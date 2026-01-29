@@ -1,403 +1,302 @@
+import { forwardRef, useState, useCallback, useRef, useMemo, useId } from "react";
+import { AccordionContext } from "./utils/context";
 import {
-  forwardRef,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-  useId,
-} from "react";
+  DEFAULT_CLASS_NAMES,
+  DEFAULT_HEADING_LEVEL,
+  DEFAULT_ORIENTATION,
+  DEFAULT_DIRECTION,
+  DEFAULT_LOOP,
+} from "./utils/constants";
+import { Slot } from "./utils/slot";
 import type {
   AccordionProps,
-  AccordionItemProps,
-  AccordionButtonProps,
-  AccordionPanelProps,
-} from "./types";
-import { ChevronDownIcon } from "./icons";
-import AccordionShimmer from "./AccordionShimmer";
-import { Button } from "../Button";
+  AccordionContextValue,
+  AccordionClassNames,
+} from "./utils/types";
 
-const AccordionButton = forwardRef<HTMLButtonElement, AccordionButtonProps>(
-  (
-    {
-      id,
-      children,
-      isExpanded,
-      onClick,
-      ariaControls,
-      disabled = false,
-      expandedIcon,
-      collapsedIcon,
-      iconPosition = "right",
-      buttonClassName = "",
-      buttonProps,
-      iconClassName = "",
-    },
-    ref,
-  ) => {
-    const renderIcon = () => {
-      if (expandedIcon && collapsedIcon) {
-        return isExpanded ? expandedIcon : collapsedIcon;
-      }
+const Accordion = forwardRef<HTMLDivElement, AccordionProps>((props, ref) => {
+  const {
+    type,
+    orientation = DEFAULT_ORIENTATION,
+    dir = DEFAULT_DIRECTION,
+    disabled = false,
+    loop = DEFAULT_LOOP,
+    classNames = {},
+    headingLevel = DEFAULT_HEADING_LEVEL,
+    children,
+    className,
+    asChild = false,
+    id: propId,
+    "aria-label": ariaLabel,
+    ...rest
+  } = props;
 
-      if (expandedIcon && !collapsedIcon) {
-        return expandedIcon;
-      }
+  const generatedId = useId();
+  const accordionId = propId ?? `accordion-${generatedId}`;
+  const collapsible = type === "single" ? (props.collapsible ?? false) : true;
+  const controlledValue = props.value;
+  const defaultValue = props.defaultValue;
+  const onValueChange = props.onValueChange;
 
-      return (
-        <ChevronDownIcon
-          className={`transition-transform ${isExpanded ? "rotate-180" : ""} ${iconClassName}`}
-        />
-      );
-    };
+  const isControlled = controlledValue !== undefined;
 
-    const iconElement = <span className="shrink-0">{renderIcon()}</span>;
-
-    return (
-      <div className="w-full" role="heading" aria-level={3}>
-        <Button
-          ref={ref}
-          id={id}
-          className={`w-full ${buttonClassName}`}
-          contentClassName={`w-full flex items-center ${
-            iconPosition === "left" ? "flex-row" : "flex-row justify-between"
-          }`}
-          onClick={() => !disabled && onClick()}
-          aria-expanded={isExpanded}
-          aria-controls={ariaControls}
-          aria-disabled={disabled}
-          disabled={disabled}
-          type="button"
-          {...buttonProps}
-        >
-          {iconPosition === "left" && iconElement}
-          <span className="flex-1">{children}</span>
-          {iconPosition === "right" && iconElement}
-        </Button>
-      </div>
-    );
-  },
-);
-
-AccordionButton.displayName = "AccordionButton";
-
-// AccordionPanel Component
-const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
-  (
-    {
-      children,
-      isExpanded,
-      id,
-      ariaLabelledby,
-      panelClassName = "",
-      contentClassName = "px-4 py-4",
-      animationDuration = 300,
-      ...rest
-    },
-    ref,
-  ) => {
-    return (
-      <div
-        ref={ref}
-        id={id}
-        className={`grid transition-all ease-in-out ${
-          isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        } ${panelClassName}`}
-        style={{ transitionDuration: `${animationDuration}ms` }}
-        aria-hidden={!isExpanded}
-        role="region"
-        aria-labelledby={ariaLabelledby}
-        {...rest}
-      >
-        <div className="overflow-hidden">
-          <div className={contentClassName}>{children}</div>
-        </div>
-      </div>
-    );
-  },
-);
-
-AccordionPanel.displayName = "AccordionPanel";
-
-// AccordionItem Component
-const AccordionItemComponent = forwardRef<HTMLDivElement, AccordionItemProps>(
-  (
-    {
-      item,
-      isExpanded,
-      onToggle,
-      expandedIcon,
-      collapsedIcon,
-      iconPosition = "right",
-      itemClassName = "",
-      buttonClassName = "",
-      buttonProps,
-      panelClassName = "",
-      contentClassName = "px-4 py-4",
-      titleClassName = "",
-      iconClassName = "",
-    },
-    ref,
-  ) => {
-    const generatedId = useId();
-    const buttonId = `accordion-button-${item.id}-${generatedId}`;
-    const panelId = `accordion-panel-${item.id}-${generatedId}`;
-
-    const handleToggle = () => onToggle(item.id);
-
-    return (
-      <div
-        ref={ref}
-        className={`w-full ${itemClassName}`}
-        data-accordion-item
-        data-expanded={isExpanded || undefined}
-        data-disabled={item.disabled || undefined}
-      >
-        <AccordionButton
-          id={buttonId}
-          isExpanded={isExpanded}
-          onClick={handleToggle}
-          ariaControls={panelId}
-          disabled={item.disabled}
-          expandedIcon={expandedIcon}
-          collapsedIcon={collapsedIcon}
-          iconPosition={iconPosition}
-          buttonClassName={buttonClassName}
-          buttonProps={buttonProps}
-          iconClassName={iconClassName}
-        >
-          <span className={`w-full block ${titleClassName}`}>{item.title}</span>
-        </AccordionButton>
-        <AccordionPanel
-          id={panelId}
-          isExpanded={isExpanded}
-          ariaLabelledby={buttonId}
-          panelClassName={panelClassName}
-          contentClassName={contentClassName}
-        >
-          {item.content}
-        </AccordionPanel>
-      </div>
-    );
-  },
-);
-
-AccordionItemComponent.displayName = "AccordionItem";
-
-// Main Accordion Component
-const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
-  (
-    {
-      items,
-      allowMultipleExpanded = false,
-      allowZeroExpanded = true,
-      preExpanded = [],
-      onChange,
-      isLoading = false,
-      shimmerItemCount = 5,
-      expandedIcon,
-      collapsedIcon,
-      iconPosition = "right",
-      accordionClassName = "",
-      itemClassName = "",
-      buttonClassName = "",
-      buttonProps,
-      panelClassName = "",
-      contentClassName = "px-4 py-4",
-      titleClassName = "",
-      iconClassName = "",
-      shimmerClassName = "",
-      shimmerItemClassName = "",
-      shimmerHeaderClassName = "",
-      shimmerTitleClassName = "",
-      shimmerIconClassName = "",
-      shimmerContentClassName = "",
-      shimmerLineClassName = "",
-      ...rest
-    },
-    ref,
-  ) => {
-    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-    const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-    const lastToggledSectionRef = useRef<string | null>(null);
-
-    const [expandedItems, setExpandedItems] = useState<Set<string>>(
-      new Set(preExpanded),
-    );
-
-    const findScrollableParent = (element: HTMLElement): HTMLElement | null => {
-      let parent = element.parentElement;
-
-      while (parent) {
-        const style = window.getComputedStyle(parent);
-        const isScrollable =
-          style.overflow === "auto" ||
-          style.overflow === "scroll" ||
-          style.overflowY === "auto" ||
-          style.overflowY === "scroll";
-
-        if (isScrollable && parent.scrollHeight > parent.clientHeight) {
-          return parent;
-        }
-
-        if (parent === document.body || parent === document.documentElement) {
-          return parent;
-        }
-
-        parent = parent.parentElement;
-      }
-
-      return document.documentElement;
-    };
-
-    const isElementInView = (
-      element: HTMLElement,
-      container: HTMLElement,
-    ): boolean => {
-      const elementRect = element.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-
-      return (
-        elementRect.top >= containerRect.top &&
-        elementRect.bottom <= containerRect.bottom
-      );
-    };
-
-    const scrollToElement = useCallback((element: HTMLElement) => {
-      if (!scrollContainerRef.current) return;
-
-      const scrollableContainer = findScrollableParent(
-        scrollContainerRef.current,
-      );
-      if (!scrollableContainer) return;
-
-      if (isElementInView(element, scrollableContainer)) {
-        return;
-      }
-
-      const containerRect = scrollableContainer.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
-
-      const scrollTop =
-        scrollableContainer.scrollTop +
-        (elementRect.top - containerRect.top) -
-        20;
-
-      scrollableContainer.scrollTo({
-        top: Math.max(0, scrollTop),
-        behavior: "smooth",
-      });
-    }, []);
-
-    useEffect(() => {
-      const lastToggled = lastToggledSectionRef.current;
-      if (lastToggled && expandedItems.has(lastToggled)) {
-        const sectionElement = sectionRefs.current[lastToggled];
-        if (sectionElement) {
-          const timeoutId = setTimeout(() => {
-            scrollToElement(sectionElement);
-            lastToggledSectionRef.current = null;
-          }, 150);
-          return () => clearTimeout(timeoutId);
-        }
-      }
-    }, [expandedItems, scrollToElement]);
-
-    const handleToggle = useCallback(
-      (id: string) => {
-        const item = items?.find((i) => i.id === id);
-
-        if (item?.disabled) return;
-
-        setExpandedItems((prev) => {
-          const newExpanded = new Set(prev);
-
-          if (newExpanded.has(id)) {
-            if (allowZeroExpanded || newExpanded.size > 1) {
-              newExpanded.delete(id);
-            }
-          } else {
-            if (!allowMultipleExpanded) {
-              newExpanded.clear();
-            }
-            newExpanded.add(id);
-            lastToggledSectionRef.current = id;
-          }
-
-          const expandedArray = Array.from(newExpanded);
-          onChange?.(expandedArray);
-          return newExpanded;
-        });
-      },
-      [allowMultipleExpanded, allowZeroExpanded, onChange, items],
-    );
-
-    const combinedRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        scrollContainerRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [ref],
-    );
-
-    if (isLoading) {
-      return (
-        <AccordionShimmer
-          className={shimmerClassName || accordionClassName}
-          itemCount={shimmerItemCount}
-          itemClassName={shimmerItemClassName}
-          headerClassName={shimmerHeaderClassName}
-          titleClassName={shimmerTitleClassName}
-          iconClassName={shimmerIconClassName}
-          contentClassName={shimmerContentClassName}
-          lineClassName={shimmerLineClassName}
-        />
+  if (import.meta.env.DEV) {
+    if (isControlled && onValueChange === undefined) {
+      console.warn(
+        "Accordion: A controlled component requires an `onValueChange` handler."
       );
     }
+  }
 
-    return (
-      <div
-        ref={combinedRef}
-        className={`w-full flex flex-col ${accordionClassName}`}
-        role="region"
-        aria-label="Accordion"
+  const [internalValue, setInternalValue] = useState<Set<string>>(() => {
+    if (defaultValue === undefined) return new Set();
+    if (Array.isArray(defaultValue)) return new Set(defaultValue);
+    return new Set([defaultValue]);
+  });
+
+  const expandedValues = useMemo(() => {
+    if (isControlled) {
+      if (Array.isArray(controlledValue)) return new Set(controlledValue);
+      return new Set([controlledValue]);
+    }
+    return internalValue;
+  }, [isControlled, controlledValue, internalValue]);
+
+  const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const itemOrderRef = useRef<Map<string, number>>(new Map());
+  const orderCounterRef = useRef(0);
+  const sortedItemsCacheRef = useRef<string[]>([]);
+  const itemsCacheValidRef = useRef(false);
+
+  const invalidateItemsCache = useCallback(() => {
+    itemsCacheValidRef.current = false;
+  }, []);
+
+  const registerItem = useCallback(
+    (value: string, element: HTMLButtonElement | null) => {
+      if (element) {
+        itemsRef.current.set(value, element);
+        if (!itemOrderRef.current.has(value)) {
+          itemOrderRef.current.set(value, orderCounterRef.current++);
+          invalidateItemsCache();
+        }
+      }
+    },
+    [invalidateItemsCache]
+  );
+
+  const unregisterItem = useCallback((value: string) => {
+    itemsRef.current.delete(value);
+    itemOrderRef.current.delete(value);
+    invalidateItemsCache();
+  }, [invalidateItemsCache]);
+
+  const getOrderedItems = useCallback(() => {
+    if (itemsCacheValidRef.current) {
+      return sortedItemsCacheRef.current;
+    }
+    const entries = Array.from(itemOrderRef.current.entries());
+    entries.sort((a, b) => a[1] - b[1]);
+    sortedItemsCacheRef.current = entries.map(([value]) => value);
+    itemsCacheValidRef.current = true;
+    return sortedItemsCacheRef.current;
+  }, []);
+
+  const focusItem = useCallback(
+    (direction: "next" | "prev" | "first" | "last") => {
+      const items = getOrderedItems();
+      if (items.length === 0) return;
+
+      const currentElement = document.activeElement;
+      let currentIndex = -1;
+
+      for (let i = 0; i < items.length; i++) {
+        if (itemsRef.current.get(items[i]) === currentElement) {
+          currentIndex = i;
+          break;
+        }
+      }
+
+      let targetIndex: number;
+      switch (direction) {
+        case "first":
+          targetIndex = 0;
+          break;
+        case "last":
+          targetIndex = items.length - 1;
+          break;
+        case "next":
+          if (currentIndex === -1) {
+            targetIndex = 0;
+          } else if (currentIndex === items.length - 1) {
+            targetIndex = loop ? 0 : currentIndex;
+          } else {
+            targetIndex = currentIndex + 1;
+          }
+          break;
+        case "prev":
+          if (currentIndex === -1) {
+            targetIndex = items.length - 1;
+          } else if (currentIndex === 0) {
+            targetIndex = loop ? items.length - 1 : 0;
+          } else {
+            targetIndex = currentIndex - 1;
+          }
+          break;
+      }
+
+      const startIndex = targetIndex;
+      const step = direction === "prev" ? -1 : 1;
+
+      do {
+        const targetValue = items[targetIndex];
+        const targetElement = itemsRef.current.get(targetValue);
+        if (targetElement && !targetElement.disabled) {
+          targetElement.focus();
+          return;
+        }
+
+        if (loop) {
+          targetIndex = (targetIndex + step + items.length) % items.length;
+        } else {
+          targetIndex = targetIndex + step;
+          if (targetIndex < 0 || targetIndex >= items.length) {
+            return;
+          }
+        }
+      } while (targetIndex !== startIndex);
+    },
+    [loop, getOrderedItems]
+  );
+
+  const fireCallback = useCallback(
+    (newSet: Set<string>) => {
+      if (type === "single") {
+        (onValueChange as ((value: string) => void) | undefined)?.(
+          Array.from(newSet)[0] ?? ""
+        );
+      } else {
+        (onValueChange as ((value: string[]) => void) | undefined)?.(
+          Array.from(newSet)
+        );
+      }
+    },
+    [type, onValueChange]
+  );
+
+  const toggleItem = useCallback(
+    (value: string) => {
+      const computeNewValue = (prev: Set<string>): Set<string> => {
+        const newSet = new Set(prev);
+        const isCurrentlyExpanded = newSet.has(value);
+
+        if (isCurrentlyExpanded) {
+          if (type === "single" && !collapsible && newSet.size === 1) {
+            return prev;
+          }
+          newSet.delete(value);
+        } else {
+          if (type === "single") {
+            newSet.clear();
+          }
+          newSet.add(value);
+        }
+
+        return newSet;
+      };
+
+      if (isControlled) {
+        const newSet = computeNewValue(expandedValues);
+        if (newSet !== expandedValues) {
+          fireCallback(newSet);
+        }
+      } else {
+        setInternalValue((prev) => {
+          const newSet = computeNewValue(prev);
+          if (newSet !== prev) {
+            fireCallback(newSet);
+          }
+          return newSet;
+        });
+      }
+    },
+    [type, collapsible, isControlled, expandedValues, fireCallback]
+  );
+
+  const mergedClassNames: AccordionClassNames = useMemo(
+    () => ({
+      root: classNames.root ?? DEFAULT_CLASS_NAMES.root,
+      item: classNames.item ?? DEFAULT_CLASS_NAMES.item,
+      trigger: classNames.trigger ?? DEFAULT_CLASS_NAMES.trigger,
+      content: classNames.content ?? DEFAULT_CLASS_NAMES.content,
+      icon: classNames.icon ?? DEFAULT_CLASS_NAMES.icon,
+    }),
+    [
+      classNames.root,
+      classNames.item,
+      classNames.trigger,
+      classNames.content,
+      classNames.icon,
+    ]
+  );
+
+  const contextValue: AccordionContextValue = useMemo(
+    () => ({
+      type,
+      orientation,
+      dir,
+      disabled,
+      collapsible,
+      loop,
+      classNames: mergedClassNames,
+      headingLevel,
+      expandedValues,
+      toggleItem,
+      registerItem,
+      unregisterItem,
+      focusItem,
+      accordionId,
+    }),
+    [
+      type,
+      orientation,
+      dir,
+      disabled,
+      collapsible,
+      loop,
+      mergedClassNames,
+      headingLevel,
+      expandedValues,
+      toggleItem,
+      registerItem,
+      unregisterItem,
+      focusItem,
+      accordionId,
+    ]
+  );
+
+  const hasExpanded = expandedValues.size > 0;
+  const Comp = asChild ? Slot : "div";
+
+  return (
+    <AccordionContext.Provider value={contextValue}>
+      <Comp
+        ref={ref}
+        id={accordionId}
+        className={`${mergedClassNames.root} ${className ?? ""}`.trim()}
+        data-orientation={orientation}
+        data-state={hasExpanded ? "has-expanded" : "all-closed"}
+        data-type={type}
+        dir={dir}
+        aria-label={ariaLabel}
         {...rest}
       >
-        {items.map((item) => (
-          <AccordionItemComponent
-            key={item.id}
-            item={item}
-            isExpanded={expandedItems.has(item.id)}
-            onToggle={handleToggle}
-            expandedIcon={expandedIcon}
-            collapsedIcon={collapsedIcon}
-            iconPosition={iconPosition}
-            itemClassName={itemClassName}
-            buttonClassName={buttonClassName}
-            buttonProps={buttonProps}
-            panelClassName={panelClassName}
-            contentClassName={contentClassName}
-            titleClassName={titleClassName}
-            iconClassName={iconClassName}
-            ref={(el) => {
-              sectionRefs.current[item.id] = el;
-            }}
-          />
-        ))}
-      </div>
-    );
-  },
-);
+        {children}
+      </Comp>
+    </AccordionContext.Provider>
+  );
+});
 
 Accordion.displayName = "Accordion";
 
 export default Accordion;
-export {
-  AccordionButton,
-  AccordionPanel,
-  AccordionItemComponent as AccordionItem,
-  AccordionShimmer,
-};

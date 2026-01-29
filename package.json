@@ -7,7 +7,21 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
+    "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
+    "test:e2e:ui": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --ui",
+    "test:e2e:headed": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --headed",
+    "test:e2e:debug": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --debug",
+    "test:e2e:chromium": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=chromium",
+    "test:e2e:firefox": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=firefox",
+    "test:e2e:webkit": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=webkit",
+    "test:e2e:mobile": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project='Mobile Chrome' --project='Mobile Safari'",
+    "test:all": "npm run test:run && npm run test:e2e"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -20,16 +34,27 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.58.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^4.0.18",
+    "axe-playwright": "^2.2.2",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "happy-dom": "^20.4.0",
+    "jsdom": "^27.0.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vitest": "^3.2.4"
   }
 }

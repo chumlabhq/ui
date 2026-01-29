@@ -1,16 +1,28 @@
-export {
-  default as Accordion,
-  AccordionButton,
-  AccordionPanel,
-  AccordionItem,
-  AccordionShimmer,
-} from "./Accordion";
-export { ChevronDownIcon, ChevronUpIcon, PlusIcon, MinusIcon } from "./icons";
+export { default as Accordion } from "./Accordion";
+export { default as AccordionItem } from "./components/AccordionItem";
+export { default as AccordionTrigger } from "./components/AccordionTrigger";
+export { default as AccordionContent } from "./components/AccordionContent";
+
 export type {
   AccordionProps,
-  AccordionItem as AccordionItemType,
+  AccordionSingleProps,
+  AccordionMultipleProps,
   AccordionItemProps,
-  AccordionButtonProps,
-  AccordionPanelProps,
-  AccordionShimmerProps,
-} from "./types";
+  AccordionTriggerProps,
+  AccordionContentProps,
+  AccordionClassNames,
+  AccordionType,
+  Orientation,
+  Direction,
+  AnimationCallbacks,
+} from "./utils/types";
+
+export {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PlusIcon,
+  MinusIcon,
+} from "./utils/icons";
+
+export { Slot } from "./utils/slot";
+export type { SlotProps } from "./utils/slot";
