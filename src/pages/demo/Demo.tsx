@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Switch } from "../../components/Switch";
 import { ThemeContext } from "./ThemeContext";
 
@@ -44,7 +44,6 @@ const components: ComponentItem[] = [
   { path: "tooltip", displayName: "Tooltip" },
 ];
 
-// Sun icon component
 const SunIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +55,6 @@ const SunIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// Moon icon component
 const MoonIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -73,15 +71,15 @@ const MoonIcon = ({ className }: { className?: string }) => (
 );
 
 const Demo = () => {
+  const location = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check localStorage first, then system preference
     const stored = localStorage.getItem("kern-ui-theme");
     if (stored) return stored === "dark";
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
   useEffect(() => {
-    // Update document class and localStorage
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("kern-ui-theme", "dark");
@@ -91,16 +89,19 @@ const Demo = () => {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
       <div
-        className={`min-h-screen flex ${
+        className={`h-screen flex overflow-hidden ${
           isDarkMode ? "bg-gray-900" : "bg-gray-50"
         }`}
       >
-        {/* Sidebar */}
         <aside
           className={`w-64 border-r p-6 sticky top-0 h-screen overflow-y-auto z-40 
           [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
@@ -110,7 +111,6 @@ const Demo = () => {
               : "bg-white border-gray-200"
           }`}
         >
-          {/* Header with logo and theme toggle */}
           <div className="flex items-center justify-between mb-6">
             <h1
               className={`text-xl font-bold ${
@@ -138,7 +138,6 @@ const Demo = () => {
             />
           </div>
 
-          {/* Navigation */}
           <nav className="flex flex-col gap-1">
             {components.map(({ path, displayName }) => (
               <NavLink
@@ -162,8 +161,8 @@ const Demo = () => {
           </nav>
         </aside>
 
-        {/* Main content */}
         <main
+          ref={mainRef}
           className={`flex-1 p-8 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]`}
         >
           <div className="max-w-4xl">

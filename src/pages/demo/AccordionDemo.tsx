@@ -4,11 +4,13 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
+  AccordionShimmer,
   PlusIcon,
   MinusIcon,
   ChevronDownIcon,
   ChevronUpIcon,
 } from "../../components/Accordion";
+import type { AccordionRef } from "../../components/Accordion";
 import { useTheme } from "./ThemeContext";
 
 // ============================================================================
@@ -106,8 +108,12 @@ const AccordionDemo = () => {
     preferences: { newsletter: false, notifications: false },
   });
 
-  // Ref for programmatic control
-  const accordionRef = useRef<HTMLDivElement>(null);
+  // Ref for programmatic control (imperative handle)
+  const accordionRef = useRef<AccordionRef>(null);
+
+  // State for loading demonstration
+  const [isLoading, setIsLoading] = useState(true);
+  const [toggleLog, setToggleLog] = useState<string[]>([]);
 
   // Helper function for async loading
   const loadContent = async (itemId: string) => {
@@ -1533,37 +1539,747 @@ const AccordionDemo = () => {
         {/* With Ref */}
         {/* ---------------------------------------------------------------- */}
         <Section
-          title="Using Refs"
-          description="Access the DOM element using forwardRef."
+          title="Imperative Handle (Ref Methods)"
+          description="Access programmatic methods via ref: expandAll, collapseAll, expand, collapse, getExpandedValues."
           isDarkMode={isDarkMode}
         >
-          <div className="mb-3">
+          <div className="mb-3 flex gap-2 flex-wrap">
             <button
-              onClick={() => {
-                if (accordionRef.current) {
-                  console.log("Accordion element:", accordionRef.current);
-                  console.log("Accordion ID:", accordionRef.current.id);
-                  alert(`Accordion ID: ${accordionRef.current.id}`);
-                }
-              }}
+              onClick={() => accordionRef.current?.expandAll()}
+              className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Expand All
+            </button>
+            <button
+              onClick={() => accordionRef.current?.collapseAll()}
+              className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+            >
+              Collapse All
+            </button>
+            <button
+              onClick={() => accordionRef.current?.expand("imperative-2")}
               className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
-              Log Ref to Console
+              Expand Item 2
+            </button>
+            <button
+              onClick={() => {
+                const expanded = accordionRef.current?.getExpandedValues();
+                alert(`Currently expanded: [${expanded?.join(", ") || "none"}]`);
+              }}
+              className={`px-3 py-1 text-sm rounded transition-colors ${
+                isDarkMode
+                  ? "bg-gray-600 text-white hover:bg-gray-500"
+                  : "bg-gray-500 text-white hover:bg-gray-600"
+              }`}
+            >
+              Get Expanded Values
             </button>
           </div>
           <DemoWrapper isDarkMode={isDarkMode}>
             <Accordion
               ref={accordionRef}
-              type="single"
-              collapsible
-              id="ref-demo-accordion"
+              type="multiple"
+              id="imperative-demo-accordion"
               classNames={getAccordionClassNames()}
             >
-              <AccordionItem value="ref-1">
-                <AccordionTrigger>Click button above to access ref</AccordionTrigger>
+              <AccordionItem value="imperative-1">
+                <AccordionTrigger>Item 1</AccordionTrigger>
+                <AccordionContent>Content for item 1</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="imperative-2">
+                <AccordionTrigger>Item 2</AccordionTrigger>
+                <AccordionContent>Content for item 2</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="imperative-3">
+                <AccordionTrigger>Item 3</AccordionTrigger>
+                <AccordionContent>Content for item 3</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Size Variants */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Size Variants"
+          description='Use size="sm", "md", or "lg" to adjust the accordion sizing.'
+          isDarkMode={isDarkMode}
+        >
+          <div className="space-y-4">
+            {(["sm", "md", "lg"] as const).map((size) => (
+              <div key={size}>
+                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  Size: {size}
+                </p>
+                <DemoWrapper isDarkMode={isDarkMode}>
+                  <Accordion type="single" collapsible size={size} classNames={getAccordionClassNames()}>
+                    <AccordionItem value={`size-${size}-1`}>
+                      <AccordionTrigger>First item ({size})</AccordionTrigger>
+                      <AccordionContent>Content for the first item with {size} size.</AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value={`size-${size}-2`}>
+                      <AccordionTrigger>Second item ({size})</AccordionTrigger>
+                      <AccordionContent>Content for the second item with {size} size.</AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </DemoWrapper>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Variant Styles */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Variant Styles"
+          description='Use variant="default", "bordered", "separated", or "flush" for different visual styles.'
+          isDarkMode={isDarkMode}
+        >
+          <div className="space-y-4">
+            {(["default", "bordered", "separated", "flush"] as const).map((variant) => (
+              <div key={variant}>
+                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  Variant: {variant}
+                </p>
+                <DemoWrapper isDarkMode={isDarkMode} className={variant === "bordered" ? "p-0!" : ""}>
+                  <Accordion type="single" collapsible variant={variant} classNames={getAccordionClassNames()}>
+                    <AccordionItem value={`variant-${variant}-1`}>
+                      <AccordionTrigger>First item ({variant})</AccordionTrigger>
+                      <AccordionContent>Content for the first item.</AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value={`variant-${variant}-2`}>
+                      <AccordionTrigger>Second item ({variant})</AccordionTrigger>
+                      <AccordionContent>Content for the second item.</AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </DemoWrapper>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Subtitle Support */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Subtitle Support"
+          description="Add a subtitle prop to AccordionTrigger for additional context."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+              <AccordionItem value="subtitle-1">
+                <AccordionTrigger subtitle="Click to learn more about React">
+                  What is React?
+                </AccordionTrigger>
                 <AccordionContent>
-                  The accordion exposes a ref to the root DOM element.
+                  React is a JavaScript library for building user interfaces.
                 </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="subtitle-2">
+                <AccordionTrigger subtitle="TypeScript adds static typing to JavaScript">
+                  What is TypeScript?
+                </AccordionTrigger>
+                <AccordionContent>
+                  TypeScript is a strongly typed programming language that builds on JavaScript.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="subtitle-3">
+                <AccordionTrigger subtitle="A utility-first CSS framework">
+                  What is Tailwind CSS?
+                </AccordionTrigger>
+                <AccordionContent>
+                  Tailwind CSS is a utility-first CSS framework for rapid UI development.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Loading Shimmer */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Loading Shimmer"
+          description="Use AccordionShimmer as a placeholder while content loads."
+          isDarkMode={isDarkMode}
+        >
+          <div className="mb-3">
+            <button
+              onClick={() => setIsLoading(!isLoading)}
+              className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              Toggle Loading: {isLoading ? "ON" : "OFF"}
+            </button>
+          </div>
+          <DemoWrapper isDarkMode={isDarkMode}>
+            {isLoading ? (
+              <AccordionShimmer count={3} showContent />
+            ) : (
+              <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                <AccordionItem value="shimmer-1">
+                  <AccordionTrigger>Loaded Item 1</AccordionTrigger>
+                  <AccordionContent>This content has loaded!</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="shimmer-2">
+                  <AccordionTrigger>Loaded Item 2</AccordionTrigger>
+                  <AccordionContent>This content has loaded!</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="shimmer-3">
+                  <AccordionTrigger>Loaded Item 3</AccordionTrigger>
+                  <AccordionContent>This content has loaded!</AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            )}
+          </DemoWrapper>
+          <div className="mt-4 space-y-4">
+            <p className={`text-xs ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+              Shimmer with different sizes
+            </p>
+            <div className="grid grid-cols-3 gap-4">
+              {(["sm", "md", "lg"] as const).map((size) => (
+                <DemoWrapper key={size} isDarkMode={isDarkMode}>
+                  <AccordionShimmer count={2} size={size} />
+                </DemoWrapper>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* onToggle Callback */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="onToggle Callback"
+          description="AccordionItem's onToggle callback fires when the item is expanded or collapsed."
+          isDarkMode={isDarkMode}
+        >
+          <div className={`mb-3 p-3 rounded-lg ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+            <p className={`text-sm font-medium mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+              Toggle Log:
+            </p>
+            <div className={`text-xs font-mono max-h-20 overflow-y-auto ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+              {toggleLog.length > 0 ? toggleLog.slice(-5).map((log, i) => (
+                <div key={i}>{log}</div>
+              )) : "No toggles yet..."}
+            </div>
+            <button
+              onClick={() => setToggleLog([])}
+              className="mt-2 px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Clear Log
+            </button>
+          </div>
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+              <AccordionItem
+                value="toggle-1"
+                onToggle={(isExpanded) => {
+                  setToggleLog((prev) => [
+                    ...prev,
+                    `Item 1: ${isExpanded ? "expanded" : "collapsed"} at ${new Date().toLocaleTimeString()}`,
+                  ]);
+                }}
+              >
+                <AccordionTrigger>Item 1 (with onToggle)</AccordionTrigger>
+                <AccordionContent>Expand/collapse to see the log update.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem
+                value="toggle-2"
+                onToggle={(isExpanded) => {
+                  setToggleLog((prev) => [
+                    ...prev,
+                    `Item 2: ${isExpanded ? "expanded" : "collapsed"} at ${new Date().toLocaleTimeString()}`,
+                  ]);
+                }}
+              >
+                <AccordionTrigger>Item 2 (with onToggle)</AccordionTrigger>
+                <AccordionContent>Each item can have its own callback.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Lazy Loading & Unmount on Close */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Lazy Loading & Unmount on Close"
+          description="Use lazyLoad to delay rendering until first expand, or unmountOnClose to remove from DOM when collapsed."
+          isDarkMode={isDarkMode}
+        >
+          <div className="space-y-4">
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                lazyLoad - Content not rendered until first expand
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                  <AccordionItem value="lazy-1">
+                    <AccordionTrigger>Lazy loaded content</AccordionTrigger>
+                    <AccordionContent lazyLoad>
+                      This content wasn't in the DOM until you expanded it for the first time.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                unmountOnClose - Content removed from DOM when collapsed
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                  <AccordionItem value="unmount-1">
+                    <AccordionTrigger>Unmount on close</AccordionTrigger>
+                    <AccordionContent unmountOnClose>
+                      This content is removed from the DOM when you collapse (inspect to verify).
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Reduced Motion */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Reduced Motion Support"
+          description='Set reduceMotion to true, false, or "auto" (respects user preference).'
+          isDarkMode={isDarkMode}
+        >
+          <div className="space-y-4">
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                reduceMotion="auto" - Respects prefers-reduced-motion
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible reduceMotion="auto" classNames={getAccordionClassNames()}>
+                  <AccordionItem value="motion-auto-1">
+                    <AccordionTrigger>Auto reduced motion</AccordionTrigger>
+                    <AccordionContent>
+                      Animation respects your system's reduced motion preference.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                reduceMotion=true - No animations
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible reduceMotion={true} classNames={getAccordionClassNames()}>
+                  <AccordionItem value="motion-true-1">
+                    <AccordionTrigger>Reduced motion enabled</AccordionTrigger>
+                    <AccordionContent>
+                      No animation - instant open/close.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Custom Animation Easing */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Custom Animation Easing"
+          description="Use animationEasing to customize the transition timing function."
+          isDarkMode={isDarkMode}
+        >
+          <div className="space-y-4">
+            {(["linear", "ease", "ease-in", "ease-out", "ease-in-out", "cubic-bezier(0.68, -0.55, 0.265, 1.55)"] as const).map((easing) => (
+              <div key={easing}>
+                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  {easing}
+                </p>
+                <DemoWrapper isDarkMode={isDarkMode}>
+                  <Accordion
+                    type="single"
+                    collapsible
+                    animationEasing={easing}
+                    animationDuration={500}
+                    classNames={getAccordionClassNames()}
+                  >
+                    <AccordionItem value={`easing-${easing}`}>
+                      <AccordionTrigger>Click to see {easing} easing</AccordionTrigger>
+                      <AccordionContent>
+                        This animation uses the {easing} timing function.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </DemoWrapper>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Icon Animation Modes */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Icon Animation Modes"
+          description='Use iconAnimation="rotate", "switch", or "none" on the trigger.'
+          isDarkMode={isDarkMode}
+        >
+          <div className="space-y-4">
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                iconAnimation="rotate" (default)
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                  <AccordionItem value="icon-rotate-1">
+                    <AccordionTrigger iconAnimation="rotate">
+                      Rotating icon animation
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      The chevron rotates 180 degrees when expanded.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                iconAnimation="switch" with custom icons
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                  <AccordionItem value="icon-switch-1">
+                    <AccordionTrigger
+                      iconAnimation="switch"
+                      expandedIcon={<MinusIcon className={`w-4 h-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`} />}
+                      collapsedIcon={<PlusIcon className={`w-4 h-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`} />}
+                    >
+                      Switching icon animation
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      The icon switches between plus and minus without rotation.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                iconAnimation="none"
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                  <AccordionItem value="icon-none-1">
+                    <AccordionTrigger iconAnimation="none">
+                      No icon animation
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      The icon doesn't animate at all.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+            <div>
+              <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                hideIcon=true
+              </p>
+              <DemoWrapper isDarkMode={isDarkMode}>
+                <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+                  <AccordionItem value="hide-icon-1">
+                    <AccordionTrigger hideIcon>
+                      Hidden icon trigger
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      The icon is completely hidden.
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </DemoWrapper>
+            </div>
+          </div>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* ARIA Busy State */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="ARIA Busy State"
+          description="Use aria-busy to indicate loading state for screen readers."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="single" collapsible aria-busy={isLoading} classNames={getAccordionClassNames()}>
+              <AccordionItem value="aria-busy-1">
+                <AccordionTrigger>Item with aria-busy={String(isLoading)}</AccordionTrigger>
+                <AccordionContent>
+                  The accordion root has aria-busy set to {String(isLoading)}.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Max Expanded (Multiple Mode) */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Max Expanded Limit"
+          description='Use maxExpanded to limit how many items can be open simultaneously in multiple mode.'
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="multiple" maxExpanded={2} classNames={getAccordionClassNames()}>
+              <AccordionItem value="max-1">
+                <AccordionTrigger>Item 1 (max 2 can be open)</AccordionTrigger>
+                <AccordionContent>First item content.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="max-2">
+                <AccordionTrigger>Item 2</AccordionTrigger>
+                <AccordionContent>Second item content.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="max-3">
+                <AccordionTrigger>Item 3</AccordionTrigger>
+                <AccordionContent>Third item content - try opening when 2 are already open!</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="max-4">
+                <AccordionTrigger>Item 4</AccordionTrigger>
+                <AccordionContent>Fourth item content.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Unstyled Mode */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Unstyled Mode"
+          description="Use unstyled={true} for headless usage - all default classes are removed."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion 
+              type="single" 
+              collapsible 
+              unstyled
+              className="w-full"
+            >
+              <AccordionItem value="unstyled-1" className="border-b border-gray-300">
+                <AccordionTrigger className="w-full py-2 text-left flex justify-between items-center">
+                  Fully custom styled trigger
+                </AccordionTrigger>
+                <AccordionContent className="py-2 text-gray-600">
+                  Content with custom styles applied directly.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="unstyled-2" className="border-b border-gray-300">
+                <AccordionTrigger className="w-full py-2 text-left flex justify-between items-center">
+                  Another custom item
+                </AccordionTrigger>
+                <AccordionContent className="py-2 text-gray-600">
+                  No default styles - fully customizable!
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Default Expand All */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Default Expand All"
+          description="Use defaultExpandAll to expand all items on initial render (multiple mode)."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="multiple" defaultExpandAll classNames={getAccordionClassNames()}>
+              <AccordionItem value="expand-all-1">
+                <AccordionTrigger>All items start expanded</AccordionTrigger>
+                <AccordionContent>This item was expanded by default.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="expand-all-2">
+                <AccordionTrigger>Second expanded item</AccordionTrigger>
+                <AccordionContent>Also expanded on load.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="expand-all-3">
+                <AccordionTrigger>Third expanded item</AccordionTrigger>
+                <AccordionContent>All items open initially!</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Expand on Print */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Expand on Print"
+          description="Use expandOnPrint to automatically expand all items when printing."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="single" collapsible expandOnPrint classNames={getAccordionClassNames()}>
+              <AccordionItem value="print-1">
+                <AccordionTrigger>Print-friendly accordion</AccordionTrigger>
+                <AccordionContent>
+                  Try printing this page - all items will expand automatically!
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="print-2">
+                <AccordionTrigger>Hidden content visible on print</AccordionTrigger>
+                <AccordionContent>
+                  This content will be visible in the printed version.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Trigger Slots */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Trigger Slots (leftSlot / rightSlot)"
+          description="Add custom content to the left or right of the trigger text."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion type="single" collapsible classNames={getAccordionClassNames()}>
+              <AccordionItem value="slot-1">
+                <AccordionTrigger
+                  leftSlot={<span className="w-2 h-2 rounded-full bg-green-500" />}
+                  rightSlot={<span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">New</span>}
+                >
+                  Item with both slots
+                </AccordionTrigger>
+                <AccordionContent>
+                  The trigger has a status dot on the left and a badge on the right.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="slot-2">
+                <AccordionTrigger
+                  leftSlot={<span className="w-2 h-2 rounded-full bg-yellow-500" />}
+                >
+                  Item with left slot only
+                </AccordionTrigger>
+                <AccordionContent>Yellow status indicator.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="slot-3">
+                <AccordionTrigger
+                  rightSlot={<span className="text-xs text-gray-500">Optional</span>}
+                >
+                  Item with right slot only
+                </AccordionTrigger>
+                <AccordionContent>Text label on the right.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Screen Reader Announcements */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Screen Reader Announcements"
+          description='Use announceExpanded to announce state changes via aria-live region.'
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion 
+              type="multiple" 
+              announceExpanded 
+              aria-live="polite"
+              classNames={getAccordionClassNames()}
+            >
+              <AccordionItem value="announce-1">
+                <AccordionTrigger>Expand to hear announcement</AccordionTrigger>
+                <AccordionContent>
+                  Screen readers will announce: "Item expanded. X of Y items expanded."
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="announce-2">
+                <AccordionTrigger>Another item</AccordionTrigger>
+                <AccordionContent>
+                  Try with a screen reader to hear the announcements.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* onExpandedChange Callback */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="onExpandedChange Callback"
+          description="Get detailed information about expand/collapse events including counts."
+          isDarkMode={isDarkMode}
+        >
+          <div className={`mb-3 p-3 rounded-lg ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+            <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+              Check the console for detailed event information.
+            </p>
+          </div>
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion 
+              type="multiple" 
+              classNames={getAccordionClassNames()}
+              onExpandedChange={(event) => {
+                console.log("onExpandedChange:", event);
+              }}
+            >
+              <AccordionItem value="event-1">
+                <AccordionTrigger>Expand/collapse to see event</AccordionTrigger>
+                <AccordionContent>
+                  Event includes: value, isExpanded, expandedCount, totalCount
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="event-2">
+                <AccordionTrigger>Second item</AccordionTrigger>
+                <AccordionContent>Try toggling multiple items.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+        </Section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Prevent Close */}
+        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Prevent Close"
+          description="Use preventClose to conditionally prevent closing (e.g., form validation)."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion 
+              type="single" 
+              collapsible 
+              defaultValue="prevent-1"
+              classNames={getAccordionClassNames()}
+              preventClose={(value) => {
+                if (value === "prevent-1") {
+                  return !window.confirm("Are you sure you want to close this item?");
+                }
+                return false;
+              }}
+            >
+              <AccordionItem value="prevent-1">
+                <AccordionTrigger>Protected item (confirm to close)</AccordionTrigger>
+                <AccordionContent>
+                  Closing this item will show a confirmation dialog.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="prevent-2">
+                <AccordionTrigger>Normal item (no protection)</AccordionTrigger>
+                <AccordionContent>This item closes normally.</AccordionContent>
               </AccordionItem>
             </Accordion>
           </DemoWrapper>
@@ -1742,6 +2458,134 @@ const AccordionDemo = () => {
                     Callback when focus leaves the accordion
                   </td>
                 </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">size</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"sm" | "md" | "lg"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"md"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Size variant for accordion items
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">variant</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"default" | "bordered" | "separated" | "flush"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"default"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Visual variant style
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">animationEasing</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"ease-in-out"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    CSS timing function for animations
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">animationDuration</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>300</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Default animation duration in ms for all items
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">reduceMotion</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean | "auto"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"auto"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Disable animations ("auto" respects system preference)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">aria-busy</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Indicates loading state for screen readers
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">maxExpanded</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Maximum number of items that can be expanded (multiple mode)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">unstyled</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Remove all default styling for headless usage
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">defaultExpandAll</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Expand all items on initial render (multiple mode)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">expandOnPrint</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Expand all items when printing
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">storageKey</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string | StorageConfig</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Persist expanded state to localStorage
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">onExpandedChange</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(event) =&gt; void</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Detailed callback with value, isExpanded, expandedCount, totalCount
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">preventClose</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value) =&gt; boolean | Promise</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Conditionally prevent closing an item (e.g., for validation)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">announceExpanded</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Announce expand/collapse state to screen readers
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">aria-live</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"off" | "polite" | "assertive"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"polite"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    aria-live mode for announcements
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">onKeyDown</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(event, itemValue) =&gt; void</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Keyboard event handler with active item value
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -1793,6 +2637,14 @@ const AccordionDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     Render as child element instead of div
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">onToggle</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(isExpanded: boolean) =&gt; void</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Callback when this item is expanded or collapsed
                   </td>
                 </tr>
               </tbody>
@@ -1856,6 +2708,54 @@ const AccordionDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     Render as child element instead of button
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">subtitle</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Secondary text displayed below the title
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">hideIcon</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Completely hide the indicator icon
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">iconAnimation</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"rotate" | "switch" | "none"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"rotate"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Type of animation for the icon
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">leftSlot</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Content rendered to the left of the title (e.g., status dot)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">rightSlot</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Content rendered to the right of the title (e.g., badge)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">aria-describedby</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    ID of element describing this trigger
                   </td>
                 </tr>
               </tbody>
@@ -1943,6 +2843,30 @@ const AccordionDemo = () => {
                     Render as child element instead of div
                   </td>
                 </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">animationEasing</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>inherited</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    CSS timing function (overrides root setting)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">lazyLoad</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Don't render content until first expand
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">unmountOnClose</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Remove content from DOM when collapsed
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2019,6 +2943,42 @@ const AccordionDemo = () => {
                     Accordion mode
                   </td>
                 </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">data-size</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Accordion</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    "sm" | "md" | "lg"
+                  </td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Current size variant
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">data-variant</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Accordion</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    "default" | "bordered" | "separated" | "flush"
+                  </td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Current visual variant
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">data-value</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Item</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    The item's unique value
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">data-animating</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Content</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>present during animation</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Whether content is currently animating
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -2082,6 +3042,177 @@ const AccordionDemo = () => {
           </div>
         </div>
 
+        {/* AccordionShimmer Props */}
+        <div>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            AccordionShimmer
+          </h3>
+          <div className="overflow-x-auto">
+            <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
+              <thead>
+                <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
+                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
+                  <th className="text-left py-3 font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">count</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>3</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Number of skeleton items to display
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">size</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"sm" | "md" | "lg"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"md"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Size variant matching Accordion size
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">variant</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"default" | "bordered" | "separated" | "flush"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"default"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Visual variant matching Accordion variant
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">animate</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>true</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Whether to animate the shimmer effect
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">showContent</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Show content skeleton placeholders
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Additional CSS classes for container
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">asChild</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Render as child element (polymorphic)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* AccordionRef Interface */}
+        <div>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            AccordionRef (Imperative Handle)
+          </h3>
+          <p className={`text-sm mb-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Methods available via ref for programmatic control:
+          </p>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`interface AccordionRef {
+  expandAll: () => void;        // Expand all items (multiple mode only)
+  collapseAll: () => void;      // Collapse all items
+  expand: (value: string) => void;    // Expand a specific item
+  collapse: (value: string) => void;  // Collapse a specific item
+  toggle: (value: string) => void;    // Toggle a specific item
+  getExpandedValues: () => string[];  // Get currently expanded values
+  isExpanded: (value: string) => boolean; // Check if item is expanded
+  focusItem: (value: string) => void; // Focus a specific item's trigger
+  getItemCount: () => number;   // Get total number of items
+  element: HTMLDivElement | null;     // Reference to the DOM element
+}`}
+          />
+        </div>
+
+        {/* Custom Hooks */}
+        <div>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            Custom Hooks
+          </h3>
+          <p className={`text-sm mb-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Hooks for accessing accordion state within compound components:
+          </p>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`// useAccordionItem - control a specific item
+const { isExpanded, toggle, expand, collapse } = useAccordionItem("item-1");
+
+// useAccordionState - get overall accordion state
+const { 
+  expandedValues,   // Array of expanded item values
+  expandedCount,    // Number of expanded items
+  itemCount,        // Total number of items
+  type,             // "single" | "multiple"
+  disabled,         // Whether accordion is disabled
+  isAllExpanded,    // Whether all items are expanded
+  isAllCollapsed    // Whether all items are collapsed
+} = useAccordionState();`}
+          />
+        </div>
+
+        {/* AccordionExpandEvent Interface */}
+        <div>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            AccordionExpandEvent
+          </h3>
+          <p className={`text-sm mb-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Event object passed to onExpandedChange callback:
+          </p>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`interface AccordionExpandEvent {
+  value: string;       // The item that changed
+  isExpanded: boolean; // New expanded state
+  expandedCount: number; // Total expanded items
+  totalCount: number;    // Total number of items
+}`}
+          />
+        </div>
+
+        {/* StorageConfig Interface */}
+        <div>
+          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            StorageConfig
+          </h3>
+          <p className={`text-sm mb-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+            Configuration for persistent storage:
+          </p>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`interface StorageConfig {
+  key: string;                        // Storage key
+  storage?: Storage;                  // Default: localStorage
+  serialize?: (values: string[]) => string;    // Custom serializer
+  deserialize?: (stored: string) => string[];  // Custom deserializer
+}
+
+// Usage:
+<Accordion storageKey="my-accordion" />
+// or
+<Accordion storageKey={{ key: "my-accordion", storage: sessionStorage }} />`}
+          />
+        </div>
+
         {/* AccordionClassNames Type */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
@@ -2090,11 +3221,15 @@ const AccordionDemo = () => {
           <CodeBlock
             isDarkMode={isDarkMode}
             code={`interface AccordionClassNames {
-  root?: string;    // Root accordion container
-  item?: string;    // Each accordion item
-  trigger?: string; // Trigger button
-  content?: string; // Content panel
-  icon?: string;    // Expand/collapse icon
+  root?: string;         // Root accordion container
+  item?: string;         // Each accordion item
+  trigger?: string;      // Trigger button
+  content?: string;      // Content panel
+  icon?: string;         // Expand/collapse icon
+  subtitle?: string;     // Subtitle text
+  triggerLeft?: string;  // Left slot wrapper (new)
+  triggerRight?: string; // Right slot wrapper (new)
+  contentInner?: string; // Inner content wrapper (new)
 }`}
           />
         </div>
@@ -2118,6 +3253,27 @@ const AccordionDemo = () => {
             <li>Screen reader friendly with proper ARIA attributes</li>
             <li>Focus management with visible focus indicators</li>
             <li>Supports RTL text direction for internationalization</li>
+            <li>aria-busy support for loading states</li>
+            <li>aria-live region announcements (announceExpanded prop)</li>
+            <li>aria-describedby support on triggers for additional context</li>
+            <li>AccordionShimmer provides role="status" and aria-label for loading placeholders</li>
+          </ul>
+        </div>
+
+        <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-gray-50"}`}>
+          <h3 className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+            Browser Compatibility
+          </h3>
+          <ul className={`list-disc list-inside space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
+            <li>Smooth CSS grid-based animations for expand/collapse</li>
+            <li>Fallback opacity/visibility for Safari &lt; 16.4 compatibility</li>
+            <li>Works in all modern browsers (Chrome, Firefox, Safari, Edge)</li>
+            <li>Graceful degradation for older browser versions</li>
+            <li>Automatic prefers-reduced-motion support (reduceMotion="auto")</li>
+            <li>Custom animation easing and duration support</li>
+            <li>Print-friendly mode (expandOnPrint) with CSS @media print support</li>
+            <li>LocalStorage/SessionStorage persistence (storageKey prop)</li>
+            <li>willChange optimization during animations for smooth performance</li>
           </ul>
         </div>
 

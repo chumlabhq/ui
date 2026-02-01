@@ -1,7 +1,7 @@
-import { forwardRef, useEffect, useRef, type KeyboardEvent } from "react";
+import { forwardRef, useEffect, useRef, useCallback, type KeyboardEvent } from "react";
 import { useAccordionContext, useAccordionItemContext } from "../utils/context";
 import { ChevronDownIcon } from "../utils/icons";
-import { Slot } from "../utils/slot";
+import { Slot } from "../../../utils/Slot";
 import type { AccordionTriggerProps } from "../utils/types";
 
 const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
@@ -13,6 +13,12 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       iconPosition = "right",
       className,
       asChild = false,
+      subtitle,
+      hideIcon = false,
+      iconAnimation = "rotate",
+      leftSlot,
+      rightSlot,
+      "aria-describedby": ariaDescribedBy,
       ...rest
     },
     ref
@@ -33,22 +39,22 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       };
     }, [registerItem, unregisterItem, item.value]);
 
-    const setRefs = (node: HTMLButtonElement | null) => {
+    const setRefs = useCallback((node: HTMLButtonElement | null) => {
       buttonRef.current = node;
       if (typeof ref === "function") {
         ref(node);
       } else if (ref) {
         ref.current = node;
       }
-    };
+    }, [ref]);
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
       if (!item.disabled) {
         accordion.toggleItem(item.value);
       }
-    };
+    }, [item.disabled, item.value, accordion]);
 
-    const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const handleKeyDown = useCallback((event: KeyboardEvent<HTMLButtonElement>) => {
       const isVertical = accordion.orientation === "vertical";
       const isRtl = accordion.dir === "rtl";
 
@@ -81,10 +87,22 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
           accordion.focusItem("last");
           break;
       }
-    };
+    }, [accordion]);
+
+    const getIconAnimationClass = useCallback(() => {
+      if (iconAnimation === "none" || accordion.reduceMotion) return "";
+      if (iconAnimation === "rotate") {
+        return item.isExpanded ? "rotate-180" : "";
+      }
+      return "";
+    }, [iconAnimation, accordion.reduceMotion, item.isExpanded]);
 
     const renderIcon = () => {
-      if (iconPosition === "none") return null;
+      if (iconPosition === "none" || hideIcon) return null;
+
+      if (iconAnimation === "switch" && expandedIcon && collapsedIcon) {
+        return item.isExpanded ? expandedIcon : collapsedIcon;
+      }
 
       if (expandedIcon && collapsedIcon) {
         return item.isExpanded ? expandedIcon : collapsedIcon;
@@ -94,16 +112,16 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         return expandedIcon;
       }
 
+      const iconClass = `${accordion.classNames.icon ?? ""} ${getIconAnimationClass()}`.trim();
       return (
         <ChevronDownIcon
-          className={`${accordion.classNames.icon ?? ""} ${
-            item.isExpanded ? "rotate-180" : ""
-          }`}
+          className={iconClass || undefined}
         />
       );
     };
 
-    const iconElement = iconPosition !== "none" && (
+    const shouldShowIcon = iconPosition !== "none" && !hideIcon;
+    const iconElement = shouldShowIcon && (
       <span className="shrink-0" aria-hidden="true">
         {renderIcon()}
       </span>
@@ -113,16 +131,19 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const HeadingTag = `h${accordion.headingLevel}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
+    const triggerClassName = `${accordion.classNames.trigger ?? ""} ${className ?? ""} ${
+      iconPosition === "left" ? "flex-row-reverse justify-end" : ""
+    }`.trim();
+
     const triggerProps = {
       id: item.triggerId,
       type: "button" as const,
-      className: `${accordion.classNames.trigger ?? ""} ${className ?? ""} ${
-        iconPosition === "left" ? "flex-row-reverse justify-end" : ""
-      }`.trim(),
+      className: triggerClassName || undefined,
       onClick: handleClick,
       onKeyDown: handleKeyDown,
       "aria-expanded": item.isExpanded,
       "aria-controls": item.contentId,
+      "aria-describedby": ariaDescribedBy ?? item.descriptionId,
       disabled: item.disabled,
       "data-state": dataState,
       "data-disabled": item.disabled || undefined,
@@ -136,9 +157,26 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       children
     ) : (
       <>
+        {leftSlot && (
+          <span className={accordion.classNames.triggerLeft ?? ""} aria-hidden="true">
+            {leftSlot}
+          </span>
+        )}
         {iconPosition === "left" && iconElement}
-        <span className="flex-1 text-left">{children}</span>
+        <span className="flex-1 text-left">
+          <span className="block">{children}</span>
+          {subtitle && (
+            <span className={`block ${accordion.classNames.subtitle ?? ""}`}>
+              {subtitle}
+            </span>
+          )}
+        </span>
         {iconPosition === "right" && iconElement}
+        {rightSlot && (
+          <span className={accordion.classNames.triggerRight ?? ""} aria-hidden="true">
+            {rightSlot}
+          </span>
+        )}
       </>
     );
 

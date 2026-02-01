@@ -1,9 +1,12 @@
-import type { HTMLAttributes, ReactNode, FocusEvent } from "react";
+import type { HTMLAttributes, ReactNode, FocusEvent, CSSProperties, KeyboardEvent } from "react";
 
 export type AccordionType = "single" | "multiple";
 export type Orientation = "vertical" | "horizontal";
 export type Direction = "ltr" | "rtl";
 export type DataState = "open" | "closed";
+export type AccordionSize = "sm" | "md" | "lg";
+export type AccordionVariant = "default" | "bordered" | "separated" | "flush";
+export type AnimationEasing = "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out" | string;
 
 export interface AnimationCallbacks {
   onOpenStart?: () => void;
@@ -18,9 +21,40 @@ export interface AccordionClassNames {
   trigger?: string;
   content?: string;
   icon?: string;
+  subtitle?: string;
+  triggerLeft?: string;
+  triggerRight?: string;
+  contentInner?: string;
 }
 
-interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange" | "dir"> {
+export interface AccordionRef {
+  expandAll: () => void;
+  collapseAll: () => void;
+  expand: (value: string) => void;
+  collapse: (value: string) => void;
+  toggle: (value: string) => void;
+  getExpandedValues: () => string[];
+  isExpanded: (value: string) => boolean;
+  focusItem: (value: string) => void;
+  getItemCount: () => number;
+  element: HTMLDivElement | null;
+}
+
+export interface AccordionExpandEvent {
+  value: string;
+  isExpanded: boolean;
+  expandedCount: number;
+  totalCount: number;
+}
+
+export interface StorageConfig {
+  key: string;
+  storage?: Storage;
+  serialize?: (values: string[]) => string;
+  deserialize?: (stored: string) => string[];
+}
+
+interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange" | "dir" | "onKeyDown"> {
   orientation?: Orientation;
   dir?: Direction;
   disabled?: boolean;
@@ -29,8 +63,23 @@ interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defau
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   children: ReactNode;
   asChild?: boolean;
+  size?: AccordionSize;
+  variant?: AccordionVariant;
+  animationEasing?: AnimationEasing;
+  animationDuration?: number;
+  reduceMotion?: boolean | "auto";
+  unstyled?: boolean;
+  defaultExpandAll?: boolean;
+  expandOnPrint?: boolean;
+  storageKey?: string | StorageConfig;
+  onExpandedChange?: (event: AccordionExpandEvent) => void;
+  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>, itemValue: string | null) => void;
+  preventClose?: (value: string) => boolean | Promise<boolean>;
   onFocusCapture?: (event: FocusEvent<HTMLDivElement>) => void;
   onBlurCapture?: (event: FocusEvent<HTMLDivElement>) => void;
+  "aria-busy"?: boolean;
+  "aria-live"?: "off" | "polite" | "assertive";
+  announceExpanded?: boolean;
 }
 
 export interface AccordionSingleProps extends AccordionBaseProps {
@@ -43,6 +92,7 @@ export interface AccordionSingleProps extends AccordionBaseProps {
 
 export interface AccordionMultipleProps extends AccordionBaseProps {
   type: "multiple";
+  maxExpanded?: number;
   value?: string[];
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
@@ -50,11 +100,13 @@ export interface AccordionMultipleProps extends AccordionBaseProps {
 
 export type AccordionProps = AccordionSingleProps | AccordionMultipleProps;
 
-export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
+export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "onToggle"> {
   value: string;
   disabled?: boolean;
   children: ReactNode;
   asChild?: boolean;
+  onToggle?: (isExpanded: boolean) => void;
+  "aria-describedby"?: string;
 }
 
 export interface AccordionTriggerProps extends Omit<HTMLAttributes<HTMLButtonElement>, "onClick"> {
@@ -63,13 +115,22 @@ export interface AccordionTriggerProps extends Omit<HTMLAttributes<HTMLButtonEle
   collapsedIcon?: ReactNode;
   iconPosition?: "left" | "right" | "none";
   asChild?: boolean;
+  subtitle?: ReactNode;
+  hideIcon?: boolean;
+  iconAnimation?: "rotate" | "switch" | "none";
+  leftSlot?: ReactNode;
+  rightSlot?: ReactNode;
+  "aria-describedby"?: string;
 }
 
 export interface AccordionContentProps extends HTMLAttributes<HTMLDivElement>, AnimationCallbacks {
   children: ReactNode;
   forceMount?: boolean;
   animationDuration?: number;
+  animationEasing?: AnimationEasing;
   asChild?: boolean;
+  lazyLoad?: boolean;
+  unmountOnClose?: boolean;
 }
 
 export interface AccordionContextValue {
@@ -86,7 +147,18 @@ export interface AccordionContextValue {
   registerItem: (value: string, element: HTMLButtonElement | null) => void;
   unregisterItem: (value: string) => void;
   focusItem: (direction: "next" | "prev" | "first" | "last") => void;
+  focusItemByValue: (value: string) => void;
   accordionId: string;
+  size: AccordionSize;
+  variant: AccordionVariant;
+  animationEasing: AnimationEasing;
+  animationDuration: number;
+  reduceMotion: boolean;
+  unstyled: boolean;
+  itemCount: number;
+  expandedCount: number;
+  announceExpanded: boolean;
+  maxExpanded?: number;
 }
 
 export interface AccordionItemContextValue {
@@ -95,4 +167,28 @@ export interface AccordionItemContextValue {
   isExpanded: boolean;
   triggerId: string;
   contentId: string;
+  descriptionId?: string;
+  onToggle?: (isExpanded: boolean) => void;
+  index: number;
+}
+
+export interface AccordionShimmerProps {
+  count?: number;
+  size?: AccordionSize;
+  variant?: AccordionVariant;
+  animate?: boolean;
+  className?: string;
+  style?: CSSProperties;
+  showContent?: boolean;
+  asChild?: boolean;
+}
+
+export interface UseAccordionStateOptions {
+  type: AccordionType;
+  defaultValue?: string | string[];
+  value?: string | string[];
+  onValueChange?: ((value: string) => void) | ((value: string[]) => void);
+  collapsible?: boolean;
+  maxExpanded?: number;
+  storageKey?: string | StorageConfig;
 }

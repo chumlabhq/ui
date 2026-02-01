@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
   Accordion,
@@ -952,8 +952,8 @@ describe("Accordion", () => {
   });
 
   describe("Ref Forwarding", () => {
-    it("forwards ref to accordion root", () => {
-      const ref = vi.fn();
+    it("forwards ref with imperative handle to accordion", () => {
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
       render(
         <Accordion type="single" ref={ref}>
           <AccordionItem value="item-1">
@@ -963,8 +963,10 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      expect(ref).toHaveBeenCalled();
-      expect(ref.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current).not.toBeNull();
+      expect(ref.current?.element).toBeInstanceOf(HTMLDivElement);
+      expect(typeof ref.current?.expandAll).toBe("function");
+      expect(typeof ref.current?.collapseAll).toBe("function");
     });
 
     it("forwards ref to trigger button", () => {
@@ -995,6 +997,456 @@ describe("Accordion", () => {
       );
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(ref).toHaveBeenCalled();
+      expect(ref.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+    });
+  });
+
+  describe("Imperative API (AccordionRef)", () => {
+    it("expands item programmatically via ref.expand()", () => {
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="single" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      act(() => {
+        ref.current?.expand("item-2");
+      });
+
+      expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+    });
+
+    it("collapses item programmatically via ref.collapse()", async () => {
+      const user = userEvent.setup();
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="single" collapsible ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+
+      act(() => {
+        ref.current?.collapse("item-1");
+      });
+
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
+    it("toggles item programmatically via ref.toggle()", () => {
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="single" collapsible ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      act(() => {
+        ref.current?.toggle("item-1");
+      });
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+
+      act(() => {
+        ref.current?.toggle("item-1");
+      });
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
+    it("expands all items via ref.expandAll() in multiple mode", () => {
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="multiple" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      act(() => {
+        ref.current?.expandAll();
+      });
+
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+      expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+    });
+
+    it("collapses all items via ref.collapseAll()", async () => {
+      const user = userEvent.setup();
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="multiple" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      await user.click(screen.getByRole("button", { name: "Item 2" }));
+
+      act(() => {
+        ref.current?.collapseAll();
+      });
+
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+      expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
+    it("returns expanded values via ref.getExpandedValues()", async () => {
+      const user = userEvent.setup();
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="multiple" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(ref.current?.getExpandedValues()).toEqual(["item-1"]);
+    });
+
+    it("checks expansion state via ref.isExpanded()", async () => {
+      const user = userEvent.setup();
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="single" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      expect(ref.current?.isExpanded("item-1")).toBe(false);
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(ref.current?.isExpanded("item-1")).toBe(true);
+    });
+
+    it("focuses item programmatically via ref.focusItem()", () => {
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="single" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      act(() => {
+        ref.current?.focusItem("item-2");
+      });
+
+      expect(screen.getByRole("button", { name: "Item 2" })).toHaveFocus();
+    });
+
+    it("returns item count via ref.getItemCount()", () => {
+      const ref = { current: null as import("../utils/types").AccordionRef | null };
+      render(
+        <Accordion type="single" ref={ref}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Item 3</AccordionTrigger>
+            <AccordionContent>Content 3</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      expect(ref.current?.getItemCount()).toBe(3);
+    });
+  });
+
+  describe("maxExpanded (Multiple Mode)", () => {
+    it("limits expansion to maxExpanded count", async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion type="multiple" maxExpanded={2}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Item 3</AccordionTrigger>
+            <AccordionContent>Content 3</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      await user.click(screen.getByRole("button", { name: "Item 2" }));
+      await user.click(screen.getByRole("button", { name: "Item 3" }));
+
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+      expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+      expect(screen.getByRole("button", { name: "Item 3" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
+    it("allows expansion after collapsing when at maxExpanded", async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion type="multiple" maxExpanded={1}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      await user.click(screen.getByRole("button", { name: "Item 1" })); // collapse
+      await user.click(screen.getByRole("button", { name: "Item 2" }));
+
+      expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+    });
+  });
+
+  describe("onExpandedChange Callback", () => {
+    it("receives detailed expansion event", async () => {
+      const user = userEvent.setup();
+      const onExpandedChange = vi.fn();
+      render(
+        <Accordion type="single" onExpandedChange={onExpandedChange}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(onExpandedChange).toHaveBeenCalledWith({
+        value: "item-1",
+        isExpanded: true,
+        expandedCount: 1,
+        totalCount: 2,
+      });
+    });
+  });
+
+  describe("AccordionItem onToggle Callback", () => {
+    it("calls onToggle when item expansion state changes", async () => {
+      const user = userEvent.setup();
+      const onToggle = vi.fn();
+      render(
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1" onToggle={onToggle}>
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(onToggle).toHaveBeenCalledWith(true);
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(onToggle).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe("preventClose Callback", () => {
+    it("prevents closing when preventClose returns true", async () => {
+      const user = userEvent.setup();
+      const preventClose = vi.fn().mockReturnValue(true);
+      render(
+        <Accordion type="single" collapsible preventClose={preventClose}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(preventClose).toHaveBeenCalledWith("item-1");
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+    });
+
+    it("allows closing when preventClose returns false", async () => {
+      const user = userEvent.setup();
+      const preventClose = vi.fn().mockReturnValue(false);
+      render(
+        <Accordion type="single" collapsible preventClose={preventClose}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
+    it("supports async preventClose", async () => {
+      const user = userEvent.setup();
+      const preventClose = vi.fn().mockResolvedValue(true);
+      render(
+        <Accordion type="single" collapsible preventClose={preventClose}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+
+      expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+    });
+  });
+
+  describe("Content Unmount Behavior", () => {
+    it("unmounts content when unmountOnClose=true after closing", async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent unmountOnClose>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(screen.getByText("Content 1")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
+      expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("AccordionItem Ref Forwarding", () => {
+    it("forwards ref to item container", () => {
+      const ref = vi.fn();
+      render(
+        <Accordion type="single">
+          <AccordionItem value="item-1" ref={ref}>
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
 
       expect(ref).toHaveBeenCalled();
       expect(ref.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
