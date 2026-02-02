@@ -15,6 +15,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   trailingIcon?: ReactNode;
   onLeadingIconClick?: () => void;
   onTrailingIconClick?: () => void;
+  leadingIconLabel?: string;
+  trailingIconLabel?: string;
   isLoading?: boolean;
   loader?: ReactNode;
   loaderSize?: number;

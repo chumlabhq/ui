@@ -1,6 +1,21 @@
-import { forwardRef, useId } from "react";
+/**
+ * AI GOVERNANCE NOTICE
+ * This repository enforces strict cross-component consistency.
+ * Do not introduce new prop names, behaviors, or documentation formats
+ * unless absolutely required for correctness.
+ */
+
+import { forwardRef, useId, type KeyboardEvent } from "react";
 import type { InputLabelProps, InputProps } from "./types";
 import { CircularLoader } from "../Loader";
+
+const handleIconKeyDown =
+  (onClick?: () => void) => (event: KeyboardEvent<HTMLSpanElement>) => {
+    if (onClick && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      onClick();
+    }
+  };
 
 export const InputLabel = ({
   label,
@@ -31,6 +46,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       trailingIcon,
       onLeadingIconClick,
       onTrailingIconClick,
+      leadingIconLabel,
+      trailingIconLabel,
       isLoading = false,
       loader,
       loaderSize = 16,
@@ -43,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       className = "",
       ...rest
     },
-    ref
+    ref,
   ) => {
     const generatedId = useId();
     const inputId = id || name || generatedId;
@@ -59,7 +76,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div
-        className={[containerClassName, fullWidthClass].filter(Boolean).join(" ")}
+        className={[containerClassName, fullWidthClass]
+          .filter(Boolean)
+          .join(" ")}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
         data-loading={isLoading || undefined}
@@ -73,14 +92,24 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         )}
 
-        <div className={["flex items-center", wrapperClassName, focusClassName].filter(Boolean).join(" ")}>
+        <div
+          className={["flex items-center w-full", wrapperClassName, focusClassName]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {leadingIcon && (
             <span
-              className="inline-flex shrink-0"
+              className={[
+                "inline-flex shrink-0",
+                onLeadingIconClick ? "cursor-pointer" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={onLeadingIconClick}
+              onKeyDown={handleIconKeyDown(onLeadingIconClick)}
               role={onLeadingIconClick ? "button" : undefined}
               tabIndex={onLeadingIconClick ? 0 : undefined}
-              aria-label={onLeadingIconClick ? "Leading icon action" : undefined}
+              aria-label={onLeadingIconClick ? leadingIconLabel : undefined}
             >
               {leadingIcon}
             </span>
@@ -93,7 +122,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type={type}
             required={required}
             disabled={isDisabled}
-            className={["flex-1", className].filter(Boolean).join(" ")}
+            className={["flex-1 min-w-0", className].filter(Boolean).join(" ")}
             aria-invalid={error || undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
@@ -104,11 +133,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
           {trailingIcon && (
             <span
-              className="inline-flex shrink-0"
+              className={[
+                "inline-flex shrink-0",
+                onTrailingIconClick ? "cursor-pointer" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={onTrailingIconClick}
+              onKeyDown={handleIconKeyDown(onTrailingIconClick)}
               role={onTrailingIconClick ? "button" : undefined}
               tabIndex={onTrailingIconClick ? 0 : undefined}
-              aria-label={onTrailingIconClick ? "Trailing icon action" : undefined}
+              aria-label={onTrailingIconClick ? trailingIconLabel : undefined}
             >
               {trailingIcon}
             </span>
@@ -124,7 +159,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

@@ -1,0 +1,815 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Components" [level=1] [ref=e6]
+      - switch [ref=e8]:
+        - img [ref=e10]
+    - navigation [ref=e12]:
+      - link "Accordion" [ref=e13] [cursor=pointer]:
+        - /url: /demo/accordion
+      - link "Avatar" [ref=e14] [cursor=pointer]:
+        - /url: /demo/avatar
+      - link "Breadcrumb" [ref=e15] [cursor=pointer]:
+        - /url: /demo/breadcrumb
+      - link "Button" [ref=e16] [cursor=pointer]:
+        - /url: /demo/button
+      - link "Cascading Dropdown" [ref=e17] [cursor=pointer]:
+        - /url: /demo/cascading-dropdown
+      - link "Checkbox" [ref=e18] [cursor=pointer]:
+        - /url: /demo/checkbox
+      - link "Country Flag" [ref=e19] [cursor=pointer]:
+        - /url: /demo/country-flag
+      - link "Date Picker" [ref=e20] [cursor=pointer]:
+        - /url: /demo/date-picker
+      - link "Drawer" [ref=e21] [cursor=pointer]:
+        - /url: /demo/drawer
+      - link "Dropdown" [ref=e22] [cursor=pointer]:
+        - /url: /demo/dropdown
+      - link "Input" [ref=e23] [cursor=pointer]:
+        - /url: /demo/input
+      - link "International Phone Input" [ref=e24] [cursor=pointer]:
+        - /url: /demo/international-phone-input
+      - link "Modal" [ref=e25] [cursor=pointer]:
+        - /url: /demo/modal
+      - link "Multi Select Dropdown" [ref=e26] [cursor=pointer]:
+        - /url: /demo/multi-select-dropdown
+      - link "Multi Select Searchable Dropdown" [ref=e27] [cursor=pointer]:
+        - /url: /demo/multi-select-searchable-dropdown
+      - link "OTP Input" [ref=e28] [cursor=pointer]:
+        - /url: /demo/otp-input
+      - link "Pagination" [ref=e29] [cursor=pointer]:
+        - /url: /demo/pagination
+      - link "Resizable Panel" [ref=e30] [cursor=pointer]:
+        - /url: /demo/resizable-panel
+      - link "Searchable Dropdown" [ref=e31] [cursor=pointer]:
+        - /url: /demo/searchable-dropdown
+      - link "Stepper" [ref=e32] [cursor=pointer]:
+        - /url: /demo/stepper
+      - link "Switch" [ref=e33] [cursor=pointer]:
+        - /url: /demo/switch
+      - link "Tab Panel" [ref=e34] [cursor=pointer]:
+        - /url: /demo/tab-panel
+      - link "Table" [ref=e35] [cursor=pointer]:
+        - /url: /demo/table
+      - link "Text Area" [ref=e36] [cursor=pointer]:
+        - /url: /demo/text-area
+      - link "Time Picker" [ref=e37] [cursor=pointer]:
+        - /url: /demo/time-picker
+      - link "Toast" [ref=e38] [cursor=pointer]:
+        - /url: /demo/toast
+      - link "Tooltip" [ref=e39] [cursor=pointer]:
+        - /url: /demo/tooltip
+  - main [ref=e40]:
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - heading "OTP Input" [level=1] [ref=e44]
+        - paragraph [ref=e45]: A flexible, accessible OTP input component with customizable length, grouping, separators, and styling. Supports paste functionality, custom renderers, and keyboard navigation.
+        - generic [ref=e46]:
+          - heading "Installation" [level=3] [ref=e47]
+          - code [ref=e49]: "import OtpInput, { OtpInputLabel } from \"@kern-ui/otp-input\";"
+      - generic [ref=e50]:
+        - heading "Examples" [level=2] [ref=e51]
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - heading "Basic OTP Input" [level=2] [ref=e54]
+            - paragraph [ref=e55]: A simple 6-digit OTP input with default configuration.
+          - generic [ref=e58]:
+            - group "OTP input" [ref=e60]:
+              - textbox "OTP digit 1" [ref=e61]
+              - textbox "OTP digit 2" [ref=e62]
+              - textbox "OTP digit 3" [ref=e63]
+              - textbox "OTP digit 4" [ref=e64]
+              - textbox "OTP digit 5" [ref=e65]
+              - textbox "OTP digit 6" [ref=e66]
+            - paragraph [ref=e67]: "Value: (empty)"
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - heading "Different Lengths" [level=2] [ref=e70]
+            - paragraph [ref=e71]: Use the length prop to set the number of input boxes.
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - paragraph [ref=e76]: 4-digit OTP (length=4)
+              - group "OTP input" [ref=e78]:
+                - textbox "OTP digit 1" [ref=e79]
+                - textbox "OTP digit 2" [ref=e80]
+                - textbox "OTP digit 3" [ref=e81]
+                - textbox "OTP digit 4" [ref=e82]
+            - generic [ref=e83]:
+              - paragraph [ref=e84]: 8-digit OTP (length=8)
+              - group "OTP input" [ref=e86]:
+                - textbox "OTP digit 1" [active] [ref=e87]
+                - textbox "OTP digit 2" [ref=e88]
+                - textbox "OTP digit 3" [ref=e89]
+                - textbox "OTP digit 4" [ref=e90]
+                - textbox "OTP digit 5" [ref=e91]
+                - textbox "OTP digit 6" [ref=e92]
+                - textbox "OTP digit 7" [ref=e93]
+                - textbox "OTP digit 8" [ref=e94]
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - heading "Layout Variations" [level=2] [ref=e97]
+            - paragraph [ref=e98]: Different grouping and spacing configurations using groups and separator props.
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - generic [ref=e104]: "1"
+                - generic [ref=e105]: Individual boxes with equal spacing
+              - group "OTP input" [ref=e107]:
+                - textbox "OTP digit 1" [ref=e108]
+                - textbox "OTP digit 2" [ref=e109]
+                - textbox "OTP digit 3" [ref=e110]
+                - textbox "OTP digit 4" [ref=e111]
+                - textbox "OTP digit 5" [ref=e112]
+                - textbox "OTP digit 6" [ref=e113]
+            - generic [ref=e114]:
+              - generic [ref=e115]:
+                - generic [ref=e116]: "2"
+                - generic [ref=e117]: Groups (2-2-2) with separator
+              - group "OTP input" [ref=e119]:
+                - generic [ref=e120]:
+                  - textbox "OTP digit 1" [ref=e121]
+                  - textbox "OTP digit 2" [ref=e122]
+                - generic [ref=e123]: "-"
+                - generic [ref=e124]:
+                  - textbox "OTP digit 3" [ref=e125]
+                  - textbox "OTP digit 4" [ref=e126]
+                - generic [ref=e127]: "-"
+                - generic [ref=e128]:
+                  - textbox "OTP digit 5" [ref=e129]
+                  - textbox "OTP digit 6" [ref=e130]
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - generic [ref=e133]: "3"
+                - generic [ref=e134]: Connected groups, space between
+              - group "OTP input" [ref=e136]:
+                - generic [ref=e137]:
+                  - textbox "OTP digit 1" [ref=e138]
+                  - textbox "OTP digit 2" [ref=e139]
+                - generic [ref=e140]:
+                  - textbox "OTP digit 3" [ref=e141]
+                  - textbox "OTP digit 4" [ref=e142]
+                - generic [ref=e143]:
+                  - textbox "OTP digit 5" [ref=e144]
+                  - textbox "OTP digit 6" [ref=e145]
+            - generic [ref=e146]:
+              - generic [ref=e147]:
+                - generic [ref=e148]: "4"
+                - generic [ref=e149]: Connected with separator
+              - group "OTP input" [ref=e151]:
+                - generic [ref=e152]:
+                  - textbox "OTP digit 1" [ref=e153]
+                  - textbox "OTP digit 2" [ref=e154]
+                - generic [ref=e155]: "-"
+                - generic [ref=e156]:
+                  - textbox "OTP digit 3" [ref=e157]
+                  - textbox "OTP digit 4" [ref=e158]
+                - generic [ref=e159]: "-"
+                - generic [ref=e160]:
+                  - textbox "OTP digit 5" [ref=e161]
+                  - textbox "OTP digit 6" [ref=e162]
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - heading "Grouped OTP Variations" [level=2] [ref=e165]
+            - paragraph [ref=e166]: More examples of grouping with different configurations.
+          - generic [ref=e169]:
+            - generic [ref=e170]:
+              - paragraph [ref=e171]: Groups (3-3) with dash separator
+              - group "OTP input" [ref=e173]:
+                - generic [ref=e174]:
+                  - textbox "OTP digit 1" [ref=e175]
+                  - textbox "OTP digit 2" [ref=e176]
+                  - textbox "OTP digit 3" [ref=e177]
+                - generic [ref=e178]: "-"
+                - generic [ref=e179]:
+                  - textbox "OTP digit 4" [ref=e180]
+                  - textbox "OTP digit 5" [ref=e181]
+                  - textbox "OTP digit 6" [ref=e182]
+            - generic [ref=e183]:
+              - paragraph [ref=e184]: Groups (3-3) connected within groups
+              - group "OTP input" [ref=e186]:
+                - generic [ref=e187]:
+                  - textbox "OTP digit 1" [ref=e188]
+                  - textbox "OTP digit 2" [ref=e189]
+                  - textbox "OTP digit 3" [ref=e190]
+                - generic [ref=e191]:
+                  - textbox "OTP digit 4" [ref=e192]
+                  - textbox "OTP digit 5" [ref=e193]
+                  - textbox "OTP digit 6" [ref=e194]
+            - generic [ref=e195]:
+              - paragraph [ref=e196]: Uneven groups (2-2-2) with slash separator
+              - group "OTP input" [ref=e198]:
+                - generic [ref=e199]:
+                  - textbox "OTP digit 1" [ref=e200]
+                  - textbox "OTP digit 2" [ref=e201]
+                - generic [ref=e202]: /
+                - generic [ref=e203]:
+                  - textbox "OTP digit 3" [ref=e204]
+                  - textbox "OTP digit 4" [ref=e205]
+                - generic [ref=e206]: /
+                - generic [ref=e207]:
+                  - textbox "OTP digit 5" [ref=e208]
+                  - textbox "OTP digit 6" [ref=e209]
+        - generic [ref=e210]:
+          - generic [ref=e211]:
+            - heading "With Label" [level=2] [ref=e212]
+            - paragraph [ref=e213]: Use the label prop to add an accessible label above the input.
+          - generic [ref=e217]:
+            - generic [ref=e218]: Verification Code
+            - group "OTP input" [ref=e219]:
+              - textbox "OTP digit 1" [ref=e220]
+              - textbox "OTP digit 2" [ref=e221]
+              - textbox "OTP digit 3" [ref=e222]
+              - textbox "OTP digit 4" [ref=e223]
+              - textbox "OTP digit 5" [ref=e224]
+              - textbox "OTP digit 6" [ref=e225]
+        - generic [ref=e226]:
+          - generic [ref=e227]:
+            - heading "Required Field" [level=2] [ref=e228]
+            - paragraph [ref=e229]: Add required prop to show an asterisk (*) indicator and set aria-required.
+          - generic [ref=e232]:
+            - generic [ref=e233]: Enter OTP*
+            - group "OTP input" [ref=e234]:
+              - textbox "OTP digit 1" [ref=e235]
+              - textbox "OTP digit 2" [ref=e236]
+              - textbox "OTP digit 3" [ref=e237]
+              - textbox "OTP digit 4" [ref=e238]
+        - generic [ref=e239]:
+          - generic [ref=e240]:
+            - heading "Error State" [level=2] [ref=e241]
+            - paragraph [ref=e242]: Use error and errorMessage props to display validation errors.
+          - generic [ref=e245]:
+            - generic [ref=e246]: Invalid Code
+            - group "OTP input" [ref=e247]:
+              - textbox "OTP digit 1" [ref=e248]
+              - textbox "OTP digit 2" [ref=e249]
+              - textbox "OTP digit 3" [ref=e250]
+              - textbox "OTP digit 4" [ref=e251]
+              - textbox "OTP digit 5" [ref=e252]
+              - textbox "OTP digit 6" [ref=e253]
+            - alert [ref=e254]: The code you entered is incorrect. Please try again.
+        - generic [ref=e255]:
+          - generic [ref=e256]:
+            - heading "Disabled State" [level=2] [ref=e257]
+            - paragraph [ref=e258]: Disable the input with the disabled prop.
+          - group "OTP input" [ref=e262]:
+            - textbox "OTP digit 1" [disabled] [ref=e263]: "1"
+            - textbox "OTP digit 2" [disabled] [ref=e264]: "2"
+            - textbox "OTP digit 3" [disabled] [ref=e265]: "3"
+            - textbox "OTP digit 4" [disabled] [ref=e266]: "4"
+            - textbox "OTP digit 5" [disabled] [ref=e267]: "5"
+            - textbox "OTP digit 6" [disabled] [ref=e268]: "6"
+        - generic [ref=e269]:
+          - generic [ref=e270]:
+            - heading "Password Type (Masked)" [level=2] [ref=e271]
+            - paragraph [ref=e272]: Use inputType="password" to mask the input values.
+          - generic [ref=e275]:
+            - group "OTP input" [ref=e277]:
+              - textbox "OTP digit 1" [ref=e278]
+              - textbox "OTP digit 2" [ref=e279]
+              - textbox "OTP digit 3" [ref=e280]
+              - textbox "OTP digit 4" [ref=e281]
+              - textbox "OTP digit 5" [ref=e282]
+              - textbox "OTP digit 6" [ref=e283]
+            - paragraph [ref=e284]: "Value: (empty)"
+        - generic [ref=e285]:
+          - generic [ref=e286]:
+            - heading "Paste Disabled" [level=2] [ref=e287]
+            - paragraph [ref=e288]: "Set allowPaste={false} to disable paste functionality."
+          - generic [ref=e291]:
+            - group "OTP input" [ref=e293]:
+              - textbox "OTP digit 1" [ref=e294]
+              - textbox "OTP digit 2" [ref=e295]
+              - textbox "OTP digit 3" [ref=e296]
+              - textbox "OTP digit 4" [ref=e297]
+              - textbox "OTP digit 5" [ref=e298]
+              - textbox "OTP digit 6" [ref=e299]
+            - paragraph [ref=e300]: Try pasting - it won't work!
+        - generic [ref=e301]:
+          - generic [ref=e302]:
+            - heading "onComplete Callback" [level=2] [ref=e303]
+            - paragraph [ref=e304]: Use onComplete to trigger an action when all digits are filled.
+          - generic [ref=e307]:
+            - group "OTP input" [ref=e309]:
+              - textbox "OTP digit 1" [ref=e310]
+              - textbox "OTP digit 2" [ref=e311]
+              - textbox "OTP digit 3" [ref=e312]
+              - textbox "OTP digit 4" [ref=e313]
+              - textbox "OTP digit 5" [ref=e314]
+              - textbox "OTP digit 6" [ref=e315]
+            - paragraph [ref=e316]: "Last completed value: (none yet)"
+          - code [ref=e318]: "<OtpInput value={value} onChange={setValue} onComplete={(val) => { // Called when all digits are filled console.log('OTP completed:', val); submitOtp(val); }} />"
+        - generic [ref=e319]:
+          - generic [ref=e320]:
+            - heading "No Auto Focus" [level=2] [ref=e321]
+            - paragraph [ref=e322]: "Set autoFocusFirst={false} to prevent auto-focusing the first input on mount."
+          - generic [ref=e325]:
+            - group "OTP input" [ref=e327]:
+              - textbox "OTP digit 1" [ref=e328]
+              - textbox "OTP digit 2" [ref=e329]
+              - textbox "OTP digit 3" [ref=e330]
+              - textbox "OTP digit 4" [ref=e331]
+              - textbox "OTP digit 5" [ref=e332]
+              - textbox "OTP digit 6" [ref=e333]
+            - paragraph [ref=e334]: First input is not auto-focused on mount
+        - generic [ref=e335]:
+          - generic [ref=e336]:
+            - heading "Ref Forwarding" [level=2] [ref=e337]
+            - paragraph [ref=e338]: Access the first input element using React refs for programmatic focus management.
+          - generic [ref=e341]:
+            - group "OTP input" [ref=e343]:
+              - textbox "OTP digit 1" [ref=e344]
+              - textbox "OTP digit 2" [ref=e345]
+              - textbox "OTP digit 3" [ref=e346]
+              - textbox "OTP digit 4" [ref=e347]
+              - textbox "OTP digit 5" [ref=e348]
+              - textbox "OTP digit 6" [ref=e349]
+            - generic [ref=e350]:
+              - button "Focus First Input" [ref=e351]
+              - button "Get First Value" [ref=e352]
+        - generic [ref=e353]:
+          - generic [ref=e354]:
+            - heading "Custom ID and Name" [level=2] [ref=e355]
+            - paragraph [ref=e356]: Set custom id and name attributes for form handling.
+          - generic [ref=e359]:
+            - generic [ref=e360]:
+              - generic [ref=e361]: Verification Code
+              - group "OTP input" [ref=e362]:
+                - textbox "OTP digit 1" [ref=e363]
+                - textbox "OTP digit 2" [ref=e364]
+                - textbox "OTP digit 3" [ref=e365]
+                - textbox "OTP digit 4" [ref=e366]
+                - textbox "OTP digit 5" [ref=e367]
+                - textbox "OTP digit 6" [ref=e368]
+            - button "Submit" [ref=e369]
+          - paragraph [ref=e371]:
+            - strong [ref=e372]: "Note:"
+            - text: The input ID is auto-generated if not provided. It uses
+            - code [ref=e373]: id || name || useId()
+            - text: fallback chain.
+        - generic [ref=e374]:
+          - generic [ref=e375]:
+            - heading "Custom Render Input" [level=2] [ref=e376]
+            - paragraph [ref=e377]: Use renderInput prop for complete control over how each input is rendered.
+          - generic [ref=e380]:
+            - group "OTP input" [ref=e382]:
+              - textbox "OTP digit 1" [ref=e384]
+              - textbox "OTP digit 2" [ref=e386]
+              - textbox "OTP digit 3" [ref=e388]
+              - textbox "OTP digit 4" [ref=e390]
+              - textbox "OTP digit 5" [ref=e392]
+              - textbox "OTP digit 6" [ref=e394]
+            - paragraph [ref=e395]: Custom rendered inputs with filled indicators
+          - code [ref=e397]: "<OtpInput value={value} onChange={setValue} renderInput={(props) => ( <div key={props.index} className=\"relative\"> <input {...props.inputProps} className={`custom-input ${props.filled ? \"filled\" : \"\"}`} /> {props.filled && <CheckIcon />} </div> )} />"
+        - generic [ref=e398]:
+          - generic [ref=e399]:
+            - heading "OtpInputLabel Standalone" [level=2] [ref=e400]
+            - paragraph [ref=e401]: Use OtpInputLabel separately for custom layouts.
+          - generic [ref=e404]:
+            - generic [ref=e405]:
+              - generic [ref=e406]: Standalone Label
+              - group "OTP input" [ref=e408]:
+                - textbox "OTP digit 1" [ref=e409]
+                - textbox "OTP digit 2" [ref=e410]
+                - textbox "OTP digit 3" [ref=e411]
+                - textbox "OTP digit 4" [ref=e412]
+                - textbox "OTP digit 5" [ref=e413]
+                - textbox "OTP digit 6" [ref=e414]
+            - generic [ref=e415]:
+              - generic [ref=e416]: Required Field*
+              - paragraph [ref=e417]: Required indicator (*) is added automatically
+        - generic [ref=e418]:
+          - generic [ref=e419]:
+            - heading "Custom Theme Examples" [level=2] [ref=e420]
+            - paragraph [ref=e421]: Customize the input appearance using className props.
+          - generic [ref=e424]:
+            - generic [ref=e425]:
+              - paragraph [ref=e426]: Dark theme (works in both modes)
+              - group "OTP input" [ref=e429]:
+                - textbox "OTP digit 1" [ref=e430]
+                - textbox "OTP digit 2" [ref=e431]
+                - textbox "OTP digit 3" [ref=e432]
+                - textbox "OTP digit 4" [ref=e433]
+                - textbox "OTP digit 5" [ref=e434]
+                - textbox "OTP digit 6" [ref=e435]
+            - generic [ref=e436]:
+              - paragraph [ref=e437]: Rounded/Pill style
+              - group "OTP input" [ref=e439]:
+                - textbox "OTP digit 1" [ref=e440]
+                - textbox "OTP digit 2" [ref=e441]
+                - textbox "OTP digit 3" [ref=e442]
+                - textbox "OTP digit 4" [ref=e443]
+                - textbox "OTP digit 5" [ref=e444]
+                - textbox "OTP digit 6" [ref=e445]
+            - generic [ref=e446]:
+              - paragraph [ref=e447]: Underline style
+              - group "OTP input" [ref=e449]:
+                - textbox "OTP digit 1" [ref=e450]
+                - textbox "OTP digit 2" [ref=e451]
+                - textbox "OTP digit 3" [ref=e452]
+                - textbox "OTP digit 4" [ref=e453]
+                - textbox "OTP digit 5" [ref=e454]
+                - textbox "OTP digit 6" [ref=e455]
+            - generic [ref=e456]:
+              - paragraph [ref=e457]: Gradient border effect
+              - group "OTP input" [ref=e459]:
+                - textbox "OTP digit 1" [ref=e460]
+                - textbox "OTP digit 2" [ref=e461]
+                - textbox "OTP digit 3" [ref=e462]
+                - textbox "OTP digit 4" [ref=e463]
+                - textbox "OTP digit 5" [ref=e464]
+                - textbox "OTP digit 6" [ref=e465]
+        - generic [ref=e466]:
+          - generic [ref=e467]:
+            - heading "Individual Input Styling" [level=2] [ref=e468]
+            - paragraph [ref=e469]: Use inputClassNames array to style each input individually.
+          - generic [ref=e472]:
+            - group "OTP input" [ref=e474]:
+              - textbox "OTP digit 1" [ref=e475]
+              - textbox "OTP digit 2" [ref=e476]
+              - textbox "OTP digit 3" [ref=e477]
+              - textbox "OTP digit 4" [ref=e478]
+              - textbox "OTP digit 5" [ref=e479]
+              - textbox "OTP digit 6" [ref=e480]
+            - paragraph [ref=e481]: Rainbow colors using inputClassNames array
+        - generic [ref=e482]:
+          - generic [ref=e483]:
+            - heading "Size Variations" [level=2] [ref=e484]
+            - paragraph [ref=e485]: Customize input sizes using className props.
+          - generic [ref=e488]:
+            - generic [ref=e489]:
+              - paragraph [ref=e490]: Large inputs
+              - group "OTP input" [ref=e492]:
+                - textbox "OTP digit 1" [ref=e493]
+                - textbox "OTP digit 2" [ref=e494]
+                - textbox "OTP digit 3" [ref=e495]
+                - textbox "OTP digit 4" [ref=e496]
+            - generic [ref=e497]:
+              - paragraph [ref=e498]: Small inputs
+              - group "OTP input" [ref=e500]:
+                - textbox "OTP digit 1" [ref=e501]
+                - textbox "OTP digit 2" [ref=e502]
+                - textbox "OTP digit 3" [ref=e503]
+                - textbox "OTP digit 4" [ref=e504]
+                - textbox "OTP digit 5" [ref=e505]
+                - textbox "OTP digit 6" [ref=e506]
+                - textbox "OTP digit 7" [ref=e507]
+                - textbox "OTP digit 8" [ref=e508]
+        - generic [ref=e509]:
+          - generic [ref=e510]:
+            - heading "Full Width" [level=2] [ref=e511]
+            - paragraph [ref=e512]: Use fullWidth prop to make the container span full width.
+          - group "OTP input" [ref=e517]:
+            - textbox "OTP digit 1" [ref=e518]
+            - textbox "OTP digit 2" [ref=e519]
+            - textbox "OTP digit 3" [ref=e520]
+            - textbox "OTP digit 4" [ref=e521]
+            - textbox "OTP digit 5" [ref=e522]
+            - textbox "OTP digit 6" [ref=e523]
+        - generic [ref=e524]:
+          - generic [ref=e525]:
+            - heading "Credit Card Style (16 digits)" [level=2] [ref=e526]
+            - paragraph [ref=e527]: Example of a longer input with groups for credit card-like input.
+          - group "OTP input" [ref=e531]:
+            - generic [ref=e532]:
+              - textbox "OTP digit 1" [ref=e533]
+              - textbox "OTP digit 2" [ref=e534]
+              - textbox "OTP digit 3" [ref=e535]
+              - textbox "OTP digit 4" [ref=e536]
+            - generic [ref=e537]: "-"
+            - generic [ref=e538]:
+              - textbox "OTP digit 5" [ref=e539]
+              - textbox "OTP digit 6" [ref=e540]
+              - textbox "OTP digit 7" [ref=e541]
+              - textbox "OTP digit 8" [ref=e542]
+            - generic [ref=e543]: "-"
+            - generic [ref=e544]:
+              - textbox "OTP digit 9" [ref=e545]
+              - textbox "OTP digit 10" [ref=e546]
+              - textbox "OTP digit 11" [ref=e547]
+              - textbox "OTP digit 12" [ref=e548]
+            - generic [ref=e549]: "-"
+            - generic [ref=e550]:
+              - textbox "OTP digit 13" [ref=e551]
+              - textbox "OTP digit 14" [ref=e552]
+              - textbox "OTP digit 15" [ref=e553]
+              - textbox "OTP digit 16" [ref=e554]
+        - generic [ref=e555]:
+          - generic [ref=e556]:
+            - heading "Data Attributes" [level=2] [ref=e557]
+            - paragraph [ref=e558]: The OtpInput component applies data attributes for CSS-based styling.
+          - generic [ref=e560]:
+            - table [ref=e562]:
+              - rowgroup [ref=e563]:
+                - row "Attribute Applied To Description" [ref=e564]:
+                  - columnheader "Attribute" [ref=e565]
+                  - columnheader "Applied To" [ref=e566]
+                  - columnheader "Description" [ref=e567]
+              - rowgroup [ref=e568]:
+                - row "data-disabled container, inputs Present when input is disabled" [ref=e569]:
+                  - cell "data-disabled" [ref=e570]
+                  - cell "container, inputs" [ref=e571]
+                  - cell "Present when input is disabled" [ref=e572]
+                - row "data-error container, inputs Present when input has an error" [ref=e573]:
+                  - cell "data-error" [ref=e574]
+                  - cell "container, inputs" [ref=e575]
+                  - cell "Present when input has an error" [ref=e576]
+                - row "data-filled input Present when input has a value" [ref=e577]:
+                  - cell "data-filled" [ref=e578]
+                  - cell "input" [ref=e579]
+                  - cell "Present when input has a value" [ref=e580]
+                - row "data-index input The index of the input (0-based)" [ref=e581]:
+                  - cell "data-index" [ref=e582]
+                  - cell "input" [ref=e583]
+                  - cell "The index of the input (0-based)" [ref=e584]
+                - row "data-group group wrapper The index of the group (when using groups)" [ref=e585]:
+                  - cell "data-group" [ref=e586]
+                  - cell "group wrapper" [ref=e587]
+                  - cell "The index of the group (when using groups)" [ref=e588]
+            - paragraph [ref=e589]:
+              - text: "Example usage:"
+              - code [ref=e590]: data-[disabled]:opacity-50
+              - text: ","
+              - code [ref=e591]: data-[filled]:border-green-500
+      - generic [ref=e592]:
+        - heading "API Reference" [level=2] [ref=e593]
+        - generic [ref=e594]:
+          - heading "OtpInput" [level=3] [ref=e595]
+          - table [ref=e597]:
+            - rowgroup [ref=e598]:
+              - row "Prop Type Default Description" [ref=e599]:
+                - columnheader "Prop" [ref=e600]
+                - columnheader "Type" [ref=e601]
+                - columnheader "Default" [ref=e602]
+                - columnheader "Description" [ref=e603]
+            - rowgroup [ref=e604]:
+              - row "length number 6 Number of input boxes" [ref=e605]:
+                - cell "length" [ref=e606]
+                - cell "number" [ref=e607]
+                - cell "6" [ref=e608]
+                - cell "Number of input boxes" [ref=e609]
+              - row "value string \"\" Current OTP value" [ref=e610]:
+                - cell "value" [ref=e611]
+                - cell "string" [ref=e612]
+                - cell "\"\"" [ref=e613]
+                - cell "Current OTP value" [ref=e614]
+              - 'row "onChange (value: string) => void - Callback when value changes" [ref=e615]':
+                - cell "onChange" [ref=e616]
+                - 'cell "(value: string) => void" [ref=e617]'
+                - cell "-" [ref=e618]
+                - cell "Callback when value changes" [ref=e619]
+              - 'row "onComplete (value: string) => void - Callback when all digits are filled" [ref=e620]':
+                - cell "onComplete" [ref=e621]
+                - 'cell "(value: string) => void" [ref=e622]'
+                - cell "-" [ref=e623]
+                - cell "Callback when all digits are filled" [ref=e624]
+              - row "label ReactNode - Label text displayed above the input" [ref=e625]:
+                - cell "label" [ref=e626]
+                - cell "ReactNode" [ref=e627]
+                - cell "-" [ref=e628]
+                - cell "Label text displayed above the input" [ref=e629]
+              - row "required boolean false Show required indicator (*) and set aria-required" [ref=e630]:
+                - cell "required" [ref=e631]
+                - cell "boolean" [ref=e632]
+                - cell "false" [ref=e633]
+                - cell "Show required indicator (*) and set aria-required" [ref=e634]
+              - row "error boolean false Show error styling (sets aria-invalid)" [ref=e635]:
+                - cell "error" [ref=e636]
+                - cell "boolean" [ref=e637]
+                - cell "false" [ref=e638]
+                - cell "Show error styling (sets aria-invalid)" [ref=e639]
+              - row "errorMessage ReactNode - Error message displayed below the input" [ref=e640]:
+                - cell "errorMessage" [ref=e641]
+                - cell "ReactNode" [ref=e642]
+                - cell "-" [ref=e643]
+                - cell "Error message displayed below the input" [ref=e644]
+              - row "disabled boolean false Disables all inputs" [ref=e645]:
+                - cell "disabled" [ref=e646]
+                - cell "boolean" [ref=e647]
+                - cell "false" [ref=e648]
+                - cell "Disables all inputs" [ref=e649]
+              - row "groups number[] - Array defining input grouping (e.g., [3, 3])" [ref=e650]:
+                - cell "groups" [ref=e651]
+                - cell "number[]" [ref=e652]
+                - cell "-" [ref=e653]
+                - cell "Array defining input grouping (e.g., [3, 3])" [ref=e654]
+              - row "separator ReactNode - Element rendered between groups" [ref=e655]:
+                - cell "separator" [ref=e656]
+                - cell "ReactNode" [ref=e657]
+                - cell "-" [ref=e658]
+                - cell "Element rendered between groups" [ref=e659]
+              - row "allowPaste boolean true Enable/disable paste functionality" [ref=e660]:
+                - cell "allowPaste" [ref=e661]
+                - cell "boolean" [ref=e662]
+                - cell "true" [ref=e663]
+                - cell "Enable/disable paste functionality" [ref=e664]
+              - row "autoFocusFirst boolean true Auto-focus first input on mount" [ref=e665]:
+                - cell "autoFocusFirst" [ref=e666]
+                - cell "boolean" [ref=e667]
+                - cell "true" [ref=e668]
+                - cell "Auto-focus first input on mount" [ref=e669]
+              - row "inputType \"text\" | \"password\" \"text\" Input type (text or password for masking)" [ref=e670]:
+                - cell "inputType" [ref=e671]
+                - cell "\"text\" | \"password\"" [ref=e672]
+                - cell "\"text\"" [ref=e673]
+                - cell "Input type (text or password for masking)" [ref=e674]
+              - row "inputClassNames (string | undefined)[] [] Individual class names per input index" [ref=e675]:
+                - cell "inputClassNames" [ref=e676]
+                - cell "(string | undefined)[]" [ref=e677]
+                - cell "[]" [ref=e678]
+                - cell "Individual class names per input index" [ref=e679]
+              - row "fullWidth boolean false Take full width of container" [ref=e680]:
+                - cell "fullWidth" [ref=e681]
+                - cell "boolean" [ref=e682]
+                - cell "false" [ref=e683]
+                - cell "Take full width of container" [ref=e684]
+              - 'row "renderInput (props: OtpInputRenderProps) => ReactNode - Custom render function for each input" [ref=e685]':
+                - cell "renderInput" [ref=e686]
+                - 'cell "(props: OtpInputRenderProps) => ReactNode" [ref=e687]'
+                - cell "-" [ref=e688]
+                - cell "Custom render function for each input" [ref=e689]
+              - row "id string auto-generated HTML id attribute for the first input" [ref=e690]:
+                - cell "id" [ref=e691]
+                - cell "string" [ref=e692]
+                - cell "auto-generated" [ref=e693]
+                - cell "HTML id attribute for the first input" [ref=e694]
+              - row "name string - HTML name attribute for form submission" [ref=e695]:
+                - cell "name" [ref=e696]
+                - cell "string" [ref=e697]
+                - cell "-" [ref=e698]
+                - cell "HTML name attribute for form submission" [ref=e699]
+        - generic [ref=e700]:
+          - heading "Styling Props" [level=3] [ref=e701]
+          - table [ref=e703]:
+            - rowgroup [ref=e704]:
+              - row "Prop Type Description" [ref=e705]:
+                - columnheader "Prop" [ref=e706]
+                - columnheader "Type" [ref=e707]
+                - columnheader "Description" [ref=e708]
+            - rowgroup [ref=e709]:
+              - row "containerClassName string CSS class for outer container (includes label and error)" [ref=e710]:
+                - cell "containerClassName" [ref=e711]
+                - cell "string" [ref=e712]
+                - cell "CSS class for outer container (includes label and error)" [ref=e713]
+              - row "wrapperClassName string CSS class for inputs wrapper (contains all inputs/groups)" [ref=e714]:
+                - cell "wrapperClassName" [ref=e715]
+                - cell "string" [ref=e716]
+                - cell "CSS class for inputs wrapper (contains all inputs/groups)" [ref=e717]
+              - row "groupClassName string CSS class for group containers (when using groups)" [ref=e718]:
+                - cell "groupClassName" [ref=e719]
+                - cell "string" [ref=e720]
+                - cell "CSS class for group containers (when using groups)" [ref=e721]
+              - row "inputClassName string CSS class for all input elements" [ref=e722]:
+                - cell "inputClassName" [ref=e723]
+                - cell "string" [ref=e724]
+                - cell "CSS class for all input elements" [ref=e725]
+              - row "focusClassName string CSS class for focus states (appended to inputClassName)" [ref=e726]:
+                - cell "focusClassName" [ref=e727]
+                - cell "string" [ref=e728]
+                - cell "CSS class for focus states (appended to inputClassName)" [ref=e729]
+              - row "labelClassName string CSS class for label element" [ref=e730]:
+                - cell "labelClassName" [ref=e731]
+                - cell "string" [ref=e732]
+                - cell "CSS class for label element" [ref=e733]
+              - row "errorClassName string CSS class for error message element" [ref=e734]:
+                - cell "errorClassName" [ref=e735]
+                - cell "string" [ref=e736]
+                - cell "CSS class for error message element" [ref=e737]
+              - row "separatorClassName string CSS class for separator elements" [ref=e738]:
+                - cell "separatorClassName" [ref=e739]
+                - cell "string" [ref=e740]
+                - cell "CSS class for separator elements" [ref=e741]
+              - row "inputClassNames (string | undefined)[] Array of classes for individual inputs by index" [ref=e742]:
+                - cell "inputClassNames" [ref=e743]
+                - cell "(string | undefined)[]" [ref=e744]
+                - cell "Array of classes for individual inputs by index" [ref=e745]
+        - generic [ref=e746]:
+          - heading "OtpInputLabel" [level=3] [ref=e747]
+          - table [ref=e749]:
+            - rowgroup [ref=e750]:
+              - row "Prop Type Default Description" [ref=e751]:
+                - columnheader "Prop" [ref=e752]
+                - columnheader "Type" [ref=e753]
+                - columnheader "Default" [ref=e754]
+                - columnheader "Description" [ref=e755]
+            - rowgroup [ref=e756]:
+              - row "label ReactNode required Label content to display" [ref=e757]:
+                - cell "label" [ref=e758]
+                - cell "ReactNode" [ref=e759]
+                - cell "required" [ref=e760]
+                - cell "Label content to display" [ref=e761]
+              - row "required boolean false Whether to show required indicator (*)" [ref=e762]:
+                - cell "required" [ref=e763]
+                - cell "boolean" [ref=e764]
+                - cell "false" [ref=e765]
+                - cell "Whether to show required indicator (*)" [ref=e766]
+              - row "inputId string - ID of the input element (for htmlFor attribute)" [ref=e767]:
+                - cell "inputId" [ref=e768]
+                - cell "string" [ref=e769]
+                - cell "-" [ref=e770]
+                - cell "ID of the input element (for htmlFor attribute)" [ref=e771]
+              - row "className string \"\" CSS class for the label element" [ref=e772]:
+                - cell "className" [ref=e773]
+                - cell "string" [ref=e774]
+                - cell "\"\"" [ref=e775]
+                - cell "CSS class for the label element" [ref=e776]
+        - generic [ref=e777]:
+          - heading "OtpInputRenderProps (for renderInput)" [level=3] [ref=e778]
+          - table [ref=e780]:
+            - rowgroup [ref=e781]:
+              - row "Property Type Description" [ref=e782]:
+                - columnheader "Property" [ref=e783]
+                - columnheader "Type" [ref=e784]
+                - columnheader "Description" [ref=e785]
+            - rowgroup [ref=e786]:
+              - row "index number Index of the current input (0-based)" [ref=e787]:
+                - cell "index" [ref=e788]
+                - cell "number" [ref=e789]
+                - cell "Index of the current input (0-based)" [ref=e790]
+              - row "value string Current value of this input" [ref=e791]:
+                - cell "value" [ref=e792]
+                - cell "string" [ref=e793]
+                - cell "Current value of this input" [ref=e794]
+              - row "disabled boolean Whether the input is disabled" [ref=e795]:
+                - cell "disabled" [ref=e796]
+                - cell "boolean" [ref=e797]
+                - cell "Whether the input is disabled" [ref=e798]
+              - row "error boolean Whether the input has an error" [ref=e799]:
+                - cell "error" [ref=e800]
+                - cell "boolean" [ref=e801]
+                - cell "Whether the input has an error" [ref=e802]
+              - row "filled boolean Whether the input has a value" [ref=e803]:
+                - cell "filled" [ref=e804]
+                - cell "boolean" [ref=e805]
+                - cell "Whether the input has a value" [ref=e806]
+              - 'row "inputProps InputHTMLAttributes & { ref } Props to spread onto the input element" [ref=e807]':
+                - cell "inputProps" [ref=e808]
+                - 'cell "InputHTMLAttributes & { ref }" [ref=e809]'
+                - cell "Props to spread onto the input element" [ref=e810]
+        - generic [ref=e811]:
+          - heading "Type Definitions" [level=3] [ref=e812]
+          - code [ref=e814]: "interface OtpInputLabelProps { label: ReactNode; required?: boolean; inputId?: string; className?: string; } interface OtpInputRenderProps { index: number; value: string; disabled: boolean; error: boolean; filled: boolean; inputProps: InputHTMLAttributes<HTMLInputElement> & { ref: (el: HTMLInputElement | null) => void; }; } interface OtpInputProps extends Omit< InputHTMLAttributes<HTMLInputElement>, \"value\" | \"onChange\" | \"type\" | \"maxLength\" > { length?: number; value?: string; onChange?: (value: string) => void; onComplete?: (value: string) => void; label?: ReactNode; required?: boolean; error?: boolean; errorMessage?: ReactNode; disabled?: boolean; groups?: number[]; separator?: ReactNode; allowPaste?: boolean; autoFocusFirst?: boolean; inputType?: \"text\" | \"password\"; inputClassNames?: (string | undefined)[]; fullWidth?: boolean; renderInput?: (props: OtpInputRenderProps) => ReactNode; // Styling props containerClassName?: string; wrapperClassName?: string; groupClassName?: string; inputClassName?: string; focusClassName?: string; labelClassName?: string; errorClassName?: string; separatorClassName?: string; }"
+      - generic [ref=e815]:
+        - heading "Accessibility" [level=2] [ref=e816]
+        - generic [ref=e817]:
+          - heading "Features" [level=3] [ref=e818]
+          - list [ref=e819]:
+            - listitem [ref=e820]:
+              - text: Label is automatically associated with first input via
+              - code [ref=e821]: htmlFor
+            - listitem [ref=e822]:
+              - text: Required inputs have
+              - code [ref=e823]: aria-required="true"
+            - listitem [ref=e824]:
+              - text: Error state sets
+              - code [ref=e825]: aria-invalid="true"
+              - text: and connects error message via
+              - code [ref=e826]: aria-describedby
+            - listitem [ref=e827]:
+              - text: Error messages use
+              - code [ref=e828]: role="alert"
+              - text: for screen reader announcements
+            - listitem [ref=e829]:
+              - text: Each input has
+              - code [ref=e830]: aria-label="OTP digit N"
+              - text: for screen readers
+            - listitem [ref=e831]:
+              - text: First input has
+              - code [ref=e832]: autoComplete="one-time-code"
+              - text: for autofill support
+            - listitem [ref=e833]:
+              - text: Wrapper uses
+              - code [ref=e834]: role="group"
+              - text: with
+              - code [ref=e835]: aria-roledescription="One-time password input"
+            - listitem [ref=e836]: Supports ref forwarding for programmatic focus management
+        - generic [ref=e837]:
+          - heading "Keyboard Navigation" [level=3] [ref=e838]
+          - list [ref=e839]:
+            - listitem [ref=e840]: Tab - Move focus to/from OTP inputs
+            - listitem [ref=e841]: ← / → - Navigate between inputs
+            - listitem [ref=e842]: Backspace - Delete current digit and move to previous input
+            - listitem [ref=e843]: Delete - Delete current digit without moving
+            - listitem [ref=e844]: Home - Jump to first input
+            - listitem [ref=e845]: End - Jump to last input
+            - listitem [ref=e846]: Ctrl/Cmd + V - Paste OTP (when allowPaste is true)
+      - paragraph [ref=e848]:
+        - strong [ref=e849]: "Note:"
+        - text: OtpInput extends native
+        - code [ref=e850]: InputHTMLAttributes
+        - text: (excluding value, onChange, type, and maxLength) and accepts all standard input props such as
+        - code [ref=e851]: autoFocus
+        - text: ","
+        - code [ref=e852]: tabIndex
+        - text: ","
+        - code [ref=e853]: onFocus
+        - text: ","
+        - code [ref=e854]: onBlur
+        - text: ","
+        - code [ref=e855]: data-*
+        - text: ","
+        - code [ref=e856]: aria-*
+        - text: ", etc. These props are spread to all individual input elements."
+```

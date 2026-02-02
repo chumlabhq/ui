@@ -18,6 +18,17 @@ export interface OtpInputStyleProps {
   separatorClassName?: string;
 }
 
+export interface OtpInputRenderProps {
+  index: number;
+  value: string;
+  disabled: boolean;
+  error: boolean;
+  filled: boolean;
+  inputProps: InputHTMLAttributes<HTMLInputElement> & {
+    ref: (el: HTMLInputElement | null) => void;
+  };
+}
+
 export interface OtpInputProps
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
@@ -40,4 +51,5 @@ export interface OtpInputProps
   inputType?: "text" | "password";
   inputClassNames?: (string | undefined)[];
   fullWidth?: boolean;
+  renderInput?: (props: OtpInputRenderProps) => ReactNode;
 }

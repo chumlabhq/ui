@@ -8,7 +8,7 @@ export interface TextAreaLabelProps {
 }
 
 export interface TextAreaProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "className"> {
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: ReactNode;
   error?: boolean;
   errorMessage?: ReactNode;
@@ -16,6 +16,8 @@ export interface TextAreaProps
   trailingIcon?: ReactNode;
   onLeadingIconClick?: () => void;
   onTrailingIconClick?: () => void;
+  leadingIconLabel?: string;
+  trailingIconLabel?: string;
   isLoading?: boolean;
   loader?: ReactNode;
   loaderSize?: number;
@@ -25,5 +27,4 @@ export interface TextAreaProps
   focusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
-  className?: string;
 }

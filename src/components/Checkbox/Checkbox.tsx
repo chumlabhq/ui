@@ -1,4 +1,4 @@
-import { forwardRef, useId, useEffect, useRef, useImperativeHandle, useMemo } from "react";
+import { forwardRef, useId, useEffect, useRef, useImperativeHandle, useMemo, useCallback } from "react";
 import type { CheckboxProps, CheckboxSize, CheckboxShape } from "./types";
 
 const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
@@ -61,6 +61,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled = false,
       required = false,
       onChange,
+      onFocus,
+      onBlur,
       error = false,
       errorMessage,
       size,
@@ -121,11 +123,14 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       return { width: boxSize, height: boxSize };
     }, [boxSize, sizeClassName]);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!disabled) {
-        onChange?.(event.target.checked, event);
-      }
-    };
+    const handleChange = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!disabled) {
+          onChange?.(event.target.checked, event);
+        }
+      },
+      [disabled, onChange]
+    );
 
     const getStateClassName = () => {
       if (indeterminate) return indeterminateClassName;
@@ -165,7 +170,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         <label className={["flex items-start gap-2", className].filter(Boolean).join(" ")}>
           <span
             className={[checkboxClassName, getStateClassName(), sizeClassName, shapeClass].filter(Boolean).join(" ")}
-            style={sizeStyle}
+            style={{ ...sizeStyle, position: "relative" }}
             data-checked={checked || undefined}
             data-indeterminate={indeterminate || undefined}
             data-disabled={disabled || undefined}
@@ -182,10 +187,21 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               disabled={disabled}
               required={required}
               onChange={handleChange}
+              onFocus={onFocus}
+              onBlur={onBlur}
               aria-invalid={error || undefined}
               aria-describedby={describedBy || undefined}
               aria-required={required || undefined}
-              className="sr-only"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                opacity: 0,
+                margin: 0,
+                padding: 0,
+                cursor: disabled ? "not-allowed" : "pointer",
+              }}
               {...rest}
             />
             {renderIcon()}

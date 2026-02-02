@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, ReactNode, CSSProperties } from "react";
+import type {
+  ButtonHTMLAttributes,
+  ReactNode,
+  CSSProperties,
+  HTMLAttributes,
+} from "react";
 
 export type IconAnimation =
   | "none"
@@ -47,7 +52,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tooltipProps?: ButtonTooltipProps;
 }
 
-export interface ButtonGroupProps {
+export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  className?: string;
 }

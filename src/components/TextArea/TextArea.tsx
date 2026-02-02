@@ -1,6 +1,21 @@
-import { forwardRef, useId } from "react";
+/**
+ * AI GOVERNANCE NOTICE
+ * This repository enforces strict cross-component consistency.
+ * Do not introduce new prop names, behaviors, or documentation formats
+ * unless absolutely required for correctness.
+ */
+
+import { forwardRef, useId, type KeyboardEvent } from "react";
 import type { TextAreaProps, TextAreaLabelProps } from "./types";
 import { CircularLoader } from "../Loader";
+
+const handleIconKeyDown =
+  (onClick?: () => void) => (event: KeyboardEvent<HTMLSpanElement>) => {
+    if (onClick && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      onClick();
+    }
+  };
 
 export const TextAreaLabel = ({
   label,
@@ -30,6 +45,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       trailingIcon,
       onLeadingIconClick,
       onTrailingIconClick,
+      leadingIconLabel,
+      trailingIconLabel,
       isLoading = false,
       loader,
       loaderSize = 16,
@@ -43,7 +60,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       rows = 4,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const generatedId = useId();
     const textAreaId = id || name || generatedId;
@@ -59,7 +76,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     return (
       <div
-        className={[containerClassName, fullWidthClass].filter(Boolean).join(" ")}
+        className={[containerClassName, fullWidthClass]
+          .filter(Boolean)
+          .join(" ")}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
         data-loading={isLoading || undefined}
@@ -73,14 +92,24 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           />
         )}
 
-        <div className={["flex items-start", wrapperClassName, focusClassName].filter(Boolean).join(" ")}>
+        <div
+          className={["flex items-start w-full", wrapperClassName, focusClassName]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {leadingIcon && (
             <span
-              className="inline-flex shrink-0"
+              className={[
+                "inline-flex shrink-0",
+                onLeadingIconClick ? "cursor-pointer" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={onLeadingIconClick}
+              onKeyDown={handleIconKeyDown(onLeadingIconClick)}
               role={onLeadingIconClick ? "button" : undefined}
               tabIndex={onLeadingIconClick ? 0 : undefined}
-              aria-label={onLeadingIconClick ? "Leading icon action" : undefined}
+              aria-label={onLeadingIconClick ? leadingIconLabel : undefined}
             >
               {leadingIcon}
             </span>
@@ -93,7 +122,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             required={required}
             disabled={isDisabled}
             rows={rows}
-            className={["flex-1 resize-none", className].filter(Boolean).join(" ")}
+            className={["flex-1 resize-none", className]
+              .filter(Boolean)
+              .join(" ")}
             aria-invalid={error || undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
@@ -104,11 +135,17 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
           {trailingIcon && (
             <span
-              className="inline-flex shrink-0"
+              className={[
+                "inline-flex shrink-0",
+                onTrailingIconClick ? "cursor-pointer" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={onTrailingIconClick}
+              onKeyDown={handleIconKeyDown(onTrailingIconClick)}
               role={onTrailingIconClick ? "button" : undefined}
               tabIndex={onTrailingIconClick ? 0 : undefined}
-              aria-label={onTrailingIconClick ? "Trailing icon action" : undefined}
+              aria-label={onTrailingIconClick ? trailingIconLabel : undefined}
             >
               {trailingIcon}
             </span>
@@ -124,7 +161,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 TextArea.displayName = "TextArea";

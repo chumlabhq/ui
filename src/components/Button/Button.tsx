@@ -3,7 +3,6 @@ import {
   cloneElement,
   isValidElement,
   type ReactElement,
-  type MouseEventHandler,
 } from "react";
 import type { ButtonProps, IconAnimation } from "./types";
 import { CircularLoader } from "../Loader";
@@ -47,35 +46,38 @@ const Button = forwardRef<
   HTMLButtonElement | HTMLAnchorElement | HTMLSpanElement,
   ButtonProps
 >((props, ref) => {
-  // Extract common props with defaults
-  const as = props.as ?? "button";
-  const children = props.children;
-  const leadingIcon = props.leadingIcon;
-  const trailingIcon = props.trailingIcon;
-  const isLoading = props.isLoading ?? false;
-  const loadingText = props.loadingText;
-  const loaderPosition = props.loaderPosition ?? "right";
-  const loaderSize = props.loaderSize ?? 16;
-  const loader = props.loader;
-  const fullWidth = props.fullWidth ?? false;
-  const asChild = props.asChild ?? false;
-  const className = props.className ?? "";
-  const contentClassName =
-    props.contentClassName ?? "inline-flex items-center justify-center gap-2";
-  const iconAnimation = props.iconAnimation ?? "none";
-  const animateOnHover = props.animateOnHover ?? true;
-  const animateIcon = props.animateIcon ?? "trailing";
-  const tooltip = props.tooltip;
-  const tooltipProps = props.tooltipProps;
-  const onClick = props.onClick as MouseEventHandler<HTMLElement> | undefined;
+  // Extract known props, rest will be spread to element
+  const {
+    as = "button",
+    children,
+    leadingIcon,
+    trailingIcon,
+    isLoading = false,
+    loadingText,
+    loaderPosition = "right",
+    loaderSize = 16,
+    loader,
+    fullWidth = false,
+    asChild = false,
+    className = "",
+    contentClassName = "inline-flex items-center justify-center gap-2",
+    iconAnimation = "none",
+    animateOnHover = true,
+    animateIcon = "trailing",
+    tooltip,
+    tooltipProps,
+    onClick,
+    type: buttonType,
+    disabled: disabledProp,
+    href,
+    target,
+    rel,
+    ...rest
+  } = props;
 
-  // Get type and disabled based on element type
-  const type: "button" | "submit" | "reset" | undefined =
-    as === "button" && "type" in props
-      ? ((props.type as "button" | "submit" | "reset") ?? "button")
-      : "button";
-  const disabled =
-    as === "button" && "disabled" in props ? (props.disabled ?? false) : false;
+  const type: "button" | "submit" | "reset" =
+    as === "button" ? (buttonType ?? "button") : "button";
+  const disabled = disabledProp ?? false;
 
   const isDisabled = disabled || isLoading;
 
@@ -167,14 +169,30 @@ const Button = forwardRef<
     );
   };
 
-  if (as === "a" && props.href) {
+  if (as === "a" && href) {
+    const handleAnchorClick = isDisabled
+      ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
+      : (onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined);
+    // Extract only ARIA and data attributes from rest for anchor elements
+    const ariaAndDataProps = Object.fromEntries(
+      Object.entries(rest).filter(
+        ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
+      ),
+    );
     return wrapWithTooltip(
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
-        href={props.href}
-        target={props.target}
-        rel={props.rel}
-        {...commonProps}
+        href={href}
+        target={target}
+        rel={rel}
+        onClick={handleAnchorClick}
+        aria-busy={isLoading || undefined}
+        aria-disabled={isDisabled || undefined}
+        data-loading={isLoading || undefined}
+        data-disabled={isDisabled || undefined}
+        data-full-width={fullWidth || undefined}
+        className={combinedClassName}
+        {...ariaAndDataProps}
       >
         {content}
       </a>,
@@ -182,12 +200,31 @@ const Button = forwardRef<
   }
 
   if (as === "span") {
+    const handleSpanClick = onClick as
+      | React.MouseEventHandler<HTMLSpanElement>
+      | undefined;
+    // Extract only ARIA and data attributes from rest for span elements
+    const ariaAndDataProps = Object.fromEntries(
+      Object.entries(rest).filter(
+        ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
+      ),
+    );
     return wrapWithTooltip(
       <span
         ref={ref as React.Ref<HTMLSpanElement>}
         role="button"
         tabIndex={isDisabled ? -1 : 0}
+        onKeyDown={(e) => {
+          if (!isDisabled && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            handleSpanClick?.(
+              e as unknown as React.MouseEvent<HTMLSpanElement>,
+            );
+          }
+        }}
         {...commonProps}
+        onClick={isDisabled ? undefined : handleSpanClick}
+        {...ariaAndDataProps}
       >
         {content}
       </span>,
@@ -200,6 +237,7 @@ const Button = forwardRef<
       type={type}
       disabled={isDisabled}
       {...commonProps}
+      {...rest}
     >
       {content}
     </button>,

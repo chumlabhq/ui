@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { InputHTMLAttributes, ReactNode, FocusEvent } from "react";
 
 export type CheckboxSize = "xs" | "sm" | "md" | "lg" | "xl" | number;
 export type CheckboxShape = "square" | "rounded" | "circle";
@@ -10,6 +10,8 @@ export interface CheckboxProps
   checked?: boolean;
   indeterminate?: boolean;
   onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   error?: boolean;
   errorMessage?: ReactNode;
   size?: CheckboxSize;
