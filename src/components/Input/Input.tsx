@@ -1,13 +1,7 @@
-/**
- * AI GOVERNANCE NOTICE
- * This repository enforces strict cross-component consistency.
- * Do not introduce new prop names, behaviors, or documentation formats
- * unless absolutely required for correctness.
- */
-
 import { forwardRef, useId, type KeyboardEvent } from "react";
 import type { InputLabelProps, InputProps } from "./types";
 import { CircularLoader } from "../Loader";
+import { cn } from "../../utils/cn";
 
 const handleIconKeyDown =
   (onClick?: () => void) => (event: KeyboardEvent<HTMLSpanElement>) => {
@@ -21,7 +15,7 @@ export const InputLabel = ({
   label,
   required = false,
   inputId,
-  className = "",
+  className,
 }: InputLabelProps) => {
   return (
     <label htmlFor={inputId} className={className}>
@@ -52,12 +46,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       loader,
       loaderSize = 16,
       fullWidth = false,
-      containerClassName = "",
-      wrapperClassName = "",
-      focusClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      className = "",
+      containerClassName,
+      wrapperClassName,
+      focusClassName,
+      labelClassName,
+      errorClassName,
+      className,
       ...rest
     },
     ref,
@@ -72,13 +66,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
     );
 
-    const fullWidthClass = fullWidth ? "w-full" : "";
-
     return (
       <div
-        className={[containerClassName, fullWidthClass]
-          .filter(Boolean)
-          .join(" ")}
+        className={cn(containerClassName, fullWidth && "w-full")}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
         data-loading={isLoading || undefined}
@@ -92,19 +82,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         )}
 
-        <div
-          className={["flex items-center w-full", wrapperClassName, focusClassName]
-            .filter(Boolean)
-            .join(" ")}
-        >
+        <div className={cn("flex items-center w-full", wrapperClassName, focusClassName)}>
           {leadingIcon && (
             <span
-              className={[
+              className={cn(
                 "inline-flex shrink-0",
-                onLeadingIconClick ? "cursor-pointer" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
+                onLeadingIconClick && "cursor-pointer"
+              )}
               onClick={onLeadingIconClick}
               onKeyDown={handleIconKeyDown(onLeadingIconClick)}
               role={onLeadingIconClick ? "button" : undefined}
@@ -122,7 +106,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type={type}
             required={required}
             disabled={isDisabled}
-            className={["flex-1 min-w-0", className].filter(Boolean).join(" ")}
+            className={cn("flex-1 min-w-0", className)}
             aria-invalid={error || undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
@@ -133,12 +117,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
           {trailingIcon && (
             <span
-              className={[
+              className={cn(
                 "inline-flex shrink-0",
-                onTrailingIconClick ? "cursor-pointer" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
+                onTrailingIconClick && "cursor-pointer"
+              )}
               onClick={onTrailingIconClick}
               onKeyDown={handleIconKeyDown(onTrailingIconClick)}
               role={onTrailingIconClick ? "button" : undefined}

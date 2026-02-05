@@ -1,18 +1,12 @@
-/**
- * AI GOVERNANCE NOTICE
- * This repository enforces strict cross-component consistency.
- * Do not introduce new prop names, behaviors, or documentation formats
- * unless absolutely required for correctness.
- */
-
 import React, { forwardRef, useCallback, useId, useRef, useImperativeHandle } from "react";
 import type { OtpInputProps, OtpInputLabelProps, OtpInputRenderProps } from "./types";
+import { cn } from "../../utils/cn";
 
 export const OtpInputLabel = ({
   label,
   required = false,
   inputId,
-  className = "",
+  className,
 }: OtpInputLabelProps) => {
   return (
     <label htmlFor={inputId} className={className}>
@@ -39,14 +33,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       allowPaste = true,
       autoFocusFirst = true,
       inputType = "text",
-      containerClassName = "",
-      wrapperClassName = "",
-      groupClassName = "",
-      inputClassName = "",
-      focusClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      separatorClassName = "",
+      containerClassName,
+      wrapperClassName,
+      groupClassName,
+      inputClassName,
+      focusClassName,
+      labelClassName,
+      errorClassName,
+      separatorClassName,
       inputClassNames = [],
       fullWidth = false,
       renderInput,
@@ -88,7 +82,6 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           focusInput(index + 1);
         }
 
-        // Check if all digits are filled (array has no empty strings)
         if (newValueArray.every(digit => digit !== "")) {
           onComplete?.(newValue);
         }
@@ -212,9 +205,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         onFocus: handleFocus,
         disabled,
         maxLength: 1,
-        className: [inputClassName, focusClassName, individualClassName]
-          .filter(Boolean)
-          .join(" "),
+        className: cn(inputClassName, focusClassName, individualClassName),
         "data-index": index,
         "data-disabled": disabled || undefined,
         "data-error": error || undefined,
@@ -280,11 +271,9 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       return valueArray.map((_, index) => renderSingleInput(index));
     };
 
-    const fullWidthClass = fullWidth ? "w-full" : "";
-
     return (
       <div
-        className={[containerClassName, fullWidthClass].filter(Boolean).join(" ")}
+        className={cn(containerClassName, fullWidth && "w-full")}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
       >

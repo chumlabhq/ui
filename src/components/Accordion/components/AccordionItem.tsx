@@ -2,6 +2,7 @@ import { forwardRef, useMemo, useEffect, useRef } from "react";
 import { useAccordionContext, AccordionItemContext } from "../utils/context";
 import { Slot } from "../../../utils/Slot";
 import type { AccordionItemProps, AccordionItemContextValue } from "../utils/types";
+import { cn } from "../../../utils/cn";
 
 const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   ({ 
@@ -60,13 +61,11 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     const Comp = asChild ? Slot : "div";
 
-    const itemClassName = `${accordion.classNames.item ?? ""} ${className ?? ""}`.trim();
-
     return (
       <AccordionItemContext.Provider value={itemContextValue}>
         <Comp
           ref={ref}
-          className={itemClassName || undefined}
+          className={cn(accordion.classNames.item, className) || undefined}
           data-state={dataState}
           data-disabled={disabled || undefined}
           data-orientation={accordion.orientation}

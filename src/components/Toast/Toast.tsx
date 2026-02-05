@@ -7,6 +7,7 @@ import {
   InfoIcon,
   CloseIcon,
 } from "./icons";
+import { cn } from "../../utils/cn";
 
 const getDefaultIcon = (type: ToastType) => {
   const iconClass = "w-5 h-5 shrink-0";
@@ -24,39 +25,16 @@ const getDefaultIcon = (type: ToastType) => {
   }
 };
 
-const getDefaultStyles = (type: ToastType) => {
-  switch (type) {
-    case "success":
-      return {
-        container: "bg-[#195030] border-[#195030] text-white",
-        icon: "text-white",
-        progress: "bg-white/40",
-      };
-    case "warning":
-      return {
-        container: "bg-[#665823] border-[#665823] text-white",
-        icon: "text-white",
-        progress: "bg-white/40",
-      };
-    case "error":
-      return {
-        container: "bg-[#82363a] border-[#82363a] text-white",
-        icon: "text-white",
-        progress: "bg-white/40",
-      };
-    case "info":
-      return {
-        container: "bg-[#213f70] border-[#213f70] text-white",
-        icon: "text-white",
-        progress: "bg-white/40",
-      };
-    default:
-      return {
-        container: "bg-gray-700 border-gray-700 text-white",
-        icon: "text-white",
-        progress: "bg-white/40",
-      };
-  }
+const defaultContainerStyles: Record<ToastType | "default", string> = {
+  success:
+    "bg-[var(--toast-success-bg,#195030)] border-[var(--toast-success-border,#195030)] text-[var(--toast-success-text,white)]",
+  warning:
+    "bg-[var(--toast-warning-bg,#665823)] border-[var(--toast-warning-border,#665823)] text-[var(--toast-warning-text,white)]",
+  error:
+    "bg-[var(--toast-error-bg,#82363a)] border-[var(--toast-error-border,#82363a)] text-[var(--toast-error-text,white)]",
+  info: "bg-[var(--toast-info-bg,#213f70)] border-[var(--toast-info-border,#213f70)] text-[var(--toast-info-text,white)]",
+  default:
+    "bg-[var(--toast-default-bg,#374151)] border-[var(--toast-default-border,#374151)] text-[var(--toast-default-text,white)]",
 };
 
 const Toast = memo(function Toast({
@@ -74,14 +52,16 @@ const Toast = memo(function Toast({
   onRemove,
   visible,
   position,
-  className = "",
-  contentClassName = "",
-  messageClassName = "",
-  descriptionClassName = "",
-  progressClassName = "",
-  closeButtonClassName = "",
-  iconClassName = "",
+  className,
+  contentClassName,
+  messageClassName,
+  descriptionClassName,
+  progressClassName,
+  closeButtonClassName,
+  iconClassName,
   pauseOnHover = true,
+  dismissOnEscape = false,
+  style,
 }: ToastProps) {
   const [progress, setProgress] = useState(100);
   const [isPaused, setIsPaused] = useState(false);
@@ -89,14 +69,27 @@ const Toast = memo(function Toast({
   const remainingTimeRef = useRef<number>(duration);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const initializedRef = useRef(false);
+  const toastRef = useRef<HTMLDivElement>(null);
 
-  const defaultStyles = getDefaultStyles(type);
   const defaultIcon = getDefaultIcon(type);
 
   const handleClose = useCallback(() => {
     onClose?.();
     onRemove(id);
   }, [id, onClose, onRemove]);
+
+  useEffect(() => {
+    if (!dismissOnEscape) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [dismissOnEscape, handleClose]);
 
   useEffect(() => {
     if (duration === Infinity || duration <= 0) return;
@@ -152,41 +145,32 @@ const Toast = memo(function Toast({
   const isTopPosition = position.startsWith("top");
   const animationClass = visible
     ? isTopPosition
-      ? "animate-toast-enter-top"
-      : "animate-toast-enter-bottom"
+      ? "animate-toast-enter-top motion-reduce:animate-none"
+      : "animate-toast-enter-bottom motion-reduce:animate-none"
     : isTopPosition
-      ? "animate-toast-leave-top"
-      : "animate-toast-leave-bottom";
+      ? "animate-toast-leave-top motion-reduce:animate-none motion-reduce:opacity-0"
+      : "animate-toast-leave-bottom motion-reduce:animate-none motion-reduce:opacity-0";
 
   return (
     <div
+      ref={toastRef}
       role="alert"
-      aria-live="polite"
-      className={[
+      className={cn(
         "relative overflow-hidden rounded-lg border shadow-lg min-w-[300px] max-w-[420px]",
-        defaultStyles.container,
+        defaultContainerStyles[type] ?? defaultContainerStyles.default,
         animationClass,
-        className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+        className
+      )}
+      style={style}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-toast-id={id}
       data-toast-type={type}
       data-paused={isPaused || undefined}
     >
-      <div
-        className={["flex items-start gap-3 p-4", contentClassName]
-          .filter(Boolean)
-          .join(" ")}
-      >
+      <div className={cn("flex items-start gap-3 p-4", contentClassName)}>
         {(icon || defaultIcon) && (
-          <span
-            className={[defaultStyles.icon, iconClassName]
-              .filter(Boolean)
-              .join(" ")}
-          >
+          <span className={cn("text-white", iconClassName)}>
             {icon ?? defaultIcon}
           </span>
         )}
@@ -196,19 +180,13 @@ const Toast = memo(function Toast({
         ) : (
           <div className="flex-1 min-w-0">
             {message && (
-              <p
-                className={["font-medium text-sm", messageClassName]
-                  .filter(Boolean)
-                  .join(" ")}
-              >
+              <p className={cn("font-medium text-sm", messageClassName)}>
                 {message}
               </p>
             )}
             {description && (
               <p
-                className={["text-sm mt-1 opacity-80", descriptionClassName]
-                  .filter(Boolean)
-                  .join(" ")}
+                className={cn("text-sm mt-1 opacity-80", descriptionClassName)}
               >
                 {description}
               </p>
@@ -220,12 +198,10 @@ const Toast = memo(function Toast({
           <button
             type="button"
             onClick={handleClose}
-            className={[
+            className={cn(
               "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors",
               closeButtonClassName,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            )}
             aria-label="Close notification"
           >
             <CloseIcon className="w-4 h-4" />
@@ -236,14 +212,11 @@ const Toast = memo(function Toast({
       {showProgress && duration !== Infinity && duration > 0 && (
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
           <div
-            className={[
-              "h-full transition-none",
-              progressColor || defaultStyles.progress,
+            className={cn(
+              "h-full transition-none bg-white/40",
               progressClassName,
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            style={{ width: `${progress}%` }}
+            )}
+            style={{ width: `${progress}%`, backgroundColor: progressColor }}
           />
         </div>
       )}

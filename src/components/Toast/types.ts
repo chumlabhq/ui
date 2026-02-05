@@ -23,6 +23,7 @@ export interface ToastConfig {
   showCloseButton?: boolean;
   onClose?: () => void;
   className?: string;
+  style?: React.CSSProperties;
   contentClassName?: string;
   messageClassName?: string;
   descriptionClassName?: string;
@@ -30,6 +31,7 @@ export interface ToastConfig {
   closeButtonClassName?: string;
   iconClassName?: string;
   pauseOnHover?: boolean;
+  dismissOnEscape?: boolean;
 }
 
 export interface ToastProps extends Omit<ToastConfig, "id"> {
@@ -46,6 +48,8 @@ export interface ToastProviderProps {
   containerClassName?: string;
   defaultDuration?: number;
   gap?: number;
+  zIndex?: number;
+  dismissOnEscape?: boolean;
 }
 
 export interface ToastContextValue {

@@ -1,7 +1,8 @@
-import { forwardRef, useRef, useEffect, useCallback, useState, useMemo, memo } from "react";
+import { forwardRef, useRef, useEffect, useCallback, useState, memo } from "react";
 import { useAccordionContext, useAccordionItemContext } from "../utils/context";
 import { Slot } from "../../../utils/Slot";
 import type { AccordionContentProps } from "../utils/types";
+import { cn } from "../../../utils/cn";
 
 const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
   (
@@ -29,23 +30,65 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     const animationEasing = propAnimationEasing ?? accordion.animationEasing;
     const effectiveDuration = accordion.reduceMotion ? 0 : animationDuration;
 
+    const [showExpanded, setShowExpanded] = useState(false);
     const [hasBeenOpened, setHasBeenOpened] = useState(item.isExpanded);
-    const [prevExpanded, setPrevExpanded] = useState(item.isExpanded);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const prevExpandedRef = useRef(item.isExpanded);
-    const contentRef = useRef<HTMLDivElement>(null);
+    const [prevIsExpanded, setPrevIsExpanded] = useState(item.isExpanded);
+    const [isClosing, setIsClosing] = useState(false);
     const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const rafRef = useRef<number | null>(null);
 
-    if (item.isExpanded !== prevExpanded) {
-      setPrevExpanded(item.isExpanded);
+    if (item.isExpanded !== prevIsExpanded) {
+      setPrevIsExpanded(item.isExpanded);
       if (item.isExpanded && !hasBeenOpened) {
         setHasBeenOpened(true);
       }
+      if (!item.isExpanded && prevIsExpanded) {
+        setIsClosing(true);
+        setShowExpanded(false);
+      }
     }
+
+    useEffect(() => {
+      if (item.isExpanded) {
+        rafRef.current = requestAnimationFrame(() => {
+          rafRef.current = requestAnimationFrame(() => {
+            setShowExpanded(true);
+          });
+        });
+      }
+
+      return () => {
+        if (rafRef.current) {
+          cancelAnimationFrame(rafRef.current);
+        }
+      };
+    }, [item.isExpanded]);
+
+    useEffect(() => {
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+      }
+
+      if (item.isExpanded) {
+        onOpenStart?.();
+        animationTimerRef.current = setTimeout(() => onOpenEnd?.(), effectiveDuration);
+      } else {
+        onCloseStart?.();
+        animationTimerRef.current = setTimeout(() => {
+          onCloseEnd?.();
+          setIsClosing(false);
+        }, effectiveDuration);
+      }
+
+      return () => {
+        if (animationTimerRef.current) {
+          clearTimeout(animationTimerRef.current);
+        }
+      };
+    }, [item.isExpanded, effectiveDuration, onOpenStart, onOpenEnd, onCloseStart, onCloseEnd]);
 
     const combinedRef = useCallback(
       (node: HTMLDivElement | null) => {
-        (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
         if (typeof ref === "function") {
           ref(node);
         } else if (ref) {
@@ -55,108 +98,55 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       [ref]
     );
 
-    useEffect(() => {
-      const wasExpanded = prevExpandedRef.current;
-      const isExpanded = item.isExpanded;
-
-      if (wasExpanded !== isExpanded) {
-        setIsAnimating(true);
-        
-        if (animationTimerRef.current) {
-          clearTimeout(animationTimerRef.current);
-        }
-
-        if (isExpanded) {
-          onOpenStart?.();
-          animationTimerRef.current = setTimeout(() => {
-            onOpenEnd?.();
-            setIsAnimating(false);
-          }, effectiveDuration);
-        } else {
-          onCloseStart?.();
-          animationTimerRef.current = setTimeout(() => {
-            onCloseEnd?.();
-            setIsAnimating(false);
-          }, effectiveDuration);
-        }
-      }
-
-      prevExpandedRef.current = isExpanded;
-
-      return () => {
-        if (animationTimerRef.current) {
-          clearTimeout(animationTimerRef.current);
-        }
-      };
-    }, [item.isExpanded, effectiveDuration, onOpenStart, onOpenEnd, onCloseStart, onCloseEnd]);
-
-    useEffect(() => {
-      prevExpandedRef.current = item.isExpanded;
-    }, [item.isExpanded]);
-
-    const shouldRender = useMemo(() => {
+    const shouldRender = (() => {
       if (forceMount) return true;
       if (item.isExpanded) return true;
       if (unmountOnClose) return false;
       if (lazyLoad && !hasBeenOpened) return false;
-      if (isAnimating) return true;
+      if (isClosing) return true;
       return hasBeenOpened;
-    }, [forceMount, item.isExpanded, unmountOnClose, lazyLoad, hasBeenOpened, isAnimating]);
-
-    const dataState = item.isExpanded ? "open" : "closed";
-
-    const contentClassName = useMemo(() => {
-      const baseClass = "grid transition-all";
-      const stateClass = item.isExpanded 
-        ? "grid-rows-[1fr] opacity-100 visible" 
-        : "grid-rows-[0fr] opacity-0 invisible";
-      const customClass = className ?? "";
-      return `${baseClass} ${stateClass} ${customClass}`.trim();
-    }, [item.isExpanded, className]);
-
-    const contentStyle = useMemo(() => ({
-      transitionDuration: `${effectiveDuration}ms`,
-      transitionTimingFunction: animationEasing,
-      willChange: isAnimating ? "grid-template-rows, opacity" : undefined,
-    }), [effectiveDuration, animationEasing, isAnimating]);
+    })();
 
     if (!shouldRender) {
       return null;
     }
 
-    const Comp = asChild ? Slot : "div";
+    const contentClassName = cn(
+      "grid transition-all",
+      showExpanded
+        ? "grid-rows-[1fr] opacity-100 visible" 
+        : "grid-rows-[0fr] opacity-0 invisible",
+      className
+    );
 
-    const contentProps = {
-      id: item.contentId,
-      role: "region" as const,
-      "aria-labelledby": item.triggerId,
-      "aria-hidden": !item.isExpanded,
-      "data-state": dataState,
-      "data-disabled": item.disabled || undefined,
-      "data-orientation": accordion.orientation,
-      "data-animating": isAnimating || undefined,
-      className: contentClassName || undefined,
-      style: contentStyle,
-      ...rest,
+    const contentStyle: React.CSSProperties = {
+      transitionDuration: `${effectiveDuration}ms`,
+      transitionTimingFunction: animationEasing,
     };
 
-    if (asChild) {
-      return (
-        <Comp ref={combinedRef} {...contentProps}>
-          {children}
-        </Comp>
-      );
-    }
-
-    const innerClassName = `${accordion.classNames.content ?? ""} ${accordion.classNames.contentInner ?? ""}`.trim();
+    const Comp = asChild ? Slot : "div";
 
     return (
-      <Comp ref={combinedRef} {...contentProps}>
-        <div className="overflow-hidden">
-          <div className={innerClassName || undefined}>
-            {children}
+      <Comp
+        ref={combinedRef}
+        id={item.contentId}
+        role="region"
+        aria-labelledby={item.triggerId}
+        aria-hidden={!item.isExpanded}
+        data-state={item.isExpanded ? "open" : "closed"}
+        data-disabled={item.disabled || undefined}
+        data-orientation={accordion.orientation}
+        className={contentClassName || undefined}
+        style={contentStyle}
+        {...rest}
+      >
+        {asChild ? children : (
+          <div className="overflow-hidden">
+            <div className={cn(accordion.classNames.content, accordion.classNames.contentInner) || undefined}>
+              {children}
+            </div>
           </div>
-        </div>
+        )}
       </Comp>
     );
   }

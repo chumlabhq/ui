@@ -3,6 +3,7 @@ import { useAccordionContext, useAccordionItemContext } from "../utils/context";
 import { ChevronDownIcon } from "../utils/icons";
 import { Slot } from "../../../utils/Slot";
 import type { AccordionTriggerProps } from "../utils/types";
+import { cn } from "../../../utils/cn";
 
 const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
   (
@@ -112,10 +113,9 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         return expandedIcon;
       }
 
-      const iconClass = `${accordion.classNames.icon ?? ""} ${getIconAnimationClass()}`.trim();
       return (
         <ChevronDownIcon
-          className={iconClass || undefined}
+          className={cn(accordion.classNames.icon, getIconAnimationClass()) || undefined}
         />
       );
     };
@@ -131,14 +131,14 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const HeadingTag = `h${accordion.headingLevel}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
-    const triggerClassName = `${accordion.classNames.trigger ?? ""} ${className ?? ""} ${
-      iconPosition === "left" ? "flex-row-reverse justify-end" : ""
-    }`.trim();
-
     const triggerProps = {
       id: item.triggerId,
       type: "button" as const,
-      className: triggerClassName || undefined,
+      className: cn(
+        accordion.classNames.trigger,
+        className,
+        iconPosition === "left" && "flex-row-reverse justify-end"
+      ) || undefined,
       onClick: handleClick,
       onKeyDown: handleKeyDown,
       "aria-expanded": item.isExpanded,
@@ -158,7 +158,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     ) : (
       <>
         {leftSlot && (
-          <span className={accordion.classNames.triggerLeft ?? ""} aria-hidden="true">
+          <span className={accordion.classNames.triggerLeft} aria-hidden="true">
             {leftSlot}
           </span>
         )}
@@ -166,14 +166,14 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         <span className="flex-1 text-left">
           <span className="block">{children}</span>
           {subtitle && (
-            <span className={`block ${accordion.classNames.subtitle ?? ""}`}>
+            <span className={cn("block", accordion.classNames.subtitle)}>
               {subtitle}
             </span>
           )}
         </span>
         {iconPosition === "right" && iconElement}
         {rightSlot && (
-          <span className={accordion.classNames.triggerRight ?? ""} aria-hidden="true">
+          <span className={accordion.classNames.triggerRight} aria-hidden="true">
             {rightSlot}
           </span>
         )}

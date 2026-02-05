@@ -8,6 +8,7 @@ export const SuccessIcon = ({ className = "" }: IconProps) => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className={className}
+    aria-hidden="true"
   >
     <path
       fillRule="evenodd"
@@ -23,6 +24,7 @@ export const WarningIcon = ({ className = "" }: IconProps) => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className={className}
+    aria-hidden="true"
   >
     <path
       fillRule="evenodd"
@@ -38,6 +40,7 @@ export const ErrorIcon = ({ className = "" }: IconProps) => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className={className}
+    aria-hidden="true"
   >
     <path
       fillRule="evenodd"
@@ -53,6 +56,7 @@ export const InfoIcon = ({ className = "" }: IconProps) => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className={className}
+    aria-hidden="true"
   >
     <path
       fillRule="evenodd"
@@ -68,6 +72,7 @@ export const CloseIcon = ({ className = "" }: IconProps) => (
     viewBox="0 0 24 24"
     fill="currentColor"
     className={className}
+    aria-hidden="true"
   >
     <path
       fillRule="evenodd"

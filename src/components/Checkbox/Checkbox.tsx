@@ -1,5 +1,6 @@
 import { forwardRef, useId, useEffect, useRef, useImperativeHandle, useMemo, useCallback } from "react";
 import type { CheckboxProps, CheckboxSize, CheckboxShape } from "./types";
+import { cn } from "../../utils/cn";
 
 const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
   xs: 14,
@@ -70,19 +71,19 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       checkedIcon,
       uncheckedIcon,
       indeterminateIcon,
-      containerClassName = "",
-      labelContainerClassName = "",
-      labelClassName = "",
-      descriptionClassName = "",
-      checkboxClassName = "",
-      checkedClassName = "",
-      uncheckedClassName = "",
-      indeterminateClassName = "",
-      iconClassName = "",
-      errorClassName = "",
-      sizeClassName = "",
-      shapeClassName = "",
-      className = "",
+      containerClassName,
+      labelContainerClassName,
+      labelClassName,
+      descriptionClassName,
+      checkboxClassName,
+      checkedClassName,
+      uncheckedClassName,
+      indeterminateClassName,
+      iconClassName,
+      errorClassName,
+      sizeClassName,
+      shapeClassName,
+      className,
       ...rest
     },
     ref
@@ -167,9 +168,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         data-size={typeof size === "string" ? size : undefined}
         data-shape={shape || undefined}
       >
-        <label className={["flex items-start gap-2", className].filter(Boolean).join(" ")}>
+        <label className={cn("flex items-start gap-2", className)}>
           <span
-            className={[checkboxClassName, getStateClassName(), sizeClassName, shapeClass].filter(Boolean).join(" ")}
+            className={cn(checkboxClassName, getStateClassName(), sizeClassName, shapeClass)}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={checked || undefined}
             data-indeterminate={indeterminate || undefined}

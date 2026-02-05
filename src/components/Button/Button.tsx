@@ -7,6 +7,7 @@ import {
 import type { ButtonProps, IconAnimation } from "./types";
 import { CircularLoader } from "../Loader";
 import { Tooltip } from "../Tooltip";
+import { cn } from "../../utils/cn";
 
 const getIconAnimationClasses = (
   animation: IconAnimation,
@@ -46,7 +47,6 @@ const Button = forwardRef<
   HTMLButtonElement | HTMLAnchorElement | HTMLSpanElement,
   ButtonProps
 >((props, ref) => {
-  // Extract known props, rest will be spread to element
   const {
     as = "button",
     children,
@@ -59,8 +59,8 @@ const Button = forwardRef<
     loader,
     fullWidth = false,
     asChild = false,
-    className = "",
-    contentClassName = "inline-flex items-center justify-center gap-2",
+    className,
+    contentClassName,
     iconAnimation = "none",
     animateOnHover = true,
     animateIcon = "trailing",
@@ -103,16 +103,16 @@ const Button = forwardRef<
       : "";
 
   const content = (
-    <span className={contentClassName}>
+    <span className={cn("inline-flex items-center justify-center gap-2", contentClassName)}>
       {loaderPosition === "left" && isLoading && loaderElement}
       {leadingIcon && (
-        <span className={`inline-flex shrink-0 ${leadingAnimationClasses}`}>
+        <span className={cn("inline-flex shrink-0", leadingAnimationClasses)}>
           {leadingIcon}
         </span>
       )}
       {displayContent}
       {trailingIcon && (
-        <span className={`inline-flex shrink-0 ${trailingAnimationClasses}`}>
+        <span className={cn("inline-flex shrink-0", trailingAnimationClasses)}>
           {trailingIcon}
         </span>
       )}
@@ -120,11 +120,11 @@ const Button = forwardRef<
     </span>
   );
 
-  const fullWidthClass = fullWidth ? "w-full" : "";
-  const groupClass = iconAnimation !== "none" ? "group" : "";
-  const combinedClassName = [className, fullWidthClass, groupClass]
-    .filter(Boolean)
-    .join(" ");
+  const combinedClassName = cn(
+    className,
+    fullWidth && "w-full",
+    iconAnimation !== "none" && "group"
+  );
 
   if (asChild && isValidElement(children)) {
     const child = children as ReactElement<{
@@ -132,15 +132,13 @@ const Button = forwardRef<
       onClick?: typeof onClick;
     }>;
     return cloneElement(child, {
-      className: [combinedClassName, child.props.className]
-        .filter(Boolean)
-        .join(" "),
+      className: cn(combinedClassName, child.props.className),
       onClick: isDisabled ? undefined : onClick,
     });
   }
 
   const commonProps = {
-    className: combinedClassName,
+    className: combinedClassName || undefined,
     onClick: isDisabled ? undefined : onClick,
     "aria-busy": isLoading || undefined,
     "aria-disabled": isDisabled || undefined,
@@ -173,7 +171,6 @@ const Button = forwardRef<
     const handleAnchorClick = isDisabled
       ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
       : (onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined);
-    // Extract only ARIA and data attributes from rest for anchor elements
     const ariaAndDataProps = Object.fromEntries(
       Object.entries(rest).filter(
         ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
@@ -191,7 +188,7 @@ const Button = forwardRef<
         data-loading={isLoading || undefined}
         data-disabled={isDisabled || undefined}
         data-full-width={fullWidth || undefined}
-        className={combinedClassName}
+        className={combinedClassName || undefined}
         {...ariaAndDataProps}
       >
         {content}
@@ -203,7 +200,6 @@ const Button = forwardRef<
     const handleSpanClick = onClick as
       | React.MouseEventHandler<HTMLSpanElement>
       | undefined;
-    // Extract only ARIA and data attributes from rest for span elements
     const ariaAndDataProps = Object.fromEntries(
       Object.entries(rest).filter(
         ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
