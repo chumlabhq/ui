@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useEffect } from "react";
 import { ToastProvider, useToast } from "../index";
 
 const TestConsumer = ({
@@ -730,16 +731,13 @@ describe("useToast Hook", () => {
   });
 
   it("returns stable API reference", async () => {
-    let firstApi: ReturnType<typeof useToast>;
-    let secondApi: ReturnType<typeof useToast>;
+    const apiRefs: ReturnType<typeof useToast>[] = [];
 
     const Tracker = () => {
       const toast = useToast();
-      if (!firstApi) {
-        firstApi = toast;
-      } else {
-        secondApi = toast;
-      }
+      useEffect(() => {
+        apiRefs.push(toast);
+      });
       return null;
     };
 
@@ -755,9 +753,10 @@ describe("useToast Hook", () => {
       </ToastProvider>
     );
 
-    expect(firstApi!.toast).toBe(secondApi!.toast);
-    expect(firstApi!.dismiss).toBe(secondApi!.dismiss);
-    expect(firstApi!.dismissAll).toBe(secondApi!.dismissAll);
+    expect(apiRefs.length).toBeGreaterThanOrEqual(2);
+    expect(apiRefs[0].toast).toBe(apiRefs[1].toast);
+    expect(apiRefs[0].dismiss).toBe(apiRefs[1].dismiss);
+    expect(apiRefs[0].dismissAll).toBe(apiRefs[1].dismissAll);
   });
 
   it("returns toast id from all methods", async () => {

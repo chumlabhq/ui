@@ -13,6 +13,17 @@ import { cn } from "../../utils/cn";
 let toastIdCounter = 0;
 const generateId = () => `toast-${++toastIdCounter}-${Date.now()}`;
 
+const getOrCreatePortal = (zIndex: number): HTMLDivElement | null => {
+  if (typeof document === "undefined") return null;
+  const existing = document.getElementById("toast-portal") as HTMLDivElement | null;
+  if (existing) return existing;
+  const portal = document.createElement("div");
+  portal.id = "toast-portal";
+  portal.style.cssText = `position:fixed;z-index:${zIndex};pointer-events:none;inset:0;`;
+  document.body.appendChild(portal);
+  return portal;
+};
+
 const positionClasses: Record<ToastPosition, string> = {
   "top-left": "top-4 left-4",
   "top-right": "top-4 right-4",
@@ -42,26 +53,7 @@ export const ToastProvider = ({
   dismissOnEscape = false,
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<ToastState[]>([]);
-  const [portalElement, setPortalElement] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const existing = document.getElementById("toast-portal") as HTMLDivElement | null;
-    if (existing) {
-      setPortalElement(existing);
-      return;
-    }
-    const portal = document.createElement("div");
-    portal.id = "toast-portal";
-    portal.style.cssText = `position:fixed;z-index:${zIndex};pointer-events:none;inset:0;`;
-    document.body.appendChild(portal);
-    setPortalElement(portal);
-
-    return () => {
-      if (portal.parentNode) {
-        portal.parentNode.removeChild(portal);
-      }
-    };
-  }, [zIndex]);
+  const [portalElement] = useState(() => getOrCreatePortal(zIndex));
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) =>
