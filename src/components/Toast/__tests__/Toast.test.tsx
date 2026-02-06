@@ -59,7 +59,6 @@ describe("Toast", () => {
     });
 
     it("renders toast with description when provided", async () => {
-      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
