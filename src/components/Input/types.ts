@@ -23,7 +23,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   fullWidth?: boolean;
   containerClassName?: string;
   wrapperClassName?: string;
-  focusClassName?: string;
+  wrapperFocusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
 }

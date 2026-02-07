@@ -22,6 +22,7 @@ export interface ToastConfig {
   icon?: ReactNode;
   showCloseButton?: boolean;
   onClose?: () => void;
+  role?: "alert" | "status";
   className?: string;
   style?: React.CSSProperties;
   contentClassName?: string;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, memo } from "react";
+import { useEffect, useRef, useCallback, memo } from "react";
 import type { ToastProps, ToastType } from "./types";
 import {
   SuccessIcon,
@@ -22,6 +22,18 @@ const getDefaultIcon = (type: ToastType) => {
       return <InfoIcon className={iconClass} />;
     default:
       return <InfoIcon className={iconClass} />;
+  }
+};
+
+const getRoleForType = (type: ToastType): "alert" | "status" => {
+  switch (type) {
+    case "error":
+    case "warning":
+      return "alert";
+    case "success":
+    case "info":
+    default:
+      return "status";
   }
 };
 
@@ -52,6 +64,7 @@ const Toast = memo(function Toast({
   onRemove,
   visible,
   position,
+  role: roleProp,
   className,
   contentClassName,
   messageClassName,
@@ -63,15 +76,18 @@ const Toast = memo(function Toast({
   dismissOnEscape = false,
   style,
 }: ToastProps) {
-  const [progress, setProgress] = useState(100);
-  const [isPaused, setIsPaused] = useState(false);
   const startTimeRef = useRef<number>(0);
   const remainingTimeRef = useRef<number>(duration);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const initializedRef = useRef(false);
   const toastRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(100);
+  const isPausedRef = useRef(false);
+  const isHoveredRef = useRef(false);
 
   const defaultIcon = getDefaultIcon(type);
+  const toastRole = roleProp ?? getRoleForType(type);
 
   const handleClose = useCallback(() => {
     onClose?.();
@@ -82,7 +98,13 @@ const Toast = memo(function Toast({
     if (!dismissOnEscape) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (
+        event.key === "Escape" &&
+        toastRef.current &&
+        (toastRef.current === document.activeElement ||
+          toastRef.current.contains(document.activeElement) ||
+          isHoveredRef.current)
+      ) {
         handleClose();
       }
     };
@@ -100,7 +122,7 @@ const Toast = memo(function Toast({
     }
 
     const updateProgress = () => {
-      if (isPaused) {
+      if (isPausedRef.current) {
         animationFrameRef.current = requestAnimationFrame(updateProgress);
         return;
       }
@@ -110,12 +132,18 @@ const Toast = memo(function Toast({
       const newProgress = (remaining / duration) * 100;
 
       if (remaining <= 0) {
-        setProgress(0);
+        progressRef.current = 0;
+        if (progressBarRef.current) {
+          progressBarRef.current.style.width = "0%";
+        }
         handleClose();
         return;
       }
 
-      setProgress(Math.max(0, newProgress));
+      progressRef.current = Math.max(0, newProgress);
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${progressRef.current}%`;
+      }
       animationFrameRef.current = requestAnimationFrame(updateProgress);
     };
 
@@ -126,18 +154,20 @@ const Toast = memo(function Toast({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [duration, isPaused, handleClose]);
+  }, [duration, handleClose]);
 
   const handleMouseEnter = useCallback(() => {
+    isHoveredRef.current = true;
     if (pauseOnHover && duration !== Infinity && duration > 0) {
-      setIsPaused(true);
-      remainingTimeRef.current = (progress / 100) * duration;
+      isPausedRef.current = true;
+      remainingTimeRef.current = (progressRef.current / 100) * duration;
     }
-  }, [pauseOnHover, duration, progress]);
+  }, [pauseOnHover, duration]);
 
   const handleMouseLeave = useCallback(() => {
+    isHoveredRef.current = false;
     if (pauseOnHover && duration !== Infinity && duration > 0) {
-      setIsPaused(false);
+      isPausedRef.current = false;
       startTimeRef.current = Date.now();
     }
   }, [pauseOnHover, duration]);
@@ -154,19 +184,20 @@ const Toast = memo(function Toast({
   return (
     <div
       ref={toastRef}
-      role="alert"
+      role={toastRole}
+      aria-live={toastRole === "status" ? "polite" : "assertive"}
       className={cn(
-        "relative overflow-hidden rounded-lg border shadow-lg min-w-[300px] max-w-[420px]",
+        "relative overflow-hidden rounded-lg border shadow-lg",
         defaultContainerStyles[type] ?? defaultContainerStyles.default,
         animationClass,
-        className
+        className,
       )}
       style={style}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      tabIndex={dismissOnEscape ? -1 : undefined}
       data-toast-id={id}
       data-toast-type={type}
-      data-paused={isPaused || undefined}
     >
       <div className={cn("flex items-start gap-3 p-4", contentClassName)}>
         {(icon || defaultIcon) && (
@@ -212,11 +243,12 @@ const Toast = memo(function Toast({
       {showProgress && duration !== Infinity && duration > 0 && (
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
           <div
+            ref={progressBarRef}
             className={cn(
               "h-full transition-none bg-white/40",
               progressClassName,
             )}
-            style={{ width: `${progress}%`, backgroundColor: progressColor }}
+            style={{ width: "100%", backgroundColor: progressColor }}
           />
         </div>
       )}

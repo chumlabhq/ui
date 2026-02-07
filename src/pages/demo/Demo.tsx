@@ -103,7 +103,7 @@ const Demo = () => {
         }`}
       >
         <aside
-          className={`w-64 border-r p-6 sticky top-0 h-screen overflow-y-auto z-40 
+          className={`w-64 shrink-0 border-r p-6 overflow-y-auto
           [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
           ${
             isDarkMode
@@ -120,19 +120,16 @@ const Demo = () => {
               Components
             </h1>
             <Switch
-              isChecked={isDarkMode}
-              handleToggle={toggleDarkMode}
+              checked={isDarkMode}
+              onCheckedChange={toggleDarkMode}
+              aria-label="Toggle dark mode"
               containerClassName="flex items-center"
-              trackerClassName={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-                isDarkMode
-                  ? "bg-blue-600 focus-visible:ring-blue-500 focus-visible:ring-offset-gray-800"
-                  : "bg-gray-200 focus-visible:ring-blue-500"
-              }`}
-              thumbClassName={`inline-flex h-4 w-4 transform items-center justify-center rounded-full transition-transform ${
-                isDarkMode
-                  ? "translate-x-6 bg-white"
-                  : "translate-x-1 bg-white shadow-sm"
-              }`}
+              trackerClassName="h-6 w-11 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              checkedTrackerClassName="bg-blue-600 focus-visible:ring-offset-gray-800"
+              uncheckedTrackerClassName="bg-gray-200"
+              thumbClassName="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"
+              checkedThumbClassName="translate-x-6"
+              uncheckedThumbClassName="translate-x-1"
               checkedIcon={<MoonIcon className="h-2.5 w-2.5 text-blue-600" />}
               uncheckedIcon={<SunIcon className="h-2.5 w-2.5 text-amber-500" />}
             />

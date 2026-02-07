@@ -124,7 +124,7 @@ describe("Accordion", () => {
     it("calls onValueChange with string value", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
-      renderAccordion({ type: "single", onValueChange });
+      renderAccordion({ type: "single", value: "", onValueChange });
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
 
@@ -163,10 +163,46 @@ describe("Accordion", () => {
     it("calls onValueChange with array of values", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
-      renderAccordion({ type: "multiple", onValueChange });
+      const { rerender } = render(
+        <Accordion type="multiple" value={[]} onValueChange={onValueChange}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Item 3</AccordionTrigger>
+            <AccordionContent>Content 3</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
       expect(onValueChange).toHaveBeenCalledWith(["item-1"]);
+
+      rerender(
+        <Accordion
+          type="multiple"
+          value={["item-1"]}
+          onValueChange={onValueChange}
+        >
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Item 2</AccordionTrigger>
+            <AccordionContent>Content 2</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Item 3</AccordionTrigger>
+            <AccordionContent>Content 3</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
 
       await user.click(screen.getByRole("button", { name: "Item 2" }));
       expect(onValueChange).toHaveBeenCalledWith(["item-1", "item-2"]);
@@ -1301,7 +1337,7 @@ describe("Accordion", () => {
       const user = userEvent.setup();
       const onExpandedChange = vi.fn();
       render(
-        <Accordion type="single" onExpandedChange={onExpandedChange}>
+        <Accordion type="single" value="" onExpandedChange={onExpandedChange}>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
             <AccordionContent>Content 1</AccordionContent>

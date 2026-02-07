@@ -55,7 +55,7 @@ describe("Toast", () => {
 
       await user.click(screen.getByRole("button", { name: "Success" }));
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
       expect(screen.getByText("Success message")).toBeInTheDocument();
     });
 
@@ -129,7 +129,8 @@ describe("Toast", () => {
         const buttonName = type.charAt(0).toUpperCase() + type.slice(1);
         await user.click(screen.getByRole("button", { name: buttonName }));
 
-        expect(screen.getByRole("alert")).toHaveAttribute(
+        const role = type === "error" || type === "warning" ? "alert" : "status";
+        expect(screen.getByRole(role)).toHaveAttribute(
           "data-toast-type",
           type
         );
@@ -180,7 +181,7 @@ describe("Toast", () => {
 
       await user.click(screen.getByRole("button", { name: "Success" }));
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
 
       const closeButton = screen.getByRole("button", { name: "Close notification" });
       fireEvent.click(closeButton);
@@ -190,7 +191,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
       });
     });
 
@@ -226,14 +227,14 @@ describe("Toast", () => {
         toastApi.info("Message");
       });
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
 
       await act(async () => {
         vi.advanceTimersByTime(1200);
       });
 
       await waitFor(() => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
       });
     });
 
@@ -252,7 +253,7 @@ describe("Toast", () => {
         vi.advanceTimersByTime(10000);
       });
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
 
     it("does not auto-dismiss when duration is 0 or negative", async () => {
@@ -270,7 +271,7 @@ describe("Toast", () => {
         vi.advanceTimersByTime(10000);
       });
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
   });
 
@@ -287,7 +288,7 @@ describe("Toast", () => {
         toastApi.info("Message");
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       const progressBar = toast.querySelector('[style*="width"]');
       expect(progressBar).toBeInTheDocument();
     });
@@ -303,7 +304,7 @@ describe("Toast", () => {
         toastApi.info("Message", { showProgress: false });
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       const progressContainer = toast.querySelector(".absolute.bottom-0");
       expect(progressContainer).not.toBeInTheDocument();
     });
@@ -319,7 +320,7 @@ describe("Toast", () => {
         toastApi.info("Message", { duration: Infinity });
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       const progressContainer = toast.querySelector(".absolute.bottom-0");
       expect(progressContainer).not.toBeInTheDocument();
     });
@@ -338,10 +339,15 @@ describe("Toast", () => {
         toastApi.info("Message");
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       fireEvent.mouseEnter(toast);
 
-      expect(toast).toHaveAttribute("data-paused", "true");
+      // Advance past the full duration while hovered — toast should still exist
+      await act(async () => {
+        vi.advanceTimersByTime(3000);
+      });
+
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
 
     it("resumes timer on mouse leave", async () => {
@@ -356,11 +362,18 @@ describe("Toast", () => {
         toastApi.info("Message");
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       fireEvent.mouseEnter(toast);
       fireEvent.mouseLeave(toast);
 
-      expect(toast).not.toHaveAttribute("data-paused");
+      // After mouse leave, timer resumes — toast should auto-dismiss
+      await act(async () => {
+        vi.advanceTimersByTime(2500);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      });
     });
 
     it("does not pause when pauseOnHover is false", async () => {
@@ -374,10 +387,17 @@ describe("Toast", () => {
         toastApi.info("Message", { pauseOnHover: false, duration: 2000 });
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       fireEvent.mouseEnter(toast);
 
-      expect(toast).not.toHaveAttribute("data-paused");
+      // Even while hovered, toast should auto-dismiss since pauseOnHover is false
+      await act(async () => {
+        vi.advanceTimersByTime(2500);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      });
     });
   });
 
@@ -394,7 +414,7 @@ describe("Toast", () => {
         toastId = toastApi.info("Message", { duration: Infinity });
       });
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
 
       await act(async () => {
         toastApi.dismiss(toastId);
@@ -405,7 +425,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
       });
     });
 
@@ -423,7 +443,7 @@ describe("Toast", () => {
         toastApi.info("Message 3", { duration: Infinity });
       });
 
-      expect(screen.getAllByRole("alert")).toHaveLength(3);
+      expect(screen.getAllByRole("status")).toHaveLength(3);
 
       await user.click(screen.getByRole("button", { name: "Dismiss All" }));
 
@@ -432,7 +452,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryAllByRole("alert")).toHaveLength(0);
+        expect(screen.queryAllByRole("status")).toHaveLength(0);
       });
     });
   });
@@ -457,7 +477,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.getAllByRole("alert").length).toBeLessThanOrEqual(3);
+        expect(screen.getAllByRole("status").length).toBeLessThanOrEqual(3);
       });
     });
   });
@@ -475,7 +495,11 @@ describe("Toast", () => {
         toastApi.info("Message", { dismissOnEscape: true, duration: Infinity });
       });
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      const toast = screen.getByRole("status");
+      expect(toast).toBeInTheDocument();
+
+      // The component only dismisses on Escape when the toast is focused or hovered
+      fireEvent.mouseEnter(toast);
 
       await user.keyboard("{Escape}");
 
@@ -484,7 +508,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
       });
     });
 
@@ -502,7 +526,7 @@ describe("Toast", () => {
         toastApi.info("Message 2", { duration: Infinity });
       });
 
-      expect(screen.getAllByRole("alert")).toHaveLength(2);
+      expect(screen.getAllByRole("status")).toHaveLength(2);
 
       await user.keyboard("{Escape}");
 
@@ -511,7 +535,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryAllByRole("alert")).toHaveLength(0);
+        expect(screen.queryAllByRole("status")).toHaveLength(0);
       });
     });
 
@@ -529,7 +553,7 @@ describe("Toast", () => {
 
       await user.keyboard("{Escape}");
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
 
     it("close button is focusable", async () => {
@@ -575,7 +599,7 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
       });
     });
 
@@ -603,19 +627,19 @@ describe("Toast", () => {
       });
 
       await waitFor(() => {
-        expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
       });
     });
   });
 
   describe("Accessibility Attributes", () => {
-    it("toast has role='alert'", async () => {
+    it("toast has correct role based on type", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       renderWithProvider();
 
       await user.click(screen.getByRole("button", { name: "Success" }));
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
 
     it("close button has accessible label", async () => {
@@ -656,7 +680,7 @@ describe("Toast", () => {
         toastApi.info("Message", { className: "custom-toast-class" });
       });
 
-      expect(screen.getByRole("alert")).toHaveClass("custom-toast-class");
+      expect(screen.getByRole("status")).toHaveClass("custom-toast-class");
     });
 
     it("applies custom style to toast", async () => {
@@ -670,7 +694,7 @@ describe("Toast", () => {
         toastApi.info("Message", { style: { maxWidth: "500px" } });
       });
 
-      expect(screen.getByRole("alert")).toHaveStyle({
+      expect(screen.getByRole("status")).toHaveStyle({
         maxWidth: "500px",
       });
     });
@@ -686,7 +710,7 @@ describe("Toast", () => {
         toastApi.info("Message", { progressColor: "#ff0000" });
       });
 
-      const toast = screen.getByRole("alert");
+      const toast = screen.getByRole("status");
       const progressBar = toast.querySelector('[style*="background-color"]');
       expect(progressBar).toHaveStyle({ backgroundColor: "#ff0000" });
     });
@@ -712,7 +736,7 @@ describe("Toast", () => {
         toastApi.info("Message");
       });
 
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toBeInTheDocument();
     });
   });
 });

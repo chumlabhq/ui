@@ -23,12 +23,20 @@ import { cn } from "../../utils/cn";
 
 const isTooltipConfig = (tooltip: unknown): tooltip is AvatarTooltipConfig => {
   return (
-    typeof tooltip === "object" && tooltip !== null && "content" in tooltip
+    typeof tooltip === "object" &&
+    tooltip !== null &&
+    !Array.isArray(tooltip) &&
+    "content" in tooltip
   );
 };
 
 const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
-  return typeof status === "object" && status !== null && "type" in status;
+  return (
+    typeof status === "object" &&
+    status !== null &&
+    !Array.isArray(status) &&
+    "type" in status
+  );
 };
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
@@ -62,6 +70,13 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   ) => {
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [prevSrc, setPrevSrc] = useState(src);
+
+    if (prevSrc !== src) {
+      setPrevSrc(src);
+      setImageError(false);
+      setImageLoaded(false);
+    }
 
     const initials = getInitials(name, maxInitials);
     const numericSize = getNumericSize(size);
@@ -127,7 +142,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         )}
         style={containerStyle}
         role={!showImage ? "img" : undefined}
-        aria-label={rest["aria-label"] || alt || name}
+        aria-label={alt || name || rest["aria-label"]}
         data-has-image={showImage || undefined}
         data-shape={shape}
         {...rest}

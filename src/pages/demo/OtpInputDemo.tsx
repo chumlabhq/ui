@@ -182,7 +182,7 @@ const OtpInputDemo = () => {
                 value={basicValue}
                 onChange={setBasicValue}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
               />
               <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
@@ -211,7 +211,7 @@ const OtpInputDemo = () => {
                   value={fourDigitValue}
                   onChange={setFourDigitValue}
                   inputClassName={classes.base}
-                  focusClassName={classes.focus}
+                  inputFocusClassName={classes.focus}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -228,7 +228,7 @@ const OtpInputDemo = () => {
                       ? "border-gray-600 bg-gray-700 text-white"
                       : "border-gray-300 bg-white text-gray-900"
                   }`}
-                  focusClassName={classes.focus}
+                  inputFocusClassName={classes.focus}
                   wrapperClassName="flex gap-1.5"
                 />
               </div>
@@ -368,7 +368,7 @@ const OtpInputDemo = () => {
                   groups={[3, 3]}
                   separator={<span className={`text-2xl ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
                   inputClassName={classes.base}
-                  focusClassName={classes.focus}
+                  inputFocusClassName={classes.focus}
                   wrapperClassName="flex items-center gap-3"
                   groupClassName="flex gap-2"
                   separatorClassName="mx-1"
@@ -404,7 +404,7 @@ const OtpInputDemo = () => {
                   groups={[2, 2, 2]}
                   separator={<span className={`text-xl ${isDarkMode ? "text-gray-500" : "text-gray-300"}`}>/</span>}
                   inputClassName={classes.base}
-                  focusClassName={classes.focus}
+                  inputFocusClassName={classes.focus}
                   wrapperClassName="flex items-center gap-2"
                   groupClassName="flex gap-1"
                   separatorClassName="mx-1"
@@ -430,7 +430,7 @@ const OtpInputDemo = () => {
                 onChange={setLabelValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -456,7 +456,7 @@ const OtpInputDemo = () => {
               onChange={setRequiredValue}
               autoFocusFirst={false}
               inputClassName={classes.base}
-              focusClassName={classes.focus}
+              inputFocusClassName={classes.focus}
               wrapperClassName={classes.wrapper}
               labelClassName={classes.label}
               containerClassName={classes.container}
@@ -523,7 +523,7 @@ const OtpInputDemo = () => {
                 autoFocusFirst={false}
                 inputType="password"
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
               />
               <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
@@ -549,7 +549,7 @@ const OtpInputDemo = () => {
                 autoFocusFirst={false}
                 allowPaste={false}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
               />
               <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
@@ -575,7 +575,7 @@ const OtpInputDemo = () => {
                 onComplete={(val: string) => setLastCompleted(val)}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
               />
               <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
@@ -615,7 +615,7 @@ const OtpInputDemo = () => {
                 onChange={setBasicValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
               />
               <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
@@ -641,7 +641,7 @@ const OtpInputDemo = () => {
                 onChange={setRefDemoValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
               />
               <div className="flex gap-2">
@@ -696,7 +696,7 @@ const OtpInputDemo = () => {
                 onChange={setIdNameValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
-                focusClassName={classes.focus}
+                inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -816,7 +816,7 @@ const OtpInputDemo = () => {
                   onChange={setBasicValue}
                   autoFocusFirst={false}
                   inputClassName={classes.base}
-                  focusClassName={classes.focus}
+                  inputFocusClassName={classes.focus}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -1359,7 +1359,7 @@ const OtpInputDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">focusClassName</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">inputFocusClassName</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     CSS class for focus states (appended to inputClassName)
@@ -1565,7 +1565,7 @@ interface OtpInputProps
   wrapperClassName?: string;
   groupClassName?: string;
   inputClassName?: string;
-  focusClassName?: string;
+  inputFocusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
   separatorClassName?: string;

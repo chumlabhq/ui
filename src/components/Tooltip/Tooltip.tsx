@@ -1,23 +1,21 @@
 import {
-  forwardRef,
   useRef,
   useState,
   useEffect,
   useCallback,
-  useLayoutEffect,
+  useId,
+  isValidElement,
+  cloneElement,
 } from "react";
+import type { CSSProperties, ReactElement, Ref } from "react";
 import { createPortal } from "react-dom";
+import { cn } from "../../utils/cn";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import type {
   TooltipProps,
-  TooltipProviderProps,
   TooltipShadowPreset,
+  TooltipWordWrap,
 } from "./types";
-
-export const TooltipProvider: React.FC<TooltipProviderProps> = ({
-  children,
-}) => {
-  return <>{children}</>;
-};
 
 const shadowPresets: Record<TooltipShadowPreset, string> = {
   none: "none",
@@ -152,285 +150,388 @@ const calculatePosition = (
   return { top, left, arrowTop, arrowLeft, arrowRotation };
 };
 
-const Tooltip = forwardRef<HTMLElement, TooltipProps>(
-  (
-    {
-      children,
-      content,
-      side = "top",
-      align = "center",
-      sideOffset = 6,
-      alignOffset = 0,
-      maxWidth = 300,
-      delayDuration = 200,
-      disableHoverableContent = false,
-      open: controlledOpen,
-      defaultOpen = false,
-      onOpenChange,
-      showArrow = true,
-      arrowColor,
-      disabled = false,
-      truncate = false,
-      truncateWidth,
-      shadow = "lg",
-      className = "",
-      triggerClassName = "",
-      contentClassName = "",
-      contentStyle,
-      arrowClassName = "",
-      arrowStyle,
+const wordWrapStyles: Record<TooltipWordWrap, CSSProperties> = {
+  normal: { overflowWrap: "normal", whiteSpace: "normal" },
+  "break-word": {
+    overflowWrap: "break-word",
+    wordBreak: "normal",
+    whiteSpace: "normal",
+  },
+  nowrap: { overflowWrap: "normal", whiteSpace: "nowrap" },
+};
+
+const DEFAULT_CONTENT_CLASS =
+  "rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100";
+
+const DEFAULT_BASE_ARROW_CLASS = "fill-white dark:fill-gray-900";
+
+function mergeTooltipRefs<T>(
+  ...refs: (Ref<T> | undefined | null)[]
+): (node: T | null) => void {
+  return (node: T | null) => {
+    refs.forEach((ref) => {
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref != null) {
+        (ref as React.MutableRefObject<T | null>).current = node;
+      }
+    });
+  };
+}
+
+const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  content,
+  side = "top",
+  align = "center",
+  sideOffset = 6,
+  alignOffset = 0,
+  maxWidth = 300,
+  wordWrap = "break-word",
+  delayDuration = 200,
+  hideDelayDuration = 100,
+  disableHoverableContent = false,
+  open: controlledOpen,
+  defaultOpen = false,
+  onOpenChange,
+  showArrow = true,
+  arrowColor,
+  disabled = false,
+  truncate = false,
+  truncateWidth,
+  shadow = "lg",
+  zIndex = 9999,
+  portal = true,
+  asChild = false,
+  className,
+  triggerClassName,
+  contentClassName,
+  contentStyle,
+  arrowClassName,
+  baseArrowClassName,
+  arrowStyle,
+  baseArrowStyle,
+}) => {
+  const generatedId = useId();
+  const tooltipId = `tooltip-${generatedId}`;
+
+  const triggerRef = useRef<HTMLElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const delayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
+  const [isPositioned, setIsPositioned] = useState(false);
+
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+
+  const setOpen = useCallback(
+    (value: boolean) => {
+      if (!isControlled) {
+        setInternalOpen(value);
+      }
+      onOpenChange?.(value);
     },
-    ref,
-  ) => {
-    const triggerRef = useRef<HTMLSpanElement>(null);
-    const tooltipRef = useRef<HTMLDivElement>(null);
-    const textRef = useRef<HTMLSpanElement>(null);
-    const delayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    [isControlled, onOpenChange],
+  );
 
-    const [internalOpen, setInternalOpen] = useState(defaultOpen);
-    const [isTruncated, setIsTruncated] = useState(false);
-    const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
-    const [isPositioned, setIsPositioned] = useState(false);
+  const checkTruncation = useCallback(() => {
+    if (truncate && textRef.current) {
+      const el = textRef.current;
+      setIsTruncated(el.scrollWidth > el.clientWidth);
+    }
+  }, [truncate]);
 
-    const isControlled = controlledOpen !== undefined;
-    const isOpen = isControlled ? controlledOpen : internalOpen;
+  useEffect(() => {
+    checkTruncation();
+    window.addEventListener("resize", checkTruncation);
+    return () => window.removeEventListener("resize", checkTruncation);
+  }, [checkTruncation, children, content]);
 
-    const setOpen = useCallback(
-      (value: boolean) => {
-        if (!isControlled) {
-          setInternalOpen(value);
-        }
-        onOpenChange?.(value);
-      },
-      [isControlled, onOpenChange],
-    );
-
-    const checkTruncation = useCallback(() => {
-      if (truncate && textRef.current) {
-        const el = textRef.current;
-        setIsTruncated(el.scrollWidth > el.clientWidth);
-      }
-    }, [truncate]);
-
-    useEffect(() => {
-      checkTruncation();
-      window.addEventListener("resize", checkTruncation);
-      return () => window.removeEventListener("resize", checkTruncation);
-    }, [checkTruncation, children, content]);
-
-    useLayoutEffect(() => {
-      if (isOpen && triggerRef.current && tooltipRef.current) {
-        const triggerRect = triggerRef.current.getBoundingClientRect();
-        const tooltipRect = tooltipRef.current.getBoundingClientRect();
-        const newPosition = calculatePosition(
-          triggerRect,
-          tooltipRect,
-          side,
-          align,
-          sideOffset,
-          alignOffset,
-        );
-        setPosition(newPosition);
-        setIsPositioned(true);
-      } else {
-        setIsPositioned(false);
-      }
-    }, [isOpen, side, align, sideOffset, alignOffset]);
-
-    useEffect(() => {
-      return () => {
-        if (delayTimeoutRef.current) clearTimeout(delayTimeoutRef.current);
-        if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
-      };
-    }, []);
-
-    const handleMouseEnter = useCallback(() => {
-      if (disabled) return;
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-        hideTimeoutRef.current = null;
-      }
-      if (delayDuration > 0) {
-        delayTimeoutRef.current = setTimeout(() => {
-          setOpen(true);
-        }, delayDuration);
-      } else {
-        setOpen(true);
-      }
-    }, [disabled, delayDuration, setOpen]);
-
-    const handleMouseLeave = useCallback(() => {
-      if (delayTimeoutRef.current) {
-        clearTimeout(delayTimeoutRef.current);
-        delayTimeoutRef.current = null;
-      }
-
-      hideTimeoutRef.current = setTimeout(() => {
-        setOpen(false);
-      }, 100);
-    }, [setOpen]);
-
-    const handleTooltipMouseEnter = useCallback(() => {
-      if (disableHoverableContent) return;
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-        hideTimeoutRef.current = null;
-      }
-    }, [disableHoverableContent]);
-
-    const handleTooltipMouseLeave = useCallback(() => {
-      setOpen(false);
-    }, [setOpen]);
-
-    const handleFocus = useCallback(() => {
-      if (disabled) return;
-      setOpen(true);
-    }, [disabled, setOpen]);
-
-    const handleBlur = useCallback(() => {
-      setOpen(false);
-    }, [setOpen]);
-
-    const computedMaxWidth =
-      typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
-    const shouldShowTooltip = !disabled && (!truncate || isTruncated);
-
-    const triggerContent = truncate ? (
-      <span
-        ref={textRef}
-        className={["block truncate", truncateWidth || "", triggerClassName]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        {children}
-      </span>
-    ) : (
-      children
-    );
-
-    if (!shouldShowTooltip) {
-      return truncate ? (
-        <span ref={ref as React.Ref<HTMLSpanElement>} className={className}>
-          {triggerContent}
-        </span>
-      ) : (
-        <>{children}</>
+  const updatePosition = useCallback(() => {
+    if (isOpen && triggerRef.current && tooltipRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const tooltipRect = tooltipRef.current.getBoundingClientRect();
+      const newPosition = calculatePosition(
+        triggerRect,
+        tooltipRect,
+        side,
+        align,
+        sideOffset,
+        alignOffset,
       );
+      setPosition(newPosition);
+      setIsPositioned(true);
+    } else {
+      setIsPositioned(false);
+    }
+  }, [isOpen, side, align, sideOffset, alignOffset]);
+
+  useIsomorphicLayoutEffect(() => {
+    updatePosition();
+  }, [updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleScrollOrResize = () => {
+      updatePosition();
+    };
+
+    window.addEventListener("scroll", handleScrollOrResize, true);
+    window.addEventListener("resize", handleScrollOrResize);
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollOrResize, true);
+      window.removeEventListener("resize", handleScrollOrResize);
+    };
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    return () => {
+      if (delayTimeoutRef.current) clearTimeout(delayTimeoutRef.current);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+    };
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    if (disabled) return;
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+    if (delayDuration > 0) {
+      delayTimeoutRef.current = setTimeout(() => {
+        setOpen(true);
+      }, delayDuration);
+    } else {
+      setOpen(true);
+    }
+  }, [disabled, delayDuration, setOpen]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (delayTimeoutRef.current) {
+      clearTimeout(delayTimeoutRef.current);
+      delayTimeoutRef.current = null;
     }
 
-    const shadowValue = isPresetShadow(shadow) ? shadowPresets[shadow] : shadow;
-    const shadowStyle = { boxShadow: shadowValue };
+    hideTimeoutRef.current = setTimeout(() => {
+      setOpen(false);
+    }, hideDelayDuration);
+  }, [setOpen, hideDelayDuration]);
 
-    const defaultContentClassName = `z-[9999] rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100`;
-    const finalContentClassName = contentClassName || defaultContentClassName;
+  const handleTooltipMouseEnter = useCallback(() => {
+    if (disableHoverableContent) return;
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+  }, [disableHoverableContent]);
 
-    const computedArrowStyle: React.CSSProperties = {
-      ...arrowStyle,
-      ...(arrowColor ? { fill: arrowColor } : {}),
-    };
+  const handleTooltipMouseLeave = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
 
-    const getArrowPosition = (): React.CSSProperties => {
-      const arrowSize = 6;
-      const style: React.CSSProperties = {
-        position: "absolute",
-        transform: `rotate(${position.arrowRotation}deg)`,
-      };
+  const handleFocus = useCallback(() => {
+    if (disabled) return;
+    setOpen(true);
+  }, [disabled, setOpen]);
 
-      switch (side) {
-        case "top":
-          style.bottom = -arrowSize;
-          style.left =
-            position.arrowLeft !== undefined ? position.arrowLeft - 6 : "50%";
-          if (position.arrowLeft === undefined)
-            style.transform += " translateX(-50%)";
-          break;
-        case "bottom":
-          style.top = -arrowSize;
-          style.left =
-            position.arrowLeft !== undefined ? position.arrowLeft - 6 : "50%";
-          if (position.arrowLeft === undefined)
-            style.transform += " translateX(-50%)";
-          break;
-        case "left":
-          style.right = -arrowSize;
-          style.top =
-            position.arrowTop !== undefined ? position.arrowTop - 6 : "50%";
-          if (position.arrowTop === undefined)
-            style.transform += " translateY(-50%)";
-          break;
-        case "right":
-          style.left = -arrowSize;
-          style.top =
-            position.arrowTop !== undefined ? position.arrowTop - 6 : "50%";
-          if (position.arrowTop === undefined)
-            style.transform += " translateY(-50%)";
-          break;
+  const handleBlur = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === "Escape" && isOpen) {
+        event.preventDefault();
+        setOpen(false);
       }
+    },
+    [isOpen, setOpen],
+  );
 
-      return style;
+  const computedMaxWidth =
+    typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
+  const shouldShowTooltip = !disabled && (!truncate || isTruncated);
+
+  const triggerContent = truncate ? (
+    <span
+      ref={textRef}
+      className={cn("block truncate", truncateWidth, triggerClassName)}
+    >
+      {children}
+    </span>
+  ) : (
+    children
+  );
+
+  if (!shouldShowTooltip) {
+    return truncate ? (
+      <span className={className || undefined}>{triggerContent}</span>
+    ) : (
+      <>{children}</>
+    );
+  }
+
+  const shadowValue = isPresetShadow(shadow) ? shadowPresets[shadow] : shadow;
+  const shadowStyle = { boxShadow: shadowValue };
+
+  const finalContentClassName = cn(DEFAULT_CONTENT_CLASS, contentClassName);
+
+  const getArrowPosition = (): React.CSSProperties => {
+    const arrowSize = 6;
+    const style: React.CSSProperties = {
+      position: "absolute",
+      transform: `rotate(${position.arrowRotation}deg)`,
     };
 
-    const tooltipContent =
-      isOpen &&
-      createPortal(
-        <div
-          ref={tooltipRef}
-          role="tooltip"
-          className={finalContentClassName}
-          style={{
-            position: "absolute",
-            top: position.top,
-            left: position.left,
-            maxWidth: computedMaxWidth,
-            wordBreak: "break-word",
-            whiteSpace: "normal",
-            opacity: isPositioned ? 1 : 0,
-            pointerEvents: isPositioned ? "auto" : "none",
-            ...shadowStyle,
-            ...contentStyle,
-          }}
-          onMouseEnter={handleTooltipMouseEnter}
-          onMouseLeave={handleTooltipMouseLeave}
-        >
-          {truncate ? children : content}
-          {showArrow && (
-            <svg
-              width={12}
-              height={6}
-              viewBox="0 0 12 6"
-              className={arrowClassName || "fill-white dark:fill-gray-900"}
-              style={{
-                ...getArrowPosition(),
-                ...computedArrowStyle,
-              }}
-            >
-              <path d="M0 6L6 0L12 6H0Z" />
-            </svg>
-          )}
-        </div>,
-        document.body,
-      );
+    switch (side) {
+      case "top":
+        style.bottom = -arrowSize;
+        style.left =
+          position.arrowLeft !== undefined ? position.arrowLeft - 6 : "50%";
+        if (position.arrowLeft === undefined)
+          style.transform += " translateX(-50%)";
+        break;
+      case "bottom":
+        style.top = -arrowSize;
+        style.left =
+          position.arrowLeft !== undefined ? position.arrowLeft - 6 : "50%";
+        if (position.arrowLeft === undefined)
+          style.transform += " translateX(-50%)";
+        break;
+      case "left":
+        style.right = -arrowSize;
+        style.top =
+          position.arrowTop !== undefined ? position.arrowTop - 6 : "50%";
+        if (position.arrowTop === undefined)
+          style.transform += " translateY(-50%)";
+        break;
+      case "right":
+        style.left = -arrowSize;
+        style.top =
+          position.arrowTop !== undefined ? position.arrowTop - 6 : "50%";
+        if (position.arrowTop === undefined)
+          style.transform += " translateY(-50%)";
+        break;
+    }
+
+    return style;
+  };
+
+  const arrowElement =
+    showArrow ? (
+      <svg
+        width={12}
+        height={6}
+        viewBox="0 0 12 6"
+        aria-hidden="true"
+        className={cn(DEFAULT_BASE_ARROW_CLASS, baseArrowClassName, arrowClassName)}
+        style={{
+          ...baseArrowStyle,
+          ...getArrowPosition(),
+          ...arrowStyle,
+          ...(arrowColor ? { fill: arrowColor } : {}),
+        }}
+      >
+        <path d="M0 6L6 0L12 6H0Z" />
+      </svg>
+    ) : null;
+
+  const tooltipElement = isOpen && (
+    <div
+      ref={tooltipRef}
+      id={tooltipId}
+      role="tooltip"
+      className={finalContentClassName}
+      style={{
+        position: "absolute",
+        top: position.top,
+        left: position.left,
+        maxWidth: computedMaxWidth,
+        ...wordWrapStyles[wordWrap],
+        opacity: isPositioned ? 1 : 0,
+        pointerEvents: isPositioned ? "auto" : "none",
+        zIndex,
+        ...shadowStyle,
+        ...contentStyle,
+      }}
+      onMouseEnter={handleTooltipMouseEnter}
+      onMouseLeave={handleTooltipMouseLeave}
+    >
+      {truncate ? children : content}
+      {arrowElement}
+    </div>
+  );
+
+  const tooltipContent = portal
+    ? tooltipElement && createPortal(tooltipElement, document.body)
+    : tooltipElement;
+
+  if (asChild && isValidElement(children)) {
+    const child = children as ReactElement<Record<string, unknown>>;
+    const childRef = (child as unknown as { ref?: Ref<HTMLElement> }).ref;
 
     return (
       <>
-        <span
-          ref={triggerRef}
-          className={truncate ? className : triggerClassName}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          tabIndex={0}
-          style={{ display: "inline-block" }}
-        >
-          {triggerContent}
-        </span>
+        {cloneElement(child, {
+          ref: mergeTooltipRefs(
+            triggerRef as React.MutableRefObject<HTMLElement>,
+            childRef,
+          ),
+          onMouseEnter: (e: React.MouseEvent) => {
+            handleMouseEnter();
+            (child.props.onMouseEnter as ((e: React.MouseEvent) => void) | undefined)?.(e);
+          },
+          onMouseLeave: (e: React.MouseEvent) => {
+            handleMouseLeave();
+            (child.props.onMouseLeave as ((e: React.MouseEvent) => void) | undefined)?.(e);
+          },
+          onFocus: (e: React.FocusEvent) => {
+            handleFocus();
+            (child.props.onFocus as ((e: React.FocusEvent) => void) | undefined)?.(e);
+          },
+          onBlur: (e: React.FocusEvent) => {
+            handleBlur();
+            (child.props.onBlur as ((e: React.FocusEvent) => void) | undefined)?.(e);
+          },
+          onKeyDown: (e: React.KeyboardEvent) => {
+            handleKeyDown(e);
+            (child.props.onKeyDown as ((e: React.KeyboardEvent) => void) | undefined)?.(e);
+          },
+          "aria-describedby": isOpen ? tooltipId : undefined,
+          className: cn(child.props.className as string | undefined, triggerClassName),
+        })}
         {tooltipContent}
       </>
     );
-  },
-);
+  }
+
+  return (
+    <>
+      <span
+        ref={triggerRef as React.RefObject<HTMLSpanElement>}
+        className={cn(triggerClassName, className) || undefined}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        style={{ display: "inline-block" }}
+        aria-describedby={isOpen ? tooltipId : undefined}
+      >
+        {triggerContent}
+      </span>
+      {tooltipContent}
+    </>
+  );
+};
 
 Tooltip.displayName = "Tooltip";
 

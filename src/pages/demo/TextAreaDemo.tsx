@@ -876,14 +876,14 @@ const TextAreaDemo = () => {
               </div>
               <div>
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Using focusClassName
+                  Using wrapperFocusClassName
                 </p>
                 <TextArea
                   placeholder="Focus me..."
                   rows={3}
                   className={`w-full bg-transparent outline-none resize-none ${isDarkMode ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`}
                   wrapperClassName={`px-3 py-2 rounded-lg border gap-2 ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-white"}`}
-                  focusClassName={isDarkMode
+                  wrapperFocusClassName={isDarkMode
                     ? "focus-within:ring-2 focus-within:ring-purple-400 focus-within:border-purple-400 focus-within:bg-purple-900/20"
                     : "focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 focus-within:bg-purple-50"
                   }
@@ -1242,7 +1242,7 @@ const TextAreaDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">focusClassName</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">wrapperFocusClassName</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     CSS class for focus state (use focus-within: prefixed classes)
@@ -1350,7 +1350,7 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   fullWidth?: boolean;
   containerClassName?: string;
   wrapperClassName?: string;
-  focusClassName?: string;
+  wrapperFocusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
 }`}

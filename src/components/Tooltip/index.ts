@@ -1,7 +1,7 @@
-export { default as Tooltip, TooltipProvider } from "./Tooltip";
+export { default as Tooltip } from "./Tooltip";
 export type {
   TooltipProps,
-  TooltipProviderProps,
   TooltipShadow,
   TooltipShadowPreset,
+  TooltipWordWrap,
 } from "./types";

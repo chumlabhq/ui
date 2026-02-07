@@ -2,6 +2,7 @@ import {
   forwardRef,
   cloneElement,
   isValidElement,
+  useMemo,
   type ReactElement,
 } from "react";
 import type { ButtonProps, IconAnimation } from "./types";
@@ -9,38 +10,28 @@ import { CircularLoader } from "../Loader";
 import { Tooltip } from "../Tooltip";
 import { cn } from "../../utils/cn";
 
-const getIconAnimationClasses = (
-  animation: IconAnimation,
-  animateOnHover: boolean,
-): string => {
-  const baseClasses = "transition-transform duration-200";
+const BASE_TRANSITION = "transition-transform duration-200";
 
-  const animationMap: Record<IconAnimation, string> = {
-    none: "",
-    slideRight: animateOnHover
-      ? `${baseClasses} group-hover:translate-x-1`
-      : `${baseClasses} animate-slide-right`,
-    slideLeft: animateOnHover
-      ? `${baseClasses} group-hover:-translate-x-1`
-      : `${baseClasses} animate-slide-left`,
-    slideUp: animateOnHover
-      ? `${baseClasses} group-hover:-translate-y-1`
-      : `${baseClasses} animate-slide-up`,
-    slideDown: animateOnHover
-      ? `${baseClasses} group-hover:translate-y-1`
-      : `${baseClasses} animate-slide-down`,
-    bounce: animateOnHover
-      ? `${baseClasses} group-hover:animate-bounce`
-      : "animate-bounce",
-    pulse: animateOnHover
-      ? `${baseClasses} group-hover:animate-pulse`
-      : "animate-pulse",
-    spin: animateOnHover
-      ? `${baseClasses} group-hover:animate-spin`
-      : "animate-spin",
-  };
+const HOVER_ANIMATION_MAP: Record<IconAnimation, string> = {
+  none: "",
+  slideRight: `${BASE_TRANSITION} group-hover:translate-x-1`,
+  slideLeft: `${BASE_TRANSITION} group-hover:-translate-x-1`,
+  slideUp: `${BASE_TRANSITION} group-hover:-translate-y-1`,
+  slideDown: `${BASE_TRANSITION} group-hover:translate-y-1`,
+  bounce: `${BASE_TRANSITION} group-hover:animate-bounce`,
+  pulse: `${BASE_TRANSITION} group-hover:animate-pulse`,
+  spin: `${BASE_TRANSITION} group-hover:animate-spin`,
+};
 
-  return animationMap[animation] || "";
+const CONTINUOUS_ANIMATION_MAP: Record<IconAnimation, string> = {
+  none: "",
+  slideRight: `${BASE_TRANSITION} animate-slide-right`,
+  slideLeft: `${BASE_TRANSITION} animate-slide-left`,
+  slideUp: `${BASE_TRANSITION} animate-slide-up`,
+  slideDown: `${BASE_TRANSITION} animate-slide-down`,
+  bounce: "animate-bounce",
+  pulse: "animate-pulse",
+  spin: "animate-spin",
 };
 
 const Button = forwardRef<
@@ -87,32 +78,41 @@ const Button = forwardRef<
 
   const displayContent = isLoading && loadingText ? loadingText : children;
 
-  const shouldAnimateLeading =
-    animateIcon === "leading" || animateIcon === "both";
-  const shouldAnimateTrailing =
-    animateIcon === "trailing" || animateIcon === "both";
-
-  const leadingAnimationClasses =
-    shouldAnimateLeading && iconAnimation !== "none"
-      ? getIconAnimationClasses(iconAnimation, animateOnHover)
-      : "";
-
-  const trailingAnimationClasses =
-    shouldAnimateTrailing && iconAnimation !== "none"
-      ? getIconAnimationClasses(iconAnimation, animateOnHover)
-      : "";
+  const animationClasses = useMemo(() => {
+    const map = animateOnHover ? HOVER_ANIMATION_MAP : CONTINUOUS_ANIMATION_MAP;
+    const classes = iconAnimation !== "none" ? map[iconAnimation] : "";
+    return {
+      leading:
+        (animateIcon === "leading" || animateIcon === "both") && classes
+          ? classes
+          : "",
+      trailing:
+        (animateIcon === "trailing" || animateIcon === "both") && classes
+          ? classes
+          : "",
+    };
+  }, [iconAnimation, animateOnHover, animateIcon]);
 
   const content = (
-    <span className={cn("inline-flex items-center justify-center gap-2", contentClassName)}>
+    <span
+      className={cn(
+        "inline-flex items-center justify-center gap-2",
+        contentClassName,
+      )}
+    >
       {loaderPosition === "left" && isLoading && loaderElement}
       {leadingIcon && (
-        <span className={cn("inline-flex shrink-0", leadingAnimationClasses)}>
+        <span
+          className={cn("inline-flex shrink-0", animationClasses.leading)}
+        >
           {leadingIcon}
         </span>
       )}
       {displayContent}
       {trailingIcon && (
-        <span className={cn("inline-flex shrink-0", trailingAnimationClasses)}>
+        <span
+          className={cn("inline-flex shrink-0", animationClasses.trailing)}
+        >
           {trailingIcon}
         </span>
       )}
@@ -123,7 +123,7 @@ const Button = forwardRef<
   const combinedClassName = cn(
     className,
     fullWidth && "w-full",
-    iconAnimation !== "none" && "group"
+    iconAnimation !== "none" && "group",
   );
 
   if (asChild && isValidElement(children)) {
@@ -167,15 +167,22 @@ const Button = forwardRef<
     );
   };
 
+  // Memoize aria/data prop filtering to avoid allocation on every render
+  const ariaAndDataProps = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(rest).filter(
+          ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
+        ),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(rest)],
+  );
+
   if (as === "a" && href) {
     const handleAnchorClick = isDisabled
       ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
       : (onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined);
-    const ariaAndDataProps = Object.fromEntries(
-      Object.entries(rest).filter(
-        ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
-      ),
-    );
     return wrapWithTooltip(
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
@@ -200,11 +207,6 @@ const Button = forwardRef<
     const handleSpanClick = onClick as
       | React.MouseEventHandler<HTMLSpanElement>
       | undefined;
-    const ariaAndDataProps = Object.fromEntries(
-      Object.entries(rest).filter(
-        ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
-      ),
-    );
     return wrapWithTooltip(
       <span
         ref={ref as React.Ref<HTMLSpanElement>}

@@ -12,7 +12,7 @@ export interface OtpInputStyleProps {
   wrapperClassName?: string;
   groupClassName?: string;
   inputClassName?: string;
-  focusClassName?: string;
+  inputFocusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
   separatorClassName?: string;
@@ -49,6 +49,7 @@ export interface OtpInputProps
   allowPaste?: boolean;
   autoFocusFirst?: boolean;
   inputType?: "text" | "password";
+  inputPattern?: string;
   inputClassNames?: (string | undefined)[];
   fullWidth?: boolean;
   renderInput?: (props: OtpInputRenderProps) => ReactNode;

@@ -7,7 +7,7 @@ import {
   useImperativeHandle,
   useEffect,
 } from "react";
-import { useId } from "../../utils/useId";
+import { useId } from "react";
 import { AccordionContext } from "./utils/context";
 import {
   DEFAULT_CLASS_NAMES,
@@ -36,14 +36,15 @@ import type {
 } from "./utils/types";
 import { cn } from "../../utils/cn";
 
-let printStylesInjected = false;
+const printStylesId = "kern-accordion-print-styles";
 
 function injectPrintStyles() {
-  if (printStylesInjected || typeof document === "undefined") return;
+  if (typeof document === "undefined") return;
+  if (document.getElementById(printStylesId)) return;
   const style = document.createElement("style");
+  style.id = printStylesId;
   style.textContent = PRINT_STYLES;
   document.head.appendChild(style);
-  printStylesInjected = true;
 }
 
 function getStorageConfig(
@@ -378,15 +379,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     ],
   );
 
-  const toggleItem = useCallback(
-    async (value: string) => {
-      const isCurrentlyExpanded = expandedValues.has(value);
-
-      if (isCurrentlyExpanded && preventClose) {
-        const shouldPrevent = await Promise.resolve(preventClose(value));
-        if (shouldPrevent) return;
-      }
-
+  const performToggle = useCallback(
+    (value: string, isCurrentlyExpanded: boolean) => {
       const computeNewValue = (prev: Set<string>): Set<string> => {
         const newSet = new Set(prev);
 
@@ -414,13 +408,17 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
           fireCallback(newSet, value, isCurrentlyExpanded);
         }
       } else {
+        let didChange = false;
+        let computedSet: Set<string> = internalValue;
         setInternalValue((prev) => {
           const newSet = computeNewValue(prev);
-          if (newSet !== prev) {
-            fireCallback(newSet, value, isCurrentlyExpanded);
-          }
+          didChange = newSet !== prev;
+          computedSet = newSet;
           return newSet;
         });
+        if (didChange) {
+          fireCallback(computedSet, value, isCurrentlyExpanded);
+        }
       }
     },
     [
@@ -429,9 +427,31 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
       maxExpanded,
       isControlled,
       expandedValues,
+      internalValue,
       fireCallback,
-      preventClose,
     ],
+  );
+
+  const toggleItem = useCallback(
+    (value: string) => {
+      const isCurrentlyExpanded = expandedValues.has(value);
+
+      if (isCurrentlyExpanded && preventClose) {
+        const result = preventClose(value);
+        if (result && typeof (result as Promise<boolean>).then === "function") {
+          (result as Promise<boolean>).then((shouldPrevent) => {
+            if (!shouldPrevent) {
+              performToggle(value, isCurrentlyExpanded);
+            }
+          });
+          return;
+        }
+        if (result) return;
+      }
+
+      performToggle(value, isCurrentlyExpanded);
+    },
+    [expandedValues, preventClose, performToggle],
   );
 
   const sizeClasses = SIZE_CLASSES[size];

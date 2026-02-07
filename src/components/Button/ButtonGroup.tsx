@@ -1,12 +1,13 @@
 import type { ButtonGroupProps } from "./types";
+import { cn } from "../../utils/cn";
 
 const ButtonGroup = ({
   children,
-  className = "",
+  className,
   ...props
 }: ButtonGroupProps) => {
   return (
-    <div className={className} role="group" {...props}>
+    <div className={cn(className) || undefined} role="group" {...props}>
       {children}
     </div>
   );

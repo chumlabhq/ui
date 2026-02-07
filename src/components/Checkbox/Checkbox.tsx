@@ -1,5 +1,6 @@
 import { forwardRef, useId, useEffect, useRef, useImperativeHandle, useMemo, useCallback } from "react";
 import type { CheckboxProps, CheckboxSize, CheckboxShape } from "./types";
+import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
 
 const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
@@ -22,6 +23,13 @@ const SHAPE_CLASS_MAP: Record<CheckboxShape, string> = {
   square: "rounded-none",
   rounded: "rounded",
   circle: "rounded-full",
+};
+
+const defaultCheckboxStyles = {
+  base: "inline-flex items-center justify-center border transition-colors",
+  checked: "bg-blue-600 border-blue-600 text-white",
+  unchecked: "bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600",
+  indeterminate: "bg-blue-600 border-blue-600 text-white",
 };
 
 const DefaultCheckIcon = ({ className, size }: { className?: string; size?: number }) => (
@@ -57,11 +65,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       name,
       label,
       description,
-      checked = false,
+      checked: controlledChecked,
+      defaultChecked = false,
       indeterminate = false,
       disabled = false,
       required = false,
-      onChange,
+      onCheckedChange,
       onFocus,
       onBlur,
       error = false,
@@ -97,6 +106,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
 
+    const [isChecked, setIsChecked] = useControllableState({
+      value: controlledChecked,
+      defaultValue: defaultChecked,
+      onChange: onCheckedChange,
+    });
+
     useEffect(() => {
       if (internalRef.current) {
         internalRef.current.indeterminate = indeterminate;
@@ -127,29 +142,29 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!disabled) {
-          onChange?.(event.target.checked, event);
+          setIsChecked(event.target.checked);
         }
       },
-      [disabled, onChange]
+      [disabled, setIsChecked]
     );
 
-    const getStateClassName = () => {
-      if (indeterminate) return indeterminateClassName;
-      if (checked) return checkedClassName;
-      return uncheckedClassName;
-    };
+    const getStateClassName = useMemo(() => {
+      if (indeterminate) return cn(defaultCheckboxStyles.indeterminate, indeterminateClassName);
+      if (isChecked) return cn(defaultCheckboxStyles.checked, checkedClassName);
+      return cn(defaultCheckboxStyles.unchecked, uncheckedClassName);
+    }, [indeterminate, isChecked, indeterminateClassName, checkedClassName, uncheckedClassName]);
 
-    const renderIcon = () => {
+    const renderIcon = useCallback(() => {
       if (indeterminate) {
         return (
           indeterminateIcon || <DefaultIndeterminateIcon className={iconClassName} size={iconSize} />
         );
       }
-      if (checked) {
+      if (isChecked) {
         return checkedIcon || <DefaultCheckIcon className={iconClassName} size={iconSize} />;
       }
       return uncheckedIcon || null;
-    };
+    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, iconClassName, iconSize]);
 
     const describedBy = [
       description ? descriptionId : null,
@@ -160,19 +175,19 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div
-        className={containerClassName}
+        className={cn(containerClassName, className)}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
-        data-checked={checked || undefined}
+        data-checked={isChecked || undefined}
         data-indeterminate={indeterminate || undefined}
         data-size={typeof size === "string" ? size : undefined}
         data-shape={shape || undefined}
       >
-        <label className={cn("flex items-start gap-2", className)}>
+        <label className={cn("flex items-start gap-2")}>
           <span
-            className={cn(checkboxClassName, getStateClassName(), sizeClassName, shapeClass)}
+            className={cn(defaultCheckboxStyles.base, checkboxClassName, getStateClassName, sizeClassName, shapeClass)}
             style={{ ...sizeStyle, position: "relative" }}
-            data-checked={checked || undefined}
+            data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
@@ -184,7 +199,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               type="checkbox"
               id={checkboxId}
               name={name}
-              checked={checked}
+              checked={isChecked}
               disabled={disabled}
               required={required}
               onChange={handleChange}

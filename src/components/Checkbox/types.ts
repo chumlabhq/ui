@@ -4,12 +4,13 @@ export type CheckboxSize = "xs" | "sm" | "md" | "lg" | "xl" | number;
 export type CheckboxShape = "square" | "rounded" | "circle";
 
 export interface CheckboxProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange" | "size"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange" | "size" | "defaultChecked"> {
   label?: ReactNode;
   description?: ReactNode;
   checked?: boolean;
+  defaultChecked?: boolean;
   indeterminate?: boolean;
-  onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
+  onCheckedChange?: (checked: boolean) => void;
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   error?: boolean;

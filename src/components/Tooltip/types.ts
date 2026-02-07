@@ -1,11 +1,9 @@
 import type { ReactNode, CSSProperties } from "react";
 
-export interface TooltipProviderProps {
-  children: ReactNode;
-}
-
 export type TooltipShadowPreset = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type TooltipShadow = TooltipShadowPreset | (string & {});
+
+export type TooltipWordWrap = "normal" | "break-word" | "nowrap";
 
 export interface TooltipProps {
   children: ReactNode;
@@ -15,7 +13,9 @@ export interface TooltipProps {
   sideOffset?: number;
   alignOffset?: number;
   maxWidth?: string | number;
+  wordWrap?: TooltipWordWrap;
   delayDuration?: number;
+  hideDelayDuration?: number;
   disableHoverableContent?: boolean;
   open?: boolean;
   defaultOpen?: boolean;
@@ -26,10 +26,15 @@ export interface TooltipProps {
   truncate?: boolean;
   truncateWidth?: string;
   shadow?: TooltipShadow;
+  zIndex?: number;
+  portal?: boolean;
+  asChild?: boolean;
   className?: string;
   triggerClassName?: string;
   contentClassName?: string;
   contentStyle?: CSSProperties;
   arrowClassName?: string;
+  baseArrowClassName?: string;
   arrowStyle?: CSSProperties;
+  baseArrowStyle?: CSSProperties;
 }

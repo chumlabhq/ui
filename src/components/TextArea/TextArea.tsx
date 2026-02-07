@@ -1,15 +1,7 @@
-import { forwardRef, useId, type KeyboardEvent } from "react";
+import { forwardRef, useId, useCallback, type KeyboardEvent } from "react";
 import type { TextAreaProps, TextAreaLabelProps } from "./types";
 import { CircularLoader } from "../Loader";
 import { cn } from "../../utils/cn";
-
-const handleIconKeyDown =
-  (onClick?: () => void) => (event: KeyboardEvent<HTMLSpanElement>) => {
-    if (onClick && (event.key === "Enter" || event.key === " ")) {
-      event.preventDefault();
-      onClick();
-    }
-  };
 
 export const TextAreaLabel = ({
   label,
@@ -47,7 +39,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       fullWidth = false,
       containerClassName,
       wrapperClassName,
-      focusClassName,
+      wrapperFocusClassName,
       labelClassName,
       errorClassName,
       className,
@@ -66,9 +58,29 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
     );
 
+    const handleLeadingIconKeyDown = useCallback(
+      (event: KeyboardEvent<HTMLSpanElement>) => {
+        if (onLeadingIconClick && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          onLeadingIconClick();
+        }
+      },
+      [onLeadingIconClick],
+    );
+
+    const handleTrailingIconKeyDown = useCallback(
+      (event: KeyboardEvent<HTMLSpanElement>) => {
+        if (onTrailingIconClick && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          onTrailingIconClick();
+        }
+      },
+      [onTrailingIconClick],
+    );
+
     return (
       <div
-        className={cn(containerClassName, fullWidth && "w-full")}
+        className={cn(containerClassName, fullWidth && "w-full") || undefined}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
         data-loading={isLoading || undefined}
@@ -82,18 +94,18 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           />
         )}
 
-        <div className={cn("flex items-start w-full", wrapperClassName, focusClassName)}>
+        <div className={cn("flex items-start w-full", wrapperClassName, wrapperFocusClassName)}>
           {leadingIcon && (
             <span
               className={cn(
                 "inline-flex shrink-0",
-                onLeadingIconClick && "cursor-pointer"
+                onLeadingIconClick && "cursor-pointer",
               )}
               onClick={onLeadingIconClick}
-              onKeyDown={handleIconKeyDown(onLeadingIconClick)}
+              onKeyDown={onLeadingIconClick ? handleLeadingIconKeyDown : undefined}
               role={onLeadingIconClick ? "button" : undefined}
               tabIndex={onLeadingIconClick ? 0 : undefined}
-              aria-label={onLeadingIconClick ? leadingIconLabel : undefined}
+              aria-label={leadingIconLabel}
             >
               {leadingIcon}
             </span>
@@ -119,13 +131,13 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             <span
               className={cn(
                 "inline-flex shrink-0",
-                onTrailingIconClick && "cursor-pointer"
+                onTrailingIconClick && "cursor-pointer",
               )}
               onClick={onTrailingIconClick}
-              onKeyDown={handleIconKeyDown(onTrailingIconClick)}
+              onKeyDown={onTrailingIconClick ? handleTrailingIconKeyDown : undefined}
               role={onTrailingIconClick ? "button" : undefined}
               tabIndex={onTrailingIconClick ? 0 : undefined}
-              aria-label={onTrailingIconClick ? trailingIconLabel : undefined}
+              aria-label={trailingIconLabel}
             >
               {trailingIcon}
             </span>

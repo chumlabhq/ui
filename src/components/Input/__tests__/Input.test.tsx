@@ -511,8 +511,8 @@ describe("Input", () => {
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
-    it("applies focusClassName to wrapper", () => {
-      render(<Input focusClassName="custom-focus" />);
+    it("applies wrapperFocusClassName to wrapper", () => {
+      render(<Input wrapperFocusClassName="custom-focus" />);
 
       expect(document.querySelector(".custom-focus")).toBeInTheDocument();
     });

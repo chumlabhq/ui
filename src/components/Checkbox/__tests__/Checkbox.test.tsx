@@ -35,11 +35,11 @@ describe("Checkbox", () => {
       expect(screen.getByText("*")).toBeInTheDocument();
     });
 
-    it("applies custom className to label wrapper", () => {
+    it("applies custom className to container div", () => {
       render(<Checkbox className="custom-class" />);
 
-      const label = screen.getByRole("checkbox").closest("label");
-      expect(label).toHaveClass("custom-class");
+      const container = screen.getByRole("checkbox").closest("label")?.parentElement;
+      expect(container).toHaveClass("custom-class");
     });
 
     it("applies containerClassName to container", () => {
@@ -52,7 +52,7 @@ describe("Checkbox", () => {
 
   describe("Controlled Behavior", () => {
     it("reflects checked state", () => {
-      render(<Checkbox checked onChange={() => {}} />);
+      render(<Checkbox checked onCheckedChange={() => {}} />);
 
       expect(screen.getByRole("checkbox")).toBeChecked();
     });
@@ -63,27 +63,27 @@ describe("Checkbox", () => {
       expect(screen.getByRole("checkbox")).not.toBeChecked();
     });
 
-    it("calls onChange with checked value when clicked", async () => {
+    it("calls onCheckedChange with checked value when clicked", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onCheckedChange = vi.fn();
 
-      render(<Checkbox checked={false} onChange={onChange} />);
+      render(<Checkbox checked={false} onCheckedChange={onCheckedChange} />);
 
       await user.click(screen.getByRole("checkbox"));
 
-      expect(onChange).toHaveBeenCalledTimes(1);
-      expect(onChange).toHaveBeenCalledWith(true, expect.any(Object));
+      expect(onCheckedChange).toHaveBeenCalledTimes(1);
+      expect(onCheckedChange).toHaveBeenCalledWith(true);
     });
 
-    it("calls onChange with unchecked value when unchecking", async () => {
+    it("calls onCheckedChange with unchecked value when unchecking", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onCheckedChange = vi.fn();
 
-      render(<Checkbox checked={true} onChange={onChange} />);
+      render(<Checkbox checked={true} onCheckedChange={onCheckedChange} />);
 
       await user.click(screen.getByRole("checkbox"));
 
-      expect(onChange).toHaveBeenCalledWith(false, expect.any(Object));
+      expect(onCheckedChange).toHaveBeenCalledWith(false);
     });
   });
 
@@ -120,15 +120,15 @@ describe("Checkbox", () => {
       expect(screen.getByRole("checkbox")).toBeDisabled();
     });
 
-    it("does not call onChange when disabled", async () => {
+    it("does not call onCheckedChange when disabled", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onCheckedChange = vi.fn();
 
-      render(<Checkbox disabled onChange={onChange} />);
+      render(<Checkbox disabled onCheckedChange={onCheckedChange} />);
 
       await user.click(screen.getByRole("checkbox"));
 
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onCheckedChange).not.toHaveBeenCalled();
     });
 
     it("sets data-disabled attribute when disabled", () => {
@@ -205,7 +205,7 @@ describe("Checkbox", () => {
       render(
         <Checkbox
           checked
-          onChange={() => {}}
+          onCheckedChange={() => {}}
           checkedIcon={<span data-testid="custom-check">✓</span>}
         />
       );
@@ -236,7 +236,7 @@ describe("Checkbox", () => {
     });
 
     it("renders default check icon when checked without custom icon", () => {
-      render(<Checkbox checked onChange={() => {}} />);
+      render(<Checkbox checked onCheckedChange={() => {}} />);
 
       const svg = document.querySelector("svg");
       expect(svg).toBeInTheDocument();
@@ -300,30 +300,30 @@ describe("Checkbox", () => {
 
     it("toggles checkbox with Space key", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onCheckedChange = vi.fn();
 
-      render(<Checkbox checked={false} onChange={onChange} />);
+      render(<Checkbox checked={false} onCheckedChange={onCheckedChange} />);
 
       const checkbox = screen.getByRole("checkbox");
       checkbox.focus();
 
       await user.keyboard(" ");
 
-      expect(onChange).toHaveBeenCalledWith(true, expect.any(Object));
+      expect(onCheckedChange).toHaveBeenCalledWith(true);
     });
 
     it("does not toggle disabled checkbox with Space key", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onCheckedChange = vi.fn();
 
-      render(<Checkbox disabled onChange={onChange} />);
+      render(<Checkbox disabled onCheckedChange={onCheckedChange} />);
 
       const checkbox = screen.getByRole("checkbox");
       checkbox.focus();
 
       await user.keyboard(" ");
 
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onCheckedChange).not.toHaveBeenCalled();
     });
   });
 
@@ -414,7 +414,7 @@ describe("Checkbox", () => {
             inputRef = el;
           }}
           checked
-          onChange={() => {}}
+          onCheckedChange={() => {}}
         />
       );
 
@@ -444,7 +444,7 @@ describe("Checkbox", () => {
       render(
         <Checkbox
           checked
-          onChange={() => {}}
+          onCheckedChange={() => {}}
           checkboxClassName="checkbox"
           checkedClassName="is-checked"
         />
@@ -512,13 +512,13 @@ describe("Checkbox", () => {
   describe("Label Association", () => {
     it("clicking label toggles checkbox", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onCheckedChange = vi.fn();
 
-      render(<Checkbox label="Click me" onChange={onChange} />);
+      render(<Checkbox label="Click me" onCheckedChange={onCheckedChange} />);
 
       await user.click(screen.getByText("Click me"));
 
-      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onCheckedChange).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -527,7 +527,7 @@ describe("Checkbox", () => {
       render(
         <Checkbox
           checked
-          onChange={() => {}}
+          onCheckedChange={() => {}}
           checkboxClassName="checkbox"
         />
       );
