@@ -179,6 +179,86 @@ function mergeTooltipRefs<T>(
   };
 }
 
+const TooltipAsChildTrigger: React.FC<{
+  child: ReactElement<Record<string, unknown>>;
+  setTriggerNode: (node: HTMLElement | null) => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
+  isOpen: boolean;
+  tooltipId: string;
+  triggerClassName?: string;
+  tooltipContent: React.ReactNode;
+}> = ({
+  child,
+  setTriggerNode,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
+  onKeyDown,
+  isOpen,
+  tooltipId,
+  triggerClassName,
+  tooltipContent,
+}) => {
+  const childRef = (child.props as { ref?: Ref<HTMLElement> }).ref;
+
+  return (
+    <>
+      {cloneElement(child, {
+        ref: mergeTooltipRefs(setTriggerNode, childRef),
+        onMouseEnter: (e: React.MouseEvent) => {
+          onMouseEnter();
+          (
+            child.props.onMouseEnter as
+              | ((e: React.MouseEvent) => void)
+              | undefined
+          )?.(e);
+        },
+        onMouseLeave: (e: React.MouseEvent) => {
+          onMouseLeave();
+          (
+            child.props.onMouseLeave as
+              | ((e: React.MouseEvent) => void)
+              | undefined
+          )?.(e);
+        },
+        onFocus: (e: React.FocusEvent) => {
+          onFocus();
+          (
+            child.props.onFocus as ((e: React.FocusEvent) => void) | undefined
+          )?.(e);
+        },
+        onBlur: (e: React.FocusEvent) => {
+          onBlur();
+          (child.props.onBlur as ((e: React.FocusEvent) => void) | undefined)?.(
+            e,
+          );
+        },
+        onKeyDown: (e: React.KeyboardEvent) => {
+          onKeyDown(e);
+          (
+            child.props.onKeyDown as
+              | ((e: React.KeyboardEvent) => void)
+              | undefined
+          )?.(e);
+        },
+        "aria-describedby": isOpen ? tooltipId : undefined,
+        className: cn(
+          child.props.className as string | undefined,
+          triggerClassName,
+        ),
+      })}
+      {tooltipContent}
+    </>
+  );
+};
+
+TooltipAsChildTrigger.displayName = "TooltipAsChildTrigger";
+
 const Tooltip: React.FC<TooltipProps> = ({
   children,
   content,
@@ -215,7 +295,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   const generatedId = useId();
   const tooltipId = `tooltip-${generatedId}`;
 
-  const triggerRef = useRef<HTMLElement>(null);
+  const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const delayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -253,8 +333,8 @@ const Tooltip: React.FC<TooltipProps> = ({
   }, [checkTruncation, children, content]);
 
   const updatePosition = useCallback(() => {
-    if (isOpen && triggerRef.current && tooltipRef.current) {
-      const triggerRect = triggerRef.current.getBoundingClientRect();
+    if (isOpen && triggerNode && tooltipRef.current) {
+      const triggerRect = triggerNode.getBoundingClientRect();
       const tooltipRect = tooltipRef.current.getBoundingClientRect();
       const newPosition = calculatePosition(
         triggerRect,
@@ -269,7 +349,7 @@ const Tooltip: React.FC<TooltipProps> = ({
     } else {
       setIsPositioned(false);
     }
-  }, [isOpen, side, align, sideOffset, alignOffset]);
+  }, [isOpen, triggerNode, side, align, sideOffset, alignOffset]);
 
   useIsomorphicLayoutEffect(() => {
     updatePosition();
@@ -424,24 +504,27 @@ const Tooltip: React.FC<TooltipProps> = ({
     return style;
   };
 
-  const arrowElement =
-    showArrow ? (
-      <svg
-        width={12}
-        height={6}
-        viewBox="0 0 12 6"
-        aria-hidden="true"
-        className={cn(DEFAULT_BASE_ARROW_CLASS, baseArrowClassName, arrowClassName)}
-        style={{
-          ...baseArrowStyle,
-          ...getArrowPosition(),
-          ...arrowStyle,
-          ...(arrowColor ? { fill: arrowColor } : {}),
-        }}
-      >
-        <path d="M0 6L6 0L12 6H0Z" />
-      </svg>
-    ) : null;
+  const arrowElement = showArrow ? (
+    <svg
+      width={12}
+      height={6}
+      viewBox="0 0 12 6"
+      aria-hidden="true"
+      className={cn(
+        DEFAULT_BASE_ARROW_CLASS,
+        baseArrowClassName,
+        arrowClassName,
+      )}
+      style={{
+        ...baseArrowStyle,
+        ...getArrowPosition(),
+        ...arrowStyle,
+        ...(arrowColor ? { fill: arrowColor } : {}),
+      }}
+    >
+      <path d="M0 6L6 0L12 6H0Z" />
+    </svg>
+  ) : null;
 
   const tooltipElement = isOpen && (
     <div
@@ -474,48 +557,27 @@ const Tooltip: React.FC<TooltipProps> = ({
     : tooltipElement;
 
   if (asChild && isValidElement(children)) {
-    const child = children as ReactElement<Record<string, unknown>>;
-    const childRef = (child as unknown as { ref?: Ref<HTMLElement> }).ref;
-
     return (
-      <>
-        {cloneElement(child, {
-          ref: mergeTooltipRefs(
-            triggerRef as React.MutableRefObject<HTMLElement>,
-            childRef,
-          ),
-          onMouseEnter: (e: React.MouseEvent) => {
-            handleMouseEnter();
-            (child.props.onMouseEnter as ((e: React.MouseEvent) => void) | undefined)?.(e);
-          },
-          onMouseLeave: (e: React.MouseEvent) => {
-            handleMouseLeave();
-            (child.props.onMouseLeave as ((e: React.MouseEvent) => void) | undefined)?.(e);
-          },
-          onFocus: (e: React.FocusEvent) => {
-            handleFocus();
-            (child.props.onFocus as ((e: React.FocusEvent) => void) | undefined)?.(e);
-          },
-          onBlur: (e: React.FocusEvent) => {
-            handleBlur();
-            (child.props.onBlur as ((e: React.FocusEvent) => void) | undefined)?.(e);
-          },
-          onKeyDown: (e: React.KeyboardEvent) => {
-            handleKeyDown(e);
-            (child.props.onKeyDown as ((e: React.KeyboardEvent) => void) | undefined)?.(e);
-          },
-          "aria-describedby": isOpen ? tooltipId : undefined,
-          className: cn(child.props.className as string | undefined, triggerClassName),
-        })}
-        {tooltipContent}
-      </>
+      <TooltipAsChildTrigger
+        child={children as ReactElement<Record<string, unknown>>}
+        setTriggerNode={setTriggerNode}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        isOpen={isOpen}
+        tooltipId={tooltipId}
+        triggerClassName={triggerClassName}
+        tooltipContent={tooltipContent}
+      />
     );
   }
 
   return (
     <>
       <span
-        ref={triggerRef as React.RefObject<HTMLSpanElement>}
+        ref={setTriggerNode}
         className={cn(triggerClassName, className) || undefined}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

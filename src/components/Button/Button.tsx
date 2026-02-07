@@ -126,6 +126,18 @@ const Button = forwardRef<
     iconAnimation !== "none" && "group",
   );
 
+  // Memoize aria/data prop filtering to avoid allocation on every render
+  const ariaAndDataProps = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(rest).filter(
+          ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
+        ),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(rest)],
+  );
+
   if (asChild && isValidElement(children)) {
     const child = children as ReactElement<{
       className?: string;
@@ -166,18 +178,6 @@ const Button = forwardRef<
       </Tooltip>
     );
   };
-
-  // Memoize aria/data prop filtering to avoid allocation on every render
-  const ariaAndDataProps = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(rest).filter(
-          ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
-        ),
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(rest)],
-  );
 
   if (as === "a" && href) {
     const handleAnchorClick = isDisabled
