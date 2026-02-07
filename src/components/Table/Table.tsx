@@ -17,7 +17,7 @@ function Table<TData>({
   data: dataProp,
   COLUMNS,
   COLUMNS_DATA,
-  isLoading = false,
+  loading = false,
   showHeader = true,
   tableHeader,
   pinnedColumns = [],
@@ -505,7 +505,7 @@ function Table<TData>({
     onCursorOverHeader,
   ]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className={containerClassName} style={containerStyle}>
         <TableShimmer

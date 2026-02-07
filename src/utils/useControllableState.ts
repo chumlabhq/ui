@@ -12,13 +12,13 @@ export function useControllableState<T>({
   onChange,
 }: UseControllableStateOptions<T>): [T, (value: T | ((prev: T) => T)) => void] {
   const isControlled = controlledValue !== undefined;
-  const isControlledRef = useRef(isControlled);
+  const initialIsControlledRef = useRef(isControlled);
 
-  if (import.meta.env.DEV) {
-    if (isControlledRef.current !== isControlled) {
+  if (process.env.NODE_ENV !== "production") {
+    if (initialIsControlledRef.current !== isControlled) {
       console.warn(
         "useControllableState: A component is changing from " +
-          (isControlledRef.current ? "controlled" : "uncontrolled") +
+          (initialIsControlledRef.current ? "controlled" : "uncontrolled") +
           " to " +
           (isControlled ? "controlled" : "uncontrolled") +
           ". This is likely a bug.",
@@ -29,19 +29,30 @@ export function useControllableState<T>({
   const [internalValue, setInternalValue] = useState<T>(defaultValue);
   const value = isControlled ? controlledValue : internalValue;
 
+  const valueRef = useRef(value);
+  valueRef.current = value;
+
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  const currentIsControlledRef = useRef(isControlled);
+  currentIsControlledRef.current = isControlled;
+
   const setValue = useCallback(
     (nextValue: T | ((prev: T) => T)) => {
       const resolvedValue =
         typeof nextValue === "function"
-          ? (nextValue as (prev: T) => T)(value)
+          ? (nextValue as (prev: T) => T)(valueRef.current)
           : nextValue;
 
-      if (!isControlled) {
+      valueRef.current = resolvedValue;
+
+      if (!currentIsControlledRef.current) {
         setInternalValue(resolvedValue);
       }
-      onChange?.(resolvedValue);
+      onChangeRef.current?.(resolvedValue);
     },
-    [isControlled, onChange, value],
+    [],
   );
 
   return [value, setValue];

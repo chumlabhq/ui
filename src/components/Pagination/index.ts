@@ -1,5 +1,5 @@
 export { default as Pagination } from "./Pagination";
-export type { PaginationProps, IconProps } from "./types";
-export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT } from "./constants";
-export { getVisiblePages } from "./utils";
-export { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./icons";
+export type { PaginationProps, IconProps, EllipsisRenderProps, PageInfoRenderProps, SectionName } from "./utils/types";
+export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT } from "./utils/constants";
+export { getVisiblePages } from "./utils/helpers";
+export { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";

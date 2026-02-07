@@ -219,8 +219,8 @@ describe("Switch Component", () => {
         />
       );
       const switchEl = screen.getByRole("switch");
-      expect(switchEl).toHaveAttribute("aria-describedby", "my-switch-desc");
-      expect(screen.getByText("This enables the feature")).toHaveAttribute("id", "my-switch-desc");
+      expect(switchEl).toHaveAttribute("aria-describedby", "my-switch-description");
+      expect(screen.getByText("This enables the feature")).toHaveAttribute("id", "my-switch-description");
     });
 
     it("does not set aria-describedby when no description", () => {
@@ -400,6 +400,162 @@ describe("Switch Component", () => {
     it("forwards custom aria-* attributes", () => {
       render(<Switch aria-controls="panel-1" aria-label="Toggle" />);
       expect(screen.getByRole("switch")).toHaveAttribute("aria-controls", "panel-1");
+    });
+  });
+
+  describe("CSS Custom Properties for Theming", () => {
+    it("uses CSS custom properties in default tracker styles", () => {
+      render(<Switch checked={true} aria-label="Toggle" />);
+      const switchEl = screen.getByRole("switch");
+      expect(switchEl.className).toContain("var(--switch-focus-ring");
+    });
+
+    it("uses CSS custom properties in default thumb styles", () => {
+      render(<Switch checked={true} aria-label="Toggle" />);
+      const switchEl = screen.getByRole("switch");
+      const thumb = switchEl.querySelector("span");
+      expect(thumb?.className).toContain("var(--switch-thumb-bg");
+    });
+  });
+
+  describe("Form Integration", () => {
+    it("renders hidden input when name is provided", () => {
+      render(<Switch name="notifications" aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toBeInTheDocument();
+      expect(hidden).toHaveAttribute("name", "notifications");
+    });
+
+    it("sends empty string value when unchecked", () => {
+      render(<Switch name="notifications" checked={false} aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toHaveAttribute("value", "");
+    });
+
+    it("sends value when checked", () => {
+      render(<Switch name="notifications" checked={true} value="yes" aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toHaveAttribute("value", "yes");
+    });
+
+    it("sends default value 'on' when checked without custom value", () => {
+      render(<Switch name="notifications" checked={true} aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toHaveAttribute("value", "on");
+    });
+
+    it("does not render hidden input when name is not provided", () => {
+      render(<Switch aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).not.toBeInTheDocument();
+    });
+
+    it("disables hidden input when switch is disabled", () => {
+      render(<Switch name="notifications" disabled aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toBeDisabled();
+    });
+
+    it("updates hidden input value when toggled", async () => {
+      const user = userEvent.setup();
+      render(<Switch name="notifications" aria-label="Toggle" />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toHaveAttribute("value", "");
+
+      await user.click(screen.getByRole("switch"));
+      expect(hidden).toHaveAttribute("value", "on");
+    });
+  });
+
+  describe("Error State", () => {
+    it("sets data-error on container when error=true", () => {
+      render(<Switch error aria-label="Toggle" containerClassName="container" />);
+
+      const container = document.querySelector(".container");
+      expect(container).toHaveAttribute("data-error", "true");
+    });
+
+    it("renders error message when error and errorMessage provided", () => {
+      render(<Switch error errorMessage="Required field" aria-label="Toggle" />);
+
+      expect(screen.getByRole("alert")).toHaveTextContent("Required field");
+    });
+
+    it("does not render error message when error=false", () => {
+      render(<Switch error={false} errorMessage="Required field" aria-label="Toggle" />);
+
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    });
+
+    it("applies errorClassName to error message", () => {
+      render(
+        <Switch error errorMessage="Error" errorClassName="custom-error" aria-label="Toggle" />
+      );
+
+      expect(screen.getByRole("alert")).toHaveClass("custom-error");
+    });
+
+    it("includes error id in aria-describedby", () => {
+      render(
+        <Switch id="my-switch" error errorMessage="Error text" aria-label="Toggle" />
+      );
+
+      const switchEl = screen.getByRole("switch");
+      expect(switchEl).toHaveAttribute("aria-describedby", expect.stringContaining("my-switch-error"));
+    });
+
+    it("includes both description and error in aria-describedby", () => {
+      render(
+        <Switch
+          id="my-switch"
+          description="Help text"
+          error
+          errorMessage="Error text"
+          aria-label="Toggle"
+        />
+      );
+
+      const switchEl = screen.getByRole("switch");
+      expect(switchEl).toHaveAttribute(
+        "aria-describedby",
+        "my-switch-description my-switch-error"
+      );
+    });
+  });
+
+  describe("Custom Styling", () => {
+    it("applies className to root container", () => {
+      render(<Switch className="custom-root" aria-label="Toggle" />);
+
+      const container = document.querySelector(".custom-root");
+      expect(container).toBeInTheDocument();
+      expect(screen.getByRole("switch")).not.toHaveClass("custom-root");
+    });
+
+    it("applies containerClassName to root container", () => {
+      render(<Switch containerClassName="custom-container" aria-label="Toggle" />);
+
+      expect(document.querySelector(".custom-container")).toBeInTheDocument();
+    });
+
+    it("applies className after containerClassName for override", () => {
+      render(
+        <Switch
+          containerClassName="bg-red-500"
+          className="bg-blue-500"
+          aria-label="Toggle"
+        />
+      );
+
+      const container = document.querySelector(".bg-blue-500");
+      expect(container).toBeInTheDocument();
     });
   });
 

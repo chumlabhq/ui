@@ -4,7 +4,7 @@ import type {
   HTMLAttributes,
   CSSProperties,
 } from "react";
-import type { TooltipShadow } from "../Tooltip/types";
+import type { TooltipShadow } from "../Tooltip";
 
 export type StepStatus = "pending" | "active" | "completed" | "error";
 

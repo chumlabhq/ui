@@ -82,7 +82,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       showSelectedIcon = true,
       selectedIcon,
       fullWidth = false,
-      isLoading: externalLoading = false,
+      loading: externalLoading = false,
       onLoadOptions,
       loadOnOpen = false,
       shimmerCount = 5,

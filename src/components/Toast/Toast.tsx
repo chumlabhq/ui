@@ -1,53 +1,8 @@
-import { useEffect, useRef, useCallback, memo } from "react";
-import type { ToastProps, ToastType } from "./types";
-import {
-  SuccessIcon,
-  WarningIcon,
-  ErrorIcon,
-  InfoIcon,
-  CloseIcon,
-} from "./icons";
+import { useEffect, useRef, useCallback, memo, useState } from "react";
+import type { ToastProps } from "./utils/types";
+import { CloseIcon, getDefaultIcon } from "./utils/icons";
+import { getRoleForType, defaultContainerStyles } from "./utils/constants";
 import { cn } from "../../utils/cn";
-
-const getDefaultIcon = (type: ToastType) => {
-  const iconClass = "w-5 h-5 shrink-0";
-  switch (type) {
-    case "success":
-      return <SuccessIcon className={iconClass} />;
-    case "warning":
-      return <WarningIcon className={iconClass} />;
-    case "error":
-      return <ErrorIcon className={iconClass} />;
-    case "info":
-      return <InfoIcon className={iconClass} />;
-    default:
-      return <InfoIcon className={iconClass} />;
-  }
-};
-
-const getRoleForType = (type: ToastType): "alert" | "status" => {
-  switch (type) {
-    case "error":
-    case "warning":
-      return "alert";
-    case "success":
-    case "info":
-    default:
-      return "status";
-  }
-};
-
-const defaultContainerStyles: Record<ToastType | "default", string> = {
-  success:
-    "bg-[var(--toast-success-bg,#195030)] border-[var(--toast-success-border,#195030)] text-[var(--toast-success-text,white)]",
-  warning:
-    "bg-[var(--toast-warning-bg,#665823)] border-[var(--toast-warning-border,#665823)] text-[var(--toast-warning-text,white)]",
-  error:
-    "bg-[var(--toast-error-bg,#82363a)] border-[var(--toast-error-border,#82363a)] text-[var(--toast-error-text,white)]",
-  info: "bg-[var(--toast-info-bg,#213f70)] border-[var(--toast-info-border,#213f70)] text-[var(--toast-info-text,white)]",
-  default:
-    "bg-[var(--toast-default-bg,#374151)] border-[var(--toast-default-border,#374151)] text-[var(--toast-default-text,white)]",
-};
 
 const Toast = memo(function Toast({
   id,
@@ -73,18 +28,17 @@ const Toast = memo(function Toast({
   closeButtonClassName,
   iconClassName,
   pauseOnHover = true,
-  dismissOnEscape = false,
+  animationDuration = 200,
   style,
 }: ToastProps) {
   const startTimeRef = useRef<number>(0);
-  const remainingTimeRef = useRef<number>(duration);
-  const animationFrameRef = useRef<number | undefined>(undefined);
-  const initializedRef = useRef(false);
+  const remainingRef = useRef<number>(duration);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toastRef = useRef<HTMLDivElement>(null);
-  const progressBarRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef(100);
-  const isPausedRef = useRef(false);
-  const isHoveredRef = useRef(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [progressPercent, setProgressPercent] = useState(100);
+  const [animDuration, setAnimDuration] = useState(duration);
 
   const defaultIcon = getDefaultIcon(type);
   const toastRole = roleProp ?? getRoleForType(type);
@@ -95,80 +49,39 @@ const Toast = memo(function Toast({
   }, [id, onClose, onRemove]);
 
   useEffect(() => {
-    if (!dismissOnEscape) return;
+    if (duration === Infinity || duration <= 0 || isPaused) return;
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === "Escape" &&
-        toastRef.current &&
-        (toastRef.current === document.activeElement ||
-          toastRef.current.contains(document.activeElement) ||
-          isHoveredRef.current)
-      ) {
-        handleClose();
-      }
+    startTimeRef.current = Date.now();
+    setAnimDuration(remainingRef.current);
+
+    timerRef.current = setTimeout(() => {
+      handleClose();
+    }, remainingRef.current);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [dismissOnEscape, handleClose]);
+  }, [duration, handleClose, isPaused]);
 
   useEffect(() => {
     if (duration === Infinity || duration <= 0) return;
-
-    if (!initializedRef.current) {
-      startTimeRef.current = Date.now();
-      initializedRef.current = true;
+    if (isPaused) {
+      setProgressPercent((remainingRef.current / duration) * 100);
     }
-
-    const updateProgress = () => {
-      if (isPausedRef.current) {
-        animationFrameRef.current = requestAnimationFrame(updateProgress);
-        return;
-      }
-
-      const elapsed = Date.now() - startTimeRef.current;
-      const remaining = remainingTimeRef.current - elapsed;
-      const newProgress = (remaining / duration) * 100;
-
-      if (remaining <= 0) {
-        progressRef.current = 0;
-        if (progressBarRef.current) {
-          progressBarRef.current.style.width = "0%";
-        }
-        handleClose();
-        return;
-      }
-
-      progressRef.current = Math.max(0, newProgress);
-      if (progressBarRef.current) {
-        progressBarRef.current.style.width = `${progressRef.current}%`;
-      }
-      animationFrameRef.current = requestAnimationFrame(updateProgress);
-    };
-
-    animationFrameRef.current = requestAnimationFrame(updateProgress);
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, [duration, handleClose]);
+  }, [isPaused, duration]);
 
   const handleMouseEnter = useCallback(() => {
-    isHoveredRef.current = true;
     if (pauseOnHover && duration !== Infinity && duration > 0) {
-      isPausedRef.current = true;
-      remainingTimeRef.current = (progressRef.current / 100) * duration;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      const elapsed = Date.now() - startTimeRef.current;
+      remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+      setIsPaused(true);
     }
   }, [pauseOnHover, duration]);
 
   const handleMouseLeave = useCallback(() => {
-    isHoveredRef.current = false;
     if (pauseOnHover && duration !== Infinity && duration > 0) {
-      isPausedRef.current = false;
-      startTimeRef.current = Date.now();
+      setIsPaused(false);
     }
   }, [pauseOnHover, duration]);
 
@@ -181,21 +94,35 @@ const Toast = memo(function Toast({
       ? "animate-toast-leave-top motion-reduce:animate-none motion-reduce:opacity-0"
       : "animate-toast-leave-bottom motion-reduce:animate-none motion-reduce:opacity-0";
 
+  const hasFiniteDuration = duration !== Infinity && duration > 0;
+  const progressAnimationStyle: React.CSSProperties | undefined =
+    hasFiniteDuration && showProgress
+      ? isPaused
+        ? { width: `${progressPercent}%`, backgroundColor: progressColor }
+        : {
+            width: "0%",
+            backgroundColor: progressColor,
+            animation: `kern-toast-progress ${animDuration}ms linear forwards`,
+          }
+      : undefined;
+
   return (
     <div
       ref={toastRef}
       role={toastRole}
-      aria-live={toastRole === "status" ? "polite" : "assertive"}
+      aria-atomic="true"
       className={cn(
         "relative overflow-hidden rounded-lg border shadow-lg",
         defaultContainerStyles[type] ?? defaultContainerStyles.default,
         animationClass,
         className,
       )}
-      style={style}
+      style={{
+        ...style,
+        animationDuration: `${animationDuration}ms`,
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      tabIndex={dismissOnEscape ? -1 : undefined}
       data-toast-id={id}
       data-toast-type={type}
     >
@@ -227,6 +154,7 @@ const Toast = memo(function Toast({
 
         {showCloseButton && (
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={handleClose}
             className={cn(
@@ -240,15 +168,14 @@ const Toast = memo(function Toast({
         )}
       </div>
 
-      {showProgress && duration !== Infinity && duration > 0 && (
+      {showProgress && hasFiniteDuration && (
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
           <div
-            ref={progressBarRef}
             className={cn(
-              "h-full transition-none bg-white/40",
+              "h-full bg-white/40",
               progressClassName,
             )}
-            style={{ width: "100%", backgroundColor: progressColor }}
+            style={progressAnimationStyle}
           />
         </div>
       )}

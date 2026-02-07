@@ -5,34 +5,25 @@ import React, {
   useRef,
   useImperativeHandle,
   useMemo,
+  useState,
 } from "react";
 import type {
   OtpInputProps,
-  OtpInputLabelProps,
   OtpInputRenderProps,
-} from "./types";
+} from "./utils/types";
+import { OtpInputLabel } from "./components/OtpInputLabel";
 import { cn } from "../../utils/cn";
 
-export const OtpInputLabel = ({
-  label,
-  required = false,
-  inputId,
-  className,
-}: OtpInputLabelProps) => {
-  return (
-    <label htmlFor={inputId} className={className}>
-      {label}
-      {required && <span aria-hidden="true">*</span>}
-    </label>
-  );
-};
+export { OtpInputLabel };
 
 const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
   (
     {
       length = 6,
-      value = "",
+      value: controlledValue,
+      defaultValue,
       onChange,
+      onValueChange,
       onComplete,
       label,
       required = false,
@@ -56,19 +47,44 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       inputClassNames,
       fullWidth = false,
       renderInput,
+      validate,
+      inputAriaLabel,
       id,
       name,
+      className,
+      ...rest
     },
     ref,
   ) => {
     const generatedId = useId();
-    const inputId = id || name || generatedId;
+    const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
+
+    const isControlled = controlledValue !== undefined;
+    const [internalValue, setInternalValue] = useState(defaultValue ?? "");
+    const value = isControlled ? controlledValue : internalValue;
+
+    const fireChange = useCallback(
+      (newValue: string) => {
+        if (!isControlled) {
+          setInternalValue(newValue);
+        }
+        onValueChange?.(newValue);
+        onChange?.(newValue);
+      },
+      [isControlled, onChange, onValueChange],
+    );
 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const lastCompletedRef = useRef<string>("");
 
     useImperativeHandle(ref, () => inputRefs.current[0] as HTMLInputElement);
+
+    React.useEffect(() => {
+      if (autoFocusFirst && inputRefs.current[0]) {
+        inputRefs.current[0].focus();
+      }
+    }, [autoFocusFirst]);
 
     const valueArray = useMemo(() => {
       const arr = value.split("").slice(0, length);
@@ -77,6 +93,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       }
       return arr;
     }, [value, length]);
+
+    const prevValueRef = useRef(value);
+    if (prevValueRef.current !== value) {
+      prevValueRef.current = value;
+      if (value.length < length) {
+        lastCompletedRef.current = "";
+      }
+    }
 
     const focusInput = useCallback(
       (index: number) => {
@@ -100,11 +124,12 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const handleChange = useCallback(
       (index: number, inputValue: string) => {
         const char = inputValue.slice(0, 1);
+        if (char && validate && !validate(char)) return;
         const newValueArray = [...valueArray];
         newValueArray[index] = char;
         const newValue = newValueArray.join("");
 
-        onChange?.(newValue);
+        fireChange(newValue);
 
         if (char && index < length - 1) {
           focusInput(index + 1);
@@ -114,7 +139,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           handleComplete(newValue);
         }
       },
-      [valueArray, onChange, handleComplete, length, focusInput],
+      [valueArray, fireChange, handleComplete, length, focusInput, validate],
     );
 
     const handleKeyDown = useCallback(
@@ -129,13 +154,13 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
 
           if (currentInputValue) {
             newValueArray[index] = "";
-            onChange?.(newValueArray.join(""));
+            fireChange(newValueArray.join(""));
             if (index > 0) {
               focusInput(index - 1);
             }
           } else if (index > 0) {
             newValueArray[index - 1] = "";
-            onChange?.(newValueArray.join(""));
+            fireChange(newValueArray.join(""));
             focusInput(index - 1);
           }
           return;
@@ -145,7 +170,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           e.preventDefault();
           const newValueArray = [...valueArray];
           newValueArray[index] = "";
-          onChange?.(newValueArray.join(""));
+          fireChange(newValueArray.join(""));
           return;
         }
 
@@ -173,7 +198,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           return;
         }
       },
-      [valueArray, onChange, focusInput, length],
+      [valueArray, fireChange, focusInput, length],
     );
 
     const handlePaste = useCallback(
@@ -185,24 +210,27 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
 
         e.preventDefault();
 
-        const chars = pastedData.slice(0, length).split("");
         const newValueArray = [...valueArray];
+        let filledCount = 0;
 
-        chars.forEach((char, i) => {
-          newValueArray[i] = char;
-        });
+        for (const char of pastedData) {
+          if (filledCount >= length) break;
+          if (validate && !validate(char)) continue;
+          newValueArray[filledCount] = char;
+          filledCount++;
+        }
 
         const newValue = newValueArray.join("");
-        onChange?.(newValue);
+        fireChange(newValue);
 
-        const lastFilledIndex = Math.min(chars.length, length) - 1;
+        const lastFilledIndex = Math.max(0, filledCount - 1);
         focusInput(lastFilledIndex);
 
-        if (chars.length >= length) {
+        if (newValueArray.every((c) => c !== "")) {
           handleComplete(newValue);
         }
       },
-      [allowPaste, valueArray, onChange, handleComplete, length, focusInput],
+      [allowPaste, valueArray, fireChange, handleComplete, length, focusInput, validate],
     );
 
     const handleFocus = useCallback(
@@ -216,16 +244,23 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       (index: number) => {
         const individualClassName = inputClassNames?.[index] || "";
 
+        const resolvedInputMode =
+          inputType === "tel" || inputPattern === "\\d*"
+            ? ("numeric" as const)
+            : ("text" as const);
+
         return {
           ref: (el: HTMLInputElement | null) => {
             inputRefs.current[index] = el;
           },
           id: index === 0 ? inputId : undefined,
           type: inputType,
-          inputMode: "numeric" as const,
+          inputMode: resolvedInputMode,
           pattern: inputPattern,
           autoComplete: index === 0 ? "one-time-code" : "off",
-          "aria-label": `Digit ${index + 1} of ${length}`,
+          "aria-label": inputAriaLabel
+            ? inputAriaLabel(index, length)
+            : `${inputType === "tel" || inputPattern === "\\d*" ? "Digit" : "Character"} ${index + 1} of ${length}`,
           "aria-invalid": error || undefined,
           "aria-required": required || undefined,
           "aria-describedby": error && errorMessage ? errorId : undefined,
@@ -242,7 +277,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "data-disabled": disabled || undefined,
           "data-error": error || undefined,
           "data-filled": valueArray[index] ? true : undefined,
-          autoFocus: autoFocusFirst && index === 0,
+          autoFocus: undefined,
         };
       },
       [
@@ -263,6 +298,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         inputClassName,
         inputFocusClassName,
         autoFocusFirst,
+        inputAriaLabel,
       ],
     );
 
@@ -331,15 +367,16 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
 
     return (
       <div
-        className={cn(containerClassName, fullWidth && "w-full") || undefined}
+        className={cn(containerClassName, fullWidth && "w-full", className) || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
+        {...rest}
       >
         {label && (
           <OtpInputLabel
             label={label}
             required={required}
-            inputId={inputId}
+            htmlFor={inputId}
             className={labelClassName}
           />
         )}
@@ -353,6 +390,15 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         >
           {renderInputs()}
         </div>
+
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={value}
+            disabled={disabled}
+          />
+        )}
 
         {error && errorMessage && (
           <div id={errorId} role="alert" className={errorClassName}>

@@ -30,11 +30,19 @@ describe("Input", () => {
       expect(label).toHaveAttribute("for", "email-input");
     });
 
-    it("generates id from name when id not provided", () => {
+    it("generates id when only name is provided", () => {
       render(<Input label="Email" name="user-email" />);
 
       const input = screen.getByRole("textbox");
-      expect(input).toHaveAttribute("id", "user-email");
+      expect(input).toHaveAttribute("id");
+      expect(input.id).toBeTruthy();
+    });
+
+    it("does not use name as id fallback", () => {
+      render(<Input name="user-email" />);
+
+      const input = screen.getByRole("textbox");
+      expect(input.id).not.toBe("user-email");
     });
 
     it("applies fullWidth class when fullWidth=true", () => {
@@ -61,7 +69,6 @@ describe("Input", () => {
     it("renders password input when type=password", () => {
       render(<Input type="password" />);
 
-      // Password inputs don't have textbox role
       const input = document.querySelector("input");
       expect(input).toHaveAttribute("type", "password");
     });
@@ -93,8 +100,8 @@ describe("Input", () => {
       expect(screen.getByRole("textbox")).toBeDisabled();
     });
 
-    it("disables input when isLoading=true", () => {
-      render(<Input isLoading />);
+    it("disables input when loading=true", () => {
+      render(<Input loading />);
 
       expect(screen.getByRole("textbox")).toBeDisabled();
     });
@@ -107,7 +114,7 @@ describe("Input", () => {
     });
 
     it("sets data-loading attribute when loading", () => {
-      render(<Input isLoading containerClassName="test-container" />);
+      render(<Input loading containerClassName="test-container" />);
 
       const container = document.querySelector(".test-container");
       expect(container).toHaveAttribute("data-loading", "true");
@@ -230,22 +237,21 @@ describe("Input", () => {
   });
 
   describe("Loading State", () => {
-    it("renders loader when isLoading=true", () => {
-      render(<Input isLoading />);
+    it("renders loader when loading=true", () => {
+      render(<Input loading />);
 
-      // CircularLoader has aria-hidden but is in the DOM
       const loader = document.querySelector('[aria-hidden="true"]');
       expect(loader).toBeInTheDocument();
     });
 
     it("renders custom loader when provided", () => {
-      render(<Input isLoading loader={<span data-testid="custom-loader">Loading...</span>} />);
+      render(<Input loading loader={<span data-testid="custom-loader">Loading...</span>} />);
 
       expect(screen.getByTestId("custom-loader")).toBeInTheDocument();
     });
 
-    it("does not render loader when isLoading=false", () => {
-      render(<Input isLoading={false} />);
+    it("does not render loader when loading=false", () => {
+      render(<Input loading={false} />);
 
       const loader = document.querySelector('[aria-hidden="true"]');
       expect(loader).not.toBeInTheDocument();
@@ -290,8 +296,8 @@ describe("Input", () => {
         />
       );
 
-      await user.tab(); // Focus input first
-      await user.tab(); // Focus trailing icon
+      await user.tab();
+      await user.tab();
 
       expect(screen.getByRole("button", { name: "Clear" })).toHaveFocus();
     });
@@ -344,8 +350,8 @@ describe("Input", () => {
         />
       );
 
-      await user.tab(); // Focus input
-      await user.tab(); // Focus trailing icon
+      await user.tab();
+      await user.tab();
       await user.keyboard("{Enter}");
 
       expect(onClick).toHaveBeenCalledTimes(1);
@@ -363,8 +369,8 @@ describe("Input", () => {
         />
       );
 
-      await user.tab(); // Focus input
-      await user.tab(); // Focus trailing icon
+      await user.tab();
+      await user.tab();
       await user.keyboard(" ");
 
       expect(onClick).toHaveBeenCalledTimes(1);
@@ -375,7 +381,6 @@ describe("Input", () => {
 
       render(<Input leadingIcon={<span>L</span>} placeholder="input" />);
 
-      // Non-clickable icon should not be focusable
       await user.tab();
       expect(screen.getByPlaceholderText("input")).toHaveFocus();
     });
@@ -493,10 +498,18 @@ describe("Input", () => {
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
-    it("applies className to input", () => {
+    it("applies className to root container", () => {
       render(<Input className="custom-input" />);
 
-      expect(screen.getByRole("textbox")).toHaveClass("custom-input");
+      const container = document.querySelector(".custom-input");
+      expect(container).toBeInTheDocument();
+      expect(screen.getByRole("textbox")).not.toHaveClass("custom-input");
+    });
+
+    it("applies inputClassName to input element", () => {
+      render(<Input inputClassName="input-style" />);
+
+      expect(screen.getByRole("textbox")).toHaveClass("input-style");
     });
 
     it("applies labelClassName to label", () => {
@@ -511,8 +524,8 @@ describe("Input", () => {
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
-    it("applies wrapperFocusClassName to wrapper", () => {
-      render(<Input wrapperFocusClassName="custom-focus" />);
+    it("applies focus classes via wrapperClassName", () => {
+      render(<Input wrapperClassName="custom-focus" />);
 
       expect(document.querySelector(".custom-focus")).toBeInTheDocument();
     });
@@ -521,25 +534,25 @@ describe("Input", () => {
 
 describe("InputLabel", () => {
   it("renders label text", () => {
-    render(<InputLabel label="Email" inputId="email" />);
+    render(<InputLabel label="Email" htmlFor="email" />);
 
     expect(screen.getByText("Email")).toBeInTheDocument();
   });
 
   it("renders required indicator", () => {
-    render(<InputLabel label="Email" inputId="email" required />);
+    render(<InputLabel label="Email" htmlFor="email" required />);
 
     expect(screen.getByText("*")).toBeInTheDocument();
   });
 
   it("associates with input via htmlFor", () => {
-    render(<InputLabel label="Email" inputId="email-input" />);
+    render(<InputLabel label="Email" htmlFor="email-input" />);
 
     expect(screen.getByText("Email")).toHaveAttribute("for", "email-input");
   });
 
   it("applies className", () => {
-    render(<InputLabel label="Email" inputId="email" className="custom-label" />);
+    render(<InputLabel label="Email" htmlFor="email" className="custom-label" />);
 
     expect(screen.getByText("Email")).toHaveClass("custom-label");
   });
@@ -548,7 +561,7 @@ describe("InputLabel", () => {
     render(
       <InputLabel
         label={<span data-testid="custom-label">Custom Label</span>}
-        inputId="email"
+        htmlFor="email"
       />
     );
 

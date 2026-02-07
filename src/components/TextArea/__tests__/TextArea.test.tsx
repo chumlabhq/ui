@@ -30,11 +30,19 @@ describe("TextArea", () => {
       expect(label).toHaveAttribute("for", "description-input");
     });
 
-    it("generates id from name when id not provided", () => {
+    it("generates id when only name is provided", () => {
       render(<TextArea label="Description" name="user-description" />);
 
       const textarea = screen.getByRole("textbox");
-      expect(textarea).toHaveAttribute("id", "user-description");
+      expect(textarea).toHaveAttribute("id");
+      expect(textarea.id).toBeTruthy();
+    });
+
+    it("does not use name as id fallback", () => {
+      render(<TextArea name="user-description" />);
+
+      const textarea = screen.getByRole("textbox");
+      expect(textarea.id).not.toBe("user-description");
     });
 
     it("applies fullWidth class when fullWidth=true", () => {
@@ -94,8 +102,8 @@ describe("TextArea", () => {
       expect(screen.getByRole("textbox")).toBeDisabled();
     });
 
-    it("disables textarea when isLoading=true", () => {
-      render(<TextArea isLoading />);
+    it("disables textarea when loading=true", () => {
+      render(<TextArea loading />);
 
       expect(screen.getByRole("textbox")).toBeDisabled();
     });
@@ -108,7 +116,7 @@ describe("TextArea", () => {
     });
 
     it("sets data-loading attribute when loading", () => {
-      render(<TextArea isLoading containerClassName="test-container" />);
+      render(<TextArea loading containerClassName="test-container" />);
 
       const container = document.querySelector(".test-container");
       expect(container).toHaveAttribute("data-loading", "true");
@@ -231,22 +239,21 @@ describe("TextArea", () => {
   });
 
   describe("Loading State", () => {
-    it("renders loader when isLoading=true", () => {
-      render(<TextArea isLoading />);
+    it("renders loader when loading=true", () => {
+      render(<TextArea loading />);
 
-      // CircularLoader has aria-hidden but is in the DOM
       const loader = document.querySelector('[aria-hidden="true"]');
       expect(loader).toBeInTheDocument();
     });
 
     it("renders custom loader when provided", () => {
-      render(<TextArea isLoading loader={<span data-testid="custom-loader">Loading...</span>} />);
+      render(<TextArea loading loader={<span data-testid="custom-loader">Loading...</span>} />);
 
       expect(screen.getByTestId("custom-loader")).toBeInTheDocument();
     });
 
-    it("does not render loader when isLoading=false", () => {
-      render(<TextArea isLoading={false} />);
+    it("does not render loader when loading=false", () => {
+      render(<TextArea loading={false} />);
 
       const loader = document.querySelector('[aria-hidden="true"]');
       expect(loader).not.toBeInTheDocument();
@@ -291,8 +298,8 @@ describe("TextArea", () => {
         />
       );
 
-      await user.tab(); // Focus textarea first
-      await user.tab(); // Focus trailing icon
+      await user.tab();
+      await user.tab();
 
       expect(screen.getByRole("button", { name: "Clear" })).toHaveFocus();
     });
@@ -345,8 +352,8 @@ describe("TextArea", () => {
         />
       );
 
-      await user.tab(); // Focus textarea
-      await user.tab(); // Focus trailing icon
+      await user.tab();
+      await user.tab();
       await user.keyboard("{Enter}");
 
       expect(onClick).toHaveBeenCalledTimes(1);
@@ -364,8 +371,8 @@ describe("TextArea", () => {
         />
       );
 
-      await user.tab(); // Focus textarea
-      await user.tab(); // Focus trailing icon
+      await user.tab();
+      await user.tab();
       await user.keyboard(" ");
 
       expect(onClick).toHaveBeenCalledTimes(1);
@@ -376,7 +383,6 @@ describe("TextArea", () => {
 
       render(<TextArea leadingIcon={<span>L</span>} placeholder="textarea" />);
 
-      // Non-clickable icon should not be focusable
       await user.tab();
       expect(screen.getByPlaceholderText("textarea")).toHaveFocus();
     });
@@ -494,10 +500,18 @@ describe("TextArea", () => {
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
-    it("applies className to textarea", () => {
+    it("applies className to root container", () => {
       render(<TextArea className="custom-textarea" />);
 
-      expect(screen.getByRole("textbox")).toHaveClass("custom-textarea");
+      const container = document.querySelector(".custom-textarea");
+      expect(container).toBeInTheDocument();
+      expect(screen.getByRole("textbox")).not.toHaveClass("custom-textarea");
+    });
+
+    it("applies textAreaClassName to textarea element", () => {
+      render(<TextArea textAreaClassName="textarea-style" />);
+
+      expect(screen.getByRole("textbox")).toHaveClass("textarea-style");
     });
 
     it("applies labelClassName to label", () => {
@@ -512,8 +526,8 @@ describe("TextArea", () => {
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
-    it("applies wrapperFocusClassName to wrapper", () => {
-      render(<TextArea wrapperFocusClassName="custom-focus" />);
+    it("applies focus classes via wrapperClassName", () => {
+      render(<TextArea wrapperClassName="custom-focus" />);
 
       expect(document.querySelector(".custom-focus")).toBeInTheDocument();
     });
@@ -522,25 +536,25 @@ describe("TextArea", () => {
 
 describe("TextAreaLabel", () => {
   it("renders label text", () => {
-    render(<TextAreaLabel label="Description" textAreaId="description" />);
+    render(<TextAreaLabel label="Description" htmlFor="description" />);
 
     expect(screen.getByText("Description")).toBeInTheDocument();
   });
 
   it("renders required indicator", () => {
-    render(<TextAreaLabel label="Description" textAreaId="description" required />);
+    render(<TextAreaLabel label="Description" htmlFor="description" required />);
 
     expect(screen.getByText("*")).toBeInTheDocument();
   });
 
   it("associates with textarea via htmlFor", () => {
-    render(<TextAreaLabel label="Description" textAreaId="description-input" />);
+    render(<TextAreaLabel label="Description" htmlFor="description-input" />);
 
     expect(screen.getByText("Description")).toHaveAttribute("for", "description-input");
   });
 
   it("applies className", () => {
-    render(<TextAreaLabel label="Description" textAreaId="description" className="custom-label" />);
+    render(<TextAreaLabel label="Description" htmlFor="description" className="custom-label" />);
 
     expect(screen.getByText("Description")).toHaveClass("custom-label");
   });
@@ -549,7 +563,7 @@ describe("TextAreaLabel", () => {
     render(
       <TextAreaLabel
         label={<span data-testid="custom-label">Custom Label</span>}
-        textAreaId="description"
+        htmlFor="description"
       />
     );
 

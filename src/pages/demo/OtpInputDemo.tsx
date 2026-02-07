@@ -2,82 +2,13 @@ import { useState, useRef } from "react";
 import { OtpInput, OtpInputLabel } from "../../components/OtpInput";
 import type { OtpInputRenderProps } from "../../components/OtpInput";
 import { useTheme } from "./ThemeContext";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// MAIN OTP INPUT DEMO COMPONENT
-// ============================================================================
 
 const OtpInputDemo = () => {
   const { isDarkMode } = useTheme();
   const otpRef = useRef<HTMLInputElement>(null);
 
-  // State for demos
   const [basicValue, setBasicValue] = useState("");
   const [fourDigitValue, setFourDigitValue] = useState("");
   const [eightDigitValue, setEightDigitValue] = useState("");
@@ -90,6 +21,7 @@ const OtpInputDemo = () => {
   const [disabledValue] = useState("123456");
   const [passwordValue, setPasswordValue] = useState("");
   const [noPasteValue, setNoPasteValue] = useState("");
+  const [digitsOnlyValue, setDigitsOnlyValue] = useState("");
   const [darkThemeValue, setDarkThemeValue] = useState("");
   const [roundedValue, setRoundedValue] = useState("");
   const [underlineValue, setUnderlineValue] = useState("");
@@ -105,7 +37,6 @@ const OtpInputDemo = () => {
   const [renderInputValue, setRenderInputValue] = useState("");
   const [idNameValue, setIdNameValue] = useState("");
 
-  // Dark mode aware class names
   const getInputClassNames = () => ({
     base: `w-12 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
       isDarkMode
@@ -135,9 +66,6 @@ const OtpInputDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           OTP Input
@@ -148,7 +76,6 @@ const OtpInputDemo = () => {
           keyboard navigation.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -160,17 +87,11 @@ const OtpInputDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic OTP Input */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic OTP Input"
           description="A simple 6-digit OTP input with default configuration."
@@ -192,9 +113,87 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Different Lengths */}
-        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Uncontrolled (defaultValue)"
+          description="Use defaultValue for uncontrolled mode. The component manages its own internal state."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-3">
+              <OtpInput
+                defaultValue="12"
+                onValueChange={(val) => console.log("Uncontrolled value:", val)}
+                autoFocusFirst={false}
+                inputClassName={classes.base}
+                inputFocusClassName={classes.focus}
+                wrapperClassName={classes.wrapper}
+              />
+              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                Starts with "12" pre-filled. Check console for value changes.
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<OtpInput
+  defaultValue="12"
+  onValueChange={(val) => console.log(val)}
+/>`}
+          />
+        </Section>
+
+        <Section
+          title="onValueChange (Preferred)"
+          description="Use onValueChange as the preferred callback name. onChange is still supported as an alias."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-3">
+              <OtpInput
+                value={basicValue}
+                onValueChange={setBasicValue}
+                autoFocusFirst={false}
+                inputClassName={classes.base}
+                inputFocusClassName={classes.focus}
+                wrapperClassName={classes.wrapper}
+              />
+              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                Value: {basicValue || "(empty)"}
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Aria Label"
+          description="Use inputAriaLabel to customize the accessible label for each input slot."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-3">
+              <OtpInput
+                length={4}
+                value={fourDigitValue}
+                onValueChange={setFourDigitValue}
+                autoFocusFirst={false}
+                inputAriaLabel={(index, length) => `Code character ${index + 1} of ${length}`}
+                inputClassName={classes.base}
+                inputFocusClassName={classes.focus}
+                wrapperClassName={classes.wrapper}
+              />
+              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                Inspect inputs to see custom aria-label: "Code character N of 4"
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<OtpInput
+  inputAriaLabel={(index, length) => \`Code character \${index + 1} of \${length}\`}
+/>`}
+          />
+        </Section>
+
         <Section
           title="Different Lengths"
           description="Use the length prop to set the number of input boxes."
@@ -236,9 +235,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Layout Variations */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Layout Variations"
           description="Different grouping and spacing configurations using groups and separator props."
@@ -347,9 +343,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Grouped OTP Variations */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Grouped OTP Variations"
           description="More examples of grouping with different configurations."
@@ -414,9 +407,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Label */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Label"
           description="Use the label prop to add an accessible label above the input."
@@ -439,9 +429,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Required Field */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Required Field"
           description="Add required prop to show an asterisk (*) indicator and set aria-required."
@@ -464,9 +451,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Error State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Error State"
           description="Use error and errorMessage props to display validation errors."
@@ -489,9 +473,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled State"
           description="Disable the input with the disabled prop."
@@ -507,9 +488,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Password Type */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Password Type (Masked)"
           description='Use inputType="password" to mask the input values.'
@@ -533,9 +511,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Paste Disabled */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Paste Disabled"
           description="Set allowPaste={false} to disable paste functionality."
@@ -559,9 +534,37 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* onComplete Callback */}
-        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="Digits Only"
+          description="Use the validate prop to restrict input to digits only."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-3">
+              <OtpInput
+                value={digitsOnlyValue}
+                onChange={setDigitsOnlyValue}
+                autoFocusFirst={false}
+                validate={(char) => /^\d$/.test(char)}
+                inputClassName={classes.base}
+                inputFocusClassName={classes.focus}
+                wrapperClassName={classes.wrapper}
+              />
+              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                Only numeric digits (0-9) are accepted.
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<OtpInput
+  value={value}
+  onChange={setValue}
+  validate={(char) => /^\\d$/.test(char)}
+/>`}
+          />
+        </Section>
+
         <Section
           title="onComplete Callback"
           description="Use onComplete to trigger an action when all digits are filled."
@@ -592,7 +595,6 @@ const OtpInputDemo = () => {
   value={value}
   onChange={setValue}
   onComplete={(val) => {
-    // Called when all digits are filled
     console.log('OTP completed:', val);
     submitOtp(val);
   }}
@@ -600,9 +602,6 @@ const OtpInputDemo = () => {
           />
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* No Auto Focus */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="No Auto Focus"
           description="Set autoFocusFirst={false} to prevent auto-focusing the first input on mount."
@@ -625,9 +624,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Ref Forwarding */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Ref Forwarding"
           description="Access the first input element using React refs for programmatic focus management."
@@ -672,9 +668,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom ID and Name */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom ID and Name"
           description="Set custom id and name attributes for form handling."
@@ -715,16 +708,13 @@ const OtpInputDemo = () => {
             <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
               <strong>Note:</strong> The input ID is auto-generated if not provided. It uses{" "}
               <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>
-                id || name || useId()
+                id || useId()
               </code>{" "}
               fallback chain.
             </p>
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Render Input */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Render Input"
           description="Use renderInput prop for complete control over how each input is rendered."
@@ -794,9 +784,6 @@ const OtpInputDemo = () => {
           />
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* OtpInputLabel Standalone */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="OtpInputLabel Standalone"
           description="Use OtpInputLabel separately for custom layouts."
@@ -807,7 +794,7 @@ const OtpInputDemo = () => {
               <div>
                 <OtpInputLabel
                   label="Standalone Label"
-                  inputId="custom-otp"
+                  htmlFor="custom-otp"
                   className={classes.label}
                 />
                 <OtpInput
@@ -823,7 +810,7 @@ const OtpInputDemo = () => {
               <div>
                 <OtpInputLabel
                   label="Required Field"
-                  inputId="required-otp"
+                  htmlFor="required-otp"
                   required
                   className={classes.label}
                 />
@@ -835,9 +822,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Theme Examples */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Theme Examples"
           description="Customize the input appearance using className props."
@@ -915,9 +899,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Individual Input Styling */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Individual Input Styling"
           description="Use inputClassNames array to style each input individually."
@@ -949,9 +930,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Size Variations */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Size Variations"
           description="Customize input sizes using className props."
@@ -997,9 +975,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Full Width */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Full Width"
           description="Use fullWidth prop to make the container span full width."
@@ -1025,9 +1000,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Credit Card Style */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Credit Card Style (16 digits)"
           description="Example of a longer input with groups for credit card-like input."
@@ -1053,9 +1025,6 @@ const OtpInputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Data Attributes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Data Attributes"
           description="The OtpInput component applies data attributes for CSS-based styling."
@@ -1134,15 +1103,11 @@ const OtpInputDemo = () => {
         </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* OtpInput Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             OtpInput
@@ -1169,9 +1134,25 @@ const OtpInputDemo = () => {
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">value</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Controlled OTP value
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">defaultValue</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>""</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Current OTP value
+                    Initial value for uncontrolled mode
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">onValueChange</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value: string) =&gt; void</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Preferred callback when value changes
                   </td>
                 </tr>
                 <tr>
@@ -1179,7 +1160,15 @@ const OtpInputDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value: string) =&gt; void</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Callback when value changes
+                    Alias for onValueChange (backwards compatible)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">inputAriaLabel</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(index: number, length: number) =&gt; string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>auto</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Custom aria-label generator for each input
                   </td>
                 </tr>
                 <tr>
@@ -1295,6 +1284,14 @@ const OtpInputDemo = () => {
                   </td>
                 </tr>
                 <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">validate</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(char: string) =&gt; boolean</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Validation function to filter input characters
+                  </td>
+                </tr>
+                <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">id</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>auto-generated</td>
@@ -1315,7 +1312,6 @@ const OtpInputDemo = () => {
           </div>
         </div>
 
-        {/* Styling Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Styling Props
@@ -1398,7 +1394,6 @@ const OtpInputDemo = () => {
           </div>
         </div>
 
-        {/* OtpInputLabel Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             OtpInputLabel
@@ -1431,7 +1426,7 @@ const OtpInputDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputId</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">htmlFor</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1451,7 +1446,6 @@ const OtpInputDemo = () => {
           </div>
         </div>
 
-        {/* OtpInputRenderProps */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             OtpInputRenderProps (for renderInput)
@@ -1513,7 +1507,6 @@ const OtpInputDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1523,7 +1516,7 @@ const OtpInputDemo = () => {
             code={`interface OtpInputLabelProps {
   label: ReactNode;
   required?: boolean;
-  inputId?: string;
+  htmlFor?: string;
   className?: string;
 }
 
@@ -1560,7 +1553,6 @@ interface OtpInputProps
   inputClassNames?: (string | undefined)[];
   fullWidth?: boolean;
   renderInput?: (props: OtpInputRenderProps) => ReactNode;
-  // Styling props
   containerClassName?: string;
   wrapperClassName?: string;
   groupClassName?: string;
@@ -1574,9 +1566,6 @@ interface OtpInputProps
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1698,9 +1687,6 @@ interface OtpInputProps
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* NATIVE PROPS NOTE */}
-      {/* ================================================================== */}
       <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
         <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
           <strong>Note:</strong> OtpInput extends native{" "}

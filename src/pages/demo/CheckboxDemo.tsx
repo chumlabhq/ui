@@ -1,76 +1,8 @@
 import { useState, useRef } from "react";
 import { Checkbox } from "../../components/Checkbox";
 import { useTheme } from "./ThemeContext";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// ICONS
-// ============================================================================
 
 const HeartIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
@@ -96,15 +28,11 @@ const PauseIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// ============================================================================
-// MAIN CHECKBOX DEMO COMPONENT
-// ============================================================================
 
 const CheckboxDemo = () => {
   const { isDarkMode } = useTheme();
   const checkboxRef = useRef<HTMLInputElement>(null);
 
-  // Dark mode aware class names
   const getCheckboxClassNames = () => ({
     container: "flex items-start gap-3",
     labelContainer: "flex flex-col",
@@ -130,7 +58,6 @@ const CheckboxDemo = () => {
 
   const classes = getCheckboxClassNames();
 
-  // State management for demos
   const [stateNotSelected, setStateNotSelected] = useState(false);
   const [stateSelected, setStateSelected] = useState(true);
   const [stateIndeterminate, setStateIndeterminate] = useState(false);
@@ -183,9 +110,6 @@ const CheckboxDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Checkbox
@@ -195,7 +119,6 @@ const CheckboxDemo = () => {
           indeterminate state, and various sizes/shapes. Fully accessible with WAI-ARIA support.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -207,17 +130,11 @@ const CheckboxDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Checkbox States */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Checkbox States"
           description="Demonstrates the three main visual states of a checkbox."
@@ -285,9 +202,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Checkbox */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Checkbox"
           description="A simple checkbox with no label."
@@ -306,9 +220,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Label */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Label"
           description="Use the label prop to add an accessible label next to the checkbox."
@@ -332,9 +243,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Label and Description */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Label and Description"
           description="Add additional context using the description prop."
@@ -358,9 +266,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Required */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Required"
           description="Use the required prop to indicate mandatory fields. Shows an asterisk (*) and sets aria-required."
@@ -381,9 +286,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Indeterminate State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Indeterminate State"
           description="Use the indeterminate prop for 'select all' scenarios where some items are selected."
@@ -407,9 +309,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Icons"
           description="Replace the default checkmark with custom icons using the checkedIcon prop."
@@ -447,9 +346,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Unchecked Icon */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Unchecked Icon"
           description="Display an icon even when the checkbox is unchecked using the uncheckedIcon prop."
@@ -472,9 +368,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Indeterminate Icon */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Indeterminate Icon"
           description="Customize the indeterminate state icon using the indeterminateIcon prop."
@@ -508,9 +401,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled States */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled States"
           description="Disable the checkbox with the disabled prop."
@@ -544,9 +434,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Error State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Error State"
           description="Use error and errorMessage props to display validation errors."
@@ -572,9 +459,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Focus and Blur Events */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Focus and Blur Events"
           description="Use onFocus and onBlur props to handle focus events."
@@ -622,9 +506,6 @@ const CheckboxDemo = () => {
           />
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Colors */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Colors"
           description="Customize colors using className props."
@@ -660,9 +541,53 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Sizes (Predefined) */}
-        {/* ---------------------------------------------------------------- */}
+        <Section
+          title="classNames Record (Alternative)"
+          description="Use the classNames record prop as a cleaner alternative to individual className props."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-4">
+              <Checkbox
+                label="Using classNames record"
+                description="All styles via a single classNames prop"
+                checked={basic}
+                onCheckedChange={setBasic}
+                classNames={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  description: classes.description,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
+              />
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Checkbox
+  label="Using classNames record"
+  classNames={{
+    root: "flex items-start gap-3",
+    label: "text-sm font-medium",
+    checkbox: "w-5 h-5 border-2 rounded",
+    checked: "bg-blue-600 border-blue-600 text-white",
+    unchecked: "bg-white border-gray-300",
+    icon: "w-3 h-3",
+  }}
+/>`}
+          />
+          <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}>
+            <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
+              <strong>Tip:</strong> The <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>classNames</code> record 
+              takes precedence over individual className props when both are provided. Individual props still work for backward compatibility.
+            </p>
+          </div>
+        </Section>
+
         <Section
           title="Sizes (Predefined)"
           description="Use the size prop with predefined values: xs, sm, md, lg, xl."
@@ -739,9 +664,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Size (Numeric) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Size (Numeric)"
           description="Pass a number to the size prop for custom pixel sizes."
@@ -779,9 +701,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Size via sizeClassName */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Size via sizeClassName"
           description="Use sizeClassName prop to set size via Tailwind classes."
@@ -805,9 +724,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Shapes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Shapes"
           description="Use the shape prop to set border-radius: square, rounded, or circle."
@@ -858,9 +774,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Shapes with Different Sizes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Shapes with Different Sizes"
           description="Combine size and shape props for various checkbox styles."
@@ -924,9 +837,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Shape via shapeClassName */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Shape via shapeClassName"
           description="Use shapeClassName prop to override the shape with custom Tailwind classes."
@@ -964,9 +874,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With id and name Props */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom ID and Name"
           description="Set custom id and name attributes for form handling."
@@ -1011,9 +918,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Ref Forwarding */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Ref Forwarding"
           description="Access the underlying input element using React refs."
@@ -1072,9 +976,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Uncontrolled (defaultChecked) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Uncontrolled (defaultChecked)"
           description="Use defaultChecked for uncontrolled checkboxes that manage their own state internally."
@@ -1106,9 +1007,6 @@ const CheckboxDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Native HTML Input Props */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Native HTML Input Props"
           description="Pass any native HTML input attribute via the spread operator (...rest). Supports autoFocus, tabIndex, data attributes, and more."
@@ -1158,7 +1056,6 @@ const CheckboxDemo = () => {
   onCheckedChange={setChecked}
 />
 
-// Read-only checkbox
 <Checkbox
   readOnly
   checked={true}
@@ -1177,15 +1074,11 @@ const CheckboxDemo = () => {
         </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* Checkbox Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Checkbox Props
@@ -1358,7 +1251,6 @@ const CheckboxDemo = () => {
           </div>
         </div>
 
-        {/* Styling Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Styling Props
@@ -1378,6 +1270,13 @@ const CheckboxDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     CSS class for the label wrapper (checkbox + label row)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">classNames</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CheckboxClassNames</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Record of class names for all internal elements (root, label, checkbox, checked, unchecked, icon, etc.)
                   </td>
                 </tr>
                 <tr>
@@ -1469,7 +1368,6 @@ const CheckboxDemo = () => {
           </div>
         </div>
 
-        {/* Data Attributes */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Data Attributes
@@ -1556,7 +1454,6 @@ const CheckboxDemo = () => {
           </p>
         </div>
 
-        {/* Size Reference */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Size Reference
@@ -1606,7 +1503,6 @@ const CheckboxDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1650,9 +1546,6 @@ interface CheckboxProps
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1723,9 +1616,6 @@ interface CheckboxProps
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* NATIVE PROPS NOTE */}
-      {/* ================================================================== */}
       <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
         <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
           <strong>Note:</strong> Checkbox extends native{" "}

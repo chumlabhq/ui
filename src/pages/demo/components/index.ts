@@ -1,2 +1,10 @@
 export * from "./Icons";
-export * from "./Section";
+export {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  DemoLabel,
+  ComponentHeader,
+  PropRow,
+  PropsTable,
+} from "./Section";

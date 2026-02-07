@@ -1,62 +1,9 @@
 import { forwardRef, useId, useEffect, useRef, useImperativeHandle, useMemo, useCallback } from "react";
-import type { CheckboxProps, CheckboxSize, CheckboxShape } from "./types";
+import type { CheckboxProps } from "./utils/types";
+import { SIZE_MAP, ICON_SIZE_MAP, SHAPE_CLASS_MAP, defaultCheckboxStyles } from "./utils/constants";
+import { DefaultCheckIcon, DefaultIndeterminateIcon } from "./utils/icons";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
-
-const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
-  xs: 14,
-  sm: 16,
-  md: 20,
-  lg: 24,
-  xl: 32,
-};
-
-const ICON_SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
-  xs: 10,
-  sm: 12,
-  md: 14,
-  lg: 18,
-  xl: 24,
-};
-
-const SHAPE_CLASS_MAP: Record<CheckboxShape, string> = {
-  square: "rounded-none",
-  rounded: "rounded",
-  circle: "rounded-full",
-};
-
-const defaultCheckboxStyles = {
-  base: "inline-flex items-center justify-center border transition-colors",
-  checked: "bg-blue-600 border-blue-600 text-white",
-  unchecked: "bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600",
-  indeterminate: "bg-blue-600 border-blue-600 text-white",
-};
-
-const DefaultCheckIcon = ({ className, size }: { className?: string; size?: number }) => (
-  <svg
-    className={className}
-    style={size ? { width: size, height: size } : undefined}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={3}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
-);
-
-const DefaultIndeterminateIcon = ({ className, size }: { className?: string; size?: number }) => (
-  <svg
-    className={className}
-    style={size ? { width: size, height: size } : undefined}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={3}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
-  </svg>
-);
 
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
@@ -80,6 +27,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       checkedIcon,
       uncheckedIcon,
       indeterminateIcon,
+      classNames,
       containerClassName,
       labelContainerClassName,
       labelClassName,
@@ -98,13 +46,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     ref
   ) => {
     const generatedId = useId();
-    const checkboxId = id || name || generatedId;
+    const checkboxId = id || generatedId;
     const errorId = `${checkboxId}-error`;
     const descriptionId = `${checkboxId}-description`;
 
     const internalRef = useRef<HTMLInputElement>(null);
 
-    useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
+    useImperativeHandle(ref, () => internalRef.current!, []);
 
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
@@ -129,15 +77,15 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }, [size]);
 
     const shapeClass = useMemo(() => {
-      if (shapeClassName) return shapeClassName;
+      if (resolvedShapeClassName) return resolvedShapeClassName;
       if (shape) return SHAPE_CLASS_MAP[shape];
       return "";
-    }, [shape, shapeClassName]);
+    }, [shape, resolvedShapeClassName]);
 
     const sizeStyle = useMemo(() => {
-      if (sizeClassName || !boxSize) return undefined;
+      if (resolvedSizeClassName || !boxSize) return undefined;
       return { width: boxSize, height: boxSize };
-    }, [boxSize, sizeClassName]);
+    }, [boxSize, resolvedSizeClassName]);
 
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,23 +96,36 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       [disabled, setIsChecked]
     );
 
-    const getStateClassName = useMemo(() => {
-      if (indeterminate) return cn(defaultCheckboxStyles.indeterminate, indeterminateClassName);
-      if (isChecked) return cn(defaultCheckboxStyles.checked, checkedClassName);
-      return cn(defaultCheckboxStyles.unchecked, uncheckedClassName);
-    }, [indeterminate, isChecked, indeterminateClassName, checkedClassName, uncheckedClassName]);
+    const resolvedContainerClassName = containerClassName ?? classNames?.root;
+    const resolvedLabelContainerClassName = labelContainerClassName ?? classNames?.labelContainer;
+    const resolvedLabelClassName = labelClassName ?? classNames?.label;
+    const resolvedDescriptionClassName = descriptionClassName ?? classNames?.description;
+    const resolvedCheckboxClassName = checkboxClassName ?? classNames?.checkbox;
+    const resolvedCheckedClassName = checkedClassName ?? classNames?.checked;
+    const resolvedUncheckedClassName = uncheckedClassName ?? classNames?.unchecked;
+    const resolvedIndeterminateClassName = indeterminateClassName ?? classNames?.indeterminate;
+    const resolvedIconClassName = iconClassName ?? classNames?.icon;
+    const resolvedErrorClassName = errorClassName ?? classNames?.error;
+    const resolvedSizeClassName = sizeClassName ?? classNames?.size;
+    const resolvedShapeClassName = shapeClassName ?? classNames?.shape;
 
-    const renderIcon = useCallback(() => {
+    const getStateClassName = useMemo(() => {
+      if (indeterminate) return cn(defaultCheckboxStyles.indeterminate, resolvedIndeterminateClassName);
+      if (isChecked) return cn(defaultCheckboxStyles.checked, resolvedCheckedClassName);
+      return cn(defaultCheckboxStyles.unchecked, resolvedUncheckedClassName);
+    }, [indeterminate, isChecked, resolvedIndeterminateClassName, resolvedCheckedClassName, resolvedUncheckedClassName]);
+
+    const renderedIcon = useMemo(() => {
       if (indeterminate) {
         return (
-          indeterminateIcon || <DefaultIndeterminateIcon className={iconClassName} size={iconSize} />
+          indeterminateIcon || <DefaultIndeterminateIcon className={resolvedIconClassName} size={iconSize} />
         );
       }
       if (isChecked) {
-        return checkedIcon || <DefaultCheckIcon className={iconClassName} size={iconSize} />;
+        return checkedIcon || <DefaultCheckIcon className={resolvedIconClassName} size={iconSize} />;
       }
       return uncheckedIcon || null;
-    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, iconClassName, iconSize]);
+    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, resolvedIconClassName, iconSize]);
 
     const describedBy = [
       description ? descriptionId : null,
@@ -175,7 +136,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div
-        className={cn(containerClassName, className)}
+        className={cn(resolvedContainerClassName, className)}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-checked={isChecked || undefined}
@@ -185,7 +146,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         <label className={cn("flex items-start gap-2")}>
           <span
-            className={cn(defaultCheckboxStyles.base, checkboxClassName, getStateClassName, sizeClassName, shapeClass)}
+            className={cn(defaultCheckboxStyles.base, resolvedCheckboxClassName, getStateClassName, resolvedSizeClassName, shapeClass)}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
@@ -220,19 +181,19 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               }}
               {...rest}
             />
-            {renderIcon()}
+            {renderedIcon}
           </span>
 
           {(label || description) && (
-            <span className={labelContainerClassName}>
+            <span className={resolvedLabelContainerClassName}>
               {label && (
-                <span className={labelClassName}>
+                <span className={resolvedLabelClassName}>
                   {label}
                   {required && <span aria-hidden="true">*</span>}
                 </span>
               )}
               {description && (
-                <span id={descriptionId} className={descriptionClassName}>
+                <span id={descriptionId} className={resolvedDescriptionClassName}>
                   {description}
                 </span>
               )}
@@ -241,7 +202,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div id={errorId} role="alert" className={resolvedErrorClassName}>
             {errorMessage}
           </div>
         )}

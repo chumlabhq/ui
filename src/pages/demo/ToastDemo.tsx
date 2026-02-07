@@ -1,77 +1,9 @@
 import { useState, useRef } from "react";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 import { Button } from "../../components/Button";
 import { ToastProvider, useToast } from "../../components/Toast";
 import { useTheme } from "./ThemeContext";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6 flex flex-wrap items-center gap-4">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// TOAST DEMO CONTENT
-// ============================================================================
 
 const ToastDemoContent = ({
   position,
@@ -84,7 +16,6 @@ const ToastDemoContent = ({
   const toast = useToast();
   const toastIdRef = useRef<string | null>(null);
 
-  // Dark mode aware button styles
   const getButtonStyles = () => ({
     success: `cursor-pointer px-4 py-2 rounded-lg font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 ${
       isDarkMode
@@ -122,9 +53,6 @@ const ToastDemoContent = ({
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Toast
@@ -135,7 +63,6 @@ const ToastDemoContent = ({
           and extensive styling options.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -144,7 +71,6 @@ const ToastDemoContent = ({
             isDarkMode={isDarkMode}
             code={`import { ToastProvider, useToast } from "@kern-ui/toast";
 
-// Wrap your app with ToastProvider
 function App() {
   return (
     <ToastProvider position="bottom-right">
@@ -153,7 +79,6 @@ function App() {
   );
 }
 
-// Use the hook in any component
 function MyComponent() {
   const toast = useToast();
   
@@ -167,17 +92,11 @@ function MyComponent() {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Variants */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Variants"
           description="Four toast types for different notification contexts: success, warning, error, and info."
@@ -211,9 +130,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Description */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Description"
           description="Add secondary text using the description prop for more context."
@@ -253,9 +169,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Duration */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Duration"
           description="Control how long toasts stay visible with the duration prop (in milliseconds). Use Infinity for persistent toasts."
@@ -309,9 +222,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Progress Bar */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Progress Bar"
           description="Toggle the progress indicator with showProgress. The bar shows remaining time before auto-dismiss."
@@ -343,9 +253,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Progress Color */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Progress Color"
           description="Customize the progress bar with progressColor (inline style) or progressClassName (Tailwind classes)."
@@ -394,9 +301,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Close Button */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Close Button"
           description="Toggle the close button visibility with showCloseButton prop."
@@ -429,9 +333,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Pause on Hover */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Pause on Hover"
           description="Control whether the auto-dismiss timer pauses when hovering over the toast."
@@ -465,9 +366,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Escape Key Dismissal */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Escape Key Dismissal"
           description="Enable keyboard dismissal with the dismissOnEscape prop. Can be set per-toast or globally on ToastProvider."
@@ -480,7 +378,6 @@ function MyComponent() {
                 toast.info("Press Escape to dismiss", {
                   duration: Infinity,
                   description: "This toast can be dismissed with the Escape key",
-                  dismissOnEscape: true,
                 })
               }
             >
@@ -492,7 +389,6 @@ function MyComponent() {
                 toast.info("Standard toast", {
                   duration: Infinity,
                   description: "Use close button to dismiss (Escape disabled)",
-                  dismissOnEscape: false,
                 })
               }
             >
@@ -510,9 +406,6 @@ function MyComponent() {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Icon */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Icon"
           description="Replace the default type icon with a custom icon using the icon prop."
@@ -572,9 +465,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Icon Styling */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Icon Styling"
           description="Customize the icon wrapper with iconClassName prop."
@@ -611,9 +501,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Content */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Content (content prop)"
           description="Replace message/description with fully custom content using the content prop."
@@ -712,9 +599,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Styling */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Styling"
           description="Customize toast appearance using className and other styling props."
@@ -779,9 +663,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Inline Style */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Inline Styles"
           description="Use the style prop for inline CSS customization."
@@ -837,9 +718,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* CSS Variables */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="CSS Variables (Theming)"
           description="Toast colors can be customized globally using CSS custom properties for design system integration."
@@ -893,9 +771,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Callbacks */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Callbacks"
           description="Use onClose callback to execute code when a toast is dismissed."
@@ -927,9 +802,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Programmatic Dismiss */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Programmatic Dismiss"
           description="Use dismiss(id) to remove a specific toast, or dismissAll() to clear all toasts."
@@ -974,9 +846,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Multiple Toasts */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Multiple Toasts & Max Limit"
           description="Toasts stack automatically. When maxToasts is exceeded, oldest toasts are dismissed."
@@ -1020,9 +889,6 @@ function MyComponent() {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Position */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Position"
           description="Control toast position using the position prop on ToastProvider. Change position to see toasts animate from different corners."
@@ -1063,9 +929,6 @@ function MyComponent() {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Generic toast() Method */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Generic toast() Method"
           description="Use toast.toast() for full configuration control, or pass a simple string for quick notifications."
@@ -1096,15 +959,11 @@ function MyComponent() {
         </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* Toast Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Toast Props (ToastConfig)
@@ -1211,6 +1070,14 @@ function MyComponent() {
                   </td>
                 </tr>
                 <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">role</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"alert" | "status"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>auto</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    ARIA role override (defaults to "alert" for error/warning, "status" for success/info)
+                  </td>
+                </tr>
+                <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">onClose</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>() =&gt; void</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
@@ -1231,7 +1098,6 @@ function MyComponent() {
           </div>
         </div>
 
-        {/* Styling Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Styling Props
@@ -1300,7 +1166,6 @@ function MyComponent() {
           </div>
         </div>
 
-        {/* ToastProvider Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             ToastProvider Props
@@ -1385,7 +1250,6 @@ function MyComponent() {
           </div>
         </div>
 
-        {/* useToast Hook */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             useToast Hook
@@ -1468,7 +1332,6 @@ function MyComponent() {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1532,7 +1395,6 @@ interface ToastContextValue {
           />
         </div>
 
-        {/* Data Attributes */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Data Attributes
@@ -1586,9 +1448,6 @@ interface ToastContextValue {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1705,9 +1564,6 @@ interface ToastContextValue {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* NOTES SECTION */}
-      {/* ================================================================== */}
       <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
         <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
           <strong>Note:</strong> The Toast component uses{" "}
@@ -1726,9 +1582,6 @@ interface ToastContextValue {
   );
 };
 
-// ============================================================================
-// MAIN TOAST DEMO COMPONENT
-// ============================================================================
 
 const ToastDemo = () => {
   const [position, setPosition] = useState<

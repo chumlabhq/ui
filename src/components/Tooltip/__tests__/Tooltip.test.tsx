@@ -190,11 +190,11 @@ describe("Tooltip", () => {
     it("shows tooltip on focus", async () => {
       render(
         <Tooltip content="Focus tooltip" delayDuration={0}>
-          <button>Trigger</button>
+          <span>Trigger</span>
         </Tooltip>
       );
 
-      const trigger = screen.getByText("Trigger").closest("span");
+      const trigger = screen.getByText("Trigger").closest("[tabindex]") as HTMLElement;
       act(() => {
         trigger?.focus();
       });
@@ -207,11 +207,11 @@ describe("Tooltip", () => {
     it("hides tooltip on blur", async () => {
       render(
         <Tooltip content="Blur tooltip" delayDuration={0}>
-          <button>Trigger</button>
+          <span>Trigger</span>
         </Tooltip>
       );
 
-      const trigger = screen.getByText("Trigger").closest("span");
+      const trigger = screen.getByText("Trigger").closest("[tabindex]") as HTMLElement;
       act(() => {
         trigger?.focus();
       });
@@ -236,7 +236,7 @@ describe("Tooltip", () => {
 
       render(
         <Tooltip content="Escape test" defaultOpen>
-          <button>Trigger</button>
+          <span tabIndex={0}>Trigger</span>
         </Tooltip>
       );
 
@@ -244,7 +244,7 @@ describe("Tooltip", () => {
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
       });
 
-      const trigger = screen.getByText("Trigger").closest("span");
+      const trigger = screen.getByText("Trigger").closest("span[tabindex]") as HTMLElement;
       act(() => {
         trigger?.focus();
       });
@@ -256,7 +256,7 @@ describe("Tooltip", () => {
       });
     });
 
-    it("trigger is focusable via keyboard (tabIndex=0)", () => {
+    it("trigger wrapper omits tabIndex when children are interactive", () => {
       render(
         <Tooltip content="Focusable">
           <button>Trigger</button>
@@ -264,7 +264,7 @@ describe("Tooltip", () => {
       );
 
       const trigger = screen.getByText("Trigger").closest("span");
-      expect(trigger).toHaveAttribute("tabindex", "0");
+      expect(trigger).not.toHaveAttribute("tabindex");
     });
   });
 

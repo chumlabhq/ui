@@ -342,7 +342,6 @@ describe("Toast", () => {
       const toast = screen.getByRole("status");
       fireEvent.mouseEnter(toast);
 
-      // Advance past the full duration while hovered — toast should still exist
       await act(async () => {
         vi.advanceTimersByTime(3000);
       });
@@ -366,7 +365,6 @@ describe("Toast", () => {
       fireEvent.mouseEnter(toast);
       fireEvent.mouseLeave(toast);
 
-      // After mouse leave, timer resumes — toast should auto-dismiss
       await act(async () => {
         vi.advanceTimersByTime(2500);
       });
@@ -390,7 +388,6 @@ describe("Toast", () => {
       const toast = screen.getByRole("status");
       fireEvent.mouseEnter(toast);
 
-      // Even while hovered, toast should auto-dismiss since pauseOnHover is false
       await act(async () => {
         vi.advanceTimersByTime(2500);
       });
@@ -483,23 +480,21 @@ describe("Toast", () => {
   });
 
   describe("Keyboard Accessibility", () => {
-    it("dismisses toast on Escape when dismissOnEscape is true on toast", async () => {
+    it("dismisses toast on Escape when dismissOnEscape is true on provider", async () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
-        <TestConsumer onMount={(api) => (toastApi = api)} />
+        <TestConsumer onMount={(api) => (toastApi = api)} />,
+        { dismissOnEscape: true }
       );
 
       await act(async () => {
-        toastApi.info("Message", { dismissOnEscape: true, duration: Infinity });
+        toastApi.info("Message", { duration: Infinity });
       });
 
       const toast = screen.getByRole("status");
       expect(toast).toBeInTheDocument();
-
-      // The component only dismisses on Escape when the toast is focused or hovered
-      fireEvent.mouseEnter(toast);
 
       await user.keyboard("{Escape}");
 
@@ -653,10 +648,10 @@ describe("Toast", () => {
       ).toBeInTheDocument();
     });
 
-    it("toast container has aria-live='polite'", async () => {
+    it("toast container has role=region for accessibility", async () => {
       renderWithProvider();
 
-      const container = document.querySelector('[aria-live="polite"]');
+      const container = document.querySelector('[role="region"]');
       expect(container).toBeInTheDocument();
     });
 
@@ -713,6 +708,63 @@ describe("Toast", () => {
       const toast = screen.getByRole("status");
       const progressBar = toast.querySelector('[style*="background-color"]');
       expect(progressBar).toHaveStyle({ backgroundColor: "#ff0000" });
+    });
+  });
+
+  describe("Portal Cleanup", () => {
+    it("removes portal element from DOM on unmount", async () => {
+      const { unmount } = renderWithProvider(<TestConsumer />);
+
+      const portalElements = Array.from(document.body.children).filter(
+        (el) => (el as HTMLElement).style?.position === "fixed"
+      );
+      expect(portalElements.length).toBeGreaterThan(0);
+
+      unmount();
+
+      const portalElementsAfter = Array.from(document.body.children).filter(
+        (el) => (el as HTMLElement).style?.position === "fixed"
+      );
+      expect(portalElementsAfter.length).toBe(0);
+    });
+
+    it("generates unique IDs across multiple provider instances", async () => {
+      let api1: ReturnType<typeof useToast>;
+      let api2: ReturnType<typeof useToast>;
+
+      const { unmount: unmount1 } = render(
+        <ToastProvider>
+          <TestConsumer onMount={(api) => (api1 = api)} />
+        </ToastProvider>
+      );
+
+      const { unmount: unmount2 } = render(
+        <ToastProvider>
+          <TestConsumer onMount={(api) => (api2 = api)} />
+        </ToastProvider>
+      );
+
+      let id1: string;
+      let id2: string;
+
+      await act(async () => {
+        id1 = api1.info("Toast 1", { duration: Infinity });
+      });
+
+      await act(async () => {
+        vi.advanceTimersByTime(1);
+      });
+
+      await act(async () => {
+        id2 = api2.info("Toast 2", { duration: Infinity });
+      });
+
+      expect(id1!).toBeTruthy();
+      expect(id2!).toBeTruthy();
+      expect(id1!).not.toBe(id2!);
+
+      unmount1();
+      unmount2();
     });
   });
 

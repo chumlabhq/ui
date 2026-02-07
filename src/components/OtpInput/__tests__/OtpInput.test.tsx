@@ -38,11 +38,12 @@ describe("OtpInput", () => {
       expect(label).toHaveAttribute("for", "otp-input");
     });
 
-    it("generates id from name when id not provided", () => {
+    it("generates id when only name is provided", () => {
       render(<OtpInput label="Code" name="verification-code" />);
 
       const inputs = screen.getAllByRole("textbox");
-      expect(inputs[0]).toHaveAttribute("id", "verification-code");
+      expect(inputs[0]).toHaveAttribute("id");
+      expect(inputs[0].id).toBeTruthy();
     });
 
     it("applies fullWidth class when fullWidth=true", () => {
@@ -130,7 +131,6 @@ describe("OtpInput", () => {
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
 
-      // Simulate paste which triggers onComplete
       const wrapper = inputs[0].parentElement!;
       const clipboardData = { getData: () => "1234" };
       const pasteEvent = new Event("paste", { bubbles: true });
@@ -152,7 +152,6 @@ describe("OtpInput", () => {
       await user.click(inputs[0]);
       await user.type(inputs[0], "a");
 
-      // Component does not filter input — it passes through any character
       expect(onChange).toHaveBeenCalledWith("a");
     });
 
@@ -161,7 +160,6 @@ describe("OtpInput", () => {
 
       const inputs = screen.getAllByRole("textbox");
       
-      // Each input has maxLength of 1
       expect(inputs[0]).toHaveAttribute("maxLength", "1");
       expect(inputs[1]).toHaveAttribute("maxLength", "1");
     });
@@ -219,7 +217,6 @@ describe("OtpInput", () => {
       await user.click(inputs[1]);
       await user.keyboard("{Backspace}");
 
-      // Should clear second position and move to first
       expect(onChange).toHaveBeenCalledWith("1");
     });
 
@@ -311,8 +308,6 @@ describe("OtpInput", () => {
   });
 
   describe("Paste Handling", () => {
-    // Helper to simulate paste event since ClipboardEvent constructor
-    // is not fully supported in jsdom
     const simulatePaste = (element: HTMLElement, text: string) => {
       const clipboardData = {
         getData: () => text,
@@ -351,7 +346,6 @@ describe("OtpInput", () => {
       const wrapper = inputs[0].parentElement!;
       simulatePaste(wrapper, "1a2b3c");
 
-      // Component does not filter pasted content — it passes through as-is
       expect(onChange).toHaveBeenCalledWith("1a2b3c");
     });
 
@@ -537,7 +531,6 @@ describe("OtpInput", () => {
       render(<OtpInput autoFocusFirst />);
 
       const inputs = screen.getAllByRole("textbox");
-      // Check that the input has focus (autoFocus behavior)
       expect(inputs[0]).toHaveFocus();
     });
 
@@ -558,7 +551,6 @@ describe("OtpInput", () => {
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[2]);
 
-      // The input should be focused and content selected
       expect(inputs[2]).toHaveFocus();
     });
   });
@@ -594,7 +586,6 @@ describe("OtpInput", () => {
 
       expect(renderInput).toHaveBeenCalledTimes(6);
 
-      // Check first call props
       const firstCall = renderInput.mock.calls[0][0];
       expect(firstCall.index).toBe(0);
       expect(firstCall.value).toBe("1");
@@ -730,30 +721,157 @@ describe("OtpInput", () => {
       expect(document.querySelector(".custom-separator")).toBeInTheDocument();
     });
   });
+
+  describe("Validate Prop", () => {
+    it("rejects invalid characters when validate is provided", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const validate = (char: string) => /^\d$/.test(char);
+
+      render(
+        <OtpInput onChange={onChange} validate={validate} autoFocusFirst={false} />
+      );
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+      await user.type(inputs[0], "a");
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("accepts valid characters when validate is provided", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const validate = (char: string) => /^\d$/.test(char);
+
+      render(
+        <OtpInput onChange={onChange} validate={validate} autoFocusFirst={false} />
+      );
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+      await user.type(inputs[0], "5");
+
+      expect(onChange).toHaveBeenCalledWith("5");
+    });
+
+    it("filters invalid characters from paste when validate is provided", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const validate = (char: string) => /^\d$/.test(char);
+
+      render(
+        <OtpInput onChange={onChange} validate={validate} autoFocusFirst={false} />
+      );
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+
+      const wrapper = inputs[0].parentElement!;
+      const clipboardData = { getData: () => "1a2b3c" };
+      const pasteEvent = new Event("paste", { bubbles: true });
+      Object.defineProperty(pasteEvent, "clipboardData", { value: clipboardData });
+      wrapper.dispatchEvent(pasteEvent);
+
+      expect(onChange).toHaveBeenCalledWith("123");
+    });
+
+    it("accepts all characters when no validate prop", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+
+      render(<OtpInput onChange={onChange} autoFocusFirst={false} />);
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+      await user.type(inputs[0], "a");
+
+      expect(onChange).toHaveBeenCalledWith("a");
+    });
+  });
+
+  describe("className Prop", () => {
+    it("applies className to root container", () => {
+      render(<OtpInput className="custom-root" />);
+
+      const container = document.querySelector(".custom-root");
+      expect(container).toBeInTheDocument();
+    });
+
+    it("className applies after containerClassName for override", () => {
+      render(
+        <OtpInput
+          containerClassName="bg-red-500"
+          className="bg-blue-500"
+        />
+      );
+
+      const container = document.querySelector(".bg-blue-500");
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  describe("Form Integration", () => {
+    it("renders hidden input with name and value for form submission", () => {
+      render(<OtpInput name="otp-code" value="1234" length={4} />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toBeInTheDocument();
+      expect(hidden).toHaveAttribute("name", "otp-code");
+      expect(hidden).toHaveAttribute("value", "1234");
+    });
+
+    it("does not render hidden input when name is not provided", () => {
+      render(<OtpInput value="1234" length={4} />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).not.toBeInTheDocument();
+    });
+
+    it("hidden input is disabled when OtpInput is disabled", () => {
+      render(<OtpInput name="otp-code" value="1234" length={4} disabled />);
+
+      const hidden = document.querySelector('input[type="hidden"]');
+      expect(hidden).toBeInTheDocument();
+      expect(hidden).toBeDisabled();
+    });
+
+    it("hidden input value updates when OtpInput value changes", () => {
+      const { rerender } = render(
+        <OtpInput name="otp-code" value="12" length={4} />
+      );
+
+      expect(document.querySelector('input[type="hidden"]')).toHaveAttribute("value", "12");
+
+      rerender(<OtpInput name="otp-code" value="1234" length={4} />);
+
+      expect(document.querySelector('input[type="hidden"]')).toHaveAttribute("value", "1234");
+    });
+  });
 });
 
 describe("OtpInputLabel", () => {
   it("renders label text", () => {
-    render(<OtpInputLabel label="Verification Code" inputId="otp" />);
+    render(<OtpInputLabel label="Verification Code" htmlFor="otp" />);
 
     expect(screen.getByText("Verification Code")).toBeInTheDocument();
   });
 
   it("renders required indicator when required", () => {
-    render(<OtpInputLabel label="Code" inputId="otp" required />);
+    render(<OtpInputLabel label="Code" htmlFor="otp" required />);
 
     expect(screen.getByText("*")).toBeInTheDocument();
   });
 
   it("associates with input via htmlFor", () => {
-    render(<OtpInputLabel label="Code" inputId="my-otp" />);
+    render(<OtpInputLabel label="Code" htmlFor="my-otp" />);
 
     expect(screen.getByText("Code")).toHaveAttribute("for", "my-otp");
   });
 
   it("applies className", () => {
     render(
-      <OtpInputLabel label="Code" inputId="otp" className="custom-label" />
+      <OtpInputLabel label="Code" htmlFor="otp" className="custom-label" />
     );
 
     expect(screen.getByText("Code")).toHaveClass("custom-label");
@@ -763,7 +881,7 @@ describe("OtpInputLabel", () => {
     render(
       <OtpInputLabel
         label={<span data-testid="custom-label">Custom Label</span>}
-        inputId="otp"
+        htmlFor="otp"
       />
     );
 

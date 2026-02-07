@@ -26,7 +26,7 @@ export interface MultiSelectSearchableDropdownProps {
   loadingText?: string;
   showChevron?: boolean;
   fullWidth?: boolean;
-  isLoading?: boolean;
+  loading?: boolean;
   onSearch?: (query: string) => Promise<MultiSelectOption[]>;
   searchDebounceMs?: number;
   initialOptions?: MultiSelectOption[];

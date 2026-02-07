@@ -1,103 +1,143 @@
-import { useState } from "react";
-import type { CountryFlagProps, CountryFlagSize } from "./types";
+import { forwardRef, useState, useCallback, useMemo } from "react";
+import type { SyntheticEvent } from "react";
+import type { CountryFlagProps } from "./utils/types";
+import { DEFAULT_FLAG_BASE_PATH, DEFAULT_ASPECT_RATIO } from "./utils/constants";
+import { getPixelSize, isTooltipConfig } from "./utils/helpers";
+import { useCountryFlagGroupContext } from "./utils/context";
+import { CountryFlagShimmer } from "./components/CountryFlagShimmer";
 import { Tooltip } from "../Tooltip";
+import { cn } from "../../utils/cn";
 
-const FLAG_CDN_URL = "https://flagcdn.com";
+export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
+  (
+    {
+      code,
+      size = "md",
+      aspectRatio = DEFAULT_ASPECT_RATIO,
+      alt,
+      fallback,
+      loading = false,
+      tooltip,
+      basePath = DEFAULT_FLAG_BASE_PATH,
+      onLoad,
+      onError,
+      className,
+      style,
+      ...rest
+    },
+    ref,
+  ) => {
+    const [hasError, setHasError] = useState(false);
+    const [isImageLoading, setIsImageLoading] = useState(true);
+    const [prevCode, setPrevCode] = useState(code);
 
-const SIZE_MAP: Record<CountryFlagSize, number> = {
-  xs: 12,
-  sm: 16,
-  md: 20,
-  lg: 24,
-  xl: 32,
-  "2xl": 40,
-};
+    if (prevCode !== code) {
+      setPrevCode(code);
+      setHasError(false);
+      setIsImageLoading(true);
+    }
 
-const VALID_CDN_WIDTHS = [20, 40, 80, 160, 320, 640] as const;
+    const groupContext = useCountryFlagGroupContext();
 
-const getNearestCdnWidth = (width: number): number => {
-  const targetWidth = width * 2;
-  for (const cdnWidth of VALID_CDN_WIDTHS) {
-    if (cdnWidth >= targetWidth) return cdnWidth;
-  }
-  return VALID_CDN_WIDTHS[VALID_CDN_WIDTHS.length - 1];
-};
+    const normalizedCode = code?.toLowerCase() || "";
+    const pixelSize = getPixelSize(size);
+    const width = pixelSize;
+    const height = Math.round(pixelSize * aspectRatio);
+    const src = `${basePath}/${normalizedCode}.svg`;
+    const altText = alt || `${normalizedCode.toUpperCase()} flag`;
 
-const getPixelSize = (size: CountryFlagSize | number): number => {
-  if (typeof size === "number") return size;
-  return SIZE_MAP[size];
-};
+    const handleError = useCallback(
+      (event: SyntheticEvent<HTMLImageElement>) => {
+        setHasError(true);
+        setIsImageLoading(false);
+        onError?.(event);
+      },
+      [onError],
+    );
 
-const CountryFlag = ({
-  code,
-  size = "md",
-  className = "",
-  alt,
-  style,
-  fallback,
-  tooltipContent,
-  tooltipSide = "top",
-  tooltipAlign = "center",
-  tooltipSideOffset = 6,
-  tooltipDelayDuration = 200,
-  tooltipClassName = "",
-  showTooltipArrow = true,
-}: CountryFlagProps) => {
-  const [hasError, setHasError] = useState(false);
+    const handleLoad = useCallback(
+      (event: SyntheticEvent<HTMLImageElement>) => {
+        setIsImageLoading(false);
+        onLoad?.(event);
+      },
+      [onLoad],
+    );
 
-  const normalizedCode = code?.toLowerCase() || "";
-  const pixelSize = getPixelSize(size);
-  const width = pixelSize;
-  const height = Math.round(pixelSize * 0.75);
-  const cdnWidth = getNearestCdnWidth(width);
-  const src = `${FLAG_CDN_URL}/w${cdnWidth}/${normalizedCode}.png`;
-  const altText = alt || `${normalizedCode.toUpperCase()} flag`;
+    const tooltipConfig = useMemo(() => {
+      if (!tooltip) return null;
+      if (isTooltipConfig(tooltip)) return tooltip;
+      return { content: tooltip };
+    }, [tooltip]);
 
-  if (hasError || !normalizedCode) {
-    if (fallback) return <>{fallback}</>;
-    
-    return (
-      <div
+    if (loading) {
+      return (
+        <CountryFlagShimmer
+          size={size}
+          aspectRatio={aspectRatio}
+          className={cn(groupContext?.itemClassName, className)}
+          style={style}
+        />
+      );
+    }
+
+    const showFallback = hasError || !normalizedCode;
+
+    const flagElement = (
+      <span
+        ref={ref}
+        className={cn(
+          "inline-flex items-center justify-center shrink-0 overflow-hidden",
+          groupContext?.itemClassName,
+          className,
+        )}
         style={{ width, height, ...style }}
-        className={`inline-flex items-center justify-center shrink-0 ${className}`}
         role="img"
         aria-label={altText}
-      />
-    );
-  }
-
-  const flagElement = (
-    <img
-      src={src}
-      alt={altText}
-      width={width}
-      height={height}
-      loading="lazy"
-      style={style}
-      className={`inline-block shrink-0 object-cover ${className}`}
-      onError={() => setHasError(true)}
-    />
-  );
-
-  if (tooltipContent) {
-    return (
-      <Tooltip
-        content={tooltipContent}
-        side={tooltipSide}
-        align={tooltipAlign}
-        sideOffset={tooltipSideOffset}
-        delayDuration={tooltipDelayDuration}
-        contentClassName={tooltipClassName}
-        showArrow={showTooltipArrow}
+        data-loading={!showFallback && isImageLoading ? true : undefined}
+        {...rest}
       >
-        {flagElement}
-      </Tooltip>
+        {showFallback ? (
+          fallback || null
+        ) : (
+          <img
+            src={src}
+            alt=""
+            aria-hidden
+            width={width}
+            height={height}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover"
+            style={{
+              borderRadius: "inherit",
+              opacity: isImageLoading ? 0 : 1,
+              transition: "opacity 0.15s ease-in-out",
+            }}
+            onLoad={handleLoad}
+            onError={handleError}
+          />
+        )}
+      </span>
     );
-  }
 
-  return flagElement;
-};
+    if (tooltipConfig) {
+      return (
+        <Tooltip
+          content={tooltipConfig.content}
+          side={tooltipConfig.side ?? "top"}
+          align={tooltipConfig.align ?? "center"}
+          sideOffset={tooltipConfig.sideOffset ?? 6}
+          delayDuration={tooltipConfig.delayDuration ?? 200}
+          contentClassName={tooltipConfig.className}
+          showArrow={tooltipConfig.showArrow ?? true}
+        >
+          {flagElement}
+        </Tooltip>
+      );
+    }
+
+    return flagElement;
+  },
+);
 
 CountryFlag.displayName = "CountryFlag";
-
-export default CountryFlag;

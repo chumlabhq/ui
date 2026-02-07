@@ -269,7 +269,6 @@ describe("Accordion", () => {
         "true",
       );
 
-      // Clicking should call onValueChange but not change UI until rerender
       await user.click(screen.getByRole("button", { name: "Item 2" }));
       expect(onValueChange).toHaveBeenCalledWith("item-2");
       expect(screen.getByRole("button", { name: "Item 1" })).toHaveAttribute(
@@ -277,7 +276,6 @@ describe("Accordion", () => {
         "true",
       );
 
-      // Rerender with new value
       rerender(
         <Accordion type="single" value="item-2" onValueChange={onValueChange}>
           <AccordionItem value="item-1">
@@ -577,7 +575,6 @@ describe("Accordion", () => {
       trigger1.focus();
       await user.keyboard("{ArrowDown}");
 
-      // Should skip disabled item-2 and focus item-3
       expect(trigger3).toHaveFocus();
     });
   });
@@ -683,8 +680,6 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      // Trigger a state change by re-rendering with the same value
-      // The callbacks are called when isExpanded changes
       vi.advanceTimersByTime(300);
 
       vi.useRealTimers();
@@ -705,7 +700,6 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      // Item is already open, clicking will close it
       await user.click(screen.getByRole("button", { name: "Item 1" }));
       expect(onCloseStart).toHaveBeenCalled();
     });
@@ -750,8 +744,7 @@ describe("Accordion", () => {
       await user.click(screen.getByRole("button", { name: "Item 1" }));
       expect(screen.getByText("Content 1")).toBeInTheDocument();
 
-      await user.click(screen.getByRole("button", { name: "Item 1" })); // Close
-      // Content should still be in DOM for close animation
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
       expect(screen.getByText("Content 1")).toBeInTheDocument();
     });
 
@@ -821,7 +814,6 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      // The item div is the parent of the heading which contains the trigger
       const heading = screen.getByText("Item 1").closest("h3");
       expect(heading?.parentElement).toHaveClass("custom-item");
     });
@@ -863,7 +855,6 @@ describe("Accordion", () => {
 
       await user.click(screen.getByText("Item 1"));
 
-      // Content class is applied to inner content wrapper
       const contentText = screen.getByText("Content 1");
       expect(contentText.closest(".custom-content")).toBeInTheDocument();
     });
@@ -952,9 +943,58 @@ describe("Accordion", () => {
     });
   });
 
+  describe("Print Styles Cleanup", () => {
+    it("injects print styles when expandOnPrint is true", () => {
+      renderAccordion({ type: "single", expandOnPrint: true });
+
+      const styleEl = document.getElementById("kern-accordion-print-styles");
+      expect(styleEl).toBeInTheDocument();
+    });
+
+    it("removes print styles on unmount when expandOnPrint is true", () => {
+      const { unmount } = render(
+        <Accordion type="single" expandOnPrint>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Item 1</AccordionTrigger>
+            <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      expect(document.getElementById("kern-accordion-print-styles")).toBeInTheDocument();
+
+      unmount();
+
+      expect(document.getElementById("kern-accordion-print-styles")).not.toBeInTheDocument();
+    });
+
+    it("keeps print styles when another accordion with expandOnPrint is still mounted", () => {
+      const { unmount: unmount1 } = render(
+        <Accordion type="single" expandOnPrint>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>A1</AccordionTrigger>
+            <AccordionContent>C1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      render(
+        <Accordion type="single" expandOnPrint>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>A2</AccordionTrigger>
+            <AccordionContent>C2</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      unmount1();
+
+      expect(document.getElementById("kern-accordion-print-styles")).toBeInTheDocument();
+    });
+  });
+
   describe("Context Errors", () => {
     it("throws error when AccordionItem used outside Accordion", () => {
-      // Suppress console.error for this test
       const spy = vi.spyOn(console, "error").mockImplementation(() => {});
 
       expect(() => {
@@ -1322,7 +1362,7 @@ describe("Accordion", () => {
       );
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
-      await user.click(screen.getByRole("button", { name: "Item 1" })); // collapse
+      await user.click(screen.getByRole("button", { name: "Item 1" }));
       await user.click(screen.getByRole("button", { name: "Item 2" }));
 
       expect(screen.getByRole("button", { name: "Item 2" })).toHaveAttribute(

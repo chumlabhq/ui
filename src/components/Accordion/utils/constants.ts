@@ -82,9 +82,9 @@ export const VARIANT_CLASSES: Record<AccordionVariant, { root: string; item: str
 export const PRINT_STYLES = `
 @media print {
   [data-accordion-expand-print="true"] [data-state="closed"] {
-    grid-template-rows: 1fr !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
   }
 }
 `;

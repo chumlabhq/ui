@@ -8,7 +8,13 @@ import {
   useEffect,
 } from "react";
 import { useId } from "react";
-import { AccordionContext } from "./utils/context";
+import {
+  AccordionContext,
+  AccordionDispatchContext,
+  AccordionConfigContext,
+  AccordionExpandedContext,
+  createExpandedStore,
+} from "./utils/context";
 import {
   DEFAULT_CLASS_NAMES,
   DEFAULT_HEADING_LEVEL,
@@ -29,7 +35,8 @@ import {
 import { Slot } from "../../utils/Slot";
 import type {
   AccordionProps,
-  AccordionContextValue,
+  AccordionDispatchValue,
+  AccordionConfigValue,
   AccordionClassNames,
   AccordionRef,
   StorageConfig,
@@ -37,14 +44,36 @@ import type {
 import { cn } from "../../utils/cn";
 
 const printStylesId = "kern-accordion-print-styles";
+const PRINT_REF_COUNT_ATTR = "data-ref-count";
 
 function injectPrintStyles() {
   if (typeof document === "undefined") return;
-  if (document.getElementById(printStylesId)) return;
+  const existing = document.getElementById(printStylesId);
+  if (existing) {
+    const count = parseInt(
+      existing.getAttribute(PRINT_REF_COUNT_ATTR) || "0",
+      10,
+    );
+    existing.setAttribute(PRINT_REF_COUNT_ATTR, String(count + 1));
+    return;
+  }
   const style = document.createElement("style");
   style.id = printStylesId;
+  style.setAttribute(PRINT_REF_COUNT_ATTR, "1");
   style.textContent = PRINT_STYLES;
   document.head.appendChild(style);
+}
+
+function removePrintStyles() {
+  if (typeof document === "undefined") return;
+  const el = document.getElementById(printStylesId);
+  if (!el) return;
+  const count = parseInt(el.getAttribute(PRINT_REF_COUNT_ATTR) || "0", 10);
+  if (count <= 1) {
+    el.parentNode?.removeChild(el);
+  } else {
+    el.setAttribute(PRINT_REF_COUNT_ATTR, String(count - 1));
+  }
 }
 
 function getStorageConfig(
@@ -113,6 +142,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
 
   useEffect(() => {
     if (reduceMotion !== "auto") return;
+    if (typeof window === "undefined") return;
 
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const handler = (e: MediaQueryListEvent) =>
@@ -124,13 +154,14 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   useEffect(() => {
     if (expandOnPrint) {
       injectPrintStyles();
+      return () => removePrintStyles();
     }
   }, [expandOnPrint]);
 
   const effectiveReduceMotion =
     reduceMotion === "auto" ? prefersReducedMotion : reduceMotion;
 
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV !== "production") {
     if (isControlled && onValueChange === undefined) {
       console.warn(
         "Accordion: A controlled component requires an `onValueChange` handler.",
@@ -151,8 +182,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
           const values = storageConfig.deserialize!(stored);
           return new Set(values);
         }
-      } catch {
-        // Ignore storage errors
+      } catch (_) {
+        void _;
       }
     }
 
@@ -167,6 +198,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const [internalValue, setInternalValue] =
     useState<Set<string>>(getInitialValue);
   const [itemCount, setItemCount] = useState(0);
+  const [pendingItem, setPendingItem] = useState<string | null>(null);
 
   useEffect(() => {
     if (storageConfig && !isControlled) {
@@ -176,8 +208,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
           storageConfig.key,
           storageConfig.serialize!(values),
         );
-      } catch {
-        // Ignore storage errors
+      } catch (_) {
+        void _;
       }
     }
   }, [internalValue, storageConfig, isControlled]);
@@ -189,6 +221,11 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     }
     return internalValue;
   }, [isControlled, controlledValue, internalValue]);
+
+  const expandedStoreRef = useRef(createExpandedStore(expandedValues));
+  useEffect(() => {
+    expandedStoreRef.current.setValues(expandedValues);
+  }, [expandedValues]);
 
   const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
   const itemOrderRef = useRef<Map<string, number>>(new Map());
@@ -408,16 +445,10 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
           fireCallback(newSet, value, isCurrentlyExpanded);
         }
       } else {
-        let didChange = false;
-        let computedSet: Set<string> = internalValue;
-        setInternalValue((prev) => {
-          const newSet = computeNewValue(prev);
-          didChange = newSet !== prev;
-          computedSet = newSet;
-          return newSet;
-        });
-        if (didChange) {
-          fireCallback(computedSet, value, isCurrentlyExpanded);
+        const newSet = computeNewValue(internalValue);
+        if (newSet !== internalValue) {
+          setInternalValue(newSet);
+          fireCallback(newSet, value, isCurrentlyExpanded);
         }
       }
     },
@@ -432,18 +463,37 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     ],
   );
 
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   const toggleItem = useCallback(
     (value: string) => {
       const isCurrentlyExpanded = expandedValues.has(value);
 
       if (isCurrentlyExpanded && preventClose) {
         const result = preventClose(value);
-        if (result && typeof (result as Promise<boolean>).then === "function") {
-          (result as Promise<boolean>).then((shouldPrevent) => {
-            if (!shouldPrevent) {
-              performToggle(value, isCurrentlyExpanded);
-            }
-          });
+        if (result instanceof Promise) {
+          setPendingItem(value);
+          result
+            .then((shouldPrevent) => {
+              if (mountedRef.current) {
+                setPendingItem(null);
+                if (!shouldPrevent) {
+                  performToggle(value, isCurrentlyExpanded);
+                }
+              }
+            })
+            .catch(() => {
+              if (mountedRef.current) {
+                setPendingItem(null);
+              }
+            });
           return;
         }
         if (result) return;
@@ -463,26 +513,25 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
       root:
         classNames.root ??
         (unstyled ? "" : cn(baseClasses.root, variantClasses.root)),
-      item:
-        classNames.item ?? (unstyled ? "" : variantClasses.item),
+      item: classNames.item ?? (unstyled ? "" : variantClasses.item),
       trigger:
         classNames.trigger ??
         (unstyled
           ? ""
-          : cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger)),
+          : cn(
+              baseClasses.trigger,
+              sizeClasses.trigger,
+              variantClasses.trigger,
+            )),
       content:
         classNames.content ??
-        (unstyled
-          ? ""
-          : cn(baseClasses.content, sizeClasses.content)),
+        (unstyled ? "" : cn(baseClasses.content, sizeClasses.content)),
       icon:
         classNames.icon ??
         (unstyled ? "" : cn(baseClasses.icon, sizeClasses.icon)),
       subtitle:
         classNames.subtitle ??
-        (unstyled
-          ? ""
-          : cn(baseClasses.subtitle, sizeClasses.subtitle)),
+        (unstyled ? "" : cn(baseClasses.subtitle, sizeClasses.subtitle)),
       triggerLeft: classNames.triggerLeft ?? baseClasses.triggerLeft,
       triggerRight: classNames.triggerRight ?? baseClasses.triggerRight,
       contentInner: classNames.contentInner ?? baseClasses.contentInner,
@@ -571,14 +620,12 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
             newValues,
           );
         } else {
-          setInternalValue((prev) => {
-            const newSet = new Set(prev);
-            newSet.add(value);
-            (onValueChange as ((value: string[]) => void) | undefined)?.(
-              Array.from(newSet),
-            );
-            return newSet;
-          });
+          const newSet = new Set(expandedValues);
+          newSet.add(value);
+          setInternalValue(newSet);
+          (onValueChange as ((value: string[]) => void) | undefined)?.(
+            Array.from(newSet),
+          );
         }
       }
     },
@@ -606,14 +653,12 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
             newValues,
           );
         } else {
-          setInternalValue((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(value);
-            (onValueChange as ((value: string[]) => void) | undefined)?.(
-              Array.from(newSet),
-            );
-            return newSet;
-          });
+          const newSet = new Set(expandedValues);
+          newSet.delete(value);
+          setInternalValue(newSet);
+          (onValueChange as ((value: string[]) => void) | undefined)?.(
+            Array.from(newSet),
+          );
         }
       }
     },
@@ -661,59 +706,68 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     ],
   );
 
-  const contextValue: AccordionContextValue = useMemo(
+  const dispatchValue: AccordionDispatchValue = useMemo(
     () => ({
-      type,
-      orientation,
-      dir,
-      disabled,
-      collapsible,
-      loop,
-      classNames: mergedClassNames,
-      headingLevel,
-      expandedValues,
       toggleItem,
       registerItem,
       unregisterItem,
       focusItem,
       focusItemByValue,
-      accordionId,
-      size,
-      variant,
-      animationEasing,
-      animationDuration: effectiveReduceMotion ? 0 : animationDuration,
+    }),
+    [toggleItem, registerItem, unregisterItem, focusItem, focusItemByValue],
+  );
+
+  const effectiveDuration = effectiveReduceMotion ? 0 : animationDuration;
+
+  const configValue: AccordionConfigValue = useMemo(
+    () => ({
+      orientation,
+      dir,
+      classNames: mergedClassNames,
+      headingLevel,
       reduceMotion: effectiveReduceMotion,
       unstyled,
+      accordionId,
+      disabled,
+      size,
+      variant,
+      animationDuration: effectiveDuration,
+      animationEasing,
+    }),
+    [
+      orientation,
+      dir,
+      mergedClassNames,
+      headingLevel,
+      effectiveReduceMotion,
+      unstyled,
+      accordionId,
+      disabled,
+      size,
+      variant,
+      effectiveDuration,
+      animationEasing,
+    ],
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      type,
+      collapsible,
+      loop,
       itemCount,
-      expandedCount: expandedValues.size,
       announceExpanded,
       maxExpanded,
+      pendingItem,
     }),
     [
       type,
-      orientation,
-      dir,
-      disabled,
       collapsible,
       loop,
-      mergedClassNames,
-      headingLevel,
-      expandedValues,
-      toggleItem,
-      registerItem,
-      unregisterItem,
-      focusItem,
-      focusItemByValue,
-      accordionId,
-      size,
-      variant,
-      animationEasing,
-      animationDuration,
-      effectiveReduceMotion,
-      unstyled,
       itemCount,
       announceExpanded,
       maxExpanded,
+      pendingItem,
     ],
   );
 
@@ -730,47 +784,53 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     [onKeyDown],
   );
 
-  return (
-    <AccordionContext.Provider value={contextValue}>
-      <Comp
-        ref={elementRef}
-        id={accordionId}
-        className={cn(mergedClassNames.root, className) || undefined}
-        data-orientation={orientation}
-        data-state={hasExpanded ? "has-expanded" : "all-closed"}
-        data-type={type}
-        data-size={size}
-        data-variant={variant}
-        data-accordion-expand-print={expandOnPrint || undefined}
-        dir={dir}
-        aria-label={ariaLabel}
-        aria-busy={ariaBusy}
-        onKeyDown={onKeyDown ? handleKeyDown : undefined}
-        {...rest}
-      >
-        {children}
-        {announceExpanded && (
-          <div
-            ref={announcerRef}
-            role="status"
-            aria-live={ariaLive ?? "polite"}
-            aria-atomic="true"
-            className="sr-only"
-            style={{
-              position: "absolute",
-              width: 1,
-              height: 1,
-              padding: 0,
-              margin: -1,
-              overflow: "hidden",
-              clip: "rect(0, 0, 0, 0)",
-              whiteSpace: "nowrap",
-              border: 0,
-            }}
-          />
-        )}
-      </Comp>
-    </AccordionContext.Provider>
+    return (
+    <AccordionExpandedContext.Provider value={expandedStoreRef.current}>
+    <AccordionDispatchContext.Provider value={dispatchValue}>
+      <AccordionConfigContext.Provider value={configValue}>
+        <AccordionContext.Provider value={contextValue}>
+          <Comp
+            ref={elementRef}
+            id={accordionId}
+            className={cn(mergedClassNames.root, className) || undefined}
+            data-orientation={orientation}
+            data-state={hasExpanded ? "has-expanded" : "all-closed"}
+            data-type={type}
+            data-size={size}
+            data-variant={variant}
+            data-accordion-expand-print={expandOnPrint || undefined}
+            dir={dir}
+            aria-label={ariaLabel}
+            aria-busy={ariaBusy}
+            onKeyDown={onKeyDown ? handleKeyDown : undefined}
+            {...rest}
+          >
+            {children}
+            {announceExpanded && (
+              <div
+                ref={announcerRef}
+                role="status"
+                aria-live={ariaLive ?? "polite"}
+                aria-atomic="true"
+                className="sr-only"
+                style={{
+                  position: "absolute",
+                  width: 1,
+                  height: 1,
+                  padding: 0,
+                  margin: -1,
+                  overflow: "hidden",
+                  clip: "rect(0, 0, 0, 0)",
+                  whiteSpace: "nowrap",
+                  border: 0,
+                }}
+              />
+            )}
+          </Comp>
+        </AccordionContext.Provider>
+      </AccordionConfigContext.Provider>
+    </AccordionDispatchContext.Provider>
+    </AccordionExpandedContext.Provider>
   );
 });
 

@@ -1,6 +1,6 @@
 export { default as Toast } from "./Toast";
-export { ToastProvider } from "./ToastProvider";
-export { useToast } from "./useToast";
+export { ToastProvider } from "./components/ToastProvider";
+export { useToast } from "./utils/context";
 export type {
   ToastType,
   ToastPosition,
@@ -8,4 +8,4 @@ export type {
   ToastProps,
   ToastProviderProps,
   ToastContextValue,
-} from "./types";
+} from "./utils/types";

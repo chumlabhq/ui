@@ -1,6 +1,6 @@
-import { forwardRef, useRef, useEffect, useCallback, useState, memo } from "react";
-import { useAccordionContext, useAccordionItemContext } from "../utils/context";
-import { Slot } from "../../../utils/Slot";
+import { forwardRef, useRef, useEffect, useState, memo } from "react";
+import { useAccordionConfig, useAccordionItemContext } from "../utils/context";
+import { Slot, mergeRefs } from "../../../utils/Slot";
 import type { AccordionContentProps } from "../utils/types";
 import { cn } from "../../../utils/cn";
 
@@ -21,20 +21,24 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       unmountOnClose = false,
       ...rest
     },
-    ref
+    ref,
   ) => {
-    const accordion = useAccordionContext();
+    const config = useAccordionConfig();
     const item = useAccordionItemContext();
 
-    const animationDuration = propAnimationDuration ?? accordion.animationDuration;
-    const animationEasing = propAnimationEasing ?? accordion.animationEasing;
-    const effectiveDuration = accordion.reduceMotion ? 0 : animationDuration;
+    const animationDuration =
+      propAnimationDuration ?? config.animationDuration;
+    const animationEasing = propAnimationEasing ?? config.animationEasing;
+    const effectiveDuration = config.reduceMotion ? 0 : animationDuration;
 
     const [showExpanded, setShowExpanded] = useState(false);
     const [hasBeenOpened, setHasBeenOpened] = useState(item.isExpanded);
     const [prevIsExpanded, setPrevIsExpanded] = useState(item.isExpanded);
     const [isClosing, setIsClosing] = useState(false);
-    const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [measuredHeight, setMeasuredHeight] = useState<number>(0);
+    const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+      null,
+    );
     const rafRef = useRef<number | null>(null);
 
     if (item.isExpanded !== prevIsExpanded) {
@@ -48,12 +52,19 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       }
     }
 
+    const contentNodeRef = useRef<HTMLDivElement>(null);
+
+    const measureHeight = () => {
+      if (contentNodeRef.current) {
+        setMeasuredHeight(contentNodeRef.current.scrollHeight);
+      }
+    };
+
     useEffect(() => {
       if (item.isExpanded) {
+        measureHeight();
         rafRef.current = requestAnimationFrame(() => {
-          rafRef.current = requestAnimationFrame(() => {
-            setShowExpanded(true);
-          });
+          setShowExpanded(true);
         });
       }
 
@@ -65,13 +76,29 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     }, [item.isExpanded]);
 
     useEffect(() => {
+      if (!item.isExpanded || !contentNodeRef.current) return;
+      if (typeof ResizeObserver === "undefined") return;
+
+      const observer = new ResizeObserver(() => {
+        if (item.isExpanded && contentNodeRef.current) {
+          setMeasuredHeight(contentNodeRef.current.scrollHeight);
+        }
+      });
+      observer.observe(contentNodeRef.current);
+      return () => observer.disconnect();
+    }, [item.isExpanded]);
+
+    useEffect(() => {
       if (animationTimerRef.current) {
         clearTimeout(animationTimerRef.current);
       }
 
       if (item.isExpanded) {
         onOpenStart?.();
-        animationTimerRef.current = setTimeout(() => onOpenEnd?.(), effectiveDuration);
+        animationTimerRef.current = setTimeout(
+          () => onOpenEnd?.(),
+          effectiveDuration,
+        );
       } else {
         onCloseStart?.();
         animationTimerRef.current = setTimeout(() => {
@@ -85,18 +112,16 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
           clearTimeout(animationTimerRef.current);
         }
       };
-    }, [item.isExpanded, effectiveDuration, onOpenStart, onOpenEnd, onCloseStart, onCloseEnd]);
+    }, [
+      item.isExpanded,
+      effectiveDuration,
+      onOpenStart,
+      onOpenEnd,
+      onCloseStart,
+      onCloseEnd,
+    ]);
 
-    const combinedRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [ref]
-    );
+    const combinedRef = mergeRefs(ref, contentNodeRef);
 
     const shouldRender = (() => {
       if (forceMount) return true;
@@ -111,15 +136,13 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       return null;
     }
 
-    const contentClassName = cn(
-      "grid transition-all",
-      showExpanded
-        ? "grid-rows-[1fr] opacity-100 visible" 
-        : "grid-rows-[0fr] opacity-0 invisible",
-      className
-    );
+    const contentClassName = cn("overflow-hidden transition-all", className);
 
     const contentStyle: React.CSSProperties = {
+      maxHeight: showExpanded ? measuredHeight : 0,
+      opacity: showExpanded ? 1 : 0,
+      visibility: showExpanded ? "visible" : undefined,
+      overflow: showExpanded ? undefined : "hidden",
       transitionDuration: `${effectiveDuration}ms`,
       transitionTimingFunction: animationEasing,
     };
@@ -135,21 +158,28 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
         aria-hidden={!item.isExpanded}
         data-state={item.isExpanded ? "open" : "closed"}
         data-disabled={item.disabled || undefined}
-        data-orientation={accordion.orientation}
+        data-orientation={config.orientation}
         className={contentClassName || undefined}
         style={contentStyle}
         {...rest}
       >
-        {asChild ? children : (
-          <div className="overflow-hidden">
-            <div className={cn(accordion.classNames.content, accordion.classNames.contentInner) || undefined}>
-              {children}
-            </div>
+        {asChild ? (
+          children
+        ) : (
+          <div
+            className={
+              cn(
+                config.classNames.content,
+                config.classNames.contentInner,
+              ) || undefined
+            }
+          >
+            {children}
           </div>
         )}
       </Comp>
     );
-  }
+  },
 );
 
 AccordionContent.displayName = "AccordionContent";

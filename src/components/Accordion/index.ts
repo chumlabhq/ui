@@ -56,10 +56,13 @@ export {
 export {
   AccordionContext,
   AccordionItemContext,
+  AccordionExpandedContext,
   useAccordionContext,
   useAccordionItemContext,
   useAccordionItem,
   useAccordionState,
+  useIsItemExpanded,
+  useExpandedStore,
 } from "./utils/context";
 
 export { Slot } from "../../utils/Slot";

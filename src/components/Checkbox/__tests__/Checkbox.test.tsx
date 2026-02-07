@@ -35,8 +35,8 @@ describe("Checkbox", () => {
       expect(screen.getByText("*")).toBeInTheDocument();
     });
 
-    it("applies custom className to container div", () => {
-      render(<Checkbox className="custom-class" />);
+    it("applies custom containerClassName to container div", () => {
+      render(<Checkbox containerClassName="custom-class" />);
 
       const container = screen.getByRole("checkbox").closest("label")?.parentElement;
       expect(container).toHaveClass("custom-class");
@@ -350,8 +350,8 @@ describe("Checkbox", () => {
         </>
       );
 
-      await user.tab(); // Focus checkbox
-      await user.tab(); // Focus button
+      await user.tab();
+      await user.tab();
 
       expect(onBlur).toHaveBeenCalledTimes(1);
     });
@@ -361,7 +361,6 @@ describe("Checkbox", () => {
     it("provides accessible name via label", () => {
       render(<Checkbox label="Accept terms" id="terms" />);
 
-      // Asterisk is aria-hidden so not included in accessible name
       expect(screen.getByRole("checkbox")).toHaveAccessibleName("Accept terms");
     });
 
@@ -488,10 +487,19 @@ describe("Checkbox", () => {
       expect(screen.getByRole("checkbox")).toHaveAttribute("id", "custom-id");
     });
 
-    it("uses name as fallback for id", () => {
+    it("generates id when only name is provided", () => {
       render(<Checkbox name="checkbox-name" />);
 
-      expect(screen.getByRole("checkbox")).toHaveAttribute("id", "checkbox-name");
+      const checkbox = screen.getByRole("checkbox");
+      expect(checkbox).toHaveAttribute("id");
+      expect(checkbox.id).toBeTruthy();
+    });
+
+    it("does not use name as id fallback", () => {
+      render(<Checkbox name="checkbox-name" />);
+
+      const checkbox = screen.getByRole("checkbox");
+      expect(checkbox.id).not.toBe("checkbox-name");
     });
 
     it("generates id when neither id nor name provided", () => {
@@ -506,6 +514,28 @@ describe("Checkbox", () => {
       render(<Checkbox name="acceptTerms" />);
 
       expect(screen.getByRole("checkbox")).toHaveAttribute("name", "acceptTerms");
+    });
+  });
+
+  describe("className Prop", () => {
+    it("applies className to root container", () => {
+      render(<Checkbox className="custom-root" />);
+
+      const container = document.querySelector(".custom-root");
+      expect(container).toBeInTheDocument();
+      expect(screen.getByRole("checkbox")).not.toHaveClass("custom-root");
+    });
+
+    it("className applies after containerClassName for override", () => {
+      render(
+        <Checkbox
+          containerClassName="bg-red-500"
+          className="bg-blue-500"
+        />
+      );
+
+      const container = document.querySelector(".bg-blue-500");
+      expect(container).toBeInTheDocument();
     });
   });
 

@@ -4,4 +4,4 @@ export type {
   OtpInputLabelProps,
   OtpInputStyleProps,
   OtpInputRenderProps,
-} from "./types";
+} from "./utils/types";

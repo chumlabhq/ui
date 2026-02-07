@@ -133,32 +133,37 @@ export interface AccordionContentProps extends HTMLAttributes<HTMLDivElement>, A
   unmountOnClose?: boolean;
 }
 
-export interface AccordionContextValue {
-  type: AccordionType;
-  orientation: Orientation;
-  dir: Direction;
-  disabled: boolean;
-  collapsible: boolean;
-  loop: boolean;
-  classNames: AccordionClassNames;
-  headingLevel: 1 | 2 | 3 | 4 | 5 | 6;
-  expandedValues: Set<string>;
+export interface AccordionDispatchValue {
   toggleItem: (value: string) => void;
   registerItem: (value: string, element: HTMLButtonElement | null) => void;
   unregisterItem: (value: string) => void;
   focusItem: (direction: "next" | "prev" | "first" | "last") => void;
   focusItemByValue: (value: string) => void;
-  accordionId: string;
-  size: AccordionSize;
-  variant: AccordionVariant;
-  animationEasing: AnimationEasing;
-  animationDuration: number;
+}
+
+export interface AccordionConfigValue {
+  orientation: Orientation;
+  dir: Direction;
+  classNames: AccordionClassNames;
+  headingLevel: 1 | 2 | 3 | 4 | 5 | 6;
   reduceMotion: boolean;
   unstyled: boolean;
+  accordionId: string;
+  disabled: boolean;
+  size: AccordionSize;
+  variant: AccordionVariant;
+  animationDuration: number;
+  animationEasing: AnimationEasing;
+}
+
+export interface AccordionContextValue {
+  type: AccordionType;
+  collapsible: boolean;
+  loop: boolean;
   itemCount: number;
-  expandedCount: number;
   announceExpanded: boolean;
   maxExpanded?: number;
+  pendingItem: string | null;
 }
 
 export interface AccordionItemContextValue {

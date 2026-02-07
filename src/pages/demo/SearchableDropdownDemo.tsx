@@ -700,7 +700,7 @@ const SearchableDropdownDemo = () => {
                 <td className="py-2 text-gray-600">Show error state</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">isLoading</td>
+                <td className="py-2 pr-4 font-mono text-blue-600">loading</td>
                 <td className="py-2 pr-4 text-gray-600">boolean</td>
                 <td className="py-2 pr-4 text-gray-500">false</td>
                 <td className="py-2 text-gray-600">External loading state</td>

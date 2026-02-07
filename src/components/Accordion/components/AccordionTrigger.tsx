@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef, useCallback, type KeyboardEvent } from "react";
-import { useAccordionContext, useAccordionItemContext } from "../utils/context";
+import { useAccordionConfig, useAccordionDispatch, useAccordionItemContext } from "../utils/context";
 import { ChevronDownIcon } from "../utils/icons";
 import { Slot } from "../../../utils/Slot";
 import type { AccordionTriggerProps } from "../utils/types";
@@ -24,11 +24,12 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     },
     ref
   ) => {
-    const accordion = useAccordionContext();
+    const config = useAccordionConfig();
+    const dispatch = useAccordionDispatch();
     const item = useAccordionItemContext();
     const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-    const { registerItem, unregisterItem } = accordion;
+    const { registerItem, unregisterItem } = dispatch;
 
     useEffect(() => {
       const button = buttonRef.current;
@@ -51,13 +52,13 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const handleClick = useCallback(() => {
       if (!item.disabled) {
-        accordion.toggleItem(item.value);
+        dispatch.toggleItem(item.value);
       }
-    }, [item.disabled, item.value, accordion]);
+    }, [item.disabled, item.value, dispatch]);
 
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLButtonElement>) => {
-      const isVertical = accordion.orientation === "vertical";
-      const isRtl = accordion.dir === "rtl";
+      const isVertical = config.orientation === "vertical";
+      const isRtl = config.dir === "rtl";
 
       let nextKey: string;
       let prevKey: string;
@@ -73,30 +74,30 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       switch (event.key) {
         case nextKey:
           event.preventDefault();
-          accordion.focusItem("next");
+          dispatch.focusItem("next");
           break;
         case prevKey:
           event.preventDefault();
-          accordion.focusItem("prev");
+          dispatch.focusItem("prev");
           break;
         case "Home":
           event.preventDefault();
-          accordion.focusItem("first");
+          dispatch.focusItem("first");
           break;
         case "End":
           event.preventDefault();
-          accordion.focusItem("last");
+          dispatch.focusItem("last");
           break;
       }
-    }, [accordion]);
+    }, [config.orientation, config.dir, dispatch]);
 
     const getIconAnimationClass = useCallback(() => {
-      if (iconAnimation === "none" || accordion.reduceMotion) return "";
+      if (iconAnimation === "none" || config.reduceMotion) return "";
       if (iconAnimation === "rotate") {
         return item.isExpanded ? "rotate-180" : "";
       }
       return "";
-    }, [iconAnimation, accordion.reduceMotion, item.isExpanded]);
+    }, [iconAnimation, config.reduceMotion, item.isExpanded]);
 
     const renderIcon = () => {
       if (iconPosition === "none" || hideIcon) return null;
@@ -115,7 +116,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
       return (
         <ChevronDownIcon
-          className={cn(accordion.classNames.icon, getIconAnimationClass()) || undefined}
+          className={cn(config.classNames.icon, getIconAnimationClass()) || undefined}
         />
       );
     };
@@ -129,13 +130,13 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const dataState = item.isExpanded ? "open" : "closed";
 
-    const HeadingTag = `h${accordion.headingLevel}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    const HeadingTag = `h${config.headingLevel}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
     const triggerProps = {
       id: item.triggerId,
       type: "button" as const,
       className: cn(
-        accordion.classNames.trigger,
+        config.classNames.trigger,
         className,
         iconPosition === "left" && "flex-row-reverse justify-end"
       ) || undefined,
@@ -147,7 +148,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       disabled: item.disabled,
       "data-state": dataState,
       "data-disabled": item.disabled || undefined,
-      "data-orientation": accordion.orientation,
+      "data-orientation": config.orientation,
       ...rest,
     };
 
@@ -158,7 +159,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     ) : (
       <>
         {leftSlot && (
-          <span className={accordion.classNames.triggerLeft} aria-hidden="true">
+          <span className={config.classNames.triggerLeft} aria-hidden="true">
             {leftSlot}
           </span>
         )}
@@ -166,14 +167,14 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         <span className="flex-1 text-left">
           <span className="block">{children}</span>
           {subtitle && (
-            <span className={cn("block", accordion.classNames.subtitle)}>
+            <span className={cn("block", config.classNames.subtitle)}>
               {subtitle}
             </span>
           )}
         </span>
         {iconPosition === "right" && iconElement}
         {rightSlot && (
-          <span className={accordion.classNames.triggerRight} aria-hidden="true">
+          <span className={config.classNames.triggerRight} aria-hidden="true">
             {rightSlot}
           </span>
         )}

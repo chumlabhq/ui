@@ -4,4 +4,4 @@ export type {
   TooltipShadow,
   TooltipShadowPreset,
   TooltipWordWrap,
-} from "./types";
+} from "./utils/types";

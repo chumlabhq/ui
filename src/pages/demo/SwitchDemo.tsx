@@ -1,73 +1,7 @@
 import { useState, useRef } from "react";
 import { Switch } from "../../components/Switch";
 import { useTheme } from "./ThemeContext";
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({
-  title,
-  description,
-  children,
-  isDarkMode,
-}) => (
-  <section className="space-y-4">
-    <div>
-      <h2
-        className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}
-      >
-        {title}
-      </h2>
-      {description && (
-        <p
-          className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-        >
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({
-  children,
-  isDarkMode,
-  className = "",
-}) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6">{children}</div>
-  </div>
-);
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
 const CheckIcon = ({ isDarkMode }: { isDarkMode: boolean }) => (
   <svg
@@ -403,6 +337,46 @@ const SwitchDemo = () => {
         </Section>
 
         <Section
+          title="classNames Record (Alternative)"
+          description="Use the classNames record prop as a cleaner alternative to individual className props."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Switch
+              label="Using classNames record"
+              description="All styles via a single classNames prop"
+              defaultChecked
+              classNames={{
+                root: "",
+                labelContainer: "flex flex-col",
+                label: `text-sm font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                description: `text-xs ${isDarkMode ? "text-gray-400" : "text-gray-500"}`,
+                tracker: `h-6 w-11 rounded-full transition-colors duration-200`,
+                checkedTracker: isDarkMode ? "bg-blue-500" : "bg-blue-600",
+                uncheckedTracker: isDarkMode ? "bg-gray-600" : "bg-gray-200",
+                thumb: `h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200`,
+                checkedThumb: "translate-x-5",
+                uncheckedThumb: "translate-x-0.5",
+              }}
+            />
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Switch
+  label="Styled via classNames"
+  classNames={{
+    tracker: "h-6 w-11 rounded-full",
+    checkedTracker: "bg-blue-600",
+    uncheckedTracker: "bg-gray-200",
+    thumb: "h-5 w-5 rounded-full bg-white shadow",
+    checkedThumb: "translate-x-5",
+    uncheckedThumb: "translate-x-0.5",
+  }}
+/>`}
+          />
+        </Section>
+
+        <Section
           title="Custom Colors"
           description="Customize colors using checkedTrackerClassName and uncheckedTrackerClassName props."
           isDarkMode={isDarkMode}
@@ -486,6 +460,75 @@ const SwitchDemo = () => {
               />
             </div>
           </DemoWrapper>
+        </Section>
+
+        <Section
+          title="CSS Custom Properties (Theming)"
+          description="Use CSS custom properties to theme switches globally or per-instance via inline styles."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-4">
+              <div
+                style={{
+                  ["--switch-tracker-checked-bg" as string]: "#7c3aed",
+                  ["--switch-tracker-unchecked-bg" as string]: "#ddd6fe",
+                  ["--switch-thumb-bg" as string]: "#fff",
+                  ["--switch-focus-ring" as string]: "#7c3aed",
+                }}
+              >
+                <Switch
+                  label="Purple theme via CSS vars"
+                  checked={customSwitch}
+                  onCheckedChange={setCustomSwitch}
+                  labelClassName={`text-sm font-medium ${isDarkMode ? "text-purple-300" : "text-purple-700"}`}
+                  trackerClassName={classes.tracker}
+                  thumbClassName={classes.thumb}
+                  checkedThumbClassName={classes.checkedThumb}
+                  uncheckedThumbClassName={classes.uncheckedThumb}
+                />
+              </div>
+              <div
+                style={{
+                  ["--switch-tracker-checked-bg" as string]: "#059669",
+                  ["--switch-tracker-unchecked-bg" as string]: "#d1fae5",
+                  ["--switch-thumb-bg" as string]: "#fff",
+                  ["--switch-focus-ring" as string]: "#059669",
+                }}
+              >
+                <Switch
+                  label="Green theme via CSS vars"
+                  checked={!customSwitch}
+                  onCheckedChange={(checked) => setCustomSwitch(!checked)}
+                  labelClassName={`text-sm font-medium ${isDarkMode ? "text-green-300" : "text-green-700"}`}
+                  trackerClassName={classes.tracker}
+                  thumbClassName={classes.thumb}
+                  checkedThumbClassName={classes.checkedThumb}
+                  uncheckedThumbClassName={classes.uncheckedThumb}
+                />
+              </div>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<div style={{
+  "--switch-tracker-checked-bg": "#7c3aed",
+  "--switch-tracker-unchecked-bg": "#ddd6fe",
+  "--switch-thumb-bg": "#fff",
+  "--switch-focus-ring": "#7c3aed",
+}}>
+  <Switch label="Purple theme" checked={value} onCheckedChange={setValue} />
+</div>
+
+Available CSS custom properties:
+  --switch-tracker-checked-bg    (default: #2563eb)
+  --switch-tracker-unchecked-bg  (default: #d1d5db)
+  --switch-thumb-bg              (default: white)
+  --switch-focus-ring            (default: #3b82f6)
+  --switch-thumb-size            (default: 1rem)
+  --switch-tracker-width         (default: 2.25rem)
+  --switch-tracker-height        (default: 1.25rem)`}
+          />
         </Section>
 
         <Section
@@ -719,6 +762,19 @@ const SwitchDemo = () => {
         </Section>
       </div>
 
+      <Section
+        title="Data Attributes"
+        description="The Switch component applies data attributes for CSS-based styling."
+        isDarkMode={isDarkMode}
+      >
+        <CodeBlock
+          isDarkMode={isDarkMode}
+          code={`data-disabled="true"   // Container + button: when disabled
+data-checked="true"    // Container + button: when checked
+data-error="true"      // Container: when in error state`}
+        />
+      </Section>
+
       <div className="space-y-8">
         <h2
           className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
@@ -821,9 +877,165 @@ const SwitchDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the error message element</td>
                 </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">id</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Custom ID for the switch (auto-generated if not provided)</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the root container element</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">checkedIcon</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Icon displayed inside the thumb when checked</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">uncheckedIcon</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Icon displayed inside the thumb when unchecked</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">transitionDuration</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Custom transition duration in milliseconds</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">transitionTimingFunction</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Custom CSS timing function for transitions</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">renderLabel</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(props: SwitchRenderProps) =&gt; ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Render function for custom label content</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">renderDescription</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(props: SwitchRenderProps) =&gt; ReactNode</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>-</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Render function for custom description content</td>
+                </tr>
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            Styling Props
+          </h3>
+          <div className="overflow-x-auto">
+            <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
+              <thead>
+                <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
+                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
+                  <th className="text-left py-3 font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">classNames</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>SwitchClassNames</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Record of class names for all internal elements (root, tracker, thumb, label, etc.)</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">containerClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the outer container div</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">labelContainerClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the label/description container</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">labelClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the label element</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">disabledLabelClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for label when disabled</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">descriptionClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the description element</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">trackerClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the track/slider element</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">disabledTrackerClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for track when disabled</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">thumbClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the thumb (handle) element</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">checkedTrackerClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for track when checked</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">uncheckedTrackerClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for track when unchecked</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">checkedThumbClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for thumb when checked</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">uncheckedThumbClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for thumb when unchecked</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">errorClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSS class for the error message element</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            Type Definitions
+          </h3>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`type SwitchRenderProps = {
+  checked: boolean;
+  disabled: boolean;
+  switchId: string;
+  descriptionId?: string;
+};`}
+          />
         </div>
       </div>
 
@@ -895,6 +1107,13 @@ const SwitchDemo = () => {
             </li>
           </ul>
         </div>
+      </div>
+
+      <div className={`p-4 rounded-lg border ${isDarkMode ? "border-blue-800 bg-blue-950/30 text-blue-300" : "border-blue-200 bg-blue-50 text-blue-800"}`}>
+        <p className="text-sm">
+          <strong>Note:</strong> The Switch component accepts all standard HTML button attributes (except onClick, role, aria-checked, type, id).
+          These are spread onto the underlying button element via the rest operator.
+        </p>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ export interface TableProps<TData> {
   data?: TData[];
   COLUMNS?: ColumnDef<TData>[];
   COLUMNS_DATA?: TData[];
-  isLoading?: boolean;
+  loading?: boolean;
   showHeader?: boolean;
   tableHeader?: boolean;
   pinnedColumns?: string[];

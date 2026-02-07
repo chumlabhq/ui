@@ -1,76 +1,8 @@
 import { useState, useRef } from "react";
 import { Input, InputLabel } from "../../components/Input";
 import { useTheme } from "./ThemeContext";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// ICONS
-// ============================================================================
 
 const SearchIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -200,9 +132,6 @@ const LockIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ============================================================================
-// MAIN INPUT DEMO COMPONENT
-// ============================================================================
 
 const InputDemo = () => {
   const { isDarkMode } = useTheme();
@@ -210,7 +139,6 @@ const InputDemo = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  // Dark mode aware class names
   const getInputClassNames = () => ({
     input: `w-full bg-transparent outline-none ${
       isDarkMode
@@ -244,9 +172,6 @@ const InputDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Input
@@ -256,7 +181,6 @@ const InputDemo = () => {
           loading states, error handling, and extensive customization through className props.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -268,17 +192,11 @@ const InputDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Usage */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Input"
           description="A simple text input with no additional props."
@@ -288,16 +206,13 @@ const InputDemo = () => {
             <div className="w-full max-w-md">
               <Input
                 placeholder="Enter text..."
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
               />
             </div>
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Label */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Label"
           description="Use the label prop to add an accessible label above the input."
@@ -309,7 +224,7 @@ const InputDemo = () => {
                 label="Email"
                 placeholder="you@example.com"
                 type="email"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -317,7 +232,7 @@ const InputDemo = () => {
               <Input
                 label="Username"
                 placeholder="Enter username"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -326,9 +241,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Required Fields */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Required Fields"
           description="Add required prop to show an asterisk (*) indicator and set aria-required."
@@ -340,7 +252,7 @@ const InputDemo = () => {
                 label="Full Name"
                 placeholder="John Doe"
                 required
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -350,7 +262,7 @@ const InputDemo = () => {
                 placeholder="you@example.com"
                 type="email"
                 required
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -359,9 +271,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Icons"
           description="Add leading and trailing icons using the leadingIcon and trailingIcon props."
@@ -376,7 +285,7 @@ const InputDemo = () => {
                 <Input
                   placeholder="Search..."
                   leadingIcon={<SearchIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -387,7 +296,7 @@ const InputDemo = () => {
                 <Input
                   placeholder="Enter amount"
                   trailingIcon={<ArrowRightIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -399,7 +308,7 @@ const InputDemo = () => {
                   placeholder="Search and submit"
                   leadingIcon={<SearchIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
                   trailingIcon={<ArrowRightIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -407,9 +316,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Clickable Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Clickable Icons"
           description="Make icons interactive with onLeadingIconClick and onTrailingIconClick. Use leadingIconLabel and trailingIconLabel for accessibility."
@@ -431,7 +337,7 @@ const InputDemo = () => {
                   trailingIcon={inputValue ? <CloseIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} /> : undefined}
                   onTrailingIconClick={() => setInputValue("")}
                   trailingIconLabel="Clear input"
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -450,7 +356,7 @@ const InputDemo = () => {
                   }
                   onTrailingIconClick={() => setShowPassword(!showPassword)}
                   trailingIconLabel={showPassword ? "Hide password" : "Show password"}
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -458,9 +364,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Error State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Error State"
           description="Use error and errorMessage props to display validation errors."
@@ -474,7 +377,7 @@ const InputDemo = () => {
                 value="invalid-email"
                 error
                 errorMessage="Please enter a valid email address"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapperError}
                 labelClassName={classes.label}
                 errorClassName={classes.error}
@@ -494,7 +397,7 @@ const InputDemo = () => {
                     Password must be at least 8 characters
                   </span>
                 }
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapperError}
                 labelClassName={classes.label}
                 errorClassName={classes.error}
@@ -504,12 +407,9 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Loading State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Loading State"
-          description="Use isLoading to show a loader and disable the input. Customize with loader and loaderSize props."
+          description="Use loading to show a loader and disable the input. Customize with loader and loaderSize props."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -520,8 +420,8 @@ const InputDemo = () => {
                 </p>
                 <Input
                   placeholder="Loading..."
-                  isLoading
-                  className={classes.input}
+                  loading
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -531,9 +431,9 @@ const InputDemo = () => {
                 </p>
                 <Input
                   placeholder="Loading..."
-                  isLoading
+                  loading
                   loaderSize={20}
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -543,13 +443,13 @@ const InputDemo = () => {
                 </p>
                 <Input
                   placeholder="Validating..."
-                  isLoading
+                  loading
                   loader={
                     <span className={`text-xs animate-pulse ${isDarkMode ? "text-blue-400" : "text-blue-500"}`}>
                       Checking...
                     </span>
                   }
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -559,9 +459,9 @@ const InputDemo = () => {
                 </p>
                 <Input
                   placeholder="Searching..."
-                  isLoading
+                  loading
                   leadingIcon={<SearchIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -569,9 +469,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled State"
           description="Disable the input with the disabled prop."
@@ -605,9 +502,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Full Width */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Full Width"
           description="Use fullWidth prop to make the input span the full container width."
@@ -618,14 +512,14 @@ const InputDemo = () => {
               <Input
                 placeholder="Full width input"
                 fullWidth
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
               />
               <Input
                 label="Full width with label"
                 placeholder="Enter your message..."
                 fullWidth
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -634,9 +528,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom ID and Name */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom ID and Name"
           description="Set custom id and name attributes for form handling."
@@ -657,7 +548,7 @@ const InputDemo = () => {
                   name="username"
                   label="Username"
                   placeholder="Enter username"
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                   labelClassName={classes.label}
                   containerClassName={classes.container}
@@ -668,7 +559,7 @@ const InputDemo = () => {
                   label="Email"
                   type="email"
                   placeholder="you@example.com"
-                  className={classes.input}
+                  inputClassName={classes.input}
                   wrapperClassName={classes.wrapper}
                   labelClassName={classes.label}
                   containerClassName={classes.container}
@@ -688,16 +579,13 @@ const InputDemo = () => {
             <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
               <strong>Note:</strong> The input ID is auto-generated if not provided. It uses{" "}
               <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>
-                id || name || useId()
+                id || useId()
               </code>{" "}
               fallback chain.
             </p>
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Ref Forwarding */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Ref Forwarding"
           description="Access the underlying input element using React refs."
@@ -708,7 +596,7 @@ const InputDemo = () => {
               <Input
                 ref={inputRef}
                 placeholder="Click the button to focus me"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
               />
               <div className="flex gap-2">
@@ -747,9 +635,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Different Input Types */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Different Input Types"
           description="The component supports all HTML input types."
@@ -761,7 +646,7 @@ const InputDemo = () => {
                 label="Text"
                 type="text"
                 placeholder="Enter text"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -771,7 +656,7 @@ const InputDemo = () => {
                 type="email"
                 placeholder="you@example.com"
                 leadingIcon={<MailIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -781,7 +666,7 @@ const InputDemo = () => {
                 type="password"
                 placeholder="Enter password"
                 leadingIcon={<LockIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -790,7 +675,7 @@ const InputDemo = () => {
                 label="Number"
                 type="number"
                 placeholder="0"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -799,7 +684,7 @@ const InputDemo = () => {
                 label="Phone"
                 type="tel"
                 placeholder="+1 (555) 000-0000"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -808,7 +693,7 @@ const InputDemo = () => {
                 label="URL"
                 type="url"
                 placeholder="https://example.com"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -816,7 +701,7 @@ const InputDemo = () => {
               <Input
                 label="Date"
                 type="date"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -824,7 +709,7 @@ const InputDemo = () => {
               <Input
                 label="Time"
                 type="time"
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -834,7 +719,7 @@ const InputDemo = () => {
                 type="search"
                 placeholder="Search..."
                 leadingIcon={<SearchIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -843,9 +728,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* InputLabel Standalone */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="InputLabel Standalone"
           description="Use InputLabel separately for custom layouts."
@@ -856,7 +738,7 @@ const InputDemo = () => {
               <div>
                 <InputLabel
                   label="Standalone Label"
-                  inputId="custom-input"
+                  htmlFor="custom-input"
                   className={classes.label}
                 />
                 <div className="mt-1">
@@ -875,7 +757,7 @@ const InputDemo = () => {
               <div>
                 <InputLabel
                   label="Required Field"
-                  inputId="required-input"
+                  htmlFor="required-input"
                   required
                   className={classes.label}
                 />
@@ -887,9 +769,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Styling */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Theme Examples"
           description="Customize the input appearance using className props."
@@ -956,16 +835,15 @@ const InputDemo = () => {
               </div>
               <div>
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Using wrapperFocusClassName
+                  Focus styles via wrapperClassName
                 </p>
                 <Input
                   placeholder="Focus me..."
                   className={`w-full bg-transparent outline-none ${isDarkMode ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`}
-                  wrapperClassName={`px-3 py-2 rounded-lg border gap-2 ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-white"}`}
-                  wrapperFocusClassName={isDarkMode
+                  wrapperClassName={`px-3 py-2 rounded-lg border gap-2 ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-white"} ${isDarkMode
                     ? "focus-within:ring-2 focus-within:ring-purple-400 focus-within:border-purple-400 focus-within:bg-purple-900/20"
                     : "focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 focus-within:bg-purple-50"
-                  }
+                  }`}
                 />
               </div>
               <div>
@@ -986,9 +864,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Data Attributes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Data Attributes"
           description="The Input component applies data attributes for CSS-based styling."
@@ -1048,9 +923,6 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Combined Example */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Login Form Example"
           description="A practical example combining multiple input features."
@@ -1070,7 +942,7 @@ const InputDemo = () => {
                 placeholder="you@example.com"
                 required
                 leadingIcon={<MailIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -1081,7 +953,7 @@ const InputDemo = () => {
                 placeholder="Enter password"
                 required
                 leadingIcon={<LockIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                className={classes.input}
+                inputClassName={classes.input}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -1108,15 +980,11 @@ const InputDemo = () => {
         </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* Input Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Input
@@ -1245,7 +1113,7 @@ const InputDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">isLoading</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">loading</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1281,7 +1149,6 @@ const InputDemo = () => {
           </div>
         </div>
 
-        {/* Styling Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Styling Props
@@ -1300,7 +1167,14 @@ const InputDemo = () => {
                   <td className="py-3 pr-4 font-mono text-blue-500">className</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the input element itself
+                    CSS class for the root container element
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">inputClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    CSS class for the native input element
                   </td>
                 </tr>
                 <tr>
@@ -1315,13 +1189,6 @@ const InputDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     CSS class for the input wrapper (contains icons and input)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">wrapperFocusClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for focus state (use focus-within: prefixed classes)
                   </td>
                 </tr>
                 <tr>
@@ -1343,7 +1210,6 @@ const InputDemo = () => {
           </div>
         </div>
 
-        {/* InputLabel Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             InputLabel
@@ -1376,7 +1242,7 @@ const InputDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputId</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">htmlFor</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1396,7 +1262,6 @@ const InputDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1406,7 +1271,7 @@ const InputDemo = () => {
             code={`interface InputLabelProps {
   label: ReactNode;
   required?: boolean;
-  inputId?: string;
+  htmlFor?: string;
   className?: string;
 }
 
@@ -1420,13 +1285,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   onTrailingIconClick?: () => void;
   leadingIconLabel?: string;
   trailingIconLabel?: string;
-  isLoading?: boolean;
+  loading?: boolean;
   loader?: ReactNode;
   loaderSize?: number;
   fullWidth?: boolean;
   containerClassName?: string;
   wrapperClassName?: string;
-  wrapperFocusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
 }`}
@@ -1434,9 +1298,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1528,9 +1389,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* NATIVE PROPS NOTE */}
-      {/* ================================================================== */}
       <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
         <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
           <strong>Note:</strong> Input extends native{" "}

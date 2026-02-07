@@ -123,7 +123,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       loadingText = "Loading...",
       showChevron = true,
       fullWidth = false,
-      isLoading: externalLoading = false,
+      loading: externalLoading = false,
       onSearch,
       searchDebounceMs = 300,
       initialOptions = [],

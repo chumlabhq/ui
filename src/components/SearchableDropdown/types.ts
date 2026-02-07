@@ -28,7 +28,7 @@ export interface SearchableDropdownProps {
   showSelectedIcon?: boolean;
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
-  isLoading?: boolean;
+  loading?: boolean;
   onSearch?: (query: string) => Promise<SearchableDropdownOption[]>;
   searchDebounceMs?: number;
   initialOptions?: SearchableDropdownOption[];

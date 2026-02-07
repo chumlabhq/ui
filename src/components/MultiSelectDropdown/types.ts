@@ -23,7 +23,7 @@ export interface MultiSelectDropdownProps {
   noResultsText?: string;
   showChevron?: boolean;
   fullWidth?: boolean;
-  isLoading?: boolean;
+  loading?: boolean;
   onLoadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
   shimmerCount?: number;

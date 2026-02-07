@@ -75,8 +75,8 @@ describe("Button", () => {
   });
 
   describe("Loading State", () => {
-    it("shows loader when isLoading=true", () => {
-      render(<Button isLoading>Loading</Button>);
+    it("shows loader when loading=true", () => {
+      render(<Button loading>Loading</Button>);
 
       const button = screen.getByRole("button");
       expect(button).toHaveAttribute("aria-busy", "true");
@@ -85,7 +85,7 @@ describe("Button", () => {
 
     it("displays loadingText when provided", () => {
       render(
-        <Button isLoading loadingText="Please wait...">
+        <Button loading loadingText="Please wait...">
           Submit
         </Button>
       );
@@ -96,7 +96,7 @@ describe("Button", () => {
 
     it("renders custom loader when provided", () => {
       render(
-        <Button isLoading loader={<span data-testid="custom-loader">⏳</span>}>
+        <Button loading loader={<span data-testid="custom-loader">⏳</span>}>
           Loading
         </Button>
       );
@@ -107,7 +107,7 @@ describe("Button", () => {
     it("positions loader on the left when loaderPosition='left'", () => {
       render(
         <Button
-          isLoading
+          loading
           loaderPosition="left"
           loader={<span data-testid="loader">⏳</span>}
         >
@@ -118,7 +118,6 @@ describe("Button", () => {
       const content = screen.getByText("Loading").closest("span");
       const loader = screen.getByTestId("loader");
 
-      // Loader should appear before the text in the DOM
       const children = Array.from(content?.childNodes || []);
       const loaderIndex = children.findIndex((n) =>
         n.contains(loader)
@@ -140,8 +139,8 @@ describe("Button", () => {
       expect(button).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("disables button when isLoading=true", () => {
-      render(<Button isLoading>Loading</Button>);
+    it("disables button when loading=true", () => {
+      render(<Button loading>Loading</Button>);
 
       expect(screen.getByRole("button")).toBeDisabled();
     });
@@ -166,7 +165,7 @@ describe("Button", () => {
       const onClick = vi.fn();
 
       render(
-        <Button isLoading onClick={onClick}>
+        <Button loading onClick={onClick}>
           Loading
         </Button>
       );
@@ -218,29 +217,30 @@ describe("Button", () => {
         </Button>
       );
 
-      const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("aria-disabled", "true");
+      const anchor = document.querySelector("a")!;
+      expect(anchor).toHaveAttribute("aria-disabled", "true");
+      expect(anchor).not.toHaveAttribute("href");
+      expect(anchor).toHaveAttribute("tabindex", "-1");
 
-      // Click should not navigate (preventDefault called)
-      await user.click(link);
-      // If navigation was prevented, we're still on the same page
-      expect(link).toBeInTheDocument();
+      await user.click(anchor);
+      expect(anchor).toBeInTheDocument();
     });
 
     it("prevents navigation when loading", async () => {
       const user = userEvent.setup();
 
       render(
-        <Button as="a" href="https://example.com" isLoading>
+        <Button as="a" href="https://example.com" loading>
           Loading Link
         </Button>
       );
 
-      const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("aria-disabled", "true");
+      const anchor = document.querySelector("a")!;
+      expect(anchor).toHaveAttribute("aria-disabled", "true");
+      expect(anchor).not.toHaveAttribute("href");
 
-      await user.click(link);
-      expect(link).toBeInTheDocument();
+      await user.click(anchor);
+      expect(anchor).toBeInTheDocument();
     });
   });
 
@@ -375,9 +375,51 @@ describe("Button", () => {
     });
   });
 
+  describe("className Override Priority", () => {
+    it("consumer className overrides fullWidth class", () => {
+      render(
+        <Button fullWidth className="w-auto">
+          Button
+        </Button>
+      );
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("w-auto");
+    });
+
+    it("consumer className overrides internal group class", () => {
+      render(
+        <Button
+          iconAnimation="slideRight"
+          leadingIcon={<span>→</span>}
+          className="custom-class"
+        >
+          Button
+        </Button>
+      );
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("custom-class");
+    });
+
+    it("className comes after internal classes in class list", () => {
+      render(
+        <Button fullWidth className="custom-button">
+          Button
+        </Button>
+      );
+
+      const button = screen.getByRole("button");
+      const classes = button.className;
+      const fullWidthIndex = classes.indexOf("w-full");
+      const customIndex = classes.indexOf("custom-button");
+      expect(customIndex).toBeGreaterThan(fullWidthIndex);
+    });
+  });
+
   describe("Data Attributes", () => {
     it("sets data-loading when loading", () => {
-      render(<Button isLoading>Loading</Button>);
+      render(<Button loading>Loading</Button>);
 
       expect(screen.getByRole("button")).toHaveAttribute("data-loading", "true");
     });

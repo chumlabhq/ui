@@ -525,19 +525,19 @@ describe("AvatarGroupCount", () => {
     it("renders count with plus prefix by default", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("status")).toHaveTextContent("+5");
+      expect(screen.getByRole("img")).toHaveTextContent("+5");
     });
 
     it("renders without plus when showPlus=false", () => {
       render(<AvatarGroupCount count={5} showPlus={false} />);
 
-      expect(screen.getByRole("status")).toHaveTextContent("5");
+      expect(screen.getByRole("img")).toHaveTextContent("5");
     });
 
     it("shows max+ when count exceeds max", () => {
       render(<AvatarGroupCount count={150} max={99} />);
 
-      expect(screen.getByRole("status")).toHaveTextContent("+99+");
+      expect(screen.getByRole("img")).toHaveTextContent("+99+");
     });
 
     it("uses custom format function", () => {
@@ -545,7 +545,7 @@ describe("AvatarGroupCount", () => {
         <AvatarGroupCount count={5} format={(n) => `${n} users`} />
       );
 
-      expect(screen.getByRole("status")).toHaveTextContent("5 users");
+      expect(screen.getByRole("img")).toHaveTextContent("5 users");
     });
   });
 
@@ -556,7 +556,7 @@ describe("AvatarGroupCount", () => {
 
       render(<AvatarGroupCount count={5} onClick={onClick} />);
 
-      await user.click(screen.getByRole("status"));
+      await user.click(screen.getByRole("img"));
 
       expect(onClick).toHaveBeenCalledTimes(1);
     });
@@ -564,7 +564,7 @@ describe("AvatarGroupCount", () => {
     it("shows pointer cursor when onClick provided", () => {
       render(<AvatarGroupCount count={5} onClick={() => {}} />);
 
-      expect(screen.getByRole("status")).toHaveClass("cursor-pointer");
+      expect(screen.getByRole("img")).toHaveClass("cursor-pointer");
     });
   });
 
@@ -572,20 +572,20 @@ describe("AvatarGroupCount", () => {
     it("applies solid variant by default", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("status")).toHaveClass("bg-gray-200");
+      expect(screen.getByRole("img")).toHaveClass("bg-gray-200");
     });
 
     it("applies outline variant", () => {
       render(<AvatarGroupCount count={5} variant="outline" />);
 
-      expect(screen.getByRole("status")).toHaveClass("border-2");
+      expect(screen.getByRole("img")).toHaveClass("border-2");
     });
 
     it("applies ghost variant", () => {
       render(<AvatarGroupCount count={5} variant="ghost" />);
 
-      expect(screen.getByRole("status")).not.toHaveClass("bg-gray-200");
-      expect(screen.getByRole("status")).not.toHaveClass("border-2");
+      expect(screen.getByRole("img")).not.toHaveClass("bg-gray-200");
+      expect(screen.getByRole("img")).not.toHaveClass("border-2");
     });
   });
 
@@ -593,7 +593,7 @@ describe("AvatarGroupCount", () => {
     it("has correct aria-label", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("status")).toHaveAttribute(
+      expect(screen.getByRole("img")).toHaveAttribute(
         "aria-label",
         "5 more members not shown"
       );
@@ -602,7 +602,7 @@ describe("AvatarGroupCount", () => {
     it("has singular aria-label for count of 1", () => {
       render(<AvatarGroupCount count={1} />);
 
-      expect(screen.getByRole("status")).toHaveAttribute(
+      expect(screen.getByRole("img")).toHaveAttribute(
         "aria-label",
         "1 more member not shown"
       );

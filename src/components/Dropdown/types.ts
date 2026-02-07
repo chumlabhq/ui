@@ -25,7 +25,7 @@ export interface DropdownProps {
   showSelectedIcon?: boolean;
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
-  isLoading?: boolean;
+  loading?: boolean;
   onLoadOptions?: () => Promise<DropdownOption[]>;
   loadOnOpen?: boolean;
   shimmerCount?: number;

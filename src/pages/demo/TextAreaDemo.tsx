@@ -1,76 +1,8 @@
 import { useState, useRef } from "react";
 import { TextArea, TextAreaLabel } from "../../components/TextArea";
 import { useTheme } from "./ThemeContext";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// ICONS
-// ============================================================================
 
 const SearchIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -161,9 +93,6 @@ const FileIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ============================================================================
-// MAIN TEXTAREA DEMO COMPONENT
-// ============================================================================
 
 const TextAreaDemo = () => {
   const { isDarkMode } = useTheme();
@@ -171,7 +100,6 @@ const TextAreaDemo = () => {
   const [textValue, setTextValue] = useState("");
   const [feedbackText, setFeedbackText] = useState("");
 
-  // Dark mode aware class names
   const getTextAreaClassNames = () => ({
     textArea: `w-full bg-transparent outline-none resize-none ${
       isDarkMode
@@ -205,9 +133,6 @@ const TextAreaDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           TextArea
@@ -217,7 +142,6 @@ const TextAreaDemo = () => {
           loading states, error handling, and extensive customization through className props.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -229,17 +153,11 @@ const TextAreaDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Usage */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic TextArea"
           description="A simple multi-line text input with no additional props."
@@ -249,16 +167,13 @@ const TextAreaDemo = () => {
             <div className="w-full max-w-md">
               <TextArea
                 placeholder="Enter your message..."
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
               />
             </div>
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Label */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Label"
           description="Use the label prop to add an accessible label above the textarea."
@@ -269,7 +184,7 @@ const TextAreaDemo = () => {
               <TextArea
                 label="Description"
                 placeholder="Enter a description..."
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -277,7 +192,7 @@ const TextAreaDemo = () => {
               <TextArea
                 label="Comments"
                 placeholder="Add your comments..."
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -286,9 +201,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Required Fields */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Required Fields"
           description="Add required prop to show an asterisk (*) indicator and set aria-required."
@@ -300,7 +212,7 @@ const TextAreaDemo = () => {
                 label="Bio"
                 placeholder="Tell us about yourself..."
                 required
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -309,7 +221,7 @@ const TextAreaDemo = () => {
                 label="Feedback"
                 placeholder="Share your feedback..."
                 required
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -318,9 +230,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Different Row Sizes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Different Row Sizes"
           description="Control the visible height with the rows prop."
@@ -335,7 +244,7 @@ const TextAreaDemo = () => {
                 <TextArea
                   placeholder="Small textarea (2 rows)"
                   rows={2}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -346,7 +255,7 @@ const TextAreaDemo = () => {
                 <TextArea
                   placeholder="Default textarea (4 rows)"
                   rows={4}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -357,7 +266,7 @@ const TextAreaDemo = () => {
                 <TextArea
                   placeholder="Large textarea (6 rows)"
                   rows={6}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -365,9 +274,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Icons"
           description="Add leading and trailing icons using the leadingIcon and trailingIcon props."
@@ -382,7 +288,7 @@ const TextAreaDemo = () => {
                 <TextArea
                   placeholder="Write your message..."
                   leadingIcon={<MessageIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -393,7 +299,7 @@ const TextAreaDemo = () => {
                 <TextArea
                   placeholder="Enter content..."
                   trailingIcon={<FileIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -405,7 +311,7 @@ const TextAreaDemo = () => {
                   placeholder="Search and filter content..."
                   leadingIcon={<SearchIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
                   trailingIcon={<SendIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -413,9 +319,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Clickable Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Clickable Icons"
           description="Make icons interactive with onLeadingIconClick and onTrailingIconClick. Use leadingIconLabel and trailingIconLabel for accessibility."
@@ -435,7 +338,7 @@ const TextAreaDemo = () => {
                   trailingIcon={textValue ? <CloseIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} /> : undefined}
                   onTrailingIconClick={() => setTextValue("")}
                   trailingIconLabel="Clear text"
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -449,7 +352,7 @@ const TextAreaDemo = () => {
                   trailingIcon={<SendIcon className={`${isDarkMode ? "text-blue-400" : "text-blue-500"}`} />}
                   onTrailingIconClick={() => alert("Message sent!")}
                   trailingIconLabel="Send message"
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -457,9 +360,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Error State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Error State"
           description="Use error and errorMessage props to display validation errors."
@@ -473,7 +373,7 @@ const TextAreaDemo = () => {
                 value="Hi"
                 error
                 errorMessage="Bio must be at least 50 characters"
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapperError}
                 labelClassName={classes.label}
                 errorClassName={classes.error}
@@ -491,7 +391,7 @@ const TextAreaDemo = () => {
                     Feedback is required
                   </span>
                 }
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapperError}
                 labelClassName={classes.label}
                 errorClassName={classes.error}
@@ -501,12 +401,9 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Loading State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Loading State"
-          description="Use isLoading to show a loader and disable the textarea. Customize with loader and loaderSize props."
+          description="Use loading to show a loader and disable the textarea. Customize with loader and loaderSize props."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -517,8 +414,8 @@ const TextAreaDemo = () => {
                 </p>
                 <TextArea
                   placeholder="Loading..."
-                  isLoading
-                  className={classes.textArea}
+                  loading
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -528,9 +425,9 @@ const TextAreaDemo = () => {
                 </p>
                 <TextArea
                   placeholder="Loading..."
-                  isLoading
+                  loading
                   loaderSize={20}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -540,13 +437,13 @@ const TextAreaDemo = () => {
                 </p>
                 <TextArea
                   placeholder="Processing..."
-                  isLoading
+                  loading
                   loader={
                     <span className={`text-xs animate-pulse ${isDarkMode ? "text-blue-400" : "text-blue-500"}`}>
                       Saving...
                     </span>
                   }
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -556,9 +453,9 @@ const TextAreaDemo = () => {
                 </p>
                 <TextArea
                   placeholder="Submitting..."
-                  isLoading
+                  loading
                   leadingIcon={<MessageIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} />}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                 />
               </div>
@@ -566,9 +463,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled State"
           description="Disable the textarea with the disabled prop."
@@ -602,9 +496,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Full Width */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Full Width"
           description="Use fullWidth prop to make the textarea span the full container width."
@@ -615,14 +506,14 @@ const TextAreaDemo = () => {
               <TextArea
                 placeholder="Full width textarea"
                 fullWidth
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
               />
               <TextArea
                 label="Full width with label"
                 placeholder="Enter your detailed message..."
                 fullWidth
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -631,9 +522,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom ID and Name */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom ID and Name"
           description="Set custom id and name attributes for form handling."
@@ -655,7 +543,7 @@ const TextAreaDemo = () => {
                   label="Message"
                   placeholder="Enter your message"
                   rows={3}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                   labelClassName={classes.label}
                   containerClassName={classes.container}
@@ -666,7 +554,7 @@ const TextAreaDemo = () => {
                   label="Feedback"
                   placeholder="Share your feedback"
                   rows={3}
-                  className={classes.textArea}
+                  textAreaClassName={classes.textArea}
                   wrapperClassName={classes.wrapper}
                   labelClassName={classes.label}
                   containerClassName={classes.container}
@@ -686,16 +574,13 @@ const TextAreaDemo = () => {
             <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
               <strong>Note:</strong> The textarea ID is auto-generated if not provided. It uses{" "}
               <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>
-                id || name || useId()
+                id || useId()
               </code>{" "}
               fallback chain.
             </p>
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Ref Forwarding */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Ref Forwarding"
           description="Access the underlying textarea element using React refs."
@@ -706,7 +591,7 @@ const TextAreaDemo = () => {
               <TextArea
                 ref={textAreaRef}
                 placeholder="Click the buttons to interact with me"
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
               />
               <div className="flex flex-wrap gap-2">
@@ -759,9 +644,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* TextAreaLabel Standalone */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="TextAreaLabel Standalone"
           description="Use TextAreaLabel separately for custom layouts."
@@ -772,7 +654,7 @@ const TextAreaDemo = () => {
               <div>
                 <TextAreaLabel
                   label="Standalone Label"
-                  textAreaId="custom-textarea"
+                  htmlFor="custom-textarea"
                   className={classes.label}
                 />
                 <div className="mt-1">
@@ -791,7 +673,7 @@ const TextAreaDemo = () => {
               <div>
                 <TextAreaLabel
                   label="Required Field"
-                  textAreaId="required-textarea"
+                  htmlFor="required-textarea"
                   required
                   className={classes.label}
                 />
@@ -803,9 +685,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Styling */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Theme Examples"
           description="Customize the textarea appearance using className props."
@@ -876,17 +755,16 @@ const TextAreaDemo = () => {
               </div>
               <div>
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Using wrapperFocusClassName
+                  Focus styles via wrapperClassName
                 </p>
                 <TextArea
                   placeholder="Focus me..."
                   rows={3}
                   className={`w-full bg-transparent outline-none resize-none ${isDarkMode ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`}
-                  wrapperClassName={`px-3 py-2 rounded-lg border gap-2 ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-white"}`}
-                  wrapperFocusClassName={isDarkMode
+                  wrapperClassName={`px-3 py-2 rounded-lg border gap-2 ${isDarkMode ? "border-gray-600 bg-gray-700" : "border-gray-300 bg-white"} ${isDarkMode
                     ? "focus-within:ring-2 focus-within:ring-purple-400 focus-within:border-purple-400 focus-within:bg-purple-900/20"
                     : "focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-purple-500 focus-within:bg-purple-50"
-                  }
+                  }`}
                 />
               </div>
               <div>
@@ -908,9 +786,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Data Attributes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Data Attributes"
           description="The TextArea component applies data attributes for CSS-based styling."
@@ -970,9 +845,6 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Combined Example */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Feedback Form Example"
           description="A practical example combining multiple textarea features."
@@ -997,7 +869,7 @@ const TextAreaDemo = () => {
                 trailingIcon={feedbackText ? <CloseIcon className={isDarkMode ? "text-gray-400" : "text-gray-500"} /> : undefined}
                 onTrailingIconClick={() => setFeedbackText("")}
                 trailingIconLabel="Clear feedback"
-                className={classes.textArea}
+                textAreaClassName={classes.textArea}
                 wrapperClassName={classes.wrapper}
                 labelClassName={classes.label}
                 containerClassName={classes.container}
@@ -1024,15 +896,11 @@ const TextAreaDemo = () => {
         </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* TextArea Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             TextArea
@@ -1161,7 +1029,7 @@ const TextAreaDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">isLoading</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">loading</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1205,7 +1073,6 @@ const TextAreaDemo = () => {
           </div>
         </div>
 
-        {/* Styling Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Styling Props
@@ -1224,7 +1091,14 @@ const TextAreaDemo = () => {
                   <td className="py-3 pr-4 font-mono text-blue-500">className</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the textarea element itself
+                    CSS class for the root container element
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">textAreaClassName</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    CSS class for the native textarea element
                   </td>
                 </tr>
                 <tr>
@@ -1239,13 +1113,6 @@ const TextAreaDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     CSS class for the textarea wrapper (contains icons and textarea)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">wrapperFocusClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for focus state (use focus-within: prefixed classes)
                   </td>
                 </tr>
                 <tr>
@@ -1267,7 +1134,6 @@ const TextAreaDemo = () => {
           </div>
         </div>
 
-        {/* TextAreaLabel Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             TextAreaLabel
@@ -1300,7 +1166,7 @@ const TextAreaDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">textAreaId</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">htmlFor</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1320,7 +1186,6 @@ const TextAreaDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1330,7 +1195,7 @@ const TextAreaDemo = () => {
             code={`interface TextAreaLabelProps {
   label: ReactNode;
   required?: boolean;
-  textAreaId?: string;
+  htmlFor?: string;
   className?: string;
 }
 
@@ -1344,13 +1209,12 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   onTrailingIconClick?: () => void;
   leadingIconLabel?: string;
   trailingIconLabel?: string;
-  isLoading?: boolean;
+  loading?: boolean;
   loader?: ReactNode;
   loaderSize?: number;
   fullWidth?: boolean;
   containerClassName?: string;
   wrapperClassName?: string;
-  wrapperFocusClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
 }`}
@@ -1358,9 +1222,6 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1452,9 +1313,6 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* NATIVE PROPS NOTE */}
-      {/* ================================================================== */}
       <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
         <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
           <strong>Note:</strong> TextArea extends native{" "}

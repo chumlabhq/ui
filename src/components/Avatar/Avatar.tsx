@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useMemo } from "react";
+import { forwardRef, useState, useCallback, useMemo, useRef, useLayoutEffect } from "react";
 import type {
   AvatarProps,
   AvatarTooltipConfig,
@@ -18,6 +18,7 @@ import {
   getStatusColor,
   getStatusPosition,
 } from "./utils/helpers";
+import { useAvatarGroupContext } from "./utils/context";
 import { AvatarShimmer } from "./components/AvatarShimmer";
 import { cn } from "../../utils/cn";
 
@@ -26,7 +27,8 @@ const isTooltipConfig = (tooltip: unknown): tooltip is AvatarTooltipConfig => {
     typeof tooltip === "object" &&
     tooltip !== null &&
     !Array.isArray(tooltip) &&
-    "content" in tooltip
+    "content" in tooltip &&
+    !("$$typeof" in tooltip)
   );
 };
 
@@ -45,8 +47,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       name,
       src,
       alt,
-      size = DEFAULT_SIZE,
-      shape = DEFAULT_SHAPE,
+      size,
+      shape,
       maxInitials = 2,
       fallback,
       autoColor = false,
@@ -68,9 +70,15 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     },
     ref,
   ) => {
+    const groupCtx = useAvatarGroupContext();
+    const effectiveSize = size ?? groupCtx?.size ?? DEFAULT_SIZE;
+    const effectiveShape = shape ?? groupCtx?.shape ?? DEFAULT_SHAPE;
+    const effectiveBordered = bordered ?? groupCtx?.bordered;
+
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
     const [prevSrc, setPrevSrc] = useState(src);
+    const imgNodeRef = useRef<HTMLImageElement>(null);
 
     if (prevSrc !== src) {
       setPrevSrc(src);
@@ -78,11 +86,18 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       setImageLoaded(false);
     }
 
+    useLayoutEffect(() => {
+      const img = imgNodeRef.current;
+      if (img && img.complete && img.naturalWidth > 0) {
+        setImageLoaded(true);
+      }
+    }, [src]);
+
     const initials = getInitials(name, maxInitials);
-    const numericSize = getNumericSize(size);
-    const fontSize = getFontSize(size);
-    const statusSize = getStatusSize(size);
-    const borderRadius = getBorderRadius(shape);
+    const numericSize = getNumericSize(effectiveSize);
+    const fontSize = getFontSize(effectiveSize);
+    const statusSize = getStatusSize(effectiveSize);
+    const borderRadius = getBorderRadius(effectiveShape);
 
     const generatedColors = useMemo(
       () => (autoColor ? generateColors(name, colors) : null),
@@ -112,7 +127,13 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     }, [tooltip]);
 
     if (loading) {
-      return <AvatarShimmer size={size} shape={shape} />;
+      return (
+        <AvatarShimmer
+          size={effectiveSize}
+          shape={effectiveShape}
+          style={groupCtx ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` } : undefined}
+        />
+      );
     }
 
     const showImage = src && !imageError;
@@ -126,8 +147,9 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       fontSize,
       backgroundColor: generatedColors?.background,
       color: generatedColors?.text,
-      border: parseBorder(bordered, generatedColors?.border),
+      border: parseBorder(effectiveBordered, generatedColors?.border),
       position: "relative",
+      ...(groupCtx ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` } : {}),
       ...style,
     };
 
@@ -144,7 +166,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         role={!showImage ? "img" : undefined}
         aria-label={alt || name || rest["aria-label"]}
         data-has-image={showImage || undefined}
-        data-shape={shape}
+        data-shape={effectiveShape}
         {...rest}
       >
         <div
@@ -153,6 +175,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         >
           {showImage && (
             <img
+              ref={imgNodeRef}
               src={src}
               alt={alt || ""}
               srcSet={imageConfig?.srcSet}
@@ -167,7 +190,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
               className={cn("w-full h-full object-cover", imageConfig?.className)}
               style={{
                 opacity: imageLoaded ? 1 : 0,
-                transition: "opacity 0.2s ease-in-out",
+                transition: imageLoaded ? "none" : "opacity 0.2s ease-in-out",
               }}
             />
           )}

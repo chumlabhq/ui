@@ -1,21 +1,10 @@
-import { forwardRef, useId, useCallback, type KeyboardEvent } from "react";
-import type { InputLabelProps, InputProps } from "./types";
-import { CircularLoader } from "../Loader";
+import { forwardRef, useId } from "react";
+import type { InputProps } from "./utils/types";
+import { FieldLabel } from "../../utils/FieldLabel";
+import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/cn";
 
-export const InputLabel = ({
-  label,
-  required = false,
-  inputId,
-  className,
-}: InputLabelProps) => {
-  return (
-    <label htmlFor={inputId} className={className}>
-      {label}
-      {required && <span aria-hidden="true">*</span>}
-    </label>
-  );
-};
+export const InputLabel = FieldLabel;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -34,124 +23,79 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       onTrailingIconClick,
       leadingIconLabel,
       trailingIconLabel,
-      isLoading = false,
+      loading = false,
       loader,
       loaderSize = 16,
       fullWidth = false,
       containerClassName,
       wrapperClassName,
-      wrapperFocusClassName,
       labelClassName,
       errorClassName,
       className,
+      inputClassName,
       ...rest
     },
     ref,
   ) => {
     const generatedId = useId();
-    const inputId = id || name || generatedId;
+    const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
+    const isDisabled = disabled || loading;
 
-    const isDisabled = disabled || isLoading;
-
-    const loaderElement = loader ?? (
-      <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
-    );
-
-    const handleLeadingIconKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLSpanElement>) => {
-        if (onLeadingIconClick && (event.key === "Enter" || event.key === " ")) {
-          event.preventDefault();
-          onLeadingIconClick();
-        }
-      },
-      [onLeadingIconClick],
-    );
-
-    const handleTrailingIconKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLSpanElement>) => {
-        if (onTrailingIconClick && (event.key === "Enter" || event.key === " ")) {
-          event.preventDefault();
-          onTrailingIconClick();
-        }
-      },
-      [onTrailingIconClick],
-    );
+    if (process.env.NODE_ENV !== "production") {
+      if (onLeadingIconClick && !leadingIconLabel) {
+        console.warn(
+          "Input: onLeadingIconClick is provided without leadingIconLabel. Add leadingIconLabel for accessibility.",
+        );
+      }
+      if (onTrailingIconClick && !trailingIconLabel) {
+        console.warn(
+          "Input: onTrailingIconClick is provided without trailingIconLabel. Add trailingIconLabel for accessibility.",
+        );
+      }
+    }
 
     return (
-      <div
-        className={cn(containerClassName, fullWidth && "w-full") || undefined}
-        data-disabled={isDisabled || undefined}
-        data-error={error || undefined}
-        data-loading={isLoading || undefined}
+      <FieldWrapper
+        fieldId={inputId}
+        label={label}
+        required={required}
+        disabled={disabled}
+        loading={loading}
+        error={error}
+        errorMessage={errorMessage}
+        leadingIcon={leadingIcon}
+        trailingIcon={trailingIcon}
+        onLeadingIconClick={onLeadingIconClick}
+        onTrailingIconClick={onTrailingIconClick}
+        leadingIconLabel={leadingIconLabel}
+        trailingIconLabel={trailingIconLabel}
+        loader={loader}
+        loaderSize={loaderSize}
+        fullWidth={fullWidth}
+        containerClassName={containerClassName}
+        wrapperClassName={wrapperClassName}
+        labelClassName={labelClassName}
+        errorClassName={errorClassName}
+        className={className}
+        wrapperAlign="items-center"
       >
-        {label && (
-          <InputLabel
-            label={label}
-            required={required}
-            inputId={inputId}
-            className={labelClassName}
-          />
-        )}
-
-        <div className={cn("flex items-center w-full", wrapperClassName, wrapperFocusClassName)}>
-          {leadingIcon && (
-            <span
-              className={cn(
-                "inline-flex shrink-0",
-                onLeadingIconClick && "cursor-pointer",
-              )}
-              onClick={onLeadingIconClick}
-              onKeyDown={onLeadingIconClick ? handleLeadingIconKeyDown : undefined}
-              role={onLeadingIconClick ? "button" : undefined}
-              tabIndex={onLeadingIconClick ? 0 : undefined}
-              aria-label={leadingIconLabel}
-            >
-              {leadingIcon}
-            </span>
-          )}
-
-          <input
-            ref={ref}
-            id={inputId}
-            name={name}
-            type={type}
-            required={required}
-            disabled={isDisabled}
-            className={cn("flex-1 min-w-0", className)}
-            aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorId : undefined}
-            aria-required={required || undefined}
-            data-disabled={isDisabled || undefined}
-            data-error={error || undefined}
-            {...rest}
-          />
-
-          {trailingIcon && (
-            <span
-              className={cn(
-                "inline-flex shrink-0",
-                onTrailingIconClick && "cursor-pointer",
-              )}
-              onClick={onTrailingIconClick}
-              onKeyDown={onTrailingIconClick ? handleTrailingIconKeyDown : undefined}
-              role={onTrailingIconClick ? "button" : undefined}
-              tabIndex={onTrailingIconClick ? 0 : undefined}
-              aria-label={trailingIconLabel}
-            >
-              {trailingIcon}
-            </span>
-          )}
-
-          {isLoading && loaderElement}
-        </div>
-
-        {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
-            {errorMessage}
-          </div>
-        )}
-      </div>
+        <input
+          ref={ref}
+          id={inputId}
+          name={name}
+          type={type}
+          required={required}
+          disabled={isDisabled}
+          className={cn("flex-1 min-w-0", inputClassName)}
+          aria-invalid={error || undefined}
+          aria-describedby={error && errorMessage ? errorId : undefined}
+          aria-required={required || undefined}
+          data-disabled={isDisabled || undefined}
+          data-error={error || undefined}
+          {...rest}
+        />
+      </FieldWrapper>
     );
   },
 );

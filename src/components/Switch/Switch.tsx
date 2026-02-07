@@ -1,27 +1,13 @@
 import { useId, useMemo, forwardRef, useCallback } from "react";
-import type { SwitchProps, SwitchRenderProps } from "./types";
+import type { SwitchProps, SwitchRenderProps } from "./utils/types";
+import { defaultStyles } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
-
-const defaultStyles = {
-  container: "gap-3",
-  label: "text-sm font-medium text-gray-700",
-  disabledLabel: "text-gray-400",
-  description: "text-xs text-gray-500",
-  tracker:
-    "h-5 w-9 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
-  disabledTracker: "opacity-50",
-  thumb:
-    "h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
-  checkedTracker: "bg-blue-600",
-  uncheckedTracker: "bg-gray-300",
-  checkedThumb: "translate-x-4.5",
-  uncheckedThumb: "translate-x-0.5",
-};
 
 const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
   (
     {
+      className,
       label,
       description,
       checked: controlledChecked,
@@ -34,6 +20,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       disabled = false,
       error = false,
       errorMessage,
+      classNames,
       errorClassName,
       containerClassName,
       labelContainerClassName,
@@ -62,7 +49,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const switchId = id || generatedId;
     const errorId = `${switchId}-error`;
     const descriptionId =
-      description || renderDescription ? `${switchId}-desc` : undefined;
+      description || renderDescription ? `${switchId}-description` : undefined;
 
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
@@ -91,117 +78,134 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       };
     }, [transitionDuration, transitionTimingFunction]);
 
+    const rContainerClassName = containerClassName ?? classNames?.root;
+    const rLabelContainerClassName = labelContainerClassName ?? classNames?.labelContainer;
+    const rLabelClassName = labelClassName ?? classNames?.label;
+    const rDisabledLabelClassName = disabledLabelClassName ?? classNames?.disabledLabel;
+    const rDescriptionClassName = descriptionClassName ?? classNames?.description;
+    const rTrackerClassName = trackerClassName ?? classNames?.tracker;
+    const rDisabledTrackerClassName = disabledTrackerClassName ?? classNames?.disabledTracker;
+    const rThumbClassName = thumbClassName ?? classNames?.thumb;
+    const rCheckedTrackerClassName = checkedTrackerClassName ?? classNames?.checkedTracker;
+    const rUncheckedTrackerClassName = uncheckedTrackerClassName ?? classNames?.uncheckedTracker;
+    const rCheckedThumbClassName = checkedThumbClassName ?? classNames?.checkedThumb;
+    const rUncheckedThumbClassName = uncheckedThumbClassName ?? classNames?.uncheckedThumb;
+    const rErrorClassName = errorClassName ?? classNames?.error;
+
     const hasLabelContent =
       label || description || renderLabel || renderDescription;
 
     return (
       <div
-        className={cn(
-          "flex items-center",
-          defaultStyles.container,
-          containerClassName,
-        )}
+        className={cn("flex flex-col", rContainerClassName, className)}
         data-disabled={disabled || undefined}
         data-checked={isChecked || undefined}
         data-error={error || undefined}
       >
-        {hasLabelContent && (
-          <div className={cn("flex flex-col", labelContainerClassName)}>
-            {renderLabel
-              ? renderLabel(renderProps)
-              : label && (
-                  <label
-                    htmlFor={switchId}
+        <div
+          className={cn(
+            "flex items-center",
+            defaultStyles.container,
+          )}
+        >
+          {hasLabelContent && (
+            <div className={cn("flex flex-col", rLabelContainerClassName)}>
+              {renderLabel
+                ? renderLabel(renderProps)
+                : label && (
+                    <label
+                      htmlFor={switchId}
+                      className={cn(
+                        "cursor-pointer",
+                        disabled && "cursor-not-allowed",
+                        defaultStyles.label,
+                        rLabelClassName,
+                        disabled && defaultStyles.disabledLabel,
+                        disabled && rDisabledLabelClassName,
+                      )}
+                    >
+                      {label}
+                    </label>
+                  )}
+              {renderDescription ? (
+                <span id={descriptionId}>{renderDescription(renderProps)}</span>
+              ) : (
+                description && (
+                  <span
+                    id={descriptionId}
                     className={cn(
-                      "cursor-pointer",
-                      disabled && "cursor-not-allowed",
-                      defaultStyles.label,
-                      labelClassName,
-                      disabled && defaultStyles.disabledLabel,
-                      disabled && disabledLabelClassName,
+                      defaultStyles.description,
+                      rDescriptionClassName,
                     )}
                   >
-                    {label}
-                  </label>
-                )}
-            {renderDescription ? (
-              <span id={descriptionId}>{renderDescription(renderProps)}</span>
-            ) : (
-              description && (
-                <span
-                  id={descriptionId}
-                  className={cn(
-                    defaultStyles.description,
-                    descriptionClassName,
-                  )}
-                >
-                  {description}
-                </span>
-              )
-            )}
-          </div>
-        )}
-
-        <button
-          ref={ref}
-          type="button"
-          id={switchId}
-          role="switch"
-          aria-checked={isChecked}
-          aria-label={ariaLabel}
-          aria-describedby={
-            [descriptionId, error && errorMessage ? errorId : undefined]
-              .filter(Boolean)
-              .join(" ") || undefined
-          }
-          aria-disabled={disabled || undefined}
-          aria-required={required || undefined}
-          disabled={disabled}
-          onClick={handleToggle}
-          className={cn(
-            "relative inline-flex items-center",
-            disabled ? "cursor-not-allowed" : "cursor-pointer",
-            defaultStyles.tracker,
-            trackerClassName,
-            disabled && defaultStyles.disabledTracker,
-            disabled && disabledTrackerClassName,
-            isChecked
-              ? defaultStyles.checkedTracker
-              : defaultStyles.uncheckedTracker,
-            isChecked ? checkedTrackerClassName : uncheckedTrackerClassName,
+                    {description}
+                  </span>
+                )
+              )}
+            </div>
           )}
-          style={transitionStyle}
-          data-disabled={disabled || undefined}
-          data-checked={isChecked || undefined}
-          {...buttonProps}
-        >
-          <span
+
+          <button
+            ref={ref}
+            type="button"
+            id={switchId}
+            role="switch"
+            aria-checked={isChecked}
+            aria-label={ariaLabel}
+            aria-describedby={
+              [descriptionId, error && errorMessage ? errorId : undefined]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
+            aria-disabled={disabled || undefined}
+            aria-required={required || undefined}
+            disabled={disabled}
+            onClick={handleToggle}
             className={cn(
-              "inline-flex items-center justify-center transform",
-              defaultStyles.thumb,
-              thumbClassName,
+              "relative inline-flex items-center",
+              disabled ? "cursor-not-allowed" : "cursor-pointer",
+              defaultStyles.tracker,
+              rTrackerClassName,
+              disabled && defaultStyles.disabledTracker,
+              disabled && rDisabledTrackerClassName,
               isChecked
-                ? defaultStyles.checkedThumb
-                : defaultStyles.uncheckedThumb,
-              isChecked ? checkedThumbClassName : uncheckedThumbClassName,
+                ? defaultStyles.checkedTracker
+                : defaultStyles.uncheckedTracker,
+              isChecked ? rCheckedTrackerClassName : rUncheckedTrackerClassName,
             )}
             style={transitionStyle}
+            data-disabled={disabled || undefined}
+            data-checked={isChecked || undefined}
+            {...buttonProps}
           >
-            {isChecked ? checkedIcon : uncheckedIcon}
-          </span>
-        </button>
+            <span
+              className={cn(
+                "inline-flex items-center justify-center transform",
+                defaultStyles.thumb,
+                rThumbClassName,
+                isChecked
+                  ? defaultStyles.checkedThumb
+                  : defaultStyles.uncheckedThumb,
+                isChecked ? rCheckedThumbClassName : rUncheckedThumbClassName,
+              )}
+              style={transitionStyle}
+            >
+              {isChecked ? checkedIcon : uncheckedIcon}
+            </span>
+          </button>
 
-        {name && (
-          <input
-            type="hidden"
-            name={name}
-            value={isChecked ? value : ""}
-            disabled={disabled}
-          />
-        )}
+          {name && (
+            <input
+              type="hidden"
+              name={name}
+              value={isChecked ? value : ""}
+              disabled={disabled}
+            />
+          )}
+        </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div id={errorId} role="alert" className={rErrorClassName}>
             {errorMessage}
           </div>
         )}

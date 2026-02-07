@@ -121,7 +121,7 @@ const MultiSelectDropdown = forwardRef<
       noResultsText = "No options available",
       showChevron = true,
       fullWidth = false,
-      isLoading: externalLoading = false,
+      loading: externalLoading = false,
       onLoadOptions,
       loadOnOpen = false,
       shimmerCount = 5,

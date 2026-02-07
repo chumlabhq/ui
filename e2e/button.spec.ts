@@ -298,11 +298,13 @@ test.describe("Button Accessibility Tests", () => {
   });
 
   test("button groups should have role='group'", async ({ page }) => {
-    const groups = page.locator('[role="group"]');
+    const groupHeading = page.getByRole("heading", { name: "Button Group" }).first();
+    await groupHeading.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
 
-    if ((await groups.count()) > 0) {
-      await expect(groups.first()).toHaveAttribute("role", "group");
-    }
+    const groups = page.locator('[role="group"]');
+    await expect(groups.first()).toBeAttached({ timeout: 5000 });
+    await expect(groups.first()).toHaveAttribute("role", "group");
   });
 });
 

@@ -13,7 +13,11 @@ import { cn } from "../../../utils/cn";
 
 const isTooltipConfig = (tooltip: unknown): tooltip is AvatarTooltipConfig => {
   return (
-    typeof tooltip === "object" && tooltip !== null && "content" in tooltip
+    typeof tooltip === "object" &&
+    tooltip !== null &&
+    !Array.isArray(tooltip) &&
+    "content" in tooltip &&
+    !("$$typeof" in tooltip)
   );
 };
 
@@ -75,7 +79,7 @@ export const AvatarGroupCount = forwardRef<
     const countElement = (
       <Comp
         ref={ref}
-        role="status"
+        role="img"
         className={cn(
           "shrink-0 inline-flex items-center justify-center",
           variantClassNames[variant],

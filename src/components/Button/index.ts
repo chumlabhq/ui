@@ -1,3 +1,3 @@
 export { default as Button } from "./Button";
-export { default as ButtonGroup } from "./ButtonGroup";
-export type { ButtonProps, ButtonGroupProps, IconAnimation } from "./types";
+export { default as ButtonGroup } from "./components/ButtonGroup";
+export type { ButtonProps, ButtonGroupProps, IconAnimation } from "./utils/types";

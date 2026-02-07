@@ -11,117 +11,41 @@ import {
   ChevronUpIcon,
 } from "../../components/Accordion";
 import type { AccordionRef } from "../../components/Accordion";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 import { useTheme } from "./ThemeContext";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg overflow-hidden ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    {children}
-  </div>
-);
-
-// ============================================================================
-// MAIN ACCORDION DEMO COMPONENT
-// ============================================================================
 
 const AccordionDemo = () => {
   const { isDarkMode } = useTheme();
   
-  // State for controlled examples
   const [singleValue, setSingleValue] = useState<string>("item-1");
   const [multipleValue, setMultipleValue] = useState<string[]>(["multi-1"]);
   
-  // State for dynamic items example
   const [dynamicItems, setDynamicItems] = useState([
     { id: "dyn-1", title: "First Dynamic Item", content: "Content for the first item." },
     { id: "dyn-2", title: "Second Dynamic Item", content: "Content for the second item." },
   ]);
   const [nextId, setNextId] = useState(3);
 
-  // State for async loading example
   const [asyncData, setAsyncData] = useState<Record<string, string>>({});
   const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set());
 
-  // State for form example
   const [formData, setFormData] = useState({
     personalInfo: { name: "", email: "" },
     address: { street: "", city: "", zip: "" },
     preferences: { newsletter: false, notifications: false },
   });
 
-  // Ref for programmatic control (imperative handle)
   const accordionRef = useRef<AccordionRef>(null);
 
-  // State for loading demonstration
   const [isLoading, setIsLoading] = useState(true);
   const [toggleLog, setToggleLog] = useState<string[]>([]);
 
-  // Helper function for async loading
   const loadContent = async (itemId: string) => {
     if (asyncData[itemId] || loadingItems.has(itemId)) return;
     
     setLoadingItems((prev) => new Set(prev).add(itemId));
     
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
     
     setAsyncData((prev) => ({
@@ -136,7 +60,6 @@ const AccordionDemo = () => {
     });
   };
 
-  // Dynamic items handlers
   const addItem = () => {
     setDynamicItems((prev) => [
       ...prev,
@@ -153,7 +76,6 @@ const AccordionDemo = () => {
     setDynamicItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Dark mode aware class names
   const getAccordionClassNames = () => ({
     root: "w-full",
     item: isDarkMode
@@ -172,9 +94,6 @@ const AccordionDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accordion
@@ -185,7 +104,6 @@ const AccordionDemo = () => {
           RTL support, and customizable styling.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -202,17 +120,11 @@ const AccordionDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Usage */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Accordion (Single Mode)"
           description="Only one item can be expanded at a time. Click to expand, click again to collapse."
@@ -245,9 +157,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Non-Collapsible */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Non-Collapsible (Single Mode)"
           description="At least one item must always be open. Try clicking the expanded item - it won't close."
@@ -271,9 +180,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Multiple Expanded Items */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Multiple Expanded Items"
           description='Multiple items can be expanded simultaneously using type="multiple".'
@@ -303,9 +209,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Controlled Mode (Single) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Controlled Mode (Single)"
           description="The expanded state is controlled externally via value and onValueChange."
@@ -363,9 +266,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Controlled Mode (Multiple) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Controlled Mode (Multiple)"
           description="Track and control multiple expanded items externally."
@@ -424,9 +324,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Keyboard Navigation */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Keyboard Navigation"
           description="Focus a trigger and use arrow keys to navigate. Full WAI-ARIA keyboard support."
@@ -540,9 +437,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Icons (Plus/Minus)"
           description="Use expandedIcon and collapsedIcon props for custom indicators."
@@ -574,9 +468,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Icon Position */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Icon Position"
           description='Position icons on the left with iconPosition="left" or hide them with iconPosition="none".'
@@ -637,9 +528,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled States */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled States"
           description="Individual items or the entire accordion can be disabled."
@@ -688,9 +576,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Styling */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Styling with classNames"
           description="Use the classNames prop to customize all parts at once (root, item, trigger, content, icon)."
@@ -735,9 +620,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Animation Duration */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Animation Duration"
           description="Use animationDuration to customize the expand/collapse speed (in milliseconds)."
@@ -777,9 +659,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Animation Callbacks */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Animation Callbacks"
           description="Use onOpenStart, onOpenEnd, onCloseStart, onCloseEnd for animation hooks."
@@ -802,9 +681,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Force Mount */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Force Mount (Keep in DOM)"
           description="Use forceMount to keep content in DOM when collapsed (useful for SEO or animations)."
@@ -828,9 +704,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Heading Level */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Heading Level"
           description="Set the heading level for accessibility with headingLevel (1-6)."
@@ -862,9 +735,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Orientation */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Orientation (Keyboard Navigation)"
           description='The orientation prop changes which arrow keys are used. Default is "vertical" (↑↓), set to "horizontal" for ←→.'
@@ -890,9 +760,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* RTL Support */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="RTL Support (dir)"
           description='The dir prop reverses left/right arrow keys when orientation="horizontal". Use for RTL languages.'
@@ -941,9 +808,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* No Loop Navigation */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="No Loop Navigation"
           description="Set loop={false} to prevent keyboard navigation from wrapping around."
@@ -971,9 +835,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom ID and ARIA Label */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom ID and ARIA Label"
           description="Use id for predictable element IDs and aria-label for accessibility."
@@ -1003,9 +864,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Focus Capture Events */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Focus Capture Events"
           description="Use onFocusCapture and onBlurCapture to track focus within the accordion."
@@ -1033,9 +891,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Render Delegation (asChild) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Render Delegation (asChild)"
           description="Use asChild to render a different element while keeping all accordion behavior."
@@ -1110,9 +965,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Dynamic Items */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Dynamic Items"
           description="Add and remove accordion items dynamically."
@@ -1153,9 +1005,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Nested Accordions */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Nested Accordions"
           description="Accordions can be nested inside each other for hierarchical content."
@@ -1197,9 +1046,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Async Loading */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Async Loading Content"
           description="Load content asynchronously when an item is expanded."
@@ -1235,9 +1081,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Form Inside Accordion */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Accordion with Form"
           description="Use accordions to organize form sections."
@@ -1447,9 +1290,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Rich Content */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Rich Content"
           description="Both triggers and content support any React nodes."
@@ -1535,9 +1375,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Ref */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Imperative Handle (Ref Methods)"
           description="Access programmatic methods via ref: expandAll, collapseAll, expand, collapse, getExpandedValues."
@@ -1599,9 +1436,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Size Variants */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Size Variants"
           description='Use size="sm", "md", or "lg" to adjust the accordion sizing.'
@@ -1630,9 +1464,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Variant Styles */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Variant Styles"
           description='Use variant="default", "bordered", "separated", or "flush" for different visual styles.'
@@ -1661,9 +1492,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Subtitle Support */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Subtitle Support"
           description="Add a subtitle prop to AccordionTrigger for additional context."
@@ -1699,9 +1527,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Loading Shimmer */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Loading Shimmer"
           description="Use AccordionShimmer as a placeholder while content loads."
@@ -1749,9 +1574,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* onToggle Callback */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="onToggle Callback"
           description="AccordionItem's onToggle callback fires when the item is expanded or collapsed."
@@ -1803,9 +1625,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Lazy Loading & Unmount on Close */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Lazy Loading & Unmount on Close"
           description="Use lazyLoad to delay rendering until first expand, or unmountOnClose to remove from DOM when collapsed."
@@ -1845,9 +1664,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Reduced Motion */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Reduced Motion Support"
           description='Set reduceMotion to true, false, or "auto" (respects user preference).'
@@ -1887,9 +1703,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Animation Easing */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Animation Easing"
           description="Use animationEasing to customize the transition timing function."
@@ -1922,9 +1735,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Icon Animation Modes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Icon Animation Modes"
           description='Use iconAnimation="rotate", "switch", or "none" on the trigger.'
@@ -2006,9 +1816,6 @@ const AccordionDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* ARIA Busy State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="ARIA Busy State"
           description="Use aria-busy to indicate loading state for screen readers."
@@ -2026,9 +1833,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Max Expanded (Multiple Mode) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Max Expanded Limit"
           description='Use maxExpanded to limit how many items can be open simultaneously in multiple mode.'
@@ -2056,9 +1860,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Unstyled Mode */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Unstyled Mode"
           description="Use unstyled={true} for headless usage - all default classes are removed."
@@ -2091,9 +1892,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Default Expand All */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Default Expand All"
           description="Use defaultExpandAll to expand all items on initial render (multiple mode)."
@@ -2117,9 +1915,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Expand on Print */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Expand on Print"
           description="Use expandOnPrint to automatically expand all items when printing."
@@ -2143,9 +1938,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Trigger Slots */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Trigger Slots (leftSlot / rightSlot)"
           description="Add custom content to the left or right of the trigger text."
@@ -2184,9 +1976,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Screen Reader Announcements */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Screen Reader Announcements"
           description='Use announceExpanded to announce state changes via aria-live region.'
@@ -2215,9 +2004,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* onExpandedChange Callback */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="onExpandedChange Callback"
           description="Get detailed information about expand/collapse events including counts."
@@ -2250,9 +2036,6 @@ const AccordionDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Prevent Close */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Prevent Close"
           description="Use preventClose to conditionally prevent closing (e.g., form validation)."
@@ -2284,17 +2067,62 @@ const AccordionDemo = () => {
             </Accordion>
           </DemoWrapper>
         </Section>
+
+        <Section
+          title="Async Prevent Close (with Loading)"
+          description="When preventClose returns a Promise, the item shows a data-pending attribute. Style it via CSS for loading feedback."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Accordion
+              type="single"
+              collapsible
+              defaultValue="async-1"
+              classNames={getAccordionClassNames()}
+              preventClose={(value) => {
+                if (value === "async-1") {
+                  return new Promise((resolve) => setTimeout(() => resolve(false), 1500));
+                }
+                return false;
+              }}
+            >
+              <AccordionItem value="async-1">
+                <AccordionTrigger>Async protected (1.5s delay)</AccordionTrigger>
+                <AccordionContent>
+                  Try closing this item — the trigger shows a pending state for 1.5 seconds.
+                  Style <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>[data-pending="true"]</code> in your CSS to show a spinner or opacity change.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="async-2">
+                <AccordionTrigger>Normal item</AccordionTrigger>
+                <AccordionContent>No async protection here.</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Accordion
+  preventClose={(value) => {
+    if (value === "item-1") {
+      // Async validation — item shows data-pending="true"
+      return new Promise((resolve) =>
+        setTimeout(() => resolve(false), 1500)
+      );
+    }
+    return false;
+  }}
+>
+  {/* style [data-pending="true"] for loading feedback */}
+</Accordion>`}
+          />
+        </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* Accordion Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Accordion
@@ -2591,7 +2419,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* AccordionItem Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionItem
@@ -2652,7 +2479,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* AccordionTrigger Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionTrigger
@@ -2763,7 +2589,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* AccordionContent Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionContent
@@ -2872,7 +2697,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* Data Attributes */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Data Attributes
@@ -2984,7 +2808,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* ARIA Attributes */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             ARIA Attributes
@@ -3042,7 +2865,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* AccordionShimmer Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionShimmer
@@ -3119,7 +2941,6 @@ const AccordionDemo = () => {
           </div>
         </div>
 
-        {/* AccordionRef Interface */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionRef (Imperative Handle)
@@ -3144,7 +2965,6 @@ const AccordionDemo = () => {
           />
         </div>
 
-        {/* Custom Hooks */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Custom Hooks
@@ -3157,7 +2977,6 @@ const AccordionDemo = () => {
             code={`// useAccordionItem - control a specific item
 const { isExpanded, toggle, expand, collapse } = useAccordionItem("item-1");
 
-// useAccordionState - get overall accordion state
 const { 
   expandedValues,   // Array of expanded item values
   expandedCount,    // Number of expanded items
@@ -3170,7 +2989,6 @@ const {
           />
         </div>
 
-        {/* AccordionExpandEvent Interface */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionExpandEvent
@@ -3189,7 +3007,6 @@ const {
           />
         </div>
 
-        {/* StorageConfig Interface */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             StorageConfig
@@ -3206,14 +3023,11 @@ const {
   deserialize?: (stored: string) => string[];  // Custom deserializer
 }
 
-// Usage:
 <Accordion storageKey="my-accordion" />
-// or
 <Accordion storageKey={{ key: "my-accordion", storage: sessionStorage }} />`}
           />
         </div>
 
-        {/* AccordionClassNames Type */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             AccordionClassNames Type
@@ -3235,9 +3049,6 @@ const {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -3320,6 +3131,14 @@ const {
             </li>
           </ul>
         </div>
+      </div>
+
+      <div className={`p-4 rounded-lg border ${isDarkMode ? "border-blue-800 bg-blue-950/30 text-blue-300" : "border-blue-200 bg-blue-50 text-blue-800"}`}>
+        <p className="text-sm">
+          <strong>Note:</strong> The Accordion component accepts all standard HTML div attributes on the root element.
+          AccordionItem, AccordionTrigger, and AccordionContent also accept standard HTML attributes
+          which are spread onto their respective underlying elements.
+        </p>
       </div>
     </div>
   );

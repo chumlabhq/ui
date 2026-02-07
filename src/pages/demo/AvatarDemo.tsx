@@ -8,89 +8,7 @@ import {
   AvatarGroupShimmer,
 } from "../../components/Avatar";
 import { useTheme } from "./ThemeContext";
-
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({
-  title,
-  description,
-  children,
-  isDarkMode,
-}) => (
-  <section className="space-y-4">
-    <div>
-      <h2
-        className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}
-      >
-        {title}
-      </h2>
-      {description && (
-        <p
-          className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-        >
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({
-  children,
-  isDarkMode,
-  className = "",
-}) => (
-  <div
-    className={`border rounded-lg overflow-hidden ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-6">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// SUBTLE COLOR PALETTE
-// ============================================================================
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
 const subtleColors = {
   backgrounds: [
@@ -115,19 +33,12 @@ const subtleColors = {
   ],
 };
 
-// ============================================================================
-// MAIN AVATAR DEMO COMPONENT
-// ============================================================================
-
 const AvatarDemo = () => {
   const { isDarkMode } = useTheme();
   const [imageError, setImageError] = useState(false);
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1
           className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}
@@ -142,7 +53,6 @@ const AvatarDemo = () => {
           auto-generated colors, and grouping.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3
             className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
@@ -161,9 +71,6 @@ const AvatarDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2
           className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
@@ -171,9 +78,6 @@ const AvatarDemo = () => {
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Usage */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Usage"
           description="Avatar with image, initials, and fallback content."
@@ -208,9 +112,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Loading States */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Loading State"
           description="Use the loading prop to show a shimmer placeholder while data is being fetched."
@@ -254,7 +155,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Shimmer */}
         <Section
           title="Avatar Shimmer (Standalone)"
           description="Use AvatarShimmer component directly for custom loading layouts."
@@ -330,7 +230,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Shimmer */}
         <Section
           title="Avatar Group Shimmer"
           description="Use AvatarGroupShimmer for loading group placeholders."
@@ -392,7 +291,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Sizes */}
         <Section
           title="Sizes"
           description="Available size presets: xs, sm, md, lg, xl, or custom number."
@@ -452,7 +350,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Shapes */}
         <Section
           title="Shapes"
           description="Available shapes: circle (default), rounded, and square."
@@ -506,7 +403,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Auto Colors */}
         <Section
           title="Auto-Generated Colors"
           description="Enable autoColor to generate consistent colors based on the name."
@@ -526,7 +422,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Custom Colors */}
         <Section
           title="Custom Color Palette"
           description="Provide custom color palettes for auto-generation."
@@ -596,7 +491,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Text Styling */}
         <Section
           title="Text Styling"
           description="Customize initials with textClassName and textStyle props."
@@ -631,7 +525,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Bordered */}
         <Section
           title="Bordered Avatars"
           description="Add borders using the bordered prop (true for auto-generated, or custom string)."
@@ -681,7 +574,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Status Indicator */}
         <Section
           title="Status Indicator"
           description="Show online/offline/away/busy status with the status prop."
@@ -745,7 +637,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Status Position */}
         <Section
           title="Status Position"
           description="Customize status indicator position using a config object."
@@ -809,7 +700,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Custom Status Color */}
         <Section
           title="Custom Status Color"
           description="Override default status colors with the color property."
@@ -839,7 +729,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Status Styling */}
         <Section
           title="Status Styling"
           description="Customize status indicator shape with statusClassName prop."
@@ -892,7 +781,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Tooltip */}
         <Section
           title="Tooltip"
           description="Add tooltips using a string or config object."
@@ -929,7 +817,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Image Config */}
         <Section
           title="Image Configuration"
           description="Configure image loading behavior with imageConfig prop."
@@ -991,9 +878,15 @@ const AvatarDemo = () => {
               </div>
             </div>
           </DemoWrapper>
+          <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}>
+            <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
+              <strong>Cached images:</strong> When a browser-cached image is used, the Avatar skips the fade-in animation 
+              and renders instantly — no flash or opacity transition. This is handled automatically via a synchronous 
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>img.complete</code> check on mount.
+            </p>
+          </div>
         </Section>
 
-        {/* Image Error Handling */}
         <Section
           title="Image Error Handling"
           description="Graceful fallback when image fails to load with onError callback."
@@ -1021,7 +914,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Clickable Avatars */}
         <Section
           title="Clickable Avatars"
           description="Make avatars interactive by wrapping them in buttons or links."
@@ -1108,9 +1000,6 @@ const AvatarDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Avatar Group */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Avatar Group"
           description="Group multiple avatars with overlap effect."
@@ -1149,7 +1038,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Group Size */}
         <Section
           title="Avatar Group Size"
           description="Control all child avatar sizes with the size prop."
@@ -1197,7 +1085,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Server-Side Total */}
         <Section
           title="Server-Side Total"
           description="Use total prop when you know the count but don't have all avatar data."
@@ -1212,7 +1099,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Custom Spacing */}
         <Section
           title="Custom Spacing"
           description="Adjust overlap spacing between avatars."
@@ -1260,7 +1146,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Ring Color */}
         <Section
           title="Custom Ring Color"
           description="Customize the ring/separator color around grouped avatars."
@@ -1309,7 +1194,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Custom Surplus Renderer */}
         <Section
           title="Custom Surplus Renderer"
           description="Use renderSurplus to customize the overflow indicator."
@@ -1368,7 +1252,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* RTL Support */}
         <Section
           title="RTL Support"
           description='Use dir="rtl" for right-to-left layouts.'
@@ -1406,7 +1289,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Custom Styling */}
         <Section
           title="Avatar Group Styling"
           description="Customize the group container with className and style props."
@@ -1453,7 +1335,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Variants */}
         <Section
           title="Avatar Group Variants"
           description="Available variants: stack (default), grid, and inline."
@@ -1482,7 +1363,6 @@ const AvatarDemo = () => {
                   Inline variant
                 </p>
                 <div>
-                  Team members:
                   <AvatarGroup
                     variant="inline"
                     max={3}
@@ -1499,7 +1379,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Shape and Bordered */}
         <Section
           title="Avatar Group Shape and Bordered"
           description="Apply shape and border styles to all children in the group."
@@ -1541,7 +1420,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Reverse Order */}
         <Section
           title="Avatar Group Reverse Order"
           description="Reverse the display order of avatars."
@@ -1579,7 +1457,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Click Handler */}
         <Section
           title="Avatar Group Click Handler"
           description="Handle clicks on individual avatars within the group."
@@ -1605,7 +1482,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Gap Alias */}
         <Section
           title="Avatar Group Gap"
           description="Use gap as an alias for spacing prop."
@@ -1643,9 +1519,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Avatar Group Count Standalone */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Avatar Group Count (Standalone)"
           description="Use AvatarGroupCount independently for custom layouts."
@@ -1662,7 +1535,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Sizes */}
         <Section
           title="Avatar Group Count Sizes"
           description="All available size options including custom numeric sizes."
@@ -1722,7 +1594,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Shapes */}
         <Section
           title="Avatar Group Count Shapes"
           description="Available shapes: circle (default), rounded, and square."
@@ -1758,7 +1629,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Bordered */}
         <Section
           title="Avatar Group Count Bordered"
           description="Add borders using the bordered prop (true for default or custom string)."
@@ -1798,7 +1668,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Text Styling */}
         <Section
           title="Avatar Group Count Text Styling"
           description="Customize the count text with textClassName and textStyle props."
@@ -1849,7 +1718,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count with Children */}
         <Section
           title="Avatar Group Count with Children"
           description="Use children prop to add custom content alongside the count."
@@ -1901,7 +1769,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Variants */}
         <Section
           title="Avatar Group Count Variants"
           description="Available variants: solid (default), outline, and ghost."
@@ -1937,7 +1804,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Max */}
         <Section
           title="Avatar Group Count Max"
           description="Use max prop to cap the displayed number."
@@ -1981,7 +1847,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Show Plus */}
         <Section
           title="Avatar Group Count Show Plus"
           description="Toggle the plus sign prefix using showPlus prop."
@@ -2009,7 +1874,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Format */}
         <Section
           title="Avatar Group Count Format"
           description="Use a custom format function for the count display."
@@ -2050,7 +1914,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Tooltip Config */}
         <Section
           title="Avatar Group Count Tooltip"
           description="Tooltip with string or configuration object."
@@ -2104,7 +1967,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Avatar Group Count Custom Styling */}
         <Section
           title="Avatar Group Count Styling"
           description="Customize appearance with className and style props."
@@ -2165,7 +2027,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Clickable Avatar Group Count */}
         <Section
           title="Clickable Avatar Group Count"
           description="Make the count interactive by wrapping it in a button."
@@ -2190,9 +2051,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Avatar Badge */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Avatar Badge"
           description="Add notification badges to avatars."
@@ -2220,7 +2078,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Positions */}
         <Section
           title="Badge Positions"
           description="Position badges at different corners."
@@ -2276,7 +2133,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Show Zero */}
         <Section
           title="Show Zero Badge"
           description="Use showZero to display badge even when count is 0."
@@ -2310,7 +2166,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Sizes */}
         <Section
           title="Badge Sizes"
           description="Available badge sizes: xs, sm, md, lg."
@@ -2366,7 +2221,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Variants */}
         <Section
           title="Badge Variants"
           description="Available variants: solid (default), outline, and soft."
@@ -2411,7 +2265,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Colors */}
         <Section
           title="Badge Colors"
           description="Use the color prop to quickly change the badge color."
@@ -2467,7 +2320,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Pulse Animation */}
         <Section
           title="Badge Pulse Animation"
           description="Add a pulse animation to draw attention to the badge."
@@ -2501,7 +2353,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Overlap */}
         <Section
           title="Badge Overlap"
           description="Control badge positioning for circular vs rectangular avatars."
@@ -2561,7 +2412,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Offset */}
         <Section
           title="Badge Offset"
           description="Fine-tune badge position with the offset prop."
@@ -2617,7 +2467,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge Invisible */}
         <Section
           title="Badge Invisible State"
           description="Hide the badge without unmounting using the invisible prop."
@@ -2651,7 +2500,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Custom Badge Styling */}
         <Section
           title="Custom Badge Styling"
           description="Customize badge appearance using style and className props. The className overrides the default styling classes."
@@ -2728,7 +2576,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Badge with Children */}
         <Section
           title="Badge with Custom Content"
           description="Use the children prop to add custom content like icons inside the badge."
@@ -2810,9 +2657,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* User Profile Example */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="User Profile Example"
           description="A common use case combining avatar with user information."
@@ -2843,7 +2687,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Team Display Example */}
         <Section
           title="Team Display Example"
           description="Display a team with avatar group and tooltip showing hidden members."
@@ -2868,7 +2711,6 @@ const AvatarDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* Notification List Example */}
         <Section
           title="Notification List Example"
           description="Combine avatars with badges for notification UIs."
@@ -2928,11 +2770,20 @@ const AvatarDemo = () => {
             </div>
           </DemoWrapper>
         </Section>
+
+        <Section
+          title="Data Attributes"
+          description="The Avatar component applies data attributes for CSS-based styling."
+          isDarkMode={isDarkMode}
+        >
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`data-has-image="true"    // Root: when displaying an image
+data-shape="circle"      // Root: current shape ("circle" | "square" | "rounded")`}
+          />
+        </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8" id="avatar-group">
         <h2
           className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
@@ -2940,7 +2791,6 @@ const AvatarDemo = () => {
           API Reference
         </h2>
 
-        {/* Avatar Props */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -3366,7 +3216,6 @@ const AvatarDemo = () => {
           </div>
         </div>
 
-        {/* AvatarGroup Props */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -3717,7 +3566,6 @@ const AvatarDemo = () => {
           </div>
         </div>
 
-        {/* AvatarGroupCount Props */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -4030,7 +3878,6 @@ const AvatarDemo = () => {
           </div>
         </div>
 
-        {/* AvatarBadge Props */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -4339,7 +4186,6 @@ const AvatarDemo = () => {
           </div>
         </div>
 
-        {/* AvatarShimmer Props */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -4460,7 +4306,6 @@ const AvatarDemo = () => {
           </div>
         </div>
 
-        {/* AvatarGroupShimmer Props */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -4657,7 +4502,6 @@ const AvatarDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3
             className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
@@ -4721,9 +4565,6 @@ const AvatarDemo = () => {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2
           className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
@@ -4811,6 +4652,17 @@ const AvatarDemo = () => {
             </li>
           </ul>
         </div>
+      </div>
+
+      <div
+        className={`p-4 rounded-lg border ${isDarkMode ? "border-blue-800 bg-blue-950/30 text-blue-300" : "border-blue-200 bg-blue-50 text-blue-800"}`}
+      >
+        <p className="text-sm">
+          <strong>Note:</strong> The Avatar component accepts all standard HTML
+          div attributes. AvatarGroup and AvatarGroupCount also accept standard
+          HTML attributes which are spread onto their respective underlying
+          elements.
+        </p>
       </div>
     </div>
   );

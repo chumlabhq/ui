@@ -554,7 +554,7 @@ const CascadingDropdownDemo = () => {
             onChange={(val) => setPrefetchValue(val)}
             onLoadChildren={handleLoadChildrenAsync}
             placeholder="Select region and country..."
-            isLoading={isPrefetchLoading}
+            loading={isPrefetchLoading}
             loadingText="Loading regions..."
             triggerClassName={triggerStyle}
             menuClassName={menuStyle}
@@ -605,7 +605,7 @@ const CascadingDropdownDemo = () => {
             onChange={(val) => setLoadOnOpenValue(val)}
             onLoadChildren={handleLoadChildrenAsync}
             placeholder="Click to load regions..."
-            isLoading={isLoadOnOpenLoading}
+            loading={isLoadOnOpenLoading}
             loadingText="Loading regions..."
             noResultsText={hasLoadOnOpenLoaded ? "No regions found" : "Click to load regions"}
             triggerClassName={triggerStyle}
@@ -1405,7 +1405,7 @@ const CascadingDropdownDemo = () => {
                 </td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">isLoading</td>
+                <td className="py-2 pr-4 font-mono text-blue-600">loading</td>
                 <td className="py-2 pr-4 text-gray-600">boolean</td>
                 <td className="py-2 pr-4 text-gray-500">false</td>
                 <td className="py-2 text-gray-600">

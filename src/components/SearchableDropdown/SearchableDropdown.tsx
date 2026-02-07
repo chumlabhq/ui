@@ -83,7 +83,7 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
       showSelectedIcon = true,
       selectedIcon,
       fullWidth = false,
-      isLoading: externalLoading = false,
+      loading: externalLoading = false,
       onSearch,
       searchDebounceMs = 300,
       initialOptions = [],

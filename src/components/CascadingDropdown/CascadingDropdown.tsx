@@ -151,7 +151,7 @@ const Submenu = memo(function Submenu({
   options,
   selectedValues,
   focusedIndex,
-  isLoading,
+  loading,
   submenuClassName,
   submenuItemClassName,
   submenuItemSelectedClassName,
@@ -175,7 +175,7 @@ const Submenu = memo(function Submenu({
   options: CascadingOption[];
   selectedValues: string[];
   focusedIndex: number;
-  isLoading: boolean;
+  loading: boolean;
   submenuClassName: string;
   submenuItemClassName: string;
   submenuItemSelectedClassName: string;
@@ -205,7 +205,7 @@ const Submenu = memo(function Submenu({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {isLoading ? (
+      {loading ? (
         <div className={loadingClassName}>{loadingText}</div>
       ) : options.length === 0 ? (
         <div className={noResultsClassName}>{noResultsText}</div>
@@ -255,7 +255,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       required = false,
       noResultsText = "No options available",
       loadingText = "Loading...",
-      isLoading: externalLoading = false,
+      loading: externalLoading = false,
       showChevron = true,
       showSelectedIcon = true,
       selectedIcon,
@@ -471,7 +471,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                                 ? submenuFocusedIndex
                                 : -1
                             }
-                            isLoading={isChildrenLoading}
+                            loading={isChildrenLoading}
                             submenuClassName={submenuClassName}
                             submenuItemClassName={submenuItemClassName}
                             submenuItemSelectedClassName={

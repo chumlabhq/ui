@@ -33,7 +33,7 @@ export interface CascadingDropdownProps {
   required?: boolean;
   noResultsText?: string;
   loadingText?: string;
-  isLoading?: boolean;
+  loading?: boolean;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
   selectedIcon?: ReactNode;

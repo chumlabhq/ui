@@ -1160,7 +1160,7 @@ const TableDemo = () => {
           <Table
             columns={extendedColumns}
             data={extendedSampleData}
-            isLoading={compIsLoading}
+            loading={compIsLoading}
             maxWidth={1000}
             maxHeight={400}
             stickyHeader={true}
@@ -1228,7 +1228,7 @@ const TableDemo = () => {
         <Table
           columns={columns}
           data={[]}
-          isLoading
+          loading
           shimmerRowCount={5}
           shimmerClassName={shimmerContainerStyle}
           shimmerRowClassName={shimmerRowStyle}
@@ -1361,7 +1361,7 @@ const TableDemo = () => {
                 </td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">isLoading</td>
+                <td className="py-2 pr-4 font-mono text-blue-600">loading</td>
                 <td className="py-2 pr-4 text-gray-600">boolean</td>
                 <td className="py-2 pr-4 text-gray-500">false</td>
                 <td className="py-2 text-gray-600">

@@ -1,83 +1,14 @@
 import { useState } from "react";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 import { Tooltip } from "../../components/Tooltip";
 import { Button } from "../../components/Button";
 import { useTheme } from "./ThemeContext";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6 flex flex-wrap items-center gap-4">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// MAIN TOOLTIP DEMO COMPONENT
-// ============================================================================
 
 const TooltipDemo = () => {
   const { isDarkMode } = useTheme();
   const [controlled, setControlled] = useState(false);
 
-  // Dark mode aware button styles
   const getButtonStyles = () => ({
     primary: `cursor-pointer px-4 py-2 rounded-lg font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 ${
       isDarkMode
@@ -98,7 +29,6 @@ const TooltipDemo = () => {
 
   const styles = getButtonStyles();
 
-  // Dark mode aware tooltip content styles
   const contentClassNameDark = "rounded-lg bg-gray-900 shadow-xl px-3 py-2 text-sm text-white";
   const contentClassNameSuccess = "rounded-lg bg-green-600 shadow-lg px-3 py-2 text-sm text-white font-medium";
   const contentClassNameWarning = "rounded-lg bg-amber-500 shadow-lg px-3 py-2 text-sm text-white font-medium";
@@ -115,7 +45,6 @@ const TooltipDemo = () => {
   const shadowSoftElevated = "0 10px 40px -10px rgba(0, 0, 0, 0.2)";
   const shadowSharpDrop = "4px 4px 0px rgba(0, 0, 0, 0.1)";
 
-  // Rich content examples
   const richContentProTip = (
     <div className="space-y-2">
       <div className={`font-semibold ${isDarkMode ? "text-white" : "text-gray-900"}`}>Pro Tip</div>
@@ -139,9 +68,6 @@ const TooltipDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Tooltip
@@ -151,7 +77,6 @@ const TooltipDemo = () => {
           rich HTML content, and auto-truncation with tooltip on overflow.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -160,12 +85,10 @@ const TooltipDemo = () => {
             isDarkMode={isDarkMode}
             code={`import { Tooltip } from "@kern-ui/tooltip";
 
-// Basic usage
 <Tooltip content="Tooltip text">
   <button>Hover me</button>
 </Tooltip>
 
-// Truncate mode
 <Tooltip truncate truncateWidth="max-w-[200px]">
   This long text will truncate and show tooltip on hover
 </Tooltip>`}
@@ -173,17 +96,11 @@ const TooltipDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Tooltip */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Tooltip"
           description="Wrap any element with Tooltip and provide content to display on hover."
@@ -199,9 +116,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Tooltip Positions */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Positions"
           description="Use the side prop to control tooltip placement: top, right, bottom, or left."
@@ -223,9 +137,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Tooltip Alignment */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Alignment"
           description="Use align prop to control tooltip alignment along the side axis: start, center, or end."
@@ -244,9 +155,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Offsets */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Offsets"
           description="Use sideOffset and alignOffset to fine-tune tooltip positioning."
@@ -268,9 +176,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Arrow */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Arrow"
           description="Toggle the arrow visibility with showArrow prop."
@@ -286,9 +191,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Delay */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Delay Duration"
           description="Control how long to wait before showing the tooltip with delayDuration (in milliseconds)."
@@ -310,9 +212,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Max Width */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Max Width"
           description="Control tooltip width with maxWidth prop (number for pixels or string for CSS value)."
@@ -337,9 +236,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Word Wrap / Text Wrapping */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Text Wrapping (Word Wrap)"
           description="Control how text wraps using wordWrap prop: 'break-word' (default), 'normal', or 'nowrap'."
@@ -381,9 +277,6 @@ const TooltipDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Default Open */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Default Open"
           description="Use defaultOpen to show tooltip on initial render (uncontrolled mode)."
@@ -399,9 +292,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Controlled */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Controlled State"
           description="Use open and onOpenChange props for controlled tooltip state."
@@ -421,9 +311,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* asChild */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="asChild Mode"
           description="Use asChild to clone tooltip handlers onto the child element instead of wrapping it in a span. This avoids double tab-stops for interactive elements."
@@ -448,9 +335,6 @@ const TooltipDemo = () => {
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled"
           description="Use disabled prop to prevent tooltip from showing."
@@ -466,9 +350,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Hoverable Content */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Hoverable Content"
           description="By default, moving mouse to tooltip keeps it open. Use disableHoverableContent to disable."
@@ -484,9 +365,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Rich HTML Content */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Rich HTML Content"
           description="The content prop accepts ReactNode for rich formatted content."
@@ -502,9 +380,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Styled Tooltips */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Styling"
           description="Use contentClassName and arrowClassName to customize tooltip appearance."
@@ -542,9 +417,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Shadow Presets */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Shadow Presets"
           description="Use shadow prop with presets: none, sm, md, lg (default), xl, 2xl."
@@ -572,9 +444,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Shadows */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Shadows"
           description="Pass a custom CSS box-shadow string to the shadow prop."
@@ -596,9 +465,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Gradient Backgrounds */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Gradient Backgrounds"
           description="Use contentStyle for gradient backgrounds and arrowColor to match the arrow."
@@ -640,9 +506,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Z-Index */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Z-Index"
           description="Use zIndex prop to control stacking order (default: 9999)."
@@ -661,9 +524,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Truncated Text (Auto Tooltip) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Truncated Text (Auto Tooltip)"
           description="Use truncate mode to automatically show tooltip only when text overflows."
@@ -703,9 +563,6 @@ const TooltipDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Truncated Text in Table */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Truncated Text in Table Layout"
           description="Common pattern for tables with long content that needs truncation."
@@ -785,17 +642,24 @@ const TooltipDemo = () => {
             </div>
           </DemoWrapper>
         </Section>
+
+        <Section
+          title="Data Attributes"
+          description="The Tooltip trigger wrapper applies data attributes for CSS-based styling."
+          isDarkMode={isDarkMode}
+        >
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`aria-describedby="tooltip-id"   // Trigger: when tooltip is open (links trigger to tooltip content)`}
+          />
+        </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* Tooltip Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Tooltip Props
@@ -1001,12 +865,19 @@ const TooltipDemo = () => {
                     Width class for truncation (e.g., "max-w-[200px]")
                   </td>
                 </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">triggerDisplay</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSSProperties["display"]</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"inline-block"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    CSS display value for the trigger wrapper element
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Styling Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Styling Props
@@ -1082,7 +953,6 @@ const TooltipDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1130,9 +1000,6 @@ interface TooltipProps {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1222,9 +1089,6 @@ interface TooltipProps {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* NOTES */}
-      {/* ================================================================== */}
       <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
         <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
           <strong>Note:</strong> The Tooltip uses{" "}

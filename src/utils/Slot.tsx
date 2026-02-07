@@ -12,10 +12,6 @@ import {
 
 type AnyProps = Record<string, unknown>;
 
-/**
- * Merges multiple refs into a single ref callback.
- * Useful when you need to pass a ref to both a parent component and use it internally.
- */
 function mergeRefs<T>(...refs: (Ref<T> | undefined)[]): Ref<T> {
   return (value: T | null) => {
     refs.forEach((ref) => {
@@ -28,12 +24,6 @@ function mergeRefs<T>(...refs: (Ref<T> | undefined)[]): Ref<T> {
   };
 }
 
-/**
- * Merges props from slot and child, with special handling for:
- * - Event handlers (onX): Both handlers are called, child first
- * - style: Objects are merged, child styles override slot styles
- * - className: Strings are concatenated with a space
- */
 function mergeProps(slotProps: AnyProps, childProps: AnyProps): AnyProps {
   const overrideProps: AnyProps = { ...childProps };
 
@@ -46,8 +36,11 @@ function mergeProps(slotProps: AnyProps, childProps: AnyProps): AnyProps {
     if (isHandler) {
       if (slotPropValue && childPropValue) {
         overrideProps[propName] = (...args: unknown[]) => {
-          (childPropValue as (...args: unknown[]) => void)(...args);
           (slotPropValue as (...args: unknown[]) => void)(...args);
+          const event = args[0] as { defaultPrevented?: boolean } | undefined;
+          if (!event?.defaultPrevented) {
+            (childPropValue as (...args: unknown[]) => void)(...args);
+          }
         };
       } else if (slotPropValue) {
         overrideProps[propName] = slotPropValue;
@@ -67,22 +60,19 @@ function mergeProps(slotProps: AnyProps, childProps: AnyProps): AnyProps {
   return { ...slotProps, ...overrideProps };
 }
 
-/**
- * Validates and returns the single child element.
- * Warns in development if multiple children or invalid elements are passed.
- */
 function getValidChild(children: ReactNode): ReactElement | null {
   const childArray = Children.toArray(children);
   if (childArray.length > 1) {
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV !== "production") {
       console.warn("Slot: Only one child is allowed when using asChild");
     }
-    return null;
+    const first = childArray[0];
+    return isValidElement(first) ? first : null;
   }
 
   const child = childArray[0];
   if (!isValidElement(child)) {
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV !== "production") {
       console.warn("Slot: Child must be a valid React element when using asChild");
     }
     return null;
@@ -95,23 +85,6 @@ interface SlotProps extends HTMLAttributes<HTMLElement> {
   children?: ReactNode;
 }
 
-/**
- * Slot component for polymorphic rendering (asChild pattern).
- * Merges its props onto its single child element, allowing components
- * to render as different elements while maintaining their behavior.
- * 
- * @example
- * ```tsx
- * // Usage in a component
- * const Comp = asChild ? Slot : "div";
- * return <Comp {...props}>{children}</Comp>;
- * 
- * // Consumer can then render as any element
- * <MyComponent asChild>
- *   <a href="/link">Click me</a>
- * </MyComponent>
- * ```
- */
 const Slot = forwardRef<HTMLElement, SlotProps>(
   ({ children, ...slotProps }, forwardedRef) => {
     const child = getValidChild(children);

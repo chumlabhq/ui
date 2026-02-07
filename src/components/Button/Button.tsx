@@ -1,49 +1,18 @@
-import {
-  forwardRef,
-  cloneElement,
-  isValidElement,
-  useMemo,
-  type ReactElement,
-} from "react";
-import type { ButtonProps, IconAnimation } from "./types";
+import { forwardRef, useMemo } from "react";
+import type { ButtonHTMLAttributes } from "react";
+import type { ButtonProps } from "./utils/types";
+import { HOVER_ANIMATION_MAP, CONTINUOUS_ANIMATION_MAP } from "./utils/constants";
 import { CircularLoader } from "../Loader";
 import { Tooltip } from "../Tooltip";
+import { Slot } from "../../utils/Slot";
 import { cn } from "../../utils/cn";
 
-const BASE_TRANSITION = "transition-transform duration-200";
-
-const HOVER_ANIMATION_MAP: Record<IconAnimation, string> = {
-  none: "",
-  slideRight: `${BASE_TRANSITION} group-hover:translate-x-1`,
-  slideLeft: `${BASE_TRANSITION} group-hover:-translate-x-1`,
-  slideUp: `${BASE_TRANSITION} group-hover:-translate-y-1`,
-  slideDown: `${BASE_TRANSITION} group-hover:translate-y-1`,
-  bounce: `${BASE_TRANSITION} group-hover:animate-bounce`,
-  pulse: `${BASE_TRANSITION} group-hover:animate-pulse`,
-  spin: `${BASE_TRANSITION} group-hover:animate-spin`,
-};
-
-const CONTINUOUS_ANIMATION_MAP: Record<IconAnimation, string> = {
-  none: "",
-  slideRight: `${BASE_TRANSITION} animate-slide-right`,
-  slideLeft: `${BASE_TRANSITION} animate-slide-left`,
-  slideUp: `${BASE_TRANSITION} animate-slide-up`,
-  slideDown: `${BASE_TRANSITION} animate-slide-down`,
-  bounce: "animate-bounce",
-  pulse: "animate-pulse",
-  spin: "animate-spin",
-};
-
-const Button = forwardRef<
-  HTMLButtonElement | HTMLAnchorElement | HTMLSpanElement,
-  ButtonProps
->((props, ref) => {
+const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const {
-    as = "button",
     children,
     leadingIcon,
     trailingIcon,
-    isLoading = false,
+    loading = false,
     loadingText,
     loaderPosition = "right",
     loaderSize = 16,
@@ -57,26 +26,18 @@ const Button = forwardRef<
     animateIcon = "trailing",
     tooltip,
     tooltipProps,
-    onClick,
-    type: buttonType,
-    disabled: disabledProp,
-    href,
-    target,
-    rel,
     ...rest
   } = props;
 
-  const type: "button" | "submit" | "reset" =
-    as === "button" ? (buttonType ?? "button") : "button";
-  const disabled = disabledProp ?? false;
-
-  const isDisabled = disabled || isLoading;
+  const as = "asChild" in props && props.asChild ? undefined : (props.as ?? "button");
+  const disabled = "disabled" in rest ? (rest.disabled ?? false) : false;
+  const isDisabled = disabled || loading;
 
   const loaderElement = loader ?? (
     <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
   );
 
-  const displayContent = isLoading && loadingText ? loadingText : children;
+  const displayContent = loading && loadingText ? loadingText : children;
 
   const animationClasses = useMemo(() => {
     const map = animateOnHover ? HOVER_ANIMATION_MAP : CONTINUOUS_ANIMATION_MAP;
@@ -100,7 +61,7 @@ const Button = forwardRef<
         contentClassName,
       )}
     >
-      {loaderPosition === "left" && isLoading && loaderElement}
+      {loaderPosition === "left" && loading && loaderElement}
       {leadingIcon && (
         <span
           className={cn("inline-flex shrink-0", animationClasses.leading)}
@@ -116,53 +77,26 @@ const Button = forwardRef<
           {trailingIcon}
         </span>
       )}
-      {loaderPosition === "right" && isLoading && loaderElement}
+      {loaderPosition === "right" && loading && loaderElement}
     </span>
   );
 
   const combinedClassName = cn(
-    className,
     fullWidth && "w-full",
     iconAnimation !== "none" && "group",
+    className,
   );
 
-  // Memoize aria/data prop filtering to avoid allocation on every render
-  const ariaAndDataProps = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(rest).filter(
-          ([key]) => key.startsWith("aria-") || key.startsWith("data-"),
-        ),
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(rest)],
-  );
-
-  if (asChild && isValidElement(children)) {
-    const child = children as ReactElement<{
-      className?: string;
-      onClick?: typeof onClick;
-    }>;
-    return cloneElement(child, {
-      className: cn(combinedClassName, child.props.className),
-      onClick: isDisabled ? undefined : onClick,
-    });
-  }
-
-  const commonProps = {
-    className: combinedClassName || undefined,
-    onClick: isDisabled ? undefined : onClick,
-    "aria-busy": isLoading || undefined,
+  const dataProps = {
+    "aria-busy": loading || undefined,
     "aria-disabled": isDisabled || undefined,
-    "data-loading": isLoading || undefined,
+    "data-loading": loading || undefined,
     "data-disabled": isDisabled || undefined,
     "data-full-width": fullWidth || undefined,
   };
 
-  const wrapWithTooltip = (element: React.ReactElement) => {
-    if (!tooltip) return element;
-
-    return (
+  const tooltipWrap = (element: React.ReactElement) =>
+    tooltip ? (
       <Tooltip
         content={tooltip}
         side={tooltipProps?.side}
@@ -176,38 +110,90 @@ const Button = forwardRef<
       >
         {element}
       </Tooltip>
+    ) : (
+      element
     );
-  };
 
-  if (as === "a" && href) {
-    const handleAnchorClick = isDisabled
-      ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
-      : (onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined);
-    return wrapWithTooltip(
-      <a
-        ref={ref as React.Ref<HTMLAnchorElement>}
-        href={href}
-        target={target}
-        rel={rel}
-        onClick={handleAnchorClick}
-        aria-busy={isLoading || undefined}
-        aria-disabled={isDisabled || undefined}
-        data-loading={isLoading || undefined}
-        data-disabled={isDisabled || undefined}
-        data-full-width={fullWidth || undefined}
+  if (asChild && children) {
+    const { onClick: asChildOnClick, ...asChildRest } = rest as Record<string, unknown>;
+    const handleDisabledClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+    };
+    const slotElement = (
+      <Slot
+        ref={ref}
         className={combinedClassName || undefined}
-        {...ariaAndDataProps}
+        onClick={isDisabled ? handleDisabledClick : (asChildOnClick as React.MouseEventHandler<HTMLElement> | undefined)}
+        aria-disabled={isDisabled || undefined}
+        {...dataProps}
+        {...asChildRest}
       >
-        {content}
-      </a>,
+        {children}
+      </Slot>
+    );
+
+    return tooltip ? (
+      <Tooltip
+        content={tooltip}
+        side={tooltipProps?.side}
+        align={tooltipProps?.align}
+        sideOffset={tooltipProps?.sideOffset}
+        maxWidth={tooltipProps?.maxWidth}
+        delayDuration={tooltipProps?.delayDuration}
+        showArrow={tooltipProps?.showArrow}
+        contentClassName={tooltipProps?.contentClassName}
+        contentStyle={tooltipProps?.contentStyle}
+        asChild
+      >
+        {slotElement}
+      </Tooltip>
+    ) : (
+      slotElement
     );
   }
 
+  if (as === "a") {
+    const {
+      href,
+      target,
+      rel,
+      onClick,
+      style,
+      disabled: _d,
+      ...anchorRest
+    } = rest as Record<string, unknown>;
+
+    const handleAnchorClick = isDisabled
+      ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()
+      : (onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined);
+
+    const anchorElement = (
+      <a
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        href={isDisabled ? undefined : (href as string)}
+        target={target as string}
+        rel={rel as string}
+        tabIndex={isDisabled ? -1 : undefined}
+        onClick={handleAnchorClick}
+        className={combinedClassName || undefined}
+        style={style as React.CSSProperties}
+        {...dataProps}
+        {...(anchorRest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {content}
+      </a>
+    );
+
+    return tooltipWrap(anchorElement);
+  }
+
   if (as === "span") {
+    const { onClick, style, ...spanRest } = rest as Record<string, unknown>;
     const handleSpanClick = onClick as
       | React.MouseEventHandler<HTMLSpanElement>
       | undefined;
-    return wrapWithTooltip(
+
+    const spanElement = (
       <span
         ref={ref as React.Ref<HTMLSpanElement>}
         role="button"
@@ -220,26 +206,43 @@ const Button = forwardRef<
             );
           }
         }}
-        {...commonProps}
+        className={combinedClassName || undefined}
+        style={style as React.CSSProperties}
         onClick={isDisabled ? undefined : handleSpanClick}
-        {...ariaAndDataProps}
+        {...dataProps}
+        {...(spanRest as React.HTMLAttributes<HTMLSpanElement>)}
       >
         {content}
-      </span>,
+      </span>
     );
+
+    return tooltipWrap(spanElement);
   }
 
-  return wrapWithTooltip(
+  const {
+    type: buttonType,
+    onClick,
+    style,
+    ...buttonRest
+  } = rest as ButtonHTMLAttributes<HTMLButtonElement> & Record<string, unknown>;
+  const type: "button" | "submit" | "reset" = buttonType ?? "button";
+
+  const buttonElement = (
     <button
       ref={ref as React.Ref<HTMLButtonElement>}
       type={type}
       disabled={isDisabled}
-      {...commonProps}
-      {...rest}
+      onClick={isDisabled ? undefined : onClick}
+      className={combinedClassName || undefined}
+      style={style as React.CSSProperties}
+      {...dataProps}
+      {...(buttonRest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
     >
       {content}
-    </button>,
+    </button>
   );
+
+  return tooltipWrap(buttonElement);
 });
 
 Button.displayName = "Button";

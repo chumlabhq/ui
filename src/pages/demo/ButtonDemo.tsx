@@ -1,76 +1,8 @@
 import { useState } from "react";
 import { Button, ButtonGroup } from "../../components/Button";
 import { useTheme } from "./ThemeContext";
+import { Section, CodeBlock, DemoWrapper } from "./components";
 
-// ============================================================================
-// SECTION COMPONENT
-// ============================================================================
-
-interface SectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const Section: React.FC<SectionProps> = ({ title, description, children, isDarkMode }) => (
-  <section className="space-y-4">
-    <div>
-      <h2 className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-        {title}
-      </h2>
-      {description && (
-        <p className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          {description}
-        </p>
-      )}
-    </div>
-    {children}
-  </section>
-);
-
-// ============================================================================
-// CODE BLOCK COMPONENT
-// ============================================================================
-
-interface CodeBlockProps {
-  code: string;
-  isDarkMode: boolean;
-}
-
-const CodeBlock: React.FC<CodeBlockProps> = ({ code, isDarkMode }) => (
-  <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
-);
-
-// ============================================================================
-// DEMO WRAPPER COMPONENT
-// ============================================================================
-
-interface DemoWrapperProps {
-  children: React.ReactNode;
-  isDarkMode: boolean;
-  className?: string;
-}
-
-const DemoWrapper: React.FC<DemoWrapperProps> = ({ children, isDarkMode, className = "" }) => (
-  <div
-    className={`border rounded-lg ${
-      isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
-    } ${className}`}
-  >
-    <div className="p-4 sm:p-6 flex flex-wrap items-center gap-4">{children}</div>
-  </div>
-);
-
-// ============================================================================
-// ICONS
-// ============================================================================
 
 const SearchIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -215,9 +147,6 @@ const ExternalLinkIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-// ============================================================================
-// MAIN BUTTON DEMO COMPONENT
-// ============================================================================
 
 const ButtonDemo = () => {
   const { isDarkMode } = useTheme();
@@ -235,7 +164,6 @@ const ButtonDemo = () => {
     setTimeout(() => setActiveGroup(null), 500);
   };
 
-  // Dark mode aware button styles
   const getButtonStyles = () => ({
     primary: `cursor-pointer px-4 py-2 rounded-lg font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 ${
       isDarkMode
@@ -288,9 +216,6 @@ const ButtonDemo = () => {
 
   return (
     <div className="space-y-16">
-      {/* ================================================================== */}
-      {/* HEADER */}
-      {/* ================================================================== */}
       <header>
         <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Button
@@ -301,7 +226,6 @@ const ButtonDemo = () => {
           and extensive customization.
         </p>
 
-        {/* Quick Install */}
         <div className="mt-6">
           <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
             Installation
@@ -313,17 +237,11 @@ const ButtonDemo = () => {
         </div>
       </header>
 
-      {/* ================================================================== */}
-      {/* EXAMPLES SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-12">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Examples
         </h2>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Basic Variants */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Basic Variants"
           description="Different button styles for various use cases."
@@ -339,9 +257,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Icons"
           description="Add leading and/or trailing icons using the leadingIcon and trailingIcon props."
@@ -370,9 +285,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Icon Only */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Icon Only Buttons"
           description="Buttons with only icons. Always provide an aria-label for accessibility."
@@ -407,9 +319,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Polymorphic Rendering (as prop) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Polymorphic Rendering (as prop)"
           description='Render as different elements using the "as" prop: button (default), anchor link, or span.'
@@ -492,9 +401,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Icon Animations (Hover) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Icon Animations (On Hover)"
           description="Animate icons on hover using iconAnimation prop. Default animateOnHover is true."
@@ -533,9 +439,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* More Icon Animation Effects */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="More Animation Effects"
           description="Additional animation options: bounce, pulse, and spin."
@@ -568,9 +471,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Animate Both Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Animate Both Icons"
           description='Use animateIcon="both" to animate leading and trailing icons together.'
@@ -598,9 +498,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Continuous Animation */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Continuous Animation"
           description="Set animateOnHover={false} to make animations run continuously."
@@ -636,12 +533,9 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Loading States */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Loading States"
-          description="Use isLoading to show a loading spinner. Customize with loadingText, loaderPosition, and loaderSize."
+          description="Use loading to show a loading spinner. Customize with loadingText, loaderPosition, and loaderSize."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -651,10 +545,10 @@ const ButtonDemo = () => {
                   Default loading (loader on right)
                 </p>
                 <div className="flex items-center gap-3">
-                  <Button className={styles.primary} isLoading>
+                  <Button className={styles.primary} loading>
                     Loading
                   </Button>
-                  <Button className={styles.secondary} isLoading>
+                  <Button className={styles.secondary} loading>
                     Saving
                   </Button>
                 </div>
@@ -663,7 +557,7 @@ const ButtonDemo = () => {
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                   loaderPosition="left"
                 </p>
-                <Button className={styles.primary} isLoading loaderPosition="left">
+                <Button className={styles.primary} loading loaderPosition="left">
                   Processing
                 </Button>
               </div>
@@ -671,7 +565,7 @@ const ButtonDemo = () => {
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                   With loadingText
                 </p>
-                <Button className={styles.outline} isLoading loadingText="Submitting...">
+                <Button className={styles.outline} loading loadingText="Submitting...">
                   Submit
                 </Button>
               </div>
@@ -679,7 +573,7 @@ const ButtonDemo = () => {
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                   Loading with icon (icon remains visible)
                 </p>
-                <Button className={styles.success} isLoading leadingIcon={<DownloadIcon />}>
+                <Button className={styles.success} loading leadingIcon={<DownloadIcon />}>
                   Downloading
                 </Button>
               </div>
@@ -687,9 +581,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Custom Loader */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Custom Loader"
           description="Provide a custom loader component using the loader prop."
@@ -698,21 +589,21 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              isLoading
+              loading
               loaderSize={12}
             >
               Small Loader
             </Button>
             <Button
               className={styles.primary}
-              isLoading
+              loading
               loaderSize={20}
             >
               Large Loader
             </Button>
             <Button
               className={styles.secondary}
-              isLoading
+              loading
               loader={
                 <span className={`text-xs animate-pulse ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
                   ...
@@ -723,7 +614,7 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.outline}
-              isLoading
+              loading
               loader={
                 <div className="flex gap-0.5">
                   <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
@@ -737,9 +628,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Interactive Loading */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Interactive Loading"
           description="Click to trigger a loading state simulation."
@@ -748,7 +636,7 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              isLoading={loading}
+              loading={loading}
               loadingText="Processing..."
               onClick={simulateLoading}
             >
@@ -760,9 +648,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Disabled State */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Disabled State"
           description="Use the disabled prop to disable the button."
@@ -784,9 +669,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Full Width */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Full Width"
           description="Use fullWidth prop to make the button span the full container width."
@@ -804,9 +686,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Content Class Name */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Content Class Name"
           description="Customize the inner content wrapper with contentClassName prop."
@@ -837,33 +716,59 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* As Child (Polymorphic) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="As Child (asChild prop)"
           description="Use asChild to merge button props onto a child element for maximum flexibility."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
-            <Button className={styles.primary} asChild>
-              <a href="https://example.com" target="_blank" rel="noreferrer">
-                Link as Button (asChild)
-              </a>
-            </Button>
+            <div className="flex flex-wrap gap-3">
+              <Button className={styles.primary} asChild>
+                <a href="https://example.com" target="_blank" rel="noreferrer">
+                  Link as Button (asChild)
+                </a>
+              </Button>
+              <Button className={styles.primary} asChild disabled>
+                <a href="https://example.com" target="_blank" rel="noreferrer" onClick={() => alert("This should NOT fire")}>
+                  Disabled asChild (click suppressed)
+                </a>
+              </Button>
+              <Button className={styles.primary} asChild loading>
+                <a href="https://example.com" target="_blank" rel="noreferrer" onClick={() => alert("This should NOT fire")}>
+                  Loading asChild
+                </a>
+              </Button>
+            </div>
           </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`{/* Normal */}
+<Button asChild>
+  <a href="/about">Link as Button</a>
+</Button>
+
+{/* Disabled — child's onClick is automatically suppressed */}
+<Button asChild disabled>
+  <a href="/about" onClick={() => alert("won't fire")}>
+    Disabled Link
+  </a>
+</Button>
+
+{/* Loading — also suppresses child click */}
+<Button asChild loading>
+  <a href="/about">Loading Link</a>
+</Button>`}
+          />
           <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}>
             <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
-              <strong>Note:</strong> When using <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>asChild</code>, 
-              the Button merges its props (className, onClick, etc.) onto the child element. 
-              This is useful when you need the exact element type for routing libraries or other integrations.
+              <strong>Note:</strong> When <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>asChild</code> is 
+              combined with <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>disabled</code> or <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>loading</code>, 
+              the child element&#39;s native onClick is automatically suppressed via event.preventDefault(). 
+              The child also receives <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>aria-disabled</code> for accessibility.
             </p>
           </div>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* With Tooltip */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="With Tooltip"
           description="Add tooltips using the tooltip prop. Customize with tooltipProps."
@@ -897,9 +802,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Tooltip Customization */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Tooltip Customization"
           description="Full control over tooltip appearance and behavior using tooltipProps."
@@ -951,9 +853,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Tooltip with Icons & Animation */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Tooltip with Icons & Animation"
           description="Combine tooltips with icons and animations."
@@ -993,9 +892,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Button Group */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Button Group"
           description="Group related buttons together using ButtonGroup component."
@@ -1056,9 +952,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Button Group (Vertical) */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Vertical Button Group"
           description="Stack buttons vertically using flex-col on the ButtonGroup."
@@ -1088,9 +981,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Button Group with Icons */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Button Group with Icons"
           description="Combine ButtonGroup with icon buttons for toolbars and action bars."
@@ -1204,9 +1094,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Form Integration */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Form Integration"
           description='Use type="submit" or type="reset" for form buttons. Default type is "button".'
@@ -1259,9 +1146,6 @@ const ButtonDemo = () => {
           </DemoWrapper>
         </Section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* Data Attributes */}
-        {/* ---------------------------------------------------------------- */}
         <Section
           title="Data Attributes"
           description="Button applies data attributes for CSS-based state styling."
@@ -1281,7 +1165,7 @@ const ButtonDemo = () => {
                   <tr>
                     <td className="py-3 pr-4 font-mono text-blue-500">data-loading</td>
                     <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      isLoading is true
+                      loading is true
                     </td>
                     <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                       <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
@@ -1292,7 +1176,7 @@ const ButtonDemo = () => {
                   <tr>
                     <td className="py-3 pr-4 font-mono text-blue-500">data-disabled</td>
                     <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      disabled or isLoading
+                      disabled or loading
                     </td>
                     <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                       <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}>
@@ -1318,15 +1202,11 @@ const ButtonDemo = () => {
         </Section>
       </div>
 
-      {/* ================================================================== */}
-      {/* API REFERENCE SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-8">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           API Reference
         </h2>
 
-        {/* Button Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Button
@@ -1403,7 +1283,7 @@ const ButtonDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">isLoading</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">loading</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1537,7 +1417,6 @@ const ButtonDemo = () => {
           </div>
         </div>
 
-        {/* ButtonTooltipProps */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             ButtonTooltipProps
@@ -1626,7 +1505,6 @@ const ButtonDemo = () => {
           </div>
         </div>
 
-        {/* ButtonGroup Props */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             ButtonGroup
@@ -1663,7 +1541,6 @@ const ButtonDemo = () => {
           </div>
         </div>
 
-        {/* Type Definitions */}
         <div>
           <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
             Type Definitions
@@ -1698,7 +1575,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
-  isLoading?: boolean;
+  loading?: boolean;
   loadingText?: ReactNode;
   loaderPosition?: "left" | "right";
   loaderSize?: number;
@@ -1724,9 +1601,6 @@ interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
         </div>
       </div>
 
-      {/* ================================================================== */}
-      {/* ACCESSIBILITY SECTION */}
-      {/* ================================================================== */}
       <div className="space-y-6">
         <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
           Accessibility
@@ -1846,6 +1720,14 @@ interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
             </li>
           </ul>
         </div>
+      </div>
+
+      <div className={`p-4 rounded-lg border ${isDarkMode ? "border-blue-800 bg-blue-950/30 text-blue-300" : "border-blue-200 bg-blue-50 text-blue-800"}`}>
+        <p className="text-sm">
+          <strong>Note:</strong> The Button component accepts all standard HTML button attributes.
+          When using <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>as="a"</code>, anchor-specific
+          attributes like <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>href</code>, <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>target</code>, and <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>rel</code> are available.
+        </p>
       </div>
     </div>
   );
