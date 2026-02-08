@@ -186,12 +186,12 @@ test.describe("Drawer Component - Cross-Browser Tests", () => {
 
       await expect(
         dialog.locator("..").first(),
-      ).not.toHaveAttribute("data-open");
+      ).toHaveAttribute("data-state", "closed");
 
       await page.getByRole("button", { name: "Open Form Drawer" }).click();
       await expect(
         dialog.locator("..").first(),
-      ).toHaveAttribute("data-open");
+      ).toHaveAttribute("data-state", "open");
 
       await expect(input).toHaveValue("Test User");
     });
@@ -206,7 +206,17 @@ test.describe("Drawer Component - Cross-Browser Tests", () => {
       await expect(dialog).toBeVisible();
 
       const overlay = dialog.locator("..").locator("[data-drawer-overlay]");
-      await expect(overlay).toBeVisible();
+
+      await page.waitForFunction(
+        () => {
+          const el = document.querySelector(
+            '[data-state="open"] [data-drawer-overlay]',
+          );
+          return el ? parseFloat(getComputedStyle(el).opacity) > 0 : false;
+        },
+        null,
+        { timeout: 5000 },
+      );
 
       const opacity = await overlay.evaluate(
         (el) => getComputedStyle(el).opacity,

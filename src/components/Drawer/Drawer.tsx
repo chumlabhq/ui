@@ -16,6 +16,12 @@ import {
   getClosingDelta,
   getTransformString,
   isHorizontalDirection,
+  getTouchAction,
+  pushDrawer,
+  popDrawer,
+  isTopDrawer,
+  acquireScrollLock,
+  releaseScrollLock,
 } from "./utils/helpers";
 import {
   DEFAULT_CLASS_NAMES,
@@ -26,7 +32,7 @@ import {
   DEFAULT_OVERLAY_BLUR,
   DEFAULT_DURATION,
   DEFAULT_SWIPE_THRESHOLD,
-  DEFAULT_SNAP_POINT,
+  DEFAULT_SNAP_POINT_INDEX,
   SWIPE_DEADZONE,
   VELOCITY_THRESHOLD,
 } from "./utils/constants";
@@ -62,9 +68,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       swipeable = false,
       swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
       snapPoints,
-      activeSnapPoint,
-      defaultSnapPoint = DEFAULT_SNAP_POINT,
-      onSnapPointChange,
+      activeSnapPointIndex,
+      defaultSnapPointIndex = DEFAULT_SNAP_POINT_INDEX,
+      onSnapPointIndexChange,
       className,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
@@ -78,23 +84,33 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const titleId = `drawer-title-${generatedId}`;
     const panelRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<Element | null>(null);
+    const restoreRafRef = useRef<number>(0);
     const [mounted, setMounted] = useState(open);
+    const [visualOpen, setVisualOpen] = useState(false);
     const prefersReducedMotion = usePrefersReducedMotion();
 
+    const safeActiveSnap =
+      activeSnapPointIndex !== undefined
+        ? Math.max(0, Math.floor(activeSnapPointIndex))
+        : undefined;
+
     const [currentSnapIndex, setSnapIndex] = useControllableState({
-      value: activeSnapPoint,
-      defaultValue: defaultSnapPoint,
-      onChange: onSnapPointChange,
+      value: safeActiveSnap,
+      defaultValue: Math.max(0, Math.floor(defaultSnapPointIndex)),
+      onChange: onSnapPointIndexChange,
     });
 
     const effectiveDuration = prefersReducedMotion ? 0 : duration;
 
     const hasSnapPoints = snapPoints !== undefined && snapPoints.length > 0;
     const clampedSnapIndex = hasSnapPoints
-      ? Math.min(currentSnapIndex, snapPoints!.length - 1)
+      ? Math.min(
+          Math.max(0, Math.floor(currentSnapIndex)),
+          snapPoints!.length - 1,
+        )
       : 0;
 
-    const fraction = open
+    const fraction = visualOpen
       ? hasSnapPoints
         ? snapPoints![clampedSnapIndex]
         : 1
@@ -118,12 +134,25 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       setMounted(true);
     }
 
+    if (!open && visualOpen) {
+      setVisualOpen(false);
+    }
+
     useEffect(() => {
       if (!open && !keepMounted) {
         const timer = setTimeout(() => setMounted(false), effectiveDuration);
         return () => clearTimeout(timer);
       }
     }, [open, effectiveDuration, keepMounted]);
+
+    useEffect(() => {
+      if (mounted && open) {
+        const raf = requestAnimationFrame(() => {
+          setVisualOpen(true);
+        });
+        return () => cancelAnimationFrame(raf);
+      }
+    }, [mounted, open]);
 
     const prevOpenRef = useRef(open);
     useEffect(() => {
@@ -138,8 +167,12 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       return () => clearTimeout(timer);
     }, [open, effectiveDuration, onTransitionEndProp]);
 
+    const prevOpenForCapture = useRef(false);
     useEffect(() => {
-      if (open && restoreFocus && modal) {
+      const wasOpen = prevOpenForCapture.current;
+      prevOpenForCapture.current = open;
+
+      if (open && !wasOpen && restoreFocus && modal) {
         triggerRef.current = document.activeElement;
       }
     }, [open, restoreFocus, modal]);
@@ -147,11 +180,20 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     useEffect(() => {
       if (!open && restoreFocus && modal && triggerRef.current) {
         const el = triggerRef.current as HTMLElement;
-        if (typeof el.focus === "function") {
-          requestAnimationFrame(() => el.focus());
-        }
         triggerRef.current = null;
+        if (typeof el.focus === "function") {
+          restoreRafRef.current = requestAnimationFrame(() => {
+            el.focus();
+            restoreRafRef.current = 0;
+          });
+        }
       }
+      return () => {
+        if (restoreRafRef.current) {
+          cancelAnimationFrame(restoreRafRef.current);
+          restoreRafRef.current = 0;
+        }
+      };
     }, [open, restoreFocus, modal]);
 
     useEffect(() => {
@@ -185,10 +227,18 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       }
     }, [open, modal, initialFocus]);
 
+    useEffect(() => {
+      if (open) {
+        pushDrawer(drawerId);
+        return () => popDrawer(drawerId);
+      }
+    }, [open, drawerId]);
+
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
         if (event.key === "Escape" && closeOnEscape) {
-          event.stopPropagation();
+          if (!isTopDrawer(drawerId)) return;
+          event.stopImmediatePropagation();
           onClose();
           return;
         }
@@ -215,10 +265,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           }
         }
       },
-      [onClose, closeOnEscape, trapFocus, modal],
+      [onClose, closeOnEscape, trapFocus, modal, drawerId],
     );
 
-    const handleOverlayPointerDown = useCallback(() => {
+    const handleOverlayClick = useCallback(() => {
       if (closeOnOverlayClick) {
         onClose();
       }
@@ -227,17 +277,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     useEffect(() => {
       if (!isBrowser) return;
       if (lockScroll && open && modal) {
-        const scrollbarWidth =
-          window.innerWidth - document.documentElement.clientWidth;
-        const original = document.body.style.cssText;
-        document.body.style.overflow = "hidden";
-        if (scrollbarWidth > 0) {
-          document.body.style.paddingRight = `${scrollbarWidth}px`;
-        }
-
-        return () => {
-          document.body.style.cssText = original;
-        };
+        acquireScrollLock();
+        return () => releaseScrollLock();
       }
     }, [open, lockScroll, modal]);
 
@@ -296,13 +337,12 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           return;
         }
 
-        const panelSize = isHorizontalDirection(direction)
-          ? panel.offsetWidth
-          : panel.offsetHeight;
-        const dragFraction = closingDelta / panelSize;
+        const horizontal = isHorizontalDirection(direction);
+        const panelSize = horizontal ? panel.offsetWidth : panel.offsetHeight;
         const baseFraction = hasSnapPoints
           ? snapPoints![clampedSnapIndex]
           : 1;
+        const dragFraction = closingDelta / panelSize;
         const newFraction = Math.max(0, baseFraction - dragFraction);
         const closedPercent = (1 - newFraction) * 100;
 
@@ -340,8 +380,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
         if (closingDelta <= 0) return;
 
+        const horizontal = isHorizontalDirection(direction);
         const panelSize = panel
-          ? isHorizontalDirection(direction)
+          ? horizontal
             ? panel.offsetWidth
             : panel.offsetHeight
           : 300;
@@ -418,40 +459,44 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     if (!keepMounted && !mounted) return null;
 
     const container = portalContainer ?? document.body;
+    const isClosed = !open;
+    const isHiddenMounted = keepMounted && isClosed;
 
     return (
       <DrawerContext.Provider value={contextValue}>
         {createPortal(
           <div
+            {...rest}
             id={drawerId}
             className={
               cn(
-                modal && "fixed inset-0 z-999999",
+                modal && "fixed inset-0",
                 modal &&
-                  (open ? "pointer-events-auto" : "pointer-events-none"),
+                  (visualOpen
+                    ? "pointer-events-auto"
+                    : "pointer-events-none"),
                 mergedClasses.root,
-                className,
               ) || undefined
             }
-            data-open={open || undefined}
+            data-state={open ? "open" : "closed"}
             data-direction={direction}
-            {...rest}
+            aria-hidden={isHiddenMounted || undefined}
           >
             {modal && (
               <div
                 className={cn(mergedClasses.overlay) || undefined}
                 style={{
                   backgroundColor: overlayColor,
-                  opacity: open ? overlayOpacity : 0,
+                  opacity: visualOpen ? overlayOpacity : 0,
                   transitionDuration: `${effectiveDuration}ms`,
-                  ...(overlayBlur > 0 && open
+                  ...(overlayBlur > 0 && visualOpen
                     ? {
                         backdropFilter: `blur(${overlayBlur}px)`,
                         WebkitBackdropFilter: `blur(${overlayBlur}px)`,
                       }
                     : {}),
                 }}
-                onPointerDown={handleOverlayPointerDown}
+                onClick={handleOverlayClick}
                 aria-hidden="true"
                 data-drawer-overlay
               />
@@ -476,15 +521,23 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               }
               aria-describedby={ariaDescribedBy}
               tabIndex={-1}
+              inert={isHiddenMounted || undefined}
               className={
                 cn(
                   mergedClasses.panel,
-                  !modal && "z-999999",
                   !modal &&
-                    (open ? "pointer-events-auto" : "pointer-events-none"),
+                    (visualOpen
+                      ? "pointer-events-auto"
+                      : "pointer-events-none"),
+                  className,
                 ) || undefined
               }
-              style={drawerStyles}
+              style={{
+                ...drawerStyles,
+                ...(swipeable
+                  ? { touchAction: getTouchAction(direction) }
+                  : {}),
+              }}
               data-drawer-panel
               data-direction={direction}
               onPointerDown={swipeable ? handlePanelPointerDown : undefined}

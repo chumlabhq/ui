@@ -23,7 +23,7 @@ export {
   DEFAULT_OVERLAY_BLUR,
   DEFAULT_DURATION,
   DEFAULT_SWIPE_THRESHOLD,
-  DEFAULT_SNAP_POINT,
+  DEFAULT_SNAP_POINT_INDEX,
 } from "./utils/constants";
 
 export { DrawerContext, useDrawerContext } from "./utils/context";

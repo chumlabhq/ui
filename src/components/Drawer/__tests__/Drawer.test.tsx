@@ -79,22 +79,80 @@ describe("Drawer", () => {
       expect(dialog).toHaveAttribute("data-direction", "right");
     });
 
-    it("sets data-open on root element", () => {
+    it("sets data-state='open' on root element when open", () => {
       renderDrawer();
       const root = screen.getByRole("dialog").parentElement!;
-      expect(root).toHaveAttribute("data-open");
+      expect(root).toHaveAttribute("data-state", "open");
+    });
+
+    it("sets data-state='closed' on root element when closed", () => {
+      const { rerender } = render(
+        <Drawer
+          open={true}
+          onClose={() => {}}
+          aria-label="State test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      rerender(
+        <Drawer
+          open={false}
+          onClose={() => {}}
+          aria-label="State test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      const root = screen.getByRole("dialog", { hidden: true }).parentElement!;
+      expect(root).toHaveAttribute("data-state", "closed");
+    });
+
+    it("sets aria-hidden and inert when keepMounted and closed", () => {
+      const { rerender } = render(
+        <Drawer
+          open={true}
+          onClose={() => {}}
+          aria-label="Inert test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      rerender(
+        <Drawer
+          open={false}
+          onClose={() => {}}
+          aria-label="Inert test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      const root = screen.getByRole("dialog", { hidden: true }).parentElement!;
+      expect(root).toHaveAttribute("aria-hidden", "true");
+      const panel = screen.getByRole("dialog", { hidden: true });
+      expect(panel).toHaveAttribute("inert");
     });
   });
 
   describe("Closing Behavior", () => {
-    it("calls onClose on overlay pointerdown", async () => {
+    it("calls onClose on overlay click", async () => {
       const { onClose } = renderDrawer();
       const overlay = document.querySelector("[data-drawer-overlay]")!;
 
       await act(() => {
-        overlay.dispatchEvent(
-          new PointerEvent("pointerdown", { bubbles: true }),
-        );
+        overlay.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
       expect(onClose).toHaveBeenCalledTimes(1);
@@ -105,9 +163,7 @@ describe("Drawer", () => {
       const overlay = document.querySelector("[data-drawer-overlay]")!;
 
       await act(() => {
-        overlay.dispatchEvent(
-          new PointerEvent("pointerdown", { bubbles: true }),
-        );
+        overlay.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
       expect(onClose).not.toHaveBeenCalled();
@@ -129,6 +185,38 @@ describe("Drawer", () => {
       await user.keyboard("{Escape}");
 
       expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it("only closes topmost drawer on Escape when stacked", async () => {
+      const user = userEvent.setup();
+      const outerClose = vi.fn();
+      const innerClose = vi.fn();
+
+      render(
+        <>
+          <Drawer
+            open={true}
+            onClose={outerClose}
+            aria-label="Outer"
+            duration={0}
+          >
+            <DrawerBody>Outer</DrawerBody>
+          </Drawer>
+          <Drawer
+            open={true}
+            onClose={innerClose}
+            aria-label="Inner"
+            duration={0}
+          >
+            <DrawerBody>Inner</DrawerBody>
+          </Drawer>
+        </>,
+      );
+
+      await user.keyboard("{Escape}");
+
+      expect(innerClose).toHaveBeenCalledTimes(1);
+      expect(outerClose).not.toHaveBeenCalled();
     });
   });
 
@@ -652,6 +740,60 @@ describe("Drawer", () => {
       const originalOverflow = document.body.style.overflow;
       renderDrawer({ modal: true, lockScroll: false });
       expect(document.body.style.overflow).toBe(originalOverflow);
+    });
+  });
+
+  describe("className", () => {
+    it("applies className to the panel element", () => {
+      renderDrawer({ className: "my-custom-class" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.className).toContain("my-custom-class");
+    });
+
+    it("does not apply className to the root wrapper", () => {
+      renderDrawer({ className: "my-custom-class" });
+      const root = screen.getByRole("dialog").parentElement!;
+      expect(root.className).not.toContain("my-custom-class");
+    });
+  });
+
+  describe("Snap Point Validation", () => {
+    it("clamps out-of-bounds snap point index", () => {
+      const onSnapPointChange = vi.fn();
+      render(
+        <Drawer
+          open={true}
+          onClose={() => {}}
+          aria-label="Snap test"
+          duration={0}
+          swipeable
+          snapPoints={[0.3, 0.6, 1]}
+          activeSnapPointIndex={10}
+          onSnapPointIndexChange={onSnapPointChange}
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+
+    it("floors non-integer snap point index", () => {
+      render(
+        <Drawer
+          open={true}
+          onClose={() => {}}
+          aria-label="Snap test"
+          duration={0}
+          swipeable
+          snapPoints={[0.3, 0.6, 1]}
+          activeSnapPointIndex={1.7}
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
   });
 });

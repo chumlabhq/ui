@@ -276,6 +276,13 @@ const DrawerDemo = () => {
   const [nonModalOpen, setNonModalOpen] = useState(false);
   const [keepMountedOpen, setKeepMountedOpen] = useState(false);
   const [closeButtonOpen, setCloseButtonOpen] = useState(false);
+  const [stackedOuterOpen, setStackedOuterOpen] = useState(false);
+  const [stackedInnerOpen, setStackedInnerOpen] = useState(false);
+  const [durationOpen, setDurationOpen] = useState<string | null>(null);
+  const [persistentOpen, setPersistentOpen] = useState(false);
+  const [scrollTestOpen, setScrollTestOpen] = useState(false);
+  const [transitionOpen, setTransitionOpen] = useState(false);
+  const [transitionStatus, setTransitionStatus] = useState("");
   const keepMountedInputRef = useRef<HTMLInputElement>(null);
 
   const cartTotal = cartItems.reduce(
@@ -1193,6 +1200,151 @@ const DrawerDemo = () => {
         </Section>
 
         <Section
+          title="Custom Animation Duration"
+          description="Control how fast the drawer animates in and out."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setDurationOpen("fast")}
+              className="px-4 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium"
+            >
+              Fast (100ms)
+            </Button>
+            <Button
+              onClick={() => setDurationOpen("normal")}
+              className={`px-4 py-2.5 rounded-lg transition-colors font-medium ${isDarkMode ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            >
+              Normal (300ms)
+            </Button>
+            <Button
+              onClick={() => setDurationOpen("slow")}
+              className="px-4 py-2.5 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-medium"
+            >
+              Slow (600ms)
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer duration={100} ...>Fast transition</Drawer>
+<Drawer duration={300} ...>Normal (default)</Drawer>
+<Drawer duration={600} ...>Slow, dramatic transition</Drawer>`}
+          />
+
+          <Drawer
+            open={durationOpen === "fast"}
+            onClose={() => setDurationOpen(null)}
+            direction="right"
+            size="360px"
+            duration={100}
+            aria-label="Fast animation drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Fast (100ms)
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    duration=&#123;100&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  Snappy transition for quick interactions.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+
+          <Drawer
+            open={durationOpen === "normal"}
+            onClose={() => setDurationOpen(null)}
+            direction="right"
+            size="360px"
+            duration={300}
+            aria-label="Normal animation drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Normal (300ms)
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    duration=&#123;300&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  Default animation speed — balanced and smooth.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+
+          <Drawer
+            open={durationOpen === "slow"}
+            onClose={() => setDurationOpen(null)}
+            direction="right"
+            size="360px"
+            duration={600}
+            aria-label="Slow animation drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Slow (600ms)
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    duration=&#123;600&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  Slow, dramatic transition for emphasis.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
           title="Swipeable Drawer"
           description="Touch-enabled drawers with swipe-to-dismiss gesture support."
           isDarkMode={isDarkMode}
@@ -1293,13 +1445,15 @@ const DrawerDemo = () => {
   open={isOpen}
   onClose={() => setIsOpen(false)}
   direction="bottom"
-  size="85vh"
+  size="100dvh"
   swipeable
   snapPoints={[0.3, 0.6, 1]}
-  activeSnapPoint={snapPoint}
-  onSnapPointChange={setSnapPoint}
+  activeSnapPointIndex={snapPoint}
+  onSnapPointIndexChange={setSnapPoint}
+  classes={{ panel: "flex flex-col overflow-hidden rounded-t-2xl" }}
 >
-  ...
+  <DrawerHeader>...</DrawerHeader>
+  <DrawerBody className="flex-1 overflow-y-auto">...</DrawerBody>
 </Drawer>`}
           />
 
@@ -1307,15 +1461,19 @@ const DrawerDemo = () => {
             open={snapOpen}
             onClose={() => setSnapOpen(false)}
             direction="bottom"
-            size="85vh"
+            size="100dvh"
             swipeable
             snapPoints={[0.3, 0.6, 1]}
-            activeSnapPoint={snapPoint}
-            onSnapPointChange={setSnapPoint}
+            activeSnapPointIndex={snapPoint}
+            onSnapPointIndexChange={setSnapPoint}
             aria-label="Snap points drawer"
-            classes={{ panel: `${panelBg} rounded-t-2xl` }}
+            classes={{
+              panel: `flex flex-col overflow-hidden ${panelBg} rounded-t-2xl`,
+            }}
           >
-            <DrawerHeader className={`px-6 pt-3 pb-4 border-b ${borderColor}`}>
+            <DrawerHeader
+              className={`shrink-0 px-6 pt-3 pb-4 border-b ${borderColor}`}
+            >
               <div
                 className={`mx-auto w-12 h-1.5 ${isDarkMode ? "bg-gray-600" : "bg-gray-300"} rounded-full mb-4`}
               />
@@ -1328,12 +1486,12 @@ const DrawerDemo = () => {
                 />
               </div>
               <p className={`text-sm ${textSecondary} mt-1`}>
-                Current: {Math.round([0.3, 0.6, 1][snapPoint] * 100)}% — Swipe
-                or use buttons below
+                Current: {Math.round([0.3, 0.6, 1][snapPoint] * 100)}% of
+                viewport — Swipe or use buttons below
               </p>
             </DrawerHeader>
             <DrawerBody className="flex-1 overflow-y-auto p-6">
-              <div className="flex gap-2 mb-6">
+              <div className="flex gap-2 mb-6 shrink-0">
                 {[0, 1, 2].map((i) => (
                   <Button
                     key={i}
@@ -1351,7 +1509,7 @@ const DrawerDemo = () => {
                 ))}
               </div>
               <div className="space-y-3">
-                {Array.from({ length: 10 }, (_, i) => (
+                {Array.from({ length: 20 }, (_, i) => (
                   <div
                     key={i}
                     className={`p-4 ${cardBg} rounded-xl flex items-center justify-between`}
@@ -1617,6 +1775,361 @@ const DrawerDemo = () => {
             </DrawerBody>
           </Drawer>
         </Section>
+
+        <Section
+          title="Stacked Drawers"
+          description="When multiple drawers are open, Escape only closes the topmost one. Scroll lock is ref-counted."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setStackedOuterOpen(true)}
+              className="px-4 py-2.5 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors font-medium"
+            >
+              Open Stacked Drawers
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`{/* Outer drawer */}
+<Drawer open={outerOpen} onClose={() => setOuterOpen(false)} direction="right">
+  <DrawerBody>
+    <button onClick={() => setInnerOpen(true)}>Open Inner</button>
+  </DrawerBody>
+</Drawer>
+
+{/* Inner drawer — Escape only closes this one */}
+<Drawer open={innerOpen} onClose={() => setInnerOpen(false)} direction="right">
+  <DrawerBody>Press Escape to close only this drawer</DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={stackedOuterOpen}
+            onClose={() => setStackedOuterOpen(false)}
+            direction="right"
+            size="400px"
+            aria-label="Outer stacked drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Outer Drawer
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl mb-4`}>
+                <p className={`${textSecondary} text-sm`}>
+                  This is the outer drawer. Click the button below to open an
+                  inner drawer on top.
+                </p>
+              </div>
+              <Button
+                onClick={() => setStackedInnerOpen(true)}
+                className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                Open Inner Drawer
+              </Button>
+            </DrawerBody>
+          </Drawer>
+
+          <Drawer
+            open={stackedInnerOpen}
+            onClose={() => setStackedInnerOpen(false)}
+            direction="right"
+            size="340px"
+            aria-label="Inner stacked drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Inner Drawer
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  Press{" "}
+                  <kbd
+                    className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
+                  >
+                    Escape
+                  </kbd>{" "}
+                  to close only this drawer. The outer drawer stays open.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="Close Behavior"
+          description="Control how the drawer can be dismissed — overlay click, Escape key, and scroll locking."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setPersistentOpen(true)}
+              className="px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+            >
+              Persistent Drawer
+            </Button>
+            <Button
+              onClick={() => setScrollTestOpen(true)}
+              className={`px-4 py-2.5 rounded-lg transition-colors font-medium ${isDarkMode ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            >
+              No Scroll Lock
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`{/* Only closeable via close button */}
+              <Drawer
+                closeOnOverlayClick={false}
+                closeOnEscape={false}
+                ...
+              >
+                <DrawerCloseButton />
+              </Drawer>
+
+              {/* Background remains scrollable */}
+              <Drawer
+                lockScroll={false}
+                closeOnOverlayClick={false}
+                classes={{
+                  root: "pointer-events-none",
+                  panel: "pointer-events-auto ...",
+                }}
+                ...
+              >
+                ...
+              </Drawer>`}
+          />
+
+          <Drawer
+            open={persistentOpen}
+            onClose={() => setPersistentOpen(false)}
+            direction="right"
+            size="380px"
+            closeOnOverlayClick={false}
+            closeOnEscape={false}
+            aria-label="Persistent drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Persistent Drawer
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+                <p className={`${textSecondary} text-sm`}>
+                  This drawer ignores overlay clicks and the Escape key. Use the
+                  close button above or the button below to dismiss.
+                </p>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-red-500" />
+                    <code
+                      className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                    >
+                      closeOnOverlayClick=&#123;false&#125;
+                    </code>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-red-500" />
+                    <code
+                      className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                    >
+                      closeOnEscape=&#123;false&#125;
+                    </code>
+                  </div>
+                </div>
+              </div>
+            </DrawerBody>
+            <DrawerFooter className={`px-5 py-4 border-t ${borderColor}`}>
+              <Button
+                onClick={() => setPersistentOpen(false)}
+                className="w-full py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
+              >
+                Close Drawer
+              </Button>
+            </DrawerFooter>
+          </Drawer>
+
+          <Drawer
+            open={scrollTestOpen}
+            onClose={() => setScrollTestOpen(false)}
+            direction="right"
+            size="360px"
+            lockScroll={false}
+            closeOnOverlayClick={false}
+            aria-label="No scroll lock drawer"
+            classes={{
+              root: "pointer-events-none",
+              overlay: "pointer-events-none",
+              panel: `flex flex-col ${panelBg} pointer-events-auto`,
+            }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                No Scroll Lock
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    lockScroll=&#123;false&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  The background page remains scrollable while this drawer is
+                  open. Scroll the page behind the overlay to see it in action.
+                </p>
+                <p className={`${textMuted} text-sm`}>
+                  The overlay and root use{" "}
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    pointer-events-none
+                  </code>{" "}
+                  via classes so scroll events pass through, while the panel
+                  keeps{" "}
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    pointer-events-auto
+                  </code>
+                  .
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="Transition Callback"
+          description="Run logic after the drawer's open or close animation completes."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => {
+                setTransitionStatus("");
+                setTransitionOpen(true);
+              }}
+              className="px-4 py-2.5 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors font-medium"
+            >
+              Open with Callback
+            </Button>
+            {transitionStatus && (
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
+                  transitionStatus === "Opened"
+                    ? isDarkMode
+                      ? "bg-green-900 text-green-300"
+                      : "bg-green-100 text-green-700"
+                    : isDarkMode
+                      ? "bg-gray-700 text-gray-300"
+                      : "bg-gray-100 text-gray-700"
+                }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    transitionStatus === "Opened"
+                      ? "bg-green-500"
+                      : "bg-gray-400"
+                  }`}
+                />
+                {transitionStatus}
+              </span>
+            )}
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer
+  onTransitionEnd={(open) => {
+    console.log(open ? "Fully opened" : "Fully closed");
+  }}
+  ...
+>
+  ...
+</Drawer>`}
+          />
+
+          <Drawer
+            open={transitionOpen}
+            onClose={() => setTransitionOpen(false)}
+            direction="right"
+            size="360px"
+            onTransitionEnd={(isOpen) =>
+              setTransitionStatus(isOpen ? "Opened" : "Closed")
+            }
+            aria-label="Transition callback drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Transition Callback
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  The{" "}
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    onTransitionEnd
+                  </code>{" "}
+                  callback fires after the animation completes. Close this
+                  drawer and watch the status badge update.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
       </div>
 
       <div className="space-y-6">
@@ -1695,7 +2208,18 @@ const DrawerDemo = () => {
                   <td className={`py-3 pr-4 ${textMuted}`}>{"{}"}</td>
                   <td className={`py-3 ${textSecondary}`}>
                     Class overrides merged via cn() (tailwind-merge) for root,
-                    overlay, and panel
+                    overlay, and panel. Z-index is overridable via
+                    classes.root/classes.panel
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">
+                    className
+                  </td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>string</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Applied to the panel element (not the root wrapper)
                   </td>
                 </tr>
                 <tr>
@@ -1874,17 +2398,17 @@ const DrawerDemo = () => {
                 </tr>
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">
-                    activeSnapPoint
+                    activeSnapPointIndex
                   </td>
                   <td className={`py-3 pr-4 ${textSecondary}`}>number</td>
                   <td className={`py-3 pr-4 ${textMuted}`}>—</td>
                   <td className={`py-3 ${textSecondary}`}>
-                    Controlled snap point index
+                    Controlled snap point index into the snapPoints array
                   </td>
                 </tr>
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">
-                    defaultSnapPoint
+                    defaultSnapPointIndex
                   </td>
                   <td className={`py-3 pr-4 ${textSecondary}`}>number</td>
                   <td className={`py-3 pr-4 ${textMuted}`}>0</td>
@@ -1894,14 +2418,14 @@ const DrawerDemo = () => {
                 </tr>
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">
-                    onSnapPointChange
+                    onSnapPointIndexChange
                   </td>
                   <td className={`py-3 pr-4 ${textSecondary}`}>
                     (index: number) =&gt; void
                   </td>
                   <td className={`py-3 pr-4 ${textMuted}`}>—</td>
                   <td className={`py-3 ${textSecondary}`}>
-                    Fires when active snap point changes
+                    Fires when active snap point index changes
                   </td>
                 </tr>
               </tbody>
@@ -1926,11 +2450,20 @@ const DrawerDemo = () => {
 type DrawerDirection = "left" | "right" | "top" | "bottom";
 
 // Exported defaults (can be imported from the package)
+// z-index is overridable via classes.root / classes.panel
 const DEFAULT_CLASS_NAMES: Required<DrawerClasses> = {
-  root: "",
+  root: "z-999999",
   overlay: "fixed inset-0 transition-opacity",
-  panel: "fixed",
+  panel: "fixed z-999999",
 };
+
+// Data attributes on the root wrapper:
+// data-state="open" | "closed"
+// data-direction="left" | "right" | "top" | "bottom"
+// aria-hidden="true" when keepMounted and closed
+
+// className prop applies to the panel element (not the root wrapper)
+// Panel gets inert attribute when keepMounted and closed
 
 // Sub-component props
 interface DrawerHeaderProps extends HTMLAttributes<HTMLDivElement> {}
@@ -1940,7 +2473,10 @@ interface DrawerCloseButtonProps extends HTMLAttributes<HTMLButtonElement> {}
 
 // Context hook
 const context = useDrawerContext();
-// => { onClose: () => void; titleId: string } | null`}
+// => { onClose: () => void; titleId: string } | null
+
+// Scroll lock safety reset (for error boundary recovery)
+import { resetScrollLock } from "kern-ui/Drawer/utils/helpers";`}
           />
         </div>
       </div>
@@ -1978,7 +2514,13 @@ const context = useDrawerContext();
             </li>
             <li>
               Focus is automatically trapped inside the drawer when open (modal
-              mode)
+              mode); hidden and{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                aria-hidden
+              </code>{" "}
+              elements are excluded from the focus trap
             </li>
             <li>Focus is restored to the trigger element on close</li>
             <li>
@@ -1996,8 +2538,18 @@ const context = useDrawerContext();
               </code>{" "}
               attribute for initial focus control
             </li>
-            <li>Background scroll is locked while the drawer is open</li>
-            <li>Escape key closes the drawer</li>
+            <li>
+              Background scroll is locked while the drawer is open (ref-counted
+              for stacked drawers)
+            </li>
+            <li>
+              Escape key closes the topmost drawer only (stacked drawers
+              supported)
+            </li>
+            <li>
+              Overlay closes on click (not pointerdown) to prevent accidental
+              dismissal
+            </li>
             <li>
               Respects{" "}
               <code
@@ -2006,6 +2558,43 @@ const context = useDrawerContext();
                 prefers-reduced-motion
               </code>{" "}
               — animations are disabled when the user prefers reduced motion
+              (SSR-safe via{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                useSyncExternalStore
+              </code>
+              )
+            </li>
+            <li>
+              When{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                keepMounted
+              </code>{" "}
+              is true, the closed drawer gets{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                aria-hidden
+              </code>{" "}
+              and{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                inert
+              </code>{" "}
+              — fully hidden from assistive technology
+            </li>
+            <li>
+              Swipeable drawers set{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                touch-action
+              </code>{" "}
+              to prevent browser gesture conflicts on mobile
             </li>
             <li>
               Auto-wires{" "}
@@ -2035,6 +2624,15 @@ const context = useDrawerContext();
               >
                 aria-describedby
               </code>
+            </li>
+            <li>
+              All directions (left, right, top, bottom) use GPU-composited{" "}
+              <code
+                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+              >
+                transform
+              </code>{" "}
+              animations for smooth 60fps transitions
             </li>
           </ul>
         </div>

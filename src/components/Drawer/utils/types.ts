@@ -33,9 +33,9 @@ export interface DrawerProps
   swipeable?: boolean;
   swipeThreshold?: number;
   snapPoints?: number[];
-  activeSnapPoint?: number;
-  defaultSnapPoint?: number;
-  onSnapPointChange?: (index: number) => void;
+  activeSnapPointIndex?: number;
+  defaultSnapPointIndex?: number;
+  onSnapPointIndexChange?: (index: number) => void;
 }
 
 export interface DrawerHeaderProps extends HTMLAttributes<HTMLDivElement> {

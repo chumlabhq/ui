@@ -7,12 +7,12 @@ export const DEFAULT_OVERLAY_OPACITY = 0.5;
 export const DEFAULT_OVERLAY_BLUR = 0;
 export const DEFAULT_DURATION = 300;
 export const DEFAULT_SWIPE_THRESHOLD = 0.4;
-export const DEFAULT_SNAP_POINT = 0;
+export const DEFAULT_SNAP_POINT_INDEX = 0;
 export const SWIPE_DEADZONE = 10;
 export const VELOCITY_THRESHOLD = 0.5;
 
 export const DEFAULT_CLASS_NAMES: Required<DrawerClasses> = {
-  root: "",
+  root: "z-999999",
   overlay: "fixed inset-0 transition-opacity",
-  panel: "fixed",
+  panel: "fixed z-999999",
 };
