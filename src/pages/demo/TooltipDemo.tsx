@@ -89,7 +89,7 @@ const TooltipDemo = () => {
   <button>Hover me</button>
 </Tooltip>
 
-<Tooltip truncate truncateWidth="max-w-[200px]">
+<Tooltip truncate truncateWidth={200}>
   This long text will truncate and show tooltip on hover
 </Tooltip>`}
           />
@@ -538,7 +538,7 @@ const TooltipDemo = () => {
                 <div className={`w-[220px] p-3 rounded-lg shadow-sm border ${isDarkMode ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[196px]"
+                    truncateWidth={196}
                     triggerClassName={`text-sm font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}
                   >
                     This is a very long text that will be truncated and show tooltip on hover
@@ -552,7 +552,7 @@ const TooltipDemo = () => {
                 <div className={`w-[220px] p-3 rounded-lg shadow-sm border ${isDarkMode ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[196px]"
+                    truncateWidth={196}
                     triggerClassName={`text-sm font-medium ${isDarkMode ? "text-white" : "text-gray-900"}`}
                   >
                     Short text
@@ -585,7 +585,7 @@ const TooltipDemo = () => {
                 <div className={`px-4 py-3 ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[150px]"
+                    truncateWidth={150}
                     triggerClassName={`text-sm font-medium cursor-pointer hover:underline ${isDarkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
                   >
                     Short Title
@@ -594,7 +594,7 @@ const TooltipDemo = () => {
                 <div className={`px-4 py-3 ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[150px]"
+                    truncateWidth={150}
                     triggerClassName={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
                   >
                     Brief description
@@ -603,7 +603,7 @@ const TooltipDemo = () => {
                 <div className={`px-4 py-3 ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[150px]"
+                    truncateWidth={150}
                     triggerClassName={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
                   >
                     John Doe
@@ -614,7 +614,7 @@ const TooltipDemo = () => {
                 <div className={`px-4 py-3 ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[150px]"
+                    truncateWidth={150}
                     triggerClassName={`text-sm font-medium cursor-pointer hover:underline ${isDarkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
                   >
                     This is a very long title that should truncate nicely
@@ -623,7 +623,7 @@ const TooltipDemo = () => {
                 <div className={`px-4 py-3 ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[150px]"
+                    truncateWidth={150}
                     triggerClassName={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
                   >
                     A much longer description that definitely won't fit in the cell
@@ -632,7 +632,7 @@ const TooltipDemo = () => {
                 <div className={`px-4 py-3 ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
                   <Tooltip
                     truncate
-                    truncateWidth="max-w-[150px]"
+                    truncateWidth={150}
                     triggerClassName={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
                   >
                     Alexander Christopher Williams III
@@ -641,6 +641,63 @@ const TooltipDemo = () => {
               </div>
             </div>
           </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Arrow Size"
+          description="Control the size of the tooltip arrow with arrowSize (in pixels)."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="flex items-center gap-6 flex-wrap">
+              {[4, 6, 10].map((size) => (
+                <Tooltip key={size} content={`Arrow size: ${size}px`} arrowSize={size}>
+                  <Button className={`px-4 py-2 rounded text-sm ${isDarkMode ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"}`}>
+                    {size}px arrow
+                  </Button>
+                </Tooltip>
+              ))}
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Tooltip content="Small arrow" arrowSize={4}>...</Tooltip>
+<Tooltip content="Default arrow" arrowSize={6}>...</Tooltip>
+<Tooltip content="Large arrow" arrowSize={10}>...</Tooltip>`}
+          />
+        </Section>
+
+        <Section
+          title="Trigger Display"
+          description="By default the trigger wrapper uses display: inline-flex. Use triggerDisplay to change this — for example, set it to 'block' for full-width triggers or 'inline' for inline text."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-4">
+              <Tooltip content="This trigger is display: block" triggerDisplay="block">
+                <div className={`w-full px-4 py-3 rounded text-sm text-center ${isDarkMode ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"}`}>
+                  Block display — stretches full width
+                </div>
+              </Tooltip>
+              <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+                Hover over this{" "}
+                <Tooltip content="Inline tooltip" triggerDisplay="inline">
+                  <span className="underline decoration-dotted cursor-help font-medium">inline text</span>
+                </Tooltip>{" "}
+                to see an inline trigger.
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Tooltip content="Block trigger" triggerDisplay="block">
+  <div>Full-width trigger</div>
+</Tooltip>
+
+<Tooltip content="Inline trigger" triggerDisplay="inline">
+  <span>inline text</span>
+</Tooltip>`}
+          />
         </Section>
 
         <Section
@@ -818,6 +875,22 @@ const TooltipDemo = () => {
                   </td>
                 </tr>
                 <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">arrowSize</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>6</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Size of the tooltip arrow in pixels
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">portalContainer</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>HTMLElement | null</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>document.body</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Custom container element for the tooltip portal
+                  </td>
+                </tr>
+                <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">disabled</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
@@ -859,16 +932,16 @@ const TooltipDemo = () => {
                 </tr>
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">truncateWidth</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number | string</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Width class for truncation (e.g., "max-w-[200px]")
+                    Max width for truncation as a CSS value (number = px, string = CSS value e.g. "50%")
                   </td>
                 </tr>
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">triggerDisplay</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CSSProperties["display"]</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"inline-block"</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"inline-flex"</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     CSS display value for the trigger wrapper element
                   </td>
@@ -982,7 +1055,7 @@ interface TooltipProps {
   disabled?: boolean;
   asChild?: boolean;
   truncate?: boolean;
-  truncateWidth?: string;
+  truncateWidth?: number | string;
   shadow?: TooltipShadow;
   zIndex?: number;
   className?: string;

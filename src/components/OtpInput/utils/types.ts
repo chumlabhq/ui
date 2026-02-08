@@ -38,7 +38,6 @@ export interface OtpInputProps
   length?: number;
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string) => void;
   onValueChange?: (value: string) => void;
   onComplete?: (value: string) => void;
   label?: ReactNode;
@@ -59,4 +58,5 @@ export interface OtpInputProps
   renderInput?: (props: OtpInputRenderProps) => ReactNode;
   validate?: (char: string) => boolean;
   inputAriaLabel?: (index: number, length: number) => string;
+  groupAriaLabel?: string;
 }

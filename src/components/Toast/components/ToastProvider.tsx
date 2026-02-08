@@ -11,16 +11,6 @@ import { positionClasses, stackDirectionClasses, PROGRESS_KEYFRAMES } from "../u
 import { cn } from "../../../utils/cn";
 
 const isBrowser = typeof document !== "undefined";
-const STYLE_ID = "kern-toast-keyframes";
-
-function injectKeyframes() {
-  if (!isBrowser) return;
-  if (document.getElementById(STYLE_ID)) return;
-  const style = document.createElement("style");
-  style.id = STYLE_ID;
-  style.textContent = PROGRESS_KEYFRAMES;
-  document.head.appendChild(style);
-}
 
 interface ToastState extends ToastConfig {
   visible: boolean;
@@ -36,25 +26,13 @@ export const ToastProvider = ({
   gap = 12,
   zIndex = 9999,
   dismissOnEscape = false,
+  containerAriaLabel = "Notifications",
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<ToastState[]>([]);
   const idCounterRef = useRef(0);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  const [portalElement, setPortalElement] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!isBrowser) return;
-    injectKeyframes();
-    const portal = document.createElement("div");
-    portal.style.cssText = `position:fixed;z-index:${zIndex};pointer-events:none;inset:0;`;
-    document.body.appendChild(portal);
-    setPortalElement(portal);
-
-    return () => {
-      portal.parentNode?.removeChild(portal);
-    };
-  }, [zIndex]);
+  const portalTarget = isBrowser ? document.body : null;
 
   const restoreFocus = useCallback(() => {
     if (previousFocusRef.current && previousFocusRef.current.isConnected) {
@@ -160,13 +138,12 @@ export const ToastProvider = ({
   );
 
   const dismissAll = useCallback(() => {
-    setToasts((prev) => {
-      prev.forEach((t) => {
-        setTimeout(() => removeToast(t.id), 0);
-      });
-      return prev;
-    });
-  }, [removeToast]);
+    setToasts((prev) => prev.map((t) => ({ ...t, visible: false })));
+    setTimeout(() => {
+      setToasts([]);
+      restoreFocus();
+    }, animationDuration);
+  }, [animationDuration, restoreFocus]);
 
   useEffect(() => {
     if (!dismissOnEscape || toasts.length === 0) return;
@@ -196,31 +173,41 @@ export const ToastProvider = ({
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      {portalElement &&
+      <style>{PROGRESS_KEYFRAMES}</style>
+      {portalTarget &&
         createPortal(
           <div
-            className={cn(
-              "fixed flex pointer-events-none",
-              positionClasses[position],
-              stackDirectionClasses[stackDirection],
-              containerClassName,
-            )}
-            style={{ gap: `${gap}px` }}
-            role="region"
-            aria-label="Notifications"
+            style={{
+              position: "fixed",
+              zIndex,
+              pointerEvents: "none",
+              inset: 0,
+            }}
           >
-            {toasts.map((toast) => (
-              <div key={toast.id} className="pointer-events-auto">
-                <Toast
-                  {...toast}
-                  onRemove={removeToast}
-                  position={position}
-                  animationDuration={animationDuration}
-                />
-              </div>
-            ))}
+            <div
+              className={cn(
+                "fixed flex pointer-events-none",
+                positionClasses[position],
+                stackDirectionClasses[stackDirection],
+                containerClassName,
+              )}
+              style={{ gap: `${gap}px` }}
+              role="region"
+              aria-label={containerAriaLabel}
+            >
+              {toasts.map((toast) => (
+                <div key={toast.id} className="pointer-events-auto">
+                  <Toast
+                    {...toast}
+                    onRemove={removeToast}
+                    position={position}
+                    animationDuration={animationDuration}
+                  />
+                </div>
+              ))}
+            </div>
           </div>,
-          portalElement,
+          portalTarget,
         )}
     </ToastContext.Provider>
   );

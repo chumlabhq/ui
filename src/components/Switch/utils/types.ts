@@ -7,7 +7,7 @@ export interface SwitchRenderProps {
   descriptionId?: string;
 }
 
-export interface SwitchClassNames {
+export interface SwitchClasses {
   root?: string;
   labelContainer?: string;
   label?: string;
@@ -41,7 +41,7 @@ export interface SwitchProps
   disabled?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
-  classNames?: SwitchClassNames;
+  classes?: SwitchClasses;
   errorClassName?: string;
   containerClassName?: string;
   labelContainerClassName?: string;

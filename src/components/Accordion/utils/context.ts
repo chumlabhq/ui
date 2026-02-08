@@ -93,7 +93,6 @@ export function useAccordionItemContext(): AccordionItemContextValue {
 }
 
 export function useAccordionItem(value: string) {
-  const store = useExpandedStore();
   const dispatch = useAccordionDispatch();
   const isExpanded = useIsItemExpanded(value);
 

@@ -1,11 +1,19 @@
-import { useState } from "react";
-import Stepper from "../../components/Stepper";
+import { useState, useRef, useMemo } from "react";
+import { Stepper } from "../../components/Stepper";
 import type {
   Step,
   StepStatus,
   StepTooltipConfig,
+  StepperClasses,
 } from "../../components/Stepper";
-import { Section, ComponentHeader } from "./components";
+import {
+  Section,
+  DemoWrapper,
+  CodeBlock,
+  PropsTable,
+  PropRow,
+} from "./components";
+import { useTheme } from "./ThemeContext";
 
 const UserIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -42,6 +50,28 @@ const CheckCircleIcon = ({ className = "" }: { className?: string }) => (
       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
       clipRule="evenodd"
     />
+  </svg>
+);
+
+const StarIcon = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+  </svg>
+);
+
+const WarningIcon = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+    <path
+      fillRule="evenodd"
+      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const ThumbsUpIcon = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
   </svg>
 );
 
@@ -122,9 +152,30 @@ const tooltipConfigSteps: Step[] = [
   },
 ];
 
+const perStepIconSteps: Step[] = [
+  { id: 1, label: "Upload", completedIcon: ThumbsUpIcon },
+  { id: 2, label: "Validate", errorIcon: WarningIcon },
+  { id: 3, label: "Publish" },
+];
+
+const mergeClasses = (
+  ...sources: (StepperClasses | undefined)[]
+): StepperClasses => {
+  const result: Record<string, string> = {};
+  for (const source of sources) {
+    if (!source) continue;
+    for (const [key, value] of Object.entries(source)) {
+      if (value) {
+        result[key] = result[key] ? `${result[key]} ${value}` : value;
+      }
+    }
+  }
+  return result as StepperClasses;
+};
+
 const StepperDemo = () => {
+  const { isDarkMode } = useTheme();
   const [basicStep, setBasicStep] = useState<number>(2);
-  const [connectorStep, setConnectorStep] = useState<number>(2);
   const [checkoutStep, setCheckoutStep] = useState<string>("payment");
   const [verticalStep, setVerticalStep] = useState<number>(2);
   const [dotStep, setDotStep] = useState<number>(3);
@@ -132,6 +183,30 @@ const StepperDemo = () => {
   const [customStep, setCustomStep] = useState<number>(2);
   const [tooltipStep, setTooltipStep] = useState<number>(2);
   const [tooltipConfigStep, setTooltipConfigStep] = useState<number>(2);
+  const [customIconStep, setCustomIconStep] = useState<number>(2);
+  const [perStepIconStep, setPerStepIconStep] = useState<number>(2);
+  const [loopStep, setLoopStep] = useState<number>(2);
+  const [autoStep, setAutoStep] = useState<number>(2);
+  const [preventStep, setPreventStep] = useState<number>(1);
+  const stepperRef = useRef<HTMLDivElement>(null);
+
+  const darkClasses: StepperClasses = useMemo(
+    () =>
+      isDarkMode
+        ? {
+            step: "hover:bg-white/5 focus-visible:ring-offset-gray-900",
+            indicator:
+              "data-[status=pending]:bg-gray-700 data-[status=pending]:text-gray-300",
+            label:
+              "data-[status=active]:text-blue-400 data-[status=completed]:text-green-400 data-[status=pending]:text-gray-400 data-[status=error]:text-red-400",
+            description:
+              "data-[status=active]:text-blue-300 data-[status=completed]:text-green-300 data-[status=pending]:text-gray-500 data-[status=error]:text-red-300",
+            connector:
+              "data-[status=pending]:bg-gray-700 data-[status=error]:bg-gray-700",
+          }
+        : {},
+    [isDarkMode],
+  );
 
   const errorGetStatus = (
     _stepId: string | number,
@@ -144,1129 +219,1023 @@ const StepperDemo = () => {
     return "pending";
   };
 
+  const perStepErrorGetStatus = (
+    _stepId: string | number,
+    index: number,
+    activeIndex: number,
+  ): StepStatus => {
+    if (index === 1) return "error";
+    if (index < activeIndex) return "completed";
+    if (index === activeIndex) return "active";
+    return "pending";
+  };
+
+  const s = {
+    text: isDarkMode ? "text-gray-300" : "text-gray-600",
+    textMuted: isDarkMode ? "text-gray-400" : "text-gray-500",
+    textStrong: isDarkMode ? "text-white" : "text-gray-900",
+    code: isDarkMode
+      ? "bg-gray-700 text-gray-300 px-1 rounded text-xs font-mono"
+      : "bg-gray-100 text-gray-700 px-1 rounded text-xs font-mono",
+    codeBorder: isDarkMode
+      ? "bg-gray-800/80 border border-gray-600 text-gray-300 px-1 py-0.5 rounded text-xs font-mono"
+      : "bg-white border border-gray-300 text-gray-700 px-1 py-0.5 rounded text-xs font-mono",
+    btnPrimary: isDarkMode
+      ? "px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-400"
+      : "px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700",
+    btnSecondary: isDarkMode
+      ? "px-4 py-2 text-sm bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600"
+      : "px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200",
+    heading: isDarkMode ? "text-white" : "text-gray-900",
+    infoBox: isDarkMode
+      ? "bg-blue-900/30 border border-blue-800 text-blue-200"
+      : "bg-blue-50 border border-blue-200 text-blue-800",
+    panel: isDarkMode ? "bg-gray-800" : "bg-gray-50",
+  };
+
   return (
-    <>
-      <ComponentHeader
-        title="Stepper"
-        description="A navigation component that displays progress through a sequence of steps."
-      />
-
-      <Section title="Basic Numbered Stepper">
-        <Stepper
-          steps={basicSteps}
-          activeStep={basicStep}
-          onChange={(id) => setBasicStep(id as number)}
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-50"
-          indicatorClassName="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-200 text-gray-600"
-          indicatorIconClassName="w-4 h-4"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          connectorClassName="flex-1 h-px min-w-8 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-200"
-        />
-        <div className="mt-4 flex gap-2">
-          <button
-            onClick={() => setBasicStep(Math.max(1, basicStep - 1))}
-            className="px-4 py-2 text-sm bg-gray-100 rounded-lg hover:bg-gray-200"
+    <div className="space-y-16">
+      <header>
+        <h1 className={`text-3xl font-bold mb-3 ${s.heading}`}>Stepper</h1>
+        <p className={`text-lg ${s.textMuted}`}>
+          A navigation component that displays progress through a sequence of
+          steps. Uses semantic {"<ol>/<li>"} markup with proper ARIA attributes,
+          conditional role=&quot;button&quot; only on interactive steps, and
+          focus-visible ring for keyboard accessibility.
+        </p>
+        <div className="mt-6">
+          <h3
+            className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
           >
-            Previous
-          </button>
-          <button
-            onClick={() => setBasicStep(Math.min(4, basicStep + 1))}
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            Installation
+          </h3>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`import { Stepper } from "@kern-ui/stepper";
+import type { Step, StepperClasses, StepTooltipConfig, StepRenderProps } from "@kern-ui/stepper";`}
+          />
+        </div>
+      </header>
+
+      <div className="space-y-12">
+        <h2 className={`text-2xl font-bold ${s.heading}`}>Examples</h2>
+
+        <Section
+          title="Basic Stepper"
+          description="Default numbered variant with horizontal layout. Click a step or use the buttons to navigate."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-4">
+              <Stepper
+                steps={basicSteps}
+                value={basicStep}
+                onValueChange={(id) => setBasicStep(id as number)}
+                classes={darkClasses}
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setBasicStep(Math.max(1, basicStep - 1))}
+                  className={s.btnSecondary}
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setBasicStep(Math.min(4, basicStep + 1))}
+                  className={s.btnPrimary}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Uncontrolled Usage"
+          description="Use defaultValue instead of value for uncontrolled mode. The component manages its own active step state internally."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={basicSteps}
+              defaultValue={2}
+              onValueChange={(id) => console.log("Step changed:", id)}
+              classes={darkClasses}
+            />
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Stepper
+  steps={steps}
+  defaultValue={2}
+  onValueChange={(id) => console.log("Step changed:", id)}
+/>`}
+          />
+        </Section>
+
+        <Section
+          title="Icon Variant with Descriptions"
+          description="Use variant='icon' with showDescriptions and labelPosition='bottom' for a rich checkout-style stepper."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={checkoutSteps}
+              value={checkoutStep}
+              onValueChange={(id) => setCheckoutStep(id as string)}
+              variant="icon"
+              showDescriptions
+              labelPosition="bottom"
+              classes={mergeClasses(darkClasses, {
+                label: "text-sm font-medium mt-2",
+              })}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Vertical Stepper"
+          description="Set orientation='vertical' for a top-to-bottom step layout."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={basicSteps}
+              value={verticalStep}
+              onValueChange={(id) => setVerticalStep(id as number)}
+              orientation="vertical"
+              classes={darkClasses}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Dot Variant"
+          description="Minimal dot indicators — ideal for carousels or wizards. Labels are hidden, aria-label is auto-generated for each step."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={basicSteps}
+              value={dotStep}
+              onValueChange={(id) => setDotStep(id as number)}
+              variant="dot"
+              showLabels={false}
+              classes={mergeClasses(darkClasses, {
+                list: "flex items-center justify-center",
+                stepContainer: "flex items-center",
+                step: "px-1 py-1",
+                connector: "w-8 h-0.5 mx-1 bg-gray-200",
+              })}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Hidden Connectors"
+          description="Set showConnectors={false} to remove the connecting lines between steps."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={basicSteps}
+              value={2}
+              onValueChange={() => {}}
+              showConnectors={false}
+              classes={mergeClasses(darkClasses, {
+                list: "flex items-center gap-4",
+              })}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Error State"
+          description="Use getStepStatus to override the default linear status calculation — here step 2 is always 'error'."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={[
+                { id: 1, label: "Account" },
+                { id: 2, label: "Verification" },
+                { id: 3, label: "Complete" },
+              ]}
+              value={errorStep}
+              onValueChange={(id) => setErrorStep(id as number)}
+              getStepStatus={errorGetStatus}
+              classes={darkClasses}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Disabled Steps"
+          description="Individual steps can be disabled via the step object's disabled property. Disabled steps are not interactive even when isStepClickable returns true."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={[
+                { id: 1, label: "Step 1" },
+                { id: 2, label: "Step 2" },
+                { id: 3, label: "Step 3", disabled: true },
+                { id: 4, label: "Step 4" },
+              ]}
+              value={2}
+              onValueChange={() => {}}
+              isStepClickable={() => true}
+              classes={darkClasses}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Globally Disabled"
+          description="Set disabled on the root component to disable all steps regardless of their individual disabled state."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-2">
+              <Stepper
+                steps={basicSteps}
+                value={2}
+                disabled
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                All steps are non-interactive when the stepper is globally
+                disabled
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Non-linear Navigation"
+          description="Set isStepClickable={() => true} to allow clicking any step regardless of its status."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-2">
+              <Stepper
+                steps={basicSteps}
+                value={2}
+                onValueChange={() => {}}
+                isStepClickable={() => true}
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                All steps are clickable regardless of status
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Step Change Prevention"
+          description="Use beforeStepChange to validate or prevent step transitions. Return false to block the change. Here, steps can only advance one at a time."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-3">
+              <Stepper
+                steps={basicSteps}
+                value={preventStep}
+                onValueChange={(id) => setPreventStep(id as number)}
+                beforeStepChange={(nextId) => {
+                  const nextIndex = basicSteps.findIndex(
+                    (s) => s.id === nextId,
+                  );
+                  const currentIndex = basicSteps.findIndex(
+                    (s) => s.id === preventStep,
+                  );
+                  return nextIndex <= currentIndex + 1;
+                }}
+                isStepClickable={() => true}
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                Click any step &mdash; cannot skip ahead more than one step at a
+                time
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Stepper
+  steps={steps}
+  value={step}
+  onValueChange={setStep}
+  beforeStepChange={(nextId, currentId) => {
+    const nextIdx = steps.findIndex(s => s.id === nextId);
+    const currentIdx = steps.findIndex(s => s.id === currentId);
+    return nextIdx <= currentIdx + 1;
+  }}
+  isStepClickable={() => true}
+/>`}
+          />
+        </Section>
+
+        <Section
+          title="Keyboard Navigation with Loop"
+          description="Arrow keys move focus between interactive steps. Home/End jump to first/last. Set loop to wrap around at boundaries."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-3">
+              <Stepper
+                steps={basicSteps}
+                value={loopStep}
+                onValueChange={(id) => setLoopStep(id as number)}
+                loop
+                isStepClickable={() => true}
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                Use{" "}
+                <kbd className={s.codeBorder}>←</kbd>{" "}
+                <kbd className={s.codeBorder}>→</kbd> to move focus,{" "}
+                <kbd className={s.codeBorder}>Enter</kbd> /{" "}
+                <kbd className={s.codeBorder}>Space</kbd> to activate.
+                Focus loops from last → first and first → last.
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Stepper
+  steps={steps}
+  value={step}
+  onValueChange={setStep}
+  loop
+  isStepClickable={() => true}
+/>`}
+          />
+        </Section>
+
+        <Section
+          title="Automatic Activation Mode"
+          description="Set activationMode='automatic' so arrow keys activate steps immediately as focus moves, matching TabPanel's automatic mode."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-3">
+              <Stepper
+                steps={basicSteps}
+                value={autoStep}
+                onValueChange={(id) => setAutoStep(id as number)}
+                activationMode="automatic"
+                loop
+                isStepClickable={() => true}
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                Arrow keys move focus and activate the step in one action
+              </p>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Stepper
+  steps={steps}
+  value={step}
+  onValueChange={setStep}
+  activationMode="automatic"
+  loop
+  isStepClickable={() => true}
+/>`}
+          />
+        </Section>
+
+        <Section
+          title="Custom Completed & Error Icons"
+          description="Override the default CheckIcon and ErrorIcon globally via completedIcon and errorIcon props."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={[
+                { id: 1, label: "Upload" },
+                { id: 2, label: "Validate" },
+                { id: 3, label: "Publish" },
+              ]}
+              value={customIconStep}
+              onValueChange={(id) => setCustomIconStep(id as number)}
+              completedIcon={StarIcon}
+              errorIcon={WarningIcon}
+              getStepStatus={errorGetStatus}
+              classes={darkClasses}
+            />
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Stepper
+  steps={steps}
+  value={step}
+  completedIcon={StarIcon}
+  errorIcon={WarningIcon}
+  getStepStatus={errorGetStatus}
+/>`}
+          />
+        </Section>
+
+        <Section
+          title="Per-Step Icon Overrides"
+          description="Each step can override the global completedIcon and errorIcon via step.completedIcon and step.errorIcon."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={perStepIconSteps}
+              value={perStepIconStep}
+              onValueChange={(id) => setPerStepIconStep(id as number)}
+              getStepStatus={perStepErrorGetStatus}
+              classes={darkClasses}
+            />
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`const steps: Step[] = [
+  { id: 1, label: "Upload", completedIcon: ThumbsUpIcon },
+  { id: 2, label: "Validate", errorIcon: WarningIcon },
+  { id: 3, label: "Publish" },
+];`}
+          />
+        </Section>
+
+        <Section
+          title="Custom Styling"
+          description="Full visual customization via the classes object. Override any internal slot — the component merges your classes with defaults via cn()."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={[
+                { id: 1, label: "Design" },
+                { id: 2, label: "Develop" },
+                { id: 3, label: "Deploy" },
+              ]}
+              value={customStep}
+              onValueChange={(id) => setCustomStep(id as number)}
+              classes={{
+                step: `px-3 py-2 rounded-2xl border-2 border-transparent transition-all ${
+                  isDarkMode
+                    ? "hover:border-purple-400/30"
+                    : "hover:border-purple-200"
+                }`,
+                indicator: `w-10 h-10 rounded-xl shadow-lg ${
+                  isDarkMode
+                    ? "bg-purple-500 text-white shadow-purple-500/20"
+                    : "bg-purple-600 text-white shadow-purple-200"
+                }`,
+                indicatorIcon: "w-5 h-5",
+                label: `text-sm font-semibold ${
+                  isDarkMode ? "text-purple-300" : "text-purple-700"
+                }`,
+                connector: `flex-1 h-1 min-w-8 mx-1 rounded-full ${
+                  isDarkMode ? "bg-purple-400/30" : "bg-purple-200"
+                }`,
+              }}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Full Width"
+          description="Set fullWidth to make the stepper expand to fill its container."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Stepper
+              steps={basicSteps}
+              value={2}
+              onValueChange={() => {}}
+              fullWidth
+              classes={mergeClasses(darkClasses, {
+                list: "flex items-center w-full",
+              })}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom ID"
+          description="Use the id prop for deterministic IDs useful for SSR and testing. Auto-generated via useId() if not provided."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-2">
+              <Stepper
+                id="checkout-stepper"
+                steps={basicSteps}
+                value={2}
+                onValueChange={() => {}}
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                Root element has{" "}
+                <code className={s.code}>id=&quot;checkout-stepper&quot;</code>
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Ref Forwarding"
+          description="Use ref to access the root DOM element for programmatic scroll, measurement, or focus management."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-4">
+              <Stepper
+                ref={stepperRef}
+                steps={basicSteps}
+                value={2}
+                onValueChange={() => {}}
+                classes={darkClasses}
+              />
+              <button
+                onClick={() =>
+                  stepperRef.current?.scrollIntoView({ behavior: "smooth" })
+                }
+                className={s.btnSecondary}
+              >
+                Scroll to Stepper
+              </button>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`const ref = useRef<HTMLDivElement>(null);
+<Stepper ref={ref} steps={steps} value={1} />
+ref.current?.scrollIntoView({ behavior: "smooth" });`}
+          />
+        </Section>
+
+        <Section
+          title="Custom Aria Label"
+          description='Use aria-label to provide a meaningful accessible name for the navigation landmark.'
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-2">
+              <Stepper
+                steps={basicSteps}
+                value={2}
+                onValueChange={() => {}}
+                aria-label="Checkout Progress"
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                The navigation landmark has{" "}
+                <code className={s.code}>
+                  aria-label=&quot;Checkout Progress&quot;
+                </code>
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="With Tooltips (Simple)"
+          description="Enable showTooltips and add a tooltip string to each step for hover-activated tooltips."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-3">
+              <Stepper
+                steps={tooltipSteps}
+                value={tooltipStep}
+                onValueChange={(id) => setTooltipStep(id as number)}
+                showTooltips
+                tooltipDefaults={{ side: "top", delayDuration: 100 }}
+                classes={darkClasses}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                Hover over each step to see the tooltip
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="With Tooltips (Custom Config)"
+          description="Each step can have a StepTooltipConfig object for per-step tooltip customization including position, JSX content, max width, and shadow."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="w-full space-y-3">
+              <Stepper
+                steps={tooltipConfigSteps}
+                value={tooltipConfigStep}
+                onValueChange={(id) => setTooltipConfigStep(id as number)}
+                showTooltips
+                classes={mergeClasses(darkClasses, {
+                  indicator: `w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent ${
+                    isDarkMode
+                      ? "data-[status=active]:bg-purple-500 data-[status=active]:text-white data-[status=active]:border-purple-500 data-[status=completed]:bg-green-500 data-[status=completed]:text-white data-[status=completed]:border-green-500 data-[status=pending]:bg-gray-800 data-[status=pending]:text-gray-400 data-[status=pending]:border-gray-600"
+                      : "data-[status=active]:bg-purple-600 data-[status=active]:text-white data-[status=active]:border-purple-600 data-[status=completed]:bg-green-500 data-[status=completed]:text-white data-[status=completed]:border-green-500 data-[status=pending]:bg-white data-[status=pending]:text-gray-400 data-[status=pending]:border-gray-300"
+                  }`,
+                  indicatorIcon: "w-5 h-5",
+                  connector: `flex-1 h-0.5 min-w-12 mx-1 rounded-full ${
+                    isDarkMode ? "bg-gray-700" : "bg-gray-200"
+                  }`,
+                })}
+              />
+              <p className={`text-sm ${s.textMuted}`}>
+                Uses <code className={s.code}>data-[status]</code> selectors for
+                per-status styling
+              </p>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Data Attributes"
+          description="The Stepper applies data attributes for CSS-based styling and state inspection."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="overflow-x-auto">
+              <table
+                className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
+              >
+                <thead>
+                  <tr
+                    className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
+                  >
+                    <th className="text-left py-3 pr-4 font-semibold">
+                      Attribute
+                    </th>
+                    <th className="text-left py-3 pr-4 font-semibold">
+                      Applied To
+                    </th>
+                    <th className="text-left py-3 font-semibold">Values</th>
+                  </tr>
+                </thead>
+                <tbody
+                  className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
+                >
+                  <tr>
+                    <td className="py-3 pr-4 font-mono text-blue-500">
+                      data-orientation
+                    </td>
+                    <td className={`py-3 pr-4 ${s.textMuted}`}>root, ol, li</td>
+                    <td className={`py-3 ${s.textMuted}`}>
+                      &quot;horizontal&quot; | &quot;vertical&quot;
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-mono text-blue-500">
+                      data-variant
+                    </td>
+                    <td className={`py-3 pr-4 ${s.textMuted}`}>root</td>
+                    <td className={`py-3 ${s.textMuted}`}>
+                      &quot;numbered&quot; | &quot;icon&quot; | &quot;dot&quot;
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-mono text-blue-500">
+                      data-status
+                    </td>
+                    <td className={`py-3 pr-4 ${s.textMuted}`}>
+                      li, step div, indicator, label, description, connector
+                    </td>
+                    <td className={`py-3 ${s.textMuted}`}>
+                      &quot;pending&quot; | &quot;active&quot; |
+                      &quot;completed&quot; | &quot;error&quot;
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-mono text-blue-500">
+                      data-disabled
+                    </td>
+                    <td className={`py-3 pr-4 ${s.textMuted}`}>step div</td>
+                    <td className={`py-3 ${s.textMuted}`}>
+                      Present when step is disabled
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-mono text-blue-500">
+                      data-clickable
+                    </td>
+                    <td className={`py-3 pr-4 ${s.textMuted}`}>step div</td>
+                    <td className={`py-3 ${s.textMuted}`}>
+                      Present when step is interactive
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 pr-4 font-mono text-blue-500">
+                      data-next-status
+                    </td>
+                    <td className={`py-3 pr-4 ${s.textMuted}`}>connector</td>
+                    <td className={`py-3 ${s.textMuted}`}>
+                      Status of the next step (&quot;pending&quot; |
+                      &quot;active&quot; | &quot;completed&quot; |
+                      &quot;error&quot;)
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className={`text-sm mt-4 ${s.textMuted}`}>
+              Example usage:{" "}
+              <code className={s.code}>
+                data-[status=active]:font-bold
+              </code>
+              ,{" "}
+              <code className={s.code}>
+                data-[disabled]:opacity-50
+              </code>
+            </p>
+          </DemoWrapper>
+        </Section>
+      </div>
+
+      <div className="space-y-8">
+        <h2 className={`text-2xl font-bold ${s.heading}`}>API Reference</h2>
+
+        <Section title="Stepper Props" isDarkMode={isDarkMode}>
+          <PropsTable isDarkMode={isDarkMode}>
+            <PropRow name="steps" type="Step[]" defaultVal="[]" description="Array of step objects" isDarkMode={isDarkMode} />
+            <PropRow name="value" type="string | number" description="Currently active step ID (controlled)" isDarkMode={isDarkMode} />
+            <PropRow name="defaultValue" type="string | number" description="Initial step ID for uncontrolled usage" isDarkMode={isDarkMode} />
+            <PropRow name="onValueChange" type="(stepId: string | number) => void" description="Callback when a step is activated" isDarkMode={isDarkMode} />
+            <PropRow name="beforeStepChange" type="(nextStepId, currentStepId) => boolean" description="Return false to prevent a step transition" isDarkMode={isDarkMode} />
+            <PropRow name="orientation" type={'"horizontal" | "vertical"'} defaultVal="horizontal" description="Layout direction" isDarkMode={isDarkMode} />
+            <PropRow name="variant" type={'"numbered" | "icon" | "dot"'} defaultVal="numbered" description="Visual style of step indicators" isDarkMode={isDarkMode} />
+            <PropRow name="activationMode" type={'"automatic" | "manual"'} defaultVal="manual" description="Whether arrow keys activate steps immediately or only move focus" isDarkMode={isDarkMode} />
+            <PropRow name="isStepClickable" type="(stepId, status) => boolean" defaultVal="completed/active" description="Custom logic for step clickability" isDarkMode={isDarkMode} />
+            <PropRow name="getStepStatus" type="(stepId, index, activeIndex) => StepStatus" defaultVal="auto" description="Custom status logic (pending/active/completed/error)" isDarkMode={isDarkMode} />
+            <PropRow name="showLabels" type="boolean" defaultVal="true" description="Show step labels" isDarkMode={isDarkMode} />
+            <PropRow name="showDescriptions" type="boolean" defaultVal="false" description="Show step descriptions" isDarkMode={isDarkMode} />
+            <PropRow name="showConnectors" type="boolean" defaultVal="true" description="Show connectors between steps" isDarkMode={isDarkMode} />
+            <PropRow name="labelPosition" type={'"bottom" | "right"'} defaultVal="right" description="Position of labels relative to indicator" isDarkMode={isDarkMode} />
+            <PropRow name="completedIcon" type="ComponentType | ReactNode" defaultVal="CheckIcon" description="Global icon for completed steps" isDarkMode={isDarkMode} />
+            <PropRow name="errorIcon" type="ComponentType | ReactNode" defaultVal="ErrorIcon" description="Global icon for error steps" isDarkMode={isDarkMode} />
+            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Whether container takes full width" isDarkMode={isDarkMode} />
+            <PropRow name="aria-label" type="string" defaultVal='"Progress"' description="Accessible label for the navigation landmark" isDarkMode={isDarkMode} />
+            <PropRow name="showTooltips" type="boolean" defaultVal="false" description="Enable tooltips on steps with tooltip content" isDarkMode={isDarkMode} />
+            <PropRow name="tooltipDefaults" type="StepperTooltipDefaults" defaultVal="{}" description="Default tooltip configuration for all steps" isDarkMode={isDarkMode} />
+            <PropRow name="classes" type="StepperClasses" defaultVal="{}" description="Object of class overrides for internal slots (root, list, step, indicator, etc.)" isDarkMode={isDarkMode} />
+            <PropRow name="className" type="string" description="Shorthand for classes.root — merged with classes.root when both are provided" isDarkMode={isDarkMode} />
+            <PropRow name="id" type="string" defaultVal="auto (useId)" description="Deterministic ID for SSR and testing" isDarkMode={isDarkMode} />
+            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Ref forwarded to the root element" isDarkMode={isDarkMode} />
+            <PropRow name="style" type="CSSProperties" description="Inline styles on the root element" isDarkMode={isDarkMode} />
+            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable all steps globally" isDarkMode={isDarkMode} />
+            <PropRow name="loop" type="boolean" defaultVal="false" description="Loop keyboard navigation at boundaries" isDarkMode={isDarkMode} />
+            <PropRow name="renderStep" type="(props, defaultElement) => ReactNode" description="Custom step rendering via render prop" isDarkMode={isDarkMode} />
+          </PropsTable>
+        </Section>
+
+        <Section title="Step Object Properties" isDarkMode={isDarkMode}>
+          <PropsTable isDarkMode={isDarkMode}>
+            <PropRow name="id" type="string | number" defaultVal="required" description="Unique identifier for the step" isDarkMode={isDarkMode} />
+            <PropRow name="label" type="ReactNode" description="Step label text" isDarkMode={isDarkMode} />
+            <PropRow name="description" type="ReactNode" description="Step description text" isDarkMode={isDarkMode} />
+            <PropRow name="icon" type="ComponentType | ReactNode" description="Custom icon (icon variant)" isDarkMode={isDarkMode} />
+            <PropRow name="completedIcon" type="ComponentType | ReactNode" description="Per-step override for completed icon" isDarkMode={isDarkMode} />
+            <PropRow name="errorIcon" type="ComponentType | ReactNode" description="Per-step override for error icon" isDarkMode={isDarkMode} />
+            <PropRow name="disabled" type="boolean" description="Whether the step is disabled" isDarkMode={isDarkMode} />
+            <PropRow name="tooltip" type="ReactNode | StepTooltipConfig" description="Tooltip content or configuration object" isDarkMode={isDarkMode} />
+          </PropsTable>
+        </Section>
+
+        <Section title="StepperClasses Slots" isDarkMode={isDarkMode}>
+          <PropsTable isDarkMode={isDarkMode}>
+            <PropRow name="root" type="string" description="Root navigation container" isDarkMode={isDarkMode} />
+            <PropRow name="list" type="string" description="The <ol> list wrapping all steps" isDarkMode={isDarkMode} />
+            <PropRow name="stepContainer" type="string" description="Each <li> wrapper (step + connector)" isDarkMode={isDarkMode} />
+            <PropRow name="step" type="string" description="Clickable step area (indicator + labels)" isDarkMode={isDarkMode} />
+            <PropRow name="indicator" type="string" description="Number/icon circle indicator" isDarkMode={isDarkMode} />
+            <PropRow name="indicatorIcon" type="string" description="Icon/SVG inside the indicator" isDarkMode={isDarkMode} />
+            <PropRow name="labelWrapper" type="string" description="Container for label + description" isDarkMode={isDarkMode} />
+            <PropRow name="label" type="string" description="Step label text" isDarkMode={isDarkMode} />
+            <PropRow name="description" type="string" description="Step description text" isDarkMode={isDarkMode} />
+            <PropRow name="connector" type="string" description="Line between steps (use data-status for per-status)" isDarkMode={isDarkMode} />
+          </PropsTable>
+        </Section>
+
+        <Section title="StepTooltipConfig Properties" isDarkMode={isDarkMode}>
+          <PropsTable isDarkMode={isDarkMode}>
+            <PropRow name="content" type="ReactNode" defaultVal="required" description="Tooltip content (text or JSX)" isDarkMode={isDarkMode} />
+            <PropRow name="side" type={'"top" | "right" | "bottom" | "left"'} description="Override tooltip position for this step" isDarkMode={isDarkMode} />
+            <PropRow name="align" type={'"start" | "center" | "end"'} description="Override tooltip alignment" isDarkMode={isDarkMode} />
+            <PropRow name="sideOffset" type="number" description="Distance from trigger (px)" isDarkMode={isDarkMode} />
+            <PropRow name="alignOffset" type="number" description="Offset from aligned edge (px)" isDarkMode={isDarkMode} />
+            <PropRow name="maxWidth" type="string | number" description="Maximum tooltip width" isDarkMode={isDarkMode} />
+            <PropRow name="delayDuration" type="number" description="Delay before showing (ms)" isDarkMode={isDarkMode} />
+            <PropRow name="showArrow" type="boolean" description="Show tooltip arrow" isDarkMode={isDarkMode} />
+            <PropRow name="arrowColor" type="string" description="Custom arrow color" isDarkMode={isDarkMode} />
+            <PropRow name="shadow" type="TooltipShadow" description="Tooltip shadow preset" isDarkMode={isDarkMode} />
+            <PropRow name="contentClassName" type="string" description="Custom class for tooltip content" isDarkMode={isDarkMode} />
+            <PropRow name="contentStyle" type="CSSProperties" description="Inline styles for tooltip content" isDarkMode={isDarkMode} />
+            <PropRow name="arrowClassName" type="string" description="Custom class for tooltip arrow" isDarkMode={isDarkMode} />
+            <PropRow name="arrowStyle" type="CSSProperties" description="Inline styles for tooltip arrow" isDarkMode={isDarkMode} />
+          </PropsTable>
+        </Section>
+
+        <Section title="StepperTooltipDefaults Properties" isDarkMode={isDarkMode}>
+          <PropsTable isDarkMode={isDarkMode}>
+            <PropRow name="side" type={'"top" | "right" | "bottom" | "left"'} defaultVal="top" description="Default tooltip position for all steps" isDarkMode={isDarkMode} />
+            <PropRow name="align" type={'"start" | "center" | "end"'} defaultVal="center" description="Default tooltip alignment" isDarkMode={isDarkMode} />
+            <PropRow name="sideOffset" type="number" defaultVal="6" description="Default distance from trigger (px)" isDarkMode={isDarkMode} />
+            <PropRow name="delayDuration" type="number" defaultVal="200" description="Default delay before showing (ms)" isDarkMode={isDarkMode} />
+            <PropRow name="maxWidth" type="string | number" defaultVal="300" description="Default maximum tooltip width" isDarkMode={isDarkMode} />
+            <PropRow name="showArrow" type="boolean" defaultVal="true" description="Default show/hide arrow" isDarkMode={isDarkMode} />
+            <PropRow name="shadow" type="TooltipShadow" defaultVal="lg" description="Default shadow preset" isDarkMode={isDarkMode} />
+          </PropsTable>
+        </Section>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
           >
-            Next
-          </button>
+            Type Definitions
+          </h3>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`type StepStatus = "pending" | "active" | "completed" | "error";
+
+interface Step {
+  id: string | number;
+  label?: ReactNode;
+  description?: ReactNode;
+  icon?: ComponentType<IconProps> | ReactNode;
+  completedIcon?: ComponentType<IconProps> | ReactNode;
+  errorIcon?: ComponentType<IconProps> | ReactNode;
+  disabled?: boolean;
+  tooltip?: ReactNode | StepTooltipConfig;
+}
+
+interface StepperClasses {
+  root?: string;
+  list?: string;
+  stepContainer?: string;
+  step?: string;
+  indicator?: string;
+  indicatorIcon?: string;
+  labelWrapper?: string;
+  label?: string;
+  description?: string;
+  connector?: string;
+}
+
+interface StepRenderProps {
+  step: Step;
+  index: number;
+  status: StepStatus;
+  isClickable: boolean;
+  isDisabled: boolean;
+  nextStepStatus?: StepStatus;
+}
+
+interface StepperProps {
+  steps: Step[];
+  value?: string | number;
+  defaultValue?: string | number;
+  onValueChange?: (stepId: string | number) => void;
+  beforeStepChange?: (nextStepId: string | number, currentStepId: string | number) => boolean;
+  orientation?: "horizontal" | "vertical";
+  variant?: "numbered" | "icon" | "dot";
+  activationMode?: "automatic" | "manual";
+  isStepClickable?: (stepId: string | number, status: StepStatus) => boolean;
+  getStepStatus?: (stepId: string | number, index: number, activeIndex: number) => StepStatus;
+  showLabels?: boolean;
+  showDescriptions?: boolean;
+  showConnectors?: boolean;
+  labelPosition?: "bottom" | "right";
+  completedIcon?: ComponentType<IconProps> | ReactNode;
+  errorIcon?: ComponentType<IconProps> | ReactNode;
+  fullWidth?: boolean;
+  "aria-label"?: string;
+  showTooltips?: boolean;
+  tooltipDefaults?: StepperTooltipDefaults;
+  classes?: StepperClasses;
+  className?: string;
+  style?: CSSProperties;
+  id?: string;
+  disabled?: boolean;
+  loop?: boolean;
+  renderStep?: (props: StepRenderProps, defaultElement: ReactElement) => ReactNode;
+}`}
+          />
         </div>
-      </Section>
+      </div>
 
-      <Section title="Horizontal with Connectors">
-        <Stepper
-          steps={basicSteps}
-          activeStep={connectorStep}
-          onChange={(id) => setConnectorStep(id as number)}
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-50"
-          indicatorClassName="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2"
-          indicatorActiveClassName="bg-blue-600 text-white border-blue-600"
-          indicatorCompletedClassName="bg-green-500 text-white border-green-500"
-          indicatorPendingClassName="bg-white text-gray-400 border-gray-300"
-          indicatorIconClassName="w-5 h-5"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-400"
-          connectorClassName="flex-1 h-0.5 min-w-12 mx-1 bg-gray-200 rounded-full"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-300"
-        />
-        <p className="mt-3 text-sm text-gray-500">
-          Horizontal stepper with visible connector lines between steps. The
-          connector uses{" "}
-          <code className="bg-gray-100 px-1 rounded">flex-1</code> to expand and
-          fill available space.
-        </p>
-      </Section>
+      <div className="space-y-6">
+        <h2 className={`text-2xl font-bold ${s.heading}`}>Accessibility</h2>
 
-      <Section title="Icon Stepper with Descriptions">
-        <Stepper
-          steps={checkoutSteps}
-          activeStep={checkoutStep}
-          onChange={(id) => setCheckoutStep(id as string)}
-          variant="icon"
-          showDescriptions
-          labelPosition="bottom"
-          className="flex flex-row items-start"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex flex-col items-center px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
-          indicatorClassName="w-12 h-12 rounded-full flex items-center justify-center"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-100 text-gray-400"
-          indicatorIconClassName="w-6 h-6"
-          labelClassName="text-sm font-medium mt-2"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          descriptionClassName="text-xs"
-          descriptionActiveClassName="text-blue-500"
-          descriptionCompletedClassName="text-green-500"
-          descriptionPendingClassName="text-gray-400"
-          connectorClassName="flex-1 h-0.5 min-w-8 mx-2 mt-6 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-200"
-        />
-      </Section>
-
-      <Section title="Vertical Stepper">
-        <Stepper
-          steps={basicSteps}
-          activeStep={verticalStep}
-          onChange={(id) => setVerticalStep(id as number)}
-          orientation="vertical"
-          className="flex flex-col"
-          stepContainerClassName="flex flex-col"
-          stepClassName="flex items-center gap-3 py-1"
-          indicatorClassName="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-200 text-gray-600"
-          indicatorIconClassName="w-4 h-4"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          connectorClassName="w-0.5 h-6 ml-4 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-200"
-        />
-      </Section>
-
-      <Section title="Dot Variant">
-        <Stepper
-          steps={basicSteps}
-          activeStep={dotStep}
-          onChange={(id) => setDotStep(id as number)}
-          variant="dot"
-          showLabels={false}
-          className="flex flex-row items-center justify-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="px-1 py-1"
-          indicatorClassName="w-3 h-3 rounded-full transition-all"
-          indicatorActiveClassName="bg-blue-600 scale-150"
-          indicatorCompletedClassName="bg-green-500"
-          indicatorPendingClassName="bg-gray-300"
-          indicatorIconClassName="w-full h-full"
-          connectorClassName="w-8 h-0.5 mx-1 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-200"
-        />
-      </Section>
-
-      <Section title="Error State">
-        <Stepper
-          steps={[
-            { id: 1, label: "Account" },
-            { id: 2, label: "Verification" },
-            { id: 3, label: "Complete" },
-          ]}
-          activeStep={errorStep}
-          onChange={(id) => setErrorStep(id as number)}
-          getStepStatus={errorGetStatus}
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-2 py-1 rounded-lg"
-          indicatorClassName="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-200 text-gray-600"
-          indicatorErrorClassName="bg-red-500 text-white"
-          indicatorIconClassName="w-4 h-4"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          labelErrorClassName="text-red-500"
-          connectorClassName="flex-1 h-px min-w-8 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-200"
-        />
-      </Section>
-
-      <Section title="Disabled Steps">
-        <Stepper
-          steps={[
-            { id: 1, label: "Step 1" },
-            { id: 2, label: "Step 2" },
-            { id: 3, label: "Step 3", disabled: true },
-            { id: 4, label: "Step 4" },
-          ]}
-          activeStep={2}
-          onChange={() => {}}
-          isStepClickable={() => true}
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-2 py-1 rounded-lg"
-          stepDisabledClassName="opacity-50 cursor-not-allowed"
-          indicatorClassName="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-200 text-gray-600"
-          indicatorIconClassName="w-4 h-4"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          connectorClassName="flex-1 h-px min-w-8 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-        />
-      </Section>
-
-      <Section title="Custom Styling">
-        <Stepper
-          steps={[
-            { id: 1, label: "Design" },
-            { id: 2, label: "Develop" },
-            { id: 3, label: "Deploy" },
-          ]}
-          activeStep={customStep}
-          onChange={(id) => setCustomStep(id as number)}
-          className="flex flex-row items-center gap-2"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-3 py-2 rounded-2xl border-2 border-transparent hover:border-purple-200 transition-all"
-          stepActiveClassName="bg-purple-50 border-purple-300"
-          indicatorClassName="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all"
-          indicatorActiveClassName="bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-200"
-          indicatorCompletedClassName="bg-gradient-to-br from-green-400 to-emerald-500 text-white"
-          indicatorPendingClassName="bg-gray-100 text-gray-400 border border-gray-200"
-          indicatorIconClassName="w-5 h-5"
-          labelClassName="text-sm font-semibold"
-          labelActiveClassName="text-purple-700"
-          labelCompletedClassName="text-emerald-600"
-          labelPendingClassName="text-gray-400"
-          connectorClassName="flex-1 h-1 min-w-8 mx-1 rounded-full bg-gray-100"
-          connectorCompletedClassName="bg-gradient-to-r from-green-400 to-emerald-500"
-          connectorActiveClassName="bg-gradient-to-r from-purple-200 to-purple-300"
-        />
-      </Section>
-
-      <Section title="Non-linear Navigation">
-        <Stepper
-          steps={basicSteps}
-          activeStep={2}
-          onChange={() => {}}
-          isStepClickable={() => true}
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-blue-50 cursor-pointer"
-          indicatorClassName="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-200 text-gray-600 hover:bg-gray-300"
-          indicatorIconClassName="w-4 h-4"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          connectorClassName="flex-1 h-px min-w-8 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-        />
-        <p className="mt-2 text-sm text-gray-500">
-          All steps are clickable regardless of status
-        </p>
-      </Section>
-
-      <Section title="With Tooltips (Simple)">
-        <Stepper
-          steps={tooltipSteps}
-          activeStep={tooltipStep}
-          onChange={(id) => setTooltipStep(id as number)}
-          showTooltips
-          tooltipSide="top"
-          tooltipDelayDuration={100}
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-50"
-          indicatorClassName="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
-          indicatorActiveClassName="bg-blue-600 text-white"
-          indicatorCompletedClassName="bg-green-500 text-white"
-          indicatorPendingClassName="bg-gray-200 text-gray-600"
-          indicatorIconClassName="w-4 h-4"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-blue-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-500"
-          connectorClassName="flex-1 h-px min-w-8 bg-gray-200"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-blue-200"
-        />
-        <p className="mt-3 text-sm text-gray-500">
-          Hover over each step to see the tooltip. Enable with{" "}
-          <code className="bg-gray-100 px-1 rounded">showTooltips</code> and add{" "}
-          <code className="bg-gray-100 px-1 rounded">tooltip</code> to each
-          step.
-        </p>
-      </Section>
-
-      <Section title="With Tooltips (Custom Config)">
-        <Stepper
-          steps={tooltipConfigSteps}
-          activeStep={tooltipConfigStep}
-          onChange={(id) => setTooltipConfigStep(id as number)}
-          showTooltips
-          className="flex flex-row items-center"
-          stepContainerClassName="flex items-center"
-          stepClassName="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
-          indicatorClassName="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2"
-          indicatorActiveClassName="bg-purple-600 text-white border-purple-600"
-          indicatorCompletedClassName="bg-green-500 text-white border-green-500"
-          indicatorPendingClassName="bg-white text-gray-400 border-gray-300"
-          indicatorIconClassName="w-5 h-5"
-          labelClassName="text-sm font-medium"
-          labelActiveClassName="text-purple-600"
-          labelCompletedClassName="text-green-600"
-          labelPendingClassName="text-gray-400"
-          connectorClassName="flex-1 h-0.5 min-w-12 mx-1 bg-gray-200 rounded-full"
-          connectorCompletedClassName="bg-green-500"
-          connectorActiveClassName="bg-purple-300"
-        />
-        <p className="mt-3 text-sm text-gray-500">
-          Each step can have custom tooltip configuration including position,
-          content (JSX), max width, and shadow.
-        </p>
-      </Section>
-
-      <Section title="Stepper Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">steps</td>
-                <td className="py-2 pr-4 text-gray-600">Step[]</td>
-                <td className="py-2 pr-4 text-gray-500">[]</td>
-                <td className="py-2 text-gray-600">Array of step objects</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  activeStep
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Currently active step ID</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  orientation
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "horizontal" | "vertical"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">"horizontal"</td>
-                <td className="py-2 text-gray-600">Layout direction</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">variant</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "numbered" | "icon" | "dot"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">"numbered"</td>
-                <td className="py-2 text-gray-600">
-                  Visual style of step indicators
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onChange</td>
-                <td className="py-2 pr-4 text-gray-600">(stepId) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Callback when a step is clicked
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  isStepClickable
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (stepId, status) =&gt; boolean
-                </td>
-                <td className="py-2 pr-4 text-gray-500">
-                  completed/active only
-                </td>
-                <td className="py-2 text-gray-600">
-                  Custom logic for step clickability
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  getStepStatus
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (stepId, index, activeIndex) =&gt; StepStatus
-                </td>
-                <td className="py-2 pr-4 text-gray-500">auto-calculated</td>
-                <td className="py-2 text-gray-600">
-                  Custom status logic (pending/active/completed/error)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showLabels
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show step labels</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showDescriptions
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Show step descriptions</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showConnectors
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">
-                  Show connectors between steps
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelPosition
-                </td>
-                <td className="py-2 pr-4 text-gray-600">"bottom" | "right"</td>
-                <td className="py-2 pr-4 text-gray-500">"right"</td>
-                <td className="py-2 text-gray-600">
-                  Position of labels relative to indicator
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  completedIcon
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  ComponentType | ReactNode
-                </td>
-                <td className="py-2 pr-4 text-gray-500">CheckIcon</td>
-                <td className="py-2 text-gray-600">Icon for completed steps</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">errorIcon</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  ComponentType | ReactNode
-                </td>
-                <td className="py-2 pr-4 text-gray-500">ErrorIcon</td>
-                <td className="py-2 text-gray-600">Icon for error steps</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">fullWidth</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Whether container takes full width
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showTooltips
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Enable tooltips on steps with tooltip content
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipSide
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "top" | "right" | "bottom" | "left"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">"top"</td>
-                <td className="py-2 text-gray-600">Default tooltip position</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipAlign
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "start" | "center" | "end"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">"center"</td>
-                <td className="py-2 text-gray-600">
-                  Default tooltip alignment
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipSideOffset
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">6</td>
-                <td className="py-2 text-gray-600">
-                  Distance from trigger element (px)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipAlignOffset
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">0</td>
-                <td className="py-2 text-gray-600">
-                  Offset from aligned edge (px)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipDelayDuration
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">200</td>
-                <td className="py-2 text-gray-600">
-                  Delay before showing tooltip (ms)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipMaxWidth
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">300</td>
-                <td className="py-2 text-gray-600">Maximum width of tooltip</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipShowArrow
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show tooltip arrow</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipShadow
-                </td>
-                <td className="py-2 pr-4 text-gray-600">TooltipShadow</td>
-                <td className="py-2 pr-4 text-gray-500">"lg"</td>
-                <td className="py-2 text-gray-600">
-                  Tooltip shadow preset or custom value
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipContentClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Custom class for tooltip content
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipContentStyle
-                </td>
-                <td className="py-2 pr-4 text-gray-600">CSSProperties</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Inline styles for tooltip content
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipArrowColor
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Custom color for tooltip arrow
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipArrowClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Custom class for tooltip arrow
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tooltipArrowStyle
-                </td>
-                <td className="py-2 pr-4 text-gray-600">CSSProperties</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Inline styles for tooltip arrow
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div className={`p-4 rounded-lg ${s.panel}`}>
+          <h3
+            className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            Features
+          </h3>
+          <ul
+            className={`list-disc list-inside space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+          >
+            <li>
+              Semantic <code className={s.code}>&lt;ol&gt;</code> /{" "}
+              <code className={s.code}>&lt;li&gt;</code> list structure — screen
+              readers announce &quot;item 2 of 4&quot;
+            </li>
+            <li>
+              <code className={s.code}>role=&quot;navigation&quot;</code> with
+              configurable <code className={s.code}>aria-label</code> landmark
+            </li>
+            <li>
+              Native{" "}
+              <code className={s.code}>&lt;button type=&quot;button&quot;&gt;</code>{" "}
+              for interactive steps with roving{" "}
+              <code className={s.code}>tabIndex</code> — only one step is in the
+              tab order at a time
+            </li>
+            <li>
+              <code className={s.code}>aria-current=&quot;step&quot;</code> on
+              the active step
+            </li>
+            <li>
+              <code className={s.code}>aria-disabled</code> on disabled steps
+            </li>
+            <li>
+              Auto-generated{" "}
+              <code className={s.code}>aria-label</code> when labels are hidden
+              (dot variant) — &quot;Step 2 of 4&quot;
+            </li>
+            <li>
+              Indicator content is{" "}
+              <code className={s.code}>aria-hidden=&quot;true&quot;</code> — the
+              step label or aria-label provides the accessible name
+            </li>
+            <li>
+              All SVG icons include{" "}
+              <code className={s.code}>aria-hidden=&quot;true&quot;</code>
+            </li>
+            <li>
+              Connectors are{" "}
+              <code className={s.code}>aria-hidden=&quot;true&quot;</code> to
+              avoid screen reader noise
+            </li>
+            <li>
+              Default <code className={s.code}>focus-visible</code> ring on
+              interactive steps for keyboard navigation
+            </li>
+            <li>
+              RTL-aware arrow key navigation — respects{" "}
+              <code className={s.code}>direction: rtl</code> on the element
+            </li>
+            <li>
+              <code className={s.code}>motion-reduce:transition-none</code>{" "}
+              applied to all animated elements for reduced-motion preference
+            </li>
+            <li>Supports ref forwarding for programmatic focus management</li>
+          </ul>
         </div>
-      </Section>
 
-      <Section title="Step Object Properties">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Property
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Required
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">id</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">Yes</td>
-                <td className="py-2 text-gray-600">
-                  Unique identifier for the step
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">label</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Step label text</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  description
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Step description text</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">icon</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  ComponentType | ReactNode
-                </td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Custom icon for the step</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  completedIcon
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  ComponentType | ReactNode
-                </td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Icon when step is completed
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">errorIcon</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  ComponentType | ReactNode
-                </td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Icon when step has error</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">disabled</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Whether the step is disabled
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">tooltip</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  ReactNode | StepTooltipConfig
-                </td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Tooltip content or configuration object
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div className={`p-4 rounded-lg ${s.panel}`}>
+          <h3
+            className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            Keyboard Navigation
+          </h3>
+          <ul
+            className={`space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+          >
+            <li>
+              <kbd className={s.codeBorder}>Tab</kbd> — Move focus into the
+              stepper (lands on the active or first interactive step via roving
+              tabindex)
+            </li>
+            <li>
+              <kbd className={s.codeBorder}>→</kbd> /{" "}
+              <kbd className={s.codeBorder}>↓</kbd> — Move focus to the next
+              interactive step (direction follows orientation; RTL-aware)
+            </li>
+            <li>
+              <kbd className={s.codeBorder}>←</kbd> /{" "}
+              <kbd className={s.codeBorder}>↑</kbd> — Move focus to the
+              previous interactive step
+            </li>
+            <li>
+              <kbd className={s.codeBorder}>Home</kbd> — Move focus to the
+              first interactive step
+            </li>
+            <li>
+              <kbd className={s.codeBorder}>End</kbd> — Move focus to the last
+              interactive step
+            </li>
+            <li>
+              <kbd className={s.codeBorder}>Enter</kbd> /{" "}
+              <kbd className={s.codeBorder}>Space</kbd> — Activate the focused
+              step (fires onValueChange)
+            </li>
+          </ul>
         </div>
-      </Section>
-
-      <Section title="StepTooltipConfig Properties">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Property
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Required
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">content</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">Yes</td>
-                <td className="py-2 text-gray-600">
-                  Tooltip content (text or JSX)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">side</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "top" | "right" | "bottom" | "left"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Override tooltip position for this step
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">align</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "start" | "center" | "end"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Override tooltip alignment for this step
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">sideOffset</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Distance from trigger element (px)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">alignOffset</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Offset from aligned edge (px)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxWidth</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Maximum width of tooltip
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">delayDuration</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Delay before showing (ms)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">showArrow</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Show tooltip arrow
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">arrowColor</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Custom color for tooltip arrow
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">shadow</td>
-                <td className="py-2 pr-4 text-gray-600">TooltipShadow</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Tooltip shadow preset
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">contentClassName</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Custom class for tooltip content
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">contentStyle</td>
-                <td className="py-2 pr-4 text-gray-600">CSSProperties</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Inline styles for tooltip content
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">arrowClassName</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Custom class for tooltip arrow
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">arrowStyle</td>
-                <td className="py-2 pr-4 text-gray-600">CSSProperties</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">
-                  Inline styles for tooltip arrow
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Section>
-
-      <Section title="Styling Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  containerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Outer container wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">className</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Steps flex container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepContainerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Individual step wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Clickable step area (base)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepActiveClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Step area when active</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepCompletedClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Step area when completed</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepPendingClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Step area when pending</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepErrorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Step area when error</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stepDisabledClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Step area when disabled</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  indicatorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Step number/icon indicator (base)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  indicatorActiveClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Indicator when active</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  indicatorCompletedClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Indicator when completed</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  indicatorPendingClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Indicator when pending</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  indicatorErrorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Indicator when error</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  indicatorIconClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Icon inside the indicator
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Step label text (base)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelActiveClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Label when active</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelCompletedClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Label when completed</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelPendingClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Label when pending</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelErrorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Label when error</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  descriptionClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Step description text (base)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  descriptionActiveClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Description when active</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  descriptionCompletedClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Description when completed
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  descriptionPendingClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Description when pending</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  descriptionErrorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Description when error</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  connectorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Connector line between steps (base)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  connectorActiveClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Connector when active</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  connectorCompletedClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Connector when completed</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  connectorPendingClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Connector when pending</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  connectorErrorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Connector when error</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Section>
-    </>
+      </div>
+    </div>
   );
 };
 

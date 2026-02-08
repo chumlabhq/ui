@@ -2772,6 +2772,35 @@ const AvatarDemo = () => {
         </Section>
 
         <Section
+          title="Image Load Callback"
+          description="Use the onLoad callback to detect when the avatar image finishes loading. Useful for tracking image load performance or showing transitions."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Avatar
+              name="Load Demo"
+              src="https://i.pravatar.cc/150?u=onload-demo"
+              size="xl"
+              shape="circle"
+              onLoad={() => console.log("Avatar image loaded successfully")}
+              onError={() => console.log("Avatar image failed to load")}
+            />
+            <p className={`text-sm mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+              Open the browser console to see onLoad / onError callbacks fire.
+            </p>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Avatar
+  name="User"
+  src="https://example.com/avatar.jpg"
+  onLoad={() => console.log("Image loaded")}
+  onError={() => console.log("Image failed")}
+/>`}
+          />
+        </Section>
+
+        <Section
           title="Data Attributes"
           description="The Avatar component applies data attributes for CSS-based styling."
           isDarkMode={isDarkMode}

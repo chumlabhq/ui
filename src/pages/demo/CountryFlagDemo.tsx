@@ -705,6 +705,91 @@ const CountryFlagDemo = () => {
           </DemoWrapper>
         </Section>
         <Section
+          title="Custom Aspect Ratio"
+          description="By default flags use a 3:4 aspect ratio (0.75). Use the aspectRatio prop to adjust the height relative to the width — for example, 1.0 for a square or 0.5 for a wider flag."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="flex items-end gap-6">
+              <div className="text-center">
+                <CountryFlag code="us" size="xl" aspectRatio={0.5} className="rounded-sm" />
+                <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>0.5 (wide)</p>
+              </div>
+              <div className="text-center">
+                <CountryFlag code="us" size="xl" aspectRatio={0.75} className="rounded-sm" />
+                <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>0.75 (default)</p>
+              </div>
+              <div className="text-center">
+                <CountryFlag code="us" size="xl" aspectRatio={1} className="rounded-sm" />
+                <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>1.0 (square)</p>
+              </div>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<CountryFlag code="us" size="xl" aspectRatio={0.5} />   // Wide
+<CountryFlag code="us" size="xl" aspectRatio={0.75} />  // Default
+<CountryFlag code="us" size="xl" aspectRatio={1} />     // Square`}
+          />
+        </Section>
+
+        <Section
+          title="Group with Custom Surplus Rendering"
+          description="Use renderSurplus on CountryFlagGroup to fully customize how the overflow count is displayed. Combined with surplusTooltipContent, you can also customize what the surplus tooltip shows."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-4">
+              <div>
+                <p className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  Custom surplus renderer with tooltip
+                </p>
+                <CountryFlagGroup
+                  max={3}
+                  size="lg"
+                  showCountTooltip
+                  surplusTooltipContent="5 more countries"
+                  renderSurplus={(count) => (
+                    <span
+                      className={`inline-flex items-center justify-center rounded-sm text-xs font-bold ${isDarkMode ? "bg-blue-900 text-blue-200" : "bg-blue-100 text-blue-700"}`}
+                      style={{ width: 48, height: 36 }}
+                    >
+                      +{count} more
+                    </span>
+                  )}
+                  itemClassName="rounded-sm"
+                >
+                  <CountryFlag code="us" />
+                  <CountryFlag code="gb" />
+                  <CountryFlag code="de" />
+                  <CountryFlag code="fr" />
+                  <CountryFlag code="jp" />
+                  <CountryFlag code="br" />
+                  <CountryFlag code="ca" />
+                  <CountryFlag code="au" />
+                </CountryFlagGroup>
+              </div>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<CountryFlagGroup
+  max={3}
+  size="lg"
+  showCountTooltip
+  surplusTooltipContent="5 more countries"
+  renderSurplus={(count) => (
+    <span className="...">+{count} more</span>
+  )}
+>
+  <CountryFlag code="us" />
+  <CountryFlag code="gb" />
+  {/* ... more flags */}
+</CountryFlagGroup>`}
+          />
+        </Section>
+
+        <Section
           title="Shimmer / Loading Placeholders"
           description="Use the loading prop on CountryFlag for built-in shimmer, or CountryFlagShimmer / CountryFlagGroupShimmer as standalone skeletons."
           isDarkMode={isDarkMode}
@@ -1027,6 +1112,20 @@ const CountryFlagDemo = () => {
             type="string"
             defaultVal="-"
             description="CSS class for the count badge"
+            isDarkMode={isDarkMode}
+          />
+          <PropRow
+            name="renderSurplus"
+            type="(count: number) => ReactNode"
+            defaultVal="-"
+            description="Custom render function for the surplus count element"
+            isDarkMode={isDarkMode}
+          />
+          <PropRow
+            name="surplusTooltipContent"
+            type="ReactNode"
+            defaultVal="-"
+            description="Content shown in tooltip when hovering the surplus count"
             isDarkMode={isDarkMode}
           />
           <PropRow

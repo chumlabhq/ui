@@ -15,7 +15,7 @@ export interface AnimationCallbacks {
   onCloseEnd?: () => void;
 }
 
-export interface AccordionClassNames {
+export interface AccordionClasses {
   root?: string;
   item?: string;
   trigger?: string;
@@ -59,7 +59,7 @@ interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defau
   dir?: Direction;
   disabled?: boolean;
   loop?: boolean;
-  classNames?: AccordionClassNames;
+  classes?: AccordionClasses;
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   children: ReactNode;
   asChild?: boolean;
@@ -144,7 +144,7 @@ export interface AccordionDispatchValue {
 export interface AccordionConfigValue {
   orientation: Orientation;
   dir: Direction;
-  classNames: AccordionClassNames;
+  classes: AccordionClasses;
   headingLevel: 1 | 2 | 3 | 4 | 5 | 6;
   reduceMotion: boolean;
   unstyled: boolean;

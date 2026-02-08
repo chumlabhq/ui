@@ -1,3 +1,2 @@
-export { default } from "./ResizablePanel";
-export { default as ResizablePanel } from "./ResizablePanel";
-export type { ResizablePanelProps } from "./types";
+export { ResizablePanel } from "./ResizablePanel";
+export type { ResizablePanelProps, ResizablePanelClasses } from "./utils/types";

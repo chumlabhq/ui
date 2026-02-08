@@ -210,12 +210,12 @@ const PaginationDemo = () => {
         ? "border-gray-600 bg-gray-700 text-gray-200 hover:bg-gray-600"
         : "border-gray-200 bg-white hover:bg-gray-50"
     }`,
-    dropdownUp: `rounded-lg shadow-lg py-1 z-10 border min-w-[64px] ${
+    dropdownUp: `rounded-lg shadow-lg py-1 border min-w-[64px] ${
       isDarkMode
         ? "bg-gray-700 border-gray-600"
         : "bg-white border-gray-200"
     }`,
-    dropdownDown: `rounded-lg shadow-lg py-1 z-10 border min-w-[64px] ${
+    dropdownDown: `rounded-lg shadow-lg py-1 border min-w-[64px] ${
       isDarkMode
         ? "bg-gray-700 border-gray-600"
         : "bg-white border-gray-200"
@@ -594,7 +594,10 @@ const PaginationDemo = () => {
                 showLabel="Afficher"
                 rowsPerPageLabel="lignes"
                 dropdownAriaLabel="Lignes par page"
-                aria-label="Navigation des pages"
+                paginationAriaLabel="Navigation des pages"
+                prevAriaLabel="Page précédente"
+                nextAriaLabel="Page suivante"
+                pageAriaLabel={(page) => `Page ${page}`}
                 renderPageInfo={({ currentPage, totalPages }) => (
                   <span className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                     Page {currentPage} sur {totalPages}
@@ -620,7 +623,10 @@ const PaginationDemo = () => {
   showLabel="Afficher"
   rowsPerPageLabel="lignes"
   dropdownAriaLabel="Lignes par page"
-  aria-label="Navigation des pages"
+  paginationAriaLabel="Navigation des pages"
+  prevAriaLabel="Page précédente"
+  nextAriaLabel="Page suivante"
+  pageAriaLabel={(page) => \`Page \${page}\`}
   ...
 />`} />
             </div>
@@ -804,8 +810,21 @@ const PaginationDemo = () => {
           </DemoWrapper>
           <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}>
             <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
-              <strong>Accessibility:</strong> The dropdown uses a proper <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>role="listbox"</code> with <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>aria-activedescendant</code> for 
-              keyboard navigation. Focus is automatically moved to the listbox when opened, and returns to the trigger when closed.
+              <strong>Note:</strong> The dropdown is rendered via a{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>React Portal</code>{" "}
+              into{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>document.body</code>,{" "}
+              so it is never clipped by{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>overflow: hidden</code>{" "}
+              ancestors. The component handles positioning and{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>z-index</code>{" "}
+              via inline styles, so you do NOT need to add positioning or z-index classes to{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>rowSelectorDropdownClassName</code>.{" "}
+              It uses{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>role="listbox"</code>{" "}
+              with{" "}
+              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>aria-activedescendant</code>{" "}
+              for keyboard navigation. Focus automatically moves to the listbox when opened and returns to the trigger when closed.
             </p>
           </div>
         </Section>
@@ -836,7 +855,7 @@ const PaginationDemo = () => {
               rowSelectorButtonClassName={`flex items-center gap-2 px-4 py-2 rounded-full border shadow-sm hover:shadow transition-shadow cursor-pointer ${
                 isDarkMode ? "bg-gray-700 border-gray-600 text-gray-200" : "bg-white border-gray-200"
               }`}
-              rowSelectorDropdownClassName={`rounded-xl shadow-lg py-2 z-10 min-w-[80px] border ${
+              rowSelectorDropdownClassName={`rounded-xl shadow-lg py-2 min-w-[80px] border ${
                 isDarkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
               }`}
               rowSelectorOptionClassName={`px-4 py-2 w-full text-left cursor-pointer transition-colors ${
@@ -1090,6 +1109,49 @@ activePageButtonClassName={/* same as above */}`} />
             </div>
           </DemoWrapper>
         </Section>
+
+        <Section
+          title="Dropdown Z-Index"
+          description="Use dropdownZIndex to control the stacking order of the rows-per-page dropdown when it overlaps other elements like modals or sticky headers."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Pagination
+              currentPage={1}
+              totalPages={10}
+              onPageChange={() => {}}
+              showRowsPerPage
+              rowsPerPage={10}
+              onRowsPerPageChange={() => {}}
+              dropdownZIndex={100}
+              containerClassName="flex items-center justify-between gap-4"
+              rowSelectorClassName="flex items-center gap-2"
+              rowSelectorButtonClassName={s.selectorBtn}
+              rowSelectorDropdownClassName={s.dropdownUp}
+              rowSelectorOptionClassName={s.option}
+              labelClassName={s.label}
+              navContainerClassName={s.flex}
+              navButtonClassName={s.nav}
+              pageButtonClassName={s.page}
+              activePageButtonClassName={s.activePage}
+              ellipsisClassName={s.ellipsis}
+              prevIconClassName={s.icon}
+              nextIconClassName={s.icon}
+            />
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Pagination
+  showRowsPerPage
+  rowsPerPage={10}
+  dropdownZIndex={100}
+  ...
+/>
+
+// Use higher values when nested inside modals:
+<Pagination dropdownZIndex={10001} ... />`}
+          />
+        </Section>
       </div>
 
       <div className="space-y-8">
@@ -1125,12 +1187,18 @@ activePageButtonClassName={/* same as above */}`} />
                   ["showLabel", "string", '"Show"', "Label shown before the rows selector (i18n)"],
                   ["dropdownAriaLabel", "string", '"Rows per page"', "ARIA label for the dropdown listbox (i18n)"],
                   ["dropdownDirection", '"up" | "down"', '"up"', "Direction the rows-per-page dropdown opens"],
+                  ["dropdownZIndex", "number", "50", "z-index of the rows-per-page dropdown portal"],
                   ["prevIcon", "ComponentType | ReactNode", "ChevronLeftIcon", "Custom icon for the previous button"],
                   ["nextIcon", "ComponentType | ReactNode", "ChevronRightIcon", "Custom icon for the next button"],
                   ["dropdownIcon", "ComponentType | ReactNode", "ChevronDownIcon", "Custom icon for the dropdown button"],
                   ["renderEllipsis", "(props) => ReactNode", "-", "Custom render for ellipsis. Receives { position, onPageChange }"],
                   ["renderPageInfo", "(props) => ReactNode", "-", "Custom render for page info. Receives { currentPage, totalPages, rowsPerPage }"],
                   ["sectionOrder", "SectionName[]", '["selector", "pageInfo", "nav"]', "Order of rendered sections"],
+                  ["portalContainer", "HTMLElement | null", "document.body", "Container element for the dropdown portal"],
+                  ["prevAriaLabel", "string", '"Previous page"', "Accessible label for the previous button (i18n)"],
+                  ["nextAriaLabel", "string", '"Next page"', "Accessible label for the next button (i18n)"],
+                  ["paginationAriaLabel", "string", '"Pagination"', "Accessible label for the nav landmark (i18n)"],
+                  ["pageAriaLabel", "(page: number) => string", 'Page ${page}', "Function to generate accessible label for page buttons (i18n)"],
                 ].map(([prop, type, def, desc]) => (
                   <tr key={prop}>
                     <td className="py-3 pr-4 font-mono text-blue-500 whitespace-nowrap">{prop}</td>
@@ -1171,7 +1239,7 @@ activePageButtonClassName={/* same as above */}`} />
                   ["ellipsisClassName", "Ellipsis elements"],
                   ["rowSelectorClassName", "Rows-per-page selector container"],
                   ["rowSelectorButtonClassName", "Rows selector trigger button"],
-                  ["rowSelectorDropdownClassName *", "Rows dropdown menu (default: absolute positioned)"],
+                  ["rowSelectorDropdownClassName", "Rows dropdown menu (rendered via portal, visual styles only)"],
                   ["rowSelectorDropdownWrapperClassName *", 'Dropdown wrapper (default: "relative")'],
                   ["rowSelectorOptionClassName", "Each dropdown option"],
                   ["labelClassName", '"Show" and rows label text'],
@@ -1210,8 +1278,10 @@ activePageButtonClassName={/* same as above */}`} />
                   ["data-selected", "row options", "Present on the selected row option"],
                   ["data-highlighted", "row options", "Present on the keyboard-focused option"],
                   ['aria-current="page"', "page buttons", "ARIA active page indicator"],
+                  ["data-state", "dropdown portal", '"open" when the dropdown is visible'],
+                  ["data-direction", "dropdown portal", '"up" or "down" based on dropdownDirection'],
                   ["aria-expanded", "selector button", "Indicates dropdown open state"],
-                  ["aria-owns", "selector button", "References the listbox when open"],
+                  ["aria-controls", "selector button", "References the listbox when open"],
                 ].map(([attr, target, desc]) => (
                   <tr key={attr}>
                     <td className="py-3 pr-4 font-mono text-blue-500 whitespace-nowrap">{attr}</td>
@@ -1269,6 +1339,7 @@ interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onChange"> 
   showLabel?: string;
   dropdownAriaLabel?: string;
   dropdownDirection?: "up" | "down";
+  dropdownZIndex?: number;
   dropdownIcon?: ComponentType<IconProps> | ReactNode;
   prevIcon?: ComponentType<IconProps> | ReactNode;
   nextIcon?: ComponentType<IconProps> | ReactNode;
@@ -1324,7 +1395,7 @@ interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onChange"> 
               Dropdown uses{" "}
               <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>role="listbox"</code>{" "}
               with{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>aria-owns</code>,{" "}
+              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>aria-controls</code>,{" "}
               <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>aria-expanded</code>, and{" "}
               <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>aria-activedescendant</code>
             </li>

@@ -1,7 +1,22 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Pagination } from "../index";
+
+let rafSpy: { mockRestore: () => void };
+
+beforeEach(() => {
+  rafSpy = vi
+    .spyOn(window, "requestAnimationFrame")
+    .mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
+});
+
+afterEach(() => {
+  rafSpy.mockRestore();
+});
 
 describe("Pagination", () => {
   describe("Rendering", () => {
@@ -287,18 +302,18 @@ describe("Pagination", () => {
       expect(other).not.toHaveAttribute("data-selected");
     });
 
-    it("sets aria-owns on trigger when dropdown is open", async () => {
+    it("sets aria-controls on trigger when dropdown is open", async () => {
       const user = userEvent.setup();
       renderWithDropdown();
 
       const trigger = screen.getByRole("button", { name: "25" });
-      expect(trigger).not.toHaveAttribute("aria-owns");
+      expect(trigger).not.toHaveAttribute("aria-controls");
 
       await user.click(trigger);
 
-      expect(trigger).toHaveAttribute("aria-owns");
+      expect(trigger).toHaveAttribute("aria-controls");
       const listbox = screen.getByRole("listbox");
-      expect(trigger.getAttribute("aria-owns")).toBe(listbox.id);
+      expect(trigger.getAttribute("aria-controls")).toBe(listbox.id);
     });
 
     it("closes dropdown on Escape and returns focus to trigger", async () => {

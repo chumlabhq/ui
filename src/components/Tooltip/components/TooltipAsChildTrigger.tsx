@@ -11,6 +11,8 @@ export const TooltipAsChildTrigger: React.FC<{
   onFocus: () => void;
   onBlur: () => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
+  onTouchStart: () => void;
+  onTouchEnd: () => void;
   isOpen: boolean;
   tooltipId: string;
   triggerClassName?: string;
@@ -23,6 +25,8 @@ export const TooltipAsChildTrigger: React.FC<{
   onFocus,
   onBlur,
   onKeyDown,
+  onTouchStart,
+  onTouchEnd,
   isOpen,
   tooltipId,
   triggerClassName,
@@ -67,6 +71,22 @@ export const TooltipAsChildTrigger: React.FC<{
           (
             child.props.onKeyDown as
               | ((e: React.KeyboardEvent) => void)
+              | undefined
+          )?.(e);
+        },
+        onTouchStart: (e: React.TouchEvent) => {
+          onTouchStart();
+          (
+            child.props.onTouchStart as
+              | ((e: React.TouchEvent) => void)
+              | undefined
+          )?.(e);
+        },
+        onTouchEnd: (e: React.TouchEvent) => {
+          onTouchEnd();
+          (
+            child.props.onTouchEnd as
+              | ((e: React.TouchEvent) => void)
               | undefined
           )?.(e);
         },

@@ -90,14 +90,9 @@ const CheckboxDemo = () => {
   const [comboLgCircle, setComboLgCircle] = useState(true);
   const [comboXlCircle, setComboXlCircle] = useState(true);
 
-  const [customRoundedLg, setCustomRoundedLg] = useState(true);
-  const [customRoundedXl, setCustomRoundedXl] = useState(true);
-
   const [uncheckedIconDemo, setUncheckedIconDemo] = useState(false);
   const [indeterminateIconDemo, setIndeterminateIconDemo] = useState(false);
   const [isIndeterminateCustom, setIsIndeterminateCustom] = useState(true);
-
-  const [sizeClassNameDemo, setSizeClassNameDemo] = useState(true);
 
   const [formCheckbox1, setFormCheckbox1] = useState(false);
   const [formCheckbox2, setFormCheckbox2] = useState(true);
@@ -149,9 +144,11 @@ const CheckboxDemo = () => {
                   onCheckedChange={(checked) => setStateNotSelected(checked)}
                   size="xl"
                   shape="rounded"
-                  checkboxClassName={classes.checkboxBase}
-                  checkedClassName={classes.checked}
-                  uncheckedClassName={classes.unchecked}
+                  classes={{
+                    checkbox: classes.checkboxBase,
+                    checked: classes.checked,
+                    unchecked: classes.unchecked,
+                  }}
                 />
                 <span className={`text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>
                   Not selected
@@ -164,9 +161,11 @@ const CheckboxDemo = () => {
                   onCheckedChange={(checked) => setStateSelected(checked)}
                   size="xl"
                   shape="rounded"
-                  checkboxClassName={classes.checkboxBase}
-                  checkedClassName={classes.checked}
-                  uncheckedClassName={classes.unchecked}
+                  classes={{
+                    checkbox: classes.checkboxBase,
+                    checked: classes.checked,
+                    unchecked: classes.unchecked,
+                  }}
                 />
                 <span className={`text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>
                   Selected
@@ -189,10 +188,12 @@ const CheckboxDemo = () => {
                   }}
                   size="xl"
                   shape="rounded"
-                  checkboxClassName={classes.checkboxBase}
-                  checkedClassName={classes.checked}
-                  uncheckedClassName={classes.unchecked}
-                  indeterminateClassName={classes.indeterminate}
+                  classes={{
+                    checkbox: classes.checkboxBase,
+                    checked: classes.checked,
+                    unchecked: classes.unchecked,
+                    indeterminate: classes.indeterminate,
+                  }}
                 />
                 <span className={`text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}>
                   Indeterminate
@@ -212,10 +213,12 @@ const CheckboxDemo = () => {
               aria-label="Basic checkbox"
               checked={basic}
               onCheckedChange={(checked) => setBasic(checked)}
-              checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-              checkedClassName={classes.checked}
-              uncheckedClassName={classes.unchecked}
-              iconClassName={classes.icon}
+              classes={{
+                checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                checked: classes.checked,
+                unchecked: classes.unchecked,
+                icon: classes.icon,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -231,13 +234,15 @@ const CheckboxDemo = () => {
                 label="Accept terms and conditions"
                 checked={withLabel}
                 onCheckedChange={(checked) => setWithLabel(checked)}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -254,14 +259,16 @@ const CheckboxDemo = () => {
               description="Receive email updates about your account activity"
               checked={withDescription}
               onCheckedChange={(checked) => setWithDescription(checked)}
-              containerClassName={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.label}
-              descriptionClassName={classes.description}
-              checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-              checkedClassName={classes.checked}
-              uncheckedClassName={classes.unchecked}
-              iconClassName={classes.icon}
+              classes={{
+                root: classes.container,
+                labelContainer: classes.labelContainer,
+                label: classes.label,
+                description: classes.description,
+                checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                checked: classes.checked,
+                unchecked: classes.unchecked,
+                icon: classes.icon,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -276,12 +283,14 @@ const CheckboxDemo = () => {
               label="I agree to the privacy policy"
               required
               checked={false}
-              containerClassName={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.label}
-              checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-              uncheckedClassName={classes.unchecked}
-              iconClassName={classes.icon}
+              classes={{
+                root: classes.container,
+                labelContainer: classes.labelContainer,
+                label: classes.label,
+                checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                unchecked: classes.unchecked,
+                icon: classes.icon,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -297,14 +306,16 @@ const CheckboxDemo = () => {
               indeterminate={indeterminate}
               checked={false}
               onCheckedChange={() => setIndeterminate(!indeterminate)}
-              containerClassName={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.label}
-              checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-              checkedClassName={classes.checked}
-              uncheckedClassName={classes.unchecked}
-              indeterminateClassName={classes.indeterminate}
-              iconClassName={classes.icon}
+              classes={{
+                root: classes.container,
+                labelContainer: classes.labelContainer,
+                label: classes.label,
+                checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                checked: classes.checked,
+                unchecked: classes.unchecked,
+                indeterminate: classes.indeterminate,
+                icon: classes.icon,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -321,26 +332,30 @@ const CheckboxDemo = () => {
                 checked={customIcon}
                 onCheckedChange={(checked) => setCustomIcon(checked)}
                 checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={`${isDarkMode ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: `${isDarkMode ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
               <Checkbox
                 label="Star this item"
                 checked={customStar}
                 onCheckedChange={(checked) => setCustomStar(checked)}
                 checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={`${isDarkMode ? "bg-yellow-500 border-yellow-500" : "bg-yellow-500 border-yellow-500"} text-white`}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: `${isDarkMode ? "bg-yellow-500 border-yellow-500" : "bg-yellow-500 border-yellow-500"} text-white`,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -358,12 +373,14 @@ const CheckboxDemo = () => {
               onCheckedChange={(checked) => setUncheckedIconDemo(checked)}
               checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
               uncheckedIcon={<EmptyHeartIcon className={`w-3 h-3 ${isDarkMode ? "text-gray-400" : "text-gray-400"}`} />}
-              containerClassName={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.label}
-              checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-              checkedClassName={`${isDarkMode ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`}
-              uncheckedClassName={classes.unchecked}
+              classes={{
+                root: classes.container,
+                labelContainer: classes.labelContainer,
+                label: classes.label,
+                checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                checked: `${isDarkMode ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`,
+                unchecked: classes.unchecked,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -389,14 +406,16 @@ const CheckboxDemo = () => {
                 }
               }}
               indeterminateIcon={<PauseIcon className="w-3 h-3 text-white" />}
-              containerClassName={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.label}
-              checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-              checkedClassName={classes.checked}
-              uncheckedClassName={classes.unchecked}
-              indeterminateClassName={`${isDarkMode ? "bg-amber-500 border-amber-500" : "bg-amber-500 border-amber-500"} text-white`}
-              iconClassName={classes.icon}
+              classes={{
+                root: classes.container,
+                labelContainer: classes.labelContainer,
+                label: classes.label,
+                checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                checked: classes.checked,
+                unchecked: classes.unchecked,
+                indeterminate: `${isDarkMode ? "bg-amber-500 border-amber-500" : "bg-amber-500 border-amber-500"} text-white`,
+                icon: classes.icon,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -412,23 +431,27 @@ const CheckboxDemo = () => {
                 label="Disabled unchecked"
                 checked={false}
                 disabled
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.disabledLabel}
-                checkboxClassName={classes.disabled}
-                uncheckedClassName={isDarkMode ? "bg-gray-600 border-gray-500" : "bg-gray-100 border-gray-200"}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.disabledLabel,
+                  checkbox: classes.disabled,
+                  unchecked: isDarkMode ? "bg-gray-600 border-gray-500" : "bg-gray-100 border-gray-200",
+                  icon: classes.icon,
+                }}
               />
               <Checkbox
                 label="Disabled checked"
                 checked={true}
                 disabled
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.disabledLabel}
-                checkboxClassName={classes.disabled}
-                checkedClassName={`${isDarkMode ? "bg-blue-400 border-blue-400" : "bg-blue-400 border-blue-400"} text-white`}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.disabledLabel,
+                  checkbox: classes.disabled,
+                  checked: `${isDarkMode ? "bg-blue-400 border-blue-400" : "bg-blue-400 border-blue-400"} text-white`,
+                  icon: classes.icon,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -446,15 +469,17 @@ const CheckboxDemo = () => {
               onCheckedChange={(checked) => setError(checked)}
               error
               errorMessage="You must accept the terms to continue"
-              containerClassName="flex flex-col gap-1"
               className={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.errorLabel}
-              checkboxClassName={classes.errorCheckbox}
-              checkedClassName={`${isDarkMode ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`}
-              uncheckedClassName={isDarkMode ? "bg-gray-700" : "bg-white"}
-              iconClassName={classes.icon}
-              errorClassName={`${classes.error} ml-7`}
+              classes={{
+                root: "flex flex-col gap-1",
+                labelContainer: classes.labelContainer,
+                label: classes.errorLabel,
+                checkbox: classes.errorCheckbox,
+                checked: `${isDarkMode ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`,
+                unchecked: isDarkMode ? "bg-gray-700" : "bg-white",
+                icon: classes.icon,
+                error: `${classes.error} ml-7`,
+              }}
             />
           </DemoWrapper>
         </Section>
@@ -476,13 +501,15 @@ const CheckboxDemo = () => {
                 onBlur={() => {
                   setFocusLog((prev) => [...prev.slice(-4), `Blur: ${new Date().toLocaleTimeString()}`]);
                 }}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
               <div className={`p-3 rounded-lg text-sm font-mono ${isDarkMode ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>Event Log:</p>
@@ -508,7 +535,7 @@ const CheckboxDemo = () => {
 
         <Section
           title="Custom Colors"
-          description="Customize colors using className props."
+          description="Customize colors using the classes prop."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -517,43 +544,47 @@ const CheckboxDemo = () => {
                 label="Purple theme"
                 checked={purple}
                 onCheckedChange={(checked) => setPurple(checked)}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-sm font-medium ${isDarkMode ? "text-purple-300" : "text-purple-700"}`}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={`${isDarkMode ? "bg-purple-500 border-purple-500" : "bg-purple-600 border-purple-600"} text-white`}
-                uncheckedClassName={`${isDarkMode ? "bg-gray-700 border-purple-400" : "bg-white border-purple-300"}`}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-sm font-medium ${isDarkMode ? "text-purple-300" : "text-purple-700"}`,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: `${isDarkMode ? "bg-purple-500 border-purple-500" : "bg-purple-600 border-purple-600"} text-white`,
+                  unchecked: `${isDarkMode ? "bg-gray-700 border-purple-400" : "bg-white border-purple-300"}`,
+                  icon: classes.icon,
+                }}
               />
               <Checkbox
                 label="Green theme"
                 checked={green}
                 onCheckedChange={(checked) => setGreen(checked)}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-sm font-medium ${isDarkMode ? "text-green-300" : "text-green-700"}`}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={`${isDarkMode ? "bg-green-500 border-green-500" : "bg-green-600 border-green-600"} text-white`}
-                uncheckedClassName={`${isDarkMode ? "bg-gray-700 border-green-400" : "bg-white border-green-300"}`}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-sm font-medium ${isDarkMode ? "text-green-300" : "text-green-700"}`,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: `${isDarkMode ? "bg-green-500 border-green-500" : "bg-green-600 border-green-600"} text-white`,
+                  unchecked: `${isDarkMode ? "bg-gray-700 border-green-400" : "bg-white border-green-300"}`,
+                  icon: classes.icon,
+                }}
               />
             </div>
           </DemoWrapper>
         </Section>
 
         <Section
-          title="classNames Record (Alternative)"
-          description="Use the classNames record prop as a cleaner alternative to individual className props."
+          title="Styling with classes"
+          description="Use the classes record prop to style all internal elements of the checkbox."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
             <div className="space-y-4">
               <Checkbox
-                label="Using classNames record"
-                description="All styles via a single classNames prop"
+                label="Using classes record"
+                description="All styles via a single classes prop"
                 checked={basic}
                 onCheckedChange={setBasic}
-                classNames={{
+                classes={{
                   root: classes.container,
                   labelContainer: classes.labelContainer,
                   label: classes.label,
@@ -569,8 +600,8 @@ const CheckboxDemo = () => {
           <CodeBlock
             isDarkMode={isDarkMode}
             code={`<Checkbox
-  label="Using classNames record"
-  classNames={{
+  label="Using classes record"
+  classes={{
     root: "flex items-start gap-3",
     label: "text-sm font-medium",
     checkbox: "w-5 h-5 border-2 rounded",
@@ -580,12 +611,6 @@ const CheckboxDemo = () => {
   }}
 />`}
           />
-          <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}>
-            <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
-              <strong>Tip:</strong> The <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>classNames</code> record 
-              takes precedence over individual className props when both are provided. Individual props still work for backward compatibility.
-            </p>
-          </div>
         </Section>
 
         <Section
@@ -601,12 +626,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeXs(checked)}
                 size="xs"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-xs font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-xs font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Small (sm)"
@@ -614,12 +641,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeSm(checked)}
                 size="sm"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-sm font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-sm font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Medium (md)"
@@ -627,12 +656,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeMd(checked)}
                 size="md"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Large (lg)"
@@ -640,12 +671,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeLg(checked)}
                 size="lg"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Extra Large (xl)"
@@ -653,12 +686,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeXl(checked)}
                 size="xl"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -677,12 +712,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeCustom28(checked)}
                 size={28}
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="40px custom size"
@@ -690,37 +727,16 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setSizeCustom40(checked)}
                 size={40}
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: `${isDarkMode ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600"} text-white`,
+                  unchecked: classes.unchecked,
+                }}
               />
             </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom Size via sizeClassName"
-          description="Use sizeClassName prop to set size via Tailwind classes."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <Checkbox
-              label="Size via Tailwind class (w-6 h-6)"
-              checked={sizeClassNameDemo}
-              onCheckedChange={(checked) => setSizeClassNameDemo(checked)}
-              shape="rounded"
-              sizeClassName="w-6 h-6"
-              containerClassName={classes.container}
-              labelContainerClassName={classes.labelContainer}
-              labelClassName={classes.label}
-              checkboxClassName={classes.checkboxBase}
-              checkedClassName={classes.checked}
-              uncheckedClassName={classes.unchecked}
-              iconClassName="w-4 h-4"
-            />
           </DemoWrapper>
         </Section>
 
@@ -737,12 +753,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setShapeSquare(checked)}
                 size="md"
                 shape="square"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Rounded"
@@ -750,12 +768,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setShapeRounded(checked)}
                 size="md"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Circle"
@@ -763,12 +783,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setShapeCircle(checked)}
                 size="md"
                 shape="circle"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: classes.checkboxBase,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -787,12 +809,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setComboSmSquare(checked)}
                 size="sm"
                 shape="square"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-sm font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-teal-500 border-teal-500" : "bg-teal-600 border-teal-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-sm font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: `${isDarkMode ? "bg-teal-500 border-teal-500" : "bg-teal-600 border-teal-600"} text-white`,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Medium Rounded"
@@ -800,12 +824,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setComboMdRounded(checked)}
                 size="md"
                 shape="rounded"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-orange-500 border-orange-500" : "bg-orange-600 border-orange-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: classes.checkboxBase,
+                  checked: `${isDarkMode ? "bg-orange-500 border-orange-500" : "bg-orange-600 border-orange-600"} text-white`,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="Large Circle"
@@ -813,12 +839,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setComboLgCircle(checked)}
                 size="lg"
                 shape="circle"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-pink-500 border-pink-500" : "bg-pink-600 border-pink-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: `${isDarkMode ? "bg-pink-500 border-pink-500" : "bg-pink-600 border-pink-600"} text-white`,
+                  unchecked: classes.unchecked,
+                }}
               />
               <Checkbox
                 label="XL Circle"
@@ -826,49 +854,14 @@ const CheckboxDemo = () => {
                 onCheckedChange={(checked) => setComboXlCircle(checked)}
                 size="xl"
                 shape="circle"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-violet-500 border-violet-500" : "bg-violet-600 border-violet-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
-              />
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom Shape via shapeClassName"
-          description="Use shapeClassName prop to override the shape with custom Tailwind classes."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-4">
-              <Checkbox
-                label="Custom rounded-lg"
-                checked={customRoundedLg}
-                onCheckedChange={(checked) => setCustomRoundedLg(checked)}
-                size="lg"
-                shapeClassName="rounded-lg"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-base font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-cyan-500 border-cyan-500" : "bg-cyan-600 border-cyan-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
-              />
-              <Checkbox
-                label="Custom rounded-xl"
-                checked={customRoundedXl}
-                onCheckedChange={(checked) => setCustomRoundedXl(checked)}
-                size="xl"
-                shapeClassName="rounded-xl"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={`text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
-                checkboxClassName={classes.checkboxBase}
-                checkedClassName={`${isDarkMode ? "bg-rose-500 border-rose-500" : "bg-rose-600 border-rose-600"} text-white`}
-                uncheckedClassName={classes.unchecked}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: `text-lg font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
+                  checkbox: classes.checkboxBase,
+                  checked: `${isDarkMode ? "bg-violet-500 border-violet-500" : "bg-violet-600 border-violet-600"} text-white`,
+                  unchecked: classes.unchecked,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -887,13 +880,15 @@ const CheckboxDemo = () => {
                 label="I accept the terms and conditions"
                 checked={formCheckbox1}
                 onCheckedChange={(checked) => setFormCheckbox1(checked)}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
               <Checkbox
                 id="newsletter-checkbox"
@@ -901,13 +896,15 @@ const CheckboxDemo = () => {
                 label="Subscribe to newsletter"
                 checked={formCheckbox2}
                 onCheckedChange={(checked) => setFormCheckbox2(checked)}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
               <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                 Inspect the checkboxes to see custom{" "}
@@ -929,13 +926,15 @@ const CheckboxDemo = () => {
                 ref={checkboxRef}
                 label="Click the button to focus me"
                 checked={false}
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
               <div className="flex gap-2">
                 <button
@@ -987,21 +986,25 @@ const CheckboxDemo = () => {
                 label="Starts unchecked"
                 defaultChecked={false}
                 onCheckedChange={(checked) => console.log("Uncontrolled 1:", checked)}
-                checkboxClassName="inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer"
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
-                labelClassName={classes.label}
+                classes={{
+                  checkbox: "inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer",
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                  label: classes.label,
+                }}
               />
               <Checkbox
                 label="Starts checked"
                 defaultChecked={true}
                 onCheckedChange={(checked) => console.log("Uncontrolled 2:", checked)}
-                checkboxClassName="inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer"
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
-                labelClassName={classes.label}
+                classes={{
+                  checkbox: "inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer",
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                  label: classes.label,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -1022,25 +1025,29 @@ const CheckboxDemo = () => {
                 tabIndex={0}
                 data-testid="autofocus-checkbox"
                 aria-label="This checkbox receives focus automatically"
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
               <Checkbox
                 label="Read-only checkbox (cannot be changed by user)"
                 checked={readOnlyDemo}
                 readOnly
-                containerClassName={classes.container}
-                labelContainerClassName={classes.labelContainer}
-                labelClassName={classes.label}
-                checkboxClassName={`inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`}
-                checkedClassName={classes.checked}
-                uncheckedClassName={classes.unchecked}
-                iconClassName={classes.icon}
+                classes={{
+                  root: classes.container,
+                  labelContainer: classes.labelContainer,
+                  label: classes.label,
+                  checkbox: `inline-flex items-center justify-center w-5 h-5 border-2 rounded transition-colors cursor-pointer`,
+                  checked: classes.checked,
+                  unchecked: classes.unchecked,
+                  icon: classes.icon,
+                }}
               />
             </div>
           </DemoWrapper>
@@ -1273,94 +1280,10 @@ const CheckboxDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">classNames</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CheckboxClassNames</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">classes</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>CheckboxClasses</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Record of class names for all internal elements (root, label, checkbox, checked, unchecked, icon, etc.)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">containerClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the outer container (includes error message)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">labelContainerClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the label/description wrapper
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">labelClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the label text
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">descriptionClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the description text
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">checkboxClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Base CSS class for the checkbox box element
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">checkedClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class applied when checkbox is checked
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">uncheckedClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class applied when checkbox is unchecked
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">indeterminateClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class applied when checkbox is indeterminate
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">iconClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the default icons
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">errorClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the error message
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">sizeClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for custom size (overrides size prop styles)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">shapeClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for custom shape (overrides shape prop)
+                    Record of class names for all internal elements (root, labelContainer, label, description, checkbox, checked, unchecked, indeterminate, icon, error, size, shape)
                   </td>
                 </tr>
               </tbody>
@@ -1512,6 +1435,21 @@ const CheckboxDemo = () => {
             code={`type CheckboxSize = "xs" | "sm" | "md" | "lg" | "xl" | number;
 type CheckboxShape = "square" | "rounded" | "circle";
 
+interface CheckboxClasses {
+  root?: string;
+  labelContainer?: string;
+  label?: string;
+  description?: string;
+  checkbox?: string;
+  checked?: string;
+  unchecked?: string;
+  indeterminate?: string;
+  icon?: string;
+  error?: string;
+  size?: string;
+  shape?: string;
+}
+
 interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange" | "size" | "defaultChecked"> {
   label?: ReactNode;
@@ -1529,18 +1467,7 @@ interface CheckboxProps
   checkedIcon?: ReactNode;
   uncheckedIcon?: ReactNode;
   indeterminateIcon?: ReactNode;
-  containerClassName?: string;
-  labelContainerClassName?: string;
-  labelClassName?: string;
-  descriptionClassName?: string;
-  checkboxClassName?: string;
-  checkedClassName?: string;
-  uncheckedClassName?: string;
-  indeterminateClassName?: string;
-  iconClassName?: string;
-  errorClassName?: string;
-  sizeClassName?: string;
-  shapeClassName?: string;
+  classes?: CheckboxClasses;
 }`}
           />
         </div>

@@ -785,7 +785,7 @@ describe("Accordion", () => {
       const { container } = render(
         <Accordion
           type="single"
-          classNames={{
+          classes={{
             root: "custom-root",
           }}
         >
@@ -803,7 +803,7 @@ describe("Accordion", () => {
       render(
         <Accordion
           type="single"
-          classNames={{
+          classes={{
             item: "custom-item",
           }}
         >
@@ -822,7 +822,7 @@ describe("Accordion", () => {
       render(
         <Accordion
           type="single"
-          classNames={{
+          classes={{
             trigger: "custom-trigger",
           }}
         >
@@ -842,7 +842,7 @@ describe("Accordion", () => {
       render(
         <Accordion
           type="single"
-          classNames={{
+          classes={{
             content: "custom-content",
           }}
         >
@@ -943,16 +943,17 @@ describe("Accordion", () => {
     });
   });
 
-  describe("Print Styles Cleanup", () => {
-    it("injects print styles when expandOnPrint is true", () => {
-      renderAccordion({ type: "single", expandOnPrint: true });
+  describe("Print Styles", () => {
+    it("renders inline style element when expandOnPrint is true", () => {
+      const { container } = renderAccordion({ type: "single", expandOnPrint: true });
 
-      const styleEl = document.getElementById("kern-accordion-print-styles");
+      const styleEl = container.querySelector("style");
       expect(styleEl).toBeInTheDocument();
+      expect(styleEl?.textContent).toContain("@media print");
     });
 
-    it("removes print styles on unmount when expandOnPrint is true", () => {
-      const { unmount } = render(
+    it("removes inline style element on unmount", () => {
+      const { unmount, container } = render(
         <Accordion type="single" expandOnPrint>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>
@@ -961,35 +962,18 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      expect(document.getElementById("kern-accordion-print-styles")).toBeInTheDocument();
+      expect(container.querySelector("style")).toBeInTheDocument();
 
       unmount();
 
-      expect(document.getElementById("kern-accordion-print-styles")).not.toBeInTheDocument();
+      expect(container.querySelector("style")).not.toBeInTheDocument();
     });
 
-    it("keeps print styles when another accordion with expandOnPrint is still mounted", () => {
-      const { unmount: unmount1 } = render(
-        <Accordion type="single" expandOnPrint>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>A1</AccordionTrigger>
-            <AccordionContent>C1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
+    it("does not render style element when expandOnPrint is false", () => {
+      const { container } = renderAccordion({ type: "single", expandOnPrint: false });
 
-      render(
-        <Accordion type="single" expandOnPrint>
-          <AccordionItem value="item-2">
-            <AccordionTrigger>A2</AccordionTrigger>
-            <AccordionContent>C2</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      unmount1();
-
-      expect(document.getElementById("kern-accordion-print-styles")).toBeInTheDocument();
+      const styleEl = container.querySelector("style");
+      expect(styleEl).not.toBeInTheDocument();
     });
   });
 

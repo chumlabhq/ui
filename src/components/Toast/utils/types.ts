@@ -32,6 +32,7 @@ export interface ToastConfig {
   closeButtonClassName?: string;
   iconClassName?: string;
   pauseOnHover?: boolean;
+  closeAriaLabel?: string;
 }
 
 export interface ToastProps extends Omit<ToastConfig, "id"> {
@@ -52,6 +53,7 @@ export interface ToastProviderProps {
   gap?: number;
   zIndex?: number;
   dismissOnEscape?: boolean;
+  containerAriaLabel?: string;
 }
 
 export interface ToastContextValue {

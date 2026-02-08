@@ -91,7 +91,7 @@ describe("OtpInput", () => {
 
   describe("Controlled Input", () => {
     it("displays value prop across inputs", () => {
-      render(<OtpInput value="123456" onChange={() => {}} />);
+      render(<OtpInput value="123456" onValueChange={() => {}} />);
 
       const inputs = screen.getAllByRole("textbox");
       expect(inputs[0]).toHaveValue("1");
@@ -102,17 +102,17 @@ describe("OtpInput", () => {
       expect(inputs[5]).toHaveValue("6");
     });
 
-    it("calls onChange when user types a digit", async () => {
+    it("calls onValueChange when user types a digit", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
       await user.type(inputs[0], "1");
 
-      expect(onChange).toHaveBeenCalledWith("1");
+      expect(onValueChange).toHaveBeenCalledWith("1");
     });
 
     it("calls onComplete when all digits are filled via paste", async () => {
@@ -122,7 +122,7 @@ describe("OtpInput", () => {
       render(
         <OtpInput
           length={4}
-          onChange={() => {}}
+          onValueChange={() => {}}
           onComplete={onComplete}
           autoFocusFirst={false}
         />
@@ -144,19 +144,19 @@ describe("OtpInput", () => {
   describe("Digit Input Behavior", () => {
     it("does not filter non-numeric characters internally", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
       await user.type(inputs[0], "a");
 
-      expect(onChange).toHaveBeenCalledWith("a");
+      expect(onValueChange).toHaveBeenCalledWith("a");
     });
 
     it("accepts only single digit per input", () => {
-      render(<OtpInput value="5" onChange={() => {}} />);
+      render(<OtpInput value="5" onValueChange={() => {}} />);
 
       const inputs = screen.getAllByRole("textbox");
       
@@ -185,7 +185,7 @@ describe("OtpInput", () => {
     it("moves focus to next input after typing digit", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -196,9 +196,9 @@ describe("OtpInput", () => {
 
     it("moves focus to previous input on Backspace when current is empty", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput value="1" onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput value="1" onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[1]);
@@ -209,35 +209,35 @@ describe("OtpInput", () => {
 
     it("clears current input on Backspace when filled", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput value="12" onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput value="12" onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[1]);
       await user.keyboard("{Backspace}");
 
-      expect(onChange).toHaveBeenCalledWith("1");
+      expect(onValueChange).toHaveBeenCalledWith("1");
     });
 
     it("clears current input on Delete without moving focus", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput value="123" onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput value="123" onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[1]);
       await user.keyboard("{Delete}");
 
-      expect(onChange).toHaveBeenCalledWith("1 3".replace(" ", ""));
+      expect(onValueChange).toHaveBeenCalledWith("1 3".replace(" ", ""));
       expect(inputs[1]).toHaveFocus();
     });
 
     it("moves focus left on ArrowLeft", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="123" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="123" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[2]);
@@ -249,7 +249,7 @@ describe("OtpInput", () => {
     it("moves focus right on ArrowRight", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="123" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="123" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -261,7 +261,7 @@ describe("OtpInput", () => {
     it("moves focus to first input on Home", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="123" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="123" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[3]);
@@ -273,7 +273,7 @@ describe("OtpInput", () => {
     it("moves focus to last input on End", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="123" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="123" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -285,7 +285,7 @@ describe("OtpInput", () => {
     it("does not move past first input on ArrowLeft", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="1" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="1" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -297,7 +297,7 @@ describe("OtpInput", () => {
     it("does not move past last input on ArrowRight", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="123456" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="123456" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[5]);
@@ -321,9 +321,9 @@ describe("OtpInput", () => {
 
     it("fills multiple inputs on paste", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -331,14 +331,14 @@ describe("OtpInput", () => {
       const wrapper = inputs[0].parentElement!;
       simulatePaste(wrapper, "123456");
 
-      expect(onChange).toHaveBeenCalledWith("123456");
+      expect(onValueChange).toHaveBeenCalledWith("123456");
     });
 
     it("does not filter non-numeric characters from paste", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -346,14 +346,14 @@ describe("OtpInput", () => {
       const wrapper = inputs[0].parentElement!;
       simulatePaste(wrapper, "1a2b3c");
 
-      expect(onChange).toHaveBeenCalledWith("1a2b3c");
+      expect(onValueChange).toHaveBeenCalledWith("1a2b3c");
     });
 
     it("does not handle paste when allowPaste=false", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput onChange={onChange} allowPaste={false} autoFocusFirst={false} />);
+      render(<OtpInput onValueChange={onValueChange} allowPaste={false} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -361,7 +361,7 @@ describe("OtpInput", () => {
       const wrapper = inputs[0].parentElement!;
       simulatePaste(wrapper, "123456");
 
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
 
     it("calls onComplete when paste fills all inputs", async () => {
@@ -371,7 +371,7 @@ describe("OtpInput", () => {
       render(
         <OtpInput
           length={4}
-          onChange={() => {}}
+          onValueChange={() => {}}
           onComplete={onComplete}
           autoFocusFirst={false}
         />
@@ -388,9 +388,9 @@ describe("OtpInput", () => {
 
     it("truncates paste to length", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput length={4} onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput length={4} onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -398,7 +398,7 @@ describe("OtpInput", () => {
       const wrapper = inputs[0].parentElement!;
       simulatePaste(wrapper, "123456789");
 
-      expect(onChange).toHaveBeenCalledWith("1234");
+      expect(onValueChange).toHaveBeenCalledWith("1234");
     });
   });
 
@@ -546,7 +546,7 @@ describe("OtpInput", () => {
     it("selects input content on focus", async () => {
       const user = userEvent.setup();
 
-      render(<OtpInput value="123456" onChange={() => {}} autoFocusFirst={false} />);
+      render(<OtpInput value="123456" onValueChange={() => {}} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[2]);
@@ -606,7 +606,7 @@ describe("OtpInput", () => {
     });
 
     it("sets data-filled on inputs with value", () => {
-      render(<OtpInput value="123" onChange={() => {}} />);
+      render(<OtpInput value="123" onValueChange={() => {}} />);
 
       const inputs = screen.getAllByRole("textbox");
       expect(inputs[0]).toHaveAttribute("data-filled", "true");
@@ -725,43 +725,43 @@ describe("OtpInput", () => {
   describe("Validate Prop", () => {
     it("rejects invalid characters when validate is provided", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
       const validate = (char: string) => /^\d$/.test(char);
 
       render(
-        <OtpInput onChange={onChange} validate={validate} autoFocusFirst={false} />
+        <OtpInput onValueChange={onValueChange} validate={validate} autoFocusFirst={false} />
       );
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
       await user.type(inputs[0], "a");
 
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
 
     it("accepts valid characters when validate is provided", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
       const validate = (char: string) => /^\d$/.test(char);
 
       render(
-        <OtpInput onChange={onChange} validate={validate} autoFocusFirst={false} />
+        <OtpInput onValueChange={onValueChange} validate={validate} autoFocusFirst={false} />
       );
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
       await user.type(inputs[0], "5");
 
-      expect(onChange).toHaveBeenCalledWith("5");
+      expect(onValueChange).toHaveBeenCalledWith("5");
     });
 
     it("filters invalid characters from paste when validate is provided", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
       const validate = (char: string) => /^\d$/.test(char);
 
       render(
-        <OtpInput onChange={onChange} validate={validate} autoFocusFirst={false} />
+        <OtpInput onValueChange={onValueChange} validate={validate} autoFocusFirst={false} />
       );
 
       const inputs = screen.getAllByRole("textbox");
@@ -773,20 +773,20 @@ describe("OtpInput", () => {
       Object.defineProperty(pasteEvent, "clipboardData", { value: clipboardData });
       wrapper.dispatchEvent(pasteEvent);
 
-      expect(onChange).toHaveBeenCalledWith("123");
+      expect(onValueChange).toHaveBeenCalledWith("123");
     });
 
     it("accepts all characters when no validate prop", async () => {
       const user = userEvent.setup();
-      const onChange = vi.fn();
+      const onValueChange = vi.fn();
 
-      render(<OtpInput onChange={onChange} autoFocusFirst={false} />);
+      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
       await user.type(inputs[0], "a");
 
-      expect(onChange).toHaveBeenCalledWith("a");
+      expect(onValueChange).toHaveBeenCalledWith("a");
     });
   });
 

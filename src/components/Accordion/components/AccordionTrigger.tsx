@@ -116,7 +116,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
       return (
         <ChevronDownIcon
-          className={cn(config.classNames.icon, getIconAnimationClass()) || undefined}
+          className={cn(config.classes.icon, getIconAnimationClass()) || undefined}
         />
       );
     };
@@ -136,7 +136,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       id: item.triggerId,
       type: "button" as const,
       className: cn(
-        config.classNames.trigger,
+        config.classes.trigger,
         className,
         iconPosition === "left" && "flex-row-reverse justify-end"
       ) || undefined,
@@ -159,7 +159,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     ) : (
       <>
         {leftSlot && (
-          <span className={config.classNames.triggerLeft} aria-hidden="true">
+          <span className={config.classes.triggerLeft} aria-hidden="true">
             {leftSlot}
           </span>
         )}
@@ -167,14 +167,14 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         <span className="flex-1 text-left">
           <span className="block">{children}</span>
           {subtitle && (
-            <span className={cn("block", config.classNames.subtitle)}>
+            <span className={cn("block", config.classes.subtitle)}>
               {subtitle}
             </span>
           )}
         </span>
         {iconPosition === "right" && iconElement}
         {rightSlot && (
-          <span className={config.classNames.triggerRight} aria-hidden="true">
+          <span className={config.classes.triggerRight} aria-hidden="true">
             {rightSlot}
           </span>
         )}

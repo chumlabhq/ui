@@ -139,13 +139,17 @@ test.describe("Button Component - Cross-Browser Tests", () => {
       const disabledLink = page.locator('a[aria-disabled="true"]').first();
 
       if ((await disabledLink.count()) > 0) {
-        const href = await disabledLink.getAttribute("href");
+        const urlBefore = page.url();
 
-        // Click the disabled link
-        await disabledLink.click();
+        page.on("dialog", (dialog) => dialog.dismiss());
 
-        // Should still be on the same page (navigation prevented)
-        expect(page.url()).not.toContain(href);
+        const [popup] = await Promise.all([
+          page.waitForEvent("popup", { timeout: 2000 }).catch(() => null),
+          disabledLink.click({ force: true }),
+        ]);
+
+        expect(popup).toBeNull();
+        expect(page.url()).toBe(urlBefore);
       }
     });
   });

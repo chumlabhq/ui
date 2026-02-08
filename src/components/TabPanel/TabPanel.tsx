@@ -1,345 +1,348 @@
-import { useId, useRef, useEffect, forwardRef, memo } from "react";
-import type { KeyboardEvent } from "react";
-import type { Tab, TabPanelProps } from "./types";
+import {
+  useId,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+  forwardRef,
+} from "react";
+import type { KeyboardEvent, ReactNode } from "react";
+import type { Tab, TabPanelProps, ResolvedClasses, TabRenderProps } from "./utils/types";
+import { TabPanelContext } from "./utils/context";
+import { useControllableState } from "../../utils/useControllableState";
+import TabButton from "./components/TabButton";
 import Tooltip from "../Tooltip/Tooltip";
-
-const TabButton = memo(function TabButton({
-  tab,
-  index,
-  isActive,
-  tabListId,
-  showIcons,
-  iconPosition,
-  showCount,
-  showZeroCount,
-  alwaysShowLabels,
-  disabled,
-  tabButtonClassName,
-  tabButtonActiveClassName,
-  tabButtonInactiveClassName,
-  tabButtonDisabledClassName,
-  tabButtonFocusClassName,
-  tabLabelClassName,
-  tabLabelActiveClassName,
-  tabLabelInactiveClassName,
-  tabIconClassName,
-  tabIconActiveClassName,
-  tabIconInactiveClassName,
-  tabCountClassName,
-  tabCountActiveClassName,
-  tabCountInactiveClassName,
-  activeIndicatorClassName,
-  onSelect,
-  onKeyDown,
-  buttonRef,
-}: {
-  tab: Tab;
-  index: number;
-  isActive: boolean;
-  tabListId: string;
-  showIcons: boolean;
-  iconPosition: "left" | "right";
-  showCount: boolean;
-  showZeroCount: boolean;
-  alwaysShowLabels: boolean;
-  disabled: boolean;
-  tabButtonClassName: string;
-  tabButtonActiveClassName: string;
-  tabButtonInactiveClassName: string;
-  tabButtonDisabledClassName: string;
-  tabButtonFocusClassName: string;
-  tabLabelClassName: string;
-  tabLabelActiveClassName: string;
-  tabLabelInactiveClassName: string;
-  tabIconClassName: string;
-  tabIconActiveClassName: string;
-  tabIconInactiveClassName: string;
-  tabCountClassName: string;
-  tabCountActiveClassName: string;
-  tabCountInactiveClassName: string;
-  activeIndicatorClassName: string;
-  onSelect: (tabId: string) => void;
-  onKeyDown: (e: KeyboardEvent<HTMLButtonElement>, index: number) => void;
-  buttonRef: (el: HTMLButtonElement | null) => void;
-}) {
-  const isDisabled = disabled || tab.disabled;
-  const count = Number(tab.count ?? 0);
-  const shouldShowCount = showCount && (showZeroCount || count > 0);
-
-  const IconComponent = tab.icon;
-  const showIcon = showIcons && IconComponent;
-
-  const iconElement = showIcon && (
-    <IconComponent
-      className={[
-        tabIconClassName,
-        isActive ? tabIconActiveClassName : tabIconInactiveClassName,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      aria-hidden="true"
-    />
-  );
-
-  const labelElement = (alwaysShowLabels || isActive) && (
-    <span
-      className={[
-        tabLabelClassName,
-        isActive ? tabLabelActiveClassName : tabLabelInactiveClassName,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      {tab.label}
-    </span>
-  );
-
-  const countElement = shouldShowCount && (
-    <span
-      className={[
-        tabCountClassName,
-        isActive ? tabCountActiveClassName : tabCountInactiveClassName,
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      aria-label={`${count} items`}
-    >
-      {count}
-    </span>
-  );
-
-  return (
-    <button
-      ref={buttonRef}
-      type="button"
-      id={`${tabListId}-tab-${tab.id}`}
-      role="tab"
-      aria-selected={isActive}
-      aria-controls={`${tabListId}-panel-${tab.id}`}
-      aria-disabled={isDisabled || undefined}
-      tabIndex={isActive ? 0 : -1}
-      disabled={isDisabled}
-      onClick={() => !isDisabled && onSelect(tab.id)}
-      onKeyDown={(e) => onKeyDown(e, index)}
-      className={[
-        tabButtonFocusClassName,
-        tabButtonClassName,
-        isActive ? tabButtonActiveClassName : tabButtonInactiveClassName,
-        isDisabled ? tabButtonDisabledClassName : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      data-active={isActive || undefined}
-      data-disabled={isDisabled || undefined}
-    >
-      <span className="inline-flex items-center gap-2">
-        {iconPosition === "left" && iconElement}
-        {labelElement}
-        {iconPosition === "right" && iconElement}
-      </span>
-      {countElement}
-      {isActive && activeIndicatorClassName && (
-        <span className={activeIndicatorClassName} aria-hidden="true" />
-      )}
-    </button>
-  );
-});
 
 const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
   (
     {
       tabs,
-      activeTabId,
-      onTabChange,
+      id,
+      value: valueProp,
+      defaultValue,
+      onValueChange,
       children,
-      showIcons = true,
+      orientation = "horizontal",
+      activationMode = "automatic",
+      loop = true,
       iconPosition = "left",
-      showCount = true,
       showZeroCount = false,
       alwaysShowLabels = true,
       showTooltips = true,
       tooltipPosition = "bottom",
       tooltipOffset = 4,
-      disableAutoFocus = false,
       disabled = false,
-      containerClassName = "",
-      tabListClassName = "",
-      tabButtonClassName = "",
-      tabButtonActiveClassName = "",
-      tabButtonInactiveClassName = "",
-      tabButtonDisabledClassName = "",
-      tabButtonFocusClassName = "outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500",
-      tabLabelClassName = "",
-      tabLabelActiveClassName = "",
-      tabLabelInactiveClassName = "",
-      tabIconClassName = "",
-      tabIconActiveClassName = "",
-      tabIconInactiveClassName = "",
-      tabCountClassName = "",
-      tabCountActiveClassName = "",
-      tabCountInactiveClassName = "",
-      activeIndicatorClassName = "",
-      tabPanelClassName = "",
+      renderTab: renderTabProp,
+      "aria-label": ariaLabel = "Tabs",
+      classes: classesProp,
+      className,
+      style,
+      forceMount = false,
+      keepMounted = false,
     },
     ref,
   ) => {
+    const [activeValue, setActiveValue] = useControllableState<string>({
+      value: valueProp,
+      defaultValue: defaultValue ?? tabs[0]?.id ?? "",
+      onChange: onValueChange,
+    });
+
+    const activeTabExists = tabs.some((t) => t.id === activeValue);
+    const resolvedValue = activeTabExists ? activeValue : (tabs[0]?.id ?? "");
+
+    useEffect(() => {
+      if (valueProp !== undefined) return;
+      if (!activeTabExists && tabs.length > 0) {
+        setActiveValue(tabs[0].id);
+      }
+    }, [tabs, activeTabExists, valueProp, setActiveValue]);
+
     const generatedId = useId();
-    const tabListId = generatedId;
+    const tabListId = id ?? generatedId;
+
     const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-    const tabIdsKey = tabs.map((t) => t.id).join("|");
     const isKeyboardNavigating = useRef(false);
+
+    const [manualFocusId, setManualFocusId] = useState<string | null>(null);
+    const [activatedTabs, setActivatedTabs] = useState<Set<string>>(
+      () => new Set([resolvedValue]),
+    );
+    const [prevResolvedValue, setPrevResolvedValue] = useState(resolvedValue);
+    if (prevResolvedValue !== resolvedValue) {
+      setPrevResolvedValue(resolvedValue);
+      setManualFocusId(null);
+      if (!activatedTabs.has(resolvedValue)) {
+        setActivatedTabs((prev) => {
+          const next = new Set(prev);
+          next.add(resolvedValue);
+          return next;
+        });
+      }
+    }
+
+    const tabbableTabId =
+      activationMode === "manual" && manualFocusId
+        ? manualFocusId
+        : resolvedValue;
 
     useEffect(() => {
       tabRefs.current = tabRefs.current.slice(0, tabs.length);
     }, [tabs.length]);
 
-    useEffect(() => {
-      if (disableAutoFocus) return;
-      // Skip auto-focus if we're handling keyboard navigation (focus is already managed)
-      if (isKeyboardNavigating.current) {
-        isKeyboardNavigating.current = false;
-        return;
-      }
-      const activeIndex = tabs.findIndex((tab) => tab.id === activeTabId);
-      if (activeIndex >= 0 && tabRefs.current[activeIndex]) {
-        tabRefs.current[activeIndex]?.focus();
-      }
-    }, [activeTabId, tabIdsKey, disableAutoFocus, tabs]);
+    const setTabRef = useCallback(
+      (index: number, el: HTMLButtonElement | null) => {
+        tabRefs.current[index] = el;
+      },
+      [],
+    );
 
-    const handleKeyDown = (
-      e: KeyboardEvent<HTMLButtonElement>,
-      index: number,
-    ) => {
-      const enabledTabs = tabs.filter((tab) => !tab.disabled && !disabled);
-      const currentEnabledIndex = enabledTabs.findIndex(
-        (tab) => tab.id === tabs[index].id,
-      );
+    const handleKeyDown = useCallback(
+      (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+        const isHorizontal = orientation === "horizontal";
+        const direction = window.getComputedStyle(e.currentTarget).direction;
+        const isRTL = direction === "rtl";
 
-      let nextTab: Tab | undefined;
+        let forwardKey: string;
+        let backwardKey: string;
 
-      switch (e.key) {
-        case "ArrowRight":
-        case "ArrowDown":
-          e.preventDefault();
-          nextTab = enabledTabs[(currentEnabledIndex + 1) % enabledTabs.length];
-          break;
-        case "ArrowLeft":
-        case "ArrowUp":
-          e.preventDefault();
-          nextTab =
-            enabledTabs[
-              (currentEnabledIndex - 1 + enabledTabs.length) %
-                enabledTabs.length
-            ];
-          break;
-        case "Home":
-          e.preventDefault();
-          nextTab = enabledTabs[0];
-          break;
-        case "End":
-          e.preventDefault();
-          nextTab = enabledTabs[enabledTabs.length - 1];
-          break;
-        default:
-          return;
-      }
-
-      if (nextTab) {
-        isKeyboardNavigating.current = true;
-        const nextIndex = tabs.findIndex((t) => t.id === nextTab!.id);
-        if (nextIndex >= 0 && tabRefs.current[nextIndex]) {
-          tabRefs.current[nextIndex]?.focus();
+        if (isHorizontal) {
+          forwardKey = isRTL ? "ArrowLeft" : "ArrowRight";
+          backwardKey = isRTL ? "ArrowRight" : "ArrowLeft";
+        } else {
+          forwardKey = "ArrowDown";
+          backwardKey = "ArrowUp";
         }
-        onTabChange(nextTab.id);
-      }
-    };
 
-    const renderTab = (tab: Tab, index: number) => {
-      const isActive = activeTabId === tab.id;
-      const shouldShowTooltip = showTooltips && tab.tooltip && !isActive;
-
-      const button = (
-        <TabButton
-          tab={tab}
-          index={index}
-          isActive={isActive}
-          tabListId={tabListId}
-          showIcons={showIcons}
-          iconPosition={iconPosition}
-          showCount={showCount}
-          showZeroCount={showZeroCount}
-          alwaysShowLabels={alwaysShowLabels}
-          disabled={disabled}
-          tabButtonClassName={tabButtonClassName}
-          tabButtonActiveClassName={tabButtonActiveClassName}
-          tabButtonInactiveClassName={tabButtonInactiveClassName}
-          tabButtonDisabledClassName={tabButtonDisabledClassName}
-          tabButtonFocusClassName={tabButtonFocusClassName}
-          tabLabelClassName={tabLabelClassName}
-          tabLabelActiveClassName={tabLabelActiveClassName}
-          tabLabelInactiveClassName={tabLabelInactiveClassName}
-          tabIconClassName={tabIconClassName}
-          tabIconActiveClassName={tabIconActiveClassName}
-          tabIconInactiveClassName={tabIconInactiveClassName}
-          tabCountClassName={tabCountClassName}
-          tabCountActiveClassName={tabCountActiveClassName}
-          tabCountInactiveClassName={tabCountInactiveClassName}
-          activeIndicatorClassName={activeIndicatorClassName}
-          onSelect={onTabChange}
-          onKeyDown={handleKeyDown}
-          buttonRef={(el) => (tabRefs.current[index] = el)}
-        />
-      );
-
-      if (shouldShowTooltip) {
-        return (
-          <Tooltip
-            key={tab.id}
-            content={tab.tooltip}
-            side={tooltipPosition}
-            sideOffset={tooltipOffset}
-          >
-            <span className="inline-flex">{button}</span>
-          </Tooltip>
+        const enabledTabs = tabs.filter(
+          (tab) => !tab.disabled && !disabled,
         );
-      }
+        const currentEnabledIndex = enabledTabs.findIndex(
+          (tab) => tab.id === tabs[index]?.id,
+        );
 
-      return (
-        <span key={tab.id} className="inline-flex">
-          {button}
-        </span>
-      );
-    };
+        if (currentEnabledIndex < 0) return;
 
-    const activeTab = tabs.find((tab) => tab.id === activeTabId);
+        let nextTab: Tab | undefined;
+
+        switch (e.key) {
+          case forwardKey:
+            e.preventDefault();
+            if (loop) {
+              nextTab =
+                enabledTabs[(currentEnabledIndex + 1) % enabledTabs.length];
+            } else {
+              const nextIdx = Math.min(
+                currentEnabledIndex + 1,
+                enabledTabs.length - 1,
+              );
+              if (nextIdx === currentEnabledIndex) return;
+              nextTab = enabledTabs[nextIdx];
+            }
+            break;
+          case backwardKey:
+            e.preventDefault();
+            if (loop) {
+              nextTab =
+                enabledTabs[
+                  (currentEnabledIndex - 1 + enabledTabs.length) %
+                    enabledTabs.length
+                ];
+            } else {
+              const prevIdx = Math.max(currentEnabledIndex - 1, 0);
+              if (prevIdx === currentEnabledIndex) return;
+              nextTab = enabledTabs[prevIdx];
+            }
+            break;
+          case "Home":
+            e.preventDefault();
+            nextTab = enabledTabs[0];
+            break;
+          case "End":
+            e.preventDefault();
+            nextTab = enabledTabs[enabledTabs.length - 1];
+            break;
+          case "Enter":
+          case " ":
+            if (activationMode === "manual") {
+              e.preventDefault();
+              const currentTab = tabs[index];
+              if (currentTab && !currentTab.disabled && !disabled) {
+                setActiveValue(currentTab.id);
+                setManualFocusId(null);
+              }
+            }
+            return;
+          default:
+            return;
+        }
+
+        if (nextTab) {
+          isKeyboardNavigating.current = true;
+          const nextIndex = tabs.findIndex((t) => t.id === nextTab!.id);
+          if (nextIndex >= 0) {
+            tabRefs.current[nextIndex]?.focus();
+          }
+          if (activationMode === "automatic") {
+            setActiveValue(nextTab.id);
+          } else {
+            setManualFocusId(nextTab.id);
+          }
+        }
+      },
+      [tabs, disabled, orientation, loop, activationMode, setActiveValue],
+    );
+
+    const handleSelect = useCallback(
+      (tabId: string) => {
+        setActiveValue(tabId);
+        if (activationMode === "manual") {
+          setManualFocusId(null);
+        }
+      },
+      [setActiveValue, activationMode],
+    );
+
+    const resolvedClasses: ResolvedClasses = useMemo(
+      () => ({
+        tab: classesProp?.tab ?? "",
+        tabActive: classesProp?.tabActive ?? "",
+        tabInactive: classesProp?.tabInactive ?? "",
+        tabDisabled: classesProp?.tabDisabled ?? "",
+        tabFocus: classesProp?.tabFocus ?? "",
+        label: classesProp?.label ?? "",
+        labelActive: classesProp?.labelActive ?? "",
+        labelInactive: classesProp?.labelInactive ?? "",
+        icon: classesProp?.icon ?? "",
+        iconActive: classesProp?.iconActive ?? "",
+        iconInactive: classesProp?.iconInactive ?? "",
+        count: classesProp?.count ?? "",
+        countActive: classesProp?.countActive ?? "",
+        countInactive: classesProp?.countInactive ?? "",
+        indicator: classesProp?.indicator ?? "",
+      }),
+      [classesProp],
+    );
+
+    const contextValue = useMemo(
+      () => ({
+        tabListId,
+        iconPosition,
+        showZeroCount,
+        alwaysShowLabels,
+        disabled,
+        orientation,
+        activationMode,
+        classNames: resolvedClasses,
+        onSelect: handleSelect,
+        onKeyDown: handleKeyDown,
+      }),
+      [
+        tabListId,
+        iconPosition,
+        showZeroCount,
+        alwaysShowLabels,
+        disabled,
+        orientation,
+        activationMode,
+        resolvedClasses,
+        handleSelect,
+        handleKeyDown,
+      ],
+    );
 
     return (
-      <div
-        ref={ref}
-        className={containerClassName}
-        data-disabled={disabled || undefined}
-      >
+      <TabPanelContext.Provider value={contextValue}>
         <div
-          role="tablist"
-          aria-label="Tabs"
-          aria-orientation="horizontal"
-          className={tabListClassName}
+          ref={ref}
+          className={classesProp?.root ?? className}
+          style={style}
+          data-disabled={disabled || undefined}
+          data-orientation={orientation}
         >
-          {tabs.map(renderTab)}
-        </div>
-
-        {activeTab && (
           <div
-            role="tabpanel"
-            id={`${tabListId}-panel-${activeTab.id}`}
-            aria-labelledby={`${tabListId}-tab-${activeTab.id}`}
-            tabIndex={0}
-            className={tabPanelClassName}
+            role="tablist"
+            aria-label={ariaLabel}
+            aria-orientation={orientation}
+            className={classesProp?.tabList || undefined}
           >
-            {children}
+            {tabs.map((tab, index) => {
+              const isActive = resolvedValue === tab.id;
+              const isTabbable = tabbableTabId === tab.id;
+              const hasTooltip = showTooltips && !!tab.tooltip;
+              const isDisabled = disabled || !!tab.disabled;
+
+              const defaultTabButton = (
+                <TabButton
+                  key={hasTooltip && !renderTabProp ? undefined : tab.id}
+                  tab={tab}
+                  index={index}
+                  isActive={isActive}
+                  isTabbable={isTabbable}
+                  setTabRef={setTabRef}
+                />
+              );
+
+              const renderProps: TabRenderProps = {
+                tab,
+                index,
+                isActive,
+                isDisabled,
+              };
+
+              const tabElement = renderTabProp
+                ? renderTabProp(renderProps, defaultTabButton)
+                : defaultTabButton;
+
+              if (hasTooltip) {
+                return (
+                  <Tooltip
+                    key={tab.id}
+                    content={tab.tooltip}
+                    side={tooltipPosition}
+                    sideOffset={tooltipOffset}
+                    disabled={isActive}
+                  >
+                    {tabElement}
+                  </Tooltip>
+                );
+              }
+
+              return tabElement;
+            })}
           </div>
-        )}
-      </div>
+
+          {tabs.map((tab) => {
+            const isActive = resolvedValue === tab.id;
+            const hasBeenActivated = activatedTabs.has(tab.id);
+
+            const shouldRenderContent =
+              forceMount ||
+              isActive ||
+              (keepMounted && hasBeenActivated);
+
+            return (
+              <div
+                key={tab.id}
+                role="tabpanel"
+                id={`${tabListId}-panel-${tab.id}`}
+                aria-labelledby={`${tabListId}-tab-${tab.id}`}
+                tabIndex={isActive ? 0 : -1}
+                className={classesProp?.panel || undefined}
+                data-state={isActive ? "active" : "inactive"}
+                data-orientation={orientation}
+                hidden={!isActive || undefined}
+              >
+                {shouldRenderContent &&
+                  (typeof children === "function"
+                    ? (children as (tab: Tab) => ReactNode)(tab)
+                    : children)}
+              </div>
+            );
+          })}
+        </div>
+      </TabPanelContext.Provider>
     );
   },
 );

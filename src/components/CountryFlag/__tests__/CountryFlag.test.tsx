@@ -20,7 +20,7 @@ describe("CountryFlag", () => {
       const img = screen.getByRole("img").querySelector("img");
       expect(img).toHaveAttribute(
         "src",
-        expect.stringContaining("/us.png"),
+        expect.stringContaining("/us.svg"),
       );
     });
 
@@ -30,7 +30,7 @@ describe("CountryFlag", () => {
       const img = screen.getByRole("img").querySelector("img");
       expect(img).toHaveAttribute(
         "src",
-        expect.stringContaining("/gb.png"),
+        expect.stringContaining("/gb.svg"),
       );
     });
 
@@ -132,7 +132,7 @@ describe("CountryFlag", () => {
       render(<CountryFlag code="us" />);
 
       const wrapper = screen.getByRole("img");
-      expect(wrapper).toHaveAttribute("data-loading", "");
+      expect(wrapper).toHaveAttribute("data-loading", "true");
     });
 
     it("removes data-loading after the image loads", () => {
@@ -157,7 +157,7 @@ describe("CountryFlag", () => {
 
       const img2 = screen.getByRole("img").querySelector("img");
       expect(img2).toBeInTheDocument();
-      expect(img2).toHaveAttribute("src", expect.stringContaining("/us.png"));
+      expect(img2).toHaveAttribute("src", expect.stringContaining("/us.svg"));
     });
   });
 

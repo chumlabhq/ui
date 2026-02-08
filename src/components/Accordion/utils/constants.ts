@@ -1,6 +1,6 @@
-import type { AccordionClassNames, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig } from "./types";
+import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig } from "./types";
 
-export const DEFAULT_CLASS_NAMES: Required<AccordionClassNames> = {
+export const DEFAULT_CLASS_NAMES: Required<AccordionClasses> = {
   root: "w-full",
   item: "border-b border-gray-200 last:border-b-0",
   trigger:
@@ -13,7 +13,7 @@ export const DEFAULT_CLASS_NAMES: Required<AccordionClassNames> = {
   contentInner: "",
 };
 
-export const UNSTYLED_CLASS_NAMES: Required<AccordionClassNames> = {
+export const UNSTYLED_CLASS_NAMES: Required<AccordionClasses> = {
   root: "",
   item: "",
   trigger: "",

@@ -1,7 +1,10 @@
 import { forwardRef, useMemo } from "react";
 import type { ButtonHTMLAttributes } from "react";
 import type { ButtonProps } from "./utils/types";
-import { HOVER_ANIMATION_MAP, CONTINUOUS_ANIMATION_MAP } from "./utils/constants";
+import {
+  HOVER_ANIMATION_MAP,
+  CONTINUOUS_ANIMATION_MAP,
+} from "./utils/constants";
 import { CircularLoader } from "../Loader";
 import { Tooltip } from "../Tooltip";
 import { Slot } from "../../utils/Slot";
@@ -29,7 +32,8 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     ...rest
   } = props;
 
-  const as = "asChild" in props && props.asChild ? undefined : (props.as ?? "button");
+  const as =
+    "asChild" in props && props.asChild ? undefined : (props.as ?? "button");
   const disabled = "disabled" in rest ? (rest.disabled ?? false) : false;
   const isDisabled = disabled || loading;
 
@@ -63,17 +67,13 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     >
       {loaderPosition === "left" && loading && loaderElement}
       {leadingIcon && (
-        <span
-          className={cn("inline-flex shrink-0", animationClasses.leading)}
-        >
+        <span className={cn("inline-flex shrink-0", animationClasses.leading)}>
           {leadingIcon}
         </span>
       )}
       {displayContent}
       {trailingIcon && (
-        <span
-          className={cn("inline-flex shrink-0", animationClasses.trailing)}
-        >
+        <span className={cn("inline-flex shrink-0", animationClasses.trailing)}>
           {trailingIcon}
         </span>
       )}
@@ -107,6 +107,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
         showArrow={tooltipProps?.showArrow}
         contentClassName={tooltipProps?.contentClassName}
         contentStyle={tooltipProps?.contentStyle}
+        asChild
       >
         {element}
       </Tooltip>
@@ -115,7 +116,10 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     );
 
   if (asChild && children) {
-    const { onClick: asChildOnClick, ...asChildRest } = rest as Record<string, unknown>;
+    const { onClick: asChildOnClick, ...asChildRest } = rest as Record<
+      string,
+      unknown
+    >;
     const handleDisabledClick = (e: React.MouseEvent) => {
       e.preventDefault();
     };
@@ -123,10 +127,16 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       <Slot
         ref={ref}
         className={combinedClassName || undefined}
-        onClick={isDisabled ? handleDisabledClick : (asChildOnClick as React.MouseEventHandler<HTMLElement> | undefined)}
-        aria-disabled={isDisabled || undefined}
+        onClick={
+          isDisabled
+            ? handleDisabledClick
+            : (asChildOnClick as
+                | React.MouseEventHandler<HTMLElement>
+                | undefined)
+        }
         {...dataProps}
         {...asChildRest}
+        aria-disabled={isDisabled || undefined}
       >
         {children}
       </Slot>
@@ -159,9 +169,9 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       rel,
       onClick,
       style,
-      disabled: _d,
       ...anchorRest
     } = rest as Record<string, unknown>;
+    delete anchorRest.disabled;
 
     const handleAnchorClick = isDisabled
       ? (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault()

@@ -7,13 +7,42 @@ import {
   useId,
   forwardRef,
   isValidElement,
+  memo,
   Fragment,
 } from "react";
+import { createPortal } from "react-dom";
 import type { PaginationProps, IconProps, SectionName } from "./utils/types";
 import { DEFAULT_ROW_OPTIONS } from "./utils/constants";
 import { getVisiblePages } from "./utils/helpers";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";
 import { cn } from "../../utils/cn";
+
+const isBrowser = typeof window !== "undefined";
+
+interface DropdownCoords {
+  top: number;
+  left: number;
+  minWidth: number;
+}
+
+function computeDropdownCoords(
+  buttonEl: HTMLButtonElement,
+  dropdownEl: HTMLDivElement,
+  direction: "up" | "down",
+  gap: number,
+): DropdownCoords {
+  const rect = buttonEl.getBoundingClientRect();
+  const dropdownRect = dropdownEl.getBoundingClientRect();
+
+  return {
+    top:
+      direction === "up"
+        ? rect.top - dropdownRect.height - gap
+        : rect.bottom + gap,
+    left: rect.left,
+    minWidth: rect.width,
+  };
+}
 
 function renderIcon(
   icon: React.ComponentType<IconProps> | React.ReactNode | undefined,
@@ -39,6 +68,134 @@ function renderIcon(
   return <DefaultIcon className={finalClassName} />;
 }
 
+const RowSelectorPortal = memo(function RowSelectorPortal({
+  triggerRef,
+  direction,
+  zIndex,
+  gap,
+  dropdownClassName,
+  optionClassName,
+  listboxId,
+  activeOptionId,
+  activeOptionIndex,
+  options,
+  selectedValue,
+  onSelect,
+  onKeyDown,
+  onBlur,
+  onOptionMouseEnter,
+  getOptionId,
+  dropdownAriaLabel,
+  portalContainer,
+}: {
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
+  direction: "up" | "down";
+  zIndex: number;
+  gap: number;
+  dropdownClassName?: string;
+  optionClassName?: string;
+  listboxId: string;
+  activeOptionId?: string;
+  activeOptionIndex: number;
+  options: number[];
+  selectedValue?: number;
+  onSelect: (value: number) => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
+  onBlur: (e: React.FocusEvent) => void;
+  onOptionMouseEnter: (index: number) => void;
+  getOptionId: (index: number) => string;
+  dropdownAriaLabel: string;
+  portalContainer?: HTMLElement | null;
+}) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [coords, setCoords] = useState<DropdownCoords | null>(null);
+
+  const updatePosition = useCallback(() => {
+    if (!triggerRef.current || !dropdownRef.current) return;
+    setCoords(
+      computeDropdownCoords(
+        triggerRef.current,
+        dropdownRef.current,
+        direction,
+        gap,
+      ),
+    );
+  }, [triggerRef, direction, gap]);
+
+  useEffect(() => {
+    requestAnimationFrame(updatePosition);
+  }, [updatePosition]);
+
+  useEffect(() => {
+    if (!isBrowser) return;
+    window.addEventListener("resize", updatePosition);
+    return () => window.removeEventListener("resize", updatePosition);
+  }, [updatePosition]);
+
+  useEffect(() => {
+    dropdownRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (activeOptionIndex >= 0) {
+      optionRefs.current[activeOptionIndex]?.scrollIntoView({
+        block: "nearest",
+      });
+    }
+  }, [activeOptionIndex]);
+
+  const dropdownStyle: React.CSSProperties = {
+    position: "fixed",
+    zIndex,
+    ...(coords
+      ? { top: coords.top, left: coords.left, minWidth: coords.minWidth }
+      : { visibility: "hidden" as const, top: 0, left: 0 }),
+  };
+
+  if (!isBrowser) return null;
+
+  const portalTarget = portalContainer ?? document.body;
+
+  return createPortal(
+    <div
+      ref={dropdownRef}
+      id={listboxId}
+      className={cn(dropdownClassName)}
+      style={dropdownStyle}
+      role="listbox"
+      tabIndex={-1}
+      aria-label={dropdownAriaLabel}
+      aria-activedescendant={activeOptionId}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
+      onMouseDown={(e) => e.preventDefault()}
+      data-state="open"
+      data-direction={direction}
+    >
+      {options.map((option, index) => (
+        <div
+          key={option}
+          ref={(el) => {
+            optionRefs.current[index] = el;
+          }}
+          id={getOptionId(index)}
+          role="option"
+          aria-selected={selectedValue === option}
+          data-selected={selectedValue === option || undefined}
+          data-highlighted={activeOptionIndex === index || undefined}
+          className={cn(optionClassName)}
+          onClick={() => onSelect(option)}
+          onMouseEnter={() => onOptionMouseEnter(index)}
+        >
+          {option}
+        </div>
+      ))}
+    </div>,
+    portalTarget,
+  );
+});
+
 const DEFAULT_SECTION_ORDER: SectionName[] = ["selector", "pageInfo", "nav"];
 
 const Pagination = forwardRef<HTMLElement, PaginationProps>(
@@ -56,6 +213,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       showLabel = "Show",
       dropdownAriaLabel = "Rows per page",
       dropdownDirection = "up",
+      dropdownZIndex = 50,
       dropdownIcon,
       prevIcon,
       nextIcon,
@@ -79,6 +237,11 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       prevIconClassName,
       nextIconClassName,
       pageInfoClassName,
+      portalContainer,
+      prevAriaLabel = "Previous page",
+      nextAriaLabel = "Next page",
+      paginationAriaLabel = "Pagination",
+      pageAriaLabel,
       className,
       ...rest
     },
@@ -96,9 +259,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [activeOptionIndex, setActiveOptionIndex] = useState(-1);
-    const dropdownRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
-    const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const listboxId = `${instanceId}-listbox`;
 
@@ -111,31 +272,35 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       if (!isDropdownOpen) return;
 
       const handleClickOutside = (event: MouseEvent) => {
-        if (
-          dropdownRef.current &&
-          triggerRef.current &&
-          !dropdownRef.current.contains(event.target as Node) &&
-          !triggerRef.current.contains(event.target as Node)
-        ) {
-          setIsDropdownOpen(false);
-        }
+        const target = event.target as Node;
+        if (triggerRef.current?.contains(target)) return;
+        const portalEl = document.getElementById(listboxId);
+        if (portalEl?.contains(target)) return;
+        setIsDropdownOpen(false);
       };
 
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isDropdownOpen]);
+    }, [isDropdownOpen, listboxId]);
 
     useEffect(() => {
-      if (isDropdownOpen) {
-        dropdownRef.current?.focus();
-      }
+      if (!isDropdownOpen || !isBrowser) return;
+      const handleScroll = () => setIsDropdownOpen(false);
+      window.addEventListener("scroll", handleScroll, true);
+      return () => window.removeEventListener("scroll", handleScroll, true);
     }, [isDropdownOpen]);
 
-    useEffect(() => {
-      if (isDropdownOpen && activeOptionIndex >= 0) {
-        optionRefs.current[activeOptionIndex]?.scrollIntoView({ block: "nearest" });
-      }
-    }, [isDropdownOpen, activeOptionIndex]);
+    const handleDropdownBlur = useCallback(
+      (e: React.FocusEvent) => {
+        if (
+          !e.currentTarget.contains(e.relatedTarget as Node) &&
+          !triggerRef.current?.contains(e.relatedTarget as Node)
+        ) {
+          setIsDropdownOpen(false);
+        }
+      },
+      [],
+    );
 
     const handleRowsChange = useCallback(
       (rows: number) => {
@@ -244,8 +409,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             <button
               ref={triggerRef}
               type="button"
-              onClick={(e) => {
-                if (e.detail === 0) return;
+              onClick={() => {
                 const opening = !isDropdownOpen;
                 setIsDropdownOpen(opening);
                 if (opening) {
@@ -269,45 +433,26 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             </button>
 
             {isDropdownOpen && (
-              <div
-                ref={dropdownRef}
-                id={listboxId}
-                className={cn(
-                  dropdownDirection === "down"
-                    ? "absolute top-full mt-1 left-0"
-                    : "absolute bottom-full mb-1 left-0",
-                  rowSelectorDropdownClassName,
-                )}
-                role="listbox"
-                tabIndex={-1}
-                aria-label={dropdownAriaLabel}
-                aria-activedescendant={activeOptionId}
+              <RowSelectorPortal
+                triggerRef={triggerRef}
+                direction={dropdownDirection}
+                zIndex={dropdownZIndex}
+                gap={4}
+                dropdownClassName={rowSelectorDropdownClassName}
+                optionClassName={rowSelectorOptionClassName}
+                listboxId={listboxId}
+                activeOptionId={activeOptionId}
+                activeOptionIndex={activeOptionIndex}
+                options={resolvedRowOptions}
+                selectedValue={rowsPerPage}
+                onSelect={handleRowsChange}
                 onKeyDown={handleDropdownKeyDown}
-                onBlur={(e) => {
-                  if (!e.currentTarget.contains(e.relatedTarget as Node) &&
-                      !triggerRef.current?.contains(e.relatedTarget as Node)) {
-                    setIsDropdownOpen(false);
-                  }
-                }}
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                {resolvedRowOptions.map((option, index) => (
-                  <div
-                    key={option}
-                    ref={(el) => { optionRefs.current[index] = el; }}
-                    id={getOptionId(index)}
-                    role="option"
-                    aria-selected={rowsPerPage === option}
-                    data-selected={rowsPerPage === option || undefined}
-                    data-highlighted={activeOptionIndex === index || undefined}
-                    className={cn(rowSelectorOptionClassName)}
-                    onClick={() => handleRowsChange(option)}
-                    onMouseEnter={() => setActiveOptionIndex(index)}
-                  >
-                    {option}
-                  </div>
-                ))}
-              </div>
+                onBlur={handleDropdownBlur}
+                onOptionMouseEnter={setActiveOptionIndex}
+                getOptionId={getOptionId}
+                dropdownAriaLabel={dropdownAriaLabel}
+                portalContainer={portalContainer}
+              />
             )}
           </div>
           <span className={labelClassName}>{rowsPerPageLabel}</span>
@@ -331,7 +476,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           onClick={handlePrevPage}
           disabled={isFirstPage}
           className={cn(navButtonClassName)}
-          aria-label="Previous page"
+          aria-label={prevAriaLabel}
           data-disabled={isFirstPage || undefined}
         >
           {renderIcon(prevIcon, ChevronLeftIcon, prevIconClassName, "w-5 h-5")}
@@ -366,7 +511,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                     ? activePageButtonClassName
                     : pageButtonClassName
                 }
-                aria-label={`Page ${item}`}
+                aria-label={pageAriaLabel ? pageAriaLabel(item) : `Page ${item}`}
                 aria-current={safeCurrentPage === item ? "page" : undefined}
                 data-active={safeCurrentPage === item || undefined}
               >
@@ -381,7 +526,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           onClick={handleNextPage}
           disabled={isLastPage}
           className={cn(navButtonClassName)}
-          aria-label="Next page"
+          aria-label={nextAriaLabel}
           data-disabled={isLastPage || undefined}
         >
           {renderIcon(nextIcon, ChevronRightIcon, nextIconClassName, "w-5 h-5")}
@@ -398,7 +543,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     return (
       <nav
         ref={ref as React.Ref<HTMLElement>}
-        aria-label="Pagination"
+        aria-label={paginationAriaLabel}
         className={cn(containerClassName, className)}
         {...rest}
       >

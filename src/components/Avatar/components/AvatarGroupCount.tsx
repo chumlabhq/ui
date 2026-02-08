@@ -10,16 +10,7 @@ import {
   parseBorder,
 } from "../utils/helpers";
 import { cn } from "../../../utils/cn";
-
-const isTooltipConfig = (tooltip: unknown): tooltip is AvatarTooltipConfig => {
-  return (
-    typeof tooltip === "object" &&
-    tooltip !== null &&
-    !Array.isArray(tooltip) &&
-    "content" in tooltip &&
-    !("$$typeof" in tooltip)
-  );
-};
+import { isTooltipConfig } from "../../../utils/isTooltipConfig";
 
 const variantClassNames = {
   solid:
@@ -68,7 +59,7 @@ export const AvatarGroupCount = forwardRef<
 
     const tooltipConfig = useMemo(() => {
       if (!tooltip) return null;
-      if (isTooltipConfig(tooltip)) return tooltip;
+      if (isTooltipConfig<AvatarTooltipConfig>(tooltip)) return tooltip;
       return { content: tooltip };
     }, [tooltip]);
 

@@ -25,7 +25,7 @@ export interface TooltipProps {
   arrowColor?: string;
   disabled?: boolean;
   truncate?: boolean;
-  truncateWidth?: string;
+  truncateWidth?: number | string;
   shadow?: TooltipShadow;
   zIndex?: number;
   portal?: boolean;

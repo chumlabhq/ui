@@ -30,28 +30,48 @@ const Toast = memo(function Toast({
   pauseOnHover = true,
   animationDuration = 200,
   style,
+  closeAriaLabel = "Close notification",
 }: ToastProps) {
-  const startTimeRef = useRef<number>(0);
+  const deadlineRef = useRef<number>(0);
   const remainingRef = useRef<number>(duration);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toastRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+  const onRemoveRef = useRef(onRemove);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+    onRemoveRef.current = onRemove;
+  });
   const [isPaused, setIsPaused] = useState(false);
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
 
   const defaultIcon = getDefaultIcon(type);
   const toastRole = roleProp ?? getRoleForType(type);
 
   const handleClose = useCallback(() => {
-    onClose?.();
-    onRemove(id);
-  }, [id, onClose, onRemove]);
+    onCloseRef.current?.();
+    onRemoveRef.current(id);
+  }, [id]);
 
   useEffect(() => {
     if (duration === Infinity || duration <= 0 || isPaused) return;
 
-    startTimeRef.current = Date.now();
+    deadlineRef.current = Date.now() + remainingRef.current;
     setAnimDuration(remainingRef.current);
 
     timerRef.current = setTimeout(() => {
@@ -73,8 +93,7 @@ const Toast = memo(function Toast({
   const handleMouseEnter = useCallback(() => {
     if (pauseOnHover && duration !== Infinity && duration > 0) {
       if (timerRef.current) clearTimeout(timerRef.current);
-      const elapsed = Date.now() - startTimeRef.current;
-      remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+      remainingRef.current = Math.max(0, deadlineRef.current - Date.now());
       setIsPaused(true);
     }
   }, [pauseOnHover, duration]);
@@ -97,7 +116,7 @@ const Toast = memo(function Toast({
   const hasFiniteDuration = duration !== Infinity && duration > 0;
   const progressAnimationStyle: React.CSSProperties | undefined =
     hasFiniteDuration && showProgress
-      ? isPaused
+      ? isPaused || prefersReducedMotion
         ? { width: `${progressPercent}%`, backgroundColor: progressColor }
         : {
             width: "0%",
@@ -161,7 +180,7 @@ const Toast = memo(function Toast({
               "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors",
               closeButtonClassName,
             )}
-            aria-label="Close notification"
+            aria-label={closeAriaLabel}
           >
             <CloseIcon className="w-4 h-4" />
           </button>

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("CountryFlag Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/countryflag");
+    await page.goto("/demo/country-flag");
     await page.waitForLoadState("domcontentloaded");
     await page.locator('[role="img"]').first().waitFor({ state: "visible" });
   });
@@ -20,17 +20,16 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test("should load flag images from the CDN", async ({ page }) => {
+    test("should load flag images from the local path", async ({ page }) => {
       const img = page.locator('[role="img"] img').first();
       const src = await img.getAttribute("src");
 
-      expect(src).toContain("flagcdn.com");
-      expect(src).toMatch(/\.png$/);
+      expect(src).toContain("/flags/");
+      expect(src).toMatch(/\.svg$/);
     });
 
     test("should render flags at multiple sizes", async ({ page }) => {
-      // The Preset Sizes section shows xs through 2xl
-      const sizeSection = page.locator("text=Preset Sizes").locator("..");
+      const sizeSection = page.locator("section").filter({ hasText: "Preset Sizes" }).first();
       await expect(sizeSection).toBeVisible();
 
       const flags = sizeSection.locator('[role="img"]');

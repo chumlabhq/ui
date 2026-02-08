@@ -2,6 +2,7 @@ import React, { forwardRef, useMemo } from "react";
 import type {
   CountryFlagGroupProps,
   CountryFlagGroupCountProps,
+  CountryFlagTooltipConfig,
   CountryFlagProps,
 } from "../utils/types";
 import { Tooltip } from "../../Tooltip";
@@ -125,7 +126,7 @@ export const CountryFlagGroupCount = forwardRef<
 
   const tooltipConfig = useMemo(() => {
     if (!tooltip) return null;
-    if (isTooltipConfig(tooltip)) return tooltip;
+    if (isTooltipConfig<CountryFlagTooltipConfig>(tooltip)) return tooltip;
     return { content: tooltip };
   }, [tooltip]);
 

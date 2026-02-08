@@ -3,7 +3,7 @@ import type { InputHTMLAttributes, ReactNode, FocusEvent } from "react";
 export type CheckboxSize = "xs" | "sm" | "md" | "lg" | "xl" | number;
 export type CheckboxShape = "square" | "rounded" | "circle";
 
-export interface CheckboxClassNames {
+export interface CheckboxClasses {
   root?: string;
   labelContainer?: string;
   label?: string;
@@ -35,17 +35,5 @@ export interface CheckboxProps
   checkedIcon?: ReactNode;
   uncheckedIcon?: ReactNode;
   indeterminateIcon?: ReactNode;
-  classNames?: CheckboxClassNames;
-  containerClassName?: string;
-  labelContainerClassName?: string;
-  labelClassName?: string;
-  descriptionClassName?: string;
-  checkboxClassName?: string;
-  checkedClassName?: string;
-  uncheckedClassName?: string;
-  indeterminateClassName?: string;
-  iconClassName?: string;
-  errorClassName?: string;
-  sizeClassName?: string;
-  shapeClassName?: string;
+  classes?: CheckboxClasses;
 }

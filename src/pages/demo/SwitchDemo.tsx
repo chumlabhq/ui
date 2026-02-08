@@ -337,16 +337,16 @@ const SwitchDemo = () => {
         </Section>
 
         <Section
-          title="classNames Record (Alternative)"
-          description="Use the classNames record prop as a cleaner alternative to individual className props."
+          title="classes Record (Alternative)"
+          description="Use the classes record prop as a cleaner alternative to individual className props."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
             <Switch
-              label="Using classNames record"
-              description="All styles via a single classNames prop"
+              label="Using classes record"
+              description="All styles via a single classes prop"
               defaultChecked
-              classNames={{
+              classes={{
                 root: "",
                 labelContainer: "flex flex-col",
                 label: `text-sm font-medium ${isDarkMode ? "text-gray-200" : "text-gray-700"}`,
@@ -363,8 +363,8 @@ const SwitchDemo = () => {
           <CodeBlock
             isDarkMode={isDarkMode}
             code={`<Switch
-  label="Styled via classNames"
-  classNames={{
+  label="Styled via classes"
+  classes={{
     tracker: "h-6 w-11 rounded-full",
     checkedTracker: "bg-blue-600",
     uncheckedTracker: "bg-gray-200",
@@ -947,8 +947,8 @@ data-error="true"      // Container: when in error state`}
               </thead>
               <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">classNames</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>SwitchClassNames</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">classes</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>SwitchClasses</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>Record of class names for all internal elements (root, tracker, thumb, label, etc.)</td>
                 </tr>
                 <tr>

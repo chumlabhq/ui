@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useMemo, useRef, useLayoutEffect } from "react";
+import { forwardRef, useState, useCallback, useMemo } from "react";
 import type {
   AvatarProps,
   AvatarTooltipConfig,
@@ -21,16 +21,7 @@ import {
 import { useAvatarGroupContext } from "./utils/context";
 import { AvatarShimmer } from "./components/AvatarShimmer";
 import { cn } from "../../utils/cn";
-
-const isTooltipConfig = (tooltip: unknown): tooltip is AvatarTooltipConfig => {
-  return (
-    typeof tooltip === "object" &&
-    tooltip !== null &&
-    !Array.isArray(tooltip) &&
-    "content" in tooltip &&
-    !("$$typeof" in tooltip)
-  );
-};
+import { isTooltipConfig } from "../../utils/isTooltipConfig";
 
 const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
   return (
@@ -78,20 +69,12 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
     const [prevSrc, setPrevSrc] = useState(src);
-    const imgNodeRef = useRef<HTMLImageElement>(null);
 
     if (prevSrc !== src) {
       setPrevSrc(src);
       setImageError(false);
       setImageLoaded(false);
     }
-
-    useLayoutEffect(() => {
-      const img = imgNodeRef.current;
-      if (img && img.complete && img.naturalWidth > 0) {
-        setImageLoaded(true);
-      }
-    }, [src]);
 
     const initials = getInitials(name, maxInitials);
     const numericSize = getNumericSize(effectiveSize);
@@ -122,7 +105,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     const tooltipConfig = useMemo(() => {
       if (!tooltip) return null;
-      if (isTooltipConfig(tooltip)) return tooltip;
+      if (isTooltipConfig<AvatarTooltipConfig>(tooltip)) return tooltip;
       return { content: tooltip };
     }, [tooltip]);
 
@@ -131,7 +114,11 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         <AvatarShimmer
           size={effectiveSize}
           shape={effectiveShape}
-          style={groupCtx ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` } : undefined}
+          style={
+            groupCtx
+              ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` }
+              : undefined
+          }
         />
       );
     }
@@ -160,7 +147,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         ref={ref}
         className={cn(
           "shrink-0 flex items-center justify-center font-medium select-none",
-          className
+          className,
         )}
         style={containerStyle}
         role={!showImage ? "img" : undefined}
@@ -175,7 +162,6 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         >
           {showImage && (
             <img
-              ref={imgNodeRef}
               src={src}
               alt={alt || ""}
               srcSet={imageConfig?.srcSet}
@@ -187,7 +173,10 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
               fetchPriority={imageConfig?.fetchPriority}
               onLoad={handleImageLoad}
               onError={handleImageError}
-              className={cn("w-full h-full object-cover", imageConfig?.className)}
+              className={cn(
+                "w-full h-full object-cover",
+                imageConfig?.className,
+              )}
               style={{
                 opacity: imageLoaded ? 1 : 0,
                 transition: imageLoaded ? "none" : "opacity 0.2s ease-in-out",

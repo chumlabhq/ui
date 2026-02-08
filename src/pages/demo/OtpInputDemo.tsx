@@ -101,7 +101,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={basicValue}
-                onChange={setBasicValue}
+                onValueChange={setBasicValue}
                 inputClassName={classes.base}
                 inputFocusClassName={classes.focus}
                 wrapperClassName={classes.wrapper}
@@ -143,8 +143,8 @@ const OtpInputDemo = () => {
         </Section>
 
         <Section
-          title="onValueChange (Preferred)"
-          description="Use onValueChange as the preferred callback name. onChange is still supported as an alias."
+          title="onValueChange"
+          description="Use onValueChange to receive value updates when the user types."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -208,7 +208,7 @@ const OtpInputDemo = () => {
                 <OtpInput
                   length={4}
                   value={fourDigitValue}
-                  onChange={setFourDigitValue}
+                  onValueChange={setFourDigitValue}
                   inputClassName={classes.base}
                   inputFocusClassName={classes.focus}
                   wrapperClassName={classes.wrapper}
@@ -221,7 +221,7 @@ const OtpInputDemo = () => {
                 <OtpInput
                   length={8}
                   value={eightDigitValue}
-                  onChange={setEightDigitValue}
+                  onValueChange={setEightDigitValue}
                   inputClassName={`w-10 h-10 text-center text-base font-medium border rounded-lg outline-none transition-all ${
                     isDarkMode
                       ? "border-gray-600 bg-gray-700 text-white"
@@ -253,7 +253,7 @@ const OtpInputDemo = () => {
                 </div>
                 <OtpInput
                   value={layoutValue1}
-                  onChange={setLayoutValue1}
+                  onValueChange={setLayoutValue1}
                   autoFocusFirst={false}
                   inputClassName={`w-10 h-10 text-center text-lg font-medium border rounded outline-none transition-all ${
                     isDarkMode
@@ -275,7 +275,7 @@ const OtpInputDemo = () => {
                 </div>
                 <OtpInput
                   value={layoutValue2}
-                  onChange={setLayoutValue2}
+                  onValueChange={setLayoutValue2}
                   autoFocusFirst={false}
                   groups={[2, 2, 2]}
                   separator={<span className={`text-xl font-medium ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
@@ -301,7 +301,7 @@ const OtpInputDemo = () => {
                 </div>
                 <OtpInput
                   value={layoutValue3}
-                  onChange={setLayoutValue3}
+                  onValueChange={setLayoutValue3}
                   autoFocusFirst={false}
                   groups={[2, 2, 2]}
                   inputClassName={`w-10 h-10 text-center text-lg font-medium border-y border-r outline-none transition-all first:border-l first:rounded-l last:rounded-r focus:ring-2 focus:z-10 relative ${
@@ -325,7 +325,7 @@ const OtpInputDemo = () => {
                 </div>
                 <OtpInput
                   value={layoutValue4}
-                  onChange={setLayoutValue4}
+                  onValueChange={setLayoutValue4}
                   autoFocusFirst={false}
                   groups={[2, 2, 2]}
                   separator={<span className={`text-xl font-medium ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
@@ -356,7 +356,7 @@ const OtpInputDemo = () => {
                 </p>
                 <OtpInput
                   value={groupedValue}
-                  onChange={setGroupedValue}
+                  onValueChange={setGroupedValue}
                   autoFocusFirst={false}
                   groups={[3, 3]}
                   separator={<span className={`text-2xl ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
@@ -373,7 +373,7 @@ const OtpInputDemo = () => {
                 </p>
                 <OtpInput
                   value={customGroupValue}
-                  onChange={setCustomGroupValue}
+                  onValueChange={setCustomGroupValue}
                   autoFocusFirst={false}
                   groups={[3, 3]}
                   separator={<span className="w-4" />}
@@ -392,7 +392,7 @@ const OtpInputDemo = () => {
                 </p>
                 <OtpInput
                   value={unevenGroupValue}
-                  onChange={setUnevenGroupValue}
+                  onValueChange={setUnevenGroupValue}
                   autoFocusFirst={false}
                   groups={[2, 2, 2]}
                   separator={<span className={`text-xl ${isDarkMode ? "text-gray-500" : "text-gray-300"}`}>/</span>}
@@ -417,7 +417,7 @@ const OtpInputDemo = () => {
               <OtpInput
                 label="Verification Code"
                 value={labelValue}
-                onChange={setLabelValue}
+                onValueChange={setLabelValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
                 inputFocusClassName={classes.focus}
@@ -440,7 +440,7 @@ const OtpInputDemo = () => {
               required
               length={4}
               value={requiredValue}
-              onChange={setRequiredValue}
+              onValueChange={setRequiredValue}
               autoFocusFirst={false}
               inputClassName={classes.base}
               inputFocusClassName={classes.focus}
@@ -460,7 +460,7 @@ const OtpInputDemo = () => {
             <OtpInput
               label="Invalid Code"
               value={errorValue}
-              onChange={setErrorValue}
+              onValueChange={setErrorValue}
               autoFocusFirst={false}
               error
               errorMessage="The code you entered is incorrect. Please try again."
@@ -497,7 +497,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={passwordValue}
-                onChange={setPasswordValue}
+                onValueChange={setPasswordValue}
                 autoFocusFirst={false}
                 inputType="password"
                 inputClassName={classes.base}
@@ -520,7 +520,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={noPasteValue}
-                onChange={setNoPasteValue}
+                onValueChange={setNoPasteValue}
                 autoFocusFirst={false}
                 allowPaste={false}
                 inputClassName={classes.base}
@@ -543,7 +543,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={digitsOnlyValue}
-                onChange={setDigitsOnlyValue}
+                onValueChange={setDigitsOnlyValue}
                 autoFocusFirst={false}
                 validate={(char) => /^\d$/.test(char)}
                 inputClassName={classes.base}
@@ -559,7 +559,7 @@ const OtpInputDemo = () => {
             isDarkMode={isDarkMode}
             code={`<OtpInput
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   validate={(char) => /^\\d$/.test(char)}
 />`}
           />
@@ -574,7 +574,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={completedValue}
-                onChange={setCompletedValue}
+                onValueChange={setCompletedValue}
                 onComplete={(val: string) => setLastCompleted(val)}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
@@ -593,7 +593,7 @@ const OtpInputDemo = () => {
             isDarkMode={isDarkMode}
             code={`<OtpInput
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   onComplete={(val) => {
     console.log('OTP completed:', val);
     submitOtp(val);
@@ -611,7 +611,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={basicValue}
-                onChange={setBasicValue}
+                onValueChange={setBasicValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
                 inputFocusClassName={classes.focus}
@@ -634,7 +634,7 @@ const OtpInputDemo = () => {
               <OtpInput
                 ref={otpRef}
                 value={refDemoValue}
-                onChange={setRefDemoValue}
+                onValueChange={setRefDemoValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
                 inputFocusClassName={classes.focus}
@@ -686,7 +686,7 @@ const OtpInputDemo = () => {
                 name="otp"
                 label="Verification Code"
                 value={idNameValue}
-                onChange={setIdNameValue}
+                onValueChange={setIdNameValue}
                 autoFocusFirst={false}
                 inputClassName={classes.base}
                 inputFocusClassName={classes.focus}
@@ -724,7 +724,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={renderInputValue}
-                onChange={setRenderInputValue}
+                onValueChange={setRenderInputValue}
                 autoFocusFirst={false}
                 wrapperClassName="flex gap-3"
                 renderInput={(props: OtpInputRenderProps) => (
@@ -770,7 +770,7 @@ const OtpInputDemo = () => {
             isDarkMode={isDarkMode}
             code={`<OtpInput
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   renderInput={(props) => (
     <div key={props.index} className="relative">
       <input
@@ -800,7 +800,7 @@ const OtpInputDemo = () => {
                 <OtpInput
                   id="custom-otp"
                   value={basicValue}
-                  onChange={setBasicValue}
+                  onValueChange={setBasicValue}
                   autoFocusFirst={false}
                   inputClassName={classes.base}
                   inputFocusClassName={classes.focus}
@@ -836,7 +836,7 @@ const OtpInputDemo = () => {
                 <div className="bg-gray-900 p-6 rounded-xl">
                   <OtpInput
                     value={darkThemeValue}
-                    onChange={setDarkThemeValue}
+                    onValueChange={setDarkThemeValue}
                     autoFocusFirst={false}
                     inputClassName="w-12 h-12 text-center text-lg font-medium border border-gray-600 rounded-lg bg-gray-800 text-white outline-none transition-all focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                     wrapperClassName="flex gap-3"
@@ -850,7 +850,7 @@ const OtpInputDemo = () => {
                 </p>
                 <OtpInput
                   value={roundedValue}
-                  onChange={setRoundedValue}
+                  onValueChange={setRoundedValue}
                   autoFocusFirst={false}
                   inputClassName={`w-14 h-14 text-center text-xl font-bold border-2 rounded-full outline-none transition-all ${
                     isDarkMode
@@ -867,7 +867,7 @@ const OtpInputDemo = () => {
                 </p>
                 <OtpInput
                   value={underlineValue}
-                  onChange={setUnderlineValue}
+                  onValueChange={setUnderlineValue}
                   autoFocusFirst={false}
                   inputClassName={`w-12 h-12 text-center text-2xl font-medium border-b-2 bg-transparent outline-none transition-all ${
                     isDarkMode
@@ -884,7 +884,7 @@ const OtpInputDemo = () => {
                 </p>
                 <OtpInput
                   value={gradientValue}
-                  onChange={setGradientValue}
+                  onValueChange={setGradientValue}
                   autoFocusFirst={false}
                   inputClassName={`w-12 h-12 text-center text-lg font-medium rounded-lg outline-none border-2 border-transparent bg-clip-padding transition-all focus:ring-2 focus:ring-pink-500 ${
                     isDarkMode
@@ -908,7 +908,7 @@ const OtpInputDemo = () => {
             <div className="space-y-3">
               <OtpInput
                 value={individualStyleValue}
-                onChange={setIndividualStyleValue}
+                onValueChange={setIndividualStyleValue}
                 autoFocusFirst={false}
                 inputClassName={`w-12 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
                   isDarkMode ? "bg-gray-700 text-white" : "bg-white text-gray-900"
@@ -944,7 +944,7 @@ const OtpInputDemo = () => {
                 <OtpInput
                   length={4}
                   value={fourDigitValue}
-                  onChange={setFourDigitValue}
+                  onValueChange={setFourDigitValue}
                   autoFocusFirst={false}
                   inputClassName={`w-16 h-16 text-center text-2xl font-bold border-2 rounded-xl outline-none transition-all ${
                     isDarkMode
@@ -961,7 +961,7 @@ const OtpInputDemo = () => {
                 <OtpInput
                   length={8}
                   value={eightDigitValue}
-                  onChange={setEightDigitValue}
+                  onValueChange={setEightDigitValue}
                   autoFocusFirst={false}
                   inputClassName={`w-8 h-8 text-center text-sm font-medium border rounded outline-none transition-all ${
                     isDarkMode
@@ -985,7 +985,7 @@ const OtpInputDemo = () => {
               <OtpInput
                 length={6}
                 value={basicValue}
-                onChange={setBasicValue}
+                onValueChange={setBasicValue}
                 autoFocusFirst={false}
                 fullWidth
                 inputClassName={`flex-1 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
@@ -1009,7 +1009,7 @@ const OtpInputDemo = () => {
             <OtpInput
               length={16}
               value=""
-              onChange={() => {}}
+              onValueChange={() => {}}
               autoFocusFirst={false}
               groups={[4, 4, 4, 4]}
               separator={<span className={isDarkMode ? "text-gray-500" : "text-gray-300"}>-</span>}
@@ -1101,6 +1101,74 @@ const OtpInputDemo = () => {
             </p>
           </DemoWrapper>
         </Section>
+
+        <Section
+          title="Input Pattern (Mobile Keyboard)"
+          description='The inputPattern prop sets the HTML pattern attribute on each input, which affects the keyboard shown on mobile devices. The default "\\d*" triggers a numeric keyboard. Set it to ".*" for a full keyboard.'
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <div className="space-y-4">
+              <div>
+                <p className={`text-sm mb-2 font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Numeric keyboard (default)</p>
+                <OtpInput
+                  length={4}
+                  autoFocusFirst={false}
+                  inputClassName={`w-12 h-12 text-center text-lg border rounded-lg ${isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"}`}
+                  wrapperClassName="flex gap-2"
+                />
+              </div>
+              <div>
+                <p className={`text-sm mb-2 font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Alphanumeric keyboard (pattern=&quot;.*&quot;)</p>
+                <OtpInput
+                  length={4}
+                  autoFocusFirst={false}
+                  inputPattern=".*"
+                  inputType="text"
+                  inputClassName={`w-12 h-12 text-center text-lg border rounded-lg ${isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"}`}
+                  wrapperClassName="flex gap-2"
+                />
+              </div>
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`// Numeric keyboard (default)
+<OtpInput length={4} inputPattern="\\d*" />
+
+// Full alphanumeric keyboard
+<OtpInput length={4} inputPattern=".*" inputType="text" />`}
+          />
+        </Section>
+
+        <Section
+          title="Custom Group Aria Label"
+          description="Use groupAriaLabel to provide a localized or context-specific accessible label for the input group. Screen readers will announce this label when the user enters the OTP area."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <OtpInput
+              length={6}
+              autoFocusFirst={false}
+              groupAriaLabel="Enter your 6-digit verification code"
+              inputClassName={`w-12 h-12 text-center text-lg border rounded-lg ${isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"}`}
+              wrapperClassName="flex gap-2"
+            />
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<OtpInput
+  length={6}
+  groupAriaLabel="Enter your 6-digit verification code"
+/>
+
+// i18n
+<OtpInput
+  length={6}
+  groupAriaLabel="Ingrese su código de verificación de 6 dígitos"
+/>`}
+          />
+        </Section>
       </div>
 
       <div className="space-y-8">
@@ -1152,15 +1220,7 @@ const OtpInputDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value: string) =&gt; void</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Preferred callback when value changes
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">onChange</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value: string) =&gt; void</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Alias for onValueChange (backwards compatible)
+                    Callback when value changes
                   </td>
                 </tr>
                 <tr>
@@ -1246,7 +1306,7 @@ const OtpInputDemo = () => {
                 <tr>
                   <td className="py-3 pr-4 font-mono text-blue-500">autoFocusFirst</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>true</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     Auto-focus first input on mount
                   </td>
@@ -1289,6 +1349,22 @@ const OtpInputDemo = () => {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     Validation function to filter input characters
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">inputPattern</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"\\d*"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    HTML pattern attribute for each input (affects mobile keyboard)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">groupAriaLabel</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"One-time password input"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Accessible label for the input group container
                   </td>
                 </tr>
                 <tr>
@@ -1534,11 +1610,11 @@ interface OtpInputRenderProps {
 interface OtpInputProps
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
-    "value" | "onChange" | "type" | "maxLength"
+    "value" | "onChange" | "type" | "maxLength"  // onChange omitted to avoid conflict with native handler
   > {
   length?: number;
   value?: string;
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   onComplete?: (value: string) => void;
   label?: ReactNode;
   required?: boolean;
@@ -1693,7 +1769,7 @@ interface OtpInputProps
           <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
             InputHTMLAttributes
           </code>{" "}
-          (excluding value, onChange, type, and maxLength) and accepts all standard input props such as{" "}
+          (excluding value, type, and maxLength) and accepts all standard input props such as{" "}
           <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>autoFocus</code>,{" "}
           <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>tabIndex</code>,{" "}
           <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>onFocus</code>,{" "}

@@ -1,6 +1,6 @@
 import { forwardRef, useState, useCallback, useMemo } from "react";
 import type { SyntheticEvent } from "react";
-import type { CountryFlagProps } from "./utils/types";
+import type { CountryFlagProps, CountryFlagTooltipConfig } from "./utils/types";
 import { DEFAULT_FLAG_BASE_PATH, DEFAULT_ASPECT_RATIO } from "./utils/constants";
 import { getPixelSize, isTooltipConfig } from "./utils/helpers";
 import { useCountryFlagGroupContext } from "./utils/context";
@@ -65,7 +65,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
 
     const tooltipConfig = useMemo(() => {
       if (!tooltip) return null;
-      if (isTooltipConfig(tooltip)) return tooltip;
+      if (isTooltipConfig<CountryFlagTooltipConfig>(tooltip)) return tooltip;
       return { content: tooltip };
     }, [tooltip]);
 

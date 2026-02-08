@@ -169,8 +169,8 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
           <div
             className={
               cn(
-                config.classNames.content,
-                config.classNames.contentInner,
+                config.classes.content,
+                config.classes.contentInner,
               ) || undefined
             }
           >

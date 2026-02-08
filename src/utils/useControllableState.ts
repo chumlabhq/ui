@@ -45,9 +45,10 @@ export function useControllableState<T>({
           ? (nextValue as (prev: T) => T)(valueRef.current)
           : nextValue;
 
-      valueRef.current = resolvedValue;
+      if (Object.is(resolvedValue, valueRef.current)) return;
 
       if (!currentIsControlledRef.current) {
+        valueRef.current = resolvedValue;
         setInternalValue(resolvedValue);
       }
       onChangeRef.current?.(resolvedValue);

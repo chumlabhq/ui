@@ -957,6 +957,95 @@ function MyComponent() {
             </Button>
           </DemoWrapper>
         </Section>
+
+        <Section
+          title="Custom Close Button Label"
+          description="Use closeAriaLabel to provide a localized or context-specific accessible label for the close button. This is important for internationalization and screen reader users."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              className={styles.info}
+              onClick={() =>
+                toast.info("Localized close label", {
+                  description: "The close button has a custom aria-label",
+                  closeAriaLabel: "Dismiss this notification",
+                })
+              }
+            >
+              Custom closeAriaLabel
+            </Button>
+            <Button
+              className={styles.info}
+              onClick={() =>
+                toast.info("Spanish label", {
+                  description: "El botón de cierre tiene una etiqueta personalizada",
+                  closeAriaLabel: "Cerrar notificación",
+                })
+              }
+            >
+              i18n Example (Spanish)
+            </Button>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`toast.info("Notification", {
+  closeAriaLabel: "Dismiss this notification",
+})
+
+// i18n example
+toast.info("Notificación", {
+  closeAriaLabel: "Cerrar notificación",
+})`}
+          />
+        </Section>
+
+        <Section
+          title="Animation Duration"
+          description="Control the speed of toast enter/exit animations via animationDuration on the ToastProvider (in milliseconds). The default is 200ms."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <p className={`text-sm mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+              This page uses the default 200ms animation. To customize, set animationDuration on the ToastProvider.
+            </p>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<ToastProvider animationDuration={400}>
+  {/* Toasts will animate in/out over 400ms */}
+  <App />
+</ToastProvider>
+
+<ToastProvider animationDuration={0}>
+  {/* Instant show/hide — no animation */}
+  <App />
+</ToastProvider>`}
+          />
+        </Section>
+
+        <Section
+          title="Container Aria Label"
+          description="Customize the accessible label for the toast container region via containerAriaLabel on the ToastProvider. Defaults to 'Notifications'."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <p className={`text-sm mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
+              The toast container has <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>role=&quot;region&quot;</code> with an <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>aria-label</code> for screen readers.
+            </p>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<ToastProvider containerAriaLabel="System alerts">
+  <App />
+</ToastProvider>
+
+// i18n
+<ToastProvider containerAriaLabel="Notificaciones del sistema">
+  <App />
+</ToastProvider>`}
+          />
+        </Section>
       </div>
 
       <div className="space-y-8">
@@ -1091,6 +1180,14 @@ function MyComponent() {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     Inline styles for the toast container
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">closeAriaLabel</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"Close notification"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Accessible label for the close button
                   </td>
                 </tr>
               </tbody>
@@ -1243,6 +1340,22 @@ function MyComponent() {
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     Dismiss all toasts when Escape key is pressed
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">animationDuration</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>200</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Duration of entry/exit animations in milliseconds
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">containerAriaLabel</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
+                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"Notifications"</td>
+                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                    Accessible label for the toast container region
                   </td>
                 </tr>
               </tbody>

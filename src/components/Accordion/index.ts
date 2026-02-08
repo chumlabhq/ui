@@ -11,7 +11,7 @@ export type {
   AccordionItemProps,
   AccordionTriggerProps,
   AccordionContentProps,
-  AccordionClassNames,
+  AccordionClasses,
   AccordionType,
   Orientation,
   Direction,

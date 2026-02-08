@@ -8,6 +8,7 @@ import {
   useEffect,
 } from "react";
 import { useId } from "react";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import {
   AccordionContext,
   AccordionDispatchContext,
@@ -37,44 +38,11 @@ import type {
   AccordionProps,
   AccordionDispatchValue,
   AccordionConfigValue,
-  AccordionClassNames,
+  AccordionClasses,
   AccordionRef,
   StorageConfig,
 } from "./utils/types";
 import { cn } from "../../utils/cn";
-
-const printStylesId = "kern-accordion-print-styles";
-const PRINT_REF_COUNT_ATTR = "data-ref-count";
-
-function injectPrintStyles() {
-  if (typeof document === "undefined") return;
-  const existing = document.getElementById(printStylesId);
-  if (existing) {
-    const count = parseInt(
-      existing.getAttribute(PRINT_REF_COUNT_ATTR) || "0",
-      10,
-    );
-    existing.setAttribute(PRINT_REF_COUNT_ATTR, String(count + 1));
-    return;
-  }
-  const style = document.createElement("style");
-  style.id = printStylesId;
-  style.setAttribute(PRINT_REF_COUNT_ATTR, "1");
-  style.textContent = PRINT_STYLES;
-  document.head.appendChild(style);
-}
-
-function removePrintStyles() {
-  if (typeof document === "undefined") return;
-  const el = document.getElementById(printStylesId);
-  if (!el) return;
-  const count = parseInt(el.getAttribute(PRINT_REF_COUNT_ATTR) || "0", 10);
-  if (count <= 1) {
-    el.parentNode?.removeChild(el);
-  } else {
-    el.setAttribute(PRINT_REF_COUNT_ATTR, String(count - 1));
-  }
-}
 
 function getStorageConfig(
   storageKey: string | StorageConfig | undefined,
@@ -93,7 +61,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     dir = DEFAULT_DIRECTION,
     disabled = false,
     loop = DEFAULT_LOOP,
-    classNames = {},
+    classes = {},
     headingLevel = DEFAULT_HEADING_LEVEL,
     children,
     className,
@@ -151,12 +119,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     return () => mediaQuery.removeEventListener("change", handler);
   }, [reduceMotion]);
 
-  useEffect(() => {
-    if (expandOnPrint) {
-      injectPrintStyles();
-      return () => removePrintStyles();
-    }
-  }, [expandOnPrint]);
 
   const effectiveReduceMotion =
     reduceMotion === "auto" ? prefersReducedMotion : reduceMotion;
@@ -222,10 +184,10 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     return internalValue;
   }, [isControlled, controlledValue, internalValue]);
 
-  const expandedStoreRef = useRef(createExpandedStore(expandedValues));
-  useEffect(() => {
-    expandedStoreRef.current.setValues(expandedValues);
-  }, [expandedValues]);
+  const [expandedStore] = useState(() => createExpandedStore(expandedValues));
+  useIsomorphicLayoutEffect(() => {
+    expandedStore.setValues(expandedValues);
+  }, [expandedValues, expandedStore]);
 
   const itemsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
   const itemOrderRef = useRef<Map<string, number>>(new Map());
@@ -508,14 +470,14 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const variantClasses = VARIANT_CLASSES[variant];
   const baseClasses = unstyled ? UNSTYLED_CLASS_NAMES : DEFAULT_CLASS_NAMES;
 
-  const mergedClassNames: AccordionClassNames = useMemo(
+  const mergedClasses: AccordionClasses = useMemo(
     () => ({
       root:
-        classNames.root ??
+        classes.root ??
         (unstyled ? "" : cn(baseClasses.root, variantClasses.root)),
-      item: classNames.item ?? (unstyled ? "" : variantClasses.item),
+      item: classes.item ?? (unstyled ? "" : variantClasses.item),
       trigger:
-        classNames.trigger ??
+        classes.trigger ??
         (unstyled
           ? ""
           : cn(
@@ -524,19 +486,19 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
               variantClasses.trigger,
             )),
       content:
-        classNames.content ??
+        classes.content ??
         (unstyled ? "" : cn(baseClasses.content, sizeClasses.content)),
       icon:
-        classNames.icon ??
+        classes.icon ??
         (unstyled ? "" : cn(baseClasses.icon, sizeClasses.icon)),
       subtitle:
-        classNames.subtitle ??
+        classes.subtitle ??
         (unstyled ? "" : cn(baseClasses.subtitle, sizeClasses.subtitle)),
-      triggerLeft: classNames.triggerLeft ?? baseClasses.triggerLeft,
-      triggerRight: classNames.triggerRight ?? baseClasses.triggerRight,
-      contentInner: classNames.contentInner ?? baseClasses.contentInner,
+      triggerLeft: classes.triggerLeft ?? baseClasses.triggerLeft,
+      triggerRight: classes.triggerRight ?? baseClasses.triggerRight,
+      contentInner: classes.contentInner ?? baseClasses.contentInner,
     }),
-    [classNames, sizeClasses, variantClasses, baseClasses, unstyled],
+    [classes, sizeClasses, variantClasses, baseClasses, unstyled],
   );
 
   const expandAll = useCallback(() => {
@@ -723,7 +685,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     () => ({
       orientation,
       dir,
-      classNames: mergedClassNames,
+      classes: mergedClasses,
       headingLevel,
       reduceMotion: effectiveReduceMotion,
       unstyled,
@@ -737,7 +699,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     [
       orientation,
       dir,
-      mergedClassNames,
+      mergedClasses,
       headingLevel,
       effectiveReduceMotion,
       unstyled,
@@ -785,53 +747,54 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   );
 
     return (
-    <AccordionExpandedContext.Provider value={expandedStoreRef.current}>
-    <AccordionDispatchContext.Provider value={dispatchValue}>
-      <AccordionConfigContext.Provider value={configValue}>
-        <AccordionContext.Provider value={contextValue}>
-          <Comp
-            ref={elementRef}
-            id={accordionId}
-            className={cn(mergedClassNames.root, className) || undefined}
-            data-orientation={orientation}
-            data-state={hasExpanded ? "has-expanded" : "all-closed"}
-            data-type={type}
-            data-size={size}
-            data-variant={variant}
-            data-accordion-expand-print={expandOnPrint || undefined}
-            dir={dir}
-            aria-label={ariaLabel}
-            aria-busy={ariaBusy}
-            onKeyDown={onKeyDown ? handleKeyDown : undefined}
-            {...rest}
-          >
-            {children}
-            {announceExpanded && (
-              <div
-                ref={announcerRef}
-                role="status"
-                aria-live={ariaLive ?? "polite"}
-                aria-atomic="true"
-                className="sr-only"
-                style={{
-                  position: "absolute",
-                  width: 1,
-                  height: 1,
-                  padding: 0,
-                  margin: -1,
-                  overflow: "hidden",
-                  clip: "rect(0, 0, 0, 0)",
-                  whiteSpace: "nowrap",
-                  border: 0,
-                }}
-              />
-            )}
-          </Comp>
-        </AccordionContext.Provider>
-      </AccordionConfigContext.Provider>
-    </AccordionDispatchContext.Provider>
-    </AccordionExpandedContext.Provider>
-  );
+      <AccordionExpandedContext.Provider value={expandedStore}>
+        <AccordionDispatchContext.Provider value={dispatchValue}>
+          <AccordionConfigContext.Provider value={configValue}>
+            <AccordionContext.Provider value={contextValue}>
+              {expandOnPrint && <style>{PRINT_STYLES}</style>}
+              <Comp
+                ref={elementRef}
+                id={accordionId}
+                className={cn(mergedClasses.root, className) || undefined}
+                data-orientation={orientation}
+                data-state={hasExpanded ? "has-expanded" : "all-closed"}
+                data-type={type}
+                data-size={size}
+                data-variant={variant}
+                data-accordion-expand-print={expandOnPrint || undefined}
+                dir={dir}
+                aria-label={ariaLabel}
+                aria-busy={ariaBusy}
+                onKeyDown={onKeyDown ? handleKeyDown : undefined}
+                {...rest}
+              >
+                {children}
+                {announceExpanded && (
+                  <div
+                    ref={announcerRef}
+                    role="status"
+                    aria-live={ariaLive ?? "polite"}
+                    aria-atomic="true"
+                    className="sr-only"
+                    style={{
+                      position: "absolute",
+                      width: 1,
+                      height: 1,
+                      padding: 0,
+                      margin: -1,
+                      overflow: "hidden",
+                      clip: "rect(0, 0, 0, 0)",
+                      whiteSpace: "nowrap",
+                      border: 0,
+                    }}
+                  />
+                )}
+              </Comp>
+            </AccordionContext.Provider>
+          </AccordionConfigContext.Provider>
+        </AccordionDispatchContext.Provider>
+      </AccordionExpandedContext.Provider>
+    );
 });
 
 Accordion.displayName = "Accordion";

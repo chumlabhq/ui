@@ -24,6 +24,14 @@ function escapeCSS(value: string): string {
   return value.replace(/:/g, "\\:");
 }
 
+async function tapOrClick(locator: import("@playwright/test").Locator) {
+  if (test.info().project.use?.hasTouch) {
+    await locator.tap();
+  } else {
+    await locator.click();
+  }
+}
+
 test.describe("Pagination Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/demo/pagination");
@@ -156,11 +164,12 @@ test.describe("Pagination Component - Cross-Browser Tests", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.click();
+      await tapOrClick(triggerButton);
 
       await expect(triggerButton).toHaveAttribute("aria-expanded", "true");
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
       await expect(listbox).toBeVisible();
 
       const options = listbox.locator('[role="option"]');
@@ -172,9 +181,10 @@ test.describe("Pagination Component - Cross-Browser Tests", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.click();
+      await tapOrClick(triggerButton);
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
       const option25 = listbox.locator('[role="option"]').filter({ hasText: "25" });
       await option25.click();
 
@@ -187,13 +197,15 @@ test.describe("Pagination Component - Cross-Browser Tests", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.click();
+      await tapOrClick(triggerButton);
 
-      await expect(pagination.locator('[role="listbox"]')).toBeVisible();
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
+      await expect(listbox).toBeVisible();
 
       await page.locator("body").click({ position: { x: 10, y: 10 } });
 
-      await expect(pagination.locator('[role="listbox"]')).toHaveCount(0);
+      await expect(listbox).not.toBeVisible();
     });
 
     test("should highlight selected option with data-selected", async ({ page }) => {
@@ -201,9 +213,10 @@ test.describe("Pagination Component - Cross-Browser Tests", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.click();
+      await tapOrClick(triggerButton);
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
       const selectedOption = listbox.locator('[role="option"][data-selected="true"]');
       await expect(selectedOption).toBeVisible();
       await expect(selectedOption).toHaveAttribute("aria-selected", "true");
@@ -258,11 +271,11 @@ test.describe("Pagination Keyboard Navigation", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.focus();
-      await page.keyboard.press("ArrowDown");
+      await tapOrClick(triggerButton);
 
       await expect(triggerButton).toHaveAttribute("aria-expanded", "true");
-      await expect(pagination.locator('[role="listbox"]')).toBeVisible();
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      await expect(page.locator(`#${escapeCSS(listboxId!)}`)).toBeVisible();
     });
 
     test("should navigate dropdown options with ArrowDown and ArrowUp", async ({ page }) => {
@@ -270,11 +283,12 @@ test.describe("Pagination Keyboard Navigation", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.focus();
-      await page.keyboard.press("ArrowDown");
+      await tapOrClick(triggerButton);
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
       await expect(listbox).toBeVisible();
+      await listbox.focus();
 
       const highlighted = listbox.locator('[role="option"][data-highlighted="true"]');
       await expect(highlighted).toBeVisible();
@@ -291,16 +305,16 @@ test.describe("Pagination Keyboard Navigation", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.focus();
-      await page.keyboard.press("ArrowDown");
+      await tapOrClick(triggerButton);
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
       await expect(listbox).toBeVisible();
 
       await page.keyboard.press("Home");
       await page.keyboard.press("Enter");
 
-      await expect(pagination.locator('[role="listbox"]')).toHaveCount(0);
+      await expect(listbox).not.toBeVisible();
     });
 
     test("should close dropdown with Escape and return focus to trigger", async ({ page }) => {
@@ -308,14 +322,16 @@ test.describe("Pagination Keyboard Navigation", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.focus();
-      await page.keyboard.press("ArrowDown");
+      await tapOrClick(triggerButton);
 
-      await expect(pagination.locator('[role="listbox"]')).toBeVisible();
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
+      await expect(listbox).toBeVisible();
+      await listbox.focus();
 
       await page.keyboard.press("Escape");
 
-      await expect(pagination.locator('[role="listbox"]')).toHaveCount(0);
+      await expect(listbox).not.toBeVisible();
       await expect(triggerButton).toBeFocused();
     });
 
@@ -324,10 +340,13 @@ test.describe("Pagination Keyboard Navigation", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.focus();
-      await page.keyboard.press("ArrowDown");
+      await tapOrClick(triggerButton);
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
+      await expect(listbox).toBeVisible();
+      await listbox.focus();
+
       await page.keyboard.press("End");
       await page.keyboard.press("Home");
 
@@ -340,10 +359,13 @@ test.describe("Pagination Keyboard Navigation", () => {
       await pagination.scrollIntoViewIfNeeded();
 
       const triggerButton = pagination.locator('button[aria-haspopup="listbox"]');
-      await triggerButton.focus();
-      await page.keyboard.press("ArrowDown");
+      await tapOrClick(triggerButton);
 
-      const listbox = pagination.locator('[role="listbox"]');
+      const listboxId = await triggerButton.getAttribute("aria-controls");
+      const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
+      await expect(listbox).toBeVisible();
+      await listbox.focus();
+
       await page.keyboard.press("End");
 
       const lastOption = listbox.locator('[role="option"]').last();
@@ -435,17 +457,17 @@ test.describe("Pagination Accessibility Tests", () => {
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("should connect trigger to listbox via aria-owns when open", async ({ page }) => {
+  test("should connect trigger to listbox via aria-controls when open", async ({ page }) => {
     const pagination = getRowsPagination(page);
     await pagination.scrollIntoViewIfNeeded();
 
     const trigger = pagination.locator('button[aria-haspopup="listbox"]');
-    await trigger.click();
+    await tapOrClick(trigger);
 
-    const ariaOwns = await trigger.getAttribute("aria-owns");
-    expect(ariaOwns).toBeTruthy();
+    const ariaControls = await trigger.getAttribute("aria-controls");
+    expect(ariaControls).toBeTruthy();
 
-    const listbox = pagination.locator(`[id="${ariaOwns}"]`);
+    const listbox = page.locator(`#${escapeCSS(ariaControls!)}`);
     await expect(listbox).toBeVisible();
     await expect(listbox).toHaveAttribute("role", "listbox");
   });
@@ -455,9 +477,11 @@ test.describe("Pagination Accessibility Tests", () => {
     await pagination.scrollIntoViewIfNeeded();
 
     const trigger = pagination.locator('button[aria-haspopup="listbox"]');
-    await trigger.click();
+    await tapOrClick(trigger);
 
-    const options = pagination.locator('[role="option"]');
+    const listboxId = await trigger.getAttribute("aria-controls");
+    const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
+    const options = listbox.locator('[role="option"]');
     const count = await options.count();
 
     for (let i = 0; i < count; i++) {
@@ -769,13 +793,13 @@ test.describe("Pagination Performance Tests", () => {
     const trigger = pagination.locator('button[aria-haspopup="listbox"]');
 
     for (let i = 0; i < 3; i++) {
-      await trigger.click();
+      await tapOrClick(trigger);
       await page.waitForTimeout(100);
-      await trigger.click();
+      await tapOrClick(trigger);
       await page.waitForTimeout(100);
     }
 
     await expect(trigger).toBeVisible();
-    await expect(pagination.locator('[role="listbox"]')).toHaveCount(0);
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 });

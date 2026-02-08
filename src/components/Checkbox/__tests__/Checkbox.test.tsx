@@ -35,15 +35,15 @@ describe("Checkbox", () => {
       expect(screen.getByText("*")).toBeInTheDocument();
     });
 
-    it("applies custom containerClassName to container div", () => {
-      render(<Checkbox containerClassName="custom-class" />);
+    it("applies classes.root to container div", () => {
+      render(<Checkbox classes={{ root: "custom-class" }} />);
 
       const container = screen.getByRole("checkbox").closest("label")?.parentElement;
       expect(container).toHaveClass("custom-class");
     });
 
-    it("applies containerClassName to container", () => {
-      render(<Checkbox containerClassName="custom-container" />);
+    it("applies classes.root to container", () => {
+      render(<Checkbox classes={{ root: "custom-container" }} />);
 
       const container = document.querySelector(".custom-container");
       expect(container).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe("Checkbox", () => {
     });
 
     it("sets data-indeterminate attribute when indeterminate", () => {
-      render(<Checkbox indeterminate containerClassName="container" />);
+      render(<Checkbox indeterminate classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).toHaveAttribute("data-indeterminate", "true");
@@ -132,7 +132,7 @@ describe("Checkbox", () => {
     });
 
     it("sets data-disabled attribute when disabled", () => {
-      render(<Checkbox disabled containerClassName="container" />);
+      render(<Checkbox disabled classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).toHaveAttribute("data-disabled", "true");
@@ -166,14 +166,14 @@ describe("Checkbox", () => {
     });
 
     it("sets data-error attribute when error=true", () => {
-      render(<Checkbox error containerClassName="container" />);
+      render(<Checkbox error classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).toHaveAttribute("data-error", "true");
     });
 
-    it("applies errorClassName to error message", () => {
-      render(<Checkbox error errorMessage="Error" errorClassName="custom-error" />);
+    it("applies classes.error to error message", () => {
+      render(<Checkbox error errorMessage="Error" classes={{ error: "custom-error" }} />);
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
@@ -252,35 +252,35 @@ describe("Checkbox", () => {
 
   describe("Size and Shape", () => {
     it("sets data-size attribute with predefined size", () => {
-      render(<Checkbox size="lg" containerClassName="container" />);
+      render(<Checkbox size="lg" classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).toHaveAttribute("data-size", "lg");
     });
 
     it("does not set data-size for numeric size", () => {
-      render(<Checkbox size={28} containerClassName="container" />);
+      render(<Checkbox size={28} classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).not.toHaveAttribute("data-size");
     });
 
     it("sets data-shape attribute", () => {
-      render(<Checkbox shape="circle" containerClassName="container" />);
+      render(<Checkbox shape="circle" classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).toHaveAttribute("data-shape", "circle");
     });
 
-    it("applies sizeClassName when provided", () => {
-      render(<Checkbox sizeClassName="custom-size" checkboxClassName="checkbox" />);
+    it("applies classes.size when provided", () => {
+      render(<Checkbox classes={{ size: "custom-size", checkbox: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveClass("custom-size");
     });
 
-    it("applies shapeClassName when provided", () => {
-      render(<Checkbox shapeClassName="custom-shape" checkboxClassName="checkbox" />);
+    it("applies classes.shape when provided", () => {
+      render(<Checkbox classes={{ shape: "custom-shape", checkbox: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveClass("custom-shape");
@@ -439,13 +439,12 @@ describe("Checkbox", () => {
   });
 
   describe("State ClassNames", () => {
-    it("applies checkedClassName when checked", () => {
+    it("applies classes.checked when checked", () => {
       render(
         <Checkbox
           checked
           onCheckedChange={() => {}}
-          checkboxClassName="checkbox"
-          checkedClassName="is-checked"
+          classes={{ checkbox: "checkbox", checked: "is-checked" }}
         />
       );
 
@@ -453,12 +452,11 @@ describe("Checkbox", () => {
       expect(checkboxSpan).toHaveClass("is-checked");
     });
 
-    it("applies uncheckedClassName when unchecked", () => {
+    it("applies classes.unchecked when unchecked", () => {
       render(
         <Checkbox
           checked={false}
-          checkboxClassName="checkbox"
-          uncheckedClassName="is-unchecked"
+          classes={{ checkbox: "checkbox", unchecked: "is-unchecked" }}
         />
       );
 
@@ -466,12 +464,11 @@ describe("Checkbox", () => {
       expect(checkboxSpan).toHaveClass("is-unchecked");
     });
 
-    it("applies indeterminateClassName when indeterminate", () => {
+    it("applies classes.indeterminate when indeterminate", () => {
       render(
         <Checkbox
           indeterminate
-          checkboxClassName="checkbox"
-          indeterminateClassName="is-indeterminate"
+          classes={{ checkbox: "checkbox", indeterminate: "is-indeterminate" }}
         />
       );
 
@@ -525,18 +522,6 @@ describe("Checkbox", () => {
       expect(container).toBeInTheDocument();
       expect(screen.getByRole("checkbox")).not.toHaveClass("custom-root");
     });
-
-    it("className applies after containerClassName for override", () => {
-      render(
-        <Checkbox
-          containerClassName="bg-red-500"
-          className="bg-blue-500"
-        />
-      );
-
-      const container = document.querySelector(".bg-blue-500");
-      expect(container).toBeInTheDocument();
-    });
   });
 
   describe("Label Association", () => {
@@ -558,7 +543,7 @@ describe("Checkbox", () => {
         <Checkbox
           checked
           onCheckedChange={() => {}}
-          checkboxClassName="checkbox"
+          classes={{ checkbox: "checkbox" }}
         />
       );
 
@@ -567,14 +552,14 @@ describe("Checkbox", () => {
     });
 
     it("sets data-disabled on checkbox span when disabled", () => {
-      render(<Checkbox disabled checkboxClassName="checkbox" />);
+      render(<Checkbox disabled classes={{ checkbox: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveAttribute("data-disabled", "true");
     });
 
     it("sets data-error on checkbox span when error", () => {
-      render(<Checkbox error checkboxClassName="checkbox" />);
+      render(<Checkbox error classes={{ checkbox: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveAttribute("data-error", "true");

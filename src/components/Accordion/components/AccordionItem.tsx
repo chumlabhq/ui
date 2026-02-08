@@ -56,7 +56,7 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
       <AccordionItemContext.Provider value={itemContextValue}>
         <Comp
           ref={ref}
-          className={cn(config.classNames.item, className) || undefined}
+          className={cn(config.classes.item, className) || undefined}
           data-state={dataState}
           data-disabled={disabled || undefined}
           data-pending={isPending || undefined}

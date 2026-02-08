@@ -30,6 +30,7 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   showLabel?: string;
   dropdownAriaLabel?: string;
   dropdownDirection?: "up" | "down";
+  dropdownZIndex?: number;
   dropdownIcon?: ComponentType<IconProps> | ReactNode;
   prevIcon?: ComponentType<IconProps> | ReactNode;
   nextIcon?: ComponentType<IconProps> | ReactNode;
@@ -53,4 +54,9 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   prevIconClassName?: string;
   nextIconClassName?: string;
   pageInfoClassName?: string;
+  portalContainer?: HTMLElement | null;
+  prevAriaLabel?: string;
+  nextAriaLabel?: string;
+  paginationAriaLabel?: string;
+  pageAriaLabel?: (page: number) => string;
 }

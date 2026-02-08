@@ -5,7 +5,6 @@ import React, {
   useRef,
   useImperativeHandle,
   useMemo,
-  useState,
 } from "react";
 import type {
   OtpInputProps,
@@ -13,6 +12,7 @@ import type {
 } from "./utils/types";
 import { OtpInputLabel } from "./components/OtpInputLabel";
 import { cn } from "../../utils/cn";
+import { useControllableState } from "../../utils/useControllableState";
 
 export { OtpInputLabel };
 
@@ -22,7 +22,6 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       length = 6,
       value: controlledValue,
       defaultValue,
-      onChange,
       onValueChange,
       onComplete,
       label,
@@ -49,6 +48,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       renderInput,
       validate,
       inputAriaLabel,
+      groupAriaLabel = "One-time password input",
       id,
       name,
       className,
@@ -60,20 +60,13 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
 
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState(defaultValue ?? "");
-    const value = isControlled ? controlledValue : internalValue;
+    const [value, setValue] = useControllableState({
+      value: controlledValue,
+      defaultValue: defaultValue ?? "",
+      onChange: onValueChange,
+    });
 
-    const fireChange = useCallback(
-      (newValue: string) => {
-        if (!isControlled) {
-          setInternalValue(newValue);
-        }
-        onValueChange?.(newValue);
-        onChange?.(newValue);
-      },
-      [isControlled, onChange, onValueChange],
-    );
+    const fireChange = setValue;
 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const lastCompletedRef = useRef<string>("");
@@ -123,6 +116,26 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
 
     const handleChange = useCallback(
       (index: number, inputValue: string) => {
+        if (inputValue.length > 1) {
+          const newValueArray = [...valueArray];
+          let filledCount = 0;
+          for (const char of inputValue) {
+            if (filledCount >= length) break;
+            if (validate && !validate(char)) continue;
+            newValueArray[filledCount] = char;
+            filledCount++;
+          }
+          const newValue = newValueArray.join("");
+          fireChange(newValue);
+          if (filledCount > 0) {
+            focusInput(Math.min(filledCount - 1, length - 1));
+          }
+          if (newValueArray.every((c) => c !== "")) {
+            handleComplete(newValue);
+          }
+          return;
+        }
+
         const char = inputValue.slice(0, 1);
         if (char && validate && !validate(char)) return;
         const newValueArray = [...valueArray];
@@ -270,6 +283,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) =>
             handleKeyDown(index, e),
           onFocus: handleFocus,
+          onPaste: allowPaste ? undefined : (e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault(),
           disabled,
           maxLength: 1,
           className: cn(inputClassName, inputFocusClassName, individualClassName),
@@ -297,8 +311,8 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         disabled,
         inputClassName,
         inputFocusClassName,
-        autoFocusFirst,
         inputAriaLabel,
+        allowPaste,
       ],
     );
 
@@ -385,8 +399,8 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           className={wrapperClassName}
           onPaste={handlePaste}
           role="group"
-          aria-label="One-time password input"
-          aria-roledescription="One-time password input"
+          aria-label={groupAriaLabel}
+          aria-roledescription={groupAriaLabel}
         >
           {renderInputs()}
         </div>

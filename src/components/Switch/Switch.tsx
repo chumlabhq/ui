@@ -20,7 +20,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       disabled = false,
       error = false,
       errorMessage,
-      classNames,
+      classes,
       errorClassName,
       containerClassName,
       labelContainerClassName,
@@ -78,19 +78,19 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       };
     }, [transitionDuration, transitionTimingFunction]);
 
-    const rContainerClassName = containerClassName ?? classNames?.root;
-    const rLabelContainerClassName = labelContainerClassName ?? classNames?.labelContainer;
-    const rLabelClassName = labelClassName ?? classNames?.label;
-    const rDisabledLabelClassName = disabledLabelClassName ?? classNames?.disabledLabel;
-    const rDescriptionClassName = descriptionClassName ?? classNames?.description;
-    const rTrackerClassName = trackerClassName ?? classNames?.tracker;
-    const rDisabledTrackerClassName = disabledTrackerClassName ?? classNames?.disabledTracker;
-    const rThumbClassName = thumbClassName ?? classNames?.thumb;
-    const rCheckedTrackerClassName = checkedTrackerClassName ?? classNames?.checkedTracker;
-    const rUncheckedTrackerClassName = uncheckedTrackerClassName ?? classNames?.uncheckedTracker;
-    const rCheckedThumbClassName = checkedThumbClassName ?? classNames?.checkedThumb;
-    const rUncheckedThumbClassName = uncheckedThumbClassName ?? classNames?.uncheckedThumb;
-    const rErrorClassName = errorClassName ?? classNames?.error;
+    const rContainerClassName = containerClassName ?? classes?.root;
+    const rLabelContainerClassName = labelContainerClassName ?? classes?.labelContainer;
+    const rLabelClassName = labelClassName ?? classes?.label;
+    const rDisabledLabelClassName = disabledLabelClassName ?? classes?.disabledLabel;
+    const rDescriptionClassName = descriptionClassName ?? classes?.description;
+    const rTrackerClassName = trackerClassName ?? classes?.tracker;
+    const rDisabledTrackerClassName = disabledTrackerClassName ?? classes?.disabledTracker;
+    const rThumbClassName = thumbClassName ?? classes?.thumb;
+    const rCheckedTrackerClassName = checkedTrackerClassName ?? classes?.checkedTracker;
+    const rUncheckedTrackerClassName = uncheckedTrackerClassName ?? classes?.uncheckedTracker;
+    const rCheckedThumbClassName = checkedThumbClassName ?? classes?.checkedThumb;
+    const rUncheckedThumbClassName = uncheckedThumbClassName ?? classes?.uncheckedThumb;
+    const rErrorClassName = errorClassName ?? classes?.error;
 
     const hasLabelContent =
       label || description || renderLabel || renderDescription;

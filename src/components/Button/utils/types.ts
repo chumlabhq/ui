@@ -32,6 +32,7 @@ export interface ButtonTooltipProps {
 
 interface ButtonSharedProps {
   children?: ReactNode;
+  disabled?: boolean;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
   loading?: boolean;

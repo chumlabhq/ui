@@ -20,6 +20,7 @@ import {
   wordWrapStyles,
   DEFAULT_CONTENT_CLASS,
   DEFAULT_BASE_ARROW_CLASS,
+  INTERACTIVE_QUERY,
 } from "./utils/constants";
 import {
   mergeTooltipRefs,
@@ -30,6 +31,14 @@ import {
 import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger";
 
 const isBrowser = typeof window !== "undefined";
+
+const INTERACTIVE_ELEMENT_TYPES = new Set([
+  "button",
+  "a",
+  "input",
+  "textarea",
+  "select",
+]);
 
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   (
@@ -90,12 +99,59 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const [isTruncated, setIsTruncated] = useState(false);
     const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
     const [isPositioned, setIsPositioned] = useState(false);
+
+    const childIsInteractiveElement = useMemo(() => {
+      if (asChild || truncate) return false;
+      if (isValidElement(children)) {
+        const type = children.type;
+        if (typeof type === "string" && INTERACTIVE_ELEMENT_TYPES.has(type)) {
+          return true;
+        }
+        const childProps = children.props as Record<string, unknown>;
+        if (
+          childProps.role === "button" ||
+          childProps.role === "link" ||
+          childProps.role === "tab" ||
+          childProps.role === "menuitem" ||
+          typeof childProps.href === "string"
+        ) {
+          return true;
+        }
+        if (
+          typeof childProps.tabIndex === "number" &&
+          childProps.tabIndex >= 0
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }, [children, asChild, truncate]);
+
     const triggerIsInteractive = useMemo(() => {
+      if (childIsInteractiveElement) return true;
       if (triggerNode && !asChild) {
         return hasInteractiveChild(triggerNode);
       }
       return false;
-    }, [triggerNode, asChild]);
+    }, [childIsInteractiveElement, triggerNode, asChild]);
+
+    useEffect(() => {
+      if (
+        process.env.NODE_ENV !== "production" &&
+        isOpen &&
+        tooltipRef.current
+      ) {
+        const interactiveEl =
+          tooltipRef.current.querySelector(INTERACTIVE_QUERY);
+        if (interactiveEl) {
+          console.warn(
+            "Tooltip: Interactive content detected inside tooltip. " +
+              'Per WAI-ARIA guidelines, tooltips (role="tooltip") should not ' +
+              "contain interactive elements. Consider using a popover instead.",
+          );
+        }
+      }
+    }, [isOpen]);
 
     const setOpen = useCallback(
       (value: boolean) => {
@@ -160,17 +216,28 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }
 
       let resizeObserver: ResizeObserver | undefined;
-      if (triggerNode && typeof ResizeObserver !== "undefined") {
+      if (typeof ResizeObserver !== "undefined") {
         resizeObserver = new ResizeObserver(handleScrollOrResize);
-        resizeObserver.observe(triggerNode);
+        if (triggerNode) {
+          resizeObserver.observe(triggerNode);
+        }
+        if (tooltipRef.current) {
+          resizeObserver.observe(tooltipRef.current);
+        }
       }
 
       return () => {
         window.removeEventListener("scroll", handleScrollOrResize, true);
         window.removeEventListener("resize", handleScrollOrResize);
         if (window.visualViewport) {
-          window.visualViewport.removeEventListener("resize", handleScrollOrResize);
-          window.visualViewport.removeEventListener("scroll", handleScrollOrResize);
+          window.visualViewport.removeEventListener(
+            "resize",
+            handleScrollOrResize,
+          );
+          window.visualViewport.removeEventListener(
+            "scroll",
+            handleScrollOrResize,
+          );
         }
         resizeObserver?.disconnect();
         if (scrollRafRef.current) cancelAnimationFrame(scrollRafRef.current);
@@ -214,6 +281,49 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }, hideDelayDuration);
     }, [setOpen, hideDelayDuration]);
 
+    // Touch support: long-press to show, tap elsewhere to dismiss
+    const touchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const handleTouchStart = useCallback(() => {
+      if (disabled) return;
+      touchTimeoutRef.current = setTimeout(() => {
+        setOpen(true);
+      }, 500);
+    }, [disabled, setOpen]);
+
+    const handleTouchEnd = useCallback(() => {
+      if (touchTimeoutRef.current) {
+        clearTimeout(touchTimeoutRef.current);
+        touchTimeoutRef.current = null;
+      }
+    }, []);
+
+    useEffect(() => {
+      if (!isOpen || !isBrowser) return;
+
+      const handleTouchOutside = (e: TouchEvent) => {
+        const target = e.target as Node;
+        if (
+          tooltipRef.current?.contains(target) ||
+          triggerNode?.contains(target)
+        )
+          return;
+        setOpen(false);
+      };
+
+      document.addEventListener("touchstart", handleTouchOutside, {
+        passive: true,
+      });
+      return () =>
+        document.removeEventListener("touchstart", handleTouchOutside);
+    }, [isOpen, setOpen, triggerNode]);
+
+    useEffect(() => {
+      return () => {
+        if (touchTimeoutRef.current) clearTimeout(touchTimeoutRef.current);
+      };
+    }, []);
+
     const handleTooltipMouseEnter = useCallback(() => {
       if (disableHoverableContent) return;
       if (hideTimeoutRef.current) {
@@ -249,10 +359,19 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
     const shouldShowTooltip = !disabled && (!truncate || isTruncated);
 
+    const truncateStyle: React.CSSProperties | undefined =
+      truncate && truncateWidth !== undefined
+        ? {
+            maxWidth:
+              typeof truncateWidth === "number" ? truncateWidth : truncateWidth,
+          }
+        : undefined;
+
     const triggerContent = truncate ? (
       <span
         ref={textRef}
-        className={cn("block truncate", truncateWidth, triggerClassName)}
+        className={cn("block truncate", triggerClassName)}
+        style={truncateStyle}
       >
         {children}
       </span>
@@ -287,28 +406,36 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         case "top":
           style.bottom = -svgHeight;
           style.left =
-            position.arrowLeft !== undefined ? position.arrowLeft - svgHeight : "50%";
+            position.arrowLeft !== undefined
+              ? position.arrowLeft - svgHeight
+              : "50%";
           if (position.arrowLeft === undefined)
             style.transform += " translateX(-50%)";
           break;
         case "bottom":
           style.top = -svgHeight;
           style.left =
-            position.arrowLeft !== undefined ? position.arrowLeft - svgHeight : "50%";
+            position.arrowLeft !== undefined
+              ? position.arrowLeft - svgHeight
+              : "50%";
           if (position.arrowLeft === undefined)
             style.transform += " translateX(-50%)";
           break;
         case "left":
           style.right = -svgHeight;
           style.top =
-            position.arrowTop !== undefined ? position.arrowTop - svgHeight : "50%";
+            position.arrowTop !== undefined
+              ? position.arrowTop - svgHeight
+              : "50%";
           if (position.arrowTop === undefined)
             style.transform += " translateY(-50%)";
           break;
         case "right":
           style.left = -svgHeight;
           style.top =
-            position.arrowTop !== undefined ? position.arrowTop - svgHeight : "50%";
+            position.arrowTop !== undefined
+              ? position.arrowTop - svgHeight
+              : "50%";
           if (position.arrowTop === undefined)
             style.transform += " translateY(-50%)";
           break;
@@ -335,7 +462,9 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           ...(arrowColor ? { fill: arrowColor } : {}),
         }}
       >
-        <path d={`M0 ${svgHeight}L${svgHeight} 0L${svgWidth} ${svgHeight}H0Z`} />
+        <path
+          d={`M0 ${svgHeight}L${svgHeight} 0L${svgWidth} ${svgHeight}H0Z`}
+        />
       </svg>
     ) : null;
 
@@ -353,6 +482,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           left: position.left,
           maxWidth: computedMaxWidth,
           ...wordWrapStyles[wordWrap],
+          visibility: isPositioned ? "visible" : "hidden",
           opacity: isPositioned ? 1 : 0,
           pointerEvents: isPositioned ? "auto" : "none",
           zIndex,
@@ -382,6 +512,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           isOpen={isOpen}
           tooltipId={tooltipId}
           triggerClassName={triggerClassName}
@@ -403,6 +535,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           tabIndex={triggerIsInteractive ? undefined : 0}
           style={{ display: triggerDisplay }}
           aria-describedby={isOpen ? tooltipId : undefined}
