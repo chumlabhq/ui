@@ -184,14 +184,14 @@ test.describe("Drawer Component - Cross-Browser Tests", () => {
 
       await page.keyboard.press("Escape");
 
-      await expect(
-        dialog.locator("..").first(),
-      ).toHaveAttribute("data-state", "closed");
+      const root = page
+        .locator('[data-drawer-panel][aria-label="Form drawer"]')
+        .locator("..")
+        .first();
+      await expect(root).toHaveAttribute("data-state", "closed");
 
       await page.getByRole("button", { name: "Open Form Drawer" }).click();
-      await expect(
-        dialog.locator("..").first(),
-      ).toHaveAttribute("data-state", "open");
+      await expect(root).toHaveAttribute("data-state", "open");
 
       await expect(input).toHaveValue("Test User");
     });

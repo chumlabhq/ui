@@ -1879,7 +1879,7 @@ const DrawerDemo = () => {
 
         <Section
           title="Close Behavior"
-          description="Control how the drawer can be dismissed — overlay click, Escape key, and scroll locking."
+          description="Control how the drawer can be dismissed and whether the background remains interactive."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -1900,26 +1900,18 @@ const DrawerDemo = () => {
           <CodeBlock
             isDarkMode={isDarkMode}
             code={`{/* Only closeable via close button */}
-              <Drawer
-                closeOnOverlayClick={false}
-                closeOnEscape={false}
-                ...
-              >
-                <DrawerCloseButton />
-              </Drawer>
+<Drawer
+  closeOnOverlayClick={false}
+  closeOnEscape={false}
+  ...
+>
+  <DrawerCloseButton />
+</Drawer>
 
-              {/* Background remains scrollable */}
-              <Drawer
-                lockScroll={false}
-                closeOnOverlayClick={false}
-                classes={{
-                  root: "pointer-events-none",
-                  panel: "pointer-events-auto ...",
-                }}
-                ...
-              >
-                ...
-              </Drawer>`}
+{/* Background remains scrollable and interactive */}
+<Drawer lockScroll={false} ...>
+  ...
+</Drawer>`}
           />
 
           <Drawer
@@ -1986,13 +1978,8 @@ const DrawerDemo = () => {
             direction="right"
             size="360px"
             lockScroll={false}
-            closeOnOverlayClick={false}
             aria-label="No scroll lock drawer"
-            classes={{
-              root: "pointer-events-none",
-              overlay: "pointer-events-none",
-              panel: `flex flex-col ${panelBg} pointer-events-auto`,
-            }}
+            classes={{ panel: `flex flex-col ${panelBg}` }}
           >
             <DrawerHeader
               className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
@@ -2007,7 +1994,7 @@ const DrawerDemo = () => {
               </DrawerCloseButton>
             </DrawerHeader>
             <DrawerBody className="flex-1 overflow-y-auto p-5">
-              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+              <div className={`p-4 ${cardBg} rounded-xl`}>
                 <p className={`${textSecondary} text-sm`}>
                   <code
                     className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
@@ -2016,24 +2003,9 @@ const DrawerDemo = () => {
                   </code>
                 </p>
                 <p className={`${textMuted} text-sm mt-2`}>
-                  The background page remains scrollable while this drawer is
-                  open. Scroll the page behind the overlay to see it in action.
-                </p>
-                <p className={`${textMuted} text-sm`}>
-                  The overlay and root use{" "}
-                  <code
-                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
-                  >
-                    pointer-events-none
-                  </code>{" "}
-                  via classes so scroll events pass through, while the panel
-                  keeps{" "}
-                  <code
-                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
-                  >
-                    pointer-events-auto
-                  </code>
-                  .
+                  The background page remains scrollable and interactive while
+                  this drawer is open. Try scrolling the page behind the
+                  overlay.
                 </p>
               </div>
             </DrawerBody>
@@ -2259,7 +2231,8 @@ const DrawerDemo = () => {
                   <td className={`py-3 pr-4 ${textSecondary}`}>boolean</td>
                   <td className={`py-3 pr-4 ${textMuted}`}>true</td>
                   <td className={`py-3 ${textSecondary}`}>
-                    Whether to lock background scroll when open
+                    Lock background scroll; when false the overlay passes
+                    pointer events through so the page stays interactive
                   </td>
                 </tr>
                 <tr>

@@ -473,7 +473,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                 modal && "fixed inset-0",
                 modal &&
                   (visualOpen
-                    ? "pointer-events-auto"
+                    ? lockScroll
+                      ? "pointer-events-auto"
+                      : "pointer-events-none"
                     : "pointer-events-none"),
                 mergedClasses.root,
               ) || undefined
@@ -484,7 +486,12 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           >
             {modal && (
               <div
-                className={cn(mergedClasses.overlay) || undefined}
+                className={
+                  cn(
+                    mergedClasses.overlay,
+                    !lockScroll && "pointer-events-none",
+                  ) || undefined
+                }
                 style={{
                   backgroundColor: overlayColor,
                   opacity: visualOpen ? overlayOpacity : 0,
@@ -525,6 +532,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               className={
                 cn(
                   mergedClasses.panel,
+                  modal && !lockScroll && "pointer-events-auto",
                   !modal &&
                     (visualOpen
                       ? "pointer-events-auto"
