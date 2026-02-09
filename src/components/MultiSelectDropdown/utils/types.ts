@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, MutableRefObject, ReactNode } from "react";
 
 export interface MultiSelectOption {
   value: string;
@@ -35,28 +35,47 @@ export interface MultiSelectDropdownClasses {
 
 export interface MultiSelectDropdownProps {
   options?: MultiSelectOption[];
+  /** Selected values. Values not present in options are not shown or submitted; prune when options change. */
   value: string[];
   onValueChange: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
-  placeholder?: string;
+  /** Placeholder when nothing selected. Simple text or inline content recommended. */
+  placeholder?: ReactNode;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
   required?: boolean;
   noResultsText?: string;
+  /** Empty state content. When set, overrides noResultsText. */
+  noResultsContent?: ReactNode;
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
   onLoadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
+  onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
   maxDisplayedChips?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
   classes?: MultiSelectDropdownClasses;
   className?: string;
+  style?: CSSProperties;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  keepMounted?: boolean;
+  portalContainer?: HTMLElement | null;
+  dropdownPosition?: "top" | "bottom";
+  dropdownZIndex?: number;
+  dropdownGap?: number;
+  "aria-label"?: string;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+  ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
 }
 
 export interface UseMultiSelectDropdownProps {
@@ -66,6 +85,10 @@ export interface UseMultiSelectDropdownProps {
   onValueChange: (values: string[], options: MultiSelectOption[]) => void;
   onLoadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
+  onLoadError?: (error: unknown) => void;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export interface UseMultiSelectDropdownReturn {
@@ -74,6 +97,7 @@ export interface UseMultiSelectDropdownReturn {
   isLoadingOptions: boolean;
   displayOptions: MultiSelectOption[];
   selectedOptions: MultiSelectOption[];
+  shouldRestoreFocusRef: MutableRefObject<boolean>;
   setFocusedIndex: (index: number) => void;
   handleToggle: () => void;
   handleClose: () => void;
