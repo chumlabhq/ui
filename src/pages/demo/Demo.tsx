@@ -103,7 +103,7 @@ const Demo = () => {
         }`}
       >
         <aside
-          className={`w-64 shrink-0 border-r p-6 overflow-y-auto
+          className={`w-[330px] shrink-0 border-r p-6 overflow-y-auto
           [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
           ${
             isDarkMode
