@@ -16,7 +16,7 @@ import {
 } from "./utils";
 import { CountryFlag } from "../CountryFlag";
 import { SearchableDropdown } from "../SearchableDropdown";
-import type { SearchableDropdownOption } from "../SearchableDropdown";
+import type { SearchableDropdownOptionType } from "../SearchableDropdown";
 
 const InternationalPhoneInput = forwardRef<
   HTMLInputElement,
@@ -48,7 +48,6 @@ const InternationalPhoneInput = forwardRef<
       inputWrapperClassName = "",
       countrySelectClassName = "",
       countrySelectTriggerClassName = "",
-      countrySelectTriggerFocusClassName = "",
       countrySelectDropdownClassName = "",
       countrySelectSearchInputClassName = "",
       countrySelectOptionClassName = "",
@@ -106,7 +105,7 @@ const InternationalPhoneInput = forwardRef<
       [selectedCountryCode, sortedCountries],
     );
 
-    const dropdownOptions: SearchableDropdownOption[] = useMemo(
+    const dropdownOptions: SearchableDropdownOptionType[] = useMemo(
       () =>
         sortedCountries.map((country) => ({
           value: country.value,
@@ -149,7 +148,8 @@ const InternationalPhoneInput = forwardRef<
     );
 
     const handleCountrySelect = useCallback(
-      (countryValue: string) => {
+      (countryValue: string | null) => {
+        if (!countryValue) return;
         const country = sortedCountries.find((c) => c.value === countryValue);
         if (!country) return;
 
@@ -293,7 +293,6 @@ const InternationalPhoneInput = forwardRef<
             classes={{
               root: countrySelectClassName,
               trigger: countrySelectTriggerClassName,
-              triggerFocused: countrySelectTriggerFocusClassName,
               content: countrySelectDropdownClassName,
               searchInput: countrySelectSearchInputClassName,
               option: countrySelectOptionClassName,

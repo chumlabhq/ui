@@ -231,8 +231,7 @@ const BreadcrumbDemo = () => {
           </h3>
           <CodeBlock
             isDarkMode={isDarkMode}
-            code={`import { Breadcrumb } from "@kern-ui/breadcrumb";
-import type { BreadcrumbItem } from "@kern-ui/breadcrumb";`}
+            code={`import { Breadcrumb } from "@kern-ui/breadcrumb";`}
           />
         </div>
       </header>

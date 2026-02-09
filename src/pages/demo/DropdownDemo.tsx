@@ -305,8 +305,7 @@ const DropdownDemo = () => {
           </h3>
           <CodeBlock
             isDarkMode={isDarkMode}
-            code={`import { Dropdown } from "@kern-ui/dropdown";
-import type { DropdownOption, DropdownClasses } from "@kern-ui/dropdown";`}
+            code={`import { Dropdown } from "@kern-ui/dropdown";`}
           />
         </div>
       </header>

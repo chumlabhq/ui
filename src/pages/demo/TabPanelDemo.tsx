@@ -316,8 +316,7 @@ const TabPanelDemo = () => {
           </h3>
           <CodeBlock
             isDarkMode={isDarkMode}
-            code={`import { TabPanel } from "@kern-ui/tab-panel";
-import type { Tab } from "@kern-ui/tab-panel";`}
+            code={`import { TabPanel } from "@kern-ui/tab-panel";`}
           />
         </div>
       </header>

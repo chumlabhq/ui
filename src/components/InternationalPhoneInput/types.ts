@@ -53,7 +53,6 @@ export interface InternationalPhoneInputProps {
   inputWrapperClassName?: string;
   countrySelectClassName?: string;
   countrySelectTriggerClassName?: string;
-  countrySelectTriggerFocusClassName?: string;
   countrySelectDropdownClassName?: string;
   countrySelectSearchInputClassName?: string;
   countrySelectOptionClassName?: string;

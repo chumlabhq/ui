@@ -1,8 +1,11 @@
 export { default as SearchableDropdown } from "./SearchableDropdown";
+export { SearchableDropdownOption } from "./components/SearchableDropdownOption";
+export { default as SearchableDropdownShimmer } from "./components/SearchableDropdownShimmer";
 export type {
-  SearchableDropdownOption,
+  SearchableDropdownOption as SearchableDropdownOptionType,
   SearchableDropdownProps,
   SearchableDropdownClasses,
-} from "./types";
-export { useDropdown } from "./useDropdown";
-export { ChevronDownIcon, CheckIcon, SearchIcon } from "./icons";
+  SearchableDropdownTriggerRenderProps,
+} from "./utils/types";
+export { useDropdown } from "./utils/useDropdown";
+export { ChevronDownIcon, CheckIcon, SearchIcon } from "./utils/icons";

@@ -147,8 +147,7 @@ const ResizablePanelDemo = () => {
           </h3>
           <CodeBlock
             isDarkMode={isDarkMode}
-            code={`import { ResizablePanel } from "@kern-ui/resizable-panel";
-import type { ResizablePanelProps, ResizablePanelClasses } from "@kern-ui/resizable-panel";`}
+            code={`import { ResizablePanel } from "@kern-ui/resizable-panel";`}
           />
         </div>
       </header>

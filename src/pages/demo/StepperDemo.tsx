@@ -271,8 +271,7 @@ const StepperDemo = () => {
           </h3>
           <CodeBlock
             isDarkMode={isDarkMode}
-            code={`import { Stepper } from "@kern-ui/stepper";
-import type { Step, StepperClasses, StepTooltipConfig, StepRenderProps } from "@kern-ui/stepper";`}
+            code={`import { Stepper } from "@kern-ui/stepper";`}
           />
         </div>
       </header>

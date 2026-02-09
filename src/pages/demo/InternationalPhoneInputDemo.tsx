@@ -36,7 +36,6 @@ const errorTextStyle = "text-sm text-red-500";
 
 const countryTriggerStyle =
   "flex items-center justify-between gap-2 h-10 px-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 outline-none min-w-[130px]";
-const countryTriggerFocusStyle = "ring-2 ring-blue-500 border-blue-500";
 const countryDropdownStyle =
   "absolute z-50 top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden";
 const countrySearchInputStyle =
@@ -85,7 +84,6 @@ const InternationalPhoneInputDemo = () => {
             inputClassName={inputStyle}
             inputFocusClassName={inputFocusStyle}
             countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
             countrySelectDropdownClassName={countryDropdownStyle}
             countrySelectSearchInputClassName={countrySearchInputStyle}
             countrySelectOptionListClassName={countryOptionListStyle}
@@ -129,7 +127,6 @@ const InternationalPhoneInputDemo = () => {
             inputClassName={inputStyle}
             inputFocusClassName={inputFocusStyle}
             countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
             countrySelectDropdownClassName={countryDropdownStyle}
             countrySelectSearchInputClassName={countrySearchInputStyle}
             countrySelectOptionListClassName={countryOptionListStyle}
@@ -158,7 +155,6 @@ const InternationalPhoneInputDemo = () => {
             inputClassName={errorInputStyle}
             errorClassName={errorTextStyle}
             countrySelectTriggerClassName={`${countryTriggerStyle} border-red-500`}
-            countrySelectTriggerFocusClassName="ring-2 ring-red-500 border-red-500"
             countrySelectDropdownClassName={countryDropdownStyle}
             countrySelectSearchInputClassName={countrySearchInputStyle}
             countrySelectOptionListClassName={countryOptionListStyle}
@@ -186,7 +182,6 @@ const InternationalPhoneInputDemo = () => {
             inputClassName={inputStyle}
             inputFocusClassName={inputFocusStyle}
             countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
             countrySelectDropdownClassName={countryDropdownStyle}
             countrySelectSearchInputClassName={countrySearchInputStyle}
             countrySelectOptionListClassName={countryOptionListStyle}
@@ -228,7 +223,6 @@ const InternationalPhoneInputDemo = () => {
             inputClassName={inputStyle}
             inputFocusClassName={inputFocusStyle}
             countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
             countrySelectDropdownClassName={countryDropdownStyle}
             countrySelectSearchInputClassName={countrySearchInputStyle}
             countrySelectOptionListClassName={countryOptionListStyle}
@@ -311,7 +305,6 @@ const InternationalPhoneInputDemo = () => {
             inputClassName={inputStyle}
             inputFocusClassName={inputFocusStyle}
             countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
             countrySelectDropdownClassName={countryDropdownStyle}
             countrySelectSearchInputClassName={countrySearchInputStyle}
             countrySelectOptionListClassName={countryOptionListStyle}
@@ -336,7 +329,6 @@ const InternationalPhoneInputDemo = () => {
           inputClassName={inputStyle}
           inputFocusClassName={inputFocusStyle}
           countrySelectTriggerClassName={countryTriggerStyle}
-          countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
           countrySelectDropdownClassName={countryDropdownStyle}
           countrySelectSearchInputClassName={countrySearchInputStyle}
           countrySelectOptionListClassName={countryOptionListStyle}
@@ -362,7 +354,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName={inputStyle}
               inputFocusClassName={inputFocusStyle}
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -393,7 +384,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName={inputStyle}
               inputFocusClassName={inputFocusStyle}
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -416,7 +406,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName={inputStyle}
               inputFocusClassName={inputFocusStyle}
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -439,7 +428,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName={inputStyle}
               inputFocusClassName={inputFocusStyle}
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName={countryTriggerFocusStyle}
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -473,7 +461,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName="flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none"
               inputFocusClassName="ring-2 ring-purple-500 border-purple-500"
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName="ring-2 ring-purple-500 border-purple-500"
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -496,7 +483,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName="flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none"
               inputFocusClassName="ring-2 ring-green-500 border-green-500"
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName="ring-2 ring-green-500 border-green-500"
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -519,7 +505,6 @@ const InternationalPhoneInputDemo = () => {
               inputClassName="flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none"
               inputFocusClassName="ring-2 ring-orange-500 border-orange-500"
               countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectTriggerFocusClassName="ring-2 ring-orange-500 border-orange-500"
               countrySelectDropdownClassName={countryDropdownStyle}
               countrySelectSearchInputClassName={countrySearchInputStyle}
               countrySelectOptionListClassName={countryOptionListStyle}
@@ -814,7 +799,6 @@ const InternationalPhoneInputDemo = () => {
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectTriggerFocusClassName
                 </td>
                 <td className="py-2 pr-4 text-gray-600">string</td>
                 <td className="py-2 text-gray-600">

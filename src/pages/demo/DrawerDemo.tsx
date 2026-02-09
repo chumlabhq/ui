@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import {
   Drawer,
   DrawerHeader,
@@ -283,7 +283,21 @@ const DrawerDemo = () => {
   const [scrollTestOpen, setScrollTestOpen] = useState(false);
   const [transitionOpen, setTransitionOpen] = useState(false);
   const [transitionStatus, setTransitionStatus] = useState("");
+  const [basicOpen, setBasicOpen] = useState(false);
+  const [trapFocusOpen, setTrapFocusOpen] = useState(false);
+  const [restoreFocusOpen, setRestoreFocusOpen] = useState(false);
+  const [restoreFocusStatus, setRestoreFocusStatus] = useState("");
+  const [portalContainerOpen, setPortalContainerOpen] = useState(false);
+  const [swipeThresholdOpen, setSwipeThresholdOpen] = useState<string | null>(null);
+  const [defaultSnapOpen, setDefaultSnapOpen] = useState(false);
+  const [classNameStyleOpen, setClassNameStyleOpen] = useState(false);
+  const [ariaOpen, setAriaOpen] = useState(false);
+  const [dataAutofocusOpen, setDataAutofocusOpen] = useState(false);
   const keepMountedInputRef = useRef<HTMLInputElement>(null);
+  const [portalEl, setPortalEl] = useState<HTMLDivElement | null>(null);
+  const portalCallbackRef = useCallback((node: HTMLDivElement | null) => {
+    setPortalEl(node);
+  }, []);
 
   const cartTotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -307,12 +321,113 @@ const DrawerDemo = () => {
         isDarkMode={isDarkMode}
       />
 
+      <div className="mt-6">
+        <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+          Installation
+        </h3>
+        <CodeBlock
+          isDarkMode={isDarkMode}
+          code={`import {
+  Drawer,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  DrawerCloseButton,
+} from "@kern-ui/drawer";`}
+        />
+      </div>
+
       <div className="space-y-12">
         <h2
           className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
         >
           Examples
         </h2>
+
+        <Section
+          title="Basic Usage"
+          description="A minimal drawer with header, body, and footer. Click to open, close with the button or overlay."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setBasicOpen(true)}
+              className={`px-4 py-2.5 rounded-lg transition-colors font-medium ${isDarkMode ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            >
+              Open Drawer
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`const [isOpen, setIsOpen] = useState(false);
+
+<Button onClick={() => setIsOpen(true)}>Open Drawer</Button>
+
+<Drawer
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  direction="right"
+  size="360px"
+  aria-label="Basic drawer"
+>
+  <DrawerHeader className="flex items-center justify-between px-5 py-4 border-b">
+    <h2 className="text-lg font-semibold">Basic Drawer</h2>
+    <DrawerCloseButton className="p-2 rounded-full hover:bg-gray-100" />
+  </DrawerHeader>
+  <DrawerBody className="flex-1 overflow-y-auto p-5">
+    <p>Your content goes here.</p>
+  </DrawerBody>
+  <DrawerFooter className="px-5 py-4 border-t">
+    <Button onClick={() => setIsOpen(false)}>Close</Button>
+  </DrawerFooter>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={basicOpen}
+            onClose={() => setBasicOpen(false)}
+            direction="right"
+            size="360px"
+            aria-label="Basic drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Basic Drawer
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <p className={textSecondary}>
+                This is a basic drawer with a header, body, and footer.
+                Click the close button or the overlay to dismiss.
+              </p>
+            </DrawerBody>
+            <DrawerFooter
+              className={`flex items-center justify-end gap-3 px-5 py-4 border-t ${borderColor}`}
+            >
+              <Button
+                onClick={() => setBasicOpen(false)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode ? "text-gray-300 bg-gray-800 hover:bg-gray-700" : "text-gray-700 bg-gray-100 hover:bg-gray-200"}`}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => setBasicOpen(false)}
+                className="px-4 py-2 bg-gray-900 dark:bg-white dark:text-gray-900 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-medium"
+              >
+                Confirm
+              </Button>
+            </DrawerFooter>
+          </Drawer>
+        </Section>
 
         <Section
           title="Real-World Examples"
@@ -1014,7 +1129,7 @@ const DrawerDemo = () => {
               Dark Overlay
             </Button>
             <Button
-              onClick={() => setOverlayDemoOpen("blur")}
+              onClick={() => setOverlayDemoOpen("blue")}
               className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               Blue Tint
@@ -1083,7 +1198,7 @@ const DrawerDemo = () => {
           </Drawer>
 
           <Drawer
-            open={overlayDemoOpen === "blur"}
+            open={overlayDemoOpen === "blue"}
             onClose={() => setOverlayDemoOpen(null)}
             direction="right"
             size="360px"
@@ -2102,6 +2217,641 @@ const DrawerDemo = () => {
             </DrawerBody>
           </Drawer>
         </Section>
+
+        <Section
+          title="Trap Focus"
+          description="Control whether focus is trapped inside the drawer. Disable to allow Tab to reach elements behind the drawer."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setTrapFocusOpen(true)}
+              className="px-4 py-2.5 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
+            >
+              Open (trapFocus=false)
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  trapFocus={false}
+>
+  {/* Tab key can escape to elements behind the drawer */}
+  <DrawerBody>
+    <input placeholder="Focus can leave this drawer" />
+  </DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={trapFocusOpen}
+            onClose={() => setTrapFocusOpen(false)}
+            direction="right"
+            size="380px"
+            trapFocus={false}
+            aria-label="Trap focus disabled drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Trap Focus Disabled
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    trapFocus=&#123;false&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm`}>
+                  Press <kbd className={`px-2 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600" : "bg-white border border-gray-300"}`}>Tab</kbd> repeatedly — focus can escape to the page behind this drawer.
+                </p>
+                <input
+                  type="text"
+                  placeholder="Try tabbing out of this input..."
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 ${isDarkMode ? "bg-gray-800 border-gray-600 text-white placeholder-gray-500" : "bg-gray-50 border-gray-200 text-gray-900"}`}
+                />
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="Restore Focus"
+          description="Control whether focus returns to the trigger element after the drawer closes."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => {
+                setRestoreFocusStatus("");
+                setRestoreFocusOpen(true);
+              }}
+              className="px-4 py-2.5 bg-lime-600 text-white rounded-lg hover:bg-lime-700 transition-colors font-medium"
+            >
+              Open (restoreFocus=false)
+            </Button>
+            {restoreFocusStatus && (
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                <span className="w-2 h-2 rounded-full bg-lime-500" />
+                {restoreFocusStatus}
+              </span>
+            )}
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  restoreFocus={false}
+>
+  {/* After closing, focus does NOT return to the trigger button */}
+  <DrawerBody>Content here</DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={restoreFocusOpen}
+            onClose={() => {
+              setRestoreFocusOpen(false);
+              setRestoreFocusStatus("Focus was NOT restored to the trigger button");
+            }}
+            direction="right"
+            size="380px"
+            restoreFocus={false}
+            aria-label="Restore focus disabled drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Restore Focus Disabled
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code
+                    className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}
+                  >
+                    restoreFocus=&#123;false&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm`}>
+                  Close this drawer and notice that focus does not return to the "Open" button. Check the status badge outside.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="Portal Container"
+          description="Render the drawer into a custom container element instead of document.body."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setPortalContainerOpen(true)}
+              className="px-4 py-2.5 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-medium"
+            >
+              Open in Custom Container
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`const containerRef = useRef<HTMLDivElement>(null);
+
+<div ref={containerRef} className="relative h-64 overflow-hidden border rounded-xl">
+  {/* Drawer renders inside this container instead of document.body */}
+  <Drawer
+    open={isOpen}
+    onClose={() => setIsOpen(false)}
+    portalContainer={containerRef.current}
+  >
+    <DrawerBody>Rendered inside the container</DrawerBody>
+  </Drawer>
+</div>`}
+          />
+
+          <div
+            ref={portalCallbackRef}
+            className={`relative h-64 overflow-hidden border rounded-xl ${isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-gray-50"}`}
+          >
+            <div className={`flex items-center justify-center h-full ${textMuted}`}>
+              <p className="text-sm">Drawer portal renders inside this container</p>
+            </div>
+            <Drawer
+              open={portalContainerOpen}
+              onClose={() => setPortalContainerOpen(false)}
+              direction="right"
+              size="260px"
+              portalContainer={portalEl}
+              aria-label="Portal container drawer"
+              classes={{ panel: `flex flex-col ${panelBg}` }}
+            >
+              <DrawerHeader
+                className={`flex items-center justify-between px-4 py-3 border-b ${borderColor}`}
+              >
+                <h2 className={`text-base font-semibold ${textPrimary}`}>
+                  Custom Portal
+                </h2>
+                <DrawerCloseButton
+                  className={`p-1.5 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+                >
+                  <CloseIcon />
+                </DrawerCloseButton>
+              </DrawerHeader>
+              <DrawerBody className="flex-1 overflow-y-auto p-4">
+                <div className={`p-3 ${cardBg} rounded-xl`}>
+                  <p className={`${textSecondary} text-sm`}>
+                    This drawer is rendered inside the bordered container above, not <code className={`px-1 py-0.5 rounded text-xs ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>document.body</code>.
+                  </p>
+                </div>
+              </DrawerBody>
+            </Drawer>
+          </div>
+        </Section>
+
+        <Section
+          title="Swipe Threshold"
+          description="Control how far the user must swipe to dismiss. Lower values are easier to dismiss."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setSwipeThresholdOpen("easy")}
+              className="px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+            >
+              Easy Dismiss (0.2)
+            </Button>
+            <Button
+              onClick={() => setSwipeThresholdOpen("hard")}
+              className="px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+            >
+              Hard Dismiss (0.7)
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`{/* Easy to dismiss — 20% swipe triggers close */}
+<Drawer swipeable swipeThreshold={0.2} direction="bottom" ...>
+  ...
+</Drawer>
+
+{/* Hard to dismiss — 70% swipe required */}
+<Drawer swipeable swipeThreshold={0.7} direction="bottom" ...>
+  ...
+</Drawer>`}
+          />
+
+          <Drawer
+            open={swipeThresholdOpen === "easy"}
+            onClose={() => setSwipeThresholdOpen(null)}
+            direction="bottom"
+            size="50vh"
+            swipeable
+            swipeThreshold={0.2}
+            aria-label="Easy swipe threshold drawer"
+            classes={{ panel: `${panelBg} rounded-t-2xl` }}
+          >
+            <DrawerHeader className={`px-6 pt-3 pb-4 border-b ${borderColor}`}>
+              <div
+                className={`mx-auto w-12 h-1.5 ${isDarkMode ? "bg-gray-600" : "bg-gray-300"} rounded-full mb-4`}
+              />
+              <div className="flex items-center justify-between">
+                <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                  Easy Dismiss
+                </h2>
+                <DrawerCloseButton
+                  className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+                />
+              </div>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-6">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                    swipeThreshold=&#123;0.2&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  Only 20% swipe distance needed to dismiss. Try swiping down — it closes very easily.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+
+          <Drawer
+            open={swipeThresholdOpen === "hard"}
+            onClose={() => setSwipeThresholdOpen(null)}
+            direction="bottom"
+            size="50vh"
+            swipeable
+            swipeThreshold={0.7}
+            aria-label="Hard swipe threshold drawer"
+            classes={{ panel: `${panelBg} rounded-t-2xl` }}
+          >
+            <DrawerHeader className={`px-6 pt-3 pb-4 border-b ${borderColor}`}>
+              <div
+                className={`mx-auto w-12 h-1.5 ${isDarkMode ? "bg-gray-600" : "bg-gray-300"} rounded-full mb-4`}
+              />
+              <div className="flex items-center justify-between">
+                <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                  Hard Dismiss
+                </h2>
+                <DrawerCloseButton
+                  className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+                />
+              </div>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-6">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                    swipeThreshold=&#123;0.7&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  You need to swipe 70% of the drawer height to dismiss. Short swipes will snap back.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="Default Snap Point Index"
+          description="Start a snap-point drawer at a non-default snap position using defaultSnapPointIndex."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setDefaultSnapOpen(true)}
+              className="px-4 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium"
+            >
+              Open at 60% (index 1)
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  direction="bottom"
+  size="100dvh"
+  swipeable
+  snapPoints={[0.3, 0.6, 1]}
+  defaultSnapPointIndex={1} // starts at 60%
+>
+  <DrawerBody>Opens at 60% height</DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={defaultSnapOpen}
+            onClose={() => setDefaultSnapOpen(false)}
+            direction="bottom"
+            size="100dvh"
+            swipeable
+            snapPoints={[0.3, 0.6, 1]}
+            defaultSnapPointIndex={1}
+            aria-label="Default snap point drawer"
+            classes={{
+              panel: `flex flex-col overflow-hidden ${panelBg} rounded-t-2xl`,
+            }}
+          >
+            <DrawerHeader className={`shrink-0 px-6 pt-3 pb-4 border-b ${borderColor}`}>
+              <div
+                className={`mx-auto w-12 h-1.5 ${isDarkMode ? "bg-gray-600" : "bg-gray-300"} rounded-full mb-4`}
+              />
+              <div className="flex items-center justify-between">
+                <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                  Default Snap Index
+                </h2>
+                <DrawerCloseButton
+                  className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+                />
+              </div>
+              <p className={`text-sm ${textSecondary} mt-1`}>
+                This drawer started at snap index 1 (60%) instead of the default 0 (30%).
+              </p>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-6">
+              <div className={`p-4 ${cardBg} rounded-xl`}>
+                <p className={`${textSecondary} text-sm`}>
+                  <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                    defaultSnapPointIndex=&#123;1&#125;
+                  </code>
+                </p>
+                <p className={`${textMuted} text-sm mt-2`}>
+                  Useful when you want the drawer to open at a larger initial size. Swipe to change snap points.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="className & style Props"
+          description="Apply className to the panel element and style to the root wrapper for inline customization."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setClassNameStyleOpen(true)}
+              className={`px-4 py-2.5 rounded-lg transition-colors font-medium ${isDarkMode ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            >
+              Open Styled Drawer
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  className="rounded-l-2xl shadow-2xl"
+  style={{ "--drawer-accent": "#8b5cf6" } as React.CSSProperties}
+>
+  <DrawerBody>
+    Panel has className applied, root has inline style
+  </DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={classNameStyleOpen}
+            onClose={() => setClassNameStyleOpen(false)}
+            direction="right"
+            size="380px"
+            className={`rounded-l-2xl shadow-2xl ${panelBg}`}
+            aria-label="Styled drawer"
+            classes={{ panel: `flex flex-col` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                Custom className & style
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+                <p className={`${textSecondary} text-sm`}>
+                  The panel has{" "}
+                  <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                    className="rounded-l-2xl shadow-2xl"
+                  </code>{" "}
+                  applied directly.
+                </p>
+                <p className={`${textMuted} text-sm`}>
+                  Use <code className={`px-1 py-0.5 rounded text-xs ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>className</code> for panel styling and <code className={`px-1 py-0.5 rounded text-xs ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>style</code> for inline CSS on the root wrapper. For more granular control, use the <code className={`px-1 py-0.5 rounded text-xs ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>classes</code> prop.
+                </p>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="aria-labelledby & aria-describedby"
+          description="Provide accessible labelling by referencing elements inside the drawer."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setAriaOpen(true)}
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              Open Accessible Drawer
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  aria-labelledby="drawer-title"
+  aria-describedby="drawer-desc"
+>
+  <DrawerHeader>
+    <h2 id="drawer-title">Confirm Action</h2>
+  </DrawerHeader>
+  <DrawerBody>
+    <p id="drawer-desc">
+      Are you sure you want to proceed? This action cannot be undone.
+    </p>
+  </DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={ariaOpen}
+            onClose={() => setAriaOpen(false)}
+            direction="right"
+            size="380px"
+            aria-labelledby="aria-demo-title"
+            aria-describedby="aria-demo-desc"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 id="aria-demo-title" className={`text-lg font-semibold ${textPrimary}`}>
+                Confirm Action
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className={`p-4 ${cardBg} rounded-xl space-y-3`}>
+                <p id="aria-demo-desc" className={`${textSecondary} text-sm`}>
+                  Are you sure you want to proceed? This action cannot be undone.
+                  Screen readers will announce the title via{" "}
+                  <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                    aria-labelledby
+                  </code>{" "}
+                  and this description via{" "}
+                  <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                    aria-describedby
+                  </code>.
+                </p>
+              </div>
+            </DrawerBody>
+            <DrawerFooter className={`px-5 py-4 border-t ${borderColor}`}>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setAriaOpen(false)}
+                  className={`flex-1 py-2.5 rounded-lg font-medium transition-colors ${isDarkMode ? "text-gray-300 bg-gray-800 hover:bg-gray-700" : "text-gray-700 bg-gray-100 hover:bg-gray-200"}`}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => setAriaOpen(false)}
+                  className="flex-1 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Confirm
+                </Button>
+              </div>
+            </DrawerFooter>
+          </Drawer>
+        </Section>
+
+        <Section
+          title="data-autofocus Attribute"
+          description="Use data-autofocus on an element to receive focus when the drawer opens, as an alternative to the initialFocus ref."
+          isDarkMode={isDarkMode}
+        >
+          <DemoWrapper isDarkMode={isDarkMode}>
+            <Button
+              onClick={() => setDataAutofocusOpen(true)}
+              className="px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium"
+            >
+              Open with data-autofocus
+            </Button>
+          </DemoWrapper>
+
+          <CodeBlock
+            isDarkMode={isDarkMode}
+            code={`<Drawer open={isOpen} onClose={() => setIsOpen(false)}>
+  <DrawerBody>
+    <input placeholder="Not focused" />
+    {/* This element receives focus when the drawer opens */}
+    <input data-autofocus placeholder="Auto-focused on open" />
+  </DrawerBody>
+</Drawer>`}
+          />
+
+          <Drawer
+            open={dataAutofocusOpen}
+            onClose={() => setDataAutofocusOpen(false)}
+            direction="right"
+            size="400px"
+            aria-label="Auto-focus demo drawer"
+            classes={{ panel: `flex flex-col ${panelBg}` }}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${borderColor}`}
+            >
+              <h2 className={`text-lg font-semibold ${textPrimary}`}>
+                data-autofocus Demo
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 ${hoverBg} rounded-full transition-colors ${textSecondary}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
+            </DrawerHeader>
+            <DrawerBody className="flex-1 overflow-y-auto p-5">
+              <div className="space-y-4">
+                <div className={`p-4 ${cardBg} rounded-xl`}>
+                  <p className={`${textSecondary} text-sm`}>
+                    The second input below has the{" "}
+                    <code className={`px-1.5 py-0.5 rounded ${isDarkMode ? "bg-gray-700 text-gray-200" : "bg-gray-200 text-gray-800"}`}>
+                      data-autofocus
+                    </code>{" "}
+                    attribute and receives focus automatically when the drawer opens.
+                  </p>
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium ${textPrimary} mb-1.5`}>
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Not auto-focused"
+                    className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 ${isDarkMode ? "bg-gray-800 border-gray-600 text-white placeholder-gray-500" : "bg-gray-50 border-gray-200 text-gray-900"}`}
+                  />
+                </div>
+                <div>
+                  <label className={`block text-sm font-medium ${textPrimary} mb-1.5`}>
+                    Email (auto-focused)
+                  </label>
+                  <input
+                    data-autofocus
+                    type="email"
+                    placeholder="This input receives focus on open"
+                    className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 ${isDarkMode ? "bg-gray-800 border-gray-600 text-white placeholder-gray-500" : "bg-gray-50 border-gray-200 text-gray-900"}`}
+                  />
+                </div>
+              </div>
+            </DrawerBody>
+          </Drawer>
+        </Section>
       </div>
 
       <div className="space-y-6">
@@ -2451,6 +3201,240 @@ const context = useDrawerContext();
 // Scroll lock safety reset (for error boundary recovery)
 import { resetScrollLock } from "kern-ui/Drawer/utils/helpers";`}
           />
+        </div>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            DrawerHeader Props
+          </h3>
+          <div className="overflow-x-auto">
+            <table
+              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
+            >
+              <thead>
+                <tr
+                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
+                >
+                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
+                  <th className="text-left py-3 font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody
+                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
+              >
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">children</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Header content (title, close button, etc.)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>string</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    CSS classes for the header container
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">...props</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>
+                    HTMLAttributes&lt;HTMLDivElement&gt;
+                  </td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    All standard HTML div attributes are forwarded. The header auto-generates <code className={`px-1 py-0.5 rounded text-xs ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>aria-labelledby</code> via context.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            DrawerBody Props
+          </h3>
+          <div className="overflow-x-auto">
+            <table
+              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
+            >
+              <thead>
+                <tr
+                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
+                >
+                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
+                  <th className="text-left py-3 font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody
+                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
+              >
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">children</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Main scrollable content of the drawer
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>string</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    CSS classes for the body container
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">...props</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>
+                    HTMLAttributes&lt;HTMLDivElement&gt;
+                  </td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    All standard HTML div attributes are forwarded
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            DrawerFooter Props
+          </h3>
+          <div className="overflow-x-auto">
+            <table
+              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
+            >
+              <thead>
+                <tr
+                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
+                >
+                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
+                  <th className="text-left py-3 font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody
+                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
+              >
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">children</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Footer content (action buttons, totals, etc.)
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>string</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    CSS classes for the footer container
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">...props</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>
+                    HTMLAttributes&lt;HTMLDivElement&gt;
+                  </td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    All standard HTML div attributes are forwarded
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h3
+            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+          >
+            DrawerCloseButton Props
+          </h3>
+          <div className="overflow-x-auto">
+            <table
+              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
+            >
+              <thead>
+                <tr
+                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
+                >
+                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
+                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
+                  <th className="text-left py-3 font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody
+                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
+              >
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">children</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>ReactNode</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>Default × icon</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Custom icon or content. If omitted, renders a default × (close) SVG icon.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>string</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    CSS classes for the close button
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">onClick</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>
+                    MouseEventHandler
+                  </td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Optional additional click handler. The button automatically calls <code className={`px-1 py-0.5 rounded text-xs ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>onClose</code> from DrawerContext — no wiring needed.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">aria-label</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>string</td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>"Close drawer"</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    Accessible label for the close button
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4 font-mono text-blue-500">...props</td>
+                  <td className={`py-3 pr-4 ${textSecondary}`}>
+                    HTMLAttributes&lt;HTMLButtonElement&gt;
+                  </td>
+                  <td className={`py-3 pr-4 ${textMuted}`}>—</td>
+                  <td className={`py-3 ${textSecondary}`}>
+                    All standard HTML button attributes are forwarded
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
