@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect, useId, forwardRef, memo } from "react";
-import type { SearchableDropdownOption, SearchableDropdownProps } from "./types";
+import type { SearchableDropdownOption, SearchableDropdownProps, SearchableDropdownClasses } from "./types";
 import { useDropdown } from "./useDropdown";
 import { ChevronDownIcon, CheckIcon, SearchIcon } from "./icons";
+import { joinClasses } from "./utils";
 
 const DropdownOption = memo(function DropdownOption({
   option,
@@ -9,10 +10,7 @@ const DropdownOption = memo(function DropdownOption({
   isFocused,
   dropdownId,
   index,
-  optionClassName,
-  optionSelectedClassName,
-  optionFocusedClassName,
-  selectedIndicatorClassName,
+  classes,
   showSelectedIcon,
   selectedIcon,
   onSelect,
@@ -23,20 +21,19 @@ const DropdownOption = memo(function DropdownOption({
   isFocused: boolean;
   dropdownId: string;
   index: number;
-  optionClassName: string;
-  optionSelectedClassName: string;
-  optionFocusedClassName: string;
-  selectedIndicatorClassName: string;
+  classes?: SearchableDropdownClasses;
   showSelectedIcon: boolean;
   selectedIcon?: React.ReactNode;
   onSelect: (option: SearchableDropdownOption) => void;
   onHover: (index: number) => void;
 }) {
-  const combinedClassName = [
-    optionClassName,
-    isSelected && optionSelectedClassName,
-    isFocused && optionFocusedClassName,
-  ].filter(Boolean).join(" ");
+  const combinedClassName =
+    joinClasses(
+      classes?.option,
+      isSelected && classes?.optionSelected,
+      isFocused && classes?.optionFocused,
+      option.disabled && classes?.optionDisabled,
+    ) || undefined;
 
   return (
     <div
@@ -54,9 +51,11 @@ const DropdownOption = memo(function DropdownOption({
       <span className="flex-1 truncate">
         {option.content || option.label}
       </span>
-      {isSelected && showSelectedIcon && (
-        selectedIcon || <CheckIcon className={selectedIndicatorClassName} />
-      )}
+      {isSelected &&
+        showSelectedIcon &&
+        (selectedIcon || (
+          <CheckIcon className={classes?.checkIcon} />
+        ))}
     </div>
   );
 });
@@ -66,7 +65,7 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
     {
       options = [],
       value,
-      onChange,
+      onValueChange,
       id,
       name,
       placeholder = "Select an option",
@@ -89,29 +88,13 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
       initialOptions = [],
       onLoadInitialOptions,
       loadInitialOnOpen = false,
-      className = "",
-      triggerClassName = "",
-      triggerFocusClassName = "",
-      dropdownClassName = "",
-      optionClassName = "",
-      optionSelectedClassName = "",
-      optionFocusedClassName = "",
-      optionListClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      searchInputClassName = "",
-      searchInputElementClassName = "",
-      containerClassName = "",
-      chevronClassName = "",
-      selectedIndicatorClassName = "",
-      searchIconClassName = "",
-      noResultsClassName = "",
-      loadingClassName = "",
+      classes: classesProp,
+      className,
     },
-    ref
+    ref,
   ) => {
     const generatedId = useId();
-    const dropdownId = id || name || generatedId;
+    const dropdownId = id || generatedId;
     const listboxId = `${dropdownId}-listbox`;
     const triggerId = `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
@@ -142,7 +125,7 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
       showSearch,
       onSearch,
       searchDebounceMs,
-      onChange,
+      onValueChange,
       initialOptions,
       onLoadInitialOptions,
       loadInitialOnOpen,
@@ -176,24 +159,32 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
       };
     }, [isOpen, handleClose]);
 
-    const fullWidthClass = fullWidth ? "w-full" : "";
+    const rootClassName =
+      joinClasses(
+        classesProp?.root,
+        className,
+        fullWidth && "w-full",
+      ) || undefined;
 
     return (
       <div
         ref={ref}
-        className={[containerClassName, fullWidthClass].filter(Boolean).join(" ")}
+        className={rootClassName}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
       >
         {label && (
-          <label htmlFor={triggerId} className={labelClassName}>
+          <label htmlFor={triggerId} className={classesProp?.label || undefined}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
         )}
 
-        <div ref={containerRef} className={["relative", className].filter(Boolean).join(" ")}>
+        <div
+          ref={containerRef}
+          className={joinClasses("relative", classesProp?.wrapper) || undefined}
+        >
           <button
             ref={triggerRef}
             type="button"
@@ -210,25 +201,28 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
             onKeyDown={handleKeyDown}
             onFocus={() => setIsTriggerFocused(true)}
             onBlur={() => setIsTriggerFocused(false)}
-            className={[triggerClassName, isTriggerFocused ? triggerFocusClassName : ""]
-              .filter(Boolean)
-              .join(" ")}
+            className={
+              joinClasses(
+                classesProp?.trigger,
+                isTriggerFocused && classesProp?.triggerFocused,
+              ) || undefined
+            }
             data-disabled={disabled || undefined}
             data-error={error || undefined}
             data-open={isOpen || undefined}
             data-focused={isTriggerFocused || undefined}
           >
-            <span className="flex-1 truncate">
+            <span className={classesProp?.triggerText || "flex-1 truncate"}>
               {selectedOption
-                ? selectedOption.selectedContent || selectedOption.content || selectedOption.label
+                ? selectedOption.selectedContent ||
+                  selectedOption.content ||
+                  selectedOption.label
                 : placeholder}
             </span>
             {showChevron && (
               <ChevronDownIcon
-                className={[
-                  chevronClassName,
-                  isOpen ? "rotate-180" : "",
-                ].filter(Boolean).join(" ")}
+                className={classesProp?.chevron || undefined}
+                style={isOpen ? { transform: "rotate(180deg)" } : undefined}
               />
             )}
           </button>
@@ -238,11 +232,11 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
               id={listboxId}
               role="listbox"
               aria-label={typeof label === "string" ? label : "Options"}
-              className={dropdownClassName}
+              className={classesProp?.content || undefined}
             >
               {showSearch && (
-                <div className={searchInputClassName}>
-                  <SearchIcon className={searchIconClassName} />
+                <div className={classesProp?.searchInput || undefined}>
+                  <SearchIcon className={classesProp?.searchIcon || undefined} />
                   <input
                     ref={searchInputRef}
                     type="text"
@@ -251,18 +245,23 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
                     onClick={(e) => e.stopPropagation()}
-                    className={["flex-1 outline-none", searchInputElementClassName].filter(Boolean).join(" ")}
+                    className={
+                      joinClasses(
+                        "flex-1 outline-none",
+                        classesProp?.searchInputElement,
+                      ) || undefined
+                    }
                   />
                 </div>
               )}
 
-              <div className={optionListClassName}>
+              <div className={classesProp?.optionList || undefined}>
                 {loading ? (
-                  <div className={loadingClassName}>
+                  <div className={classesProp?.loading || undefined}>
                     {loadingText}
                   </div>
                 ) : displayOptions.length === 0 ? (
-                  <div className={noResultsClassName}>
+                  <div className={classesProp?.noResults || undefined}>
                     {noResultsText}
                   </div>
                 ) : (
@@ -274,10 +273,7 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
                       isFocused={index === focusedIndex}
                       dropdownId={dropdownId}
                       index={index}
-                      optionClassName={optionClassName}
-                      optionSelectedClassName={optionSelectedClassName}
-                      optionFocusedClassName={optionFocusedClassName}
-                      selectedIndicatorClassName={selectedIndicatorClassName}
+                      classes={classesProp}
                       showSelectedIcon={showSelectedIcon}
                       selectedIcon={selectedIcon}
                       onSelect={handleOptionSelect}
@@ -290,14 +286,28 @@ const SearchableDropdown = forwardRef<HTMLDivElement, SearchableDropdownProps>(
           )}
         </div>
 
+        {/* Hidden input for native form participation */}
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={value ?? ""}
+            aria-hidden="true"
+          />
+        )}
+
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div
+            id={errorId}
+            role="alert"
+            className={classesProp?.error || undefined}
+          >
             {errorMessage}
           </div>
         )}
       </div>
     );
-  }
+  },
 );
 
 SearchableDropdown.displayName = "SearchableDropdown";

@@ -1,9 +1,41 @@
-import { useRef, useEffect, useId, forwardRef, memo } from "react";
-import type { ReactNode } from "react";
-import type { DropdownOption, DropdownProps } from "./types";
-import { useDropdown } from "./useDropdown";
-import { ChevronDownIcon, CheckIcon } from "./icons";
-import DropdownShimmer from "./DropdownShimmer";
+import {
+  useRef,
+  useEffect,
+  useId,
+  forwardRef,
+  memo,
+  useState,
+  useCallback,
+} from "react";
+import { createPortal } from "react-dom";
+import type { ReactNode, CSSProperties } from "react";
+import type { DropdownOption, DropdownProps, DropdownClasses } from "./utils/types";
+import { useDropdown } from "./utils/useDropdown";
+import {
+  DefaultChevronIcon,
+  DefaultCheckIcon,
+  DefaultClearIcon,
+} from "./utils/icons";
+import {
+  computeDropdownCoords,
+  scrollOptionIntoView,
+  isBrowser,
+  joinClasses,
+} from "./utils/helpers";
+import type { DropdownCoords } from "./utils/helpers";
+import DropdownShimmer from "./components/DropdownShimmer";
+
+const SR_ONLY_STYLE: CSSProperties = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clip: "rect(0,0,0,0)",
+  whiteSpace: "nowrap",
+  border: 0,
+};
 
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
@@ -11,12 +43,10 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
   isFocused,
   dropdownId,
   index,
-  optionClassName,
-  selectedOptionClassName,
-  focusedOptionClassName,
-  checkIconClassName,
+  classes,
   showSelectedIcon,
   selectedIcon,
+  CheckIconComponent,
   onSelect,
   onHover,
 }: {
@@ -25,50 +55,254 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
   isFocused: boolean;
   dropdownId: string;
   index: number;
-  optionClassName: string;
-  selectedOptionClassName: string;
-  focusedOptionClassName: string;
-  checkIconClassName: string;
+  classes?: DropdownClasses;
   showSelectedIcon: boolean;
   selectedIcon?: ReactNode;
+  CheckIconComponent: React.ComponentType<{
+    className?: string;
+    style?: CSSProperties;
+  }>;
   onSelect: (option: DropdownOption) => void;
   onHover: (index: number) => void;
 }) {
-  const combinedClassName = [
-    optionClassName,
-    isSelected && selectedOptionClassName,
-    isFocused && focusedOptionClassName,
-  ].filter(Boolean).join(" ");
+  const isDisabled = !!option.disabled;
 
   return (
     <div
       id={`${dropdownId}-option-${index}`}
       role="option"
       aria-selected={isSelected}
-      aria-disabled={option.disabled}
-      className={combinedClassName}
+      aria-disabled={isDisabled || undefined}
+      className={
+        joinClasses(
+          classes?.option,
+          isSelected && classes?.optionSelected,
+          isFocused && classes?.optionFocused,
+          isDisabled && classes?.optionDisabled,
+        ) || undefined
+      }
       data-selected={isSelected || undefined}
       data-focused={isFocused || undefined}
-      data-disabled={option.disabled || undefined}
-      onClick={() => onSelect(option)}
+      data-disabled={isDisabled || undefined}
+      data-value={option.value}
+      onClick={() => {
+        if (!isDisabled) onSelect(option);
+      }}
       onMouseEnter={() => onHover(index)}
     >
-      <span className="flex-1 truncate">
-        {option.content || option.label}
-      </span>
-      {isSelected && showSelectedIcon && (
-        selectedIcon || <CheckIcon className={checkIconClassName} />
-      )}
+      <span>{option.content || option.label}</span>
+      {isSelected &&
+        showSelectedIcon &&
+        (selectedIcon || (
+          <CheckIconComponent className={classes?.checkIcon} />
+        ))}
     </div>
   );
 });
 
-const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
-  (
-    {
+interface DropdownContentProps {
+  triggerElement: HTMLElement | null;
+  isOpen: boolean;
+  keepMounted: boolean;
+  position: "top" | "bottom";
+  zIndex: number;
+  gap: number;
+  portalContainer?: HTMLElement | null;
+  classes?: DropdownClasses;
+  listboxId: string;
+  dropdownId: string;
+  focusedIndex: number;
+  loading: boolean;
+  ariaLabel: string;
+  children: ReactNode;
+}
+
+const DropdownContent = memo(function DropdownContent({
+  triggerElement,
+  isOpen,
+  keepMounted,
+  position: preferredPosition,
+  zIndex,
+  gap,
+  portalContainer,
+  classes,
+  listboxId,
+  dropdownId,
+  focusedIndex,
+  loading,
+  ariaLabel,
+  children,
+}: DropdownContentProps) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState<DropdownCoords | null>(null);
+  const rafIdRef = useRef<number | null>(null);
+
+  const updatePosition = useCallback(() => {
+    if (!triggerElement || !dropdownRef.current) return;
+    setCoords(
+      computeDropdownCoords(
+        triggerElement,
+        dropdownRef.current,
+        preferredPosition,
+        gap,
+      ),
+    );
+  }, [triggerElement, preferredPosition, gap]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (rafIdRef.current !== null) {
+      cancelAnimationFrame(rafIdRef.current);
+    }
+    rafIdRef.current = requestAnimationFrame(updatePosition);
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen || !isBrowser) return;
+    const handleResize = () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(updatePosition);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen || !isBrowser) return;
+    const handleScroll = () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(updatePosition);
+    };
+    window.addEventListener("scroll", handleScroll, true);
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen || !isBrowser || !triggerElement) return;
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(updatePosition);
+    });
+    observer.observe(triggerElement);
+    return () => {
+      observer.disconnect();
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, [isOpen, triggerElement, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen || !isBrowser) return;
+    if (typeof ResizeObserver === "undefined") return;
+    const el = dropdownRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(updatePosition);
+    });
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen || !isBrowser) return;
+    const vv = window.visualViewport;
+    if (!vv || typeof vv.addEventListener !== "function") return;
+    const handleViewportChange = () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(updatePosition);
+    };
+    vv.addEventListener("resize", handleViewportChange);
+    vv.addEventListener("scroll", handleViewportChange);
+    return () => {
+      if (typeof vv.removeEventListener === "function") {
+        vv.removeEventListener("resize", handleViewportChange);
+        vv.removeEventListener("scroll", handleViewportChange);
+      }
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen || focusedIndex < 0) return;
+    const optionEl = document.getElementById(
+      `${dropdownId}-option-${focusedIndex}`,
+    );
+    if (optionEl) {
+      scrollOptionIntoView(optionEl);
+    }
+  }, [isOpen, focusedIndex, dropdownId]);
+
+  if (!isBrowser) return null;
+  if (!isOpen && !keepMounted) return null;
+
+  const dropdownStyle: CSSProperties = {
+    position: "fixed",
+    zIndex,
+    ...(coords
+      ? { top: coords.top, left: coords.left, width: coords.width }
+      : { visibility: "hidden" as const, top: 0, left: 0 }),
+    ...(!isOpen && keepMounted ? { display: "none" } : {}),
+  };
+
+  return createPortal(
+    <div
+      ref={dropdownRef}
+      id={listboxId}
+      role="listbox"
+      aria-label={ariaLabel}
+      aria-busy={loading || undefined}
+      className={classes?.content || undefined}
+      style={dropdownStyle}
+      data-state={isOpen ? "open" : "closed"}
+      data-position={coords?.position ?? preferredPosition}
+      data-dropdown-id={dropdownId}
+    >
+      <div className={classes?.optionList || undefined}>{children}</div>
+    </div>,
+    portalContainer ?? document.body,
+  );
+});
+
+const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
+  (props, forwardedRef) => {
+    const {
       options = [],
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
+      open,
+      defaultOpen,
+      onOpenChange,
       id,
       name,
       placeholder = "Select an option",
@@ -77,7 +311,8 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       errorMessage,
       label,
       required = false,
-      noResultsText = "No options available",
+      clearable = false,
+      noResultsContent = "No options available",
       showChevron = true,
       showSelectedIcon = true,
       selectedIcon,
@@ -85,33 +320,36 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       loading: externalLoading = false,
       onLoadOptions,
       loadOnOpen = false,
+      onLoadError,
       shimmerCount = 5,
-      className = "",
-      containerClassName = "",
-      triggerClassName = "",
-      dropdownClassName = "",
-      optionClassName = "",
-      selectedOptionClassName = "",
-      focusedOptionClassName = "",
-      optionListClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      chevronClassName = "",
-      checkIconClassName = "",
-      noResultsClassName = "",
-      shimmerClassName = "",
-      shimmerItemClassName = "",
-    },
-    ref
-  ) => {
+      classes: classesProp,
+      className,
+      style,
+      keepMounted = false,
+      portalContainer,
+      dropdownPosition = "bottom",
+      dropdownZIndex = 50,
+      dropdownGap = 4,
+      typeaheadTimeout = 500,
+      "aria-label": ariaLabel,
+      onBlur,
+      onFocus,
+      onKeyDown: onKeyDownProp,
+      renderTrigger,
+      ChevronIcon = DefaultChevronIcon,
+      CheckIcon: CheckIconProp = DefaultCheckIcon,
+      ClearIcon: ClearIconProp = DefaultClearIcon,
+    } = props;
+
     const generatedId = useId();
-    const dropdownId = id || name || generatedId;
+    const dropdownId = id || generatedId;
     const listboxId = `${dropdownId}-listbox`;
     const triggerId = `${dropdownId}-trigger`;
+    const labelId = `${dropdownId}-label`;
     const errorId = `${dropdownId}-error`;
+    const statusId = `${dropdownId}-status`;
 
-    const containerRef = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
+    const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
 
     const {
       isOpen,
@@ -119,145 +357,294 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       isLoadingOptions,
       displayOptions,
       selectedOption,
+      currentValue,
+      activeDescendantId,
+      shouldRestoreFocusRef,
+      statusMessage,
       setFocusedIndex,
       handleToggle,
       handleClose,
       handleOptionSelect,
+      handleClear,
       handleKeyDown,
     } = useDropdown({
       options,
       value,
+      defaultValue,
       disabled,
-      onChange,
+      open,
+      defaultOpen,
+      clearable,
+      onValueChange,
+      onOpenChange,
       onLoadOptions,
       loadOnOpen,
+      onLoadError,
+      dropdownId,
+      typeaheadTimeout,
     });
 
     const loading = externalLoading || isLoadingOptions;
 
     useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          containerRef.current &&
-          !containerRef.current.contains(event.target as Node)
-        ) {
-          handleClose();
-        }
+      if (!isOpen && shouldRestoreFocusRef.current) {
+        triggerNode?.focus();
+        shouldRestoreFocusRef.current = false;
+      }
+    }, [isOpen, shouldRestoreFocusRef, triggerNode]);
+
+    useEffect(() => {
+      if (!isOpen || !isBrowser) return;
+
+      const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+        const target = event.target as Node;
+        if (triggerNode?.contains(target)) return;
+        const portalDropdown = (target as HTMLElement).closest?.(
+          `[data-dropdown-id="${dropdownId}"]`,
+        );
+        if (portalDropdown) return;
+        handleClose();
       };
 
-      if (isOpen) {
-        document.addEventListener("mousedown", handleClickOutside);
-      }
-
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("touchstart", handleClickOutside);
       };
-    }, [isOpen, handleClose]);
+    }, [isOpen, handleClose, triggerNode, dropdownId]);
 
-    const fullWidthClass = fullWidth ? "w-full" : "";
+    const rootClassName =
+      joinClasses(classesProp?.root, className) || undefined;
+    const rootStyle: CSSProperties = {
+      ...(fullWidth ? { width: "100%" } : {}),
+      ...style,
+    };
+    const hasRootStyle = Object.keys(rootStyle).length > 0;
+
+    const listboxAriaLabel =
+      ariaLabel ??
+      (typeof label === "string" ? label : undefined) ??
+      "Options";
+
+    const handleKeyDownWithPassthrough = useCallback(
+      (event: React.KeyboardEvent) => {
+        onKeyDownProp?.(event);
+        if (!event.defaultPrevented) {
+          handleKeyDown(event);
+        }
+      },
+      [onKeyDownProp, handleKeyDown],
+    );
+
+    const mergedTriggerRef = useCallback(
+      (node: HTMLButtonElement | null) => {
+        setTriggerNode(node);
+        if (typeof forwardedRef === "function") {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          (
+            forwardedRef as React.MutableRefObject<HTMLButtonElement | null>
+          ).current = node;
+        }
+      },
+      [forwardedRef],
+    );
+
+  const renderTriggerRefCallback = useCallback(
+    (node: HTMLElement | null) => {
+      if (node && process.env.NODE_ENV !== "production") {
+        if (node.tagName !== "BUTTON") {
+          console.warn(
+            "[Dropdown] renderTrigger must return a <button> element for proper accessibility. " +
+            `Received: <${node.tagName.toLowerCase()}>. Screen readers and keyboard navigation may not work correctly.`
+          );
+        }
+      }
+      setTriggerNode(node);
+      if (typeof forwardedRef === "function") {
+        forwardedRef(node as HTMLButtonElement | null);
+      } else if (forwardedRef) {
+        (
+          forwardedRef as React.MutableRefObject<HTMLButtonElement | null>
+        ).current = node as HTMLButtonElement | null;
+      }
+    },
+    [forwardedRef],
+  );
+
+    const triggerProps = {
+      id: triggerId,
+      role: "combobox" as const,
+      "aria-expanded": isOpen,
+      "aria-haspopup": "listbox" as const,
+      "aria-controls": listboxId,
+      "aria-activedescendant": activeDescendantId,
+      "aria-invalid": (error || undefined) as boolean | undefined,
+      "aria-describedby": error && errorMessage ? errorId : undefined,
+      "aria-required": (required || undefined) as boolean | undefined,
+      "aria-labelledby": label ? labelId : undefined,
+      disabled,
+      onClick: handleToggle,
+      onKeyDown: handleKeyDownWithPassthrough,
+      onFocus,
+      onBlur,
+      "data-disabled": (disabled || undefined) as true | undefined,
+      "data-error": (error || undefined) as true | undefined,
+      "data-open": (isOpen || undefined) as true | undefined,
+      "data-placeholder": (!selectedOption || undefined) as true | undefined,
+    };
 
     return (
       <div
-        ref={ref}
-        className={[containerClassName, fullWidthClass].filter(Boolean).join(" ")}
+        className={rootClassName}
+        style={hasRootStyle ? rootStyle : undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
+        data-full-width={fullWidth || undefined}
       >
         {label && (
-          <label htmlFor={triggerId} className={labelClassName}>
+          <label
+            id={labelId}
+            htmlFor={triggerId}
+            className={classesProp?.label || undefined}
+          >
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
         )}
 
-        <div ref={containerRef} className={["relative", className].filter(Boolean).join(" ")}>
-          <button
-            ref={triggerRef}
-            type="button"
-            id={triggerId}
-            role="combobox"
-            aria-expanded={isOpen}
-            aria-haspopup="listbox"
-            aria-controls={listboxId}
-            aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorId : undefined}
-            aria-required={required || undefined}
-            disabled={disabled}
-            onClick={handleToggle}
-            onKeyDown={handleKeyDown}
-            className={triggerClassName}
-            data-disabled={disabled || undefined}
-            data-error={error || undefined}
-            data-open={isOpen || undefined}
-          >
-            <span className="flex-1 truncate">
-              {selectedOption
-                ? selectedOption.selectedContent || selectedOption.content || selectedOption.label
-                : placeholder}
-            </span>
-            {showChevron && (
-              <ChevronDownIcon
-                className={[
-                  chevronClassName,
-                  isOpen ? "rotate-180" : "",
-                ].filter(Boolean).join(" ")}
-              />
-            )}
-          </button>
-
-          {isOpen && (
-            <div
-              id={listboxId}
-              role="listbox"
-              aria-label={typeof label === "string" ? label : "Options"}
-              aria-busy={loading || undefined}
-              className={dropdownClassName}
+        <div className={classesProp?.wrapper || undefined}>
+          {renderTrigger ? (
+            renderTrigger({
+              ...triggerProps,
+              ref: renderTriggerRefCallback,
+              isOpen,
+              selectedOption,
+              placeholder,
+            })
+          ) : (
+            <button
+              ref={mergedTriggerRef}
+              {...triggerProps}
+              type="button"
+              className={classesProp?.trigger || undefined}
             >
-              <div className={optionListClassName}>
-                {loading ? (
-                  <DropdownShimmer
-                    count={shimmerCount}
-                    className={shimmerClassName}
-                    itemClassName={shimmerItemClassName}
-                  />
-                ) : displayOptions.length === 0 ? (
-                  <div className={noResultsClassName}>
-                    {noResultsText}
-                  </div>
-                ) : (
-                  displayOptions.map((option, index) => (
-                    <DropdownOptionItem
-                      key={option.value}
-                      option={option}
-                      isSelected={option.value === value}
-                      isFocused={index === focusedIndex}
-                      dropdownId={dropdownId}
-                      index={index}
-                      optionClassName={optionClassName}
-                      selectedOptionClassName={selectedOptionClassName}
-                      focusedOptionClassName={focusedOptionClassName}
-                      checkIconClassName={checkIconClassName}
-                      showSelectedIcon={showSelectedIcon}
-                      selectedIcon={selectedIcon}
-                      onSelect={handleOptionSelect}
-                      onHover={setFocusedIndex}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
+              <span className={classesProp?.triggerText || undefined}>
+                {selectedOption
+                  ? selectedOption.selectedContent ||
+                    selectedOption.content ||
+                    selectedOption.label
+                  : placeholder}
+              </span>
+              {showChevron && (
+                <ChevronIcon
+                  className={classesProp?.chevron || undefined}
+                  style={
+                    isOpen ? { transform: "rotate(180deg)" } : undefined
+                  }
+                />
+              )}
+            </button>
           )}
+
+          {clearable && selectedOption && (
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Clear selection"
+              className={classesProp?.clearIcon || undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClear();
+                triggerNode?.focus();
+              }}
+            >
+              <ClearIconProp />
+            </button>
+          )}
+
+          <DropdownContent
+            triggerElement={triggerNode}
+            isOpen={isOpen}
+            keepMounted={keepMounted}
+            position={dropdownPosition}
+            zIndex={dropdownZIndex}
+            gap={dropdownGap}
+            portalContainer={portalContainer}
+            classes={classesProp}
+            listboxId={listboxId}
+            dropdownId={dropdownId}
+            focusedIndex={focusedIndex}
+            loading={loading}
+            ariaLabel={listboxAriaLabel}
+          >
+            {loading ? (
+              <DropdownShimmer
+                count={shimmerCount}
+                className={classesProp?.shimmer}
+                itemClassName={classesProp?.shimmerItem}
+              />
+            ) : displayOptions.length === 0 ? (
+              <div
+                role="status"
+                className={classesProp?.noResults || undefined}
+              >
+                {noResultsContent}
+              </div>
+            ) : (
+              displayOptions.map((option, index) => (
+                <DropdownOptionItem
+                  key={option.value}
+                  option={option}
+                  isSelected={option.value === currentValue}
+                  isFocused={index === focusedIndex}
+                  dropdownId={dropdownId}
+                  index={index}
+                  classes={classesProp}
+                  showSelectedIcon={showSelectedIcon}
+                  selectedIcon={selectedIcon}
+                  CheckIconComponent={CheckIconProp}
+                  onSelect={handleOptionSelect}
+                  onHover={setFocusedIndex}
+                />
+              ))
+            )}
+          </DropdownContent>
+        </div>
+
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={currentValue ?? ""}
+            aria-hidden="true"
+          />
+        )}
+
+        <div
+          id={statusId}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={SR_ONLY_STYLE}
+        >
+          {statusMessage}
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div
+            id={errorId}
+            role="alert"
+            className={classesProp?.error || undefined}
+          >
             {errorMessage}
           </div>
         )}
       </div>
     );
-  }
+  },
 );
 
 Dropdown.displayName = "Dropdown";

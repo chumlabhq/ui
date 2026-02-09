@@ -9,7 +9,7 @@ export function useMultiSelectDropdown({
   options = [],
   value,
   disabled = false,
-  onChange,
+  onValueChange,
   onLoadOptions,
   loadOnOpen = false,
 }: UseMultiSelectDropdownProps): UseMultiSelectDropdownReturn {
@@ -28,7 +28,7 @@ export function useMultiSelectDropdown({
 
   const selectedOptions = useMemo(
     () => displayOptions.filter((option) => value.includes(option.value)),
-    [displayOptions, value]
+    [displayOptions, value],
   );
 
   const loadOptions = useCallback(() => {
@@ -76,23 +76,23 @@ export function useMultiSelectDropdown({
         : [...value, option.value];
 
       const newSelectedOptions = displayOptions.filter((opt) =>
-        newValues.includes(opt.value)
+        newValues.includes(opt.value),
       );
 
-      onChange(newValues, newSelectedOptions);
+      onValueChange(newValues, newSelectedOptions);
     },
-    [value, displayOptions, onChange]
+    [value, displayOptions, onValueChange],
   );
 
   const handleRemoveOption = useCallback(
     (optionValue: string) => {
       const newValues = value.filter((v) => v !== optionValue);
       const newSelectedOptions = displayOptions.filter((opt) =>
-        newValues.includes(opt.value)
+        newValues.includes(opt.value),
       );
-      onChange(newValues, newSelectedOptions);
+      onValueChange(newValues, newSelectedOptions);
     },
-    [value, displayOptions, onChange]
+    [value, displayOptions, onValueChange],
   );
 
   const handleKeyDown = useCallback(
@@ -153,7 +153,7 @@ export function useMultiSelectDropdown({
           event.preventDefault();
           if (isOpen) {
             const firstEnabledIndex = displayOptions.findIndex(
-              (option) => !option.disabled
+              (option) => !option.disabled,
             );
             if (firstEnabledIndex !== -1) {
               setFocusedIndex(firstEnabledIndex);
@@ -173,7 +173,7 @@ export function useMultiSelectDropdown({
           break;
       }
     },
-    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, loadOptions]
+    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, loadOptions],
   );
 
   return {

@@ -8,10 +8,33 @@ export interface SearchableDropdownOption {
   disabled?: boolean;
 }
 
+export interface SearchableDropdownClasses {
+  root?: string;
+  wrapper?: string;
+  trigger?: string;
+  triggerFocused?: string;
+  triggerText?: string;
+  content?: string;
+  optionList?: string;
+  option?: string;
+  optionSelected?: string;
+  optionFocused?: string;
+  optionDisabled?: string;
+  chevron?: string;
+  checkIcon?: string;
+  noResults?: string;
+  loading?: string;
+  label?: string;
+  error?: string;
+  searchInput?: string;
+  searchInputElement?: string;
+  searchIcon?: string;
+}
+
 export interface SearchableDropdownProps {
   options?: SearchableDropdownOption[];
   value: string | null;
-  onChange: (value: string, option: SearchableDropdownOption | null) => void;
+  onValueChange: (value: string, option: SearchableDropdownOption | null) => void;
   id?: string;
   name?: string;
   placeholder?: string;
@@ -34,22 +57,6 @@ export interface SearchableDropdownProps {
   initialOptions?: SearchableDropdownOption[];
   onLoadInitialOptions?: () => Promise<SearchableDropdownOption[]>;
   loadInitialOnOpen?: boolean;
+  classes?: SearchableDropdownClasses;
   className?: string;
-  triggerClassName?: string;
-  triggerFocusClassName?: string;
-  dropdownClassName?: string;
-  optionClassName?: string;
-  optionSelectedClassName?: string;
-  optionFocusedClassName?: string;
-  optionListClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  searchInputClassName?: string;
-  searchInputElementClassName?: string;
-  containerClassName?: string;
-  chevronClassName?: string;
-  selectedIndicatorClassName?: string;
-  searchIconClassName?: string;
-  noResultsClassName?: string;
-  loadingClassName?: string;
 }

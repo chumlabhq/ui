@@ -1,14 +1,22 @@
-interface IconProps {
-  className?: string;
-}
+import type { CSSProperties } from "react";
 
-export function ChevronDownIcon({ className = "" }: IconProps) {
+export function ChevronDownIcon({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: CSSProperties;
+}) {
   return (
     <svg
       viewBox="0 0 20 20"
       fill="currentColor"
+      width={16}
+      height={16}
       className={className}
+      style={style}
       aria-hidden="true"
+      focusable="false"
     >
       <path
         fillRule="evenodd"
@@ -19,13 +27,20 @@ export function ChevronDownIcon({ className = "" }: IconProps) {
   );
 }
 
-export function CheckIcon({ className = "" }: IconProps) {
+export function CheckIcon({
+  className,
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 20 20"
       fill="currentColor"
+      width={16}
+      height={16}
       className={className}
       aria-hidden="true"
+      focusable="false"
     >
       <path
         fillRule="evenodd"
@@ -36,13 +51,20 @@ export function CheckIcon({ className = "" }: IconProps) {
   );
 }
 
-export function XIcon({ className = "" }: IconProps) {
+export function XIcon({
+  className,
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 20 20"
       fill="currentColor"
+      width={16}
+      height={16}
       className={className}
       aria-hidden="true"
+      focusable="false"
     >
       <path
         d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"

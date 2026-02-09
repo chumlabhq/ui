@@ -283,25 +283,27 @@ const InternationalPhoneInput = forwardRef<
           <SearchableDropdown
             options={dropdownOptions}
             value={selectedCountryCode}
-            onChange={handleCountrySelect}
+            onValueChange={handleCountrySelect}
             placeholder={countryDropdownPlaceholder}
             disabled={disabled}
             showSearch={true}
             searchPlaceholder={countrySearchPlaceholder}
             showChevron={true}
-            containerClassName={countrySelectClassName}
-            triggerClassName={countrySelectTriggerClassName}
-            triggerFocusClassName={countrySelectTriggerFocusClassName}
-            dropdownClassName={countrySelectDropdownClassName}
-            searchInputClassName={countrySelectSearchInputClassName}
-            optionClassName={countrySelectOptionClassName}
-            optionSelectedClassName={countrySelectOptionSelectedClassName}
-            optionListClassName={countrySelectOptionListClassName}
-            chevronClassName={countrySelectChevronClassName}
-            selectedIndicatorClassName={countrySelectSelectedIndicatorClassName}
             selectedIcon={countrySelectSelectedIndicator}
-            searchIconClassName={countrySelectSearchIconClassName}
-            noResultsClassName={countrySelectNoResultsClassName}
+            classes={{
+              root: countrySelectClassName,
+              trigger: countrySelectTriggerClassName,
+              triggerFocused: countrySelectTriggerFocusClassName,
+              content: countrySelectDropdownClassName,
+              searchInput: countrySelectSearchInputClassName,
+              option: countrySelectOptionClassName,
+              optionSelected: countrySelectOptionSelectedClassName,
+              optionList: countrySelectOptionListClassName,
+              chevron: countrySelectChevronClassName,
+              checkIcon: countrySelectSelectedIndicatorClassName,
+              searchIcon: countrySelectSearchIconClassName,
+              noResults: countrySelectNoResultsClassName,
+            }}
           />
 
           <input

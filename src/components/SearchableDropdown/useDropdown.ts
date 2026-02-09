@@ -8,7 +8,7 @@ interface UseDropdownProps {
   showSearch?: boolean;
   onSearch?: (query: string) => Promise<SearchableDropdownOption[]>;
   searchDebounceMs?: number;
-  onChange: (value: string, option: SearchableDropdownOption | null) => void;
+  onValueChange: (value: string, option: SearchableDropdownOption | null) => void;
   initialOptions?: SearchableDropdownOption[];
   onLoadInitialOptions?: () => Promise<SearchableDropdownOption[]>;
   loadInitialOnOpen?: boolean;
@@ -37,7 +37,7 @@ export function useDropdown({
   showSearch = true,
   onSearch,
   searchDebounceMs = 300,
-  onChange,
+  onValueChange,
   initialOptions = [],
   onLoadInitialOptions,
   loadInitialOnOpen = false,
@@ -57,24 +57,21 @@ export function useDropdown({
 
   const allInitialOptions = useMemo(
     () => [...initialOptions, ...loadedInitialOptions],
-    [initialOptions, loadedInitialOptions]
+    [initialOptions, loadedInitialOptions],
   );
 
-  const selectedOption = useMemo(
-    () => {
-      const allOptions = isAsync 
-        ? [...options, ...asyncOptions, ...allInitialOptions] 
-        : options;
-      return allOptions.find((option) => option.value === value) || null;
-    },
-    [options, asyncOptions, allInitialOptions, value, isAsync]
-  );
+  const selectedOption = useMemo(() => {
+    const allOptions = isAsync
+      ? [...options, ...asyncOptions, ...allInitialOptions]
+      : options;
+    return allOptions.find((option) => option.value === value) || null;
+  }, [options, asyncOptions, allInitialOptions, value, isAsync]);
 
   const filteredSyncOptions = useMemo(() => {
     if (isAsync || !showSearch || !searchQuery.trim()) return options;
     const query = searchQuery.toLowerCase();
     return options.filter((option) =>
-      option.label.toLowerCase().includes(query)
+      option.label.toLowerCase().includes(query),
     );
   }, [options, searchQuery, showSearch, isAsync]);
 
@@ -157,10 +154,10 @@ export function useDropdown({
   const handleOptionSelect = useCallback(
     (option: SearchableDropdownOption) => {
       if (option.disabled) return;
-      onChange(option.value, option);
+      onValueChange(option.value, option);
       handleClose();
     },
-    [onChange, handleClose]
+    [onValueChange, handleClose],
   );
 
   const handleKeyDown = useCallback(
@@ -197,7 +194,7 @@ export function useDropdown({
             setFocusedIndex(0);
           } else {
             setFocusedIndex((prev) =>
-              prev < displayOptions.length - 1 ? prev + 1 : 0
+              prev < displayOptions.length - 1 ? prev + 1 : 0,
             );
           }
           break;
@@ -205,7 +202,7 @@ export function useDropdown({
           event.preventDefault();
           if (isOpen) {
             setFocusedIndex((prev) =>
-              prev > 0 ? prev - 1 : displayOptions.length - 1
+              prev > 0 ? prev - 1 : displayOptions.length - 1,
             );
           }
           break;
@@ -219,7 +216,7 @@ export function useDropdown({
           break;
       }
     },
-    [disabled, isOpen, focusedIndex, displayOptions, showSearch, handleToggle, handleClose, handleOptionSelect]
+    [disabled, isOpen, focusedIndex, displayOptions, showSearch, handleToggle, handleClose, handleOptionSelect],
   );
 
   return {

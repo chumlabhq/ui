@@ -1,9 +1,22 @@
 import { useRef, useEffect, useId, forwardRef, memo } from "react";
 import type { ReactNode } from "react";
-import type { MultiSelectOption, MultiSelectDropdownProps } from "./types";
+import type {
+  MultiSelectOption,
+  MultiSelectDropdownProps,
+  MultiSelectDropdownClasses,
+} from "./types";
 import { useMultiSelectDropdown } from "./useMultiSelectDropdown";
 import { ChevronDownIcon, CheckIcon, XIcon } from "./icons";
 import MultiSelectDropdownShimmer from "./MultiSelectDropdownShimmer";
+
+/**
+ * Joins class names, filtering out falsy values.
+ */
+function joinClasses(
+  ...classes: (string | false | null | undefined)[]
+): string {
+  return classes.filter(Boolean).join(" ");
+}
 
 const OptionItem = memo(function OptionItem({
   option,
@@ -11,12 +24,7 @@ const OptionItem = memo(function OptionItem({
   isFocused,
   dropdownId,
   index,
-  optionClassName,
-  selectedOptionClassName,
-  focusedOptionClassName,
-  checkboxClassName,
-  checkboxCheckedClassName,
-  checkboxIconClassName,
+  classes,
   checkboxIcon,
   onToggle,
   onHover,
@@ -26,26 +34,24 @@ const OptionItem = memo(function OptionItem({
   isFocused: boolean;
   dropdownId: string;
   index: number;
-  optionClassName: string;
-  selectedOptionClassName: string;
-  focusedOptionClassName: string;
-  checkboxClassName: string;
-  checkboxCheckedClassName: string;
-  checkboxIconClassName: string;
+  classes?: MultiSelectDropdownClasses;
   checkboxIcon?: ReactNode;
   onToggle: (option: MultiSelectOption) => void;
   onHover: (index: number) => void;
 }) {
-  const combinedOptionClassName = [
-    optionClassName,
-    isSelected && selectedOptionClassName,
-    isFocused && focusedOptionClassName,
-  ].filter(Boolean).join(" ");
+  const combinedOptionClassName =
+    joinClasses(
+      classes?.option,
+      isSelected && classes?.optionSelected,
+      isFocused && classes?.optionFocused,
+      option.disabled && classes?.optionDisabled,
+    ) || undefined;
 
-  const combinedCheckboxClassName = [
-    checkboxClassName,
-    isSelected && checkboxCheckedClassName,
-  ].filter(Boolean).join(" ");
+  const combinedCheckboxClassName =
+    joinClasses(
+      classes?.checkbox,
+      isSelected && classes?.checkboxChecked,
+    ) || undefined;
 
   return (
     <div
@@ -61,7 +67,10 @@ const OptionItem = memo(function OptionItem({
       onMouseEnter={() => onHover(index)}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined}>
-        {isSelected && (checkboxIcon || <CheckIcon className={checkboxIconClassName || "w-full h-full"} />)}
+        {isSelected &&
+          (checkboxIcon || (
+            <CheckIcon className={classes?.checkboxIcon || "w-full h-full"} />
+          ))}
       </span>
       <span className="flex-1 truncate">
         {option.content || option.label}
@@ -72,17 +81,15 @@ const OptionItem = memo(function OptionItem({
 
 const SelectedChip = memo(function SelectedChip({
   option,
-  chipClassName,
-  chipRemoveClassName,
+  classes,
   onRemove,
 }: {
   option: MultiSelectOption;
-  chipClassName: string;
-  chipRemoveClassName: string;
+  classes?: MultiSelectDropdownClasses;
   onRemove: (value: string) => void;
 }) {
   return (
-    <span className={chipClassName}>
+    <span className={classes?.chip || undefined}>
       <span className="truncate">
         {option.selectedContent || option.content || option.label}
       </span>
@@ -92,7 +99,7 @@ const SelectedChip = memo(function SelectedChip({
           e.stopPropagation();
           onRemove(option.value);
         }}
-        className={chipRemoveClassName}
+        className={classes?.chipRemove || undefined}
         aria-label={`Remove ${option.label}`}
       >
         <XIcon className="w-full h-full" />
@@ -109,7 +116,7 @@ const MultiSelectDropdown = forwardRef<
     {
       options = [],
       value,
-      onChange,
+      onValueChange,
       id,
       name,
       placeholder = "Select options...",
@@ -128,31 +135,13 @@ const MultiSelectDropdown = forwardRef<
       maxDisplayedChips = 3,
       showSelectedChips = true,
       checkboxIcon,
-      className = "",
-      containerClassName = "",
-      triggerClassName = "",
-      dropdownClassName = "",
-      optionClassName = "",
-      selectedOptionClassName = "",
-      focusedOptionClassName = "",
-      optionListClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      chipClassName = "",
-      chipRemoveClassName = "",
-      chevronClassName = "",
-      checkboxClassName = "",
-      checkboxCheckedClassName = "",
-      checkboxIconClassName = "",
-      noResultsClassName = "",
-      shimmerClassName = "",
-      shimmerItemClassName = "",
-      moreCountClassName = "",
+      classes: classesProp,
+      className,
     },
-    ref
+    ref,
   ) => {
     const generatedId = useId();
-    const dropdownId = id || name || generatedId;
+    const dropdownId = id || generatedId;
     const listboxId = `${dropdownId}-listbox`;
     const triggerId = `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
@@ -176,7 +165,7 @@ const MultiSelectDropdown = forwardRef<
       options,
       value,
       disabled,
-      onChange,
+      onValueChange,
       onLoadOptions,
       loadOnOpen,
     });
@@ -202,26 +191,35 @@ const MultiSelectDropdown = forwardRef<
       };
     }, [isOpen, handleClose]);
 
-    const fullWidthClass = fullWidth ? "w-full" : "";
+    const rootClassName =
+      joinClasses(
+        classesProp?.root,
+        className,
+        fullWidth && "w-full",
+      ) || undefined;
+
     const displayedChips = selectedOptions.slice(0, maxDisplayedChips);
     const remainingCount = selectedOptions.length - maxDisplayedChips;
 
     return (
       <div
         ref={ref}
-        className={[containerClassName, fullWidthClass].filter(Boolean).join(" ")}
+        className={rootClassName}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
       >
         {label && (
-          <label htmlFor={triggerId} className={labelClassName}>
+          <label htmlFor={triggerId} className={classesProp?.label || undefined}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
         )}
 
-        <div ref={containerRef} className={["relative", className].filter(Boolean).join(" ")}>
+        <div
+          ref={containerRef}
+          className={joinClasses("relative", classesProp?.wrapper) || undefined}
+        >
           <button
             ref={triggerRef}
             type="button"
@@ -236,25 +234,24 @@ const MultiSelectDropdown = forwardRef<
             disabled={disabled}
             onClick={handleToggle}
             onKeyDown={handleKeyDown}
-            className={triggerClassName}
+            className={classesProp?.trigger || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
             data-open={isOpen || undefined}
           >
-            <span className="flex-1 flex items-center gap-1 min-w-0 overflow-hidden">
+            <span className={classesProp?.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
               {showSelectedChips && selectedOptions.length > 0 ? (
                 <>
                   {displayedChips.map((option) => (
                     <SelectedChip
                       key={option.value}
                       option={option}
-                      chipClassName={chipClassName}
-                      chipRemoveClassName={chipRemoveClassName}
+                      classes={classesProp}
                       onRemove={handleRemoveOption}
                     />
                   ))}
                   {remainingCount > 0 && (
-                    <span className={moreCountClassName}>
+                    <span className={classesProp?.moreCount || undefined}>
                       +{remainingCount}
                     </span>
                   )}
@@ -269,10 +266,8 @@ const MultiSelectDropdown = forwardRef<
             </span>
             {showChevron && (
               <ChevronDownIcon
-                className={[
-                  chevronClassName,
-                  isOpen ? "rotate-180" : "",
-                ].filter(Boolean).join(" ")}
+                className={classesProp?.chevron || undefined}
+                style={isOpen ? { transform: "rotate(180deg)" } : undefined}
               />
             )}
           </button>
@@ -284,17 +279,17 @@ const MultiSelectDropdown = forwardRef<
               aria-label={typeof label === "string" ? label : "Options"}
               aria-multiselectable="true"
               aria-busy={loading || undefined}
-              className={dropdownClassName}
+              className={classesProp?.content || undefined}
             >
-              <div className={optionListClassName}>
+              <div className={classesProp?.optionList || undefined}>
                 {loading ? (
                   <MultiSelectDropdownShimmer
                     count={shimmerCount}
-                    className={shimmerClassName}
-                    itemClassName={shimmerItemClassName}
+                    className={classesProp?.shimmer || undefined}
+                    itemClassName={classesProp?.shimmerItem || undefined}
                   />
                 ) : displayOptions.length === 0 ? (
-                  <div className={noResultsClassName}>
+                  <div className={classesProp?.noResults || undefined}>
                     {noResultsText}
                   </div>
                 ) : (
@@ -306,12 +301,7 @@ const MultiSelectDropdown = forwardRef<
                       isFocused={index === focusedIndex}
                       dropdownId={dropdownId}
                       index={index}
-                      optionClassName={optionClassName}
-                      selectedOptionClassName={selectedOptionClassName}
-                      focusedOptionClassName={focusedOptionClassName}
-                      checkboxClassName={checkboxClassName}
-                      checkboxCheckedClassName={checkboxCheckedClassName}
-                      checkboxIconClassName={checkboxIconClassName}
+                      classes={classesProp}
                       checkboxIcon={checkboxIcon}
                       onToggle={handleOptionToggle}
                       onHover={setFocusedIndex}
@@ -323,14 +313,28 @@ const MultiSelectDropdown = forwardRef<
           )}
         </div>
 
+        {/* Hidden input for native form participation */}
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={value.join(",")}
+            aria-hidden="true"
+          />
+        )}
+
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div
+            id={errorId}
+            role="alert"
+            className={classesProp?.error || undefined}
+          >
             {errorMessage}
           </div>
         )}
       </div>
     );
-  }
+  },
 );
 
 MultiSelectDropdown.displayName = "MultiSelectDropdown";

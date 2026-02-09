@@ -8,10 +8,35 @@ export interface MultiSelectOption {
   disabled?: boolean;
 }
 
+export interface MultiSelectDropdownClasses {
+  root?: string;
+  wrapper?: string;
+  trigger?: string;
+  triggerText?: string;
+  content?: string;
+  optionList?: string;
+  option?: string;
+  optionSelected?: string;
+  optionFocused?: string;
+  optionDisabled?: string;
+  chevron?: string;
+  checkbox?: string;
+  checkboxChecked?: string;
+  checkboxIcon?: string;
+  chip?: string;
+  chipRemove?: string;
+  noResults?: string;
+  label?: string;
+  error?: string;
+  shimmer?: string;
+  shimmerItem?: string;
+  moreCount?: string;
+}
+
 export interface MultiSelectDropdownProps {
   options?: MultiSelectOption[];
   value: string[];
-  onChange: (values: string[], options: MultiSelectOption[]) => void;
+  onValueChange: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
   placeholder?: string;
@@ -30,33 +55,15 @@ export interface MultiSelectDropdownProps {
   maxDisplayedChips?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
+  classes?: MultiSelectDropdownClasses;
   className?: string;
-  containerClassName?: string;
-  triggerClassName?: string;
-  dropdownClassName?: string;
-  optionClassName?: string;
-  selectedOptionClassName?: string;
-  focusedOptionClassName?: string;
-  optionListClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  chipClassName?: string;
-  chipRemoveClassName?: string;
-  chevronClassName?: string;
-  checkboxClassName?: string;
-  checkboxCheckedClassName?: string;
-  checkboxIconClassName?: string;
-  noResultsClassName?: string;
-  shimmerClassName?: string;
-  shimmerItemClassName?: string;
-  moreCountClassName?: string;
 }
 
 export interface UseMultiSelectDropdownProps {
   options?: MultiSelectOption[];
   value: string[];
   disabled?: boolean;
-  onChange: (values: string[], options: MultiSelectOption[]) => void;
+  onValueChange: (values: string[], options: MultiSelectOption[]) => void;
   onLoadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
 }

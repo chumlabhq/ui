@@ -1,5 +1,13 @@
 export { default as Dropdown } from "./Dropdown";
-export { default as DropdownShimmer } from "./DropdownShimmer";
-export type { DropdownOption, DropdownProps } from "./types";
-export { useDropdown } from "./useDropdown";
-export { ChevronDownIcon, CheckIcon } from "./icons";
+export { default as DropdownShimmer } from "./components/DropdownShimmer";
+export type {
+  DropdownOption,
+  DropdownProps,
+  DropdownClasses,
+  DropdownTriggerRenderProps,
+} from "./utils/types";
+export {
+  DefaultChevronIcon,
+  DefaultCheckIcon,
+  DefaultClearIcon,
+} from "./utils/icons";

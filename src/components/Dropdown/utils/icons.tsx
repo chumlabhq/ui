@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-export const ChevronDownIcon = ({
+export const DefaultChevronIcon = ({
   className,
   style,
 }: {
@@ -25,7 +25,7 @@ export const ChevronDownIcon = ({
   </svg>
 );
 
-export const CheckIcon = ({
+export const DefaultCheckIcon = ({
   className,
   style,
 }: {
@@ -50,7 +50,7 @@ export const CheckIcon = ({
   </svg>
 );
 
-export const SearchIcon = ({
+export const DefaultClearIcon = ({
   className,
 }: {
   className?: string;
@@ -58,16 +58,14 @@ export const SearchIcon = ({
   <svg
     viewBox="0 0 20 20"
     fill="currentColor"
-    width={16}
-    height={16}
+    width={14}
+    height={14}
     className={className}
     aria-hidden="true"
     focusable="false"
   >
     <path
-      fillRule="evenodd"
-      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-      clipRule="evenodd"
+      d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"
     />
   </svg>
 );
