@@ -13,7 +13,7 @@ const optionStyle =
   "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-gray-50 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-sm";
 const selectedOptionStyle = "bg-blue-50 font-medium";
 const focusedOptionStyle = "bg-gray-100";
-const trailingIconStyle =
+const endIconStyle =
   "w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200";
 const selectedIconStyle = "w-4 h-4 shrink-0 text-blue-600";
 const labelStyle = "block text-sm font-medium text-gray-700 mb-1";
@@ -140,7 +140,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -175,7 +175,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -207,7 +207,7 @@ const TimePickerDemo = () => {
             minuteStep={5}
             triggerClassName={triggerStyle}
             inputClassName={inputStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             // Clock-specific styling
             clockContainerClassName="absolute z-50 top-full left-0 mt-1 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 w-72"
             clockDisplayClassName="flex items-center justify-center gap-1 mb-4"
@@ -259,7 +259,7 @@ const TimePickerDemo = () => {
             minuteStep={5}
             triggerClassName={triggerStyle}
             inputClassName={inputStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             // Clock-specific styling - Purple theme
             clockContainerClassName="absolute z-50 top-full left-0 mt-1 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 w-80"
             clockDisplayClassName="flex items-center justify-center gap-1 mb-4"
@@ -306,7 +306,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
@@ -333,7 +333,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -360,7 +360,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -384,7 +384,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -414,7 +414,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
@@ -441,7 +441,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -462,7 +462,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -487,7 +487,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -499,7 +499,7 @@ const TimePickerDemo = () => {
 
       <Section title="Custom Trailing Icon">
         <p className="text-sm text-gray-600 mb-4">
-          Replace the default chevron icon with a custom icon using the <code className="bg-gray-100 px-1 rounded">trailingIcon</code> prop.
+          Replace the default chevron icon with a custom icon using the <code className="bg-gray-100 px-1 rounded">endIcon</code> prop.
         </p>
         <div className="flex flex-wrap gap-8">
           <div className="w-48">
@@ -515,7 +515,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIcon={<ClockIcon className="w-4 h-4 text-gray-400" />}
+              endIcon={<ClockIcon className="w-4 h-4 text-gray-400" />}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
@@ -533,7 +533,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIcon={<CalendarIcon className="w-4 h-4 text-gray-400" />}
+              endIcon={<CalendarIcon className="w-4 h-4 text-gray-400" />}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
@@ -551,7 +551,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIcon={<BellIcon className="w-4 h-4 text-gray-400" />}
+              endIcon={<BellIcon className="w-4 h-4 text-gray-400" />}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
@@ -569,14 +569,14 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              showTrailingIcon={false}
+              showEndIcon={false}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
           </div>
         </div>
         <p className="text-sm text-gray-500 mt-4">
-          Use <code className="bg-gray-100 px-1 rounded">trailingIcon</code> to provide a custom icon, or <code className="bg-gray-100 px-1 rounded">showTrailingIcon=false</code> to hide the icon entirely.
+          Use <code className="bg-gray-100 px-1 rounded">endIcon</code> to provide a custom icon, or <code className="bg-gray-100 px-1 rounded">showEndIcon=false</code> to hide the icon entirely.
         </p>
       </Section>
 
@@ -597,7 +597,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName="!bg-green-100 border-l-4 border-green-500"
               focusedOptionClassName={focusedOptionStyle}
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIconClassName={selectedIconStyle}
               noResultsClassName={noResultsStyle}
             />
@@ -627,7 +627,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIcon={
                 <StarIcon className="w-4 h-4 shrink-0 text-yellow-500" />
               }
@@ -647,7 +647,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIcon={
                 <CircleCheckIcon className="w-4 h-4 shrink-0 text-green-600" />
               }
@@ -667,7 +667,7 @@ const TimePickerDemo = () => {
               optionClassName={optionStyle}
               selectedOptionClassName={selectedOptionStyle}
               focusedOptionClassName={focusedOptionStyle}
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               showSelectedIcon={false}
               noResultsClassName={noResultsStyle}
             />
@@ -698,7 +698,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-purple-50 text-sm"
               focusedOptionClassName="bg-purple-100"
               selectedOptionClassName="bg-purple-50"
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIconClassName="w-4 h-4 shrink-0 text-purple-600"
               noResultsClassName={noResultsStyle}
             />
@@ -716,7 +716,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-green-50 text-sm"
               focusedOptionClassName="bg-green-100"
               selectedOptionClassName="bg-green-50"
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIconClassName="w-4 h-4 shrink-0 text-green-600"
               noResultsClassName={noResultsStyle}
             />
@@ -734,7 +734,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-orange-50 text-sm"
               focusedOptionClassName="bg-orange-100"
               selectedOptionClassName="bg-orange-50"
-              trailingIconClassName={trailingIconStyle}
+              endIconClassName={endIconStyle}
               selectedIconClassName="w-4 h-4 shrink-0 text-orange-600"
               noResultsClassName={noResultsStyle}
             />
@@ -773,7 +773,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 text-sm"
               focusedOptionClassName="bg-gray-700"
               selectedOptionClassName="bg-gray-600"
-              trailingIconClassName="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200"
               selectedIconClassName="w-4 h-4 shrink-0 text-blue-400"
               noResultsClassName="px-3 py-4 text-sm text-gray-400 text-center"
             />
@@ -795,7 +795,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-amber-900 hover:bg-amber-100 text-sm"
               focusedOptionClassName="bg-amber-100"
               selectedOptionClassName="bg-amber-200"
-              trailingIconClassName="w-4 h-4 shrink-0 text-amber-600 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-amber-600 transition-transform duration-200"
               selectedIconClassName="w-4 h-4 shrink-0 text-amber-700"
               noResultsClassName="px-3 py-4 text-sm text-amber-600 text-center"
             />
@@ -817,7 +817,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-cyan-900 hover:bg-cyan-100 text-sm"
               focusedOptionClassName="bg-cyan-100"
               selectedOptionClassName="bg-cyan-200"
-              trailingIconClassName="w-4 h-4 shrink-0 text-cyan-600 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-cyan-600 transition-transform duration-200"
               selectedIconClassName="w-4 h-4 shrink-0 text-cyan-700"
               noResultsClassName="px-3 py-4 text-sm text-cyan-600 text-center"
             />
@@ -839,7 +839,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-gray-700 hover:bg-gray-50 text-sm"
               focusedOptionClassName="bg-gray-50"
               selectedOptionClassName="font-medium"
-              trailingIconClassName="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200"
               showSelectedIcon={false}
               noResultsClassName="px-3 py-4 text-sm text-gray-400 text-center"
             />
@@ -869,7 +869,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-gray-700 hover:bg-gray-50 text-sm"
               focusedOptionClassName="bg-blue-50"
               selectedOptionClassName="bg-blue-50"
-              trailingIconClassName="w-4 h-4 shrink-0 text-blue-200 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-blue-200 transition-transform duration-200"
               selectedIconClassName="w-4 h-4 shrink-0 text-blue-600"
               noResultsClassName={noResultsStyle}
             />
@@ -891,7 +891,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-gray-800 hover:bg-gray-100 text-sm"
               focusedOptionClassName="bg-gray-200"
               selectedOptionClassName="bg-gray-200 font-medium"
-              trailingIconClassName="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200"
               selectedIconClassName="w-4 h-4 shrink-0 text-gray-700"
               noResultsClassName={noResultsStyle}
             />
@@ -913,7 +913,7 @@ const TimePickerDemo = () => {
               optionClassName="flex items-center justify-between px-3 py-2 cursor-pointer text-gray-700 hover:bg-purple-50 text-sm"
               focusedOptionClassName="bg-purple-50"
               selectedOptionClassName="bg-purple-100"
-              trailingIconClassName="w-4 h-4 shrink-0 text-purple-200 transition-transform duration-200"
+              endIconClassName="w-4 h-4 shrink-0 text-purple-200 transition-transform duration-200"
               selectedIconClassName="w-4 h-4 shrink-0 text-purple-600"
               noResultsClassName={noResultsStyle}
             />
@@ -940,7 +940,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
             renderOptionContent={(time) => (
@@ -977,7 +977,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
             errorClassName={errorStyle}
@@ -994,7 +994,7 @@ const TimePickerDemo = () => {
             format="24h"
             triggerClassName={`${triggerStyle} opacity-50 cursor-not-allowed`}
             inputClassName={`${inputStyle} cursor-not-allowed`}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
           />
         </div>
       </Section>
@@ -1015,7 +1015,7 @@ const TimePickerDemo = () => {
             optionClassName={optionStyle}
             selectedOptionClassName={selectedOptionStyle}
             focusedOptionClassName={focusedOptionStyle}
-            trailingIconClassName={trailingIconStyle}
+            endIconClassName={endIconStyle}
             selectedIconClassName={selectedIconStyle}
             noResultsClassName={noResultsStyle}
           />
@@ -1257,19 +1257,19 @@ const TimePickerDemo = () => {
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
-                  showTrailingIcon
+                  showEndIcon
                 </td>
                 <td className="py-2 pr-4 text-gray-600">boolean</td>
                 <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show trailing icon</td>
+                <td className="py-2 text-gray-600">Show end icon</td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
-                  trailingIcon
+                  endIcon
                 </td>
                 <td className="py-2 pr-4 text-gray-600">ReactNode</td>
                 <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Custom trailing icon (default: chevron)</td>
+                <td className="py-2 text-gray-600">Custom end icon (default: chevron)</td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1396,7 +1396,7 @@ const TimePickerDemo = () => {
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
-                  trailingIconClassName
+                  endIconClassName
                 </td>
                 <td className="py-2 text-gray-600">Trailing icon</td>
               </tr>

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, type KeyboardEvent, type ReactNode } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { FieldLabel } from "./FieldLabel";
 import { CircularLoader } from "../components/Loader";
 import { cn } from "./cn";
@@ -11,24 +11,59 @@ export interface FieldWrapperProps {
   loading?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
-  leadingIcon?: ReactNode;
-  trailingIcon?: ReactNode;
-  onLeadingIconClick?: () => void;
-  onTrailingIconClick?: () => void;
-  leadingIconLabel?: string;
-  trailingIconLabel?: string;
+  success?: boolean;
+  successMessage?: ReactNode;
+  description?: ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  onStartIconClick?: () => void;
+  onEndIconClick?: () => void;
+  startIconLabel?: string;
+  endIconLabel?: string;
+  clearable?: boolean;
+  onClearClick?: () => void;
+  clearLabel?: string;
+  showCount?: boolean;
+  currentLength?: number;
+  maxLength?: number;
+  countId?: string;
   loader?: ReactNode;
   loaderSize?: number;
   fullWidth?: boolean;
-  containerClassName?: string;
+  className?: string;
   wrapperClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
-  className?: string;
+  successClassName?: string;
+  descriptionClassName?: string;
+  prefixClassName?: string;
+  suffixClassName?: string;
+  countClassName?: string;
   wrapperAlign?: "items-center" | "items-start";
   wrapperRef?: React.Ref<HTMLDivElement>;
+  "data-size"?: string;
+  "data-readonly"?: boolean;
   children: ReactNode;
 }
+
+const ClearIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M18 6 6 18" />
+    <path d="m6 6 12 12" />
+  </svg>
+);
 
 export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
   (
@@ -40,70 +75,69 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       loading = false,
       error = false,
       errorMessage,
-      leadingIcon,
-      trailingIcon,
-      onLeadingIconClick,
-      onTrailingIconClick,
-      leadingIconLabel,
-      trailingIconLabel,
+      success = false,
+      successMessage,
+      description,
+      prefix,
+      suffix,
+      startIcon,
+      endIcon,
+      onStartIconClick,
+      onEndIconClick,
+      startIconLabel,
+      endIconLabel,
+      clearable = false,
+      onClearClick,
+      clearLabel = "Clear",
+      showCount = false,
+      currentLength = 0,
+      maxLength,
+      countId,
       loader,
       loaderSize = 16,
       fullWidth = false,
-      containerClassName,
+      className,
       wrapperClassName,
       labelClassName,
       errorClassName,
-      className,
+      successClassName,
+      descriptionClassName,
+      prefixClassName,
+      suffixClassName,
+      countClassName,
       wrapperAlign = "items-center",
       wrapperRef,
+      "data-size": dataSize,
+      "data-readonly": dataReadonly,
       children,
     },
     ref,
   ) => {
     const errorId = `${fieldId}-error`;
+    const successId = `${fieldId}-success`;
+    const descriptionId = `${fieldId}-description`;
     const isDisabled = disabled || loading;
+    const showSuccess = !error && success;
 
-    const loaderElement = loader ?? (
-      <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
-    );
-
-    const handleLeadingIconKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLSpanElement>) => {
-        if (
-          onLeadingIconClick &&
-          (event.key === "Enter" || event.key === " ")
-        ) {
-          event.preventDefault();
-          onLeadingIconClick();
-        }
-      },
-      [onLeadingIconClick],
-    );
-
-    const handleTrailingIconKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLSpanElement>) => {
-        if (
-          onTrailingIconClick &&
-          (event.key === "Enter" || event.key === " ")
-        ) {
-          event.preventDefault();
-          onTrailingIconClick();
-        }
-      },
-      [onTrailingIconClick],
-    );
+    const loaderElement = loading
+      ? (loader ?? (
+          <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
+        ))
+      : null;
 
     return (
       <div
         ref={ref}
-        className={
-          cn(containerClassName, fullWidth && "w-full", className) || undefined
-        }
+        data-slot="container"
+        className={cn(fullWidth && "w-full", className) || undefined}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
+        data-success={showSuccess || undefined}
         data-loading={loading || undefined}
+        data-size={dataSize}
+        data-readonly={dataReadonly || undefined}
       >
-        {label && (
+        {label != null && label !== "" && (
           <FieldLabel
             label={label}
             required={required}
@@ -112,51 +146,126 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
           />
         )}
 
-        <div ref={wrapperRef} className={cn("flex w-full", wrapperAlign, wrapperClassName)}>
-          {leadingIcon && (
+        {description != null && description !== "" && (
+          <div
+            id={descriptionId}
+            data-slot="description"
+            className={descriptionClassName}
+          >
+            {description}
+          </div>
+        )}
+
+        <div
+          ref={wrapperRef}
+          data-slot="wrapper"
+          className={cn("flex w-full", wrapperAlign, wrapperClassName)}
+          aria-busy={loading || undefined}
+        >
+          {prefix != null && (
             <span
-              className={cn(
-                "inline-flex shrink-0",
-                onLeadingIconClick && "cursor-pointer",
-              )}
-              onClick={onLeadingIconClick}
-              onKeyDown={
-                onLeadingIconClick ? handleLeadingIconKeyDown : undefined
-              }
-              role={onLeadingIconClick ? "button" : undefined}
-              tabIndex={onLeadingIconClick ? 0 : undefined}
-              aria-label={leadingIconLabel}
+              data-slot="prefix"
+              className={cn("inline-flex shrink-0 select-none", prefixClassName)}
             >
-              {leadingIcon}
+              {prefix}
             </span>
           )}
+
+          {startIcon &&
+            (onStartIconClick ? (
+              <button
+                type="button"
+                className={cn("inline-flex shrink-0 cursor-pointer")}
+                onClick={onStartIconClick}
+                disabled={isDisabled}
+                aria-label={startIconLabel}
+              >
+                {startIcon}
+              </button>
+            ) : (
+              <span
+                className="inline-flex shrink-0"
+                aria-hidden="true"
+              >
+                {startIcon}
+              </span>
+            ))}
 
           {children}
 
-          {trailingIcon && (
-            <span
-              className={cn(
-                "inline-flex shrink-0",
-                onTrailingIconClick && "cursor-pointer",
-              )}
-              onClick={onTrailingIconClick}
-              onKeyDown={
-                onTrailingIconClick ? handleTrailingIconKeyDown : undefined
-              }
-              role={onTrailingIconClick ? "button" : undefined}
-              tabIndex={onTrailingIconClick ? 0 : undefined}
-              aria-label={trailingIconLabel}
+          {clearable && currentLength > 0 && (
+            <button
+              type="button"
+              className="inline-flex shrink-0 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+              onClick={onClearClick}
+              aria-label={clearLabel}
             >
-              {trailingIcon}
+              <ClearIcon />
+            </button>
+          )}
+
+          {endIcon &&
+            (onEndIconClick ? (
+              <button
+                type="button"
+                className={cn("inline-flex shrink-0 cursor-pointer")}
+                onClick={onEndIconClick}
+                disabled={isDisabled}
+                aria-label={endIconLabel}
+              >
+                {endIcon}
+              </button>
+            ) : (
+              <span
+                className="inline-flex shrink-0"
+                aria-hidden="true"
+              >
+                {endIcon}
+              </span>
+            ))}
+
+          {suffix != null && (
+            <span
+              data-slot="suffix"
+              className={cn("inline-flex shrink-0 select-none", suffixClassName)}
+            >
+              {suffix}
             </span>
           )}
 
-          {loading && loaderElement}
+          {loaderElement}
         </div>
 
+        {showCount && maxLength != null && (
+          <div
+            id={countId}
+            data-slot="count"
+            className={countClassName}
+            aria-live="polite"
+          >
+            {currentLength}/{maxLength}
+          </div>
+        )}
+
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div
+            id={errorId}
+            role="alert"
+            data-slot="error"
+            className={errorClassName}
+          >
             {errorMessage}
+          </div>
+        )}
+
+        {showSuccess && successMessage && (
+          <div
+            id={successId}
+            role="status"
+            data-slot="success"
+            className={successClassName}
+          >
+            {successMessage}
           </div>
         )}
       </div>

@@ -26,8 +26,8 @@ export interface TimePickerProps {
   errorMessage?: ReactNode;
   label?: ReactNode;
   required?: boolean;
-  showTrailingIcon?: boolean;
-  trailingIcon?: ReactNode;
+  showEndIcon?: boolean;
+  endIcon?: ReactNode;
   showSelectedIcon?: boolean;
   selectedIcon?: ReactNode;
   renderOptionContent?: (time: string, isSelected: boolean) => ReactNode;
@@ -44,7 +44,7 @@ export interface TimePickerProps {
   optionListClassName?: string;
   labelClassName?: string;
   errorClassName?: string;
-  trailingIconClassName?: string;
+  endIconClassName?: string;
   selectedIconClassName?: string;
   noResultsClassName?: string;
   clockContainerClassName?: string;

@@ -13,8 +13,8 @@ import { cn } from "../../utils/cn";
 const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const {
     children,
-    leadingIcon,
-    trailingIcon,
+    startIcon,
+    endIcon,
     loading = false,
     loadingText,
     loaderPosition = "right",
@@ -66,15 +66,15 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       )}
     >
       {loaderPosition === "left" && loading && loaderElement}
-      {leadingIcon && (
+      {startIcon && (
         <span className={cn("inline-flex shrink-0", animationClasses.leading)}>
-          {leadingIcon}
+          {startIcon}
         </span>
       )}
       {displayContent}
-      {trailingIcon && (
+      {endIcon && (
         <span className={cn("inline-flex shrink-0", animationClasses.trailing)}>
-          {trailingIcon}
+          {endIcon}
         </span>
       )}
       {loaderPosition === "right" && loading && loaderElement}

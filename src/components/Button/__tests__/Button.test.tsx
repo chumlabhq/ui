@@ -35,7 +35,7 @@ describe("Button", () => {
 
     it("renders leading icon", () => {
       render(
-        <Button leadingIcon={<span data-testid="leading">→</span>}>
+        <Button startIcon={<span data-testid="leading">→</span>}>
           With Icon
         </Button>
       );
@@ -45,7 +45,7 @@ describe("Button", () => {
 
     it("renders trailing icon", () => {
       render(
-        <Button trailingIcon={<span data-testid="trailing">←</span>}>
+        <Button endIcon={<span data-testid="trailing">←</span>}>
           With Icon
         </Button>
       );
@@ -391,7 +391,7 @@ describe("Button", () => {
       render(
         <Button
           iconAnimation="slideRight"
-          leadingIcon={<span>→</span>}
+          startIcon={<span>→</span>}
           className="custom-class"
         >
           Button

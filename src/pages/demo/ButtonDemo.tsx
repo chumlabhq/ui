@@ -259,27 +259,27 @@ const ButtonDemo = () => {
 
         <Section
           title="With Icons"
-          description="Add leading and/or trailing icons using the leadingIcon and trailingIcon props."
+          description="Add leading and/or trailing icons using the startIcon and endIcon props."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
-            <Button className={styles.primary} leadingIcon={<PlusIcon />}>
+            <Button className={styles.primary} startIcon={<PlusIcon />}>
               Add Item
             </Button>
-            <Button className={styles.secondary} trailingIcon={<ArrowRightIcon />}>
+            <Button className={styles.secondary} endIcon={<ArrowRightIcon />}>
               Continue
             </Button>
             <Button
               className={styles.outline}
-              leadingIcon={<SearchIcon />}
-              trailingIcon={<ArrowRightIcon />}
+              startIcon={<SearchIcon />}
+              endIcon={<ArrowRightIcon />}
             >
               Search
             </Button>
-            <Button className={styles.success} leadingIcon={<DownloadIcon />}>
+            <Button className={styles.success} startIcon={<DownloadIcon />}>
               Download
             </Button>
-            <Button className={styles.danger} leadingIcon={<TrashIcon />}>
+            <Button className={styles.danger} startIcon={<TrashIcon />}>
               Delete
             </Button>
           </DemoWrapper>
@@ -293,27 +293,27 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.iconOnly}
-              leadingIcon={<SearchIcon />}
+              startIcon={<SearchIcon />}
               aria-label="Search"
             />
             <Button
               className={styles.iconOnly}
-              leadingIcon={<PlusIcon />}
+              startIcon={<PlusIcon />}
               aria-label="Add"
             />
             <Button
               className={styles.iconOnly}
-              leadingIcon={<DownloadIcon />}
+              startIcon={<DownloadIcon />}
               aria-label="Download"
             />
             <Button
               className={styles.iconOnly}
-              leadingIcon={<TrashIcon />}
+              startIcon={<TrashIcon />}
               aria-label="Delete"
             />
             <Button
               className={`${styles.iconOnly} ${isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-600 hover:bg-blue-700"} text-white`}
-              leadingIcon={<CheckIcon />}
+              startIcon={<CheckIcon />}
               aria-label="Confirm"
             />
           </DemoWrapper>
@@ -354,7 +354,7 @@ const ButtonDemo = () => {
                     target="_blank"
                     rel="noreferrer"
                     className={styles.link}
-                    trailingIcon={<ExternalLinkIcon />}
+                    endIcon={<ExternalLinkIcon />}
                     iconAnimation="slideRight"
                   >
                     External Link
@@ -381,7 +381,7 @@ const ButtonDemo = () => {
                   <Button
                     as="span"
                     className={styles.text}
-                    trailingIcon={<ArrowRightIcon />}
+                    endIcon={<ArrowRightIcon />}
                     iconAnimation="slideRight"
                   >
                     Learn More
@@ -389,7 +389,7 @@ const ButtonDemo = () => {
                   <Button
                     as="span"
                     className={`${styles.text} ${isDarkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
-                    leadingIcon={<PlusIcon />}
+                    startIcon={<PlusIcon />}
                     iconAnimation="pulse"
                     animateIcon="leading"
                   >
@@ -409,14 +409,14 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="slideRight"
             >
               Slide Right
             </Button>
             <Button
               className={styles.secondary}
-              leadingIcon={<ArrowRightIcon />}
+              startIcon={<ArrowRightIcon />}
               iconAnimation="slideLeft"
               animateIcon="leading"
             >
@@ -424,14 +424,14 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.outline}
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="slideUp"
             >
               Slide Up
             </Button>
             <Button
               className={styles.ghost}
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="slideDown"
             >
               Slide Down
@@ -447,14 +447,14 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="bounce"
             >
               Bounce
             </Button>
             <Button
               className={styles.secondary}
-              leadingIcon={<SearchIcon />}
+              startIcon={<SearchIcon />}
               iconAnimation="pulse"
               animateIcon="leading"
             >
@@ -462,7 +462,7 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.outline}
-              leadingIcon={<SpinnerIcon />}
+              startIcon={<SpinnerIcon />}
               iconAnimation="spin"
               animateIcon="leading"
             >
@@ -479,8 +479,8 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              leadingIcon={<ArrowRightIcon />}
-              trailingIcon={<ArrowRightIcon />}
+              startIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="slideRight"
               animateIcon="both"
             >
@@ -488,8 +488,8 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.secondary}
-              leadingIcon={<PlusIcon />}
-              trailingIcon={<PlusIcon />}
+              startIcon={<PlusIcon />}
+              endIcon={<PlusIcon />}
               iconAnimation="pulse"
               animateIcon="both"
             >
@@ -506,7 +506,7 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="slideRight"
               animateOnHover={false}
             >
@@ -514,7 +514,7 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.secondary}
-              leadingIcon={<SpinnerIcon />}
+              startIcon={<SpinnerIcon />}
               iconAnimation="spin"
               animateIcon="leading"
               animateOnHover={false}
@@ -523,7 +523,7 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.outline}
-              leadingIcon={<SearchIcon />}
+              startIcon={<SearchIcon />}
               iconAnimation="pulse"
               animateIcon="leading"
               animateOnHover={false}
@@ -573,7 +573,7 @@ const ButtonDemo = () => {
                 <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
                   Loading with icon (icon remains visible)
                 </p>
-                <Button className={styles.success} loading leadingIcon={<DownloadIcon />}>
+                <Button className={styles.success} loading startIcon={<DownloadIcon />}>
                   Downloading
                 </Button>
               </div>
@@ -663,7 +663,7 @@ const ButtonDemo = () => {
             <Button className={styles.outline} disabled>
               Disabled Outline
             </Button>
-            <Button className={styles.ghost} disabled leadingIcon={<PlusIcon />}>
+            <Button className={styles.ghost} disabled startIcon={<PlusIcon />}>
               Disabled with Icon
             </Button>
           </DemoWrapper>
@@ -679,7 +679,7 @@ const ButtonDemo = () => {
               <Button className={styles.primary} fullWidth>
                 Full Width Primary
               </Button>
-              <Button className={styles.outline} fullWidth leadingIcon={<DownloadIcon />}>
+              <Button className={styles.outline} fullWidth startIcon={<DownloadIcon />}>
                 Full Width with Icon
               </Button>
             </div>
@@ -695,21 +695,21 @@ const ButtonDemo = () => {
             <Button
               className={styles.primary}
               contentClassName="inline-flex items-center justify-center gap-4"
-              leadingIcon={<SearchIcon />}
+              startIcon={<SearchIcon />}
             >
               Wider Gap (gap-4)
             </Button>
             <Button
               className={styles.secondary}
               contentClassName="inline-flex items-center justify-center gap-1"
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
             >
               Tighter Gap (gap-1)
             </Button>
             <Button
               className={styles.outline}
               contentClassName="flex flex-row-reverse items-center justify-center gap-2"
-              leadingIcon={<CheckIcon />}
+              startIcon={<CheckIcon />}
             >
               Reversed Content
             </Button>
@@ -794,7 +794,7 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.iconOnly}
-              leadingIcon={<SearchIcon />}
+              startIcon={<SearchIcon />}
               aria-label="Search"
               tooltip="Search for items"
               tooltipProps={{ side: "bottom", showArrow: false }}
@@ -861,7 +861,7 @@ const ButtonDemo = () => {
           <DemoWrapper isDarkMode={isDarkMode}>
             <Button
               className={styles.primary}
-              trailingIcon={<ArrowRightIcon />}
+              endIcon={<ArrowRightIcon />}
               iconAnimation="slideRight"
               tooltip="Continue to the next step"
             >
@@ -873,7 +873,7 @@ const ButtonDemo = () => {
               target="_blank"
               rel="noreferrer"
               className={styles.link}
-              trailingIcon={<ExternalLinkIcon />}
+              endIcon={<ExternalLinkIcon />}
               iconAnimation="slideRight"
               tooltip="Opens in a new tab"
               tooltipProps={{ side: "top" }}
@@ -882,7 +882,7 @@ const ButtonDemo = () => {
             </Button>
             <Button
               className={styles.success}
-              leadingIcon={<DownloadIcon />}
+              startIcon={<DownloadIcon />}
               iconAnimation="slideDown"
               animateIcon="leading"
               tooltip="Download the file"
@@ -995,22 +995,22 @@ const ButtonDemo = () => {
                 <ButtonGroup className="inline-flex gap-0">
                   <Button
                     className={`${styles.outline} rounded-r-none border-r-0`}
-                    leadingIcon={<SearchIcon />}
+                    startIcon={<SearchIcon />}
                     aria-label="Search"
                   />
                   <Button
                     className={`${styles.outline} rounded-none border-r-0`}
-                    leadingIcon={<PlusIcon />}
+                    startIcon={<PlusIcon />}
                     aria-label="Add"
                   />
                   <Button
                     className={`${styles.outline} rounded-none border-r-0`}
-                    leadingIcon={<DownloadIcon />}
+                    startIcon={<DownloadIcon />}
                     aria-label="Download"
                   />
                   <Button
                     className={`${styles.outline} rounded-l-none`}
-                    leadingIcon={<TrashIcon />}
+                    startIcon={<TrashIcon />}
                     aria-label="Delete"
                   />
                 </ButtonGroup>
@@ -1022,19 +1022,19 @@ const ButtonDemo = () => {
                 <ButtonGroup className="inline-flex gap-2">
                   <Button
                     className={styles.primary}
-                    leadingIcon={<PlusIcon />}
+                    startIcon={<PlusIcon />}
                   >
                     Add
                   </Button>
                   <Button
                     className={styles.secondary}
-                    leadingIcon={<DownloadIcon />}
+                    startIcon={<DownloadIcon />}
                   >
                     Export
                   </Button>
                   <Button
                     className={styles.danger}
-                    leadingIcon={<TrashIcon />}
+                    startIcon={<TrashIcon />}
                   >
                     Delete
                   </Button>
@@ -1047,21 +1047,21 @@ const ButtonDemo = () => {
                 <ButtonGroup className="inline-flex gap-1">
                   <Button
                     className={styles.ghost}
-                    leadingIcon={<SearchIcon />}
+                    startIcon={<SearchIcon />}
                     iconAnimation="pulse"
                     animateIcon="leading"
                     aria-label="Search"
                   />
                   <Button
                     className={styles.ghost}
-                    leadingIcon={<DownloadIcon />}
+                    startIcon={<DownloadIcon />}
                     iconAnimation="slideDown"
                     animateIcon="leading"
                     aria-label="Download"
                   />
                   <Button
                     className={styles.ghost}
-                    leadingIcon={<ArrowRightIcon />}
+                    startIcon={<ArrowRightIcon />}
                     iconAnimation="slideRight"
                     animateIcon="leading"
                     aria-label="Next"
@@ -1075,17 +1075,17 @@ const ButtonDemo = () => {
                 <ButtonGroup className="inline-flex flex-col gap-0">
                   <Button
                     className={`${styles.outline} rounded-b-none border-b-0`}
-                    leadingIcon={<PlusIcon />}
+                    startIcon={<PlusIcon />}
                     aria-label="Add"
                   />
                   <Button
                     className={`${styles.outline} rounded-none border-b-0`}
-                    leadingIcon={<SearchIcon />}
+                    startIcon={<SearchIcon />}
                     aria-label="Search"
                   />
                   <Button
                     className={`${styles.outline} rounded-t-none`}
-                    leadingIcon={<CheckIcon />}
+                    startIcon={<CheckIcon />}
                     aria-label="Confirm"
                   />
                 </ButtonGroup>
@@ -1241,7 +1241,7 @@ const ButtonDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">leadingIcon</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">startIcon</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1249,7 +1249,7 @@ const ButtonDemo = () => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">trailingIcon</td>
+                  <td className="py-3 pr-4 font-mono text-blue-500">endIcon</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
                   <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
                   <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
@@ -1573,8 +1573,8 @@ interface ButtonTooltipProps {
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
-  leadingIcon?: ReactNode;
-  trailingIcon?: ReactNode;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
   loading?: boolean;
   loadingText?: ReactNode;
   loaderPosition?: "left" | "right";

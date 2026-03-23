@@ -33,8 +33,8 @@ export interface ButtonTooltipProps {
 interface ButtonSharedProps {
   children?: ReactNode;
   disabled?: boolean;
-  leadingIcon?: ReactNode;
-  trailingIcon?: ReactNode;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
   loading?: boolean;
   loadingText?: ReactNode;
   loaderPosition?: "left" | "right";

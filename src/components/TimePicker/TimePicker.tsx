@@ -96,8 +96,8 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       errorMessage,
       label,
       required = false,
-      showTrailingIcon = true,
-      trailingIcon,
+      showEndIcon = true,
+      endIcon,
       showSelectedIcon = true,
       selectedIcon,
       renderOptionContent,
@@ -114,7 +114,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       optionListClassName = "",
       labelClassName = "",
       errorClassName = "",
-      trailingIconClassName = "",
+      endIconClassName = "",
       selectedIconClassName = "",
       noResultsClassName = "",
       clockContainerClassName = "",
@@ -298,12 +298,12 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
               className={inputClassName}
               autoComplete="off"
             />
-            {showTrailingIcon &&
-              (trailingIcon ? (
-                <span className={trailingIconClassName}>{trailingIcon}</span>
+            {showEndIcon &&
+              (endIcon ? (
+                <span className={endIconClassName}>{endIcon}</span>
               ) : (
                 <ChevronDownIcon
-                  className={[trailingIconClassName, isOpen ? "rotate-180" : ""]
+                  className={[endIconClassName, isOpen ? "rotate-180" : ""]
                     .filter(Boolean)
                     .join(" ")}
                 />

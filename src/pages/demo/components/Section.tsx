@@ -11,16 +11,16 @@ export const Section: React.FC<SectionProps> = ({
   children,
   isDarkMode = false,
 }) => (
-  <section className="space-y-4">
+  <section className="space-y-3">
     <div>
-      <h2
-        className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}
+      <h3
+        className={`text-[15px] font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}
       >
         {title}
-      </h2>
+      </h3>
       {description && (
         <p
-          className={`text-sm mt-1 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+          className={`text-xs mt-0.5 ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
         >
           {description}
         </p>
@@ -40,8 +40,10 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   isDarkMode = false,
 }) => (
   <pre
-    className={`p-4 rounded-lg text-sm overflow-x-auto ${
-      isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
+    className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${
+      isDarkMode
+        ? "bg-gradient-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/[0.06]"
+        : "bg-gray-50 text-gray-700 border border-gray-200"
     }`}
   >
     <code>{code}</code>
@@ -70,11 +72,13 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
 
   return (
     <div
-      className={`border rounded-lg overflow-hidden ${
-        isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
+      className={`relative border rounded-xl overflow-hidden ${
+        isDarkMode
+          ? "border-white/[0.06] bg-gradient-to-br from-gray-800/80 via-gray-900/60 to-gray-800/80"
+          : "border-gray-200 bg-white"
       } ${className}`}
     >
-      <div className={`p-4 sm:p-6 ${layoutClasses}`}>{children}</div>
+      <div className={`p-4 sm:p-5 ${layoutClasses}`}>{children}</div>
     </div>
   );
 };

@@ -1,0 +1,916 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Components" [level=1] [ref=e6]
+      - switch "Toggle dark mode" [ref=e9] [cursor=pointer]:
+        - img [ref=e11]
+    - navigation [ref=e13]:
+      - link "Accordion" [ref=e14]:
+        - /url: /demo/accordion
+      - link "Avatar" [ref=e15]:
+        - /url: /demo/avatar
+      - link "Breadcrumb" [ref=e16]:
+        - /url: /demo/breadcrumb
+      - link "Button" [ref=e17]:
+        - /url: /demo/button
+      - link "Cascading Dropdown" [ref=e18]:
+        - /url: /demo/cascading-dropdown
+      - link "Checkbox" [ref=e19]:
+        - /url: /demo/checkbox
+      - link "Country Flag" [ref=e20]:
+        - /url: /demo/country-flag
+      - link "Date Picker" [ref=e21]:
+        - /url: /demo/date-picker
+      - link "Drawer" [ref=e22]:
+        - /url: /demo/drawer
+      - link "Dropdown" [ref=e23]:
+        - /url: /demo/dropdown
+      - link "Input" [ref=e24]:
+        - /url: /demo/input
+      - link "International Phone Input" [ref=e25]:
+        - /url: /demo/international-phone-input
+      - link "Modal" [ref=e26]:
+        - /url: /demo/modal
+      - link "Multi Select Dropdown" [ref=e27]:
+        - /url: /demo/multi-select-dropdown
+      - link "Multi Select Searchable Dropdown" [ref=e28]:
+        - /url: /demo/multi-select-searchable-dropdown
+      - link "OTP Input" [ref=e29]:
+        - /url: /demo/otp-input
+      - link "Pagination" [ref=e30]:
+        - /url: /demo/pagination
+      - link "Resizable Panel" [ref=e31]:
+        - /url: /demo/resizable-panel
+      - link "Searchable Dropdown" [ref=e32]:
+        - /url: /demo/searchable-dropdown
+      - link "Stepper" [ref=e33]:
+        - /url: /demo/stepper
+      - link "Switch" [ref=e34]:
+        - /url: /demo/switch
+      - link "Tab Panel" [ref=e35]:
+        - /url: /demo/tab-panel
+      - link "Table" [ref=e36]:
+        - /url: /demo/table
+      - link "Text Area" [ref=e37]:
+        - /url: /demo/text-area
+      - link "Time Picker" [ref=e38]:
+        - /url: /demo/time-picker
+      - link "Toast" [ref=e39]:
+        - /url: /demo/toast
+      - link "Tooltip" [ref=e40]:
+        - /url: /demo/tooltip
+  - main [ref=e41]:
+    - generic:
+      - generic:
+        - generic:
+          - heading "MultiSelectDropdown" [level=1]
+          - paragraph: A multi-select dropdown component without search. Supports keyboard navigation, async option loading, chips or count display, and full customization via the classes prop.
+          - generic:
+            - heading "Installation" [level=3]
+            - code [ref=e43]: "import { MultiSelectDropdown } from \"@kern-ui/multi-select-dropdown\";"
+        - generic:
+          - heading "Examples" [level=2]
+          - generic:
+            - generic:
+              - heading "Basic Usage" [level=2]
+              - paragraph: Standard multi-select with chips.
+            - generic [ref=e47]:
+              - combobox [ref=e49]:
+                - generic [ref=e51]: Select fruits...
+                - img [ref=e52]
+              - status [ref=e54]
+          - generic:
+            - generic:
+              - heading "State Variations" [level=2]
+              - paragraph: "Overview of different states: default, selected, disabled, error, and loading."
+            - generic [ref=e56]:
+              - generic:
+                - generic:
+                  - paragraph: Default (empty)
+                  - generic:
+                    - combobox [ref=e57]:
+                      - generic:
+                        - generic: Select fruits...
+                      - img [ref=e58]
+                    - status [ref=e60]
+                - generic:
+                  - paragraph: Selected (with chips)
+                  - generic:
+                    - combobox [ref=e61]:
+                      - generic:
+                        - generic [ref=e62]:
+                          - generic [ref=e63]: Apple
+                          - button "Remove Apple" [ref=e64] [cursor=pointer]:
+                            - img [ref=e65]
+                        - generic [ref=e67]:
+                          - generic [ref=e68]: Banana
+                          - button "Remove Banana" [ref=e69] [cursor=pointer]:
+                            - img [ref=e70]
+                      - img [ref=e72]
+                    - status [ref=e74]: "Selected: Apple, Banana"
+                - generic:
+                  - paragraph: Disabled
+                  - generic:
+                    - combobox [disabled] [ref=e75]:
+                      - generic:
+                        - generic [ref=e76]:
+                          - generic [ref=e77]: Apple
+                          - button "Remove Apple" [ref=e78] [cursor=pointer]:
+                            - img [ref=e79]
+                        - generic [ref=e81]:
+                          - generic [ref=e82]: Banana
+                          - button "Remove Banana" [ref=e83] [cursor=pointer]:
+                            - img [ref=e84]
+                      - img [ref=e86]
+                    - status [ref=e88]: "Selected: Apple, Banana"
+                - generic:
+                  - paragraph: Error state
+                  - generic:
+                    - combobox [ref=e89]:
+                      - generic:
+                        - generic: Select fruits...
+                      - img [ref=e90]
+                    - status [ref=e92]
+                    - alert: Please select at least one
+                - generic:
+                  - paragraph: Loading state
+                  - generic:
+                    - combobox [ref=e93]:
+                      - generic:
+                        - generic: Loading...
+                      - img [ref=e94]
+                    - status [ref=e96]: Loading options
+                - generic:
+                  - paragraph: Count only (no chips)
+                  - generic:
+                    - combobox [ref=e97]:
+                      - generic:
+                        - generic: 3 selected
+                      - img [ref=e98]
+                    - status [ref=e100]: "Selected: Apple, Banana, Cherry"
+          - generic:
+            - generic:
+              - heading "With Custom Content" [level=2]
+            - generic [ref=e104]:
+              - combobox [ref=e106]:
+                - generic [ref=e108]: Select countries...
+                - img [ref=e109]
+              - status [ref=e111]
+          - generic:
+            - generic:
+              - heading "With Status Indicators" [level=2]
+            - generic [ref=e115]:
+              - combobox [ref=e117]:
+                - generic [ref=e119]: Select statuses...
+                - img [ref=e120]
+              - status [ref=e122]
+          - generic:
+            - generic:
+              - heading "Async Data Fetching with Shimmer" [level=2]
+              - paragraph: Options loaded when dropdown opens.
+            - generic [ref=e126]:
+              - combobox [ref=e128]:
+                - generic [ref=e130]: Select countries...
+                - img [ref=e131]
+              - status [ref=e133]
+            - paragraph: Options are fetched from the REST Countries API when the dropdown opens.
+          - generic:
+            - generic:
+              - heading "With Disabled Options" [level=2]
+            - generic [ref=e137]:
+              - combobox [ref=e139]:
+                - generic [ref=e141]: Select options...
+                - img [ref=e142]
+              - status [ref=e144]
+          - generic:
+            - generic:
+              - heading "With Label" [level=2]
+            - generic [ref=e148]:
+              - generic [ref=e149]: Favorite Fruits*
+              - combobox "Favorite Fruits" [ref=e151]:
+                - generic [ref=e153]: Select fruits...
+                - img [ref=e154]
+              - status [ref=e156]
+          - generic:
+            - generic:
+              - heading "Controlled Open State" [level=2]
+              - paragraph: Use open and onOpenChange to control the dropdown programmatically.
+            - generic [ref=e159]:
+              - generic [ref=e161]:
+                - combobox [ref=e163]:
+                  - generic [ref=e165]: Controlled dropdown...
+                  - img [ref=e166]
+                - status [ref=e168]
+              - button "Open" [ref=e169]
+          - generic:
+            - generic:
+              - heading "Without Chips (Count Only)" [level=2]
+              - paragraph: Shows "X selected" instead of chips.
+            - generic [ref=e173]:
+              - combobox [ref=e175]:
+                - generic [ref=e177]: Select fruits...
+                - img [ref=e178]
+              - status [ref=e180]
+          - generic:
+            - generic:
+              - heading "Disabled State" [level=2]
+            - generic [ref=e184]:
+              - combobox [disabled] [ref=e186]:
+                - generic [ref=e187]:
+                  - generic [ref=e188]:
+                    - generic [ref=e189]: Apple
+                    - button "Remove Apple" [ref=e190] [cursor=pointer]:
+                      - img [ref=e191]
+                  - generic [ref=e193]:
+                    - generic [ref=e194]: Banana
+                    - button "Remove Banana" [ref=e195] [cursor=pointer]:
+                      - img [ref=e196]
+                - img [ref=e198]
+              - status [ref=e200]: "Selected: Apple, Banana"
+          - generic:
+            - generic:
+              - heading "Error State" [level=2]
+            - generic [ref=e204]:
+              - generic [ref=e205]: Required Field*
+              - combobox "Required Field" [ref=e207]:
+                - generic [ref=e209]: Select fruits...
+                - img [ref=e210]
+              - status [ref=e212]
+              - alert [ref=e213]: Please select at least one option
+          - generic:
+            - generic:
+              - heading "Native Form Participation" [level=2]
+              - paragraph: When name is set, a hidden input is rendered so the value participates in native form submissions and FormData.
+            - generic [ref=e216]:
+              - generic [ref=e218]:
+                - generic [ref=e219]: Fruits (in form)
+                - combobox "Fruits (in form)" [ref=e221]:
+                  - generic [ref=e223]: Select fruits...
+                  - img [ref=e224]
+                - status [ref=e226]
+              - button "Submit" [ref=e227]
+          - generic:
+            - generic:
+              - heading "Without Chevron" [level=2]
+            - generic [ref=e231]:
+              - combobox [ref=e233]:
+                - generic [ref=e235]: Select fruits...
+              - status [ref=e236]
+          - generic:
+            - generic:
+              - heading "Full Width" [level=2]
+            - generic [ref=e238]:
+              - generic:
+                - generic:
+                  - combobox [ref=e239]:
+                    - generic:
+                      - generic: Select fruits...
+                    - img [ref=e240]
+                  - status [ref=e242]
+          - generic:
+            - generic:
+              - heading "Dropdown Position" [level=2]
+              - paragraph: Control whether the popup opens above or below the trigger. Auto-flips when there isn't enough space.
+            - generic [ref=e244]:
+              - generic:
+                - generic:
+                  - paragraph: dropdownPosition="bottom" (default)
+                  - generic [ref=e246]:
+                    - combobox [ref=e248]:
+                      - generic [ref=e250]: Opens below...
+                      - img [ref=e251]
+                    - status [ref=e253]
+                - generic:
+                  - paragraph: dropdownPosition="top"
+                  - generic [ref=e255]:
+                    - combobox [ref=e257]:
+                      - generic [ref=e259]: Opens above...
+                      - img [ref=e260]
+                    - status [ref=e262]
+            - generic [ref=e263]:
+              - paragraph:
+                - text: The dropdown renders via a
+                - code [ref=e264]: React Portal
+                - text: into
+                - code [ref=e265]: document.body
+                - text: (or a custom container via portalContainer).
+          - generic:
+            - generic:
+              - heading "Custom Portal Container" [level=2]
+              - paragraph: Use portalContainer to render the dropdown into a specific DOM element instead of document.body.
+            - generic [ref=e269]:
+              - combobox [ref=e271]:
+                - generic [ref=e273]: Renders to document.body...
+                - img [ref=e274]
+              - status [ref=e276]
+            - paragraph:
+              - text: Pass a specific HTMLElement to
+              - code [ref=e277]: portalContainer
+              - text: or
+              - code [ref=e278]: "null"
+              - text: for document.body (default).
+          - generic:
+            - generic:
+              - heading "Keep Mounted" [level=2]
+              - paragraph: "Use keepMounted to keep the dropdown portal in the DOM when closed (hidden with display: none)."
+            - generic [ref=e282]:
+              - combobox [ref=e284]:
+                - generic [ref=e286]: Select fruits...
+                - img [ref=e287]
+              - status [ref=e289]
+          - generic:
+            - generic:
+              - heading "Custom Dropdown Gap" [level=2]
+              - paragraph: Control the gap between the trigger and dropdown with dropdownGap (pixels). Default is 4.
+            - generic [ref=e291]:
+              - generic:
+                - generic:
+                  - paragraph: No gap (0px)
+                  - generic [ref=e293]:
+                    - combobox [ref=e295]:
+                      - generic [ref=e297]: No gap...
+                      - img [ref=e298]
+                    - status [ref=e300]
+                - generic:
+                  - paragraph: Large gap (16px)
+                  - generic [ref=e302]:
+                    - combobox [ref=e304]:
+                      - generic [ref=e306]: Large gap...
+                      - img [ref=e307]
+                    - status [ref=e309]
+          - generic:
+            - generic:
+              - heading "Custom Z-Index" [level=2]
+              - paragraph: Control the z-index of the dropdown portal with dropdownZIndex. Default is 50.
+            - generic [ref=e313]:
+              - combobox [ref=e315]:
+                - generic [ref=e317]: "Select (z-index: 9999)..."
+                - img [ref=e318]
+              - status [ref=e320]
+          - generic:
+            - generic:
+              - heading "Form Integration (onBlur / onFocus)" [level=2]
+              - paragraph: Use onBlur and onFocus for integration with form libraries like React Hook Form or Formik.
+            - generic [ref=e324]:
+              - combobox [ref=e326]:
+                - generic [ref=e328]: Focus or blur me...
+                - img [ref=e329]
+              - status [ref=e331]
+          - generic:
+            - generic:
+              - heading "Custom KeyDown Handler" [level=2]
+              - paragraph: Provide onKeyDown to intercept or extend keyboard behavior. Call preventDefault() to override internal behavior.
+            - generic [ref=e335]:
+              - combobox [ref=e337]:
+                - generic [ref=e339]: Try pressing 'x'...
+                - img [ref=e340]
+              - status [ref=e342]
+          - generic:
+            - generic:
+              - heading "className, style & aria-label" [level=2]
+              - paragraph: Use className for root, style for inline styles, and aria-label to customize the listbox accessible label.
+            - generic [ref=e344]:
+              - generic:
+                - generic:
+                  - paragraph: className (root)
+                  - generic [ref=e346]:
+                    - combobox [ref=e348]:
+                      - generic [ref=e350]: Select fruits...
+                      - img [ref=e351]
+                    - status [ref=e353]
+                - generic:
+                  - paragraph: style (inline on root)
+                  - generic [ref=e355]:
+                    - combobox [ref=e357]:
+                      - generic [ref=e359]: Select fruits...
+                      - img [ref=e360]
+                    - status [ref=e362]
+                - generic:
+                  - paragraph: aria-label="Fruit options"
+                  - generic [ref=e364]:
+                    - combobox [ref=e366]:
+                      - generic [ref=e368]: Select fruits...
+                      - img [ref=e369]
+                    - status [ref=e371]
+          - generic:
+            - generic:
+              - heading "Dark Theme" [level=2]
+            - generic [ref=e375]:
+              - combobox [ref=e377]:
+                - generic [ref=e379]: Select fruits...
+                - img [ref=e380]
+              - status [ref=e382]
+          - generic:
+            - generic:
+              - heading "Purple Theme" [level=2]
+            - generic [ref=e386]:
+              - combobox [ref=e388]:
+                - generic [ref=e390]: Select fruits...
+                - img [ref=e391]
+              - status [ref=e393]
+          - generic:
+            - generic:
+              - heading "Custom Checkbox - Green Rounded" [level=2]
+            - generic [ref=e397]:
+              - combobox [ref=e399]:
+                - generic [ref=e401]: Select fruits...
+                - img [ref=e402]
+              - status [ref=e404]
+          - generic:
+            - generic:
+              - heading "Custom Checkbox - Orange Square" [level=2]
+            - generic [ref=e408]:
+              - combobox [ref=e410]:
+                - generic [ref=e412]: Select fruits...
+                - img [ref=e413]
+              - status [ref=e415]
+          - generic:
+            - generic:
+              - heading "Custom Checkbox Icon" [level=2]
+            - generic [ref=e419]:
+              - combobox [ref=e421]:
+                - generic [ref=e423]: Select fruits...
+                - img [ref=e424]
+              - status [ref=e426]
+          - generic:
+            - generic:
+              - heading "Shimmer Count Variations" [level=2]
+              - paragraph: Control the number of shimmer items during loading with shimmerCount.
+            - generic [ref=e429]:
+              - generic [ref=e430]:
+                - paragraph [ref=e431]: 3 shimmer items
+                - generic [ref=e432]:
+                  - combobox [ref=e434]:
+                    - generic [ref=e436]: Loading...
+                    - img [ref=e437]
+                  - status [ref=e439]: Loading options
+              - generic [ref=e440]:
+                - paragraph [ref=e441]: 8 shimmer items
+                - generic [ref=e442]:
+                  - combobox [ref=e444]:
+                    - generic [ref=e446]: Loading...
+                    - img [ref=e447]
+                  - status [ref=e449]: Loading options
+          - generic:
+            - generic:
+              - heading "Empty Options" [level=2]
+              - paragraph: When no options are available, noResultsText or noResultsContent is shown.
+            - generic [ref=e452]:
+              - generic [ref=e453]:
+                - paragraph [ref=e454]: Default text (noResultsText)
+                - generic [ref=e455]:
+                  - combobox [ref=e457]:
+                    - generic [ref=e459]: No options...
+                    - img [ref=e460]
+                  - status [ref=e462]
+              - generic [ref=e463]:
+                - paragraph [ref=e464]: Custom noResultsContent
+                - generic [ref=e465]:
+                  - combobox [ref=e467]:
+                    - generic [ref=e469]: Custom empty...
+                    - img [ref=e470]
+                  - status [ref=e472]
+          - generic:
+            - generic:
+              - 'heading "Combined: All Features" [level=2]'
+              - paragraph: Label, required, custom chevron, chips, and classes together.
+            - generic [ref=e476]:
+              - generic [ref=e477]: Favorite Fruits*
+              - combobox "Favorite Fruits" [ref=e479]:
+                - generic [ref=e481]: Select fruits...
+                - img [ref=e482]
+              - status [ref=e484]
+          - generic:
+            - generic:
+              - heading "Keyboard Navigation" [level=2]
+            - generic [ref=e485]:
+              - paragraph: Keyboard shortcuts
+              - list:
+                - listitem:
+                  - generic [ref=e486]: Enter / Space
+                  - generic [ref=e487]: Open dropdown / toggle focused option
+                - listitem:
+                  - generic [ref=e488]: ↓
+                  - generic [ref=e489]: Open dropdown / move to next option
+                - listitem:
+                  - generic [ref=e490]: ↑
+                  - generic [ref=e491]: Move to previous option
+                - listitem:
+                  - generic [ref=e492]: Home
+                  - generic [ref=e493]: Move to first option
+                - listitem:
+                  - generic [ref=e494]: End
+                  - generic [ref=e495]: Move to last option
+                - listitem:
+                  - generic [ref=e496]: Escape
+                  - generic [ref=e497]: Close dropdown, restore focus to trigger
+                - listitem:
+                  - generic [ref=e498]: Tab
+                  - generic [ref=e499]: Close dropdown, move focus forward
+            - generic [ref=e503]:
+              - combobox [ref=e505]:
+                - generic [ref=e507]: Try keyboard navigation...
+                - img [ref=e508]
+              - status [ref=e510]
+          - generic:
+            - generic:
+              - heading "Data Attributes" [level=2]
+            - generic [ref=e512]:
+              - table [ref=e513]:
+                - rowgroup [ref=e514]:
+                  - row "Attribute Applied To Description" [ref=e515]:
+                    - columnheader "Attribute" [ref=e516]
+                    - columnheader "Applied To" [ref=e517]
+                    - columnheader "Description" [ref=e518]
+                - rowgroup [ref=e519]:
+                  - row "data-open root, trigger Present when the dropdown is open" [ref=e520]:
+                    - cell "data-open" [ref=e521]
+                    - cell "root, trigger" [ref=e522]
+                    - cell "Present when the dropdown is open" [ref=e523]
+                  - row "data-disabled root, trigger, option Present when disabled" [ref=e524]:
+                    - cell "data-disabled" [ref=e525]
+                    - cell "root, trigger, option" [ref=e526]
+                    - cell "Present when disabled" [ref=e527]
+                  - row "data-error root, trigger Present when in error state" [ref=e528]:
+                    - cell "data-error" [ref=e529]
+                    - cell "root, trigger" [ref=e530]
+                    - cell "Present when in error state" [ref=e531]
+                  - row "data-full-width root Present when fullWidth is true" [ref=e532]:
+                    - cell "data-full-width" [ref=e533]
+                    - cell "root" [ref=e534]
+                    - cell "Present when fullWidth is true" [ref=e535]
+                  - row "data-state content (portal) \"open\" or \"closed\"" [ref=e536]:
+                    - cell "data-state" [ref=e537]
+                    - cell "content (portal)" [ref=e538]
+                    - cell "\"open\" or \"closed\"" [ref=e539]
+                  - row "data-position content (portal) \"top\" or \"bottom\" (actual position)" [ref=e540]:
+                    - cell "data-position" [ref=e541]
+                    - cell "content (portal)" [ref=e542]
+                    - cell "\"top\" or \"bottom\" (actual position)" [ref=e543]
+              - paragraph [ref=e544]:
+                - text: "Example usage:"
+                - code [ref=e545]: data-[selected]:font-bold
+                - text: ","
+                - code [ref=e546]: data-[disabled]:opacity-50
+        - generic:
+          - heading "API Reference" [level=2]
+          - generic:
+            - heading "MultiSelectDropdown Props" [level=3]
+            - table [ref=e547]:
+              - rowgroup [ref=e548]:
+                - row "Prop Type Default Description" [ref=e549]:
+                  - columnheader "Prop" [ref=e550]
+                  - columnheader "Type" [ref=e551]
+                  - columnheader "Default" [ref=e552]
+                  - columnheader "Description" [ref=e553]
+              - rowgroup [ref=e554]:
+                - row "options MultiSelectOption[] [] Array of options to display" [ref=e555]:
+                  - cell "options" [ref=e556]
+                  - cell "MultiSelectOption[]" [ref=e557]
+                  - cell "[]" [ref=e558]
+                  - cell "Array of options to display" [ref=e559]
+                - row "value string[] - Selected values (required)" [ref=e560]:
+                  - cell "value" [ref=e561]
+                  - cell "string[]" [ref=e562]
+                  - cell "-" [ref=e563]
+                  - cell "Selected values (required)" [ref=e564]
+                - row "onValueChange (values, options) => void - Change handler (required)" [ref=e565]:
+                  - cell "onValueChange" [ref=e566]
+                  - cell "(values, options) => void" [ref=e567]
+                  - cell "-" [ref=e568]
+                  - cell "Change handler (required)" [ref=e569]
+                - row "id string auto-generated ID for ARIA and form association" [ref=e570]:
+                  - cell "id" [ref=e571]
+                  - cell "string" [ref=e572]
+                  - cell "auto-generated" [ref=e573]
+                  - cell "ID for ARIA and form association" [ref=e574]
+                - row "name string - Form field name — hidden input with comma-separated values" [ref=e575]:
+                  - cell "name" [ref=e576]
+                  - cell "string" [ref=e577]
+                  - cell "-" [ref=e578]
+                  - cell "Form field name — hidden input with comma-separated values" [ref=e579]
+                - row "classes MultiSelectDropdownClasses - Class names for internal elements" [ref=e580]:
+                  - cell "classes" [ref=e581]
+                  - cell "MultiSelectDropdownClasses" [ref=e582]
+                  - cell "-" [ref=e583]
+                  - cell "Class names for internal elements" [ref=e584]
+                - row "className string - Root class name" [ref=e585]:
+                  - cell "className" [ref=e586]
+                  - cell "string" [ref=e587]
+                  - cell "-" [ref=e588]
+                  - cell "Root class name" [ref=e589]
+                - row "placeholder ReactNode \"Select options...\" Placeholder when nothing selected" [ref=e590]:
+                  - cell "placeholder" [ref=e591]
+                  - cell "ReactNode" [ref=e592]
+                  - cell "\"Select options...\"" [ref=e593]
+                  - cell "Placeholder when nothing selected" [ref=e594]
+                - row "disabled boolean false Disable the dropdown" [ref=e595]:
+                  - cell "disabled" [ref=e596]
+                  - cell "boolean" [ref=e597]
+                  - cell "false" [ref=e598]
+                  - cell "Disable the dropdown" [ref=e599]
+                - row "error boolean false Show error state" [ref=e600]:
+                  - cell "error" [ref=e601]
+                  - cell "boolean" [ref=e602]
+                  - cell "false" [ref=e603]
+                  - cell "Show error state" [ref=e604]
+                - row "errorMessage ReactNode - Error message to display" [ref=e605]:
+                  - cell "errorMessage" [ref=e606]
+                  - cell "ReactNode" [ref=e607]
+                  - cell "-" [ref=e608]
+                  - cell "Error message to display" [ref=e609]
+                - row "label ReactNode - Label for the dropdown" [ref=e610]:
+                  - cell "label" [ref=e611]
+                  - cell "ReactNode" [ref=e612]
+                  - cell "-" [ref=e613]
+                  - cell "Label for the dropdown" [ref=e614]
+                - row "required boolean false Whether field is required" [ref=e615]:
+                  - cell "required" [ref=e616]
+                  - cell "boolean" [ref=e617]
+                  - cell "false" [ref=e618]
+                  - cell "Whether field is required" [ref=e619]
+                - row "showChevron boolean true Show dropdown chevron" [ref=e620]:
+                  - cell "showChevron" [ref=e621]
+                  - cell "boolean" [ref=e622]
+                  - cell "true" [ref=e623]
+                  - cell "Show dropdown chevron" [ref=e624]
+                - row "fullWidth boolean false Take full container width" [ref=e625]:
+                  - cell "fullWidth" [ref=e626]
+                  - cell "boolean" [ref=e627]
+                  - cell "false" [ref=e628]
+                  - cell "Take full container width" [ref=e629]
+                - row "loading boolean false External loading state" [ref=e630]:
+                  - cell "loading" [ref=e631]
+                  - cell "boolean" [ref=e632]
+                  - cell "false" [ref=e633]
+                  - cell "External loading state" [ref=e634]
+                - row "onLoadOptions () => Promise<Option[]> - Async function to load options" [ref=e635]:
+                  - cell "onLoadOptions" [ref=e636]
+                  - cell "() => Promise<Option[]>" [ref=e637]
+                  - cell "-" [ref=e638]
+                  - cell "Async function to load options" [ref=e639]
+                - row "loadOnOpen boolean false Load options when dropdown opens" [ref=e640]:
+                  - cell "loadOnOpen" [ref=e641]
+                  - cell "boolean" [ref=e642]
+                  - cell "false" [ref=e643]
+                  - cell "Load options when dropdown opens" [ref=e644]
+                - 'row "onLoadError (error: unknown) => void - Callback when async loading fails" [ref=e645]':
+                  - cell "onLoadError" [ref=e646]
+                  - 'cell "(error: unknown) => void" [ref=e647]'
+                  - cell "-" [ref=e648]
+                  - cell "Callback when async loading fails" [ref=e649]
+                - row "shimmerCount number 5 Number of shimmer items" [ref=e650]:
+                  - cell "shimmerCount" [ref=e651]
+                  - cell "number" [ref=e652]
+                  - cell "5" [ref=e653]
+                  - cell "Number of shimmer items" [ref=e654]
+                - row "maxDisplayedChips number 3 Max chips before showing +N" [ref=e655]:
+                  - cell "maxDisplayedChips" [ref=e656]
+                  - cell "number" [ref=e657]
+                  - cell "3" [ref=e658]
+                  - cell "Max chips before showing +N" [ref=e659]
+                - row "showSelectedChips boolean true Show chips or count only" [ref=e660]:
+                  - cell "showSelectedChips" [ref=e661]
+                  - cell "boolean" [ref=e662]
+                  - cell "true" [ref=e663]
+                  - cell "Show chips or count only" [ref=e664]
+                - row "checkboxIcon ReactNode CheckIcon Custom checkbox icon" [ref=e665]:
+                  - cell "checkboxIcon" [ref=e666]
+                  - cell "ReactNode" [ref=e667]
+                  - cell "CheckIcon" [ref=e668]
+                  - cell "Custom checkbox icon" [ref=e669]
+                - row "open boolean - Controlled open state" [ref=e670]:
+                  - cell "open" [ref=e671]
+                  - cell "boolean" [ref=e672]
+                  - cell "-" [ref=e673]
+                  - cell "Controlled open state" [ref=e674]
+                - row "defaultOpen boolean false Initial open state (uncontrolled)" [ref=e675]:
+                  - cell "defaultOpen" [ref=e676]
+                  - cell "boolean" [ref=e677]
+                  - cell "false" [ref=e678]
+                  - cell "Initial open state (uncontrolled)" [ref=e679]
+                - 'row "onOpenChange (open: boolean) => void - Called when open state changes" [ref=e680]':
+                  - cell "onOpenChange" [ref=e681]
+                  - 'cell "(open: boolean) => void" [ref=e682]'
+                  - cell "-" [ref=e683]
+                  - cell "Called when open state changes" [ref=e684]
+                - row "style CSSProperties - Root inline styles" [ref=e685]:
+                  - cell "style" [ref=e686]
+                  - cell "CSSProperties" [ref=e687]
+                  - cell "-" [ref=e688]
+                  - cell "Root inline styles" [ref=e689]
+                - row "aria-label string - Listbox aria-label override" [ref=e690]:
+                  - cell "aria-label" [ref=e691]
+                  - cell "string" [ref=e692]
+                  - cell "-" [ref=e693]
+                  - cell "Listbox aria-label override" [ref=e694]
+                - row "onBlur () => void - Trigger blur callback" [ref=e695]:
+                  - cell "onBlur" [ref=e696]
+                  - cell "() => void" [ref=e697]
+                  - cell "-" [ref=e698]
+                  - cell "Trigger blur callback" [ref=e699]
+                - row "onFocus () => void - Trigger focus callback" [ref=e700]:
+                  - cell "onFocus" [ref=e701]
+                  - cell "() => void" [ref=e702]
+                  - cell "-" [ref=e703]
+                  - cell "Trigger focus callback" [ref=e704]
+                - 'row "onKeyDown (e: KeyboardEvent) => void - Custom keydown (preventDefault to override)" [ref=e705]':
+                  - cell "onKeyDown" [ref=e706]
+                  - 'cell "(e: KeyboardEvent) => void" [ref=e707]'
+                  - cell "-" [ref=e708]
+                  - cell "Custom keydown (preventDefault to override)" [ref=e709]
+                - row "ChevronIcon ComponentType ChevronDownIcon Custom chevron icon" [ref=e710]:
+                  - cell "ChevronIcon" [ref=e711]
+                  - cell "ComponentType" [ref=e712]
+                  - cell "ChevronDownIcon" [ref=e713]
+                  - cell "Custom chevron icon" [ref=e714]
+                - row "noResultsText string \"No options available\" Default empty state text" [ref=e715]:
+                  - cell "noResultsText" [ref=e716]
+                  - cell "string" [ref=e717]
+                  - cell "\"No options available\"" [ref=e718]
+                  - cell "Default empty state text" [ref=e719]
+                - row "noResultsContent ReactNode - Empty state (overrides noResultsText when set)" [ref=e720]:
+                  - cell "noResultsContent" [ref=e721]
+                  - cell "ReactNode" [ref=e722]
+                  - cell "-" [ref=e723]
+                  - cell "Empty state (overrides noResultsText when set)" [ref=e724]
+                - row "keepMounted boolean false Keep listbox in DOM when closed" [ref=e725]:
+                  - cell "keepMounted" [ref=e726]
+                  - cell "boolean" [ref=e727]
+                  - cell "false" [ref=e728]
+                  - cell "Keep listbox in DOM when closed" [ref=e729]
+                - row "portalContainer HTMLElement | null document.body Portal target" [ref=e730]:
+                  - cell "portalContainer" [ref=e731]
+                  - cell "HTMLElement | null" [ref=e732]
+                  - cell "document.body" [ref=e733]
+                  - cell "Portal target" [ref=e734]
+                - row "dropdownPosition \"top\" | \"bottom\" \"bottom\" Preferred list position" [ref=e735]:
+                  - cell "dropdownPosition" [ref=e736]
+                  - cell "\"top\" | \"bottom\"" [ref=e737]
+                  - cell "\"bottom\"" [ref=e738]
+                  - cell "Preferred list position" [ref=e739]
+                - row "dropdownZIndex number 50 Listbox z-index" [ref=e740]:
+                  - cell "dropdownZIndex" [ref=e741]
+                  - cell "number" [ref=e742]
+                  - cell "50" [ref=e743]
+                  - cell "Listbox z-index" [ref=e744]
+                - row "dropdownGap number 4 Gap between trigger and list (px)" [ref=e745]:
+                  - cell "dropdownGap" [ref=e746]
+                  - cell "number" [ref=e747]
+                  - cell "4" [ref=e748]
+                  - cell "Gap between trigger and list (px)" [ref=e749]
+          - generic:
+            - heading "classes Record (MultiSelectDropdownClasses)" [level=3]
+            - table [ref=e750]:
+              - rowgroup [ref=e751]:
+                - row "Key Description" [ref=e752]:
+                  - columnheader "Key" [ref=e753]
+                  - columnheader "Description" [ref=e754]
+              - rowgroup [ref=e755]:
+                - row "root Root container" [ref=e756]:
+                  - cell "root" [ref=e757]
+                  - cell "Root container" [ref=e758]
+                - row "wrapper Inner wrapper (relative positioned)" [ref=e759]:
+                  - cell "wrapper" [ref=e760]
+                  - cell "Inner wrapper (relative positioned)" [ref=e761]
+                - row "trigger Trigger button" [ref=e762]:
+                  - cell "trigger" [ref=e763]
+                  - cell "Trigger button" [ref=e764]
+                - row "triggerText Text span inside trigger" [ref=e765]:
+                  - cell "triggerText" [ref=e766]
+                  - cell "Text span inside trigger" [ref=e767]
+                - row "content Dropdown menu container" [ref=e768]:
+                  - cell "content" [ref=e769]
+                  - cell "Dropdown menu container" [ref=e770]
+                - row "optionList Options list wrapper" [ref=e771]:
+                  - cell "optionList" [ref=e772]
+                  - cell "Options list wrapper" [ref=e773]
+                - row "option Base option styling" [ref=e774]:
+                  - cell "option" [ref=e775]
+                  - cell "Base option styling" [ref=e776]
+                - row "optionSelected Additional class for selected options" [ref=e777]:
+                  - cell "optionSelected" [ref=e778]
+                  - cell "Additional class for selected options" [ref=e779]
+                - row "optionFocused Additional class for keyboard-focused options" [ref=e780]:
+                  - cell "optionFocused" [ref=e781]
+                  - cell "Additional class for keyboard-focused options" [ref=e782]
+                - row "optionDisabled Additional class for disabled options" [ref=e783]:
+                  - cell "optionDisabled" [ref=e784]
+                  - cell "Additional class for disabled options" [ref=e785]
+                - row "chevron Chevron icon" [ref=e786]:
+                  - cell "chevron" [ref=e787]
+                  - cell "Chevron icon" [ref=e788]
+                - row "checkbox Base checkbox styling" [ref=e789]:
+                  - cell "checkbox" [ref=e790]
+                  - cell "Base checkbox styling" [ref=e791]
+                - row "checkboxChecked Additional class for checked checkbox" [ref=e792]:
+                  - cell "checkboxChecked" [ref=e793]
+                  - cell "Additional class for checked checkbox" [ref=e794]
+                - row "checkboxIcon Checkbox icon styling" [ref=e795]:
+                  - cell "checkboxIcon" [ref=e796]
+                  - cell "Checkbox icon styling" [ref=e797]
+                - row "chip Selected chip styling" [ref=e798]:
+                  - cell "chip" [ref=e799]
+                  - cell "Selected chip styling" [ref=e800]
+                - row "chipRemove Chip remove button" [ref=e801]:
+                  - cell "chipRemove" [ref=e802]
+                  - cell "Chip remove button" [ref=e803]
+                - row "moreCount \"+N more\" badge" [ref=e804]:
+                  - cell "moreCount" [ref=e805]
+                  - cell "\"+N more\" badge" [ref=e806]
+                - row "noResults No results message" [ref=e807]:
+                  - cell "noResults" [ref=e808]
+                  - cell "No results message" [ref=e809]
+                - row "label Label element" [ref=e810]:
+                  - cell "label" [ref=e811]
+                  - cell "Label element" [ref=e812]
+                - row "error Error message" [ref=e813]:
+                  - cell "error" [ref=e814]
+                  - cell "Error message" [ref=e815]
+                - row "shimmer Shimmer container" [ref=e816]:
+                  - cell "shimmer" [ref=e817]
+                  - cell "Shimmer container" [ref=e818]
+                - row "shimmerItem Individual shimmer item" [ref=e819]:
+                  - cell "shimmerItem" [ref=e820]
+                  - cell "Individual shimmer item" [ref=e821]
+        - generic:
+          - heading "Performance & Best Practices" [level=2]
+          - generic [ref=e822]:
+            - heading "Recommended Limits" [level=3]
+            - list:
+              - listitem:
+                - strong [ref=e823]: "Maximum options:"
+                - text: The list is not virtualized. For optimal performance, limit static options to 500 or fewer. For larger datasets, use
+                - code [ref=e824]: onLoadOptions
+                - text: with server-side data.
+              - listitem:
+                - strong [ref=e825]: "Controlled vs Uncontrolled open:"
+                - text: Choose one mode for
+                - code [ref=e826]: open
+                - text: /
+                - code [ref=e827]: defaultOpen
+                - text: at mount and do not switch.
+              - listitem:
+                - strong [ref=e828]: "Async loading:"
+                - text: Use
+                - code [ref=e829]: onLoadError
+                - text: to handle network failures gracefully.
+              - listitem:
+                - strong [ref=e830]: "keepMounted:"
+                - text: Use sparingly; keeping many dropdowns in the DOM when closed can increase memory use.
+          - generic [ref=e831]:
+            - heading "Form Integration" [level=3]
+            - list:
+              - listitem:
+                - text: Use the
+                - code [ref=e832]: name
+                - text: prop for native form submission; a hidden input is rendered with the selected values (comma-separated).
+              - listitem:
+                - text: Use
+                - code [ref=e833]: onBlur
+                - text: and
+                - code [ref=e834]: onFocus
+                - text: for React Hook Form, Formik, etc.
+              - listitem:
+                - text: Use
+                - code [ref=e835]: error
+                - text: and
+                - code [ref=e836]: errorMessage
+                - text: for validation; the message uses
+                - code [ref=e837]: role="alert"
+                - text: .
+        - generic:
+          - heading "Accessibility" [level=2]
+          - generic [ref=e838]:
+            - heading "Features" [level=3]
+            - list:
+              - listitem:
+                - text: Trigger uses
+                - code [ref=e839]: role="combobox"
+                - text: with
+                - code [ref=e840]: aria-expanded
+                - text: ","
+                - code [ref=e841]: aria-haspopup="listbox"
+                - text: ","
+                - code [ref=e842]: aria-controls
+                - text: ", and"
+                - code [ref=e843]: aria-activedescendant
+                - text: .
+              - listitem:
+                - text: Listbox uses
+                - code [ref=e844]: role="listbox"
+                - text: with
+                - code [ref=e845]: aria-multiselectable="true"
+                - text: and
+                - code [ref=e846]: role="option"
+                - text: items.
+              - listitem: "Full keyboard navigation: Enter/Space (toggle option), ArrowDown/Up, Home, End, Escape, Tab. Focus restores to trigger on close."
+              - listitem:
+                - code [ref=e847]: aria-live="polite"
+                - text: status region announces loading and selection count. Disabled options have
+                - code [ref=e848]: aria-disabled
+                - text: and are skipped by keyboard.
+```
