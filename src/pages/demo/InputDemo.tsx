@@ -170,11 +170,11 @@ const InputDemo = () => {
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
         {/* Gradient background glow */}
         <div className={`absolute inset-0 ${dark
-          ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-purple-950/50"
-          : "bg-gradient-to-br from-indigo-50 via-white to-purple-50/80"
+          ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+          : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"
         }`} />
         <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
-        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-purple-500/8" : "bg-purple-200/30"}`} />
+        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
 
         <div className="relative space-y-3">
           <h1 className={`text-3xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}>
@@ -739,8 +739,8 @@ const InputDemo = () => {
                   : "border-gray-200 focus-within:border-indigo-500"
                 }`, "Enter text...", undefined],
                 ["Purple accent", `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
-                  ? "border-purple-400/30 bg-purple-500/[0.06] focus-within:ring-2 focus-within:ring-purple-500/25 focus-within:border-purple-400"
-                  : "border-purple-200 bg-purple-50/30 shadow-sm focus-within:ring-2 focus-within:ring-purple-500/15 focus-within:border-purple-400"
+                  ? "border-blue-400/30 bg-blue-500/[0.06] focus-within:ring-2 focus-within:ring-blue-500/25 focus-within:border-blue-400"
+                  : "border-blue-200 bg-blue-50/30 shadow-sm focus-within:ring-2 focus-within:ring-blue-500/15 focus-within:border-blue-400"
                 }`, "Purple theme...", undefined],
                 ["Elevated shadow", `px-3.5 py-2.5 rounded-xl border-0 gap-2.5 transition-all duration-150 ${dark
                   ? "bg-white/[0.06] shadow-lg shadow-black/20 focus-within:ring-1 focus-within:ring-white/10"

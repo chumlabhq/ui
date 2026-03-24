@@ -56,10 +56,10 @@ function TypingHeadline() {
   }, [phraseIdx, done]);
 
   return (
-    <span className="animate-shimmer bg-[linear-gradient(110deg,#e879f9_0%,#f472b6_20%,#c084fc_40%,#818cf8_60%,#38bdf8_80%,#e879f9_100%)] bg-clip-text text-transparent">
+    <span className="animate-shimmer bg-[linear-gradient(110deg,#60a5fa_0%,#38bdf8_20%,#818cf8_40%,#6366f1_60%,#38bdf8_80%,#60a5fa_100%)] bg-clip-text text-transparent">
       {display}
       {!done && (
-        <span className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-fuchsia-400 ml-1 align-middle animate-pulse rounded-full" />
+        <span className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-blue-400 ml-1 align-middle animate-pulse rounded-full" />
       )}
     </span>
   );
@@ -218,16 +218,16 @@ const Home = () => {
   useSpaceScene(canvasRef);
 
   return (
-    <div className="min-h-screen bg-[#04040a] text-white overflow-hidden selection:bg-fuchsia-500/30">
+    <div className="min-h-screen bg-[#04040a] text-white overflow-hidden selection:bg-indigo-500/30">
       <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0" style={{ pointerEvents: "all" }} aria-hidden="true" />
 
       {/* CSS nebula layers */}
       <div className="fixed inset-0 pointer-events-none z-[1]" aria-hidden="true">
-        <div className="animate-nebula-pulse absolute top-[12%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse,rgba(168,85,247,0.12)_0%,rgba(236,72,153,0.05)_35%,transparent_65%)] blur-[50px]" />
+        <div className="animate-nebula-pulse absolute top-[12%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse,rgba(168,85,247,0.12)_0%,rgba(99,102,241,0.05)_35%,transparent_65%)] blur-[50px]" />
         <div className="absolute top-[28%] left-1/2 w-0 h-0">
-          <div className="animate-orbit-1 absolute w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(217,70,239,0.10)_0%,transparent_65%)] blur-[70px]" />
+          <div className="animate-orbit-1 absolute w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.10)_0%,transparent_65%)] blur-[70px]" />
           <div className="animate-orbit-2 absolute w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.08)_0%,transparent_65%)] blur-[70px]" />
-          <div className="animate-orbit-3 absolute w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(244,114,182,0.06)_0%,transparent_65%)] blur-[70px]" />
+          <div className="animate-orbit-3 absolute w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.06)_0%,transparent_65%)] blur-[70px]" />
         </div>
         <div className="absolute top-[33%] left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-400/[0.10] to-transparent" />
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-[0.025]">
@@ -259,14 +259,14 @@ const Home = () => {
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="relative group-hover:scale-105 transition-transform duration-500">
                   <LogoMark size={40} />
-                  <div className="absolute -inset-3 rounded-full bg-fuchsia-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute -inset-3 rounded-full bg-indigo-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
                 <LogoWordmark className="text-[22px]" />
               </Link>
               <div className="flex items-center gap-1">
-                <Link to="/demo/input" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]">Docs</Link>
-                <Link to="/demo/input" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]">Components</Link>
-                <Link to="/demo/input" className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.08] hover:border-fuchsia-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]">
+                <Link to="/accordion" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]">Docs</Link>
+                <Link to="/accordion" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]">Components</Link>
+                <Link to="/accordion" className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.08] hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]">
                   Get Started
                 </Link>
               </div>
@@ -296,10 +296,10 @@ const Home = () => {
               </p>
 
               <div className="animate-fade-up-d3 flex flex-col items-center gap-4">
-                <Link to="/demo/input" className="group relative inline-flex items-center gap-2 px-7 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all">
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-600"/>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-rose-400 via-fuchsia-400 to-violet-500 transition-opacity duration-500"/>
-                  <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(217,70,239,0.25)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.45)] transition-shadow duration-500"/>
+                <Link to="/input" className="group relative inline-flex items-center gap-2 px-7 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-600"/>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500"/>
+                  <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.25)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.45)] transition-shadow duration-500"/>
                   <span className="relative">Explore Components</span>
                   <svg className="relative group-hover:translate-x-0.5 transition-transform duration-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </Link>
@@ -340,7 +340,7 @@ const Home = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
               {[
                 { icon: "M9 12l2 2 4-4|M22 11.08V12a10 10 0 1 1-5.93-9.14", title: "Accessible from day one", desc: "Most startups skip accessibility until a customer complains or an audit fails. Every churn lab component ships with full keyboard navigation, screen reader support, and WCAG 2.1 AA compliance built in.", ic: "text-emerald-400", float: "animate-float" },
-                { icon: "M12 2L2 7l10 5 10-5-10-5z|M2 17l10 5 10-5|M2 12l10 5 10-5", title: "Your brand, not ours", desc: "Most component libraries force you into their visual style and then you spend weeks overriding it. Churn lab gives you className props on every single element so your components look like yours from day one.", ic: "text-fuchsia-400", float: "animate-float-d1" },
+                { icon: "M12 2L2 7l10 5 10-5-10-5z|M2 17l10 5 10-5|M2 12l10 5 10-5", title: "Your brand, not ours", desc: "Most component libraries force you into their visual style and then you spend weeks overriding it. Churn lab gives you className props on every single element so your components look like yours from day one.", ic: "text-blue-400", float: "animate-float-d1" },
                 { icon: "M13 2L3 14h9l-1 8 10-12h-9l1-8z", title: "Actually production ready", desc: "We handle the edge cases that bite you at 2am. Controlled and uncontrolled modes that actually work together, proper event contracts, ref forwarding, and dev warnings that catch bugs before your users do.", ic: "text-amber-400", float: "animate-float-d2" },
               ].map((f) => (
                 <div key={f.title} className={`card-glow rounded-2xl p-5 transition-all duration-500 backdrop-blur-sm animate-pulse-glow`}>
@@ -367,15 +367,15 @@ const Home = () => {
               {components.map((c, i) => (
                 <Link
                   key={c.path}
-                  to={`/demo/${c.path}`}
+                  to={`/${c.path}`}
                   className={`card-glow group relative rounded-xl p-4 transition-all duration-500 backdrop-blur-sm ${staggerClass(i)}`}
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-fuchsia-500/[0.03] via-transparent to-violet-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/[0.03] via-transparent to-indigo-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="relative flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <span className="text-[13px] font-medium group-hover:text-fuchsia-300 transition-colors duration-300">{c.name}</span>
+                      <span className="text-[13px] font-medium group-hover:text-blue-300 transition-colors duration-300">{c.name}</span>
                     </div>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 group-hover:text-fuchsia-400 group-hover:translate-x-0.5 transition-all duration-300"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all duration-300"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                   <p className="relative text-[11px] text-gray-600 leading-relaxed mt-1.5 group-hover:text-gray-400 transition-colors duration-300">{c.desc}</p>
                 </Link>
@@ -387,15 +387,15 @@ const Home = () => {
           <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-24">
             <div className="relative rounded-2xl overflow-hidden p-8 sm:p-12 text-center">
               {/* Background glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/[0.04] via-transparent to-violet-500/[0.03]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.04] via-transparent to-indigo-500/[0.03]" />
               <div className="absolute inset-0 border border-white/[0.04] rounded-2xl" />
               <div className="relative">
                 <h3 className="text-lg sm:text-xl font-bold tracking-tight mb-2">Ship your product, not your component library</h3>
                 <p className="text-[13px] text-gray-500 mb-6 max-w-md mx-auto">Your engineering team should be building features that move the needle for your business, not spending another sprint rebuilding a dropdown.</p>
-                <Link to="/demo/input" className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all">
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-600"/>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-rose-400 via-fuchsia-400 to-violet-500 transition-opacity duration-500"/>
-                  <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(217,70,239,0.2)] group-hover:shadow-[0_0_40px_rgba(217,70,239,0.4)] transition-shadow duration-500"/>
+                <Link to="/input" className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-600"/>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500"/>
+                  <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.2)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] transition-shadow duration-500"/>
                   <span className="relative">Browse Documentation</span>
                   <svg className="relative group-hover:translate-x-0.5 transition-transform duration-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </Link>
@@ -413,8 +413,8 @@ const Home = () => {
                   <span className="text-[10px] text-gray-700 ml-2">MIT License</span>
                 </div>
                 <div className="flex items-center gap-5">
-                  <Link to="/demo/input" className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300">Docs</Link>
-                  <Link to="/demo/button" className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300">Components</Link>
+                  <Link to="/accordion" className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300">Docs</Link>
+                  <Link to="/button" className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300">Components</Link>
                   <a href="https://github.com" className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300">GitHub</a>
                 </div>
               </div>

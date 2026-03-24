@@ -33,8 +33,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/demo" element={<Demo />}>
-        <Route index element={<Navigate to="accordion" replace />} />
+      <Route element={<Demo />}>
         <Route path="accordion" element={<AccordionDemo />} />
         <Route path="avatar" element={<AvatarDemo />} />
         <Route path="breadcrumb" element={<BreadcrumbDemo />} />
@@ -46,26 +45,14 @@ const App = () => {
         <Route path="drawer" element={<DrawerDemo />} />
         <Route path="dropdown" element={<DropdownDemo />} />
         <Route path="input" element={<InputDemo />} />
-        <Route
-          path="international-phone-input"
-          element={<InternationalPhoneInputDemo />}
-        />
+        <Route path="international-phone-input" element={<InternationalPhoneInputDemo />} />
         <Route path="modal" element={<ModalDemo />} />
-        <Route
-          path="multi-select-dropdown"
-          element={<MultiSelectDropdownDemo />}
-        />
-        <Route
-          path="multi-select-searchable-dropdown"
-          element={<MultiSelectSearchableDropdownDemo />}
-        />
+        <Route path="multi-select-dropdown" element={<MultiSelectDropdownDemo />} />
+        <Route path="multi-select-searchable-dropdown" element={<MultiSelectSearchableDropdownDemo />} />
         <Route path="otp-input" element={<OtpInputDemo />} />
         <Route path="pagination" element={<PaginationDemo />} />
         <Route path="resizable-panel" element={<ResizablePanelDemo />} />
-        <Route
-          path="searchable-dropdown"
-          element={<SearchableDropdownDemo />}
-        />
+        <Route path="searchable-dropdown" element={<SearchableDropdownDemo />} />
         <Route path="stepper" element={<StepperDemo />} />
         <Route path="switch" element={<SwitchDemo />} />
         <Route path="tab-panel" element={<TabPanelDemo />} />
