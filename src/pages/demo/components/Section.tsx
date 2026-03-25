@@ -1,3 +1,5 @@
+import { cn } from "../../../utils/cn";
+
 interface SectionProps {
   title: string;
   description?: string;
@@ -72,11 +74,13 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
 
   return (
     <div
-      className={`relative border rounded-xl overflow-hidden ${
+      className={cn(
+        "relative border rounded-xl overflow-hidden",
         isDarkMode
           ? "border-white/[0.06] bg-gradient-to-br from-gray-800/80 via-gray-900/60 to-gray-800/80"
-          : "border-gray-200 bg-white"
-      } ${className}`}
+          : "border-gray-200 bg-white",
+        className,
+      )}
     >
       <div className={`p-4 sm:p-5 ${layoutClasses}`}>{children}</div>
     </div>

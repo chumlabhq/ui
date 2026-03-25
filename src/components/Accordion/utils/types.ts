@@ -19,12 +19,16 @@ export interface AccordionClasses {
   root?: string;
   item?: string;
   trigger?: string;
+  triggerInner?: string;
   content?: string;
+  contentWrapper?: string;
   icon?: string;
+  iconWrapper?: string;
   subtitle?: string;
   triggerLeft?: string;
   triggerRight?: string;
   contentInner?: string;
+  heading?: string;
 }
 
 export interface AccordionRef {
@@ -35,7 +39,7 @@ export interface AccordionRef {
   toggle: (value: string) => void;
   getExpandedValues: () => string[];
   isExpanded: (value: string) => boolean;
-  focusItem: (value: string) => void;
+  focusItem: (value: string, scrollIntoView?: boolean) => void;
   getItemCount: () => number;
   element: HTMLDivElement | null;
 }
@@ -75,6 +79,7 @@ interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defau
   onExpandedChange?: (event: AccordionExpandEvent) => void;
   onKeyDown?: (event: KeyboardEvent<HTMLDivElement>, itemValue: string | null) => void;
   preventClose?: (value: string) => boolean | Promise<boolean>;
+  preventCloseTimeout?: number;
   onFocusCapture?: (event: FocusEvent<HTMLDivElement>) => void;
   onBlurCapture?: (event: FocusEvent<HTMLDivElement>) => void;
   "aria-busy"?: boolean;
@@ -87,7 +92,7 @@ export interface AccordionSingleProps extends AccordionBaseProps {
   collapsible?: boolean;
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string | null) => void;
 }
 
 export interface AccordionMultipleProps extends AccordionBaseProps {
@@ -116,7 +121,6 @@ export interface AccordionTriggerProps extends Omit<HTMLAttributes<HTMLButtonEle
   iconPosition?: "left" | "right" | "none";
   asChild?: boolean;
   subtitle?: ReactNode;
-  hideIcon?: boolean;
   iconAnimation?: "rotate" | "switch" | "none";
   leftSlot?: ReactNode;
   rightSlot?: ReactNode;
@@ -138,7 +142,7 @@ export interface AccordionDispatchValue {
   registerItem: (value: string, element: HTMLButtonElement | null) => void;
   unregisterItem: (value: string) => void;
   focusItem: (direction: "next" | "prev" | "first" | "last") => void;
-  focusItemByValue: (value: string) => void;
+  focusItemByValue: (value: string, scrollIntoView?: boolean) => void;
 }
 
 export interface AccordionConfigValue {
@@ -174,7 +178,6 @@ export interface AccordionItemContextValue {
   contentId: string;
   descriptionId?: string;
   onToggle?: (isExpanded: boolean) => void;
-  index: number;
 }
 
 export interface AccordionShimmerProps {
@@ -192,7 +195,7 @@ export interface UseAccordionStateOptions {
   type: AccordionType;
   defaultValue?: string | string[];
   value?: string | string[];
-  onValueChange?: ((value: string) => void) | ((value: string[]) => void);
+  onValueChange?: ((value: string | null) => void) | ((value: string[]) => void);
   collapsible?: boolean;
   maxExpanded?: number;
   storageKey?: string | StorageConfig;

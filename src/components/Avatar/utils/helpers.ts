@@ -15,8 +15,7 @@ export const getInitials = (name?: string, maxInitials: number = 2): string => {
   if (!name) return "";
 
   const cleanName = name.trim().toUpperCase();
-
-  if (cleanName.length <= maxInitials) return cleanName;
+  if (cleanName.length === 0) return "";
 
   if (cleanName.includes(" ")) {
     return cleanName
@@ -27,7 +26,8 @@ export const getInitials = (name?: string, maxInitials: number = 2): string => {
       .slice(0, maxInitials);
   }
 
-  return cleanName.slice(0, maxInitials);
+  // Single-word name: return just the first letter (industry standard)
+  return cleanName[0];
 };
 
 export const getNumericSize = (size: AvatarSize): number => {
@@ -89,10 +89,13 @@ export const generateColors = (
 
   const hash = hashString(name.toLowerCase().trim());
 
+  // Use same index across all arrays for consistent palette mapping
+  const index = hash % Math.max(backgrounds.length, borders.length, textColors.length);
+
   return {
-    background: backgrounds[hash % backgrounds.length],
-    border: borders[hash % borders.length],
-    text: textColors[hash % textColors.length],
+    background: backgrounds[index % backgrounds.length],
+    border: borders[index % borders.length],
+    text: textColors[index % textColors.length],
   };
 };
 
@@ -151,7 +154,7 @@ export const getBadgePosition = (
 export const getBadgeSizeClasses = (
   size: BadgeSize | undefined,
   dot: boolean
-): { sizeClasses: string; minWidth: string; height: string } => {
+): { minWidth: string; height: string } => {
   if (dot) {
     const dotSizes: Record<BadgeSize, { size: string }> = {
       xs: { size: "6px" },
@@ -160,17 +163,16 @@ export const getBadgeSizeClasses = (
       lg: { size: "12px" },
     };
     const s = dotSizes[size || "md"];
-    return { sizeClasses: "", minWidth: s.size, height: s.size };
+    return { minWidth: s.size, height: s.size };
   }
 
-  const countSizes: Record<BadgeSize, { minWidth: string; height: string; fontSize: string }> = {
-    xs: { minWidth: "14px", height: "14px", fontSize: "9px" },
-    sm: { minWidth: "18px", height: "18px", fontSize: "10px" },
-    md: { minWidth: "20px", height: "20px", fontSize: "12px" },
-    lg: { minWidth: "24px", height: "24px", fontSize: "14px" },
+  const countSizes: Record<BadgeSize, { minWidth: string; height: string }> = {
+    xs: { minWidth: "14px", height: "14px" },
+    sm: { minWidth: "18px", height: "18px" },
+    md: { minWidth: "20px", height: "20px" },
+    lg: { minWidth: "24px", height: "24px" },
   };
-  const s = countSizes[size || "md"];
-  return { sizeClasses: `text-[${s.fontSize}]`, minWidth: s.minWidth, height: s.height };
+  return countSizes[size || "md"];
 };
 
 export const parseBorder = (

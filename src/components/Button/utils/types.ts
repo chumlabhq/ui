@@ -30,6 +30,14 @@ export interface ButtonTooltipProps {
   contentStyle?: CSSProperties;
 }
 
+export interface ButtonClasses {
+  root?: string;
+  content?: string;
+  startIcon?: string;
+  endIcon?: string;
+  loader?: string;
+}
+
 interface ButtonSharedProps {
   children?: ReactNode;
   disabled?: boolean;
@@ -41,10 +49,12 @@ interface ButtonSharedProps {
   loaderSize?: number;
   loader?: ReactNode;
   fullWidth?: boolean;
-  contentClassName?: string;
+  classes?: ButtonClasses;
+  unstyled?: boolean;
   iconAnimation?: IconAnimation;
   animateOnHover?: boolean;
   animateIcon?: "leading" | "trailing" | "both";
+  reduceMotion?: boolean | "auto";
   tooltip?: ReactNode;
   tooltipProps?: ButtonTooltipProps;
 }
@@ -96,4 +106,5 @@ export type ButtonProps =
 
 export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  orientation?: "horizontal" | "vertical";
 }

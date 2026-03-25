@@ -1,8 +1,26 @@
-import type { AvatarSize, AvatarStatus } from "../types";
+import type { AvatarSize, AvatarStatus, AvatarClasses } from "../types";
 
 export const DEFAULT_SIZE: AvatarSize = "md";
 export const DEFAULT_SHAPE = "circle" as const;
 export const DEFAULT_SPACING = -8;
+
+export const DEFAULT_AVATAR_CLASSES: Required<AvatarClasses> = {
+  root: "shrink-0 flex items-center justify-center font-medium select-none",
+  inner: "absolute inset-0 overflow-hidden flex items-center justify-center",
+  image: "w-full h-full object-cover",
+  initials: "",
+  fallback: "",
+  status: "absolute block rounded-full",
+};
+
+export const UNSTYLED_AVATAR_CLASSES: Required<AvatarClasses> = {
+  root: "",
+  inner: "",
+  image: "",
+  initials: "",
+  fallback: "",
+  status: "",
+};
 
 export const SIZE_MAP: Record<Exclude<AvatarSize, number>, number> = {
   xs: 24,

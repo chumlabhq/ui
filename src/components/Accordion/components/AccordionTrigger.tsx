@@ -15,7 +15,6 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       className,
       asChild = false,
       subtitle,
-      hideIcon = false,
       iconAnimation = "rotate",
       leftSlot,
       rightSlot,
@@ -91,16 +90,16 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       }
     }, [config.orientation, config.dir, dispatch]);
 
-    const getIconAnimationClass = useCallback(() => {
+    const getIconAnimationClass = () => {
       if (iconAnimation === "none" || config.reduceMotion) return "";
       if (iconAnimation === "rotate") {
         return item.isExpanded ? "rotate-180" : "";
       }
       return "";
-    }, [iconAnimation, config.reduceMotion, item.isExpanded]);
+    };
 
     const renderIcon = () => {
-      if (iconPosition === "none" || hideIcon) return null;
+      if (iconPosition === "none") return null;
 
       if (iconAnimation === "switch" && expandedIcon && collapsedIcon) {
         return item.isExpanded ? expandedIcon : collapsedIcon;
@@ -121,9 +120,9 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       );
     };
 
-    const shouldShowIcon = iconPosition !== "none" && !hideIcon;
+    const shouldShowIcon = iconPosition !== "none";
     const iconElement = shouldShowIcon && (
-      <span className="shrink-0" aria-hidden="true">
+      <span className={config.classes.iconWrapper || undefined} aria-hidden="true">
         {renderIcon()}
       </span>
     );
@@ -159,22 +158,22 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     ) : (
       <>
         {leftSlot && (
-          <span className={config.classes.triggerLeft} aria-hidden="true">
+          <span className={config.classes.triggerLeft || undefined} aria-hidden="true">
             {leftSlot}
           </span>
         )}
         {iconPosition === "left" && iconElement}
-        <span className="flex-1 text-left">
-          <span className="block">{children}</span>
+        <span className={config.classes.triggerInner || undefined}>
+          <span>{children}</span>
           {subtitle && (
-            <span className={cn("block", config.classes.subtitle)}>
+            <span className={cn("block", config.classes.subtitle) || undefined}>
               {subtitle}
             </span>
           )}
         </span>
         {iconPosition === "right" && iconElement}
         {rightSlot && (
-          <span className={config.classes.triggerRight} aria-hidden="true">
+          <span className={config.classes.triggerRight || undefined} aria-hidden="true">
             {rightSlot}
           </span>
         )}
@@ -182,7 +181,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     );
 
     return (
-      <HeadingTag className="m-0">
+      <HeadingTag className={config.classes.heading || undefined}>
         <Comp ref={setRefs} {...triggerProps}>
           {content}
         </Comp>

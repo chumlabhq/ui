@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties, ComponentType } from "react";
+import type { ReactNode, CSSProperties, ComponentType, HTMLAttributes } from "react";
 
 export type TooltipSide = "top" | "right" | "bottom" | "left";
 export type TooltipAlign = "start" | "center" | "end";
@@ -21,6 +21,7 @@ export interface BreadcrumbItem {
   href?: string;
   onClick?: () => void;
   icon?: ReactNode;
+  /** @default "left" when icon is provided */
   iconPosition?: IconPosition;
   disabled?: boolean;
   content?: ReactNode;
@@ -28,7 +29,7 @@ export interface BreadcrumbItem {
   tooltipProps?: BreadcrumbTooltipProps;
 }
 
-export interface BreadcrumbClassNames {
+export interface BreadcrumbClasses {
   root?: string;
   list?: string;
   item?: string;
@@ -46,17 +47,18 @@ export interface BreadcrumbClassNames {
 
 export type DropdownPosition = "top" | "bottom" | "left" | "right";
 
-export interface BreadcrumbProps {
+export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "className" | "style" | "aria-label"> {
   items: BreadcrumbItem[];
   maxVisibleItems?: number;
   separator?: ReactNode;
   onItemClick?: (item: BreadcrumbItem) => void;
   "aria-label"?: string;
-  classes?: BreadcrumbClassNames;
+  classes?: BreadcrumbClasses;
+  unstyled?: boolean;
   className?: string;
   style?: CSSProperties;
-  SeparatorIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
-  EllipsisIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
+  separatorIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
+  ellipsisIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   iconSize?: number | string;
   showTooltips?: boolean;
   tooltipPosition?: TooltipSide;
@@ -68,4 +70,5 @@ export interface BreadcrumbProps {
   dropdownZIndex?: number;
   portalContainer?: HTMLElement | null;
   ellipsisAriaLabel?: string;
+  onDropdownOpenChange?: (open: boolean) => void;
 }

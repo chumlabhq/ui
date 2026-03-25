@@ -4,25 +4,33 @@ export const DEFAULT_CLASS_NAMES: Required<AccordionClasses> = {
   root: "w-full",
   item: "border-b border-gray-200 last:border-b-0",
   trigger:
-    "flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-  content: "px-4 py-4 text-sm text-gray-600",
-  icon: "h-4 w-4 shrink-0 text-gray-500 transition-transform duration-200",
-  subtitle: "text-xs text-gray-500 font-normal mt-0.5",
+    "flex w-full items-center justify-between text-left font-medium transition-colors hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+  triggerInner: "flex-1 text-left",
+  content: "text-gray-600",
+  contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+  icon: "shrink-0 text-gray-500 transition-transform duration-200",
+  iconWrapper: "shrink-0",
+  subtitle: "text-gray-500 font-normal mt-0.5",
   triggerLeft: "mr-2 shrink-0",
   triggerRight: "ml-2 shrink-0",
   contentInner: "",
+  heading: "",
 };
 
 export const UNSTYLED_CLASS_NAMES: Required<AccordionClasses> = {
   root: "",
   item: "",
   trigger: "",
+  triggerInner: "",
   content: "",
+  contentWrapper: "",
   icon: "",
+  iconWrapper: "",
   subtitle: "",
   triggerLeft: "",
   triggerRight: "",
   contentInner: "",
+  heading: "",
 };
 
 export const DEFAULT_ANIMATION_DURATION = 300;
@@ -81,16 +89,41 @@ export const VARIANT_CLASSES: Record<AccordionVariant, { root: string; item: str
 
 export const PRINT_STYLES = `
 @media print {
+  [data-accordion-expand-print="true"] [aria-hidden="true"] {
+    max-height: none !important;
+    height: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+  }
   [data-accordion-expand-print="true"] [data-state="closed"] {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    visibility: visible;
+    max-height: none !important;
+    height: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
   }
 }
 `;
 
+export function getDefaultStorageConfig(): Omit<StorageConfig, "key"> {
+  return {
+    storage: typeof window !== "undefined" ? window.localStorage : undefined,
+    serialize: (values: string[]) => JSON.stringify(values),
+    deserialize: (stored: string) => {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return [];
+      }
+    },
+  };
+}
+
+/**
+ * @deprecated Use `getDefaultStorageConfig()` instead to avoid SSR issues.
+ */
 export const DEFAULT_STORAGE_CONFIG: Omit<StorageConfig, "key"> = {
-  storage: typeof window !== "undefined" ? window.localStorage : undefined,
   serialize: (values: string[]) => JSON.stringify(values),
   deserialize: (stored: string) => {
     try {

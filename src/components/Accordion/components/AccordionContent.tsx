@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useEffect, useState, memo } from "react";
+import { forwardRef, useRef, useEffect, useState } from "react";
 import { useAccordionConfig, useAccordionItemContext } from "../utils/context";
 import { Slot, mergeRefs } from "../../../utils/Slot";
 import type { AccordionContentProps } from "../utils/types";
@@ -36,9 +36,6 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
     const [prevIsExpanded, setPrevIsExpanded] = useState(item.isExpanded);
     const [isClosing, setIsClosing] = useState(false);
     const [measuredHeight, setMeasuredHeight] = useState<number>(0);
-    const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-      null,
-    );
     const rafRef = useRef<number | null>(null);
 
     if (item.isExpanded !== prevIsExpanded) {
@@ -75,42 +72,75 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       };
     }, [item.isExpanded]);
 
+    // Observe content size changes while expanded (debounced)
     useEffect(() => {
       if (!item.isExpanded || !contentNodeRef.current) return;
       if (typeof ResizeObserver === "undefined") return;
 
+      let rafId: number | null = null;
       const observer = new ResizeObserver(() => {
-        if (item.isExpanded && contentNodeRef.current) {
-          setMeasuredHeight(contentNodeRef.current.scrollHeight);
-        }
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          if (item.isExpanded && contentNodeRef.current) {
+            setMeasuredHeight(contentNodeRef.current.scrollHeight);
+          }
+        });
       });
       observer.observe(contentNodeRef.current);
-      return () => observer.disconnect();
+      return () => {
+        observer.disconnect();
+        if (rafId) cancelAnimationFrame(rafId);
+      };
     }, [item.isExpanded]);
 
+    // Animation callbacks via transitionend (with fallback for duration=0)
+    const endFiredRef = useRef(false);
     useEffect(() => {
-      if (animationTimerRef.current) {
-        clearTimeout(animationTimerRef.current);
-      }
+      const node = contentNodeRef.current;
+      endFiredRef.current = false;
 
       if (item.isExpanded) {
         onOpenStart?.();
-        animationTimerRef.current = setTimeout(
-          () => onOpenEnd?.(),
-          effectiveDuration,
-        );
       } else {
         onCloseStart?.();
-        animationTimerRef.current = setTimeout(() => {
-          onCloseEnd?.();
-          setIsClosing(false);
-        }, effectiveDuration);
       }
 
-      return () => {
-        if (animationTimerRef.current) {
-          clearTimeout(animationTimerRef.current);
+      const fireEnd = () => {
+        if (endFiredRef.current) return;
+        endFiredRef.current = true;
+
+        if (item.isExpanded) {
+          onOpenEnd?.();
+        } else {
+          onCloseEnd?.();
+          setIsClosing(false);
         }
+      };
+
+      // For zero-duration (reduced motion), fire callbacks immediately
+      if (effectiveDuration === 0) {
+        fireEnd();
+        return;
+      }
+
+      if (!node) return;
+
+      const handleTransitionEnd = (e: TransitionEvent) => {
+        // Only respond to transitions on this element (not children)
+        if (e.target !== node) return;
+        // Only respond to max-height transition (the primary one)
+        if (e.propertyName !== "max-height") return;
+        fireEnd();
+      };
+
+      node.addEventListener("transitionend", handleTransitionEnd);
+
+      // Safety fallback: if transitionend doesn't fire (e.g., display:none parent)
+      const fallbackTimer = setTimeout(fireEnd, effectiveDuration + 50);
+
+      return () => {
+        node.removeEventListener("transitionend", handleTransitionEnd);
+        clearTimeout(fallbackTimer);
       };
     }, [
       item.isExpanded,
@@ -136,13 +166,15 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       return null;
     }
 
-    const contentClassName = cn("overflow-hidden transition-all", className);
+    const wrapperClassName = cn(config.classes.contentWrapper, className);
 
     const contentStyle: React.CSSProperties = {
       maxHeight: showExpanded ? measuredHeight : 0,
       opacity: showExpanded ? 1 : 0,
-      visibility: showExpanded ? "visible" : undefined,
+      visibility: showExpanded ? "visible" : "hidden",
       overflow: showExpanded ? undefined : "hidden",
+      // Prevent interaction with content during close animation
+      pointerEvents: showExpanded ? undefined : "none",
       transitionDuration: `${effectiveDuration}ms`,
       transitionTimingFunction: animationEasing,
     };
@@ -159,7 +191,7 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
         data-state={item.isExpanded ? "open" : "closed"}
         data-disabled={item.disabled || undefined}
         data-orientation={config.orientation}
-        className={contentClassName || undefined}
+        className={wrapperClassName || undefined}
         style={contentStyle}
         {...rest}
       >
@@ -184,4 +216,4 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
 AccordionContent.displayName = "AccordionContent";
 
-export default memo(AccordionContent);
+export default AccordionContent;

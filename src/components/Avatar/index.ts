@@ -16,6 +16,8 @@ export type {
   AvatarStatusConfig,
   AvatarImageConfig,
   AvatarColors,
+  AvatarClasses,
+  AvatarGroupClasses,
   BadgeOffset,
   TooltipSide,
   TooltipAlign,

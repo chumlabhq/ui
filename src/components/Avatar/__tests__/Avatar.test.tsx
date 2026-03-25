@@ -21,7 +21,7 @@ describe("Avatar", () => {
     it("renders single initial for single-word name", () => {
       render(<Avatar name="John" maxInitials={2} />);
 
-      expect(screen.getByText("JO")).toBeInTheDocument();
+      expect(screen.getByText("J")).toBeInTheDocument();
     });
 
     it("respects maxInitials prop", () => {
@@ -367,29 +367,29 @@ describe("AvatarGroup", () => {
     it("renders all children when no max", () => {
       render(
         <AvatarGroup>
-          <Avatar name="John" />
-          <Avatar name="Jane" />
-          <Avatar name="Bob" />
+          <Avatar name="John Doe" />
+          <Avatar name="Jane Smith" />
+          <Avatar name="Bob Lee" />
         </AvatarGroup>
       );
 
-      expect(screen.getByText("JO")).toBeInTheDocument();
-      expect(screen.getByText("JA")).toBeInTheDocument();
-      expect(screen.getByText("BO")).toBeInTheDocument();
+      expect(screen.getByText("JD")).toBeInTheDocument();
+      expect(screen.getByText("JS")).toBeInTheDocument();
+      expect(screen.getByText("BL")).toBeInTheDocument();
     });
 
     it("limits visible avatars when max is set", () => {
       render(
         <AvatarGroup max={2}>
-          <Avatar name="John" />
-          <Avatar name="Jane" />
-          <Avatar name="Bob" />
+          <Avatar name="John Doe" />
+          <Avatar name="Jane Smith" />
+          <Avatar name="Bob Lee" />
         </AvatarGroup>
       );
 
-      expect(screen.getByText("JO")).toBeInTheDocument();
-      expect(screen.getByText("JA")).toBeInTheDocument();
-      expect(screen.queryByText("BO")).not.toBeInTheDocument();
+      expect(screen.getByText("JD")).toBeInTheDocument();
+      expect(screen.getByText("JS")).toBeInTheDocument();
+      expect(screen.queryByText("BL")).not.toBeInTheDocument();
     });
 
     it("shows surplus count when max exceeded", () => {
@@ -437,20 +437,23 @@ describe("AvatarGroup", () => {
   });
 
   describe("Click Handling", () => {
-    it("calls onAvatarClick with correct index", async () => {
+    it("calls onAvatarClick with correct info", async () => {
       const user = userEvent.setup();
       const onAvatarClick = vi.fn();
 
       render(
         <AvatarGroup onAvatarClick={onAvatarClick}>
-          <Avatar name="John" />
-          <Avatar name="Jane" />
+          <Avatar name="John Doe" />
+          <Avatar name="Jane Smith" />
         </AvatarGroup>
       );
 
-      await user.click(screen.getByText("JA"));
+      await user.click(screen.getByText("JS"));
 
-      expect(onAvatarClick).toHaveBeenCalledWith(1, expect.any(Object));
+      expect(onAvatarClick).toHaveBeenCalledWith(
+        { index: 1, name: "Jane Smith" },
+        expect.any(Object),
+      );
     });
   });
 

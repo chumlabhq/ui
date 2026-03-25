@@ -3,10 +3,16 @@ import type {
   AvatarProps,
   AvatarTooltipConfig,
   AvatarStatusConfig,
+  AvatarClasses,
 } from "./types";
 import { Tooltip } from "../Tooltip";
 import { Slot } from "../../utils/Slot";
-import { DEFAULT_SIZE, DEFAULT_SHAPE } from "./utils/constants";
+import {
+  DEFAULT_SIZE,
+  DEFAULT_SHAPE,
+  DEFAULT_AVATAR_CLASSES,
+  UNSTYLED_AVATAR_CLASSES,
+} from "./utils/constants";
 import {
   parseBorder,
   getInitials,
@@ -22,6 +28,7 @@ import { useAvatarGroupContext } from "./utils/context";
 import { AvatarShimmer } from "./components/AvatarShimmer";
 import { cn } from "../../utils/cn";
 import { isTooltipConfig } from "../../utils/isTooltipConfig";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
   return (
@@ -48,10 +55,11 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       status,
       tooltip,
       imageConfig,
-      textClassName,
+      classes = {},
+      unstyled = false,
       textStyle,
-      statusClassName,
       loading = false,
+      reduceMotion = "auto",
       onLoad,
       onError,
       asChild = false,
@@ -65,6 +73,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const effectiveSize = size ?? groupCtx?.size ?? DEFAULT_SIZE;
     const effectiveShape = shape ?? groupCtx?.shape ?? DEFAULT_SHAPE;
     const effectiveBordered = bordered ?? groupCtx?.bordered;
+
+    const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
@@ -82,6 +92,20 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const statusSize = getStatusSize(effectiveSize);
     const borderRadius = getBorderRadius(effectiveShape);
 
+    const baseClasses = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;
+
+    const mergedClasses: Required<AvatarClasses> = useMemo(
+      () => ({
+        root: classes.root ?? baseClasses.root,
+        inner: classes.inner ?? baseClasses.inner,
+        image: classes.image ?? baseClasses.image,
+        initials: classes.initials ?? baseClasses.initials,
+        fallback: classes.fallback ?? baseClasses.fallback,
+        status: classes.status ?? baseClasses.status,
+      }),
+      [classes, baseClasses],
+    );
+
     const generatedColors = useMemo(
       () => (autoColor ? generateColors(name, colors) : null),
       [autoColor, name, colors],
@@ -96,6 +120,13 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       setImageLoaded(true);
       onLoad?.();
     }, [onLoad]);
+
+    // Check if image is already cached on mount
+    const imgRef = useCallback((node: HTMLImageElement | null) => {
+      if (node && node.complete && node.naturalWidth > 0) {
+        setImageLoaded(true);
+      }
+    }, []);
 
     const statusConfig = useMemo(() => {
       if (!status) return null;
@@ -114,6 +145,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         <AvatarShimmer
           size={effectiveSize}
           shape={effectiveShape}
+          reduceMotion={reduceMotion}
           style={
             groupCtx
               ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` }
@@ -145,10 +177,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const avatarElement = (
       <Comp
         ref={ref}
-        className={cn(
-          "shrink-0 flex items-center justify-center font-medium select-none",
-          className,
-        )}
+        className={cn(mergedClasses.root, className) || undefined}
         style={containerStyle}
         role={!showImage ? "img" : undefined}
         aria-label={alt || name || rest["aria-label"]}
@@ -157,11 +186,12 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         {...rest}
       >
         <div
-          className="absolute inset-0 overflow-hidden flex items-center justify-center"
+          className={mergedClasses.inner || undefined}
           style={{ borderRadius }}
         >
           {showImage && (
             <img
+              ref={imgRef}
               src={src}
               alt={alt || ""}
               srcSet={imageConfig?.srcSet}
@@ -173,19 +203,22 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
               fetchPriority={imageConfig?.fetchPriority}
               onLoad={handleImageLoad}
               onError={handleImageError}
-              className={cn(
-                "w-full h-full object-cover",
-                imageConfig?.className,
-              )}
-              style={{
-                opacity: imageLoaded ? 1 : 0,
-                transition: imageLoaded ? "none" : "opacity 0.2s ease-in-out",
-              }}
+              className={cn(mergedClasses.image, imageConfig?.className) || undefined}
+              style={
+                effectiveReduceMotion
+                  ? { opacity: 1 }
+                  : {
+                      opacity: imageLoaded ? 1 : 0,
+                      transition: imageLoaded ? "none" : "opacity 0.2s ease-in-out",
+                    }
+              }
             />
           )}
-          {showFallback && fallback}
+          {showFallback && (
+            <span className={mergedClasses.fallback || undefined}>{fallback}</span>
+          )}
           {showInitials && (
-            <span className={textClassName} style={textStyle}>
+            <span className={mergedClasses.initials || undefined} style={textStyle}>
               {initials}
             </span>
           )}
@@ -193,7 +226,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
         {statusConfig && (
           <span
-            className={cn("absolute block rounded-full", statusClassName)}
+            className={cn(mergedClasses.status, statusConfig.className) || undefined}
             style={{
               width: statusSize,
               height: statusSize,

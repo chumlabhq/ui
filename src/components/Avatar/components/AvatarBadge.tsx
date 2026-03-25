@@ -35,7 +35,7 @@ export const AvatarBadge = forwardRef<HTMLSpanElement, AvatarBadgeProps>(
       overlap = "circular",
       pulse = false,
       invisible = false,
-      "aria-live": ariaLive,
+      "aria-live": ariaLive = "polite",
       asChild = false,
       className,
       style,

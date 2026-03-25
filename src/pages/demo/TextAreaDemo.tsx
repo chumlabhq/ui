@@ -135,6 +135,20 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
+        {/* Size Variants */}
+        <Section title="Size Variants" description="The size prop emits data-size on the container for CSS targeting." isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+              {(["sm", "md", "lg"] as const).map((s) => (
+                <div key={s} className="space-y-1.5">
+                  <span className={c.sectionLabel}>{s}</span>
+                  <TextArea aria-label={`Size ${s}`} placeholder={`Size ${s}...`} size={s} textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+                </div>
+              ))}
+            </div>
+          </DemoWrapper>
+        </Section>
+
         {/* Label, Description, Required */}
         <Section title="Label, Description & Required" description="Semantic labels with helper text and required indicators." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
@@ -214,6 +228,18 @@ const TextAreaDemo = () => {
                   endIcon={<SendIcon className={c.iconHover} />}
                   onEndIconClick={() => { alert(`Sent: ${message}`); setMessage(""); }}
                   endIconLabel="Send message"
+                  textAreaClassName={c.textarea}
+                  wrapperClassName={c.wrapper}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Clickable start icon</span>
+                <TextArea
+                  aria-label="With attach button"
+                  placeholder="Click the icon to attach..."
+                  startIcon={<FileIcon className={c.iconHover} />}
+                  onStartIconClick={() => alert("Attach file clicked")}
+                  startIconLabel="Attach file"
                   textAreaClassName={c.textarea}
                   wrapperClassName={c.wrapper}
                 />
@@ -395,6 +421,10 @@ const TextAreaDemo = () => {
                   textAreaClassName={c.textarea}
                   wrapperClassName={c.wrapper}
                 />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Custom loader size (24px)</span>
+                <TextArea aria-label="Loading large" placeholder="Loading..." loading loaderSize={24} textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
               </div>
             </div>
           </DemoWrapper>

@@ -5,15 +5,20 @@ import {
   useCallback,
   useMemo,
   forwardRef,
-  memo,
+  useId,
 } from "react";
 import { createPortal } from "react-dom";
 import type {
   BreadcrumbItem,
   BreadcrumbProps,
+  BreadcrumbClasses,
   BreadcrumbTooltipProps,
 } from "./utils/types";
-import { ChevronRightIcon, EllipsisIcon } from "./icons";
+import {
+  DEFAULT_BREADCRUMB_CLASSES,
+  UNSTYLED_BREADCRUMB_CLASSES,
+} from "./utils/constants";
+import { ChevronRightIcon, EllipsisIcon as DefaultEllipsisIcon } from "./icons";
 import BreadcrumbItemContent from "./components/BreadcrumbItemContent";
 import Tooltip from "../Tooltip/Tooltip";
 import { cn } from "../../utils/cn";
@@ -36,29 +41,19 @@ function computeDropdownCoords(
 
   switch (position) {
     case "top":
-      return {
-        top: rect.top - dropdownRect.height - gap,
-        left: rect.left,
-      };
+      return { top: rect.top - dropdownRect.height - gap, left: rect.left };
     case "bottom":
-      return {
-        top: rect.bottom + gap,
-        left: rect.left,
-      };
+      return { top: rect.bottom + gap, left: rect.left };
     case "left":
-      return {
-        top: rect.top,
-        left: rect.left - dropdownRect.width - gap,
-      };
+      return { top: rect.top, left: rect.left - dropdownRect.width - gap };
     case "right":
-      return {
-        top: rect.top,
-        left: rect.right + gap,
-      };
+      return { top: rect.top, left: rect.right + gap };
   }
 }
 
-const CollapsedDropdownItem = memo(function CollapsedDropdownItem({
+// ─── Dropdown Item ─────────────────────────────────────────────────────────
+
+function CollapsedDropdownItem({
   item,
   itemClassName,
   itemDisabledClassName,
@@ -88,15 +83,10 @@ const CollapsedDropdownItem = memo(function CollapsedDropdownItem({
   const isDisabled = !!item.disabled;
 
   const handleClick = () => {
-    if (!isDisabled) {
-      onClick(item);
-    }
+    if (!isDisabled) onClick(item);
   };
 
-  const mergedTooltipProps = {
-    ...defaultTooltipProps,
-    ...item.tooltipProps,
-  };
+  const mergedTooltipProps = { ...defaultTooltipProps, ...item.tooltipProps };
 
   const button = (
     <button
@@ -104,10 +94,7 @@ const CollapsedDropdownItem = memo(function CollapsedDropdownItem({
       type="button"
       role="menuitem"
       tabIndex={-1}
-      className={cn(
-        itemClassName,
-        isDisabled && itemDisabledClassName,
-      ) || undefined}
+      className={cn(itemClassName, isDisabled && itemDisabledClassName) || undefined}
       onClick={handleClick}
       onKeyDown={(e) => onKeyDown(e, index)}
       disabled={isDisabled}
@@ -134,10 +121,15 @@ const CollapsedDropdownItem = memo(function CollapsedDropdownItem({
   }
 
   return button;
-});
+}
 
-const DropdownPortal = memo(function DropdownPortal({
+CollapsedDropdownItem.displayName = "CollapsedDropdownItem";
+
+// ─── Dropdown Portal ───────────────────────────────────────────────────────
+
+function DropdownPortal({
   buttonRef,
+  dropdownId,
   dropdownClassName,
   dropdownItemClassName,
   dropdownItemDisabledClassName,
@@ -157,6 +149,7 @@ const DropdownPortal = memo(function DropdownPortal({
   portalContainer,
 }: {
   buttonRef: React.RefObject<HTMLButtonElement | null>;
+  dropdownId: string;
   dropdownClassName?: string;
   dropdownItemClassName?: string;
   dropdownItemDisabledClassName?: string;
@@ -181,12 +174,7 @@ const DropdownPortal = memo(function DropdownPortal({
   const updatePosition = useCallback(() => {
     if (!buttonRef.current || !dropdownRef.current) return;
     setCoords(
-      computeDropdownCoords(
-        buttonRef.current,
-        dropdownRef.current,
-        position,
-        gap,
-      ),
+      computeDropdownCoords(buttonRef.current, dropdownRef.current, position, gap),
     );
   }, [buttonRef, position, gap]);
 
@@ -194,17 +182,27 @@ const DropdownPortal = memo(function DropdownPortal({
     requestAnimationFrame(updatePosition);
   }, [updatePosition]);
 
+  // Reposition on resize and any ancestor scroll (capture phase)
   useEffect(() => {
     if (!isBrowser) return;
-    window.addEventListener("resize", updatePosition);
-    return () => window.removeEventListener("resize", updatePosition);
+    let rafId: number;
+    const handleReposition = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updatePosition);
+    };
+    window.addEventListener("resize", handleReposition);
+    window.addEventListener("scroll", handleReposition, true);
+    return () => {
+      window.removeEventListener("resize", handleReposition);
+      window.removeEventListener("scroll", handleReposition, true);
+      cancelAnimationFrame(rafId);
+    };
   }, [updatePosition]);
 
+  // Auto-focus first enabled item
   useEffect(() => {
     if (menuItemRefs.current.length > 0) {
-      const firstEnabled = menuItemRefs.current.find(
-        (el) => el && !el.disabled,
-      );
+      const firstEnabled = menuItemRefs.current.find((el) => el && !el.disabled);
       firstEnabled?.focus();
     }
   }, [menuItemRefs]);
@@ -227,7 +225,7 @@ const DropdownPortal = memo(function DropdownPortal({
       style={dropdownStyle}
       data-state="open"
       data-position={position}
-      data-breadcrumb-dropdown
+      data-breadcrumb-dropdown-id={dropdownId}
     >
       {collapsedItems.map((item, idx) => (
         <CollapsedDropdownItem
@@ -249,7 +247,11 @@ const DropdownPortal = memo(function DropdownPortal({
     </div>,
     portalContainer ?? document.body,
   );
-});
+}
+
+DropdownPortal.displayName = "DropdownPortal";
+
+// ─── Breadcrumb ────────────────────────────────────────────────────────────
 
 const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
   (
@@ -260,10 +262,11 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       onItemClick,
       "aria-label": ariaLabel = "Breadcrumb",
       classes: classesProp,
+      unstyled = false,
       className,
       style,
-      SeparatorIcon,
-      EllipsisIcon: CustomEllipsisIcon,
+      separatorIcon: SeparatorIconProp,
+      ellipsisIcon: EllipsisIconProp,
       iconSize = 16,
       showTooltips = true,
       tooltipPosition = "bottom",
@@ -275,14 +278,51 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       dropdownZIndex = 50,
       portalContainer,
       ellipsisAriaLabel = "Show collapsed breadcrumb items",
+      onDropdownOpenChange,
+      ...rest
     },
     ref,
   ) => {
+    const generatedId = useId();
+    const dropdownId = `breadcrumb-dropdown-${generatedId}`;
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const ellipsisButtonRef = useRef<HTMLButtonElement>(null);
     const menuItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const dropdownGap = 4;
+    const mountedRef = useRef(false);
 
+    // ─── Notify on dropdown state change (skip initial mount) ────────
+    useEffect(() => {
+      if (!mountedRef.current) {
+        mountedRef.current = true;
+        return;
+      }
+      onDropdownOpenChange?.(isDropdownOpen);
+    }, [isDropdownOpen, onDropdownOpenChange]);
+
+    // ─── Merged classes system ────────────────────────────────────────
+    const baseClasses = unstyled ? UNSTYLED_BREADCRUMB_CLASSES : DEFAULT_BREADCRUMB_CLASSES;
+    const mergedClasses: Required<BreadcrumbClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        list: classesProp?.list ?? baseClasses.list,
+        item: classesProp?.item ?? baseClasses.item,
+        itemActive: classesProp?.itemActive ?? baseClasses.itemActive,
+        itemDisabled: classesProp?.itemDisabled ?? baseClasses.itemDisabled,
+        link: classesProp?.link ?? baseClasses.link,
+        separator: classesProp?.separator ?? baseClasses.separator,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
+        ellipsisButton: classesProp?.ellipsisButton ?? baseClasses.ellipsisButton,
+        dropdown: classesProp?.dropdown ?? baseClasses.dropdown,
+        dropdownItem: classesProp?.dropdownItem ?? baseClasses.dropdownItem,
+        dropdownItemDisabled: classesProp?.dropdownItemDisabled ?? baseClasses.dropdownItemDisabled,
+      }),
+      [classesProp, baseClasses],
+    );
+
+    // ─── Click outside ───────────────────────────────────────────────
     const handleClickOutside = useCallback(
       (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
@@ -291,13 +331,14 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         for (const el of menuEls) {
           if (el?.contains(target)) return;
         }
+        // Use instance-specific selector
         const portalDropdown = (target as HTMLElement).closest?.(
-          "[data-breadcrumb-dropdown]",
+          `[data-breadcrumb-dropdown-id="${dropdownId}"]`,
         );
         if (portalDropdown) return;
         setIsDropdownOpen(false);
       },
-      [],
+      [dropdownId],
     );
 
     useEffect(() => {
@@ -311,6 +352,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       };
     }, [isDropdownOpen, handleClickOutside]);
 
+    // ─── Close on scroll ─────────────────────────────────────────────
     useEffect(() => {
       if (!isDropdownOpen || !isBrowser) return;
       const handleScroll = () => setIsDropdownOpen(false);
@@ -318,6 +360,41 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       return () => window.removeEventListener("scroll", handleScroll, true);
     }, [isDropdownOpen]);
 
+    // ─── Close on Escape (document level) ────────────────────────────
+    useEffect(() => {
+      if (!isDropdownOpen) return;
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setIsDropdownOpen(false);
+          ellipsisButtonRef.current?.focus();
+        }
+      };
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }, [isDropdownOpen]);
+
+    // ─── Close on focus leaving ──────────────────────────────────────
+    useEffect(() => {
+      if (!isDropdownOpen || !isBrowser) return;
+      const handleFocusOut = (e: FocusEvent) => {
+        const related = e.relatedTarget as Node | null;
+        if (!related) return;
+        // If focus is going to the ellipsis button or a menu item, keep open
+        if (ellipsisButtonRef.current?.contains(related)) return;
+        for (const el of menuItemRefs.current) {
+          if (el?.contains(related)) return;
+        }
+        const portalDropdown = (related as HTMLElement).closest?.(
+          `[data-breadcrumb-dropdown-id="${dropdownId}"]`,
+        );
+        if (portalDropdown) return;
+        setIsDropdownOpen(false);
+      };
+      document.addEventListener("focusout", handleFocusOut);
+      return () => document.removeEventListener("focusout", handleFocusOut);
+    }, [isDropdownOpen, dropdownId]);
+
+    // ─── Item click ──────────────────────────────────────────────────
     const handleItemClick = useCallback(
       (item: BreadcrumbItem) => {
         if (item.disabled) return;
@@ -334,54 +411,30 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
     const handleEllipsisKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        switch (e.key) {
-          case "Enter":
-          case " ":
-            e.preventDefault();
-            handleEllipsisClick();
-            break;
-          case "Escape":
-            if (isDropdownOpen) {
-              e.preventDefault();
-              setIsDropdownOpen(false);
-              ellipsisButtonRef.current?.focus();
-            }
-            break;
-          case "ArrowDown":
-            if (!isDropdownOpen) {
-              e.preventDefault();
-              setIsDropdownOpen(true);
-            }
-            break;
+        // Enter/Space handled natively by <button> — only add non-native keys
+        if (e.key === "ArrowDown" && !isDropdownOpen) {
+          e.preventDefault();
+          setIsDropdownOpen(true);
         }
       },
-      [handleEllipsisClick, isDropdownOpen],
+      [isDropdownOpen],
     );
 
     const handleMenuKeyDown = useCallback(
       (e: React.KeyboardEvent, index: number) => {
-        const enabledItems = menuItemRefs.current.filter(
-          (el) => el && !el.disabled,
-        );
-        const currentEnabledIndex = enabledItems.indexOf(
-          menuItemRefs.current[index],
-        );
+        const enabledItems = menuItemRefs.current.filter((el) => el && !el.disabled);
+        const currentEnabledIndex = enabledItems.indexOf(menuItemRefs.current[index]);
 
         switch (e.key) {
           case "ArrowDown": {
             e.preventDefault();
-            const next =
-              enabledItems[(currentEnabledIndex + 1) % enabledItems.length];
+            const next = enabledItems[(currentEnabledIndex + 1) % enabledItems.length];
             next?.focus();
             break;
           }
           case "ArrowUp": {
             e.preventDefault();
-            const prev =
-              enabledItems[
-                (currentEnabledIndex - 1 + enabledItems.length) %
-                  enabledItems.length
-              ];
+            const prev = enabledItems[(currentEnabledIndex - 1 + enabledItems.length) % enabledItems.length];
             prev?.focus();
             break;
           }
@@ -420,16 +473,13 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       [],
     );
 
+    // ─── Truncation logic ────────────────────────────────────────────
     const { visibleItems, collapsedItems, shouldTruncate } = useMemo(() => {
       const totalItems = items.length;
       const effectiveMaxVisible = Math.max(maxVisibleItems, 2);
 
       if (totalItems <= effectiveMaxVisible) {
-        return {
-          visibleItems: items,
-          collapsedItems: [],
-          shouldTruncate: false,
-        };
+        return { visibleItems: items, collapsedItems: [], shouldTruncate: false };
       }
 
       const firstItem = items[0];
@@ -445,14 +495,12 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     }, [items, maxVisibleItems]);
 
     useEffect(() => {
-      menuItemRefs.current = menuItemRefs.current.slice(
-        0,
-        collapsedItems.length,
-      );
+      menuItemRefs.current = menuItemRefs.current.slice(0, collapsedItems.length);
     }, [collapsedItems.length]);
 
-    const SeparatorComponent = SeparatorIcon || ChevronRightIcon;
-    const EllipsisComponent = CustomEllipsisIcon || EllipsisIcon;
+    // ─── Icons ───────────────────────────────────────────────────────
+    const SeparatorComponent = SeparatorIconProp || ChevronRightIcon;
+    const EllipsisComponent = EllipsisIconProp || DefaultEllipsisIcon;
 
     const iconSizeProps = useMemo(() => {
       if (typeof iconSize === "number") {
@@ -461,18 +509,14 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       return { className: iconSize };
     }, [iconSize]);
 
+    // ─── Render helpers ──────────────────────────────────────────────
     const renderSeparator = useCallback(
       (key: string) => (
-        <li
-          key={key}
-          role="presentation"
-          aria-hidden="true"
-          className={classesProp?.separator || undefined}
-        >
+        <li key={key} role="presentation" aria-hidden="true" className={mergedClasses.separator || undefined}>
           {separator || <SeparatorComponent {...iconSizeProps} />}
         </li>
       ),
-      [separator, classesProp?.separator, SeparatorComponent, iconSizeProps],
+      [separator, mergedClasses.separator, SeparatorComponent, iconSizeProps],
     );
 
     const renderItem = useCallback(
@@ -481,20 +525,15 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         const isDisabled = !!item.disabled;
         const isClickable = !isDisabled && (!!item.onClick || !!onItemClick);
 
-        const content = (
-          <BreadcrumbItemContent
-            item={item}
-            iconClassName={classesProp?.icon}
-          />
-        );
+        const content = <BreadcrumbItemContent item={item} iconClassName={mergedClasses.icon} />;
 
-        const mergedTooltipProps = {
-          ...defaultTooltipProps,
-          ...item.tooltipProps,
-        };
+        // Only merge when tooltip is actually shown to avoid unnecessary object creation
+        const mergedTooltipProps = showTooltips && item.tooltip
+          ? { ...defaultTooltipProps, ...item.tooltipProps }
+          : null;
 
         const wrapWithTooltip = (el: React.ReactElement, key: string) => {
-          if (showTooltips && item.tooltip) {
+          if (mergedTooltipProps) {
             return (
               <li key={key}>
                 <Tooltip
@@ -517,10 +556,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           return wrapWithTooltip(
             <a
               href={item.href}
-              className={cn(
-                classesProp?.link,
-                isActive ? classesProp?.itemActive : classesProp?.item,
-              ) || undefined}
+              className={cn(mergedClasses.link, isActive ? mergedClasses.itemActive : mergedClasses.item) || undefined}
               onClick={(e) => {
                 if (item.onClick || onItemClick) {
                   e.preventDefault();
@@ -540,7 +576,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         if (isActive) {
           return wrapWithTooltip(
             <span
-              className={classesProp?.itemActive || undefined}
+              className={mergedClasses.itemActive || undefined}
               aria-current="page"
               data-state="active"
             >
@@ -555,10 +591,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             type="button"
             disabled={isDisabled}
             tabIndex={isDisabled ? -1 : 0}
-            className={cn(
-              classesProp?.item,
-              isDisabled && classesProp?.itemDisabled,
-            ) || undefined}
+            className={cn(mergedClasses.item, isDisabled && mergedClasses.itemDisabled) || undefined}
             onClick={() => handleItemClick(item)}
             data-state="inactive"
             data-disabled={isDisabled || undefined}
@@ -571,11 +604,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         );
       },
       [
-        classesProp?.item,
-        classesProp?.itemActive,
-        classesProp?.itemDisabled,
-        classesProp?.link,
-        classesProp?.icon,
+        mergedClasses,
         onItemClick,
         handleItemClick,
         showTooltips,
@@ -586,10 +615,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     );
 
     const renderEllipsis = useCallback(() => {
-      const mergedEllipsisTp = {
-        ...defaultTooltipProps,
-        ...ellipsisTooltipProps,
-      };
+      const mergedEllipsisTp = { ...defaultTooltipProps, ...ellipsisTooltipProps };
 
       const ellipsisButton = (
         <button
@@ -597,7 +623,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           type="button"
           onClick={handleEllipsisClick}
           onKeyDown={handleEllipsisKeyDown}
-          className={classesProp?.ellipsisButton || undefined}
+          className={mergedClasses.ellipsisButton || undefined}
           aria-expanded={isDropdownOpen}
           aria-haspopup="menu"
           aria-label={ellipsisAriaLabel}
@@ -623,19 +649,16 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         );
 
       return (
-        <li
-          key="ellipsis"
-          className={classesProp?.ellipsis || undefined}
-        >
+        <li key="ellipsis" className={mergedClasses.ellipsis || undefined}>
           {wrappedEllipsisButton}
-
           {isDropdownOpen && (
             <DropdownPortal
               buttonRef={ellipsisButtonRef}
-              dropdownClassName={classesProp?.dropdown}
-              dropdownItemClassName={classesProp?.dropdownItem}
-              dropdownItemDisabledClassName={classesProp?.dropdownItemDisabled}
-              iconClassName={classesProp?.icon}
+              dropdownId={dropdownId}
+              dropdownClassName={mergedClasses.dropdown}
+              dropdownItemClassName={mergedClasses.dropdownItem}
+              dropdownItemDisabledClassName={mergedClasses.dropdownItemDisabled}
+              iconClassName={mergedClasses.icon}
               collapsedItems={collapsedItems}
               position={dropdownPosition}
               zIndex={dropdownZIndex}
@@ -654,12 +677,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         </li>
       );
     }, [
-      classesProp?.ellipsis,
-      classesProp?.ellipsisButton,
-      classesProp?.dropdown,
-      classesProp?.dropdownItem,
-      classesProp?.dropdownItemDisabled,
-      classesProp?.icon,
+      mergedClasses,
       isDropdownOpen,
       collapsedItems,
       handleEllipsisClick,
@@ -677,10 +695,12 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       defaultTooltipProps,
       dropdownPosition,
       dropdownZIndex,
+      dropdownId,
       ellipsisAriaLabel,
       portalContainer,
     ]);
 
+    // ─── Build rendered items ────────────────────────────────────────
     const renderedItems = useMemo(() => {
       const result: React.ReactNode[] = [];
 
@@ -705,24 +725,19 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       }
 
       return result;
-    }, [
-      shouldTruncate,
-      visibleItems,
-      renderItem,
-      renderSeparator,
-      renderEllipsis,
-    ]);
+    }, [shouldTruncate, visibleItems, renderItem, renderSeparator, renderEllipsis]);
 
     return (
       <nav
         ref={ref}
         aria-label={ariaLabel}
-        className={classesProp?.root ?? className}
+        className={cn(mergedClasses.root, className) || undefined}
         style={style}
         data-truncated={shouldTruncate || undefined}
         data-dropdown-open={isDropdownOpen || undefined}
+        {...rest}
       >
-        <ol className={classesProp?.list || undefined}>{renderedItems}</ol>
+        <ol className={mergedClasses.list || undefined}>{renderedItems}</ol>
       </nav>
     );
   },

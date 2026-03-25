@@ -5,15 +5,15 @@ import type { AccordionItemProps, AccordionItemContextValue } from "../utils/typ
 import { cn } from "../../../utils/cn";
 
 const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
-  ({ 
-    value, 
-    disabled: itemDisabled, 
-    children, 
-    className, 
-    asChild = false, 
+  ({
+    value,
+    disabled: itemDisabled,
+    children,
+    className,
+    asChild = false,
     onToggle,
     "aria-describedby": ariaDescribedBy,
-    ...rest 
+    ...rest
   }, ref) => {
     const config = useAccordionConfig();
     const context = useAccordionContext();
@@ -23,7 +23,6 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     const triggerId = `${config.accordionId}-trigger-${value}`;
     const contentId = `${config.accordionId}-content-${value}`;
-    const descriptionId = ariaDescribedBy ?? `${config.accordionId}-desc-${value}`;
     const isPending = context.pendingItem === value;
 
     const prevExpandedRef = useRef(isExpanded);
@@ -41,11 +40,12 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
         isExpanded,
         triggerId,
         contentId,
-        descriptionId: ariaDescribedBy ? descriptionId : undefined,
+        // Only set descriptionId when explicitly provided — auto-generating
+        // an ID that points to a non-existent DOM element is an a11y anti-pattern
+        descriptionId: ariaDescribedBy,
         onToggle,
-        index: 0,
       }),
-      [value, disabled, isExpanded, triggerId, contentId, descriptionId, ariaDescribedBy, onToggle]
+      [value, disabled, isExpanded, triggerId, contentId, ariaDescribedBy, onToggle]
     );
 
     const dataState = isExpanded ? "open" : "closed";

@@ -14,10 +14,10 @@ import { isTooltipConfig } from "../../../utils/isTooltipConfig";
 
 const variantClassNames = {
   solid:
-    "font-medium bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 select-none px-2",
+    "font-medium bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 select-none",
   outline:
-    "font-medium border-2 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 bg-transparent select-none px-2",
-  ghost: "font-medium text-gray-600 dark:text-gray-300 select-none px-2",
+    "font-medium border-2 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 bg-transparent select-none",
+  ghost: "font-medium text-gray-600 dark:text-gray-300 select-none",
 };
 
 export const AvatarGroupCount = forwardRef<
@@ -80,8 +80,9 @@ export const AvatarGroupCount = forwardRef<
         style={{
           minWidth: numericSize,
           height: numericSize,
-          borderRadius,
+          borderRadius: numericSize,
           fontSize,
+          paddingInline: Math.round(numericSize * 0.25),
           border: parseBorder(bordered),
           ...style,
         }}

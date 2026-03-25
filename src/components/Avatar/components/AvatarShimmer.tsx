@@ -4,8 +4,7 @@ import { DEFAULT_SIZE, DEFAULT_SHAPE, DEFAULT_SPACING } from "../utils/constants
 import { getNumericSize, getBorderRadius } from "../utils/helpers";
 import { Slot } from "../../../utils/Slot";
 import { cn } from "../../../utils/cn";
-
-const defaultShimmerClassName = "bg-gray-200 dark:bg-gray-700";
+import { useReducedMotion } from "../../../utils/useReducedMotion";
 
 export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
   (
@@ -15,21 +14,23 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
       className,
       style,
       animate = true,
+      reduceMotion = "auto",
       asChild = false,
     },
     ref,
   ) => {
     const numericSize = getNumericSize(size);
     const borderRadius = getBorderRadius(shape);
+    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const shouldAnimate = animate && !effectiveReduceMotion;
     const Comp = asChild ? Slot : "div";
 
     return (
       <Comp
         ref={ref}
         className={cn(
-          "shrink-0",
-          defaultShimmerClassName,
-          animate && "animate-pulse",
+          "shrink-0 bg-gray-200",
+          shouldAnimate && "animate-pulse",
           className,
         )}
         style={{
@@ -59,6 +60,7 @@ export const AvatarGroupShimmer = forwardRef<
       spacing = DEFAULT_SPACING,
       ringColor = "white",
       animate = true,
+      reduceMotion = "auto",
       className,
       style,
       showCount = false,
@@ -68,10 +70,12 @@ export const AvatarGroupShimmer = forwardRef<
   ) => {
     const numericSize = getNumericSize(size);
     const borderRadius = getBorderRadius(shape);
+    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const shouldAnimate = animate && !effectiveReduceMotion;
     const Comp = asChild ? Slot : "div";
     const itemClassName = cn(
-      "shrink-0 bg-gray-200 dark:bg-gray-700",
-      animate && "animate-pulse",
+      "shrink-0 bg-gray-200",
+      shouldAnimate && "animate-pulse",
     );
 
     return (

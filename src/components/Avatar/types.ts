@@ -13,6 +13,21 @@ export type BadgeOverlap = "rectangular" | "circular";
 export type CountVariant = "solid" | "outline" | "ghost";
 export type GroupVariant = "stack" | "grid" | "inline";
 
+export interface AvatarClasses {
+  root?: string;
+  inner?: string;
+  image?: string;
+  initials?: string;
+  fallback?: string;
+  status?: string;
+}
+
+export interface AvatarGroupClasses {
+  root?: string;
+  item?: string;
+  surplus?: string;
+}
+
 export interface AvatarColors {
   backgrounds?: string[];
   borders?: string[];
@@ -61,10 +76,11 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLDivElement>, "onLoa
   status?: AvatarStatus | AvatarStatusConfig;
   tooltip?: ReactNode | AvatarTooltipConfig;
   imageConfig?: AvatarImageConfig;
-  textClassName?: string;
+  classes?: AvatarClasses;
+  unstyled?: boolean;
   textStyle?: CSSProperties;
-  statusClassName?: string;
   loading?: boolean;
+  reduceMotion?: boolean | "auto";
   onLoad?: () => void;
   onError?: () => void;
   asChild?: boolean;
@@ -77,15 +93,15 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   shape?: AvatarShape;
   bordered?: boolean | string;
   spacing?: number;
-  gap?: number;
   ringColor?: string;
   showTooltip?: boolean;
   total?: number;
   variant?: GroupVariant;
   reverseOrder?: boolean;
   renderSurplus?: (count: number) => ReactNode;
-  onAvatarClick?: (index: number, event: React.MouseEvent) => void;
+  onAvatarClick?: (info: { index: number; name?: string }, event: React.MouseEvent) => void;
   dir?: Direction;
+  classes?: AvatarGroupClasses;
   asChild?: boolean;
 }
 
@@ -132,6 +148,7 @@ export interface AvatarShimmerProps extends HTMLAttributes<HTMLDivElement> {
   size?: AvatarSize;
   shape?: AvatarShape;
   animate?: boolean;
+  reduceMotion?: boolean | "auto";
   asChild?: boolean;
 }
 
@@ -143,5 +160,6 @@ export interface AvatarGroupShimmerProps extends HTMLAttributes<HTMLDivElement> 
   ringColor?: string;
   animate?: boolean;
   showCount?: boolean;
+  reduceMotion?: boolean | "auto";
   asChild?: boolean;
 }

@@ -1,4 +1,4 @@
-import type { IconAnimation } from "./types";
+import type { IconAnimation, ButtonClasses } from "./types";
 
 export const BASE_TRANSITION = "transition-transform duration-200";
 
@@ -22,4 +22,20 @@ export const CONTINUOUS_ANIMATION_MAP: Record<IconAnimation, string> = {
   bounce: "animate-bounce",
   pulse: "animate-pulse",
   spin: "animate-spin",
+};
+
+export const DEFAULT_BUTTON_CLASSES: Required<ButtonClasses> = {
+  root: "",
+  content: "inline-flex items-center justify-center gap-2",
+  startIcon: "inline-flex shrink-0",
+  endIcon: "inline-flex shrink-0",
+  loader: "",
+};
+
+export const UNSTYLED_BUTTON_CLASSES: Required<ButtonClasses> = {
+  root: "",
+  content: "",
+  startIcon: "",
+  endIcon: "",
+  loader: "",
 };

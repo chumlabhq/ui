@@ -66,8 +66,8 @@ describe("Button", () => {
       expect(screen.getByRole("button")).toHaveClass("custom-class");
     });
 
-    it("applies custom contentClassName", () => {
-      render(<Button contentClassName="custom-content">Content</Button>);
+    it("applies custom classes.content", () => {
+      render(<Button classes={{ content: "custom-content" }}>Content</Button>);
 
       const content = screen.getByText("Content").closest("span");
       expect(content).toHaveClass("custom-content");

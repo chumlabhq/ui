@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from "react";
-import type { AvatarGroupProps } from "../types";
+import type { AvatarGroupProps, AvatarGroupClasses } from "../types";
 import { AvatarGroupCount } from "./AvatarGroupCount";
 import { Slot } from "../../../utils/Slot";
 import {
@@ -8,6 +8,7 @@ import {
   DEFAULT_SHAPE,
 } from "../utils/constants";
 import { AvatarGroupContext } from "../utils/context";
+import { cn } from "../../../utils/cn";
 
 const variantClassNames = {
   stack: "flex items-center",
@@ -24,7 +25,6 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       shape,
       bordered,
       spacing,
-      gap,
       ringColor = "white",
       showTooltip = false,
       total,
@@ -33,6 +33,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       renderSurplus,
       onAvatarClick,
       dir = "ltr",
+      classes = {},
       asChild = false,
       className,
       style,
@@ -40,7 +41,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
     },
     ref,
   ) => {
-    const effectiveSpacing = gap ?? spacing ?? DEFAULT_SPACING;
+    const effectiveSpacing = spacing ?? DEFAULT_SPACING;
     const effectiveShape = shape ?? DEFAULT_SHAPE;
 
     const effectiveMax =
@@ -86,7 +87,6 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
         .join(", ");
     }, [showTooltip, remainingChildren]);
 
-    const resolvedClassName = className ?? variantClassNames[variant];
     const Comp = asChild ? Slot : "div";
 
     const ariaLabel = useMemo(() => {
@@ -105,38 +105,46 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       [size, effectiveShape, bordered, ringColor],
     );
 
+    const itemClassName = classes.item ?? "shrink-0";
+
     return (
       <AvatarGroupContext.Provider value={contextValue}>
         <Comp
           ref={ref}
-          className={resolvedClassName}
+          className={cn(variantClassNames[variant], classes.root, className) || undefined}
           style={style}
           dir={dir}
           role="group"
           aria-label={ariaLabel}
           {...rest}
         >
-          {visibleChildren.map((child, index) => (
-            <div
-              key={
-                React.isValidElement(child) ? (child.key ?? index) : index
-              }
-              className="shrink-0"
-              style={{
-                marginInlineStart: index === 0 ? 0 : effectiveSpacing,
-                zIndex: visibleChildren.length - index,
-                position: "relative",
-                cursor: onAvatarClick ? "pointer" : undefined,
-              }}
-              onClick={
-                onAvatarClick
-                  ? (e: React.MouseEvent) => onAvatarClick(index, e)
-                  : undefined
-              }
-            >
-              {child}
-            </div>
-          ))}
+          {visibleChildren.map((child, index) => {
+            const childName = React.isValidElement(child)
+              ? ((child.props as Record<string, unknown>).name as string | undefined)
+              : undefined;
+
+            return (
+              <div
+                key={
+                  React.isValidElement(child) ? (child.key ?? index) : index
+                }
+                className={itemClassName || undefined}
+                style={{
+                  marginInlineStart: index === 0 ? 0 : effectiveSpacing,
+                  zIndex: visibleChildren.length - index,
+                  position: "relative",
+                  cursor: onAvatarClick ? "pointer" : undefined,
+                }}
+                onClick={
+                  onAvatarClick
+                    ? (e: React.MouseEvent) => onAvatarClick({ index, name: childName }, e)
+                    : undefined
+                }
+              >
+                {child}
+              </div>
+            );
+          })}
           {remainingCount > 0 &&
             (renderSurplus ? (
               renderSurplus(remainingCount)
@@ -148,9 +156,8 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 bordered={bordered}
                 tooltip={tooltipContent}
                 style={{
-                  marginInlineStart: effectiveSpacing,
+                  marginInlineStart: effectiveSpacing < 0 ? 4 : effectiveSpacing,
                   zIndex: 0,
-                  boxShadow: `0 0 0 2px ${ringColor}`,
                 }}
               />
             ))}

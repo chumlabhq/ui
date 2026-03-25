@@ -1,4 +1,3 @@
-import { memo } from "react";
 import type { BreadcrumbItem } from "../utils/types";
 import { cn } from "../../../utils/cn";
 
@@ -7,10 +6,9 @@ interface BreadcrumbItemContentProps {
   iconClassName?: string;
 }
 
-const BreadcrumbItemContent = memo(function BreadcrumbItemContent({
-  item,
-  iconClassName,
-}: BreadcrumbItemContentProps) {
+function BreadcrumbItemContent({ item, iconClassName }: BreadcrumbItemContentProps) {
+  const position = item.iconPosition ?? (item.icon ? "left" : undefined);
+
   const icon = item.icon != null && (
     <span className={cn(iconClassName) || undefined} aria-hidden="true">
       {item.icon}
@@ -19,12 +17,12 @@ const BreadcrumbItemContent = memo(function BreadcrumbItemContent({
 
   return (
     <>
-      {item.iconPosition === "left" && icon}
+      {position === "left" && icon}
       <span>{item.content || item.label}</span>
-      {item.iconPosition === "right" && icon}
+      {position === "right" && icon}
     </>
   );
-});
+}
 
 BreadcrumbItemContent.displayName = "BreadcrumbItemContent";
 

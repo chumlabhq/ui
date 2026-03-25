@@ -211,6 +211,26 @@ const InputDemo = () => {
           </DemoWrapper>
         </Section>
 
+        {/* Size Variants */}
+        <Section title="Size Variants" description="The size prop emits data-size on the container for CSS targeting." isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Small</span>
+                <Input aria-label="Small" placeholder="Small size" size="sm" inputClassName={c.input} wrapperClassName={c.wrapper} />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Medium (default)</span>
+                <Input aria-label="Medium" placeholder="Medium size" size="md" inputClassName={c.input} wrapperClassName={c.wrapper} />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Large</span>
+                <Input aria-label="Large" placeholder="Large size" size="lg" inputClassName={c.input} wrapperClassName={c.wrapper} />
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
         {/* Label, Description, Required */}
         <Section title="Label, Description & Required" description="Semantic labels with helper text and required indicators." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
@@ -528,7 +548,7 @@ const InputDemo = () => {
         {/* Loading */}
         <Section title="Loading State" description="Disables input and shows a spinner. Supports custom loaders." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 w-full">
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Default</span>
                 <Input aria-label="Loading" placeholder="Loading..." loading inputClassName={c.input} wrapperClassName={c.wrapper} />
@@ -547,6 +567,10 @@ const InputDemo = () => {
                   inputClassName={c.input}
                   wrapperClassName={c.wrapper}
                 />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Custom loader size</span>
+                <Input aria-label="Custom loader size" placeholder="Loading..." loading loaderSize={24} inputClassName={c.input} wrapperClassName={c.wrapper} />
               </div>
             </div>
           </DemoWrapper>
