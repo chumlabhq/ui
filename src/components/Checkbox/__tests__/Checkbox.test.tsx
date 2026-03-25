@@ -272,18 +272,11 @@ describe("Checkbox", () => {
       expect(container).toHaveAttribute("data-shape", "circle");
     });
 
-    it("applies classes.size when provided", () => {
-      render(<Checkbox classes={{ size: "custom-size", checkbox: "checkbox" }} />);
+    it("applies shape class from shape prop", () => {
+      render(<Checkbox shape="circle" classes={{ checkbox: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
-      expect(checkboxSpan).toHaveClass("custom-size");
-    });
-
-    it("applies classes.shape when provided", () => {
-      render(<Checkbox classes={{ shape: "custom-shape", checkbox: "checkbox" }} />);
-
-      const checkboxSpan = document.querySelector(".checkbox");
-      expect(checkboxSpan).toHaveClass("custom-shape");
+      expect(checkboxSpan).toHaveClass("rounded-full");
     });
   });
 

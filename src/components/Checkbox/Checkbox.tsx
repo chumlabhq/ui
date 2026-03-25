@@ -1,6 +1,12 @@
-import { forwardRef, useId, useEffect, useRef, useImperativeHandle, useMemo, useCallback } from "react";
-import type { CheckboxProps } from "./utils/types";
-import { SIZE_MAP, ICON_SIZE_MAP, SHAPE_CLASS_MAP, defaultCheckboxStyles } from "./utils/constants";
+import { forwardRef, useId, useEffect, useRef, useMemo, useCallback } from "react";
+import type { CheckboxProps, CheckboxClasses } from "./utils/types";
+import {
+  SIZE_MAP,
+  ICON_SIZE_MAP,
+  SHAPE_CLASS_MAP,
+  DEFAULT_CHECKBOX_CLASSES,
+  UNSTYLED_CHECKBOX_CLASSES,
+} from "./utils/constants";
 import { DefaultCheckIcon, DefaultIndeterminateIcon } from "./utils/icons";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
@@ -27,11 +33,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       checkedIcon,
       uncheckedIcon,
       indeterminateIcon,
-      classes,
+      classes: classesProp,
+      unstyled = false,
+      reduceMotion: _reduceMotion,
       className,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const generatedId = useId();
     const checkboxId = id || generatedId;
@@ -40,7 +48,34 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const internalRef = useRef<HTMLInputElement>(null);
 
-    useImperativeHandle(ref, () => internalRef.current!, []);
+    // Merge refs — callback ref pattern (safe, no non-null assertion)
+    const setRef = useCallback(
+      (node: HTMLInputElement | null) => {
+        internalRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref],
+    );
+
+    // Dev warnings — fire once per instance
+    const warnedRef = useRef(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (
+        !label &&
+        !rest["aria-label"] &&
+        !rest["aria-labelledby"] &&
+        !warnedRef.current
+      ) {
+        warnedRef.current = true;
+        console.warn(
+          "Checkbox: A checkbox without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
+        );
+      }
+    }
 
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
@@ -54,6 +89,25 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
     }, [indeterminate]);
 
+    // ─── Merged classes system ──────────────────────────────────────────
+    const baseClasses = unstyled ? UNSTYLED_CHECKBOX_CLASSES : DEFAULT_CHECKBOX_CLASSES;
+    const mergedClasses: Required<CheckboxClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        labelContainer: classesProp?.labelContainer ?? baseClasses.labelContainer,
+        label: classesProp?.label ?? baseClasses.label,
+        description: classesProp?.description ?? baseClasses.description,
+        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        checked: classesProp?.checked ?? baseClasses.checked,
+        unchecked: classesProp?.unchecked ?? baseClasses.unchecked,
+        indeterminate: classesProp?.indeterminate ?? baseClasses.indeterminate,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        error: classesProp?.error ?? baseClasses.error,
+      }),
+      [classesProp, baseClasses],
+    );
+
+    // ─── Size & shape ───────────────────────────────────────────────────
     const { boxSize, iconSize } = useMemo(() => {
       if (size === undefined) {
         return { boxSize: undefined, iconSize: undefined };
@@ -64,44 +118,42 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       return { boxSize: SIZE_MAP[size], iconSize: ICON_SIZE_MAP[size] };
     }, [size]);
 
-    const shapeClass = useMemo(() => {
-      if (classes?.shape) return classes.shape;
-      if (shape) return SHAPE_CLASS_MAP[shape];
-      return "";
-    }, [shape, classes]);
+    const shapeClass = shape ? SHAPE_CLASS_MAP[shape] : "";
 
     const sizeStyle = useMemo(() => {
-      if (classes?.size || !boxSize) return undefined;
+      if (!boxSize) return undefined;
       return { width: boxSize, height: boxSize };
-    }, [boxSize, classes]);
+    }, [boxSize]);
 
+    // ─── State class ────────────────────────────────────────────────────
+    const stateClassName = useMemo(() => {
+      if (indeterminate) return mergedClasses.indeterminate;
+      if (isChecked) return mergedClasses.checked;
+      return mergedClasses.unchecked;
+    }, [indeterminate, isChecked, mergedClasses]);
+
+    // ─── Handlers ───────────────────────────────────────────────────────
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!disabled) {
           setIsChecked(event.target.checked);
         }
       },
-      [disabled, setIsChecked]
+      [disabled, setIsChecked],
     );
 
-    const getStateClassName = useMemo(() => {
-      if (indeterminate) return cn(defaultCheckboxStyles.indeterminate, classes?.indeterminate);
-      if (isChecked) return cn(defaultCheckboxStyles.checked, classes?.checked);
-      return cn(defaultCheckboxStyles.unchecked, classes?.unchecked);
-    }, [indeterminate, isChecked, classes?.indeterminate, classes?.checked, classes?.unchecked]);
-
+    // ─── Icon ───────────────────────────────────────────────────────────
     const renderedIcon = useMemo(() => {
       if (indeterminate) {
-        return (
-          indeterminateIcon || <DefaultIndeterminateIcon className={classes?.icon} size={iconSize} />
-        );
+        return indeterminateIcon || <DefaultIndeterminateIcon className={mergedClasses.icon || undefined} size={iconSize} />;
       }
       if (isChecked) {
-        return checkedIcon || <DefaultCheckIcon className={classes?.icon} size={iconSize} />;
+        return checkedIcon || <DefaultCheckIcon className={mergedClasses.icon || undefined} size={iconSize} />;
       }
       return uncheckedIcon || null;
-    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, classes?.icon, iconSize]);
+    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, mergedClasses.icon, iconSize]);
 
+    // ─── Described by ───────────────────────────────────────────────────
     const describedBy = [
       description ? descriptionId : null,
       error && errorMessage ? errorId : null,
@@ -111,7 +163,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div
-        className={cn(classes?.root, className)}
+        className={cn(mergedClasses.root, className) || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-checked={isChecked || undefined}
@@ -119,19 +171,17 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         data-size={typeof size === "string" ? size : undefined}
         data-shape={shape || undefined}
       >
-        <label className={cn("flex items-start gap-2")}>
+        <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span
-            className={cn(defaultCheckboxStyles.base, classes?.checkbox, getStateClassName, classes?.size, shapeClass)}
+            className={cn(mergedClasses.checkbox, stateClassName, shapeClass) || undefined}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
-            data-size={typeof size === "string" ? size : undefined}
-            data-shape={shape || undefined}
           >
             <input
-              ref={internalRef}
+              ref={setRef}
               type="checkbox"
               id={checkboxId}
               name={name}
@@ -160,15 +210,15 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           </span>
 
           {(label || description) && (
-            <span className={classes?.labelContainer}>
+            <span className={mergedClasses.labelContainer || undefined}>
               {label && (
-                <span className={classes?.label}>
+                <span className={mergedClasses.label || undefined}>
                   {label}
-                  {required && <span aria-hidden="true">*</span>}
+                  {required && <span aria-hidden="true"> *</span>}
                 </span>
               )}
               {description && (
-                <span id={descriptionId} className={classes?.description}>
+                <span id={descriptionId} className={mergedClasses.description || undefined}>
                   {description}
                 </span>
               )}
@@ -177,13 +227,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={classes?.error}>
+          <div id={errorId} role="alert" className={mergedClasses.error || undefined}>
             {errorMessage}
           </div>
         )}
       </div>
     );
-  }
+  },
 );
 
 Checkbox.displayName = "Checkbox";

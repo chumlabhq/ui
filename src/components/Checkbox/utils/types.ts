@@ -14,8 +14,6 @@ export interface CheckboxClasses {
   indeterminate?: string;
   icon?: string;
   error?: string;
-  size?: string;
-  shape?: string;
 }
 
 export interface CheckboxProps
@@ -36,4 +34,6 @@ export interface CheckboxProps
   uncheckedIcon?: ReactNode;
   indeterminateIcon?: ReactNode;
   classes?: CheckboxClasses;
+  unstyled?: boolean;
+  reduceMotion?: boolean | "auto";
 }

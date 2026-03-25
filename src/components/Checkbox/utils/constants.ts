@@ -1,4 +1,4 @@
-import type { CheckboxSize, CheckboxShape } from "./types";
+import type { CheckboxSize, CheckboxShape, CheckboxClasses } from "./types";
 
 export const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
   xs: 14,
@@ -22,9 +22,28 @@ export const SHAPE_CLASS_MAP: Record<CheckboxShape, string> = {
   circle: "rounded-full",
 };
 
-export const defaultCheckboxStyles = {
-  base: "inline-flex items-center justify-center border transition-colors focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2",
+export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
+  root: "",
+  labelContainer: "flex flex-col",
+  label: "text-sm font-medium text-gray-700",
+  description: "text-xs text-gray-500",
+  checkbox: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2",
   checked: "bg-blue-600 border-blue-600 text-white",
-  unchecked: "bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600",
+  unchecked: "bg-white border-gray-300",
   indeterminate: "bg-blue-600 border-blue-600 text-white",
+  icon: "",
+  error: "text-sm text-red-500",
+};
+
+export const UNSTYLED_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
+  root: "",
+  labelContainer: "",
+  label: "",
+  description: "",
+  checkbox: "",
+  checked: "",
+  unchecked: "",
+  indeterminate: "",
+  icon: "",
+  error: "",
 };
