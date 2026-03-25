@@ -23,6 +23,8 @@ export interface DrawerProps
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
   classes?: DrawerClasses;
+  unstyled?: boolean;
+  reduceMotion?: boolean | "auto";
   trapFocus?: boolean;
   restoreFocus?: boolean;
   portalContainer?: HTMLElement | null;

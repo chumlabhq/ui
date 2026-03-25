@@ -11,8 +11,17 @@ export const DEFAULT_SNAP_POINT_INDEX = 0;
 export const SWIPE_DEADZONE = 10;
 export const VELOCITY_THRESHOLD = 0.5;
 
-export const DEFAULT_CLASS_NAMES: Required<DrawerClasses> = {
+export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
   root: "z-999999",
   overlay: "fixed inset-0 transition-opacity",
   panel: "fixed z-999999",
 };
+
+export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> = {
+  root: "",
+  overlay: "",
+  panel: "",
+};
+
+/** @deprecated Use DEFAULT_DRAWER_CLASSES */
+export const DEFAULT_CLASS_NAMES = DEFAULT_DRAWER_CLASSES;

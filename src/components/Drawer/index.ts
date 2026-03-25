@@ -15,6 +15,8 @@ export type {
 } from "./utils/types";
 
 export {
+  DEFAULT_DRAWER_CLASSES,
+  UNSTYLED_DRAWER_CLASSES,
   DEFAULT_CLASS_NAMES,
   DEFAULT_DIRECTION,
   DEFAULT_SIZE,

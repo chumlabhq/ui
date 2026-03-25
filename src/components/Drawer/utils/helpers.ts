@@ -55,9 +55,9 @@ export const getDirectionStyles = (
 
   switch (direction) {
     case "left":
-      return { top: 0, left: 0, height: "100dvh", width: size, transform: `translateX(${-closedPercent}%)`, transition };
+      return { top: 0, left: 0, height: "100vh", width: size, transform: `translateX(${-closedPercent}%)`, transition };
     case "right":
-      return { top: 0, right: 0, height: "100dvh", width: size, transform: `translateX(${closedPercent}%)`, transition };
+      return { top: 0, right: 0, height: "100vh", width: size, transform: `translateX(${closedPercent}%)`, transition };
     case "top":
       return { top: 0, left: 0, width: "100vw", height: size, transform: `translateY(${-closedPercent}%)`, transition };
     case "bottom":
@@ -124,18 +124,22 @@ export function isTopDrawer(id: string): boolean {
 }
 
 let scrollLockCount = 0;
-let savedOverflow = "";
+let savedHtmlOverflow = "";
+let savedBodyOverflow = "";
 let savedPaddingRight = "";
 
 export function acquireScrollLock() {
   if (scrollLockCount === 0) {
-    savedOverflow = document.body.style.overflow;
-    savedPaddingRight = document.body.style.paddingRight;
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden";
+    const html = document.documentElement;
+    const body = document.body;
+    savedHtmlOverflow = html.style.overflow;
+    savedBodyOverflow = body.style.overflow;
+    savedPaddingRight = body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - html.clientWidth;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      body.style.paddingRight = `${scrollbarWidth}px`;
     }
   }
   scrollLockCount++;
@@ -144,17 +148,21 @@ export function acquireScrollLock() {
 export function releaseScrollLock() {
   scrollLockCount = Math.max(0, scrollLockCount - 1);
   if (scrollLockCount === 0) {
-    document.body.style.overflow = savedOverflow;
+    document.documentElement.style.overflow = savedHtmlOverflow;
+    document.body.style.overflow = savedBodyOverflow;
     document.body.style.paddingRight = savedPaddingRight;
-    savedOverflow = "";
+    savedHtmlOverflow = "";
+    savedBodyOverflow = "";
     savedPaddingRight = "";
   }
 }
 
 export function resetScrollLock() {
   scrollLockCount = 0;
+  document.documentElement.style.overflow = "";
   document.body.style.overflow = "";
   document.body.style.paddingRight = "";
-  savedOverflow = "";
+  savedHtmlOverflow = "";
+  savedBodyOverflow = "";
   savedPaddingRight = "";
 }

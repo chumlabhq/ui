@@ -24,7 +24,8 @@ import {
   releaseScrollLock,
 } from "./utils/helpers";
 import {
-  DEFAULT_CLASS_NAMES,
+  DEFAULT_DRAWER_CLASSES,
+  UNSTYLED_DRAWER_CLASSES,
   DEFAULT_DIRECTION,
   DEFAULT_SIZE,
   DEFAULT_OVERLAY_COLOR,
@@ -57,7 +58,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       lockScroll = true,
       closeOnOverlayClick = true,
       closeOnEscape = true,
-      classes = {},
+      classes: classesProp,
+      unstyled = false,
+      reduceMotion: reduceMotionProp,
       trapFocus = true,
       restoreFocus = true,
       portalContainer,
@@ -87,7 +90,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const restoreRafRef = useRef<number>(0);
     const [mounted, setMounted] = useState(open);
     const [visualOpen, setVisualOpen] = useState(false);
-    const prefersReducedMotion = usePrefersReducedMotion();
+    const systemPrefersReducedMotion = usePrefersReducedMotion();
+    const prefersReducedMotion = reduceMotionProp === true ? true : reduceMotionProp === false ? false : systemPrefersReducedMotion;
 
     const safeActiveSnap =
       activeSnapPointIndex !== undefined
@@ -116,13 +120,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         : 1
       : 0;
 
+    const baseClasses = unstyled ? UNSTYLED_DRAWER_CLASSES : DEFAULT_DRAWER_CLASSES;
     const mergedClasses: Required<DrawerClasses> = useMemo(
       () => ({
-        root: cn(DEFAULT_CLASS_NAMES.root, classes.root),
-        overlay: cn(DEFAULT_CLASS_NAMES.overlay, classes.overlay),
-        panel: cn(DEFAULT_CLASS_NAMES.panel, classes.panel),
+        root: classesProp?.root ?? baseClasses.root,
+        overlay: classesProp?.overlay ?? baseClasses.overlay,
+        panel: classesProp?.panel ?? baseClasses.panel,
       }),
-      [classes],
+      [classesProp, baseClasses],
     );
 
     const drawerStyles = useMemo(
