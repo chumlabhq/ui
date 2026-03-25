@@ -35,6 +35,7 @@ export function useDatePicker({
   outsideDaysSelectable,
   fixedWeeks,
   disabled,
+  showWeekNumbers,
   markers,
   onChange,
   onRangeChange,
@@ -90,6 +91,7 @@ export function useDatePicker({
           disabledDates,
           minDate,
           maxDate,
+          showWeekNumbers,
           markers,
         }),
       );
@@ -108,6 +110,7 @@ export function useDatePicker({
     disabledDates,
     minDate,
     maxDate,
+    showWeekNumbers,
     markers,
   ]);
 

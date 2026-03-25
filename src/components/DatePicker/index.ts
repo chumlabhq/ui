@@ -1,6 +1,8 @@
 export { default as DatePicker } from "./DatePicker";
+
 export type {
   DatePickerProps,
+  DatePickerClasses,
   DatePickerMode,
   DateValue,
   DateRange,
@@ -11,6 +13,12 @@ export type {
   CalendarMonth,
   DateMarker,
 } from "./types";
+
+export {
+  DEFAULT_DATEPICKER_CLASSES,
+  UNSTYLED_DATEPICKER_CLASSES,
+} from "./constants";
+
 export {
   formatDate,
   formatDateRange,

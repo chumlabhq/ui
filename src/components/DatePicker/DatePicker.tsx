@@ -5,11 +5,13 @@ import {
   forwardRef,
   memo,
   useCallback,
+  useMemo,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import type {
   DatePickerProps,
+  DatePickerClasses,
   CalendarDay,
   DatePreset,
   DateRange,
@@ -40,6 +42,14 @@ import {
   isSameDay,
   getDefaultPresets,
 } from "./utils";
+import { cn } from "../../utils/cn";
+import { useReducedMotion } from "../../utils/useReducedMotion";
+import {
+  DEFAULT_DATEPICKER_CLASSES,
+  UNSTYLED_DATEPICKER_CLASSES,
+} from "./constants";
+
+// ─── Sub-component interfaces ────────────────────────────────────────────────
 
 interface DropdownProps {
   value: number;
@@ -71,7 +81,7 @@ const CustomDropdown = memo(function CustomDropdown({
   const selectedOption = options.find((opt) => opt.value === value);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -82,8 +92,12 @@ const CustomDropdown = memo(function CustomDropdown({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -101,19 +115,11 @@ const CustomDropdown = memo(function CustomDropdown({
     }
   };
 
-  const defaultButtonClass =
-    "flex items-center gap-1 px-2 py-1 text-sm font-medium rounded-md hover:bg-gray-100 focus:outline-none focus:border-2 focus:border-blue-500";
-  const defaultMenuClass =
-    "absolute z-[60] mt-1 max-h-60 overflow-auto rounded-lg bg-white shadow-lg border border-gray-200 py-1 min-w-[140px]";
-  const defaultItemClass =
-    "flex items-center justify-between w-full px-3 py-2 text-sm text-left hover:bg-gray-50 cursor-pointer";
-  const defaultItemSelectedClass = "bg-blue-50 text-blue-600 font-medium";
-
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        className={buttonClassName || defaultButtonClass}
+        className={buttonClassName}
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
         aria-label={ariaLabel}
@@ -128,7 +134,7 @@ const CustomDropdown = memo(function CustomDropdown({
         )}
       </button>
       {isOpen && (
-        <div className={menuClassName || defaultMenuClass} role="listbox">
+        <div className={menuClassName} role="listbox">
           {options.map((option) => {
             const isSelected = option.value === value;
             return (
@@ -138,13 +144,10 @@ const CustomDropdown = memo(function CustomDropdown({
                 type="button"
                 role="option"
                 aria-selected={isSelected}
-                className={[
-                  itemClassName || defaultItemClass,
-                  isSelected &&
-                    (itemSelectedClassName || defaultItemSelectedClass),
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
+                className={cn(
+                  itemClassName,
+                  isSelected && itemSelectedClassName,
+                )}
                 onClick={() => {
                   onChange(option.value);
                   setIsOpen(false);
@@ -162,245 +165,203 @@ const CustomDropdown = memo(function CustomDropdown({
   );
 });
 
-interface MarkerTooltipProps {
-  marker: DateMarker;
-  className?: string;
-  children: React.ReactNode;
-  showTooltip?: boolean;
-}
+CustomDropdown.displayName = "CustomDropdown";
 
-const MarkerTooltip = memo(function MarkerTooltip({
-  marker,
-  className,
-  children,
-  showTooltip = true,
-}: MarkerTooltipProps) {
+// ─── Marker Tooltip Hook ─────────────────────────────────────────────────────
+
+function useMarkerTooltip(
+  marker: DateMarker | undefined,
+  showTooltip: boolean,
+  portalContainer?: HTMLElement | null,
+) {
   const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState<{
-    top: number;
-    left: number;
-    placement: "top" | "bottom";
-  } | null>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
 
-  const handleMouseEnter = useCallback(() => {
-    if (triggerRef.current) {
-      const triggerRect = triggerRef.current.getBoundingClientRect();
-      const scrollX = window.scrollX;
-      const scrollY = window.scrollY;
-      const viewportWidth = window.innerWidth;
-
-      const gap = 4;
-      const estimatedTooltipHeight = 60;
-
-      let placement: "top" | "bottom" = "bottom";
-      let top: number;
-      let left = triggerRect.left + scrollX;
-
-      if (
-        triggerRect.bottom + estimatedTooltipHeight + gap >
-        window.innerHeight
-      ) {
-        placement = "top";
-        top = triggerRect.top + scrollY - estimatedTooltipHeight - gap;
-      } else {
-        placement = "bottom";
-        top = triggerRect.bottom + scrollY + gap;
-      }
-
-      if (left < 8) left = 8;
-      if (left + 180 > viewportWidth - 8) {
-        left = viewportWidth - 180 - 8;
-      }
-
-      setPosition({ top, left, placement });
-      setIsVisible(true);
-    }
-  }, []);
+  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+    if (!marker || !showTooltip) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const gap = 6;
+    let top = rect.bottom + gap;
+    let left = rect.left + rect.width / 2;
+    if (top + 80 > window.innerHeight) top = rect.top - 80 - gap;
+    if (left + 100 > window.innerWidth) left = window.innerWidth - 110;
+    if (left < 10) left = 10;
+    setPosition({ top, left });
+    setIsVisible(true);
+  }, [marker, showTooltip]);
 
   const handleMouseLeave = useCallback(() => {
     setIsVisible(false);
     setPosition(null);
   }, []);
 
-  if (!showTooltip) {
-    return <>{children}</>;
-  }
+  const tooltipPortal =
+    isVisible && position && marker
+      ? createPortal(
+          <div
+            role="tooltip"
+            style={{
+              position: "fixed",
+              zIndex: 100,
+              top: position.top,
+              left: position.left,
+              transform: "translateX(-50%)",
+              maxWidth: 240,
+              padding: "8px 12px",
+              borderRadius: 8,
+              backgroundColor: "rgba(15, 23, 42, 0.95)",
+              color: "#f1f5f9",
+              fontSize: 12,
+              lineHeight: 1.5,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              pointerEvents: "none",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              {marker.color && (
+                <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: marker.color, flexShrink: 0 }} />
+              )}
+              <span style={{ fontWeight: 600 }}>{marker.label}</span>
+            </div>
+            {marker.description && (
+              <div style={{ color: "#94a3b8", marginTop: 2 }}>{marker.description}</div>
+            )}
+            {marker.type && (
+              <div style={{ color: "#64748b", marginTop: 4, textTransform: "capitalize", fontSize: 11 }}>{marker.type}</div>
+            )}
+          </div>,
+          portalContainer ?? document.body,
+        )
+      : null;
 
-  const defaultTooltipClass =
-    "z-[9999] px-3 py-2 text-sm bg-white rounded-lg shadow-lg border border-gray-200";
+  return { tooltipPortal, handleMouseEnter, handleMouseLeave };
+}
 
-  const tooltip =
-    isVisible &&
-    position &&
-    createPortal(
-      <div
-        role="tooltip"
-        className={className || defaultTooltipClass}
-        style={{
-          position: "absolute",
-          top: position.top,
-          left: position.left,
-          maxWidth: 220,
-        }}
-      >
-        <div className="font-medium text-gray-900">{marker.label}</div>
-        {marker.description && (
-          <div className="text-gray-500 text-xs mt-0.5">
-            {marker.description}
-          </div>
-        )}
-        {marker.type && (
-          <div className="text-xs text-gray-400 mt-1 capitalize">
-            {marker.type}
-          </div>
-        )}
-      </div>,
-      document.body,
-    );
+// ─── DayCell ─────────────────────────────────────────────────────────────────
 
-  return (
-    <div
-      ref={triggerRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {children}
-      {tooltip}
-    </div>
-  );
-});
-
-const DayCell = memo(function DayCell({
-  day,
-  datePickerId,
-  dayClassName,
-  daySelectedClassName,
-  dayTodayClassName,
-  dayDisabledClassName,
-  dayOutsideClassName,
-  dayRangeStartClassName,
-  dayRangeEndClassName,
-  dayRangeMiddleClassName,
-  dayFocusedClassName,
-  dayMarkedClassName,
-  markerIndicatorClassName,
-  markerTooltipClassName,
-  isFocused,
-  showOutsideDays,
-  showMarkerIndicator,
-  showMarkerTooltip,
-  onSelect,
-  onHover,
-  onFocus,
-  onKeyDown,
-}: {
+interface DayCellProps {
   day: CalendarDay;
   datePickerId: string;
-  dayClassName: string;
-  daySelectedClassName: string;
-  dayTodayClassName: string;
-  dayDisabledClassName: string;
-  dayOutsideClassName: string;
-  dayRangeStartClassName: string;
-  dayRangeEndClassName: string;
-  dayRangeMiddleClassName: string;
-  dayFocusedClassName: string;
-  dayMarkedClassName: string;
-  markerIndicatorClassName: string;
-  markerTooltipClassName: string;
+  classes: {
+    day: string;
+    daySelected: string;
+    dayToday: string;
+    dayDisabled: string;
+    dayOutside: string;
+    dayRangeStart: string;
+    dayRangeEnd: string;
+    dayRangeMiddle: string;
+    dayFocused: string;
+    dayMarked: string;
+    markerIndicator: string;
+    markerTooltip: string;
+  };
   isFocused: boolean;
   showOutsideDays: boolean;
   showMarkerIndicator: boolean;
   showMarkerTooltip: boolean;
+  portalContainer?: HTMLElement | null;
   onSelect: (date: Date, isOutside: boolean) => void;
   onHover: (date: Date | null) => void;
   onFocus: (date: Date | null) => void;
   onKeyDown: (event: React.KeyboardEvent, date: Date) => void;
-}) {
+}
+
+const DayCell = memo(function DayCell({
+  day,
+  datePickerId,
+  classes: cls,
+  isFocused,
+  showOutsideDays,
+  showMarkerIndicator,
+  showMarkerTooltip,
+  portalContainer,
+  onSelect,
+  onHover,
+  onFocus,
+  onKeyDown,
+}: DayCellProps) {
   if (day.dayOfMonth === 0 || (day.isOutside && !showOutsideDays)) {
-    return <div className={dayClassName} aria-hidden="true" />;
+    return <div className={cls.day} aria-hidden="true" />;
   }
 
-  const classNames = [
-    dayClassName,
-    day.isSelected && daySelectedClassName,
-    day.isToday && dayTodayClassName,
-    day.isDisabled && dayDisabledClassName,
-    day.isOutside && dayOutsideClassName,
-    day.isRangeStart && dayRangeStartClassName,
-    day.isRangeEnd && dayRangeEndClassName,
-    day.isInRange && dayRangeMiddleClassName,
-    isFocused && dayFocusedClassName,
-    day.isMarked && dayMarkedClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const defaultMarkerIndicatorClass =
-    "absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red-500";
-  const markerColor = day.marker?.color;
-
-  const dayContent = (
-    <button
-      type="button"
-      id={`${datePickerId}-day-${day.date.toISOString()}`}
-      role="gridcell"
-      aria-selected={day.isSelected || undefined}
-      aria-disabled={day.isDisabled || undefined}
-      aria-current={day.isToday ? "date" : undefined}
-      tabIndex={isFocused ? 0 : -1}
-      disabled={day.isDisabled}
-      className={classNames}
-      data-selected={day.isSelected || undefined}
-      data-today={day.isToday || undefined}
-      data-disabled={day.isDisabled || undefined}
-      data-outside={day.isOutside || undefined}
-      data-range-start={day.isRangeStart || undefined}
-      data-range-end={day.isRangeEnd || undefined}
-      data-in-range={day.isInRange || undefined}
-      data-focused={isFocused || undefined}
-      data-marked={day.isMarked || undefined}
-      data-marker-type={day.marker?.type || undefined}
-      onClick={() => !day.isDisabled && onSelect(day.date, day.isOutside)}
-      onMouseEnter={() => onHover(day.date)}
-      onMouseLeave={() => onHover(null)}
-      onFocus={() => onFocus(day.date)}
-      onKeyDown={(e) => onKeyDown(e, day.date)}
-    >
-      {day.dayOfMonth}
-      {day.isMarked && showMarkerIndicator && (
-        <span
-          className={
-            markerColor ||
-            markerIndicatorClassName ||
-            defaultMarkerIndicatorClass
-          }
-          style={
-            markerColor?.startsWith("#")
-              ? { backgroundColor: markerColor }
-              : undefined
-          }
-          aria-hidden="true"
-        />
-      )}
-    </button>
+  const classNames = cn(
+    cls.day,
+    day.isSelected && cls.daySelected,
+    day.isToday && cls.dayToday,
+    day.isDisabled && cls.dayDisabled,
+    day.isOutside && cls.dayOutside,
+    day.isRangeStart && cls.dayRangeStart,
+    day.isRangeEnd && cls.dayRangeEnd,
+    day.isInRange && cls.dayRangeMiddle,
+    isFocused && cls.dayFocused,
+    day.isMarked && cls.dayMarked,
   );
 
-  if (day.isMarked && day.marker && showMarkerTooltip) {
-    return (
-      <MarkerTooltip
-        marker={day.marker}
-        className={markerTooltipClassName}
-        showTooltip={showMarkerTooltip}
-      >
-        {dayContent}
-      </MarkerTooltip>
-    );
-  }
+  const markerColor = day.marker?.color;
+  const { tooltipPortal, handleMouseEnter: tooltipEnter, handleMouseLeave: tooltipLeave } = useMarkerTooltip(
+    day.isMarked ? day.marker : undefined,
+    showMarkerTooltip,
+    portalContainer,
+  );
 
-  return dayContent;
+  return (
+    <>
+      <button
+        type="button"
+        id={`${datePickerId}-day-${day.date.toISOString()}`}
+        role="gridcell"
+        aria-selected={day.isSelected || undefined}
+        aria-disabled={day.isDisabled || undefined}
+        aria-current={day.isToday ? "date" : undefined}
+        tabIndex={isFocused ? 0 : -1}
+        disabled={day.isDisabled}
+        className={classNames}
+        data-selected={day.isSelected || undefined}
+        data-today={day.isToday || undefined}
+        data-disabled={day.isDisabled || undefined}
+        data-outside={day.isOutside || undefined}
+        data-range-start={day.isRangeStart || undefined}
+        data-range-end={day.isRangeEnd || undefined}
+        data-in-range={day.isInRange || undefined}
+        data-focused={isFocused || undefined}
+        data-marked={day.isMarked || undefined}
+        data-marker-type={day.marker?.type || undefined}
+        onClick={() => !day.isDisabled && onSelect(day.date, day.isOutside)}
+        onMouseEnter={(e) => { onHover(day.date); tooltipEnter(e); }}
+        onMouseLeave={() => { onHover(null); tooltipLeave(); }}
+        onFocus={() => onFocus(day.date)}
+        onKeyDown={(e) => onKeyDown(e, day.date)}
+      >
+        {day.dayOfMonth}
+        {day.isMarked && showMarkerIndicator && (
+          <span
+            className={cls.markerIndicator}
+            style={markerColor ? { backgroundColor: markerColor } : undefined}
+            aria-hidden="true"
+          />
+        )}
+      </button>
+      {tooltipPortal}
+    </>
+  );
 });
+
+DayCell.displayName = "DayCell";
+
+// ─── PresetsPanel ────────────────────────────────────────────────────────────
+
+interface PresetsPanelProps {
+  presets: DatePreset[];
+  mode: "single" | "range" | "multiple";
+  value?: Date | null;
+  rangeValue?: DateRange | null;
+  multipleValue?: Date[] | null;
+  presetsClassName: string;
+  presetButtonClassName: string;
+  presetActiveClassName: string;
+  onPresetClick: (preset: DatePreset) => void;
+}
 
 const PresetsPanel = memo(function PresetsPanel({
   presets,
@@ -412,17 +373,7 @@ const PresetsPanel = memo(function PresetsPanel({
   presetButtonClassName,
   presetActiveClassName,
   onPresetClick,
-}: {
-  presets: DatePreset[];
-  mode: "single" | "range" | "multiple";
-  value?: Date | null;
-  rangeValue?: DateRange | null;
-  multipleValue?: Date[] | null;
-  presetsClassName: string;
-  presetButtonClassName: string;
-  presetActiveClassName: string;
-  onPresetClick: (preset: DatePreset) => void;
-}) {
+}: PresetsPanelProps) {
   const isPresetActive = useCallback(
     (preset: DatePreset) => {
       const presetValue = preset.getValue();
@@ -461,19 +412,17 @@ const PresetsPanel = memo(function PresetsPanel({
   );
 
   return (
-    <div className={presetsClassName} role="group" aria-label="Date presets">
+    <div className={presetsClassName} role="group" aria-label="Date presets" style={{ width: 0, minWidth: "100%" }}>
       {presets.map((preset) => {
         const isActive = isPresetActive(preset);
         return (
           <button
             key={preset.label}
             type="button"
-            className={[
+            className={cn(
               presetButtonClassName,
               isActive && presetActiveClassName,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            )}
             data-active={isActive || undefined}
             onClick={() => onPresetClick(preset)}
           >
@@ -484,6 +433,10 @@ const PresetsPanel = memo(function PresetsPanel({
     </div>
   );
 });
+
+PresetsPanel.displayName = "PresetsPanel";
+
+// ─── DatePicker ──────────────────────────────────────────────────────────────
 
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   (
@@ -503,8 +456,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       locale,
       numberOfMonths = 1,
       showTodayIndicator = true,
-      showTodayButton = true,
-      todayAction = true,
+      showTodayButton = false,
+      todayAction = false,
       dateFormat = "MMM d, yyyy",
       showWeekNumbers = false,
       showOutsideDays = true,
@@ -533,55 +486,57 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       prevYearIcon,
       nextYearIcon,
       todayIcon,
-      className = "",
-      containerClassName = "",
-      triggerClassName = "",
-      inputClassName = "",
-      calendarClassName = "",
-      headerClassName = "",
-      monthNavClassName = "",
-      monthSelectClassName = "",
-      yearSelectClassName = "",
-      navButtonClassName = "",
-      weekdayClassName = "",
-      weekdayHeaderClassName = "",
-      dayClassName = "",
-      daySelectedClassName = "",
-      dayTodayClassName = "",
-      dayDisabledClassName = "",
-      dayOutsideClassName = "",
-      dayRangeStartClassName = "",
-      dayRangeEndClassName = "",
-      dayRangeMiddleClassName = "",
-      dayFocusedClassName = "",
-      dayMarkedClassName = "",
-      weekNumberClassName = "",
-      gridClassName = "",
-      monthGridClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      calendarIconClassName = "",
-      clearButtonClassName = "",
-      presetsClassName = "",
-      presetButtonClassName = "",
-      presetActiveClassName = "",
-      footerClassName = "",
-      todayButtonClassName = "",
-      markerIndicatorClassName = "",
-      markerTooltipClassName = "",
-      monthDropdownClassName = "",
-      yearDropdownClassName = "",
-      dropdownMenuClassName = "",
-      dropdownItemClassName = "",
-      dropdownItemSelectedClassName = "",
       monthDropdownSelectedIcon,
       yearDropdownSelectedIcon,
+      classes: classesProp,
+      unstyled = false,
+      className = "",
+      portalContainer,
+      lockScroll = false,
+      reduceMotion = "auto",
       onMonthChange,
       onOpen,
       onClose,
+      ...rest
     },
     ref,
   ) => {
+    // ─── Merged classes ────────────────────────────────────────────────
+    const baseClasses = unstyled
+      ? UNSTYLED_DATEPICKER_CLASSES
+      : DEFAULT_DATEPICKER_CLASSES;
+
+    const mergedClasses = useMemo<Required<DatePickerClasses>>(() => {
+      if (!classesProp) return baseClasses;
+      const result = { ...baseClasses };
+      for (const key of Object.keys(baseClasses) as (keyof DatePickerClasses)[]) {
+        if (classesProp[key] !== undefined) {
+          result[key] = classesProp[key] as string;
+        }
+      }
+      return result;
+    }, [classesProp, baseClasses]);
+
+    // ─── Reduced motion ────────────────────────────────────────────────
+    const _effectiveReduceMotion = useReducedMotion(reduceMotion);
+
+    // ─── Dev warning ───────────────────────────────────────────────────
+    const warnedRef = useRef(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (
+        !label &&
+        !(rest as Record<string, unknown>)["aria-label"] &&
+        !(rest as Record<string, unknown>)["aria-labelledby"] &&
+        !warnedRef.current
+      ) {
+        warnedRef.current = true;
+        console.warn(
+          "DatePicker: A date picker without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
+        );
+      }
+    }
+
+    // ─── IDs ───────────────────────────────────────────────────────────
     const generatedId = useId();
     const datePickerId = id || name || generatedId;
     const triggerId = `${datePickerId}-trigger`;
@@ -590,7 +545,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const calendarRef = useRef<HTMLDivElement>(null);
+    const [calendarPos, setCalendarPos] = useState<{ top: number; left: number } | null>(null);
 
+    // ─── Hook ──────────────────────────────────────────────────────────
     const {
       isOpen,
       calendarMonths,
@@ -622,6 +580,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       outsideDaysSelectable,
       fixedWeeks,
       disabled,
+      showWeekNumbers,
       markers,
       onChange,
       onRangeChange,
@@ -629,6 +588,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       onMonthChange,
     });
 
+    // ─── Open/close callbacks ──────────────────────────────────────────
     const prevIsOpenRef = useRef<boolean | null>(null);
 
     useEffect(() => {
@@ -642,25 +602,91 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       prevIsOpenRef.current = isOpen;
     }, [isOpen, onOpen, onClose]);
 
+    // ─── Calendar positioning ───────────────────────────────────────────
     useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          containerRef.current &&
-          !containerRef.current.contains(event.target as Node)
-        ) {
-          handleClose();
+      if (!isOpen || !triggerRef.current) {
+        setCalendarPos(null);
+        return;
+      }
+
+      const updatePos = () => {
+        if (!triggerRef.current) return;
+        const rect = triggerRef.current.getBoundingClientRect();
+        setCalendarPos({
+          top: rect.bottom + 4,
+          left: rect.left,
+        });
+      };
+
+      // Initial position
+      updatePos();
+
+      // Reposition synchronously on scroll and resize — no RAF delay = no jitter
+      if (!lockScroll) {
+        window.addEventListener("scroll", updatePos, true);
+      }
+      window.addEventListener("resize", updatePos);
+
+      return () => {
+        if (!lockScroll) {
+          window.removeEventListener("scroll", updatePos, true);
         }
+        window.removeEventListener("resize", updatePos);
+      };
+    }, [isOpen, lockScroll]);
+
+    // ─── Scroll lock ─────────────────────────────────────────────────────
+    useEffect(() => {
+      if (!isOpen || !lockScroll) return;
+
+      // Block wheel and touch scroll globally — works regardless of which element scrolls
+      const preventScroll = (e: Event) => {
+        // Allow scroll inside the calendar itself
+        if (calendarRef.current?.contains(e.target as Node)) return;
+        e.preventDefault();
+      };
+
+      window.addEventListener("wheel", preventScroll, { capture: true, passive: false });
+      window.addEventListener("touchmove", preventScroll, { capture: true, passive: false });
+
+      // Also block keyboard scroll (arrow keys, page up/down, space on body)
+      const preventKeyScroll = (e: KeyboardEvent) => {
+        if (calendarRef.current?.contains(e.target as Node)) return;
+        const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
+        if (scrollKeys.includes(e.key) && (e.target === document.body || e.target === document.documentElement)) {
+          e.preventDefault();
+        }
+      };
+      window.addEventListener("keydown", preventKeyScroll, { capture: true });
+
+      return () => {
+        window.removeEventListener("wheel", preventScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener("touchmove", preventScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener("keydown", preventKeyScroll, { capture: true } as EventListenerOptions);
+      };
+    }, [isOpen, lockScroll]);
+
+    // ─── Click outside ─────────────────────────────────────────────────
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+        const target = event.target as Node;
+        if (containerRef.current?.contains(target)) return;
+        if (calendarRef.current?.contains(target)) return;
+        handleClose();
       };
 
       if (isOpen) {
         document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside);
       }
 
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("touchstart", handleClickOutside);
       };
     }, [isOpen, handleClose]);
 
+    // ─── Display value ─────────────────────────────────────────────────
     const displayValue = (() => {
       if (mode === "single" && value) {
         return formatDate(value, dateFormat, locale);
@@ -682,6 +708,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     const hasValue = displayValue !== "";
 
+    // ─── Callbacks ─────────────────────────────────────────────────────
     const handleClearClick = useCallback(
       (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -735,24 +762,44 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       [mode, onChange, onRangeChange, onMultipleChange, handleClose],
     );
 
+    // ─── Derived ───────────────────────────────────────────────────────
     const weekdays = getWeekdayHeaders(weekStartsOn, "EEE", locale);
     const effectivePresets = presets || getDefaultPresets(mode);
     const fullWidthClass = fullWidth ? "w-full" : "";
+    const showFooter = showTodayButton;
 
-    const showFooter = showTodayIndicator && (showTodayButton || todayAction);
+    // No hardcoded width — calendar auto-sizes to its grid content
 
+    // ─── Classes for DayCell sub-component ─────────────────────────────
+    const dayCellClasses = useMemo(
+      () => ({
+        day: mergedClasses.day,
+        daySelected: mergedClasses.daySelected,
+        dayToday: mergedClasses.dayToday,
+        dayDisabled: mergedClasses.dayDisabled,
+        dayOutside: mergedClasses.dayOutside,
+        dayRangeStart: mergedClasses.dayRangeStart,
+        dayRangeEnd: mergedClasses.dayRangeEnd,
+        dayRangeMiddle: mergedClasses.dayRangeMiddle,
+        dayFocused: mergedClasses.dayFocused,
+        dayMarked: mergedClasses.dayMarked,
+        markerIndicator: mergedClasses.markerIndicator,
+        markerTooltip: mergedClasses.markerTooltip,
+      }),
+      [mergedClasses],
+    );
+
+    // ─── Render ────────────────────────────────────────────────────────
     return (
       <div
         ref={ref}
-        className={[containerClassName, fullWidthClass]
-          .filter(Boolean)
-          .join(" ")}
+        className={cn(mergedClasses.root, fullWidthClass, className)}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
       >
         {label && (
-          <label htmlFor={triggerId} className={labelClassName}>
+          <label htmlFor={triggerId} className={mergedClasses.label}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
@@ -760,7 +807,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
         <div
           ref={containerRef}
-          className={["relative", className].filter(Boolean).join(" ")}
+          className="relative"
         >
           <button
             ref={triggerRef}
@@ -776,12 +823,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             disabled={disabled}
             onClick={handleToggle}
             onKeyDown={handleKeyDown}
-            className={triggerClassName}
+            className={mergedClasses.trigger}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
             data-open={isOpen || undefined}
           >
-            <span className={inputClassName || "flex-1 truncate text-left"}>
+            <span className={mergedClasses.input}>
               {hasValue ? displayValue : placeholder || defaultPlaceholder}
             </span>
             <div className="flex items-center gap-1">
@@ -789,7 +836,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 <span
                   role="button"
                   aria-label="Clear selection"
-                  className={clearButtonClassName}
+                  className={mergedClasses.clearButton}
                   onClick={handleClearClick}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -804,20 +851,25 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               )}
               {showCalendarIcon &&
                 (calendarIcon || (
-                  <CalendarIcon
-                    className={calendarIconClassName || "w-5 h-5"}
-                  />
+                  <CalendarIcon className={mergedClasses.calendarIcon} />
                 ))}
             </div>
           </button>
 
-          {isOpen && (
+          {isOpen && createPortal(
             <div
+              ref={calendarRef}
               id={calendarId}
               role="dialog"
               aria-modal="true"
               aria-label={`${mode === "single" ? "Date" : mode === "range" ? "Date range" : "Multiple dates"} picker`}
-              className={calendarClassName}
+              className={mergedClasses.calendar}
+              style={{
+                position: "fixed",
+                zIndex: 50,
+                width: "max-content",
+                ...(calendarPos ? { top: calendarPos.top, left: calendarPos.left } : { visibility: "hidden" as const, top: 0, left: 0 }),
+              }}
             >
               {showPresets && (
                 <PresetsPanel
@@ -826,14 +878,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   value={value}
                   rangeValue={rangeValue}
                   multipleValue={multipleValue}
-                  presetsClassName={presetsClassName}
-                  presetButtonClassName={presetButtonClassName}
-                  presetActiveClassName={presetActiveClassName}
+                  presetsClassName={mergedClasses.presets}
+                  presetButtonClassName={mergedClasses.presetButton}
+                  presetActiveClassName={mergedClasses.presetActive}
                   onPresetClick={handlePresetClick}
                 />
               )}
 
-              <div className={monthGridClassName}>
+              <div className={mergedClasses.monthGrid}>
                 {calendarMonths.map((calendarMonth, monthIndex) => {
                   const monthYear = getYear(calendarMonth.month);
                   const monthIdx = getMonth(calendarMonth.month);
@@ -841,16 +893,16 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   return (
                     <div
                       key={calendarMonth.month.toISOString()}
-                      className={gridClassName}
+                      className={mergedClasses.grid}
                     >
-                      <div className={headerClassName}>
+                      <div className={mergedClasses.header}>
                         {monthIndex === 0 && (
                           <>
                             <button
                               type="button"
                               aria-label="Previous year"
                               onClick={() => handleYearSelect(monthYear - 1)}
-                              className={navButtonClassName}
+                              className={mergedClasses.navButton}
                             >
                               {prevYearIcon || (
                                 <DoubleChevronLeftIcon className="w-4 h-4" />
@@ -860,7 +912,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Previous month"
                               onClick={() => handleMonthNavigation("prev")}
-                              className={navButtonClassName}
+                              className={mergedClasses.navButton}
                             >
                               {prevMonthIcon || (
                                 <ChevronLeftIcon className="w-4 h-4" />
@@ -869,18 +921,16 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           </>
                         )}
 
-                        <div className={monthNavClassName}>
+                        <div className={mergedClasses.monthNav}>
                           <CustomDropdown
                             value={monthIdx}
                             options={getMonthOptions(locale)}
                             onChange={(m) => handleMonthSelect(m - monthIndex)}
-                            buttonClassName={
-                              monthSelectClassName || monthDropdownClassName
-                            }
-                            menuClassName={dropdownMenuClassName}
-                            itemClassName={dropdownItemClassName}
+                            buttonClassName={mergedClasses.monthSelect}
+                            menuClassName={mergedClasses.dropdownMenu}
+                            itemClassName={mergedClasses.dropdownItem}
                             itemSelectedClassName={
-                              dropdownItemSelectedClassName
+                              mergedClasses.dropdownItemSelected
                             }
                             selectedIcon={monthDropdownSelectedIcon}
                             ariaLabel="Select month"
@@ -889,13 +939,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                             value={monthYear}
                             options={getYearOptions(monthYear)}
                             onChange={handleYearSelect}
-                            buttonClassName={
-                              yearSelectClassName || yearDropdownClassName
-                            }
-                            menuClassName={dropdownMenuClassName}
-                            itemClassName={dropdownItemClassName}
+                            buttonClassName={mergedClasses.yearSelect}
+                            menuClassName={mergedClasses.dropdownMenu}
+                            itemClassName={mergedClasses.dropdownItem}
                             itemSelectedClassName={
-                              dropdownItemSelectedClassName
+                              mergedClasses.dropdownItemSelected
                             }
                             selectedIcon={yearDropdownSelectedIcon}
                             ariaLabel="Select year"
@@ -908,7 +956,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Next month"
                               onClick={() => handleMonthNavigation("next")}
-                              className={navButtonClassName}
+                              className={mergedClasses.navButton}
                             >
                               {nextMonthIcon || (
                                 <ChevronRightIcon className="w-4 h-4" />
@@ -918,7 +966,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                               type="button"
                               aria-label="Next year"
                               onClick={() => handleYearSelect(monthYear + 1)}
-                              className={navButtonClassName}
+                              className={mergedClasses.navButton}
                             >
                               {nextYearIcon || (
                                 <DoubleChevronRightIcon className="w-4 h-4" />
@@ -929,13 +977,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       </div>
 
                       <div
-                        className={weekdayHeaderClassName}
+                        className={mergedClasses.weekdayHeader}
+                        style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
                         role="row"
                         aria-label="Days of the week"
                       >
                         {showWeekNumbers && (
                           <div
-                            className={weekNumberClassName}
+                            className={mergedClasses.weekNumber}
                             aria-hidden="true"
                           >
                             #
@@ -944,7 +993,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         {weekdays.map((day) => (
                           <div
                             key={day}
-                            className={weekdayClassName}
+                            className={mergedClasses.weekday}
                             role="columnheader"
                             aria-label={day}
                           >
@@ -965,18 +1014,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           <div
                             key={weekIndex}
                             role="row"
-                            className={
-                              showWeekNumbers
-                                ? "grid grid-cols-8"
-                                : "grid grid-cols-7"
-                            }
+                            className="grid grid-cols-7"
+                            style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
                           >
-                            {showWeekNumbers && week[0]?.weekNumber && (
+                            {showWeekNumbers && (
                               <div
-                                className={weekNumberClassName}
+                                className={mergedClasses.weekNumber}
                                 aria-hidden="true"
                               >
-                                {week[0].weekNumber}
+                                {week[0]?.weekNumber ?? ""}
                               </div>
                             )}
                             {week.map((day) => (
@@ -984,22 +1030,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                 key={day.date.toISOString()}
                                 day={day}
                                 datePickerId={datePickerId}
-                                dayClassName={dayClassName}
-                                daySelectedClassName={daySelectedClassName}
-                                dayTodayClassName={dayTodayClassName}
-                                dayDisabledClassName={dayDisabledClassName}
-                                dayOutsideClassName={dayOutsideClassName}
-                                dayRangeStartClassName={dayRangeStartClassName}
-                                dayRangeEndClassName={dayRangeEndClassName}
-                                dayRangeMiddleClassName={
-                                  dayRangeMiddleClassName
-                                }
-                                dayFocusedClassName={dayFocusedClassName}
-                                dayMarkedClassName={dayMarkedClassName}
-                                markerIndicatorClassName={
-                                  markerIndicatorClassName
-                                }
-                                markerTooltipClassName={markerTooltipClassName}
+                                classes={dayCellClasses}
                                 isFocused={
                                   focusedDate
                                     ? isSameDay(day.date, focusedDate)
@@ -1008,6 +1039,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                 showOutsideDays={showOutsideDays}
                                 showMarkerIndicator={showMarkerIndicator}
                                 showMarkerTooltip={showMarkerTooltip}
+                                portalContainer={portalContainer}
                                 onSelect={handleDateSelect}
                                 onHover={handleDateHover}
                                 onFocus={handleDateFocus}
@@ -1023,11 +1055,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               </div>
 
               {showFooter && (
-                <div className={footerClassName}>
+                <div className={mergedClasses.footer}>
                   {showTodayButton && todayAction && (
                     <button
                       type="button"
-                      className={todayButtonClassName}
+                      className={mergedClasses.todayButton}
                       onClick={handleTodayClick}
                     >
                       <span className="flex items-center gap-2">
@@ -1039,7 +1071,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   {!todayAction && showTodayButton && (
                     <button
                       type="button"
-                      className={todayButtonClassName}
+                      className={mergedClasses.todayButton}
                       onClick={goToToday}
                     >
                       <span className="flex items-center gap-2">
@@ -1050,12 +1082,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   )}
                 </div>
               )}
-            </div>
+            </div>,
+            portalContainer ?? document.body,
           )}
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div id={errorId} role="alert" className={mergedClasses.error}>
             {errorMessage}
           </div>
         )}
