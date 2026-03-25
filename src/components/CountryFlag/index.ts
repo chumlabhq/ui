@@ -13,5 +13,13 @@ export type {
   CountryFlagShimmerProps,
   CountryFlagGroupShimmerProps,
   CountryFlagTooltipConfig,
+  CountryFlagClasses,
+  CountryFlagGroupClasses,
   CountryFlagSize,
 } from "./utils/types";
+export {
+  DEFAULT_COUNTRYFLAG_CLASSES,
+  UNSTYLED_COUNTRYFLAG_CLASSES,
+  DEFAULT_COUNTRYFLAG_GROUP_CLASSES,
+  UNSTYLED_COUNTRYFLAG_GROUP_CLASSES,
+} from "./utils/constants";

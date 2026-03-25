@@ -5,17 +5,16 @@ import type {
 } from "../utils/types";
 import { cn } from "../../../utils/cn";
 import { getPixelSize } from "../utils/helpers";
-import { DEFAULT_ASPECT_RATIO, DEFAULT_SHIMMER_CLASS_NAME } from "../utils/constants";
+import { DEFAULT_ASPECT_RATIO } from "../utils/constants";
+import { useReducedMotion } from "../../../utils/useReducedMotion";
 
-export const CountryFlagShimmer = forwardRef<
-  HTMLSpanElement,
-  CountryFlagShimmerProps
->(
+export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmerProps>(
   (
     {
       size = "md",
       aspectRatio = DEFAULT_ASPECT_RATIO,
       animate = true,
+      reduceMotion = "auto",
       className,
       style,
       ...rest
@@ -25,21 +24,18 @@ export const CountryFlagShimmer = forwardRef<
     const pixelSize = getPixelSize(size);
     const width = pixelSize;
     const height = Math.round(pixelSize * aspectRatio);
+    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const shouldAnimate = animate && !effectiveReduceMotion;
 
     return (
       <span
         ref={ref}
         className={cn(
-          "inline-flex shrink-0 overflow-hidden",
-          DEFAULT_SHIMMER_CLASS_NAME,
-          animate && "animate-pulse",
+          "inline-flex shrink-0 overflow-hidden bg-gray-200",
+          shouldAnimate && "animate-pulse",
           className,
         )}
-        style={{
-          width,
-          height,
-          ...style,
-        }}
+        style={{ width, height, ...style }}
         role="status"
         aria-label="Loading flag"
         {...rest}
@@ -50,16 +46,14 @@ export const CountryFlagShimmer = forwardRef<
 
 CountryFlagShimmer.displayName = "CountryFlagShimmer";
 
-export const CountryFlagGroupShimmer = forwardRef<
-  HTMLDivElement,
-  CountryFlagGroupShimmerProps
->(
+export const CountryFlagGroupShimmer = forwardRef<HTMLDivElement, CountryFlagGroupShimmerProps>(
   (
     {
       count = 3,
       size = "md",
       aspectRatio = DEFAULT_ASPECT_RATIO,
       animate = true,
+      reduceMotion = "auto",
       showCount = false,
       className,
       style,
@@ -70,11 +64,9 @@ export const CountryFlagGroupShimmer = forwardRef<
     const pixelSize = getPixelSize(size);
     const width = pixelSize;
     const height = Math.round(pixelSize * aspectRatio);
-    const itemClassName = cn(
-      "shrink-0",
-      DEFAULT_SHIMMER_CLASS_NAME,
-      animate && "animate-pulse",
-    );
+    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const shouldAnimate = animate && !effectiveReduceMotion;
+    const itemClassName = cn("shrink-0 bg-gray-200", shouldAnimate && "animate-pulse");
 
     return (
       <div
@@ -86,21 +78,12 @@ export const CountryFlagGroupShimmer = forwardRef<
         {...rest}
       >
         {Array.from({ length: count }).map((_, index) => (
-          <span
-            key={index}
-            className={itemClassName}
-            style={{ width, height }}
-          />
+          <span key={index} className={itemClassName} style={{ width, height }} />
         ))}
         {showCount && (
           <span
             className={itemClassName}
-            style={{
-              minWidth: width,
-              height,
-              paddingLeft: 4,
-              paddingRight: 4,
-            }}
+            style={{ minWidth: width, height, paddingLeft: 4, paddingRight: 4 }}
           />
         )}
       </div>

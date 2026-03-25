@@ -308,10 +308,10 @@ describe("CountryFlagGroup", () => {
     });
   });
 
-  describe("Context — itemClassName", () => {
-    it("passes itemClassName to child CountryFlags via context", () => {
+  describe("Context — classes.item", () => {
+    it("passes classes.item to child CountryFlags via context", () => {
       render(
-        <CountryFlagGroup itemClassName="rounded-full ring-2">
+        <CountryFlagGroup classes={{ item: "rounded-full ring-2" }}>
           <CountryFlag code="us" />
         </CountryFlagGroup>,
       );
@@ -422,8 +422,8 @@ describe("CountryFlagGroupCount", () => {
     render(<CountryFlagGroupCount count={2} size="xl" />);
 
     const el = screen.getByRole("img");
-    // xl = 32px width, 24px height
-    expect(el).toHaveStyle({ minWidth: "32px", height: "24px" });
+    // xl = 32px width, height = 32 * 0.75 = 24px, minWidth = height = 24px
+    expect(el).toHaveStyle({ minWidth: "24px", height: "24px" });
   });
 
   it("forwards ref", () => {

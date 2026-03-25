@@ -12,18 +12,31 @@ export interface CountryFlagTooltipConfig {
   showArrow?: boolean;
 }
 
+export interface CountryFlagClasses {
+  root?: string;
+  image?: string;
+  fallback?: string;
+}
+
+export interface CountryFlagGroupClasses {
+  root?: string;
+  item?: string;
+  count?: string;
+}
+
 export interface CountryFlagProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "onLoad" | "onError"> {
   code: string;
   size?: CountryFlagSize | number;
-  /** Aspect ratio (height / width). Defaults to 0.75 (4:3). */
   aspectRatio?: number;
   alt?: string;
   fallback?: ReactNode;
-  /** Show a shimmer placeholder instead of the flag. */
   loading?: boolean;
   tooltip?: ReactNode | CountryFlagTooltipConfig;
   basePath?: string;
+  classes?: CountryFlagClasses;
+  unstyled?: boolean;
+  reduceMotion?: boolean | "auto";
   onLoad?: (event: SyntheticEvent<HTMLImageElement>) => void;
   onError?: (event: SyntheticEvent<HTMLImageElement>) => void;
 }
@@ -31,16 +44,12 @@ export interface CountryFlagProps
 export interface CountryFlagGroupProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   max?: number;
-  /** Size used for the surplus count badge. Should match the size of child flags. */
   size?: CountryFlagSize | number;
   showCountTooltip?: boolean;
   countTooltip?: Omit<CountryFlagTooltipConfig, "content">;
-  /** Explicit tooltip content for the surplus badge. Overrides auto-generated content from showCountTooltip. */
   surplusTooltipContent?: ReactNode;
-  /** Custom render function for the surplus indicator. Replaces the default count badge. */
   renderSurplus?: (count: number) => ReactNode;
-  itemClassName?: string;
-  countClassName?: string;
+  classes?: CountryFlagGroupClasses;
 }
 
 export interface CountryFlagGroupCountProps
@@ -55,6 +64,7 @@ export interface CountryFlagShimmerProps
   size?: CountryFlagSize | number;
   aspectRatio?: number;
   animate?: boolean;
+  reduceMotion?: boolean | "auto";
 }
 
 export interface CountryFlagGroupShimmerProps
@@ -63,5 +73,6 @@ export interface CountryFlagGroupShimmerProps
   size?: CountryFlagSize | number;
   aspectRatio?: number;
   animate?: boolean;
+  reduceMotion?: boolean | "auto";
   showCount?: boolean;
 }

@@ -2,1248 +2,363 @@ import { useState } from "react";
 import {
   CountryFlag,
   CountryFlagGroup,
-  CountryFlagGroupCount,
   CountryFlagShimmer,
   CountryFlagGroupShimmer,
 } from "../../components/CountryFlag";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
 
-interface PropRowProps {
-  name: string;
-  type: string;
-  defaultVal: string;
-  description: string;
-  isDarkMode: boolean;
-}
+// ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const PropRow: React.FC<PropRowProps> = ({
-  name,
-  type,
-  defaultVal,
-  description,
-  isDarkMode,
-}) => (
-  <tr>
-    <td className="py-3 pr-4 font-mono text-blue-500">{name}</td>
-    <td
-      className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-    >
-      {type}
-    </td>
-    <td
-      className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}
-    >
-      {defaultVal}
-    </td>
-    <td
-      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-    >
-      {description}
-    </td>
-  </tr>
-);
+const getClasses = (dark: boolean) => ({
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  // Flag styling
+  flag: "rounded-[3px]",
+  flagLg: "rounded",
+  flagGroup: {
+    root: "flex items-center -space-x-1.5",
+    item: `rounded-[3px] ${dark ? "outline outline-[1.5px] outline-gray-900" : "outline outline-[1.5px] outline-white"}`,
+    count: `shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none ${dark ? "bg-gray-700/90 text-gray-300 outline outline-[1.5px] outline-gray-900" : "bg-gray-100 text-gray-500 outline outline-[1.5px] outline-white"}`,
+  },
+  flagGroupDark: {
+    root: "flex items-center -space-x-1.5",
+    item: "rounded-[3px] outline outline-[1.5px] outline-gray-800",
+    count: "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-gray-700 text-gray-300 outline outline-[1.5px] outline-gray-800",
+  },
+  fallback: `inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide ${dark ? "bg-gray-700 text-gray-500" : "bg-gray-100 text-gray-400"}`,
+});
 
-interface PropsTableProps {
-  title: string;
-  children: React.ReactNode;
-  isDarkMode: boolean;
-}
-
-const PropsTable: React.FC<PropsTableProps> = ({
-  title,
-  children,
-  isDarkMode,
-}) => (
-  <div>
-    <h3
-      className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
-    >
-      {title}
-    </h3>
-    <div className="overflow-x-auto">
-      <table
-        className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
-      >
-        <thead>
-          <tr
-            className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
-          >
-            <th className="text-left py-3 pr-4 font-semibold">Prop</th>
-            <th className="text-left py-3 pr-4 font-semibold">Type</th>
-            <th className="text-left py-3 pr-4 font-semibold">Default</th>
-            <th className="text-left py-3 font-semibold">Description</th>
-          </tr>
-        </thead>
-        <tbody
-          className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
-        >
-          {children}
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
+// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const CountryFlagDemo = () => {
-  const { isDarkMode } = useTheme();
-  const [errorFlag, setErrorFlag] = useState(false);
+  const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <div className="space-y-16">
-      <header>
-        <h1
-          className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          CountryFlag
-        </h1>
-        <p
-          className={`text-lg ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-        >
-          Display country flags with various sizes, tooltips, and grouping
-          options. Uses ISO 3166-1 alpha-2 country codes with CDN-backed flag
-          images.
-        </p>
-
-        <div className="mt-6">
-          <h3
-            className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
-          >
-            Installation
-          </h3>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`import {
-  CountryFlag,
-  CountryFlagGroup,
-  CountryFlagGroupCount,
-} from "@kern-ui/country-flag";`}
-          />
+    <div className="space-y-10">
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"}`} />
+        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
+        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
+        <div className="relative">
+          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>CountryFlag</h1>
+          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
+            A lightweight component for rendering country flags from SVG files.
+            Supports sizes, aspect ratios, tooltips, grouping with overflow,
+            loading shimmer, error fallback, and fully customizable styling.
+          </p>
+          <div className="mt-5">
+            <CodeBlock isDarkMode={dark} code={`import {\n  CountryFlag, CountryFlagGroup,\n  CountryFlagShimmer, CountryFlagGroupShimmer,\n} from "@kern-ui/country-flag";`} />
+          </div>
         </div>
       </header>
 
-      <div className="space-y-12">
-        <h2
-          className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          Examples
-        </h2>
+      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
+      <Section title="Basic Usage" description="Render a flag by passing a two-letter ISO country code." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {["us", "gb", "jp", "de", "fr", "in", "br", "ca"].map((code) => (
+            <CountryFlag key={code} code={code} size={48} className={c.flag} />
+          ))}
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Preset Sizes"
-          description="Available size presets: xs, sm, md, lg, xl, 2xl."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex items-end gap-4">
-              <div className="text-center">
-                <CountryFlag code="us" size="xs" className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  xs (12px)
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="sm" className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  sm (16px)
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="md" className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  md (20px)
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="lg" className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  lg (24px)
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="xl" className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  xl (32px)
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="2xl" className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  2xl (40px)
-                </p>
-              </div>
+      {/* ─── Sizes ──────────────────────────────────────────────────────── */}
+      <Section title="Sizes" description="Presets: xs, sm, md, lg, xl, 2xl, or any custom pixel number." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(["xs", "sm", "md", "lg", "xl", "2xl"] as const).map((s) => (
+            <div key={s} className="text-center">
+              <CountryFlag code="us" size={s} className={c.flag} />
+              <p className={`text-xs mt-2 ${c.label}`}>{s}</p>
             </div>
-          </DemoWrapper>
-        </Section>
+          ))}
+          <div className="text-center">
+            <CountryFlag code="us" size={48} className={c.flag} />
+            <p className={`text-xs mt-2 ${c.label}`}>48px</p>
+          </div>
+          <div className="text-center">
+            <CountryFlag code="us" size={64} className={c.flag} />
+            <p className={`text-xs mt-2 ${c.label}`}>64px</p>
+          </div>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Custom Pixel Sizes"
-          description="Pass a number for pixel-precise sizing."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex items-end gap-4">
-              <div className="text-center">
-                <CountryFlag code="gb" size={14} className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  14px
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="gb" size={28} className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  28px
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="gb" size={48} className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  48px
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="gb" size={64} className="rounded-sm" />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  64px
-                </p>
-              </div>
+      {/* ─── Aspect Ratio ───────────────────────────────────────────────── */}
+      <Section title="Aspect Ratio" description="Control height via aspectRatio (height/width). Default is 0.75 (4:3)." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {[0.5, 0.625, 0.75, 1].map((ratio) => (
+            <div key={ratio} className="text-center">
+              <CountryFlag code="jp" size={48} aspectRatio={ratio} className={c.flag} />
+              <p className={`text-xs mt-2 ${c.label}`}>{ratio}</p>
             </div>
-          </DemoWrapper>
-        </Section>
+          ))}
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Various Countries"
-          description="Use ISO 3166-1 alpha-2 codes to render any country flag."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex flex-wrap gap-3">
-              {[
-                { code: "us", name: "United States" },
-                { code: "gb", name: "United Kingdom" },
-                { code: "ca", name: "Canada" },
-                { code: "au", name: "Australia" },
-                { code: "de", name: "Germany" },
-                { code: "fr", name: "France" },
-                { code: "jp", name: "Japan" },
-                { code: "in", name: "India" },
-                { code: "br", name: "Brazil" },
-                { code: "mx", name: "Mexico" },
-                { code: "kr", name: "South Korea" },
-                { code: "it", name: "Italy" },
-                { code: "es", name: "Spain" },
-                { code: "se", name: "Sweden" },
-                { code: "ch", name: "Switzerland" },
-                { code: "nl", name: "Netherlands" },
-              ].map(({ code, name }) => (
-                <div key={code} className="text-center">
-                  <CountryFlag
-                    code={code}
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip={name}
-                  />
-                  <p
-                    className={`text-xs mt-1.5 font-mono ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
-                  >
-                    {code.toUpperCase()}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </DemoWrapper>
-        </Section>
+      {/* ─── Tooltip ────────────────────────────────────────────────────── */}
+      <Section title="Tooltip" description="Add tooltips via string or config object." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <CountryFlag code="us" size={48} tooltip="United States" className={c.flag} />
+          <CountryFlag code="gb" size={48} tooltip="United Kingdom" className={c.flag} />
+          <CountryFlag code="jp" size={48} tooltip={{ content: "Japan", side: "bottom" }} className={c.flag} />
+          <CountryFlag code="de" size={48} tooltip={{ content: "Germany", showArrow: false }} className={c.flag} />
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Custom Styling"
-          description="Apply custom classes for shadows, rings, opacity, and filters."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex items-center gap-5">
-              <div className="text-center">
-                <CountryFlag
-                  code="us"
-                  size="xl"
-                  className="rounded-sm shadow-md"
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  shadow
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag
-                  code="gb"
-                  size="xl"
-                  className="rounded-sm ring-2 ring-blue-500"
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  ring
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag
-                  code="ca"
-                  size="xl"
-                  className="rounded-sm opacity-50"
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  opacity
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag
-                  code="au"
-                  size="xl"
-                  className="rounded-sm grayscale"
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  grayscale
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag
-                  code="de"
-                  size="xl"
-                  className="rounded-full"
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  rounded-full
-                </p>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
+      {/* ─── Fallback ───────────────────────────────────────────────────── */}
+      <Section title="Error Fallback" description="Custom fallback content when the flag image fails to load." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <div className="text-center">
+            <CountryFlag code="xx" size={48} className={c.flag} fallback={<span className={c.fallback} style={{ width: 48, height: 36, borderRadius: 3 }}>??</span>} />
+            <p className={`text-xs mt-2 ${c.label}`}>invalid code</p>
+          </div>
+          <div className="text-center">
+            <CountryFlag code="" size={48} className={c.flag} fallback={<span className={c.fallback} style={{ width: 48, height: 36, borderRadius: 3 }}>--</span>} />
+            <p className={`text-xs mt-2 ${c.label}`}>empty code</p>
+          </div>
+          <div className="text-center">
+            <CountryFlag code="zz" size={48} className={c.flag} fallback={
+              <span className={c.fallback} style={{ width: 48, height: 36, borderRadius: 3 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
+              </span>
+            } />
+            <p className={`text-xs mt-2 ${c.label}`}>icon fallback</p>
+          </div>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="With Tooltips"
-          description="Use the tooltip prop with a string for simple tooltips, or an object for full control."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Simple string tooltips
-                </p>
-                <div className="flex items-center gap-4">
-                  <CountryFlag
-                    code="us"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip="United States"
-                  />
-                  <CountryFlag
-                    code="gb"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip="United Kingdom"
-                  />
-                  <CountryFlag
-                    code="ca"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip="Canada"
-                  />
-                  <CountryFlag
-                    code="jp"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip="Japan"
-                  />
-                </div>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Tooltip with config object
-                </p>
-                <div className="flex items-center gap-4">
-                  <CountryFlag
-                    code="au"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip={{
-                      content: "Australia",
-                      side: "bottom",
-                    }}
-                  />
-                  <CountryFlag
-                    code="de"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip={{
-                      content: "Germany",
-                      side: "right",
-                    }}
-                  />
-                  <CountryFlag
-                    code="fr"
-                    size="lg"
-                    className="rounded-sm"
-                    tooltip={{
-                      content: "France",
-                      showArrow: false,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+      {/* ─── Loading / Shimmer ──────────────────────────────────────────── */}
+      <Section title="Loading & Shimmer" description="Show a shimmer placeholder while data loads." isDarkMode={dark}>
+        <div className="mb-3">
+          <button className={c.btn} onClick={() => setIsLoading(!isLoading)}>
+            {isLoading ? "Show Flags" : "Show Shimmer"}
+          </button>
+        </div>
+        <DemoWrapper isDarkMode={dark}>
+          {isLoading ? (
+            <>
+              <CountryFlagShimmer size={32} className="rounded-[3px]" />
+              <CountryFlagShimmer size={48} className="rounded-[3px]" />
+              <CountryFlagShimmer size={48} className="rounded-[3px]" />
+            </>
+          ) : (
+            <>
+              <CountryFlag code="us" size={32} className={c.flag} />
+              <CountryFlag code="gb" size={48} className={c.flag} />
+              <CountryFlag code="jp" size={48} className={c.flag} />
+            </>
+          )}
+        </DemoWrapper>
+        <div className="mt-4">
+          <p className={`text-xs font-medium mb-2 ${c.label}`}>loading prop on CountryFlag</p>
+          <DemoWrapper isDarkMode={dark}>
+            <CountryFlag code="us" loading size={48} className="rounded-[3px]" />
+            <CountryFlag code="gb" loading size={48} className="rounded-[3px]" />
           </DemoWrapper>
-        </Section>
+        </div>
+      </Section>
 
-        <Section
-          title="Error State & Fallback"
-          description="Handle loading errors with custom fallback content."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex items-center gap-5">
-              <div className="text-center">
-                <CountryFlag
-                  code="xx"
-                  size="xl"
-                  className={`rounded-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}
-                  fallback={
-                    <svg
-                      className={`w-4 h-4 ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5"
-                      />
-                    </svg>
-                  }
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  with fallback
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag
-                  code="zz"
-                  size="xl"
-                  className={`rounded-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-100"}`}
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  no fallback
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlag
-                  code="us"
-                  size="xl"
-                  className="rounded-sm"
-                  onError={() => setErrorFlag(true)}
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  onError callback
-                </p>
-                {errorFlag && (
-                  <p className="text-xs text-red-500 mt-1">Error fired</p>
-                )}
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Flag Group"
-          description="Group multiple flags together with overlapping layout."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  3 flags, md size
-                </p>
-                <CountryFlagGroup
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                >
-                  <CountryFlag code="us" size="md" />
-                  <CountryFlag code="gb" size="md" />
-                  <CountryFlag code="ca" size="md" />
+      {/* ─── Group ──────────────────────────────────────────────────────── */}
+      <Section title="Flag Group" description="Stack flags with automatic overflow counting, similar to AvatarGroup." isDarkMode={dark}>
+        <div className="space-y-4">
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Default (all visible)</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <CountryFlagGroup size={48} classes={c.flagGroup}>
+                <CountryFlag code="us" className="rounded-[3px]" />
+                <CountryFlag code="gb" className="rounded-[3px]" />
+                <CountryFlag code="jp" className="rounded-[3px]" />
+                <CountryFlag code="de" className="rounded-[3px]" />
+              </CountryFlagGroup>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>max=3 with surplus count</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <CountryFlagGroup size={48} max={3} classes={c.flagGroup}>
+                <CountryFlag code="us" className="rounded-[3px]" />
+                <CountryFlag code="gb" className="rounded-[3px]" />
+                <CountryFlag code="jp" className="rounded-[3px]" />
+                <CountryFlag code="de" className="rounded-[3px]" />
+                <CountryFlag code="fr" className="rounded-[3px]" />
+              </CountryFlagGroup>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>showCountTooltip on surplus (hover +2)</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <CountryFlagGroup size={48} max={2} showCountTooltip classes={c.flagGroup}>
+                <CountryFlag code="us" alt="United States" className="rounded-[3px]" />
+                <CountryFlag code="gb" alt="United Kingdom" className="rounded-[3px]" />
+                <CountryFlag code="jp" alt="Japan" className="rounded-[3px]" />
+                <CountryFlag code="de" alt="Germany" className="rounded-[3px]" />
+              </CountryFlagGroup>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>On dark background</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <div className="p-4 rounded-lg bg-gray-800">
+                <CountryFlagGroup size={48} classes={c.flagGroupDark}>
+                  <CountryFlag code="us" className="rounded-[3px]" />
+                  <CountryFlag code="gb" className="rounded-[3px]" />
+                  <CountryFlag code="jp" className="rounded-[3px]" />
+                  <CountryFlag code="de" className="rounded-[3px]" />
                 </CountryFlagGroup>
               </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  4 flags, lg size
-                </p>
-                <CountryFlagGroup
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                >
-                  <CountryFlag code="de" size="lg" />
-                  <CountryFlag code="fr" size="lg" />
-                  <CountryFlag code="it" size="lg" />
-                  <CountryFlag code="es" size="lg" />
-                </CountryFlagGroup>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  5 flags, xl size
-                </p>
-                <CountryFlagGroup
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                >
-                  <CountryFlag code="jp" size="xl" />
-                  <CountryFlag code="kr" size="xl" />
-                  <CountryFlag code="cn" size="xl" />
-                  <CountryFlag code="in" size="xl" />
-                  <CountryFlag code="sg" size="xl" />
-                </CountryFlagGroup>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom surplus renderer</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <CountryFlagGroup size={48} max={2} classes={c.flagGroup} renderSurplus={(count) => (
+                <span className={`ml-2 text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}>and {count} more</span>
+              )}>
+                <CountryFlag code="us" className="rounded-[3px]" />
+                <CountryFlag code="gb" className="rounded-[3px]" />
+                <CountryFlag code="jp" className="rounded-[3px]" />
+                <CountryFlag code="de" className="rounded-[3px]" />
+              </CountryFlagGroup>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Large size group</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <CountryFlagGroup size={56} classes={{ ...c.flagGroup, item: `rounded ${dark ? "outline outline-[1.5px] outline-gray-900" : "outline outline-[1.5px] outline-white"}`, count: `${c.flagGroup.count} text-xs rounded` }}>
+                <CountryFlag code="us" className="rounded" />
+                <CountryFlag code="gb" className="rounded" />
+                <CountryFlag code="jp" className="rounded" />
+              </CountryFlagGroup>
+            </DemoWrapper>
+          </div>
+        </div>
+      </Section>
 
-        <Section
-          title="Flag Group with Max Limit"
-          description="Use the max prop to limit visible flags and show a count badge for the rest."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  7 flags, max=3
-                </p>
-                <CountryFlagGroup
-                  max={3}
-                  size="lg"
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                  countClassName={`rounded-sm text-xs font-medium ring-1 ${isDarkMode ? "bg-gray-700 text-gray-300 ring-gray-800" : "bg-gray-100 text-gray-500 ring-white"}`}
-                >
-                  <CountryFlag code="us" size="lg" />
-                  <CountryFlag code="gb" size="lg" />
-                  <CountryFlag code="ca" size="lg" />
-                  <CountryFlag code="au" size="lg" />
-                  <CountryFlag code="de" size="lg" />
-                  <CountryFlag code="fr" size="lg" />
-                  <CountryFlag code="jp" size="lg" />
-                </CountryFlagGroup>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  10 flags, max=5
-                </p>
-                <CountryFlagGroup
-                  max={5}
-                  size="xl"
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                  countClassName={`rounded-sm text-xs font-medium ring-1 ${isDarkMode ? "bg-gray-700 text-gray-300 ring-gray-800" : "bg-gray-100 text-gray-500 ring-white"}`}
-                >
-                  <CountryFlag code="us" size="xl" />
-                  <CountryFlag code="gb" size="xl" />
-                  <CountryFlag code="ca" size="xl" />
-                  <CountryFlag code="au" size="xl" />
-                  <CountryFlag code="de" size="xl" />
-                  <CountryFlag code="fr" size="xl" />
-                  <CountryFlag code="jp" size="xl" />
-                  <CountryFlag code="in" size="xl" />
-                  <CountryFlag code="br" size="xl" />
-                  <CountryFlag code="mx" size="xl" />
-                </CountryFlagGroup>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
+      {/* ─── Group Shimmer ──────────────────────────────────────────────── */}
+      <Section title="Group Shimmer" description="Loading placeholder for flag groups." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <CountryFlagGroupShimmer count={4} size={48} showCount className="rounded-[3px]" />
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Flag Group with Count Tooltip"
-          description="Hover the count badge to see the remaining country names."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Hover +4 to see remaining
-                </p>
-                <CountryFlagGroup
-                  max={3}
-                  size="lg"
-                  showCountTooltip
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                  countClassName={`rounded-sm text-xs font-medium ring-1 ${isDarkMode ? "bg-gray-700 text-gray-300 ring-gray-800" : "bg-gray-100 text-gray-500 ring-white"}`}
-                >
-                  <CountryFlag code="us" size="lg" alt="United States" />
-                  <CountryFlag code="gb" size="lg" alt="United Kingdom" />
-                  <CountryFlag code="ca" size="lg" alt="Canada" />
-                  <CountryFlag code="au" size="lg" alt="Australia" />
-                  <CountryFlag code="de" size="lg" alt="Germany" />
-                  <CountryFlag code="fr" size="lg" alt="France" />
-                  <CountryFlag code="jp" size="lg" alt="Japan" />
-                </CountryFlagGroup>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Count tooltip on right side
-                </p>
-                <CountryFlagGroup
-                  max={2}
-                  size="xl"
-                  showCountTooltip
-                  countTooltip={{ side: "right" }}
-                  itemClassName={`rounded-sm ring-1 ${isDarkMode ? "ring-gray-800" : "ring-white"}`}
-                  countClassName={`rounded-sm text-xs font-medium ring-1 ${isDarkMode ? "bg-gray-700 text-gray-300 ring-gray-800" : "bg-gray-100 text-gray-500 ring-white"}`}
-                >
-                  <CountryFlag code="br" size="xl" alt="Brazil" />
-                  <CountryFlag code="mx" size="xl" alt="Mexico" />
-                  <CountryFlag code="ar" size="xl" alt="Argentina" />
-                  <CountryFlag code="cl" size="xl" alt="Chile" />
-                  <CountryFlag code="co" size="xl" alt="Colombia" />
-                </CountryFlagGroup>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
+      {/* ─── Classes System ─────────────────────────────────────────────── */}
+      <Section title="Classes System" description="Override internal elements with the classes prop. Slots: root, image, fallback." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <CountryFlag code="us" size={48} classes={{ root: "inline-flex items-center justify-center shrink-0 overflow-hidden rounded-xl shadow-lg ring-2 ring-indigo-400" }} />
+          <CountryFlag code="gb" size={48} classes={{ root: "inline-flex items-center justify-center shrink-0 overflow-hidden rounded-full shadow-lg" }} />
+          <CountryFlag code="jp" size={48} classes={{ root: "inline-flex items-center justify-center shrink-0 overflow-hidden rounded-none" }} />
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Standalone Count Badge"
-          description="Use CountryFlagGroupCount independently."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex items-center gap-4">
-              <div className="text-center">
-                <CountryFlagGroupCount
-                  count={5}
-                  size={20}
-                  className={`rounded-sm text-xs font-medium ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-500"}`}
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  +5
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlagGroupCount
-                  count={10}
-                  size={24}
-                  className={`rounded-sm text-xs font-medium ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-500"}`}
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  +10
-                </p>
-              </div>
-              <div className="text-center">
-                <CountryFlagGroupCount
-                  count={99}
-                  size={32}
-                  className={`rounded-sm text-sm font-medium ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-500"}`}
-                  tooltip="99 more countries"
-                />
-                <p
-                  className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  +99 (with tooltip)
-                </p>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-        <Section
-          title="Custom Aspect Ratio"
-          description="By default flags use a 3:4 aspect ratio (0.75). Use the aspectRatio prop to adjust the height relative to the width — for example, 1.0 for a square or 0.5 for a wider flag."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="flex items-end gap-6">
-              <div className="text-center">
-                <CountryFlag code="us" size="xl" aspectRatio={0.5} className="rounded-sm" />
-                <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>0.5 (wide)</p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="xl" aspectRatio={0.75} className="rounded-sm" />
-                <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>0.75 (default)</p>
-              </div>
-              <div className="text-center">
-                <CountryFlag code="us" size="xl" aspectRatio={1} className="rounded-sm" />
-                <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>1.0 (square)</p>
-              </div>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<CountryFlag code="us" size="xl" aspectRatio={0.5} />   // Wide
-<CountryFlag code="us" size="xl" aspectRatio={0.75} />  // Default
-<CountryFlag code="us" size="xl" aspectRatio={1} />     // Square`}
-          />
-        </Section>
+      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
+      <Section title="Unstyled Mode" description="Set unstyled=true to strip all default classes. Build from scratch." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <CountryFlag code="us" size={48} unstyled classes={{ root: "inline-block overflow-hidden rounded-2xl border-2 border-indigo-400 shadow-xl" }} />
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Group with Custom Surplus Rendering"
-          description="Use renderSurplus on CountryFlagGroup to fully customize how the overflow count is displayed. Combined with surplusTooltipContent, you can also customize what the surplus tooltip shows."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-4">
-              <div>
-                <p className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Custom surplus renderer with tooltip
-                </p>
-                <CountryFlagGroup
-                  max={3}
-                  size="lg"
-                  showCountTooltip
-                  surplusTooltipContent="5 more countries"
-                  renderSurplus={(count) => (
-                    <span
-                      className={`inline-flex items-center justify-center rounded-sm text-xs font-bold ${isDarkMode ? "bg-blue-900 text-blue-200" : "bg-blue-100 text-blue-700"}`}
-                      style={{ width: 48, height: 36 }}
-                    >
-                      +{count} more
-                    </span>
-                  )}
-                  itemClassName="rounded-sm"
-                >
-                  <CountryFlag code="us" />
-                  <CountryFlag code="gb" />
-                  <CountryFlag code="de" />
-                  <CountryFlag code="fr" />
-                  <CountryFlag code="jp" />
-                  <CountryFlag code="br" />
-                  <CountryFlag code="ca" />
-                  <CountryFlag code="au" />
-                </CountryFlagGroup>
-              </div>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<CountryFlagGroup
-  max={3}
-  size="lg"
-  showCountTooltip
-  surplusTooltipContent="5 more countries"
-  renderSurplus={(count) => (
-    <span className="...">+{count} more</span>
-  )}
->
-  <CountryFlag code="us" />
-  <CountryFlag code="gb" />
-  {/* ... more flags */}
-</CountryFlagGroup>`}
-          />
-        </Section>
+      {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
+      <Section title="Reduce Motion" description='Disable fade-in transition and shimmer pulse.' isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <div className="text-center">
+            <CountryFlag code="us" size={48} className={c.flag} />
+            <p className={`text-xs mt-2 ${c.label}`}>default (auto)</p>
+          </div>
+          <div className="text-center">
+            <CountryFlag code="gb" size={48} reduceMotion={true} className={c.flag} />
+            <p className={`text-xs mt-2 ${c.label}`}>no transition</p>
+          </div>
+          <div className="text-center">
+            <CountryFlagShimmer size={48} reduceMotion={true} className="rounded-[3px]" />
+            <p className={`text-xs mt-2 ${c.label}`}>no pulse</p>
+          </div>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Shimmer / Loading Placeholders"
-          description="Use the loading prop on CountryFlag for built-in shimmer, or CountryFlagShimmer / CountryFlagGroupShimmer as standalone skeletons."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Built-in loading prop (recommended)
-                </p>
-                <div className="flex items-end gap-4">
-                  <div className="text-center">
-                    <CountryFlag code="us" size="sm" loading className="rounded-sm" />
-                    <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>sm</p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlag code="gb" size="md" loading className="rounded-sm" />
-                    <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>md</p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlag code="de" size="lg" loading className="rounded-sm" />
-                    <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>lg</p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlag code="fr" size="xl" loading className="rounded-sm" />
-                    <p className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>xl</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Loading inside a group
-                </p>
-                <CountryFlagGroup size="lg" itemClassName="rounded-sm ring-1 ring-white dark:ring-gray-800">
-                  <CountryFlag code="us" size="lg" loading />
-                  <CountryFlag code="gb" size="lg" loading />
-                  <CountryFlag code="de" size="lg" />
-                  <CountryFlag code="fr" size="lg" />
-                </CountryFlagGroup>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Standalone shimmers at different sizes
-                </p>
-                <div className="flex items-end gap-4">
-                  <div className="text-center">
-                    <CountryFlagShimmer size="xs" className="rounded-sm" />
-                    <p
-                      className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      xs
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlagShimmer size="sm" className="rounded-sm" />
-                    <p
-                      className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      sm
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlagShimmer size="md" className="rounded-sm" />
-                    <p
-                      className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      md
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlagShimmer size="lg" className="rounded-sm" />
-                    <p
-                      className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      lg
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlagShimmer size="xl" className="rounded-sm" />
-                    <p
-                      className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      xl
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <CountryFlagShimmer size="2xl" className="rounded-sm" />
-                    <p
-                      className={`text-xs mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                    >
-                      2xl
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Static (no animation)
-                </p>
-                <div className="flex items-center gap-4">
-                  <CountryFlagShimmer size="lg" animate={false} className="rounded-sm" />
-                  <CountryFlagShimmer size="lg" animate={false} className="rounded-full" />
-                </div>
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Group shimmer (3 items, lg)
-                </p>
-                <CountryFlagGroupShimmer
-                  count={3}
-                  size="lg"
-                  className={`[&>span]:rounded-sm [&>span]:ring-1 ${isDarkMode ? "[&>span]:ring-gray-800" : "[&>span]:ring-white"}`}
-                />
-              </div>
-              <div>
-                <p
-                  className={`text-xs mb-3 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  Group shimmer with count placeholder (5 items, xl)
-                </p>
-                <CountryFlagGroupShimmer
-                  count={5}
-                  size="xl"
-                  showCount
-                  className={`[&>span]:rounded-sm [&>span]:ring-1 ${isDarkMode ? "[&>span]:ring-gray-800" : "[&>span]:ring-white"}`}
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-      </div>
+      {/* ─── Custom Base Path ───────────────────────────────────────────── */}
+      <Section title="Custom Base Path" description="Load flags from a different directory or CDN." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <CountryFlag code="us" size={48} basePath="/assets/flags" className={c.flag} fallback={<span className={c.fallback} style={{ width: 48, height: 36, borderRadius: 3 }}>US</span>} />
+        </DemoWrapper>
+        <div className={c.note}>
+          Default path is <code className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`}>/flags</code>. Override for CDN or custom paths.
+        </div>
+      </Section>
 
-      <div className="space-y-8">
-        <h2
-          className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          API Reference
-        </h2>
+      {/* ─── Props Tables ───────────────────────────────────────────────── */}
+      <Section title="CountryFlag Props" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="code" type="string" defaultVal="required" description="Two-letter ISO country code" isDarkMode={dark} />
+            <PropRow name="size" type='CountryFlagSize | number' defaultVal='"md"' description="Flag width (height from aspect ratio)" isDarkMode={dark} />
+            <PropRow name="aspectRatio" type="number" defaultVal="0.75" description="Height / width ratio" isDarkMode={dark} />
+            <PropRow name="alt" type="string" description='Alt text (defaults to "CODE flag")' isDarkMode={dark} />
+            <PropRow name="fallback" type="ReactNode" description="Content when image fails" isDarkMode={dark} />
+            <PropRow name="loading" type="boolean" defaultVal="false" description="Show shimmer placeholder" isDarkMode={dark} />
+            <PropRow name="tooltip" type="ReactNode | TooltipConfig" description="Tooltip content or config" isDarkMode={dark} />
+            <PropRow name="basePath" type="string" defaultVal='"/flags"' description="Base path for SVG files" isDarkMode={dark} />
+            <PropRow name="classes" type="CountryFlagClasses" description="Slot overrides: root, image, fallback" isDarkMode={dark} />
+            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
+            <PropRow name="reduceMotion" type='boolean | "auto"' defaultVal='"auto"' description="Disable fade-in animation" isDarkMode={dark} />
+            <PropRow name="onLoad" type="(e) => void" description="Image load callback" isDarkMode={dark} />
+            <PropRow name="onError" type="(e) => void" description="Image error callback" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
 
-        <PropsTable title="CountryFlag" isDarkMode={isDarkMode}>
-          <PropRow
-            name="code"
-            type="string"
-            defaultVal="-"
-            description="ISO 3166-1 alpha-2 country code (required)"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="size"
-            type={'"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number'}
-            defaultVal='"md"'
-            description="Flag size preset or pixel value"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="alt"
-            type="string"
-            defaultVal="auto"
-            description='Accessible label (defaults to "CODE flag")'
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="fallback"
-            type="ReactNode"
-            defaultVal="-"
-            description="Content to render when flag fails to load"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="loading"
-            type="boolean"
-            defaultVal="false"
-            description="Show a shimmer placeholder instead of the flag"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="tooltip"
-            type="ReactNode | CountryFlagTooltipConfig"
-            defaultVal="-"
-            description="Tooltip content or config object"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="basePath"
-            type="string"
-            defaultVal='"/flags"'
-            description="Base path for flag images"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="onLoad"
-            type="() => void"
-            defaultVal="-"
-            description="Callback when flag image loads"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="onError"
-            type="() => void"
-            defaultVal="-"
-            description="Callback when flag image fails to load"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="-"
-            description="CSS class for the flag wrapper"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="style"
-            type="CSSProperties"
-            defaultVal="-"
-            description="Inline styles for the flag wrapper"
-            isDarkMode={isDarkMode}
-          />
-        </PropsTable>
+      <Section title="CountryFlagGroup Props" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="children" type="ReactNode" defaultVal="required" description="CountryFlag components" isDarkMode={dark} />
+            <PropRow name="max" type="number" description="Max visible flags" isDarkMode={dark} />
+            <PropRow name="size" type="CountryFlagSize | number" defaultVal='"md"' description="Size for surplus badge" isDarkMode={dark} />
+            <PropRow name="showCountTooltip" type="boolean" defaultVal="false" description="Auto tooltip from hidden flag names" isDarkMode={dark} />
+            <PropRow name="surplusTooltipContent" type="ReactNode" description="Explicit surplus tooltip" isDarkMode={dark} />
+            <PropRow name="renderSurplus" type="(count) => ReactNode" description="Custom surplus renderer" isDarkMode={dark} />
+            <PropRow name="classes" type="CountryFlagGroupClasses" description="Slot overrides: root, item, count" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
 
-        <PropsTable title="CountryFlagTooltipConfig" isDarkMode={isDarkMode}>
-          <PropRow
-            name="content"
-            type="ReactNode"
-            defaultVal="-"
-            description="Tooltip content (required)"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="side"
-            type={'"top" | "right" | "bottom" | "left"'}
-            defaultVal='"top"'
-            description="Tooltip placement side"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="align"
-            type={'"start" | "center" | "end"'}
-            defaultVal='"center"'
-            description="Tooltip alignment"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="sideOffset"
-            type="number"
-            defaultVal="6"
-            description="Distance from trigger in pixels"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="delayDuration"
-            type="number"
-            defaultVal="200"
-            description="Delay before showing tooltip (ms)"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="-"
-            description="CSS class for tooltip content"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="showArrow"
-            type="boolean"
-            defaultVal="true"
-            description="Show tooltip arrow"
-            isDarkMode={isDarkMode}
-          />
-        </PropsTable>
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-loading" type="root span" description="Present while image is loading" isDarkMode={dark} />
+            <PropRow name="data-error" type="root span" description="Present when image failed" isDarkMode={dark} />
+            <PropRow name="data-code" type="root span" description="Normalized country code" isDarkMode={dark} />
+            <PropRow name="role" type='root span, group, shimmer' description='role="img" / "group" / "status"' isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
 
-        <PropsTable title="CountryFlagGroup" isDarkMode={isDarkMode}>
-          <PropRow
-            name="children"
-            type="ReactNode"
-            defaultVal="-"
-            description="CountryFlag components"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="max"
-            type="number"
-            defaultVal="-"
-            description="Maximum flags to show before count badge"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="showCountTooltip"
-            type="boolean"
-            defaultVal="false"
-            description="Show tooltip on count badge with remaining country names"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="countTooltip"
-            type="Omit<CountryFlagTooltipConfig, 'content'>"
-            defaultVal="-"
-            description="Config for the count badge tooltip (side, align, etc.)"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="itemClassName"
-            type="string"
-            defaultVal="-"
-            description="CSS class applied to each flag in the group"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="countClassName"
-            type="string"
-            defaultVal="-"
-            description="CSS class for the count badge"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="renderSurplus"
-            type="(count: number) => ReactNode"
-            defaultVal="-"
-            description="Custom render function for the surplus count element"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="surplusTooltipContent"
-            type="ReactNode"
-            defaultVal="-"
-            description="Content shown in tooltip when hovering the surplus count"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="-"
-            description="CSS class for the group wrapper"
-            isDarkMode={isDarkMode}
-          />
-        </PropsTable>
-
-        <PropsTable title="CountryFlagGroupCount" isDarkMode={isDarkMode}>
-          <PropRow
-            name="count"
-            type="number"
-            defaultVal="-"
-            description="Number to display (required)"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="size"
-            type="number"
-            defaultVal="20"
-            description="Width in pixels"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="tooltip"
-            type="ReactNode | CountryFlagTooltipConfig"
-            defaultVal="-"
-            description="Tooltip content or config object"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="-"
-            description="CSS class for the count element"
-            isDarkMode={isDarkMode}
-          />
-        </PropsTable>
-
-        <PropsTable title="CountryFlagShimmer" isDarkMode={isDarkMode}>
-          <PropRow
-            name="size"
-            type={'"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number'}
-            defaultVal='"md"'
-            description="Shimmer width (height derived from aspect ratio)"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="aspectRatio"
-            type="number"
-            defaultVal="0.75"
-            description="Height / width ratio"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="animate"
-            type="boolean"
-            defaultVal="true"
-            description="Enable pulse animation"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="-"
-            description="CSS class for the shimmer element"
-            isDarkMode={isDarkMode}
-          />
-        </PropsTable>
-
-        <PropsTable title="CountryFlagGroupShimmer" isDarkMode={isDarkMode}>
-          <PropRow
-            name="count"
-            type="number"
-            defaultVal="3"
-            description="Number of shimmer items to render"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="size"
-            type={'"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | number'}
-            defaultVal='"md"'
-            description="Size of each shimmer item"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="aspectRatio"
-            type="number"
-            defaultVal="0.75"
-            description="Height / width ratio for each item"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="animate"
-            type="boolean"
-            defaultVal="true"
-            description="Enable pulse animation"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="showCount"
-            type="boolean"
-            defaultVal="false"
-            description="Show an extra placeholder for the count badge"
-            isDarkMode={isDarkMode}
-          />
-          <PropRow
-            name="className"
-            type="string"
-            defaultVal="-"
-            description="CSS class for the group wrapper"
-            isDarkMode={isDarkMode}
-          />
-        </PropsTable>
-      </div>
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" isDarkMode={dark}>
+        <div className={c.card}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              'Flags use role="img" with auto-generated aria-label from code',
+              'Inner <img> has alt="" and aria-hidden (decorative)',
+              "Images default to loading=\"lazy\" and decoding=\"async\"",
+              'Group uses role="group" with auto-generated aria-label',
+              'Surplus count has aria-label: "N more flag(s) not shown"',
+              'Shimmer uses role="status" with descriptive aria-label',
+              "prefers-reduced-motion respected via reduceMotion prop",
+              "Cached images skip fade-in via img.complete check",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
   );
 };
