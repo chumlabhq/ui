@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
 import { createExpandedStore } from "../utils/context";
 import type { AccordionExpandEvent, AccordionType } from "../utils/types";

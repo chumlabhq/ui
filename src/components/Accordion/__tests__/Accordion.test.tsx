@@ -125,7 +125,7 @@ describe("Accordion", () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
 
-      const { rerender } = render(
+      render(
         <Accordion type="single" value="item-1" onValueChange={onValueChange} collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Item 1</AccordionTrigger>

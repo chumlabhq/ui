@@ -488,7 +488,7 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="space-y-4 w-full max-w-md">
               <div>
-                <TextAreaLabel label="Custom Layout" htmlFor="custom-ta" className={c.label} />
+                <TextAreaLabel label="Custom Layout" htmlFor="custom-ta" className={c.textarea.label} />
                 <textarea
                   id="custom-ta"
                   placeholder="Native textarea with TextAreaLabel"
@@ -500,7 +500,7 @@ const TextAreaDemo = () => {
                 />
               </div>
               <div>
-                <TextAreaLabel label="Required Field" htmlFor="req-ta" required className={c.label} />
+                <TextAreaLabel label="Required Field" htmlFor="req-ta" required className={c.textarea.label} />
                 <p className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>Required indicator (*) is automatically added</p>
               </div>
             </div>
@@ -546,14 +546,14 @@ const TextAreaDemo = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className={c.container}>
-                  <label htmlFor="contact-name" className={c.label}>Name</label>
+                  <label htmlFor="contact-name" className={c.textarea.label}>Name</label>
                   <input id="contact-name" placeholder="John Doe" required className={`px-3.5 py-2.5 rounded-xl border outline-none text-sm transition-all duration-150 ${dark
                     ? "bg-white/[0.04] border-white/10 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500/30"
                     : "bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 shadow-sm focus:ring-2 focus:ring-indigo-500/15"
                   }`} />
                 </div>
                 <div className={c.container}>
-                  <label htmlFor="contact-email" className={c.label}>Email</label>
+                  <label htmlFor="contact-email" className={c.textarea.label}>Email</label>
                   <input id="contact-email" type="email" placeholder="you@example.com" required className={`px-3.5 py-2.5 rounded-xl border outline-none text-sm transition-all duration-150 ${dark
                     ? "bg-white/[0.04] border-white/10 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500/30"
                     : "bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 shadow-sm focus:ring-2 focus:ring-indigo-500/15"

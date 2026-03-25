@@ -60,9 +60,6 @@ const EyeOffIcon = ({ className = "" }: { className?: string }) => (
     <line x1="2" x2="22" y1="2" y2="22" />
   </svg>
 );
-const UserIcon = ({ className = "" }: { className?: string }) => (
-  <Icon d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" className={className} />
-);
 const LinkIcon = ({ className = "" }: { className?: string }) => (
   <Icon d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71|M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" className={className} />
 );
@@ -644,7 +641,7 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="space-y-4 w-full max-w-sm">
               <div>
-                <InputLabel label="Custom Layout" htmlFor="custom-input" className={c.label} />
+                <InputLabel label="Custom Layout" htmlFor="custom-input" className={c.input.label} />
                 <input
                   id="custom-input"
                   type="text"
@@ -656,7 +653,7 @@ const InputDemo = () => {
                 />
               </div>
               <div>
-                <InputLabel label="Required Field" htmlFor="req" required className={c.label} />
+                <InputLabel label="Required Field" htmlFor="req" required className={c.input.label} />
                 <p className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
                   Required indicator (*) is automatically added
                 </p>

@@ -43,12 +43,6 @@ const Icon = ({
   </svg>
 );
 
-const StarIcon = ({ className = "" }: { className?: string }) => (
-  <Icon d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" className={className} />
-);
-const GlobeIcon = ({ className = "" }: { className?: string }) => (
-  <Icon d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z|M2 12h20|M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" className={className} />
-);
 const BoltIcon = ({ className = "" }: { className?: string }) => (
   <Icon d="M13 2L3 14h9l-1 10 10-12h-9l1-10z" className={className} />
 );

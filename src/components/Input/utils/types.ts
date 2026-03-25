@@ -23,7 +23,7 @@ export interface InputClasses {
 }
 
 export interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   label?: ReactNode;
   description?: ReactNode;
   error?: boolean;

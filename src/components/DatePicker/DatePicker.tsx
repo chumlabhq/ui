@@ -553,7 +553,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     }), [classesProp, baseClasses]);
 
     // ─── Reduced motion ────────────────────────────────────────────────
-    const _effectiveReduceMotion = useReducedMotion(reduceMotion);
+    useReducedMotion(reduceMotion);
 
     // ─── Dev warning ───────────────────────────────────────────────────
     const warnedRef = useRef(false);

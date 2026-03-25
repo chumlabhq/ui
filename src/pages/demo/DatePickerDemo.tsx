@@ -1,14 +1,12 @@
 import { useState } from "react";
 import {
   DatePicker,
-  type DateValue,
   type DateRange,
-  type DateRangeValue,
   type DateMarker,
 } from "../../components/DatePicker";
 import { useTheme } from "./ThemeContext";
 import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
-import { subDays, addDays, startOfMonth, endOfMonth, subMonths, startOfWeek, eachDayOfInterval } from "date-fns";
+import { subDays, addDays, startOfMonth, endOfMonth, subMonths, startOfWeek } from "date-fns";
 import { fr, de } from "date-fns/locale";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────

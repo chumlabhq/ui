@@ -222,25 +222,25 @@ const Home = () => {
       <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0" style={{ pointerEvents: "all" }} aria-hidden="true" />
 
       {/* CSS nebula layers */}
-      <div className="fixed inset-0 pointer-events-none z-[1]" aria-hidden="true">
+      <div className="fixed inset-0 pointer-events-none z-1" aria-hidden="true">
         <div className="animate-nebula-pulse absolute top-[12%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse,rgba(168,85,247,0.12)_0%,rgba(99,102,241,0.05)_35%,transparent_65%)] blur-[50px]" />
         <div className="absolute top-[28%] left-1/2 w-0 h-0">
           <div className="animate-orbit-1 absolute w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.10)_0%,transparent_65%)] blur-[70px]" />
           <div className="animate-orbit-2 absolute w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.08)_0%,transparent_65%)] blur-[70px]" />
           <div className="animate-orbit-3 absolute w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.06)_0%,transparent_65%)] blur-[70px]" />
         </div>
-        <div className="absolute top-[33%] left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-400/[0.10] to-transparent" />
+        <div className="absolute top-[33%] left-0 w-full h-px bg-linear-to-r from-transparent via-purple-400/10 to-transparent" />
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-[0.025]">
           <div className="animate-beam absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(90deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)]" />
         </div>
         {/* Vignette — shifted right so bottom-left sun is not covered */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_55%_40%,transparent_0%,rgba(4,4,10,0.3)_60%,rgba(4,4,10,0.6)_80%,#04040a_100%)]" />
         {/* Bottom fade — only right side, left is open for sun */}
-        <div className="absolute bottom-0 left-[25%] right-0 h-[20%] bg-gradient-to-t from-[#04040a]/40 to-transparent" />
+        <div className="absolute bottom-0 left-[25%] right-0 h-[20%] bg-linear-to-t from-[#04040a]/40 to-transparent" />
       </div>
 
       {/* ═══ SUN — very subtle warm presence, bottom-left ═══ */}
-      <div className="fixed bottom-0 left-0 pointer-events-none z-[2] opacity-50" aria-hidden="true" style={{ width: "45vw", height: "45vh" }}>
+      <div className="fixed bottom-0 left-0 pointer-events-none z-2 opacity-50" aria-hidden="true" style={{ width: "45vw", height: "45vh" }}>
         <div className="absolute -bottom-[35%] -left-[18%] w-[70vmin] h-[70vmin] rounded-full bg-[radial-gradient(circle,rgba(255,170,60,0.035)_0%,rgba(255,130,30,0.01)_40%,transparent_65%)]" />
         <div className="absolute -bottom-[25%] -left-[12%] w-[40vmin] h-[40vmin] rounded-full bg-[radial-gradient(circle,rgba(255,190,90,0.05)_0%,rgba(255,140,40,0.015)_50%,transparent_75%)]" />
         <div className="absolute -bottom-[20%] -left-[8%] w-[28vmin] h-[28vmin] rounded-full bg-[radial-gradient(circle,rgba(255,210,130,0.07)_0%,rgba(255,160,50,0.02)_50%,transparent_75%)]" />
@@ -264,9 +264,9 @@ const Home = () => {
                 <LogoWordmark className="text-[22px]" />
               </Link>
               <div className="flex items-center gap-1">
-                <Link to="/accordion" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]">Docs</Link>
-                <Link to="/accordion" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]">Components</Link>
-                <Link to="/accordion" className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.08] hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]">
+                <Link to="/accordion" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4">Docs</Link>
+                <Link to="/accordion" className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4">Components</Link>
+                <Link to="/accordion" className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]">
                   Get Started
                 </Link>
               </div>
@@ -281,8 +281,8 @@ const Home = () => {
             <div className="max-w-3xl mx-auto">
               {/* Decorative orbital ring behind heading */}
               <div className="relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/[0.02] animate-float opacity-60" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full border border-white/[0.015] animate-float-d1 opacity-40" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/2 animate-float opacity-60" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full border border-white/1.5 animate-float-d1 opacity-40" />
 
                 <h1 className="relative animate-fade-up-d1 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] mb-6 whitespace-nowrap">
                   Ship products <TypingHeadline />
@@ -297,13 +297,13 @@ const Home = () => {
 
               <div className="animate-fade-up-d3 flex flex-col items-center gap-4">
                 <Link to="/input" className="group relative inline-flex items-center gap-2 px-7 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-600"/>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500"/>
+                  <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-violet-600"/>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500"/>
                   <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.25)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.45)] transition-shadow duration-500"/>
                   <span className="relative">Explore Components</span>
                   <svg className="relative group-hover:translate-x-0.5 transition-transform duration-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </Link>
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-lg bg-white/[0.025] border border-white/[0.05] text-[12px] font-mono text-gray-500">
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-lg bg-white/2.5 border border-white/5 text-[12px] font-mono text-gray-500">
                   <span className="text-gray-700 select-none">$</span>
                   <span>npm install <span className="text-gray-400">@churnlab/ui</span></span>
                   <button onClick={() => navigator.clipboard.writeText("npm install @churnlab/ui")} className="text-gray-600 hover:text-gray-300 transition-colors duration-300" aria-label="Copy">
@@ -324,7 +324,7 @@ const Home = () => {
                 ["180+", "Tests"],
               ].map(([num, label]) => (
                 <div key={label}>
-                  <div className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">{num}</div>
+                  <div className="text-xl sm:text-2xl font-bold tracking-tight bg-linear-to-b from-white to-gray-500 bg-clip-text text-transparent">{num}</div>
                   <div className="text-[10px] text-gray-600 uppercase tracking-wider mt-0.5">{label}</div>
                 </div>
               ))}
@@ -358,9 +358,9 @@ const Home = () => {
           <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-28">
             {/* Section header with decorative line */}
             <div className="flex items-center gap-4 mb-10">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/[0.06]" />
+              <div className="h-px flex-1 bg-linear-to-r from-transparent to-white/6" />
               <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 shrink-0">Components</span>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/[0.06]" />
+              <div className="h-px flex-1 bg-linear-to-l from-transparent to-white/6" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-4xl mx-auto">
@@ -370,7 +370,7 @@ const Home = () => {
                   to={`/${c.path}`}
                   className={`card-glow group relative rounded-xl p-4 transition-all duration-500 backdrop-blur-sm ${staggerClass(i)}`}
                 >
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500/[0.03] via-transparent to-indigo-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 rounded-xl bg-linear-to-br from-blue-500/3 via-transparent to-indigo-500/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="relative flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <span className="text-[13px] font-medium group-hover:text-blue-300 transition-colors duration-300">{c.name}</span>
@@ -387,14 +387,14 @@ const Home = () => {
           <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-24">
             <div className="relative rounded-2xl overflow-hidden p-8 sm:p-12 text-center">
               {/* Background glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.04] via-transparent to-indigo-500/[0.03]" />
-              <div className="absolute inset-0 border border-white/[0.04] rounded-2xl" />
+              <div className="absolute inset-0 bg-linear-to-br from-blue-500/4 via-transparent to-indigo-500/3" />
+              <div className="absolute inset-0 border border-white/4 rounded-2xl" />
               <div className="relative">
                 <h3 className="text-lg sm:text-xl font-bold tracking-tight mb-2">Ship your product, not your component library</h3>
                 <p className="text-[13px] text-gray-500 mb-6 max-w-md mx-auto">Your engineering team should be building features that move the needle for your business, not spending another sprint rebuilding a dropdown.</p>
                 <Link to="/input" className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-600"/>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500"/>
+                  <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-violet-600"/>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500"/>
                   <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.2)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] transition-shadow duration-500"/>
                   <span className="relative">Browse Documentation</span>
                   <svg className="relative group-hover:translate-x-0.5 transition-transform duration-300" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -405,7 +405,7 @@ const Home = () => {
 
           {/* ── FOOTER ── */}
           <footer className="w-full px-5 sm:px-8 pb-6">
-            <div className="border-t border-white/[0.04] pt-6">
+            <div className="border-t border-white/4 pt-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <LogoMark size={32} />
