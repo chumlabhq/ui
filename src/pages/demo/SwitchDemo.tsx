@@ -10,24 +10,24 @@ const getClasses = (dark: boolean) => ({
     description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
     tracker: `relative inline-flex items-center h-5 w-9 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer ${
       dark
-        ? "focus-visible:ring-blue-400 focus-visible:ring-offset-gray-900"
-        : "focus-visible:ring-blue-500"
+        ? "focus-visible:ring-indigo-400 focus-visible:ring-offset-gray-900"
+        : "focus-visible:ring-indigo-500"
     }`,
     disabledTracker: "opacity-50 cursor-not-allowed",
     thumb:
       "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
-    checkedTracker: dark ? "bg-blue-500" : "bg-blue-600",
+    checkedTracker: dark ? "bg-indigo-500" : "bg-indigo-600",
     uncheckedTracker: dark ? "bg-gray-600" : "bg-gray-300",
     checkedThumb: "translate-x-4.5",
     uncheckedThumb: "translate-x-0.5",
     error: `text-sm mt-2 ${dark ? "text-red-400" : "text-red-500"}`,
   },
-  card: `rounded-xl border p-4 ${dark ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-white"}`,
-  kbd: `px-2 py-1 rounded text-xs font-mono ${dark ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`,
-  label: `text-sm font-medium ${dark ? "text-gray-300" : "text-gray-700"}`,
-  btn: `px-3 py-1.5 text-sm rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-300 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-sm rounded-lg transition-colors bg-blue-600 text-white hover:bg-blue-700`,
-  note: `text-sm p-4 rounded-lg border ${dark ? "border-blue-800 bg-blue-950/30 text-blue-300" : "border-blue-200 bg-blue-50 text-blue-800"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
+  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
 });
 
 const CheckIcon = () => (
@@ -79,7 +79,7 @@ const SwitchDemo = () => {
   return (
     <div className="space-y-10">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-8">
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
         <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"}`} />
         <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`} />
         <div className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`} />
@@ -87,11 +87,13 @@ const SwitchDemo = () => {
           <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>
             Switch
           </h1>
-          <p className={`text-lg mb-6 ${dark ? "text-gray-400" : "text-gray-600"}`}>
+          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
             A toggle switch for binary on/off states. Fully accessible with WAI-ARIA
             support, keyboard navigation, form semantics, and customizable via the classes slot system.
           </p>
-          <CodeBlock isDarkMode={dark} code={`import { Switch } from "@kern-ui/switch";`} />
+          <div className="mt-5">
+            <CodeBlock isDarkMode={dark} code={`import { Switch } from "@kern-ui/switch";`} />
+          </div>
         </div>
       </header>
 
