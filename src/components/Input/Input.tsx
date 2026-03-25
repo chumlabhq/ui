@@ -3,14 +3,16 @@ import {
   useCallback,
   useEffect,
   useId,
+  useMemo,
   useRef,
-  useState,
   type ChangeEvent,
 } from "react";
-import type { InputProps } from "./utils/types";
+import type { InputProps, InputClasses } from "./utils/types";
+import { DEFAULT_INPUT_CLASSES, UNSTYLED_INPUT_CLASSES } from "./utils/constants";
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/cn";
+import { useControllableState } from "../../utils/useControllableState";
 
 export const InputLabel = FieldLabel;
 
@@ -47,15 +49,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       loaderSize = 16,
       fullWidth = false,
       className,
-      wrapperClassName,
-      labelClassName,
-      errorClassName,
-      successClassName,
-      descriptionClassName,
-      inputClassName,
-      prefixClassName,
-      suffixClassName,
-      countClassName,
+      classes: classesProp,
+      unstyled = false,
       readOnly,
       maxLength,
       value,
@@ -73,16 +68,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const isDisabled = disabled || loading;
     const isInteractive = !isDisabled && !readOnly;
 
-    // Controlled vs uncontrolled detection
+    // Controlled/uncontrolled state via shared hook
+    // (hook handles transition warnings internally)
+    const [currentValue, setCurrentValue] = useControllableState({
+      value: value !== undefined ? String(value) : undefined,
+      defaultValue: (defaultValue as string) ?? "",
+      onChange: onValueChange,
+    });
     const isControlled = value !== undefined;
-
-    // Track whether the component started as controlled — warn on switch
-    const wasControlledRef = useRef(isControlled);
-
-    // Track internal value for clearable/showCount in uncontrolled mode
-    const [internalValue, setInternalValue] = useState(
-      () => (defaultValue as string) ?? "",
-    );
 
     // Internal ref — merged with consumer's forwarded ref via callback
     const internalRef = useRef<HTMLInputElement | null>(null);
@@ -101,8 +94,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       [ref],
     );
 
-    const currentValue = isControlled ? String(value) : internalValue;
-
     // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
       [
@@ -114,15 +105,30 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         .filter(Boolean)
         .join(" ") || undefined;
 
+    // ─── Merged classes ─────────────────────────────────────────────────
+    const baseClasses = unstyled ? UNSTYLED_INPUT_CLASSES : DEFAULT_INPUT_CLASSES;
+    const mergedClasses: Required<InputClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        label: classesProp?.label ?? baseClasses.label,
+        description: classesProp?.description ?? baseClasses.description,
+        input: classesProp?.input ?? baseClasses.input,
+        prefix: classesProp?.prefix ?? baseClasses.prefix,
+        suffix: classesProp?.suffix ?? baseClasses.suffix,
+        error: classesProp?.error ?? baseClasses.error,
+        success: classesProp?.success ?? baseClasses.success,
+        count: classesProp?.count ?? baseClasses.count,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const handleChange = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => {
-        if (!isControlled) {
-          setInternalValue(e.target.value);
-        }
+        setCurrentValue(e.target.value);
         onChange?.(e);
-        onValueChange?.(e.target.value);
       },
-      [onChange, onValueChange, isControlled],
+      [onChange, setCurrentValue],
     );
 
     const handleClear = useCallback(() => {
@@ -141,10 +147,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       )?.set;
       nativeInputValueSetter?.call(input, "");
 
-      // Update internal state for uncontrolled
-      if (!isControlled) {
-        setInternalValue("");
-      }
+      // Update state via controllable hook
+      setCurrentValue("");
 
       // Construct a proper event with the real input element as target
       // so e.target.name, e.target.type, e.preventDefault() etc. all work
@@ -159,27 +163,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       });
 
       onChange?.(event as unknown as ChangeEvent<HTMLInputElement>);
-      onValueChange?.("");
-    }, [onClear, onChange, onValueChange, isControlled]);
+    }, [onClear, onChange, setCurrentValue]);
 
     // Dev warnings — in useEffect to avoid double-firing in StrictMode
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
-        // Controlled/uncontrolled transition warning
-        if (wasControlledRef.current && !isControlled) {
-          console.warn(
-            "Input: switched from controlled to uncontrolled. This is likely a bug. " +
-              "Decide between using a controlled or uncontrolled Input for its lifetime.",
-          );
-        }
-        if (!wasControlledRef.current && isControlled) {
-          console.warn(
-            "Input: switched from uncontrolled to controlled. This is likely a bug. " +
-              "Decide between using a controlled or uncontrolled Input for its lifetime.",
-          );
-        }
-        wasControlledRef.current = isControlled;
-
         if (onStartIconClick && !startIconLabel) {
           console.warn(
             "Input: onStartIconClick is provided without startIconLabel. Add startIconLabel for accessibility.",
@@ -197,8 +185,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-      isControlled,
       label,
       onStartIconClick,
       startIconLabel,
@@ -236,15 +224,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         loader={loader}
         loaderSize={loaderSize}
         fullWidth={fullWidth}
-        className={className}
-        wrapperClassName={wrapperClassName}
-        labelClassName={labelClassName}
-        errorClassName={errorClassName}
-        successClassName={successClassName}
-        descriptionClassName={descriptionClassName}
-        prefixClassName={prefixClassName}
-        suffixClassName={suffixClassName}
-        countClassName={countClassName}
+        className={cn(mergedClasses.root, fullWidth && "w-full", className)}
+        wrapperClassName={mergedClasses.wrapper}
+        labelClassName={mergedClasses.label}
+        errorClassName={mergedClasses.error}
+        successClassName={mergedClasses.success}
+        descriptionClassName={mergedClasses.description}
+        prefixClassName={mergedClasses.prefix}
+        suffixClassName={mergedClasses.suffix}
+        countClassName={mergedClasses.count}
         wrapperAlign="items-center"
         data-size={size || undefined}
         data-readonly={readOnly || undefined}
@@ -260,7 +248,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           readOnly={readOnly}
           maxLength={maxLength}
           data-slot="input"
-          className={cn("flex-1 min-w-0", inputClassName)}
+          className={cn("flex-1 min-w-0", mergedClasses.input)}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
           aria-errormessage={error && errorMessage ? errorId : undefined}
@@ -270,7 +258,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           data-success={(!error && success) || undefined}
           data-readonly={readOnly || undefined}
           onChange={handleChange}
-          value={isControlled ? value : internalValue}
+          value={currentValue}
         />
       </FieldWrapper>
     );

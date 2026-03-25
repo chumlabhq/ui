@@ -3,14 +3,16 @@ import {
   useCallback,
   useEffect,
   useId,
+  useMemo,
   useRef,
-  useState,
   type ChangeEvent,
 } from "react";
-import type { TextAreaProps } from "./utils/types";
+import type { TextAreaProps, TextAreaClasses } from "./utils/types";
+import { DEFAULT_TEXTAREA_CLASSES, UNSTYLED_TEXTAREA_CLASSES } from "./utils/constants";
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/cn";
+import { useControllableState } from "../../utils/useControllableState";
 
 export const TextAreaLabel = FieldLabel;
 
@@ -44,13 +46,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       loaderSize = 16,
       fullWidth = false,
       className,
-      wrapperClassName,
-      labelClassName,
-      errorClassName,
-      successClassName,
-      descriptionClassName,
-      textAreaClassName,
-      countClassName,
+      classes: classesProp,
+      unstyled = false,
       readOnly,
       maxLength,
       value,
@@ -69,16 +66,29 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const isDisabled = disabled || loading;
     const isInteractive = !isDisabled && !readOnly;
 
-    // Controlled vs uncontrolled detection
-    const isControlled = value !== undefined;
-
-    // Track whether the component started as controlled — warn on switch
-    const wasControlledRef = useRef(isControlled);
-
-    // Track internal value for clearable/showCount in uncontrolled mode
-    const [internalValue, setInternalValue] = useState(
-      () => (defaultValue as string) ?? "",
+    // ─── Merged classes ─────────────────────────────────────────────────
+    const baseClasses = unstyled ? UNSTYLED_TEXTAREA_CLASSES : DEFAULT_TEXTAREA_CLASSES;
+    const mergedClasses: Required<TextAreaClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        label: classesProp?.label ?? baseClasses.label,
+        description: classesProp?.description ?? baseClasses.description,
+        textarea: classesProp?.textarea ?? baseClasses.textarea,
+        error: classesProp?.error ?? baseClasses.error,
+        success: classesProp?.success ?? baseClasses.success,
+        count: classesProp?.count ?? baseClasses.count,
+      }),
+      [classesProp, baseClasses],
     );
+
+    // Controlled/uncontrolled state via shared hook
+    const [currentValue, setCurrentValue] = useControllableState({
+      value: value !== undefined ? String(value) : undefined,
+      defaultValue: (defaultValue as string) ?? "",
+      onChange: onValueChange,
+    });
+    const isControlled = value !== undefined;
 
     // Internal ref — merged with consumer's forwarded ref via callback
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
@@ -96,8 +106,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       [ref],
     );
 
-    const currentValue = isControlled ? String(value) : internalValue;
-
     // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
       [
@@ -111,13 +119,10 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     const handleChange = useCallback(
       (e: ChangeEvent<HTMLTextAreaElement>) => {
-        if (!isControlled) {
-          setInternalValue(e.target.value);
-        }
+        setCurrentValue(e.target.value);
         onChange?.(e);
-        onValueChange?.(e.target.value);
       },
-      [onChange, onValueChange, isControlled],
+      [onChange, setCurrentValue],
     );
 
     const handleClear = useCallback(() => {
@@ -136,9 +141,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       )?.set;
       nativeValueSetter?.call(textarea, "");
 
-      if (!isControlled) {
-        setInternalValue("");
-      }
+      setCurrentValue("");
 
       // Construct a proper event with the real textarea element as target
       const event = new Event("change", { bubbles: true });
@@ -152,26 +155,11 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       });
 
       onChange?.(event as unknown as ChangeEvent<HTMLTextAreaElement>);
-      onValueChange?.("");
-    }, [onClear, onChange, onValueChange, isControlled]);
+    }, [onClear, onChange, setCurrentValue]);
 
     // Dev warnings — in useEffect to avoid double-firing in StrictMode
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
-        if (wasControlledRef.current && !isControlled) {
-          console.warn(
-            "TextArea: switched from controlled to uncontrolled. This is likely a bug. " +
-              "Decide between using a controlled or uncontrolled TextArea for its lifetime.",
-          );
-        }
-        if (!wasControlledRef.current && isControlled) {
-          console.warn(
-            "TextArea: switched from uncontrolled to controlled. This is likely a bug. " +
-              "Decide between using a controlled or uncontrolled TextArea for its lifetime.",
-          );
-        }
-        wasControlledRef.current = isControlled;
-
         if (onStartIconClick && !startIconLabel) {
           console.warn(
             "TextArea: onStartIconClick is provided without startIconLabel. Add startIconLabel for accessibility.",
@@ -189,8 +177,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-      isControlled,
       label,
       onStartIconClick,
       startIconLabel,
@@ -226,13 +214,13 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         loader={loader}
         loaderSize={loaderSize}
         fullWidth={fullWidth}
-        className={className}
-        wrapperClassName={wrapperClassName}
-        labelClassName={labelClassName}
-        errorClassName={errorClassName}
-        successClassName={successClassName}
-        descriptionClassName={descriptionClassName}
-        countClassName={countClassName}
+        className={cn(mergedClasses.root, fullWidth && "w-full", className)}
+        wrapperClassName={mergedClasses.wrapper}
+        labelClassName={mergedClasses.label}
+        errorClassName={mergedClasses.error}
+        successClassName={mergedClasses.success}
+        descriptionClassName={mergedClasses.description}
+        countClassName={mergedClasses.count}
         wrapperAlign="items-start"
         data-size={size || undefined}
         data-readonly={readOnly || undefined}
@@ -248,7 +236,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           maxLength={maxLength}
           rows={rows}
           data-slot="textarea"
-          className={cn("flex-1 min-w-0", textAreaClassName)}
+          className={cn("flex-1 min-w-0", mergedClasses.textarea)}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
           aria-errormessage={error && errorMessage ? errorId : undefined}
@@ -258,7 +246,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           data-success={(!error && success) || undefined}
           data-readonly={readOnly || undefined}
           onChange={handleChange}
-          value={isControlled ? value : internalValue}
+          value={currentValue}
         />
       </FieldWrapper>
     );

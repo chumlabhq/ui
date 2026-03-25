@@ -1,6 +1,6 @@
 import type { OtpInputLabelProps } from "../utils/types";
 
-export const OtpInputLabel = ({
+const OtpInputLabel = ({
   label,
   required = false,
   htmlFor,
@@ -13,3 +13,7 @@ export const OtpInputLabel = ({
     </label>
   );
 };
+
+OtpInputLabel.displayName = "OtpInputLabel";
+
+export { OtpInputLabel };

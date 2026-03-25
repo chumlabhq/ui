@@ -6,6 +6,7 @@ import {
   useCallback,
   useRef,
   useEffect,
+  useMemo,
   isValidElement,
   type ComponentType,
   type ReactNode,
@@ -27,9 +28,12 @@ import { Tooltip } from "../Tooltip";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
 import { isTooltipConfig } from "../../utils/isTooltipConfig";
+import {
+  DEFAULT_STEPPER_CLASSES,
+  UNSTYLED_STEPPER_CLASSES,
+} from "./utils/constants";
 
 const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
-const EMPTY_CLASSES: StepperClasses = {};
 
 const REACT_MEMO_TYPE = Symbol.for("react.memo");
 const REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
@@ -70,32 +74,23 @@ const defaultIsStepClickable = (
   status: StepStatus,
 ): boolean => status === "completed" || status === "active";
 
-const INDICATOR_STATUS: Record<StepStatus, string> = {
-  active: "bg-blue-600 text-white",
-  completed: "bg-green-500 text-white",
-  pending: "bg-gray-200 text-gray-600",
-  error: "bg-red-500 text-white",
+const INDICATOR_SIZE: Record<string, string> = {
+  dot: "w-3 h-3",
+  icon: "w-10 h-10",
+  numbered: "w-8 h-8 text-sm font-medium",
 };
 
-const LABEL_STATUS: Record<StepStatus, string> = {
-  active: "text-blue-600",
-  completed: "text-green-600",
-  pending: "text-gray-500",
-  error: "text-red-500",
+/** Default indicator pixel sizes per variant (used for connector alignment) */
+const INDICATOR_PX: Record<string, number> = {
+  dot: 12,
+  icon: 40,
+  numbered: 32,
 };
 
-const DESCRIPTION_STATUS: Record<StepStatus, string> = {
-  active: "text-blue-500",
-  completed: "text-green-500",
-  pending: "text-gray-400",
-  error: "text-red-400",
-};
-
-const CONNECTOR_STATUS: Record<StepStatus, string> = {
-  active: "bg-blue-200",
-  completed: "bg-green-500",
-  pending: "",
-  error: "",
+const ICON_SIZE: Record<string, string> = {
+  dot: "w-full h-full",
+  icon: "w-5 h-5",
+  numbered: "w-4 h-4",
 };
 
 interface StepItemInternalProps {
@@ -108,6 +103,7 @@ interface StepItemInternalProps {
   isTabbable: boolean;
   isLast: boolean;
   variant: "numbered" | "icon" | "dot";
+  indicatorPx: number;
   orientation: "horizontal" | "vertical";
   labelPosition: "bottom" | "right";
   showLabels: boolean;
@@ -120,9 +116,28 @@ interface StepItemInternalProps {
   setStepRef: (index: number, el: HTMLElement | null) => void;
   showTooltips: boolean;
   tooltipDefaults: StepperTooltipDefaults;
-  classes: StepperClasses;
+  classes: Required<StepperClasses>;
   nextStepStatus?: StepStatus;
 }
+
+const getStatusClass = (
+  status: StepStatus,
+  active: string,
+  completed: string,
+  pending: string,
+  error: string,
+): string => {
+  switch (status) {
+    case "active":
+      return active;
+    case "completed":
+      return completed;
+    case "pending":
+      return pending;
+    case "error":
+      return error;
+  }
+};
 
 const StepItem = memo(function StepItem({
   step,
@@ -134,6 +149,7 @@ const StepItem = memo(function StepItem({
   isTabbable,
   isLast,
   variant,
+  indicatorPx,
   orientation,
   labelPosition,
   showLabels,
@@ -153,21 +169,10 @@ const StepItem = memo(function StepItem({
   const isLabelBottom = labelPosition === "bottom";
   const isInteractive = isClickable;
 
-  const indicatorBase =
-    variant === "dot"
-      ? "w-3 h-3 rounded-full flex items-center justify-center"
-      : variant === "icon"
-        ? "w-10 h-10 rounded-full flex items-center justify-center"
-        : "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium";
+  const indicatorSizeClass = INDICATOR_SIZE[variant] ?? INDICATOR_SIZE.numbered;
+  const iconSizeClass = ICON_SIZE[variant] ?? ICON_SIZE.numbered;
 
-  const iconBase =
-    variant === "dot"
-      ? "w-full h-full"
-      : variant === "icon"
-        ? "w-5 h-5"
-        : "w-4 h-4";
-
-  const iconClassName = cn(iconBase, classes.indicatorIcon);
+  const iconClassName = cn(iconSizeClass, classes.indicatorIcon);
 
   const getIndicatorContent = (): ReactNode => {
     if (status === "completed") {
@@ -237,13 +242,20 @@ const StepItem = memo(function StepItem({
     );
   };
 
+  const indicatorStatusClass = getStatusClass(
+    status,
+    classes.indicatorActive,
+    classes.indicatorCompleted,
+    classes.indicatorPending,
+    classes.indicatorError,
+  );
+
   const indicator = (
     <div
       className={cn(
-        indicatorBase,
-        "shrink-0 transition-colors motion-reduce:transition-none",
-        INDICATOR_STATUS[status],
+        indicatorSizeClass,
         classes.indicator,
+        indicatorStatusClass,
       )}
       data-status={status}
       aria-hidden="true"
@@ -256,17 +268,21 @@ const StepItem = memo(function StepItem({
     (showLabels || showDescriptions) && (step.label || step.description) ? (
       <div
         className={cn(
-          "flex flex-col",
-          isLabelBottom && "items-center",
           classes.labelWrapper,
+          isLabelBottom && classes.labelWrapperBottom,
         )}
       >
         {showLabels && step.label && (
           <span
             className={cn(
-              "text-sm font-medium transition-colors motion-reduce:transition-none",
-              LABEL_STATUS[status],
               classes.label,
+              getStatusClass(
+                status,
+                classes.labelActive,
+                classes.labelCompleted,
+                classes.labelPending,
+                classes.labelError,
+              ),
             )}
             data-status={status}
           >
@@ -276,9 +292,14 @@ const StepItem = memo(function StepItem({
         {showDescriptions && step.description && (
           <span
             className={cn(
-              "text-xs transition-colors motion-reduce:transition-none",
-              DESCRIPTION_STATUS[status],
               classes.description,
+              getStatusClass(
+                status,
+                classes.descriptionActive,
+                classes.descriptionCompleted,
+                classes.descriptionPending,
+                classes.descriptionError,
+              ),
             )}
             data-status={status}
           >
@@ -293,11 +314,16 @@ const StepItem = memo(function StepItem({
       <div
         className={cn(
           isHorizontal
-            ? "flex-1 h-px min-w-8 bg-gray-200"
-            : "w-px h-6 ml-4 bg-gray-200",
-          "transition-colors motion-reduce:transition-none",
-          CONNECTOR_STATUS[status],
+            ? classes.connectorHorizontal
+            : classes.connectorVertical,
           classes.connector,
+          getStatusClass(
+            status,
+            classes.connectorActive,
+            classes.connectorCompleted,
+            classes.connectorPending,
+            classes.connectorError,
+          ),
         )}
         data-status={status}
         data-next-status={nextStepStatus}
@@ -305,12 +331,162 @@ const StepItem = memo(function StepItem({
       />
     ) : null;
 
-  const stepBaseClassName = cn(
-    "flex items-center gap-2 rounded-lg transition-colors motion-reduce:transition-none px-2 py-1.5",
-    isLabelBottom && "flex-col px-3 py-2",
-    classes.step,
-  );
+  // ─── Shared interactive wrapper props ──────────────────────────────
+  const sharedAriaLabel =
+    stepAriaLabel ||
+    (isHorizontal && isLabelBottom && typeof step.label === "string"
+      ? step.label
+      : stepAriaLabel);
 
+  // ─── VERTICAL LAYOUT ─────────────────────────────────────────────
+  if (!isHorizontal) {
+    // Connector margin: step padding-left (8px from px-2) + half indicator width
+    const stepPaddingLeft = 8; // px-2 = 0.5rem = 8px
+    const connectorMarginLeft = stepPaddingLeft + indicatorPx / 2;
+
+    const verticalConnector =
+      showConnectors && !isLast ? (
+        <div
+          className={cn(
+            classes.connectorVertical,
+            classes.connector,
+            getStatusClass(
+              status,
+              classes.connectorActive,
+              classes.connectorCompleted,
+              classes.connectorPending,
+              classes.connectorError,
+            ),
+          )}
+          style={{ marginLeft: connectorMarginLeft }}
+          data-status={status}
+          data-next-status={nextStepStatus}
+          aria-hidden="true"
+        />
+      ) : null;
+
+    const stepContent = isInteractive ? (
+      <button
+        ref={(el) => setStepRef(index, el)}
+        type="button"
+        tabIndex={isTabbable ? 0 : -1}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        aria-current={status === "active" ? "step" : undefined}
+        aria-label={sharedAriaLabel}
+        className={cn(classes.step, classes.stepInteractive)}
+        data-status={status}
+        data-clickable="true"
+      >
+        {indicator}
+        {labelContent}
+      </button>
+    ) : (
+      <div
+        ref={(el) => setStepRef(index, el)}
+        role="group"
+        aria-current={status === "active" ? "step" : undefined}
+        aria-disabled={isDisabled || undefined}
+        aria-label={sharedAriaLabel}
+        className={cn(classes.step, isDisabled && classes.stepDisabled)}
+        data-status={status}
+        data-disabled={isDisabled || undefined}
+      >
+        {indicator}
+        {labelContent}
+      </div>
+    );
+
+    return (
+      <li
+        className={cn("flex flex-col", classes.stepContainer)}
+        data-status={status}
+        data-orientation={orientation}
+      >
+        {wrapWithTooltip(stepContent)}
+        {verticalConnector}
+      </li>
+    );
+  }
+
+  // ─── HORIZONTAL LAYOUT ────────────────────────────────────────────
+  //
+  // Connectors are rendered as SEPARATE <li> elements by the Stepper
+  // parent (between step <li> items). This StepItem only renders the
+  // step itself.
+  //
+  // labelPosition="right":
+  //   Button wraps [indicator + label] in a horizontal row.
+  //   Connector <li> sits between steps at the same vertical center.
+  //
+  // labelPosition="bottom":
+  //   The <li> uses a 2-row CSS grid so that:
+  //   - Row 1: indicator (button) — fixed height, connector aligns here
+  //   - Row 2: label/description — below, handled by CSS, never affects
+  //     the connector's vertical position
+  //   The button wraps ONLY the indicator. The label is a separate
+  //   element in row 2. This cleanly separates concerns.
+
+  if (isLabelBottom) {
+    // Button wraps only the indicator for clean connector alignment
+    const indicatorEl = isInteractive ? (
+      <button
+        ref={(el) => setStepRef(index, el)}
+        type="button"
+        tabIndex={isTabbable ? 0 : -1}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        aria-current={status === "active" ? "step" : undefined}
+        aria-label={
+          typeof step.label === "string"
+            ? step.label
+            : `Step ${index + 1} of ${totalSteps}`
+        }
+        className="cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        data-status={status}
+        data-clickable="true"
+      >
+        {indicator}
+      </button>
+    ) : (
+      <div
+        ref={(el) => setStepRef(index, el)}
+        role="group"
+        aria-current={status === "active" ? "step" : undefined}
+        aria-disabled={isDisabled || undefined}
+        aria-label={
+          typeof step.label === "string"
+            ? step.label
+            : `Step ${index + 1} of ${totalSteps}`
+        }
+        className={isDisabled ? classes.stepDisabled : undefined}
+        data-status={status}
+        data-disabled={isDisabled || undefined}
+      >
+        {indicator}
+      </div>
+    );
+
+    return (
+      <li
+        className={cn(
+          "shrink-0 flex flex-col items-center",
+          classes.stepContainer,
+        )}
+        data-status={status}
+        data-orientation={orientation}
+      >
+        {wrapWithTooltip(indicatorEl)}
+        {labelContent && (
+          <div className="mt-2">
+            {labelContent}
+          </div>
+        )}
+      </li>
+    );
+  }
+
+  // labelPosition="right" — button wraps indicator + label together
   const stepContent = isInteractive ? (
     <button
       ref={(el) => setStepRef(index, el)}
@@ -320,10 +496,7 @@ const StepItem = memo(function StepItem({
       onKeyDown={handleKeyDown}
       aria-current={status === "active" ? "step" : undefined}
       aria-label={stepAriaLabel}
-      className={cn(
-        stepBaseClassName,
-        "cursor-pointer hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
-      )}
+      className={cn(classes.step, classes.stepInteractive)}
       data-status={status}
       data-clickable="true"
     >
@@ -337,10 +510,7 @@ const StepItem = memo(function StepItem({
       aria-current={status === "active" ? "step" : undefined}
       aria-disabled={isDisabled || undefined}
       aria-label={stepAriaLabel}
-      className={cn(
-        stepBaseClassName,
-        isDisabled && "opacity-50 cursor-not-allowed",
-      )}
+      className={cn(classes.step, isDisabled && classes.stepDisabled)}
       data-status={status}
       data-disabled={isDisabled || undefined}
     >
@@ -351,15 +521,11 @@ const StepItem = memo(function StepItem({
 
   return (
     <li
-      className={cn(
-        isHorizontal ? "flex items-center" : "flex flex-col",
-        classes.stepContainer,
-      )}
+      className={cn("shrink-0", classes.stepContainer)}
       data-status={status}
       data-orientation={orientation}
     >
       {wrapWithTooltip(stepContent)}
-      {connector}
     </li>
   );
 });
@@ -386,7 +552,9 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       "aria-label": ariaLabel = "Progress",
       showTooltips = false,
       tooltipDefaults = EMPTY_TOOLTIP_DEFAULTS,
-      classes: classesProp = EMPTY_CLASSES,
+      indicatorSize: indicatorSizeProp,
+      classes: classesProp,
+      unstyled = false,
       className,
       style,
       id: idProp,
@@ -397,6 +565,66 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     },
     ref,
   ) => {
+    const baseClasses = unstyled
+      ? UNSTYLED_STEPPER_CLASSES
+      : DEFAULT_STEPPER_CLASSES;
+
+    const mergedClasses: Required<StepperClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        list: classesProp?.list ?? baseClasses.list,
+        stepContainer: classesProp?.stepContainer ?? baseClasses.stepContainer,
+        step: classesProp?.step ?? baseClasses.step,
+        stepInteractive:
+          classesProp?.stepInteractive ?? baseClasses.stepInteractive,
+        stepDisabled: classesProp?.stepDisabled ?? baseClasses.stepDisabled,
+        indicator: classesProp?.indicator ?? baseClasses.indicator,
+        indicatorIcon:
+          classesProp?.indicatorIcon ?? baseClasses.indicatorIcon,
+        indicatorActive:
+          classesProp?.indicatorActive ?? baseClasses.indicatorActive,
+        indicatorCompleted:
+          classesProp?.indicatorCompleted ?? baseClasses.indicatorCompleted,
+        indicatorPending:
+          classesProp?.indicatorPending ?? baseClasses.indicatorPending,
+        indicatorError:
+          classesProp?.indicatorError ?? baseClasses.indicatorError,
+        labelWrapper: classesProp?.labelWrapper ?? baseClasses.labelWrapper,
+        labelWrapperBottom:
+          classesProp?.labelWrapperBottom ?? baseClasses.labelWrapperBottom,
+        label: classesProp?.label ?? baseClasses.label,
+        labelActive: classesProp?.labelActive ?? baseClasses.labelActive,
+        labelCompleted:
+          classesProp?.labelCompleted ?? baseClasses.labelCompleted,
+        labelPending: classesProp?.labelPending ?? baseClasses.labelPending,
+        labelError: classesProp?.labelError ?? baseClasses.labelError,
+        description: classesProp?.description ?? baseClasses.description,
+        descriptionActive:
+          classesProp?.descriptionActive ?? baseClasses.descriptionActive,
+        descriptionCompleted:
+          classesProp?.descriptionCompleted ??
+          baseClasses.descriptionCompleted,
+        descriptionPending:
+          classesProp?.descriptionPending ?? baseClasses.descriptionPending,
+        descriptionError:
+          classesProp?.descriptionError ?? baseClasses.descriptionError,
+        connector: classesProp?.connector ?? baseClasses.connector,
+        connectorHorizontal:
+          classesProp?.connectorHorizontal ?? baseClasses.connectorHorizontal,
+        connectorVertical:
+          classesProp?.connectorVertical ?? baseClasses.connectorVertical,
+        connectorActive:
+          classesProp?.connectorActive ?? baseClasses.connectorActive,
+        connectorCompleted:
+          classesProp?.connectorCompleted ?? baseClasses.connectorCompleted,
+        connectorPending:
+          classesProp?.connectorPending ?? baseClasses.connectorPending,
+        connectorError:
+          classesProp?.connectorError ?? baseClasses.connectorError,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const generatedId = useId();
     const stepperId = idProp || generatedId;
 
@@ -635,7 +863,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         id={stepperId}
         role="navigation"
         aria-label={ariaLabel}
-        className={cn(fullWidth && "w-full", classesProp.root, className)}
+        className={cn(fullWidth && "w-full", mergedClasses.root, className)}
         style={style}
         data-orientation={orientation}
         data-variant={variant}
@@ -644,10 +872,9 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         <ol
           className={cn(
             orientation === "horizontal"
-              ? "flex items-center"
+              ? `flex w-full ${labelPosition === "bottom" ? "items-start" : "items-center"}`
               : "flex flex-col",
-            "list-none m-0 p-0",
-            classesProp.list,
+            mergedClasses.list,
           )}
           data-orientation={orientation}
           onFocus={handleListFocus}
@@ -658,8 +885,9 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
             const isDisabled = step.disabled || disabled;
             const clickable = !isDisabled && checkClickable(step.id, status);
             const isTabbable = index === tabbableIndex;
+            const isLast = index === steps.length - 1;
             const nextStatus =
-              index < steps.length - 1
+              !isLast
                 ? getStatus(steps[index + 1].id, index + 1, activeIndex)
                 : undefined;
 
@@ -671,8 +899,9 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
               isClickable: clickable,
               isDisabled,
               isTabbable,
-              isLast: index === steps.length - 1,
+              isLast,
               variant,
+              indicatorPx: indicatorSizeProp ?? INDICATOR_PX[variant] ?? 32,
               orientation,
               labelPosition,
               showLabels,
@@ -685,30 +914,71 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
               setStepRef,
               showTooltips,
               tooltipDefaults,
-              classes: classesProp,
+              classes: mergedClasses,
               nextStepStatus: nextStatus,
             };
 
-            if (renderStep) {
-              const renderProps: StepRenderProps = {
-                step,
-                index,
-                status,
-                isClickable: clickable,
-                isDisabled,
-                nextStepStatus: nextStatus,
-              };
+            const stepElement = renderStep
+              ? (() => {
+                  const renderProps: StepRenderProps = {
+                    step,
+                    index,
+                    status,
+                    isClickable: clickable,
+                    isDisabled,
+                    nextStepStatus: nextStatus,
+                  };
+                  return (
+                    <Fragment key={step.id}>
+                      {renderStep(
+                        renderProps,
+                        (<StepItem {...itemProps} />) as React.ReactElement,
+                      )}
+                    </Fragment>
+                  );
+                })()
+              : <StepItem key={step.id} {...itemProps} />;
+
+            // For horizontal mode, render connector between steps (not inside them).
+            // The connector is a separate flex item in the <ol> that fills space.
+            // For labelPosition="bottom" + items-start, offset the connector to
+            // align with indicator center.
+            if (orientation === "horizontal" && showConnectors && !isLast) {
+              const indicatorPx = indicatorSizeProp ?? INDICATOR_PX[variant] ?? 32;
+              const connectorStyle = labelPosition === "bottom"
+                ? { marginTop: indicatorPx / 2 - 1 }
+                : undefined;
+
               return (
                 <Fragment key={step.id}>
-                  {renderStep(
-                    renderProps,
-                    (<StepItem {...itemProps} />) as React.ReactElement,
-                  )}
+                  {stepElement}
+                  <li
+                    role="presentation"
+                    aria-hidden="true"
+                    className="flex-1 min-w-4 px-2"
+                  >
+                    <div
+                      className={cn(
+                        mergedClasses.connectorHorizontal,
+                        mergedClasses.connector,
+                        getStatusClass(
+                          status,
+                          mergedClasses.connectorActive,
+                          mergedClasses.connectorCompleted,
+                          mergedClasses.connectorPending,
+                          mergedClasses.connectorError,
+                        ),
+                      )}
+                      style={connectorStyle}
+                      data-status={status}
+                      data-next-status={nextStatus}
+                    />
+                  </li>
                 </Fragment>
               );
             }
 
-            return <StepItem key={step.id} {...itemProps} />;
+            return stepElement;
           })}
         </ol>
       </div>

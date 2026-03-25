@@ -4,6 +4,7 @@ export { AvatarGroupCount } from "./components/AvatarGroupCount";
 export { AvatarBadge } from "./components/AvatarBadge";
 export { AvatarShimmer, AvatarGroupShimmer } from "./components/AvatarShimmer";
 export { useAvatarGroupContext } from "./utils/context";
+export { DEFAULT_AVATAR_CLASSES, UNSTYLED_AVATAR_CLASSES } from "./utils/constants";
 export type { AvatarGroupContextValue } from "./utils/context";
 export type {
   AvatarProps,

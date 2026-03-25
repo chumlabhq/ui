@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Input, InputLabel } from "../../components/Input";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -98,11 +98,23 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
-  input: `w-full bg-transparent outline-none text-sm ${dark ? "text-white placeholder:text-gray-500 [color-scheme:dark]" : "text-gray-900 placeholder:text-gray-400"}`,
-  wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
-    ? "text-gray-300 border-white/10 bg-white/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
-    : "text-gray-700 border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
-  }`,
+  // InputClasses object for the `classes` prop
+  input: {
+    root: "flex flex-col",
+    input: `w-full bg-transparent outline-none text-sm ${dark ? "text-white placeholder:text-gray-500 [color-scheme:dark]" : "text-gray-900 placeholder:text-gray-400"}`,
+    wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
+      ? "text-gray-300 border-white/10 bg-white/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
+      : "text-gray-700 border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
+    }`,
+    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
+    error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
+    success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
+    description: `text-xs mt-1 mb-1.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
+    prefix: `text-sm select-none ${dark ? "text-gray-500" : "text-gray-400"}`,
+    suffix: `text-sm select-none ${dark ? "text-gray-500" : "text-gray-400"}`,
+    count: `text-[11px] mt-1 text-right tabular-nums ${dark ? "text-gray-500" : "text-gray-400"}`,
+  },
+  // Variant wrapper overrides
   wrapperError: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
     ? "border-red-400/40 bg-red-500/[0.06] focus-within:ring-2 focus-within:ring-red-500/25"
     : "border-red-300 bg-red-50/40 shadow-sm shadow-red-900/[0.04] focus-within:ring-2 focus-within:ring-red-500/15"
@@ -112,15 +124,7 @@ const getClasses = (dark: boolean) => ({
     : "border-emerald-300 bg-emerald-50/40 shadow-sm shadow-emerald-900/[0.04] focus-within:ring-2 focus-within:ring-emerald-500/15"
   }`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-xl border gap-2.5 opacity-50 cursor-not-allowed ${dark ? "border-white/5 bg-white/[0.02]" : "border-gray-200 bg-gray-50"}`,
-  label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
-  error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
-  success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
-  description: `text-xs mt-1 mb-1.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
-  container: "flex flex-col",
-  disabled: `w-full bg-transparent outline-none text-sm cursor-not-allowed ${dark ? "text-gray-500 placeholder:text-gray-600" : "text-gray-400 placeholder:text-gray-300"}`,
-  prefix: `text-sm select-none ${dark ? "text-gray-500" : "text-gray-400"}`,
-  suffix: `text-sm select-none ${dark ? "text-gray-500" : "text-gray-400"}`,
-  count: `text-[11px] mt-1 text-right tabular-nums ${dark ? "text-gray-500" : "text-gray-400"}`,
+  disabledInput: `w-full bg-transparent outline-none text-sm cursor-not-allowed ${dark ? "text-gray-500 placeholder:text-gray-600" : "text-gray-400 placeholder:text-gray-300"}`,
   icon: dark ? "text-gray-500" : "text-gray-400",
   iconHover: dark ? "text-gray-400 hover:text-gray-300" : "text-gray-400 hover:text-gray-600",
   // Demo UI classes
@@ -162,7 +166,7 @@ const InputDemo = () => {
   const userBad = username.length > 0 && username.length < 3;
 
   const wrapperFor = (err: boolean, ok: boolean) =>
-    err ? c.wrapperError : ok ? c.wrapperSuccess : c.wrapper;
+    err ? c.wrapperError : ok ? c.wrapperSuccess : c.input.wrapper;
 
   return (
     <div className="space-y-10">
@@ -183,7 +187,7 @@ const InputDemo = () => {
           <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-500"}`}>
             A production-grade, fully accessible text input. Supports icons, prefix/suffix addons,
             clearable, character counts, validation states, loading, and complete styling
-            control through className props.
+            control through the classes prop.
           </p>
           <div className="pt-1">
             <CodeBlock isDarkMode={dark} code={`import { Input, InputLabel } from "@kern-ui/input";`} />
@@ -204,8 +208,7 @@ const InputDemo = () => {
               <Input
                 aria-label="Basic input"
                 placeholder="Enter text..."
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -217,15 +220,15 @@ const InputDemo = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Small</span>
-                <Input aria-label="Small" placeholder="Small size" size="sm" inputClassName={c.input} wrapperClassName={c.wrapper} />
+                <Input aria-label="Small" placeholder="Small size" size="sm" classes={c.input} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Medium (default)</span>
-                <Input aria-label="Medium" placeholder="Medium size" size="md" inputClassName={c.input} wrapperClassName={c.wrapper} />
+                <Input aria-label="Medium" placeholder="Medium size" size="md" classes={c.input} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Large</span>
-                <Input aria-label="Large" placeholder="Large size" size="lg" inputClassName={c.input} wrapperClassName={c.wrapper} />
+                <Input aria-label="Large" placeholder="Large size" size="lg" classes={c.input} />
               </div>
             </div>
           </DemoWrapper>
@@ -240,20 +243,13 @@ const InputDemo = () => {
                 description="We'll never share your email."
                 placeholder="you@example.com"
                 type="email"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                descriptionClassName={c.description}
-                className={c.container}
+                classes={c.input}
               />
               <Input
                 label="Full name"
                 placeholder="John Doe"
                 required
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -275,8 +271,7 @@ const InputDemo = () => {
                     placeholder={ph as string}
                     startIcon={leading}
                     endIcon={trailing}
-                    inputClassName={c.input}
-                    wrapperClassName={c.wrapper}
+                    classes={c.input}
                   />
                 </div>
               ))}
@@ -293,8 +288,7 @@ const InputDemo = () => {
                   endIcon={search ? <CloseIcon className={c.iconHover} /> : undefined}
                   onEndIconClick={search ? () => setSearch("") : undefined}
                   endIconLabel="Clear"
-                  inputClassName={c.input}
-                  wrapperClassName={c.wrapper}
+                  classes={c.input}
                 />
               </div>
             </div>
@@ -313,12 +307,7 @@ const InputDemo = () => {
                 suffix="USD"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
-                prefixClassName={c.prefix}
-                suffixClassName={c.suffix}
+                classes={c.input}
               />
               <Input
                 label="Website"
@@ -327,33 +316,20 @@ const InputDemo = () => {
                 suffix=".com"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
-                prefixClassName={c.prefix}
-                suffixClassName={c.suffix}
+                classes={c.input}
               />
               <Input
                 label="Weight"
                 placeholder="0"
                 type="number"
                 suffix="kg"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
-                suffixClassName={c.suffix}
+                classes={c.input}
               />
               <Input
                 label="Twitter handle"
                 placeholder="username"
                 prefix="@"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
-                prefixClassName={c.prefix}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -371,20 +347,14 @@ const InputDemo = () => {
                 clearable
                 onClear={() => setSearch("")}
                 startIcon={<SearchIcon className={c.icon} />}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
               <Input
                 label="Uncontrolled"
                 placeholder="Type and clear..."
                 clearable
                 defaultValue=""
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -401,11 +371,7 @@ const InputDemo = () => {
                 showCount
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
-                countClassName={c.count}
+                classes={c.input}
               />
               <Input
                 label="Username"
@@ -421,14 +387,7 @@ const InputDemo = () => {
                 successMessage={<><CheckIcon /> Username available</>}
                 error={userBad}
                 errorMessage="Minimum 3 characters"
-                inputClassName={c.input}
-                wrapperClassName={wrapperFor(userBad, userOk)}
-                labelClassName={c.label}
-                className={c.container}
-                countClassName={c.count}
-                prefixClassName={c.prefix}
-                errorClassName={c.error}
-                successClassName={c.success}
+                classes={{ ...c.input, wrapper: wrapperFor(userBad, userOk) }}
               />
             </div>
           </DemoWrapper>
@@ -441,32 +400,21 @@ const InputDemo = () => {
               <Input
                 label="Default"
                 placeholder="Normal state"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
               <Input
                 label="Error"
                 value="invalid-email"
                 error
                 errorMessage={<><AlertIcon /> Please enter a valid email</>}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapperError}
-                labelClassName={c.label}
-                errorClassName={c.error}
-                className={c.container}
+                classes={{ ...c.input, wrapper: c.wrapperError }}
               />
               <Input
                 label="Success"
                 value="john@example.com"
                 success
                 successMessage={<><CheckIcon /> Email is valid</>}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapperSuccess}
-                labelClassName={c.label}
-                successClassName={c.success}
-                className={c.container}
+                classes={{ ...c.input, wrapper: c.wrapperSuccess }}
               />
             </div>
           </DemoWrapper>
@@ -489,12 +437,7 @@ const InputDemo = () => {
                 errorMessage={<><AlertIcon /> Enter a valid email address</>}
                 success={emailOk}
                 successMessage={<><CheckIcon /> Looks good!</>}
-                inputClassName={c.input}
-                wrapperClassName={wrapperFor(emailBad, emailOk)}
-                labelClassName={c.label}
-                errorClassName={c.error}
-                successClassName={c.success}
-                className={c.container}
+                classes={{ ...c.input, wrapper: wrapperFor(emailBad, emailOk) }}
               />
             </div>
           </DemoWrapper>
@@ -513,10 +456,7 @@ const InputDemo = () => {
                 endIcon={showPw ? <EyeOffIcon className={c.iconHover} /> : <EyeIcon className={c.iconHover} />}
                 onEndIconClick={() => setShowPw(!showPw)}
                 endIconLabel={showPw ? "Hide password" : "Show password"}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -533,10 +473,7 @@ const InputDemo = () => {
                 onValueChange={setSearch}
                 clearable
                 onClear={() => setSearch("")}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
               <div className={`rounded-lg px-3 py-2 text-xs font-mono ${dark ? "bg-white/[0.04] text-gray-400" : "bg-gray-50 text-gray-500"}`}>
                 value: {JSON.stringify(search)}
@@ -551,11 +488,11 @@ const InputDemo = () => {
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 w-full">
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Default</span>
-                <Input aria-label="Loading" placeholder="Loading..." loading inputClassName={c.input} wrapperClassName={c.wrapper} />
+                <Input aria-label="Loading" placeholder="Loading..." loading classes={c.input} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>With icon</span>
-                <Input aria-label="Searching" placeholder="Searching..." loading startIcon={<SearchIcon className={c.icon} />} inputClassName={c.input} wrapperClassName={c.wrapper} />
+                <Input aria-label="Searching" placeholder="Searching..." loading startIcon={<SearchIcon className={c.icon} />} classes={c.input} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Custom loader</span>
@@ -564,13 +501,12 @@ const InputDemo = () => {
                   placeholder="Validating..."
                   loading
                   loader={<span className={`text-[11px] font-medium animate-pulse ${dark ? "text-indigo-400" : "text-indigo-500"}`}>Checking...</span>}
-                  inputClassName={c.input}
-                  wrapperClassName={c.wrapper}
+                  classes={c.input}
                 />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Custom loader size</span>
-                <Input aria-label="Custom loader size" placeholder="Loading..." loading loaderSize={24} inputClassName={c.input} wrapperClassName={c.wrapper} />
+                <Input aria-label="Custom loader size" placeholder="Loading..." loading loaderSize={24} classes={c.input} />
               </div>
             </div>
           </DemoWrapper>
@@ -580,9 +516,9 @@ const InputDemo = () => {
         <Section title="Disabled & Read-Only" description="Disabled prevents all interaction. Read-only allows selection/copy but not editing." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-              <Input label="Disabled" value="Cannot edit" disabled startIcon={<LockIcon className={dark ? "text-gray-600" : "text-gray-300"} />} inputClassName={c.disabled} wrapperClassName={c.wrapperDisabled} labelClassName={c.label} className={c.container} />
-              <Input label="Disabled empty" placeholder="Disabled placeholder" disabled inputClassName={c.disabled} wrapperClassName={c.wrapperDisabled} labelClassName={c.label} className={c.container} />
-              <Input label="Read-only" value="Read-only value" readOnly inputClassName={c.input} wrapperClassName={`${c.wrapper} cursor-default`} labelClassName={c.label} className={c.container} />
+              <Input label="Disabled" value="Cannot edit" disabled startIcon={<LockIcon className={dark ? "text-gray-600" : "text-gray-300"} />} classes={{ ...c.input, input: c.disabledInput, wrapper: c.wrapperDisabled }} />
+              <Input label="Disabled empty" placeholder="Disabled placeholder" disabled classes={{ ...c.input, input: c.disabledInput, wrapper: c.wrapperDisabled }} />
+              <Input label="Read-only" value="Read-only value" readOnly classes={{ ...c.input, wrapper: `${c.input.wrapper} cursor-default` }} />
             </div>
           </DemoWrapper>
         </Section>
@@ -608,10 +544,7 @@ const InputDemo = () => {
                   type={type as string}
                   placeholder={ph as string | undefined}
                   startIcon={icon}
-                  inputClassName={c.input}
-                  wrapperClassName={c.wrapper}
-                  labelClassName={c.label}
-                  className={c.container}
+                  classes={c.input}
                 />
               ))}
             </div>
@@ -627,10 +560,7 @@ const InputDemo = () => {
                 placeholder="12345"
                 pattern="[0-9]{5}"
                 title="Five digit zip code"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
               <Input
                 label="Age (min/max)"
@@ -638,19 +568,13 @@ const InputDemo = () => {
                 placeholder="18-99"
                 min={18}
                 max={99}
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
               <Input
                 label="With autoComplete"
                 placeholder="Start typing..."
                 autoComplete="given-name"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
               <Input
                 label="Spellcheck disabled"
@@ -658,10 +582,7 @@ const InputDemo = () => {
                 spellCheck={false}
                 autoCapitalize="off"
                 autoCorrect="off"
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -675,8 +596,7 @@ const InputDemo = () => {
                 aria-label="Full width"
                 placeholder="Full width input"
                 fullWidth
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
+                classes={c.input}
               />
               <Input
                 label="Full width, all features"
@@ -686,11 +606,7 @@ const InputDemo = () => {
                 clearable
                 maxLength={200}
                 showCount
-                inputClassName={c.input}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                className={c.container}
-                countClassName={c.count}
+                classes={c.input}
               />
             </div>
           </DemoWrapper>
@@ -700,7 +616,7 @@ const InputDemo = () => {
         <Section title="Ref Forwarding" description="Access the native input for programmatic focus, selection, or value reads." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="space-y-4 w-full max-w-sm">
-              <Input ref={inputRef} aria-label="Ref demo" placeholder="Click buttons below" inputClassName={c.input} wrapperClassName={c.wrapper} />
+              <Input ref={inputRef} aria-label="Ref demo" placeholder="Click buttons below" classes={c.input} />
               <div className="flex gap-2 flex-wrap">
                 {([
                   ["Focus", () => inputRef.current?.focus()],
@@ -750,7 +666,7 @@ const InputDemo = () => {
         </Section>
 
         {/* Custom Theme Variations */}
-        <Section title="Custom Themes" description="Full visual control through className props. Here are creative variations." isDarkMode={dark}>
+        <Section title="Custom Themes" description="Full visual control through the classes prop. Here are creative variations." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
               {([
@@ -785,10 +701,13 @@ const InputDemo = () => {
                     aria-label={String(label)}
                     placeholder={ph as string}
                     startIcon={icon}
-                    inputClassName={String(label) === "Large size"
-                      ? `w-full bg-transparent outline-none text-lg ${dark ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`
-                      : c.input}
-                    wrapperClassName={wCls as string}
+                    classes={{
+                      ...c.input,
+                      input: String(label) === "Large size"
+                        ? `w-full bg-transparent outline-none text-lg ${dark ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`
+                        : c.input.input,
+                      wrapper: wCls as string,
+                    }}
                   />
                 </div>
               ))}
@@ -806,8 +725,8 @@ const InputDemo = () => {
                 <h3 className={`text-xl font-semibold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}>Welcome back</h3>
                 <p className={`text-sm ${dark ? "text-gray-500" : "text-gray-400"}`}>Sign in to continue</p>
               </div>
-              <Input label="Email" type="email" placeholder="you@example.com" required startIcon={<MailIcon className={c.icon} />} inputClassName={c.input} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} />
-              <Input label="Password" type={showPw ? "text" : "password"} placeholder="Enter password" required startIcon={<LockIcon className={c.icon} />} endIcon={showPw ? <EyeOffIcon className={c.iconHover} /> : <EyeIcon className={c.iconHover} />} onEndIconClick={() => setShowPw(!showPw)} endIconLabel={showPw ? "Hide" : "Show"} inputClassName={c.input} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} />
+              <Input label="Email" type="email" placeholder="you@example.com" required startIcon={<MailIcon className={c.icon} />} classes={c.input} />
+              <Input label="Password" type={showPw ? "text" : "password"} placeholder="Enter password" required startIcon={<LockIcon className={c.icon} />} endIcon={showPw ? <EyeOffIcon className={c.iconHover} /> : <EyeIcon className={c.iconHover} />} onEndIconClick={() => setShowPw(!showPw)} endIconLabel={showPw ? "Hide" : "Show"} classes={c.input} />
               <div className="flex items-center justify-between">
                 <label className={`flex items-center gap-2 text-sm cursor-pointer ${dark ? "text-gray-400" : "text-gray-500"}`}>
                   <input type="checkbox" className="rounded border-gray-300 accent-indigo-500" /> Remember me
@@ -826,8 +745,8 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <form onSubmit={(e) => { e.preventDefault(); alert("Created!"); }} className="w-full max-w-md space-y-5">
               <div className="grid grid-cols-2 gap-4">
-                <Input label="First name" placeholder="John" required inputClassName={c.input} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} />
-                <Input label="Last name" placeholder="Doe" required inputClassName={c.input} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} />
+                <Input label="First name" placeholder="John" required classes={c.input} />
+                <Input label="Last name" placeholder="Doe" required classes={c.input} />
               </div>
               <Input
                 label="Username" placeholder="johndoe" required prefix="@" clearable maxLength={20} showCount
@@ -835,9 +754,7 @@ const InputDemo = () => {
                 value={username} onChange={(e) => setUsername(e.target.value)}
                 success={userOk} successMessage={<><CheckIcon /> Available</>}
                 error={userBad} errorMessage="Min 3 characters"
-                inputClassName={c.input} wrapperClassName={wrapperFor(userBad, userOk)}
-                labelClassName={c.label} className={c.container} prefixClassName={c.prefix}
-                countClassName={c.count} errorClassName={c.error} successClassName={c.success}
+                classes={{ ...c.input, wrapper: wrapperFor(userBad, userOk) }}
               />
               <Input
                 label="Email" type="email" placeholder="you@example.com" required
@@ -846,12 +763,10 @@ const InputDemo = () => {
                 value={email} onChange={(e) => setEmail(e.target.value)}
                 success={emailOk} successMessage={<><CheckIcon /> Valid</>}
                 error={emailBad} errorMessage={<><AlertIcon /> Invalid format</>}
-                inputClassName={c.input} wrapperClassName={wrapperFor(emailBad, emailOk)}
-                labelClassName={c.label} className={c.container}
-                errorClassName={c.error} successClassName={c.success}
+                classes={{ ...c.input, wrapper: wrapperFor(emailBad, emailOk) }}
               />
-              <Input label="Password" type="password" placeholder="Min 8 characters" required startIcon={<LockIcon className={c.icon} />} inputClassName={c.input} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} />
-              <Input label="Website" placeholder="yoursite" prefix="https://" suffix=".com" inputClassName={c.input} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} prefixClassName={c.prefix} suffixClassName={c.suffix} />
+              <Input label="Password" type="password" placeholder="Min 8 characters" required startIcon={<LockIcon className={c.icon} />} classes={c.input} />
+              <Input label="Website" placeholder="yoursite" prefix="https://" suffix=".com" classes={c.input} />
               <button type="submit" className={`w-full py-2.5 rounded-xl font-medium text-sm text-white transition-all ${dark ? "bg-indigo-500 hover:bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-500"} shadow-lg shadow-indigo-500/20`}>
                 Create Account
               </button>
@@ -860,218 +775,105 @@ const InputDemo = () => {
         </Section>
       </div>
 
-      {/* ─── API Reference ────────────────────────────────────────────── */}
-      <div className="space-y-6">
-        <h2 className={`text-xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}>API Reference</h2>
-
-        {/* Props Table */}
+      {/* ─── Props Tables ───────────────────────────────────────────────── */}
+      <Section title="Input Props" isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Props</h3>
-          <div className="overflow-x-auto -mx-6 px-6">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Prop</th>
-                  <th className={c.tableHead}>Type</th>
-                  <th className={c.tableHead}>Default</th>
-                  <th className={c.tableHead}>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["label", "ReactNode", "-", "Label above the input"],
-                  ["description", "ReactNode", "-", "Helper text below the label"],
-                  ["required", "boolean", "false", "Shows * and sets aria-required"],
-                  ["disabled", "boolean", "false", "Disables the input"],
-                  ["error", "boolean", "false", "Error state (sets aria-invalid)"],
-                  ["errorMessage", "ReactNode", "-", "Error text below input (role=alert)"],
-                  ["success", "boolean", "false", "Success validation state"],
-                  ["successMessage", "ReactNode", "-", "Success text below input (role=status)"],
-                  ["prefix", "ReactNode", "-", 'Inline addon before input (e.g. "$")'],
-                  ["suffix", "ReactNode", "-", 'Inline addon after input (e.g. "USD")'],
-                  ["startIcon", "ReactNode", "-", "Icon before input"],
-                  ["endIcon", "ReactNode", "-", "Icon after input"],
-                  ["onStartIconClick", "() => void", "-", "Makes leading icon a button"],
-                  ["onEndIconClick", "() => void", "-", "Makes trailing icon a button"],
-                  ["startIconLabel", "string", "-", "Accessible label for leading icon button"],
-                  ["endIconLabel", "string", "-", "Accessible label for trailing icon button"],
-                  ["clearable", "boolean", "false", "Shows clear button when input has value"],
-                  ["onClear", "() => void", "-", "Callback when clear button clicked"],
-                  ["showCount", "boolean", "false", "Show character count (needs maxLength)"],
-                  ["onValueChange", "(val: string) => void", "-", "Convenience callback with string value"],
-                  ["loading", "boolean", "false", "Shows loader, disables input"],
-                  ["loader", "ReactNode", "CircularLoader", "Custom loader component"],
-                  ["loaderSize", "number", "16", "Default loader size in px"],
-                  ["fullWidth", "boolean", "false", "Spans full container width"],
-                  ["size", '"sm" | "md" | "lg"', "-", "Size variant (emits data-size)"],
-                ] as const).map(([prop, type, def, desc], i) => (
-                  <tr key={prop} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propName}`}>{prop}</td>
-                    <td className={`${c.tableCell} ${c.propType}`}>{type}</td>
-                    <td className={`${c.tableCell} ${c.propDefault}`}>{def}</td>
-                    <td className={`${c.tableCell} ${c.propDesc}`}>{desc}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="label" type="ReactNode" description="Label above the input" isDarkMode={dark} />
+            <PropRow name="description" type="ReactNode" description="Helper text below the label" isDarkMode={dark} />
+            <PropRow name="error" type="boolean" defaultVal="false" description="Error state (sets aria-invalid)" isDarkMode={dark} />
+            <PropRow name="errorMessage" type="ReactNode" description="Error text below input (role=alert)" isDarkMode={dark} />
+            <PropRow name="success" type="boolean" defaultVal="false" description="Success validation state" isDarkMode={dark} />
+            <PropRow name="successMessage" type="ReactNode" description="Success text below input (role=status)" isDarkMode={dark} />
+            <PropRow name="size" type='"sm"|"md"|"lg"' description="Size variant (emits data-size)" isDarkMode={dark} />
+            <PropRow name="prefix" type="ReactNode" description='Inline addon before input (e.g. "$")' isDarkMode={dark} />
+            <PropRow name="suffix" type="ReactNode" description='Inline addon after input (e.g. "USD")' isDarkMode={dark} />
+            <PropRow name="startIcon" type="ReactNode" description="Icon before input" isDarkMode={dark} />
+            <PropRow name="endIcon" type="ReactNode" description="Icon after input" isDarkMode={dark} />
+            <PropRow name="onStartIconClick" type="() => void" description="Makes leading icon a button" isDarkMode={dark} />
+            <PropRow name="onEndIconClick" type="() => void" description="Makes trailing icon a button" isDarkMode={dark} />
+            <PropRow name="startIconLabel" type="string" description="Accessible label for leading icon button" isDarkMode={dark} />
+            <PropRow name="endIconLabel" type="string" description="Accessible label for trailing icon button" isDarkMode={dark} />
+            <PropRow name="onValueChange" type="(val: string) => void" description="Convenience callback with string value" isDarkMode={dark} />
+            <PropRow name="clearable" type="boolean" defaultVal="false" description="Shows clear button when input has value" isDarkMode={dark} />
+            <PropRow name="onClear" type="() => void" description="Callback when clear button clicked" isDarkMode={dark} />
+            <PropRow name="showCount" type="boolean" defaultVal="false" description="Show character count (needs maxLength)" isDarkMode={dark} />
+            <PropRow name="loading" type="boolean" defaultVal="false" description="Shows loader, disables input" isDarkMode={dark} />
+            <PropRow name="loader" type="ReactNode" description="Custom loader component" isDarkMode={dark} />
+            <PropRow name="loaderSize" type="number" defaultVal="16" description="Default loader size in px" isDarkMode={dark} />
+            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Spans full container width" isDarkMode={dark} />
+            <PropRow name="classes" type="InputClasses" description="Slot-based class overrides for internal elements" isDarkMode={dark} />
+            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
+            <PropRow name="className" type="string" description="CSS class for the root container element" isDarkMode={dark} />
+          </PropsTable>
         </div>
+      </Section>
 
-        {/* Styling Props */}
+      <Section title="InputClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Styling Props</h3>
-          <div className="overflow-x-auto -mx-6 px-6">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Prop</th>
-                  <th className={c.tableHead}>Targets</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["className", "Root container (label + input row + error/success)"],
-                  ["wrapperClassName", "Input row wrapper (icons + input)"],
-                  ["inputClassName", "Native <input> element"],
-                  ["labelClassName", "Label element"],
-                  ["errorClassName", "Error message"],
-                  ["successClassName", "Success message"],
-                  ["descriptionClassName", "Helper/description text"],
-                  ["prefixClassName", "Prefix addon"],
-                  ["suffixClassName", "Suffix addon"],
-                  ["countClassName", "Character count display"],
-                ] as const).map(([prop, target], i) => (
-                  <tr key={prop} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propName}`}>{prop}</td>
-                    <td className={`${c.tableCell} ${c.propDesc}`}>{target}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="root" type="string" description="Root container (label + input row + error/success)" isDarkMode={dark} />
+            <PropRow name="wrapper" type="string" description="Input row wrapper (icons + input)" isDarkMode={dark} />
+            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
+            <PropRow name="description" type="string" description="Helper/description text" isDarkMode={dark} />
+            <PropRow name="input" type="string" description="Native <input> element" isDarkMode={dark} />
+            <PropRow name="prefix" type="string" description="Prefix addon" isDarkMode={dark} />
+            <PropRow name="suffix" type="string" description="Suffix addon" isDarkMode={dark} />
+            <PropRow name="error" type="string" description="Error message" isDarkMode={dark} />
+            <PropRow name="success" type="string" description="Success message" isDarkMode={dark} />
+            <PropRow name="count" type="string" description="Character count display" isDarkMode={dark} />
+          </PropsTable>
         </div>
+      </Section>
 
-        {/* Data Attributes */}
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Data Attributes</h3>
-          <p className={`text-xs mb-4 ${dark ? "text-gray-500" : "text-gray-400"}`}>
-            Use these for CSS-based state styling, e.g. <code className={c.code}>data-[error]:border-red-500</code>
-          </p>
-          <div className="overflow-x-auto -mx-6 px-6">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Attribute</th>
-                  <th className={c.tableHead}>On</th>
-                  <th className={c.tableHead}>When</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["data-disabled", "container, input", "disabled or loading"],
-                  ["data-error", "container, input", "error = true"],
-                  ["data-success", "container, input", "success = true (without error)"],
-                  ["data-loading", "container", "loading = true"],
-                  ["data-size", "container", "size is set"],
-                  ["data-readonly", "container, input", "readOnly = true"],
-                  ["data-slot", "every sub-element", "Always — identifies structural parts"],
-                ] as const).map(([attr, on, when], i) => (
-                  <tr key={attr} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propName}`}>{attr}</td>
-                    <td className={`${c.tableCell} ${c.propType}`}>{on}</td>
-                    <td className={`${c.tableCell} ${c.propDesc}`}>{when}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-disabled" type="container, input" description="Present when disabled or loading" isDarkMode={dark} />
+            <PropRow name="data-error" type="container, input" description="Present when error = true" isDarkMode={dark} />
+            <PropRow name="data-success" type="container, input" description="Present when success = true (without error)" isDarkMode={dark} />
+            <PropRow name="data-loading" type="container" description="Present when loading = true" isDarkMode={dark} />
+            <PropRow name="data-size" type="container" description="Present when size is set" isDarkMode={dark} />
+            <PropRow name="data-readonly" type="container, input" description="Present when readOnly = true" isDarkMode={dark} />
+            <PropRow name="data-slot" type="every sub-element" description="Always present — identifies structural parts" isDarkMode={dark} />
+          </PropsTable>
         </div>
-
-        {/* Type Defs */}
-        <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Type Exports</h3>
-          <p className={`text-xs mb-4 ${dark ? "text-gray-500" : "text-gray-400"}`}>
-            <code className={c.code}>InputProps</code> extends <code className={c.code}>InputHTMLAttributes&lt;HTMLInputElement&gt;</code> — all native input attributes are inherited.
-          </p>
-          <div className="overflow-x-auto -mx-5 px-5">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Category</th>
-                  <th className={c.tableHead}>Props</th>
-                  <th className={c.tableHead}>Types</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["Content", "label, description, prefix, suffix, startIcon, endIcon", "ReactNode"],
-                  ["Behavior", "required, disabled, readOnly, loading, clearable, showCount", "boolean"],
-                  ["Size", "size", '"sm" | "md" | "lg"'],
-                  ["Validation", "error, success", "boolean"],
-                  ["Validation Messages", "errorMessage, successMessage", "ReactNode"],
-                  ["Callbacks", "onValueChange", "(value: string) => void"],
-                  ["Callbacks", "onClear, onStartIconClick, onEndIconClick", "() => void"],
-                  ["Callbacks", "startIconLabel, endIconLabel", "string"],
-                  ["Loader", "loader", "ReactNode"],
-                  ["Loader", "loaderSize", "number"],
-                  ["Layout", "fullWidth", "boolean"],
-                  ["Styling", "className, wrapperClassName, inputClassName, labelClassName, errorClassName, successClassName, descriptionClassName, prefixClassName, suffixClassName, countClassName", "string"],
-                ] as const).map(([cat, props, types], i) => (
-                  <tr key={`${cat}-${i}`} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propDesc} font-medium whitespace-nowrap`}>{cat}</td>
-                    <td className={`${c.tableCell} ${c.propName}`}>{props}</td>
-                    <td className={`${c.tableCell} ${c.propType} whitespace-nowrap`}>{types}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className={`mt-4 pt-3 flex flex-wrap gap-3 text-xs ${c.divider} ${dark ? "text-gray-500" : "text-gray-400"}`}>
-            <span>Exported types:</span>
-            {["InputProps", "InputLabelProps", "InputSize"].map((t) => (
-              <code key={t} className={c.code}>{t}</code>
-            ))}
-          </div>
-        </div>
-      </div>
+      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <div className="space-y-4">
-        <h2 className={`text-xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}>Accessibility</h2>
-
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Built-in Features</h3>
-          <ul className={`space-y-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-            {([
-              ["Label auto-associated via", "htmlFor"],
-              ["Required inputs set", "aria-required=\"true\""],
-              ["Error state sets", "aria-invalid"],
-              ["Error connected via", "aria-describedby"],
-              ["Error messages use", "role=\"alert\""],
-              ["Success messages use", "role=\"status\""],
-              ["Loading state sets", "aria-busy=\"true\""],
-              ["Clear button has", "aria-label=\"Clear input\""],
-              ["Character count uses", "aria-live=\"polite\""],
-              ["Clickable icons are", "<button> with aria-label"],
-              ["Dev warnings fire for", "missing accessible names"],
-            ] as const).map(([text, attr]) => (
-              <li key={text} className="flex items-start gap-2.5">
-                <CheckIcon className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`} />
-                <span>{text} <code className={c.code}>{attr}</code></span>
-              </li>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              "Label auto-associated via htmlFor",
+              "Required inputs set aria-required=\"true\"",
+              "Error state sets aria-invalid",
+              "Error connected via aria-describedby",
+              "Error messages use role=\"alert\"",
+              "Success messages use role=\"status\"",
+              "Loading state sets aria-busy=\"true\"",
+              "Clear button has aria-label=\"Clear input\"",
+              "Character count uses aria-live=\"polite\"",
+              "Clickable icons are <button> with aria-label",
+              "Dev warnings fire for missing accessible names",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
             ))}
-          </ul>
+          </div>
         </div>
-
-        <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Keyboard Navigation</h3>
-          <div className={`space-y-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-            {([
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
               ["Tab", "Move focus to/from input, icon buttons, and clear button"],
               ["Enter", "Activate focused icon or clear button"],
               ["Space", "Activate focused icon or clear button"],
               ["Esc", "Browser default (no custom behavior)"],
-            ] as const).map(([key, desc]) => (
+            ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>
                 <span>{desc}</span>
@@ -1079,16 +881,7 @@ const InputDemo = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* ─── Footer ───────────────────────────────────────────────────── */}
-      <div className={`${c.cardDense} text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-        <strong className={dark ? "text-gray-300" : "text-gray-600"}>Note:</strong> Input extends{" "}
-        <code className={c.code}>InputHTMLAttributes</code> — all standard props like{" "}
-        {["value", "defaultValue", "onChange", "onBlur", "onFocus", "placeholder", "maxLength", "pattern", "min", "max", "autoComplete", "autoFocus", "readOnly"].map((p, i) => (
-          <span key={p}>{i > 0 && ", "}<code className={c.code}>{p}</code></span>
-        ))}{" "}are fully supported.
-      </div>
+      </Section>
     </div>
   );
 };

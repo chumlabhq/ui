@@ -317,7 +317,9 @@ describe("Drawer", () => {
       const first = buttons[0];
       const last = buttons[buttons.length - 1];
 
+      // Ensure focus trap is active before testing
       first.focus();
+      await new Promise((r) => setTimeout(r, 50));
       await user.tab({ shift: true });
 
       expect(document.activeElement).toBe(last);

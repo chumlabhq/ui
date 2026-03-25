@@ -47,7 +47,7 @@ describe("OtpInput", () => {
     });
 
     it("applies fullWidth class when fullWidth=true", () => {
-      render(<OtpInput fullWidth containerClassName="test-container" />);
+      render(<OtpInput fullWidth classes={{ root: "test-container" }} />);
 
       const container = document.querySelector(".test-container");
       expect(container).toHaveClass("w-full");
@@ -56,7 +56,7 @@ describe("OtpInput", () => {
 
   describe("Grouped Inputs", () => {
     it("renders inputs in groups when groups prop provided", () => {
-      render(<OtpInput groups={[3, 3]} groupClassName="otp-group" />);
+      render(<OtpInput groups={[3, 3]} classes={{ group: "otp-group" }} />);
 
       const groups = document.querySelectorAll(".otp-group");
       expect(groups).toHaveLength(2);
@@ -81,7 +81,7 @@ describe("OtpInput", () => {
     });
 
     it("applies group data attribute", () => {
-      render(<OtpInput groups={[3, 3]} groupClassName="otp-group" />);
+      render(<OtpInput groups={[3, 3]} classes={{ group: "otp-group" }} />);
 
       const groups = document.querySelectorAll(".otp-group");
       expect(groups[0]).toHaveAttribute("data-group", "0");
@@ -413,7 +413,7 @@ describe("OtpInput", () => {
     });
 
     it("sets data-disabled attribute on container", () => {
-      render(<OtpInput disabled containerClassName="test-container" />);
+      render(<OtpInput disabled classes={{ root: "test-container" }} />);
 
       const container = document.querySelector(".test-container");
       expect(container).toHaveAttribute("data-disabled", "true");
@@ -459,7 +459,7 @@ describe("OtpInput", () => {
     });
 
     it("sets data-error attribute on container", () => {
-      render(<OtpInput error containerClassName="test-container" />);
+      render(<OtpInput error classes={{ root: "test-container" }} />);
 
       const container = document.querySelector(".test-container");
       expect(container).toHaveAttribute("data-error", "true");
@@ -515,14 +515,11 @@ describe("OtpInput", () => {
       expect(wrapper).toBeInTheDocument();
     });
 
-    it("wrapper has aria-roledescription", () => {
+    it("wrapper has aria-label", () => {
       render(<OtpInput />);
 
       const wrapper = screen.getByRole("group");
-      expect(wrapper).toHaveAttribute(
-        "aria-roledescription",
-        "One-time password input"
-      );
+      expect(wrapper).toHaveAttribute("aria-label", "One-time password input");
     });
   });
 
@@ -651,20 +648,20 @@ describe("OtpInput", () => {
   });
 
   describe("Custom Styling", () => {
-    it("applies containerClassName to container", () => {
-      render(<OtpInput containerClassName="custom-container" />);
+    it("applies classes.root to container", () => {
+      render(<OtpInput classes={{ root: "custom-container" }} />);
 
       expect(document.querySelector(".custom-container")).toBeInTheDocument();
     });
 
-    it("applies wrapperClassName to wrapper", () => {
-      render(<OtpInput wrapperClassName="custom-wrapper" />);
+    it("applies classes.wrapper to wrapper", () => {
+      render(<OtpInput classes={{ wrapper: "custom-wrapper" }} />);
 
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
-    it("applies inputClassName to all inputs", () => {
-      render(<OtpInput inputClassName="custom-input" />);
+    it("applies classes.input to all inputs", () => {
+      render(<OtpInput classes={{ input: "custom-input" }} />);
 
       const inputs = screen.getAllByRole("textbox");
       inputs.forEach((input) => {
@@ -686,22 +683,22 @@ describe("OtpInput", () => {
       expect(inputs[2]).toHaveClass("third-class");
     });
 
-    it("applies labelClassName to label", () => {
-      render(<OtpInput label="Code" labelClassName="custom-label" />);
+    it("applies classes.label to label", () => {
+      render(<OtpInput label="Code" classes={{ label: "custom-label" }} />);
 
       expect(screen.getByText("Code")).toHaveClass("custom-label");
     });
 
     it("applies errorClassName to error message", () => {
       render(
-        <OtpInput error errorMessage="Error" errorClassName="custom-error" />
+        <OtpInput error errorMessage="Error" classes={{ error: "custom-error" }} />
       );
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
-    it("applies inputFocusClassName to inputs", () => {
-      render(<OtpInput inputFocusClassName="custom-focus" />);
+    it("applies classes.inputFocused to inputs", () => {
+      render(<OtpInput classes={{ inputFocused: "custom-focus" }} />);
 
       const inputs = screen.getAllByRole("textbox");
       inputs.forEach((input) => {
@@ -709,12 +706,12 @@ describe("OtpInput", () => {
       });
     });
 
-    it("applies separatorClassName to separator", () => {
+    it("applies classes.separator to separator", () => {
       render(
         <OtpInput
           groups={[3, 3]}
           separator={<span>-</span>}
-          separatorClassName="custom-separator"
+          classes={{ separator: "custom-separator" }}
         />
       );
 
@@ -798,10 +795,10 @@ describe("OtpInput", () => {
       expect(container).toBeInTheDocument();
     });
 
-    it("className applies after containerClassName for override", () => {
+    it("className applies after classes.root for override", () => {
       render(
         <OtpInput
-          containerClassName="bg-red-500"
+          classes={{ root: "bg-red-500" }}
           className="bg-blue-500"
         />
       );

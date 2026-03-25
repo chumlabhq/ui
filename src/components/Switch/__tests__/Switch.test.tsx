@@ -476,7 +476,7 @@ describe("Switch Component", () => {
 
   describe("Error State", () => {
     it("sets data-error on container when error=true", () => {
-      render(<Switch error aria-label="Toggle" containerClassName="container" />);
+      render(<Switch error aria-label="Toggle" classes={{ root: "container" }} />);
 
       const container = document.querySelector(".container");
       expect(container).toHaveAttribute("data-error", "true");
@@ -494,9 +494,9 @@ describe("Switch Component", () => {
       expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     });
 
-    it("applies errorClassName to error message", () => {
+    it("applies error class from classes prop to error message", () => {
       render(
-        <Switch error errorMessage="Error" errorClassName="custom-error" aria-label="Toggle" />
+        <Switch error errorMessage="Error" classes={{ error: "custom-error" }} aria-label="Toggle" />
       );
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
@@ -539,16 +539,16 @@ describe("Switch Component", () => {
       expect(screen.getByRole("switch")).not.toHaveClass("custom-root");
     });
 
-    it("applies containerClassName to root container", () => {
-      render(<Switch containerClassName="custom-container" aria-label="Toggle" />);
+    it("applies classes.root to root container", () => {
+      render(<Switch classes={{ root: "custom-container" }} aria-label="Toggle" />);
 
       expect(document.querySelector(".custom-container")).toBeInTheDocument();
     });
 
-    it("applies className after containerClassName for override", () => {
+    it("applies className after classes.root for override", () => {
       render(
         <Switch
-          containerClassName="bg-red-500"
+          classes={{ root: "bg-red-500" }}
           className="bg-blue-500"
           aria-label="Toggle"
         />

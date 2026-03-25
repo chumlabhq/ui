@@ -13,7 +13,7 @@ import {
   AccordionExpandedContext,
 } from "./utils/context";
 import {
-  DEFAULT_CLASS_NAMES,
+  DEFAULT_ACCORDION_CLASSES,
   DEFAULT_HEADING_LEVEL,
   DEFAULT_ORIENTATION,
   DEFAULT_DIRECTION,
@@ -25,7 +25,7 @@ import {
   DEFAULT_ANNOUNCE_EXPANDED,
   SIZE_CLASSES,
   VARIANT_CLASSES,
-  UNSTYLED_CLASS_NAMES,
+  UNSTYLED_ACCORDION_CLASSES,
 } from "./utils/constants";
 import { Slot } from "../../utils/Slot";
 import type {
@@ -51,7 +51,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     dir = DEFAULT_DIRECTION,
     disabled = false,
     loop = DEFAULT_LOOP,
-    classes = {},
+    classes: classesProp,
     headingLevel = DEFAULT_HEADING_LEVEL,
     children,
     className,
@@ -157,16 +157,16 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   // ─── Styling ─────────────────────────────────────────────────────────────
   const sizeClasses = SIZE_CLASSES[size];
   const variantClasses = VARIANT_CLASSES[variant];
-  const baseClasses = unstyled ? UNSTYLED_CLASS_NAMES : DEFAULT_CLASS_NAMES;
+  const baseClasses = unstyled ? UNSTYLED_ACCORDION_CLASSES : DEFAULT_ACCORDION_CLASSES;
 
   const mergedClasses: AccordionClasses = useMemo(
     () => ({
       root:
-        classes.root ??
+        classesProp?.root ??
         (unstyled ? "" : cn(baseClasses.root, variantClasses.root)),
-      item: classes.item ?? (unstyled ? "" : variantClasses.item),
+      item: classesProp?.item ?? (unstyled ? "" : variantClasses.item),
       trigger:
-        classes.trigger ??
+        classesProp?.trigger ??
         (unstyled
           ? ""
           : cn(
@@ -174,24 +174,24 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
               sizeClasses.trigger,
               variantClasses.trigger,
             )),
-      triggerInner: classes.triggerInner ?? baseClasses.triggerInner,
+      triggerInner: classesProp?.triggerInner ?? baseClasses.triggerInner,
       content:
-        classes.content ??
+        classesProp?.content ??
         (unstyled ? "" : cn(baseClasses.content, sizeClasses.content)),
-      contentWrapper: classes.contentWrapper ?? baseClasses.contentWrapper,
+      contentWrapper: classesProp?.contentWrapper ?? baseClasses.contentWrapper,
       icon:
-        classes.icon ??
+        classesProp?.icon ??
         (unstyled ? "" : cn(baseClasses.icon, sizeClasses.icon)),
-      iconWrapper: classes.iconWrapper ?? baseClasses.iconWrapper,
+      iconWrapper: classesProp?.iconWrapper ?? baseClasses.iconWrapper,
       subtitle:
-        classes.subtitle ??
+        classesProp?.subtitle ??
         (unstyled ? "" : cn(baseClasses.subtitle, sizeClasses.subtitle)),
-      triggerLeft: classes.triggerLeft ?? baseClasses.triggerLeft,
-      triggerRight: classes.triggerRight ?? baseClasses.triggerRight,
-      contentInner: classes.contentInner ?? baseClasses.contentInner,
-      heading: classes.heading ?? baseClasses.heading,
+      triggerLeft: classesProp?.triggerLeft ?? baseClasses.triggerLeft,
+      triggerRight: classesProp?.triggerRight ?? baseClasses.triggerRight,
+      contentInner: classesProp?.contentInner ?? baseClasses.contentInner,
+      heading: classesProp?.heading ?? baseClasses.heading,
     }),
-    [classes, sizeClasses, variantClasses, baseClasses, unstyled],
+    [classesProp, sizeClasses, variantClasses, baseClasses, unstyled],
   );
 
   // ─── Imperative handle ───────────────────────────────────────────────────

@@ -45,12 +45,33 @@ export interface StepperClasses {
   list?: string;
   stepContainer?: string;
   step?: string;
+  stepInteractive?: string;
+  stepDisabled?: string;
   indicator?: string;
   indicatorIcon?: string;
+  indicatorActive?: string;
+  indicatorCompleted?: string;
+  indicatorPending?: string;
+  indicatorError?: string;
   labelWrapper?: string;
+  labelWrapperBottom?: string;
   label?: string;
+  labelActive?: string;
+  labelCompleted?: string;
+  labelPending?: string;
+  labelError?: string;
   description?: string;
+  descriptionActive?: string;
+  descriptionCompleted?: string;
+  descriptionPending?: string;
+  descriptionError?: string;
   connector?: string;
+  connectorHorizontal?: string;
+  connectorVertical?: string;
+  connectorActive?: string;
+  connectorCompleted?: string;
+  connectorPending?: string;
+  connectorError?: string;
 }
 
 export interface StepperTooltipDefaults {
@@ -106,7 +127,10 @@ export interface StepperProps {
   "aria-label"?: string;
   showTooltips?: boolean;
   tooltipDefaults?: StepperTooltipDefaults;
+  /** Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. */
+  indicatorSize?: number;
   classes?: StepperClasses;
+  unstyled?: boolean;
   className?: string;
   style?: CSSProperties;
   id?: string;

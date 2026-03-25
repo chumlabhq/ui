@@ -12,7 +12,6 @@ import type { DrawerProps, DrawerClasses } from "./utils/types";
 import {
   getDirectionStyles,
   getFocusableElements,
-  usePrefersReducedMotion,
   getClosingDelta,
   getTransformString,
   isHorizontalDirection,
@@ -23,6 +22,7 @@ import {
   acquireScrollLock,
   releaseScrollLock,
 } from "./utils/helpers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import {
   DEFAULT_DRAWER_CLASSES,
   UNSTYLED_DRAWER_CLASSES,
@@ -90,8 +90,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const restoreRafRef = useRef<number>(0);
     const [mounted, setMounted] = useState(open);
     const [visualOpen, setVisualOpen] = useState(false);
-    const systemPrefersReducedMotion = usePrefersReducedMotion();
-    const prefersReducedMotion = reduceMotionProp === true ? true : reduceMotionProp === false ? false : systemPrefersReducedMotion;
+    const prefersReducedMotion = useReducedMotion(reduceMotionProp);
 
     const safeActiveSnap =
       activeSnapPointIndex !== undefined

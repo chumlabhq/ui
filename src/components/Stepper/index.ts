@@ -10,3 +10,7 @@ export type {
   IconProps,
 } from "./utils/types";
 export { CheckIcon, ErrorIcon, DotIcon } from "./utils/icons";
+export {
+  DEFAULT_STEPPER_CLASSES,
+  UNSTYLED_STEPPER_CLASSES,
+} from "./utils/constants";

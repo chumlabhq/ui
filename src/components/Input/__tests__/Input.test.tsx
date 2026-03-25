@@ -182,8 +182,8 @@ describe("Input", () => {
       expect(container).not.toHaveAttribute("data-success");
     });
 
-    it("applies successClassName to success message", () => {
-      render(<Input aria-label="test" success successMessage="Good" successClassName="custom-success" />);
+    it("applies classes.success to success message", () => {
+      render(<Input aria-label="test" success successMessage="Good" classes={{ success: "custom-success" }} />);
       expect(document.querySelector(".custom-success")).toBeInTheDocument();
     });
   });
@@ -205,13 +205,13 @@ describe("Input", () => {
       expect(screen.getByText(".com")).toBeInTheDocument();
     });
 
-    it("applies prefixClassName", () => {
-      render(<Input aria-label="test" prefix="$" prefixClassName="custom-prefix" />);
+    it("applies classes.prefix", () => {
+      render(<Input aria-label="test" prefix="$" classes={{ prefix: "custom-prefix" }} />);
       expect(document.querySelector(".custom-prefix")).toBeInTheDocument();
     });
 
-    it("applies suffixClassName", () => {
-      render(<Input aria-label="test" suffix="USD" suffixClassName="custom-suffix" />);
+    it("applies classes.suffix", () => {
+      render(<Input aria-label="test" suffix="USD" classes={{ suffix: "custom-suffix" }} />);
       expect(document.querySelector(".custom-suffix")).toBeInTheDocument();
     });
   });
@@ -295,8 +295,8 @@ describe("Input", () => {
       expect(input.getAttribute("aria-describedby")).toContain("test-input-count");
     });
 
-    it("applies countClassName", () => {
-      render(<Input aria-label="test" showCount maxLength={10} value="" onChange={() => {}} countClassName="custom-count" />);
+    it("applies classes.count", () => {
+      render(<Input aria-label="test" showCount maxLength={10} value="" onChange={() => {}} classes={{ count: "custom-count" }} />);
       expect(document.querySelector(".custom-count")).toBeInTheDocument();
     });
   });
@@ -622,8 +622,8 @@ describe("Input", () => {
       expect(input).toHaveAttribute("aria-describedby", "test-input-description test-input-error");
     });
 
-    it("applies descriptionClassName", () => {
-      render(<Input label="Email" description="Help" descriptionClassName="custom-desc" />);
+    it("applies classes.description", () => {
+      render(<Input label="Email" description="Help" classes={{ description: "custom-desc" }} />);
       expect(document.querySelector(".custom-desc")).toBeInTheDocument();
     });
   });
@@ -729,28 +729,28 @@ describe("Input", () => {
       expect(screen.getByRole("textbox")).not.toHaveClass("custom-container");
     });
 
-    it("applies wrapperClassName to wrapper", () => {
-      render(<Input aria-label="test" wrapperClassName="custom-wrapper" />);
+    it("applies classes.wrapper to wrapper", () => {
+      render(<Input aria-label="test" classes={{ wrapper: "custom-wrapper" }} />);
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
-    it("applies inputClassName to input element", () => {
-      render(<Input aria-label="test" inputClassName="input-style" />);
+    it("applies classes.input to input element", () => {
+      render(<Input aria-label="test" classes={{ input: "input-style" }} />);
       expect(screen.getByRole("textbox")).toHaveClass("input-style");
     });
 
-    it("applies labelClassName to label", () => {
-      render(<Input label="Email" labelClassName="custom-label" />);
+    it("applies classes.label to label", () => {
+      render(<Input label="Email" classes={{ label: "custom-label" }} />);
       expect(screen.getByText("Email")).toHaveClass("custom-label");
     });
 
-    it("applies errorClassName to error message", () => {
-      render(<Input aria-label="test" error errorMessage="Error" errorClassName="custom-error" />);
+    it("applies classes.error to error message", () => {
+      render(<Input aria-label="test" error errorMessage="Error" classes={{ error: "custom-error" }} />);
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
-    it("applies focus classes via wrapperClassName", () => {
-      render(<Input aria-label="test" wrapperClassName="custom-focus" />);
+    it("applies focus classes via classes.wrapper", () => {
+      render(<Input aria-label="test" classes={{ wrapper: "custom-focus" }} />);
       expect(document.querySelector(".custom-focus")).toBeInTheDocument();
     });
   });

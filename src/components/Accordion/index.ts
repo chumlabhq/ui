@@ -36,7 +36,7 @@ export {
 } from "./utils/icons";
 
 export {
-  DEFAULT_CLASS_NAMES,
+  DEFAULT_ACCORDION_CLASSES,
   DEFAULT_ANIMATION_DURATION,
   DEFAULT_HEADING_LEVEL,
   DEFAULT_ORIENTATION,
@@ -50,7 +50,7 @@ export {
   getDefaultStorageConfig,
   SIZE_CLASSES,
   VARIANT_CLASSES,
-  UNSTYLED_CLASS_NAMES,
+  UNSTYLED_ACCORDION_CLASSES,
   PRINT_STYLES,
 } from "./utils/constants";
 

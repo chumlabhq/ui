@@ -9,6 +9,19 @@ export interface InputLabelProps {
 
 export type InputSize = "sm" | "md" | "lg";
 
+export interface InputClasses {
+  root?: string;
+  wrapper?: string;
+  label?: string;
+  description?: string;
+  input?: string;
+  prefix?: string;
+  suffix?: string;
+  error?: string;
+  success?: string;
+  count?: string;
+}
+
 export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: ReactNode;
@@ -67,13 +80,8 @@ export interface InputProps
   fullWidth?: boolean;
   /** CSS class for the root container element (wraps label, input row, error/success). */
   className?: string;
-  wrapperClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  successClassName?: string;
-  descriptionClassName?: string;
-  inputClassName?: string;
-  prefixClassName?: string;
-  suffixClassName?: string;
-  countClassName?: string;
+  /** Slot-based class overrides for internal elements. */
+  classes?: InputClasses;
+  /** When true, all default classes are removed so you can style from scratch. */
+  unstyled?: boolean;
 }

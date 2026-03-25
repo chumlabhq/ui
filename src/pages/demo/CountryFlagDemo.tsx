@@ -338,7 +338,7 @@ const CountryFlagDemo = () => {
       </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section title="Accessibility" isDarkMode={dark}>
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
             {[

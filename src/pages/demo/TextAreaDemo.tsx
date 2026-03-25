@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { TextArea, TextAreaLabel } from "../../components/TextArea";
+import type { TextAreaClasses } from "../../components/TextArea";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -44,11 +45,21 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 // ─── Themed Classes (identical structure to InputDemo) ───────────────────────
 
 const getClasses = (dark: boolean) => ({
-  textarea: `w-full bg-transparent outline-none text-sm resize-y ${dark ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`,
-  wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
-    ? "text-gray-300 border-white/10 bg-white/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
-    : "text-gray-700 border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
-  }`,
+  // ── TextAreaClasses object for the `classes` prop ──
+  textarea: {
+    wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
+      ? "text-gray-300 border-white/10 bg-white/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
+      : "text-gray-700 border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
+    }`,
+    textarea: `w-full bg-transparent outline-none text-sm resize-y ${dark ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`,
+    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
+    description: `text-xs mt-1 mb-1.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
+    error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
+    success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
+    count: `text-[11px] mt-1 text-right tabular-nums ${dark ? "text-gray-500" : "text-gray-400"}`,
+  } satisfies TextAreaClasses,
+
+  // ── Wrapper variants for validation states ──
   wrapperError: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
     ? "text-gray-300 border-red-400/40 bg-red-500/[0.06] focus-within:ring-2 focus-within:ring-red-500/25"
     : "text-gray-700 border-red-300 bg-red-50/40 shadow-sm shadow-red-900/[0.04] focus-within:ring-2 focus-within:ring-red-500/15"
@@ -58,13 +69,10 @@ const getClasses = (dark: boolean) => ({
     : "text-gray-700 border-emerald-300 bg-emerald-50/40 shadow-sm shadow-emerald-900/[0.04] focus-within:ring-2 focus-within:ring-emerald-500/15"
   }`,
   wrapperDisabled: `px-3.5 py-2.5 rounded-xl border gap-2.5 opacity-50 cursor-not-allowed ${dark ? "border-white/5 bg-white/[0.02]" : "border-gray-200 bg-gray-50"}`,
-  label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
-  error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
-  success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
-  description: `text-xs mt-1 mb-1.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
+  disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed ${dark ? "text-gray-500 placeholder:text-gray-600" : "text-gray-400 placeholder:text-gray-300"}`,
+
+  // ── Misc UI helpers ──
   container: "flex flex-col",
-  disabled: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed ${dark ? "text-gray-500 placeholder:text-gray-600" : "text-gray-400 placeholder:text-gray-300"}`,
-  count: `text-[11px] mt-1 text-right tabular-nums ${dark ? "text-gray-500" : "text-gray-400"}`,
   icon: dark ? "text-gray-500" : "text-gray-400",
   iconHover: dark ? "text-gray-400 hover:text-gray-300" : "text-gray-400 hover:text-gray-600",
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-600" : "text-gray-300"}`,
@@ -97,7 +105,7 @@ const TextAreaDemo = () => {
   const bioBad = bio.length > 0 && bio.length < 10;
 
   const wrapperFor = (err: boolean, ok: boolean) =>
-    err ? c.wrapperError : ok ? c.wrapperSuccess : c.wrapper;
+    err ? c.wrapperError : ok ? c.wrapperSuccess : c.textarea.wrapper;
 
   return (
     <div className="space-y-10">
@@ -114,7 +122,7 @@ const TextAreaDemo = () => {
           <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-500"}`}>
             A production-grade, multi-line text input. Supports icons, validation states,
             character counts, clearable, loading states, description text, and complete
-            styling control through className props.
+            styling control through the <code>classes</code> prop.
           </p>
           <div className="pt-1">
             <CodeBlock isDarkMode={dark} code={`import { TextArea, TextAreaLabel } from "@kern-ui/textarea";`} />
@@ -130,7 +138,7 @@ const TextAreaDemo = () => {
         <Section title="Basic TextArea" description="Minimal usage with just a placeholder." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-md">
-              <TextArea aria-label="Basic textarea" placeholder="Enter text..." textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+              <TextArea aria-label="Basic textarea" placeholder="Enter text..." classes={c.textarea} />
             </div>
           </DemoWrapper>
         </Section>
@@ -142,7 +150,7 @@ const TextAreaDemo = () => {
               {(["sm", "md", "lg"] as const).map((s) => (
                 <div key={s} className="space-y-1.5">
                   <span className={c.sectionLabel}>{s}</span>
-                  <TextArea aria-label={`Size ${s}`} placeholder={`Size ${s}...`} size={s} textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+                  <TextArea aria-label={`Size ${s}`} placeholder={`Size ${s}...`} size={s} classes={c.textarea} />
                 </div>
               ))}
             </div>
@@ -157,19 +165,14 @@ const TextAreaDemo = () => {
                 label="Message"
                 description="Write your message here."
                 placeholder="Type your message..."
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
-                descriptionClassName={c.description}
+                classes={c.textarea}
                 className={c.container}
               />
               <TextArea
                 label="Comment"
                 placeholder="Leave a comment..."
                 required
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
               />
             </div>
@@ -183,7 +186,7 @@ const TextAreaDemo = () => {
               {([["2 rows", 2], ["4 rows (default)", 4], ["8 rows", 8]] as const).map(([lbl, r]) => (
                 <div key={String(lbl)} className="space-y-1.5">
                   <span className={c.sectionLabel}>{lbl}</span>
-                  <TextArea aria-label={String(lbl)} placeholder="Resizable..." rows={r as number} textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+                  <TextArea aria-label={String(lbl)} placeholder="Resizable..." rows={r as number} classes={c.textarea} />
                 </div>
               ))}
             </div>
@@ -191,20 +194,20 @@ const TextAreaDemo = () => {
         </Section>
 
         {/* Resize Behavior */}
-        <Section title="Resize Behavior" description="Control resize via textAreaClassName. No resize is hardcoded — you choose." isDarkMode={dark}>
+        <Section title="Resize Behavior" description="Control resize via the textarea slot in classes. No resize is hardcoded — you choose." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Vertical only (resize-y)</span>
-                <TextArea aria-label="Resize vertical" placeholder="Drag the bottom edge..." rows={3} textAreaClassName={`${c.textarea} resize-y`} wrapperClassName={c.wrapper} />
+                <TextArea aria-label="Resize vertical" placeholder="Drag the bottom edge..." rows={3} classes={{ ...c.textarea, textarea: `${c.textarea.textarea} resize-y` }} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Fixed height (resize-none)</span>
-                <TextArea aria-label="Fixed height" placeholder="Cannot resize this..." rows={3} textAreaClassName={`${c.textarea} resize-none`} wrapperClassName={c.wrapper} />
+                <TextArea aria-label="Fixed height" placeholder="Cannot resize this..." rows={3} classes={{ ...c.textarea, textarea: `${c.textarea.textarea} resize-none` }} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Both axes (resize)</span>
-                <TextArea aria-label="Resize both" placeholder="Drag any corner..." rows={3} textAreaClassName={`${c.textarea} resize`} wrapperClassName={c.wrapper} />
+                <TextArea aria-label="Resize both" placeholder="Drag any corner..." rows={3} classes={{ ...c.textarea, textarea: `${c.textarea.textarea} resize` }} />
               </div>
             </div>
           </DemoWrapper>
@@ -216,7 +219,7 @@ const TextAreaDemo = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Start icon</span>
-                <TextArea aria-label="With start icon" placeholder="Write a message..." startIcon={<MessageIcon className={c.icon} />} textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+                <TextArea aria-label="With start icon" placeholder="Write a message..." startIcon={<MessageIcon className={c.icon} />} classes={c.textarea} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Clickable end icon</span>
@@ -228,8 +231,7 @@ const TextAreaDemo = () => {
                   endIcon={<SendIcon className={c.iconHover} />}
                   onEndIconClick={() => { alert(`Sent: ${message}`); setMessage(""); }}
                   endIconLabel="Send message"
-                  textAreaClassName={c.textarea}
-                  wrapperClassName={c.wrapper}
+                  classes={c.textarea}
                 />
               </div>
               <div className="space-y-1.5">
@@ -240,8 +242,7 @@ const TextAreaDemo = () => {
                   startIcon={<FileIcon className={c.iconHover} />}
                   onStartIconClick={() => alert("Attach file clicked")}
                   startIconLabel="Attach file"
-                  textAreaClassName={c.textarea}
-                  wrapperClassName={c.wrapper}
+                  classes={c.textarea}
                 />
               </div>
             </div>
@@ -259,9 +260,7 @@ const TextAreaDemo = () => {
                 onChange={(e) => setNotes(e.target.value)}
                 clearable
                 onClear={() => setNotes("")}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
               />
               <TextArea
@@ -269,9 +268,7 @@ const TextAreaDemo = () => {
                 placeholder="Type and clear..."
                 clearable
                 defaultValue=""
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
               />
             </div>
@@ -293,13 +290,8 @@ const TextAreaDemo = () => {
                 successMessage={<><CheckIcon /> Looks great!</>}
                 error={bioBad}
                 errorMessage="At least 10 characters required"
-                textAreaClassName={c.textarea}
-                wrapperClassName={wrapperFor(bioBad, bioOk)}
-                labelClassName={c.label}
+                classes={{ ...c.textarea, wrapper: wrapperFor(bioBad, bioOk) }}
                 className={c.container}
-                countClassName={c.count}
-                errorClassName={c.error}
-                successClassName={c.success}
               />
               <TextArea
                 label="Notes"
@@ -310,11 +302,8 @@ const TextAreaDemo = () => {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 onClear={() => setNotes("")}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
-                countClassName={c.count}
               />
             </div>
           </DemoWrapper>
@@ -324,16 +313,13 @@ const TextAreaDemo = () => {
         <Section title="Validation States" description="Error and success feedback with proper ARIA attributes." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-              <TextArea label="Default" placeholder="Normal state" textAreaClassName={c.textarea} wrapperClassName={c.wrapper} labelClassName={c.label} className={c.container} />
+              <TextArea label="Default" placeholder="Normal state" classes={c.textarea} className={c.container} />
               <TextArea
                 label="Error"
                 value="Too short"
                 error
                 errorMessage={<><AlertIcon /> Minimum 20 characters required</>}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapperError}
-                labelClassName={c.label}
-                errorClassName={c.error}
+                classes={{ ...c.textarea, wrapper: c.wrapperError }}
                 className={c.container}
               />
               <TextArea
@@ -341,10 +327,7 @@ const TextAreaDemo = () => {
                 value="This is a properly written description that meets the requirements."
                 success
                 successMessage={<><CheckIcon /> Content looks good</>}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapperSuccess}
-                labelClassName={c.label}
-                successClassName={c.success}
+                classes={{ ...c.textarea, wrapper: c.wrapperSuccess }}
                 className={c.container}
               />
             </div>
@@ -368,13 +351,8 @@ const TextAreaDemo = () => {
                 errorMessage={<><AlertIcon /> At least 10 characters required</>}
                 success={bioOk}
                 successMessage={<><CheckIcon /> Looks great!</>}
-                textAreaClassName={c.textarea}
-                wrapperClassName={wrapperFor(bioBad, bioOk)}
-                labelClassName={c.label}
+                classes={{ ...c.textarea, wrapper: wrapperFor(bioBad, bioOk) }}
                 className={c.container}
-                countClassName={c.count}
-                errorClassName={c.error}
-                successClassName={c.success}
               />
             </div>
           </DemoWrapper>
@@ -391,9 +369,7 @@ const TextAreaDemo = () => {
                 onValueChange={setFeedback}
                 clearable
                 onClear={() => setFeedback("")}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
               />
               <div className={`rounded-lg px-3 py-2 text-xs font-mono ${dark ? "bg-white/[0.04] text-gray-400" : "bg-gray-50 text-gray-500"}`}>
@@ -409,7 +385,7 @@ const TextAreaDemo = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Default loader</span>
-                <TextArea aria-label="Loading" placeholder="Loading..." loading textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+                <TextArea aria-label="Loading" placeholder="Loading..." loading classes={c.textarea} />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Custom loader</span>
@@ -418,13 +394,12 @@ const TextAreaDemo = () => {
                   placeholder="Saving..."
                   loading
                   loader={<span className={`text-[11px] font-medium animate-pulse ${dark ? "text-indigo-400" : "text-indigo-500"}`}>Saving...</span>}
-                  textAreaClassName={c.textarea}
-                  wrapperClassName={c.wrapper}
+                  classes={c.textarea}
                 />
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Custom loader size (24px)</span>
-                <TextArea aria-label="Loading large" placeholder="Loading..." loading loaderSize={24} textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+                <TextArea aria-label="Loading large" placeholder="Loading..." loading loaderSize={24} classes={c.textarea} />
               </div>
             </div>
           </DemoWrapper>
@@ -434,9 +409,9 @@ const TextAreaDemo = () => {
         <Section title="Disabled & Read-Only" description="Disabled prevents interaction. Read-only allows selection but not editing." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-              <TextArea label="Disabled" value="Cannot edit this content" disabled startIcon={<LockIcon className={dark ? "text-gray-600" : "text-gray-300"} />} textAreaClassName={c.disabled} wrapperClassName={c.wrapperDisabled} labelClassName={c.label} className={c.container} />
-              <TextArea label="Disabled empty" placeholder="Disabled placeholder" disabled textAreaClassName={c.disabled} wrapperClassName={c.wrapperDisabled} labelClassName={c.label} className={c.container} />
-              <TextArea label="Read-only" value="This content can be selected and copied but not edited." readOnly textAreaClassName={c.textarea} wrapperClassName={`${c.wrapper} cursor-default`} labelClassName={c.label} className={c.container} />
+              <TextArea label="Disabled" value="Cannot edit this content" disabled startIcon={<LockIcon className={dark ? "text-gray-600" : "text-gray-300"} />} classes={{ ...c.textarea, textarea: c.disabledTextarea, wrapper: c.wrapperDisabled }} className={c.container} />
+              <TextArea label="Disabled empty" placeholder="Disabled placeholder" disabled classes={{ ...c.textarea, textarea: c.disabledTextarea, wrapper: c.wrapperDisabled }} className={c.container} />
+              <TextArea label="Read-only" value="This content can be selected and copied but not edited." readOnly classes={{ ...c.textarea, wrapper: `${c.textarea.wrapper} cursor-default` }} className={c.container} />
             </div>
           </DemoWrapper>
         </Section>
@@ -452,9 +427,7 @@ const TextAreaDemo = () => {
                 autoCapitalize="off"
                 autoCorrect="off"
                 rows={3}
-                textAreaClassName={`${c.textarea} resize-none`}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={{ ...c.textarea, textarea: `${c.textarea.textarea} resize-none` }}
                 className={c.container}
               />
               <TextArea
@@ -463,9 +436,7 @@ const TextAreaDemo = () => {
                 wrap="hard"
                 cols={40}
                 rows={3}
-                textAreaClassName={`${c.textarea} resize-none`}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={{ ...c.textarea, textarea: `${c.textarea.textarea} resize-none` }}
                 className={c.container}
               />
             </div>
@@ -484,11 +455,8 @@ const TextAreaDemo = () => {
                 maxLength={500}
                 showCount
                 startIcon={<MessageIcon className={c.icon} />}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
-                countClassName={c.count}
               />
             </div>
           </DemoWrapper>
@@ -498,7 +466,7 @@ const TextAreaDemo = () => {
         <Section title="Ref Forwarding" description="Access the native textarea for programmatic control." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="space-y-4 w-full max-w-md">
-              <TextArea ref={textAreaRef} aria-label="Ref demo" placeholder="Click buttons below" textAreaClassName={c.textarea} wrapperClassName={c.wrapper} />
+              <TextArea ref={textAreaRef} aria-label="Ref demo" placeholder="Click buttons below" classes={c.textarea} />
               <div className="flex gap-2 flex-wrap">
                 {([
                   ["Focus", () => textAreaRef.current?.focus()],
@@ -540,7 +508,7 @@ const TextAreaDemo = () => {
         </Section>
 
         {/* Custom Themes */}
-        <Section title="Custom Themes" description="Full visual control through className props." isDarkMode={dark}>
+        <Section title="Custom Themes" description="Full visual control through the classes prop." isDarkMode={dark}>
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
               <div className="space-y-1.5">
@@ -549,8 +517,7 @@ const TextAreaDemo = () => {
                   aria-label="Underline theme"
                   placeholder="Enter text..."
                   rows={3}
-                  textAreaClassName={c.textarea}
-                  wrapperClassName={`px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 ${dark ? "border-white/10 focus-within:border-indigo-400" : "border-gray-200 focus-within:border-indigo-500"}`}
+                  classes={{ ...c.textarea, wrapper: `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 ${dark ? "border-white/10 focus-within:border-indigo-400" : "border-gray-200 focus-within:border-indigo-500"}` }}
                 />
               </div>
               <div className="space-y-1.5">
@@ -559,11 +526,10 @@ const TextAreaDemo = () => {
                   aria-label="Purple theme"
                   placeholder="Purple theme..."
                   rows={3}
-                  textAreaClassName={c.textarea}
-                  wrapperClassName={`px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
+                  classes={{ ...c.textarea, wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${dark
                     ? "border-blue-400/30 bg-blue-500/[0.06] focus-within:ring-2 focus-within:ring-blue-500/25"
                     : "border-blue-200 bg-blue-50/30 shadow-sm focus-within:ring-2 focus-within:ring-blue-500/15"
-                  }`}
+                  }` }}
                 />
               </div>
             </div>
@@ -606,11 +572,8 @@ const TextAreaDemo = () => {
                 onChange={(e) => setFeedback(e.target.value)}
                 onClear={() => setFeedback("")}
                 startIcon={<MailIcon className={c.icon} />}
-                textAreaClassName={c.textarea}
-                wrapperClassName={c.wrapper}
-                labelClassName={c.label}
+                classes={c.textarea}
                 className={c.container}
-                countClassName={c.count}
               />
               <button type="submit" className={`w-full py-2.5 rounded-xl font-medium text-sm text-white transition-all ${dark ? "bg-indigo-500 hover:bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-500"} shadow-lg shadow-indigo-500/20`}>
                 Send Message
@@ -620,178 +583,104 @@ const TextAreaDemo = () => {
         </Section>
       </div>
 
-      {/* ─── API Reference ────────────────────────────────────────────── */}
-      <div className="space-y-6">
-        <h2 className={`text-xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}>API Reference</h2>
-
+      {/* ─── Props Tables ───────────────────────────────────────────────── */}
+      <Section title="TextArea Props" isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Props</h3>
-          <div className="overflow-x-auto -mx-5 px-5">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Prop</th>
-                  <th className={c.tableHead}>Type</th>
-                  <th className={c.tableHead}>Default</th>
-                  <th className={c.tableHead}>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["label", "ReactNode", "-", "Label above the textarea"],
-                  ["description", "ReactNode", "-", "Helper text below the label"],
-                  ["required", "boolean", "false", "Shows * and sets aria-required"],
-                  ["disabled", "boolean", "false", "Disables the textarea"],
-                  ["readOnly", "boolean", "false", "Makes textarea read-only"],
-                  ["rows", "number", "4", "Visible row count"],
-                  ["error", "boolean", "false", "Error state (sets aria-invalid)"],
-                  ["errorMessage", "ReactNode", "-", "Error text (role=alert)"],
-                  ["success", "boolean", "false", "Success validation state"],
-                  ["successMessage", "ReactNode", "-", "Success text (role=status)"],
-                  ["startIcon", "ReactNode", "-", "Icon before textarea"],
-                  ["endIcon", "ReactNode", "-", "Icon after textarea"],
-                  ["onStartIconClick", "() => void", "-", "Makes start icon a button"],
-                  ["onEndIconClick", "() => void", "-", "Makes end icon a button"],
-                  ["startIconLabel", "string", "-", "Accessible label for start icon button"],
-                  ["endIconLabel", "string", "-", "Accessible label for end icon button"],
-                  ["clearable", "boolean", "false", "Shows clear button when has value"],
-                  ["onClear", "() => void", "-", "Callback when clear clicked"],
-                  ["showCount", "boolean", "false", "Show character count (needs maxLength)"],
-                  ["onValueChange", "(val: string) => void", "-", "Convenience callback with string value"],
-                  ["loading", "boolean", "false", "Shows loader, disables textarea"],
-                  ["loader", "ReactNode", "CircularLoader", "Custom loader component"],
-                  ["loaderSize", "number", "16", "Default loader size in px"],
-                  ["fullWidth", "boolean", "false", "Spans full container width"],
-                  ["size", '"sm" | "md" | "lg"', "-", "Size variant (emits data-size)"],
-                ] as const).map(([prop, type, def, desc], i) => (
-                  <tr key={prop} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propName}`}>{prop}</td>
-                    <td className={`${c.tableCell} ${c.propType}`}>{type}</td>
-                    <td className={`${c.tableCell} ${c.propDefault}`}>{def}</td>
-                    <td className={`${c.tableCell} ${c.propDesc}`}>{desc}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="label" type="ReactNode" description="Label above the textarea" isDarkMode={dark} />
+            <PropRow name="description" type="ReactNode" description="Helper text below the label" isDarkMode={dark} />
+            <PropRow name="required" type="boolean" defaultVal="false" description="Shows * and sets aria-required" isDarkMode={dark} />
+            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disables the textarea" isDarkMode={dark} />
+            <PropRow name="readOnly" type="boolean" defaultVal="false" description="Makes textarea read-only" isDarkMode={dark} />
+            <PropRow name="rows" type="number" defaultVal="4" description="Visible row count" isDarkMode={dark} />
+            <PropRow name="error" type="boolean" defaultVal="false" description="Error state (sets aria-invalid)" isDarkMode={dark} />
+            <PropRow name="errorMessage" type="ReactNode" description="Error text (role=alert)" isDarkMode={dark} />
+            <PropRow name="success" type="boolean" defaultVal="false" description="Success validation state" isDarkMode={dark} />
+            <PropRow name="successMessage" type="ReactNode" description="Success text (role=status)" isDarkMode={dark} />
+            <PropRow name="startIcon" type="ReactNode" description="Icon before textarea" isDarkMode={dark} />
+            <PropRow name="endIcon" type="ReactNode" description="Icon after textarea" isDarkMode={dark} />
+            <PropRow name="onStartIconClick" type="() => void" description="Makes start icon a button" isDarkMode={dark} />
+            <PropRow name="onEndIconClick" type="() => void" description="Makes end icon a button" isDarkMode={dark} />
+            <PropRow name="startIconLabel" type="string" description="Accessible label for start icon button" isDarkMode={dark} />
+            <PropRow name="endIconLabel" type="string" description="Accessible label for end icon button" isDarkMode={dark} />
+            <PropRow name="clearable" type="boolean" defaultVal="false" description="Shows clear button when has value" isDarkMode={dark} />
+            <PropRow name="onClear" type="() => void" description="Callback when clear clicked" isDarkMode={dark} />
+            <PropRow name="showCount" type="boolean" defaultVal="false" description="Show character count (needs maxLength)" isDarkMode={dark} />
+            <PropRow name="onValueChange" type="(val: string) => void" description="Convenience callback with string value" isDarkMode={dark} />
+            <PropRow name="loading" type="boolean" defaultVal="false" description="Shows loader, disables textarea" isDarkMode={dark} />
+            <PropRow name="loader" type="ReactNode" defaultVal="CircularLoader" description="Custom loader component" isDarkMode={dark} />
+            <PropRow name="loaderSize" type="number" defaultVal="16" description="Default loader size in px" isDarkMode={dark} />
+            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Spans full container width" isDarkMode={dark} />
+            <PropRow name="size" type='"sm" | "md" | "lg"' description="Size variant (emits data-size)" isDarkMode={dark} />
+            <PropRow name="className" type="string" description="CSS class for the root container element" isDarkMode={dark} />
+            <PropRow name="classes" type="TextAreaClasses" description="Slot-based class overrides for internal elements" isDarkMode={dark} />
+            <PropRow name="unstyled" type="boolean" defaultVal="false" description="When true, all default classes are removed; only classes overrides apply" isDarkMode={dark} />
+          </PropsTable>
         </div>
+      </Section>
 
+      <Section title="TextAreaClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Styling Props</h3>
-          <div className="overflow-x-auto -mx-5 px-5">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Prop</th>
-                  <th className={c.tableHead}>Targets</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["className", "Root container (label + textarea row + error/success)"],
-                  ["wrapperClassName", "Textarea row wrapper (icons + textarea)"],
-                  ["textAreaClassName", "Native <textarea> element"],
-                  ["labelClassName", "Label element"],
-                  ["errorClassName", "Error message"],
-                  ["successClassName", "Success message"],
-                  ["descriptionClassName", "Helper/description text"],
-                  ["countClassName", "Character count display"],
-                ] as const).map(([prop, target], i) => (
-                  <tr key={prop} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propName}`}>{prop}</td>
-                    <td className={`${c.tableCell} ${c.propDesc}`}>{target}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="root" type="string" description="Outermost container (same element as className)" isDarkMode={dark} />
+            <PropRow name="wrapper" type="string" description="Textarea row wrapper (icons + textarea)" isDarkMode={dark} />
+            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
+            <PropRow name="description" type="string" description="Helper/description text" isDarkMode={dark} />
+            <PropRow name="textarea" type="string" description="Native <textarea> element" isDarkMode={dark} />
+            <PropRow name="error" type="string" description="Error message" isDarkMode={dark} />
+            <PropRow name="success" type="string" description="Success message" isDarkMode={dark} />
+            <PropRow name="count" type="string" description="Character count display" isDarkMode={dark} />
+          </PropsTable>
         </div>
+      </Section>
 
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Data Attributes</h3>
-          <p className={`text-xs mb-4 ${dark ? "text-gray-500" : "text-gray-400"}`}>
-            Use for CSS-based state styling, e.g. <code className={c.code}>data-[error]:border-red-500</code>
-          </p>
-          <div className="overflow-x-auto -mx-5 px-5">
-            <table className="min-w-full">
-              <thead>
-                <tr className={c.divider}>
-                  <th className={c.tableHead}>Attribute</th>
-                  <th className={c.tableHead}>On</th>
-                  <th className={c.tableHead}>When</th>
-                </tr>
-              </thead>
-              <tbody>
-                {([
-                  ["data-disabled", "container, textarea", "disabled or loading"],
-                  ["data-error", "container, textarea", "error = true"],
-                  ["data-success", "container, textarea", "success = true (without error)"],
-                  ["data-loading", "container", "loading = true"],
-                  ["data-size", "container", "size is set"],
-                  ["data-readonly", "container, textarea", "readOnly = true"],
-                  ["data-slot", "every sub-element", "Always — identifies structural parts"],
-                ] as const).map(([attr, on, when], i) => (
-                  <tr key={attr} className={i > 0 ? c.divider : ""}>
-                    <td className={`${c.tableCell} ${c.propName}`}>{attr}</td>
-                    <td className={`${c.tableCell} ${c.propType}`}>{on}</td>
-                    <td className={`${c.tableCell} ${c.propDesc}`}>{when}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-disabled" type="container, textarea" description="Present when disabled or loading" isDarkMode={dark} />
+            <PropRow name="data-error" type="container, textarea" description="Present when error = true" isDarkMode={dark} />
+            <PropRow name="data-success" type="container, textarea" description="Present when success = true (without error)" isDarkMode={dark} />
+            <PropRow name="data-loading" type="container" description="Present when loading = true" isDarkMode={dark} />
+            <PropRow name="data-size" type="container" description="Present when size is set" isDarkMode={dark} />
+            <PropRow name="data-readonly" type="container, textarea" description="Present when readOnly = true" isDarkMode={dark} />
+            <PropRow name="data-slot" type="every sub-element" description="Always present — identifies structural parts" isDarkMode={dark} />
+          </PropsTable>
         </div>
-
-        <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Type Exports</h3>
-          <p className={`text-xs mb-4 ${dark ? "text-gray-500" : "text-gray-400"}`}>
-            <code className={c.code}>TextAreaProps</code> extends <code className={c.code}>TextareaHTMLAttributes&lt;HTMLTextAreaElement&gt;</code> — all native textarea attributes are inherited.
-          </p>
-          <div className={`flex flex-wrap gap-3 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
-            <span>Exported types:</span>
-            {["TextAreaProps", "TextAreaLabelProps", "TextAreaSize"].map((t) => (
-              <code key={t} className={c.code}>{t}</code>
-            ))}
-          </div>
-        </div>
-      </div>
+      </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <div className="space-y-4">
-        <h2 className={`text-xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}>Accessibility</h2>
-
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Built-in Features</h3>
-          <ul className={`space-y-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-            {([
-              ["Label auto-associated via", "htmlFor"],
-              ["Required textareas set", "aria-required=\"true\""],
-              ["Error state sets", "aria-invalid"],
-              ["Error connected via", "aria-describedby"],
-              ["Error messages use", "role=\"alert\""],
-              ["Success messages use", "role=\"status\""],
-              ["Loading state sets", "aria-busy=\"true\""],
-              ["Clear button has", "aria-label=\"Clear textarea\""],
-              ["Character count uses", "aria-live=\"polite\""],
-              ["Clickable icons are", "<button> with aria-label"],
-              ["Dev warnings fire for", "missing accessible names"],
-            ] as const).map(([text, attr]) => (
-              <li key={text} className="flex items-start gap-2.5">
-                <CheckIcon className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`} />
-                <span>{text} <code className={c.code}>{attr}</code></span>
-              </li>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              "Label auto-associated via htmlFor",
+              "Required textareas set aria-required=\"true\"",
+              "Error state sets aria-invalid",
+              "Error connected via aria-describedby",
+              "Error messages use role=\"alert\"",
+              "Success messages use role=\"status\"",
+              "Loading state sets aria-busy=\"true\"",
+              "Clear button has aria-label=\"Clear textarea\"",
+              "Character count uses aria-live=\"polite\"",
+              "Clickable icons are <button> with aria-label",
+              "Dev warnings fire for missing accessible names",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
             ))}
-          </ul>
+          </div>
         </div>
-
-        <div className={c.card}>
-          <h3 className={`text-sm font-semibold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Keyboard Navigation</h3>
-          <div className={`space-y-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-            {([
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
               ["Tab", "Move focus to/from textarea, icon buttons, and clear button"],
               ["Enter", "Activate focused icon or clear button (newline in textarea)"],
               ["Space", "Activate focused icon or clear button"],
-            ] as const).map(([key, desc]) => (
+            ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>
                 <span>{desc}</span>
@@ -799,16 +688,7 @@ const TextAreaDemo = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* ─── Footer ───────────────────────────────────────────────────── */}
-      <div className={`${c.cardDense} text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-        <strong className={dark ? "text-gray-300" : "text-gray-600"}>Note:</strong> TextArea extends{" "}
-        <code className={c.code}>TextareaHTMLAttributes</code> — all standard props like{" "}
-        {["value", "defaultValue", "onChange", "onBlur", "onFocus", "placeholder", "maxLength", "rows", "readOnly", "autoFocus", "wrap"].map((p, i) => (
-          <span key={p}>{i > 0 && ", "}<code className={c.code}>{p}</code></span>
-        ))}{" "}are fully supported.
-      </div>
+      </Section>
     </div>
   );
 };

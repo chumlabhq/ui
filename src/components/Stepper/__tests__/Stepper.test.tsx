@@ -116,8 +116,9 @@ describe("Stepper", () => {
       const { container } = renderStepper();
       const ol = container.querySelector("ol");
       expect(ol).toBeInTheDocument();
-      const listItems = ol!.querySelectorAll("li");
-      expect(listItems.length).toBe(4);
+      // Step items (exclude connector li[role="presentation"])
+      const stepItems = ol!.querySelectorAll("li:not([role='presentation'])");
+      expect(stepItems.length).toBe(4);
     });
 
     it("sets aria-current='step' on active step", () => {

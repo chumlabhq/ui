@@ -506,16 +506,50 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       ? UNSTYLED_DATEPICKER_CLASSES
       : DEFAULT_DATEPICKER_CLASSES;
 
-    const mergedClasses = useMemo<Required<DatePickerClasses>>(() => {
-      if (!classesProp) return baseClasses;
-      const result = { ...baseClasses };
-      for (const key of Object.keys(baseClasses) as (keyof DatePickerClasses)[]) {
-        if (classesProp[key] !== undefined) {
-          result[key] = classesProp[key] as string;
-        }
-      }
-      return result;
-    }, [classesProp, baseClasses]);
+    const mergedClasses = useMemo<Required<DatePickerClasses>>(() => ({
+      root: classesProp?.root ?? baseClasses.root,
+      trigger: classesProp?.trigger ?? baseClasses.trigger,
+      input: classesProp?.input ?? baseClasses.input,
+      calendarIcon: classesProp?.calendarIcon ?? baseClasses.calendarIcon,
+      clearButton: classesProp?.clearButton ?? baseClasses.clearButton,
+      label: classesProp?.label ?? baseClasses.label,
+      error: classesProp?.error ?? baseClasses.error,
+      calendar: classesProp?.calendar ?? baseClasses.calendar,
+      header: classesProp?.header ?? baseClasses.header,
+      monthNav: classesProp?.monthNav ?? baseClasses.monthNav,
+      navButton: classesProp?.navButton ?? baseClasses.navButton,
+      navButtonDisabled: classesProp?.navButtonDisabled ?? baseClasses.navButtonDisabled,
+      monthGrid: classesProp?.monthGrid ?? baseClasses.monthGrid,
+      grid: classesProp?.grid ?? baseClasses.grid,
+      weekdayHeader: classesProp?.weekdayHeader ?? baseClasses.weekdayHeader,
+      weekday: classesProp?.weekday ?? baseClasses.weekday,
+      day: classesProp?.day ?? baseClasses.day,
+      daySelected: classesProp?.daySelected ?? baseClasses.daySelected,
+      dayToday: classesProp?.dayToday ?? baseClasses.dayToday,
+      dayDisabled: classesProp?.dayDisabled ?? baseClasses.dayDisabled,
+      dayOutside: classesProp?.dayOutside ?? baseClasses.dayOutside,
+      dayRangeStart: classesProp?.dayRangeStart ?? baseClasses.dayRangeStart,
+      dayRangeEnd: classesProp?.dayRangeEnd ?? baseClasses.dayRangeEnd,
+      dayRangeMiddle: classesProp?.dayRangeMiddle ?? baseClasses.dayRangeMiddle,
+      dayHover: classesProp?.dayHover ?? baseClasses.dayHover,
+      dayFocused: classesProp?.dayFocused ?? baseClasses.dayFocused,
+      dayMarked: classesProp?.dayMarked ?? baseClasses.dayMarked,
+      weekNumber: classesProp?.weekNumber ?? baseClasses.weekNumber,
+      presets: classesProp?.presets ?? baseClasses.presets,
+      presetButton: classesProp?.presetButton ?? baseClasses.presetButton,
+      presetActive: classesProp?.presetActive ?? baseClasses.presetActive,
+      footer: classesProp?.footer ?? baseClasses.footer,
+      todayButton: classesProp?.todayButton ?? baseClasses.todayButton,
+      markerIndicator: classesProp?.markerIndicator ?? baseClasses.markerIndicator,
+      markerTooltip: classesProp?.markerTooltip ?? baseClasses.markerTooltip,
+      monthSelect: classesProp?.monthSelect ?? baseClasses.monthSelect,
+      yearSelect: classesProp?.yearSelect ?? baseClasses.yearSelect,
+      monthDropdown: classesProp?.monthDropdown ?? baseClasses.monthDropdown,
+      yearDropdown: classesProp?.yearDropdown ?? baseClasses.yearDropdown,
+      dropdownMenu: classesProp?.dropdownMenu ?? baseClasses.dropdownMenu,
+      dropdownItem: classesProp?.dropdownItem ?? baseClasses.dropdownItem,
+      dropdownItemSelected: classesProp?.dropdownItemSelected ?? baseClasses.dropdownItemSelected,
+    }), [classesProp, baseClasses]);
 
     // ─── Reduced motion ────────────────────────────────────────────────
     const _effectiveReduceMotion = useReducedMotion(reduceMotion);

@@ -3,13 +3,10 @@ import React, {
   useCallback,
   useId,
   useRef,
-  useImperativeHandle,
   useMemo,
 } from "react";
-import type {
-  OtpInputProps,
-  OtpInputRenderProps,
-} from "./utils/types";
+import type { OtpInputProps, OtpInputClasses, OtpInputRenderProps } from "./utils/types";
+import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants";
 import { OtpInputLabel } from "./components/OtpInputLabel";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
@@ -35,20 +32,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       autoFocusFirst = false,
       inputType = "text",
       inputPattern = "\\d*",
-      containerClassName,
-      wrapperClassName,
-      groupClassName,
-      inputClassName,
-      inputFocusClassName,
-      labelClassName,
-      errorClassName,
-      separatorClassName,
       inputClassNames,
       fullWidth = false,
       renderInput,
       validate,
       inputAriaLabel,
       groupAriaLabel = "One-time password input",
+      classes: classesProp,
+      unstyled = false,
       id,
       name,
       className,
@@ -59,6 +50,17 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const generatedId = useId();
     const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
+
+    // Dev warning
+    const warnedRef = useRef(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (!label && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
+        warnedRef.current = true;
+        console.warn(
+          "OtpInput: An OTP input without a label requires `aria-label` or `aria-labelledby` for accessibility.",
+        );
+      }
+    }
 
     const [value, setValue] = useControllableState({
       value: controlledValue,
@@ -71,7 +73,18 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const lastCompletedRef = useRef<string>("");
 
-    useImperativeHandle(ref, () => inputRefs.current[0] as HTMLInputElement);
+    // Callback ref pattern — safe, no non-null assertion
+    const setRef = useCallback(
+      (node: HTMLInputElement | null) => {
+        inputRefs.current[0] = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref],
+    );
 
     React.useEffect(() => {
       if (autoFocusFirst && inputRefs.current[0]) {
@@ -79,27 +92,37 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       }
     }, [autoFocusFirst]);
 
+    // ─── Merged classes ─────────────────────────────────────────────────
+    const baseClasses = unstyled ? UNSTYLED_OTPINPUT_CLASSES : DEFAULT_OTPINPUT_CLASSES;
+    const mergedClasses: Required<OtpInputClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        group: classesProp?.group ?? baseClasses.group,
+        input: classesProp?.input ?? baseClasses.input,
+        inputFocused: classesProp?.inputFocused ?? baseClasses.inputFocused,
+        label: classesProp?.label ?? baseClasses.label,
+        error: classesProp?.error ?? baseClasses.error,
+        separator: classesProp?.separator ?? baseClasses.separator,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const valueArray = useMemo(() => {
       const arr = value.split("").slice(0, length);
-      while (arr.length < length) {
-        arr.push("");
-      }
+      while (arr.length < length) arr.push("");
       return arr;
     }, [value, length]);
 
     const prevValueRef = useRef(value);
     if (prevValueRef.current !== value) {
       prevValueRef.current = value;
-      if (value.length < length) {
-        lastCompletedRef.current = "";
-      }
+      if (value.length < length) lastCompletedRef.current = "";
     }
 
     const focusInput = useCallback(
       (index: number) => {
-        if (index >= 0 && index < length) {
-          inputRefs.current[index]?.focus();
-        }
+        if (index >= 0 && index < length) inputRefs.current[index]?.focus();
       },
       [length],
     );
@@ -127,12 +150,8 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           }
           const newValue = newValueArray.join("");
           fireChange(newValue);
-          if (filledCount > 0) {
-            focusInput(Math.min(filledCount - 1, length - 1));
-          }
-          if (newValueArray.every((c) => c !== "")) {
-            handleComplete(newValue);
-          }
+          if (filledCount > 0) focusInput(Math.min(filledCount - 1, length - 1));
+          if (newValueArray.every((c) => c !== "")) handleComplete(newValue);
           return;
         }
 
@@ -141,16 +160,9 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         const newValueArray = [...valueArray];
         newValueArray[index] = char;
         const newValue = newValueArray.join("");
-
         fireChange(newValue);
-
-        if (char && index < length - 1) {
-          focusInput(index + 1);
-        }
-
-        if (newValueArray.every((c) => c !== "")) {
-          handleComplete(newValue);
-        }
+        if (char && index < length - 1) focusInput(index + 1);
+        if (newValueArray.every((c) => c !== "")) handleComplete(newValue);
       },
       [valueArray, fireChange, handleComplete, length, focusInput, validate],
     );
@@ -158,19 +170,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const handleKeyDown = useCallback(
       (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
         const { key } = e;
-
         if (key === "Backspace") {
           e.preventDefault();
-          const target = e.target as HTMLInputElement;
-          const currentInputValue = target.value;
+          const currentInputValue = (e.target as HTMLInputElement).value;
           const newValueArray = [...valueArray];
-
           if (currentInputValue) {
             newValueArray[index] = "";
             fireChange(newValueArray.join(""));
-            if (index > 0) {
-              focusInput(index - 1);
-            }
+            if (index > 0) focusInput(index - 1);
           } else if (index > 0) {
             newValueArray[index - 1] = "";
             fireChange(newValueArray.join(""));
@@ -178,38 +185,11 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           }
           return;
         }
-
-        if (key === "Delete") {
-          e.preventDefault();
-          const newValueArray = [...valueArray];
-          newValueArray[index] = "";
-          fireChange(newValueArray.join(""));
-          return;
-        }
-
-        if (key === "ArrowLeft") {
-          e.preventDefault();
-          focusInput(index - 1);
-          return;
-        }
-
-        if (key === "ArrowRight") {
-          e.preventDefault();
-          focusInput(index + 1);
-          return;
-        }
-
-        if (key === "Home") {
-          e.preventDefault();
-          focusInput(0);
-          return;
-        }
-
-        if (key === "End") {
-          e.preventDefault();
-          focusInput(length - 1);
-          return;
-        }
+        if (key === "Delete") { e.preventDefault(); const arr = [...valueArray]; arr[index] = ""; fireChange(arr.join("")); return; }
+        if (key === "ArrowLeft") { e.preventDefault(); focusInput(index - 1); return; }
+        if (key === "ArrowRight") { e.preventDefault(); focusInput(index + 1); return; }
+        if (key === "Home") { e.preventDefault(); focusInput(0); return; }
+        if (key === "End") { e.preventDefault(); focusInput(length - 1); return; }
       },
       [valueArray, fireChange, focusInput, length],
     );
@@ -217,55 +197,36 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const handlePaste = useCallback(
       (e: React.ClipboardEvent<HTMLDivElement>) => {
         if (!allowPaste) return;
-
         const pastedData = e.clipboardData.getData("text").trim();
         if (!pastedData) return;
-
         e.preventDefault();
-
         const newValueArray = [...valueArray];
         let filledCount = 0;
-
         for (const char of pastedData) {
           if (filledCount >= length) break;
           if (validate && !validate(char)) continue;
           newValueArray[filledCount] = char;
           filledCount++;
         }
-
         const newValue = newValueArray.join("");
         fireChange(newValue);
-
-        const lastFilledIndex = Math.max(0, filledCount - 1);
-        focusInput(lastFilledIndex);
-
-        if (newValueArray.every((c) => c !== "")) {
-          handleComplete(newValue);
-        }
+        focusInput(Math.max(0, filledCount - 1));
+        if (newValueArray.every((c) => c !== "")) handleComplete(newValue);
       },
       [allowPaste, valueArray, fireChange, handleComplete, length, focusInput, validate],
     );
 
-    const handleFocus = useCallback(
-      (e: React.FocusEvent<HTMLInputElement>) => {
-        e.target.select();
-      },
-      [],
-    );
+    const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => { e.target.select(); }, []);
 
     const createInputProps = useCallback(
       (index: number) => {
         const individualClassName = inputClassNames?.[index] || "";
-
-        const resolvedInputMode =
-          inputType === "tel" || inputPattern === "\\d*"
-            ? ("numeric" as const)
-            : ("text" as const);
+        const resolvedInputMode = inputType === "tel" || inputPattern === "\\d*" ? ("numeric" as const) : ("text" as const);
 
         return {
-          ref: (el: HTMLInputElement | null) => {
-            inputRefs.current[index] = el;
-          },
+          ref: index === 0
+            ? (el: HTMLInputElement | null) => { inputRefs.current[0] = el; setRef(el); }
+            : (el: HTMLInputElement | null) => { inputRefs.current[index] = el; },
           id: index === 0 ? inputId : undefined,
           type: inputType,
           inputMode: resolvedInputMode,
@@ -278,63 +239,31 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "aria-required": required || undefined,
           "aria-describedby": error && errorMessage ? errorId : undefined,
           value: valueArray[index],
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange(index, e.target.value),
-          onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) =>
-            handleKeyDown(index, e),
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleChange(index, e.target.value),
+          onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(index, e),
           onFocus: handleFocus,
           onPaste: allowPaste ? undefined : (e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault(),
           disabled,
           maxLength: 1,
-          className: cn(inputClassName, inputFocusClassName, individualClassName),
+          className: cn(mergedClasses.input, mergedClasses.inputFocused, individualClassName),
           "data-index": index,
           "data-disabled": disabled || undefined,
           "data-error": error || undefined,
           "data-filled": valueArray[index] ? true : undefined,
-          autoFocus: undefined,
         };
       },
-      [
-        inputClassNames,
-        inputId,
-        inputType,
-        inputPattern,
-        length,
-        error,
-        required,
-        errorMessage,
-        errorId,
-        valueArray,
-        handleChange,
-        handleKeyDown,
-        handleFocus,
-        disabled,
-        inputClassName,
-        inputFocusClassName,
-        inputAriaLabel,
-        allowPaste,
-      ],
+      [inputClassNames, inputId, inputType, inputPattern, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, mergedClasses, inputAriaLabel, allowPaste, setRef],
     );
 
     const renderSingleInput = (index: number) => {
       const inputProps = createInputProps(index);
-
       if (renderInput) {
-        const renderProps: OtpInputRenderProps = {
-          index,
-          value: valueArray[index],
-          disabled,
-          error,
-          filled: !!valueArray[index],
-          inputProps,
-        };
         return (
           <React.Fragment key={index}>
-            {renderInput(renderProps)}
+            {renderInput({ index, value: valueArray[index], disabled, error, filled: !!valueArray[index], inputProps })}
           </React.Fragment>
         );
       }
-
       return <input key={index} {...inputProps} />;
     };
 
@@ -342,82 +271,45 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       if (groups && groups.length > 0) {
         let currentIndex = 0;
         const groupElements: React.ReactNode[] = [];
-
         groups.forEach((groupSize, groupIndex) => {
           const groupInputs: React.ReactNode[] = [];
-
           for (let i = 0; i < groupSize && currentIndex < length; i++) {
             groupInputs.push(renderSingleInput(currentIndex));
             currentIndex++;
           }
-
           groupElements.push(
-            <div
-              key={`group-${groupIndex}`}
-              className={groupClassName}
-              data-group={groupIndex}
-            >
-              {groupInputs}
-            </div>,
+            <div key={`group-${groupIndex}`} className={mergedClasses.group || undefined} data-group={groupIndex}>{groupInputs}</div>,
           );
-
           if (groupIndex < groups.length - 1 && separator) {
-            groupElements.push(
-              <span
-                key={`separator-${groupIndex}`}
-                className={separatorClassName}
-              >
-                {separator}
-              </span>,
-            );
+            groupElements.push(<span key={`sep-${groupIndex}`} className={mergedClasses.separator || undefined}>{separator}</span>);
           }
         });
-
         return groupElements;
       }
-
       return valueArray.map((_, index) => renderSingleInput(index));
     };
 
     return (
       <div
-        className={cn(containerClassName, fullWidth && "w-full", className) || undefined}
+        className={cn(mergedClasses.root, fullWidth && "w-full", className) || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         {...rest}
       >
         {label && (
-          <OtpInputLabel
-            label={label}
-            required={required}
-            htmlFor={inputId}
-            className={labelClassName}
-          />
+          <OtpInputLabel label={label} required={required} htmlFor={inputId} className={mergedClasses.label || undefined} />
         )}
-
         <div
-          className={wrapperClassName}
+          className={mergedClasses.wrapper || undefined}
           onPaste={handlePaste}
           role="group"
           aria-label={groupAriaLabel}
-          aria-roledescription={groupAriaLabel}
         >
           {renderInputs()}
         </div>
-
-        {name && (
-          <input
-            type="hidden"
-            name={name}
-            value={value}
-            disabled={disabled}
-          />
-        )}
-
+        {name && <input type="hidden" name={name} value={value} disabled={disabled} />}
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
-            {errorMessage}
-          </div>
+          <div id={errorId} role="alert" className={mergedClasses.error || undefined}>{errorMessage}</div>
         )}
       </div>
     );

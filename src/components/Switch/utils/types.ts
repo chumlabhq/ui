@@ -3,12 +3,14 @@ import type { ReactNode, ButtonHTMLAttributes } from "react";
 export interface SwitchRenderProps {
   checked: boolean;
   disabled: boolean;
+  error: boolean;
   switchId: string;
   descriptionId?: string;
 }
 
 export interface SwitchClasses {
   root?: string;
+  innerRow?: string;
   labelContainer?: string;
   label?: string;
   disabledLabel?: string;
@@ -41,24 +43,12 @@ export interface SwitchProps
   disabled?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
-  classes?: SwitchClasses;
-  errorClassName?: string;
-  containerClassName?: string;
-  labelContainerClassName?: string;
-  labelClassName?: string;
-  disabledLabelClassName?: string;
-  descriptionClassName?: string;
-  trackerClassName?: string;
-  disabledTrackerClassName?: string;
-  thumbClassName?: string;
-  checkedTrackerClassName?: string;
-  uncheckedTrackerClassName?: string;
-  checkedThumbClassName?: string;
-  uncheckedThumbClassName?: string;
   checkedIcon?: ReactNode;
   uncheckedIcon?: ReactNode;
   transitionDuration?: number;
   transitionTimingFunction?: string;
   renderLabel?: (props: SwitchRenderProps) => ReactNode;
   renderDescription?: (props: SwitchRenderProps) => ReactNode;
+  classes?: SwitchClasses;
+  unstyled?: boolean;
 }

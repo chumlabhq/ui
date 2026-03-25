@@ -1,1784 +1,430 @@
 import { useState, useRef } from "react";
-import { OtpInput, OtpInputLabel } from "../../components/OtpInput";
-import type { OtpInputRenderProps } from "../../components/OtpInput";
+import { OtpInput } from "../../components/OtpInput";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper } from "./components";
+import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
 
+// ─── Themed Classes ──────────────────────────────────────────────────────────
+
+const getClasses = (dark: boolean) => ({
+  otp: {
+    wrapper: "flex items-center gap-2",
+    group: "flex items-center gap-2",
+    input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark
+      ? "bg-gray-800 border-gray-600 text-gray-100 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
+      : "bg-white border-gray-300 text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+    }`,
+    label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
+    error: `text-xs mt-2 ${dark ? "text-red-400" : "text-red-500"}`,
+    separator: `text-lg select-none ${dark ? "text-gray-600" : "text-gray-300"}`,
+  },
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  btnPrimary: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
+  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+});
+
+// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const OtpInputDemo = () => {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
   const otpRef = useRef<HTMLInputElement>(null);
 
-  const [basicValue, setBasicValue] = useState("");
-  const [fourDigitValue, setFourDigitValue] = useState("");
-  const [eightDigitValue, setEightDigitValue] = useState("");
-  const [groupedValue, setGroupedValue] = useState("");
-  const [customGroupValue, setCustomGroupValue] = useState("");
-  const [unevenGroupValue, setUnevenGroupValue] = useState("");
-  const [labelValue, setLabelValue] = useState("");
-  const [requiredValue, setRequiredValue] = useState("");
-  const [errorValue, setErrorValue] = useState("");
-  const [disabledValue] = useState("123456");
-  const [passwordValue, setPasswordValue] = useState("");
-  const [noPasteValue, setNoPasteValue] = useState("");
-  const [digitsOnlyValue, setDigitsOnlyValue] = useState("");
-  const [darkThemeValue, setDarkThemeValue] = useState("");
-  const [roundedValue, setRoundedValue] = useState("");
-  const [underlineValue, setUnderlineValue] = useState("");
-  const [gradientValue, setGradientValue] = useState("");
-  const [individualStyleValue, setIndividualStyleValue] = useState("");
-  const [completedValue, setCompletedValue] = useState("");
-  const [lastCompleted, setLastCompleted] = useState("");
-  const [layoutValue1, setLayoutValue1] = useState("");
-  const [layoutValue2, setLayoutValue2] = useState("");
-  const [layoutValue3, setLayoutValue3] = useState("");
-  const [layoutValue4, setLayoutValue4] = useState("");
-  const [refDemoValue, setRefDemoValue] = useState("");
-  const [renderInputValue, setRenderInputValue] = useState("");
-  const [idNameValue, setIdNameValue] = useState("");
-
-  const getInputClassNames = () => ({
-    base: `w-12 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
-      isDarkMode
-        ? "border-gray-600 bg-gray-700 text-white placeholder:text-gray-500"
-        : "border-gray-300 bg-white text-gray-900"
-    }`,
-    focus: isDarkMode
-      ? "focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-      : "focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-    error: `w-12 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
-      isDarkMode
-        ? "border-red-400 bg-gray-700 text-white focus:ring-2 focus:ring-red-400"
-        : "border-red-500 bg-white text-gray-900 focus:ring-2 focus:ring-red-500"
-    }`,
-    disabled: `w-12 h-12 text-center text-lg font-medium border rounded-lg cursor-not-allowed ${
-      isDarkMode
-        ? "border-gray-600 bg-gray-600 text-gray-400"
-        : "border-gray-200 bg-gray-100 text-gray-400"
-    }`,
-    label: `block text-sm font-medium mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`,
-    errorMessage: `text-sm mt-2 ${isDarkMode ? "text-red-400" : "text-red-500"}`,
-    container: "flex flex-col",
-    wrapper: "flex gap-2",
-  });
-
-  const classes = getInputClassNames();
+  const [basic, setBasic] = useState("");
+  const [controlled, setControlled] = useState("123");
+  const [completed, setCompleted] = useState<string | null>(null);
+  const [grouped, setGrouped] = useState("");
+  const [errorVal, setErrorVal] = useState("");
+  const [custom, setCustom] = useState("");
 
   return (
-    <div className="space-y-16">
-      <header>
-        <h1 className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-          OTP Input
-        </h1>
-        <p className={`text-lg ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-          A flexible, accessible OTP input component with customizable length, grouping, 
-          separators, and styling. Supports paste functionality, custom renderers, and 
-          keyboard navigation.
-        </p>
-
-        <div className="mt-6">
-          <h3 className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
-            Installation
-          </h3>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`import OtpInput, { OtpInputLabel } from "@kern-ui/otp-input";`}
-          />
+    <div className="space-y-10">
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"}`} />
+        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
+        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
+        <div className="relative">
+          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>OTP Input</h1>
+          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
+            A one-time password input with per-character fields, keyboard navigation,
+            paste support, grouping, validation, and fully customizable styling.
+          </p>
+          <div className="mt-5">
+            <CodeBlock isDarkMode={dark} code={`import { OtpInput } from "@kern-ui/otp-input";`} />
+          </div>
         </div>
       </header>
 
-      <div className="space-y-12">
-        <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-          Examples
-        </h2>
+      {/* ─── Basic ──────────────────────────────────────────────────────── */}
+      <Section title="Basic Usage" description="A 6-digit OTP input." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput value={basic} onValueChange={setBasic} classes={c.otp} />
+          {basic && <p className={`text-xs font-mono mt-3 ${dark ? "text-gray-400" : "text-gray-500"}`}>Value: {basic}</p>}
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Basic OTP Input"
-          description="A simple 6-digit OTP input with default configuration."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={basicValue}
-                onValueChange={setBasicValue}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Value: {basicValue || "(empty)"}
-              </p>
+      {/* ─── With Label ─────────────────────────────────────────────────── */}
+      <Section title="With Label" description="Accessible labeling via the label prop." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput label="Verification Code" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Required ───────────────────────────────────────────────────── */}
+      <Section title="Required" description="Shows asterisk and sets aria-required." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput label="Enter OTP" required classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Lengths ────────────────────────────────────────────────────── */}
+      <Section title="Custom Length" description="Control the number of fields." isDarkMode={dark}>
+        <div className="space-y-4">
+          {[4, 6, 8].map((len) => (
+            <div key={len}>
+              <p className={`text-xs font-medium mb-2 ${c.label}`}>length={len}</p>
+              <DemoWrapper isDarkMode={dark} layout="block">
+                <OtpInput length={len} classes={c.otp} />
+              </DemoWrapper>
             </div>
-          </DemoWrapper>
-        </Section>
+          ))}
+        </div>
+      </Section>
 
-        <Section
-          title="Uncontrolled (defaultValue)"
-          description="Use defaultValue for uncontrolled mode. The component manages its own internal state."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                defaultValue="12"
-                onValueChange={(val) => console.log("Uncontrolled value:", val)}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Starts with "12" pre-filled. Check console for value changes.
-              </p>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<OtpInput
-  defaultValue="12"
-  onValueChange={(val) => console.log(val)}
-/>`}
-          />
-        </Section>
-
-        <Section
-          title="onValueChange"
-          description="Use onValueChange to receive value updates when the user types."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={basicValue}
-                onValueChange={setBasicValue}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Value: {basicValue || "(empty)"}
-              </p>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom Aria Label"
-          description="Use inputAriaLabel to customize the accessible label for each input slot."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                length={4}
-                value={fourDigitValue}
-                onValueChange={setFourDigitValue}
-                autoFocusFirst={false}
-                inputAriaLabel={(index, length) => `Code character ${index + 1} of ${length}`}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Inspect inputs to see custom aria-label: "Code character N of 4"
-              </p>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<OtpInput
-  inputAriaLabel={(index, length) => \`Code character \${index + 1} of \${length}\`}
-/>`}
-          />
-        </Section>
-
-        <Section
-          title="Different Lengths"
-          description="Use the length prop to set the number of input boxes."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  4-digit OTP (length=4)
-                </p>
-                <OtpInput
-                  length={4}
-                  value={fourDigitValue}
-                  onValueChange={setFourDigitValue}
-                  inputClassName={classes.base}
-                  inputFocusClassName={classes.focus}
-                  wrapperClassName={classes.wrapper}
-                />
-              </div>
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  8-digit OTP (length=8)
-                </p>
-                <OtpInput
-                  length={8}
-                  value={eightDigitValue}
-                  onValueChange={setEightDigitValue}
-                  inputClassName={`w-10 h-10 text-center text-base font-medium border rounded-lg outline-none transition-all ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white"
-                      : "border-gray-300 bg-white text-gray-900"
-                  }`}
-                  inputFocusClassName={classes.focus}
-                  wrapperClassName="flex gap-1.5"
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Layout Variations"
-          description="Different grouping and spacing configurations using groups and separator props."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-medium ${isDarkMode ? "bg-purple-500" : "bg-purple-600"}`}>
-                    1
-                  </span>
-                  <span className={`text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
-                    Individual boxes with equal spacing
-                  </span>
-                </div>
-                <OtpInput
-                  value={layoutValue1}
-                  onValueChange={setLayoutValue1}
-                  autoFocusFirst={false}
-                  inputClassName={`w-10 h-10 text-center text-lg font-medium border rounded outline-none transition-all ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex gap-2"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-medium ${isDarkMode ? "bg-purple-500" : "bg-purple-600"}`}>
-                    2
-                  </span>
-                  <span className={`text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
-                    Groups (2-2-2) with separator
-                  </span>
-                </div>
-                <OtpInput
-                  value={layoutValue2}
-                  onValueChange={setLayoutValue2}
-                  autoFocusFirst={false}
-                  groups={[2, 2, 2]}
-                  separator={<span className={`text-xl font-medium ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
-                  inputClassName={`w-10 h-10 text-center text-lg font-medium border rounded outline-none transition-all ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex items-center gap-2"
-                  groupClassName="flex gap-2"
-                  separatorClassName="mx-1"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-medium ${isDarkMode ? "bg-purple-500" : "bg-purple-600"}`}>
-                    3
-                  </span>
-                  <span className={`text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
-                    Connected groups, space between
-                  </span>
-                </div>
-                <OtpInput
-                  value={layoutValue3}
-                  onValueChange={setLayoutValue3}
-                  autoFocusFirst={false}
-                  groups={[2, 2, 2]}
-                  inputClassName={`w-10 h-10 text-center text-lg font-medium border-y border-r outline-none transition-all first:border-l first:rounded-l last:rounded-r focus:ring-2 focus:z-10 relative ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex items-center gap-4"
-                  groupClassName="flex"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-medium ${isDarkMode ? "bg-purple-500" : "bg-purple-600"}`}>
-                    4
-                  </span>
-                  <span className={`text-sm font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
-                    Connected with separator
-                  </span>
-                </div>
-                <OtpInput
-                  value={layoutValue4}
-                  onValueChange={setLayoutValue4}
-                  autoFocusFirst={false}
-                  groups={[2, 2, 2]}
-                  separator={<span className={`text-xl font-medium ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
-                  inputClassName={`w-10 h-10 text-center text-lg font-medium border-y border-r outline-none transition-all first:border-l first:rounded-l last:rounded-r focus:ring-2 focus:z-10 relative ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex items-center gap-2"
-                  groupClassName="flex"
-                  separatorClassName="mx-1"
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Grouped OTP Variations"
-          description="More examples of grouping with different configurations."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Groups (3-3) with dash separator
-                </p>
-                <OtpInput
-                  value={groupedValue}
-                  onValueChange={setGroupedValue}
-                  autoFocusFirst={false}
-                  groups={[3, 3]}
-                  separator={<span className={`text-2xl ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>-</span>}
-                  inputClassName={classes.base}
-                  inputFocusClassName={classes.focus}
-                  wrapperClassName="flex items-center gap-3"
-                  groupClassName="flex gap-2"
-                  separatorClassName="mx-1"
-                />
-              </div>
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Groups (3-3) connected within groups
-                </p>
-                <OtpInput
-                  value={customGroupValue}
-                  onValueChange={setCustomGroupValue}
-                  autoFocusFirst={false}
-                  groups={[3, 3]}
-                  separator={<span className="w-4" />}
-                  inputClassName={`w-12 h-12 text-center text-lg font-medium border-y border-r outline-none transition-all first:border-l first:rounded-l-lg last:rounded-r-lg focus:ring-2 focus:z-10 relative ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex items-center"
-                  groupClassName="flex"
-                />
-              </div>
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Uneven groups (2-2-2) with slash separator
-                </p>
-                <OtpInput
-                  value={unevenGroupValue}
-                  onValueChange={setUnevenGroupValue}
-                  autoFocusFirst={false}
-                  groups={[2, 2, 2]}
-                  separator={<span className={`text-xl ${isDarkMode ? "text-gray-500" : "text-gray-300"}`}>/</span>}
-                  inputClassName={classes.base}
-                  inputFocusClassName={classes.focus}
-                  wrapperClassName="flex items-center gap-2"
-                  groupClassName="flex gap-1"
-                  separatorClassName="mx-1"
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Label"
-          description="Use the label prop to add an accessible label above the input."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <OtpInput
-                label="Verification Code"
-                value={labelValue}
-                onValueChange={setLabelValue}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-                labelClassName={classes.label}
-                containerClassName={classes.container}
-              />
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Required Field"
-          description="Add required prop to show an asterisk (*) indicator and set aria-required."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <OtpInput
-              label="Enter OTP"
-              required
-              length={4}
-              value={requiredValue}
-              onValueChange={setRequiredValue}
-              autoFocusFirst={false}
-              inputClassName={classes.base}
-              inputFocusClassName={classes.focus}
-              wrapperClassName={classes.wrapper}
-              labelClassName={classes.label}
-              containerClassName={classes.container}
-            />
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Error State"
-          description="Use error and errorMessage props to display validation errors."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <OtpInput
-              label="Invalid Code"
-              value={errorValue}
-              onValueChange={setErrorValue}
-              autoFocusFirst={false}
-              error
-              errorMessage="The code you entered is incorrect. Please try again."
-              inputClassName={classes.error}
-              wrapperClassName={classes.wrapper}
-              labelClassName={classes.label}
-              errorClassName={classes.errorMessage}
-              containerClassName={classes.container}
-            />
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Disabled State"
-          description="Disable the input with the disabled prop."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <OtpInput
-              value={disabledValue}
-              disabled
-              inputClassName={classes.disabled}
-              wrapperClassName={classes.wrapper}
-            />
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Password Type (Masked)"
-          description='Use inputType="password" to mask the input values.'
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={passwordValue}
-                onValueChange={setPasswordValue}
-                autoFocusFirst={false}
-                inputType="password"
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Value: {passwordValue || "(empty)"}
-              </p>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Paste Disabled"
-          description="Set allowPaste={false} to disable paste functionality."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={noPasteValue}
-                onValueChange={setNoPasteValue}
-                autoFocusFirst={false}
-                allowPaste={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Try pasting - it won't work!
-              </p>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Digits Only"
-          description="Use the validate prop to restrict input to digits only."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={digitsOnlyValue}
-                onValueChange={setDigitsOnlyValue}
-                autoFocusFirst={false}
-                validate={(char) => /^\d$/.test(char)}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Only numeric digits (0-9) are accepted.
-              </p>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<OtpInput
-  value={value}
-  onValueChange={setValue}
-  validate={(char) => /^\\d$/.test(char)}
-/>`}
-          />
-        </Section>
-
-        <Section
-          title="onComplete Callback"
-          description="Use onComplete to trigger an action when all digits are filled."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={completedValue}
-                onValueChange={setCompletedValue}
-                onComplete={(val: string) => setLastCompleted(val)}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Last completed value:{" "}
-                <span className={`font-mono ${isDarkMode ? "text-green-400" : "text-green-600"}`}>
-                  {lastCompleted || "(none yet)"}
-                </span>
-              </p>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<OtpInput
-  value={value}
-  onValueChange={setValue}
-  onComplete={(val) => {
-    console.log('OTP completed:', val);
-    submitOtp(val);
-  }}
-/>`}
-          />
-        </Section>
-
-        <Section
-          title="No Auto Focus"
-          description="Set autoFocusFirst={false} to prevent auto-focusing the first input on mount."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={basicValue}
-                onValueChange={setBasicValue}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                First input is not auto-focused on mount
-              </p>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Ref Forwarding"
-          description="Access the first input element using React refs for programmatic focus management."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-4">
-              <OtpInput
-                ref={otpRef}
-                value={refDemoValue}
-                onValueChange={setRefDemoValue}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-              />
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => otpRef.current?.focus()}
-                  className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                    isDarkMode
-                      ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Focus First Input
-                </button>
-                <button
-                  type="button"
-                  onClick={() => alert(`First input value: "${otpRef.current?.value || ""}"`)}
-                  className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                    isDarkMode
-                      ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Get First Value
-                </button>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom ID and Name"
-          description="Set custom id and name attributes for form handling."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert(`Form submitted with OTP: ${idNameValue}`);
-              }}
-              className="space-y-4"
-            >
-              <OtpInput
-                id="verification-code"
-                name="otp"
-                label="Verification Code"
-                value={idNameValue}
-                onValueChange={setIdNameValue}
-                autoFocusFirst={false}
-                inputClassName={classes.base}
-                inputFocusClassName={classes.focus}
-                wrapperClassName={classes.wrapper}
-                labelClassName={classes.label}
-                containerClassName={classes.container}
-              />
-              <button
-                type="submit"
-                className={`px-4 py-2 rounded-lg text-white transition-colors ${
-                  isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
-                }`}
-              >
-                Submit
-              </button>
-            </form>
-          </DemoWrapper>
-          <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}>
-            <p className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}>
-              <strong>Note:</strong> The input ID is auto-generated if not provided. It uses{" "}
-              <code className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}>
-                id || useId()
-              </code>{" "}
-              fallback chain.
-            </p>
+      {/* ─── Grouped ────────────────────────────────────────────────────── */}
+      <Section title="Grouped with Separator" description="Split digits into visual groups." isDarkMode={dark}>
+        <div className="space-y-4">
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>groups=[3,3] with dash</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput value={grouped} onValueChange={setGrouped} groups={[3, 3]} separator={<span className={c.otp.separator}>—</span>} classes={c.otp} />
+            </DemoWrapper>
           </div>
-        </Section>
-
-        <Section
-          title="Custom Render Input"
-          description="Use renderInput prop for complete control over how each input is rendered."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={renderInputValue}
-                onValueChange={setRenderInputValue}
-                autoFocusFirst={false}
-                wrapperClassName="flex gap-3"
-                renderInput={(props: OtpInputRenderProps) => (
-                  <div key={props.index} className="relative">
-                    <input
-                      {...props.inputProps}
-                      className={`w-14 h-14 text-center text-xl font-bold rounded-xl border-2 outline-none transition-all ${
-                        props.filled
-                          ? isDarkMode
-                            ? "border-green-400 bg-green-900/30 text-green-400"
-                            : "border-green-500 bg-green-50 text-green-700"
-                          : isDarkMode
-                            ? "border-gray-600 bg-gray-700 text-white"
-                            : "border-gray-300 bg-white text-gray-900"
-                      } ${
-                        props.error
-                          ? isDarkMode
-                            ? "border-red-400"
-                            : "border-red-500"
-                          : ""
-                      } ${
-                        props.disabled
-                          ? "opacity-50 cursor-not-allowed"
-                          : "focus:ring-2 focus:ring-blue-500"
-                      }`}
-                    />
-                    {props.filled && (
-                      <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center ${isDarkMode ? "bg-green-500" : "bg-green-500"}`}>
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                )}
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Custom rendered inputs with filled indicators
-              </p>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<OtpInput
-  value={value}
-  onValueChange={setValue}
-  renderInput={(props) => (
-    <div key={props.index} className="relative">
-      <input
-        {...props.inputProps}
-        className={\`custom-input \${props.filled ? "filled" : ""}\`}
-      />
-      {props.filled && <CheckIcon />}
-    </div>
-  )}
-/>`}
-          />
-        </Section>
-
-        <Section
-          title="OtpInputLabel Standalone"
-          description="Use OtpInputLabel separately for custom layouts."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-4">
-              <div>
-                <OtpInputLabel
-                  label="Standalone Label"
-                  htmlFor="custom-otp"
-                  className={classes.label}
-                />
-                <OtpInput
-                  id="custom-otp"
-                  value={basicValue}
-                  onValueChange={setBasicValue}
-                  autoFocusFirst={false}
-                  inputClassName={classes.base}
-                  inputFocusClassName={classes.focus}
-                  wrapperClassName={classes.wrapper}
-                />
-              </div>
-              <div>
-                <OtpInputLabel
-                  label="Required Field"
-                  htmlFor="required-otp"
-                  required
-                  className={classes.label}
-                />
-                <p className={`text-xs mb-1 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Required indicator (*) is added automatically
-                </p>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom Theme Examples"
-          description="Customize the input appearance using className props."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-8">
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Dark theme (works in both modes)
-                </p>
-                <div className="bg-gray-900 p-6 rounded-xl">
-                  <OtpInput
-                    value={darkThemeValue}
-                    onValueChange={setDarkThemeValue}
-                    autoFocusFirst={false}
-                    inputClassName="w-12 h-12 text-center text-lg font-medium border border-gray-600 rounded-lg bg-gray-800 text-white outline-none transition-all focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                    wrapperClassName="flex gap-3"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Rounded/Pill style
-                </p>
-                <OtpInput
-                  value={roundedValue}
-                  onValueChange={setRoundedValue}
-                  autoFocusFirst={false}
-                  inputClassName={`w-14 h-14 text-center text-xl font-bold border-2 rounded-full outline-none transition-all ${
-                    isDarkMode
-                      ? "border-purple-400 bg-purple-900/30 text-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-purple-900/50"
-                      : "border-purple-300 bg-purple-50 text-purple-900 focus:ring-2 focus:ring-purple-500 focus:bg-white"
-                  }`}
-                  wrapperClassName="flex gap-4"
-                />
-              </div>
-
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Underline style
-                </p>
-                <OtpInput
-                  value={underlineValue}
-                  onValueChange={setUnderlineValue}
-                  autoFocusFirst={false}
-                  inputClassName={`w-12 h-12 text-center text-2xl font-medium border-b-2 bg-transparent outline-none transition-all ${
-                    isDarkMode
-                      ? "border-gray-600 text-white focus:border-blue-400"
-                      : "border-gray-300 text-gray-900 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex gap-4"
-                />
-              </div>
-
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Gradient border effect
-                </p>
-                <OtpInput
-                  value={gradientValue}
-                  onValueChange={setGradientValue}
-                  autoFocusFirst={false}
-                  inputClassName={`w-12 h-12 text-center text-lg font-medium rounded-lg outline-none border-2 border-transparent bg-clip-padding transition-all focus:ring-2 focus:ring-pink-500 ${
-                    isDarkMode
-                      ? "bg-gray-800 text-white"
-                      : "bg-white text-gray-900"
-                  }`}
-                  wrapperClassName="flex gap-2"
-                  containerClassName={`${isDarkMode ? "[&_input]:bg-gradient-to-r [&_input]:from-purple-600 [&_input]:to-pink-600" : "[&_input]:bg-gradient-to-r [&_input]:from-purple-500 [&_input]:to-pink-500"} [&_input]:[background-origin:border-box] [&_input]:[background-clip:padding-box,border-box]`}
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Individual Input Styling"
-          description="Use inputClassNames array to style each input individually."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-3">
-              <OtpInput
-                value={individualStyleValue}
-                onValueChange={setIndividualStyleValue}
-                autoFocusFirst={false}
-                inputClassName={`w-12 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
-                  isDarkMode ? "bg-gray-700 text-white" : "bg-white text-gray-900"
-                }`}
-                inputClassNames={[
-                  `border-red-400 focus:ring-2 focus:ring-red-500 focus:border-red-500`,
-                  `border-orange-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500`,
-                  `border-yellow-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500`,
-                  `border-green-400 focus:ring-2 focus:ring-green-500 focus:border-green-500`,
-                  `border-blue-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500`,
-                  `border-purple-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500`,
-                ]}
-                wrapperClassName="flex gap-2"
-              />
-              <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                Rainbow colors using inputClassNames array
-              </p>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Size Variations"
-          description="Customize input sizes using className props."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-6">
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Large inputs
-                </p>
-                <OtpInput
-                  length={4}
-                  value={fourDigitValue}
-                  onValueChange={setFourDigitValue}
-                  autoFocusFirst={false}
-                  inputClassName={`w-16 h-16 text-center text-2xl font-bold border-2 rounded-xl outline-none transition-all ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex gap-4"
-                />
-              </div>
-              <div>
-                <p className={`text-xs mb-2 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  Small inputs
-                </p>
-                <OtpInput
-                  length={8}
-                  value={eightDigitValue}
-                  onValueChange={setEightDigitValue}
-                  autoFocusFirst={false}
-                  inputClassName={`w-8 h-8 text-center text-sm font-medium border rounded outline-none transition-all ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                      : "border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  }`}
-                  wrapperClassName="flex gap-1"
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Full Width"
-          description="Use fullWidth prop to make the container span full width."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="w-full max-w-md">
-              <OtpInput
-                length={6}
-                value={basicValue}
-                onValueChange={setBasicValue}
-                autoFocusFirst={false}
-                fullWidth
-                inputClassName={`flex-1 h-12 text-center text-lg font-medium border rounded-lg outline-none transition-all ${
-                  isDarkMode
-                    ? "border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                    : "border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                }`}
-                wrapperClassName="flex gap-2 w-full"
-                containerClassName="w-full"
-              />
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Credit Card Style (16 digits)"
-          description="Example of a longer input with groups for credit card-like input."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <OtpInput
-              length={16}
-              value=""
-              onValueChange={() => {}}
-              autoFocusFirst={false}
-              groups={[4, 4, 4, 4]}
-              separator={<span className={isDarkMode ? "text-gray-500" : "text-gray-300"}>-</span>}
-              inputClassName={`w-8 h-10 text-center text-sm font-mono border rounded outline-none transition-all ${
-                isDarkMode
-                  ? "border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-                  : "border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              }`}
-              wrapperClassName="flex items-center gap-2"
-              groupClassName="flex gap-0.5"
-              separatorClassName="mx-1"
-            />
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Data Attributes"
-          description="The OtpInput component applies data attributes for CSS-based styling."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="overflow-x-auto">
-              <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
-                <thead>
-                  <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                    <th className="text-left py-3 pr-4 font-semibold">Attribute</th>
-                    <th className="text-left py-3 pr-4 font-semibold">Applied To</th>
-                    <th className="text-left py-3 font-semibold">Description</th>
-                  </tr>
-                </thead>
-                <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">data-disabled</td>
-                    <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      container, inputs
-                    </td>
-                    <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      Present when input is disabled
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">data-error</td>
-                    <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      container, inputs
-                    </td>
-                    <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      Present when input has an error
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">data-filled</td>
-                    <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      input
-                    </td>
-                    <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      Present when input has a value
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">data-index</td>
-                    <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      input
-                    </td>
-                    <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      The index of the input (0-based)
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">data-group</td>
-                    <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      group wrapper
-                    </td>
-                    <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                      The index of the group (when using groups)
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className={`text-sm mt-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
-              Example usage:{" "}
-              <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
-                data-[disabled]:opacity-50
-              </code>
-              ,{" "}
-              <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
-                data-[filled]:border-green-500
-              </code>
-            </p>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Input Pattern (Mobile Keyboard)"
-          description='The inputPattern prop sets the HTML pattern attribute on each input, which affects the keyboard shown on mobile devices. The default "\\d*" triggers a numeric keyboard. Set it to ".*" for a full keyboard.'
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="space-y-4">
-              <div>
-                <p className={`text-sm mb-2 font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Numeric keyboard (default)</p>
-                <OtpInput
-                  length={4}
-                  autoFocusFirst={false}
-                  inputClassName={`w-12 h-12 text-center text-lg border rounded-lg ${isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"}`}
-                  wrapperClassName="flex gap-2"
-                />
-              </div>
-              <div>
-                <p className={`text-sm mb-2 font-medium ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Alphanumeric keyboard (pattern=&quot;.*&quot;)</p>
-                <OtpInput
-                  length={4}
-                  autoFocusFirst={false}
-                  inputPattern=".*"
-                  inputType="text"
-                  inputClassName={`w-12 h-12 text-center text-lg border rounded-lg ${isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"}`}
-                  wrapperClassName="flex gap-2"
-                />
-              </div>
-            </div>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`// Numeric keyboard (default)
-<OtpInput length={4} inputPattern="\\d*" />
-
-// Full alphanumeric keyboard
-<OtpInput length={4} inputPattern=".*" inputType="text" />`}
-          />
-        </Section>
-
-        <Section
-          title="Custom Group Aria Label"
-          description="Use groupAriaLabel to provide a localized or context-specific accessible label for the input group. Screen readers will announce this label when the user enters the OTP area."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <OtpInput
-              length={6}
-              autoFocusFirst={false}
-              groupAriaLabel="Enter your 6-digit verification code"
-              inputClassName={`w-12 h-12 text-center text-lg border rounded-lg ${isDarkMode ? "bg-gray-800 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"}`}
-              wrapperClassName="flex gap-2"
-            />
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<OtpInput
-  length={6}
-  groupAriaLabel="Enter your 6-digit verification code"
-/>
-
-// i18n
-<OtpInput
-  length={6}
-  groupAriaLabel="Ingrese su código de verificación de 6 dígitos"
-/>`}
-          />
-        </Section>
-      </div>
-
-      <div className="space-y-8">
-        <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-          API Reference
-        </h2>
-
-        <div>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            OtpInput
-          </h3>
-          <div className="overflow-x-auto">
-            <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
-              <thead>
-                <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">length</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>6</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Number of input boxes
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">value</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Controlled OTP value
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">defaultValue</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>""</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Initial value for uncontrolled mode
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">onValueChange</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value: string) =&gt; void</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Callback when value changes
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputAriaLabel</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(index: number, length: number) =&gt; string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>auto</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Custom aria-label generator for each input
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">onComplete</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(value: string) =&gt; void</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Callback when all digits are filled
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">label</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Label text displayed above the input
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">required</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Show required indicator (*) and set aria-required
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">error</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Show error styling (sets aria-invalid)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">errorMessage</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Error message displayed below the input
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">disabled</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Disables all inputs
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">groups</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number[]</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Array defining input grouping (e.g., [3, 3])
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">separator</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Element rendered between groups
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">allowPaste</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>true</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Enable/disable paste functionality
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">autoFocusFirst</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Auto-focus first input on mount
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputType</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>"text" | "password"</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"text"</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Input type (text or password for masking)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputClassNames</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(string | undefined)[]</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>[]</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Individual class names per input index
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">fullWidth</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Take full width of container
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">renderInput</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(props: OtpInputRenderProps) =&gt; ReactNode</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Custom render function for each input
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">validate</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(char: string) =&gt; boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Validation function to filter input characters
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputPattern</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"\\d*"</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    HTML pattern attribute for each input (affects mobile keyboard)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">groupAriaLabel</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>"One-time password input"</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Accessible label for the input group container
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">id</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>auto-generated</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    HTML id attribute for the first input
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">name</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    HTML name attribute for form submission
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>groups=[2,2,2] with dot</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput groups={[2, 2, 2]} separator={<span className={c.otp.separator}>·</span>} classes={c.otp} />
+            </DemoWrapper>
           </div>
         </div>
+      </Section>
 
-        <div>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            Styling Props
-          </h3>
-          <div className="overflow-x-auto">
-            <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
-              <thead>
-                <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">containerClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for outer container (includes label and error)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">wrapperClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for inputs wrapper (contains all inputs/groups)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">groupClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for group containers (when using groups)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for all input elements
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputFocusClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for focus states (appended to inputClassName)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">labelClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for label element
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">errorClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for error message element
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">separatorClassName</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for separator elements
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputClassNames</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>(string | undefined)[]</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Array of classes for individual inputs by index
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      {/* ─── Password ───────────────────────────────────────────────────── */}
+      <Section title="Password Mask" description='inputType="password" masks characters.' isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput inputType="password" label="Masked PIN" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── onComplete ─────────────────────────────────────────────────── */}
+      <Section title="onComplete Callback" description="Fires when all fields are filled." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput onComplete={(val) => setCompleted(val)} classes={c.otp} />
+          {completed && (
+            <div className={`mt-3 px-3 py-2 rounded-lg text-sm font-mono ${dark ? "bg-emerald-900/30 text-emerald-300 border border-emerald-800" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`}>
+              Completed: {completed}
+            </div>
+          )}
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Controlled ─────────────────────────────────────────────────── */}
+      <Section title="Controlled Mode" description="External state via value + onValueChange." isDarkMode={dark}>
+        <div className={`mb-3 p-3 rounded-lg flex items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
+          <span className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}>Value:</span>
+          <span className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}>&quot;{controlled}&quot;</span>
+          <button className={`ml-auto ${c.btn}`} onClick={() => setControlled("")}>Clear</button>
+          <button className={c.btnPrimary} onClick={() => setControlled("123456")}>Set 123456</button>
         </div>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput value={controlled} onValueChange={setControlled} classes={c.otp} />
+        </DemoWrapper>
+      </Section>
 
-        <div>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            OtpInputLabel
-          </h3>
-          <div className="overflow-x-auto">
-            <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
-              <thead>
-                <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">label</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>ReactNode</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>required</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Label content to display
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">required</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>false</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Whether to show required indicator (*)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">htmlFor</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>-</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    ID of the input element (for htmlFor attribute)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">className</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}>""</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    CSS class for the label element
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            OtpInputRenderProps (for renderInput)
-          </h3>
-          <div className="overflow-x-auto">
-            <table className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}>
-              <thead>
-                <tr className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}>
-                  <th className="text-left py-3 pr-4 font-semibold">Property</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">index</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>number</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Index of the current input (0-based)
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">value</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>string</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Current value of this input
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">disabled</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Whether the input is disabled
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">error</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Whether the input has an error
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">filled</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>boolean</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Whether the input has a value
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-3 pr-4 font-mono text-blue-500">inputProps</td>
-                  <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>InputHTMLAttributes & {`{ ref }`}</td>
-                  <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Props to spread onto the input element
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div>
-          <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            Type Definitions
-          </h3>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`interface OtpInputLabelProps {
-  label: ReactNode;
-  required?: boolean;
-  htmlFor?: string;
-  className?: string;
-}
-
-interface OtpInputRenderProps {
-  index: number;
-  value: string;
-  disabled: boolean;
-  error: boolean;
-  filled: boolean;
-  inputProps: InputHTMLAttributes<HTMLInputElement> & {
-    ref: (el: HTMLInputElement | null) => void;
-  };
-}
-
-interface OtpInputProps
-  extends Omit<
-    InputHTMLAttributes<HTMLInputElement>,
-    "value" | "onChange" | "type" | "maxLength"  // onChange omitted to avoid conflict with native handler
-  > {
-  length?: number;
-  value?: string;
-  onValueChange?: (value: string) => void;
-  onComplete?: (value: string) => void;
-  label?: ReactNode;
-  required?: boolean;
-  error?: boolean;
-  errorMessage?: ReactNode;
-  disabled?: boolean;
-  groups?: number[];
-  separator?: ReactNode;
-  allowPaste?: boolean;
-  autoFocusFirst?: boolean;
-  inputType?: "text" | "password";
-  inputClassNames?: (string | undefined)[];
-  fullWidth?: boolean;
-  renderInput?: (props: OtpInputRenderProps) => ReactNode;
-  containerClassName?: string;
-  wrapperClassName?: string;
-  groupClassName?: string;
-  inputClassName?: string;
-  inputFocusClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  separatorClassName?: string;
-}`}
+      {/* ─── Error ──────────────────────────────────────────────────────── */}
+      <Section title="Error State" description="Validation with error + errorMessage." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            value={errorVal}
+            onValueChange={setErrorVal}
+            label="Verification Code"
+            error={errorVal.length > 0 && errorVal.length < 6}
+            errorMessage={errorVal.length > 0 && errorVal.length < 6 ? "Please enter all 6 digits" : undefined}
+            classes={{
+              ...c.otp,
+              input: `${c.otp.input} ${errorVal.length > 0 && errorVal.length < 6 ? (dark ? "border-red-400 focus:border-red-400 focus:ring-red-400/20" : "border-red-500 focus:border-red-500 focus:ring-red-500/20") : ""}`,
+            }}
           />
-        </div>
-      </div>
+        </DemoWrapper>
+      </Section>
 
-      <div className="space-y-6">
-        <h2 className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-          Accessibility
-        </h2>
-        <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-          <h3 className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            Features
-          </h3>
-          <ul className={`list-disc list-inside space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-            <li>
-              Label is automatically associated with first input via{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                htmlFor
-              </code>
-            </li>
-            <li>
-              Required inputs have{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                aria-required="true"
-              </code>
-            </li>
-            <li>
-              Error state sets{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                aria-invalid="true"
-              </code>{" "}
-              and connects error message via{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                aria-describedby
-              </code>
-            </li>
-            <li>
-              Error messages use{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                role="alert"
-              </code>{" "}
-              for screen reader announcements
-            </li>
-            <li>
-              Each input has{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                aria-label="OTP digit N"
-              </code>{" "}
-              for screen readers
-            </li>
-            <li>
-              First input has{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                autoComplete="one-time-code"
-              </code>{" "}
-              for autofill support
-            </li>
-            <li>
-              Wrapper uses{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                role="group"
-              </code>{" "}
-              with{" "}
-              <code className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}>
-                aria-roledescription="One-time password input"
-              </code>
-            </li>
-            <li>Supports ref forwarding for programmatic focus management</li>
-          </ul>
-        </div>
+      {/* ─── Disabled ───────────────────────────────────────────────────── */}
+      <Section title="Disabled" description="Disable all input fields." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput disabled defaultValue="123456" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
 
-        <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-gray-50"}`}>
-          <h3 className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-            Keyboard Navigation
-          </h3>
-          <ul className={`space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                Tab
-              </kbd>{" "}
-              - Move focus to/from OTP inputs
-            </li>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                ←
-              </kbd>{" "}
-              /{" "}
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                →
-              </kbd>{" "}
-              - Navigate between inputs
-            </li>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                Backspace
-              </kbd>{" "}
-              - Delete current digit and move to previous input
-            </li>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                Delete
-              </kbd>{" "}
-              - Delete current digit without moving
-            </li>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                Home
-              </kbd>{" "}
-              - Jump to first input
-            </li>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                End
-              </kbd>{" "}
-              - Jump to last input
-            </li>
-            <li>
-              <kbd className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}>
-                Ctrl/Cmd + V
-              </kbd>{" "}
-              - Paste OTP (when allowPaste is true)
-            </li>
-          </ul>
+      {/* ─── Validation ─────────────────────────────────────────────────── */}
+      <Section title="Custom Validation" description="Restrict characters with the validate function." isDarkMode={dark}>
+        <div className="space-y-4">
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Digits only</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput validate={(char) => /\d/.test(char)} label="PIN (digits only)" classes={c.otp} />
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Letters only</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput length={4} validate={(char) => /[a-zA-Z]/.test(char)} label="Code (letters only)" classes={c.otp} />
+            </DemoWrapper>
+          </div>
         </div>
-      </div>
+      </Section>
 
-      <div className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800 border border-gray-700" : "bg-gray-50 border border-gray-200"}`}>
-        <p className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
-          <strong>Note:</strong> OtpInput extends native{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
-            InputHTMLAttributes
-          </code>{" "}
-          (excluding value, type, and maxLength) and accepts all standard input props such as{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>autoFocus</code>,{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>tabIndex</code>,{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>onFocus</code>,{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>onBlur</code>,{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>data-*</code>,{" "}
-          <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>aria-*</code>, etc.
-          These props are spread to all individual input elements.
-        </p>
-      </div>
+      {/* ─── Auto Focus ─────────────────────────────────────────────────── */}
+      <Section title="Auto Focus" description="Focus the first field on mount." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput autoFocusFirst label="Auto-focused" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Paste Disabled ─────────────────────────────────────────────── */}
+      <Section title="Paste Disabled" description="Block clipboard paste with allowPaste={false}." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput allowPaste={false} label="No paste" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Ref ────────────────────────────────────────────────────────── */}
+      <Section title="Ref Forwarding" description="Access the first input via ref." isDarkMode={dark}>
+        <div className="mb-3">
+          <button className={c.btnPrimary} onClick={() => otpRef.current?.focus()}>Focus First Input</button>
+        </div>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput ref={otpRef} label="Ref demo" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Render ──────────────────────────────────────────────── */}
+      <Section title="Custom Render Input" description="Use renderInput for complete control over each field." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            value={custom}
+            onValueChange={setCustom}
+            length={4}
+            renderInput={({ inputProps, filled }) => (
+              <input
+                {...inputProps}
+                className={`w-14 h-14 text-center text-xl font-bold rounded-2xl border-2 transition-all focus:outline-none ${
+                  filled
+                    ? (dark ? "border-indigo-400 bg-indigo-500/10 text-indigo-300" : "border-indigo-500 bg-indigo-50 text-indigo-700")
+                    : (dark ? "border-gray-600 bg-gray-800 text-gray-200" : "border-gray-300 bg-white text-gray-900")
+                } ${dark ? "focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`}
+              />
+            )}
+            classes={{ wrapper: "flex items-center gap-3" }}
+          />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Classes System ─────────────────────────────────────────────── */}
+      <Section title="Classes System" description="Override styling with the classes prop — 8 slots." isDarkMode={dark}>
+        <div className="space-y-4">
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Rounded-full</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput length={4} classes={{
+                ...c.otp,
+                input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none ${dark ? "bg-gray-800 border-gray-600 text-gray-100 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "bg-white border-gray-300 text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`,
+              }} />
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Compact</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput length={6} classes={{
+                ...c.otp,
+                wrapper: "flex items-center gap-1.5",
+                input: `w-9 h-9 text-center text-sm font-semibold rounded-lg border transition-all focus:outline-none ${dark ? "bg-gray-800 border-gray-600 text-gray-100 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "bg-white border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`,
+              }} />
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>Underline style</p>
+            <DemoWrapper isDarkMode={dark} layout="block">
+              <OtpInput length={6} classes={{
+                ...c.otp,
+                wrapper: "flex items-center gap-3",
+                input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none ${dark ? "border-gray-600 text-gray-100 focus:border-indigo-400" : "border-gray-300 text-gray-900 focus:border-indigo-500"}`,
+              }} />
+            </DemoWrapper>
+          </div>
+        </div>
+      </Section>
+
+      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
+      <Section title="Unstyled Mode" description="unstyled=true strips all defaults." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput unstyled length={4} classes={{
+            wrapper: "flex items-center gap-4",
+            input: `w-16 h-16 text-center text-2xl font-black rounded-2xl border-2 transition-all focus:outline-none ${dark ? "bg-gradient-to-br from-purple-900/50 to-pink-900/50 border-purple-500/50 text-purple-300 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30" : "bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300 text-purple-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"}`,
+          }} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Form Integration ───────────────────────────────────────────── */}
+      <Section title="Form Integration" description="Hidden input with name prop for form submission." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); alert(`OTP: ${fd.get("otp")}`); }}>
+            <OtpInput name="otp" label="Enter OTP" classes={c.otp} />
+            <button type="submit" className={`mt-3 ${c.btnPrimary}`}>Submit</button>
+          </form>
+        </DemoWrapper>
+        <div className={c.note}>
+          A hidden <code className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`}>&lt;input type=&quot;hidden&quot;&gt;</code> carries the full value.
+        </div>
+      </Section>
+
+      {/* ─── Tel Input Type ────────────────────────────────────────────── */}
+      <Section title="Telephone Input Type" description='inputType="tel" shows number pad on mobile devices.' isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput inputType="tel" label="Phone OTP (tel)" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Per-Field Styling ──────────────────────────────────────────── */}
+      <Section title="Per-Field Styling" description="Use inputClassNames to apply different styles to individual fields." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            length={4}
+            inputClassNames={[
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-red-400 text-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-400/20" : "bg-white border-red-400 text-red-600 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"}`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-amber-400 text-amber-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20" : "bg-white border-amber-400 text-amber-600 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"}`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-emerald-400 text-emerald-300 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20" : "bg-white border-emerald-400 text-emerald-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"}`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-indigo-400 text-indigo-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "bg-white border-indigo-400 text-indigo-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`,
+            ]}
+            classes={{ wrapper: "flex items-center gap-2" }}
+          />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Full Width ─────────────────────────────────────────────────── */}
+      <Section title="Full Width" description="Span the container width with fullWidth." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput fullWidth label="Full width OTP" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Aria Labels ─────────────────────────────────────────── */}
+      <Section title="Custom Aria Labels" description="Override per-field and group aria labels for i18n or custom screen reader text." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            length={4}
+            inputAriaLabel={(index, len) => `Code field ${index + 1} out of ${len}`}
+            groupAriaLabel="Verification code entry"
+            label="Custom a11y labels"
+            classes={c.otp}
+          />
+        </DemoWrapper>
+        <div className={c.note}>
+          Open screen reader to hear &quot;Code field 1 out of 4&quot; instead of the default &quot;Digit 1 of 4&quot;.
+        </div>
+      </Section>
+
+      {/* ─── Uncontrolled with Default Value ────────────────────────────── */}
+      <Section title="Uncontrolled with Default Value" description="Use defaultValue for initial state without controlled mode." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput defaultValue="42" label="Pre-filled (uncontrolled)" classes={c.otp} />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Props Table ────────────────────────────────────────────────── */}
+      <Section title="OtpInput Props" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="length" type="number" defaultVal="6" description="Number of input fields" isDarkMode={dark} />
+            <PropRow name="value" type="string" description="Controlled value" isDarkMode={dark} />
+            <PropRow name="defaultValue" type="string" description="Initial value (uncontrolled)" isDarkMode={dark} />
+            <PropRow name="onValueChange" type="(value) => void" description="Value change callback" isDarkMode={dark} />
+            <PropRow name="onComplete" type="(value) => void" description="Fires when all fields filled" isDarkMode={dark} />
+            <PropRow name="label" type="ReactNode" description="Label text" isDarkMode={dark} />
+            <PropRow name="required" type="boolean" defaultVal="false" description="Required field" isDarkMode={dark} />
+            <PropRow name="error" type="boolean" defaultVal="false" description="Error state" isDarkMode={dark} />
+            <PropRow name="errorMessage" type="ReactNode" description="Error text" isDarkMode={dark} />
+            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable all inputs" isDarkMode={dark} />
+            <PropRow name="groups" type="number[]" description="Split into groups" isDarkMode={dark} />
+            <PropRow name="separator" type="ReactNode" description="Between groups" isDarkMode={dark} />
+            <PropRow name="allowPaste" type="boolean" defaultVal="true" description="Allow paste" isDarkMode={dark} />
+            <PropRow name="autoFocusFirst" type="boolean" defaultVal="false" description="Auto-focus first" isDarkMode={dark} />
+            <PropRow name="inputType" type='"text"|"password"|"tel"' defaultVal='"text"' description="Input type" isDarkMode={dark} />
+            <PropRow name="validate" type="(char) => boolean" description="Character validation" isDarkMode={dark} />
+            <PropRow name="renderInput" type="(props) => ReactNode" description="Custom field render" isDarkMode={dark} />
+            <PropRow name="name" type="string" description="Hidden input name" isDarkMode={dark} />
+            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Full width" isDarkMode={dark} />
+            <PropRow name="classes" type="OtpInputClasses" description="Slot overrides (8 slots)" isDarkMode={dark} />
+            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip defaults" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-index" type="input" description="Field index" isDarkMode={dark} />
+            <PropRow name="data-filled" type="input" description="Has value" isDarkMode={dark} />
+            <PropRow name="data-disabled" type="root, input" description="Disabled" isDarkMode={dark} />
+            <PropRow name="data-error" type="root, input" description="Error state" isDarkMode={dark} />
+            <PropRow name="data-group" type="group div" description="Group index" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" isDarkMode={dark}>
+        <div className={c.card}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              'Each input has aria-label: "Digit N of M"',
+              'Wrapper uses role="group" with aria-label',
+              "aria-invalid and aria-required on each input",
+              "Error message uses role=\"alert\"",
+              "Label auto-associated via htmlFor",
+              'autoComplete="one-time-code" on first input',
+              'inputMode="numeric" for mobile keyboards',
+              "Dev warning for missing label/aria-label",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["0-9 / A-Z", "Type character, auto-advance"],
+              ["Backspace", "Clear current, move to previous"],
+              ["Delete", "Clear current field"],
+              ["Arrow Left / Right", "Move between fields"],
+              ["Home / End", "First / last field"],
+              ["Ctrl+V", "Paste full OTP"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
   );
 };

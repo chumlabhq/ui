@@ -1,6 +1,6 @@
-import { useId, useMemo, forwardRef, useCallback } from "react";
-import type { SwitchProps, SwitchRenderProps } from "./utils/types";
-import { defaultStyles } from "./utils/constants";
+import { useId, useMemo, useRef, forwardRef, useCallback } from "react";
+import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/types";
+import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
 
@@ -20,20 +20,8 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       disabled = false,
       error = false,
       errorMessage,
-      classes,
-      errorClassName,
-      containerClassName,
-      labelContainerClassName,
-      labelClassName,
-      disabledLabelClassName,
-      descriptionClassName,
-      trackerClassName,
-      disabledTrackerClassName,
-      thumbClassName,
-      checkedTrackerClassName,
-      uncheckedTrackerClassName,
-      checkedThumbClassName,
-      uncheckedThumbClassName,
+      classes: classesProp,
+      unstyled = false,
       checkedIcon,
       uncheckedIcon,
       transitionDuration,
@@ -41,6 +29,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       renderLabel,
       renderDescription,
       "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       ...buttonProps
     },
     ref,
@@ -50,6 +39,17 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const errorId = `${switchId}-error`;
     const descriptionId =
       description || renderDescription ? `${switchId}-description` : undefined;
+
+    // Dev warning
+    const warnedRef = useRef(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (!label && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
+        warnedRef.current = true;
+        console.warn(
+          "Switch: A switch without a label requires `aria-label` or `aria-labelledby` for accessibility.",
+        );
+      }
+    }
 
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
@@ -63,9 +63,31 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       }
     }, [disabled, isChecked, setIsChecked]);
 
+    // ─── Merged classes ─────────────────────────────────────────────────
+    const baseClasses = unstyled ? UNSTYLED_SWITCH_CLASSES : DEFAULT_SWITCH_CLASSES;
+    const mergedClasses: Required<SwitchClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        innerRow: classesProp?.innerRow ?? baseClasses.innerRow,
+        labelContainer: classesProp?.labelContainer ?? baseClasses.labelContainer,
+        label: classesProp?.label ?? baseClasses.label,
+        disabledLabel: classesProp?.disabledLabel ?? baseClasses.disabledLabel,
+        description: classesProp?.description ?? baseClasses.description,
+        tracker: classesProp?.tracker ?? baseClasses.tracker,
+        disabledTracker: classesProp?.disabledTracker ?? baseClasses.disabledTracker,
+        thumb: classesProp?.thumb ?? baseClasses.thumb,
+        checkedTracker: classesProp?.checkedTracker ?? baseClasses.checkedTracker,
+        uncheckedTracker: classesProp?.uncheckedTracker ?? baseClasses.uncheckedTracker,
+        checkedThumb: classesProp?.checkedThumb ?? baseClasses.checkedThumb,
+        uncheckedThumb: classesProp?.uncheckedThumb ?? baseClasses.uncheckedThumb,
+        error: classesProp?.error ?? baseClasses.error,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const renderProps: SwitchRenderProps = useMemo(
-      () => ({ checked: isChecked, disabled, switchId, descriptionId }),
-      [isChecked, disabled, switchId, descriptionId],
+      () => ({ checked: isChecked, disabled, error, switchId, descriptionId }),
+      [isChecked, disabled, error, switchId, descriptionId],
     );
 
     const transitionStyle = useMemo(() => {
@@ -78,53 +100,31 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       };
     }, [transitionDuration, transitionTimingFunction]);
 
-    const rContainerClassName = containerClassName ?? classes?.root;
-    const rLabelContainerClassName = labelContainerClassName ?? classes?.labelContainer;
-    const rLabelClassName = labelClassName ?? classes?.label;
-    const rDisabledLabelClassName = disabledLabelClassName ?? classes?.disabledLabel;
-    const rDescriptionClassName = descriptionClassName ?? classes?.description;
-    const rTrackerClassName = trackerClassName ?? classes?.tracker;
-    const rDisabledTrackerClassName = disabledTrackerClassName ?? classes?.disabledTracker;
-    const rThumbClassName = thumbClassName ?? classes?.thumb;
-    const rCheckedTrackerClassName = checkedTrackerClassName ?? classes?.checkedTracker;
-    const rUncheckedTrackerClassName = uncheckedTrackerClassName ?? classes?.uncheckedTracker;
-    const rCheckedThumbClassName = checkedThumbClassName ?? classes?.checkedThumb;
-    const rUncheckedThumbClassName = uncheckedThumbClassName ?? classes?.uncheckedThumb;
-    const rErrorClassName = errorClassName ?? classes?.error;
-
     const hasLabelContent =
       label || description || renderLabel || renderDescription;
 
     return (
       <div
-        className={cn("flex flex-col", rContainerClassName, className)}
+        className={cn(mergedClasses.root, className) || undefined}
         data-disabled={disabled || undefined}
         data-checked={isChecked || undefined}
         data-error={error || undefined}
       >
-        <div
-          className={cn(
-            "flex items-center",
-            defaultStyles.container,
-          )}
-        >
+        <div className={mergedClasses.innerRow || undefined}>
           {hasLabelContent && (
-            <div className={cn("flex flex-col", rLabelContainerClassName)}>
+            <div className={mergedClasses.labelContainer || undefined}>
               {renderLabel
                 ? renderLabel(renderProps)
                 : label && (
                     <label
                       htmlFor={switchId}
                       className={cn(
-                        "cursor-pointer",
-                        disabled && "cursor-not-allowed",
-                        defaultStyles.label,
-                        rLabelClassName,
-                        disabled && defaultStyles.disabledLabel,
-                        disabled && rDisabledLabelClassName,
-                      )}
+                        mergedClasses.label,
+                        disabled && mergedClasses.disabledLabel,
+                      ) || undefined}
                     >
                       {label}
+                      {required && <span aria-hidden="true"> *</span>}
                     </label>
                   )}
               {renderDescription ? (
@@ -133,10 +133,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
                 description && (
                   <span
                     id={descriptionId}
-                    className={cn(
-                      defaultStyles.description,
-                      rDescriptionClassName,
-                    )}
+                    className={mergedClasses.description || undefined}
                   >
                     {description}
                   </span>
@@ -152,6 +149,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             role="switch"
             aria-checked={isChecked}
             aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
             aria-describedby={
               [descriptionId, error && errorMessage ? errorId : undefined]
                 .filter(Boolean)
@@ -162,17 +160,10 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             disabled={disabled}
             onClick={handleToggle}
             className={cn(
-              "relative inline-flex items-center",
-              disabled ? "cursor-not-allowed" : "cursor-pointer",
-              defaultStyles.tracker,
-              rTrackerClassName,
-              disabled && defaultStyles.disabledTracker,
-              disabled && rDisabledTrackerClassName,
-              isChecked
-                ? defaultStyles.checkedTracker
-                : defaultStyles.uncheckedTracker,
-              isChecked ? rCheckedTrackerClassName : rUncheckedTrackerClassName,
-            )}
+              mergedClasses.tracker,
+              disabled && mergedClasses.disabledTracker,
+              isChecked ? mergedClasses.checkedTracker : mergedClasses.uncheckedTracker,
+            ) || undefined}
             style={transitionStyle}
             data-disabled={disabled || undefined}
             data-checked={isChecked || undefined}
@@ -180,14 +171,9 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           >
             <span
               className={cn(
-                "inline-flex items-center justify-center transform",
-                defaultStyles.thumb,
-                rThumbClassName,
-                isChecked
-                  ? defaultStyles.checkedThumb
-                  : defaultStyles.uncheckedThumb,
-                isChecked ? rCheckedThumbClassName : rUncheckedThumbClassName,
-              )}
+                mergedClasses.thumb,
+                isChecked ? mergedClasses.checkedThumb : mergedClasses.uncheckedThumb,
+              ) || undefined}
               style={transitionStyle}
             >
               {isChecked ? checkedIcon : uncheckedIcon}
@@ -205,9 +191,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={rErrorClassName}>
-            {errorMessage}
-          </div>
+          <div id={errorId} role="alert" className={mergedClasses.error || undefined}>{errorMessage}</div>
         )}
       </div>
     );

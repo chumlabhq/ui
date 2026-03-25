@@ -9,6 +9,17 @@ export interface TextAreaLabelProps {
 
 export type TextAreaSize = "sm" | "md" | "lg";
 
+export interface TextAreaClasses {
+  root?: string;
+  wrapper?: string;
+  label?: string;
+  description?: string;
+  textarea?: string;
+  error?: string;
+  success?: string;
+  count?: string;
+}
+
 export interface TextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: ReactNode;
@@ -57,11 +68,8 @@ export interface TextAreaProps
   fullWidth?: boolean;
   /** CSS class for the root container element (wraps label, textarea row, error/success). */
   className?: string;
-  wrapperClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  successClassName?: string;
-  descriptionClassName?: string;
-  textAreaClassName?: string;
-  countClassName?: string;
+  /** Slot-based class overrides for internal elements. */
+  classes?: TextAreaClasses;
+  /** When true, all default classes are removed; only `classes` overrides apply. */
+  unstyled?: boolean;
 }

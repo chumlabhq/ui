@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useMemo } from "react";
+import { forwardRef, useState, useCallback, useMemo, useRef } from "react";
 import type {
   AvatarProps,
   AvatarTooltipConfig,
@@ -55,7 +55,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       status,
       tooltip,
       imageConfig,
-      classes = {},
+      classes: classesProp,
       unstyled = false,
       textStyle,
       loading = false,
@@ -94,16 +94,26 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     const baseClasses = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;
 
+    const warnedRef = useRef(false);
+    if (process.env.NODE_ENV !== "production") {
+      if (!name && !src && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
+        warnedRef.current = true;
+        console.warn(
+          "Avatar: An avatar without a name or src requires `aria-label` or `aria-labelledby` for accessibility.",
+        );
+      }
+    }
+
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({
-        root: classes.root ?? baseClasses.root,
-        inner: classes.inner ?? baseClasses.inner,
-        image: classes.image ?? baseClasses.image,
-        initials: classes.initials ?? baseClasses.initials,
-        fallback: classes.fallback ?? baseClasses.fallback,
-        status: classes.status ?? baseClasses.status,
+        root: classesProp?.root ?? baseClasses.root,
+        inner: classesProp?.inner ?? baseClasses.inner,
+        image: classesProp?.image ?? baseClasses.image,
+        initials: classesProp?.initials ?? baseClasses.initials,
+        fallback: classesProp?.fallback ?? baseClasses.fallback,
+        status: classesProp?.status ?? baseClasses.status,
       }),
-      [classes, baseClasses],
+      [classesProp, baseClasses],
     );
 
     const generatedColors = useMemo(

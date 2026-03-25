@@ -1,6 +1,6 @@
 import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig } from "./types";
 
-export const DEFAULT_CLASS_NAMES: Required<AccordionClasses> = {
+export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",
   item: "border-b border-gray-200 last:border-b-0",
   trigger:
@@ -17,7 +17,7 @@ export const DEFAULT_CLASS_NAMES: Required<AccordionClasses> = {
   heading: "",
 };
 
-export const UNSTYLED_CLASS_NAMES: Required<AccordionClasses> = {
+export const UNSTYLED_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "",
   item: "",
   trigger: "",
@@ -32,6 +32,11 @@ export const UNSTYLED_CLASS_NAMES: Required<AccordionClasses> = {
   contentInner: "",
   heading: "",
 };
+
+/** @deprecated Use DEFAULT_ACCORDION_CLASSES */
+export const DEFAULT_CLASS_NAMES = DEFAULT_ACCORDION_CLASSES;
+/** @deprecated Use UNSTYLED_ACCORDION_CLASSES */
+export const UNSTYLED_CLASS_NAMES = UNSTYLED_ACCORDION_CLASSES;
 
 export const DEFAULT_ANIMATION_DURATION = 300;
 export const DEFAULT_HEADING_LEVEL = 3 as const;

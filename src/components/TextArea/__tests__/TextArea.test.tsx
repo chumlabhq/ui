@@ -163,8 +163,8 @@ describe("TextArea", () => {
       expect(document.querySelector(".test-container")).not.toHaveAttribute("data-success");
     });
 
-    it("applies successClassName to success message", () => {
-      render(<TextArea aria-label="test" success successMessage="Good" successClassName="custom-success" />);
+    it("applies classes.success to success message", () => {
+      render(<TextArea aria-label="test" success successMessage="Good" classes={{ success: "custom-success" }} />);
       expect(document.querySelector(".custom-success")).toBeInTheDocument();
     });
   });
@@ -185,8 +185,8 @@ describe("TextArea", () => {
       expect(screen.getByRole("textbox")).toHaveAttribute("aria-describedby", "test-ta-description test-ta-error");
     });
 
-    it("applies descriptionClassName", () => {
-      render(<TextArea label="Bio" description="Help" descriptionClassName="custom-desc" />);
+    it("applies classes.description", () => {
+      render(<TextArea label="Bio" description="Help" classes={{ description: "custom-desc" }} />);
       expect(document.querySelector(".custom-desc")).toBeInTheDocument();
     });
   });
@@ -254,8 +254,8 @@ describe("TextArea", () => {
       expect(screen.getByRole("textbox").getAttribute("aria-describedby")).toContain("test-ta-count");
     });
 
-    it("applies countClassName", () => {
-      render(<TextArea aria-label="test" showCount maxLength={10} value="" onChange={() => {}} countClassName="custom-count" />);
+    it("applies classes.count", () => {
+      render(<TextArea aria-label="test" showCount maxLength={10} value="" onChange={() => {}} classes={{ count: "custom-count" }} />);
       expect(document.querySelector(".custom-count")).toBeInTheDocument();
     });
   });
@@ -419,23 +419,23 @@ describe("TextArea", () => {
       expect(document.querySelector(".custom-container")).toBeInTheDocument();
     });
 
-    it("applies wrapperClassName to wrapper", () => {
-      render(<TextArea aria-label="test" wrapperClassName="custom-wrapper" />);
+    it("applies classes.wrapper to wrapper", () => {
+      render(<TextArea aria-label="test" classes={{ wrapper: "custom-wrapper" }} />);
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
-    it("applies textAreaClassName to textarea element", () => {
-      render(<TextArea aria-label="test" textAreaClassName="ta-style" />);
+    it("applies classes.textarea to textarea element", () => {
+      render(<TextArea aria-label="test" classes={{ textarea: "ta-style" }} />);
       expect(screen.getByRole("textbox")).toHaveClass("ta-style");
     });
 
-    it("applies labelClassName to label", () => {
-      render(<TextArea label="Message" labelClassName="custom-label" />);
+    it("applies classes.label to label", () => {
+      render(<TextArea label="Message" classes={{ label: "custom-label" }} />);
       expect(screen.getByText("Message")).toHaveClass("custom-label");
     });
 
-    it("applies errorClassName to error message", () => {
-      render(<TextArea aria-label="test" error errorMessage="Error" errorClassName="custom-error" />);
+    it("applies classes.error to error message", () => {
+      render(<TextArea aria-label="test" error errorMessage="Error" classes={{ error: "custom-error" }} />);
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
   });
