@@ -11,8 +11,8 @@ import {
   Fragment,
 } from "react";
 import { createPortal } from "react-dom";
-import type { PaginationProps, IconProps, SectionName } from "./utils/types";
-import { DEFAULT_ROW_OPTIONS } from "./utils/constants";
+import type { PaginationProps, PaginationClasses, IconProps, SectionName } from "./utils/types";
+import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants";
 import { getVisiblePages } from "./utils/helpers";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";
 import { cn } from "../../utils/cn";
@@ -220,23 +220,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       renderEllipsis,
       renderPageInfo,
       sectionOrder = DEFAULT_SECTION_ORDER,
-      containerClassName,
-      rowSelectorClassName,
-      rowSelectorButtonClassName,
-      rowSelectorDropdownClassName,
-      rowSelectorDropdownWrapperClassName,
-      rowSelectorOptionClassName,
-      pageButtonClassName,
-      activePageButtonClassName,
-      navButtonClassName,
-      navContainerClassName,
-      pageButtonsContainerClassName,
-      ellipsisClassName,
-      labelClassName,
-      dropdownIconClassName,
-      prevIconClassName,
-      nextIconClassName,
-      pageInfoClassName,
+      classes: classesProp,
+      unstyled = false,
       portalContainer,
       prevAriaLabel = "Previous page",
       nextAriaLabel = "Next page",
@@ -248,6 +233,44 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     ref,
   ) => {
     const instanceId = useId();
+
+    // Dev warning for missing aria-label
+    const warnedRef = useRef(false);
+    useEffect(() => {
+      if (
+        process.env.NODE_ENV !== "production" &&
+        !warnedRef.current &&
+        !rest["aria-label"] &&
+        !rest["aria-labelledby"] &&
+        !paginationAriaLabel
+      ) {
+        warnedRef.current = true;
+        console.warn(
+          "Pagination: Consider providing an `aria-label` or `paginationAriaLabel` for accessibility.",
+        );
+      }
+    }, [rest, paginationAriaLabel]);
+
+    const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
+    const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
+      root: classesProp?.root ?? baseClasses.root,
+      nav: classesProp?.nav ?? baseClasses.nav,
+      pageButtons: classesProp?.pageButtons ?? baseClasses.pageButtons,
+      pageButton: classesProp?.pageButton ?? baseClasses.pageButton,
+      activePageButton: classesProp?.activePageButton ?? baseClasses.activePageButton,
+      navButton: classesProp?.navButton ?? baseClasses.navButton,
+      ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
+      selector: classesProp?.selector ?? baseClasses.selector,
+      selectorButton: classesProp?.selectorButton ?? baseClasses.selectorButton,
+      selectorDropdown: classesProp?.selectorDropdown ?? baseClasses.selectorDropdown,
+      selectorDropdownWrapper: classesProp?.selectorDropdownWrapper ?? baseClasses.selectorDropdownWrapper,
+      selectorOption: classesProp?.selectorOption ?? baseClasses.selectorOption,
+      label: classesProp?.label ?? baseClasses.label,
+      dropdownIcon: classesProp?.dropdownIcon ?? baseClasses.dropdownIcon,
+      prevIcon: classesProp?.prevIcon ?? baseClasses.prevIcon,
+      nextIcon: classesProp?.nextIcon ?? baseClasses.nextIcon,
+      pageInfo: classesProp?.pageInfo ?? baseClasses.pageInfo,
+    }), [classesProp, baseClasses]);
 
     const resolvedRowOptions = useMemo(
       () => rowOptions ?? [...DEFAULT_ROW_OPTIONS],
@@ -391,7 +414,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const dropdownIconClass = cn(
       "w-3 h-3 transition-transform duration-200",
       isDropdownOpen && "rotate-180",
-      dropdownIconClassName,
+      mergedClasses.dropdownIcon,
     );
 
     const isFirstPage = safeCurrentPage <= 1;
@@ -403,9 +426,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const selectorSection =
       showRowsPerPage && rowsPerPage !== undefined ? (
-        <div className={rowSelectorClassName}>
-          <span className={labelClassName}>{showLabel}</span>
-          <div className={cn("relative", rowSelectorDropdownWrapperClassName)}>
+        <div className={mergedClasses.selector}>
+          <span className={mergedClasses.label}>{showLabel}</span>
+          <div className={cn("relative", mergedClasses.selectorDropdownWrapper)}>
             <button
               ref={triggerRef}
               type="button"
@@ -418,7 +441,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 }
               }}
               onKeyDown={!isDropdownOpen ? handleDropdownKeyDown : undefined}
-              className={cn(rowSelectorButtonClassName)}
+              className={cn(mergedClasses.selectorButton)}
               aria-expanded={isDropdownOpen}
               aria-haspopup="listbox"
               aria-controls={isDropdownOpen ? listboxId : undefined}
@@ -427,7 +450,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               {renderIcon(
                 dropdownIcon,
                 ChevronDownIcon,
-                dropdownIconClassName,
+                mergedClasses.dropdownIcon,
                 dropdownIconClass,
               )}
             </button>
@@ -438,8 +461,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 direction={dropdownDirection}
                 zIndex={dropdownZIndex}
                 gap={4}
-                dropdownClassName={rowSelectorDropdownClassName}
-                optionClassName={rowSelectorOptionClassName}
+                dropdownClassName={mergedClasses.selectorDropdown}
+                optionClassName={mergedClasses.selectorOption}
                 listboxId={listboxId}
                 activeOptionId={activeOptionId}
                 activeOptionIndex={activeOptionIndex}
@@ -455,12 +478,12 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               />
             )}
           </div>
-          <span className={labelClassName}>{rowsPerPageLabel}</span>
+          <span className={mergedClasses.label}>{rowsPerPageLabel}</span>
         </div>
       ) : null;
 
     const pageInfoSection = renderPageInfo ? (
-      <div className={pageInfoClassName}>
+      <div className={mergedClasses.pageInfo}>
         {renderPageInfo({
           currentPage: safeCurrentPage,
           totalPages: safeTotalPages,
@@ -470,19 +493,19 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     ) : null;
 
     const navSection = (
-      <div className={cn("flex items-center gap-2", navContainerClassName)}>
+      <div className={cn("flex items-center gap-2", mergedClasses.nav)}>
         <button
           type="button"
           onClick={handlePrevPage}
           disabled={isFirstPage}
-          className={cn(navButtonClassName)}
+          className={cn(mergedClasses.navButton)}
           aria-label={prevAriaLabel}
           data-disabled={isFirstPage || undefined}
         >
-          {renderIcon(prevIcon, ChevronLeftIcon, prevIconClassName, "w-5 h-5")}
+          {renderIcon(prevIcon, ChevronLeftIcon, mergedClasses.prevIcon, "w-5 h-5")}
         </button>
 
-        <div className={cn("flex items-center gap-2", pageButtonsContainerClassName)}>
+        <div className={cn("flex items-center gap-2", mergedClasses.pageButtons)}>
           {visiblePages.map((item, index) =>
             item === "ellipsis" ? (
               renderEllipsis ? (
@@ -495,7 +518,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               ) : (
                 <span
                   key={`ellipsis-${index}`}
-                  className={ellipsisClassName}
+                  className={mergedClasses.ellipsis}
                   aria-hidden="true"
                 >
                   &hellip;
@@ -508,8 +531,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 onClick={() => onPageChange(item)}
                 className={
                   safeCurrentPage === item
-                    ? activePageButtonClassName
-                    : pageButtonClassName
+                    ? mergedClasses.activePageButton
+                    : mergedClasses.pageButton
                 }
                 aria-label={pageAriaLabel ? pageAriaLabel(item) : `Page ${item}`}
                 aria-current={safeCurrentPage === item ? "page" : undefined}
@@ -525,11 +548,11 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           type="button"
           onClick={handleNextPage}
           disabled={isLastPage}
-          className={cn(navButtonClassName)}
+          className={cn(mergedClasses.navButton)}
           aria-label={nextAriaLabel}
           data-disabled={isLastPage || undefined}
         >
-          {renderIcon(nextIcon, ChevronRightIcon, nextIconClassName, "w-5 h-5")}
+          {renderIcon(nextIcon, ChevronRightIcon, mergedClasses.nextIcon, "w-5 h-5")}
         </button>
       </div>
     );
@@ -544,7 +567,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       <nav
         ref={ref as React.Ref<HTMLElement>}
         aria-label={paginationAriaLabel}
-        className={cn(containerClassName, className)}
+        className={cn(mergedClasses.root, className)}
         {...rest}
       >
         {sectionOrder.map((section) => (

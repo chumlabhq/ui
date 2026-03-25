@@ -1,7 +1,13 @@
 import { useState, useRef } from "react";
 import { ResizablePanel } from "../../components/ResizablePanel";
 import { useTheme } from "./ThemeContext";
-import { Section, DemoWrapper, CodeBlock, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  DemoWrapper,
+  CodeBlock,
+  PropsTable,
+  PropRow,
+} from "./components";
 
 const ResizablePanelDemo = () => {
   const { isDarkMode } = useTheme();
@@ -132,11 +138,12 @@ const ResizablePanelDemo = () => {
         <p
           className={`text-lg ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
         >
-          A panel component with a draggable separator handle for resizing. Supports
-          horizontal and vertical orientations, keyboard navigation, pointer events
-          for mouse and touch, controlled and uncontrolled modes, custom constraints,
-          resize callbacks, Escape to cancel, handle content slots, CSS custom
-          properties, and full accessibility via WAI-ARIA separator semantics.
+          A panel component with a draggable separator handle for resizing.
+          Supports horizontal and vertical orientations, keyboard navigation,
+          pointer events for mouse and touch, controlled and uncontrolled modes,
+          custom constraints, resize callbacks, Escape to cancel, handle content
+          slots, CSS custom properties, and full accessibility via WAI-ARIA
+          separator semantics.
         </p>
 
         <div className="mt-6">
@@ -175,7 +182,12 @@ const ResizablePanelDemo = () => {
                 handle: handleClass("blue"),
               }}
             >
-              {panelContent("blue", "Right Resizable Panel", rightWidth, "Min: 200px | Max: 500px")}
+              {panelContent(
+                "blue",
+                "Right Resizable Panel",
+                rightWidth,
+                "Min: 200px | Max: 500px",
+              )}
             </ResizablePanel>
           </DemoWrapper>
           <CodeBlock
@@ -213,7 +225,12 @@ const ResizablePanelDemo = () => {
                   handle: handleClass("green"),
                 }}
               >
-                {panelContent("green", "Left Resizable Panel", leftWidth, "Min: 200px | Max: 600px")}
+                {panelContent(
+                  "green",
+                  "Left Resizable Panel",
+                  leftWidth,
+                  "Min: 200px | Max: 600px",
+                )}
               </ResizablePanel>
             </div>
           </DemoWrapper>
@@ -254,7 +271,12 @@ const ResizablePanelDemo = () => {
                 handle: handleClass("blue"),
               }}
             >
-              {panelContent("blue", "Bottom Resizable Panel", bottomHeight, "Min: 100px | Max: 400px")}
+              {panelContent(
+                "blue",
+                "Bottom Resizable Panel",
+                bottomHeight,
+                "Min: 100px | Max: 400px",
+              )}
             </ResizablePanel>
           </DemoWrapper>
           <CodeBlock
@@ -295,7 +317,12 @@ const ResizablePanelDemo = () => {
                   handle: handleClass("green"),
                 }}
               >
-                {panelContent("green", "Top Resizable Panel", topHeight, "Min: 100px | Max: 400px")}
+                {panelContent(
+                  "green",
+                  "Top Resizable Panel",
+                  topHeight,
+                  "Min: 100px | Max: 400px",
+                )}
               </ResizablePanel>
             </div>
           </DemoWrapper>
@@ -333,10 +360,14 @@ const ResizablePanelDemo = () => {
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Uncontrolled Panel
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
                   Started at 280px (no external state)
                 </p>
               </div>
@@ -433,7 +464,12 @@ const ResizablePanelDemo = () => {
                 handle: handleClass("amber"),
               }}
             >
-              {panelContent("amber", "Constrained Panel", constrainedWidth, "Min: 180px | Max: 400px")}
+              {panelContent(
+                "amber",
+                "Constrained Panel",
+                constrainedWidth,
+                "Min: 180px | Max: 400px",
+              )}
             </ResizablePanel>
           </DemoWrapper>
           <CodeBlock
@@ -472,7 +508,12 @@ const ResizablePanelDemo = () => {
                   handle: handleClass("amber"),
                 }}
               >
-                {panelContent("amber", "Custom Step (25px)", customStepWidth, "Step: 25px | Shift: 125px")}
+                {panelContent(
+                  "amber",
+                  "Custom Step (25px)",
+                  customStepWidth,
+                  "Step: 25px | Shift: 125px",
+                )}
               </ResizablePanel>
             </div>
           </DemoWrapper>
@@ -531,12 +572,12 @@ const ResizablePanelDemo = () => {
               >
                 <div className="p-4">
                   <p
-                    className={`font-medium ${disabledToggle ? (isDarkMode ? "text-gray-400" : "text-gray-500") : (isDarkMode ? "text-blue-300" : "text-blue-800")}`}
+                    className={`font-medium ${disabledToggle ? (isDarkMode ? "text-gray-400" : "text-gray-500") : isDarkMode ? "text-blue-300" : "text-blue-800"}`}
                   >
                     {disabledToggle ? "Disabled Panel" : "Enabled Panel"}
                   </p>
                   <p
-                    className={`text-sm mt-2 ${disabledToggle ? (isDarkMode ? "text-gray-500" : "text-gray-400") : (isDarkMode ? "text-blue-400" : "text-blue-600")}`}
+                    className={`text-sm mt-2 ${disabledToggle ? (isDarkMode ? "text-gray-500" : "text-gray-400") : isDarkMode ? "text-blue-400" : "text-blue-600"}`}
                   >
                     {disabledToggle ? "Cannot be resized" : "Drag to resize"}
                   </p>
@@ -595,10 +636,14 @@ const ResizablePanelDemo = () => {
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Tab to the handle, then use arrow keys
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
                   Step: 10px | Shift+Arrow: 50px | Escape: cancel drag
                 </p>
               </div>
@@ -622,10 +667,14 @@ const ResizablePanelDemo = () => {
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Start dragging, then press Escape
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
                   Size snaps back to where it was before the drag
                 </p>
               </div>
@@ -637,9 +686,10 @@ const ResizablePanelDemo = () => {
             <p
               className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}
             >
-              <strong>Note:</strong> Escape only works during an active pointer drag. For keyboard
-              resizing (arrow keys), each key press is an individual resize action with its own
-              onResizeStart/onResizeEnd lifecycle.
+              <strong>Note:</strong> Escape only works during an active pointer
+              drag. For keyboard resizing (arrow keys), each key press is an
+              individual resize action with its own onResizeStart/onResizeEnd
+              lifecycle.
             </p>
           </div>
         </Section>
@@ -656,8 +706,16 @@ const ResizablePanelDemo = () => {
                 minValue={200}
                 maxValue={500}
                 onValueChange={setCallbackWidth}
-                onResizeStart={(w) => addLog(`[${new Date().toLocaleTimeString()}] onResizeStart \u2192 ${Math.round(w)}px`)}
-                onResizeEnd={(w) => addLog(`[${new Date().toLocaleTimeString()}] onResizeEnd \u2192 ${Math.round(w)}px`)}
+                onResizeStart={(w) =>
+                  addLog(
+                    `[${new Date().toLocaleTimeString()}] onResizeStart \u2192 ${Math.round(w)}px`,
+                  )
+                }
+                onResizeEnd={(w) =>
+                  addLog(
+                    `[${new Date().toLocaleTimeString()}] onResizeEnd \u2192 ${Math.round(w)}px`,
+                  )
+                }
                 classes={{
                   root: panelRootClass("blue"),
                   handle: handleClass("blue"),
@@ -670,7 +728,9 @@ const ResizablePanelDemo = () => {
                 className={`h-28 overflow-y-auto rounded-lg border p-3 font-mono text-xs ${isDarkMode ? "bg-gray-900 border-gray-700 text-gray-300" : "bg-gray-50 border-gray-200 text-gray-600"}`}
               >
                 {callbackLog.length === 0 ? (
-                  <span className={isDarkMode ? "text-gray-500" : "text-gray-400"}>
+                  <span
+                    className={isDarkMode ? "text-gray-500" : "text-gray-400"}
+                  >
                     Drag the handle to see resize events...
                   </span>
                 ) : (
@@ -704,15 +764,19 @@ const ResizablePanelDemo = () => {
               maxValue={500}
               onValueChange={setStyledWidth}
               classes={{
-                root: `h-32 rounded-lg border ${isDarkMode ? "bg-gradient-to-r from-purple-950/60 to-pink-950/60 border-purple-800" : "bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200"}`,
-                handle: `rounded-full ${isDarkMode ? "bg-gradient-to-b from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400" : "bg-gradient-to-b from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500"} transition-colors`,
+                root: `h-32 rounded-lg border ${isDarkMode ? "bg-linear-to-r from-purple-950/60 to-pink-950/60 border-purple-800" : "bg-linear-to-r from-purple-50 to-pink-50 border-purple-200"}`,
+                handle: `rounded-full ${isDarkMode ? "bg-linear-to-b from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400" : "bg-linear-to-b from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500"} transition-colors`,
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-purple-300" : "text-purple-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-purple-300" : "text-purple-800"}`}
+                >
                   Gradient Styling
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-purple-400" : "text-purple-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-purple-400" : "text-purple-600"}`}
+                >
                   Custom handle and root styles via classes
                 </p>
               </div>
@@ -723,8 +787,8 @@ const ResizablePanelDemo = () => {
             code={`<ResizablePanel
   defaultValue={300}
   classes={{
-    root: "h-32 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border",
-    handle: "rounded-full bg-gradient-to-b from-purple-400 to-pink-400",
+    root: "h-32 bg-linear-to-r from-purple-50 to-pink-50 rounded-lg border",
+    handle: "rounded-full bg-linear-to-b from-purple-400 to-pink-400",
   }}
 >
   <div>Styled panel</div>
@@ -762,10 +826,14 @@ const ResizablePanelDemo = () => {
               }
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Panel with Grip Handle
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
                   Three-dot grip icon rendered inside the handle
                 </p>
               </div>
@@ -811,11 +879,16 @@ const ResizablePanelDemo = () => {
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Both className and classes.root
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
-                  className=&quot;h-32 rounded-lg&quot; + classes.root=&quot;bg-blue-50 ...&quot;
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
+                  className=&quot;h-32 rounded-lg&quot; +
+                  classes.root=&quot;bg-blue-50 ...&quot;
                 </p>
               </div>
             </ResizablePanel>
@@ -854,31 +927,41 @@ const ResizablePanelDemo = () => {
                 }}
               >
                 <div className="p-4">
-                  <p className={`font-medium ${isDarkMode ? "text-purple-300" : "text-purple-800"}`}>
+                  <p
+                    className={`font-medium ${isDarkMode ? "text-purple-300" : "text-purple-800"}`}
+                  >
                     Sidebar
                   </p>
-                  <p className={`text-sm mt-2 ${isDarkMode ? "text-purple-400" : "text-purple-600"}`}>
+                  <p
+                    className={`text-sm mt-2 ${isDarkMode ? "text-purple-400" : "text-purple-600"}`}
+                  >
                     Width: {Math.round(sidebarWidth)}px
                   </p>
                   <ul className="mt-4 space-y-2 text-sm">
-                    {["Navigation 1", "Navigation 2", "Navigation 3"].map((item) => (
-                      <li
-                        key={item}
-                        className={`px-2 py-1 rounded ${isDarkMode ? "bg-purple-900/50 text-purple-300" : "bg-purple-100 text-purple-700"}`}
-                      >
-                        {item}
-                      </li>
-                    ))}
+                    {["Navigation 1", "Navigation 2", "Navigation 3"].map(
+                      (item) => (
+                        <li
+                          key={item}
+                          className={`px-2 py-1 rounded ${isDarkMode ? "bg-purple-900/50 text-purple-300" : "bg-purple-100 text-purple-700"}`}
+                        >
+                          {item}
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               </ResizablePanel>
               <div
                 className={`flex-1 p-4 border border-l-0 rounded-r-lg ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
               >
-                <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}
+                >
                   Main Content
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                >
                   This area expands as the sidebar shrinks.
                 </p>
               </div>
@@ -920,14 +1003,22 @@ const ResizablePanelDemo = () => {
                 }}
               >
                 <div className="p-4 h-full flex flex-col">
-                  <p className={`font-medium ${isDarkMode ? "text-indigo-300" : "text-indigo-800"}`}>
+                  <p
+                    className={`font-medium ${isDarkMode ? "text-indigo-300" : "text-indigo-800"}`}
+                  >
                     Left Panel
                   </p>
-                  <p className={`text-sm mt-2 ${isDarkMode ? "text-indigo-400" : "text-indigo-600"}`}>
+                  <p
+                    className={`text-sm mt-2 ${isDarkMode ? "text-indigo-400" : "text-indigo-600"}`}
+                  >
                     Width: {Math.round(leftPanelWidth)}px
                   </p>
                   <div className="mt-4 flex-1 space-y-2">
-                    {["Navigation Item 1", "Navigation Item 2", "Navigation Item 3"].map((item) => (
+                    {[
+                      "Navigation Item 1",
+                      "Navigation Item 2",
+                      "Navigation Item 3",
+                    ].map((item) => (
                       <div
                         key={item}
                         className={`px-3 py-2 rounded text-sm ${isDarkMode ? "bg-indigo-900/50 text-indigo-300" : "bg-indigo-100 text-indigo-700"}`}
@@ -942,16 +1033,22 @@ const ResizablePanelDemo = () => {
               <div
                 className={`flex-1 p-4 flex flex-col border-y ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
               >
-                <p className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-white" : "text-gray-800"}`}
+                >
                   Center Panel
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                >
                   Flexible width &mdash; expands to fill available space
                 </p>
                 <div
                   className={`mt-4 flex-1 rounded border p-4 ${isDarkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"}`}
                 >
-                  <p className={`text-sm ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}>
+                  <p
+                    className={`text-sm ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
+                  >
                     Main content area
                   </p>
                 </div>
@@ -970,21 +1067,27 @@ const ResizablePanelDemo = () => {
                 }}
               >
                 <div className="p-4 h-full flex flex-col">
-                  <p className={`font-medium ${isDarkMode ? "text-teal-300" : "text-teal-800"}`}>
+                  <p
+                    className={`font-medium ${isDarkMode ? "text-teal-300" : "text-teal-800"}`}
+                  >
                     Right Panel
                   </p>
-                  <p className={`text-sm mt-2 ${isDarkMode ? "text-teal-400" : "text-teal-600"}`}>
+                  <p
+                    className={`text-sm mt-2 ${isDarkMode ? "text-teal-400" : "text-teal-600"}`}
+                  >
                     Width: {Math.round(rightPanelWidth)}px
                   </p>
                   <div className="mt-4 flex-1 space-y-2">
-                    {["Details Section", "Properties", "Actions"].map((item) => (
-                      <div
-                        key={item}
-                        className={`px-3 py-2 rounded text-sm ${isDarkMode ? "bg-teal-900/50 text-teal-300" : "bg-teal-100 text-teal-700"}`}
-                      >
-                        {item}
-                      </div>
-                    ))}
+                    {["Details Section", "Properties", "Actions"].map(
+                      (item) => (
+                        <div
+                          key={item}
+                          className={`px-3 py-2 rounded text-sm ${isDarkMode ? "bg-teal-900/50 text-teal-300" : "bg-teal-100 text-teal-700"}`}
+                        >
+                          {item}
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
               </ResizablePanel>
@@ -1036,10 +1139,14 @@ const ResizablePanelDemo = () => {
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Custom ID Panel
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
                   id=&quot;my-resizable&quot;
                 </p>
               </div>
@@ -1070,10 +1177,14 @@ const ResizablePanelDemo = () => {
               }}
             >
               <div className="p-4">
-                <p className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}>
+                <p
+                  className={`font-medium ${isDarkMode ? "text-blue-300" : "text-blue-800"}`}
+                >
                   Custom Aria Label
                 </p>
-                <p className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}>
+                <p
+                  className={`text-sm mt-2 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+                >
                   aria-label=&quot;Resize sidebar navigation&quot;
                 </p>
               </div>
@@ -1104,25 +1215,49 @@ const ResizablePanelDemo = () => {
                   <tr
                     className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
                   >
-                    <th className="text-left py-3 pr-4 font-semibold">Attribute</th>
-                    <th className="text-left py-3 pr-4 font-semibold">Applied To</th>
-                    <th className="text-left py-3 font-semibold">Description</th>
+                    <th className="text-left py-3 pr-4 font-semibold">
+                      Attribute
+                    </th>
+                    <th className="text-left py-3 pr-4 font-semibold">
+                      Applied To
+                    </th>
+                    <th className="text-left py-3 font-semibold">
+                      Description
+                    </th>
                   </tr>
                 </thead>
                 <tbody
                   className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
                 >
                   {[
-                    ["data-resizing", "root, handle", "Present during an active pointer drag"],
-                    ["data-disabled", "root, handle", "Present when the component is disabled"],
-                    ["data-direction", "handle", '"left", "right", "top", or "bottom" — which edge the handle is on'],
+                    [
+                      "data-resizing",
+                      "root, handle",
+                      "Present during an active pointer drag",
+                    ],
+                    [
+                      "data-disabled",
+                      "root, handle",
+                      "Present when the component is disabled",
+                    ],
+                    [
+                      "data-direction",
+                      "handle",
+                      '"left", "right", "top", or "bottom" — which edge the handle is on',
+                    ],
                   ].map(([attr, target, desc]) => (
                     <tr key={attr}>
-                      <td className="py-3 pr-4 font-mono text-blue-500">{attr}</td>
-                      <td className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <td className="py-3 pr-4 font-mono text-blue-500">
+                        {attr}
+                      </td>
+                      <td
+                        className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                      >
                         {target}
                       </td>
-                      <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <td
+                        className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                      >
                         {desc}
                       </td>
                     </tr>
@@ -1169,21 +1304,38 @@ const ResizablePanelDemo = () => {
                   <tr
                     className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
                   >
-                    <th className="text-left py-3 pr-4 font-semibold">Property</th>
-                    <th className="text-left py-3 font-semibold">Description</th>
+                    <th className="text-left py-3 pr-4 font-semibold">
+                      Property
+                    </th>
+                    <th className="text-left py-3 font-semibold">
+                      Description
+                    </th>
                   </tr>
                 </thead>
                 <tbody
                   className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
                 >
                   {[
-                    ["--resizable-panel-size", "Current size in pixels (rounded)"],
-                    ["--resizable-panel-min", "Minimum size constraint in pixels"],
-                    ["--resizable-panel-max", "Maximum size constraint in pixels"],
+                    [
+                      "--resizable-panel-size",
+                      "Current size in pixels (rounded)",
+                    ],
+                    [
+                      "--resizable-panel-min",
+                      "Minimum size constraint in pixels",
+                    ],
+                    [
+                      "--resizable-panel-max",
+                      "Maximum size constraint in pixels",
+                    ],
                   ].map(([prop, desc]) => (
                     <tr key={prop}>
-                      <td className="py-3 pr-4 font-mono text-blue-500">{prop}</td>
-                      <td className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+                      <td className="py-3 pr-4 font-mono text-blue-500">
+                        {prop}
+                      </td>
+                      <td
+                        className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                      >
                         {desc}
                       </td>
                     </tr>
@@ -1209,24 +1361,123 @@ const ResizablePanelDemo = () => {
             ResizablePanel Props
           </h3>
           <PropsTable isDarkMode={isDarkMode}>
-            <PropRow name="children" type="ReactNode" description="Content to render inside the panel" isDarkMode={isDarkMode} />
-            <PropRow name="value" type="number" description="Controlled panel size in pixels (width or height depending on resizeDirection)" isDarkMode={isDarkMode} />
-            <PropRow name="defaultValue" type="number" defaultVal="300" description="Initial size for uncontrolled mode (clamped to [minValue, maxValue])" isDarkMode={isDarkMode} />
-            <PropRow name="onValueChange" type="(value: number) => void" description="Callback fired continuously as size changes during resize" isDarkMode={isDarkMode} />
-            <PropRow name="onResizeStart" type="(value: number) => void" description="Callback fired when a resize gesture begins, receiving the current size" isDarkMode={isDarkMode} />
-            <PropRow name="onResizeEnd" type="(value: number) => void" description="Callback fired when a resize gesture ends, with the final size" isDarkMode={isDarkMode} />
-            <PropRow name="minValue" type="number" defaultVal="200" description="Minimum size constraint in pixels" isDarkMode={isDarkMode} />
-            <PropRow name="maxValue" type="number" defaultVal="800" description="Maximum size constraint in pixels" isDarkMode={isDarkMode} />
-            <PropRow name='resizeDirection' type='"left" | "right" | "top" | "bottom"' defaultVal='"right"' description='Which edge has the resize handle. "left"/"right" manage width; "top"/"bottom" manage height.' isDarkMode={isDarkMode} />
-            <PropRow name="step" type="number" defaultVal="10" description="Keyboard arrow key increment in pixels (Shift multiplies by 5)" isDarkMode={isDarkMode} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable all resize interactions (pointer, keyboard, and focus)" isDarkMode={isDarkMode} />
-            <PropRow name="aria-label" type="string" defaultVal='"Resize panel"' description="Accessible label for the separator handle element" isDarkMode={isDarkMode} />
-            <PropRow name="classes" type="ResizablePanelClasses" defaultVal="{}" description="Object of class overrides for internal slots (root, handle)" isDarkMode={isDarkMode} />
-            <PropRow name="handleContent" type="ReactNode" description="Content rendered inside the separator handle (e.g. grip icon)" isDarkMode={isDarkMode} />
-            <PropRow name="className" type="string" description="Shorthand for classes.root — merged with classes.root when both are provided" isDarkMode={isDarkMode} />
-            <PropRow name="style" type="CSSProperties" description="Inline styles merged onto the root element (managed size property cannot be overridden)" isDarkMode={isDarkMode} />
-            <PropRow name="id" type="string" defaultVal="auto-generated" description="Deterministic ID for the root element (auto-generated via useId if omitted)" isDarkMode={isDarkMode} />
-            <PropRow name="...rest" type="HTMLDivElement props" description="All standard HTML div attributes are forwarded to the root element (e.g. data-testid, event handlers)" isDarkMode={isDarkMode} />
+            <PropRow
+              name="children"
+              type="ReactNode"
+              description="Content to render inside the panel"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="value"
+              type="number"
+              description="Controlled panel size in pixels (width or height depending on resizeDirection)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="defaultValue"
+              type="number"
+              defaultVal="300"
+              description="Initial size for uncontrolled mode (clamped to [minValue, maxValue])"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(value: number) => void"
+              description="Callback fired continuously as size changes during resize"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="onResizeStart"
+              type="(value: number) => void"
+              description="Callback fired when a resize gesture begins, receiving the current size"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="onResizeEnd"
+              type="(value: number) => void"
+              description="Callback fired when a resize gesture ends, with the final size"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="minValue"
+              type="number"
+              defaultVal="200"
+              description="Minimum size constraint in pixels"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="maxValue"
+              type="number"
+              defaultVal="800"
+              description="Maximum size constraint in pixels"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="resizeDirection"
+              type='"left" | "right" | "top" | "bottom"'
+              defaultVal='"right"'
+              description='Which edge has the resize handle. "left"/"right" manage width; "top"/"bottom" manage height.'
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="step"
+              type="number"
+              defaultVal="10"
+              description="Keyboard arrow key increment in pixels (Shift multiplies by 5)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable all resize interactions (pointer, keyboard, and focus)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="aria-label"
+              type="string"
+              defaultVal='"Resize panel"'
+              description="Accessible label for the separator handle element"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="classes"
+              type="ResizablePanelClasses"
+              defaultVal="{}"
+              description="Object of class overrides for internal slots (root, handle)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="handleContent"
+              type="ReactNode"
+              description="Content rendered inside the separator handle (e.g. grip icon)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="Shorthand for classes.root — merged with classes.root when both are provided"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles merged onto the root element (managed size property cannot be overridden)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              defaultVal="auto-generated"
+              description="Deterministic ID for the root element (auto-generated via useId if omitted)"
+              isDarkMode={isDarkMode}
+            />
+            <PropRow
+              name="...rest"
+              type="HTMLDivElement props"
+              description="All standard HTML div attributes are forwarded to the root element (e.g. data-testid, event handlers)"
+              isDarkMode={isDarkMode}
+            />
           </PropsTable>
         </div>
 
@@ -1252,8 +1503,14 @@ const ResizablePanelDemo = () => {
                 className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
               >
                 {[
-                  ["root", "Root container div that wraps children and the handle"],
-                  ["handle", 'Drag handle element (role="separator") — positioned on the edge specified by resizeDirection'],
+                  [
+                    "root",
+                    "Root container div that wraps children and the handle",
+                  ],
+                  [
+                    "handle",
+                    'Drag handle element (role="separator") — positioned on the edge specified by resizeDirection',
+                  ],
                 ].map(([key, desc]) => (
                   <tr key={key}>
                     <td className="py-3 pr-4 font-mono text-blue-500">{key}</td>
@@ -1388,8 +1645,8 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               >
                 aria-orientation
               </code>{" "}
-              set per the WAI-ARIA window splitter pattern (&quot;vertical&quot; for
-              left/right, &quot;horizontal&quot; for top/bottom)
+              set per the WAI-ARIA window splitter pattern (&quot;vertical&quot;
+              for left/right, &quot;horizontal&quot; for top/bottom)
             </li>
             <li>
               <code
@@ -1397,8 +1654,8 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               >
                 aria-controls
               </code>{" "}
-              on the separator references the panel&apos;s id, linking the handle to
-              the element it controls
+              on the separator references the panel&apos;s id, linking the
+              handle to the element it controls
             </li>
             <li>
               <code
@@ -1426,7 +1683,8 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               >
                 aria-valuetext
               </code>{" "}
-              provides a human-readable announcement (e.g. &quot;300 pixels&quot;)
+              provides a human-readable announcement (e.g. &quot;300
+              pixels&quot;)
             </li>
             <li>
               <code
@@ -1434,16 +1692,17 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               >
                 aria-label
               </code>{" "}
-              on the handle for screen reader identification (customizable via prop)
+              on the handle for screen reader identification (customizable via
+              prop)
             </li>
             <li>
-              Full keyboard navigation: ArrowLeft/ArrowRight for horizontal panels,
-              ArrowUp/ArrowDown for vertical panels, Home/End to jump to min/max,
-              Shift for large increments, Escape to cancel drag
+              Full keyboard navigation: ArrowLeft/ArrowRight for horizontal
+              panels, ArrowUp/ArrowDown for vertical panels, Home/End to jump to
+              min/max, Shift for large increments, Escape to cancel drag
             </li>
             <li>
-              Keyboard resizing fires onResizeStart and onResizeEnd per key press,
-              ensuring consistent lifecycle hooks for all input methods
+              Keyboard resizing fires onResizeStart and onResizeEnd per key
+              press, ensuring consistent lifecycle hooks for all input methods
             </li>
             <li>
               Handle is focusable via{" "}
@@ -1488,7 +1747,8 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               >
                 pointercancel
               </code>{" "}
-              for interrupted touch gestures (e.g. incoming calls, system gestures)
+              for interrupted touch gestures (e.g. incoming calls, system
+              gestures)
             </li>
             <li>
               <code
@@ -1502,7 +1762,8 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               >
                 select-none
               </code>{" "}
-              on the handle prevent browser scroll and text selection interference
+              on the handle prevent browser scroll and text selection
+              interference
             </li>
             <li>
               <code
@@ -1513,8 +1774,9 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
               respects user&apos;s reduced-motion preferences
             </li>
             <li>
-              No opinionated focus ring styles — the browser&apos;s native focus indicator
-              is preserved, allowing consumers to provide their own via{" "}
+              No opinionated focus ring styles — the browser&apos;s native focus
+              indicator is preserved, allowing consumers to provide their own
+              via{" "}
               <code
                 className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
               >
@@ -1542,11 +1804,13 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
             </li>
             <li>
               Body cursor and user-select overrides are saved and restored (not
-              blindly reset), preventing conflicts with other components or app state
+              blindly reset), preventing conflicts with other components or app
+              state
             </li>
             <li>
-              CSS custom properties (--resizable-panel-size, --resizable-panel-min,
-              --resizable-panel-max) enable external CSS-based integrations
+              CSS custom properties (--resizable-panel-size,
+              --resizable-panel-min, --resizable-panel-max) enable external
+              CSS-based integrations
             </li>
             <li>
               All standard HTML div attributes are forwarded via rest props,
@@ -1568,14 +1832,29 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
           >
             {[
               ["Tab", "Focus the resize handle (enters the tab order)"],
-              ["ArrowRight", "Increase width by step (horizontal panels; decrease for left-resize)"],
-              ["ArrowLeft", "Decrease width by step (horizontal panels; increase for left-resize)"],
-              ["ArrowDown", "Increase height by step (vertical panels; decrease for top-resize)"],
-              ["ArrowUp", "Decrease height by step (vertical panels; increase for top-resize)"],
+              [
+                "ArrowRight",
+                "Increase width by step (horizontal panels; decrease for left-resize)",
+              ],
+              [
+                "ArrowLeft",
+                "Decrease width by step (horizontal panels; increase for left-resize)",
+              ],
+              [
+                "ArrowDown",
+                "Increase height by step (vertical panels; decrease for top-resize)",
+              ],
+              [
+                "ArrowUp",
+                "Decrease height by step (vertical panels; increase for top-resize)",
+              ],
               ["Shift + Arrow", "Resize by 5\u00D7 the step value"],
               ["Home", "Set size to minimum (minValue)"],
               ["End", "Set size to maximum (maxValue)"],
-              ["Escape", "Cancel active pointer drag and restore original size"],
+              [
+                "Escape",
+                "Cancel active pointer drag and restore original size",
+              ],
             ].map(([key, desc]) => (
               <li key={key}>
                 <kbd
@@ -1616,9 +1895,9 @@ interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
           </code>
           ) modes. Switching between controlled and uncontrolled at runtime will
           trigger a development warning. Values outside the [minValue, maxValue]
-          range are clamped automatically. In uncontrolled mode, constraint changes
-          that clamp the current value will fire onValueChange with the new clamped
-          value.
+          range are clamped automatically. In uncontrolled mode, constraint
+          changes that clamp the current value will fire onValueChange with the
+          new clamped value.
         </p>
       </div>
     </div>

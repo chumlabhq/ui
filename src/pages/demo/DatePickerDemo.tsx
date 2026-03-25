@@ -5,8 +5,21 @@ import {
   type DateMarker,
 } from "../../components/DatePicker";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
-import { subDays, addDays, startOfMonth, endOfMonth, subMonths, startOfWeek } from "date-fns";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
+import {
+  subDays,
+  addDays,
+  startOfMonth,
+  endOfMonth,
+  subMonths,
+  startOfWeek,
+} from "date-fns";
 import { fr, de } from "date-fns/locale";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -14,9 +27,10 @@ import { fr, de } from "date-fns/locale";
 const getClasses = (dark: boolean) => ({
   datepicker: {
     root: "",
-    trigger: `flex items-center gap-2 w-full px-3.5 py-2.5 rounded-xl border text-sm transition-all cursor-pointer ${dark
-      ? "bg-white/[0.04] border-white/10 text-gray-200 hover:border-white/20 focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
-      : "bg-white border-gray-200 text-gray-900 shadow-sm shadow-gray-900/[0.04] hover:border-gray-300 focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
+    trigger: `flex items-center gap-2 w-full px-3.5 py-2.5 rounded-xl border text-sm transition-all cursor-pointer ${
+      dark
+        ? "bg-white/4 border-white/10 text-gray-200 hover:border-white/20 focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
+        : "bg-white border-gray-200 text-gray-900 shadow-sm shadow-gray-900/[0.04] hover:border-gray-300 focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
     }`,
     input: "flex-1 text-left truncate",
     calendarIcon: `w-5 h-5 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
@@ -45,7 +59,7 @@ const getClasses = (dark: boolean) => ({
     dayMarked: "",
     weekNumber: `text-xs flex items-center justify-center ${dark ? "text-gray-600" : "text-gray-400"}`,
     presets: `flex flex-wrap gap-2 pb-4 mb-4 border-b ${dark ? "border-gray-700" : "border-gray-100"}`,
-    presetButton: `px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${dark ? "bg-white/[0.06] text-gray-300 hover:bg-white/[0.12]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+    presetButton: `px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${dark ? "bg-white/6 text-gray-300 hover:bg-white/[0.12]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
     presetActive: `${dark ? "bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-400/30" : "bg-indigo-100 text-indigo-700 ring-1 ring-indigo-300"}`,
     footer: `flex justify-center pt-4 mt-4 border-t ${dark ? "border-gray-700" : "border-gray-100"}`,
     todayButton: `flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all ${dark ? "text-indigo-400 hover:bg-indigo-500/10" : "text-indigo-600 hover:bg-indigo-50"}`,
@@ -56,10 +70,10 @@ const getClasses = (dark: boolean) => ({
     monthDropdown: "",
     yearDropdown: "",
     dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-lg shadow-lg py-1 min-w-[140px] ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-    dropdownItem: `flex items-center justify-between w-full px-3 py-2 text-sm text-left cursor-pointer ${dark ? "text-gray-300 hover:bg-white/[0.06]" : "text-gray-700 hover:bg-gray-50"}`,
+    dropdownItem: `flex items-center justify-between w-full px-3 py-2 text-sm text-left cursor-pointer ${dark ? "text-gray-300 hover:bg-white/6" : "text-gray-700 hover:bg-gray-50"}`,
     dropdownItemSelected: `font-medium ${dark ? "bg-indigo-500/10 text-indigo-300" : "bg-indigo-50 text-indigo-600"}`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
   kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
   label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
   note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
@@ -81,25 +95,88 @@ const DatePickerDemo = () => {
   const [controlledDate, setControlledDate] = useState<Date | null>(new Date());
   // Event log
   const [eventLog, setEventLog] = useState<string[]>([]);
-  const log = (msg: string) => setEventLog((prev) => [msg, ...prev.slice(0, 4)]);
+  const log = (msg: string) =>
+    setEventLog((prev) => [msg, ...prev.slice(0, 4)]);
 
   const today = new Date();
   const markers: DateMarker[] = [
-    { date: addDays(today, 2), label: "Team Meeting", type: "meeting", color: "#6366f1" },
-    { date: addDays(today, 5), label: "Deadline", description: "Project submission", type: "deadline", color: "#ef4444" },
-    { date: addDays(today, 10), label: "Holiday", type: "holiday", color: "#22c55e" },
+    {
+      date: addDays(today, 2),
+      label: "Team Meeting",
+      type: "meeting",
+      color: "#6366f1",
+    },
+    {
+      date: addDays(today, 5),
+      label: "Deadline",
+      description: "Project submission",
+      type: "deadline",
+      color: "#ef4444",
+    },
+    {
+      date: addDays(today, 10),
+      label: "Holiday",
+      type: "holiday",
+      color: "#22c55e",
+    },
   ];
 
   // Rich event markers (holidays, absences, events)
   const eventMarkers: DateMarker[] = [
-    { date: addDays(today, 1), label: "Sprint Review", description: "End of sprint demo", type: "event", color: "#6366f1" },
-    { date: addDays(today, 3), label: "Public Holiday", description: "National holiday — office closed", type: "holiday", color: "#22c55e" },
-    { date: addDays(today, 4), label: "Alice — PTO", description: "Approved leave", type: "absence", color: "#f59e0b" },
-    { date: addDays(today, 6), label: "Bob — Sick Leave", type: "absence", color: "#f59e0b" },
-    { date: addDays(today, 7), label: "Team Offsite", description: "Annual team building", type: "event", color: "#6366f1" },
-    { date: addDays(today, 8), label: "Release Day", description: "v2.0 launch", type: "deadline", color: "#ef4444" },
-    { date: addDays(today, 12), label: "Holiday — Christmas", type: "holiday", color: "#22c55e" },
-    { date: addDays(today, 15), label: "Charlie — Vacation", description: "Dec 15-22", type: "absence", color: "#f59e0b" },
+    {
+      date: addDays(today, 1),
+      label: "Sprint Review",
+      description: "End of sprint demo",
+      type: "event",
+      color: "#6366f1",
+    },
+    {
+      date: addDays(today, 3),
+      label: "Public Holiday",
+      description: "National holiday — office closed",
+      type: "holiday",
+      color: "#22c55e",
+    },
+    {
+      date: addDays(today, 4),
+      label: "Alice — PTO",
+      description: "Approved leave",
+      type: "absence",
+      color: "#f59e0b",
+    },
+    {
+      date: addDays(today, 6),
+      label: "Bob — Sick Leave",
+      type: "absence",
+      color: "#f59e0b",
+    },
+    {
+      date: addDays(today, 7),
+      label: "Team Offsite",
+      description: "Annual team building",
+      type: "event",
+      color: "#6366f1",
+    },
+    {
+      date: addDays(today, 8),
+      label: "Release Day",
+      description: "v2.0 launch",
+      type: "deadline",
+      color: "#ef4444",
+    },
+    {
+      date: addDays(today, 12),
+      label: "Holiday — Christmas",
+      type: "holiday",
+      color: "#22c55e",
+    },
+    {
+      date: addDays(today, 15),
+      label: "Charlie — Vacation",
+      description: "Dec 15-22",
+      type: "absence",
+      color: "#f59e0b",
+    },
   ];
 
   // Custom presets
@@ -111,36 +188,81 @@ const DatePickerDemo = () => {
   ];
 
   const rangePresets = [
-    { label: "This Week", getValue: () => { const start = startOfWeek(today, { weekStartsOn: 1 }); return { start, end: addDays(start, 4) }; } },
-    { label: "Last 7 Days", getValue: () => ({ start: subDays(today, 6), end: today }) },
-    { label: "Last 30 Days", getValue: () => ({ start: subDays(today, 29), end: today }) },
-    { label: "This Month", getValue: () => ({ start: startOfMonth(today), end: endOfMonth(today) }) },
-    { label: "Last Month", getValue: () => ({ start: startOfMonth(subMonths(today, 1)), end: endOfMonth(subMonths(today, 1)) }) },
+    {
+      label: "This Week",
+      getValue: () => {
+        const start = startOfWeek(today, { weekStartsOn: 1 });
+        return { start, end: addDays(start, 4) };
+      },
+    },
+    {
+      label: "Last 7 Days",
+      getValue: () => ({ start: subDays(today, 6), end: today }),
+    },
+    {
+      label: "Last 30 Days",
+      getValue: () => ({ start: subDays(today, 29), end: today }),
+    },
+    {
+      label: "This Month",
+      getValue: () => ({ start: startOfMonth(today), end: endOfMonth(today) }),
+    },
+    {
+      label: "Last Month",
+      getValue: () => ({
+        start: startOfMonth(subMonths(today, 1)),
+        end: endOfMonth(subMonths(today, 1)),
+      }),
+    },
   ];
 
   return (
     <div className="space-y-10">
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"}`} />
-        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
-        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
+        <div
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
         <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>DatePicker</h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            A full-featured date picker supporting single, range, and multiple date selection.
-            Includes presets, markers, locale support, keyboard navigation, week numbers,
-            and fully customizable styling via the classes system.
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            DatePicker
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A full-featured date picker supporting single, range, and multiple
+            date selection. Includes presets, markers, locale support, keyboard
+            navigation, week numbers, and fully customizable styling via the
+            classes system.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import { DatePicker } from "@kern-ui/date-picker";`} />
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { DatePicker } from "@kern-ui/date-picker";`}
+            />
           </div>
         </div>
       </header>
 
       {/* ─── Single Date ────────────────────────────────────────────────── */}
-      <Section title="Single Date Selection" description="Default mode. Click a day to select it." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Single Date Selection"
+        description="Default mode. Click a day to select it."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               value={singleDate}
@@ -152,7 +274,9 @@ const DatePickerDemo = () => {
             />
           </div>
           {singleDate && (
-            <p className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               Selected: {singleDate.toLocaleDateString()}
             </p>
           )}
@@ -160,8 +284,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Range Selection ────────────────────────────────────────────── */}
-      <Section title="Date Range Selection" description='Use mode="range" to select a start and end date.' isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Date Range Selection"
+        description='Use mode="range" to select a start and end date.'
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               mode="range"
@@ -174,19 +306,32 @@ const DatePickerDemo = () => {
             />
           </div>
           {rangeValue?.start && rangeValue?.end && (
-            <p className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              Range: {rangeValue.start.toLocaleDateString()} – {rangeValue.end.toLocaleDateString()}
+            <p
+              className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Range: {rangeValue.start.toLocaleDateString()} –{" "}
+              {rangeValue.end.toLocaleDateString()}
             </p>
           )}
         </DemoWrapper>
       </Section>
 
       {/* ─── Range Customization ──────────────────────────────────────── */}
-      <Section title="Range Selection — Custom Colors" description="Customize the range start, end, and middle day colors, plus the trigger and calendar accent." isDarkMode={dark}>
+      <Section
+        title="Range Selection — Custom Colors"
+        description="Customize the range start, end, and middle day colors, plus the trigger and calendar accent."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Emerald / teal range</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Emerald / teal range
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
@@ -208,8 +353,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Amber / warm range</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Amber / warm range
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
@@ -231,8 +382,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Rose / pink with bold text</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Rose / pink with bold text
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
@@ -260,8 +417,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Gradient-style range with rounded ends</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Gradient-style range with rounded ends
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
@@ -285,8 +448,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Multiple Selection ─────────────────────────────────────────── */}
-      <Section title="Multiple Date Selection" description='Use mode="multiple" to select multiple individual dates.' isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Multiple Date Selection"
+        description='Use mode="multiple" to select multiple individual dates.'
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               mode="multiple"
@@ -299,16 +470,27 @@ const DatePickerDemo = () => {
             />
           </div>
           {multipleDates && multipleDates.length > 0 && (
-            <p className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              Selected: {multipleDates.length} date{multipleDates.length !== 1 ? "s" : ""}
+            <p
+              className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Selected: {multipleDates.length} date
+              {multipleDates.length !== 1 ? "s" : ""}
             </p>
           )}
         </DemoWrapper>
       </Section>
 
       {/* ─── With Presets ───────────────────────────────────────────────── */}
-      <Section title="Date Presets" description="Quick-select common dates with showPresets." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Date Presets"
+        description="Quick-select common dates with showPresets."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               mode="range"
@@ -325,11 +507,21 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Markers ────────────────────────────────────────────────────── */}
-      <Section title="Date Markers" description="Highlight specific dates with colored indicator dots and hover tooltips showing event details." isDarkMode={dark}>
+      <Section
+        title="Date Markers"
+        description="Highlight specific dates with colored indicator dots and hover tooltips showing event details."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Indicator dots + tooltips (hover to see details)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Indicator dots + tooltips (hover to see details)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   value={singleDate}
@@ -346,8 +538,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Indicator dots only (no tooltip)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Indicator dots only (no tooltip)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Dots only..."
@@ -360,17 +558,39 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Dots with custom colors (no tooltips)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Dots with custom colors (no tooltips)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Colored dots..."
                   markers={[
                     { date: addDays(today, 1), label: "Red", color: "#ef4444" },
-                    { date: addDays(today, 3), label: "Green", color: "#22c55e" },
-                    { date: addDays(today, 5), label: "Blue", color: "#3b82f6" },
-                    { date: addDays(today, 7), label: "Amber", color: "#f59e0b" },
-                    { date: addDays(today, 9), label: "Purple", color: "#8b5cf6" },
+                    {
+                      date: addDays(today, 3),
+                      label: "Green",
+                      color: "#22c55e",
+                    },
+                    {
+                      date: addDays(today, 5),
+                      label: "Blue",
+                      color: "#3b82f6",
+                    },
+                    {
+                      date: addDays(today, 7),
+                      label: "Amber",
+                      color: "#f59e0b",
+                    },
+                    {
+                      date: addDays(today, 9),
+                      label: "Purple",
+                      color: "#8b5cf6",
+                    },
                   ]}
                   showMarkerIndicator
                   showMarkerTooltip={false}
@@ -383,11 +603,21 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Disabled Dates ─────────────────────────────────────────────── */}
-      <Section title="Disabled Dates" description="Disable specific dates, date ranges, days of week, or custom logic." isDarkMode={dark}>
+      <Section
+        title="Disabled Dates"
+        description="Disable specific dates, date ranges, days of week, or custom logic."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Disable past dates</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Disable past dates
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="No past dates"
@@ -398,8 +628,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Disable weekends</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Disable weekends
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="No weekends"
@@ -410,8 +646,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Min/max date range</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Min/max date range
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Limited range"
@@ -426,8 +668,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Two Months ─────────────────────────────────────────────────── */}
-      <Section title="Multiple Months" description="Display two months side by side with numberOfMonths={2}." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Multiple Months"
+        description="Display two months side by side with numberOfMonths={2}."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-md">
             <DatePicker
               mode="range"
@@ -444,8 +694,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Week Numbers ───────────────────────────────────────────────── */}
-      <Section title="Week Numbers" description="Show ISO week numbers with showWeekNumbers." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Week Numbers"
+        description="Show ISO week numbers with showWeekNumbers."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               placeholder="With week numbers"
@@ -457,37 +715,81 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Today Button & Indicator ─────────────────────────────────── */}
-      <Section title="Today Button & Indicator" description="showTodayIndicator adds a ring on today's date. showTodayButton adds a footer button. Both are independent and off by default." isDarkMode={dark}>
+      <Section
+        title="Today Button & Indicator"
+        description="showTodayIndicator adds a ring on today's date. showTodayButton adds a footer button. Both are independent and off by default."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Default — no indicator, no footer</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Default — no indicator, no footer
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Clean calendar" classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Clean calendar"
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Today indicator only (ring on today, no footer)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Today indicator only (ring on today, no footer)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Indicator only" showTodayIndicator classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Indicator only"
+                  showTodayIndicator
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Today button only (footer, no ring)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Today button only (footer, no ring)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Button only" showTodayButton classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Button only"
+                  showTodayButton
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Both — indicator ring + footer button</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Both — indicator ring + footer button
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Both enabled" showTodayIndicator showTodayButton classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Both enabled"
+                  showTodayIndicator
+                  showTodayButton
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
@@ -495,8 +797,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Monday Start ───────────────────────────────────────────────── */}
-      <Section title="Week Starts On Monday" description="Set weekStartsOn={1} for Monday-first calendars." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Week Starts On Monday"
+        description="Set weekStartsOn={1} for Monday-first calendars."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               placeholder="Monday start"
@@ -508,8 +818,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Error State ────────────────────────────────────────────────── */}
-      <Section title="Error State" description="Show validation errors with error and errorMessage." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Error State"
+        description="Show validation errors with error and errorMessage."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               label="Required date"
@@ -524,8 +842,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
-      <Section title="Disabled" description="Disable the entire date picker." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Disabled"
+        description="Disable the entire date picker."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               label="Disabled picker"
@@ -538,18 +864,42 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Controlled ─────────────────────────────────────────────────── */}
-      <Section title="Controlled Mode" description="External state control via value + onChange." isDarkMode={dark}>
-        <div className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
-          <span className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}>Value:</span>
-          <span className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}>{controlledDate?.toLocaleDateString() ?? "null"}</span>
-          <button className={`ml-auto px-3 py-1 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`} onClick={() => setControlledDate(null)}>
+      <Section
+        title="Controlled Mode"
+        description="External state control via value + onChange."
+        isDarkMode={dark}
+      >
+        <div
+          className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
+          <span
+            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            Value:
+          </span>
+          <span
+            className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}
+          >
+            {controlledDate?.toLocaleDateString() ?? "null"}
+          </span>
+          <button
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            onClick={() => setControlledDate(null)}
+          >
             Clear
           </button>
-          <button className={`px-3 py-1 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600`} onClick={() => setControlledDate(new Date())}>
+          <button
+            className={`px-3 py-1 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600`}
+            onClick={() => setControlledDate(new Date())}
+          >
             Set Today
           </button>
         </div>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               value={controlledDate}
@@ -564,8 +914,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Full Width ─────────────────────────────────────────────────── */}
-      <Section title="Full Width" description="Use fullWidth to span the trigger across the container." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Full Width"
+        description="Use fullWidth to span the trigger across the container."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <DatePicker
             placeholder="Full width date picker"
             fullWidth
@@ -575,9 +933,19 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Events Calendar (Holidays, Absences, Deadlines) ────────────── */}
-      <Section title="Events Calendar (Holidays, Absences, Deadlines)" description="Real-world SaaS use case: team calendar with different event types. Each marker type has a unique color. Hover marked dates to see tooltip with event details." isDarkMode={dark}>
-        <div className={`mb-3 p-3 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
-          <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-600"}`}>Legend</p>
+      <Section
+        title="Events Calendar (Holidays, Absences, Deadlines)"
+        description="Real-world SaaS use case: team calendar with different event types. Each marker type has a unique color. Hover marked dates to see tooltip with event details."
+        isDarkMode={dark}
+      >
+        <div
+          className={`mb-3 p-3 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
+          <p
+            className={`text-xs font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-600"}`}
+          >
+            Legend
+          </p>
           <div className="flex flex-wrap gap-4">
             {[
               { color: "#6366f1", label: "Event" },
@@ -586,13 +954,28 @@ const DatePickerDemo = () => {
               { color: "#ef4444", label: "Deadline" },
             ].map(({ color, label: lbl }) => (
               <div key={lbl} className="flex items-center gap-2">
-                <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: color }} />
-                <span className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>{lbl}</span>
+                <span
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    backgroundColor: color,
+                  }}
+                />
+                <span
+                  className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  {lbl}
+                </span>
               </div>
             ))}
           </div>
         </div>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               value={singleDate}
@@ -609,13 +992,46 @@ const DatePickerDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Each marker has <code className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`}>type</code>, <code className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`}>color</code>, <code className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`}>label</code>, and optional <code className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`}>description</code>. Colored dots appear on marked dates. Hover to see the tooltip with event name, description, and type.
+          Each marker has{" "}
+          <code
+            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+          >
+            type
+          </code>
+          ,{" "}
+          <code
+            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+          >
+            color
+          </code>
+          ,{" "}
+          <code
+            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+          >
+            label
+          </code>
+          , and optional{" "}
+          <code
+            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+          >
+            description
+          </code>
+          . Colored dots appear on marked dates. Hover to see the tooltip with
+          event name, description, and type.
         </div>
       </Section>
 
       {/* ─── Custom Presets ──────────────────────────────────────────────── */}
-      <Section title="Custom Presets (Single)" description="Provide your own preset options with the presets prop." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Custom Presets (Single)"
+        description="Provide your own preset options with the presets prop."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               value={singleDate}
@@ -632,8 +1048,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Range Presets ───────────────────────────────────────────────── */}
-      <Section title="Custom Range Presets" description="Common range presets for analytics dashboards." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Custom Range Presets"
+        description="Common range presets for analytics dashboards."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               mode="range"
@@ -651,21 +1075,43 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Locale ─────────────────────────────────────────────────────── */}
-      <Section title="Locale Support" description="Pass a date-fns locale for localized month names, weekdays, and formatting." isDarkMode={dark}>
+      <Section
+        title="Locale Support"
+        description="Pass a date-fns locale for localized month names, weekdays, and formatting."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>French</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Choisir une date..." locale={fr} weekStartsOn={1} classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Choisir une date..."
+                  locale={fr}
+                  weekStartsOn={1}
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>German</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Datum auswählen..." locale={de} weekStartsOn={1} classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Datum auswählen..."
+                  locale={de}
+                  weekStartsOn={1}
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
@@ -673,7 +1119,11 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Date Format ────────────────────────────────────────────────── */}
-      <Section title="Custom Date Format" description="Control how the selected date is displayed in the trigger." isDarkMode={dark}>
+      <Section
+        title="Custom Date Format"
+        description="Control how the selected date is displayed in the trigger."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           {[
             { label: 'Default: "MMM d, yyyy"', format: "MMM d, yyyy" },
@@ -683,9 +1133,19 @@ const DatePickerDemo = () => {
           ].map(({ label: lbl, format: fmt }) => (
             <div key={fmt}>
               <p className={`text-xs font-medium mb-2 ${c.label}`}>{lbl}</p>
-              <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <DemoWrapper
+                isDarkMode={dark}
+                layout="block"
+                className="overflow-visible"
+              >
                 <div className="max-w-xs">
-                  <DatePicker value={controlledDate} onChange={setControlledDate} dateFormat={fmt} showClearButton classes={c.datepicker} />
+                  <DatePicker
+                    value={controlledDate}
+                    onChange={setControlledDate}
+                    dateFormat={fmt}
+                    showClearButton
+                    classes={c.datepicker}
+                  />
                 </div>
               </DemoWrapper>
             </div>
@@ -694,21 +1154,46 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Outside Days ───────────────────────────────────────────────── */}
-      <Section title="Outside Days" description="Toggle visibility and selectability of days from adjacent months." isDarkMode={dark}>
+      <Section
+        title="Outside Days"
+        description="Toggle visibility and selectability of days from adjacent months."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>showOutsideDays=true (default) + selectable</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              showOutsideDays=true (default) + selectable
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Outside days visible & selectable" showOutsideDays outsideDaysSelectable classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Outside days visible & selectable"
+                  showOutsideDays
+                  outsideDaysSelectable
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>showOutsideDays=false</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              showOutsideDays=false
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
-                <DatePicker placeholder="Outside days hidden" showOutsideDays={false} classes={c.datepicker} />
+                <DatePicker
+                  placeholder="Outside days hidden"
+                  showOutsideDays={false}
+                  classes={c.datepicker}
+                />
               </div>
             </DemoWrapper>
           </div>
@@ -716,36 +1201,73 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Fixed Weeks ────────────────────────────────────────────────── */}
-      <Section title="Fixed Weeks" description="Always render 6 rows so the calendar height never changes between months." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Fixed Weeks"
+        description="Always render 6 rows so the calendar height never changes between months."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
-            <DatePicker placeholder="Fixed 6 weeks" fixedWeeks classes={c.datepicker} />
+            <DatePicker
+              placeholder="Fixed 6 weeks"
+              fixedWeeks
+              classes={c.datepicker}
+            />
           </div>
         </DemoWrapper>
       </Section>
 
       {/* ─── Specific Disabled Dates ────────────────────────────────────── */}
-      <Section title="Disable Specific Dates" description="Blacklist individual dates or use a custom function." isDarkMode={dark}>
+      <Section
+        title="Disable Specific Dates"
+        description="Blacklist individual dates or use a custom function."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Specific dates disabled</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Specific dates disabled
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Some dates blocked"
-                  disabledDates={{ dates: [addDays(today, 1), addDays(today, 3), addDays(today, 7)] }}
+                  disabledDates={{
+                    dates: [
+                      addDays(today, 1),
+                      addDays(today, 3),
+                      addDays(today, 7),
+                    ],
+                  }}
                   classes={c.datepicker}
                 />
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom function (only allow Tuesdays and Thursdays)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom function (only allow Tuesdays and Thursdays)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Tue & Thu only"
-                  disabledDates={{ custom: (date) => date.getDay() !== 2 && date.getDay() !== 4 }}
+                  disabledDates={{
+                    custom: (date) =>
+                      date.getDay() !== 2 && date.getDay() !== 4,
+                  }}
                   classes={c.datepicker}
                 />
               </div>
@@ -755,8 +1277,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Callbacks ──────────────────────────────────────────────────── */}
-      <Section title="Event Callbacks" description="onOpen, onClose, onMonthChange, and onClear callbacks." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Event Callbacks"
+        description="onOpen, onClose, onMonthChange, and onClear callbacks."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               label="Watch the log below"
@@ -764,27 +1294,46 @@ const DatePickerDemo = () => {
               showClearButton
               onOpen={() => log("onOpen fired")}
               onClose={() => log("onClose fired")}
-              onMonthChange={(month) => log(`onMonthChange: ${month.toLocaleDateString()}`)}
+              onMonthChange={(month) =>
+                log(`onMonthChange: ${month.toLocaleDateString()}`)
+              }
               onClear={() => log("onClear fired")}
-              onChange={(date) => { setSingleDate(date); if (date) log(`onChange: ${date.toLocaleDateString()}`); }}
+              onChange={(date) => {
+                setSingleDate(date);
+                if (date) log(`onChange: ${date.toLocaleDateString()}`);
+              }}
               value={singleDate}
               classes={c.datepicker}
             />
           </div>
           {eventLog.length > 0 && (
-            <div className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              {eventLog.map((entry, i) => <div key={i}>{entry}</div>)}
+            <div
+              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              {eventLog.map((entry, i) => (
+                <div key={i}>{entry}</div>
+              ))}
             </div>
           )}
         </DemoWrapper>
       </Section>
 
       {/* ─── Classes System ─────────────────────────────────────────────── */}
-      <Section title="Classes System" description="Override any internal element via the classes prop — 40+ slots for trigger, calendar, days, header, weekdays, presets, footer, dropdowns, and more." isDarkMode={dark}>
+      <Section
+        title="Classes System"
+        description="Override any internal element via the classes prop — 40+ slots for trigger, calendar, days, header, weekdays, presets, footer, dropdowns, and more."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom accent color (pink)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom accent color (pink)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Pink theme"
@@ -801,8 +1350,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Large fonts — bigger weekdays, day numbers, header</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Large fonts — bigger weekdays, day numbers, header
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-sm">
                 <DatePicker
                   placeholder="Large calendar"
@@ -827,14 +1382,20 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Compact — smaller everything</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Compact — smaller everything
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-[220px]">
                 <DatePicker
                   placeholder="Compact"
                   classes={{
                     ...c.datepicker,
-                    trigger: `flex items-center gap-1.5 w-full px-2.5 py-1.5 rounded-lg border text-xs transition-all cursor-pointer ${dark ? "bg-white/[0.04] border-white/10 text-gray-200" : "bg-white border-gray-200 text-gray-900 shadow-sm"}`,
+                    trigger: `flex items-center gap-1.5 w-full px-2.5 py-1.5 rounded-lg border text-xs transition-all cursor-pointer ${dark ? "bg-white/4 border-white/10 text-gray-200" : "bg-white border-gray-200 text-gray-900 shadow-sm"}`,
                     calendar: `rounded-lg shadow-lg p-2.5 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
                     calendarIcon: `w-3.5 h-3.5 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
                     header: "flex items-center justify-between mb-2",
@@ -857,8 +1418,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom nav buttons and trigger border</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom nav buttons and trigger border
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Custom nav"
@@ -876,8 +1443,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom presets styling</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom presets styling
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
@@ -899,11 +1472,21 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Scroll Behavior ───────────────────────────────────────────── */}
-      <Section title="Scroll Behavior" description="By default the calendar follows the trigger on scroll. Set lockScroll to lock body scroll while the calendar is open." isDarkMode={dark}>
+      <Section
+        title="Scroll Behavior"
+        description="By default the calendar follows the trigger on scroll. Set lockScroll to lock body scroll while the calendar is open."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Default — calendar repositions on scroll</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Default — calendar repositions on scroll
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Scroll the page..."
@@ -914,8 +1497,14 @@ const DatePickerDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>lockScroll=true — body scroll disabled while open</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              lockScroll=true — body scroll disabled while open
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className="max-w-xs">
                 <DatePicker
                   placeholder="Open me, then try scrolling..."
@@ -930,8 +1519,16 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Custom Icons ───────────────────────────────────────────────── */}
-      <Section title="Custom Icons" description="Replace any icon — calendar, clear, nav arrows, today button." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Custom Icons"
+        description="Replace any icon — calendar, clear, nav arrows, today button."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               placeholder="Custom icons"
@@ -952,14 +1549,22 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section title="Unstyled Mode" description="Set unstyled=true to strip all default classes. Build from scratch." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Unstyled Mode"
+        description="Set unstyled=true to strip all default classes. Build from scratch."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
             <DatePicker
               unstyled
               placeholder="Fully custom"
               classes={{
-                trigger: `flex items-center gap-2 w-full px-4 py-3 rounded-2xl font-medium text-sm cursor-pointer ${dark ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white" : "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25"}`,
+                trigger: `flex items-center gap-2 w-full px-4 py-3 rounded-2xl font-medium text-sm cursor-pointer ${dark ? "bg-linear-to-r from-purple-600 to-pink-600 text-white" : "bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25"}`,
                 input: "flex-1 text-left truncate",
                 calendarIcon: "w-5 h-5 shrink-0 text-white/70",
                 calendar: `rounded-2xl shadow-2xl p-5 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
@@ -969,14 +1574,16 @@ const DatePickerDemo = () => {
                 weekdayHeader: "grid grid-cols-7 mb-2",
                 weekday: `text-xs font-bold text-center py-2 ${dark ? "text-gray-500" : "text-gray-400"}`,
                 day: `w-10 h-10 flex items-center justify-center text-sm rounded-xl cursor-pointer transition-all ${dark ? "hover:bg-white/10 text-gray-200" : "hover:bg-purple-50 text-gray-700"}`,
-                daySelected: dark ? "bg-purple-500 text-white" : "bg-purple-600 text-white",
+                daySelected: dark
+                  ? "bg-purple-500 text-white"
+                  : "bg-purple-600 text-white",
                 dayToday: `font-bold ${dark ? "text-purple-400" : "text-purple-600"}`,
                 dayDisabled: "opacity-30 cursor-not-allowed",
                 dayOutside: "opacity-20",
                 monthSelect: `px-2 py-1 text-sm font-bold rounded-lg cursor-pointer ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
                 yearSelect: `px-2 py-1 text-sm font-bold rounded-lg cursor-pointer ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
                 dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-xl shadow-xl py-1 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-                dropdownItem: `flex items-center justify-between px-3 py-2 text-sm cursor-pointer ${dark ? "text-gray-300 hover:bg-white/[0.06]" : "text-gray-700 hover:bg-purple-50"}`,
+                dropdownItem: `flex items-center justify-between px-3 py-2 text-sm cursor-pointer ${dark ? "text-gray-300 hover:bg-white/6" : "text-gray-700 hover:bg-purple-50"}`,
                 dropdownItemSelected: `font-medium ${dark ? "text-purple-300" : "text-purple-600"}`,
               }}
             />
@@ -985,10 +1592,22 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
-      <Section title="Reduce Motion" description="Set reduceMotion={true} to disable all transitions." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+      <Section
+        title="Reduce Motion"
+        description="Set reduceMotion={true} to disable all transitions."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
           <div className="max-w-xs">
-            <DatePicker placeholder="No transitions" reduceMotion={true} classes={c.datepicker} />
+            <DatePicker
+              placeholder="No transitions"
+              reduceMotion={true}
+              classes={c.datepicker}
+            />
           </div>
         </DemoWrapper>
       </Section>
@@ -997,47 +1616,273 @@ const DatePickerDemo = () => {
       <Section title="DatePicker Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="mode" type='"single"|"range"|"multiple"' defaultVal='"single"' description="Date selection mode" isDarkMode={dark} />
-            <PropRow name="value" type="Date | null" description="Selected date (single mode)" isDarkMode={dark} />
-            <PropRow name="rangeValue" type="DateRange | null" description="Selected range (range mode)" isDarkMode={dark} />
-            <PropRow name="multipleValue" type="Date[] | null" description="Selected dates (multiple mode)" isDarkMode={dark} />
-            <PropRow name="onChange" type="(date, dateValue) => void" description="Single mode callback" isDarkMode={dark} />
-            <PropRow name="onRangeChange" type="(range, rangeValue) => void" description="Range mode callback" isDarkMode={dark} />
-            <PropRow name="onMultipleChange" type="(dates, dateValues) => void" description="Multiple mode callback" isDarkMode={dark} />
-            <PropRow name="onClear" type="() => void" description="Clear callback" isDarkMode={dark} />
-            <PropRow name="minDate" type="Date" description="Minimum selectable date" isDarkMode={dark} />
-            <PropRow name="maxDate" type="Date" description="Maximum selectable date" isDarkMode={dark} />
-            <PropRow name="disabledDates" type="DisabledDateOptions" description="Disabled dates configuration" isDarkMode={dark} />
-            <PropRow name="weekStartsOn" type="0-6" defaultVal="0" description="First day of week (0=Sunday)" isDarkMode={dark} />
-            <PropRow name="locale" type="Locale" description="date-fns locale object" isDarkMode={dark} />
-            <PropRow name="numberOfMonths" type="number" defaultVal="1" description="Months to display side by side" isDarkMode={dark} />
-            <PropRow name="dateFormat" type="string" defaultVal='"MMM d, yyyy"' description="Display format string" isDarkMode={dark} />
-            <PropRow name="showTodayIndicator" type="boolean" defaultVal="false" description="Highlight today with a ring" isDarkMode={dark} />
-            <PropRow name="showTodayButton" type="boolean" defaultVal="false" description="Show jump-to-today footer button" isDarkMode={dark} />
-            <PropRow name="showWeekNumbers" type="boolean" defaultVal="false" description="Show ISO week numbers" isDarkMode={dark} />
-            <PropRow name="showOutsideDays" type="boolean" defaultVal="true" description="Show days from adjacent months" isDarkMode={dark} />
-            <PropRow name="fixedWeeks" type="boolean" defaultVal="false" description="Always show 6 weeks" isDarkMode={dark} />
-            <PropRow name="showPresets" type="boolean" defaultVal="false" description="Show preset quick-select buttons" isDarkMode={dark} />
-            <PropRow name="presets" type="DatePreset[]" description="Custom presets (auto-generated if omitted)" isDarkMode={dark} />
-            <PropRow name="markers" type="DateMarker[]" description="Dates to highlight with indicators" isDarkMode={dark} />
-            <PropRow name="showMarkerIndicator" type="boolean" defaultVal="false" description="Show colored dots on marked dates" isDarkMode={dark} />
-            <PropRow name="showMarkerTooltip" type="boolean" defaultVal="false" description="Show tooltip on hover for marked dates" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Label above trigger" isDarkMode={dark} />
-            <PropRow name="placeholder" type="string" description="Trigger placeholder text" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the picker" isDarkMode={dark} />
-            <PropRow name="error" type="boolean" defaultVal="false" description="Error state" isDarkMode={dark} />
-            <PropRow name="errorMessage" type="ReactNode" description="Error text below trigger" isDarkMode={dark} />
-            <PropRow name="required" type="boolean" defaultVal="false" description="Required field" isDarkMode={dark} />
-            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Full width trigger" isDarkMode={dark} />
-            <PropRow name="showClearButton" type="boolean" defaultVal="false" description="Show clear button in trigger" isDarkMode={dark} />
-            <PropRow name="classes" type="DatePickerClasses" description="Slot class overrides (40+ slots)" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="reduceMotion" type='boolean|"auto"' defaultVal='"auto"' description="Disable transitions" isDarkMode={dark} />
-            <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Calendar portal target" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while calendar is open" isDarkMode={dark} />
-            <PropRow name="onOpen" type="() => void" description="Calendar open callback" isDarkMode={dark} />
-            <PropRow name="onClose" type="() => void" description="Calendar close callback" isDarkMode={dark} />
-            <PropRow name="onMonthChange" type="(month) => void" description="Month navigation callback" isDarkMode={dark} />
+            <PropRow
+              name="mode"
+              type='"single"|"range"|"multiple"'
+              defaultVal='"single"'
+              description="Date selection mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="Date | null"
+              description="Selected date (single mode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="rangeValue"
+              type="DateRange | null"
+              description="Selected range (range mode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="multipleValue"
+              type="Date[] | null"
+              description="Selected dates (multiple mode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onChange"
+              type="(date, dateValue) => void"
+              description="Single mode callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onRangeChange"
+              type="(range, rangeValue) => void"
+              description="Range mode callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onMultipleChange"
+              type="(dates, dateValues) => void"
+              description="Multiple mode callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onClear"
+              type="() => void"
+              description="Clear callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="minDate"
+              type="Date"
+              description="Minimum selectable date"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="maxDate"
+              type="Date"
+              description="Maximum selectable date"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabledDates"
+              type="DisabledDateOptions"
+              description="Disabled dates configuration"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="weekStartsOn"
+              type="0-6"
+              defaultVal="0"
+              description="First day of week (0=Sunday)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="locale"
+              type="Locale"
+              description="date-fns locale object"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="numberOfMonths"
+              type="number"
+              defaultVal="1"
+              description="Months to display side by side"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dateFormat"
+              type="string"
+              defaultVal='"MMM d, yyyy"'
+              description="Display format string"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showTodayIndicator"
+              type="boolean"
+              defaultVal="false"
+              description="Highlight today with a ring"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showTodayButton"
+              type="boolean"
+              defaultVal="false"
+              description="Show jump-to-today footer button"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showWeekNumbers"
+              type="boolean"
+              defaultVal="false"
+              description="Show ISO week numbers"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showOutsideDays"
+              type="boolean"
+              defaultVal="true"
+              description="Show days from adjacent months"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fixedWeeks"
+              type="boolean"
+              defaultVal="false"
+              description="Always show 6 weeks"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showPresets"
+              type="boolean"
+              defaultVal="false"
+              description="Show preset quick-select buttons"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="presets"
+              type="DatePreset[]"
+              description="Custom presets (auto-generated if omitted)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="markers"
+              type="DateMarker[]"
+              description="Dates to highlight with indicators"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showMarkerIndicator"
+              type="boolean"
+              defaultVal="false"
+              description="Show colored dots on marked dates"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showMarkerTooltip"
+              type="boolean"
+              defaultVal="false"
+              description="Show tooltip on hover for marked dates"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="ReactNode"
+              description="Label above trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="placeholder"
+              type="string"
+              description="Trigger placeholder text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable the picker"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="boolean"
+              defaultVal="false"
+              description="Error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorMessage"
+              type="ReactNode"
+              description="Error text below trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="required"
+              type="boolean"
+              defaultVal="false"
+              description="Required field"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fullWidth"
+              type="boolean"
+              defaultVal="false"
+              description="Full width trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showClearButton"
+              type="boolean"
+              defaultVal="false"
+              description="Show clear button in trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="DatePickerClasses"
+              description="Slot class overrides (40+ slots)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="reduceMotion"
+              type='boolean|"auto"'
+              defaultVal='"auto"'
+              description="Disable transitions"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="portalContainer"
+              type="HTMLElement | null"
+              defaultVal="document.body"
+              description="Calendar portal target"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lockScroll"
+              type="boolean"
+              defaultVal="false"
+              description="Lock body scroll while calendar is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onOpen"
+              type="() => void"
+              description="Calendar open callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onClose"
+              type="() => void"
+              description="Calendar close callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onMonthChange"
+              type="(month) => void"
+              description="Month navigation callback"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1046,17 +1891,72 @@ const DatePickerDemo = () => {
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-open" type="root" description="Present when calendar is open" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="root, trigger" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="root" description="Present when error=true" isDarkMode={dark} />
-            <PropRow name="data-mode" type="root" description='"single" | "range" | "multiple"' isDarkMode={dark} />
-            <PropRow name="data-today" type="day cell" description="Present on today's date" isDarkMode={dark} />
-            <PropRow name="data-selected" type="day cell" description="Present on selected dates" isDarkMode={dark} />
-            <PropRow name="data-outside" type="day cell" description="Present on outside-month days" isDarkMode={dark} />
-            <PropRow name="data-range-start" type="day cell" description="Present on range start" isDarkMode={dark} />
-            <PropRow name="data-range-end" type="day cell" description="Present on range end" isDarkMode={dark} />
-            <PropRow name="data-in-range" type="day cell" description="Present on days within range" isDarkMode={dark} />
-            <PropRow name="data-marked" type="day cell" description="Present on marked dates" isDarkMode={dark} />
+            <PropRow
+              name="data-open"
+              type="root"
+              description="Present when calendar is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, trigger"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-error"
+              type="root"
+              description="Present when error=true"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-mode"
+              type="root"
+              description='"single" | "range" | "multiple"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-today"
+              type="day cell"
+              description="Present on today's date"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-selected"
+              type="day cell"
+              description="Present on selected dates"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-outside"
+              type="day cell"
+              description="Present on outside-month days"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-range-start"
+              type="day cell"
+              description="Present on range start"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-range-end"
+              type="day cell"
+              description="Present on range end"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-in-range"
+              type="day cell"
+              description="Present on days within range"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-marked"
+              type="day cell"
+              description="Present on marked dates"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1064,7 +1964,9 @@ const DatePickerDemo = () => {
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               "Calendar opens via click, Enter, Space, or ArrowDown on trigger",
               "Full arrow key navigation within calendar (←→↑↓ move days)",
@@ -1080,15 +1982,25 @@ const DatePickerDemo = () => {
               "Dev warning fires for missing label/aria-label",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               ["Enter / Space", "Open calendar / select focused date"],
               ["Escape", "Close calendar, restore focus"],

@@ -49,7 +49,11 @@ const CircleCheckIcon = ({ className = "" }: { className?: string }) => (
 
 const CalendarIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
-    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+    <path
+      fillRule="evenodd"
+      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -103,16 +107,24 @@ const TimePickerDemo = () => {
     null,
   );
   const [clockIconValue, setClockIconValue] = useState<string | null>(null);
-  const [calendarIconValue, setCalendarIconValue] = useState<string | null>(null);
+  const [calendarIconValue, setCalendarIconValue] = useState<string | null>(
+    null,
+  );
   const [bellIconValue, setBellIconValue] = useState<string | null>(null);
-  const [noTrailingIconValue, setNoTrailingIconValue] = useState<string | null>(null);
-  const [customPlaceholderValue, setCustomPlaceholderValue] = useState<string | null>(null);
+  const [noTrailingIconValue, setNoTrailingIconValue] = useState<string | null>(
+    null,
+  );
+  const [customPlaceholderValue, setCustomPlaceholderValue] = useState<
+    string | null
+  >(null);
   const [fullWidthValue, setFullWidthValue] = useState<string | null>(null);
   const [idNameValue, setIdNameValue] = useState<string | null>(null);
   const [blurValue, setBlurValue] = useState<string | null>(null);
   const [blurCount, setBlurCount] = useState(0);
-  const [containerClassValue, setContainerClassValue] = useState<string | null>(null);
-  
+  const [containerClassValue, setContainerClassValue] = useState<string | null>(
+    null,
+  );
+
   // Clock variant state
   const [clock24Value, setClock24Value] = useState<string | null>(null);
   const [clock12Value, setClock12Value] = useState<string | null>(null);
@@ -196,7 +208,8 @@ const TimePickerDemo = () => {
 
       <Section title="Clock Variant (24-Hour)">
         <p className="text-sm text-gray-600 mb-4">
-          Use <code className="bg-gray-100 px-1 rounded">variant="clock"</code> for a circular clock UI with dual rings for 24-hour format.
+          Use <code className="bg-gray-100 px-1 rounded">variant="clock"</code>{" "}
+          for a circular clock UI with dual rings for 24-hour format.
         </p>
         <div className="w-64">
           <TimePicker
@@ -313,7 +326,9 @@ const TimePickerDemo = () => {
           </div>
         </div>
         <p className="text-sm text-gray-500 mt-2">
-          Use <code className="bg-gray-100 px-1 rounded">placeholder</code> to customize the placeholder text. Defaults to "hh:mm" for 24h format and "hh:mm AM/PM" for 12h format.
+          Use <code className="bg-gray-100 px-1 rounded">placeholder</code> to
+          customize the placeholder text. Defaults to "hh:mm" for 24h format and
+          "hh:mm AM/PM" for 12h format.
         </p>
       </Section>
 
@@ -339,7 +354,8 @@ const TimePickerDemo = () => {
           />
         </div>
         <p className="text-sm text-gray-500 mt-2">
-          Use <code className="bg-gray-100 px-1 rounded">fullWidth</code> to make the picker take the full width of its container.
+          Use <code className="bg-gray-100 px-1 rounded">fullWidth</code> to
+          make the picker take the full width of its container.
         </p>
       </Section>
 
@@ -366,7 +382,10 @@ const TimePickerDemo = () => {
           />
         </div>
         <p className="text-sm text-gray-500 mt-2">
-          Use <code className="bg-gray-100 px-1 rounded">id</code> and <code className="bg-gray-100 px-1 rounded">name</code> props for form integration and accessibility. The ID is used for ARIA attributes and label association.
+          Use <code className="bg-gray-100 px-1 rounded">id</code> and{" "}
+          <code className="bg-gray-100 px-1 rounded">name</code> props for form
+          integration and accessibility. The ID is used for ARIA attributes and
+          label association.
         </p>
       </Section>
 
@@ -389,18 +408,22 @@ const TimePickerDemo = () => {
             noResultsClassName={noResultsStyle}
           />
           <p className="text-sm text-gray-500 mt-2">
-            Blur count: <code className="bg-gray-100 px-1 rounded">{blurCount}</code>
+            Blur count:{" "}
+            <code className="bg-gray-100 px-1 rounded">{blurCount}</code>
           </p>
         </div>
         <p className="text-sm text-gray-500 mt-2">
-          Use <code className="bg-gray-100 px-1 rounded">onBlur</code> to handle blur events, useful for form validation.
+          Use <code className="bg-gray-100 px-1 rounded">onBlur</code> to handle
+          blur events, useful for form validation.
         </p>
       </Section>
 
       <Section title="Container and Wrapper Styling">
         <div className="flex flex-wrap gap-8">
           <div>
-            <p className="text-sm text-gray-600 mb-2">With containerClassName:</p>
+            <p className="text-sm text-gray-600 mb-2">
+              With containerClassName:
+            </p>
             <TimePicker
               value={containerClassValue}
               onChange={(time) => setContainerClassValue(time)}
@@ -421,7 +444,12 @@ const TimePickerDemo = () => {
           </div>
         </div>
         <p className="text-sm text-gray-500 mt-4">
-          Use <code className="bg-gray-100 px-1 rounded">containerClassName</code> to style the root container (includes label and error), and <code className="bg-gray-100 px-1 rounded">className</code> to style the dropdown wrapper (relative positioned element containing trigger and dropdown).
+          Use{" "}
+          <code className="bg-gray-100 px-1 rounded">containerClassName</code>{" "}
+          to style the root container (includes label and error), and{" "}
+          <code className="bg-gray-100 px-1 rounded">className</code> to style
+          the dropdown wrapper (relative positioned element containing trigger
+          and dropdown).
         </p>
       </Section>
 
@@ -499,7 +527,8 @@ const TimePickerDemo = () => {
 
       <Section title="Custom Trailing Icon">
         <p className="text-sm text-gray-600 mb-4">
-          Replace the default chevron icon with a custom icon using the <code className="bg-gray-100 px-1 rounded">endIcon</code> prop.
+          Replace the default chevron icon with a custom icon using the{" "}
+          <code className="bg-gray-100 px-1 rounded">endIcon</code> prop.
         </p>
         <div className="flex flex-wrap gap-8">
           <div className="w-48">
@@ -576,7 +605,10 @@ const TimePickerDemo = () => {
           </div>
         </div>
         <p className="text-sm text-gray-500 mt-4">
-          Use <code className="bg-gray-100 px-1 rounded">endIcon</code> to provide a custom icon, or <code className="bg-gray-100 px-1 rounded">showEndIcon=false</code> to hide the icon entirely.
+          Use <code className="bg-gray-100 px-1 rounded">endIcon</code> to
+          provide a custom icon, or{" "}
+          <code className="bg-gray-100 px-1 rounded">showEndIcon=false</code> to
+          hide the icon entirely.
         </p>
       </Section>
 
@@ -906,7 +938,7 @@ const TimePickerDemo = () => {
               value={contrastTheme3Value}
               onChange={(time) => setContrastTheme3Value(time)}
               format="24h"
-              triggerClassName="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 focus-within:ring-2 focus-within:ring-purple-400 focus-within:ring-offset-2 cursor-text"
+              triggerClassName="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-linear-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 focus-within:ring-2 focus-within:ring-purple-400 focus-within:ring-offset-2 cursor-text"
               inputClassName="flex-1 min-w-0 bg-transparent outline-none text-sm text-white placeholder:text-purple-200"
               dropdownClassName="absolute z-50 top-full left-0 mt-1 w-full bg-white border border-purple-100 rounded-lg shadow-lg overflow-hidden"
               optionListClassName={optionListStyle}
@@ -1163,13 +1195,17 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">onCancel</td>
                 <td className="py-2 pr-4 text-gray-600">() =&gt; void</td>
                 <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Cancel callback (clock variant)</td>
+                <td className="py-2 text-gray-600">
+                  Cancel callback (clock variant)
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">onConfirm</td>
                 <td className="py-2 pr-4 text-gray-600">() =&gt; void</td>
                 <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Confirm callback (clock variant)</td>
+                <td className="py-2 text-gray-600">
+                  Confirm callback (clock variant)
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">label</td>
@@ -1219,9 +1255,13 @@ const TimePickerDemo = () => {
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">variant</td>
-                <td className="py-2 pr-4 text-gray-600">"dropdown" | "clock"</td>
+                <td className="py-2 pr-4 text-gray-600">
+                  "dropdown" | "clock"
+                </td>
                 <td className="py-2 pr-4 text-gray-500">"dropdown"</td>
-                <td className="py-2 text-gray-600">UI variant (list or circular clock)</td>
+                <td className="py-2 text-gray-600">
+                  UI variant (list or circular clock)
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1264,12 +1304,12 @@ const TimePickerDemo = () => {
                 <td className="py-2 text-gray-600">Show end icon</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  endIcon
-                </td>
+                <td className="py-2 pr-4 font-mono text-blue-600">endIcon</td>
                 <td className="py-2 pr-4 text-gray-600">ReactNode</td>
                 <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Custom end icon (default: chevron)</td>
+                <td className="py-2 text-gray-600">
+                  Custom end icon (default: chevron)
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1419,7 +1459,9 @@ const TimePickerDemo = () => {
 
       <Section title="Clock Variant Styling Props">
         <p className="text-sm text-gray-600 mb-4">
-          These props are used when <code className="bg-gray-100 px-1 rounded">variant="clock"</code> is set.
+          These props are used when{" "}
+          <code className="bg-gray-100 px-1 rounded">variant="clock"</code> is
+          set.
         </p>
         <div className="overflow-x-auto w-full">
           <table className="min-w-full text-sm">
@@ -1438,13 +1480,17 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockContainerClassName
                 </td>
-                <td className="py-2 text-gray-600">Container for the clock popup</td>
+                <td className="py-2 text-gray-600">
+                  Container for the clock popup
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockDisplayClassName
                 </td>
-                <td className="py-2 text-gray-600">Hours:minutes display area</td>
+                <td className="py-2 text-gray-600">
+                  Hours:minutes display area
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1462,7 +1508,9 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockDisplayActiveClassName
                 </td>
-                <td className="py-2 text-gray-600">Active state for hours/minutes</td>
+                <td className="py-2 text-gray-600">
+                  Active state for hours/minutes
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1474,7 +1522,9 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockFaceClassName
                 </td>
-                <td className="py-2 text-gray-600">Circular clock face container</td>
+                <td className="py-2 text-gray-600">
+                  Circular clock face container
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1522,7 +1572,9 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockActionsClassName
                 </td>
-                <td className="py-2 text-gray-600">Cancel/OK button container</td>
+                <td className="py-2 text-gray-600">
+                  Cancel/OK button container
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1540,7 +1592,9 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockPeriodToggleClassName
                 </td>
-                <td className="py-2 text-gray-600">AM/PM toggle container (12h)</td>
+                <td className="py-2 text-gray-600">
+                  AM/PM toggle container (12h)
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
@@ -1552,7 +1606,9 @@ const TimePickerDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   clockPeriodActiveClassName
                 </td>
-                <td className="py-2 text-gray-600">Active period button styling</td>
+                <td className="py-2 text-gray-600">
+                  Active period button styling
+                </td>
               </tr>
             </tbody>
           </table>

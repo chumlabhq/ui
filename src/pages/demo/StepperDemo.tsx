@@ -181,7 +181,7 @@ const getClasses = (dark: boolean) => ({
         connectorVertical: "w-0.5 h-6 bg-gray-700",
       }
     : {},
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
   kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
   label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
   note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
@@ -236,19 +236,34 @@ const StepperDemo = () => {
     <div className="space-y-10">
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"}`} />
-        <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`} />
-        <div className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`} />
+        <div
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`}
+        />
         <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Stepper</h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            Stepper
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
             A navigation component that displays progress through a sequence of
-            steps. Uses semantic {"<ol>/<li>"} markup with proper ARIA attributes,
-            conditional role=&quot;button&quot; only on interactive steps, and
-            focus-visible ring for keyboard accessibility.
+            steps. Uses semantic {"<ol>/<li>"} markup with proper ARIA
+            attributes, conditional role=&quot;button&quot; only on interactive
+            steps, and focus-visible ring for keyboard accessibility.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import { Stepper } from "@kern-ui/stepper";`} />
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { Stepper } from "@kern-ui/stepper";`}
+            />
           </div>
         </div>
       </header>
@@ -320,7 +335,10 @@ const StepperDemo = () => {
             labelPosition="bottom"
             fullWidth
             isStepClickable={() => true}
-            classes={{ ...c.stepper, label: "text-sm font-medium leading-tight mt-1 transition-colors" }}
+            classes={{
+              ...c.stepper,
+              label: "text-sm font-medium leading-tight mt-1 transition-colors",
+            }}
           />
         </DemoWrapper>
       </Section>
@@ -443,7 +461,9 @@ const StepperDemo = () => {
               disabled
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               All steps are non-interactive when the stepper is globally
               disabled
             </p>
@@ -466,7 +486,9 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               All steps are clickable regardless of status
             </p>
           </div>
@@ -486,9 +508,7 @@ const StepperDemo = () => {
               value={preventStep}
               onValueChange={(id) => setPreventStep(id as number)}
               beforeStepChange={(nextId) => {
-                const nextIndex = basicSteps.findIndex(
-                  (s) => s.id === nextId,
-                );
+                const nextIndex = basicSteps.findIndex((s) => s.id === nextId);
                 const currentIndex = basicSteps.findIndex(
                   (s) => s.id === preventStep,
                 );
@@ -497,7 +517,9 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               Click any step &mdash; cannot skip ahead more than one step at a
               time
             </p>
@@ -521,13 +543,14 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              Use{" "}
-              <kbd className={c.kbd}>{"\u2190"}</kbd>{" "}
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Use <kbd className={c.kbd}>{"\u2190"}</kbd>{" "}
               <kbd className={c.kbd}>{"\u2192"}</kbd> to move focus,{" "}
               <kbd className={c.kbd}>Enter</kbd> /{" "}
-              <kbd className={c.kbd}>Space</kbd> to activate.
-              Focus loops from last to first and first to last.
+              <kbd className={c.kbd}>Space</kbd> to activate. Focus loops from
+              last to first and first to last.
             </p>
           </div>
         </DemoWrapper>
@@ -550,7 +573,9 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               Arrow keys move focus and activate the step in one action
             </p>
           </div>
@@ -618,11 +643,10 @@ const StepperDemo = () => {
             classes={{
               ...c.stepper,
               step: `flex items-center gap-2 px-3 py-2 rounded-2xl border-2 border-transparent transition-all ${
-                dark
-                  ? "hover:border-purple-400/30"
-                  : "hover:border-purple-200"
+                dark ? "hover:border-purple-400/30" : "hover:border-purple-200"
               }`,
-              stepInteractive: "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2",
+              stepInteractive:
+                "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2",
               indicator: `shrink-0 rounded-xl flex items-center justify-center shadow-lg ${
                 dark
                   ? "bg-purple-500 text-white shadow-purple-500/20"
@@ -678,9 +702,15 @@ const StepperDemo = () => {
               onValueChange={() => {}}
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               Root element has{" "}
-              <code className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>id=&quot;checkout-stepper&quot;</code>
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                id=&quot;checkout-stepper&quot;
+              </code>
             </p>
           </div>
         </DemoWrapper>
@@ -716,7 +746,7 @@ const StepperDemo = () => {
       {/* ─── Custom Aria Label ────────────────────────────────────────── */}
       <Section
         title="Custom Aria Label"
-        description='Use aria-label to provide a meaningful accessible name for the navigation landmark.'
+        description="Use aria-label to provide a meaningful accessible name for the navigation landmark."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -728,9 +758,13 @@ const StepperDemo = () => {
               aria-label="Checkout Progress"
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               The navigation landmark has{" "}
-              <code className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
                 aria-label=&quot;Checkout Progress&quot;
               </code>
             </p>
@@ -755,7 +789,9 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={c.stepper}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
               Hover over each step to see the tooltip
             </p>
           </div>
@@ -792,9 +828,16 @@ const StepperDemo = () => {
                 }`,
               }}
             />
-            <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              Uses <code className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}>data-[status]</code> selectors for
-              per-status styling
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Uses{" "}
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                data-[status]
+              </code>{" "}
+              selectors for per-status styling
             </p>
           </div>
         </DemoWrapper>
@@ -818,8 +861,12 @@ const StepperDemo = () => {
               step: `flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${dark ? "border-gray-700" : "border-gray-200"}`,
               stepInteractive: `cursor-pointer ${dark ? "hover:border-indigo-400/50" : "hover:border-indigo-300"}`,
               indicator: `shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-600"}`,
-              indicatorActive: dark ? "bg-indigo-500 text-white" : "bg-indigo-600 text-white",
-              indicatorCompleted: dark ? "bg-emerald-500 text-white" : "bg-emerald-600 text-white",
+              indicatorActive: dark
+                ? "bg-indigo-500 text-white"
+                : "bg-indigo-600 text-white",
+              indicatorCompleted: dark
+                ? "bg-emerald-500 text-white"
+                : "bg-emerald-600 text-white",
               label: `text-sm font-medium ${dark ? "text-gray-300" : "text-gray-700"}`,
               labelActive: dark ? "text-indigo-400" : "text-indigo-600",
               labelCompleted: dark ? "text-emerald-400" : "text-emerald-600",
@@ -859,7 +906,9 @@ const StepperDemo = () => {
                     >
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                          dark ? "bg-indigo-500 text-white" : "bg-indigo-600 text-white"
+                          dark
+                            ? "bg-indigo-500 text-white"
+                            : "bg-indigo-600 text-white"
                         }`}
                       >
                         {props.index + 1}
@@ -869,7 +918,9 @@ const StepperDemo = () => {
                           dark ? "text-indigo-300" : "text-indigo-700"
                         }`}
                       >
-                        {typeof props.step.label === "string" ? props.step.label : `Step ${props.index + 1}`}
+                        {typeof props.step.label === "string"
+                          ? props.step.label
+                          : `Step ${props.index + 1}`}
                       </span>
                     </div>
                   </li>
@@ -885,35 +936,201 @@ const StepperDemo = () => {
       <Section title="Stepper Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="steps" type="Step[]" defaultVal="[]" description="Array of step objects" isDarkMode={dark} />
-            <PropRow name="value" type="string | number" description="Currently active step ID (controlled)" isDarkMode={dark} />
-            <PropRow name="defaultValue" type="string | number" description="Initial step ID for uncontrolled usage" isDarkMode={dark} />
-            <PropRow name="onValueChange" type="(stepId: string | number) => void" description="Callback when a step is activated" isDarkMode={dark} />
-            <PropRow name="beforeStepChange" type="(nextStepId, currentStepId) => boolean" description="Return false to prevent a step transition" isDarkMode={dark} />
-            <PropRow name="orientation" type={'"horizontal" | "vertical"'} defaultVal="horizontal" description="Layout direction" isDarkMode={dark} />
-            <PropRow name="variant" type={'"numbered" | "icon" | "dot"'} defaultVal="numbered" description="Visual style of step indicators" isDarkMode={dark} />
-            <PropRow name="activationMode" type={'"automatic" | "manual"'} defaultVal="manual" description="Whether arrow keys activate steps immediately or only move focus" isDarkMode={dark} />
-            <PropRow name="isStepClickable" type="(stepId, status) => boolean" defaultVal="completed/active" description="Custom logic for step clickability" isDarkMode={dark} />
-            <PropRow name="getStepStatus" type="(stepId, index, activeIndex) => StepStatus" defaultVal="auto" description="Custom status logic (pending/active/completed/error)" isDarkMode={dark} />
-            <PropRow name="showLabels" type="boolean" defaultVal="true" description="Show step labels" isDarkMode={dark} />
-            <PropRow name="showDescriptions" type="boolean" defaultVal="false" description="Show step descriptions" isDarkMode={dark} />
-            <PropRow name="showConnectors" type="boolean" defaultVal="true" description="Show connectors between steps" isDarkMode={dark} />
-            <PropRow name="labelPosition" type={'"bottom" | "right"'} defaultVal="right" description="Position of labels relative to indicator" isDarkMode={dark} />
-            <PropRow name="completedIcon" type="ComponentType | ReactNode" defaultVal="CheckIcon" description="Global icon for completed steps" isDarkMode={dark} />
-            <PropRow name="errorIcon" type="ComponentType | ReactNode" defaultVal="ErrorIcon" description="Global icon for error steps" isDarkMode={dark} />
-            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Whether container takes full width" isDarkMode={dark} />
-            <PropRow name="aria-label" type="string" defaultVal='"Progress"' description="Accessible label for the navigation landmark" isDarkMode={dark} />
-            <PropRow name="showTooltips" type="boolean" defaultVal="false" description="Enable tooltips on steps with tooltip content" isDarkMode={dark} />
-            <PropRow name="tooltipDefaults" type="StepperTooltipDefaults" defaultVal="{}" description="Default tooltip configuration for all steps" isDarkMode={dark} />
-            <PropRow name="classes" type="StepperClasses" defaultVal="{}" description="Object of class overrides for internal slots (root, list, step, indicator, etc.)" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="Shorthand for classes.root — merged with classes.root when both are provided" isDarkMode={dark} />
-            <PropRow name="id" type="string" defaultVal="auto (useId)" description="Deterministic ID for SSR and testing" isDarkMode={dark} />
-            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Ref forwarded to the root element" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Inline styles on the root element" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable all steps globally" isDarkMode={dark} />
-            <PropRow name="loop" type="boolean" defaultVal="false" description="Loop keyboard navigation at boundaries" isDarkMode={dark} />
-            <PropRow name="renderStep" type="(props, defaultElement) => ReactNode" description="Custom step rendering via render prop" isDarkMode={dark} />
+            <PropRow
+              name="steps"
+              type="Step[]"
+              defaultVal="[]"
+              description="Array of step objects"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="string | number"
+              description="Currently active step ID (controlled)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultValue"
+              type="string | number"
+              description="Initial step ID for uncontrolled usage"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(stepId: string | number) => void"
+              description="Callback when a step is activated"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="beforeStepChange"
+              type="(nextStepId, currentStepId) => boolean"
+              description="Return false to prevent a step transition"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="orientation"
+              type={'"horizontal" | "vertical"'}
+              defaultVal="horizontal"
+              description="Layout direction"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="variant"
+              type={'"numbered" | "icon" | "dot"'}
+              defaultVal="numbered"
+              description="Visual style of step indicators"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="activationMode"
+              type={'"automatic" | "manual"'}
+              defaultVal="manual"
+              description="Whether arrow keys activate steps immediately or only move focus"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="isStepClickable"
+              type="(stepId, status) => boolean"
+              defaultVal="completed/active"
+              description="Custom logic for step clickability"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="getStepStatus"
+              type="(stepId, index, activeIndex) => StepStatus"
+              defaultVal="auto"
+              description="Custom status logic (pending/active/completed/error)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showLabels"
+              type="boolean"
+              defaultVal="true"
+              description="Show step labels"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showDescriptions"
+              type="boolean"
+              defaultVal="false"
+              description="Show step descriptions"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showConnectors"
+              type="boolean"
+              defaultVal="true"
+              description="Show connectors between steps"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="labelPosition"
+              type={'"bottom" | "right"'}
+              defaultVal="right"
+              description="Position of labels relative to indicator"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="completedIcon"
+              type="ComponentType | ReactNode"
+              defaultVal="CheckIcon"
+              description="Global icon for completed steps"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorIcon"
+              type="ComponentType | ReactNode"
+              defaultVal="ErrorIcon"
+              description="Global icon for error steps"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fullWidth"
+              type="boolean"
+              defaultVal="false"
+              description="Whether container takes full width"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="aria-label"
+              type="string"
+              defaultVal='"Progress"'
+              description="Accessible label for the navigation landmark"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showTooltips"
+              type="boolean"
+              defaultVal="false"
+              description="Enable tooltips on steps with tooltip content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltipDefaults"
+              type="StepperTooltipDefaults"
+              defaultVal="{}"
+              description="Default tooltip configuration for all steps"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="StepperClasses"
+              defaultVal="{}"
+              description="Object of class overrides for internal slots (root, list, step, indicator, etc.)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="Shorthand for classes.root — merged with classes.root when both are provided"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              defaultVal="auto (useId)"
+              description="Deterministic ID for SSR and testing"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ref"
+              type="Ref<HTMLDivElement>"
+              description="Ref forwarded to the root element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles on the root element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable all steps globally"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loop"
+              type="boolean"
+              defaultVal="false"
+              description="Loop keyboard navigation at boundaries"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderStep"
+              type="(props, defaultElement) => ReactNode"
+              description="Custom step rendering via render prop"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -921,14 +1138,55 @@ const StepperDemo = () => {
       <Section title="Step Object Properties" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="id" type="string | number" defaultVal="required" description="Unique identifier for the step" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Step label text" isDarkMode={dark} />
-            <PropRow name="description" type="ReactNode" description="Step description text" isDarkMode={dark} />
-            <PropRow name="icon" type="ComponentType | ReactNode" description="Custom icon (icon variant)" isDarkMode={dark} />
-            <PropRow name="completedIcon" type="ComponentType | ReactNode" description="Per-step override for completed icon" isDarkMode={dark} />
-            <PropRow name="errorIcon" type="ComponentType | ReactNode" description="Per-step override for error icon" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" description="Whether the step is disabled" isDarkMode={dark} />
-            <PropRow name="tooltip" type="ReactNode | StepTooltipConfig" description="Tooltip content or configuration object" isDarkMode={dark} />
+            <PropRow
+              name="id"
+              type="string | number"
+              defaultVal="required"
+              description="Unique identifier for the step"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="ReactNode"
+              description="Step label text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="description"
+              type="ReactNode"
+              description="Step description text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="icon"
+              type="ComponentType | ReactNode"
+              description="Custom icon (icon variant)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="completedIcon"
+              type="ComponentType | ReactNode"
+              description="Per-step override for completed icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorIcon"
+              type="ComponentType | ReactNode"
+              description="Per-step override for error icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              description="Whether the step is disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltip"
+              type="ReactNode | StepTooltipConfig"
+              description="Tooltip content or configuration object"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -936,16 +1194,66 @@ const StepperDemo = () => {
       <Section title="StepperClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="root" type="string" description="Root navigation container" isDarkMode={dark} />
-            <PropRow name="list" type="string" description="The <ol> list wrapping all steps" isDarkMode={dark} />
-            <PropRow name="stepContainer" type="string" description="Each <li> wrapper (step + connector)" isDarkMode={dark} />
-            <PropRow name="step" type="string" description="Clickable step area (indicator + labels)" isDarkMode={dark} />
-            <PropRow name="indicator" type="string" description="Number/icon circle indicator" isDarkMode={dark} />
-            <PropRow name="indicatorIcon" type="string" description="Icon/SVG inside the indicator" isDarkMode={dark} />
-            <PropRow name="labelWrapper" type="string" description="Container for label + description" isDarkMode={dark} />
-            <PropRow name="label" type="string" description="Step label text" isDarkMode={dark} />
-            <PropRow name="description" type="string" description="Step description text" isDarkMode={dark} />
-            <PropRow name="connector" type="string" description="Line between steps (use data-status for per-status)" isDarkMode={dark} />
+            <PropRow
+              name="root"
+              type="string"
+              description="Root navigation container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="list"
+              type="string"
+              description="The <ol> list wrapping all steps"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="stepContainer"
+              type="string"
+              description="Each <li> wrapper (step + connector)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="step"
+              type="string"
+              description="Clickable step area (indicator + labels)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="indicator"
+              type="string"
+              description="Number/icon circle indicator"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="indicatorIcon"
+              type="string"
+              description="Icon/SVG inside the indicator"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="labelWrapper"
+              type="string"
+              description="Container for label + description"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="string"
+              description="Step label text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="description"
+              type="string"
+              description="Step description text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="connector"
+              type="string"
+              description="Line between steps (use data-status for per-status)"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -953,20 +1261,91 @@ const StepperDemo = () => {
       <Section title="StepTooltipConfig Properties" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="content" type="ReactNode" defaultVal="required" description="Tooltip content (text or JSX)" isDarkMode={dark} />
-            <PropRow name="side" type={'"top" | "right" | "bottom" | "left"'} description="Override tooltip position for this step" isDarkMode={dark} />
-            <PropRow name="align" type={'"start" | "center" | "end"'} description="Override tooltip alignment" isDarkMode={dark} />
-            <PropRow name="sideOffset" type="number" description="Distance from trigger (px)" isDarkMode={dark} />
-            <PropRow name="alignOffset" type="number" description="Offset from aligned edge (px)" isDarkMode={dark} />
-            <PropRow name="maxWidth" type="string | number" description="Maximum tooltip width" isDarkMode={dark} />
-            <PropRow name="delayDuration" type="number" description="Delay before showing (ms)" isDarkMode={dark} />
-            <PropRow name="showArrow" type="boolean" description="Show tooltip arrow" isDarkMode={dark} />
-            <PropRow name="arrowColor" type="string" description="Custom arrow color" isDarkMode={dark} />
-            <PropRow name="shadow" type="TooltipShadow" description="Tooltip shadow preset" isDarkMode={dark} />
-            <PropRow name="contentClassName" type="string" description="Custom class for tooltip content" isDarkMode={dark} />
-            <PropRow name="contentStyle" type="CSSProperties" description="Inline styles for tooltip content" isDarkMode={dark} />
-            <PropRow name="arrowClassName" type="string" description="Custom class for tooltip arrow" isDarkMode={dark} />
-            <PropRow name="arrowStyle" type="CSSProperties" description="Inline styles for tooltip arrow" isDarkMode={dark} />
+            <PropRow
+              name="content"
+              type="ReactNode"
+              defaultVal="required"
+              description="Tooltip content (text or JSX)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="side"
+              type={'"top" | "right" | "bottom" | "left"'}
+              description="Override tooltip position for this step"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="align"
+              type={'"start" | "center" | "end"'}
+              description="Override tooltip alignment"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="sideOffset"
+              type="number"
+              description="Distance from trigger (px)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="alignOffset"
+              type="number"
+              description="Offset from aligned edge (px)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="maxWidth"
+              type="string | number"
+              description="Maximum tooltip width"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="delayDuration"
+              type="number"
+              description="Delay before showing (ms)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showArrow"
+              type="boolean"
+              description="Show tooltip arrow"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="arrowColor"
+              type="string"
+              description="Custom arrow color"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shadow"
+              type="TooltipShadow"
+              description="Tooltip shadow preset"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="contentClassName"
+              type="string"
+              description="Custom class for tooltip content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="contentStyle"
+              type="CSSProperties"
+              description="Inline styles for tooltip content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="arrowClassName"
+              type="string"
+              description="Custom class for tooltip arrow"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="arrowStyle"
+              type="CSSProperties"
+              description="Inline styles for tooltip arrow"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -974,67 +1353,168 @@ const StepperDemo = () => {
       <Section title="StepperTooltipDefaults Properties" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="side" type={'"top" | "right" | "bottom" | "left"'} defaultVal="top" description="Default tooltip position for all steps" isDarkMode={dark} />
-            <PropRow name="align" type={'"start" | "center" | "end"'} defaultVal="center" description="Default tooltip alignment" isDarkMode={dark} />
-            <PropRow name="sideOffset" type="number" defaultVal="6" description="Default distance from trigger (px)" isDarkMode={dark} />
-            <PropRow name="delayDuration" type="number" defaultVal="200" description="Default delay before showing (ms)" isDarkMode={dark} />
-            <PropRow name="maxWidth" type="string | number" defaultVal="300" description="Default maximum tooltip width" isDarkMode={dark} />
-            <PropRow name="showArrow" type="boolean" defaultVal="true" description="Default show/hide arrow" isDarkMode={dark} />
-            <PropRow name="shadow" type="TooltipShadow" defaultVal="lg" description="Default shadow preset" isDarkMode={dark} />
+            <PropRow
+              name="side"
+              type={'"top" | "right" | "bottom" | "left"'}
+              defaultVal="top"
+              description="Default tooltip position for all steps"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="align"
+              type={'"start" | "center" | "end"'}
+              defaultVal="center"
+              description="Default tooltip alignment"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="sideOffset"
+              type="number"
+              defaultVal="6"
+              description="Default distance from trigger (px)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="delayDuration"
+              type="number"
+              defaultVal="200"
+              description="Default delay before showing (ms)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="maxWidth"
+              type="string | number"
+              defaultVal="300"
+              description="Default maximum tooltip width"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showArrow"
+              type="boolean"
+              defaultVal="true"
+              description="Default show/hide arrow"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shadow"
+              type="TooltipShadow"
+              defaultVal="lg"
+              description="Default shadow preset"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-orientation" type="root, ol, li" description={'"horizontal" | "vertical"'} isDarkMode={dark} />
-            <PropRow name="data-variant" type="root" description={'"numbered" | "icon" | "dot"'} isDarkMode={dark} />
-            <PropRow name="data-status" type="li, step, indicator, label, description, connector" description={'"pending" | "active" | "completed" | "error"'} isDarkMode={dark} />
-            <PropRow name="data-disabled" type="step" description="Present when step is disabled" isDarkMode={dark} />
-            <PropRow name="data-clickable" type="step" description="Present when step is interactive" isDarkMode={dark} />
-            <PropRow name="data-next-status" type="connector" description="Status of the next step" isDarkMode={dark} />
+            <PropRow
+              name="data-orientation"
+              type="root, ol, li"
+              description={'"horizontal" | "vertical"'}
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-variant"
+              type="root"
+              description={'"numbered" | "icon" | "dot"'}
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-status"
+              type="li, step, indicator, label, description, connector"
+              description={'"pending" | "active" | "completed" | "error"'}
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="step"
+              description="Present when step is disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-clickable"
+              type="step"
+              description="Present when step is interactive"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-next-status"
+              type="connector"
+              description="Status of the next step"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
-              "Semantic <ol>/<li> list structure — screen readers announce \"item 2 of 4\"",
-              "role=\"navigation\" with configurable aria-label landmark",
-              "Native <button type=\"button\"> for interactive steps with roving tabIndex",
-              "aria-current=\"step\" on the active step",
+              'Semantic <ol>/<li> list structure — screen readers announce "item 2 of 4"',
+              'role="navigation" with configurable aria-label landmark',
+              'Native <button type="button"> for interactive steps with roving tabIndex',
+              'aria-current="step" on the active step',
               "aria-disabled on disabled steps",
-              "Auto-generated aria-label when labels are hidden (dot variant) — \"Step 2 of 4\"",
-              "Indicator content is aria-hidden=\"true\" — the step label provides the accessible name",
-              "All SVG icons include aria-hidden=\"true\"",
-              "Connectors are aria-hidden=\"true\" to avoid screen reader noise",
+              'Auto-generated aria-label when labels are hidden (dot variant) — "Step 2 of 4"',
+              'Indicator content is aria-hidden="true" — the step label provides the accessible name',
+              'All SVG icons include aria-hidden="true"',
+              'Connectors are aria-hidden="true" to avoid screen reader noise',
               "Default focus-visible ring on interactive steps for keyboard navigation",
               "RTL-aware arrow key navigation — respects direction: rtl on the element",
               "motion-reduce:transition-none applied to all animated elements",
               "Supports ref forwarding for programmatic focus management",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
-              ["Tab", "Move focus into the stepper (lands on active or first interactive step)"],
+              [
+                "Tab",
+                "Move focus into the stepper (lands on active or first interactive step)",
+              ],
               ["\u2192 / \u2193", "Move focus to the next interactive step"],
-              ["\u2190 / \u2191", "Move focus to the previous interactive step"],
+              [
+                "\u2190 / \u2191",
+                "Move focus to the previous interactive step",
+              ],
               ["Home", "Move focus to the first interactive step"],
               ["End", "Move focus to the last interactive step"],
-              ["Enter / Space", "Activate the focused step (fires onValueChange)"],
+              [
+                "Enter / Space",
+                "Activate the focused step (fires onValueChange)",
+              ],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>

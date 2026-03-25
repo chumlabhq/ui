@@ -458,7 +458,7 @@ const shimmerContainerWideStyle = "w-max min-w-[1600px]"; // Matches table width
 const shimmerRowStyle = "border-b border-gray-100";
 const shimmerCellStyle = "px-4 py-2 h-14";
 const shimmerBarStyle =
-  "h-full w-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded animate-pulse";
+  "h-full w-full bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded animate-pulse";
 
 const paginationContainerStyle = "flex items-center justify-between mt-4 px-2";
 const paginationRowSelectorStyle = "flex items-center gap-2";
@@ -929,16 +929,18 @@ const TableDemo = () => {
             rowsPerPage={rowsPerPage}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleRowsPerPageChange}
-            containerClassName={paginationContainerStyle}
-            rowSelectorClassName={paginationRowSelectorStyle}
-            rowSelectorButtonClassName={paginationButtonStyle}
-            rowSelectorDropdownClassName={paginationDropdownStyle}
-            rowSelectorOptionClassName={paginationOptionStyle}
-            pageButtonClassName={paginationPageStyle}
-            activePageButtonClassName={paginationActivePageStyle}
-            navButtonClassName={paginationNavStyle}
-            ellipsisClassName={paginationEllipsisStyle}
-            labelClassName={paginationLabelStyle}
+            classes={{
+              root: paginationContainerStyle,
+              selector: paginationRowSelectorStyle,
+              selectorButton: paginationButtonStyle,
+              selectorDropdown: paginationDropdownStyle,
+              selectorOption: paginationOptionStyle,
+              pageButton: paginationPageStyle,
+              activePageButton: paginationActivePageStyle,
+              navButton: paginationNavStyle,
+              ellipsis: paginationEllipsisStyle,
+              label: paginationLabelStyle,
+            }}
           />
         </div>
       </Section>
@@ -965,18 +967,20 @@ const TableDemo = () => {
             onPageChange={handleDarkPageChange}
             onRowsPerPageChange={handleDarkRowsPerPageChange}
             rowsPerPageLabel="per page"
-            containerClassName={darkPaginationContainerStyle}
-            rowSelectorClassName={darkPaginationRowSelectorStyle}
-            rowSelectorButtonClassName={darkPaginationButtonStyle}
-            rowSelectorDropdownClassName={darkPaginationDropdownStyle}
-            rowSelectorOptionClassName={darkPaginationOptionStyle}
-            pageButtonClassName={darkPaginationPageStyle}
-            activePageButtonClassName={darkPaginationActivePageStyle}
-            navButtonClassName={darkPaginationNavStyle}
-            navContainerClassName={darkPaginationNavContainerStyle}
-            pageButtonsContainerClassName={darkPaginationPageContainerStyle}
-            ellipsisClassName={darkPaginationEllipsisStyle}
-            labelClassName={darkPaginationLabelStyle}
+            classes={{
+              root: darkPaginationContainerStyle,
+              selector: darkPaginationRowSelectorStyle,
+              selectorButton: darkPaginationButtonStyle,
+              selectorDropdown: darkPaginationDropdownStyle,
+              selectorOption: darkPaginationOptionStyle,
+              pageButton: darkPaginationPageStyle,
+              activePageButton: darkPaginationActivePageStyle,
+              navButton: darkPaginationNavStyle,
+              nav: darkPaginationNavContainerStyle,
+              pageButtons: darkPaginationPageContainerStyle,
+              ellipsis: darkPaginationEllipsisStyle,
+              label: darkPaginationLabelStyle,
+            }}
           />
         </div>
         <p className="mt-3 text-sm text-gray-500">
@@ -1353,12 +1357,12 @@ const TableDemo = () => {
                 <td className="py-2 text-gray-600">Table data array</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">COLUMNS_DATA</td>
+                <td className="py-2 pr-4 font-mono text-blue-600">
+                  COLUMNS_DATA
+                </td>
                 <td className="py-2 pr-4 text-gray-600">TData[]</td>
                 <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Alternative to data prop
-                </td>
+                <td className="py-2 text-gray-600">Alternative to data prop</td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">loading</td>
@@ -1718,134 +1722,22 @@ const TableDemo = () => {
                 <td className="py-2 text-gray-600">Label after row count</td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  containerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Root container class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowSelectorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
+                <td className="py-2 pr-4 font-mono text-blue-600">classes</td>
+                <td className="py-2 pr-4 text-gray-600">PaginationClasses</td>
+                <td className="py-2 pr-4 text-gray-500">{"{}"}</td>
                 <td className="py-2 text-gray-600">
-                  Row selector wrapper class
+                  Slot class overrides (17 slots: root, nav, pageButtons,
+                  pageButton, activePageButton, navButton, ellipsis, selector,
+                  selectorButton, selectorDropdown, selectorOption, label, etc.)
                 </td>
               </tr>
               <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowSelectorButtonClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
+                <td className="py-2 pr-4 font-mono text-blue-600">unstyled</td>
+                <td className="py-2 pr-4 text-gray-600">boolean</td>
+                <td className="py-2 pr-4 text-gray-500">false</td>
                 <td className="py-2 text-gray-600">
-                  Dropdown trigger button class
+                  Strip all default classes
                 </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowSelectorDropdownClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Dropdown menu class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowSelectorDropdownWrapperClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"relative"</td>
-                <td className="py-2 text-gray-600">Dropdown wrapper class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowSelectorOptionClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Dropdown option class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pageButtonClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Page number button class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  activePageButtonClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Active page button class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  navButtonClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Prev/Next button class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  navContainerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Navigation container class
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pageButtonsContainerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Page buttons wrapper class
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  ellipsisClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Ellipsis element class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Label text class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  chevronDownIconClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">
-                  Dropdown chevron icon class
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  navIconClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">""</td>
-                <td className="py-2 text-gray-600">Nav arrow icon class</td>
               </tr>
             </tbody>
           </table>
@@ -2026,19 +1918,25 @@ const TableDemo = () => {
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   shimmerRowClassName
                 </td>
-                <td className="py-2 text-gray-600">Shimmer row wrapper class</td>
+                <td className="py-2 text-gray-600">
+                  Shimmer row wrapper class
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   shimmerCellClassName
                 </td>
-                <td className="py-2 text-gray-600">Shimmer cell wrapper class</td>
+                <td className="py-2 text-gray-600">
+                  Shimmer cell wrapper class
+                </td>
               </tr>
               <tr>
                 <td className="py-2 pr-4 font-mono text-blue-600">
                   shimmerBarClassName
                 </td>
-                <td className="py-2 text-gray-600">Shimmer bar element class</td>
+                <td className="py-2 text-gray-600">
+                  Shimmer bar element class
+                </td>
               </tr>
             </tbody>
           </table>

@@ -81,11 +81,7 @@ const PlusIcon = (props: React.SVGProps<SVGSVGElement>) => (
     stroke="currentColor"
     strokeWidth={2}
   >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 4v16m8-8H4"
-    />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
   </svg>
 );
 
@@ -180,9 +176,21 @@ const tabsWithDisabled: Tab[] = [
 ];
 
 const rtlTabs: Tab[] = [
-  { id: "home", label: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629", icon: <HomeIcon className="w-5 h-5" /> },
-  { id: "users", label: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645\u0648\u0646", icon: <UsersIcon className="w-5 h-5" /> },
-  { id: "settings", label: "\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A", icon: <SettingsIcon className="w-5 h-5" /> },
+  {
+    id: "home",
+    label: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629",
+    icon: <HomeIcon className="w-5 h-5" />,
+  },
+  {
+    id: "users",
+    label: "\u0627\u0644\u0645\u0633\u062A\u062E\u062F\u0645\u0648\u0646",
+    icon: <UsersIcon className="w-5 h-5" />,
+  },
+  {
+    id: "settings",
+    label: "\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A",
+    icon: <SettingsIcon className="w-5 h-5" />,
+  },
 ];
 
 const getTabStyles = (isDarkMode: boolean) => ({
@@ -731,7 +739,7 @@ const TabPanelDemo = () => {
               value={gradientTab}
               onValueChange={setGradientTab}
               classes={{
-                root: `w-full rounded-xl p-3 ${isDarkMode ? "bg-gradient-to-r from-purple-950 to-pink-950" : "bg-gradient-to-r from-purple-50 to-pink-50"}`,
+                root: `w-full rounded-xl p-3 ${isDarkMode ? "bg-linear-to-r from-purple-950 to-pink-950" : "bg-linear-to-r from-purple-50 to-pink-50"}`,
                 tabList: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-xl ${isDarkMode ? "bg-gray-800/60" : "bg-white/60"}`,
                 tab: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-lg",
                 tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-purple-500 ${isDarkMode ? "focus-visible:ring-offset-gray-900" : ""}`,
@@ -775,9 +783,7 @@ const TabPanelDemo = () => {
                     root: "w-full",
                     tabList: s.icon.tabList,
                     tab: s.icon.tab,
-                    tabActive: isDarkMode
-                      ? "text-green-400"
-                      : "text-green-600",
+                    tabActive: isDarkMode ? "text-green-400" : "text-green-600",
                     tabInactive: s.icon.tabInactive,
                     tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-dashed ${isDarkMode ? "focus-visible:ring-offset-gray-800" : ""}`,
                     iconActive: isDarkMode
@@ -788,7 +794,9 @@ const TabPanelDemo = () => {
                     panel: s.panel,
                   }}
                 >
-                  <div className={s.content}>Custom green dashed focus ring</div>
+                  <div className={s.content}>
+                    Custom green dashed focus ring
+                  </div>
                 </TabPanel>
               </div>
             </div>
@@ -1188,7 +1196,8 @@ const TabPanelDemo = () => {
               )}
             >
               <div className={s.content}>
-                Tab content for <strong className={s.contentStrong}>{renderTabTab}</strong>
+                Tab content for{" "}
+                <strong className={s.contentStrong}>{renderTabTab}</strong>
               </div>
             </TabPanel>
           </DemoWrapper>
@@ -1217,8 +1226,7 @@ const TabPanelDemo = () => {
             >
               <div className={s.content}>
                 All styles via{" "}
-                <strong className={s.contentStrong}>classes</strong> record
-                for{" "}
+                <strong className={s.contentStrong}>classes</strong> record for{" "}
                 <strong className={s.contentStrong}>{classesTab}</strong>
               </div>
             </TabPanel>
@@ -1289,7 +1297,7 @@ const TabPanelDemo = () => {
 
         <Section
           title="Custom Aria Label"
-          description='Use aria-label to provide a meaningful accessible name for the tablist.'
+          description="Use aria-label to provide a meaningful accessible name for the tablist."
           isDarkMode={isDarkMode}
         >
           <DemoWrapper isDarkMode={isDarkMode}>
@@ -1442,7 +1450,9 @@ const TabPanelDemo = () => {
             >
               {(tab: Tab) => (
                 <div className={s.content}>
-                  Panel for <strong className={s.contentStrong}>{tab.label}</strong> — always mounted in DOM
+                  Panel for{" "}
+                  <strong className={s.contentStrong}>{tab.label}</strong> —
+                  always mounted in DOM
                 </div>
               )}
             </TabPanel>
@@ -1481,7 +1491,9 @@ const TabPanelDemo = () => {
             >
               {(tab: Tab) => (
                 <div className={s.content}>
-                  Panel for <strong className={s.contentStrong}>{tab.label}</strong> — stays mounted after first visit
+                  Panel for{" "}
+                  <strong className={s.contentStrong}>{tab.label}</strong> —
+                  stays mounted after first visit
                 </div>
               )}
             </TabPanel>
@@ -1522,9 +1534,7 @@ const TabPanelDemo = () => {
                 >
                   <th className="text-left py-3 pr-4 font-semibold">Prop</th>
                   <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 pr-4 font-semibold">
-                    Default
-                  </th>
+                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
                   <th className="text-left py-3 font-semibold">Description</th>
                 </tr>
               </thead>
@@ -1532,29 +1542,129 @@ const TabPanelDemo = () => {
                 className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
               >
                 {[
-                  ["tabs", "Tab[]", "required", "Array of tab configuration objects"],
-                  ["id", "string", "auto-generated", "Deterministic ID for SSR/testing"],
+                  [
+                    "tabs",
+                    "Tab[]",
+                    "required",
+                    "Array of tab configuration objects",
+                  ],
+                  [
+                    "id",
+                    "string",
+                    "auto-generated",
+                    "Deterministic ID for SSR/testing",
+                  ],
                   ["value", "string", "-", "Controlled active tab ID"],
-                  ["defaultValue", "string", "tabs[0].id", "Initial active tab for uncontrolled mode"],
-                  ["onValueChange", "(tabId: string) => void", "-", "Callback when active tab changes"],
-                  ["children", "ReactNode | (tab: Tab) => ReactNode", "-", "Panel content or render function receiving active tab"],
-                  ['orientation', '"horizontal" | "vertical"', '"horizontal"', "Tab orientation \u2014 affects keyboard navigation axis"],
-                  ['activationMode', '"automatic" | "manual"', '"automatic"', "Automatic: arrows activate. Manual: Enter/Space activates"],
-                  ["loop", "boolean", "true", "Whether keyboard navigation wraps around at ends"],
-                  ['iconPosition', '"left" | "right"', '"left"', "Position of icon relative to label"],
-                  ["showZeroCount", "boolean", "false", "Show count badge even when value is 0"],
-                  ["alwaysShowLabels", "boolean", "true", "Show labels on all tabs or only the active one"],
-                  ["showTooltips", "boolean", "true", "Enable tooltips on tabs with tooltip content"],
-                  ['tooltipPosition', '"top" | "bottom" | "left" | "right"', '"bottom"', "Position of tooltip relative to tab"],
-                  ["tooltipOffset", "number", "4", "Distance between tooltip and tab (px)"],
+                  [
+                    "defaultValue",
+                    "string",
+                    "tabs[0].id",
+                    "Initial active tab for uncontrolled mode",
+                  ],
+                  [
+                    "onValueChange",
+                    "(tabId: string) => void",
+                    "-",
+                    "Callback when active tab changes",
+                  ],
+                  [
+                    "children",
+                    "ReactNode | (tab: Tab) => ReactNode",
+                    "-",
+                    "Panel content or render function receiving active tab",
+                  ],
+                  [
+                    "orientation",
+                    '"horizontal" | "vertical"',
+                    '"horizontal"',
+                    "Tab orientation \u2014 affects keyboard navigation axis",
+                  ],
+                  [
+                    "activationMode",
+                    '"automatic" | "manual"',
+                    '"automatic"',
+                    "Automatic: arrows activate. Manual: Enter/Space activates",
+                  ],
+                  [
+                    "loop",
+                    "boolean",
+                    "true",
+                    "Whether keyboard navigation wraps around at ends",
+                  ],
+                  [
+                    "iconPosition",
+                    '"left" | "right"',
+                    '"left"',
+                    "Position of icon relative to label",
+                  ],
+                  [
+                    "showZeroCount",
+                    "boolean",
+                    "false",
+                    "Show count badge even when value is 0",
+                  ],
+                  [
+                    "alwaysShowLabels",
+                    "boolean",
+                    "true",
+                    "Show labels on all tabs or only the active one",
+                  ],
+                  [
+                    "showTooltips",
+                    "boolean",
+                    "true",
+                    "Enable tooltips on tabs with tooltip content",
+                  ],
+                  [
+                    "tooltipPosition",
+                    '"top" | "bottom" | "left" | "right"',
+                    '"bottom"',
+                    "Position of tooltip relative to tab",
+                  ],
+                  [
+                    "tooltipOffset",
+                    "number",
+                    "4",
+                    "Distance between tooltip and tab (px)",
+                  ],
                   ["disabled", "boolean", "false", "Disable all tabs globally"],
-                  ["renderTab", "(props: TabRenderProps, defaultElement: ReactElement) => ReactNode", "-", "Custom render function for each tab trigger"],
-                  ["aria-label", "string", '"Tabs"', "Accessible label for the tablist element"],
-                  ["classes", "TabPanelClasses", "-", "Record of class names for all internal elements"],
-                  ["className", "string", "-", "Root element class name (fallback for classes.root)"],
+                  [
+                    "renderTab",
+                    "(props: TabRenderProps, defaultElement: ReactElement) => ReactNode",
+                    "-",
+                    "Custom render function for each tab trigger",
+                  ],
+                  [
+                    "aria-label",
+                    "string",
+                    '"Tabs"',
+                    "Accessible label for the tablist element",
+                  ],
+                  [
+                    "classes",
+                    "TabPanelClasses",
+                    "-",
+                    "Record of class names for all internal elements",
+                  ],
+                  [
+                    "className",
+                    "string",
+                    "-",
+                    "Root element class name (fallback for classes.root)",
+                  ],
                   ["style", "CSSProperties", "-", "Root element inline styles"],
-                  ["forceMount", "boolean", "false", "Mount all tab panels eagerly, regardless of active state"],
-                  ["keepMounted", "boolean", "false", "Keep a tab panel mounted after it has been activated at least once"],
+                  [
+                    "forceMount",
+                    "boolean",
+                    "false",
+                    "Mount all tab panels eagerly, regardless of active state",
+                  ],
+                  [
+                    "keepMounted",
+                    "boolean",
+                    "false",
+                    "Keep a tab panel mounted after it has been activated at least once",
+                  ],
                 ].map(([prop, type, def, desc]) => (
                   <tr key={prop}>
                     <td className="py-3 pr-4 font-mono text-blue-500">
@@ -1612,10 +1722,20 @@ const TabPanelDemo = () => {
                 {[
                   ["id", "string", "Yes", "Unique identifier for the tab"],
                   ["label", "string", "Yes", "Tab label text"],
-                  ["icon", "ReactNode", "No", "Icon element rendered in the tab (any ReactNode)"],
+                  [
+                    "icon",
+                    "ReactNode",
+                    "No",
+                    "Icon element rendered in the tab (any ReactNode)",
+                  ],
                   ["count", "number", "No", "Count badge value"],
                   ["disabled", "boolean", "No", "Disable this specific tab"],
-                  ["tooltip", "ReactNode", "No", "Tooltip content (shown on inactive tabs when showTooltips is true)"],
+                  [
+                    "tooltip",
+                    "ReactNode",
+                    "No",
+                    "Tooltip content (shown on inactive tabs when showTooltips is true)",
+                  ],
                 ].map(([prop, type, required, desc]) => (
                   <tr key={prop}>
                     <td className="py-3 pr-4 font-mono text-blue-500">
@@ -1666,18 +1786,24 @@ const TabPanelDemo = () => {
               >
                 {[
                   ["root", "Root container"],
-                  ["tabList", "Tab list container (role=\"tablist\")"],
+                  ["tabList", 'Tab list container (role="tablist")'],
                   ["tab", "Tab button base"],
                   ["tabActive", "Tab button active state"],
                   ["tabInactive", "Tab button inactive state"],
                   ["tabDisabled", "Tab button disabled state"],
                   ["tabFocus", "Tab button focus ring"],
                   ["label", "Label text base"],
-                  ["labelActive / labelInactive", "Label active/inactive states"],
+                  [
+                    "labelActive / labelInactive",
+                    "Label active/inactive states",
+                  ],
                   ["icon", "Icon wrapper base"],
                   ["iconActive / iconInactive", "Icon active/inactive states"],
                   ["count", "Count badge base"],
-                  ["countActive / countInactive", "Count badge active/inactive states"],
+                  [
+                    "countActive / countInactive",
+                    "Count badge active/inactive states",
+                  ],
                   ["indicator", "Active tab indicator element"],
                   ["panel", "Tab panel content area"],
                 ].map(([key, desc]) => (

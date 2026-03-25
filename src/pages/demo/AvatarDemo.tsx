@@ -8,13 +8,30 @@ import {
   AvatarGroupShimmer,
 } from "../../components/Avatar";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
 const UserIcon = ({ className = "" }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className={className}>
-    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={className}
+  >
+    <path
+      fillRule="evenodd"
+      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -22,16 +39,35 @@ const UserIcon = ({ className = "" }: { className?: string }) => (
 
 const getClasses = (dark: boolean) => ({
   subtleColors: {
-    backgrounds: ["#e0e7ff", "#dbeafe", "#d1fae5", "#fef9c3", "#fce7f3", "#ede9fe", "#cffafe", "#fef2f2"],
-    text: ["#4f46e5", "#2563eb", "#059669", "#ca8a04", "#db2777", "#7c3aed", "#0891b2", "#ef4444"],
+    backgrounds: [
+      "#e0e7ff",
+      "#dbeafe",
+      "#d1fae5",
+      "#fef9c3",
+      "#fce7f3",
+      "#ede9fe",
+      "#cffafe",
+      "#fef2f2",
+    ],
+    text: [
+      "#4f46e5",
+      "#2563eb",
+      "#059669",
+      "#ca8a04",
+      "#db2777",
+      "#7c3aed",
+      "#0891b2",
+      "#ef4444",
+    ],
   },
   brandColors: {
     backgrounds: ["#1e40af", "#7c3aed", "#0e7490", "#b91c1c"],
     text: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"],
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-blue-500 text-white hover:bg-blue-600",
+  btnPrimary:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-blue-500 text-white hover:bg-blue-600",
   label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
   note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
   fallbackBg: dark ? "bg-gray-700" : "bg-gray-100",
@@ -52,41 +88,78 @@ const AvatarDemo = () => {
     <div className="space-y-10">
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark
-          ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-          : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"
-        }`} />
-        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
-        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
+        <div
+          className={`absolute inset-0 ${
+            dark
+              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
+          }`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
         <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Avatar</h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            A flexible avatar component for displaying user images, initials, or fallback content.
-            Supports status indicators, badges, tooltips, auto-generated colors, grouping,
-            and fully customizable styling via the classes system.
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            Avatar
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A flexible avatar component for displaying user images, initials, or
+            fallback content. Supports status indicators, badges, tooltips,
+            auto-generated colors, grouping, and fully customizable styling via
+            the classes system.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import {\n  Avatar, AvatarGroup, AvatarGroupCount,\n  AvatarBadge, AvatarShimmer, AvatarGroupShimmer,\n} from "@kern-ui/avatar";`} />
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import {\n  Avatar, AvatarGroup, AvatarGroupCount,\n  AvatarBadge, AvatarShimmer, AvatarGroupShimmer,\n} from "@kern-ui/avatar";`}
+            />
           </div>
         </div>
       </header>
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
-      <Section title="Basic Usage" description="Avatar with image, initials, and custom fallback content." isDarkMode={dark}>
+      <Section
+        title="Basic Usage"
+        description="Avatar with image, initials, and custom fallback content."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <Avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop" alt="John Doe" name="John Doe" />
+          <Avatar
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
+            alt="John Doe"
+            name="John Doe"
+          />
           <Avatar name="Jane Smith" autoColor colors={c.subtleColors} />
           <Avatar name="Alex" autoColor colors={c.subtleColors} />
-          <Avatar fallback={<UserIcon className="w-5 h-5 text-gray-400" />} className={c.fallbackBg} />
+          <Avatar
+            fallback={<UserIcon className="w-5 h-5 text-gray-400" />}
+            className={c.fallbackBg}
+          />
         </DemoWrapper>
       </Section>
 
       {/* ─── Sizes ──────────────────────────────────────────────────────── */}
-      <Section title="Sizes" description="Presets: xs, sm, md, lg, xl, or any custom pixel number." isDarkMode={dark}>
+      <Section
+        title="Sizes"
+        description="Presets: xs, sm, md, lg, xl, or any custom pixel number."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           {(["xs", "sm", "md", "lg", "xl"] as const).map((s) => (
             <div key={s} className="text-center">
-              <Avatar name={s.toUpperCase()} size={s} autoColor colors={c.subtleColors} />
+              <Avatar
+                name={s.toUpperCase()}
+                size={s}
+                autoColor
+                colors={c.subtleColors}
+              />
               <p className={`text-xs mt-2 ${c.label}`}>{s}</p>
             </div>
           ))}
@@ -98,11 +171,21 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Shapes ─────────────────────────────────────────────────────── */}
-      <Section title="Shapes" description="circle (default), rounded, and square." isDarkMode={dark}>
+      <Section
+        title="Shapes"
+        description="circle (default), rounded, and square."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           {(["circle", "rounded", "square"] as const).map((s) => (
             <div key={s} className="text-center">
-              <Avatar name={s} shape={s} size="lg" autoColor colors={c.subtleColors} />
+              <Avatar
+                name={s}
+                shape={s}
+                size="lg"
+                autoColor
+                colors={c.subtleColors}
+              />
               <p className={`text-xs mt-2 ${c.label}`}>{s}</p>
             </div>
           ))}
@@ -110,45 +193,93 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Max Initials ───────────────────────────────────────────────── */}
-      <Section title="Max Initials" description="Control how many initials are shown with maxInitials." isDarkMode={dark}>
+      <Section
+        title="Max Initials"
+        description="Control how many initials are shown with maxInitials."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="text-center">
-            <Avatar name="John Michael Doe" maxInitials={1} autoColor colors={c.subtleColors} />
+            <Avatar
+              name="John Michael Doe"
+              maxInitials={1}
+              autoColor
+              colors={c.subtleColors}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>maxInitials=1</p>
           </div>
           <div className="text-center">
-            <Avatar name="John Michael Doe" maxInitials={2} autoColor colors={c.subtleColors} />
+            <Avatar
+              name="John Michael Doe"
+              maxInitials={2}
+              autoColor
+              colors={c.subtleColors}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>maxInitials=2</p>
           </div>
           <div className="text-center">
-            <Avatar name="John Michael Doe" maxInitials={3} autoColor colors={c.subtleColors} />
+            <Avatar
+              name="John Michael Doe"
+              maxInitials={3}
+              autoColor
+              colors={c.subtleColors}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>maxInitials=3</p>
           </div>
         </DemoWrapper>
       </Section>
 
       {/* ─── Auto Colors ────────────────────────────────────────────────── */}
-      <Section title="Auto-Generated Colors" description="autoColor generates consistent colors based on the name hash." isDarkMode={dark}>
+      <Section
+        title="Auto-Generated Colors"
+        description="autoColor generates consistent colors based on the name hash."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          {["Alice", "Bob", "Charlie", "Diana", "Edward", "Fiona", "George", "Hannah"].map((name) => (
+          {[
+            "Alice",
+            "Bob",
+            "Charlie",
+            "Diana",
+            "Edward",
+            "Fiona",
+            "George",
+            "Hannah",
+          ].map((name) => (
             <Avatar key={name} name={name} autoColor colors={c.subtleColors} />
           ))}
         </DemoWrapper>
       </Section>
 
       {/* ─── Custom Color Palettes ──────────────────────────────────────── */}
-      <Section title="Custom Color Palettes" description="Provide custom color arrays for autoColor generation." isDarkMode={dark}>
+      <Section
+        title="Custom Color Palettes"
+        description="Provide custom color arrays for autoColor generation."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Subtle pastel palette</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Subtle pastel palette
+            </p>
             <DemoWrapper isDarkMode={dark}>
               {["Custom 1", "Custom 2", "Custom 3"].map((n) => (
-                <Avatar key={n} name={n} autoColor colors={{ backgrounds: ["#e0f2fe", "#fce7f3", "#dcfce7"], text: ["#0369a1", "#be185d", "#15803d"] }} />
+                <Avatar
+                  key={n}
+                  name={n}
+                  autoColor
+                  colors={{
+                    backgrounds: ["#e0f2fe", "#fce7f3", "#dcfce7"],
+                    text: ["#0369a1", "#be185d", "#15803d"],
+                  }}
+                />
               ))}
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Brand colors (white text on dark backgrounds)</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Brand colors (white text on dark backgrounds)
+            </p>
             <DemoWrapper isDarkMode={dark}>
               {["Brand A", "Brand B", "Brand C", "Brand D"].map((n) => (
                 <Avatar key={n} name={n} autoColor colors={c.brandColors} />
@@ -159,35 +290,75 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Text Styling ───────────────────────────────────────────────── */}
-      <Section title="Text & Initials Styling" description="Customize initials via classes.initials or textStyle." isDarkMode={dark}>
+      <Section
+        title="Text & Initials Styling"
+        description="Customize initials via classes.initials or textStyle."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <Avatar name="Bold" autoColor colors={c.subtleColors} classes={{ initials: "font-bold" }} />
-          <Avatar name="Light" autoColor colors={c.subtleColors} classes={{ initials: "font-light" }} />
-          <Avatar name="Italic" autoColor colors={c.subtleColors} textStyle={{ fontStyle: "italic" }} />
-          <Avatar name="Custom" className={c.fallbackBg} textStyle={{ color: "#6366f1", fontWeight: 600 }} />
+          <Avatar
+            name="Bold"
+            autoColor
+            colors={c.subtleColors}
+            classes={{ initials: "font-bold" }}
+          />
+          <Avatar
+            name="Light"
+            autoColor
+            colors={c.subtleColors}
+            classes={{ initials: "font-light" }}
+          />
+          <Avatar
+            name="Italic"
+            autoColor
+            colors={c.subtleColors}
+            textStyle={{ fontStyle: "italic" }}
+          />
+          <Avatar
+            name="Custom"
+            className={c.fallbackBg}
+            textStyle={{ color: "#6366f1", fontWeight: 600 }}
+          />
         </DemoWrapper>
       </Section>
 
       {/* ─── Bordered ───────────────────────────────────────────────────── */}
-      <Section title="Bordered Avatars" description="bordered={true} for auto-generated color, or a CSS border string." isDarkMode={dark}>
+      <Section
+        title="Bordered Avatars"
+        description="bordered={true} for auto-generated color, or a CSS border string."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="text-center">
             <Avatar name="Auto" autoColor colors={c.subtleColors} bordered />
             <p className={`text-xs mt-2 ${c.label}`}>bordered=true</p>
           </div>
           <div className="text-center">
-            <Avatar name="Custom" autoColor colors={c.subtleColors} bordered="2px solid #a5b4fc" />
+            <Avatar
+              name="Custom"
+              autoColor
+              colors={c.subtleColors}
+              bordered="2px solid #a5b4fc"
+            />
             <p className={`text-xs mt-2 ${c.label}`}>custom string</p>
           </div>
           <div className="text-center">
-            <Avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop" name="Image" bordered="2px solid #86efac" />
+            <Avatar
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
+              name="Image"
+              bordered="2px solid #86efac"
+            />
             <p className={`text-xs mt-2 ${c.label}`}>with image</p>
           </div>
         </DemoWrapper>
       </Section>
 
       {/* ─── Status Indicator ───────────────────────────────────────────── */}
-      <Section title="Status Indicator" description="Show online/offline/away/busy status. Use a string shorthand or config object." isDarkMode={dark}>
+      <Section
+        title="Status Indicator"
+        description="Show online/offline/away/busy status. Use a string shorthand or config object."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           {(["online", "offline", "away", "busy"] as const).map((s) => (
             <div key={s} className="text-center">
@@ -199,49 +370,118 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Status Position & Custom Color ─────────────────────────────── */}
-      <Section title="Status Position & Custom Color" description="Position the indicator at any corner and override the default color." isDarkMode={dark}>
+      <Section
+        title="Status Position & Custom Color"
+        description="Position the indicator at any corner and override the default color."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <DemoWrapper isDarkMode={dark}>
-            {(["top-right", "top-left", "bottom-right", "bottom-left"] as const).map((pos) => (
+            {(
+              ["top-right", "top-left", "bottom-right", "bottom-left"] as const
+            ).map((pos) => (
               <div key={pos} className="text-center">
-                <Avatar name={pos.slice(0, 2).toUpperCase()} autoColor colors={c.subtleColors} status={{ type: "online", position: pos }} />
+                <Avatar
+                  name={pos.slice(0, 2).toUpperCase()}
+                  autoColor
+                  colors={c.subtleColors}
+                  status={{ type: "online", position: pos }}
+                />
                 <p className={`text-xs mt-2 ${c.label}`}>{pos}</p>
               </div>
             ))}
           </DemoWrapper>
           <DemoWrapper isDarkMode={dark}>
-            <Avatar name="Purple" autoColor colors={c.subtleColors} status={{ type: "online", color: "#8b5cf6" }} />
-            <Avatar name="Pink" autoColor colors={c.subtleColors} status={{ type: "online", color: "#ec4899" }} />
-            <Avatar name="Cyan" autoColor colors={c.subtleColors} status={{ type: "online", color: "#06b6d4" }} />
+            <Avatar
+              name="Purple"
+              autoColor
+              colors={c.subtleColors}
+              status={{ type: "online", color: "#8b5cf6" }}
+            />
+            <Avatar
+              name="Pink"
+              autoColor
+              colors={c.subtleColors}
+              status={{ type: "online", color: "#ec4899" }}
+            />
+            <Avatar
+              name="Cyan"
+              autoColor
+              colors={c.subtleColors}
+              status={{ type: "online", color: "#06b6d4" }}
+            />
           </DemoWrapper>
         </div>
       </Section>
 
       {/* ─── Tooltip ────────────────────────────────────────────────────── */}
-      <Section title="Tooltip" description="Simple string tooltip or full config object with side, offset, delay." isDarkMode={dark}>
+      <Section
+        title="Tooltip"
+        description="Simple string tooltip or full config object with side, offset, delay."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <Avatar name="Simple" autoColor colors={c.subtleColors} tooltip="Simple tooltip" />
-          <Avatar name="Bottom" autoColor colors={c.subtleColors} tooltip={{ content: "Bottom tooltip", side: "bottom", sideOffset: 8 }} />
-          <Avatar name="Delayed" autoColor colors={c.subtleColors} tooltip={{ content: "Appears after 500ms", delayDuration: 500 }} />
-          <Avatar name="No Arrow" autoColor colors={c.subtleColors} tooltip={{ content: "No arrow", showArrow: false }} />
+          <Avatar
+            name="Simple"
+            autoColor
+            colors={c.subtleColors}
+            tooltip="Simple tooltip"
+          />
+          <Avatar
+            name="Bottom"
+            autoColor
+            colors={c.subtleColors}
+            tooltip={{
+              content: "Bottom tooltip",
+              side: "bottom",
+              sideOffset: 8,
+            }}
+          />
+          <Avatar
+            name="Delayed"
+            autoColor
+            colors={c.subtleColors}
+            tooltip={{ content: "Appears after 500ms", delayDuration: 500 }}
+          />
+          <Avatar
+            name="No Arrow"
+            autoColor
+            colors={c.subtleColors}
+            tooltip={{ content: "No arrow", showArrow: false }}
+          />
         </DemoWrapper>
       </Section>
 
       {/* ─── Avatar Badge ───────────────────────────────────────────────── */}
-      <Section title="Avatar Badge" description="Overlay notification badges with count, dot, variants, sizes, and positioning." isDarkMode={dark}>
+      <Section
+        title="Avatar Badge"
+        description="Overlay notification badges with count, dot, variants, sizes, and positioning."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Variants & dot</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Variants & dot
+            </p>
             <DemoWrapper isDarkMode={dark} className="overflow-visible">
-              {([
+              {[
                 { label: "count", props: { count: 5 } },
                 { label: "max=99", props: { count: 150, max: 99 } },
                 { label: "dot", props: { dot: true } },
-                { label: "pulse", props: { dot: true, pulse: true, color: "#22c55e" } },
-                { label: "outline", props: { count: 3, variant: "outline" as const } },
-                { label: "soft", props: { count: 7, variant: "soft" as const } },
+                {
+                  label: "pulse",
+                  props: { dot: true, pulse: true, color: "#22c55e" },
+                },
+                {
+                  label: "outline",
+                  props: { count: 3, variant: "outline" as const },
+                },
+                {
+                  label: "soft",
+                  props: { count: 7, variant: "soft" as const },
+                },
                 { label: "showZero", props: { count: 0, showZero: true } },
-              ]).map(({ label, props }) => (
+              ].map(({ label, props }) => (
                 <div key={label} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
                     <Avatar name={label} autoColor colors={c.subtleColors} />
@@ -269,10 +509,21 @@ const AvatarDemo = () => {
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Positions</p>
             <DemoWrapper isDarkMode={dark} className="overflow-visible">
-              {(["top-right", "top-left", "bottom-right", "bottom-left"] as const).map((pos) => (
+              {(
+                [
+                  "top-right",
+                  "top-left",
+                  "bottom-right",
+                  "bottom-left",
+                ] as const
+              ).map((pos) => (
                 <div key={pos} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
-                    <Avatar name={pos.slice(0, 2)} autoColor colors={c.subtleColors} />
+                    <Avatar
+                      name={pos.slice(0, 2)}
+                      autoColor
+                      colors={c.subtleColors}
+                    />
                     <AvatarBadge dot color="#22c55e" position={pos} />
                   </div>
                   <p className={`text-xs mt-3 ${c.label}`}>{pos}</p>
@@ -281,7 +532,9 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Overlap modes & custom offset</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Overlap modes & custom offset
+            </p>
             <DemoWrapper isDarkMode={dark} className="overflow-visible">
               <div className="text-center pt-2 pb-1">
                 <div className="relative inline-flex">
@@ -292,7 +545,12 @@ const AvatarDemo = () => {
               </div>
               <div className="text-center pt-2 pb-1">
                 <div className="relative inline-flex">
-                  <Avatar name="Rect" shape="square" autoColor colors={c.subtleColors} />
+                  <Avatar
+                    name="Rect"
+                    shape="square"
+                    autoColor
+                    colors={c.subtleColors}
+                  />
                   <AvatarBadge count={2} overlap="rectangular" />
                 </div>
                 <p className={`text-xs mt-3 ${c.label}`}>rectangular</p>
@@ -310,54 +568,100 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Avatar Group ───────────────────────────────────────────────── */}
-      <Section title="Avatar Group" description="Stack avatars with automatic overflow counting, custom spacing, and layout variants." isDarkMode={dark}>
+      <Section
+        title="Avatar Group"
+        description="Stack avatars with automatic overflow counting, custom spacing, and layout variants."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Default stack</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Default stack
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                <Avatar
+                  name="Charlie Davis"
+                  autoColor
+                  colors={c.subtleColors}
+                />
                 <Avatar name="Diana Evans" autoColor colors={c.subtleColors} />
               </AvatarGroup>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>max=3 with surplus</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              max=3 with surplus
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup max={3}>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                <Avatar
+                  name="Charlie Davis"
+                  autoColor
+                  colors={c.subtleColors}
+                />
                 <Avatar name="Diana Evans" autoColor colors={c.subtleColors} />
                 <Avatar name="Edward Fox" autoColor colors={c.subtleColors} />
               </AvatarGroup>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>total=50 (server-side count)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              total=50 (server-side count)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup max={3} total={50}>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                <Avatar
+                  name="Charlie Davis"
+                  autoColor
+                  colors={c.subtleColors}
+                />
               </AvatarGroup>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>showTooltip on surplus</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              showTooltip on surplus
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup max={2} showTooltip>
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                <Avatar
+                  name="Charlie Davis"
+                  autoColor
+                  colors={c.subtleColors}
+                />
                 <Avatar name="Diana Evans" autoColor colors={c.subtleColors} />
               </AvatarGroup>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom spacing</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom spacing
+            </p>
             <DemoWrapper isDarkMode={dark}>
               <div className="text-center">
                 <AvatarGroup spacing={-16}>
@@ -378,20 +682,40 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom ring color (dark background)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom ring color (dark background)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <div className={c.darkBg}>
                 <AvatarGroup ringColor="#1f2937">
-                  <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
+                  <Avatar
+                    name="Alice Brown"
+                    autoColor
+                    colors={c.subtleColors}
+                  />
                   <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                  <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                  <Avatar
+                    name="Charlie Davis"
+                    autoColor
+                    colors={c.subtleColors}
+                  />
                 </AvatarGroup>
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>reverseOrder</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              reverseOrder
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup reverseOrder>
                 <Avatar name="First" autoColor colors={c.subtleColors} />
                 <Avatar name="Second" autoColor colors={c.subtleColors} />
@@ -400,16 +724,31 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>renderSurplus (custom)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-              <AvatarGroup max={2} renderSurplus={(count) => (
-                <span className={`ml-2 text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}>
-                  and {count} more...
-                </span>
-              )}>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              renderSurplus (custom)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
+              <AvatarGroup
+                max={2}
+                renderSurplus={(count) => (
+                  <span
+                    className={`ml-2 text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  >
+                    and {count} more...
+                  </span>
+                )}
+              >
                 <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                <Avatar
+                  name="Charlie Davis"
+                  autoColor
+                  colors={c.subtleColors}
+                />
                 <Avatar name="Diana Evans" autoColor colors={c.subtleColors} />
               </AvatarGroup>
             </DemoWrapper>
@@ -418,12 +757,20 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Avatar Group Variants ──────────────────────────────────────── */}
-      <Section title="Group Layout Variants" description='variant="stack" (default), "grid", or "inline".' isDarkMode={dark}>
+      <Section
+        title="Group Layout Variants"
+        description='variant="stack" (default), "grid", or "inline".'
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           {(["stack", "grid", "inline"] as const).map((v) => (
             <div key={v}>
               <p className={`text-xs font-medium mb-2 ${c.label}`}>{v}</p>
-              <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <DemoWrapper
+                isDarkMode={dark}
+                layout="block"
+                className="overflow-visible"
+              >
                 <AvatarGroup variant={v} spacing={v === "stack" ? -8 : 4}>
                   <Avatar name="Alice" autoColor colors={c.subtleColors} />
                   <Avatar name="Bob" autoColor colors={c.subtleColors} />
@@ -436,25 +783,46 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Avatar Group Click ─────────────────────────────────────────── */}
-      <Section title="Group Click Handler" description="onAvatarClick receives {index, name} and the event." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-          <AvatarGroup onAvatarClick={(info) => {
-            setClickLog((prev) => [`Clicked: ${info.name ?? "unknown"} (index ${info.index})`, ...prev.slice(0, 4)]);
-          }}>
+      <Section
+        title="Group Click Handler"
+        description="onAvatarClick receives {index, name} and the event."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
+          <AvatarGroup
+            onAvatarClick={(info) => {
+              setClickLog((prev) => [
+                `Clicked: ${info.name ?? "unknown"} (index ${info.index})`,
+                ...prev.slice(0, 4),
+              ]);
+            }}
+          >
             <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
             <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
             <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
           </AvatarGroup>
           {clickLog.length > 0 && (
-            <div className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              {clickLog.map((log, i) => <div key={i}>{log}</div>)}
+            <div
+              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              {clickLog.map((log, i) => (
+                <div key={i}>{log}</div>
+              ))}
             </div>
           )}
         </DemoWrapper>
       </Section>
 
       {/* ─── Standalone AvatarGroupCount ─────────────────────────────────── */}
-      <Section title="AvatarGroupCount (Standalone)" description="Use AvatarGroupCount independently with variants, custom format, and click handler." isDarkMode={dark}>
+      <Section
+        title="AvatarGroupCount (Standalone)"
+        description="Use AvatarGroupCount independently with variants, custom format, and click handler."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Variants</p>
@@ -468,7 +836,9 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom format & showPlus</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom format & showPlus
+            </p>
             <DemoWrapper isDarkMode={dark}>
               <div className="text-center">
                 <AvatarGroupCount count={12} showPlus />
@@ -479,22 +849,37 @@ const AvatarDemo = () => {
                 <p className={`text-xs mt-2 ${c.label}`}>no plus</p>
               </div>
               <div className="text-center">
-                <AvatarGroupCount count={1234} format={(n) => n > 999 ? `${(n / 1000).toFixed(1)}k` : `${n}`} />
+                <AvatarGroupCount
+                  count={1234}
+                  format={(n) =>
+                    n > 999 ? `${(n / 1000).toFixed(1)}k` : `${n}`
+                  }
+                />
                 <p className={`text-xs mt-2 ${c.label}`}>custom format</p>
               </div>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>With tooltip & click</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              With tooltip & click
+            </p>
             <DemoWrapper isDarkMode={dark}>
-              <AvatarGroupCount count={8} tooltip="View all 8 members" onClick={() => alert("View all clicked!")} />
+              <AvatarGroupCount
+                count={8}
+                tooltip="View all 8 members"
+                onClick={() => alert("View all clicked!")}
+              />
             </DemoWrapper>
           </div>
         </div>
       </Section>
 
       {/* ─── Loading & Shimmer ──────────────────────────────────────────── */}
-      <Section title="Loading & Shimmer" description="Show shimmer placeholders while data loads. Toggle to see the transition." isDarkMode={dark}>
+      <Section
+        title="Loading & Shimmer"
+        description="Show shimmer placeholders while data loads. Toggle to see the transition."
+        isDarkMode={dark}
+      >
         <div className="mb-3">
           <button className={c.btn} onClick={() => setIsLoading(!isLoading)}>
             {isLoading ? "Show Content" : "Show Shimmer"}
@@ -512,94 +897,213 @@ const AvatarDemo = () => {
             </>
           ) : (
             <>
-              <Avatar name="Alice" size="sm" autoColor colors={c.subtleColors} />
+              <Avatar
+                name="Alice"
+                size="sm"
+                autoColor
+                colors={c.subtleColors}
+              />
               <Avatar name="Bob" autoColor colors={c.subtleColors} />
-              <Avatar name="Charlie" size="lg" autoColor colors={c.subtleColors} />
-              <Avatar name="Diana" shape="rounded" autoColor colors={c.subtleColors} />
-              <Avatar name="Edward" shape="square" autoColor colors={c.subtleColors} />
+              <Avatar
+                name="Charlie"
+                size="lg"
+                autoColor
+                colors={c.subtleColors}
+              />
+              <Avatar
+                name="Diana"
+                shape="rounded"
+                autoColor
+                colors={c.subtleColors}
+              />
+              <Avatar
+                name="Edward"
+                shape="square"
+                autoColor
+                colors={c.subtleColors}
+              />
               <Avatar name="Fiona" autoColor colors={c.subtleColors} />
             </>
           )}
         </DemoWrapper>
         <div className="space-y-4 mt-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Group shimmer with count</p>
-            <DemoWrapper isDarkMode={dark}><AvatarGroupShimmer count={4} showCount /></DemoWrapper>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Group shimmer with count
+            </p>
+            <DemoWrapper isDarkMode={dark}>
+              <AvatarGroupShimmer count={4} showCount />
+            </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom ring color on dark background</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom ring color on dark background
+            </p>
             <DemoWrapper isDarkMode={dark}>
-              <div className={c.darkBg}><AvatarGroupShimmer count={3} ringColor="#1f2937" /></div>
+              <div className={c.darkBg}>
+                <AvatarGroupShimmer count={3} ringColor="#1f2937" />
+              </div>
             </DemoWrapper>
           </div>
         </div>
       </Section>
 
       {/* ─── Image Config ───────────────────────────────────────────────── */}
-      <Section title="Image Configuration" description="Fine-tune image loading: lazy/eager, priority, srcSet, crossOrigin." isDarkMode={dark}>
+      <Section
+        title="Image Configuration"
+        description="Fine-tune image loading: lazy/eager, priority, srcSet, crossOrigin."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="text-center">
-            <Avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop" name="Lazy" imageConfig={{ loading: "lazy" }} />
+            <Avatar
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
+              name="Lazy"
+              imageConfig={{ loading: "lazy" }}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>lazy (default)</p>
           </div>
           <div className="text-center">
-            <Avatar src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" name="Eager" imageConfig={{ loading: "eager", decoding: "sync" }} />
+            <Avatar
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop"
+              name="Eager"
+              imageConfig={{ loading: "eager", decoding: "sync" }}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>eager + sync</p>
           </div>
           <div className="text-center">
-            <Avatar src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop" name="Priority" imageConfig={{ fetchPriority: "high" }} />
+            <Avatar
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop"
+              name="Priority"
+              imageConfig={{ fetchPriority: "high" }}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>high priority</p>
           </div>
         </DemoWrapper>
       </Section>
 
       {/* ─── Image Error ────────────────────────────────────────────────── */}
-      <Section title="Image Error Handling" description="Graceful fallback to initials when image fails to load." isDarkMode={dark}>
+      <Section
+        title="Image Error Handling"
+        description="Graceful fallback to initials when image fails to load."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <Avatar src={imageError ? "" : "https://invalid-url.example/image.jpg"} name="John Doe" autoColor colors={c.subtleColors} onError={() => setImageError(true)} />
+          <Avatar
+            src={imageError ? "" : "https://invalid-url.example/image.jpg"}
+            name="John Doe"
+            autoColor
+            colors={c.subtleColors}
+            onError={() => setImageError(true)}
+          />
         </DemoWrapper>
       </Section>
 
       {/* ─── Classes System ─────────────────────────────────────────────── */}
-      <Section title="Classes System" description="Override internal element styling with the classes prop. Slots: root, inner, image, initials, fallback, status." isDarkMode={dark}>
+      <Section
+        title="Classes System"
+        description="Override internal element styling with the classes prop. Slots: root, inner, image, initials, fallback, status."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom initials styling</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom initials styling
+            </p>
             <DemoWrapper isDarkMode={dark}>
-              <Avatar name="Bold" autoColor colors={c.subtleColors} classes={{ initials: "font-bold tracking-wider" }} />
-              <Avatar name="Italic" autoColor colors={c.subtleColors} classes={{ initials: "italic" }} />
+              <Avatar
+                name="Bold"
+                autoColor
+                colors={c.subtleColors}
+                classes={{ initials: "font-bold tracking-wider" }}
+              />
+              <Avatar
+                name="Italic"
+                autoColor
+                colors={c.subtleColors}
+                classes={{ initials: "italic" }}
+              />
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom status class (ring effect)</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom status class (ring effect)
+            </p>
             <DemoWrapper isDarkMode={dark}>
-              <Avatar name="Ring" autoColor colors={c.subtleColors} status="online" classes={{ status: "absolute block rounded-full ring-2 ring-white" }} />
+              <Avatar
+                name="Ring"
+                autoColor
+                colors={c.subtleColors}
+                status="online"
+                classes={{
+                  status: "absolute block rounded-full ring-2 ring-white",
+                }}
+              />
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>unstyled + gradient root</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              unstyled + gradient root
+            </p>
             <DemoWrapper isDarkMode={dark}>
-              <Avatar name="Custom" unstyled classes={{ root: "inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold", inner: "absolute inset-0 overflow-hidden flex items-center justify-center rounded-xl" }} size="lg" />
+              <Avatar
+                name="Custom"
+                unstyled
+                classes={{
+                  root: "inline-flex items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-pink-500 text-white font-bold",
+                  inner:
+                    "absolute inset-0 overflow-hidden flex items-center justify-center rounded-xl",
+                }}
+                size="lg"
+              />
             </DemoWrapper>
           </div>
         </div>
       </Section>
 
       {/* ─── Clickable ──────────────────────────────────────────────────── */}
-      <Section title="Clickable Avatars" description="Wrap avatars in buttons or links. Prefer wrapping over asChild for focus management." isDarkMode={dark}>
+      <Section
+        title="Clickable Avatars"
+        description="Wrap avatars in buttons or links. Prefer wrapping over asChild for focus management."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <button onClick={() => alert("Avatar clicked!")} className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 rounded-full">
-            <Avatar name="Click" autoColor colors={c.subtleColors} tooltip="Click me!" />
+          <button
+            onClick={() => alert("Avatar clicked!")}
+            className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 rounded-full"
+          >
+            <Avatar
+              name="Click"
+              autoColor
+              colors={c.subtleColors}
+              tooltip="Click me!"
+            />
           </button>
-          <button onClick={() => alert("Profile opened!")} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300 ${dark ? "hover:bg-gray-700/50" : "hover:bg-gray-50"}`}>
-            <Avatar name="Jane Doe" autoColor colors={c.subtleColors} status="online" />
-            <span className={`text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`}>Jane Doe</span>
+          <button
+            onClick={() => alert("Profile opened!")}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300 ${dark ? "hover:bg-gray-700/50" : "hover:bg-gray-50"}`}
+          >
+            <Avatar
+              name="Jane Doe"
+              autoColor
+              colors={c.subtleColors}
+              status="online"
+            />
+            <span
+              className={`text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`}
+            >
+              Jane Doe
+            </span>
           </button>
         </DemoWrapper>
       </Section>
 
       {/* ─── Avatar loading prop ────────────────────────────────────────── */}
-      <Section title="Loading Prop on Avatar" description="Set loading={true} directly on Avatar to show a shimmer in its place." isDarkMode={dark}>
+      <Section
+        title="Loading Prop on Avatar"
+        description="Set loading={true} directly on Avatar to show a shimmer in its place."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="text-center">
             <Avatar loading />
@@ -621,11 +1125,21 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Group Size / Shape / Bordered ─────────────────────────────── */}
-      <Section title="Group Inherited Props" description="AvatarGroup passes size, shape, and bordered to all children via context." isDarkMode={dark}>
+      <Section
+        title="Group Inherited Props"
+        description="AvatarGroup passes size, shape, and bordered to all children via context."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>size=&quot;lg&quot; (all children inherit)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              size=&quot;lg&quot; (all children inherit)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup size="lg">
                 <Avatar name="Alice" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob" autoColor colors={c.subtleColors} />
@@ -634,8 +1148,14 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>shape=&quot;rounded&quot;</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              shape=&quot;rounded&quot;
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup shape="rounded">
                 <Avatar name="Alice" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob" autoColor colors={c.subtleColors} />
@@ -644,8 +1164,14 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>bordered (all children get border)</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              bordered (all children get border)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup bordered>
                 <Avatar name="Alice" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob" autoColor colors={c.subtleColors} />
@@ -654,8 +1180,14 @@ const AvatarDemo = () => {
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>dir=&quot;rtl&quot;</p>
-            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              dir=&quot;rtl&quot;
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
               <AvatarGroup dir="rtl">
                 <Avatar name="Alice" autoColor colors={c.subtleColors} />
                 <Avatar name="Bob" autoColor colors={c.subtleColors} />
@@ -667,7 +1199,11 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Badge Invisible ───────────────────────────────────────────── */}
-      <Section title="Badge Invisible" description="Use invisible to hide a badge without unmounting (preserves layout)." isDarkMode={dark}>
+      <Section
+        title="Badge Invisible"
+        description="Use invisible to hide a badge without unmounting (preserves layout)."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} className="overflow-visible">
           <div className="text-center pt-2 pb-1">
             <div className="relative inline-flex">
@@ -687,22 +1223,32 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Group Shimmer Full Options ────────────────────────────────── */}
-      <Section title="Group Shimmer Options" description="AvatarGroupShimmer supports size, shape, spacing, animate, and count." isDarkMode={dark}>
+      <Section
+        title="Group Shimmer Options"
+        description="AvatarGroupShimmer supports size, shape, spacing, animate, and count."
+        isDarkMode={dark}
+      >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Large + rounded</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Large + rounded
+            </p>
             <DemoWrapper isDarkMode={dark}>
               <AvatarGroupShimmer count={4} size="lg" shape="rounded" />
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>Custom spacing</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Custom spacing
+            </p>
             <DemoWrapper isDarkMode={dark}>
               <AvatarGroupShimmer count={3} spacing={-16} />
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>No animation</p>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              No animation
+            </p>
             <DemoWrapper isDarkMode={dark}>
               <AvatarGroupShimmer count={3} animate={false} />
             </DemoWrapper>
@@ -711,14 +1257,25 @@ const AvatarDemo = () => {
       </Section>
 
       {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
-      <Section title="Reduce Motion" description='Set reduceMotion={true} to disable image fade-in and shimmer pulse animations.' isDarkMode={dark}>
+      <Section
+        title="Reduce Motion"
+        description="Set reduceMotion={true} to disable image fade-in and shimmer pulse animations."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="text-center">
-            <Avatar src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop" name="Animated" />
+            <Avatar
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
+              name="Animated"
+            />
             <p className={`text-xs mt-2 ${c.label}`}>default (auto)</p>
           </div>
           <div className="text-center">
-            <Avatar src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" name="No Motion" reduceMotion={true} />
+            <Avatar
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop"
+              name="No Motion"
+              reduceMotion={true}
+            />
             <p className={`text-xs mt-2 ${c.label}`}>reduceMotion=true</p>
           </div>
           <div className="text-center">
@@ -732,27 +1289,140 @@ const AvatarDemo = () => {
       <Section title="Avatar Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="name" type="string" description="User name for initials generation" isDarkMode={dark} />
-            <PropRow name="src" type="string" description="Image URL" isDarkMode={dark} />
-            <PropRow name="alt" type="string" description="Image alt text" isDarkMode={dark} />
-            <PropRow name="size" type='"xs"|"sm"|"md"|"lg"|"xl"|number' defaultVal='"md"' description="Size preset or pixel value" isDarkMode={dark} />
-            <PropRow name="shape" type='"circle"|"rounded"|"square"' defaultVal='"circle"' description="Avatar shape" isDarkMode={dark} />
-            <PropRow name="maxInitials" type="number" defaultVal="2" description="Max characters for initials" isDarkMode={dark} />
-            <PropRow name="fallback" type="ReactNode" description="Custom fallback when no name/image" isDarkMode={dark} />
-            <PropRow name="autoColor" type="boolean" defaultVal="false" description="Generate colors from name" isDarkMode={dark} />
-            <PropRow name="colors" type="AvatarColors" description="Custom color palettes for autoColor" isDarkMode={dark} />
-            <PropRow name="bordered" type="boolean | string" description="Add border (true or CSS string)" isDarkMode={dark} />
-            <PropRow name="status" type="AvatarStatus | AvatarStatusConfig" description="Status indicator" isDarkMode={dark} />
-            <PropRow name="tooltip" type="ReactNode | AvatarTooltipConfig" description="Tooltip content or config" isDarkMode={dark} />
-            <PropRow name="imageConfig" type="AvatarImageConfig" description="Image loading options (lazy, srcSet, priority, etc.)" isDarkMode={dark} />
-            <PropRow name="classes" type="AvatarClasses" description="Slot class overrides: root, inner, image, initials, fallback, status" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="textStyle" type="CSSProperties" description="Inline styles for initials text" isDarkMode={dark} />
-            <PropRow name="loading" type="boolean" defaultVal="false" description="Show shimmer placeholder" isDarkMode={dark} />
-            <PropRow name="reduceMotion" type='boolean | "auto"' defaultVal='"auto"' description="Disable fade-in and shimmer pulse" isDarkMode={dark} />
-            <PropRow name="onLoad" type="() => void" description="Image load success callback" isDarkMode={dark} />
-            <PropRow name="onError" type="() => void" description="Image load error callback" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child element" isDarkMode={dark} />
+            <PropRow
+              name="name"
+              type="string"
+              description="User name for initials generation"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="src"
+              type="string"
+              description="Image URL"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="alt"
+              type="string"
+              description="Image alt text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type='"xs"|"sm"|"md"|"lg"|"xl"|number'
+              defaultVal='"md"'
+              description="Size preset or pixel value"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shape"
+              type='"circle"|"rounded"|"square"'
+              defaultVal='"circle"'
+              description="Avatar shape"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="maxInitials"
+              type="number"
+              defaultVal="2"
+              description="Max characters for initials"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fallback"
+              type="ReactNode"
+              description="Custom fallback when no name/image"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="autoColor"
+              type="boolean"
+              defaultVal="false"
+              description="Generate colors from name"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="colors"
+              type="AvatarColors"
+              description="Custom color palettes for autoColor"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="bordered"
+              type="boolean | string"
+              description="Add border (true or CSS string)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="status"
+              type="AvatarStatus | AvatarStatusConfig"
+              description="Status indicator"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltip"
+              type="ReactNode | AvatarTooltipConfig"
+              description="Tooltip content or config"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="imageConfig"
+              type="AvatarImageConfig"
+              description="Image loading options (lazy, srcSet, priority, etc.)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="AvatarClasses"
+              description="Slot class overrides: root, inner, image, initials, fallback, status"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="textStyle"
+              type="CSSProperties"
+              description="Inline styles for initials text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loading"
+              type="boolean"
+              defaultVal="false"
+              description="Show shimmer placeholder"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="reduceMotion"
+              type='boolean | "auto"'
+              defaultVal='"auto"'
+              description="Disable fade-in and shimmer pulse"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onLoad"
+              type="() => void"
+              description="Image load success callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onError"
+              type="() => void"
+              description="Image load error callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child element"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -760,21 +1430,105 @@ const AvatarDemo = () => {
       <Section title="AvatarGroup Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="max" type="number" description="Maximum visible avatars" isDarkMode={dark} />
-            <PropRow name="size" type="AvatarSize" defaultVal='"md"' description="Size for all children" isDarkMode={dark} />
-            <PropRow name="shape" type="AvatarShape" defaultVal='"circle"' description="Shape for all children" isDarkMode={dark} />
-            <PropRow name="bordered" type="boolean | string" description="Border for all children" isDarkMode={dark} />
-            <PropRow name="spacing" type="number" defaultVal="-8" description="Overlap spacing in px (negative = overlap)" isDarkMode={dark} />
-            <PropRow name="ringColor" type="string" defaultVal='"white"' description="Ring color between stacked avatars" isDarkMode={dark} />
-            <PropRow name="variant" type='"stack"|"grid"|"inline"' defaultVal='"stack"' description="Layout variant" isDarkMode={dark} />
-            <PropRow name="total" type="number" description="Override total count for surplus calculation" isDarkMode={dark} />
-            <PropRow name="showTooltip" type="boolean" defaultVal="false" description="Show hidden names in surplus tooltip" isDarkMode={dark} />
-            <PropRow name="reverseOrder" type="boolean" defaultVal="false" description="Reverse child order" isDarkMode={dark} />
-            <PropRow name="renderSurplus" type="(count) => ReactNode" description="Custom surplus renderer" isDarkMode={dark} />
-            <PropRow name="onAvatarClick" type="(info, event) => void" description="Click handler: {index, name}" isDarkMode={dark} />
-            <PropRow name="classes" type="AvatarGroupClasses" description="Slot class overrides: root, item" isDarkMode={dark} />
-            <PropRow name="dir" type='"ltr"|"rtl"' defaultVal='"ltr"' description="Text direction" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child" isDarkMode={dark} />
+            <PropRow
+              name="max"
+              type="number"
+              description="Maximum visible avatars"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type="AvatarSize"
+              defaultVal='"md"'
+              description="Size for all children"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shape"
+              type="AvatarShape"
+              defaultVal='"circle"'
+              description="Shape for all children"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="bordered"
+              type="boolean | string"
+              description="Border for all children"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="spacing"
+              type="number"
+              defaultVal="-8"
+              description="Overlap spacing in px (negative = overlap)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ringColor"
+              type="string"
+              defaultVal='"white"'
+              description="Ring color between stacked avatars"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="variant"
+              type='"stack"|"grid"|"inline"'
+              defaultVal='"stack"'
+              description="Layout variant"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="total"
+              type="number"
+              description="Override total count for surplus calculation"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showTooltip"
+              type="boolean"
+              defaultVal="false"
+              description="Show hidden names in surplus tooltip"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="reverseOrder"
+              type="boolean"
+              defaultVal="false"
+              description="Reverse child order"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderSurplus"
+              type="(count) => ReactNode"
+              description="Custom surplus renderer"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onAvatarClick"
+              type="(info, event) => void"
+              description="Click handler: {index, name}"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="AvatarGroupClasses"
+              description="Slot class overrides: root, item"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dir"
+              type='"ltr"|"rtl"'
+              defaultVal='"ltr"'
+              description="Text direction"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -782,17 +1536,77 @@ const AvatarDemo = () => {
       <Section title="AvatarGroupCount Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="count" type="number" description="Surplus count to display" isDarkMode={dark} />
-            <PropRow name="size" type="AvatarSize" defaultVal='"md"' description="Size matching group avatars" isDarkMode={dark} />
-            <PropRow name="shape" type="AvatarShape" defaultVal='"circle"' description="Shape matching group avatars" isDarkMode={dark} />
-            <PropRow name="max" type="number" description='Max before showing "+"' isDarkMode={dark} />
-            <PropRow name="showPlus" type="boolean" defaultVal="true" description='Prefix with "+"' isDarkMode={dark} />
-            <PropRow name="format" type="(count) => string" description="Custom display format function" isDarkMode={dark} />
-            <PropRow name="variant" type='"solid"|"outline"|"ghost"' defaultVal='"solid"' description="Visual variant" isDarkMode={dark} />
-            <PropRow name="tooltip" type="ReactNode | AvatarTooltipConfig" description="Tooltip on hover" isDarkMode={dark} />
-            <PropRow name="bordered" type="boolean | string" description="Border style" isDarkMode={dark} />
-            <PropRow name="onClick" type="() => void" description="Click handler" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child" isDarkMode={dark} />
+            <PropRow
+              name="count"
+              type="number"
+              description="Surplus count to display"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type="AvatarSize"
+              defaultVal='"md"'
+              description="Size matching group avatars"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shape"
+              type="AvatarShape"
+              defaultVal='"circle"'
+              description="Shape matching group avatars"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="max"
+              type="number"
+              description='Max before showing "+"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showPlus"
+              type="boolean"
+              defaultVal="true"
+              description='Prefix with "+"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="format"
+              type="(count) => string"
+              description="Custom display format function"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="variant"
+              type='"solid"|"outline"|"ghost"'
+              defaultVal='"solid"'
+              description="Visual variant"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltip"
+              type="ReactNode | AvatarTooltipConfig"
+              description="Tooltip on hover"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="bordered"
+              type="boolean | string"
+              description="Border style"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onClick"
+              type="() => void"
+              description="Click handler"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -800,55 +1614,174 @@ const AvatarDemo = () => {
       <Section title="AvatarBadge Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="count" type="number" description="Notification count" isDarkMode={dark} />
-            <PropRow name="max" type="number" defaultVal="99" description='Max before showing "+"' isDarkMode={dark} />
-            <PropRow name="dot" type="boolean" defaultVal="false" description="Show dot instead of count" isDarkMode={dark} />
-            <PropRow name="showZero" type="boolean" defaultVal="false" description="Show badge when count is 0" isDarkMode={dark} />
-            <PropRow name="position" type="CornerPosition" defaultVal='"top-right"' description="Badge position corner" isDarkMode={dark} />
-            <PropRow name="variant" type='"solid"|"outline"|"soft"' defaultVal='"solid"' description="Visual variant" isDarkMode={dark} />
-            <PropRow name="color" type="string" description="Custom badge color" isDarkMode={dark} />
-            <PropRow name="size" type='"xs"|"sm"|"md"|"lg"' defaultVal='"md"' description="Badge size" isDarkMode={dark} />
-            <PropRow name="pulse" type="boolean" defaultVal="false" description="Pulse animation" isDarkMode={dark} />
-            <PropRow name="invisible" type="boolean" defaultVal="false" description="Render but visually hide" isDarkMode={dark} />
-            <PropRow name="overlap" type='"circular"|"rectangular"' defaultVal='"circular"' description="Overlap positioning mode" isDarkMode={dark} />
-            <PropRow name="offset" type="BadgeOffset" description="Fine-tune position with {x, y} px" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child" isDarkMode={dark} />
+            <PropRow
+              name="count"
+              type="number"
+              description="Notification count"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="max"
+              type="number"
+              defaultVal="99"
+              description='Max before showing "+"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dot"
+              type="boolean"
+              defaultVal="false"
+              description="Show dot instead of count"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showZero"
+              type="boolean"
+              defaultVal="false"
+              description="Show badge when count is 0"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="position"
+              type="CornerPosition"
+              defaultVal='"top-right"'
+              description="Badge position corner"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="variant"
+              type='"solid"|"outline"|"soft"'
+              defaultVal='"solid"'
+              description="Visual variant"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="color"
+              type="string"
+              description="Custom badge color"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type='"xs"|"sm"|"md"|"lg"'
+              defaultVal='"md"'
+              description="Badge size"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="pulse"
+              type="boolean"
+              defaultVal="false"
+              description="Pulse animation"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="invisible"
+              type="boolean"
+              defaultVal="false"
+              description="Render but visually hide"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="overlap"
+              type='"circular"|"rectangular"'
+              defaultVal='"circular"'
+              description="Overlap positioning mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="offset"
+              type="BadgeOffset"
+              description="Fine-tune position with {x, y} px"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Use these for CSS-based state styling." isDarkMode={dark}>
+      <Section
+        title="Data Attributes"
+        description="Use these for CSS-based state styling."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-has-image" type="Avatar root" description="Present when rendering an image (not initials/fallback)" isDarkMode={dark} />
-            <PropRow name="data-shape" type="Avatar root" description='"circle"|"rounded"|"square"' isDarkMode={dark} />
-            <PropRow name="data-state" type="AvatarBadge (via content)" description="Can be used for custom state styling" isDarkMode={dark} />
-            <PropRow name="role" type="Avatar root" description='role="img" when showing initials/fallback (not image)' isDarkMode={dark} />
-            <PropRow name="role" type="AvatarGroup" description='role="group" with auto-generated aria-label' isDarkMode={dark} />
-            <PropRow name="role" type="AvatarBadge, Shimmer" description='role="status" for live region semantics' isDarkMode={dark} />
+            <PropRow
+              name="data-has-image"
+              type="Avatar root"
+              description="Present when rendering an image (not initials/fallback)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-shape"
+              type="Avatar root"
+              description='"circle"|"rounded"|"square"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-state"
+              type="AvatarBadge (via content)"
+              description="Can be used for custom state styling"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="role"
+              type="Avatar root"
+              description='role="img" when showing initials/fallback (not image)'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="role"
+              type="AvatarGroup"
+              description='role="group" with auto-generated aria-label'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="role"
+              type="AvatarBadge, Shimmer"
+              description='role="status" for live region semantics'
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
-              "Avatar uses role=\"img\" with aria-label when showing initials or fallback",
+              'Avatar uses role="img" with aria-label when showing initials or fallback',
               "Image avatars use native <img> with alt text (empty alt for decorative)",
               "Status indicators have aria-label describing the status type",
-              "AvatarBadge uses role=\"status\" with aria-live=\"polite\" for screen reader announcements",
-              "Badge auto-generates aria-label: \"N notification(s)\" or \"New notification\" for dots",
-              "AvatarGroup uses role=\"group\" with auto-generated aria-label including member count",
-              "AvatarGroupCount provides aria-label: \"N more member(s) not shown\"",
-              "Images default to loading=\"lazy\" and decoding=\"async\" for performance",
+              'AvatarBadge uses role="status" with aria-live="polite" for screen reader announcements',
+              'Badge auto-generates aria-label: "N notification(s)" or "New notification" for dots',
+              'AvatarGroup uses role="group" with auto-generated aria-label including member count',
+              'AvatarGroupCount provides aria-label: "N more member(s) not shown"',
+              'Images default to loading="lazy" and decoding="async" for performance',
               "prefers-reduced-motion disables image fade-in and shimmer pulse (via reduceMotion prop)",
-              "Shimmer components use role=\"status\" with descriptive aria-label",
+              'Shimmer components use role="status" with descriptive aria-label',
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
                 <span>{text}</span>
               </p>
             ))}

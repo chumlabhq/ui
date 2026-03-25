@@ -6,7 +6,7 @@ const defaultContainerClass =
 const defaultRowClass = "border-b border-gray-200";
 const defaultCellClass = "px-3 py-2 h-[52px]";
 const defaultShimmerClass =
-  "h-full w-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded animate-pulse";
+  "h-full w-full bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded animate-pulse";
 
 const TableShimmer = memo(function TableShimmer({
   rowCount = 10,

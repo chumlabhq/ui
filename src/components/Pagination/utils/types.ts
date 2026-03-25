@@ -17,6 +17,26 @@ export interface PageInfoRenderProps {
 
 export type SectionName = "selector" | "pageInfo" | "nav";
 
+export interface PaginationClasses {
+  root?: string;
+  nav?: string;
+  pageButtons?: string;
+  pageButton?: string;
+  activePageButton?: string;
+  navButton?: string;
+  ellipsis?: string;
+  selector?: string;
+  selectorButton?: string;
+  selectorDropdown?: string;
+  selectorDropdownWrapper?: string;
+  selectorOption?: string;
+  label?: string;
+  dropdownIcon?: string;
+  prevIcon?: string;
+  nextIcon?: string;
+  pageInfo?: string;
+}
+
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onChange"> {
   currentPage: number;
   totalPages: number;
@@ -37,23 +57,8 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   renderEllipsis?: (props: EllipsisRenderProps) => ReactNode;
   renderPageInfo?: (props: PageInfoRenderProps) => ReactNode;
   sectionOrder?: SectionName[];
-  containerClassName?: string;
-  rowSelectorClassName?: string;
-  rowSelectorButtonClassName?: string;
-  rowSelectorDropdownClassName?: string;
-  rowSelectorDropdownWrapperClassName?: string;
-  rowSelectorOptionClassName?: string;
-  pageButtonClassName?: string;
-  activePageButtonClassName?: string;
-  navButtonClassName?: string;
-  navContainerClassName?: string;
-  pageButtonsContainerClassName?: string;
-  ellipsisClassName?: string;
-  labelClassName?: string;
-  dropdownIconClassName?: string;
-  prevIconClassName?: string;
-  nextIconClassName?: string;
-  pageInfoClassName?: string;
+  classes?: PaginationClasses;
+  unstyled?: boolean;
   portalContainer?: HTMLElement | null;
   prevAriaLabel?: string;
   nextAriaLabel?: string;

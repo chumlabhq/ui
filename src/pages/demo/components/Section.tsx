@@ -44,7 +44,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   <pre
     className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${
       isDarkMode
-        ? "bg-gradient-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/[0.06]"
+        ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6"
         : "bg-gray-50 text-gray-700 border border-gray-200"
     }`}
   >
@@ -77,7 +77,7 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
       className={cn(
         "relative border rounded-xl overflow-hidden",
         isDarkMode
-          ? "border-white/[0.06] bg-gradient-to-br from-gray-800/80 via-gray-900/60 to-gray-800/80"
+          ? "border-white/6 bg-linear-to-br from-gray-800/80 via-gray-900/60 to-gray-800/80"
           : "border-gray-200 bg-white",
         className,
       )}

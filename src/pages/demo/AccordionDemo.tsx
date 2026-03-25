@@ -11,7 +11,13 @@ import {
   ChevronUpIcon,
 } from "../../components/Accordion";
 import type { AccordionRef } from "../../components/Accordion";
-import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
 import { useTheme } from "./ThemeContext";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -50,8 +56,20 @@ const ShieldIcon = ({ className = "" }: { className?: string }) => (
   <Icon d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" className={className} />
 );
 const SettingsIcon = ({ className = "" }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
   </svg>
 );
 
@@ -71,7 +89,8 @@ const getClasses = (dark: boolean) => ({
     }`,
     triggerInner: "flex-1 text-left",
     content: `px-4 py-4 text-sm ${dark ? "text-gray-300" : "text-gray-600"}`,
-    contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+    contentWrapper:
+      "overflow-hidden transition-[max-height,opacity,visibility]",
     icon: `h-4 w-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
     iconWrapper: "shrink-0",
     subtitle: `font-normal mt-0.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
@@ -80,7 +99,9 @@ const getClasses = (dark: boolean) => ({
   // Variant overrides
   accordionBordered: {
     root: `w-full border rounded-lg overflow-hidden ${dark ? "border-gray-700" : "border-gray-200"}`,
-    item: dark ? "border-b border-gray-700 last:border-b-0" : "border-b border-gray-200 last:border-b-0",
+    item: dark
+      ? "border-b border-gray-700 last:border-b-0"
+      : "border-b border-gray-200 last:border-b-0",
   },
   accordionSeparated: {
     root: "w-full space-y-2",
@@ -97,9 +118,9 @@ const getClasses = (dark: boolean) => ({
   },
   // Demo UI classes (matching InputDemo/TextAreaDemo pattern)
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-600" : "text-gray-300"}`,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  cardDense: `rounded-xl border p-4 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  code: `px-1.5 py-0.5 rounded-md text-[11px] font-mono font-medium ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-600"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  cardDense: `rounded-xl border p-4 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  code: `px-1.5 py-0.5 rounded-md text-[11px] font-mono font-medium ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`,
   kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
   badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wider ${dark ? "bg-indigo-500/10 text-indigo-400 ring-1 ring-inset ring-indigo-400/20" : "bg-indigo-50 text-indigo-600 ring-1 ring-inset ring-indigo-600/10"}`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
@@ -123,8 +144,16 @@ const AccordionDemo = () => {
 
   // Dynamic items
   const [dynamicItems, setDynamicItems] = useState([
-    { id: "dyn-1", title: "First Dynamic Item", content: "Content for the first item." },
-    { id: "dyn-2", title: "Second Dynamic Item", content: "Content for the second item." },
+    {
+      id: "dyn-1",
+      title: "First Dynamic Item",
+      content: "Content for the first item.",
+    },
+    {
+      id: "dyn-2",
+      title: "Second Dynamic Item",
+      content: "Content for the second item.",
+    },
   ]);
   const [nextId, setNextId] = useState(3);
 
@@ -137,7 +166,11 @@ const AccordionDemo = () => {
   const addItem = () => {
     setDynamicItems((prev) => [
       ...prev,
-      { id: `dyn-${nextId}`, title: `Dynamic Item ${nextId}`, content: `Content for item ${nextId}.` },
+      {
+        id: `dyn-${nextId}`,
+        title: `Dynamic Item ${nextId}`,
+        content: `Content for item ${nextId}.`,
+      },
     ]);
     setNextId((prev) => prev + 1);
   };
@@ -150,21 +183,33 @@ const AccordionDemo = () => {
     <div className="space-y-10">
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark
-          ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-          : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"
-        }`} />
-        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
-        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
+        <div
+          className={`absolute inset-0 ${
+            dark
+              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
+          }`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
 
         <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
             Accordion
           </h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            A composable, accessible accordion component following WAI-ARIA patterns.
-            Supports keyboard navigation, single/multiple modes, controlled/uncontrolled state,
-            RTL support, and fully customizable styling.
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A composable, accessible accordion component following WAI-ARIA
+            patterns. Supports keyboard navigation, single/multiple modes,
+            controlled/uncontrolled state, RTL support, and fully customizable
+            styling.
           </p>
 
           <div className="mt-5">
@@ -188,26 +233,33 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" defaultValue="basic-1" collapsible classes={c.accordion}>
+          <Accordion
+            type="single"
+            defaultValue="basic-1"
+            collapsible
+            classes={c.accordion}
+          >
             <AccordionItem value="basic-1">
               <AccordionTrigger>What is React?</AccordionTrigger>
               <AccordionContent>
-                React is a JavaScript library for building user interfaces. It lets you
-                compose complex UIs from small and isolated pieces of code called components.
+                React is a JavaScript library for building user interfaces. It
+                lets you compose complex UIs from small and isolated pieces of
+                code called components.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="basic-2">
               <AccordionTrigger>What is TypeScript?</AccordionTrigger>
               <AccordionContent>
-                TypeScript is a strongly typed programming language that builds on JavaScript,
-                giving you better tooling at any scale.
+                TypeScript is a strongly typed programming language that builds
+                on JavaScript, giving you better tooling at any scale.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="basic-3">
               <AccordionTrigger>What is Tailwind CSS?</AccordionTrigger>
               <AccordionContent>
-                Tailwind CSS is a utility-first CSS framework packed with classes that can
-                be composed to build any design, directly in your markup.
+                Tailwind CSS is a utility-first CSS framework packed with
+                classes that can be composed to build any design, directly in
+                your markup.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -221,7 +273,12 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" defaultValue="nc-1" collapsible={false} classes={c.accordion}>
+          <Accordion
+            type="single"
+            defaultValue="nc-1"
+            collapsible={false}
+            classes={c.accordion}
+          >
             <AccordionItem value="nc-1">
               <AccordionTrigger>First Item (Always One Open)</AccordionTrigger>
               <AccordionContent>
@@ -245,18 +302,28 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" defaultValue={["multi-1", "multi-2"]} classes={c.accordion}>
+          <Accordion
+            type="multiple"
+            defaultValue={["multi-1", "multi-2"]}
+            classes={c.accordion}
+          >
             <AccordionItem value="multi-1">
               <AccordionTrigger>First Section</AccordionTrigger>
-              <AccordionContent>This section can be open along with others.</AccordionContent>
+              <AccordionContent>
+                This section can be open along with others.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="multi-2">
               <AccordionTrigger>Second Section</AccordionTrigger>
-              <AccordionContent>Both sections can be expanded at the same time.</AccordionContent>
+              <AccordionContent>
+                Both sections can be expanded at the same time.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="multi-3">
               <AccordionTrigger>Third Section</AccordionTrigger>
-              <AccordionContent>Open or close any section independently.</AccordionContent>
+              <AccordionContent>
+                Open or close any section independently.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -272,15 +339,21 @@ const AccordionDemo = () => {
           <Accordion type="multiple" maxExpanded={2} classes={c.accordion}>
             <AccordionItem value="max-1">
               <AccordionTrigger>First (open me)</AccordionTrigger>
-              <AccordionContent>You can open up to 2 items at once.</AccordionContent>
+              <AccordionContent>
+                You can open up to 2 items at once.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="max-2">
               <AccordionTrigger>Second (open me too)</AccordionTrigger>
               <AccordionContent>Two items are now open.</AccordionContent>
             </AccordionItem>
             <AccordionItem value="max-3">
-              <AccordionTrigger>Third (blocked when 2 are open)</AccordionTrigger>
-              <AccordionContent>Close one of the others first.</AccordionContent>
+              <AccordionTrigger>
+                Third (blocked when 2 are open)
+              </AccordionTrigger>
+              <AccordionContent>
+                Close one of the others first.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -289,7 +362,7 @@ const AccordionDemo = () => {
       {/* ─── Default Expand All ────────────────────────────────────────── */}
       <Section
         title="Default Expand All"
-        description='Use defaultExpandAll to open every item on mount (multiple mode only).'
+        description="Use defaultExpandAll to open every item on mount (multiple mode only)."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -315,12 +388,25 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           {([2, 3, 4] as const).map((level) => (
             <div key={level}>
-              <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>headingLevel={level}</p>
+              <p
+                className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              >
+                headingLevel={level}
+              </p>
               <DemoWrapper isDarkMode={dark} layout="block">
-                <Accordion type="single" collapsible headingLevel={level} classes={c.accordion}>
+                <Accordion
+                  type="single"
+                  collapsible
+                  headingLevel={level}
+                  classes={c.accordion}
+                >
                   <AccordionItem value={`hl-${level}`}>
-                    <AccordionTrigger>Trigger wrapped in h{level}</AccordionTrigger>
-                    <AccordionContent>Content under an h{level} heading.</AccordionContent>
+                    <AccordionTrigger>
+                      Trigger wrapped in h{level}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      Content under an h{level} heading.
+                    </AccordionContent>
                   </AccordionItem>
                 </Accordion>
               </DemoWrapper>
@@ -335,12 +421,25 @@ const AccordionDemo = () => {
         description="The expanded state is controlled externally via value and onValueChange."
         isDarkMode={dark}
       >
-        <div className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
-          <span className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}>Current:</span>
+        <div
+          className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
+          <span
+            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            Current:
+          </span>
           <span className={c.stateDisplay}>{singleValue ?? "null"}</span>
           <div className="ml-auto flex gap-2">
-            <button className={c.btnPrimary} onClick={() => setSingleValue("item-2")}>Open Item 2</button>
-            <button className={c.btn} onClick={() => setSingleValue(null)}>Close All</button>
+            <button
+              className={c.btnPrimary}
+              onClick={() => setSingleValue("item-2")}
+            >
+              Open Item 2
+            </button>
+            <button className={c.btn} onClick={() => setSingleValue(null)}>
+              Close All
+            </button>
           </div>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -373,16 +472,36 @@ const AccordionDemo = () => {
         description="Track and control multiple expanded items externally."
         isDarkMode={dark}
       >
-        <div className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
-          <span className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}>Current:</span>
+        <div
+          className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
+          <span
+            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            Current:
+          </span>
           <span className={c.stateDisplay}>[{multipleValue.join(", ")}]</span>
           <div className="ml-auto flex gap-2">
-            <button className={c.btnPrimary} onClick={() => setMultipleValue(["multi-1", "multi-2", "multi-3"])}>Open All</button>
-            <button className={c.btn} onClick={() => setMultipleValue([])}>Close All</button>
+            <button
+              className={c.btnPrimary}
+              onClick={() =>
+                setMultipleValue(["multi-1", "multi-2", "multi-3"])
+              }
+            >
+              Open All
+            </button>
+            <button className={c.btn} onClick={() => setMultipleValue([])}>
+              Close All
+            </button>
           </div>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="multiple" value={multipleValue} onValueChange={setMultipleValue} classes={c.accordion}>
+          <Accordion
+            type="multiple"
+            value={multipleValue}
+            onValueChange={setMultipleValue}
+            classes={c.accordion}
+          >
             <AccordionItem value="multi-1">
               <AccordionTrigger>First</AccordionTrigger>
               <AccordionContent>First content</AccordionContent>
@@ -408,18 +527,27 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           {(["sm", "md", "lg"] as const).map((size) => (
             <div key={size}>
-              <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>
+              <p
+                className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              >
                 size=&quot;{size}&quot;
               </p>
               <DemoWrapper isDarkMode={dark} layout="block">
-                <Accordion type="single" collapsible size={size} classes={{ ...c.accordion }}>
+                <Accordion
+                  type="single"
+                  collapsible
+                  size={size}
+                  classes={{ ...c.accordion }}
+                >
                   <AccordionItem value={`${size}-1`}>
                     <AccordionTrigger>First Item</AccordionTrigger>
                     <AccordionContent>Content in {size} size.</AccordionContent>
                   </AccordionItem>
                   <AccordionItem value={`${size}-2`}>
                     <AccordionTrigger>Second Item</AccordionTrigger>
-                    <AccordionContent>More content in {size} size.</AccordionContent>
+                    <AccordionContent>
+                      More content in {size} size.
+                    </AccordionContent>
                   </AccordionItem>
                 </Accordion>
               </DemoWrapper>
@@ -436,38 +564,92 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>default</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              default
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
-                <AccordionItem value="v-1"><AccordionTrigger>Default Variant</AccordionTrigger><AccordionContent>Standard look.</AccordionContent></AccordionItem>
-                <AccordionItem value="v-2"><AccordionTrigger>Second Item</AccordionTrigger><AccordionContent>Content.</AccordionContent></AccordionItem>
+                <AccordionItem value="v-1">
+                  <AccordionTrigger>Default Variant</AccordionTrigger>
+                  <AccordionContent>Standard look.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="v-2">
+                  <AccordionTrigger>Second Item</AccordionTrigger>
+                  <AccordionContent>Content.</AccordionContent>
+                </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>bordered</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              bordered
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={{ ...c.accordion, ...c.accordionBordered }}>
-                <AccordionItem value="vb-1"><AccordionTrigger>Bordered Variant</AccordionTrigger><AccordionContent>Wrapped in a border.</AccordionContent></AccordionItem>
-                <AccordionItem value="vb-2"><AccordionTrigger>Second Item</AccordionTrigger><AccordionContent>Content.</AccordionContent></AccordionItem>
+              <Accordion
+                type="single"
+                collapsible
+                classes={{ ...c.accordion, ...c.accordionBordered }}
+              >
+                <AccordionItem value="vb-1">
+                  <AccordionTrigger>Bordered Variant</AccordionTrigger>
+                  <AccordionContent>Wrapped in a border.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="vb-2">
+                  <AccordionTrigger>Second Item</AccordionTrigger>
+                  <AccordionContent>Content.</AccordionContent>
+                </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>separated</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              separated
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={{ ...c.accordion, ...c.accordionSeparated }}>
-                <AccordionItem value="vs-1"><AccordionTrigger>Separated Variant</AccordionTrigger><AccordionContent>Each item is its own card.</AccordionContent></AccordionItem>
-                <AccordionItem value="vs-2"><AccordionTrigger>Second Item</AccordionTrigger><AccordionContent>Content.</AccordionContent></AccordionItem>
+              <Accordion
+                type="single"
+                collapsible
+                classes={{ ...c.accordion, ...c.accordionSeparated }}
+              >
+                <AccordionItem value="vs-1">
+                  <AccordionTrigger>Separated Variant</AccordionTrigger>
+                  <AccordionContent>
+                    Each item is its own card.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="vs-2">
+                  <AccordionTrigger>Second Item</AccordionTrigger>
+                  <AccordionContent>Content.</AccordionContent>
+                </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>flush</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              flush
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible classes={{ ...c.accordion, ...c.accordionFlush }}>
-                <AccordionItem value="vf-1"><AccordionTrigger>Flush Variant</AccordionTrigger><AccordionContent>Minimal borders.</AccordionContent></AccordionItem>
-                <AccordionItem value="vf-2"><AccordionTrigger>Second Item</AccordionTrigger><AccordionContent>Content.</AccordionContent></AccordionItem>
+              <Accordion
+                type="single"
+                collapsible
+                classes={{ ...c.accordion, ...c.accordionFlush }}
+              >
+                <AccordionItem value="vf-1">
+                  <AccordionTrigger>Flush Variant</AccordionTrigger>
+                  <AccordionContent>Minimal borders.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="vf-2">
+                  <AccordionTrigger>Second Item</AccordionTrigger>
+                  <AccordionContent>Content.</AccordionContent>
+                </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
@@ -482,21 +664,49 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>Entire accordion disabled</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              Entire accordion disabled
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <Accordion type="single" collapsible disabled classes={c.accordion}>
-                <AccordionItem value="d-1"><AccordionTrigger>Disabled Item 1</AccordionTrigger><AccordionContent>Content.</AccordionContent></AccordionItem>
-                <AccordionItem value="d-2"><AccordionTrigger>Disabled Item 2</AccordionTrigger><AccordionContent>Content.</AccordionContent></AccordionItem>
+              <Accordion
+                type="single"
+                collapsible
+                disabled
+                classes={c.accordion}
+              >
+                <AccordionItem value="d-1">
+                  <AccordionTrigger>Disabled Item 1</AccordionTrigger>
+                  <AccordionContent>Content.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="d-2">
+                  <AccordionTrigger>Disabled Item 2</AccordionTrigger>
+                  <AccordionContent>Content.</AccordionContent>
+                </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>Individual item disabled</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              Individual item disabled
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
-                <AccordionItem value="di-1"><AccordionTrigger>Enabled Item</AccordionTrigger><AccordionContent>This works.</AccordionContent></AccordionItem>
-                <AccordionItem value="di-2" disabled><AccordionTrigger>Disabled Item</AccordionTrigger><AccordionContent>Can&apos;t open this.</AccordionContent></AccordionItem>
-                <AccordionItem value="di-3"><AccordionTrigger>Another Enabled</AccordionTrigger><AccordionContent>This also works.</AccordionContent></AccordionItem>
+                <AccordionItem value="di-1">
+                  <AccordionTrigger>Enabled Item</AccordionTrigger>
+                  <AccordionContent>This works.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="di-2" disabled>
+                  <AccordionTrigger>Disabled Item</AccordionTrigger>
+                  <AccordionContent>Can&apos;t open this.</AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="di-3">
+                  <AccordionTrigger>Another Enabled</AccordionTrigger>
+                  <AccordionContent>This also works.</AccordionContent>
+                </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
@@ -511,13 +721,25 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>Plus/Minus icons</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              Plus/Minus icons
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="icon-1">
                   <AccordionTrigger
-                    expandedIcon={<MinusIcon className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`} />}
-                    collapsedIcon={<PlusIcon className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`} />}
+                    expandedIcon={
+                      <MinusIcon
+                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      />
+                    }
+                    collapsedIcon={
+                      <PlusIcon
+                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      />
+                    }
                   >
                     Click to expand
                   </AccordionTrigger>
@@ -525,40 +747,68 @@ const AccordionDemo = () => {
                 </AccordionItem>
                 <AccordionItem value="icon-2">
                   <AccordionTrigger
-                    expandedIcon={<MinusIcon className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`} />}
-                    collapsedIcon={<PlusIcon className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`} />}
+                    expandedIcon={
+                      <MinusIcon
+                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      />
+                    }
+                    collapsedIcon={
+                      <PlusIcon
+                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      />
+                    }
                   >
                     Another section
                   </AccordionTrigger>
-                  <AccordionContent>Content with custom icons.</AccordionContent>
+                  <AccordionContent>
+                    Content with custom icons.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>Icon on left</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              Icon on left
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="left-1">
                   <AccordionTrigger
                     iconPosition="left"
-                    expandedIcon={<ChevronUpIcon className="w-4 h-4 text-blue-500" />}
-                    collapsedIcon={<ChevronDownIcon className="w-4 h-4 text-blue-500" />}
+                    expandedIcon={
+                      <ChevronUpIcon className="w-4 h-4 text-blue-500" />
+                    }
+                    collapsedIcon={
+                      <ChevronDownIcon className="w-4 h-4 text-blue-500" />
+                    }
                   >
                     Icon on the left
                   </AccordionTrigger>
-                  <AccordionContent>The icon is positioned before the title.</AccordionContent>
+                  <AccordionContent>
+                    The icon is positioned before the title.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>No icon (iconPosition=&quot;none&quot;)</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              No icon (iconPosition=&quot;none&quot;)
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="noicon-1">
-                  <AccordionTrigger iconPosition="none">No icon shown</AccordionTrigger>
-                  <AccordionContent>The icon is completely hidden.</AccordionContent>
+                  <AccordionTrigger iconPosition="none">
+                    No icon shown
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    The icon is completely hidden.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
@@ -574,39 +824,67 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>iconAnimation=&quot;rotate&quot; (default)</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              iconAnimation=&quot;rotate&quot; (default)
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="anim-rotate">
-                  <AccordionTrigger iconAnimation="rotate">Toggle to see rotate animation</AccordionTrigger>
-                  <AccordionContent>The chevron rotates 180 degrees.</AccordionContent>
+                  <AccordionTrigger iconAnimation="rotate">
+                    Toggle to see rotate animation
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    The chevron rotates 180 degrees.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>iconAnimation=&quot;switch&quot;</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              iconAnimation=&quot;switch&quot;
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="anim-switch">
                   <AccordionTrigger
                     iconAnimation="switch"
-                    expandedIcon={<MinusIcon className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`} />}
-                    collapsedIcon={<PlusIcon className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`} />}
+                    expandedIcon={
+                      <MinusIcon
+                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      />
+                    }
+                    collapsedIcon={
+                      <PlusIcon
+                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      />
+                    }
                   >
                     Toggle to see switch animation
                   </AccordionTrigger>
-                  <AccordionContent>Icon swaps between plus and minus.</AccordionContent>
+                  <AccordionContent>
+                    Icon swaps between plus and minus.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>iconAnimation=&quot;none&quot;</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              iconAnimation=&quot;none&quot;
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="anim-none">
-                  <AccordionTrigger iconAnimation="none">Toggle with no animation</AccordionTrigger>
+                  <AccordionTrigger iconAnimation="none">
+                    Toggle with no animation
+                  </AccordionTrigger>
                   <AccordionContent>Icon has no transition.</AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -626,30 +904,54 @@ const AccordionDemo = () => {
             <AccordionItem value="slot-1">
               <AccordionTrigger
                 subtitle="Learn about our performance features"
-                leftSlot={<BoltIcon className={`w-4 h-4 ${dark ? "text-yellow-400" : "text-yellow-500"}`} />}
+                leftSlot={
+                  <BoltIcon
+                    className={`w-4 h-4 ${dark ? "text-yellow-400" : "text-yellow-500"}`}
+                  />
+                }
               >
                 Performance
               </AccordionTrigger>
-              <AccordionContent>Optimized for speed and efficiency.</AccordionContent>
+              <AccordionContent>
+                Optimized for speed and efficiency.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="slot-2">
               <AccordionTrigger
                 subtitle="Security features and compliance"
-                leftSlot={<ShieldIcon className={`w-4 h-4 ${dark ? "text-green-400" : "text-green-500"}`} />}
-                rightSlot={<span className={`text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-green-500/10 text-green-400" : "bg-green-100 text-green-600"}`}>New</span>}
+                leftSlot={
+                  <ShieldIcon
+                    className={`w-4 h-4 ${dark ? "text-green-400" : "text-green-500"}`}
+                  />
+                }
+                rightSlot={
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-green-500/10 text-green-400" : "bg-green-100 text-green-600"}`}
+                  >
+                    New
+                  </span>
+                }
               >
                 Security
               </AccordionTrigger>
-              <AccordionContent>Enterprise-grade security built in.</AccordionContent>
+              <AccordionContent>
+                Enterprise-grade security built in.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="slot-3">
               <AccordionTrigger
                 subtitle="Customize to your needs"
-                leftSlot={<SettingsIcon className={`w-4 h-4 ${dark ? "text-blue-400" : "text-blue-500"}`} />}
+                leftSlot={
+                  <SettingsIcon
+                    className={`w-4 h-4 ${dark ? "text-blue-400" : "text-blue-500"}`}
+                  />
+                }
               >
                 Settings
               </AccordionTrigger>
-              <AccordionContent>Full customization options available.</AccordionContent>
+              <AccordionContent>
+                Full customization options available.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -665,7 +967,9 @@ const AccordionDemo = () => {
           <Accordion type="single" collapsible dir="rtl" classes={c.accordion}>
             <AccordionItem value="rtl-1">
               <AccordionTrigger>العنصر الأول</AccordionTrigger>
-              <AccordionContent>محتوى العنصر الأول - يدعم الكتابة من اليمين إلى اليسار بالكامل.</AccordionContent>
+              <AccordionContent>
+                محتوى العنصر الأول - يدعم الكتابة من اليمين إلى اليسار بالكامل.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="rtl-2">
               <AccordionTrigger>العنصر الثاني</AccordionTrigger>
@@ -681,7 +985,9 @@ const AccordionDemo = () => {
         description="Full WAI-ARIA keyboard support. Focus a trigger and try the keys below."
         isDarkMode={dark}
       >
-        <div className={`mb-4 p-4 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
+        <div
+          className={`mb-4 p-4 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
           <div className="grid grid-cols-2 gap-2 text-sm">
             {[
               ["Space / Enter", "Toggle expanded state"],
@@ -693,7 +999,11 @@ const AccordionDemo = () => {
             ].map(([key, action]) => (
               <div key={key} className="flex items-center gap-3 py-1">
                 <kbd className={c.kbd}>{key}</kbd>
-                <span className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>{action}</span>
+                <span
+                  className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  {action}
+                </span>
               </div>
             ))}
           </div>
@@ -701,8 +1011,12 @@ const AccordionDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion type="single" collapsible classes={c.accordion}>
             <AccordionItem value="kb-1">
-              <AccordionTrigger>Click here to focus, then use arrow keys</AccordionTrigger>
-              <AccordionContent>Press Space or Enter to toggle.</AccordionContent>
+              <AccordionTrigger>
+                Click here to focus, then use arrow keys
+              </AccordionTrigger>
+              <AccordionContent>
+                Press Space or Enter to toggle.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="kb-2">
               <AccordionTrigger>Press Home to go to first</AccordionTrigger>
@@ -713,8 +1027,13 @@ const AccordionDemo = () => {
               <AccordionContent>Third item content</AccordionContent>
             </AccordionItem>
             <AccordionItem value="kb-4">
-              <AccordionTrigger>Navigation wraps around (loop=true)</AccordionTrigger>
-              <AccordionContent>Pressing down on the last item moves to the first, and vice versa.</AccordionContent>
+              <AccordionTrigger>
+                Navigation wraps around (loop=true)
+              </AccordionTrigger>
+              <AccordionContent>
+                Pressing down on the last item moves to the first, and vice
+                versa.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -726,11 +1045,33 @@ const AccordionDemo = () => {
         description="Control the accordion programmatically via ref methods."
         isDarkMode={dark}
       >
-        <div className={`mb-3 p-3 rounded-lg flex flex-wrap gap-2 ${dark ? "bg-gray-800" : "bg-gray-50"}`}>
-          <button className={c.btnPrimary} onClick={() => accordionRef.current?.expandAll()}>Expand All</button>
-          <button className={c.btn} onClick={() => accordionRef.current?.collapseAll()}>Collapse All</button>
-          <button className={c.btn} onClick={() => accordionRef.current?.toggle("ref-2")}>Toggle Item 2</button>
-          <button className={c.btn} onClick={() => accordionRef.current?.focusItem("ref-1")}>Focus Item 1</button>
+        <div
+          className={`mb-3 p-3 rounded-lg flex flex-wrap gap-2 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+        >
+          <button
+            className={c.btnPrimary}
+            onClick={() => accordionRef.current?.expandAll()}
+          >
+            Expand All
+          </button>
+          <button
+            className={c.btn}
+            onClick={() => accordionRef.current?.collapseAll()}
+          >
+            Collapse All
+          </button>
+          <button
+            className={c.btn}
+            onClick={() => accordionRef.current?.toggle("ref-2")}
+          >
+            Toggle Item 2
+          </button>
+          <button
+            className={c.btn}
+            onClick={() => accordionRef.current?.focusItem("ref-1")}
+          >
+            Focus Item 1
+          </button>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion
@@ -750,7 +1091,9 @@ const AccordionDemo = () => {
             </AccordionItem>
             <AccordionItem value="ref-2">
               <AccordionTrigger>Second Item</AccordionTrigger>
-              <AccordionContent>Toggle me with the button above.</AccordionContent>
+              <AccordionContent>
+                Toggle me with the button above.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="ref-3">
               <AccordionTrigger>Third Item</AccordionTrigger>
@@ -759,7 +1102,9 @@ const AccordionDemo = () => {
           </Accordion>
         </DemoWrapper>
         {toggleLog.length > 0 && (
-          <div className={`mt-3 p-3 rounded-lg text-xs font-mono space-y-1 ${dark ? "bg-gray-800 text-gray-400" : "bg-gray-50 text-gray-500"}`}>
+          <div
+            className={`mt-3 p-3 rounded-lg text-xs font-mono space-y-1 ${dark ? "bg-gray-800 text-gray-400" : "bg-gray-50 text-gray-500"}`}
+          >
             {toggleLog.map((log, i) => (
               <div key={i}>{log}</div>
             ))}
@@ -783,9 +1128,18 @@ const AccordionDemo = () => {
             <AccordionShimmer count={3} size="md" />
           ) : (
             <Accordion type="single" collapsible classes={c.accordion}>
-              <AccordionItem value="loaded-1"><AccordionTrigger>Loaded Item 1</AccordionTrigger><AccordionContent>Content loaded.</AccordionContent></AccordionItem>
-              <AccordionItem value="loaded-2"><AccordionTrigger>Loaded Item 2</AccordionTrigger><AccordionContent>Content loaded.</AccordionContent></AccordionItem>
-              <AccordionItem value="loaded-3"><AccordionTrigger>Loaded Item 3</AccordionTrigger><AccordionContent>Content loaded.</AccordionContent></AccordionItem>
+              <AccordionItem value="loaded-1">
+                <AccordionTrigger>Loaded Item 1</AccordionTrigger>
+                <AccordionContent>Content loaded.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="loaded-2">
+                <AccordionTrigger>Loaded Item 2</AccordionTrigger>
+                <AccordionContent>Content loaded.</AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="loaded-3">
+                <AccordionTrigger>Loaded Item 3</AccordionTrigger>
+                <AccordionContent>Content loaded.</AccordionContent>
+              </AccordionItem>
             </Accordion>
           )}
         </DemoWrapper>
@@ -798,7 +1152,9 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div className={`mb-3 flex gap-2`}>
-          <button className={c.btnPrimary} onClick={addItem}>Add Item</button>
+          <button className={c.btnPrimary} onClick={addItem}>
+            Add Item
+          </button>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion type="multiple" classes={c.accordion}>
@@ -808,7 +1164,10 @@ const AccordionDemo = () => {
                   rightSlot={
                     <button
                       className={`text-xs px-2 py-0.5 rounded ${dark ? "text-red-400 hover:bg-red-500/10" : "text-red-500 hover:bg-red-50"}`}
-                      onClick={(e) => { e.stopPropagation(); removeItem(item.id); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeItem(item.id);
+                      }}
                     >
                       Remove
                     </button>
@@ -831,23 +1190,35 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>lazyLoad (renders only after first open)</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              lazyLoad (renders only after first open)
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="lazy-1">
                   <AccordionTrigger>Lazy Loaded Content</AccordionTrigger>
-                  <AccordionContent lazyLoad>This content was not in the DOM until you opened it.</AccordionContent>
+                  <AccordionContent lazyLoad>
+                    This content was not in the DOM until you opened it.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>unmountOnClose (removed from DOM when closed)</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              unmountOnClose (removed from DOM when closed)
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion type="single" collapsible classes={c.accordion}>
                 <AccordionItem value="unmount-1">
                   <AccordionTrigger>Unmount on Close</AccordionTrigger>
-                  <AccordionContent unmountOnClose>This content is removed from the DOM when closed.</AccordionContent>
+                  <AccordionContent unmountOnClose>
+                    This content is removed from the DOM when closed.
+                  </AccordionContent>
                 </AccordionItem>
               </Accordion>
             </DemoWrapper>
@@ -863,13 +1234,34 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           {[
-            { label: "Fast (100ms)", duration: 100, easing: "ease-out" as const },
-            { label: "Default (300ms)", duration: 300, easing: "ease-in-out" as const },
-            { label: "Slow (800ms)", duration: 800, easing: "ease-in-out" as const },
-            { label: "No animation (reduceMotion)", duration: 300, easing: "ease-in-out" as const, reduceMotion: true as const },
+            {
+              label: "Fast (100ms)",
+              duration: 100,
+              easing: "ease-out" as const,
+            },
+            {
+              label: "Default (300ms)",
+              duration: 300,
+              easing: "ease-in-out" as const,
+            },
+            {
+              label: "Slow (800ms)",
+              duration: 800,
+              easing: "ease-in-out" as const,
+            },
+            {
+              label: "No animation (reduceMotion)",
+              duration: 300,
+              easing: "ease-in-out" as const,
+              reduceMotion: true as const,
+            },
           ].map(({ label, duration, easing, reduceMotion }) => (
             <div key={label}>
-              <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>{label}</p>
+              <p
+                className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              >
+                {label}
+              </p>
               <DemoWrapper isDarkMode={dark} layout="block">
                 <Accordion
                   type="single"
@@ -907,7 +1299,8 @@ const AccordionDemo = () => {
               trigger: `flex w-full items-center justify-between py-3 text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`,
               triggerInner: "flex-1 text-left",
               content: `py-2 text-sm ${dark ? "text-gray-400" : "text-gray-600"}`,
-              contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+              contentWrapper:
+                "overflow-hidden transition-[max-height,opacity,visibility]",
               icon: `w-4 h-4 transition-transform duration-200 ${dark ? "text-gray-500" : "text-gray-400"}`,
               iconWrapper: "shrink-0",
               heading: "",
@@ -915,11 +1308,15 @@ const AccordionDemo = () => {
           >
             <AccordionItem value="unstyled-1">
               <AccordionTrigger>Custom Styled Item</AccordionTrigger>
-              <AccordionContent>All styling provided via classes prop.</AccordionContent>
+              <AccordionContent>
+                All styling provided via classes prop.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="unstyled-2">
               <AccordionTrigger>Another Custom Item</AccordionTrigger>
-              <AccordionContent>Full control over every class.</AccordionContent>
+              <AccordionContent>
+                Full control over every class.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -932,14 +1329,24 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion type="single" collapsible expandOnPrint classes={c.accordion}>
+          <Accordion
+            type="single"
+            collapsible
+            expandOnPrint
+            classes={c.accordion}
+          >
             <AccordionItem value="print-1">
               <AccordionTrigger>Visible in Print</AccordionTrigger>
-              <AccordionContent>This content will be visible when printing, even if collapsed on screen.</AccordionContent>
+              <AccordionContent>
+                This content will be visible when printing, even if collapsed on
+                screen.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="print-2">
               <AccordionTrigger>Also Visible in Print</AccordionTrigger>
-              <AccordionContent>All collapsed content expands for print media.</AccordionContent>
+              <AccordionContent>
+                All collapsed content expands for print media.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -958,16 +1365,22 @@ const AccordionDemo = () => {
             defaultValue="pc-1"
             classes={c.accordion}
             preventClose={(value) => {
-              return !window.confirm(`Close "${value}"? You have unsaved changes.`);
+              return !window.confirm(
+                `Close "${value}"? You have unsaved changes.`,
+              );
             }}
           >
             <AccordionItem value="pc-1">
               <AccordionTrigger>Try closing me</AccordionTrigger>
-              <AccordionContent>A confirmation dialog will appear before this closes.</AccordionContent>
+              <AccordionContent>
+                A confirmation dialog will appear before this closes.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="pc-2">
               <AccordionTrigger>Another guarded item</AccordionTrigger>
-              <AccordionContent>Same guard applies to all items.</AccordionContent>
+              <AccordionContent>
+                Same guard applies to all items.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -982,12 +1395,18 @@ const AccordionDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion type="multiple" announceExpanded classes={c.accordion}>
             <AccordionItem value="ann-1">
-              <AccordionTrigger>Toggle me (check screen reader)</AccordionTrigger>
-              <AccordionContent>Screen readers will announce the state change.</AccordionContent>
+              <AccordionTrigger>
+                Toggle me (check screen reader)
+              </AccordionTrigger>
+              <AccordionContent>
+                Screen readers will announce the state change.
+              </AccordionContent>
             </AccordionItem>
             <AccordionItem value="ann-2">
               <AccordionTrigger>Another item</AccordionTrigger>
-              <AccordionContent>Announces count of expanded items.</AccordionContent>
+              <AccordionContent>
+                Announces count of expanded items.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -1003,7 +1422,10 @@ const AccordionDemo = () => {
           <Accordion type="single" collapsible classes={c.accordion}>
             <AccordionItem value="fm-1">
               <AccordionTrigger>Always in DOM</AccordionTrigger>
-              <AccordionContent forceMount>This content is always rendered (check DOM inspector). It uses aria-hidden when collapsed.</AccordionContent>
+              <AccordionContent forceMount>
+                This content is always rendered (check DOM inspector). It uses
+                aria-hidden when collapsed.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -1020,7 +1442,9 @@ const AccordionDemo = () => {
             <AccordionItem value="cb-1">
               <AccordionTrigger>Toggle and check console</AccordionTrigger>
               <AccordionContent
-                onOpenStart={() => console.log("[onOpenStart] Animation starting")}
+                onOpenStart={() =>
+                  console.log("[onOpenStart] Animation starting")
+                }
                 onOpenEnd={() => console.log("[onOpenEnd] Animation complete")}
                 onCloseStart={() => console.log("[onCloseStart] Closing")}
                 onCloseEnd={() => console.log("[onCloseEnd] Closed")}
@@ -1040,13 +1464,27 @@ const AccordionDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion type="multiple" classes={c.accordion}>
-            <AccordionItem value="tog-1" onToggle={(expanded) => console.log(`Item 1: ${expanded ? "opened" : "closed"}`)}>
+            <AccordionItem
+              value="tog-1"
+              onToggle={(expanded) =>
+                console.log(`Item 1: ${expanded ? "opened" : "closed"}`)
+              }
+            >
               <AccordionTrigger>Item 1 (check console)</AccordionTrigger>
-              <AccordionContent>onToggle fires with the new expanded state.</AccordionContent>
+              <AccordionContent>
+                onToggle fires with the new expanded state.
+              </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="tog-2" onToggle={(expanded) => console.log(`Item 2: ${expanded ? "opened" : "closed"}`)}>
+            <AccordionItem
+              value="tog-2"
+              onToggle={(expanded) =>
+                console.log(`Item 2: ${expanded ? "opened" : "closed"}`)
+              }
+            >
               <AccordionTrigger>Item 2 (check console)</AccordionTrigger>
-              <AccordionContent>Each item can have its own toggle callback.</AccordionContent>
+              <AccordionContent>
+                Each item can have its own toggle callback.
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </DemoWrapper>
@@ -1060,19 +1498,31 @@ const AccordionDemo = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>With subtitle preview (showContent)</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              With subtitle preview (showContent)
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <AccordionShimmer count={3} showContent />
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>No animation</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              No animation
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <AccordionShimmer count={2} animate={false} />
             </DemoWrapper>
           </div>
           <div>
-            <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}>Small size</p>
+            <p
+              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+            >
+              Small size
+            </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <AccordionShimmer count={2} size="sm" />
             </DemoWrapper>
@@ -1084,32 +1534,179 @@ const AccordionDemo = () => {
       <Section title="Accordion Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="type" type='"single" | "multiple"' description="Selection mode" isDarkMode={dark} />
-            <PropRow name="value" type="string | string[]" description="Controlled expanded value(s)" isDarkMode={dark} />
-            <PropRow name="defaultValue" type="string | string[]" description="Initial expanded value(s)" isDarkMode={dark} />
-            <PropRow name="onValueChange" type="(v) => void" description="Callback when value changes" isDarkMode={dark} />
-            <PropRow name="collapsible" type="boolean" defaultVal="false" description="Allow collapsing all items (single mode)" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable all items" isDarkMode={dark} />
-            <PropRow name="orientation" type='"vertical" | "horizontal"' defaultVal='"vertical"' description="Orientation for keyboard navigation" isDarkMode={dark} />
-            <PropRow name="dir" type='"ltr" | "rtl"' defaultVal='"ltr"' description="Text direction" isDarkMode={dark} />
-            <PropRow name="loop" type="boolean" defaultVal="true" description="Loop keyboard navigation" isDarkMode={dark} />
-            <PropRow name="size" type='"sm" | "md" | "lg"' defaultVal='"md"' description="Size preset" isDarkMode={dark} />
-            <PropRow name="variant" type='"default" | "bordered" | "separated" | "flush"' defaultVal='"default"' description="Visual variant" isDarkMode={dark} />
-            <PropRow name="headingLevel" type="1-6" defaultVal="3" description="Heading level for triggers" isDarkMode={dark} />
-            <PropRow name="classes" type="AccordionClasses" description="Custom class overrides for all slots" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default styling" isDarkMode={dark} />
-            <PropRow name="animationDuration" type="number" defaultVal="300" description="Animation duration in ms" isDarkMode={dark} />
-            <PropRow name="animationEasing" type="string" defaultVal='"ease-in-out"' description="CSS easing function" isDarkMode={dark} />
-            <PropRow name="reduceMotion" type='boolean | "auto"' defaultVal='"auto"' description="Disable animations" isDarkMode={dark} />
-            <PropRow name="expandOnPrint" type="boolean" defaultVal="false" description="Expand all items when printing" isDarkMode={dark} />
-            <PropRow name="maxExpanded" type="number" description="Max expanded items (multiple mode)" isDarkMode={dark} />
-            <PropRow name="defaultExpandAll" type="boolean" defaultVal="false" description="Expand all on mount (multiple mode)" isDarkMode={dark} />
-            <PropRow name="storageKey" type="string | StorageConfig" description="Persist state to storage" isDarkMode={dark} />
-            <PropRow name="preventClose" type="(v) => boolean | Promise<boolean>" description="Guard before closing an item" isDarkMode={dark} />
-            <PropRow name="preventCloseTimeout" type="number" defaultVal="10000" description="Timeout for async preventClose" isDarkMode={dark} />
-            <PropRow name="onExpandedChange" type="(event) => void" description="Detailed expand/collapse event" isDarkMode={dark} />
-            <PropRow name="announceExpanded" type="boolean" defaultVal="false" description="Announce changes to screen readers" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child element" isDarkMode={dark} />
+            <PropRow
+              name="type"
+              type='"single" | "multiple"'
+              description="Selection mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="string | string[]"
+              description="Controlled expanded value(s)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultValue"
+              type="string | string[]"
+              description="Initial expanded value(s)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(v) => void"
+              description="Callback when value changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="collapsible"
+              type="boolean"
+              defaultVal="false"
+              description="Allow collapsing all items (single mode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable all items"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="orientation"
+              type='"vertical" | "horizontal"'
+              defaultVal='"vertical"'
+              description="Orientation for keyboard navigation"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dir"
+              type='"ltr" | "rtl"'
+              defaultVal='"ltr"'
+              description="Text direction"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loop"
+              type="boolean"
+              defaultVal="true"
+              description="Loop keyboard navigation"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type='"sm" | "md" | "lg"'
+              defaultVal='"md"'
+              description="Size preset"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="variant"
+              type='"default" | "bordered" | "separated" | "flush"'
+              defaultVal='"default"'
+              description="Visual variant"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="headingLevel"
+              type="1-6"
+              defaultVal="3"
+              description="Heading level for triggers"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="AccordionClasses"
+              description="Custom class overrides for all slots"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default styling"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="animationDuration"
+              type="number"
+              defaultVal="300"
+              description="Animation duration in ms"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="animationEasing"
+              type="string"
+              defaultVal='"ease-in-out"'
+              description="CSS easing function"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="reduceMotion"
+              type='boolean | "auto"'
+              defaultVal='"auto"'
+              description="Disable animations"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="expandOnPrint"
+              type="boolean"
+              defaultVal="false"
+              description="Expand all items when printing"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="maxExpanded"
+              type="number"
+              description="Max expanded items (multiple mode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultExpandAll"
+              type="boolean"
+              defaultVal="false"
+              description="Expand all on mount (multiple mode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="storageKey"
+              type="string | StorageConfig"
+              description="Persist state to storage"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="preventClose"
+              type="(v) => boolean | Promise<boolean>"
+              description="Guard before closing an item"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="preventCloseTimeout"
+              type="number"
+              defaultVal="10000"
+              description="Timeout for async preventClose"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onExpandedChange"
+              type="(event) => void"
+              description="Detailed expand/collapse event"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="announceExpanded"
+              type="boolean"
+              defaultVal="false"
+              description="Announce changes to screen readers"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child element"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1117,10 +1714,32 @@ const AccordionDemo = () => {
       <Section title="AccordionItem Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="value" type="string" description="Unique identifier for this item" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable this item" isDarkMode={dark} />
-            <PropRow name="onToggle" type="(isExpanded) => void" description="Callback when this item toggles" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child element" isDarkMode={dark} />
+            <PropRow
+              name="value"
+              type="string"
+              description="Unique identifier for this item"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable this item"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onToggle"
+              type="(isExpanded) => void"
+              description="Callback when this item toggles"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child element"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1128,14 +1747,57 @@ const AccordionDemo = () => {
       <Section title="AccordionTrigger Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="iconPosition" type='"left" | "right" | "none"' defaultVal='"right"' description="Position of the indicator icon" isDarkMode={dark} />
-            <PropRow name="expandedIcon" type="ReactNode" description="Custom icon when expanded" isDarkMode={dark} />
-            <PropRow name="collapsedIcon" type="ReactNode" description="Custom icon when collapsed" isDarkMode={dark} />
-            <PropRow name="iconAnimation" type='"rotate" | "switch" | "none"' defaultVal='"rotate"' description="Icon animation style" isDarkMode={dark} />
-            <PropRow name="subtitle" type="ReactNode" description="Secondary text below the trigger" isDarkMode={dark} />
-            <PropRow name="leftSlot" type="ReactNode" description="Content before the trigger text" isDarkMode={dark} />
-            <PropRow name="rightSlot" type="ReactNode" description="Content after the trigger text" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child element" isDarkMode={dark} />
+            <PropRow
+              name="iconPosition"
+              type='"left" | "right" | "none"'
+              defaultVal='"right"'
+              description="Position of the indicator icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="expandedIcon"
+              type="ReactNode"
+              description="Custom icon when expanded"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="collapsedIcon"
+              type="ReactNode"
+              description="Custom icon when collapsed"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="iconAnimation"
+              type='"rotate" | "switch" | "none"'
+              defaultVal='"rotate"'
+              description="Icon animation style"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="subtitle"
+              type="ReactNode"
+              description="Secondary text below the trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="leftSlot"
+              type="ReactNode"
+              description="Content before the trigger text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="rightSlot"
+              type="ReactNode"
+              description="Content after the trigger text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child element"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1143,45 +1805,149 @@ const AccordionDemo = () => {
       <Section title="AccordionContent Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="forceMount" type="boolean" defaultVal="false" description="Always render in DOM" isDarkMode={dark} />
-            <PropRow name="lazyLoad" type="boolean" defaultVal="false" description="Defer render until first open" isDarkMode={dark} />
-            <PropRow name="unmountOnClose" type="boolean" defaultVal="false" description="Remove from DOM when closed" isDarkMode={dark} />
-            <PropRow name="animationDuration" type="number" description="Override accordion-level duration" isDarkMode={dark} />
-            <PropRow name="animationEasing" type="string" description="Override accordion-level easing" isDarkMode={dark} />
-            <PropRow name="onOpenStart" type="() => void" description="Called when open animation starts" isDarkMode={dark} />
-            <PropRow name="onOpenEnd" type="() => void" description="Called when open animation ends" isDarkMode={dark} />
-            <PropRow name="onCloseStart" type="() => void" description="Called when close animation starts" isDarkMode={dark} />
-            <PropRow name="onCloseEnd" type="() => void" description="Called when close animation ends" isDarkMode={dark} />
-            <PropRow name="asChild" type="boolean" defaultVal="false" description="Merge props onto child element" isDarkMode={dark} />
+            <PropRow
+              name="forceMount"
+              type="boolean"
+              defaultVal="false"
+              description="Always render in DOM"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lazyLoad"
+              type="boolean"
+              defaultVal="false"
+              description="Defer render until first open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unmountOnClose"
+              type="boolean"
+              defaultVal="false"
+              description="Remove from DOM when closed"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="animationDuration"
+              type="number"
+              description="Override accordion-level duration"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="animationEasing"
+              type="string"
+              description="Override accordion-level easing"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onOpenStart"
+              type="() => void"
+              description="Called when open animation starts"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onOpenEnd"
+              type="() => void"
+              description="Called when open animation ends"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onCloseStart"
+              type="() => void"
+              description="Called when close animation starts"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onCloseEnd"
+              type="() => void"
+              description="Called when close animation ends"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="asChild"
+              type="boolean"
+              defaultVal="false"
+              description="Merge props onto child element"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Use these for CSS-based state styling." isDarkMode={dark}>
+      <Section
+        title="Data Attributes"
+        description="Use these for CSS-based state styling."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-state" type="Accordion, Item, Trigger, Content" description='"has-expanded"|"all-closed" (root), "open"|"closed" (items)' isDarkMode={dark} />
-            <PropRow name="data-disabled" type="Item, Trigger" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-pending" type="Item" description="Present during async preventClose" isDarkMode={dark} />
-            <PropRow name="data-orientation" type="Accordion, Item, Trigger, Content" description='"vertical"|"horizontal"' isDarkMode={dark} />
-            <PropRow name="data-value" type="Item" description="The item's value string" isDarkMode={dark} />
-            <PropRow name="data-type" type="Accordion" description='"single"|"multiple"' isDarkMode={dark} />
-            <PropRow name="data-size" type="Accordion" description="Size preset value" isDarkMode={dark} />
-            <PropRow name="data-variant" type="Accordion" description="Variant value" isDarkMode={dark} />
+            <PropRow
+              name="data-state"
+              type="Accordion, Item, Trigger, Content"
+              description='"has-expanded"|"all-closed" (root), "open"|"closed" (items)'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="Item, Trigger"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-pending"
+              type="Item"
+              description="Present during async preventClose"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-orientation"
+              type="Accordion, Item, Trigger, Content"
+              description='"vertical"|"horizontal"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-value"
+              type="Item"
+              description="The item's value string"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-type"
+              type="Accordion"
+              description='"single"|"multiple"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-size"
+              type="Accordion"
+              description="Size preset value"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-variant"
+              type="Accordion"
+              description="Variant value"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section title="Accessibility" description="WAI-ARIA Accordion pattern compliance." isDarkMode={dark}>
+      <Section
+        title="Accessibility"
+        description="WAI-ARIA Accordion pattern compliance."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               "Triggers are native <button> elements inside heading elements (configurable level)",
               "aria-expanded on triggers reflects open/closed state",
               "aria-controls links each trigger to its content region",
-              "Content panels have role=\"region\" with aria-labelledby pointing to trigger",
+              'Content panels have role="region" with aria-labelledby pointing to trigger',
               "aria-hidden on collapsed content prevents screen reader access",
               "Disabled items use native disabled attribute (removed from tab order)",
               "Live region announcer (opt-in) announces expand/collapse to screen readers",
@@ -1189,22 +1955,41 @@ const AccordionDemo = () => {
               "Full RTL support with reversed keyboard navigation",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               ["Space / Enter", "Toggle the focused accordion item"],
-              ["Arrow Down / Arrow Up", "Move focus to next/previous trigger (vertical mode)"],
-              ["Arrow Right / Arrow Left", "Move focus to next/previous trigger (horizontal mode)"],
+              [
+                "Arrow Down / Arrow Up",
+                "Move focus to next/previous trigger (vertical mode)",
+              ],
+              [
+                "Arrow Right / Arrow Left",
+                "Move focus to next/previous trigger (horizontal mode)",
+              ],
               ["Home", "Move focus to the first trigger"],
               ["End", "Move focus to the last trigger"],
-              ["Tab", "Move focus into/out of the accordion (standard tab order)"],
+              [
+                "Tab",
+                "Move focus into/out of the accordion (standard tab order)",
+              ],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>

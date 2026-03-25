@@ -7,12 +7,30 @@ import {
   DrawerCloseButton,
 } from "../../components/Drawer";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
 const CloseIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
 );
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
@@ -25,8 +43,9 @@ const getClasses = (dark: boolean) => ({
   closeBtn: `p-2 rounded-lg transition-colors ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-white/10" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"}`,
   text: dark ? "text-gray-300" : "text-gray-600",
   btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  btnPrimary:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
   kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
   label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
 });
@@ -45,7 +64,12 @@ const DrawerDemo = () => {
   const c = getClasses(dark);
 
   const basic = useDrawerState();
-  const directions = { left: useDrawerState(), right: useDrawerState(), top: useDrawerState(), bottom: useDrawerState() };
+  const directions = {
+    left: useDrawerState(),
+    right: useDrawerState(),
+    top: useDrawerState(),
+    bottom: useDrawerState(),
+  };
   const sized = useDrawerState();
   const overlay = useDrawerState();
   const blurOverlay = useDrawerState();
@@ -68,18 +92,31 @@ const DrawerDemo = () => {
   const formDrawer = useDrawerState();
   const [snapIndex, setSnapIndex] = useState(1);
 
-  const renderDrawerContent = (title: string, onClose: () => void, extra?: React.ReactNode) => (
+  const renderDrawerContent = (
+    title: string,
+    onClose: () => void,
+    extra?: React.ReactNode,
+  ) => (
     <div className={c.panel}>
       <DrawerHeader className={c.header}>
         <h2 className={c.title}>{title}</h2>
-        <DrawerCloseButton className={c.closeBtn}><CloseIcon /></DrawerCloseButton>
+        <DrawerCloseButton className={c.closeBtn}>
+          <CloseIcon />
+        </DrawerCloseButton>
       </DrawerHeader>
       <DrawerBody className={c.body}>
-        <p className={`text-sm ${c.text}`}>{extra || "This is the drawer content. Click outside, press Escape, or click the X to close."}</p>
+        <p className={`text-sm ${c.text}`}>
+          {extra ||
+            "This is the drawer content. Click outside, press Escape, or click the X to close."}
+        </p>
       </DrawerBody>
       <DrawerFooter className={c.footer}>
-        <button className={c.btn} onClick={onClose}>Cancel</button>
-        <button className={c.btnPrimary} onClick={onClose}>Confirm</button>
+        <button className={c.btn} onClick={onClose}>
+          Cancel
+        </button>
+        <button className={c.btnPrimary} onClick={onClose}>
+          Confirm
+        </button>
       </DrawerFooter>
     </div>
   );
@@ -88,109 +125,274 @@ const DrawerDemo = () => {
     <div className="space-y-10">
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-indigo-50 via-white to-blue-50/80"}`} />
-        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
-        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
+        <div
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
         <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Drawer</h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            A sliding panel overlay with focus trapping, scroll lock, swipe-to-close, snap points,
-            stacked drawer support, and fully accessible keyboard navigation.
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            Drawer
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A sliding panel overlay with focus trapping, scroll lock,
+            swipe-to-close, snap points, stacked drawer support, and fully
+            accessible keyboard navigation.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import {\n  Drawer, DrawerHeader, DrawerBody,\n  DrawerFooter, DrawerCloseButton,\n} from "@kern-ui/drawer";`} />
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import {\n  Drawer, DrawerHeader, DrawerBody,\n  DrawerFooter, DrawerCloseButton,\n} from "@kern-ui/drawer";`}
+            />
           </div>
         </div>
       </header>
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
-      <Section title="Basic Usage" description="A simple drawer with header, body, footer, and close button." isDarkMode={dark}>
+      <Section
+        title="Basic Usage"
+        description="A simple drawer with header, body, footer, and close button."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={basic.onOpen}>Open Drawer</button>
+          <button className={c.btnPrimary} onClick={basic.onOpen}>
+            Open Drawer
+          </button>
         </DemoWrapper>
-        <Drawer open={basic.open} onClose={basic.onClose}>{renderDrawerContent("Basic Drawer", basic.onClose)}</Drawer>
+        <Drawer open={basic.open} onClose={basic.onClose}>
+          {renderDrawerContent("Basic Drawer", basic.onClose)}
+        </Drawer>
       </Section>
 
       {/* ─── Directions ─────────────────────────────────────────────────── */}
-      <Section title="Directions" description="Slide from left, right, top, or bottom." isDarkMode={dark}>
+      <Section
+        title="Directions"
+        description="Slide from left, right, top, or bottom."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           {(["left", "right", "top", "bottom"] as const).map((dir) => (
-            <button key={dir} className={c.btn} onClick={directions[dir].onOpen}>{dir}</button>
+            <button
+              key={dir}
+              className={c.btn}
+              onClick={directions[dir].onOpen}
+            >
+              {dir}
+            </button>
           ))}
         </DemoWrapper>
         {(["left", "right", "top", "bottom"] as const).map((dir) => (
-          <Drawer key={dir} open={directions[dir].open} onClose={directions[dir].onClose} direction={dir} size={dir === "top" || dir === "bottom" ? "250px" : "320px"}>
-            {renderDrawerContent(`${dir.charAt(0).toUpperCase() + dir.slice(1)} Drawer`, directions[dir].onClose)}
+          <Drawer
+            key={dir}
+            open={directions[dir].open}
+            onClose={directions[dir].onClose}
+            direction={dir}
+            size={dir === "top" || dir === "bottom" ? "250px" : "320px"}
+          >
+            {renderDrawerContent(
+              `${dir.charAt(0).toUpperCase() + dir.slice(1)} Drawer`,
+              directions[dir].onClose,
+            )}
           </Drawer>
         ))}
       </Section>
 
       {/* ─── Custom Size ────────────────────────────────────────────────── */}
-      <Section title="Custom Size" description="Control width/height with the size prop (any CSS value)." isDarkMode={dark}>
+      <Section
+        title="Custom Size"
+        description="Control width/height with the size prop (any CSS value)."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={sized.onOpen}>Open 500px Drawer</button>
+          <button className={c.btnPrimary} onClick={sized.onOpen}>
+            Open 500px Drawer
+          </button>
         </DemoWrapper>
-        <Drawer open={sized.open} onClose={sized.onClose} size="500px">{renderDrawerContent("500px Wide Drawer", sized.onClose)}</Drawer>
+        <Drawer open={sized.open} onClose={sized.onClose} size="500px">
+          {renderDrawerContent("500px Wide Drawer", sized.onClose)}
+        </Drawer>
       </Section>
 
       {/* ─── Overlay ────────────────────────────────────────────────────── */}
-      <Section title="Overlay Customization" description="Custom overlay color, opacity, and blur." isDarkMode={dark}>
+      <Section
+        title="Overlay Customization"
+        description="Custom overlay color, opacity, and blur."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <button className={c.btn} onClick={overlay.onOpen}>Custom Opacity (0.7)</button>
-          <button className={c.btn} onClick={blurOverlay.onOpen}>Blur Overlay</button>
+          <button className={c.btn} onClick={overlay.onOpen}>
+            Custom Opacity (0.7)
+          </button>
+          <button className={c.btn} onClick={blurOverlay.onOpen}>
+            Blur Overlay
+          </button>
         </DemoWrapper>
-        <Drawer open={overlay.open} onClose={overlay.onClose} overlayOpacity={0.7}>{renderDrawerContent("Dark Overlay", overlay.onClose)}</Drawer>
-        <Drawer open={blurOverlay.open} onClose={blurOverlay.onClose} overlayBlur={8} overlayOpacity={0.3}>{renderDrawerContent("Blurred Overlay", blurOverlay.onClose)}</Drawer>
+        <Drawer
+          open={overlay.open}
+          onClose={overlay.onClose}
+          overlayOpacity={0.7}
+        >
+          {renderDrawerContent("Dark Overlay", overlay.onClose)}
+        </Drawer>
+        <Drawer
+          open={blurOverlay.open}
+          onClose={blurOverlay.onClose}
+          overlayBlur={8}
+          overlayOpacity={0.3}
+        >
+          {renderDrawerContent("Blurred Overlay", blurOverlay.onClose)}
+        </Drawer>
       </Section>
 
       {/* ─── Close Behavior ─────────────────────────────────────────────── */}
-      <Section title="Close Behavior" description="Disable overlay click or Escape key closing." isDarkMode={dark}>
+      <Section
+        title="Close Behavior"
+        description="Disable overlay click or Escape key closing."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <button className={c.btn} onClick={noOverlayClose.onOpen}>No Overlay Close</button>
-          <button className={c.btn} onClick={noEscClose.onOpen}>No Escape Close</button>
+          <button className={c.btn} onClick={noOverlayClose.onOpen}>
+            No Overlay Close
+          </button>
+          <button className={c.btn} onClick={noEscClose.onOpen}>
+            No Escape Close
+          </button>
         </DemoWrapper>
-        <Drawer open={noOverlayClose.open} onClose={noOverlayClose.onClose} closeOnOverlayClick={false}>{renderDrawerContent("Click overlay won't close", noOverlayClose.onClose)}</Drawer>
-        <Drawer open={noEscClose.open} onClose={noEscClose.onClose} closeOnEscape={false}>{renderDrawerContent("Escape key won't close", noEscClose.onClose)}</Drawer>
+        <Drawer
+          open={noOverlayClose.open}
+          onClose={noOverlayClose.onClose}
+          closeOnOverlayClick={false}
+        >
+          {renderDrawerContent(
+            "Click overlay won't close",
+            noOverlayClose.onClose,
+          )}
+        </Drawer>
+        <Drawer
+          open={noEscClose.open}
+          onClose={noEscClose.onClose}
+          closeOnEscape={false}
+        >
+          {renderDrawerContent("Escape key won't close", noEscClose.onClose)}
+        </Drawer>
       </Section>
 
       {/* ─── Keep Mounted ───────────────────────────────────────────────── */}
-      <Section title="Keep Mounted" description="Keep the drawer in DOM when closed (preserves form state)." isDarkMode={dark}>
+      <Section
+        title="Keep Mounted"
+        description="Keep the drawer in DOM when closed (preserves form state)."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={keepMounted.onOpen}>Open (keepMounted)</button>
+          <button className={c.btnPrimary} onClick={keepMounted.onOpen}>
+            Open (keepMounted)
+          </button>
         </DemoWrapper>
-        <Drawer open={keepMounted.open} onClose={keepMounted.onClose} keepMounted>{renderDrawerContent("Keep Mounted", keepMounted.onClose, "This drawer stays in DOM when closed. Form state is preserved.")}</Drawer>
+        <Drawer
+          open={keepMounted.open}
+          onClose={keepMounted.onClose}
+          keepMounted
+        >
+          {renderDrawerContent(
+            "Keep Mounted",
+            keepMounted.onClose,
+            "This drawer stays in DOM when closed. Form state is preserved.",
+          )}
+        </Drawer>
       </Section>
 
       {/* ─── Non-Modal ──────────────────────────────────────────────────── */}
-      <Section title="Non-Modal Drawer" description="No overlay, no scroll lock, no focus trap. Interacts with page behind." isDarkMode={dark}>
+      <Section
+        title="Non-Modal Drawer"
+        description="No overlay, no scroll lock, no focus trap. Interacts with page behind."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={nonModal.onOpen}>Open Non-Modal</button>
+          <button className={c.btnPrimary} onClick={nonModal.onOpen}>
+            Open Non-Modal
+          </button>
         </DemoWrapper>
-        <Drawer open={nonModal.open} onClose={nonModal.onClose} modal={false} direction="right" lockScroll={false}>{renderDrawerContent("Non-Modal", nonModal.onClose, "You can interact with the page behind this drawer.")}</Drawer>
+        <Drawer
+          open={nonModal.open}
+          onClose={nonModal.onClose}
+          modal={false}
+          direction="right"
+          lockScroll={false}
+        >
+          {renderDrawerContent(
+            "Non-Modal",
+            nonModal.onClose,
+            "You can interact with the page behind this drawer.",
+          )}
+        </Drawer>
       </Section>
 
       {/* ─── Custom Duration ────────────────────────────────────────────── */}
-      <Section title="Custom Animation Duration" description="Control slide animation speed with duration (ms)." isDarkMode={dark}>
+      <Section
+        title="Custom Animation Duration"
+        description="Control slide animation speed with duration (ms)."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={customDuration.onOpen}>Open (600ms)</button>
+          <button className={c.btnPrimary} onClick={customDuration.onOpen}>
+            Open (600ms)
+          </button>
         </DemoWrapper>
-        <Drawer open={customDuration.open} onClose={customDuration.onClose} duration={600}>{renderDrawerContent("Slow Animation", customDuration.onClose)}</Drawer>
+        <Drawer
+          open={customDuration.open}
+          onClose={customDuration.onClose}
+          duration={600}
+        >
+          {renderDrawerContent("Slow Animation", customDuration.onClose)}
+        </Drawer>
       </Section>
 
       {/* ─── Swipeable ──────────────────────────────────────────────────── */}
-      <Section title="Swipeable Drawer" description="Enable swipe-to-close on touch/pointer devices." isDarkMode={dark}>
+      <Section
+        title="Swipeable Drawer"
+        description="Enable swipe-to-close on touch/pointer devices."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={swipeable.onOpen}>Open Swipeable</button>
+          <button className={c.btnPrimary} onClick={swipeable.onOpen}>
+            Open Swipeable
+          </button>
         </DemoWrapper>
-        <Drawer open={swipeable.open} onClose={swipeable.onClose} swipeable direction="bottom" size="300px">{renderDrawerContent("Swipe Down to Close", swipeable.onClose)}</Drawer>
+        <Drawer
+          open={swipeable.open}
+          onClose={swipeable.onClose}
+          swipeable
+          direction="bottom"
+          size="300px"
+        >
+          {renderDrawerContent("Swipe Down to Close", swipeable.onClose)}
+        </Drawer>
       </Section>
 
       {/* ─── Snap Points ────────────────────────────────────────────────── */}
-      <Section title="Snap Points" description="Bottom-sheet style drawer with snap positions. Drag the handle to snap between heights." isDarkMode={dark}>
+      <Section
+        title="Snap Points"
+        description="Bottom-sheet style drawer with snap positions. Drag the handle to snap between heights."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex items-center gap-3">
-            <button className={c.btnPrimary} onClick={snapPoints.onOpen}>Open Bottom Sheet</button>
-            <span className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}>snap: {Math.round([0.3, 0.6, 1][snapIndex] * 100)}%</span>
+            <button className={c.btnPrimary} onClick={snapPoints.onOpen}>
+              Open Bottom Sheet
+            </button>
+            <span
+              className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              snap: {Math.round([0.3, 0.6, 1][snapIndex] * 100)}%
+            </span>
           </div>
         </DemoWrapper>
         <Drawer
@@ -204,25 +406,42 @@ const DrawerDemo = () => {
           onSnapPointIndexChange={setSnapIndex}
           defaultSnapPointIndex={1}
         >
-          <div className={`flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"} rounded-t-2xl`}>
+          <div
+            className={`flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"} rounded-t-2xl`}
+          >
             {/* Drag handle */}
             <div className="flex justify-center py-3">
-              <div className={`w-10 h-1.5 rounded-full ${dark ? "bg-gray-600" : "bg-gray-300"}`} />
+              <div
+                className={`w-10 h-1.5 rounded-full ${dark ? "bg-gray-600" : "bg-gray-300"}`}
+              />
             </div>
-            <DrawerHeader className={`px-5 pb-3 border-b ${dark ? "border-gray-700" : "border-gray-200"}`}>
+            <DrawerHeader
+              className={`px-5 pb-3 border-b ${dark ? "border-gray-700" : "border-gray-200"}`}
+            >
               <h2 className={c.title}>Bottom Sheet</h2>
-              <p className={`text-xs mt-1 ${dark ? "text-gray-400" : "text-gray-500"}`}>Snap points: 30%, 60%, 100%</p>
+              <p
+                className={`text-xs mt-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+              >
+                Snap points: 30%, 60%, 100%
+              </p>
             </DrawerHeader>
             <div className="flex gap-2 px-5 py-3">
               {[0, 1, 2].map((i) => (
-                <button key={i} className={`${snapIndex === i ? c.btnPrimary : c.btn} text-xs`} onClick={() => setSnapIndex(i)}>
+                <button
+                  key={i}
+                  className={`${snapIndex === i ? c.btnPrimary : c.btn} text-xs`}
+                  onClick={() => setSnapIndex(i)}
+                >
                   {Math.round([0.3, 0.6, 1][i] * 100)}%
                 </button>
               ))}
             </div>
             <DrawerBody className={`flex-1 overflow-y-auto px-5 py-4`}>
               {Array.from({ length: 20 }).map((_, i) => (
-                <p key={i} className={`text-sm py-2 border-b ${dark ? "border-gray-800 text-gray-400" : "border-gray-100 text-gray-500"}`}>
+                <p
+                  key={i}
+                  className={`text-sm py-2 border-b ${dark ? "border-gray-800 text-gray-400" : "border-gray-100 text-gray-500"}`}
+                >
                   Item {i + 1} — scroll to see more content
                 </p>
               ))}
@@ -232,65 +451,123 @@ const DrawerDemo = () => {
       </Section>
 
       {/* ─── Stacked ────────────────────────────────────────────────────── */}
-      <Section title="Stacked Drawers" description="Multiple drawers can stack. Only the topmost responds to Escape." isDarkMode={dark}>
+      <Section
+        title="Stacked Drawers"
+        description="Multiple drawers can stack. Only the topmost responds to Escape."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={stacked1.onOpen}>Open First</button>
+          <button className={c.btnPrimary} onClick={stacked1.onOpen}>
+            Open First
+          </button>
         </DemoWrapper>
         <Drawer open={stacked1.open} onClose={stacked1.onClose}>
           <div className={c.panel}>
             <DrawerHeader className={c.header}>
               <h2 className={c.title}>First Drawer</h2>
-              <DrawerCloseButton className={c.closeBtn}><CloseIcon /></DrawerCloseButton>
+              <DrawerCloseButton className={c.closeBtn}>
+                <CloseIcon />
+              </DrawerCloseButton>
             </DrawerHeader>
             <DrawerBody className={c.body}>
-              <p className={`text-sm mb-4 ${c.text}`}>This is the first drawer.</p>
-              <button className={c.btnPrimary} onClick={stacked2.onOpen}>Open Second</button>
+              <p className={`text-sm mb-4 ${c.text}`}>
+                This is the first drawer.
+              </p>
+              <button className={c.btnPrimary} onClick={stacked2.onOpen}>
+                Open Second
+              </button>
             </DrawerBody>
           </div>
         </Drawer>
         <Drawer open={stacked2.open} onClose={stacked2.onClose} size="280px">
-          {renderDrawerContent("Second Drawer", stacked2.onClose, "Same direction, stacked on top. Escape closes this one first.")}
+          {renderDrawerContent(
+            "Second Drawer",
+            stacked2.onClose,
+            "Same direction, stacked on top. Escape closes this one first.",
+          )}
         </Drawer>
       </Section>
 
       {/* ─── Initial Focus ──────────────────────────────────────────────── */}
-      <Section title="Initial Focus" description="Direct focus to a specific element when the drawer opens." isDarkMode={dark}>
+      <Section
+        title="Initial Focus"
+        description="Direct focus to a specific element when the drawer opens."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={initialFocus.onOpen}>Open (focus on input)</button>
+          <button className={c.btnPrimary} onClick={initialFocus.onOpen}>
+            Open (focus on input)
+          </button>
         </DemoWrapper>
-        <Drawer open={initialFocus.open} onClose={initialFocus.onClose} initialFocus={initialFocusRef}>
+        <Drawer
+          open={initialFocus.open}
+          onClose={initialFocus.onClose}
+          initialFocus={initialFocusRef}
+        >
           <div className={c.panel}>
             <DrawerHeader className={c.header}>
               <h2 className={c.title}>Initial Focus</h2>
-              <DrawerCloseButton className={c.closeBtn}><CloseIcon /></DrawerCloseButton>
+              <DrawerCloseButton className={c.closeBtn}>
+                <CloseIcon />
+              </DrawerCloseButton>
             </DrawerHeader>
             <DrawerBody className={c.body}>
               <label className={`block text-sm mb-1 ${c.text}`}>Name</label>
-              <input ref={initialFocusRef} type="text" placeholder="This gets focus on open" className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`} />
+              <input
+                ref={initialFocusRef}
+                type="text"
+                placeholder="This gets focus on open"
+                className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+              />
             </DrawerBody>
           </div>
         </Drawer>
       </Section>
 
       {/* ─── Transition Callback ────────────────────────────────────────── */}
-      <Section title="Transition Callback" description="onTransitionEnd fires after the open/close animation completes." isDarkMode={dark}>
+      <Section
+        title="Transition Callback"
+        description="onTransitionEnd fires after the open/close animation completes."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={transitionCb.onOpen}>Open (check log)</button>
+          <button className={c.btnPrimary} onClick={transitionCb.onOpen}>
+            Open (check log)
+          </button>
           {transitionLog.length > 0 && (
-            <div className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              {transitionLog.map((log, i) => <div key={i}>{log}</div>)}
+            <div
+              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              {transitionLog.map((log, i) => (
+                <div key={i}>{log}</div>
+              ))}
             </div>
           )}
         </DemoWrapper>
-        <Drawer open={transitionCb.open} onClose={transitionCb.onClose} onTransitionEnd={(isOpen) => setTransitionLog((prev) => [`onTransitionEnd: ${isOpen ? "opened" : "closed"}`, ...prev.slice(0, 4)])}>
+        <Drawer
+          open={transitionCb.open}
+          onClose={transitionCb.onClose}
+          onTransitionEnd={(isOpen) =>
+            setTransitionLog((prev) => [
+              `onTransitionEnd: ${isOpen ? "opened" : "closed"}`,
+              ...prev.slice(0, 4),
+            ])
+          }
+        >
           {renderDrawerContent("Transition Callback", transitionCb.onClose)}
         </Drawer>
       </Section>
 
       {/* ─── Classes System ─────────────────────────────────────────────── */}
-      <Section title="Classes System" description="Override root, overlay, and panel styling with the classes prop." isDarkMode={dark}>
+      <Section
+        title="Classes System"
+        description="Override root, overlay, and panel styling with the classes prop."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={classesDemo.onOpen}>Custom Styled Drawer</button>
+          <button className={c.btnPrimary} onClick={classesDemo.onOpen}>
+            Custom Styled Drawer
+          </button>
         </DemoWrapper>
         <Drawer
           open={classesDemo.open}
@@ -302,22 +579,44 @@ const DrawerDemo = () => {
             panel: `fixed z-999999 ${dark ? "shadow-2xl shadow-indigo-500/10" : "shadow-2xl shadow-indigo-500/20"}`,
           }}
         >
-          <div className={`flex flex-col h-full ${dark ? "bg-gray-900" : "bg-white"} border-l ${dark ? "border-indigo-500/20" : "border-indigo-200"}`}>
-            <DrawerHeader className={`flex items-center justify-between px-5 py-4 border-b ${dark ? "border-indigo-500/20" : "border-indigo-100"}`}>
-              <h2 className={`text-lg font-semibold ${dark ? "text-indigo-300" : "text-indigo-700"}`}>Custom Classes</h2>
-              <DrawerCloseButton className={`p-2 rounded-lg ${dark ? "text-indigo-400 hover:bg-indigo-500/10" : "text-indigo-500 hover:bg-indigo-50"}`}><CloseIcon /></DrawerCloseButton>
+          <div
+            className={`flex flex-col h-full ${dark ? "bg-gray-900" : "bg-white"} border-l ${dark ? "border-indigo-500/20" : "border-indigo-200"}`}
+          >
+            <DrawerHeader
+              className={`flex items-center justify-between px-5 py-4 border-b ${dark ? "border-indigo-500/20" : "border-indigo-100"}`}
+            >
+              <h2
+                className={`text-lg font-semibold ${dark ? "text-indigo-300" : "text-indigo-700"}`}
+              >
+                Custom Classes
+              </h2>
+              <DrawerCloseButton
+                className={`p-2 rounded-lg ${dark ? "text-indigo-400 hover:bg-indigo-500/10" : "text-indigo-500 hover:bg-indigo-50"}`}
+              >
+                <CloseIcon />
+              </DrawerCloseButton>
             </DrawerHeader>
-            <DrawerBody className={`flex-1 px-5 py-4 ${dark ? "text-gray-300" : "text-gray-600"}`}>
-              <p className="text-sm">Indigo-themed overlay and panel shadow via the classes prop.</p>
+            <DrawerBody
+              className={`flex-1 px-5 py-4 ${dark ? "text-gray-300" : "text-gray-600"}`}
+            >
+              <p className="text-sm">
+                Indigo-themed overlay and panel shadow via the classes prop.
+              </p>
             </DrawerBody>
           </div>
         </Drawer>
       </Section>
 
       {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section title="Unstyled Mode" description="Set unstyled=true to strip all default classes. Build from scratch." isDarkMode={dark}>
+      <Section
+        title="Unstyled Mode"
+        description="Set unstyled=true to strip all default classes. Build from scratch."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={unstyledDemo.onOpen}>Open Unstyled</button>
+          <button className={c.btnPrimary} onClick={unstyledDemo.onOpen}>
+            Open Unstyled
+          </button>
         </DemoWrapper>
         <Drawer
           open={unstyledDemo.open}
@@ -331,10 +630,14 @@ const DrawerDemo = () => {
           direction="right"
           size="320px"
         >
-          <div className={`flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"}`}>
+          <div
+            className={`flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"}`}
+          >
             <div className="flex items-center justify-between px-5 py-4">
               <h2 className="text-lg font-bold">Unstyled Drawer</h2>
-              <button onClick={unstyledDemo.onClose} className="p-1"><CloseIcon /></button>
+              <button onClick={unstyledDemo.onClose} className="p-1">
+                <CloseIcon />
+              </button>
             </div>
             <div className="flex-1 px-5 py-4 text-sm">
               <p>All default classes stripped. Everything is custom.</p>
@@ -344,39 +647,95 @@ const DrawerDemo = () => {
       </Section>
 
       {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
-      <Section title="Reduce Motion" description="Set reduceMotion={true} to disable slide animation." isDarkMode={dark}>
+      <Section
+        title="Reduce Motion"
+        description="Set reduceMotion={true} to disable slide animation."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={reduceMotionDemo.onOpen}>Open (no animation)</button>
+          <button className={c.btnPrimary} onClick={reduceMotionDemo.onOpen}>
+            Open (no animation)
+          </button>
         </DemoWrapper>
-        <Drawer open={reduceMotionDemo.open} onClose={reduceMotionDemo.onClose} reduceMotion={true}>
-          {renderDrawerContent("No Animation", reduceMotionDemo.onClose, "This drawer opens and closes instantly — no slide transition.")}
+        <Drawer
+          open={reduceMotionDemo.open}
+          onClose={reduceMotionDemo.onClose}
+          reduceMotion={true}
+        >
+          {renderDrawerContent(
+            "No Animation",
+            reduceMotionDemo.onClose,
+            "This drawer opens and closes instantly — no slide transition.",
+          )}
         </Drawer>
       </Section>
 
       {/* ─── Form Drawer (Real-World) ───────────────────────────────────── */}
-      <Section title="Form Drawer (Real-World)" description="Common SaaS pattern: a side panel form with input fields, validation, and actions." isDarkMode={dark}>
+      <Section
+        title="Form Drawer (Real-World)"
+        description="Common SaaS pattern: a side panel form with input fields, validation, and actions."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={formDrawer.onOpen}>Create New Item</button>
+          <button className={c.btnPrimary} onClick={formDrawer.onOpen}>
+            Create New Item
+          </button>
         </DemoWrapper>
-        <Drawer open={formDrawer.open} onClose={formDrawer.onClose} direction="right" size="400px">
+        <Drawer
+          open={formDrawer.open}
+          onClose={formDrawer.onClose}
+          direction="right"
+          size="400px"
+        >
           <div className={c.panel}>
             <DrawerHeader className={c.header}>
               <h2 className={c.title}>Create Item</h2>
-              <DrawerCloseButton className={c.closeBtn}><CloseIcon /></DrawerCloseButton>
+              <DrawerCloseButton className={c.closeBtn}>
+                <CloseIcon />
+              </DrawerCloseButton>
             </DrawerHeader>
             <DrawerBody className={c.body}>
-              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); formDrawer.onClose(); }}>
+              <form
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  formDrawer.onClose();
+                }}
+              >
                 <div>
-                  <label className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}>Name</label>
-                  <input data-autofocus type="text" placeholder="Item name" className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`} />
+                  <label
+                    className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  >
+                    Name
+                  </label>
+                  <input
+                    data-autofocus
+                    type="text"
+                    placeholder="Item name"
+                    className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+                  />
                 </div>
                 <div>
-                  <label className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}>Description</label>
-                  <textarea rows={3} placeholder="Optional description" className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`} />
+                  <label
+                    className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Optional description"
+                    className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+                  />
                 </div>
                 <div>
-                  <label className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}>Category</label>
-                  <select className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}>
+                  <label
+                    className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  >
+                    Category
+                  </label>
+                  <select
+                    className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+                  >
                     <option>General</option>
                     <option>Design</option>
                     <option>Engineering</option>
@@ -385,8 +744,12 @@ const DrawerDemo = () => {
               </form>
             </DrawerBody>
             <DrawerFooter className={c.footer}>
-              <button className={c.btn} onClick={formDrawer.onClose}>Cancel</button>
-              <button className={c.btnPrimary} onClick={formDrawer.onClose}>Create</button>
+              <button className={c.btn} onClick={formDrawer.onClose}>
+                Cancel
+              </button>
+              <button className={c.btnPrimary} onClick={formDrawer.onClose}>
+                Create
+              </button>
             </DrawerFooter>
           </div>
         </Drawer>
@@ -396,49 +759,237 @@ const DrawerDemo = () => {
       <Section title="Drawer Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="open" type="boolean" defaultVal="required" description="Whether the drawer is open" isDarkMode={dark} />
-            <PropRow name="onClose" type="() => void" defaultVal="required" description="Called when the drawer should close" isDarkMode={dark} />
-            <PropRow name="direction" type='"left"|"right"|"top"|"bottom"' defaultVal='"left"' description="Slide direction" isDarkMode={dark} />
-            <PropRow name="size" type="string" defaultVal='"300px"' description="Width (left/right) or height (top/bottom)" isDarkMode={dark} />
-            <PropRow name="duration" type="number" defaultVal="300" description="Animation duration in ms" isDarkMode={dark} />
-            <PropRow name="overlayColor" type="string" defaultVal='"black"' description="Overlay background color" isDarkMode={dark} />
-            <PropRow name="overlayOpacity" type="number" defaultVal="0.5" description="Overlay opacity (0–1)" isDarkMode={dark} />
-            <PropRow name="overlayBlur" type="number" defaultVal="0" description="Overlay backdrop blur in px" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll when open" isDarkMode={dark} />
-            <PropRow name="closeOnOverlayClick" type="boolean" defaultVal="true" description="Close on overlay click" isDarkMode={dark} />
-            <PropRow name="closeOnEscape" type="boolean" defaultVal="true" description="Close on Escape key" isDarkMode={dark} />
-            <PropRow name="trapFocus" type="boolean" defaultVal="true" description="Trap focus inside drawer" isDarkMode={dark} />
-            <PropRow name="restoreFocus" type="boolean" defaultVal="true" description="Restore focus to trigger on close" isDarkMode={dark} />
-            <PropRow name="initialFocus" type="RefObject<HTMLElement>" description="Focus this element on open" isDarkMode={dark} />
-            <PropRow name="modal" type="boolean" defaultVal="true" description="Render as modal with overlay" isDarkMode={dark} />
-            <PropRow name="keepMounted" type="boolean" defaultVal="false" description="Keep in DOM when closed" isDarkMode={dark} />
-            <PropRow name="swipeable" type="boolean" defaultVal="false" description="Enable swipe-to-close" isDarkMode={dark} />
-            <PropRow name="swipeThreshold" type="number" defaultVal="0.4" description="Swipe distance fraction to close" isDarkMode={dark} />
-            <PropRow name="snapPoints" type="number[]" description="Snap positions as fractions (e.g. [0.3, 0.6, 1])" isDarkMode={dark} />
-            <PropRow name="activeSnapPointIndex" type="number" description="Controlled snap point index" isDarkMode={dark} />
-            <PropRow name="defaultSnapPointIndex" type="number" defaultVal="0" description="Initial snap point index" isDarkMode={dark} />
-            <PropRow name="onSnapPointIndexChange" type="(index) => void" description="Snap point change callback" isDarkMode={dark} />
-            <PropRow name="classes" type="DrawerClasses" description="Slot overrides: root, overlay, panel" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="reduceMotion" type='boolean | "auto"' description="Override reduced motion (auto = system)" isDarkMode={dark} />
-            <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Portal target" isDarkMode={dark} />
-            <PropRow name="onTransitionEnd" type="(open: boolean) => void" description="Fires after animation completes" isDarkMode={dark} />
+            <PropRow
+              name="open"
+              type="boolean"
+              defaultVal="required"
+              description="Whether the drawer is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onClose"
+              type="() => void"
+              defaultVal="required"
+              description="Called when the drawer should close"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="direction"
+              type='"left"|"right"|"top"|"bottom"'
+              defaultVal='"left"'
+              description="Slide direction"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type="string"
+              defaultVal='"300px"'
+              description="Width (left/right) or height (top/bottom)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="duration"
+              type="number"
+              defaultVal="300"
+              description="Animation duration in ms"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="overlayColor"
+              type="string"
+              defaultVal='"black"'
+              description="Overlay background color"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="overlayOpacity"
+              type="number"
+              defaultVal="0.5"
+              description="Overlay opacity (0–1)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="overlayBlur"
+              type="number"
+              defaultVal="0"
+              description="Overlay backdrop blur in px"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lockScroll"
+              type="boolean"
+              defaultVal="true"
+              description="Lock body scroll when open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="closeOnOverlayClick"
+              type="boolean"
+              defaultVal="true"
+              description="Close on overlay click"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="closeOnEscape"
+              type="boolean"
+              defaultVal="true"
+              description="Close on Escape key"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="trapFocus"
+              type="boolean"
+              defaultVal="true"
+              description="Trap focus inside drawer"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="restoreFocus"
+              type="boolean"
+              defaultVal="true"
+              description="Restore focus to trigger on close"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="initialFocus"
+              type="RefObject<HTMLElement>"
+              description="Focus this element on open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="modal"
+              type="boolean"
+              defaultVal="true"
+              description="Render as modal with overlay"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="keepMounted"
+              type="boolean"
+              defaultVal="false"
+              description="Keep in DOM when closed"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="swipeable"
+              type="boolean"
+              defaultVal="false"
+              description="Enable swipe-to-close"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="swipeThreshold"
+              type="number"
+              defaultVal="0.4"
+              description="Swipe distance fraction to close"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="snapPoints"
+              type="number[]"
+              description="Snap positions as fractions (e.g. [0.3, 0.6, 1])"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="activeSnapPointIndex"
+              type="number"
+              description="Controlled snap point index"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultSnapPointIndex"
+              type="number"
+              defaultVal="0"
+              description="Initial snap point index"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onSnapPointIndexChange"
+              type="(index) => void"
+              description="Snap point change callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="DrawerClasses"
+              description="Slot overrides: root, overlay, panel"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="reduceMotion"
+              type='boolean | "auto"'
+              description="Override reduced motion (auto = system)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="portalContainer"
+              type="HTMLElement | null"
+              defaultVal="document.body"
+              description="Portal target"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onTransitionEnd"
+              type="(open: boolean) => void"
+              description="Fires after animation completes"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       <Section title="Sub-Component Props" isDarkMode={dark}>
         <div className={c.card}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>DrawerHeader, DrawerBody, DrawerFooter</p>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            DrawerHeader, DrawerBody, DrawerFooter
+          </p>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="children" type="ReactNode" description="Content" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="CSS class" isDarkMode={dark} />
+            <PropRow
+              name="children"
+              type="ReactNode"
+              description="Content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class"
+              isDarkMode={dark}
+            />
           </PropsTable>
-          <p className={`text-xs font-semibold mt-5 mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>DrawerCloseButton</p>
+          <p
+            className={`text-xs font-semibold mt-5 mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            DrawerCloseButton
+          </p>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="children" type="ReactNode" description="Custom close icon (default: X icon)" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="CSS class" isDarkMode={dark} />
-            <PropRow name="onClick" type="(e) => void" description="Custom click handler (closes drawer unless e.preventDefault)" isDarkMode={dark} />
+            <PropRow
+              name="children"
+              type="ReactNode"
+              description="Custom close icon (default: X icon)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onClick"
+              type="(e) => void"
+              description="Custom click handler (closes drawer unless e.preventDefault)"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -447,15 +998,60 @@ const DrawerDemo = () => {
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-state" type="root" description='"open" | "closed"' isDarkMode={dark} />
-            <PropRow name="data-direction" type="root, panel" description='"left"|"right"|"top"|"bottom"' isDarkMode={dark} />
-            <PropRow name="data-drawer-panel" type="panel div" description="Identifies the panel element" isDarkMode={dark} />
-            <PropRow name="data-drawer-overlay" type="overlay div" description="Identifies the overlay" isDarkMode={dark} />
-            <PropRow name="data-drawer-header" type="DrawerHeader" description="Identifies the header" isDarkMode={dark} />
-            <PropRow name="data-drawer-body" type="DrawerBody" description="Identifies the body" isDarkMode={dark} />
-            <PropRow name="data-drawer-footer" type="DrawerFooter" description="Identifies the footer" isDarkMode={dark} />
-            <PropRow name="data-drawer-close" type="DrawerCloseButton" description="Identifies the close button" isDarkMode={dark} />
-            <PropRow name="data-autofocus" type="any element" description="Auto-focused on open (if no initialFocus ref)" isDarkMode={dark} />
+            <PropRow
+              name="data-state"
+              type="root"
+              description='"open" | "closed"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-direction"
+              type="root, panel"
+              description='"left"|"right"|"top"|"bottom"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-drawer-panel"
+              type="panel div"
+              description="Identifies the panel element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-drawer-overlay"
+              type="overlay div"
+              description="Identifies the overlay"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-drawer-header"
+              type="DrawerHeader"
+              description="Identifies the header"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-drawer-body"
+              type="DrawerBody"
+              description="Identifies the body"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-drawer-footer"
+              type="DrawerFooter"
+              description="Identifies the footer"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-drawer-close"
+              type="DrawerCloseButton"
+              description="Identifies the close button"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-autofocus"
+              type="any element"
+              description="Auto-focused on open (if no initialFocus ref)"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -463,7 +1059,9 @@ const DrawerDemo = () => {
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               'role="dialog" with aria-modal on the panel',
               "aria-labelledby auto-wired from DrawerHeader via context",
@@ -480,19 +1078,32 @@ const DrawerDemo = () => {
               "GPU-composited transform animations for smooth 60fps transitions",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               ["Escape", "Close the drawer (topmost in stack)"],
               ["Tab", "Cycle forward through focusable elements (trapped)"],
-              ["Shift + Tab", "Cycle backward through focusable elements (trapped)"],
+              [
+                "Shift + Tab",
+                "Cycle backward through focusable elements (trapped)",
+              ],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>

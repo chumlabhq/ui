@@ -1,7 +1,13 @@
 import { useState, useRef } from "react";
 import { Switch } from "../../components/Switch";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
 
 const getClasses = (dark: boolean) => ({
   switch: {
@@ -22,7 +28,7 @@ const getClasses = (dark: boolean) => ({
     uncheckedThumb: "translate-x-0.5",
     error: `text-sm mt-2 ${dark ? "text-red-400" : "text-red-500"}`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
   kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
   label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
@@ -31,26 +37,54 @@ const getClasses = (dark: boolean) => ({
 });
 
 const CheckIcon = () => (
-  <svg className="w-2.5 h-2.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+  <svg
+    className="w-2.5 h-2.5 text-blue-600"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={3}
+  >
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
   </svg>
 );
 
 const CrossIcon = () => (
-  <svg className="w-2.5 h-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  <svg
+    className="w-2.5 h-2.5 text-gray-400"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={3}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 18L18 6M6 6l12 12"
+    />
   </svg>
 );
 
 const SunIcon = () => (
-  <svg className="w-2.5 h-2.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+  <svg
+    className="w-2.5 h-2.5 text-amber-500"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
     <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
   </svg>
 );
 
 const MoonIcon = () => (
-  <svg className="w-2.5 h-2.5 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
-    <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clipRule="evenodd" />
+  <svg
+    className="w-2.5 h-2.5 text-indigo-400"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      fillRule="evenodd"
+      d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -80,25 +114,43 @@ const SwitchDemo = () => {
     <div className="space-y-10">
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"}`} />
-        <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`} />
-        <div className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`} />
+        <div
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`}
+        />
         <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
             Switch
           </h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            A toggle switch for binary on/off states. Fully accessible with WAI-ARIA
-            support, keyboard navigation, form semantics, and customizable via the classes slot system.
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A toggle switch for binary on/off states. Fully accessible with
+            WAI-ARIA support, keyboard navigation, form semantics, and
+            customizable via the classes slot system.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import { Switch } from "@kern-ui/switch";`} />
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { Switch } from "@kern-ui/switch";`}
+            />
           </div>
         </div>
       </header>
 
       {/* ── Basic ──────────────────────────────────────────────────────── */}
-      <Section title="Basic Switch" description="A simple switch with no visible label. Use aria-label for accessibility." isDarkMode={dark}>
+      <Section
+        title="Basic Switch"
+        description="A simple switch with no visible label. Use aria-label for accessibility."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             aria-label="Toggle feature"
@@ -110,7 +162,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Uncontrolled ───────────────────────────────────────────────── */}
-      <Section title="Uncontrolled Switch" description="Use defaultChecked for uncontrolled mode — no state management needed." isDarkMode={dark}>
+      <Section
+        title="Uncontrolled Switch"
+        description="Use defaultChecked for uncontrolled mode — no state management needed."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             label="Uncontrolled switch"
@@ -121,7 +177,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── With Label ─────────────────────────────────────────────────── */}
-      <Section title="With Label" description="The label prop adds an accessible label linked via htmlFor." isDarkMode={dark}>
+      <Section
+        title="With Label"
+        description="The label prop adds an accessible label linked via htmlFor."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             label="Enable notifications"
@@ -133,7 +193,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── With Label and Description ─────────────────────────────────── */}
-      <Section title="With Label and Description" description="Add additional context using the description prop." isDarkMode={dark}>
+      <Section
+        title="With Label and Description"
+        description="Add additional context using the description prop."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             label="Dark mode"
@@ -146,7 +210,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Required ───────────────────────────────────────────────────── */}
-      <Section title="Required" description="The required prop adds aria-required and shows an asterisk after the label." isDarkMode={dark}>
+      <Section
+        title="Required"
+        description="The required prop adds aria-required and shows an asterisk after the label."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             label="Accept terms of service"
@@ -159,7 +227,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── With Icons ─────────────────────────────────────────────────── */}
-      <Section title="With Icons" description="Add icons inside the thumb using checkedIcon and uncheckedIcon." isDarkMode={dark}>
+      <Section
+        title="With Icons"
+        description="Add icons inside the thumb using checkedIcon and uncheckedIcon."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
@@ -172,7 +244,9 @@ const SwitchDemo = () => {
             />
             <Switch
               label="Theme"
-              description={themeSwitch ? "Dark mode enabled" : "Light mode enabled"}
+              description={
+                themeSwitch ? "Dark mode enabled" : "Light mode enabled"
+              }
               checked={themeSwitch}
               onCheckedChange={setThemeSwitch}
               checkedIcon={<MoonIcon />}
@@ -188,17 +262,35 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Disabled States ────────────────────────────────────────────── */}
-      <Section title="Disabled States" description="Disable the switch with the disabled prop." isDarkMode={dark}>
+      <Section
+        title="Disabled States"
+        description="Disable the switch with the disabled prop."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
-            <Switch label="Disabled (off)" checked={false} disabled classes={c.switch} />
-            <Switch label="Disabled (on)" checked={true} disabled classes={c.switch} />
+            <Switch
+              label="Disabled (off)"
+              checked={false}
+              disabled
+              classes={c.switch}
+            />
+            <Switch
+              label="Disabled (on)"
+              checked={true}
+              disabled
+              classes={c.switch}
+            />
           </div>
         </DemoWrapper>
       </Section>
 
       {/* ── Error State ────────────────────────────────────────────────── */}
-      <Section title="Error State" description="Use error and errorMessage props to display validation errors." isDarkMode={dark}>
+      <Section
+        title="Error State"
+        description="Use error and errorMessage props to display validation errors."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
@@ -224,7 +316,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Custom Colors ──────────────────────────────────────────────── */}
-      <Section title="Custom Colors" description="Override tracker colors via the classes prop." isDarkMode={dark}>
+      <Section
+        title="Custom Colors"
+        description="Override tracker colors via the classes prop."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
@@ -254,7 +350,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Custom Sizes ───────────────────────────────────────────────── */}
-      <Section title="Custom Sizes" description="Override tracker and thumb sizes via classes." isDarkMode={dark}>
+      <Section
+        title="Custom Sizes"
+        description="Override tracker and thumb sizes via classes."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
@@ -265,7 +365,8 @@ const SwitchDemo = () => {
                 ...c.switch,
                 label: `text-xs font-medium ${dark ? "text-gray-200" : "text-gray-700"} cursor-pointer`,
                 tracker: `relative inline-flex items-center h-4 w-7 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer ${dark ? "focus-visible:ring-blue-400 focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
-                thumb: "inline-flex items-center justify-center transform h-3 w-3 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
+                thumb:
+                  "inline-flex items-center justify-center transform h-3 w-3 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
                 checkedThumb: "translate-x-3.5",
                 uncheckedThumb: "translate-x-0.5",
               }}
@@ -284,7 +385,8 @@ const SwitchDemo = () => {
                 ...c.switch,
                 label: `text-base font-medium ${dark ? "text-gray-200" : "text-gray-700"} cursor-pointer`,
                 tracker: `relative inline-flex items-center h-7 w-12 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer ${dark ? "focus-visible:ring-blue-400 focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
-                thumb: "inline-flex items-center justify-center transform h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
+                thumb:
+                  "inline-flex items-center justify-center transform h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
                 checkedThumb: "translate-x-6",
                 uncheckedThumb: "translate-x-1",
               }}
@@ -294,14 +396,20 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── CSS Custom Properties ──────────────────────────────────────── */}
-      <Section title="CSS Custom Properties (Theming)" description="Use CSS custom properties to theme switches globally or per-instance." isDarkMode={dark}>
+      <Section
+        title="CSS Custom Properties (Theming)"
+        description="Use CSS custom properties to theme switches globally or per-instance."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
-            <div style={{
-              ["--switch-tracker-checked-bg" as string]: "#7c3aed",
-              ["--switch-tracker-unchecked-bg" as string]: "#ddd6fe",
-              ["--switch-focus-ring" as string]: "#7c3aed",
-            }}>
+            <div
+              style={{
+                ["--switch-tracker-checked-bg" as string]: "#7c3aed",
+                ["--switch-tracker-unchecked-bg" as string]: "#ddd6fe",
+                ["--switch-focus-ring" as string]: "#7c3aed",
+              }}
+            >
               <Switch
                 label="Purple theme via CSS vars"
                 checked={cssVarSwitch}
@@ -314,11 +422,13 @@ const SwitchDemo = () => {
                 }}
               />
             </div>
-            <div style={{
-              ["--switch-tracker-checked-bg" as string]: "#059669",
-              ["--switch-tracker-unchecked-bg" as string]: "#d1fae5",
-              ["--switch-focus-ring" as string]: "#059669",
-            }}>
+            <div
+              style={{
+                ["--switch-tracker-checked-bg" as string]: "#059669",
+                ["--switch-tracker-unchecked-bg" as string]: "#d1fae5",
+                ["--switch-focus-ring" as string]: "#059669",
+              }}
+            >
               <Switch
                 label="Green theme via CSS vars"
                 checked={!cssVarSwitch}
@@ -336,7 +446,11 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Custom Animation ───────────────────────────────────────────── */}
-      <Section title="Custom Animation Timing" description="Use transitionDuration and transitionTimingFunction for custom animations." isDarkMode={dark}>
+      <Section
+        title="Custom Animation Timing"
+        description="Use transitionDuration and transitionTimingFunction for custom animations."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
@@ -360,19 +474,27 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Render Props ───────────────────────────────────────────────── */}
-      <Section title="Render Props" description="Use renderLabel and renderDescription for dynamic content based on switch state." isDarkMode={dark}>
+      <Section
+        title="Render Props"
+        description="Use renderLabel and renderDescription for dynamic content based on switch state."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             checked={renderPropsSwitch}
             onCheckedChange={setRenderPropsSwitch}
             aria-label="Toggle feature status"
             renderLabel={({ checked }) => (
-              <span className={`font-bold ${checked ? (dark ? "text-green-400" : "text-green-600") : dark ? "text-red-400" : "text-red-600"}`}>
+              <span
+                className={`font-bold ${checked ? (dark ? "text-green-400" : "text-green-600") : dark ? "text-red-400" : "text-red-600"}`}
+              >
                 {checked ? "Active" : "Inactive"}
               </span>
             )}
             renderDescription={({ checked }) => (
-              <span className={`text-xs italic ${dark ? "text-gray-400" : "text-gray-500"}`}>
+              <span
+                className={`text-xs italic ${dark ? "text-gray-400" : "text-gray-500"}`}
+              >
                 Status: {checked ? "Feature is enabled" : "Feature is disabled"}
               </span>
             )}
@@ -382,21 +504,43 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Focus and Blur Events ──────────────────────────────────────── */}
-      <Section title="Focus and Blur Events" description="Native button events are forwarded via the spread operator." isDarkMode={dark}>
+      <Section
+        title="Focus and Blur Events"
+        description="Native button events are forwarded via the spread operator."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
               label="Focus me to see events"
               checked={focusBlurSwitch}
               onCheckedChange={setFocusBlurSwitch}
-              onFocus={() => setFocusLog((prev) => [...prev.slice(-4), `Focus: ${new Date().toLocaleTimeString()}`])}
-              onBlur={() => setFocusLog((prev) => [...prev.slice(-4), `Blur: ${new Date().toLocaleTimeString()}`])}
+              onFocus={() =>
+                setFocusLog((prev) => [
+                  ...prev.slice(-4),
+                  `Focus: ${new Date().toLocaleTimeString()}`,
+                ])
+              }
+              onBlur={() =>
+                setFocusLog((prev) => [
+                  ...prev.slice(-4),
+                  `Blur: ${new Date().toLocaleTimeString()}`,
+                ])
+              }
               classes={c.switch}
             />
-            <div className={`p-3 rounded-lg text-sm font-mono ${dark ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
-              <p className={`text-xs mb-2 ${dark ? "text-gray-400" : "text-gray-500"}`}>Event Log:</p>
+            <div
+              className={`p-3 rounded-lg text-sm font-mono ${dark ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+            >
+              <p
+                className={`text-xs mb-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+              >
+                Event Log:
+              </p>
               {focusLog.length === 0 ? (
-                <span className="text-gray-400">Focus or blur the switch to see events...</span>
+                <span className="text-gray-400">
+                  Focus or blur the switch to see events...
+                </span>
               ) : (
                 focusLog.map((log, i) => <div key={i}>{log}</div>)
               )}
@@ -406,13 +550,22 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Form Semantics ─────────────────────────────────────────────── */}
-      <Section title="Form Semantics" description="Use name and value props for HTML form integration. A hidden input is automatically rendered." isDarkMode={dark}>
+      <Section
+        title="Form Semantics"
+        description="Use name and value props for HTML form integration. A hidden input is automatically rendered."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <form className="space-y-4" onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            alert(`Form data: notifications=${formData.get("notifications")}`);
-          }}>
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              alert(
+                `Form data: notifications=${formData.get("notifications")}`,
+              );
+            }}
+          >
             <Switch
               id="notifications-switch"
               name="notifications"
@@ -421,13 +574,19 @@ const SwitchDemo = () => {
               onCheckedChange={setFormSwitch}
               classes={c.switch}
             />
-            <button type="submit" className={c.btnPrimary}>Submit Form</button>
+            <button type="submit" className={c.btnPrimary}>
+              Submit Form
+            </button>
           </form>
         </DemoWrapper>
       </Section>
 
       {/* ── Ref Forwarding ─────────────────────────────────────────────── */}
-      <Section title="Ref Forwarding" description="Access the underlying button element using React refs." isDarkMode={dark}>
+      <Section
+        title="Ref Forwarding"
+        description="Access the underlying button element using React refs."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Switch
@@ -438,15 +597,31 @@ const SwitchDemo = () => {
               classes={c.switch}
             />
             <div className="flex gap-2">
-              <button type="button" onClick={() => switchRef.current?.focus()} className={c.btn}>Focus Switch</button>
-              <button type="button" onClick={() => switchRef.current?.click()} className={c.btn}>Toggle Switch</button>
+              <button
+                type="button"
+                onClick={() => switchRef.current?.focus()}
+                className={c.btn}
+              >
+                Focus Switch
+              </button>
+              <button
+                type="button"
+                onClick={() => switchRef.current?.click()}
+                className={c.btn}
+              >
+                Toggle Switch
+              </button>
             </div>
           </div>
         </DemoWrapper>
       </Section>
 
       {/* ── Unstyled ───────────────────────────────────────────────────── */}
-      <Section title="Unstyled Mode" description="Use unstyled to strip all default classes and start from scratch." isDarkMode={dark}>
+      <Section
+        title="Unstyled Mode"
+        description="Use unstyled to strip all default classes and start from scratch."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
           <Switch
             label="Unstyled switch"
@@ -457,8 +632,8 @@ const SwitchDemo = () => {
               root: "flex flex-col",
               innerRow: "flex items-center gap-3",
               label: `text-sm ${dark ? "text-gray-300" : "text-gray-700"} cursor-pointer`,
-              tracker: `relative inline-flex items-center h-6 w-11 rounded-md border-2 ${unstyledSwitch ? (dark ? "border-green-400 bg-green-900" : "border-green-600 bg-green-100") : (dark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-gray-50")} cursor-pointer transition-colors`,
-              thumb: `inline-flex items-center justify-center h-4 w-4 rounded-sm transition-transform ${unstyledSwitch ? (dark ? "bg-green-400" : "bg-green-600") : (dark ? "bg-gray-500" : "bg-gray-400")}`,
+              tracker: `relative inline-flex items-center h-6 w-11 rounded-md border-2 ${unstyledSwitch ? (dark ? "border-green-400 bg-green-900" : "border-green-600 bg-green-100") : dark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-gray-50"} cursor-pointer transition-colors`,
+              thumb: `inline-flex items-center justify-center h-4 w-4 rounded-sm transition-transform ${unstyledSwitch ? (dark ? "bg-green-400" : "bg-green-600") : dark ? "bg-gray-500" : "bg-gray-400"}`,
               checkedThumb: "translate-x-5.5",
               uncheckedThumb: "translate-x-0.5",
             }}
@@ -467,12 +642,31 @@ const SwitchDemo = () => {
       </Section>
 
       {/* ── Data Attributes ────────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-checked" type="root, button" description="Present when checked" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="root, button" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="root" description="Present when error=true" isDarkMode={dark} />
+            <PropRow
+              name="data-checked"
+              type="root, button"
+              description="Present when checked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, button"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-error"
+              type="root"
+              description="Present when error=true"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -481,27 +675,138 @@ const SwitchDemo = () => {
       <Section title="API Reference" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="checked" type="boolean" description="Controlled checked state" isDarkMode={dark} />
-            <PropRow name="defaultChecked" type="boolean" defaultVal="false" description="Initial checked state (uncontrolled)" isDarkMode={dark} />
-            <PropRow name="onCheckedChange" type="(checked: boolean) => void" description="Callback when checked state changes" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Label text for the switch" isDarkMode={dark} />
-            <PropRow name="description" type="ReactNode" description="Description text below the label" isDarkMode={dark} />
-            <PropRow name="name" type="string" description="Form field name (renders hidden input)" isDarkMode={dark} />
-            <PropRow name="value" type="string" defaultVal='"on"' description="Value submitted with form when checked" isDarkMode={dark} />
-            <PropRow name="id" type="string" description="Custom ID (auto-generated if omitted)" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Whether the switch is disabled" isDarkMode={dark} />
-            <PropRow name="required" type="boolean" defaultVal="false" description="Sets aria-required, shows asterisk on label" isDarkMode={dark} />
-            <PropRow name="error" type="boolean" defaultVal="false" description="Whether the switch is in error state" isDarkMode={dark} />
-            <PropRow name="errorMessage" type="ReactNode" description="Error message displayed below the switch" isDarkMode={dark} />
-            <PropRow name="checkedIcon" type="ReactNode" description="Icon inside the thumb when checked" isDarkMode={dark} />
-            <PropRow name="uncheckedIcon" type="ReactNode" description="Icon inside the thumb when unchecked" isDarkMode={dark} />
-            <PropRow name="transitionDuration" type="number" description="Custom transition duration in ms" isDarkMode={dark} />
-            <PropRow name="transitionTimingFunction" type="string" description="Custom CSS timing function" isDarkMode={dark} />
-            <PropRow name="renderLabel" type="(props: SwitchRenderProps) => ReactNode" description="Render function for custom label content" isDarkMode={dark} />
-            <PropRow name="renderDescription" type="(props: SwitchRenderProps) => ReactNode" description="Render function for custom description" isDarkMode={dark} />
-            <PropRow name="classes" type="SwitchClasses" description="Class overrides for all internal elements" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="Additional class merged onto root container" isDarkMode={dark} />
+            <PropRow
+              name="checked"
+              type="boolean"
+              description="Controlled checked state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultChecked"
+              type="boolean"
+              defaultVal="false"
+              description="Initial checked state (uncontrolled)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onCheckedChange"
+              type="(checked: boolean) => void"
+              description="Callback when checked state changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="ReactNode"
+              description="Label text for the switch"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="description"
+              type="ReactNode"
+              description="Description text below the label"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="name"
+              type="string"
+              description="Form field name (renders hidden input)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="string"
+              defaultVal='"on"'
+              description="Value submitted with form when checked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              description="Custom ID (auto-generated if omitted)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Whether the switch is disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="required"
+              type="boolean"
+              defaultVal="false"
+              description="Sets aria-required, shows asterisk on label"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="boolean"
+              defaultVal="false"
+              description="Whether the switch is in error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorMessage"
+              type="ReactNode"
+              description="Error message displayed below the switch"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkedIcon"
+              type="ReactNode"
+              description="Icon inside the thumb when checked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="uncheckedIcon"
+              type="ReactNode"
+              description="Icon inside the thumb when unchecked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="transitionDuration"
+              type="number"
+              description="Custom transition duration in ms"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="transitionTimingFunction"
+              type="string"
+              description="Custom CSS timing function"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderLabel"
+              type="(props: SwitchRenderProps) => ReactNode"
+              description="Render function for custom label content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderDescription"
+              type="(props: SwitchRenderProps) => ReactNode"
+              description="Render function for custom description"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="SwitchClasses"
+              description="Class overrides for all internal elements"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="Additional class merged onto root container"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -510,30 +815,106 @@ const SwitchDemo = () => {
       <Section title="SwitchClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="root" type="string" description="Outer container div" isDarkMode={dark} />
-            <PropRow name="innerRow" type="string" description="Inner flex row (label + button)" isDarkMode={dark} />
-            <PropRow name="labelContainer" type="string" description="Wrapper around label + description" isDarkMode={dark} />
-            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
-            <PropRow name="disabledLabel" type="string" description="Merged onto label when disabled" isDarkMode={dark} />
-            <PropRow name="description" type="string" description="Description span element" isDarkMode={dark} />
-            <PropRow name="tracker" type="string" description="Track/slider button element" isDarkMode={dark} />
-            <PropRow name="disabledTracker" type="string" description="Merged onto tracker when disabled" isDarkMode={dark} />
-            <PropRow name="checkedTracker" type="string" description="Merged onto tracker when checked" isDarkMode={dark} />
-            <PropRow name="uncheckedTracker" type="string" description="Merged onto tracker when unchecked" isDarkMode={dark} />
-            <PropRow name="thumb" type="string" description="Thumb (handle) span element" isDarkMode={dark} />
-            <PropRow name="checkedThumb" type="string" description="Merged onto thumb when checked" isDarkMode={dark} />
-            <PropRow name="uncheckedThumb" type="string" description="Merged onto thumb when unchecked" isDarkMode={dark} />
-            <PropRow name="error" type="string" description="Error message div" isDarkMode={dark} />
+            <PropRow
+              name="root"
+              type="string"
+              description="Outer container div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="innerRow"
+              type="string"
+              description="Inner flex row (label + button)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="labelContainer"
+              type="string"
+              description="Wrapper around label + description"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="string"
+              description="Label element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabledLabel"
+              type="string"
+              description="Merged onto label when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="description"
+              type="string"
+              description="Description span element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tracker"
+              type="string"
+              description="Track/slider button element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabledTracker"
+              type="string"
+              description="Merged onto tracker when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkedTracker"
+              type="string"
+              description="Merged onto tracker when checked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="uncheckedTracker"
+              type="string"
+              description="Merged onto tracker when unchecked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="thumb"
+              type="string"
+              description="Thumb (handle) span element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkedThumb"
+              type="string"
+              description="Merged onto thumb when checked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="uncheckedThumb"
+              type="string"
+              description="Merged onto thumb when unchecked"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="string"
+              description="Error message div"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
 
       {/* ── Accessibility ──────────────────────────────────────────────── */}
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
-              "Uses native role=\"switch\" for proper screen reader announcement",
+              'Uses native role="switch" for proper screen reader announcement',
               "aria-checked reflects the current state",
               "Label automatically associated with switch via htmlFor",
               "Description text linked via aria-describedby",
@@ -545,15 +926,25 @@ const SwitchDemo = () => {
               "Accepts all standard HTML button attributes (except onClick, role, aria-checked, type, id)",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               ["Tab", "Move focus to/from switch"],
               ["Space", "Toggle switch state"],
