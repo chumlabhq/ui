@@ -80,7 +80,7 @@ export const AvatarGroupCount = forwardRef<
         style={{
           minWidth: numericSize,
           height: numericSize,
-          borderRadius: numericSize,
+          borderRadius,
           fontSize,
           paddingInline: Math.round(numericSize * 0.25),
           border: parseBorder(bordered),

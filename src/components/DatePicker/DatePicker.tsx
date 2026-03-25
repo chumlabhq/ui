@@ -281,6 +281,14 @@ const DayCell = memo(function DayCell({
   onFocus,
   onKeyDown,
 }: DayCellProps) {
+  // Hooks must be called unconditionally — before any early return
+  const markerColor = day.marker?.color;
+  const { tooltipPortal, handleMouseEnter: tooltipEnter, handleMouseLeave: tooltipLeave } = useMarkerTooltip(
+    day.isMarked ? day.marker : undefined,
+    showMarkerTooltip,
+    portalContainer,
+  );
+
   if (day.dayOfMonth === 0 || (day.isOutside && !showOutsideDays)) {
     return <div className={cls.day} aria-hidden="true" />;
   }
@@ -296,13 +304,6 @@ const DayCell = memo(function DayCell({
     day.isInRange && cls.dayRangeMiddle,
     isFocused && cls.dayFocused,
     day.isMarked && cls.dayMarked,
-  );
-
-  const markerColor = day.marker?.color;
-  const { tooltipPortal, handleMouseEnter: tooltipEnter, handleMouseLeave: tooltipLeave } = useMarkerTooltip(
-    day.isMarked ? day.marker : undefined,
-    showMarkerTooltip,
-    portalContainer,
   );
 
   return (
@@ -556,19 +557,22 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     // ─── Dev warning ───────────────────────────────────────────────────
     const warnedRef = useRef(false);
-    if (process.env.NODE_ENV !== "production") {
-      if (
-        !label &&
-        !(rest as Record<string, unknown>)["aria-label"] &&
-        !(rest as Record<string, unknown>)["aria-labelledby"] &&
-        !warnedRef.current
-      ) {
-        warnedRef.current = true;
-        console.warn(
-          "DatePicker: A date picker without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
-        );
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (
+          !label &&
+          !(rest as Record<string, unknown>)["aria-label"] &&
+          !(rest as Record<string, unknown>)["aria-labelledby"] &&
+          !warnedRef.current
+        ) {
+          warnedRef.current = true;
+          console.warn(
+            "DatePicker: A date picker without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
+          );
+        }
       }
-    }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [label]);
 
     // ─── IDs ───────────────────────────────────────────────────────────
     const generatedId = useId();

@@ -35,7 +35,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       indeterminateIcon,
       classes: classesProp,
       unstyled = false,
-      reduceMotion: _reduceMotion,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      reduceMotion,
       className,
       ...rest
     },
@@ -61,21 +62,23 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       [ref],
     );
 
-    // Dev warnings — fire once per instance
+    // Dev warnings — in useEffect to comply with React 19 ref access rules
     const warnedRef = useRef(false);
-    if (process.env.NODE_ENV !== "production") {
-      if (
-        !label &&
-        !rest["aria-label"] &&
-        !rest["aria-labelledby"] &&
-        !warnedRef.current
-      ) {
-        warnedRef.current = true;
-        console.warn(
-          "Checkbox: A checkbox without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
-        );
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (
+          !label &&
+          !rest["aria-label"] &&
+          !rest["aria-labelledby"] &&
+          !warnedRef.current
+        ) {
+          warnedRef.current = true;
+          console.warn(
+            "Checkbox: A checkbox without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
+          );
+        }
       }
-    }
+    }, [label, rest]);
 
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,

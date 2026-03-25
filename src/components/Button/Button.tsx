@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef } from "react";
 import type {
   ButtonProps,
   ButtonClasses,
@@ -50,16 +50,19 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
 
   const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
-  // Dev warning — fire only once per component instance
+  // Dev warning — in useEffect for React 19 ref access compliance
   const warnedRef = useRef(false);
-  if (process.env.NODE_ENV !== "production") {
-    if (!children && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
-      warnedRef.current = true;
-      console.warn(
-        "Button: A button without children requires an `aria-label` or `aria-labelledby` for accessibility.",
-      );
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      const r = rest as Record<string, unknown>;
+      if (!children && !r["aria-label"] && !r["aria-labelledby"] && !warnedRef.current) {
+        warnedRef.current = true;
+        console.warn(
+          "Button: A button without children requires an `aria-label` or `aria-labelledby` for accessibility.",
+        );
+      }
     }
-  }
+  }, [children, rest]);
 
   // ─── Merged classes system ──────────────────────────────────────────
   const baseClasses = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;

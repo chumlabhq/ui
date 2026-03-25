@@ -75,7 +75,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       defaultValue: (defaultValue as string) ?? "",
       onChange: onValueChange,
     });
-    const isControlled = value !== undefined;
 
     // Internal ref — merged with consumer's forwarded ref via callback
     const internalRef = useRef<HTMLInputElement | null>(null);
@@ -165,6 +164,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       onChange?.(event as unknown as ChangeEvent<HTMLInputElement>);
     }, [onClear, onChange, setCurrentValue]);
 
+    // Extract aria values for stable effect deps (rest is a new object each render)
+    const ariaLabel = rest["aria-label"];
+    const ariaLabelledBy = rest["aria-labelledby"];
+
     // Dev warnings — in useEffect to avoid double-firing in StrictMode
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
@@ -178,16 +181,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             "Input: onEndIconClick is provided without endIconLabel. Add endIconLabel for accessibility.",
           );
         }
-        if (!label && !rest["aria-label"] && !rest["aria-labelledby"]) {
+        if (!label && !ariaLabel && !ariaLabelledBy) {
           console.warn(
             "Input: No accessible name provided. Add a `label`, `aria-label`, or `aria-labelledby` prop for accessibility.",
           );
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       label,
+      ariaLabel,
+      ariaLabelledBy,
       onStartIconClick,
       startIconLabel,
       onEndIconClick,

@@ -1,11 +1,12 @@
 import React, {
   forwardRef,
   useCallback,
+  useEffect,
   useId,
   useRef,
   useMemo,
 } from "react";
-import type { OtpInputProps, OtpInputClasses, OtpInputRenderProps } from "./utils/types";
+import type { OtpInputProps, OtpInputClasses } from "./utils/types";
 import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants";
 import { OtpInputLabel } from "./components/OtpInputLabel";
 import { cn } from "../../utils/cn";
@@ -51,16 +52,18 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
 
-    // Dev warning
+    // Dev warning — in useEffect for React 19 ref access compliance
     const warnedRef = useRef(false);
-    if (process.env.NODE_ENV !== "production") {
-      if (!label && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
-        warnedRef.current = true;
-        console.warn(
-          "OtpInput: An OTP input without a label requires `aria-label` or `aria-labelledby` for accessibility.",
-        );
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (!label && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
+          warnedRef.current = true;
+          console.warn(
+            "OtpInput: An OTP input without a label requires `aria-label` or `aria-labelledby` for accessibility.",
+          );
+        }
       }
-    }
+    }, [label, rest]);
 
     const [value, setValue] = useControllableState({
       value: controlledValue,

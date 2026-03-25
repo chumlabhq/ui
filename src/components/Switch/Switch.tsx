@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, forwardRef, useCallback } from "react";
+import { useId, useMemo, useRef, useEffect, forwardRef, useCallback } from "react";
 import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/types";
 import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
@@ -40,16 +40,18 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const descriptionId =
       description || renderDescription ? `${switchId}-description` : undefined;
 
-    // Dev warning
+    // Dev warning — in useEffect to comply with React 19 ref access rules
     const warnedRef = useRef(false);
-    if (process.env.NODE_ENV !== "production") {
-      if (!label && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
-        warnedRef.current = true;
-        console.warn(
-          "Switch: A switch without a label requires `aria-label` or `aria-labelledby` for accessibility.",
-        );
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (!label && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
+          warnedRef.current = true;
+          console.warn(
+            "Switch: A switch without a label requires `aria-label` or `aria-labelledby` for accessibility.",
+          );
+        }
       }
-    }
+    }, [label, ariaLabel, ariaLabelledBy]);
 
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,

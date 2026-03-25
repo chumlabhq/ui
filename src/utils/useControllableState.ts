@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface UseControllableStateOptions<T> {
   value?: T;
@@ -12,31 +12,36 @@ export function useControllableState<T>({
   onChange,
 }: UseControllableStateOptions<T>): [T, (value: T | ((prev: T) => T)) => void] {
   const isControlled = controlledValue !== undefined;
-  const initialIsControlledRef = useRef(isControlled);
 
-  if (process.env.NODE_ENV !== "production") {
-    if (initialIsControlledRef.current !== isControlled) {
-      console.warn(
-        "useControllableState: A component is changing from " +
-          (initialIsControlledRef.current ? "controlled" : "uncontrolled") +
-          " to " +
-          (isControlled ? "controlled" : "uncontrolled") +
-          ". This is likely a bug.",
-      );
+  // Warn on controlled/uncontrolled transition — in useEffect for React 19
+  const initialIsControlledRef = useRef(isControlled);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      if (initialIsControlledRef.current !== isControlled) {
+        console.warn(
+          "useControllableState: A component is changing from " +
+            (initialIsControlledRef.current ? "controlled" : "uncontrolled") +
+            " to " +
+            (isControlled ? "controlled" : "uncontrolled") +
+            ". This is likely a bug.",
+        );
+      }
     }
-  }
+  }, [isControlled]);
 
   const [internalValue, setInternalValue] = useState<T>(defaultValue);
   const value = isControlled ? controlledValue : internalValue;
 
+  // Refs updated in effects for React 19 compliance
   const valueRef = useRef(value);
-  valueRef.current = value;
-
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
-
   const currentIsControlledRef = useRef(isControlled);
-  currentIsControlledRef.current = isControlled;
+
+  useEffect(() => {
+    valueRef.current = value;
+    onChangeRef.current = onChange;
+    currentIsControlledRef.current = isControlled;
+  });
 
   const setValue = useCallback(
     (nextValue: T | ((prev: T) => T)) => {

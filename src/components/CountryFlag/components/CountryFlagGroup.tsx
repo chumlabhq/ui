@@ -8,7 +8,6 @@ import type {
 } from "../utils/types";
 import {
   DEFAULT_COUNTRYFLAG_GROUP_CLASSES,
-  UNSTYLED_COUNTRYFLAG_GROUP_CLASSES,
 } from "../utils/constants";
 import { Tooltip } from "../../Tooltip";
 import { cn } from "../../../utils/cn";

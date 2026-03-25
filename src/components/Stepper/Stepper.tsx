@@ -309,28 +309,6 @@ const StepItem = memo(function StepItem({
       </div>
     ) : null;
 
-  const connector =
-    showConnectors && !isLast ? (
-      <div
-        className={cn(
-          isHorizontal
-            ? classes.connectorHorizontal
-            : classes.connectorVertical,
-          classes.connector,
-          getStatusClass(
-            status,
-            classes.connectorActive,
-            classes.connectorCompleted,
-            classes.connectorPending,
-            classes.connectorError,
-          ),
-        )}
-        data-status={status}
-        data-next-status={nextStepStatus}
-        aria-hidden="true"
-      />
-    ) : null;
-
   // ─── Shared interactive wrapper props ──────────────────────────────
   const sharedAriaLabel =
     stepAriaLabel ||

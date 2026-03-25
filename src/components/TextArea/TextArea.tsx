@@ -88,7 +88,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       defaultValue: (defaultValue as string) ?? "",
       onChange: onValueChange,
     });
-    const isControlled = value !== undefined;
 
     // Internal ref — merged with consumer's forwarded ref via callback
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
@@ -157,6 +156,10 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       onChange?.(event as unknown as ChangeEvent<HTMLTextAreaElement>);
     }, [onClear, onChange, setCurrentValue]);
 
+    // Extract aria values for stable effect deps (rest is a new object each render)
+    const ariaLabel = rest["aria-label"];
+    const ariaLabelledBy = rest["aria-labelledby"];
+
     // Dev warnings — in useEffect to avoid double-firing in StrictMode
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
@@ -170,16 +173,16 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             "TextArea: onEndIconClick is provided without endIconLabel. Add endIconLabel for accessibility.",
           );
         }
-        if (!label && !rest["aria-label"] && !rest["aria-labelledby"]) {
+        if (!label && !ariaLabel && !ariaLabelledBy) {
           console.warn(
             "TextArea: No accessible name provided. Add a `label`, `aria-label`, or `aria-labelledby` prop for accessibility.",
           );
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       label,
+      ariaLabel,
+      ariaLabelledBy,
       onStartIconClick,
       startIconLabel,
       onEndIconClick,
