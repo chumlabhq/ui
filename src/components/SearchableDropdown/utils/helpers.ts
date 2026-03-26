@@ -51,9 +51,3 @@ export function scrollOptionIntoView(element: HTMLElement): void {
     element.scrollIntoView(false);
   }
 }
-
-export function joinClasses(
-  ...classes: (string | false | null | undefined)[]
-): string {
-  return classes.filter(Boolean).join(" ");
-}
