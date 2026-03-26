@@ -1,0 +1,43 @@
+import type { DropdownClasses } from "./types";
+
+export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
+  root: "",
+  wrapper: "",
+  trigger: "",
+  triggerText: "",
+  content: "",
+  optionList: "",
+  option: "",
+  optionSelected: "",
+  optionFocused: "",
+  optionDisabled: "",
+  chevron: "",
+  checkIcon: "",
+  clearIcon: "",
+  noResults: "",
+  label: "",
+  error: "",
+  shimmer: "",
+  shimmerItem: "",
+};
+
+export const UNSTYLED_DROPDOWN_CLASSES: Required<DropdownClasses> = {
+  root: "",
+  wrapper: "",
+  trigger: "",
+  triggerText: "",
+  content: "",
+  optionList: "",
+  option: "",
+  optionSelected: "",
+  optionFocused: "",
+  optionDisabled: "",
+  chevron: "",
+  checkIcon: "",
+  clearIcon: "",
+  noResults: "",
+  label: "",
+  error: "",
+  shimmer: "",
+  shimmerItem: "",
+};

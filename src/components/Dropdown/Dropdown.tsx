@@ -4,6 +4,7 @@ import {
   useId,
   forwardRef,
   memo,
+  useMemo,
   useState,
   useCallback,
 } from "react";
@@ -20,10 +21,14 @@ import {
   computeDropdownCoords,
   scrollOptionIntoView,
   isBrowser,
-  joinClasses,
 } from "./utils/helpers";
 import type { DropdownCoords } from "./utils/helpers";
 import DropdownShimmer from "./components/DropdownShimmer";
+import { cn } from "../../utils/cn";
+import {
+  DEFAULT_DROPDOWN_CLASSES,
+  UNSTYLED_DROPDOWN_CLASSES,
+} from "./utils/constants";
 
 const SR_ONLY_STYLE: CSSProperties = {
   position: "absolute",
@@ -55,7 +60,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
   isFocused: boolean;
   dropdownId: string;
   index: number;
-  classes?: DropdownClasses;
+  classes: Required<DropdownClasses>;
   showSelectedIcon: boolean;
   selectedIcon?: ReactNode;
   CheckIconComponent: React.ComponentType<{
@@ -74,11 +79,11 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       aria-selected={isSelected}
       aria-disabled={isDisabled || undefined}
       className={
-        joinClasses(
-          classes?.option,
-          isSelected && classes?.optionSelected,
-          isFocused && classes?.optionFocused,
-          isDisabled && classes?.optionDisabled,
+        cn(
+          classes.option,
+          isSelected && classes.optionSelected,
+          isFocused && classes.optionFocused,
+          isDisabled && classes.optionDisabled,
         ) || undefined
       }
       data-selected={isSelected || undefined}
@@ -94,7 +99,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <CheckIconComponent className={classes?.checkIcon} />
+          <CheckIconComponent className={classes.checkIcon || undefined} />
         ))}
     </div>
   );
@@ -108,12 +113,13 @@ interface DropdownContentProps {
   zIndex: number;
   gap: number;
   portalContainer?: HTMLElement | null;
-  classes?: DropdownClasses;
+  classes: Required<DropdownClasses>;
   listboxId: string;
   dropdownId: string;
   focusedIndex: number;
   loading: boolean;
   ariaLabel: string;
+  contentRef?: React.RefObject<HTMLDivElement | null>;
   children: ReactNode;
 }
 
@@ -131,6 +137,7 @@ const DropdownContent = memo(function DropdownContent({
   focusedIndex,
   loading,
   ariaLabel,
+  contentRef,
   children,
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -276,18 +283,21 @@ const DropdownContent = memo(function DropdownContent({
 
   return createPortal(
     <div
-      ref={dropdownRef}
+      ref={(node) => {
+        (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (contentRef) (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       id={listboxId}
       role="listbox"
       aria-label={ariaLabel}
       aria-busy={loading || undefined}
-      className={classes?.content || undefined}
+      className={classes.content || undefined}
       style={dropdownStyle}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.position ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
-      <div className={classes?.optionList || undefined}>{children}</div>
+      <div className={classes.optionList || undefined}>{children}</div>
     </div>,
     portalContainer ?? document.body,
   );
@@ -322,11 +332,13 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       loadOnOpen = false,
       onLoadError,
       shimmerCount = 5,
+      unstyled = false,
       classes: classesProp,
       className,
       style,
       keepMounted = false,
       portalContainer,
+      lockScroll = true,
       dropdownPosition = "bottom",
       dropdownZIndex = 50,
       dropdownGap = 4,
@@ -340,6 +352,32 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       CheckIcon: CheckIconProp = DefaultCheckIcon,
       ClearIcon: ClearIconProp = DefaultClearIcon,
     } = props;
+
+    const baseClasses = unstyled ? UNSTYLED_DROPDOWN_CLASSES : DEFAULT_DROPDOWN_CLASSES;
+
+    const mergedClasses: Required<DropdownClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        trigger: classesProp?.trigger ?? baseClasses.trigger,
+        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
+        content: classesProp?.content ?? baseClasses.content,
+        optionList: classesProp?.optionList ?? baseClasses.optionList,
+        option: classesProp?.option ?? baseClasses.option,
+        optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
+        optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
+        optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
+        chevron: classesProp?.chevron ?? baseClasses.chevron,
+        checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
+        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
+        noResults: classesProp?.noResults ?? baseClasses.noResults,
+        label: classesProp?.label ?? baseClasses.label,
+        error: classesProp?.error ?? baseClasses.error,
+        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
+        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+      }),
+      [classesProp, baseClasses],
+    );
 
     const generatedId = useId();
     const dropdownId = id || generatedId;
@@ -382,6 +420,8 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       onLoadError,
       dropdownId,
       typeaheadTimeout,
+      label,
+      "aria-label": ariaLabel,
     });
 
     const loading = externalLoading || isLoadingOptions;
@@ -392,6 +432,26 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         shouldRestoreFocusRef.current = false;
       }
     }, [isOpen, shouldRestoreFocusRef, triggerNode]);
+
+    // Scroll lock when dropdown is open — uses event prevention (works on any scrollable ancestor)
+    const dropdownContentRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+      if (!lockScroll || !isOpen || !isBrowser) return;
+
+      const preventScroll = (e: Event) => {
+        // Allow scroll inside the dropdown content itself
+        if (dropdownContentRef.current?.contains(e.target as Node)) return;
+        e.preventDefault();
+      };
+
+      window.addEventListener("wheel", preventScroll, { capture: true, passive: false });
+      window.addEventListener("touchmove", preventScroll, { capture: true, passive: false });
+
+      return () => {
+        window.removeEventListener("wheel", preventScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener("touchmove", preventScroll, { capture: true } as EventListenerOptions);
+      };
+    }, [lockScroll, isOpen]);
 
     useEffect(() => {
       if (!isOpen || !isBrowser) return;
@@ -415,7 +475,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
     }, [isOpen, handleClose, triggerNode, dropdownId]);
 
     const rootClassName =
-      joinClasses(classesProp?.root, className) || undefined;
+      cn(mergedClasses.root, className) || undefined;
     const rootStyle: CSSProperties = {
       ...(fullWidth ? { width: "100%" } : {}),
       ...style,
@@ -508,14 +568,14 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
           <label
             id={labelId}
             htmlFor={triggerId}
-            className={classesProp?.label || undefined}
+            className={mergedClasses.label || undefined}
           >
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
         )}
 
-        <div className={classesProp?.wrapper || undefined}>
+        <div className={mergedClasses.wrapper || undefined}>
           {renderTrigger ? (
             renderTrigger({
               ...triggerProps,
@@ -529,9 +589,9 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
               ref={mergedTriggerRef}
               {...triggerProps}
               type="button"
-              className={classesProp?.trigger || undefined}
+              className={mergedClasses.trigger || undefined}
             >
-              <span className={classesProp?.triggerText || undefined}>
+              <span className={mergedClasses.triggerText || undefined}>
                 {selectedOption
                   ? selectedOption.selectedContent ||
                     selectedOption.content ||
@@ -540,7 +600,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
               </span>
               {showChevron && (
                 <ChevronIcon
-                  className={classesProp?.chevron || undefined}
+                  className={mergedClasses.chevron || undefined}
                   style={
                     isOpen ? { transform: "rotate(180deg)" } : undefined
                   }
@@ -554,7 +614,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
               type="button"
               tabIndex={-1}
               aria-label="Clear selection"
-              className={classesProp?.clearIcon || undefined}
+              className={mergedClasses.clearIcon || undefined}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
@@ -573,23 +633,24 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
             zIndex={dropdownZIndex}
             gap={dropdownGap}
             portalContainer={portalContainer}
-            classes={classesProp}
+            classes={mergedClasses}
             listboxId={listboxId}
             dropdownId={dropdownId}
             focusedIndex={focusedIndex}
             loading={loading}
             ariaLabel={listboxAriaLabel}
+            contentRef={dropdownContentRef}
           >
             {loading ? (
               <DropdownShimmer
                 count={shimmerCount}
-                className={classesProp?.shimmer}
-                itemClassName={classesProp?.shimmerItem}
+                className={mergedClasses.shimmer}
+                itemClassName={mergedClasses.shimmerItem}
               />
             ) : displayOptions.length === 0 ? (
               <div
                 role="status"
-                className={classesProp?.noResults || undefined}
+                className={mergedClasses.noResults || undefined}
               >
                 {noResultsContent}
               </div>
@@ -602,7 +663,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
                   isFocused={index === focusedIndex}
                   dropdownId={dropdownId}
                   index={index}
-                  classes={classesProp}
+                  classes={mergedClasses}
                   showSelectedIcon={showSelectedIcon}
                   selectedIcon={selectedIcon}
                   CheckIconComponent={CheckIconProp}
@@ -637,7 +698,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
           <div
             id={errorId}
             role="alert"
-            className={classesProp?.error || undefined}
+            className={mergedClasses.error || undefined}
           >
             {errorMessage}
           </div>

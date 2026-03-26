@@ -85,11 +85,14 @@ export interface DropdownProps {
   loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
+  unstyled?: boolean;
   classes?: DropdownClasses;
   className?: string;
   style?: CSSProperties;
   keepMounted?: boolean;
   portalContainer?: HTMLElement | null;
+  /** When true, locks body scroll while the dropdown is open. Default: true. */
+  lockScroll?: boolean;
   dropdownPosition?: "top" | "bottom";
   dropdownZIndex?: number;
   dropdownGap?: number;

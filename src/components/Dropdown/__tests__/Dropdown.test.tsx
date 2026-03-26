@@ -1115,9 +1115,9 @@ describe('Dropdown - Custom Trigger', () => {
     render(
       <Dropdown 
         options={fruitOptions}
-        renderTrigger={(props) => (
-          <button {...props} type="button">
-            Custom: {props.selectedOption?.label ?? 'None'}
+        renderTrigger={({ isOpen, selectedOption, ...rest }) => (
+          <button {...rest} type="button">
+            Custom: {selectedOption?.label ?? 'None'}
           </button>
         )}
       />
@@ -1132,9 +1132,9 @@ describe('Dropdown - Custom Trigger', () => {
     render(
       <Dropdown 
         options={fruitOptions}
-        renderTrigger={(props) => (
-          <button {...props} type="button">
-            {props.isOpen ? 'Open' : 'Closed'} - {props.selectedOption?.label ?? 'Select'}
+        renderTrigger={({ isOpen, selectedOption, ...rest }) => (
+          <button {...rest} type="button">
+            {isOpen ? 'Open' : 'Closed'} - {selectedOption?.label ?? 'Select'}
           </button>
         )}
       />

@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type { DropdownOption } from "./types";
+import { useControllableState } from "../../../utils/useControllableState";
 
 interface UseDropdownProps {
   options: DropdownOption[];
@@ -16,6 +17,8 @@ interface UseDropdownProps {
   onLoadError?: (error: unknown) => void;
   dropdownId: string;
   typeaheadTimeout?: number;
+  label?: React.ReactNode;
+  "aria-label"?: string;
 }
 
 export const useDropdown = ({
@@ -33,16 +36,23 @@ export const useDropdown = ({
   onLoadError,
   dropdownId,
   typeaheadTimeout = 500,
+  label,
+  "aria-label": ariaLabel,
 }: UseDropdownProps) => {
-  const [internalValue, setInternalValue] = useState<string | null>(defaultValue ?? null);
-  const isValueControlledRef = useRef(valueProp !== undefined);
-  const isValueControlled = valueProp !== undefined;
-  const currentValue = isValueControlled ? valueProp : internalValue;
+  const [currentValue, setCurrentValue] = useControllableState<string | null>({
+    value: valueProp,
+    defaultValue: defaultValue ?? null,
+    onChange: (newValue) => {
+      const option = displayOptionsRef.current.find((o) => o.value === newValue) || null;
+      onValueChange?.(newValue, option);
+    },
+  });
 
-  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
-  const isOpenControlledRef = useRef(openProp !== undefined);
-  const isOpenControlled = openProp !== undefined;
-  const isOpen = isOpenControlled ? openProp : internalOpen;
+  const [isOpen, setIsOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen ?? false,
+    onChange: onOpenChange,
+  });
 
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
@@ -57,6 +67,21 @@ export const useDropdown = ({
   const typeaheadTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const shouldRestoreFocusRef = useRef(false);
   const prevLoadOptionsRef = useRef(onLoadOptions);
+  const displayOptionsRef = useRef<DropdownOption[]>([]);
+
+  // Accessibility dev warning for missing label/aria-label
+  const warnedRef = useRef(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
+      if (!label && !ariaLabel) {
+        warnedRef.current = true;
+        console.warn(
+          "[Dropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
+          "so that screen readers can identify this dropdown."
+        );
+      }
+    }
+  }, [label, ariaLabel]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -67,30 +92,6 @@ export const useDropdown = ({
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production") {
-      if (isValueControlledRef.current !== isValueControlled) {
-        console.error(
-          "[Dropdown] Component is changing from " +
-          (isValueControlledRef.current ? "controlled" : "uncontrolled") +
-          " to " +
-          (isValueControlled ? "controlled" : "uncontrolled") +
-          ". This is not supported and may cause unexpected behavior. " +
-          "Decide between using a controlled or uncontrolled dropdown for the lifetime of the component."
-        );
-      }
-      if (isOpenControlledRef.current !== isOpenControlled) {
-        console.error(
-          "[Dropdown] Component is changing from " +
-          (isOpenControlledRef.current ? "controlled open state" : "uncontrolled open state") +
-          " to " +
-          (isOpenControlled ? "controlled open state" : "uncontrolled open state") +
-          ". This is not supported and may cause unexpected behavior."
-        );
-      }
-    }
-  }, [isValueControlled, isOpenControlled]);
 
   useEffect(() => {
     if (prevLoadOptionsRef.current !== onLoadOptions) {
@@ -108,19 +109,14 @@ export const useDropdown = ({
     return options;
   }, [options, loadedOptions, loadOnOpen, onLoadOptions, hasLoaded]);
 
+  // Keep ref in sync for use in onChange callback
+  useEffect(() => {
+    displayOptionsRef.current = displayOptions;
+  }, [displayOptions]);
+
   const selectedOption = useMemo(
     () => displayOptions.find((option) => option.value === currentValue) || null,
     [displayOptions, currentValue],
-  );
-
-  const updateOpen = useCallback(
-    (newOpen: boolean) => {
-      if (!isOpenControlled) {
-        setInternalOpen(newOpen);
-      }
-      onOpenChange?.(newOpen);
-    },
-    [isOpenControlled, onOpenChange],
   );
 
   const loadOptions = useCallback(() => {
@@ -171,11 +167,37 @@ export const useDropdown = ({
   }, [currentValue, displayOptions]);
 
   const handleOpen = useCallback(() => {
-    if (!disabled && !isOpen) {
-      updateOpen(true);
+    if (disabled) return;
+    setIsOpen(true);
+    setFocusedIndex(getInitialFocusIndex());
+    loadOptions();
+
+    if (!loadOnOpen || !onLoadOptions) {
+      const count = displayOptions.length;
+      setStatusMessage(
+        count === 0
+          ? "No options available"
+          : `${count} option${count === 1 ? "" : "s"} available`,
+      );
+    }
+  }, [disabled, setIsOpen, loadOptions, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setFocusedIndex(-1);
+    setStatusMessage("");
+  }, [setIsOpen]);
+
+  const handleToggle = useCallback(() => {
+    if (disabled) return;
+    setIsOpen((prev: boolean) => {
+      if (prev) {
+        setFocusedIndex(-1);
+        setStatusMessage("");
+        return false;
+      }
       setFocusedIndex(getInitialFocusIndex());
       loadOptions();
-
       if (!loadOnOpen || !onLoadOptions) {
         const count = displayOptions.length;
         setStatusMessage(
@@ -184,59 +206,33 @@ export const useDropdown = ({
             : `${count} option${count === 1 ? "" : "s"} available`,
         );
       }
-    }
-  }, [disabled, isOpen, updateOpen, loadOptions, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
-
-  const handleClose = useCallback(() => {
-    if (isOpen) {
-      updateOpen(false);
-      setFocusedIndex(-1);
-      setStatusMessage("");
-    }
-  }, [isOpen, updateOpen]);
-
-  const handleToggle = useCallback(() => {
-    if (!disabled) {
-      if (isOpen) {
-        handleClose();
-      } else {
-        handleOpen();
-      }
-    }
-  }, [disabled, isOpen, handleOpen, handleClose]);
+      return true;
+    });
+  }, [disabled, setIsOpen, loadOptions, getInitialFocusIndex, loadOnOpen, onLoadOptions, displayOptions.length]);
 
   const handleOptionSelect = useCallback(
     (option: DropdownOption) => {
       if (option.disabled) return;
 
       if (clearable && option.value === currentValue) {
-        if (!isValueControlled) {
-          setInternalValue(null);
-        }
-        onValueChange?.(null, null);
-        updateOpen(false);
+        setCurrentValue(null);
+        setIsOpen(false);
         setFocusedIndex(-1);
         shouldRestoreFocusRef.current = true;
         return;
       }
 
-      if (!isValueControlled) {
-        setInternalValue(option.value);
-      }
-      onValueChange?.(option.value, option);
-      updateOpen(false);
+      setCurrentValue(option.value);
+      setIsOpen(false);
       setFocusedIndex(-1);
       shouldRestoreFocusRef.current = true;
     },
-    [isValueControlled, onValueChange, updateOpen, clearable, currentValue],
+    [setCurrentValue, setIsOpen, clearable, currentValue],
   );
 
   const handleClear = useCallback(() => {
-    if (!isValueControlled) {
-      setInternalValue(null);
-    }
-    onValueChange?.(null, null);
-  }, [isValueControlled, onValueChange]);
+    setCurrentValue(null);
+  }, [setCurrentValue]);
 
   const activeDescendantId = useMemo(() => {
     if (isOpen && focusedIndex >= 0 && focusedIndex < displayOptions.length) {

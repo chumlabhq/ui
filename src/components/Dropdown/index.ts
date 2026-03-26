@@ -11,3 +11,7 @@ export {
   DefaultCheckIcon,
   DefaultClearIcon,
 } from "./utils/icons";
+export {
+  DEFAULT_DROPDOWN_CLASSES,
+  UNSTYLED_DROPDOWN_CLASSES,
+} from "./utils/constants";
