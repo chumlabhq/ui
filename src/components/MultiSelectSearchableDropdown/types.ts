@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, MutableRefObject, ReactNode } from "react";
 
 export interface MultiSelectOption {
   value: string;
@@ -6,6 +6,33 @@ export interface MultiSelectOption {
   content?: ReactNode;
   selectedContent?: ReactNode;
   disabled?: boolean;
+}
+
+export interface MultiSelectSearchableDropdownClasses {
+  root?: string;
+  container?: string;
+  trigger?: string;
+  triggerText?: string;
+  content?: string;
+  optionList?: string;
+  option?: string;
+  optionSelected?: string;
+  optionFocused?: string;
+  optionDisabled?: string;
+  chevron?: string;
+  checkbox?: string;
+  checkboxChecked?: string;
+  checkboxIcon?: string;
+  chip?: string;
+  chipRemove?: string;
+  noResults?: string;
+  loading?: string;
+  label?: string;
+  error?: string;
+  searchInput?: string;
+  searchInputElement?: string;
+  searchIcon?: string;
+  moreCount?: string;
 }
 
 export interface MultiSelectSearchableDropdownProps {
@@ -35,28 +62,20 @@ export interface MultiSelectSearchableDropdownProps {
   maxDisplayedChips?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
+  unstyled?: boolean;
+  lockScroll?: boolean;
+  classes?: MultiSelectSearchableDropdownClasses;
   className?: string;
-  containerClassName?: string;
-  triggerClassName?: string;
-  dropdownClassName?: string;
-  optionClassName?: string;
-  selectedOptionClassName?: string;
-  focusedOptionClassName?: string;
-  optionListClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  searchInputClassName?: string;
-  searchInputTextClassName?: string;
-  chipClassName?: string;
-  chipRemoveClassName?: string;
-  chevronClassName?: string;
-  checkboxClassName?: string;
-  checkboxCheckedClassName?: string;
-  checkboxIconClassName?: string;
-  searchIconClassName?: string;
-  noResultsClassName?: string;
-  loadingClassName?: string;
-  moreCountClassName?: string;
+  style?: CSSProperties;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  portalContainer?: HTMLElement | null;
+  dropdownPosition?: "top" | "bottom";
+  dropdownZIndex?: number;
+  dropdownGap?: number;
+  keepMounted?: boolean;
+  "aria-label"?: string;
 }
 
 export interface UseMultiSelectDropdownProps {
@@ -70,6 +89,11 @@ export interface UseMultiSelectDropdownProps {
   initialOptions?: MultiSelectOption[];
   onLoadInitialOptions?: () => Promise<MultiSelectOption[]>;
   loadInitialOnOpen?: boolean;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  label?: ReactNode;
+  "aria-label"?: string;
 }
 
 export interface UseMultiSelectDropdownReturn {
@@ -80,6 +104,7 @@ export interface UseMultiSelectDropdownReturn {
   isLoadingInitial: boolean;
   displayOptions: MultiSelectOption[];
   selectedOptions: MultiSelectOption[];
+  shouldRestoreFocusRef: MutableRefObject<boolean>;
   setSearchQuery: (query: string) => void;
   setFocusedIndex: (index: number) => void;
   handleToggle: () => void;

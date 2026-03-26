@@ -1,13 +1,17 @@
+import type { CSSProperties } from "react";
+
 interface IconProps {
   className?: string;
+  style?: CSSProperties;
 }
 
-export function ChevronDownIcon({ className = "" }: IconProps) {
+export function ChevronDownIcon({ className, style }: IconProps) {
   return (
     <svg
       viewBox="0 0 20 20"
       fill="currentColor"
       className={className}
+      style={style}
       aria-hidden="true"
     >
       <path

@@ -4,6 +4,7 @@ import type {
   UseMultiSelectDropdownProps,
   UseMultiSelectDropdownReturn,
 } from "./types";
+import { useControllableState } from "../../utils/useControllableState";
 
 export function useMultiSelectDropdown({
   options = [],
@@ -16,8 +17,18 @@ export function useMultiSelectDropdown({
   initialOptions = [],
   onLoadInitialOptions,
   loadInitialOnOpen = false,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  label,
+  "aria-label": ariaLabel,
 }: UseMultiSelectDropdownProps): UseMultiSelectDropdownReturn {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
@@ -27,6 +38,21 @@ export function useMultiSelectDropdown({
   const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const shouldRestoreFocusRef = useRef(false);
+
+  // Accessibility dev warning for missing label/aria-label
+  const warnedRef = useRef(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
+      if (!label && !ariaLabel) {
+        warnedRef.current = true;
+        console.warn(
+          "[MultiSelectSearchableDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
+          "so that screen readers can identify this dropdown."
+        );
+      }
+    }
+  }, [label, ariaLabel]);
 
   const isAsync = typeof onSearch === "function";
 
@@ -118,18 +144,27 @@ export function useMultiSelectDropdown({
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
-    setIsOpen((prev) => !prev);
-    setSearchQuery("");
-    setFocusedIndex(-1);
-    setAsyncOptions([]);
-  }, [disabled]);
+    setIsOpen((prev: boolean) => {
+      if (prev) {
+        setSearchQuery("");
+        setFocusedIndex(-1);
+        setAsyncOptions([]);
+        return false;
+      }
+      setSearchQuery("");
+      setFocusedIndex(-1);
+      setAsyncOptions([]);
+      return true;
+    });
+  }, [disabled, setIsOpen]);
 
   const handleClose = useCallback(() => {
+    shouldRestoreFocusRef.current = true;
     setIsOpen(false);
     setSearchQuery("");
     setFocusedIndex(-1);
     setAsyncOptions([]);
-  }, []);
+  }, [setIsOpen]);
 
   const handleOptionToggle = useCallback(
     (option: MultiSelectOption) => {
@@ -218,7 +253,7 @@ export function useMultiSelectDropdown({
           break;
       }
     },
-    [disabled, isOpen, focusedIndex, displayOptions, showSearch, handleToggle, handleClose, handleOptionToggle]
+    [disabled, isOpen, focusedIndex, displayOptions, showSearch, handleToggle, handleClose, handleOptionToggle, setIsOpen]
   );
 
   return {
@@ -229,6 +264,7 @@ export function useMultiSelectDropdown({
     isLoadingInitial,
     displayOptions,
     selectedOptions,
+    shouldRestoreFocusRef,
     setSearchQuery,
     setFocusedIndex,
     handleToggle,

@@ -2,6 +2,11 @@ export { default as MultiSelectSearchableDropdown } from "./MultiSelectSearchabl
 export type {
   MultiSelectOption,
   MultiSelectSearchableDropdownProps,
+  MultiSelectSearchableDropdownClasses,
 } from "./types";
 export { useMultiSelectDropdown } from "./useMultiSelectDropdown";
+export {
+  DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
+  UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
+} from "./constants";
 export { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./icons";

@@ -1,7 +1,27 @@
 import { useState, useCallback } from "react";
 import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown";
 import type { MultiSelectOption } from "../../components/MultiSelectSearchableDropdown";
-import { Section, ComponentHeader } from "./components";
+import { useTheme } from "./ThemeContext";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+interface RestCountryResponse {
+  name: { common: string; official: string };
+  cca2: string;
+  flag: string;
+  flags: { png: string; svg: string };
+  capital?: string[];
+  region: string;
+}
+
+// ─── Static Data ────────────────────────────────────────────────────────────
 
 const staticOptions: MultiSelectOption[] = [
   { value: "apple", label: "Apple" },
@@ -15,100 +35,110 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 const countryOptions: MultiSelectOption[] = [
-  { value: "us", label: "United States", content: <span>🇺🇸 United States</span> },
-  { value: "gb", label: "United Kingdom", content: <span>🇬🇧 United Kingdom</span> },
-  { value: "ca", label: "Canada", content: <span>🇨🇦 Canada</span> },
-  { value: "au", label: "Australia", content: <span>🇦🇺 Australia</span> },
-  { value: "de", label: "Germany", content: <span>🇩🇪 Germany</span> },
-  { value: "fr", label: "France", content: <span>🇫🇷 France</span> },
-  { value: "jp", label: "Japan", content: <span>🇯🇵 Japan</span> },
-  { value: "in", label: "India", content: <span>🇮🇳 India</span> },
+  { value: "us", label: "United States", content: <span>United States</span> },
+  { value: "gb", label: "United Kingdom", content: <span>United Kingdom</span> },
+  { value: "ca", label: "Canada", content: <span>Canada</span> },
+  { value: "au", label: "Australia", content: <span>Australia</span> },
+  { value: "de", label: "Germany", content: <span>Germany</span> },
+  { value: "fr", label: "France", content: <span>France</span> },
+  { value: "jp", label: "Japan", content: <span>Japan</span> },
+  { value: "in", label: "India", content: <span>India</span> },
 ];
 
-interface RestCountryResponse {
-  name: {
-    common: string;
-    official: string;
-  };
-  cca2: string;
-  flag: string;
-  flags: {
-    png: string;
-    svg: string;
-  };
-  capital?: string[];
-  region: string;
-}
+// ─── Themed Classes ─────────────────────────────────────────────────────────
 
-const triggerStyle = "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-300 rounded-lg bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[42px]";
-const dropdownStyle = "absolute z-50 top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden";
-const searchInputStyle = "flex items-center gap-2 px-3 py-2 border-b border-gray-200";
-const optionListStyle = "max-h-60 overflow-y-auto";
-const optionStyle = "flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-50 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed";
-const selectedOptionStyle = "bg-blue-50";
-const focusedOptionStyle = "bg-gray-100";
-const chevronStyle = "w-4 h-4 shrink-0 transition-transform duration-200";
-const checkboxStyle = "w-4 h-4 shrink-0 border border-gray-300 rounded flex items-center justify-center";
-const checkboxCheckedStyle = "bg-blue-600 border-blue-600 text-white";
-const checkboxIconStyle = "w-full h-full";
-const searchIconStyle = "w-4 h-4 shrink-0 text-gray-400";
-const noResultsStyle = "px-3 py-4 text-sm text-gray-500 text-center";
-const loadingStyle = "px-3 py-4 text-sm text-gray-500 text-center";
-const labelStyle = "block text-sm font-medium text-gray-700 mb-1";
-const errorStyle = "text-sm text-red-500 mt-1";
-const chipStyle = "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-md shrink-0 max-w-[100px]";
-const chipRemoveStyle = "w-3 h-3 shrink-0 hover:text-blue-600";
-const moreCountStyle = "inline-flex items-center px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-md shrink-0";
+const getClasses = (dark: boolean) => ({
+  dropdown: {
+    root: "",
+    container: "relative",
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors min-h-[42px] ${
+      dark
+        ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    }`,
+    triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+    content: `rounded-lg shadow-lg overflow-hidden ${
+      dark
+        ? "bg-gray-800 border border-gray-700"
+        : "bg-white border border-gray-200"
+    }`,
+    searchInput: `flex items-center gap-2 px-3 py-2 border-b ${
+      dark ? "border-gray-700 bg-gray-800" : "border-gray-200"
+    }`,
+    searchInputElement: dark ? "text-gray-200 placeholder:text-gray-500" : "",
+    searchIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
+    optionList: "max-h-60 overflow-y-auto",
+    option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed ${
+      dark
+        ? "text-gray-200 hover:bg-gray-700"
+        : "text-gray-700 hover:bg-gray-50"
+    }`,
+    optionSelected: dark ? "bg-blue-900/50" : "bg-blue-50",
+    optionFocused: dark ? "bg-gray-600" : "bg-gray-100",
+    optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
+    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
+    checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-gray-500" : "border-gray-300"}`,
+    checkboxChecked: "bg-blue-600 border-blue-600 text-white",
+    checkboxIcon: "w-full h-full",
+    noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
+    loading: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
+    label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
+    error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
+    chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${dark ? "bg-gray-600 text-gray-200" : "bg-blue-100 text-blue-800"}`,
+    chipRemove: `w-3 h-3 shrink-0 cursor-pointer ${dark ? "hover:text-gray-300" : "hover:text-blue-600"}`,
+    moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-md shrink-0 ${dark ? "bg-gray-600 text-gray-300" : "bg-gray-100 text-gray-600"}`,
+  },
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+});
 
-// Dark theme styles
-const darkDropdownStyle = "absolute z-50 top-full left-0 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-hidden";
-const darkSearchInputStyle = "flex items-center gap-2 px-3 py-2 border-b border-gray-700 bg-gray-800";
-const darkSearchInputTextStyle = "text-gray-200 placeholder:text-gray-500";
-const darkOptionStyle = "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed";
-const darkSelectedOptionStyle = "bg-gray-700";
-const darkFocusedOptionStyle = "bg-gray-600";
-const darkCheckboxStyle = "w-4 h-4 shrink-0 border border-gray-500 rounded flex items-center justify-center";
-const darkCheckboxCheckedStyle = "bg-blue-500 border-blue-500 text-white";
-const darkSearchIconStyle = "w-4 h-4 shrink-0 text-gray-500";
-const darkNoResultsStyle = "px-3 py-4 text-sm text-gray-400 text-center";
-
-// Purple theme styles
-const purpleDropdownStyle = "absolute z-50 top-full left-0 mt-1 w-full bg-purple-50 border border-purple-200 rounded-lg shadow-lg overflow-hidden";
-const purpleSearchInputStyle = "flex items-center gap-2 px-3 py-2 border-b border-purple-200 bg-purple-50";
-const purpleOptionStyle = "flex items-center gap-2 px-3 py-2 cursor-pointer text-purple-900 hover:bg-purple-100 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed";
-const purpleSelectedOptionStyle = "bg-purple-200";
-const purpleFocusedOptionStyle = "bg-purple-100";
-const purpleCheckboxStyle = "w-4 h-4 shrink-0 border border-purple-400 rounded flex items-center justify-center";
-const purpleCheckboxCheckedStyle = "bg-purple-600 border-purple-600 text-white";
-const purpleSearchIconStyle = "w-4 h-4 shrink-0 text-purple-400";
-const purpleNoResultsStyle = "px-3 py-4 text-sm text-purple-500 text-center";
-const purpleChipStyle = "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-purple-200 text-purple-800 rounded-md shrink-0 max-w-[100px]";
-const purpleChipRemoveStyle = "w-3 h-3 shrink-0 hover:text-purple-600";
-const purpleTriggerStyle = "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-purple-300 rounded-lg bg-white hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent min-h-[42px]";
-
-// Green checkbox styles
-const greenCheckboxStyle = "w-4 h-4 shrink-0 border border-gray-300 rounded-full flex items-center justify-center";
-const greenCheckboxCheckedStyle = "bg-emerald-500 border-emerald-500 text-white";
-
-// Orange checkbox styles
-const orangeCheckboxStyle = "w-5 h-5 shrink-0 border-2 border-orange-300 rounded-sm flex items-center justify-center";
-const orangeCheckboxCheckedStyle = "bg-orange-500 border-orange-500 text-white";
+// ─── Demo ───────────────────────────────────────────────────────────────────
 
 const MultiSelectSearchableDropdownDemo = () => {
+  const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
+
+  // Basic
   const [basicValue, setBasicValue] = useState<string[]>([]);
+  // Custom content
   const [countryValue, setCountryValue] = useState<string[]>([]);
+  // Async search
   const [asyncValue, setAsyncValue] = useState<string[]>([]);
+  // Async prefetch
   const [asyncPrefetchValue, setAsyncPrefetchValue] = useState<string[]>([]);
-  const [disabledValue, setDisabledValue] = useState<string[]>(["apple", "banana"]);
-  const [errorValue, setErrorValue] = useState<string[]>([]);
+  // Label
+  const [labelValue, setLabelValue] = useState<string[]>([]);
+  // No chips
   const [noChipsValue, setNoChipsValue] = useState<string[]>([]);
+  // Disabled
+  const [disabledValue, setDisabledValue] = useState<string[]>(["apple", "banana"]);
+  // Error
+  const [errorValue, setErrorValue] = useState<string[]>([]);
+  // Without search
+  const [noSearchValue, setNoSearchValue] = useState<string[]>([]);
+  // Controlled open
+  const [controlledOpen, setControlledOpen] = useState(false);
+  const [controlledValue, setControlledValue] = useState<string[]>([]);
+  // Dark theme
   const [darkThemeValue, setDarkThemeValue] = useState<string[]>([]);
+  // Purple theme
   const [purpleThemeValue, setPurpleThemeValue] = useState<string[]>([]);
+  // Custom checkboxes
   const [greenCheckboxValue, setGreenCheckboxValue] = useState<string[]>([]);
   const [orangeCheckboxValue, setOrangeCheckboxValue] = useState<string[]>([]);
   const [customIconValue, setCustomIconValue] = useState<string[]>([]);
-  const [labelValue, setLabelValue] = useState<string[]>([]);
-  const [noSearchValue, setNoSearchValue] = useState<string[]>([]);
+  // Scroll lock
+  const [scrollLockValue, setScrollLockValue] = useState<string[]>([]);
+  const [scrollUnlockedValue, setScrollUnlockedValue] = useState<string[]>([]);
+  // Style variants
+  const [variantDefaultValue, setVariantDefaultValue] = useState<string[]>([]);
+  const [variantBorderlessValue, setVariantBorderlessValue] = useState<string[]>([]);
+  const [variantBottomValue, setVariantBottomValue] = useState<string[]>([]);
+  const [variantGhostValue, setVariantGhostValue] = useState<string[]>([]);
+  const [variantPillValue, setVariantPillValue] = useState<string[]>([]);
 
   const mapCountryToOption = useCallback((country: RestCountryResponse): MultiSelectOption => ({
     value: country.cca2,
@@ -157,783 +187,779 @@ const MultiSelectSearchableDropdownDemo = () => {
 
     const popularCountryCodes = ["US", "GB", "DE", "FR", "JP", "CA", "AU", "IN", "BR", "IT"];
     const popularCountries = popularCountryCodes
-      .map((code) => data.find((c) => c.cca2 === code))
-      .filter((c): c is RestCountryResponse => c !== undefined);
+      .map((code) => data.find((r) => r.cca2 === code))
+      .filter((r): r is RestCountryResponse => r !== undefined);
 
     return popularCountries.map(mapCountryToOption);
   }, [mapCountryToOption]);
 
   return (
-    <>
-      <ComponentHeader
-        title="MultiSelectSearchableDropdown"
-        description="A multi-select dropdown with sync and async search support."
-      />
+    <div className="space-y-10">
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
+        <div className="relative">
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            MultiSelectSearchableDropdown
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A multi-select dropdown with built-in search, async loading,
+            debounced queries, chips display, and full customization via the classes prop.
+          </p>
+          <div className="mt-5">
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { MultiSelectSearchableDropdown } from "@kern-ui/multi-select-searchable-dropdown";`}
+            />
+          </div>
+        </div>
+      </header>
 
-      <Section title="Basic Usage">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={basicValue}
-            onChange={(values) => setBasicValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-          {basicValue.length > 0 && (
-            <p className="text-sm text-gray-500 mt-2">
-              Selected: {basicValue.join(", ")}
-            </p>
-          )}
+      {/* ─── Basic Usage ──────────────────────────────────────────────────── */}
+      <Section
+        title="Basic Usage"
+        description="Standard multi-select with search and chips."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={basicValue}
+              onChange={(values) => setBasicValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Select fruits"
+            />
+          </div>
+        </DemoWrapper>
+        {basicValue.length > 0 && (
+          <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>
+            Selected: {basicValue.join(", ")}
+          </p>
+        )}
+      </Section>
+
+      {/* ─── With Custom Content ──────────────────────────────────────────── */}
+      <Section
+        title="With Custom Content"
+        description="Use the content prop on options for rich rendering."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={countryOptions}
+              value={countryValue}
+              onChange={(values) => setCountryValue(values)}
+              placeholder="Select countries..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Select countries"
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Async Search (Real API) ──────────────────────────────────────── */}
+      <Section
+        title="Async Search (Real API)"
+        description="Type to search countries using the REST Countries API."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-80">
+            <MultiSelectSearchableDropdown
+              value={asyncValue}
+              onChange={(values) => setAsyncValue(values)}
+              placeholder="Search countries..."
+              onSearch={handleAsyncSearch}
+              searchDebounceMs={300}
+              maxDisplayedChips={2}
+              loadingText="Searching countries..."
+              noResultsText="No countries found"
+              classes={c.dropdown}
+              aria-label="Search countries"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          Try: &quot;germany&quot;, &quot;united&quot;, &quot;japan&quot;, &quot;aus&quot;
         </div>
       </Section>
 
-      <Section title="With Custom Content">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={countryOptions}
-            value={countryValue}
-            onChange={(values) => setCountryValue(values)}
-            placeholder="Select countries..."
-            maxDisplayedChips={2}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
+      {/* ─── Async with Dynamic Prefetch ──────────────────────────────────── */}
+      <Section
+        title="Async with Dynamic Prefetch"
+        description="Fetches popular countries when dropdown opens, searches API when user types."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-80">
+            <MultiSelectSearchableDropdown
+              value={asyncPrefetchValue}
+              onChange={(values) => setAsyncPrefetchValue(values)}
+              placeholder="Select or search countries..."
+              onSearch={handleAsyncSearch}
+              onLoadInitialOptions={handleLoadInitialOptions}
+              loadInitialOnOpen
+              searchDebounceMs={300}
+              maxDisplayedChips={2}
+              loadingText="Loading..."
+              noResultsText="No countries found"
+              classes={c.dropdown}
+              aria-label="Select or search countries"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          Options are fetched from the REST Countries API when the dropdown opens.
         </div>
       </Section>
 
-      <Section title="Async Search (Real API)">
-        <div className="w-80">
-          <MultiSelectSearchableDropdown
-            value={asyncValue}
-            onChange={(values) => setAsyncValue(values)}
-            placeholder="Search countries..."
-            onSearch={handleAsyncSearch}
-            searchDebounceMs={300}
-            maxDisplayedChips={2}
-            loadingText="Searching countries..."
-            noResultsText="No countries found"
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            loadingClassName={loadingStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Type to search countries using the REST Countries API.
-        </p>
-        <p className="text-xs text-gray-400 mt-1">
-          Try: "germany", "united", "japan", "aus"
-        </p>
+      {/* ─── With Label ───────────────────────────────────────────────────── */}
+      <Section
+        title="With Label"
+        description="Use the label and required props."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              label="Favorite Fruits"
+              required
+              options={staticOptions}
+              value={labelValue}
+              onChange={(values) => setLabelValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Async with Dynamic Prefetch">
-        <div className="w-80">
-          <MultiSelectSearchableDropdown
-            value={asyncPrefetchValue}
-            onChange={(values) => setAsyncPrefetchValue(values)}
-            placeholder="Select or search countries..."
-            onSearch={handleAsyncSearch}
-            onLoadInitialOptions={handleLoadInitialOptions}
-            loadInitialOnOpen
-            searchDebounceMs={300}
-            maxDisplayedChips={2}
-            loadingText="Loading..."
-            noResultsText="No countries found"
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            loadingClassName={loadingStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Fetches popular countries when dropdown opens, searches API when user types.
-        </p>
+      {/* ─── Without Chips (Count Only) ───────────────────────────────────── */}
+      <Section
+        title="Without Chips (Count Only)"
+        description='Shows "X selected" instead of individual chips.'
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={noChipsValue}
+              onChange={(values) => setNoChipsValue(values)}
+              placeholder="Select fruits..."
+              showSelectedChips={false}
+              classes={c.dropdown}
+              aria-label="Select fruits count only"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="With Label">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            label="Favorite Fruits"
-            required
-            options={staticOptions}
-            value={labelValue}
-            onChange={(values) => setLabelValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            labelClassName={labelStyle}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
+      {/* ─── Disabled State ───────────────────────────────────────────────── */}
+      <Section
+        title="Disabled State"
+        description="Use disabled to prevent interaction."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={disabledValue}
+              onChange={(values) => setDisabledValue(values)}
+              disabled
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed` }}
+              aria-label="Disabled fruits"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Without Chips (Count Only)">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={noChipsValue}
-            onChange={(values) => setNoChipsValue(values)}
-            placeholder="Select fruits..."
-            showSelectedChips={false}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Shows "X selected" instead of individual chips.
-        </p>
+      {/* ─── Error State ──────────────────────────────────────────────────── */}
+      <Section
+        title="Error State"
+        description="Show validation errors with error and errorMessage props."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              label="Required Field"
+              options={staticOptions}
+              value={errorValue}
+              onChange={(values) => setErrorValue(values)}
+              required
+              error
+              errorMessage="Please select at least one option"
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500` }}
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Disabled State">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={disabledValue}
-            onChange={(values) => setDisabledValue(values)}
-            disabled
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={`${triggerStyle} opacity-50 cursor-not-allowed`}
-            dropdownClassName={dropdownStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
+      {/* ─── Without Search ───────────────────────────────────────────────── */}
+      <Section
+        title="Without Search"
+        description="Disable the search input with showSearch={false}."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={noSearchValue}
+              onChange={(values) => setNoSearchValue(values)}
+              showSearch={false}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Select fruits no search"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Error State">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            label="Required Field"
-            options={staticOptions}
-            value={errorValue}
-            onChange={(values) => setErrorValue(values)}
-            required
-            error
-            errorMessage="Please select at least one option"
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            labelClassName={labelStyle}
-            triggerClassName={`${triggerStyle} border-red-500 focus:ring-red-500`}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            errorClassName={errorStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
+      {/* ─── Controlled Open State ────────────────────────────────────────── */}
+      <Section
+        title="Controlled Open State"
+        description="Use open and onOpenChange to control the dropdown programmatically."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="flex items-end gap-4">
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={controlledValue}
+                onChange={(values) => setControlledValue(values)}
+                open={controlledOpen}
+                onOpenChange={setControlledOpen}
+                placeholder="Controlled dropdown..."
+                maxDisplayedChips={2}
+                classes={c.dropdown}
+                aria-label="Controlled dropdown"
+              />
+            </div>
+            <button
+              type="button"
+              className={c.btn}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => setControlledOpen((o) => !o)}
+            >
+              {controlledOpen ? "Close" : "Open"}
+            </button>
+            {controlledValue.length > 0 && (
+              <button
+                type="button"
+                className={c.btn}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={() => setControlledValue([])}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Without Search">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={noSearchValue}
-            onChange={(values) => setNoSearchValue(values)}
-            showSearch={false}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={checkboxStyle}
-            checkboxCheckedClassName={checkboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
+      {/* ─── Scroll Lock ──────────────────────────────────────────────────── */}
+      <Section
+        title="Scroll Lock"
+        description="By default, body scroll is locked when the dropdown is open. Set lockScroll={false} to allow background scrolling."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={scrollLockValue}
+              onChange={(values) => setScrollLockValue(values)}
+              placeholder="Scroll locked (default)"
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Scroll locked dropdown"
+            />
+          </div>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={scrollUnlockedValue}
+              onChange={(values) => setScrollUnlockedValue(values)}
+              placeholder="Scroll allowed"
+              lockScroll={false}
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Scroll unlocked dropdown"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Dark Theme Menu">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={darkThemeValue}
-            onChange={(values) => setDarkThemeValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={triggerStyle}
-            dropdownClassName={darkDropdownStyle}
-            searchInputClassName={darkSearchInputStyle}
-            searchInputTextClassName={darkSearchInputTextStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={darkOptionStyle}
-            selectedOptionClassName={darkSelectedOptionStyle}
-            focusedOptionClassName={darkFocusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={darkCheckboxStyle}
-            checkboxCheckedClassName={darkCheckboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={darkSearchIconStyle}
-            noResultsClassName={darkNoResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Dark themed dropdown menu with custom background colors.
-        </p>
+      {/* ─── Style Variants ───────────────────────────────────────────────── */}
+      <Section
+        title="Style Variants"
+        description="Different visual treatments using the classes prop -- borderless, bottom-border-only, ghost, and pill styles."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="flex-col">
+          <div>
+            <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={variantDefaultValue}
+                onChange={(values) => setVariantDefaultValue(values)}
+                placeholder="Select..."
+                maxDisplayedChips={2}
+                classes={c.dropdown}
+                aria-label="Default variant"
+              />
+            </div>
+          </div>
+          <div>
+            <p className={`mb-2 ${c.label}`}>Borderless</p>
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={variantBorderlessValue}
+                onChange={(values) => setVariantBorderlessValue(values)}
+                placeholder="Select..."
+                maxDisplayedChips={2}
+                classes={{
+                  ...c.dropdown,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer min-h-[42px] ${
+                    dark
+                      ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]"
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  }`,
+                  triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                }}
+                aria-label="Borderless variant"
+              />
+            </div>
+          </div>
+          <div>
+            <p className={`mb-2 ${c.label}`}>Bottom border only</p>
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={variantBottomValue}
+                onChange={(values) => setVariantBottomValue(values)}
+                placeholder="Select..."
+                maxDisplayedChips={2}
+                classes={{
+                  ...c.dropdown,
+                  trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] ${
+                    dark
+                      ? "border-gray-600 text-gray-200 hover:border-indigo-400 focus-within:border-indigo-400"
+                      : "border-gray-200 text-gray-700 hover:border-indigo-500 focus-within:border-indigo-500"
+                  }`,
+                  triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                }}
+                aria-label="Bottom border variant"
+              />
+            </div>
+          </div>
+          <div>
+            <p className={`mb-2 ${c.label}`}>Ghost</p>
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={variantGhostValue}
+                onChange={(values) => setVariantGhostValue(values)}
+                placeholder="Select..."
+                maxDisplayedChips={2}
+                classes={{
+                  ...c.dropdown,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer min-h-[42px] ${
+                    dark
+                      ? "text-gray-300 hover:bg-white/[0.06]"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`,
+                  triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                }}
+                aria-label="Ghost variant"
+              />
+            </div>
+          </div>
+          <div>
+            <p className={`mb-2 ${c.label}`}>Pill</p>
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={variantPillValue}
+                onChange={(values) => setVariantPillValue(values)}
+                placeholder="Select..."
+                maxDisplayedChips={2}
+                classes={{
+                  ...c.dropdown,
+                  trigger: `flex items-center gap-2 px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer min-h-[42px] ${
+                    dark
+                      ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
+                  }`,
+                  triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                }}
+                aria-label="Pill variant"
+              />
+            </div>
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Purple Theme Menu">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={purpleThemeValue}
-            onChange={(values) => setPurpleThemeValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={purpleTriggerStyle}
-            dropdownClassName={purpleDropdownStyle}
-            searchInputClassName={purpleSearchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={purpleOptionStyle}
-            selectedOptionClassName={purpleSelectedOptionStyle}
-            focusedOptionClassName={purpleFocusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={purpleCheckboxStyle}
-            checkboxCheckedClassName={purpleCheckboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={purpleSearchIconStyle}
-            noResultsClassName={purpleNoResultsStyle}
-            chipClassName={purpleChipStyle}
-            chipRemoveClassName={purpleChipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Purple themed dropdown with matching checkbox and chips.
-        </p>
+      {/* ─── Dark Theme ───────────────────────────────────────────────────── */}
+      <Section
+        title="Dark Theme"
+        description="A dedicated dark color scheme using classes override."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={darkThemeValue}
+              onChange={(values) => setDarkThemeValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={{
+                ...c.dropdown,
+                trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 min-h-[42px]",
+                content: "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
+                searchInput: "flex items-center gap-2 px-3 py-2 border-b border-gray-700 bg-gray-800",
+                searchInputElement: "text-gray-200 placeholder:text-gray-500",
+                option: "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
+                optionSelected: "bg-gray-700",
+                optionFocused: "bg-gray-600",
+                chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
+                checkbox: "w-4 h-4 shrink-0 border border-gray-500 rounded flex items-center justify-center",
+                checkboxChecked: "bg-blue-500 border-blue-500 text-white",
+                searchIcon: "w-4 h-4 shrink-0 text-gray-500",
+                chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-gray-600 text-gray-200 rounded-md shrink-0 max-w-[100px]",
+                chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-gray-300",
+                moreCount: "inline-flex items-center px-2 py-0.5 text-xs bg-gray-600 text-gray-300 rounded-md shrink-0",
+                noResults: "px-3 py-4 text-sm text-gray-400 text-center",
+              }}
+              aria-label="Dark theme fruits"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Custom Checkbox - Green Rounded">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={greenCheckboxValue}
-            onChange={(values) => setGreenCheckboxValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={greenCheckboxStyle}
-            checkboxCheckedClassName={greenCheckboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Round checkbox with green checked state.
-        </p>
+      {/* ─── Purple Theme ─────────────────────────────────────────────────── */}
+      <Section
+        title="Purple Theme"
+        description="Custom color scheme example."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={purpleThemeValue}
+              onChange={(values) => setPurpleThemeValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={{
+                ...c.dropdown,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 min-h-[42px] ${
+                  dark
+                    ? "border-purple-700 bg-purple-950/60 text-purple-200 hover:border-purple-500"
+                    : "border-purple-300 bg-purple-50 text-purple-900 hover:border-purple-400"
+                }`,
+                triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                content: `rounded-lg shadow-lg overflow-hidden ${
+                  dark ? "bg-purple-950 border border-purple-800" : "bg-purple-50 border border-purple-200"
+                }`,
+                searchInput: `flex items-center gap-2 px-3 py-2 border-b ${
+                  dark ? "border-purple-800 bg-purple-950" : "border-purple-200 bg-purple-50"
+                }`,
+                option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed ${
+                  dark ? "text-purple-200 hover:bg-purple-900/60" : "text-purple-900 hover:bg-purple-100"
+                }`,
+                optionSelected: dark ? "bg-purple-900/80" : "bg-purple-200",
+                optionFocused: dark ? "bg-purple-900/60" : "bg-purple-100",
+                chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-purple-400" : "text-purple-600"}`,
+                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-purple-500" : "border-purple-400"}`,
+                checkboxChecked: dark ? "bg-purple-500 border-purple-500 text-white" : "bg-purple-600 border-purple-600 text-white",
+                searchIcon: `w-4 h-4 shrink-0 ${dark ? "text-purple-400" : "text-purple-500"}`,
+                chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${
+                  dark ? "bg-purple-900/60 text-purple-200" : "bg-purple-200 text-purple-800"
+                }`,
+                chipRemove: `w-3 h-3 shrink-0 cursor-pointer ${dark ? "hover:text-purple-300" : "hover:text-purple-600"}`,
+                moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-md shrink-0 ${
+                  dark ? "bg-purple-900/40 text-purple-300" : "bg-purple-100 text-purple-700"
+                }`,
+                label: `block text-sm font-medium mb-1 ${dark ? "text-purple-300" : "text-purple-900"}`,
+                error: `text-sm mt-1 ${dark ? "text-purple-400" : "text-purple-600"}`,
+              }}
+              aria-label="Purple theme fruits"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Custom Checkbox - Orange Square">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={orangeCheckboxValue}
-            onChange={(values) => setOrangeCheckboxValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName={orangeCheckboxStyle}
-            checkboxCheckedClassName={orangeCheckboxCheckedStyle}
-            checkboxIconClassName={checkboxIconStyle}
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Larger square checkbox with orange checked state and thicker border.
-        </p>
+      {/* ─── Custom Checkbox - Green Rounded ──────────────────────────────── */}
+      <Section
+        title="Custom Checkbox - Green Rounded"
+        description="Override checkbox classes for custom styling."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={greenCheckboxValue}
+              onChange={(values) => setGreenCheckboxValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={{
+                ...c.dropdown,
+                checkbox: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center ${dark ? "border-gray-500" : "border-gray-300"}`,
+                checkboxChecked: "bg-emerald-500 border-emerald-500 text-white",
+              }}
+              aria-label="Green checkbox fruits"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Custom Checkbox Icon">
-        <div className="w-72">
-          <MultiSelectSearchableDropdown
-            options={staticOptions}
-            value={customIconValue}
-            onChange={(values) => setCustomIconValue(values)}
-            placeholder="Select fruits..."
-            maxDisplayedChips={2}
-            checkboxIcon={
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            }
-            triggerClassName={triggerStyle}
-            dropdownClassName={dropdownStyle}
-            searchInputClassName={searchInputStyle}
-            optionListClassName={optionListStyle}
-            optionClassName={optionStyle}
-            selectedOptionClassName={selectedOptionStyle}
-            focusedOptionClassName={focusedOptionStyle}
-            chevronClassName={chevronStyle}
-            checkboxClassName="w-4 h-4 shrink-0 border border-amber-400 rounded flex items-center justify-center"
-            checkboxCheckedClassName="bg-amber-500 border-amber-500 text-white"
-            searchIconClassName={searchIconStyle}
-            noResultsClassName={noResultsStyle}
-            chipClassName={chipStyle}
-            chipRemoveClassName={chipRemoveStyle}
-            moreCountClassName={moreCountStyle}
-          />
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Custom star icon instead of default checkmark.
-        </p>
+      {/* ─── Custom Checkbox - Orange Square ──────────────────────────────── */}
+      <Section
+        title="Custom Checkbox - Orange Square"
+        description="Another checkbox style variant."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={orangeCheckboxValue}
+              onChange={(values) => setOrangeCheckboxValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={{
+                ...c.dropdown,
+                checkbox: "w-5 h-5 shrink-0 border-2 border-orange-300 rounded-sm flex items-center justify-center",
+                checkboxChecked: "bg-orange-500 border-orange-500 text-white",
+              }}
+              aria-label="Orange checkbox fruits"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="MultiSelectOption Interface">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Property</th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Type</th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Required</th>
-                <th className="text-left py-2 font-medium text-gray-900">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">value</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">Yes</td>
-                <td className="py-2 text-gray-600">Unique identifier for the option</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">label</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">Yes</td>
-                <td className="py-2 text-gray-600">Display text (used for search filtering)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">content</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Custom content to render in dropdown (overrides label)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">selectedContent</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Custom content for selected chips (defaults to content or label)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">disabled</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">No</td>
-                <td className="py-2 text-gray-600">Disable this specific option</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      {/* ─── Custom Checkbox Icon ─────────────────────────────────────────── */}
+      <Section
+        title="Custom Checkbox Icon"
+        description="Replace the default check icon with a star."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={customIconValue}
+              onChange={(values) => setCustomIconValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              checkboxIcon={
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              }
+              classes={{
+                ...c.dropdown,
+                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-amber-500" : "border-amber-400"}`,
+                checkboxChecked: "bg-amber-500 border-amber-500 text-white",
+              }}
+              aria-label="Custom icon fruits"
+            />
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Props Reference">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Prop</th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Type</th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Default</th>
-                <th className="text-left py-2 font-medium text-gray-900">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">id</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">auto-generated</td>
-                <td className="py-2 text-gray-600">Custom ID for the dropdown</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">name</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Name attribute</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">options</td>
-                <td className="py-2 pr-4 text-gray-600">MultiSelectOption[]</td>
-                <td className="py-2 pr-4 text-gray-500">[]</td>
-                <td className="py-2 text-gray-600">Static options array</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">value</td>
-                <td className="py-2 pr-4 text-gray-600">string[]</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Selected values (required)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onChange</td>
-                <td className="py-2 pr-4 text-gray-600">(values, options) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Change handler (required)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">label</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Label for the dropdown</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">required</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Whether field is required</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">placeholder</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Select options..."</td>
-                <td className="py-2 text-gray-600">Placeholder text</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">errorMessage</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Error message to display</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">searchPlaceholder</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Search..."</td>
-                <td className="py-2 text-gray-600">Search input placeholder</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">noResultsText</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"No results found"</td>
-                <td className="py-2 text-gray-600">Text when no results</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">loadingText</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Loading..."</td>
-                <td className="py-2 text-gray-600">Text while loading</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">showChevron</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show dropdown chevron</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">fullWidth</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Take full container width</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">loading</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">External loading state</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onSearch</td>
-                <td className="py-2 pr-4 text-gray-600">(query) =&gt; Promise&lt;Option[]&gt;</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Async search function</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">searchDebounceMs</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">300</td>
-                <td className="py-2 text-gray-600">Debounce delay for async search</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">initialOptions</td>
-                <td className="py-2 pr-4 text-gray-600">MultiSelectOption[]</td>
-                <td className="py-2 pr-4 text-gray-500">[]</td>
-                <td className="py-2 text-gray-600">Static initial options for async dropdown</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onLoadInitialOptions</td>
-                <td className="py-2 pr-4 text-gray-600">() =&gt; Promise&lt;Option[]&gt;</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Async function to load initial options</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">loadInitialOnOpen</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Load initial options when dropdown opens</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxDisplayedChips</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">3</td>
-                <td className="py-2 text-gray-600">Max chips before showing +N</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">showSelectedChips</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show chips or count only</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">showSearch</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show search input</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">disabled</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Disable the dropdown</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">error</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Show error state</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">checkboxIcon</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">CheckIcon</td>
-                <td className="py-2 text-gray-600">Custom checkbox icon when checked</td>
-              </tr>
-            </tbody>
-          </table>
+      {/* ─── Props ────────────────────────────────────────────────────────── */}
+      <Section title="MultiSelectSearchableDropdown Props" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="options" type="MultiSelectOption[]" defaultVal="[]" description="Static options array" isDarkMode={dark} />
+            <PropRow name="value" type="string[]" description="Selected values (required)" isDarkMode={dark} />
+            <PropRow name="onChange" type="(values, options) => void" description="Change handler (required)" isDarkMode={dark} />
+            <PropRow name="id" type="string" description="ID for ARIA and form association" isDarkMode={dark} />
+            <PropRow name="name" type="string" description="Form field name" isDarkMode={dark} />
+            <PropRow name="placeholder" type="string" defaultVal='"Select options..."' description="Placeholder when nothing selected" isDarkMode={dark} />
+            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the dropdown" isDarkMode={dark} />
+            <PropRow name="error" type="boolean" defaultVal="false" description="Show error state" isDarkMode={dark} />
+            <PropRow name="errorMessage" type="ReactNode" description="Error message to display" isDarkMode={dark} />
+            <PropRow name="label" type="ReactNode" description="Label for the dropdown" isDarkMode={dark} />
+            <PropRow name="required" type="boolean" defaultVal="false" description="Whether field is required" isDarkMode={dark} />
+            <PropRow name="showSearch" type="boolean" defaultVal="true" description="Show the search input" isDarkMode={dark} />
+            <PropRow name="searchPlaceholder" type="string" defaultVal='"Search..."' description="Placeholder for search input" isDarkMode={dark} />
+            <PropRow name="showChevron" type="boolean" defaultVal="true" description="Show dropdown chevron" isDarkMode={dark} />
+            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Take full container width" isDarkMode={dark} />
+            <PropRow name="loading" type="boolean" defaultVal="false" description="External loading state" isDarkMode={dark} />
+            <PropRow name="onSearch" type="(query) => Promise<Option[]>" description="Async search function" isDarkMode={dark} />
+            <PropRow name="searchDebounceMs" type="number" defaultVal="300" description="Debounce delay for search" isDarkMode={dark} />
+            <PropRow name="initialOptions" type="MultiSelectOption[]" description="Pre-loaded initial options" isDarkMode={dark} />
+            <PropRow name="onLoadInitialOptions" type="() => Promise<Option[]>" description="Async function to load initial options" isDarkMode={dark} />
+            <PropRow name="loadInitialOnOpen" type="boolean" defaultVal="false" description="Load initial options when dropdown opens" isDarkMode={dark} />
+            <PropRow name="maxDisplayedChips" type="number" defaultVal="3" description="Max chips before showing +N" isDarkMode={dark} />
+            <PropRow name="showSelectedChips" type="boolean" defaultVal="true" description="Show chips or count only" isDarkMode={dark} />
+            <PropRow name="checkboxIcon" type="ReactNode" defaultVal="CheckIcon" description="Custom checkbox icon" isDarkMode={dark} />
+            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
+            <PropRow name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
+            <PropRow name="open" type="boolean" description="Controlled open state" isDarkMode={dark} />
+            <PropRow name="defaultOpen" type="boolean" defaultVal="false" description="Initial open state (uncontrolled)" isDarkMode={dark} />
+            <PropRow name="onOpenChange" type="(open: boolean) => void" description="Called when open state changes" isDarkMode={dark} />
+            <PropRow name="classes" type="MultiSelectSearchableDropdownClasses" description="Class names for internal elements" isDarkMode={dark} />
+            <PropRow name="className" type="string" description="Root class name" isDarkMode={dark} />
+            <PropRow name="style" type="CSSProperties" description="Root inline styles" isDarkMode={dark} />
+            <PropRow name="keepMounted" type="boolean" defaultVal="false" description="Keep listbox in DOM when closed" isDarkMode={dark} />
+            <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Portal target" isDarkMode={dark} />
+            <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred list position" isDarkMode={dark} />
+            <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="Listbox z-index" isDarkMode={dark} />
+            <PropRow name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and list (px)" isDarkMode={dark} />
+            <PropRow name="noResultsText" type="string" defaultVal='"No options available"' description="Default empty state text" isDarkMode={dark} />
+            <PropRow name="loadingText" type="string" defaultVal='"Loading..."' description="Loading state text" isDarkMode={dark} />
+            <PropRow name="aria-label" type="string" description="Accessible label for the dropdown" isDarkMode={dark} />
+          </PropsTable>
         </div>
       </Section>
 
-      <Section title="Styling Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">Prop</th>
-                <th className="text-left py-2 font-medium text-gray-900">Description</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">className</td>
-                <td className="py-2 text-gray-600">Dropdown wrapper (relative positioned)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">containerClassName</td>
-                <td className="py-2 text-gray-600">Root container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">labelClassName</td>
-                <td className="py-2 text-gray-600">Label element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">errorClassName</td>
-                <td className="py-2 text-gray-600">Error message</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">triggerClassName</td>
-                <td className="py-2 text-gray-600">Trigger button</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">dropdownClassName</td>
-                <td className="py-2 text-gray-600">Dropdown menu container (background, border, shadow)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">searchInputClassName</td>
-                <td className="py-2 text-gray-600">Search input wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">searchInputTextClassName</td>
-                <td className="py-2 text-gray-600">Search input text element (text color, placeholder styling)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">optionListClassName</td>
-                <td className="py-2 text-gray-600">Options list wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">optionClassName</td>
-                <td className="py-2 text-gray-600">Base option styling (layout, hover)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">selectedOptionClassName</td>
-                <td className="py-2 text-gray-600">Additional class for selected options</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">focusedOptionClassName</td>
-                <td className="py-2 text-gray-600">Additional class for keyboard-focused options</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">checkboxClassName</td>
-                <td className="py-2 text-gray-600">Base checkbox styling (size, border, shape)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">checkboxCheckedClassName</td>
-                <td className="py-2 text-gray-600">Additional class for checked checkbox (background, color)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">checkboxIconClassName</td>
-                <td className="py-2 text-gray-600">Checkbox icon styling (size)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">chipClassName</td>
-                <td className="py-2 text-gray-600">Selected chip</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">chipRemoveClassName</td>
-                <td className="py-2 text-gray-600">Chip remove button</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">moreCountClassName</td>
-                <td className="py-2 text-gray-600">"+N more" badge</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">chevronClassName</td>
-                <td className="py-2 text-gray-600">Chevron icon</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">searchIconClassName</td>
-                <td className="py-2 text-gray-600">Search icon</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">noResultsClassName</td>
-                <td className="py-2 text-gray-600">No results message</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">loadingClassName</td>
-                <td className="py-2 text-gray-600">Loading message</td>
-              </tr>
-            </tbody>
-          </table>
+      {/* ─── MultiSelectSearchableDropdownClasses Slots ───────────────────── */}
+      <Section title="MultiSelectSearchableDropdownClasses Slots" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="root" type="string" description="Root container element" isDarkMode={dark} />
+            <PropRow name="container" type="string" description="Inner wrapper (relative positioned)" isDarkMode={dark} />
+            <PropRow name="trigger" type="string" description="Trigger button" isDarkMode={dark} />
+            <PropRow name="triggerText" type="string" description="Trigger text/chips container" isDarkMode={dark} />
+            <PropRow name="content" type="string" description="Dropdown content (portaled, background, border, shadow)" isDarkMode={dark} />
+            <PropRow name="optionList" type="string" description="Options list wrapper" isDarkMode={dark} />
+            <PropRow name="option" type="string" description="Base option styling" isDarkMode={dark} />
+            <PropRow name="optionSelected" type="string" description="Additional class for selected options" isDarkMode={dark} />
+            <PropRow name="optionFocused" type="string" description="Additional class for keyboard-focused options" isDarkMode={dark} />
+            <PropRow name="optionDisabled" type="string" description="Additional class for disabled options" isDarkMode={dark} />
+            <PropRow name="searchInput" type="string" description="Search input wrapper" isDarkMode={dark} />
+            <PropRow name="searchInputElement" type="string" description="Search input text element" isDarkMode={dark} />
+            <PropRow name="searchIcon" type="string" description="Search icon" isDarkMode={dark} />
+            <PropRow name="checkbox" type="string" description="Checkbox container" isDarkMode={dark} />
+            <PropRow name="checkboxChecked" type="string" description="Additional class for checked checkbox" isDarkMode={dark} />
+            <PropRow name="checkboxIcon" type="string" description="Checkbox icon" isDarkMode={dark} />
+            <PropRow name="chip" type="string" description="Selected chip" isDarkMode={dark} />
+            <PropRow name="chipRemove" type="string" description="Chip remove button" isDarkMode={dark} />
+            <PropRow name="chevron" type="string" description="Chevron icon" isDarkMode={dark} />
+            <PropRow name="moreCount" type="string" description='"+N more" badge' isDarkMode={dark} />
+            <PropRow name="noResults" type="string" description="No results message" isDarkMode={dark} />
+            <PropRow name="loading" type="string" description="Loading message" isDarkMode={dark} />
+            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
+            <PropRow name="error" type="string" description="Error message" isDarkMode={dark} />
+          </PropsTable>
         </div>
       </Section>
-    </>
+
+      {/* ─── Data Attributes ──────────────────────────────────────────────── */}
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
+            <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
+            <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
+            <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
+            <PropRow name="data-state" type="content (portal)" description='"open" or "closed"' isDarkMode={dark} />
+            <PropRow name="data-position" type="content (portal)" description='"top" or "bottom" (actual position)' isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────────── */}
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            {[
+              'Trigger uses role="combobox" with aria-expanded, aria-haspopup="listbox", aria-controls, and aria-activedescendant',
+              'Listbox uses role="listbox" with aria-multiselectable="true" and role="option" items',
+              "Full keyboard navigation: Enter/Space (toggle option), ArrowDown/Up, Home, End, Escape, Tab",
+              "Focus automatically restores to trigger on close via Escape or Tab",
+              'aria-live="polite" status region announces loading and selection count',
+              "Disabled options have aria-disabled and are skipped by keyboard navigation",
+              'Error messages use role="alert" linked via aria-describedby',
+              "Associated label linked via htmlFor and aria-labelledby",
+              'All decorative icons have aria-hidden="true"',
+              "Click-outside detection handles both mouse and touch events",
+              "Portal rendering prevents overflow clipping while maintaining ARIA relationships",
+              "Search input auto-focused when dropdown opens",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            {[
+              ["Tab", "Move focus to/from the trigger button"],
+              ["Enter / Space", "Open dropdown or toggle focused option"],
+              ["\u2193", "Open dropdown or move to next option"],
+              ["\u2191", "Move to previous option"],
+              ["Home", "Move to first enabled option"],
+              ["End", "Move to last enabled option"],
+              ["Escape", "Close dropdown, restore focus to trigger"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+    </div>
   );
 };
 
