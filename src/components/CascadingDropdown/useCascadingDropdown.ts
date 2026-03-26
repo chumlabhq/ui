@@ -1,10 +1,11 @@
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type {
   CascadingOption,
   CascadingValue,
   UseCascadingDropdownProps,
   UseCascadingDropdownReturn,
 } from "./types";
+import { useControllableState } from "../../utils/useControllableState";
 
 export const useCascadingDropdown = ({
   options,
@@ -14,12 +15,16 @@ export const useCascadingDropdown = ({
   closeOnSelect = true,
   onChange,
   onLoadChildren,
+  label,
+  "aria-label": ariaLabel,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
-  const isControlled = value !== undefined;
-  const [uncontrolledValue, setUncontrolledValue] = useState<CascadingValue>(
-    defaultValue || {}
-  );
-  const internalValue = isControlled ? value : uncontrolledValue;
+  const [internalValue, setInternalValue] = useControllableState<CascadingValue>({
+    value,
+    defaultValue: defaultValue ?? {},
+    onChange: () => {
+      // onChange with path is handled directly in updateValue
+    },
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -29,6 +34,20 @@ export const useCascadingDropdown = ({
   const [loadedChildren, setLoadedChildren] = useState<Record<string, CascadingOption[]>>({});
   const submenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHoveringSubmenuRef = useRef(false);
+
+  // Accessibility dev warning for missing label/aria-label
+  const warnedRef = useRef(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
+      if (!label && !ariaLabel) {
+        warnedRef.current = true;
+        console.warn(
+          "[CascadingDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
+          "so that screen readers can identify this dropdown."
+        );
+      }
+    }
+  }, [label, ariaLabel]);
 
   const clearSubmenuTimeout = useCallback(() => {
     if (submenuTimeoutRef.current) {
@@ -56,12 +75,10 @@ export const useCascadingDropdown = ({
 
   const updateValue = useCallback(
     (newValue: CascadingValue, path: CascadingOption[]) => {
-      if (!isControlled) {
-        setUncontrolledValue(newValue);
-      }
+      setInternalValue(newValue);
       onChange?.(newValue, path);
     },
-    [isControlled, onChange]
+    [setInternalValue, onChange]
   );
 
   const loadChildrenForOption = useCallback(

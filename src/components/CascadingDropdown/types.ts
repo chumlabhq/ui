@@ -17,6 +17,31 @@ export interface CascadingValue {
   [parentValue: string]: string | string[];
 }
 
+export interface CascadingDropdownClasses {
+  root?: string;
+  container?: string;
+  trigger?: string;
+  menu?: string;
+  menuItem?: string;
+  menuItemSelected?: string;
+  menuItemFocused?: string;
+  menuItemDisabled?: string;
+  submenu?: string;
+  submenuContainer?: string;
+  submenuItem?: string;
+  submenuItemSelected?: string;
+  submenuItemFocused?: string;
+  label?: string;
+  error?: string;
+  chevron?: string;
+  submenuChevron?: string;
+  checkIcon?: string;
+  checkbox?: string;
+  checkboxChecked?: string;
+  noResults?: string;
+  loading?: string;
+}
+
 export interface CascadingDropdownProps {
   options: CascadingOption[];
   value?: CascadingValue;
@@ -32,7 +57,7 @@ export interface CascadingDropdownProps {
   label?: ReactNode;
   required?: boolean;
   noResultsText?: string;
-  loadingText?: string;
+  loadingText?: ReactNode;
   loading?: boolean;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
@@ -41,28 +66,12 @@ export interface CascadingDropdownProps {
   fullWidth?: boolean;
   submenuPosition?: "right" | "left";
   closeOnSelect?: boolean;
-  className?: string;
-  containerClassName?: string;
-  triggerClassName?: string;
-  menuClassName?: string;
-  menuItemClassName?: string;
-  menuItemSelectedClassName?: string;
-  menuItemFocusedClassName?: string;
-  menuItemDisabledClassName?: string;
-  submenuClassName?: string;
-  submenuContainerClassName?: string;
-  submenuItemClassName?: string;
-  submenuItemSelectedClassName?: string;
-  submenuItemFocusedClassName?: string;
-  labelClassName?: string;
-  errorClassName?: string;
-  chevronClassName?: string;
-  submenuChevronClassName?: string;
-  checkIconClassName?: string;
-  checkboxClassName?: string;
-  checkboxCheckedClassName?: string;
-  noResultsClassName?: string;
-  loadingClassName?: string;
+  classes?: CascadingDropdownClasses;
+  unstyled?: boolean;
+  lockScroll?: boolean;
+  portalContainer?: HTMLElement | null;
+  dropdownZIndex?: number;
+  "aria-label"?: string;
 }
 
 export interface UseCascadingDropdownProps {
@@ -73,6 +82,8 @@ export interface UseCascadingDropdownProps {
   closeOnSelect?: boolean;
   onChange?: (value: CascadingValue, path: CascadingOption[]) => void;
   onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
+  label?: ReactNode;
+  "aria-label"?: string;
 }
 
 export interface UseCascadingDropdownReturn {

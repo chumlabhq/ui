@@ -1,8 +1,16 @@
-import { useRef, useEffect, useId, forwardRef, memo } from "react";
+import { useRef, useEffect, useId, forwardRef, memo, useMemo, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
-import type { CascadingOption, CascadingDropdownProps } from "./types";
+import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./types";
 import { useCascadingDropdown } from "./useCascadingDropdown";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./icons";
+import { cn } from "../../utils/cn";
+import {
+  DEFAULT_CASCADINGDROPDOWN_CLASSES,
+  UNSTYLED_CASCADINGDROPDOWN_CLASSES,
+} from "./constants";
+
+const isBrowser = typeof window !== "undefined";
 
 const SubmenuItem = memo(function SubmenuItem({
   option,
@@ -11,12 +19,7 @@ const SubmenuItem = memo(function SubmenuItem({
   parentValue,
   index,
   selectionMode,
-  submenuItemClassName,
-  submenuItemSelectedClassName,
-  submenuItemFocusedClassName,
-  checkIconClassName,
-  checkboxClassName,
-  checkboxCheckedClassName,
+  classes,
   showSelectedIcon,
   selectedIcon,
   checkboxIcon,
@@ -29,32 +32,23 @@ const SubmenuItem = memo(function SubmenuItem({
   parentValue: string;
   index: number;
   selectionMode: "single" | "multi";
-  submenuItemClassName: string;
-  submenuItemSelectedClassName: string;
-  submenuItemFocusedClassName: string;
-  checkIconClassName: string;
-  checkboxClassName: string;
-  checkboxCheckedClassName: string;
+  classes: Required<CascadingDropdownClasses>;
   showSelectedIcon: boolean;
   selectedIcon?: ReactNode;
   checkboxIcon?: ReactNode;
   onSelect: () => void;
   onHover: (index: number) => void;
 }) {
-  const combinedClassName = [
-    submenuItemClassName,
-    isSelected && submenuItemSelectedClassName,
-    isFocused && submenuItemFocusedClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const combinedClassName = cn(
+    classes.submenuItem,
+    isSelected && classes.submenuItemSelected,
+    isFocused && classes.submenuItemFocused,
+  );
 
-  const combinedCheckboxClassName = [
-    checkboxClassName,
-    isSelected && checkboxCheckedClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const combinedCheckboxClassName = cn(
+    classes.checkbox,
+    isSelected && classes.checkboxChecked,
+  );
 
   return (
     <div
@@ -62,7 +56,7 @@ const SubmenuItem = memo(function SubmenuItem({
       role="menuitemcheckbox"
       aria-checked={isSelected}
       aria-disabled={option.disabled}
-      className={combinedClassName}
+      className={combinedClassName || undefined}
       data-selected={isSelected || undefined}
       data-focused={isFocused || undefined}
       data-disabled={option.disabled || undefined}
@@ -71,7 +65,7 @@ const SubmenuItem = memo(function SubmenuItem({
     >
       {selectionMode === "multi" && (
         <span
-          className={combinedCheckboxClassName}
+          className={combinedCheckboxClassName || undefined}
           data-checked={isSelected || undefined}
         >
           {isSelected &&
@@ -82,7 +76,7 @@ const SubmenuItem = memo(function SubmenuItem({
       {selectionMode === "single" &&
         isSelected &&
         showSelectedIcon &&
-        (selectedIcon || <CheckIcon className={checkIconClassName} />)}
+        (selectedIcon || <CheckIcon className={classes.checkIcon || undefined} />)}
     </div>
   );
 });
@@ -95,10 +89,7 @@ const MenuItem = memo(function MenuItem({
   isSubmenuOpen,
   dropdownId,
   index,
-  menuItemClassName,
-  menuItemSelectedClassName,
-  menuItemFocusedClassName,
-  submenuChevronClassName,
+  classes,
   onHover,
   onClick,
 }: {
@@ -109,20 +100,15 @@ const MenuItem = memo(function MenuItem({
   isSubmenuOpen: boolean;
   dropdownId: string;
   index: number;
-  menuItemClassName: string;
-  menuItemSelectedClassName: string;
-  menuItemFocusedClassName: string;
-  submenuChevronClassName: string;
+  classes: Required<CascadingDropdownClasses>;
   onHover: (option: CascadingOption, index: number) => void;
   onClick: (option: CascadingOption) => void;
 }) {
-  const combinedClassName = [
-    menuItemClassName,
-    isSelected && menuItemSelectedClassName,
-    isFocused && menuItemFocusedClassName,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const combinedClassName = cn(
+    classes.menuItem,
+    isSelected && classes.menuItemSelected,
+    isFocused && classes.menuItemFocused,
+  );
 
   return (
     <div
@@ -132,7 +118,7 @@ const MenuItem = memo(function MenuItem({
       aria-expanded={hasSubmenu ? isSubmenuOpen : undefined}
       aria-checked={!hasSubmenu ? isSelected : undefined}
       aria-disabled={option.disabled}
-      className={combinedClassName}
+      className={combinedClassName || undefined}
       data-selected={isSelected || undefined}
       data-focused={isFocused || undefined}
       data-disabled={option.disabled || undefined}
@@ -141,7 +127,7 @@ const MenuItem = memo(function MenuItem({
       onClick={() => onClick(option)}
     >
       <span className="flex-1 truncate">{option.content || option.label}</span>
-      {hasSubmenu && <ChevronRightIcon className={submenuChevronClassName} />}
+      {hasSubmenu && <ChevronRightIcon className={classes.submenuChevron || undefined} />}
     </div>
   );
 });
@@ -152,16 +138,8 @@ const Submenu = memo(function Submenu({
   selectedValues,
   focusedIndex,
   loading,
-  submenuClassName,
-  submenuItemClassName,
-  submenuItemSelectedClassName,
-  submenuItemFocusedClassName,
-  checkIconClassName,
-  checkboxClassName,
-  checkboxCheckedClassName,
-  noResultsClassName,
+  classes,
   noResultsText,
-  loadingClassName,
   loadingText,
   showSelectedIcon,
   selectedIcon,
@@ -176,17 +154,9 @@ const Submenu = memo(function Submenu({
   selectedValues: string[];
   focusedIndex: number;
   loading: boolean;
-  submenuClassName: string;
-  submenuItemClassName: string;
-  submenuItemSelectedClassName: string;
-  submenuItemFocusedClassName: string;
-  checkIconClassName: string;
-  checkboxClassName: string;
-  checkboxCheckedClassName: string;
-  noResultsClassName: string;
+  classes: Required<CascadingDropdownClasses>;
   noResultsText: string;
-  loadingClassName: string;
-  loadingText: string;
+  loadingText: ReactNode;
   showSelectedIcon: boolean;
   selectedIcon?: ReactNode;
   checkboxIcon?: ReactNode;
@@ -201,14 +171,14 @@ const Submenu = memo(function Submenu({
     <div
       role="menu"
       aria-label={`${parent.label} submenu`}
-      className={submenuClassName}
+      className={classes.submenu || undefined}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {loading ? (
-        <div className={loadingClassName}>{loadingText}</div>
+        <div className={classes.loading || undefined}>{loadingText}</div>
       ) : options.length === 0 ? (
-        <div className={noResultsClassName}>{noResultsText}</div>
+        <div className={classes.noResults || undefined}>{noResultsText}</div>
       ) : (
         options.map((option, index) => (
           <SubmenuItem
@@ -219,12 +189,7 @@ const Submenu = memo(function Submenu({
             parentValue={parent.value}
             index={index}
             selectionMode={selectionMode}
-            submenuItemClassName={submenuItemClassName}
-            submenuItemSelectedClassName={submenuItemSelectedClassName}
-            submenuItemFocusedClassName={submenuItemFocusedClassName}
-            checkIconClassName={checkIconClassName}
-            checkboxClassName={checkboxClassName}
-            checkboxCheckedClassName={checkboxCheckedClassName}
+            classes={classes}
             showSelectedIcon={showSelectedIcon}
             selectedIcon={selectedIcon}
             checkboxIcon={checkboxIcon}
@@ -263,30 +228,45 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       fullWidth = false,
       submenuPosition = "right",
       closeOnSelect = true,
-      className = "",
-      containerClassName = "",
-      triggerClassName = "flex items-center justify-between gap-2 w-full",
-      menuClassName = "absolute z-50 top-full left-0 mt-1 w-full min-w-[200px]",
-      menuItemClassName = "flex items-center justify-between cursor-pointer",
-      menuItemSelectedClassName = "",
-      menuItemFocusedClassName = "",
-      submenuClassName = "min-w-[180px]",
-      submenuContainerClassName = "z-[9999]",
-      submenuItemClassName = "flex items-center gap-2 cursor-pointer",
-      submenuItemSelectedClassName = "",
-      submenuItemFocusedClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      chevronClassName = "w-4 h-4 shrink-0 transition-transform duration-200",
-      submenuChevronClassName = "w-4 h-4 shrink-0",
-      checkIconClassName = "w-4 h-4 shrink-0",
-      checkboxClassName = "w-4 h-4 shrink-0 flex items-center justify-center",
-      checkboxCheckedClassName = "",
-      noResultsClassName = "",
-      loadingClassName = "",
+      classes: classesProp,
+      unstyled = false,
+      lockScroll = true,
+      portalContainer,
+      dropdownZIndex = 50,
+      "aria-label": ariaLabel,
     },
     ref,
   ) => {
+    const baseClasses = unstyled ? UNSTYLED_CASCADINGDROPDOWN_CLASSES : DEFAULT_CASCADINGDROPDOWN_CLASSES;
+
+    const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        container: classesProp?.container ?? baseClasses.container,
+        trigger: classesProp?.trigger ?? baseClasses.trigger,
+        menu: classesProp?.menu ?? baseClasses.menu,
+        menuItem: classesProp?.menuItem ?? baseClasses.menuItem,
+        menuItemSelected: classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
+        menuItemFocused: classesProp?.menuItemFocused ?? baseClasses.menuItemFocused,
+        menuItemDisabled: classesProp?.menuItemDisabled ?? baseClasses.menuItemDisabled,
+        submenu: classesProp?.submenu ?? baseClasses.submenu,
+        submenuContainer: classesProp?.submenuContainer ?? baseClasses.submenuContainer,
+        submenuItem: classesProp?.submenuItem ?? baseClasses.submenuItem,
+        submenuItemSelected: classesProp?.submenuItemSelected ?? baseClasses.submenuItemSelected,
+        submenuItemFocused: classesProp?.submenuItemFocused ?? baseClasses.submenuItemFocused,
+        label: classesProp?.label ?? baseClasses.label,
+        error: classesProp?.error ?? baseClasses.error,
+        chevron: classesProp?.chevron ?? baseClasses.chevron,
+        submenuChevron: classesProp?.submenuChevron ?? baseClasses.submenuChevron,
+        checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
+        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
+        noResults: classesProp?.noResults ?? baseClasses.noResults,
+        loading: classesProp?.loading ?? baseClasses.loading,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const generatedId = useId();
     const dropdownId = id || name || generatedId;
     const menuId = `${dropdownId}-menu`;
@@ -295,6 +275,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const {
       isOpen,
@@ -323,26 +304,69 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       closeOnSelect,
       onChange,
       onLoadChildren,
+      label,
+      "aria-label": ariaLabel,
     });
 
     useEffect(() => {
+      if (!isOpen) return;
       const handleClickOutside = (event: MouseEvent) => {
-        if (
-          containerRef.current &&
-          !containerRef.current.contains(event.target as Node)
-        ) {
-          handleClose();
-        }
+        const target = event.target as Node;
+        if (containerRef.current?.contains(target)) return;
+        if (menuRef.current?.contains(target)) return;
+        handleClose();
       };
 
-      if (isOpen) {
-        document.addEventListener("mousedown", handleClickOutside);
-      }
-
+      document.addEventListener("mousedown", handleClickOutside);
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
     }, [isOpen, handleClose]);
+
+    // Scroll lock when dropdown is open
+    useEffect(() => {
+      if (!lockScroll || !isOpen) return;
+
+      const preventScroll = (e: Event) => {
+        // Allow scroll inside the dropdown menu itself
+        if (menuRef.current?.contains(e.target as Node)) return;
+        e.preventDefault();
+      };
+
+      window.addEventListener("wheel", preventScroll, { capture: true, passive: false });
+      window.addEventListener("touchmove", preventScroll, { capture: true, passive: false });
+
+      return () => {
+        window.removeEventListener("wheel", preventScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener("touchmove", preventScroll, { capture: true } as EventListenerOptions);
+      };
+    }, [lockScroll, isOpen]);
+
+    // Portal positioning — compute menu coordinates from trigger rect
+    const [menuCoords, setMenuCoords] = useState<{ top: number; left: number; width: number } | null>(null);
+
+    const updateMenuPosition = useCallback(() => {
+      if (!triggerRef.current) return;
+      const rect = triggerRef.current.getBoundingClientRect();
+      setMenuCoords({
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: rect.width,
+      });
+    }, []);
+
+    useEffect(() => {
+      if (!isOpen || !isBrowser) return;
+      updateMenuPosition();
+      window.addEventListener("scroll", updateMenuPosition, true);
+      window.addEventListener("resize", updateMenuPosition);
+      return () => {
+        window.removeEventListener("scroll", updateMenuPosition, true);
+        window.removeEventListener("resize", updateMenuPosition);
+      };
+    }, [isOpen, updateMenuPosition]);
+
+    const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
 
     const fullWidthClass = fullWidth ? "w-full" : "";
     const displayValue = getDisplayValue();
@@ -356,15 +380,13 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     return (
       <div
         ref={ref}
-        className={[containerClassName, fullWidthClass]
-          .filter(Boolean)
-          .join(" ")}
+        className={cn(mergedClasses.container, fullWidthClass) || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
       >
         {label && (
-          <label htmlFor={triggerId} className={labelClassName}>
+          <label htmlFor={triggerId} className={mergedClasses.label || undefined}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
@@ -372,7 +394,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
         <div
           ref={containerRef}
-          className={["relative", className].filter(Boolean).join(" ")}
+          className={cn("relative", mergedClasses.root) || undefined}
         >
           <button
             ref={triggerRef}
@@ -385,37 +407,44 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
             aria-invalid={error || undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
+            aria-label={ariaLabel}
             disabled={disabled}
             onClick={handleToggle}
             onKeyDown={handleKeyDown}
-            className={triggerClassName}
+            className={mergedClasses.trigger || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
             data-open={isOpen || undefined}
           >
-            <span className="flex-1 truncate">
+            <span className="flex-1 text-left truncate">
               {displayValue || placeholder}
             </span>
             {showChevron && (
               <ChevronDownIcon
-                className={[chevronClassName, isOpen ? "rotate-180" : ""]
-                  .filter(Boolean)
-                  .join(" ")}
+                className={cn(mergedClasses.chevron, isOpen && "rotate-180") || undefined}
               />
             )}
           </button>
 
-          {isOpen && (
+          {isOpen && portalTarget && createPortal(
             <div
+              ref={menuRef}
               id={menuId}
               role="menu"
-              aria-label={typeof label === "string" ? label : "Options"}
-              className={menuClassName}
+              aria-label={typeof label === "string" ? label : ariaLabel || "Options"}
+              className={mergedClasses.menu || undefined}
+              style={{
+                position: "fixed" as const,
+                zIndex: dropdownZIndex,
+                ...(menuCoords
+                  ? { top: menuCoords.top, left: menuCoords.left, width: menuCoords.width }
+                  : { visibility: "hidden" as const, top: 0, left: 0 }),
+              }}
             >
               {externalLoading ? (
-                <div className={loadingClassName}>{loadingText}</div>
+                <div className={mergedClasses.loading || undefined}>{loadingText}</div>
               ) : options.length === 0 ? (
-                <div className={noResultsClassName}>{noResultsText}</div>
+                <div className={mergedClasses.noResults || undefined}>{noResultsText}</div>
               ) : (
                 options.map((option, index) => {
                   const staticChildren = option.children || [];
@@ -441,24 +470,19 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                         isSubmenuOpen={submenuOpen}
                         dropdownId={dropdownId}
                         index={index}
-                        menuItemClassName={menuItemClassName}
-                        menuItemSelectedClassName={menuItemSelectedClassName}
-                        menuItemFocusedClassName={menuItemFocusedClassName}
-                        submenuChevronClassName={submenuChevronClassName}
+                        classes={mergedClasses}
                         onHover={handleMenuItemHover}
                         onClick={handleMenuItemClick}
                       />
 
                       {hasSubmenu && submenuOpen && (
                         <div
-                          className={[
+                          className={cn(
                             submenuPosition === "right"
                               ? "absolute left-full top-0"
                               : "absolute right-full top-0",
-                            submenuContainerClassName,
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
+                            mergedClasses.submenuContainer,
+                          ) || undefined}
                         >
                           <Submenu
                             parent={option}
@@ -472,20 +496,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                                 : -1
                             }
                             loading={isChildrenLoading}
-                            submenuClassName={submenuClassName}
-                            submenuItemClassName={submenuItemClassName}
-                            submenuItemSelectedClassName={
-                              submenuItemSelectedClassName
-                            }
-                            submenuItemFocusedClassName={
-                              submenuItemFocusedClassName
-                            }
-                            checkIconClassName={checkIconClassName}
-                            checkboxClassName={checkboxClassName}
-                            checkboxCheckedClassName={checkboxCheckedClassName}
-                            noResultsClassName={noResultsClassName}
+                            classes={mergedClasses}
                             noResultsText={noResultsText}
-                            loadingClassName={loadingClassName}
                             loadingText={loadingText}
                             showSelectedIcon={showSelectedIcon}
                             selectedIcon={selectedIcon}
@@ -501,12 +513,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                   );
                 })
               )}
-            </div>
-          )}
+            </div>,
+          portalTarget)}
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div id={errorId} role="alert" className={mergedClasses.error || undefined}>
             {errorMessage}
           </div>
         )}
