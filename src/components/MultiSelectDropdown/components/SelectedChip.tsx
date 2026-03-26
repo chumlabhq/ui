@@ -8,7 +8,7 @@ export const SelectedChip = memo(function SelectedChip({
   onRemove,
 }: {
   option: MultiSelectOption;
-  classes?: MultiSelectDropdownClasses;
+  classes: Required<MultiSelectDropdownClasses>;
   onRemove: (value: string) => void;
 }) {
   return (

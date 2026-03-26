@@ -8,4 +8,8 @@ export type {
   MultiSelectDropdownClasses,
 } from "./utils/types";
 export { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
+export {
+  DEFAULT_MULTISELECTDROPDOWN_CLASSES,
+  UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
+} from "./utils/constants";
 export { ChevronDownIcon, CheckIcon, XIcon } from "./utils/icons";

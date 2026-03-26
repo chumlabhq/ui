@@ -60,6 +60,8 @@ export interface MultiSelectDropdownProps {
   maxDisplayedChips?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
+  unstyled?: boolean;
+  lockScroll?: boolean;
   classes?: MultiSelectDropdownClasses;
   className?: string;
   style?: CSSProperties;
@@ -89,6 +91,8 @@ export interface UseMultiSelectDropdownProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  label?: React.ReactNode;
+  "aria-label"?: string;
 }
 
 export interface UseMultiSelectDropdownReturn {

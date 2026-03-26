@@ -4,6 +4,7 @@ import type {
   UseMultiSelectDropdownProps,
   UseMultiSelectDropdownReturn,
 } from "./types";
+import { useControllableState } from "../../../utils/useControllableState";
 
 function getFirstEnabledIndex(opts: MultiSelectOption[]): number {
   return opts.findIndex((o) => !o.disabled);
@@ -20,17 +21,35 @@ export function useMultiSelectDropdown({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
+  label,
+  "aria-label": ariaLabel,
 }: UseMultiSelectDropdownProps): UseMultiSelectDropdownReturn {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isOpenControlled = openProp !== undefined;
-  const isOpen = isOpenControlled ? openProp : internalOpen;
+  const [isOpen, setIsOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isLoadingOptions, setIsLoadingOptions] = useState(false);
   const [loadedOptions, setLoadedOptions] = useState<MultiSelectOption[]>([]);
   const hasLoadedRef = useRef(false);
   const mountedRef = useRef(true);
   const shouldRestoreFocusRef = useRef(false);
-  const isOpenControlledRef = useRef(openProp !== undefined);
+
+  // Accessibility dev warning for missing label/aria-label
+  const warnedRef = useRef(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
+      if (!label && !ariaLabel) {
+        warnedRef.current = true;
+        console.warn(
+          "[MultiSelectDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
+          "so that screen readers can identify this dropdown."
+        );
+      }
+    }
+  }, [label, ariaLabel]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -38,16 +57,6 @@ export function useMultiSelectDropdown({
       mountedRef.current = false;
     };
   }, []);
-
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production" && isOpenControlledRef.current !== (openProp !== undefined)) {
-      console.error(
-        "[MultiSelectDropdown] Component is changing between controlled and uncontrolled open state. " +
-          "Decide between using open or defaultOpen for the lifetime of the component."
-      );
-    }
-    isOpenControlledRef.current = openProp !== undefined;
-  }, [openProp]);
 
   useEffect(() => {
     hasLoadedRef.current = false;
@@ -86,30 +95,24 @@ export function useMultiSelectDropdown({
       });
   }, [loadOnOpen, onLoadOptions, isLoadingOptions, onLoadError]);
 
-  const setOpen = useCallback(
-    (next: boolean) => {
-      if (!isOpenControlled) setInternalOpen(next);
-      onOpenChange?.(next);
-    },
-    [isOpenControlled, onOpenChange],
-  );
-
   const handleToggle = useCallback(() => {
-    if (!disabled) {
-      const willOpen = !isOpen;
-      setOpen(willOpen);
-      setFocusedIndex(-1);
-      if (willOpen) {
-        loadOptions();
+    if (disabled) return;
+    setIsOpen((prev: boolean) => {
+      if (prev) {
+        setFocusedIndex(-1);
+        return false;
       }
-    }
-  }, [disabled, isOpen, loadOptions, setOpen]);
+      setFocusedIndex(-1);
+      loadOptions();
+      return true;
+    });
+  }, [disabled, setIsOpen, loadOptions]);
 
   const handleClose = useCallback(() => {
     shouldRestoreFocusRef.current = true;
-    setOpen(false);
+    setIsOpen(false);
     setFocusedIndex(-1);
-  }, [setOpen]);
+  }, [setIsOpen]);
 
   const handleOptionToggle = useCallback(
     (option: MultiSelectOption) => {
@@ -163,7 +166,7 @@ export function useMultiSelectDropdown({
         case "ArrowDown":
           event.preventDefault();
           if (!isOpen) {
-            setOpen(true);
+            setIsOpen(true);
             loadOptions();
             const first = getFirstEnabledIndex(displayOptions);
             if (first !== -1) setFocusedIndex(first);
@@ -219,7 +222,7 @@ export function useMultiSelectDropdown({
           break;
       }
     },
-    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, loadOptions, setOpen],
+    [disabled, isOpen, focusedIndex, displayOptions, handleToggle, handleClose, handleOptionToggle, loadOptions, setIsOpen],
   );
 
   return {

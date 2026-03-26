@@ -1,14 +1,19 @@
-import { useRef, useEffect, useId, forwardRef, useCallback, useState } from "react";
+import { useRef, useEffect, useId, forwardRef, useCallback, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 import type { CSSProperties, ReactNode } from "react";
 import type { MultiSelectDropdownProps, MultiSelectDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
-import { joinClasses, computeDropdownCoords, scrollOptionIntoView, isBrowser } from "./utils/helpers";
+import { computeDropdownCoords, scrollOptionIntoView, isBrowser } from "./utils/helpers";
 import type { DropdownCoords } from "./utils/helpers";
 import { ChevronDownIcon } from "./utils/icons";
 import MultiSelectDropdownShimmer from "./components/MultiSelectDropdownShimmer";
 import { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption";
 import { SelectedChip } from "./components/SelectedChip";
+import { cn } from "../../utils/cn";
+import {
+  DEFAULT_MULTISELECTDROPDOWN_CLASSES,
+  UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
+} from "./utils/constants";
 
 const SR_ONLY_STYLE: CSSProperties = {
   position: "absolute",
@@ -32,11 +37,12 @@ interface MultiSelectDropdownContentProps {
   zIndex: number;
   gap: number;
   portalContainer?: HTMLElement | null;
-  classes?: MultiSelectDropdownClasses;
+  classes: Required<MultiSelectDropdownClasses>;
   listboxId: string;
   dropdownId: string;
   listboxAriaLabel: string;
   loading: boolean;
+  contentRef?: React.RefObject<HTMLDivElement | null>;
   children: ReactNode;
 }
 
@@ -53,6 +59,7 @@ function MultiSelectDropdownContent({
   dropdownId,
   listboxAriaLabel,
   loading,
+  contentRef,
   children,
 }: MultiSelectDropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -157,19 +164,22 @@ function MultiSelectDropdownContent({
 
   return createPortal(
     <div
-      ref={dropdownRef}
+      ref={(node) => {
+        (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (contentRef) (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       id={listboxId}
       role="listbox"
       aria-label={listboxAriaLabel}
       aria-multiselectable="true"
       aria-busy={loading || undefined}
-      className={classes?.content || undefined}
+      className={classes.content || undefined}
       style={dropdownStyle}
       data-state={isOpen ? "open" : "closed"}
       data-position={coords?.position ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
-      <div className={classes?.optionList || undefined}>{children}</div>
+      <div className={classes.optionList || undefined}>{children}</div>
     </div>,
     portalContainer ?? document.body,
   );
@@ -204,6 +214,8 @@ const MultiSelectDropdown = forwardRef<
       maxDisplayedChips = 3,
       showSelectedChips = true,
       checkboxIcon,
+      unstyled = false,
+      lockScroll = true,
       classes: classesProp,
       className,
       style,
@@ -223,6 +235,36 @@ const MultiSelectDropdown = forwardRef<
     },
     ref,
   ) => {
+    const baseClasses = unstyled ? UNSTYLED_MULTISELECTDROPDOWN_CLASSES : DEFAULT_MULTISELECTDROPDOWN_CLASSES;
+
+    const mergedClasses: Required<MultiSelectDropdownClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        trigger: classesProp?.trigger ?? baseClasses.trigger,
+        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
+        content: classesProp?.content ?? baseClasses.content,
+        optionList: classesProp?.optionList ?? baseClasses.optionList,
+        option: classesProp?.option ?? baseClasses.option,
+        optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
+        optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
+        optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
+        chevron: classesProp?.chevron ?? baseClasses.chevron,
+        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
+        checkboxIcon: classesProp?.checkboxIcon ?? baseClasses.checkboxIcon,
+        chip: classesProp?.chip ?? baseClasses.chip,
+        chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,
+        noResults: classesProp?.noResults ?? baseClasses.noResults,
+        label: classesProp?.label ?? baseClasses.label,
+        error: classesProp?.error ?? baseClasses.error,
+        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
+        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+        moreCount: classesProp?.moreCount ?? baseClasses.moreCount,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const generatedId = useId();
     const dropdownId = id || generatedId;
     const listboxId = `${dropdownId}-listbox`;
@@ -258,6 +300,8 @@ const MultiSelectDropdown = forwardRef<
       open,
       defaultOpen,
       onOpenChange,
+      label,
+      "aria-label": ariaLabel,
     });
 
     const activeDescendantId =
@@ -292,6 +336,26 @@ const MultiSelectDropdown = forwardRef<
       const optionEl = document.getElementById(`${dropdownId}-option-${focusedIndex}`);
       if (optionEl) scrollOptionIntoView(optionEl);
     }, [isOpen, focusedIndex, dropdownId]);
+
+    // Scroll lock when dropdown is open
+    const dropdownContentRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+      if (!lockScroll || !isOpen || !isBrowser) return;
+
+      const preventScroll = (e: Event) => {
+        // Allow scroll inside the dropdown content itself
+        if (dropdownContentRef.current?.contains(e.target as Node)) return;
+        e.preventDefault();
+      };
+
+      window.addEventListener("wheel", preventScroll, { capture: true, passive: false });
+      window.addEventListener("touchmove", preventScroll, { capture: true, passive: false });
+
+      return () => {
+        window.removeEventListener("wheel", preventScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener("touchmove", preventScroll, { capture: true } as EventListenerOptions);
+      };
+    }, [lockScroll, isOpen]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent | TouchEvent) => {
@@ -364,8 +428,8 @@ const MultiSelectDropdown = forwardRef<
     );
 
     const rootClassName =
-      joinClasses(
-        classesProp?.root,
+      cn(
+        mergedClasses.root,
         className,
         fullWidth && "w-full",
       ) || undefined;
@@ -393,7 +457,7 @@ const MultiSelectDropdown = forwardRef<
           <label
             id={labelId}
             htmlFor={triggerId}
-            className={classesProp?.label || undefined}
+            className={mergedClasses.label || undefined}
           >
             {label}
             {required && <span aria-hidden="true">*</span>}
@@ -401,7 +465,7 @@ const MultiSelectDropdown = forwardRef<
         )}
 
         <div
-          className={joinClasses("relative", classesProp?.wrapper) || undefined}
+          className={cn("relative", mergedClasses.wrapper) || undefined}
         >
           <button
             ref={mergedTriggerRef}
@@ -421,24 +485,24 @@ const MultiSelectDropdown = forwardRef<
             onKeyDown={handleKeyDownWithPassthrough}
             onFocus={onFocus}
             onBlur={onBlur}
-            className={classesProp?.trigger || undefined}
+            className={mergedClasses.trigger || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
             data-open={isOpen || undefined}
           >
-            <span className={classesProp?.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
+            <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
               {showSelectedChips && selectedOptions.length > 0 ? (
                 <>
                   {displayedChips.map((option) => (
                     <SelectedChip
                       key={option.value}
                       option={option}
-                      classes={classesProp}
+                      classes={mergedClasses}
                       onRemove={handleRemoveOptionAndFocus}
                     />
                   ))}
                   {remainingCount > 0 && (
-                    <span className={classesProp?.moreCount || undefined}>
+                    <span className={mergedClasses.moreCount || undefined}>
                       +{remainingCount}
                     </span>
                   )}
@@ -453,7 +517,7 @@ const MultiSelectDropdown = forwardRef<
             </span>
             {showChevron && (
               <ChevronIconProp
-                className={classesProp?.chevron || undefined}
+                className={mergedClasses.chevron || undefined}
                 style={isOpen ? { transform: "rotate(180deg)" } : undefined}
               />
             )}
@@ -467,22 +531,23 @@ const MultiSelectDropdown = forwardRef<
             zIndex={dropdownZIndex}
             gap={dropdownGap}
             portalContainer={portalContainer}
-            classes={classesProp}
+            classes={mergedClasses}
             listboxId={listboxId}
             dropdownId={dropdownId}
             listboxAriaLabel={listboxAriaLabel}
             loading={loading}
+            contentRef={dropdownContentRef}
           >
             {loading ? (
               <MultiSelectDropdownShimmer
                 count={shimmerCount}
-                className={classesProp?.shimmer || undefined}
-                itemClassName={classesProp?.shimmerItem || undefined}
+                className={mergedClasses.shimmer || undefined}
+                itemClassName={mergedClasses.shimmerItem || undefined}
               />
             ) : displayOptions.length === 0 ? (
               <div
                 role="status"
-                className={classesProp?.noResults || undefined}
+                className={mergedClasses.noResults || undefined}
               >
                 {noResultsContent ?? noResultsText}
               </div>
@@ -495,7 +560,7 @@ const MultiSelectDropdown = forwardRef<
                   isFocused={index === focusedIndex}
                   dropdownId={dropdownId}
                   index={index}
-                  classes={classesProp}
+                  classes={mergedClasses}
                   checkboxIcon={checkboxIcon}
                   onToggle={handleOptionToggle}
                   onHover={setFocusedIndex}
@@ -528,7 +593,7 @@ const MultiSelectDropdown = forwardRef<
           <div
             id={errorId}
             role="alert"
-            className={classesProp?.error || undefined}
+            className={mergedClasses.error || undefined}
           >
             {errorMessage}
           </div>
