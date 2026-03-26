@@ -59,11 +59,13 @@ export interface TabPanelProps {
   tooltipPosition?: TooltipPosition;
   tooltipOffset?: number;
   disabled?: boolean;
+  unstyled?: boolean;
   renderTab?: (
     props: TabRenderProps,
     defaultElement: React.ReactElement,
   ) => ReactNode;
   "aria-label"?: string;
+  "aria-labelledby"?: string;
   classes?: TabPanelClasses;
   className?: string;
   style?: CSSProperties;

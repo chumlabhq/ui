@@ -10,6 +10,7 @@ import {
 import type { KeyboardEvent, ReactNode } from "react";
 import type { Tab, TabPanelProps, ResolvedClasses, TabRenderProps } from "./utils/types";
 import { TabPanelContext } from "./utils/context";
+import { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
 import TabButton from "./components/TabButton";
 import Tooltip from "../Tooltip/Tooltip";
@@ -33,8 +34,10 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       tooltipPosition = "bottom",
       tooltipOffset = 4,
       disabled = false,
+      unstyled = false,
       renderTab: renderTabProp,
       "aria-label": ariaLabel = "Tabs",
+      "aria-labelledby": ariaLabelledBy,
       classes: classesProp,
       className,
       style,
@@ -43,6 +46,18 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     },
     ref,
   ) => {
+    const warnedRef = useRef(false);
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (!ariaLabel && !ariaLabelledBy && !warnedRef.current) {
+          warnedRef.current = true;
+          console.warn(
+            "TabPanel: A tab panel without `aria-label` or `aria-labelledby` may not be accessible.",
+          );
+        }
+      }
+    }, [ariaLabel, ariaLabelledBy]);
+
     const [activeValue, setActiveValue] = useControllableState<string>({
       value: valueProp,
       defaultValue: defaultValue ?? tabs[0]?.id ?? "",
@@ -204,25 +219,26 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       [setActiveValue, activationMode],
     );
 
+    const baseClasses = unstyled ? UNSTYLED_TABPANEL_CLASSES : DEFAULT_TABPANEL_CLASSES;
     const resolvedClasses: ResolvedClasses = useMemo(
       () => ({
-        tab: classesProp?.tab ?? "",
-        tabActive: classesProp?.tabActive ?? "",
-        tabInactive: classesProp?.tabInactive ?? "",
-        tabDisabled: classesProp?.tabDisabled ?? "",
-        tabFocus: classesProp?.tabFocus ?? "",
-        label: classesProp?.label ?? "",
-        labelActive: classesProp?.labelActive ?? "",
-        labelInactive: classesProp?.labelInactive ?? "",
-        icon: classesProp?.icon ?? "",
-        iconActive: classesProp?.iconActive ?? "",
-        iconInactive: classesProp?.iconInactive ?? "",
-        count: classesProp?.count ?? "",
-        countActive: classesProp?.countActive ?? "",
-        countInactive: classesProp?.countInactive ?? "",
-        indicator: classesProp?.indicator ?? "",
+        tab: classesProp?.tab ?? baseClasses.tab,
+        tabActive: classesProp?.tabActive ?? baseClasses.tabActive,
+        tabInactive: classesProp?.tabInactive ?? baseClasses.tabInactive,
+        tabDisabled: classesProp?.tabDisabled ?? baseClasses.tabDisabled,
+        tabFocus: classesProp?.tabFocus ?? baseClasses.tabFocus,
+        label: classesProp?.label ?? baseClasses.label,
+        labelActive: classesProp?.labelActive ?? baseClasses.labelActive,
+        labelInactive: classesProp?.labelInactive ?? baseClasses.labelInactive,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        iconActive: classesProp?.iconActive ?? baseClasses.iconActive,
+        iconInactive: classesProp?.iconInactive ?? baseClasses.iconInactive,
+        count: classesProp?.count ?? baseClasses.count,
+        countActive: classesProp?.countActive ?? baseClasses.countActive,
+        countInactive: classesProp?.countInactive ?? baseClasses.countInactive,
+        indicator: classesProp?.indicator ?? baseClasses.indicator,
       }),
-      [classesProp],
+      [classesProp, baseClasses],
     );
 
     const contextValue = useMemo(
@@ -264,6 +280,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
           <div
             role="tablist"
             aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
             aria-orientation={orientation}
             className={classesProp?.tabList || undefined}
           >

@@ -1,1 +1,43 @@
-export const TABPANEL_NAME = "TabPanel";
+import type { TabPanelClasses } from "./types";
+
+export const DEFAULT_TABPANEL_CLASSES: Required<TabPanelClasses> = {
+  root: "",
+  tabList: "",
+  tab: "",
+  tabActive: "",
+  tabInactive: "",
+  tabDisabled: "",
+  tabFocus: "",
+  label: "",
+  labelActive: "",
+  labelInactive: "",
+  icon: "",
+  iconActive: "",
+  iconInactive: "",
+  count: "",
+  countActive: "",
+  countInactive: "",
+  indicator: "",
+  panel: "",
+};
+
+export const UNSTYLED_TABPANEL_CLASSES: Required<TabPanelClasses> = {
+  root: "",
+  tabList: "",
+  tab: "",
+  tabActive: "",
+  tabInactive: "",
+  tabDisabled: "",
+  tabFocus: "",
+  label: "",
+  labelActive: "",
+  labelInactive: "",
+  icon: "",
+  iconActive: "",
+  iconInactive: "",
+  count: "",
+  countActive: "",
+  countInactive: "",
+  indicator: "",
+  panel: "",
+};

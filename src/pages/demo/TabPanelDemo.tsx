@@ -2,7 +2,15 @@ import { useState, useRef } from "react";
 import { TabPanel } from "../../components/TabPanel";
 import type { Tab } from "../../components/TabPanel";
 import { useTheme } from "./ThemeContext";
-import { Section, CodeBlock, DemoWrapper } from "./components";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
+
+// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const HomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -101,6 +109,8 @@ const TrashIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// ─── Tab Data ────────────────────────────────────────────────────────────────
+
 const basicTabs: Tab[] = [
   { id: "home", label: "Home" },
   { id: "profile", label: "Profile" },
@@ -193,61 +203,81 @@ const rtlTabs: Tab[] = [
   },
 ];
 
-const getTabStyles = (isDarkMode: boolean) => ({
-  underline: {
-    tabList: `flex items-center gap-6 border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`,
-    tab: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-    tabActive: isDarkMode ? "text-blue-400" : "text-blue-600",
-    tabInactive: isDarkMode
-      ? "text-gray-400 hover:text-gray-200"
-      : "text-gray-500 hover:text-gray-700",
-    indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${isDarkMode ? "bg-blue-400" : "bg-blue-600"}`,
+// ─── Themed Classes ──────────────────────────────────────────────────────────
+
+const getClasses = (dark: boolean) => ({
+  tabs: {
+    underline: {
+      root: "w-full",
+      tabList: `flex items-center gap-6 border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
+      tab: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
+      tabActive: dark ? "text-blue-400" : "text-blue-600",
+      tabInactive: dark
+        ? "text-gray-400 hover:text-gray-200"
+        : "text-gray-500 hover:text-gray-700",
+      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
+      indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${dark ? "bg-blue-400" : "bg-blue-600"}`,
+      panel: "p-4",
+    },
+    pill: {
+      root: "w-full",
+      tabList: `inline-flex items-center gap-1 p-1 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-100"}`,
+      tab: "px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
+      tabActive: dark
+        ? "bg-gray-700 text-white shadow-sm"
+        : "bg-white text-gray-900 shadow-sm",
+      tabInactive: dark
+        ? "text-gray-400 hover:text-gray-200"
+        : "text-gray-600 hover:text-gray-900",
+      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
+      panel: "p-4 mt-2",
+    },
+    icon: {
+      root: "w-full",
+      tabList: `flex items-center gap-1 border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
+      tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
+      tabActive: dark ? "text-blue-400" : "text-blue-600",
+      tabInactive: dark
+        ? "text-gray-400 hover:text-gray-200"
+        : "text-gray-500 hover:text-gray-700",
+      tabDisabled: dark
+        ? "opacity-40 cursor-not-allowed hover:text-gray-400"
+        : "opacity-40 cursor-not-allowed hover:text-gray-500",
+      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
+      iconActive: dark ? "text-blue-400" : "text-blue-600",
+      iconInactive: dark ? "text-gray-500" : "text-gray-400",
+      count: "px-2 py-0.5 text-xs font-semibold rounded-full",
+      countActive: dark
+        ? "bg-blue-900 text-blue-300"
+        : "bg-blue-100 text-blue-600",
+      countInactive: dark
+        ? "bg-gray-700 text-gray-400"
+        : "bg-gray-100 text-gray-500",
+      indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${dark ? "bg-blue-400" : "bg-blue-600"}`,
+      panel: "p-4",
+    },
   },
-  pill: {
-    tabList: `inline-flex items-center gap-1 p-1 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`,
-    tab: "px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
-    tabActive: isDarkMode
-      ? "bg-gray-700 text-white shadow-sm"
-      : "bg-white text-gray-900 shadow-sm",
-    tabInactive: isDarkMode
-      ? "text-gray-400 hover:text-gray-200"
-      : "text-gray-600 hover:text-gray-900",
-  },
-  icon: {
-    tabList: `flex items-center gap-1 border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`,
-    tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-    tabActive: isDarkMode ? "text-blue-400" : "text-blue-600",
-    tabInactive: isDarkMode
-      ? "text-gray-400 hover:text-gray-200"
-      : "text-gray-500 hover:text-gray-700",
-    iconActive: isDarkMode ? "text-blue-400" : "text-blue-600",
-    iconInactive: isDarkMode ? "text-gray-500" : "text-gray-400",
-    indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${isDarkMode ? "bg-blue-400" : "bg-blue-600"}`,
-  },
-  count: {
-    count: "px-2 py-0.5 text-xs font-semibold rounded-full",
-    countActive: isDarkMode
-      ? "bg-blue-900 text-blue-300"
-      : "bg-blue-100 text-blue-600",
-    countInactive: isDarkMode
-      ? "bg-gray-700 text-gray-400"
-      : "bg-gray-100 text-gray-500",
-  },
-  disabled: {
-    tabDisabled: isDarkMode
-      ? "opacity-40 cursor-not-allowed hover:text-gray-400"
-      : "opacity-40 cursor-not-allowed hover:text-gray-500",
-  },
-  content: isDarkMode ? "text-gray-300" : "text-gray-700",
-  contentStrong: isDarkMode ? "text-white" : "text-gray-900",
-  panel: "p-4",
-  focus: isDarkMode
-    ? "outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 focus-visible:ring-offset-gray-900"
-    : "outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500",
+  content: `text-sm leading-relaxed ${dark ? "text-gray-400" : "text-gray-500"}`,
+  contentStrong: `font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+  contentTitle: `text-base font-semibold mb-1 ${dark ? "text-white" : "text-gray-900"}`,
+  contentCard: `rounded-lg p-4 ${dark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-gray-50 border border-gray-100"}`,
+  stat: `text-2xl font-bold ${dark ? "text-white" : "text-gray-900"}`,
+  statLabel: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
 });
 
+// ─── Demo ────────────────────────────────────────────────────────────────────
+
 const TabPanelDemo = () => {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
+
+  // Each demo section has its own independent state
   const [underlinedTab, setUnderlinedTab] = useState("home");
   const [pillTab, setPillTab] = useState("home");
   const [boxedTab, setBoxedTab] = useState("home");
@@ -296,1824 +326,1330 @@ const TabPanelDemo = () => {
     setDynamicTabs((prev) => prev.filter((t) => t.id !== tabId));
   };
 
-  const s = getTabStyles(isDarkMode);
-
   return (
-    <div className="space-y-16">
-      <header>
-        <h1
-          className={`text-3xl font-bold mb-3 ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          TabPanel
-        </h1>
-        <p
-          className={`text-lg ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-        >
-          A tabbed interface component with full keyboard navigation, RTL
-          support, accessibility, roving tabindex, and extensive styling
-          customization. Supports icons as ReactNode, count badges, tooltips,
-          vertical orientation, manual activation, dynamic tabs with automatic
-          fallback, and both controlled and uncontrolled modes.
-        </p>
-
-        <div className="mt-6">
-          <h3
-            className={`text-sm font-semibold mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
+    <div className="space-y-10">
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
+        <div className="relative">
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
           >
-            Installation
-          </h3>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`import { TabPanel } from "@kern-ui/tab-panel";`}
-          />
+            TabPanel
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A tabbed interface component with full keyboard navigation, RTL
+            support, accessibility, roving tabindex, and extensive styling
+            customization. Supports icons as ReactNode, count badges, tooltips,
+            vertical orientation, manual activation, dynamic tabs with automatic
+            fallback, and both controlled and uncontrolled modes.
+          </p>
+          <div className="mt-5">
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { TabPanel } from "@kern-ui/tab-panel";`}
+            />
+          </div>
         </div>
       </header>
 
-      <div className="space-y-12">
-        <h2
-          className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          Examples
-        </h2>
-
-        <Section
-          title="Underlined Style"
-          description="Classic underline tab style with an active indicator bar."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              value={underlinedTab}
-              onValueChange={setUnderlinedTab}
-              classes={{
-                root: "w-full",
-                tabList: s.underline.tabList,
-                tab: s.underline.tab,
-                tabActive: s.underline.tabActive,
-                tabInactive: s.underline.tabInactive,
-                tabFocus: s.focus,
-                indicator: s.underline.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{underlinedTab}</strong> tab
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Pill Style"
-          description="Contained pill-shaped tab style with background highlight on active tab."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              value={pillTab}
-              onValueChange={setPillTab}
-              classes={{
-                root: "w-full",
-                tabList: s.pill.tabList,
-                tab: s.pill.tab,
-                tabActive: s.pill.tabActive,
-                tabInactive: s.pill.tabInactive,
-                tabFocus: s.focus,
-                panel: "p-4 mt-2",
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{pillTab}</strong> tab
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Boxed Style"
-          description="Browser-style boxed tabs with bordered active state."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              value={boxedTab}
-              onValueChange={setBoxedTab}
-              classes={{
-                root: "w-full",
-                tabList: `flex items-center border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`,
-                tab: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
-                tabActive: isDarkMode
-                  ? "bg-gray-800 text-blue-400 border-gray-700 border-b-gray-800 rounded-t-lg"
-                  : "bg-white text-blue-600 border-gray-200 border-b-white rounded-t-lg",
-                tabInactive: isDarkMode
-                  ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
-                tabFocus: s.focus,
-                panel: `p-4 border border-t-0 rounded-b-lg ${isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"}`,
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{boxedTab}</strong> tab
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Icons (Left)"
-          description="Tabs with leading icon components using iconPosition='left' (default)."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={iconLeftTab}
-              onValueChange={setIconLeftTab}
-              iconPosition="left"
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{iconLeftTab}</strong> tab
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Icons (Right)"
-          description="Tabs with trailing icon components using iconPosition='right'."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={iconRightTab}
-              onValueChange={setIconRightTab}
-              iconPosition="right"
-              classes={{
-                root: "w-full",
-                tabList: s.pill.tabList,
-                tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
-                tabActive: s.pill.tabActive,
-                tabInactive: s.pill.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                panel: "p-4 mt-2",
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{iconRightTab}</strong> tab
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Icon Only (Labels Hidden)"
-          description="Set alwaysShowLabels={false} to hide labels on inactive tabs. Only the active tab shows its label. Inactive tabs get an aria-label for screen readers."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={iconOnlyTab}
-              onValueChange={setIconOnlyTab}
-              alwaysShowLabels={false}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Only the active tab shows its label. Icons always visible.
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Count Badges (Hide Zero)"
-          description="Display count badges on tabs. Tabs with count 0 hide the badge by default."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithCounts}
-              value={countTab}
-              onValueChange={setCountTab}
-              showZeroCount={false}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                count: s.count.count,
-                countActive: s.count.countActive,
-                countInactive: s.count.countInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{countTab}</strong> tab
-                (Settings count is 0, so badge is hidden)
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Count Badges (Show Zero)"
-          description="Set showZeroCount={true} to always display the badge, even for count 0."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithCounts}
-              value={zeroCountTab}
-              onValueChange={setZeroCountTab}
-              showZeroCount={true}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                count: s.count.count,
-                countActive: s.count.countActive,
-                countInactive: s.count.countInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Content for{" "}
-                <strong className={s.contentStrong}>{zeroCountTab}</strong> tab
-                (Settings shows 0)
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Tooltips (Bottom)"
-          description="Hover over inactive tabs to see tooltips below. Active tab tooltip is hidden."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithTooltips}
-              value={tooltipTab}
-              onValueChange={setTooltipTab}
-              showTooltips={true}
-              tooltipPosition="bottom"
-              tooltipOffset={4}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Currently viewing:{" "}
-                <strong className={s.contentStrong}>{tooltipTab}</strong>
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="With Tooltips (Top)"
-          description="Hover over inactive tabs to see tooltips above."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithTooltips}
-              value={tooltipTopTab}
-              onValueChange={setTooltipTopTab}
-              showTooltips={true}
-              tooltipPosition="top"
-              tooltipOffset={4}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Currently viewing:{" "}
-                <strong className={s.contentStrong}>{tooltipTopTab}</strong>
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Disabled Tab"
-          description="Individual tabs can be disabled via the tab object's disabled property. Disabled tabs are skipped during keyboard navigation."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithDisabled}
-              value={disabledTab}
-              onValueChange={setDisabledTab}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabDisabled: s.disabled.tabDisabled,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                The &quot;Users&quot; tab is disabled and cannot be selected
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="All Tabs Disabled"
-          description="Set the top-level disabled prop to disable all tabs at once."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={allDisabledTab}
-              onValueChange={setAllDisabledTab}
-              disabled={true}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabDisabled: s.disabled.tabDisabled,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                All tabs are disabled via the top-level{" "}
-                <code
-                  className={`px-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-                >
-                  disabled
-                </code>{" "}
-                prop
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Gradient Style"
-          description="Custom styled tabs with gradient background demonstrating full visual customization."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={gradientTab}
-              onValueChange={setGradientTab}
-              classes={{
-                root: `w-full rounded-xl p-3 ${isDarkMode ? "bg-linear-to-r from-purple-950 to-pink-950" : "bg-linear-to-r from-purple-50 to-pink-50"}`,
-                tabList: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-xl ${isDarkMode ? "bg-gray-800/60" : "bg-white/60"}`,
-                tab: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-lg",
-                tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-purple-500 ${isDarkMode ? "focus-visible:ring-offset-gray-900" : ""}`,
-                tabActive: isDarkMode
-                  ? "bg-gray-800 text-purple-300 shadow-md"
-                  : "bg-white text-purple-600 shadow-md",
-                tabInactive: isDarkMode
-                  ? "text-gray-400 hover:text-purple-300 hover:bg-gray-800/50"
-                  : "text-gray-500 hover:text-purple-500 hover:bg-white/50",
-                iconActive: isDarkMode ? "text-purple-300" : "text-purple-600",
-                iconInactive: isDarkMode ? "text-gray-500" : "text-gray-400",
-                panel: `p-4 mt-3 rounded-xl shadow-sm ${isDarkMode ? "bg-gray-800" : "bg-white"}`,
-              }}
-            >
-              <div className={s.content}>
-                Custom styled tabs with gradient background (notice the purple
-                focus ring)
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom Focus Styles"
-          description="Use classes.tabFocus to customize the keyboard focus ring. Click a tab then use arrow keys to see the focus ring."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode} layout="flex-col">
-            <div className="w-full space-y-6">
-              <div>
-                <p
-                  className={`text-xs mb-2 ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
-                >
-                  Green dashed focus ring:
-                </p>
-                <TabPanel
-                  tabs={tabsWithIcons}
-                  value={customFocusTab}
-                  onValueChange={setCustomFocusTab}
-                  classes={{
-                    root: "w-full",
-                    tabList: s.icon.tabList,
-                    tab: s.icon.tab,
-                    tabActive: isDarkMode ? "text-green-400" : "text-green-600",
-                    tabInactive: s.icon.tabInactive,
-                    tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-dashed ${isDarkMode ? "focus-visible:ring-offset-gray-800" : ""}`,
-                    iconActive: isDarkMode
-                      ? "text-green-400"
-                      : "text-green-600",
-                    iconInactive: s.icon.iconInactive,
-                    indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${isDarkMode ? "bg-green-400" : "bg-green-600"}`,
-                    panel: s.panel,
-                  }}
-                >
-                  <div className={s.content}>
-                    Custom green dashed focus ring
-                  </div>
-                </TabPanel>
-              </div>
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Keyboard Navigation"
-          description="Full WAI-ARIA keyboard support with RTL-aware arrow key direction. Click a tab and use arrow keys to navigate."
-          isDarkMode={isDarkMode}
-        >
-          <div
-            className={`mb-4 p-4 rounded-lg text-sm ${isDarkMode ? "bg-blue-900/30 border border-blue-800 text-blue-200" : "bg-blue-50 text-blue-800"}`}
+      {/* ─── 1. Underlined Style ─────────────────────────────────────────── */}
+      <Section
+        title="Underlined Style"
+        description="Classic underline tab style with an active indicator bar."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            value={underlinedTab}
+            onValueChange={setUnderlinedTab}
+            classes={c.tabs.underline}
           >
-            <p className="font-semibold mb-2">Keyboard shortcuts:</p>
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2">
-                <kbd
-                  className={`px-2 py-1 rounded border text-xs font-mono shadow-sm ${isDarkMode ? "bg-gray-800 border-gray-600 text-gray-300" : "bg-white border-blue-200 text-blue-800"}`}
-                >
-                  &rarr;
-                </kbd>
-                <kbd
-                  className={`px-2 py-1 rounded border text-xs font-mono shadow-sm ${isDarkMode ? "bg-gray-800 border-gray-600 text-gray-300" : "bg-white border-blue-200 text-blue-800"}`}
-                >
-                  &darr;
-                </kbd>
-                <span>Move to next tab (reversed in RTL)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <kbd
-                  className={`px-2 py-1 rounded border text-xs font-mono shadow-sm ${isDarkMode ? "bg-gray-800 border-gray-600 text-gray-300" : "bg-white border-blue-200 text-blue-800"}`}
-                >
-                  &larr;
-                </kbd>
-                <kbd
-                  className={`px-2 py-1 rounded border text-xs font-mono shadow-sm ${isDarkMode ? "bg-gray-800 border-gray-600 text-gray-300" : "bg-white border-blue-200 text-blue-800"}`}
-                >
-                  &uarr;
-                </kbd>
-                <span>Move to previous tab (reversed in RTL)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <kbd
-                  className={`px-2 py-1 rounded border text-xs font-mono shadow-sm ${isDarkMode ? "bg-gray-800 border-gray-600 text-gray-300" : "bg-white border-blue-200 text-blue-800"}`}
-                >
-                  Home
-                </kbd>
-                <span>Move to first tab</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <kbd
-                  className={`px-2 py-1 rounded border text-xs font-mono shadow-sm ${isDarkMode ? "bg-gray-800 border-gray-600 text-gray-300" : "bg-white border-blue-200 text-blue-800"}`}
-                >
-                  End
-                </kbd>
-                <span>Move to last tab</span>
-              </li>
-            </ul>
-          </div>
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={keyboardTab}
-              onValueChange={setKeyboardTab}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Click on a tab and use keyboard to navigate
+            {underlinedTab === "home" && (
+              <div className="space-y-3">
+                <p className={c.contentTitle}>Welcome back</p>
+                <p className={c.content}>Here's what's happening with your projects today. You have 3 tasks due and 2 messages waiting.</p>
+                <div className="flex gap-4 mt-2">
+                  {[["12", "Active projects"], ["3", "Due today"], ["98%", "Uptime"]].map(([v, l]) => (
+                    <div key={l}><div className={c.stat}>{v}</div><div className={c.statLabel}>{l}</div></div>
+                  ))}
+                </div>
               </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
+            )}
+            {underlinedTab === "profile" && (
+              <div className="space-y-2">
+                <p className={c.contentTitle}>Profile settings</p>
+                <p className={c.content}>Manage your account details, notification preferences, and connected integrations.</p>
+              </div>
+            )}
+            {underlinedTab === "settings" && (
+              <div className="space-y-2">
+                <p className={c.contentTitle}>General settings</p>
+                <p className={c.content}>Configure language, timezone, theme, and default workspace options.</p>
+              </div>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="RTL Support"
-          description="Arrow key direction automatically reverses in right-to-left contexts. The component detects RTL via computed CSS direction."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div dir="rtl" className="w-full">
-              <div
-                className={`mb-3 text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-              >
-                This section has{" "}
-                <code
-                  className={`px-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-                >
-                  dir=&quot;rtl&quot;
-                </code>{" "}
-                &mdash; ArrowRight moves backward, ArrowLeft moves forward.
+      {/* ─── 2. Pill Style ───────────────────────────────────────────────── */}
+      <Section
+        title="Pill Style"
+        description="Contained pill-shaped tab style with background highlight on active tab."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            value={pillTab}
+            onValueChange={setPillTab}
+            classes={c.tabs.pill}
+          >
+            <div className={c.content}>
+              {pillTab === "home" && "Your dashboard overview with key metrics, recent activity, and quick actions."}
+              {pillTab === "profile" && "Edit your display name, avatar, bio, and social links."}
+              {pillTab === "settings" && "Theme preferences, notification channels, and API key management."}
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 3. Boxed Style ──────────────────────────────────────────────── */}
+      <Section
+        title="Boxed Style"
+        description="Browser-style boxed tabs with bordered active state."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            value={boxedTab}
+            onValueChange={setBoxedTab}
+            classes={{
+              root: "w-full",
+              tabList: `flex items-center border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
+              tab: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
+              tabActive: dark
+                ? "bg-gray-800 text-blue-400 border-gray-700 border-b-gray-800 rounded-t-lg"
+                : "bg-white text-blue-600 border-gray-200 border-b-white rounded-t-lg",
+              tabInactive: dark
+                ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+              tabFocus: c.tabs.underline.tabFocus,
+              panel: `p-4 border border-t-0 rounded-b-lg ${dark ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"}`,
+            }}
+          >
+            <div className={c.content}>
+              {boxedTab === "home" && "Boxed tabs work well for document-style interfaces where the active panel needs a clear visual boundary."}
+              {boxedTab === "profile" && "User profile information, team membership, and activity history."}
+              {boxedTab === "settings" && "Workspace configuration, billing, and access control settings."}
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 4. With Icons (Left) ────────────────────────────────────────── */}
+      <Section
+        title="With Icons (Left)"
+        description="Tabs with leading icon components using iconPosition='left' (default)."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={iconLeftTab}
+            onValueChange={setIconLeftTab}
+            iconPosition="left"
+            classes={c.tabs.icon}
+          >
+            {iconLeftTab === "home" && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-3">
+                  {[["Revenue", "$24.5k", "+12%"], ["Users", "1,429", "+8%"], ["Orders", "892", "+23%"]].map(([label, value, change]) => (
+                    <div key={label} className={c.contentCard}>
+                      <div className={c.statLabel}>{label}</div>
+                      <div className={c.stat}>{value}</div>
+                      <div className="text-xs text-emerald-500 font-medium">{change}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
+            )}
+            {iconLeftTab === "users" && <div className={c.content}>Team members, roles, and invitation management.</div>}
+            {iconLeftTab === "settings" && <div className={c.content}>Workspace preferences, integrations, and security.</div>}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 5. With Icons (Right) ───────────────────────────────────────── */}
+      <Section
+        title="With Icons (Right)"
+        description="Tabs with trailing icon components using iconPosition='right'."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={iconRightTab}
+            onValueChange={setIconRightTab}
+            iconPosition="right"
+            classes={{
+              ...c.tabs.pill,
+              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
+              iconActive: c.tabs.icon.iconActive,
+              iconInactive: c.tabs.icon.iconInactive,
+            }}
+          >
+            <div className={c.content}>
+              {iconRightTab === "home" && "Overview dashboard with key performance indicators and recent activity."}
+              {iconRightTab === "users" && "Active users, pending invitations, and role assignments."}
+              {iconRightTab === "settings" && "Application configuration, webhooks, and API tokens."}
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 6. Icon Only (Labels Hidden) ────────────────────────────────── */}
+      <Section
+        title="Icon Only (Labels Hidden)"
+        description="Set alwaysShowLabels={false} to hide labels on inactive tabs. Only the active tab shows its label. Inactive tabs get an aria-label for screen readers."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={iconOnlyTab}
+            onValueChange={setIconOnlyTab}
+            alwaysShowLabels={false}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              Only the active tab shows its label. Icons always visible.
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 7. With Count Badges (Hide Zero) ────────────────────────────── */}
+      <Section
+        title="With Count Badges (Hide Zero)"
+        description="Display count badges on tabs. Tabs with count 0 hide the badge by default."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithCounts}
+            value={countTab}
+            onValueChange={setCountTab}
+            showZeroCount={false}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              {countTab === "inbox" && "12 unread messages — 3 flagged as urgent. Settings badge is hidden since its count is 0."}
+              {countTab === "users" && "5 team members online. Manage roles and permissions."}
+              {countTab === "settings" && "No pending configuration changes."}
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 8. With Count Badges (Show Zero) ────────────────────────────── */}
+      <Section
+        title="With Count Badges (Show Zero)"
+        description="Set showZeroCount={true} to always display the badge, even for count 0."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithCounts}
+            value={zeroCountTab}
+            onValueChange={setZeroCountTab}
+            showZeroCount={true}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              {zeroCountTab === "inbox" && "All messages displayed. Badge counts remain visible even at zero."}
+              {zeroCountTab === "users" && "Team member directory with activity status."}
+              {zeroCountTab === "settings" && "Zero pending changes — the 0 badge is visible to show the count explicitly."}
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 9. With Tooltips (Bottom) ───────────────────────────────────── */}
+      <Section
+        title="With Tooltips (Bottom)"
+        description="Hover over inactive tabs to see tooltips below. Active tab tooltip is hidden."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithTooltips}
+            value={tooltipTab}
+            onValueChange={setTooltipTab}
+            showTooltips={true}
+            tooltipPosition="bottom"
+            tooltipOffset={4}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              Currently viewing:{" "}
+              <strong className={c.contentStrong}>{tooltipTab}</strong>
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 10. With Tooltips (Top) ─────────────────────────────────────── */}
+      <Section
+        title="With Tooltips (Top)"
+        description="Hover over inactive tabs to see tooltips above."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithTooltips}
+            value={tooltipTopTab}
+            onValueChange={setTooltipTopTab}
+            showTooltips={true}
+            tooltipPosition="top"
+            tooltipOffset={4}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              Currently viewing:{" "}
+              <strong className={c.contentStrong}>{tooltipTopTab}</strong>
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 11. Disabled Tab ────────────────────────────────────────────── */}
+      <Section
+        title="Disabled Tab"
+        description="Individual tabs can be disabled via the tab object's disabled property. Disabled tabs are skipped during keyboard navigation."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithDisabled}
+            value={disabledTab}
+            onValueChange={setDisabledTab}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              The &quot;Users&quot; tab is disabled and cannot be selected
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 12. All Tabs Disabled ───────────────────────────────────────── */}
+      <Section
+        title="All Tabs Disabled"
+        description="Set the top-level disabled prop to disable all tabs at once."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={allDisabledTab}
+            onValueChange={setAllDisabledTab}
+            disabled={true}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              All tabs are disabled via the top-level{" "}
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                disabled
+              </code>{" "}
+              prop
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 13. Gradient Style ──────────────────────────────────────────── */}
+      <Section
+        title="Gradient Style"
+        description="Custom styled tabs with gradient background demonstrating full visual customization."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={gradientTab}
+            onValueChange={setGradientTab}
+            classes={{
+              root: `w-full rounded-xl p-3 ${dark ? "bg-linear-to-r from-purple-950 to-pink-950" : "bg-linear-to-r from-purple-50 to-pink-50"}`,
+              tabList: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-xl ${dark ? "bg-gray-800/60" : "bg-white/60"}`,
+              tab: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-lg",
+              tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-purple-500 ${dark ? "focus-visible:ring-offset-gray-900" : ""}`,
+              tabActive: dark
+                ? "bg-gray-800 text-purple-300 shadow-md"
+                : "bg-white text-purple-600 shadow-md",
+              tabInactive: dark
+                ? "text-gray-400 hover:text-purple-300 hover:bg-gray-800/50"
+                : "text-gray-500 hover:text-purple-500 hover:bg-white/50",
+              iconActive: dark ? "text-purple-300" : "text-purple-600",
+              iconInactive: dark ? "text-gray-500" : "text-gray-400",
+              panel: `p-4 mt-3 rounded-xl shadow-sm ${dark ? "bg-gray-800" : "bg-white"}`,
+            }}
+          >
+            <div className={c.content}>
+              Custom styled tabs with gradient background (notice the purple
+              focus ring)
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 14. Custom Focus Styles ─────────────────────────────────────── */}
+      <Section
+        title="Custom Focus Styles"
+        description="Use classes.tabFocus to customize the keyboard focus ring. Click a tab then use arrow keys to see the focus ring."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="flex-col">
+          <div className="w-full space-y-6">
+            <div>
+              <p className={`text-xs mb-2 ${c.label}`}>
+                Green dashed focus ring:
+              </p>
               <TabPanel
-                tabs={rtlTabs}
-                value={rtlTab}
-                onValueChange={setRtlTab}
+                tabs={tabsWithIcons}
+                value={customFocusTab}
+                onValueChange={setCustomFocusTab}
                 classes={{
-                  root: "w-full",
-                  tabList: s.icon.tabList,
-                  tab: s.icon.tab,
-                  tabActive: s.icon.tabActive,
-                  tabInactive: s.icon.tabInactive,
-                  tabFocus: s.focus,
-                  iconActive: s.icon.iconActive,
-                  iconInactive: s.icon.iconInactive,
-                  indicator: s.icon.indicator,
-                  panel: s.panel,
+                  ...c.tabs.icon,
+                  tabActive: dark ? "text-green-400" : "text-green-600",
+                  tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-dashed ${dark ? "focus-visible:ring-offset-gray-800" : ""}`,
+                  iconActive: dark ? "text-green-400" : "text-green-600",
+                  indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${dark ? "bg-green-400" : "bg-green-600"}`,
                 }}
               >
+                <div className={c.content}>Custom green dashed focus ring</div>
+              </TabPanel>
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 15. Keyboard Navigation ─────────────────────────────────────── */}
+      <Section
+        title="Keyboard Navigation"
+        description="Full WAI-ARIA keyboard support with RTL-aware arrow key direction. Click a tab and use arrow keys to navigate."
+        isDarkMode={dark}
+      >
+        <div className={c.note}>
+          <p className="font-semibold mb-2">Keyboard shortcuts:</p>
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <kbd className={c.kbd}>&rarr;</kbd>
+              <kbd className={c.kbd}>&darr;</kbd>
+              <span>Move to next tab (reversed in RTL)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className={c.kbd}>&larr;</kbd>
+              <kbd className={c.kbd}>&uarr;</kbd>
+              <span>Move to previous tab (reversed in RTL)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className={c.kbd}>Home</kbd>
+              <span>Move to first tab</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <kbd className={c.kbd}>End</kbd>
+              <span>Move to last tab</span>
+            </div>
+          </div>
+        </div>
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={keyboardTab}
+            onValueChange={setKeyboardTab}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              Click on a tab and use keyboard to navigate
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 16. RTL Support ─────────────────────────────────────────────── */}
+      <Section
+        title="RTL Support"
+        description="Arrow key direction automatically reverses in right-to-left contexts. The component detects RTL via computed CSS direction."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div dir="rtl" className="w-full">
+            <div
+              className={`mb-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              This section has{" "}
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                dir=&quot;rtl&quot;
+              </code>{" "}
+              &mdash; ArrowRight moves backward, ArrowLeft moves forward.
+            </div>
+            <TabPanel
+              tabs={rtlTabs}
+              value={rtlTab}
+              onValueChange={setRtlTab}
+              classes={c.tabs.icon}
+            >
+              {(tab) => (
+                <div className={c.content}>
+                  <strong className={c.contentStrong}>{tab.label}</strong>{" "}
+                  &mdash; {tab.id}
+                </div>
+              )}
+            </TabPanel>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 17. Dynamic Tabs (Add / Remove) ─────────────────────────────── */}
+      <Section
+        title="Dynamic Tabs (Add / Remove)"
+        description="Tabs can be dynamically added and removed. When the active tab is removed, the component automatically falls back to the first available tab."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-full space-y-4">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={addDynamicTab}
+                className={c.btnPrimary}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <PlusIcon className="w-4 h-4" />
+                  Add Tab
+                </span>
+              </button>
+              <span
+                className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              >
+                {dynamicTabs.length} tab{dynamicTabs.length !== 1 && "s"}
+              </span>
+            </div>
+            {dynamicTabs.length > 0 ? (
+              <TabPanel
+                tabs={dynamicTabs}
+                value={dynamicTab}
+                onValueChange={setDynamicTab}
+                classes={c.tabs.icon}
+              >
                 {(tab) => (
-                  <div className={s.content}>
-                    <strong className={s.contentStrong}>{tab.label}</strong>{" "}
-                    &mdash; {tab.id}
+                  <div className="flex items-center justify-between">
+                    <span className={c.content}>
+                      Active:{" "}
+                      <strong className={c.contentStrong}>{tab.label}</strong>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeDynamicTab(tab.id)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-red-900/50 hover:bg-red-800/60 text-red-300" : "bg-red-50 hover:bg-red-100 text-red-600"}`}
+                    >
+                      <TrashIcon className="w-4 h-4" />
+                      Remove this tab
+                    </button>
                   </div>
                 )}
               </TabPanel>
+            ) : (
+              <div
+                className={`p-8 text-center rounded-lg border-2 border-dashed ${dark ? "border-gray-700 text-gray-500" : "border-gray-200 text-gray-400"}`}
+              >
+                No tabs. Click &quot;Add Tab&quot; to create one.
+              </div>
+            )}
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 18. Uncontrolled (defaultValue) ─────────────────────────────── */}
+      <Section
+        title="Uncontrolled (defaultValue)"
+        description="Use defaultValue for uncontrolled behavior -- no external state management needed."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            defaultValue="profile"
+            classes={c.tabs.underline}
+          >
+            {(tab) => (
+              <div className={c.content}>
+                Uncontrolled tab:{" "}
+                <strong className={c.contentStrong}>{tab.label}</strong>{" "}
+                (started at Profile)
+              </div>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 19. Vertical Orientation ────────────────────────────────────── */}
+      <Section
+        title="Vertical Orientation"
+        description="Set orientation='vertical' -- keyboard navigation switches to ArrowUp/ArrowDown."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={verticalTab}
+            onValueChange={setVerticalTab}
+            orientation="vertical"
+            classes={{
+              root: "flex gap-0 w-full",
+              tabList: `flex flex-col gap-1 pr-0 min-w-[160px] border-r ${dark ? "border-gray-700" : "border-gray-200"}`,
+              tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
+              tabActive: dark
+                ? "text-blue-400 bg-blue-900/30"
+                : "text-blue-600 bg-blue-50",
+              tabInactive: dark
+                ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+              tabFocus: c.tabs.underline.tabFocus,
+              iconActive: c.tabs.icon.iconActive,
+              iconInactive: c.tabs.icon.iconInactive,
+              panel: "flex-1 p-4",
+            }}
+          >
+            <div className={c.content}>
+              Vertical tab content for{" "}
+              <strong className={c.contentStrong}>{verticalTab}</strong>
             </div>
-          </DemoWrapper>
-        </Section>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Dynamic Tabs (Add / Remove)"
-          description="Tabs can be dynamically added and removed. When the active tab is removed, the component automatically falls back to the first available tab."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="w-full space-y-4">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={addDynamicTab}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${isDarkMode ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-                >
-                  <PlusIcon className="w-4 h-4" />
-                  Add Tab
-                </button>
-                <span
-                  className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-                >
-                  {dynamicTabs.length} tab{dynamicTabs.length !== 1 && "s"}
-                </span>
-              </div>
-              {dynamicTabs.length > 0 ? (
-                <TabPanel
-                  tabs={dynamicTabs}
-                  value={dynamicTab}
-                  onValueChange={setDynamicTab}
-                  classes={{
-                    root: "w-full",
-                    tabList: s.icon.tabList,
-                    tab: s.icon.tab,
-                    tabActive: s.icon.tabActive,
-                    tabInactive: s.icon.tabInactive,
-                    tabFocus: s.focus,
-                    iconActive: s.icon.iconActive,
-                    iconInactive: s.icon.iconInactive,
-                    indicator: s.icon.indicator,
-                    panel: s.panel,
-                  }}
-                >
-                  {(tab) => (
-                    <div className="flex items-center justify-between">
-                      <span className={s.content}>
-                        Active:{" "}
-                        <strong className={s.contentStrong}>{tab.label}</strong>
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => removeDynamicTab(tab.id)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${isDarkMode ? "bg-red-900/50 hover:bg-red-800/60 text-red-300" : "bg-red-50 hover:bg-red-100 text-red-600"}`}
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                        Remove this tab
-                      </button>
-                    </div>
-                  )}
-                </TabPanel>
-              ) : (
-                <div
-                  className={`p-8 text-center rounded-lg border-2 border-dashed ${isDarkMode ? "border-gray-700 text-gray-500" : "border-gray-200 text-gray-400"}`}
-                >
-                  No tabs. Click &quot;Add Tab&quot; to create one.
-                </div>
-              )}
+      {/* ─── 20. Manual Activation Mode ──────────────────────────────────── */}
+      <Section
+        title="Manual Activation Mode"
+        description="With activationMode='manual', arrow keys move focus between tabs but do not activate them. Press Enter or Space to activate."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={manualTab}
+            onValueChange={setManualTab}
+            activationMode="manual"
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              Active tab:{" "}
+              <strong className={c.contentStrong}>{manualTab}</strong> (focus
+              may differ from active)
             </div>
-          </DemoWrapper>
-        </Section>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Uncontrolled (defaultValue)"
-          description="Use defaultValue for uncontrolled behavior — no external state management needed."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              defaultValue="profile"
-              classes={{
-                root: "w-full",
-                tabList: s.underline.tabList,
-                tab: s.underline.tab,
-                tabActive: s.underline.tabActive,
-                tabInactive: s.underline.tabInactive,
-                tabFocus: s.focus,
-                indicator: s.underline.indicator,
-                panel: s.panel,
-              }}
-            >
-              {(tab) => (
-                <div className={s.content}>
-                  Uncontrolled tab:{" "}
-                  <strong className={s.contentStrong}>{tab.label}</strong>{" "}
-                  (started at Profile)
-                </div>
-              )}
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
+      {/* ─── 21. No Loop ─────────────────────────────────────────────────── */}
+      <Section
+        title="No Loop (loop={false})"
+        description="Set loop={false} to prevent keyboard navigation from wrapping around at the ends."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={noLoopTab}
+            onValueChange={setNoLoopTab}
+            loop={false}
+            classes={c.tabs.icon}
+          >
+            <div className={c.content}>
+              Arrow keys stop at first/last tab instead of wrapping
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
 
-        <Section
-          title="Vertical Orientation"
-          description="Set orientation='vertical' — keyboard navigation switches to ArrowUp/ArrowDown."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={verticalTab}
-              onValueChange={setVerticalTab}
-              orientation="vertical"
-              classes={{
-                root: "flex gap-0 w-full",
-                tabList: `flex flex-col gap-1 pr-0 min-w-[160px] border-r ${isDarkMode ? "border-gray-700" : "border-gray-200"}`,
-                tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
-                tabActive: isDarkMode
-                  ? "text-blue-400 bg-blue-900/30"
-                  : "text-blue-600 bg-blue-50",
-                tabInactive: isDarkMode
-                  ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                panel: "flex-1 p-4",
-              }}
-            >
-              <div className={s.content}>
-                Vertical tab content for{" "}
-                <strong className={s.contentStrong}>{verticalTab}</strong>
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Manual Activation Mode"
-          description="With activationMode='manual', arrow keys move focus between tabs but do not activate them. Press Enter or Space to activate."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={manualTab}
-              onValueChange={setManualTab}
-              activationMode="manual"
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Active tab:{" "}
-                <strong className={s.contentStrong}>{manualTab}</strong> (focus
-                may differ from active)
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="No Loop (loop={false})"
-          description="Set loop={false} to prevent keyboard navigation from wrapping around at the ends."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={noLoopTab}
-              onValueChange={setNoLoopTab}
-              loop={false}
-              classes={{
-                root: "w-full",
-                tabList: s.icon.tabList,
-                tab: s.icon.tab,
-                tabActive: s.icon.tabActive,
-                tabInactive: s.icon.tabInactive,
-                tabFocus: s.focus,
-                iconActive: s.icon.iconActive,
-                iconInactive: s.icon.iconInactive,
-                indicator: s.icon.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Arrow keys stop at first/last tab instead of wrapping
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Render Function Children"
-          description="Pass a function as children for dynamic per-tab content rendering. The function receives the active tab object."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={renderFnTab}
-              onValueChange={setRenderFnTab}
-              classes={{
-                root: "w-full",
-                tabList: s.pill.tabList,
-                tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
-                tabActive: s.pill.tabActive,
-                tabInactive: s.pill.tabInactive,
-                tabFocus: s.focus,
-                iconActive: isDarkMode ? "text-white" : "text-gray-900",
-                iconInactive: s.icon.iconInactive,
-                panel: "p-4 mt-2",
-              }}
-            >
-              {(tab) => (
-                <div className={s.content}>
-                  <strong className={s.contentStrong}>{tab.label}</strong>{" "}
-                  &mdash; rendered via{" "}
-                  <code
-                    className={`px-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-                  >
-                    children(tab)
-                  </code>
-                </div>
-              )}
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom Tab Rendering (renderTab)"
-          description="Use the renderTab prop to wrap or customize tab triggers. Receives render props and the default element."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={tabsWithIcons}
-              value={renderTabTab}
-              onValueChange={setRenderTabTab}
-              classes={{
-                root: "w-full",
-                tabList: s.pill.tabList,
-                tab: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
-                tabActive: s.pill.tabActive,
-                tabInactive: s.pill.tabInactive,
-                tabFocus: s.focus,
-                iconActive: isDarkMode ? "text-white" : "text-gray-900",
-                iconInactive: s.icon.iconInactive,
-                panel: "p-4 mt-2",
-              }}
-              renderTab={(props, defaultElement) => (
-                <div key={props.tab.id} className="relative">
-                  {defaultElement}
-                  {props.tab.count != null && props.tab.count > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
-                      {props.tab.count}
-                    </span>
-                  )}
-                </div>
-              )}
-            >
-              <div className={s.content}>
-                Tab content for{" "}
-                <strong className={s.contentStrong}>{renderTabTab}</strong>
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="classes Record"
-          description="All styling is done via the classes record for a clean, consolidated API."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              value={classesTab}
-              onValueChange={setClassNamesTab}
-              classes={{
-                root: "w-full",
-                tabList: s.underline.tabList,
-                tab: s.underline.tab,
-                tabActive: s.underline.tabActive,
-                tabInactive: s.underline.tabInactive,
-                tabFocus: s.focus,
-                indicator: s.underline.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                All styles via{" "}
-                <strong className={s.contentStrong}>classes</strong> record for{" "}
-                <strong className={s.contentStrong}>{classesTab}</strong>
-              </div>
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Custom ID"
-          description="Use the id prop for deterministic IDs useful for SSR and testing."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              id="my-tabs"
-              value={customIdTab}
-              onValueChange={setCustomIdTab}
-              classes={{
-                root: "w-full",
-                tabList: s.underline.tabList,
-                tab: s.underline.tab,
-                tabActive: s.underline.tabActive,
-                tabInactive: s.underline.tabInactive,
-                tabFocus: s.focus,
-                indicator: s.underline.indicator,
-                panel: s.panel,
-              }}
-            >
-              <div className={s.content}>
-                Tab IDs are{" "}
+      {/* ─── 22. Render Function Children ────────────────────────────────── */}
+      <Section
+        title="Render Function Children"
+        description="Pass a function as children for dynamic per-tab content rendering. The function receives the active tab object."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={renderFnTab}
+            onValueChange={setRenderFnTab}
+            classes={{
+              ...c.tabs.pill,
+              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
+              iconActive: dark ? "text-white" : "text-gray-900",
+              iconInactive: c.tabs.icon.iconInactive,
+            }}
+          >
+            {(tab) => (
+              <div className={c.content}>
+                <strong className={c.contentStrong}>{tab.label}</strong> &mdash;
+                rendered via{" "}
                 <code
-                  className={`px-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                  className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
                 >
-                  my-tabs-tab-home
+                  children(tab)
                 </code>
-                ,{" "}
-                <code
-                  className={`px-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-                >
-                  my-tabs-panel-home
-                </code>
-                , etc.
               </div>
-            </TabPanel>
-          </DemoWrapper>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 23. Custom Tab Rendering (renderTab) ────────────────────────── */}
+      <Section
+        title="Custom Tab Rendering (renderTab)"
+        description="Use the renderTab prop to wrap or customize tab triggers. Receives render props and the default element."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithIcons}
+            value={renderTabTab}
+            onValueChange={setRenderTabTab}
+            classes={{
+              ...c.tabs.pill,
+              tab: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
+              iconActive: dark ? "text-white" : "text-gray-900",
+              iconInactive: c.tabs.icon.iconInactive,
+            }}
+            renderTab={(props, defaultElement) => (
+              <div key={props.tab.id} className="relative">
+                {defaultElement}
+                {props.tab.count != null && props.tab.count > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
+                    {props.tab.count}
+                  </span>
+                )}
+              </div>
+            )}
+          >
+            <div className={c.content}>
+              Tab content for{" "}
+              <strong className={c.contentStrong}>{renderTabTab}</strong>
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 24. classes Record ───────────────────────────────────────────── */}
+      <Section
+        title="classes Record"
+        description="All styling is done via the classes record for a clean, consolidated API."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            value={classesTab}
+            onValueChange={setClassNamesTab}
+            classes={c.tabs.underline}
+          >
+            <div className={c.content}>
+              All styles via{" "}
+              <strong className={c.contentStrong}>classes</strong> record for{" "}
+              <strong className={c.contentStrong}>{classesTab}</strong>
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 25. Custom ID ───────────────────────────────────────────────── */}
+      <Section
+        title="Custom ID"
+        description="Use the id prop for deterministic IDs useful for SSR and testing."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            id="my-tabs"
+            value={customIdTab}
+            onValueChange={setCustomIdTab}
+            classes={c.tabs.underline}
+          >
+            <div className={c.content}>
+              Tab IDs are{" "}
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                my-tabs-tab-home
+              </code>
+              ,{" "}
+              <code
+                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              >
+                my-tabs-panel-home
+              </code>
+              , etc.
+            </div>
+          </TabPanel>
+        </DemoWrapper>
+        <div className={c.note}>
+          <strong>Note:</strong> The ID is auto-generated via{" "}
+          <code
+            className={`px-1 py-0.5 border rounded text-xs font-mono ${dark ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}
+          >
+            useId()
+          </code>{" "}
+          if not provided. Use the{" "}
+          <code
+            className={`px-1 py-0.5 border rounded text-xs font-mono ${dark ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}
+          >
+            id
+          </code>{" "}
+          prop for deterministic SSR/testing IDs.
+        </div>
+      </Section>
+
+      {/* ─── 26. Custom Aria Label ───────────────────────────────────────── */}
+      <Section
+        title="Custom Aria Label"
+        description="Use aria-label to provide a meaningful accessible name for the tablist."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            defaultValue="home"
+            aria-label="Main navigation tabs"
+            classes={c.tabs.underline}
+          >
+            {(tab) => (
+              <div className={c.content}>
+                The tablist has{" "}
+                <code
+                  className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                >
+                  aria-label=&quot;Main navigation tabs&quot;
+                </code>{" "}
+                &mdash; currently on:{" "}
+                <strong className={c.contentStrong}>{tab.label}</strong>
+              </div>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 27. Force Mount (All Panels) ────────────────────────────────── */}
+      <Section
+        title="Force Mount (All Panels)"
+        description="With forceMount, every tab panel is rendered into the DOM regardless of whether it is active. Useful when panels contain forms or other stateful content that must persist across tab switches."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            defaultValue="home"
+            forceMount
+            classes={c.tabs.underline}
+          >
+            {(tab: Tab) => (
+              <div className={c.content}>
+                Panel for{" "}
+                <strong className={c.contentStrong}>{tab.label}</strong> —
+                always mounted in DOM
+              </div>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 28. Keep Mounted (Lazy Persist) ─────────────────────────────── */}
+      <Section
+        title="Keep Mounted (Lazy Persist)"
+        description="With keepMounted, a tab panel stays in the DOM once it has been activated at least once. Panels that have never been visited are not rendered, saving initial mount cost while preserving state after the first visit."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            defaultValue="home"
+            keepMounted
+            classes={c.tabs.pill}
+          >
+            {(tab: Tab) => (
+              <div className={c.content}>
+                Panel for{" "}
+                <strong className={c.contentStrong}>{tab.label}</strong> — stays
+                mounted after first visit
+              </div>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── 29. Data Attributes ─────────────────────────────────────────── */}
+      <Section
+        title="Data Attributes Demo"
+        description="The TabPanel component applies data attributes for CSS-based styling. Use data-[state=active], data-[disabled], etc."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={tabsWithDisabled}
+            defaultValue="home"
+            classes={c.tabs.icon}
+          >
+            {(tab) => (
+              <div className={c.content}>
+                Data attributes on tab buttons and panels for{" "}
+                <strong className={c.contentStrong}>{tab.label}</strong>
+              </div>
+            )}
+          </TabPanel>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Props Table ─────────────────────────────────────────────────── */}
+      <Section title="TabPanel Props" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="tabs"
+              type="Tab[]"
+              defaultVal="required"
+              description="Array of tab configuration objects"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              defaultVal="auto-generated"
+              description="Deterministic ID for SSR/testing"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="string"
+              description="Controlled active tab ID"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultValue"
+              type="string"
+              defaultVal="tabs[0].id"
+              description="Initial active tab for uncontrolled mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(tabId: string) => void"
+              description="Callback when active tab changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="children"
+              type="ReactNode | (tab: Tab) => ReactNode"
+              description="Panel content or render function receiving active tab"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="orientation"
+              type={'"horizontal" | "vertical"'}
+              defaultVal='"horizontal"'
+              description="Tab orientation -- affects keyboard navigation axis"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="activationMode"
+              type={'"automatic" | "manual"'}
+              defaultVal='"automatic"'
+              description="Automatic: arrows activate. Manual: Enter/Space activates"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loop"
+              type="boolean"
+              defaultVal="true"
+              description="Whether keyboard navigation wraps around at ends"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="iconPosition"
+              type={'"left" | "right"'}
+              defaultVal='"left"'
+              description="Position of icon relative to label"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showZeroCount"
+              type="boolean"
+              defaultVal="false"
+              description="Show count badge even when value is 0"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="alwaysShowLabels"
+              type="boolean"
+              defaultVal="true"
+              description="Show labels on all tabs or only the active one"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showTooltips"
+              type="boolean"
+              defaultVal="true"
+              description="Enable tooltips on tabs with tooltip content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltipPosition"
+              type={'"top" | "bottom" | "left" | "right"'}
+              defaultVal='"bottom"'
+              description="Position of tooltip relative to tab"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltipOffset"
+              type="number"
+              defaultVal="4"
+              description="Distance between tooltip and tab (px)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable all tabs globally"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderTab"
+              type="(props: TabRenderProps, defaultElement: ReactElement) => ReactNode"
+              description="Custom render function for each tab trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="aria-label"
+              type="string"
+              defaultVal='"Tabs"'
+              description="Accessible label for the tablist element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="TabPanelClasses"
+              description="Record of class names for all internal elements"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="Root element class name (fallback for classes.root)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Root element inline styles"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="forceMount"
+              type="boolean"
+              defaultVal="false"
+              description="Mount all tab panels eagerly, regardless of active state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="keepMounted"
+              type="boolean"
+              defaultVal="false"
+              description="Keep a tab panel mounted after it has been activated at least once"
+              isDarkMode={dark}
+            />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Tab Object Props ────────────────────────────────────────────── */}
+      <Section title="Tab Object Properties" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="id"
+              type="string"
+              defaultVal="required"
+              description="Unique identifier for the tab"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="string"
+              defaultVal="required"
+              description="Tab label text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="icon"
+              type="ReactNode"
+              description="Icon element rendered in the tab (any ReactNode)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="count"
+              type="number"
+              description="Count badge value"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              description="Disable this specific tab"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tooltip"
+              type="ReactNode"
+              description="Tooltip content (shown on inactive tabs when showTooltips is true)"
+              isDarkMode={dark}
+            />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── TabPanelClasses Slots ───────────────────────────────────────── */}
+      <Section title="TabPanelClasses Slots" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="root"
+              type="string"
+              description="Root container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tabList"
+              type="string"
+              description='Tab list container (role="tablist")'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tab"
+              type="string"
+              description="Tab button base"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tabActive"
+              type="string"
+              description="Tab button active state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tabInactive"
+              type="string"
+              description="Tab button inactive state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tabDisabled"
+              type="string"
+              description="Tab button disabled state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="tabFocus"
+              type="string"
+              description="Tab button focus ring"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="string"
+              description="Label text base"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="labelActive"
+              type="string"
+              description="Label active state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="labelInactive"
+              type="string"
+              description="Label inactive state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="icon"
+              type="string"
+              description="Icon wrapper base"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="iconActive"
+              type="string"
+              description="Icon active state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="iconInactive"
+              type="string"
+              description="Icon inactive state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="count"
+              type="string"
+              description="Count badge base"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countActive"
+              type="string"
+              description="Count badge active state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countInactive"
+              type="string"
+              description="Count badge inactive state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="indicator"
+              type="string"
+              description="Active tab indicator element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="panel"
+              type="string"
+              description="Tab panel content area"
+              isDarkMode={dark}
+            />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="data-state"
+              type="tab button, panel"
+              description={'"active" or "inactive"'}
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, tab button"
+              description="Present when the tab or entire component is disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-orientation"
+              type="root, tab button, panel"
+              description={'"horizontal" or "vertical"'}
+              isDarkMode={dark}
+            />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ───────────────────────────────────────────────── */}
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
           <div
-            className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-blue-900/30 border border-blue-800" : "bg-blue-50 border border-blue-200"}`}
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
-            <p
-              className={`text-sm ${isDarkMode ? "text-blue-200" : "text-blue-800"}`}
-            >
-              <strong>Note:</strong> The ID is auto-generated via{" "}
-              <code
-                className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}
-              >
-                useId()
-              </code>{" "}
-              if not provided. Use the{" "}
-              <code
-                className={`px-1 py-0.5 border rounded text-xs font-mono ${isDarkMode ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}
-              >
-                id
-              </code>{" "}
-              prop for deterministic SSR/testing IDs.
-            </p>
-          </div>
-        </Section>
-
-        <Section
-          title="Custom Aria Label"
-          description="Use aria-label to provide a meaningful accessible name for the tablist."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              defaultValue="home"
-              aria-label="Main navigation tabs"
-              classes={{
-                root: "w-full",
-                tabList: s.underline.tabList,
-                tab: s.underline.tab,
-                tabActive: s.underline.tabActive,
-                tabInactive: s.underline.tabInactive,
-                tabFocus: s.focus,
-                indicator: s.underline.indicator,
-                panel: s.panel,
-              }}
-            >
-              {(tab) => (
-                <div className={s.content}>
-                  The tablist has{" "}
-                  <code
-                    className={`px-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-                  >
-                    aria-label=&quot;Main navigation tabs&quot;
-                  </code>{" "}
-                  &mdash; currently on:{" "}
-                  <strong className={s.contentStrong}>{tab.label}</strong>
-                </div>
-              )}
-            </TabPanel>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Data Attributes"
-          description="The TabPanel component applies data attributes for CSS-based styling."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <div className="overflow-x-auto">
-              <table
-                className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
-              >
-                <thead>
-                  <tr
-                    className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
-                  >
-                    <th className="text-left py-3 pr-4 font-semibold">
-                      Attribute
-                    </th>
-                    <th className="text-left py-3 pr-4 font-semibold">
-                      Applied To
-                    </th>
-                    <th className="text-left py-3 font-semibold">
-                      Description
-                    </th>
-                  </tr>
-                </thead>
-                <tbody
-                  className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
+            {[
+              'Implements WAI-ARIA role="tablist", role="tab", and role="tabpanel" semantics',
+              "All panels rendered in the DOM (hidden attribute) so aria-controls always references valid DOM elements",
+              "RTL-aware keyboard navigation: arrow key direction reverses based on computed CSS direction",
+              "Roving tabindex: tabIndex=0 on tabbable tab, tabIndex=-1 on others",
+              "aria-selected reflects active state on each tab",
+              "aria-controls and aria-labelledby link tabs to their panels",
+              "aria-disabled on disabled tabs (preserving roving tabindex; not HTML disabled)",
+              "When labels are hidden (alwaysShowLabels=false), inactive tabs receive aria-label for screen reader accessibility",
+              "Icons wrapped with aria-hidden=\"true\" as they are decorative",
+              "Count badges have aria-label for screen reader announcement",
+              "No focus stealing on mount -- focus managed only during keyboard interaction",
+              "Automatic fallback to first tab when the active tab is removed from the tabs array",
+              "Supports ref forwarding for programmatic focus management",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
                 >
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">
-                      data-state
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      tab button, panel
-                    </td>
-                    <td
-                      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      &quot;active&quot; or &quot;inactive&quot;
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">
-                      data-disabled
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      root, tab button
-                    </td>
-                    <td
-                      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      Present when the tab or entire component is disabled
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 pr-4 font-mono text-blue-500">
-                      data-orientation
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      root, tab button, panel
-                    </td>
-                    <td
-                      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      &quot;horizontal&quot; or &quot;vertical&quot;
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p
-              className={`text-sm mt-4 ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-            >
-              Example usage:{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-              >
-                data-[state=active]:font-bold
-              </code>
-              ,{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-xs font-mono ${isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
-              >
-                data-[disabled]:opacity-50
-              </code>
-            </p>
-          </DemoWrapper>
-        </Section>
-
-        <Section
-          title="Force Mount (All Panels)"
-          description="With forceMount, every tab panel is rendered into the DOM regardless of whether it is active. Useful when panels contain forms or other stateful content that must persist across tab switches."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              defaultValue="home"
-              forceMount
-              classes={{
-                root: "w-full",
-                tabList: s.underline.tabList,
-                tab: s.underline.tab,
-                tabActive: s.underline.tabActive,
-                tabInactive: s.underline.tabInactive,
-                tabFocus: s.focus,
-                indicator: s.underline.indicator,
-                panel: s.panel,
-              }}
-            >
-              {(tab: Tab) => (
-                <div className={s.content}>
-                  Panel for{" "}
-                  <strong className={s.contentStrong}>{tab.label}</strong> —
-                  always mounted in DOM
-                </div>
-              )}
-            </TabPanel>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<TabPanel
-  tabs={tabs}
-  defaultValue="home"
-  forceMount
->
-  {(tab) => <div>Panel for {tab.label}</div>}
-</TabPanel>`}
-          />
-        </Section>
-
-        <Section
-          title="Keep Mounted (Lazy Persist)"
-          description="With keepMounted, a tab panel stays in the DOM once it has been activated at least once. Panels that have never been visited are not rendered, saving initial mount cost while preserving state after the first visit."
-          isDarkMode={isDarkMode}
-        >
-          <DemoWrapper isDarkMode={isDarkMode}>
-            <TabPanel
-              tabs={basicTabs}
-              defaultValue="home"
-              keepMounted
-              classes={{
-                root: "w-full",
-                tabList: s.pill.tabList,
-                tab: s.pill.tab,
-                tabActive: s.pill.tabActive,
-                tabInactive: s.pill.tabInactive,
-                tabFocus: s.focus,
-                panel: s.panel,
-              }}
-            >
-              {(tab: Tab) => (
-                <div className={s.content}>
-                  Panel for{" "}
-                  <strong className={s.contentStrong}>{tab.label}</strong> —
-                  stays mounted after first visit
-                </div>
-              )}
-            </TabPanel>
-          </DemoWrapper>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`<TabPanel
-  tabs={tabs}
-  defaultValue="home"
-  keepMounted
->
-  {(tab) => <div>Panel for {tab.label}</div>}
-</TabPanel>`}
-          />
-        </Section>
-      </div>
-
-      <div className="space-y-8">
-        <h2
-          className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          API Reference
-        </h2>
-
-        <div>
-          <h3
-            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
-          >
-            TabPanel Props
-          </h3>
-          <div className="overflow-x-auto">
-            <table
-              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
-            >
-              <thead>
-                <tr
-                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
-                >
-                  <th className="text-left py-3 pr-4 font-semibold">Prop</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 pr-4 font-semibold">Default</th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody
-                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
-              >
-                {[
-                  [
-                    "tabs",
-                    "Tab[]",
-                    "required",
-                    "Array of tab configuration objects",
-                  ],
-                  [
-                    "id",
-                    "string",
-                    "auto-generated",
-                    "Deterministic ID for SSR/testing",
-                  ],
-                  ["value", "string", "-", "Controlled active tab ID"],
-                  [
-                    "defaultValue",
-                    "string",
-                    "tabs[0].id",
-                    "Initial active tab for uncontrolled mode",
-                  ],
-                  [
-                    "onValueChange",
-                    "(tabId: string) => void",
-                    "-",
-                    "Callback when active tab changes",
-                  ],
-                  [
-                    "children",
-                    "ReactNode | (tab: Tab) => ReactNode",
-                    "-",
-                    "Panel content or render function receiving active tab",
-                  ],
-                  [
-                    "orientation",
-                    '"horizontal" | "vertical"',
-                    '"horizontal"',
-                    "Tab orientation \u2014 affects keyboard navigation axis",
-                  ],
-                  [
-                    "activationMode",
-                    '"automatic" | "manual"',
-                    '"automatic"',
-                    "Automatic: arrows activate. Manual: Enter/Space activates",
-                  ],
-                  [
-                    "loop",
-                    "boolean",
-                    "true",
-                    "Whether keyboard navigation wraps around at ends",
-                  ],
-                  [
-                    "iconPosition",
-                    '"left" | "right"',
-                    '"left"',
-                    "Position of icon relative to label",
-                  ],
-                  [
-                    "showZeroCount",
-                    "boolean",
-                    "false",
-                    "Show count badge even when value is 0",
-                  ],
-                  [
-                    "alwaysShowLabels",
-                    "boolean",
-                    "true",
-                    "Show labels on all tabs or only the active one",
-                  ],
-                  [
-                    "showTooltips",
-                    "boolean",
-                    "true",
-                    "Enable tooltips on tabs with tooltip content",
-                  ],
-                  [
-                    "tooltipPosition",
-                    '"top" | "bottom" | "left" | "right"',
-                    '"bottom"',
-                    "Position of tooltip relative to tab",
-                  ],
-                  [
-                    "tooltipOffset",
-                    "number",
-                    "4",
-                    "Distance between tooltip and tab (px)",
-                  ],
-                  ["disabled", "boolean", "false", "Disable all tabs globally"],
-                  [
-                    "renderTab",
-                    "(props: TabRenderProps, defaultElement: ReactElement) => ReactNode",
-                    "-",
-                    "Custom render function for each tab trigger",
-                  ],
-                  [
-                    "aria-label",
-                    "string",
-                    '"Tabs"',
-                    "Accessible label for the tablist element",
-                  ],
-                  [
-                    "classes",
-                    "TabPanelClasses",
-                    "-",
-                    "Record of class names for all internal elements",
-                  ],
-                  [
-                    "className",
-                    "string",
-                    "-",
-                    "Root element class name (fallback for classes.root)",
-                  ],
-                  ["style", "CSSProperties", "-", "Root element inline styles"],
-                  [
-                    "forceMount",
-                    "boolean",
-                    "false",
-                    "Mount all tab panels eagerly, regardless of active state",
-                  ],
-                  [
-                    "keepMounted",
-                    "boolean",
-                    "false",
-                    "Keep a tab panel mounted after it has been activated at least once",
-                  ],
-                ].map(([prop, type, def, desc]) => (
-                  <tr key={prop}>
-                    <td className="py-3 pr-4 font-mono text-blue-500">
-                      {prop}
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      {type}
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}
-                    >
-                      {def}
-                    </td>
-                    <td
-                      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      {desc}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  &#10003;
+                </span>
+                <span>{text}</span>
+              </p>
+            ))}
           </div>
         </div>
-
-        <div>
-          <h3
-            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
+        <div className={`${c.card} mt-3`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
           >
-            Tab Object Properties
-          </h3>
-          <div className="overflow-x-auto">
-            <table
-              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
-            >
-              <thead>
-                <tr
-                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
-                >
-                  <th className="text-left py-3 pr-4 font-semibold">
-                    Property
-                  </th>
-                  <th className="text-left py-3 pr-4 font-semibold">Type</th>
-                  <th className="text-left py-3 pr-4 font-semibold">
-                    Required
-                  </th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody
-                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
-              >
-                {[
-                  ["id", "string", "Yes", "Unique identifier for the tab"],
-                  ["label", "string", "Yes", "Tab label text"],
-                  [
-                    "icon",
-                    "ReactNode",
-                    "No",
-                    "Icon element rendered in the tab (any ReactNode)",
-                  ],
-                  ["count", "number", "No", "Count badge value"],
-                  ["disabled", "boolean", "No", "Disable this specific tab"],
-                  [
-                    "tooltip",
-                    "ReactNode",
-                    "No",
-                    "Tooltip content (shown on inactive tabs when showTooltips is true)",
-                  ],
-                ].map(([prop, type, required, desc]) => (
-                  <tr key={prop}>
-                    <td className="py-3 pr-4 font-mono text-blue-500">
-                      {prop}
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      {type}
-                    </td>
-                    <td
-                      className={`py-3 pr-4 ${isDarkMode ? "text-gray-500" : "text-gray-500"}`}
-                    >
-                      {required}
-                    </td>
-                    <td
-                      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      {desc}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            {[
+              ["Tab", "Move focus into/out of the tablist"],
+              ["\u2192 / \u2193", "Move to next tab (RTL-aware, orientation-aware)"],
+              ["\u2190 / \u2191", "Move to previous tab (RTL-aware, orientation-aware)"],
+              ["Home", "Move to first enabled tab"],
+              ["End", "Move to last enabled tab"],
+              ["Enter / Space", "Activate focused tab (manual mode only)"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
           </div>
         </div>
-
-        <div>
-          <h3
-            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
-          >
-            classes Record (TabPanelClasses)
-          </h3>
-          <div className="overflow-x-auto">
-            <table
-              className={`min-w-full text-sm ${isDarkMode ? "text-gray-300" : "text-gray-900"}`}
-            >
-              <thead>
-                <tr
-                  className={`border-b ${isDarkMode ? "border-gray-700" : "border-gray-200"}`}
-                >
-                  <th className="text-left py-3 pr-4 font-semibold">Key</th>
-                  <th className="text-left py-3 font-semibold">Description</th>
-                </tr>
-              </thead>
-              <tbody
-                className={`divide-y ${isDarkMode ? "divide-gray-700" : "divide-gray-100"}`}
-              >
-                {[
-                  ["root", "Root container"],
-                  ["tabList", 'Tab list container (role="tablist")'],
-                  ["tab", "Tab button base"],
-                  ["tabActive", "Tab button active state"],
-                  ["tabInactive", "Tab button inactive state"],
-                  ["tabDisabled", "Tab button disabled state"],
-                  ["tabFocus", "Tab button focus ring"],
-                  ["label", "Label text base"],
-                  [
-                    "labelActive / labelInactive",
-                    "Label active/inactive states",
-                  ],
-                  ["icon", "Icon wrapper base"],
-                  ["iconActive / iconInactive", "Icon active/inactive states"],
-                  ["count", "Count badge base"],
-                  [
-                    "countActive / countInactive",
-                    "Count badge active/inactive states",
-                  ],
-                  ["indicator", "Active tab indicator element"],
-                  ["panel", "Tab panel content area"],
-                ].map(([key, desc]) => (
-                  <tr key={key}>
-                    <td className="py-3 pr-4 font-mono text-blue-500">{key}</td>
-                    <td
-                      className={`py-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                    >
-                      {desc}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div>
-          <h3
-            className={`text-lg font-semibold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}
-          >
-            Type Definitions
-          </h3>
-          <CodeBlock
-            isDarkMode={isDarkMode}
-            code={`interface Tab {
-  id: string;
-  label: string;
-  icon?: ReactNode;
-  count?: number;
-  disabled?: boolean;
-  tooltip?: ReactNode;
-}
-
-interface TabPanelClasses {
-  root?: string;
-  tabList?: string;
-  tab?: string;
-  tabActive?: string;
-  tabInactive?: string;
-  tabDisabled?: string;
-  tabFocus?: string;
-  label?: string;
-  labelActive?: string;
-  labelInactive?: string;
-  icon?: string;
-  iconActive?: string;
-  iconInactive?: string;
-  count?: string;
-  countActive?: string;
-  countInactive?: string;
-  indicator?: string;
-  panel?: string;
-}
-
-interface TabPanelProps {
-  tabs: Tab[];
-  id?: string;
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (tabId: string) => void;
-  children?: ReactNode | ((tab: Tab) => ReactNode);
-  orientation?: "horizontal" | "vertical";
-  activationMode?: "automatic" | "manual";
-  loop?: boolean;
-  iconPosition?: "left" | "right";
-  showZeroCount?: boolean;
-  alwaysShowLabels?: boolean;
-  showTooltips?: boolean;
-  tooltipPosition?: "top" | "bottom" | "left" | "right";
-  tooltipOffset?: number;
-  disabled?: boolean;
-  renderTab?: (props: TabRenderProps, defaultElement: ReactElement) => ReactNode;
-  "aria-label"?: string;
-  classes?: TabPanelClasses;
-  className?: string;
-  style?: CSSProperties;
-}`}
-          />
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <h2
-          className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"}`}
-        >
-          Accessibility
-        </h2>
-        <div
-          className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-gray-50"}`}
-        >
-          <h3
-            className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}
-          >
-            Features
-          </h3>
-          <ul
-            className={`list-disc list-inside space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-          >
-            <li>
-              Implements WAI-ARIA{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                role=&quot;tablist&quot;
-              </code>
-              ,{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                role=&quot;tab&quot;
-              </code>
-              , and{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                role=&quot;tabpanel&quot;
-              </code>{" "}
-              semantics
-            </li>
-            <li>
-              All panels are rendered in the DOM (hidden with{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                hidden
-              </code>{" "}
-              attribute) so{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-controls
-              </code>{" "}
-              always references valid DOM elements
-            </li>
-            <li>
-              RTL-aware keyboard navigation: arrow key direction automatically
-              reverses based on the computed CSS{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                direction
-              </code>{" "}
-              of the element
-            </li>
-            <li>
-              Roving tabindex:{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                tabIndex=0
-              </code>{" "}
-              on tabbable tab,{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                tabIndex=-1
-              </code>{" "}
-              on others
-            </li>
-            <li>
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-selected
-              </code>{" "}
-              reflects active state on each tab
-            </li>
-            <li>
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-controls
-              </code>{" "}
-              and{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-labelledby
-              </code>{" "}
-              link tabs to their panels
-            </li>
-            <li>
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-disabled
-              </code>{" "}
-              on disabled tabs (preserving roving tabindex; not HTML disabled)
-            </li>
-            <li>
-              When labels are hidden (alwaysShowLabels=false), inactive tabs
-              receive{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-label
-              </code>{" "}
-              for screen reader accessibility
-            </li>
-            <li>
-              Icons are wrapped with{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-hidden=&quot;true&quot;
-              </code>{" "}
-              as they are decorative
-            </li>
-            <li>
-              Count badges have{" "}
-              <code
-                className={`px-1.5 py-0.5 rounded text-sm ${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
-              >
-                aria-label
-              </code>{" "}
-              for screen reader announcement
-            </li>
-            <li>
-              No focus stealing on mount &mdash; focus is managed only during
-              keyboard interaction
-            </li>
-            <li>
-              Automatic fallback to first tab when the active tab is removed
-              from the tabs array
-            </li>
-            <li>Supports ref forwarding for programmatic focus management</li>
-          </ul>
-        </div>
-
-        <div
-          className={`p-4 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-gray-50"}`}
-        >
-          <h3
-            className={`font-semibold mb-3 ${isDarkMode ? "text-white" : "text-gray-800"}`}
-          >
-            Keyboard Navigation
-          </h3>
-          <ul
-            className={`space-y-2 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-          >
-            <li>
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                Tab
-              </kbd>{" "}
-              - Move focus into/out of the tablist
-            </li>
-            <li>
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                ArrowRight
-              </kbd>{" "}
-              /{" "}
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                ArrowDown
-              </kbd>{" "}
-              - Move to next tab (RTL-aware, orientation-aware)
-            </li>
-            <li>
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                ArrowLeft
-              </kbd>{" "}
-              /{" "}
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                ArrowUp
-              </kbd>{" "}
-              - Move to previous tab (RTL-aware, orientation-aware)
-            </li>
-            <li>
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                Home
-              </kbd>{" "}
-              - Move to first enabled tab
-            </li>
-            <li>
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                End
-              </kbd>{" "}
-              - Move to last enabled tab
-            </li>
-            <li>
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                Enter
-              </kbd>{" "}
-              /{" "}
-              <kbd
-                className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? "bg-gray-900 border border-gray-600 text-gray-100" : "bg-white border border-gray-300 text-gray-700"}`}
-              >
-                Space
-              </kbd>{" "}
-              - Activate focused tab (manual mode only)
-            </li>
-          </ul>
-        </div>
-      </div>
+      </Section>
     </div>
   );
 };

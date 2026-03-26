@@ -1,5 +1,6 @@
 export { default as TabPanel } from "./TabPanel";
 export { default as TabButton } from "./components/TabButton";
+export { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants";
 
 export type {
   Tab,

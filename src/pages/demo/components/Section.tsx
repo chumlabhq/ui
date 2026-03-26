@@ -147,22 +147,22 @@ export const PropRow: React.FC<PropRowProps> = ({
     className={`border-t ${isDarkMode ? "border-gray-700/50" : "border-gray-100"}`}
   >
     <td
-      className={`px-4 py-2.5 font-mono text-[13px] whitespace-nowrap ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+      className={`px-4 py-2 font-mono text-[13px] whitespace-nowrap align-top ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
     >
       {name}
     </td>
     <td
-      className={`px-4 py-2.5 font-mono text-xs whitespace-nowrap ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
+      className={`px-4 py-2 font-mono text-xs align-top ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
     >
       {type}
     </td>
     <td
-      className={`px-4 py-2.5 font-mono text-xs whitespace-nowrap ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
+      className={`px-4 py-2 font-mono text-xs whitespace-nowrap align-top ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
     >
       {defaultVal ?? "-"}
     </td>
     <td
-      className={`px-4 py-2.5 text-[13px] ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+      className={`px-4 py-2 text-[13px] align-top ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
     >
       {description ?? "-"}
     </td>
@@ -184,16 +184,16 @@ export const PropsTable: React.FC<PropsTableProps> = ({
         <tr
           className={`${isDarkMode ? "text-gray-500 border-gray-700/50" : "text-gray-400 border-gray-100"} border-b`}
         >
-          <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">
+          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
             Prop
           </th>
-          <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">
+          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
             Type
           </th>
-          <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">
+          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
             Default
           </th>
-          <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider">
+          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
             Description
           </th>
         </tr>
