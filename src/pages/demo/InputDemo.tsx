@@ -324,12 +324,6 @@ const InputDemo = () => {
 
       {/* ─── Examples ─────────────────────────────────────────────────── */}
       <div className="space-y-8">
-        <h2
-          className={`text-xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
-        >
-          Examples
-        </h2>
-
         {/* Basic */}
         <Section
           title="Basic Input"

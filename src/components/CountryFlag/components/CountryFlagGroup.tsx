@@ -160,7 +160,7 @@ export const CountryFlagGroupCount = forwardRef<HTMLDivElement, CountryFlagGroup
           align={tooltipConfig.align ?? "center"}
           sideOffset={tooltipConfig.sideOffset ?? 6}
           delayDuration={tooltipConfig.delayDuration ?? 200}
-          contentClassName={tooltipConfig.className}
+          classes={tooltipConfig.className ? { content: tooltipConfig.className } : undefined}
           showArrow={tooltipConfig.showArrow ?? true}
         >
           {countElement}

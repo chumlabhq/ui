@@ -244,12 +244,6 @@ const TextAreaDemo = () => {
 
       {/* ─── Examples ───────────────────────────────────────────────── */}
       <div className="space-y-8">
-        <h2
-          className={`text-xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
-        >
-          Examples
-        </h2>
-
         {/* Basic */}
         <Section
           title="Basic TextArea"
@@ -793,28 +787,20 @@ const TextAreaDemo = () => {
                 classes={c.textarea}
               />
               <div className="flex gap-2 flex-wrap">
-                {(
-                  [
-                    ["Focus", () => textAreaRef.current?.focus()],
-                    [
-                      "Select All",
-                      () => {
+                {(["Focus", "Select All", "Get Value"] as const).map((lbl) => (
+                  <button
+                    key={lbl}
+                    onClick={() => {
+                      if (lbl === "Focus") textAreaRef.current?.focus();
+                      else if (lbl === "Select All") {
                         textAreaRef.current?.focus();
                         textAreaRef.current?.select();
-                      },
-                    ],
-                    [
-                      "Get Value",
-                      () => alert(`"${textAreaRef.current?.value}"`),
-                    ],
-                  ] as const
-                ).map(([lbl, fn]) => (
-                  <button
-                    key={String(lbl)}
-                    onClick={fn as () => void}
+                      } else if (lbl === "Get Value")
+                        alert(`"${textAreaRef.current?.value}"`);
+                    }}
                     className={`px-3 py-1.5 text-[11px] font-medium rounded-lg transition-colors ${
                       dark
-                        ? "bg-white/4 text-gray-400 hover:bg-white/8 ring-1 ring-inset ring-white/[0.06]"
+                        ? "bg-white/4 text-gray-400 hover:bg-white/8 ring-1 ring-inset ring-white/6"
                         : "bg-gray-50 text-gray-500 hover:bg-gray-100 ring-1 ring-inset ring-gray-200"
                     }`}
                   >

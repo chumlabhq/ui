@@ -5,6 +5,13 @@ export type TooltipShadow = TooltipShadowPreset | (string & {});
 
 export type TooltipWordWrap = "normal" | "break-word" | "nowrap";
 
+export interface TooltipClasses {
+  trigger?: string;
+  content?: string;
+  arrow?: string;
+  baseArrow?: string;
+}
+
 export interface TooltipProps {
   children: ReactNode;
   content?: ReactNode;
@@ -33,11 +40,9 @@ export interface TooltipProps {
   asChild?: boolean;
   triggerDisplay?: CSSProperties["display"];
   className?: string;
-  triggerClassName?: string;
-  contentClassName?: string;
+  classes?: TooltipClasses;
+  unstyled?: boolean;
   contentStyle?: CSSProperties;
-  arrowClassName?: string;
-  baseArrowClassName?: string;
   arrowStyle?: CSSProperties;
   baseArrowStyle?: CSSProperties;
 }

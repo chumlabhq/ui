@@ -18,8 +18,8 @@ import {
   shadowPresets,
   isPresetShadow,
   wordWrapStyles,
-  DEFAULT_CONTENT_CLASS,
-  DEFAULT_BASE_ARROW_CLASS,
+  DEFAULT_TOOLTIP_CLASSES,
+  UNSTYLED_TOOLTIP_CLASSES,
   INTERACTIVE_QUERY,
 } from "./utils/constants";
 import {
@@ -70,11 +70,9 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       asChild = false,
       triggerDisplay = "inline-flex",
       className,
-      triggerClassName,
-      contentClassName,
+      classes: classesProp,
+      unstyled = false,
       contentStyle,
-      arrowClassName,
-      baseArrowClassName,
       arrowStyle,
       baseArrowStyle,
     },
@@ -82,6 +80,14 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   ) => {
     const generatedId = useId();
     const tooltipId = `tooltip-${generatedId}`;
+
+    const baseClasses = unstyled ? UNSTYLED_TOOLTIP_CLASSES : DEFAULT_TOOLTIP_CLASSES;
+    const mergedClasses = useMemo(() => ({
+      trigger: classesProp?.trigger ?? baseClasses.trigger,
+      content: classesProp?.content ?? baseClasses.content,
+      arrow: classesProp?.arrow ?? baseClasses.arrow,
+      baseArrow: classesProp?.baseArrow ?? baseClasses.baseArrow,
+    }), [classesProp, baseClasses]);
 
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
@@ -135,15 +141,19 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       return false;
     }, [childIsInteractiveElement, triggerNode, asChild]);
 
+    const warnedRef = useRef(false);
+
     useEffect(() => {
       if (
         process.env.NODE_ENV !== "production" &&
+        !warnedRef.current &&
         isOpen &&
         tooltipRef.current
       ) {
         const interactiveEl =
           tooltipRef.current.querySelector(INTERACTIVE_QUERY);
         if (interactiveEl) {
+          warnedRef.current = true;
           console.warn(
             "Tooltip: Interactive content detected inside tooltip. " +
               'Per WAI-ARIA guidelines, tooltips (role="tooltip") should not ' +
@@ -370,7 +380,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const triggerContent = truncate ? (
       <span
         ref={textRef}
-        className={cn("block truncate", triggerClassName)}
+        className={cn("block truncate", mergedClasses.trigger)}
         style={truncateStyle}
       >
         {children}
@@ -390,7 +400,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const shadowValue = isPresetShadow(shadow) ? shadowPresets[shadow] : shadow;
     const shadowStyle = { boxShadow: shadowValue };
 
-    const finalContentClassName = cn(DEFAULT_CONTENT_CLASS, contentClassName);
+    const finalContentClassName = mergedClasses.content;
 
     const resolvedSide = position.resolvedSide ?? side;
     const svgWidth = arrowSizeProp * 2;
@@ -450,11 +460,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         height={svgHeight}
         viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         aria-hidden="true"
-        className={cn(
-          DEFAULT_BASE_ARROW_CLASS,
-          baseArrowClassName,
-          arrowClassName,
-        )}
+        className={cn(mergedClasses.baseArrow, mergedClasses.arrow)}
         style={{
           ...baseArrowStyle,
           ...getArrowPosition(),
@@ -516,7 +522,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           onTouchEnd={handleTouchEnd}
           isOpen={isOpen}
           tooltipId={tooltipId}
-          triggerClassName={triggerClassName}
+          triggerClassName={mergedClasses.trigger}
           tooltipContent={tooltipContent}
         />
       );
@@ -529,7 +535,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             setTriggerNode,
             forwardedRef as Ref<HTMLElement>,
           )}
-          className={cn(triggerClassName, className) || undefined}
+          className={cn(mergedClasses.trigger, className) || undefined}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onFocus={handleFocus}

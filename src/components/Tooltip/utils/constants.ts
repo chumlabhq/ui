@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { TooltipShadowPreset, TooltipWordWrap } from "./types";
+import type { TooltipShadowPreset, TooltipWordWrap, TooltipClasses } from "./types";
 
 export const shadowPresets: Record<TooltipShadowPreset, string> = {
   none: "none",
@@ -24,10 +24,19 @@ export const wordWrapStyles: Record<TooltipWordWrap, CSSProperties> = {
   nowrap: { overflowWrap: "normal", whiteSpace: "nowrap" },
 };
 
-export const DEFAULT_CONTENT_CLASS =
-  "rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100";
+export const DEFAULT_TOOLTIP_CLASSES: Required<TooltipClasses> = {
+  trigger: "",
+  content: "rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100",
+  arrow: "",
+  baseArrow: "fill-white dark:fill-gray-900",
+};
 
-export const DEFAULT_BASE_ARROW_CLASS = "fill-white dark:fill-gray-900";
+export const UNSTYLED_TOOLTIP_CLASSES: Required<TooltipClasses> = {
+  trigger: "",
+  content: "",
+  arrow: "",
+  baseArrow: "",
+};
 
 export const INTERACTIVE_TAGS = new Set([
   "button",

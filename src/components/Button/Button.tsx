@@ -154,7 +154,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
         maxWidth={tooltipProps?.maxWidth}
         delayDuration={tooltipProps?.delayDuration}
         showArrow={tooltipProps?.showArrow}
-        contentClassName={tooltipProps?.contentClassName}
+        classes={tooltipProps?.contentClassName ? { content: tooltipProps.contentClassName } : undefined}
         contentStyle={tooltipProps?.contentStyle}
         asChild
       >

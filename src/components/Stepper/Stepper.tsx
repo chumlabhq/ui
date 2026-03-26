@@ -228,13 +228,11 @@ const StepItem = memo(function StepItem({
         showArrow={config.showArrow ?? tooltipDefaults.showArrow ?? true}
         arrowColor={config.arrowColor ?? tooltipDefaults.arrowColor}
         shadow={config.shadow ?? tooltipDefaults.shadow ?? "lg"}
-        contentClassName={
-          config.contentClassName ?? tooltipDefaults.contentClassName
-        }
+        classes={{
+          content: config.contentClassName ?? tooltipDefaults.contentClassName,
+          arrow: config.arrowClassName ?? tooltipDefaults.arrowClassName,
+        }}
         contentStyle={config.contentStyle ?? tooltipDefaults.contentStyle}
-        arrowClassName={
-          config.arrowClassName ?? tooltipDefaults.arrowClassName
-        }
         arrowStyle={config.arrowStyle ?? tooltipDefaults.arrowStyle}
       >
         {content}

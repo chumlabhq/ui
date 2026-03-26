@@ -265,7 +265,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           align={tooltipConfig.align ?? "center"}
           sideOffset={tooltipConfig.sideOffset ?? 6}
           delayDuration={tooltipConfig.delayDuration ?? 200}
-          contentClassName={tooltipConfig.className}
+          classes={tooltipConfig.className ? { content: tooltipConfig.className } : undefined}
           showArrow={tooltipConfig.showArrow ?? true}
         >
           {avatarElement}

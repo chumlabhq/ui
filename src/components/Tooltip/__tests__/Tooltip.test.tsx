@@ -524,9 +524,9 @@ describe("Tooltip", () => {
   });
 
   describe("Styling Props", () => {
-    it("applies custom contentClassName", async () => {
+    it("applies custom content class via classes prop", async () => {
       render(
-        <Tooltip content="Styled" contentClassName="custom-tooltip-class" defaultOpen>
+        <Tooltip content="Styled" classes={{ content: "custom-tooltip-class" }} defaultOpen>
           <button>Trigger</button>
         </Tooltip>
       );
@@ -537,9 +537,9 @@ describe("Tooltip", () => {
       });
     });
 
-    it("applies custom triggerClassName", () => {
+    it("applies custom trigger class via classes prop", () => {
       render(
-        <Tooltip content="Trigger styled" triggerClassName="custom-trigger">
+        <Tooltip content="Trigger styled" classes={{ trigger: "custom-trigger" }}>
           <button>Trigger</button>
         </Tooltip>
       );
@@ -548,9 +548,9 @@ describe("Tooltip", () => {
       expect(trigger).toHaveClass("custom-trigger");
     });
 
-    it("applies custom arrowClassName", async () => {
+    it("applies custom arrow class via classes prop", async () => {
       render(
-        <Tooltip content="Arrow styled" arrowClassName="custom-arrow" defaultOpen>
+        <Tooltip content="Arrow styled" classes={{ arrow: "custom-arrow" }} defaultOpen>
           <button>Trigger</button>
         </Tooltip>
       );
