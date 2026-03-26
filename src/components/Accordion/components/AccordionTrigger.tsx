@@ -1,7 +1,15 @@
-import { forwardRef, useEffect, useRef, useCallback, type KeyboardEvent } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  type KeyboardEvent,
+} from "react";
 import { useAccordionConfig, useAccordionDispatch, useAccordionItemContext } from "../utils/context";
 import { ChevronDownIcon } from "../utils/icons";
 import { Slot } from "../../../utils/Slot";
+import { mergeRefs } from "../../../utils/mergeRefs";
 import type { AccordionTriggerProps } from "../utils/types";
 import { cn } from "../../../utils/cn";
 
@@ -40,14 +48,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       };
     }, [registerItem, unregisterItem, item.value]);
 
-    const setRefs = useCallback((node: HTMLButtonElement | null) => {
-      buttonRef.current = node;
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
-    }, [ref]);
+    const mergedButtonRef = useMemo(() => mergeRefs(buttonRef, ref), [ref]);
 
     const handleClick = useCallback(() => {
       if (!item.disabled) {
@@ -182,7 +183,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     return (
       <HeadingTag className={config.classes.heading || undefined}>
-        <Comp ref={setRefs} {...triggerProps}>
+        <Comp ref={mergedButtonRef} {...triggerProps}>
           {content}
         </Comp>
       </HeadingTag>

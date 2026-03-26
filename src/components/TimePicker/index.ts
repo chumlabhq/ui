@@ -6,7 +6,7 @@ export type {
   TimeValue,
   TimePickerVariant,
   ClockSelectionMode,
-} from "./types";
+} from "./utils/types";
 export { useTimePicker } from "./useTimePicker";
 export {
   generateTimeOptions,

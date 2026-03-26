@@ -10,6 +10,7 @@ import type { OtpInputProps, OtpInputClasses } from "./utils/types";
 import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants";
 import { OtpInputLabel } from "./components/OtpInputLabel";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
 export { OtpInputLabel };
@@ -76,16 +77,11 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const lastCompletedRef = useRef<string>("");
 
-    // Callback ref pattern — safe, no non-null assertion
-    const setRef = useCallback(
-      (node: HTMLInputElement | null) => {
-        inputRefs.current[0] = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
+    const mergedRef = useMemo(
+      () =>
+        mergeRefs(ref, (node: HTMLInputElement | null) => {
+          inputRefs.current[0] = node;
+        }),
       [ref],
     );
 
@@ -227,9 +223,12 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         const resolvedInputMode = inputType === "tel" || inputPattern === "\\d*" ? ("numeric" as const) : ("text" as const);
 
         return {
-          ref: index === 0
-            ? (el: HTMLInputElement | null) => { inputRefs.current[0] = el; setRef(el); }
-            : (el: HTMLInputElement | null) => { inputRefs.current[index] = el; },
+          ref:
+            index === 0
+              ? mergedRef
+              : (el: HTMLInputElement | null) => {
+                  inputRefs.current[index] = el;
+                },
           id: index === 0 ? inputId : undefined,
           type: inputType,
           inputMode: resolvedInputMode,
@@ -255,7 +254,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "data-filled": valueArray[index] ? true : undefined,
         };
       },
-      [inputClassNames, inputId, inputType, inputPattern, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, mergedClasses, inputAriaLabel, allowPaste, setRef],
+      [inputClassNames, inputId, inputType, inputPattern, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
     );
 
     const renderSingleInput = (index: number) => {

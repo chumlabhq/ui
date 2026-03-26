@@ -5,7 +5,7 @@ export type {
   CascadingDropdownProps,
   CascadingDropdownClasses,
   SelectionMode,
-} from "./types";
+} from "./utils/types";
 export { useCascadingDropdown } from "./useCascadingDropdown";
 export { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./icons";
 export {

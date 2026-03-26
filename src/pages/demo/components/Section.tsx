@@ -114,7 +114,7 @@ export const ComponentHeader: React.FC<ComponentHeaderProps> = ({
   description,
   isDarkMode = false,
 }) => (
-  <div className="mb-8 pb-4 border-b border-gray-200">
+  <div className={`mb-8 pb-4 border-b ${isDarkMode ? "border-gray-700/50" : "border-gray-200"}`}>
     <h1
       className={`text-3xl font-bold mb-2 ${isDarkMode ? "text-white" : "text-gray-900"}`}
     >
@@ -178,8 +178,8 @@ export const PropsTable: React.FC<PropsTableProps> = ({
   children,
   isDarkMode = false,
 }) => (
-  <div className="overflow-x-auto -mx-1">
-    <table className="w-full text-left min-w-[640px]">
+  <div className="overflow-x-auto -mx-1 w-full">
+    <table className="w-full text-left min-w-[800px]">
       <thead>
         <tr
           className={`${isDarkMode ? "text-gray-500 border-gray-700/50" : "text-gray-400 border-gray-100"} border-b`}

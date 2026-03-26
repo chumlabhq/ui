@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
 import { createExpandedStore } from "../utils/context";
 import type { AccordionExpandEvent, AccordionType } from "../utils/types";
@@ -59,16 +59,18 @@ export function useAccordionStateManager(
 
   // Warn on controlled/uncontrolled mode switching
   const wasControlledRef = useRef(isControlled);
-  if (process.env.NODE_ENV !== "production") {
-    if (wasControlledRef.current !== isControlled) {
-      console.warn(
-        `Accordion: Component switched from ${wasControlledRef.current ? "controlled" : "uncontrolled"} to ${isControlled ? "controlled" : "uncontrolled"}. ` +
-        "This is not supported and may cause unexpected behavior. " +
-        "Decide between using a controlled or uncontrolled accordion for the lifetime of the component.",
-      );
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      if (wasControlledRef.current !== isControlled) {
+        console.warn(
+          `Accordion: Component switched from ${wasControlledRef.current ? "controlled" : "uncontrolled"} to ${isControlled ? "controlled" : "uncontrolled"}. ` +
+          "This is not supported and may cause unexpected behavior. " +
+          "Decide between using a controlled or uncontrolled accordion for the lifetime of the component.",
+        );
+      }
+      wasControlledRef.current = isControlled;
     }
-    wasControlledRef.current = isControlled;
-  }
+  }, [isControlled]);
 
   // Use refs for latest callback values to avoid stale closures
   const onValueChangeRef = useRef(onValueChange);

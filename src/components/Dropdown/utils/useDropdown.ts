@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type { DropdownOption } from "./types";
 import { useControllableState } from "../../../utils/useControllableState";
+import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
 
 interface UseDropdownProps {
   options: DropdownOption[];
@@ -66,7 +67,7 @@ export const useDropdown = ({
   const typeaheadRef = useRef("");
   const typeaheadTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const shouldRestoreFocusRef = useRef(false);
-  const prevLoadOptionsRef = useRef(onLoadOptions);
+
   const displayOptionsRef = useRef<DropdownOption[]>([]);
 
   // Accessibility dev warning for missing label/aria-label
@@ -93,14 +94,17 @@ export const useDropdown = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (prevLoadOptionsRef.current !== onLoadOptions) {
-      prevLoadOptionsRef.current = onLoadOptions;
-      hasLoadedRef.current = false;
-      setHasLoaded(false);
-      setLoadedOptions([]);
-    }
-  }, [onLoadOptions]);
+  const [prevLoadOptions, setPrevLoadOptions] = useState(onLoadOptions);
+  if (prevLoadOptions !== onLoadOptions) {
+    setPrevLoadOptions(onLoadOptions);
+    setHasLoaded(false);
+    setLoadedOptions([]);
+  }
+
+  // Sync hasLoadedRef after render to match hasLoaded state
+  useIsomorphicLayoutEffect(() => {
+    hasLoadedRef.current = hasLoaded;
+  });
 
   const displayOptions = useMemo(() => {
     if (loadOnOpen && onLoadOptions && hasLoaded) {
@@ -126,7 +130,7 @@ export const useDropdown = ({
 
     isLoadingRef.current = true;
     setIsLoadingOptions(true);
-    setStatusMessage("Loading options\u2026");
+    setStatusMessage("Loading...");
 
     onLoadOptions()
       .then((results) => {

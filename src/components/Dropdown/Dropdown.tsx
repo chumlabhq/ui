@@ -9,8 +9,12 @@ import {
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
-import type { ReactNode, CSSProperties } from "react";
-import type { DropdownOption, DropdownProps, DropdownClasses } from "./utils/types";
+import type { CSSProperties, ReactNode } from "react";
+import type {
+  DropdownOption,
+  DropdownProps,
+  DropdownClasses,
+} from "./utils/types";
 import { useDropdown } from "./utils/useDropdown";
 import {
   DefaultChevronIcon,
@@ -29,18 +33,9 @@ import {
   DEFAULT_DROPDOWN_CLASSES,
   UNSTYLED_DROPDOWN_CLASSES,
 } from "./utils/constants";
-
-const SR_ONLY_STYLE: CSSProperties = {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: "hidden",
-  clip: "rect(0,0,0,0)",
-  whiteSpace: "nowrap",
-  border: 0,
-};
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+import { mergeRefs } from "../../utils/mergeRefs";
+import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
@@ -142,6 +137,7 @@ const DropdownContent = memo(function DropdownContent({
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<DropdownCoords | null>(null);
+  const isPositionStable = useStablePositionAfterOpen(isOpen);
   const rafIdRef = useRef<number | null>(null);
 
   const updatePosition = useCallback(() => {
@@ -275,7 +271,8 @@ const DropdownContent = memo(function DropdownContent({
   const dropdownStyle: CSSProperties = {
     position: "fixed",
     zIndex,
-    ...(coords
+    margin: 0,
+    ...(coords && isPositionStable
       ? { top: coords.top, left: coords.left, width: coords.width }
       : { visibility: "hidden" as const, top: 0, left: 0 }),
     ...(!isOpen && keepMounted ? { display: "none" } : {}),
@@ -283,10 +280,7 @@ const DropdownContent = memo(function DropdownContent({
 
   return createPortal(
     <div
-      ref={(node) => {
-        (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (contentRef) (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+      ref={mergeRefs(dropdownRef, contentRef)}
       id={listboxId}
       role="listbox"
       aria-label={ariaLabel}
@@ -322,7 +316,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       label,
       required = false,
       clearable = false,
-      noResultsContent = "No options available",
+      noResultsContent = "No options found",
       showChevron = true,
       showSelectedIcon = true,
       selectedIcon,
@@ -353,7 +347,9 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       ClearIcon: ClearIconProp = DefaultClearIcon,
     } = props;
 
-    const baseClasses = unstyled ? UNSTYLED_DROPDOWN_CLASSES : DEFAULT_DROPDOWN_CLASSES;
+    const baseClasses = unstyled
+      ? UNSTYLED_DROPDOWN_CLASSES
+      : DEFAULT_DROPDOWN_CLASSES;
 
     const mergedClasses: Required<DropdownClasses> = useMemo(
       () => ({
@@ -364,9 +360,11 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         content: classesProp?.content ?? baseClasses.content,
         optionList: classesProp?.optionList ?? baseClasses.optionList,
         option: classesProp?.option ?? baseClasses.option,
-        optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
+        optionSelected:
+          classesProp?.optionSelected ?? baseClasses.optionSelected,
         optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
-        optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
+        optionDisabled:
+          classesProp?.optionDisabled ?? baseClasses.optionDisabled,
         chevron: classesProp?.chevron ?? baseClasses.chevron,
         checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
         clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
@@ -444,12 +442,22 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         e.preventDefault();
       };
 
-      window.addEventListener("wheel", preventScroll, { capture: true, passive: false });
-      window.addEventListener("touchmove", preventScroll, { capture: true, passive: false });
+      window.addEventListener("wheel", preventScroll, {
+        capture: true,
+        passive: false,
+      });
+      window.addEventListener("touchmove", preventScroll, {
+        capture: true,
+        passive: false,
+      });
 
       return () => {
-        window.removeEventListener("wheel", preventScroll, { capture: true } as EventListenerOptions);
-        window.removeEventListener("touchmove", preventScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener("wheel", preventScroll, {
+          capture: true,
+        } as EventListenerOptions);
+        window.removeEventListener("touchmove", preventScroll, {
+          capture: true,
+        } as EventListenerOptions);
       };
     }, [lockScroll, isOpen]);
 
@@ -474,8 +482,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       };
     }, [isOpen, handleClose, triggerNode, dropdownId]);
 
-    const rootClassName =
-      cn(mergedClasses.root, className) || undefined;
+    const rootClassName = cn(mergedClasses.root, className) || undefined;
     const rootStyle: CSSProperties = {
       ...(fullWidth ? { width: "100%" } : {}),
       ...style,
@@ -483,9 +490,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
     const hasRootStyle = Object.keys(rootStyle).length > 0;
 
     const listboxAriaLabel =
-      ariaLabel ??
-      (typeof label === "string" ? label : undefined) ??
-      "Options";
+      ariaLabel ?? (typeof label === "string" ? label : undefined) ?? "Options";
 
     const handleKeyDownWithPassthrough = useCallback(
       (event: React.KeyboardEvent) => {
@@ -499,39 +504,29 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
 
     const mergedTriggerRef = useCallback(
       (node: HTMLButtonElement | null) => {
+        if (typeof forwardedRef === "function") forwardedRef(node);
+        else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
         setTriggerNode(node);
-        if (typeof forwardedRef === "function") {
-          forwardedRef(node);
-        } else if (forwardedRef) {
-          (
-            forwardedRef as React.MutableRefObject<HTMLButtonElement | null>
-          ).current = node;
-        }
       },
       [forwardedRef],
     );
 
-  const renderTriggerRefCallback = useCallback(
-    (node: HTMLElement | null) => {
-      if (node && process.env.NODE_ENV !== "production") {
-        if (node.tagName !== "BUTTON") {
-          console.warn(
-            "[Dropdown] renderTrigger must return a <button> element for proper accessibility. " +
-            `Received: <${node.tagName.toLowerCase()}>. Screen readers and keyboard navigation may not work correctly.`
-          );
+    const renderTriggerRefCallback = useCallback(
+      (node: HTMLElement | null) => {
+        if (typeof forwardedRef === "function") forwardedRef(node as HTMLButtonElement);
+        else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
+        if (node && process.env.NODE_ENV !== "production") {
+          if (node.tagName !== "BUTTON") {
+            console.warn(
+              "[Dropdown] renderTrigger must return a <button> element for proper accessibility. " +
+                `Received: <${node.tagName.toLowerCase()}>. Screen readers and keyboard navigation may not work correctly.`,
+            );
+          }
         }
-      }
-      setTriggerNode(node);
-      if (typeof forwardedRef === "function") {
-        forwardedRef(node as HTMLButtonElement | null);
-      } else if (forwardedRef) {
-        (
-          forwardedRef as React.MutableRefObject<HTMLButtonElement | null>
-        ).current = node as HTMLButtonElement | null;
-      }
-    },
-    [forwardedRef],
-  );
+        setTriggerNode(node);
+      },
+      [forwardedRef],
+    );
 
     const triggerProps = {
       id: triggerId,
@@ -601,9 +596,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
               {showChevron && (
                 <ChevronIcon
                   className={mergedClasses.chevron || undefined}
-                  style={
-                    isOpen ? { transform: "rotate(180deg)" } : undefined
-                  }
+                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
                 />
               )}
             </button>

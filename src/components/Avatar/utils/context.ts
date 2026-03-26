@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { AvatarSize, AvatarShape } from "../types";
+import type { AvatarSize, AvatarShape } from "./types";
 
 export interface AvatarGroupContextValue {
   size: AvatarSize;

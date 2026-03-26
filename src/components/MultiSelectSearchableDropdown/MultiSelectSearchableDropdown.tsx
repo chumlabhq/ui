@@ -1,7 +1,11 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
-import type { CSSProperties, ReactNode } from "react";
-import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./types";
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
+import { isBrowser } from "../../utils/isBrowser";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+import { mergeRefs } from "../../utils/mergeRefs";
+import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
+import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./useMultiSelectDropdown";
 import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./icons";
 import { cn } from "../../utils/cn";
@@ -9,8 +13,6 @@ import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
 } from "./constants";
-
-const isBrowser = typeof window !== "undefined";
 
 interface DropdownCoords {
   top: number;
@@ -79,6 +81,7 @@ function DropdownContent({
 }: DropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<DropdownCoords | null>(null);
+  const isPositionStable = useStablePositionAfterOpen(isOpen);
   const rafIdRef = useRef<number | null>(null);
 
   const updatePosition = useCallback(() => {
@@ -171,7 +174,8 @@ function DropdownContent({
   const dropdownStyle: CSSProperties = {
     position: "fixed",
     zIndex,
-    ...(coords
+    margin: 0,
+    ...(coords && isPositionStable
       ? { top: coords.top, left: coords.left, width: coords.width }
       : { visibility: "hidden" as const, top: 0, left: 0 }),
     ...(!isOpen && keepMounted ? { display: "none" } : {}),
@@ -179,10 +183,7 @@ function DropdownContent({
 
   return createPortal(
     <div
-      ref={(node) => {
-        (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (contentRef) (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+      ref={mergeRefs(dropdownRef, contentRef)}
       id={listboxId}
       role="listbox"
       aria-label={listboxAriaLabel}
@@ -295,7 +296,8 @@ const MultiSelectSearchableDropdown = forwardRef<
     {
       options = [],
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
       id,
       name,
       placeholder = "Select options...",
@@ -306,7 +308,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       required = false,
       showSearch = true,
       searchPlaceholder = "Search...",
-      noResultsText = "No results found",
+      noResultsContent = "No options found",
       loadingText = "Loading...",
       showChevron = true,
       fullWidth = false,
@@ -316,6 +318,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       initialOptions = [],
       onLoadInitialOptions,
       loadInitialOnOpen = false,
+      onLoadError,
       maxDisplayedChips = 3,
       showSelectedChips = true,
       checkboxIcon,
@@ -333,6 +336,10 @@ const MultiSelectSearchableDropdown = forwardRef<
       dropdownZIndex = 50,
       dropdownGap = 4,
       keepMounted = false,
+      onBlur: onBlurProp,
+      onFocus: onFocusProp,
+      onKeyDown: onKeyDownProp,
+      searchInputAriaLabel = "Search options",
     },
     ref
   ) => {
@@ -343,7 +350,7 @@ const MultiSelectSearchableDropdown = forwardRef<
     const mergedClasses: Required<MultiSelectSearchableDropdownClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        container: classesProp?.container ?? baseClasses.container,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
         triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
         content: classesProp?.content ?? baseClasses.content,
@@ -390,6 +397,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       isLoadingInitial,
       displayOptions,
       selectedOptions,
+      selectedValues,
       shouldRestoreFocusRef,
       setSearchQuery,
       setFocusedIndex,
@@ -401,14 +409,16 @@ const MultiSelectSearchableDropdown = forwardRef<
     } = useMultiSelectDropdown({
       options,
       value,
+      defaultValue,
       disabled,
       showSearch,
       onSearch,
       searchDebounceMs,
-      onChange,
+      onValueChange,
       initialOptions,
       onLoadInitialOptions,
       loadInitialOnOpen,
+      onLoadError,
       open,
       defaultOpen,
       onOpenChange,
@@ -417,6 +427,12 @@ const MultiSelectSearchableDropdown = forwardRef<
     });
 
     const loading = externalLoading || isSearching || isLoadingInitial;
+
+    const statusMessage = loading
+      ? "Loading options"
+      : isOpen
+        ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
+        : "";
 
     const activeDescendantId =
       isOpen && focusedIndex >= 0
@@ -498,7 +514,7 @@ const MultiSelectSearchableDropdown = forwardRef<
     // Global keyboard handling for Escape/Tab when portal is open
     useEffect(() => {
       if (!isOpen || typeof document === "undefined") return;
-      const handleDocumentKeyDown = (event: KeyboardEvent) => {
+      const handleDocumentKeyDown = (event: globalThis.KeyboardEvent) => {
         if (event.key !== "Escape" && event.key !== "Tab") return;
         handleClose();
         if (event.key === "Escape") {
@@ -508,19 +524,17 @@ const MultiSelectSearchableDropdown = forwardRef<
         }
       };
       document.addEventListener("keydown", handleDocumentKeyDown, true);
-      window.addEventListener("keydown", handleDocumentKeyDown, true);
       return () => {
         document.removeEventListener("keydown", handleDocumentKeyDown, true);
-        window.removeEventListener("keydown", handleDocumentKeyDown, true);
       };
     }, [isOpen, handleClose, shouldRestoreFocusRef]);
 
-    const mergedTriggerRef = useCallback(
-      (node: HTMLButtonElement | null) => {
-        (triggerRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
-        setTriggerNode(node);
-      },
-      [],
+    const mergedTriggerRef = useMemo(
+      () =>
+        mergeRefs(triggerRef, (node: HTMLButtonElement | null) => {
+          setTriggerNode(node);
+        }),
+      [setTriggerNode],
     );
 
     const handleRemoveOptionAndFocus = useCallback(
@@ -535,6 +549,16 @@ const MultiSelectSearchableDropdown = forwardRef<
       ariaLabel ??
       (typeof label === "string" ? label : undefined) ??
       "Options";
+
+    const handleKeyDownWithPassthrough = useCallback(
+      (event: ReactKeyboardEvent) => {
+        onKeyDownProp?.(event);
+        if (!event.defaultPrevented) {
+          handleKeyDown(event);
+        }
+      },
+      [onKeyDownProp, handleKeyDown],
+    );
 
     const rootClassName =
       cn(
@@ -574,7 +598,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         )}
 
         <div
-          className={cn("relative", mergedClasses.container) || undefined}
+          className={cn("relative", mergedClasses.wrapper) || undefined}
         >
           <button
             ref={mergedTriggerRef}
@@ -591,7 +615,9 @@ const MultiSelectSearchableDropdown = forwardRef<
             aria-required={required || undefined}
             disabled={disabled}
             onClick={handleToggle}
-            onKeyDown={handleKeyDown}
+            onFocus={onFocusProp}
+            onBlur={onBlurProp}
+            onKeyDown={handleKeyDownWithPassthrough}
             className={mergedClasses.trigger || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
@@ -652,6 +678,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                   ref={searchInputRef}
                   type="text"
                   placeholder={searchPlaceholder}
+                  aria-label={searchInputAriaLabel}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -663,19 +690,19 @@ const MultiSelectSearchableDropdown = forwardRef<
 
             <div className={mergedClasses.optionList || undefined}>
               {loading ? (
-                <div className={mergedClasses.loading || undefined}>
+                <div role="status" className={mergedClasses.loading || undefined}>
                   {loadingText}
                 </div>
               ) : displayOptions.length === 0 ? (
-                <div className={mergedClasses.noResults || undefined}>
-                  {noResultsText}
+                <div role="status" className={mergedClasses.noResults || undefined}>
+                  {noResultsContent}
                 </div>
               ) : (
                 displayOptions.map((option, index) => (
                   <OptionItem
                     key={option.value}
                     option={option}
-                    isSelected={value.includes(option.value)}
+                    isSelected={selectedValues.includes(option.value)}
                     isFocused={index === focusedIndex}
                     dropdownId={dropdownId}
                     index={index}
@@ -689,6 +716,12 @@ const MultiSelectSearchableDropdown = forwardRef<
             </div>
           </DropdownContent>
         </div>
+
+        {name && (
+          <input type="hidden" name={name} value={selectedOptions.map((o) => o.value).join(",")} aria-hidden="true" />
+        )}
+
+        <div id={`${dropdownId}-status`} role="status" aria-live="polite" aria-atomic="true" style={SR_ONLY_STYLE}>{statusMessage}</div>
 
         {error && errorMessage && (
           <div

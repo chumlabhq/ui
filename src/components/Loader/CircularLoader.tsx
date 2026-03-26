@@ -1,5 +1,5 @@
 import { forwardRef, type CSSProperties } from "react";
-import type { CircularLoaderProps } from "./types";
+import type { CircularLoaderProps } from "./utils/types";
 
 const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
   (

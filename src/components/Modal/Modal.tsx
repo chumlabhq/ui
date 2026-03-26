@@ -14,9 +14,10 @@ import type {
   ModalBodyProps,
   ModalFooterProps,
   ModalContextValue,
-} from "./types";
+} from "./utils/types";
 import { CloseIcon } from "./icons";
 import { ModalContext } from "./ModalContext";
+import { mergeRefs } from "../../utils/mergeRefs";
 
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
@@ -74,6 +75,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const titleId = `${modalId}-title`;
     const descriptionId = `${modalId}-description`;
     const contentRef = useRef<HTMLDivElement>(null);
+    const mergedContentRef = useMemo(() => mergeRefs(contentRef, ref), [ref]);
     const previousActiveElement = useRef<HTMLElement | null>(null);
 
     const parentContext = useContext(ModalContext);
@@ -300,15 +302,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             data-modal-container
           >
             <div
-              ref={(node) => {
-                (contentRef as React.MutableRefObject<HTMLDivElement | null>).current =
-                  node;
-                if (typeof ref === "function") {
-                  ref(node);
-                } else if (ref) {
-                  ref.current = node;
-                }
-              }}
+              ref={mergedContentRef}
               role="dialog"
               aria-modal="true"
               aria-label={ariaLabel}

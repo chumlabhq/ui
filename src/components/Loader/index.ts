@@ -1,2 +1,2 @@
 export { default as CircularLoader } from "./CircularLoader";
-export type { CircularLoaderProps } from "./types";
+export type { CircularLoaderProps } from "./utils/types";

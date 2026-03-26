@@ -50,7 +50,7 @@ const countryOptions: MultiSelectOption[] = [
 const getClasses = (dark: boolean) => ({
   dropdown: {
     root: "",
-    container: "relative",
+    wrapper: "relative",
     trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors min-h-[42px] ${
       dark
         ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -238,7 +238,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={basicValue}
-              onChange={(values) => setBasicValue(values)}
+              onValueChange={(values) => setBasicValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={c.dropdown}
@@ -264,7 +264,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={countryOptions}
               value={countryValue}
-              onChange={(values) => setCountryValue(values)}
+              onValueChange={(values) => setCountryValue(values)}
               placeholder="Select countries..."
               maxDisplayedChips={2}
               classes={c.dropdown}
@@ -284,13 +284,13 @@ const MultiSelectSearchableDropdownDemo = () => {
           <div className="w-80">
             <MultiSelectSearchableDropdown
               value={asyncValue}
-              onChange={(values) => setAsyncValue(values)}
+              onValueChange={(values) => setAsyncValue(values)}
               placeholder="Search countries..."
               onSearch={handleAsyncSearch}
               searchDebounceMs={300}
               maxDisplayedChips={2}
               loadingText="Searching countries..."
-              noResultsText="No countries found"
+              noResultsContent="No countries found"
               classes={c.dropdown}
               aria-label="Search countries"
             />
@@ -311,7 +311,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           <div className="w-80">
             <MultiSelectSearchableDropdown
               value={asyncPrefetchValue}
-              onChange={(values) => setAsyncPrefetchValue(values)}
+              onValueChange={(values) => setAsyncPrefetchValue(values)}
               placeholder="Select or search countries..."
               onSearch={handleAsyncSearch}
               onLoadInitialOptions={handleLoadInitialOptions}
@@ -319,7 +319,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               searchDebounceMs={300}
               maxDisplayedChips={2}
               loadingText="Loading..."
-              noResultsText="No countries found"
+              noResultsContent="No countries found"
               classes={c.dropdown}
               aria-label="Select or search countries"
             />
@@ -343,7 +343,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               required
               options={staticOptions}
               value={labelValue}
-              onChange={(values) => setLabelValue(values)}
+              onValueChange={(values) => setLabelValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={c.dropdown}
@@ -363,7 +363,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={noChipsValue}
-              onChange={(values) => setNoChipsValue(values)}
+              onValueChange={(values) => setNoChipsValue(values)}
               placeholder="Select fruits..."
               showSelectedChips={false}
               classes={c.dropdown}
@@ -384,7 +384,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={disabledValue}
-              onChange={(values) => setDisabledValue(values)}
+              onValueChange={(values) => setDisabledValue(values)}
               disabled
               placeholder="Select fruits..."
               maxDisplayedChips={2}
@@ -407,7 +407,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               label="Required Field"
               options={staticOptions}
               value={errorValue}
-              onChange={(values) => setErrorValue(values)}
+              onValueChange={(values) => setErrorValue(values)}
               required
               error
               errorMessage="Please select at least one option"
@@ -430,7 +430,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={noSearchValue}
-              onChange={(values) => setNoSearchValue(values)}
+              onValueChange={(values) => setNoSearchValue(values)}
               showSearch={false}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
@@ -453,7 +453,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={controlledValue}
-                onChange={(values) => setControlledValue(values)}
+                onValueChange={(values) => setControlledValue(values)}
                 open={controlledOpen}
                 onOpenChange={setControlledOpen}
                 placeholder="Controlled dropdown..."
@@ -495,7 +495,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={scrollLockValue}
-              onChange={(values) => setScrollLockValue(values)}
+              onValueChange={(values) => setScrollLockValue(values)}
               placeholder="Scroll locked (default)"
               maxDisplayedChips={2}
               classes={c.dropdown}
@@ -506,7 +506,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={scrollUnlockedValue}
-              onChange={(values) => setScrollUnlockedValue(values)}
+              onValueChange={(values) => setScrollUnlockedValue(values)}
               placeholder="Scroll allowed"
               lockScroll={false}
               maxDisplayedChips={2}
@@ -530,7 +530,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantDefaultValue}
-                onChange={(values) => setVariantDefaultValue(values)}
+                onValueChange={(values) => setVariantDefaultValue(values)}
                 placeholder="Select..."
                 maxDisplayedChips={2}
                 classes={c.dropdown}
@@ -544,7 +544,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantBorderlessValue}
-                onChange={(values) => setVariantBorderlessValue(values)}
+                onValueChange={(values) => setVariantBorderlessValue(values)}
                 placeholder="Select..."
                 maxDisplayedChips={2}
                 classes={{
@@ -566,7 +566,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantBottomValue}
-                onChange={(values) => setVariantBottomValue(values)}
+                onValueChange={(values) => setVariantBottomValue(values)}
                 placeholder="Select..."
                 maxDisplayedChips={2}
                 classes={{
@@ -588,7 +588,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantGhostValue}
-                onChange={(values) => setVariantGhostValue(values)}
+                onValueChange={(values) => setVariantGhostValue(values)}
                 placeholder="Select..."
                 maxDisplayedChips={2}
                 classes={{
@@ -610,7 +610,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantPillValue}
-                onChange={(values) => setVariantPillValue(values)}
+                onValueChange={(values) => setVariantPillValue(values)}
                 placeholder="Select..."
                 maxDisplayedChips={2}
                 classes={{
@@ -640,7 +640,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={darkThemeValue}
-              onChange={(values) => setDarkThemeValue(values)}
+              onValueChange={(values) => setDarkThemeValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={{
@@ -678,7 +678,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={purpleThemeValue}
-              onChange={(values) => setPurpleThemeValue(values)}
+              onValueChange={(values) => setPurpleThemeValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={{
@@ -731,7 +731,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={greenCheckboxValue}
-              onChange={(values) => setGreenCheckboxValue(values)}
+              onValueChange={(values) => setGreenCheckboxValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={{
@@ -756,7 +756,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={orangeCheckboxValue}
-              onChange={(values) => setOrangeCheckboxValue(values)}
+              onValueChange={(values) => setOrangeCheckboxValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={{
@@ -781,7 +781,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={customIconValue}
-              onChange={(values) => setCustomIconValue(values)}
+              onValueChange={(values) => setCustomIconValue(values)}
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               checkboxIcon={
@@ -805,8 +805,9 @@ const MultiSelectSearchableDropdownDemo = () => {
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
             <PropRow name="options" type="MultiSelectOption[]" defaultVal="[]" description="Static options array" isDarkMode={dark} />
-            <PropRow name="value" type="string[]" description="Selected values (required)" isDarkMode={dark} />
-            <PropRow name="onChange" type="(values, options) => void" description="Change handler (required)" isDarkMode={dark} />
+            <PropRow name="value" type="string[]" description="Selected values (controlled)" isDarkMode={dark} />
+            <PropRow name="defaultValue" type="string[]" description="Initial selected values (uncontrolled)" isDarkMode={dark} />
+            <PropRow name="onValueChange" type="(values, options) => void" description="Change handler (required)" isDarkMode={dark} />
             <PropRow name="id" type="string" description="ID for ARIA and form association" isDarkMode={dark} />
             <PropRow name="name" type="string" description="Form field name" isDarkMode={dark} />
             <PropRow name="placeholder" type="string" defaultVal='"Select options..."' description="Placeholder when nothing selected" isDarkMode={dark} />
@@ -841,7 +842,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred list position" isDarkMode={dark} />
             <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="Listbox z-index" isDarkMode={dark} />
             <PropRow name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and list (px)" isDarkMode={dark} />
-            <PropRow name="noResultsText" type="string" defaultVal='"No options available"' description="Default empty state text" isDarkMode={dark} />
+            <PropRow name="noResultsContent" type="ReactNode" defaultVal='"No results found"' description="Custom no-results content" isDarkMode={dark} />
             <PropRow name="loadingText" type="string" defaultVal='"Loading..."' description="Loading state text" isDarkMode={dark} />
             <PropRow name="aria-label" type="string" description="Accessible label for the dropdown" isDarkMode={dark} />
           </PropsTable>
@@ -853,7 +854,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
             <PropRow name="root" type="string" description="Root container element" isDarkMode={dark} />
-            <PropRow name="container" type="string" description="Inner wrapper (relative positioned)" isDarkMode={dark} />
+            <PropRow name="wrapper" type="string" description="Inner wrapper (relative positioned)" isDarkMode={dark} />
             <PropRow name="trigger" type="string" description="Trigger button" isDarkMode={dark} />
             <PropRow name="triggerText" type="string" description="Trigger text/chips container" isDarkMode={dark} />
             <PropRow name="content" type="string" description="Dropdown content (portaled, background, border, shadow)" isDarkMode={dark} />

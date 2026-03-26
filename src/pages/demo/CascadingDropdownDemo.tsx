@@ -216,7 +216,7 @@ const disabledOptions: CascadingOption[] = [
 const getClasses = (dark: boolean) => ({
   cascading: {
     root: "",
-    container: "",
+    wrapper: "",
     trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
       dark
         ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -485,7 +485,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={regionOptionsSingle}
               value={asyncSingleValue}
-              onChange={(val) => setAsyncSingleValue(val)}
+              onValueChange={(val) => setAsyncSingleValue(val)}
               onLoadChildren={handleLoadChildren}
               placeholder="Select region and country..."
               loadingText="Loading countries..."
@@ -517,7 +517,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={regionOptionsMulti}
               value={asyncMultiValue}
-              onChange={(val) => setAsyncMultiValue(val)}
+              onValueChange={(val) => setAsyncMultiValue(val)}
               onLoadChildren={handleLoadChildren}
               placeholder="Select region and countries..."
               closeOnSelect={false}
@@ -550,7 +550,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={prefetchOptions}
               value={prefetchValue}
-              onChange={(val) => setPrefetchValue(val)}
+              onValueChange={(val) => setPrefetchValue(val)}
               onLoadChildren={handleLoadChildrenAsync}
               placeholder="Select region and country..."
               loading={isPrefetchLoading}
@@ -593,12 +593,12 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={loadOnOpenOptions}
               value={loadOnOpenValue}
-              onChange={(val) => setLoadOnOpenValue(val)}
+              onValueChange={(val) => setLoadOnOpenValue(val)}
               onLoadChildren={handleLoadChildrenAsync}
               placeholder="Click to load regions..."
               loading={isLoadOnOpenLoading}
               loadingText="Loading regions..."
-              noResultsText={hasLoadOnOpenLoaded ? "No regions found" : "Click to load regions"}
+              noResultsContent={hasLoadOnOpenLoaded ? "No regions found" : "Click to load regions"}
               classes={{
                 ...c.cascading,
                 submenu: `${c.cascading.submenu} max-h-64 overflow-y-auto`,
@@ -648,7 +648,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={basicValue}
-              onChange={(val) => setBasicValue(val)}
+              onValueChange={(val) => setBasicValue(val)}
               placeholder="Select category..."
               classes={c.cascading}
             />
@@ -667,7 +667,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={filterOptions}
               value={multiValue}
-              onChange={(val) => setMultiValue(val)}
+              onValueChange={(val) => setMultiValue(val)}
               placeholder="Select filters..."
               closeOnSelect={false}
               classes={c.cascading}
@@ -687,7 +687,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={mixedOptions}
               value={mixedValue}
-              onChange={(val) => setMixedValue(val)}
+              onValueChange={(val) => setMixedValue(val)}
               placeholder="Filter candidates..."
               closeOnSelect={false}
               classes={c.cascading}
@@ -707,7 +707,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={simpleOptions}
               value={simpleValue}
-              onChange={(val) => setSimpleValue(val)}
+              onValueChange={(val) => setSimpleValue(val)}
               placeholder="Select option..."
               classes={c.cascading}
             />
@@ -727,7 +727,7 @@ const CascadingDropdownDemo = () => {
               label="Product Category"
               options={categoryOptions}
               value={labeledValue}
-              onChange={(val) => setLabeledValue(val)}
+              onValueChange={(val) => setLabeledValue(val)}
               placeholder="Select category..."
               classes={c.cascading}
             />
@@ -748,7 +748,7 @@ const CascadingDropdownDemo = () => {
               required
               options={categoryOptions}
               value={errorValue}
-              onChange={(val) => setErrorValue(val)}
+              onValueChange={(val) => setErrorValue(val)}
               placeholder="Select category..."
               error={Object.keys(errorValue).length === 0}
               errorMessage={
@@ -802,7 +802,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={disabledOptions}
               value={disabledValue}
-              onChange={(val) => setDisabledValue(val)}
+              onValueChange={(val) => setDisabledValue(val)}
               placeholder="Select option..."
               classes={c.cascading}
             />
@@ -821,7 +821,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={leftPositionValue}
-              onChange={(val) => setLeftPositionValue(val)}
+              onValueChange={(val) => setLeftPositionValue(val)}
               placeholder="Select category..."
               submenuPosition="left"
               classes={{
@@ -844,7 +844,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={noCloseValue}
-              onChange={(val) => setNoCloseValue(val)}
+              onValueChange={(val) => setNoCloseValue(val)}
               placeholder="Select categories..."
               closeOnSelect={false}
               classes={c.cascading}
@@ -882,7 +882,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={darkThemeValue}
-              onChange={(val) => setDarkThemeValue(val)}
+              onValueChange={(val) => setDarkThemeValue(val)}
               placeholder="Select category..."
               classes={darkOnlyClasses}
             />
@@ -901,7 +901,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={filterOptions}
               value={darkThemeMultiValue}
-              onChange={(val) => setDarkThemeMultiValue(val)}
+              onValueChange={(val) => setDarkThemeMultiValue(val)}
               placeholder="Select filters..."
               closeOnSelect={false}
               classes={darkOnlyClasses}
@@ -921,7 +921,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={purpleThemeValue}
-              onChange={(val) => setPurpleThemeValue(val)}
+              onValueChange={(val) => setPurpleThemeValue(val)}
               placeholder="Select category..."
               classes={getPurpleClasses(dark)}
             />
@@ -940,7 +940,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={filterOptions}
               value={purpleThemeMultiValue}
-              onChange={(val) => setPurpleThemeMultiValue(val)}
+              onValueChange={(val) => setPurpleThemeMultiValue(val)}
               placeholder="Select filters..."
               closeOnSelect={false}
               classes={getPurpleClasses(dark)}
@@ -960,7 +960,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={filterOptions}
               value={greenCheckboxValue}
-              onChange={(val) => setGreenCheckboxValue(val)}
+              onValueChange={(val) => setGreenCheckboxValue(val)}
               placeholder="Select filters..."
               closeOnSelect={false}
               classes={{
@@ -987,7 +987,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={filterOptions}
               value={orangeCheckboxValue}
-              onChange={(val) => setOrangeCheckboxValue(val)}
+              onValueChange={(val) => setOrangeCheckboxValue(val)}
               placeholder="Select filters..."
               closeOnSelect={false}
               classes={{
@@ -1014,7 +1014,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={filterOptions}
               value={customCheckboxIconValue}
-              onChange={(val) => setCustomCheckboxIconValue(val)}
+              onValueChange={(val) => setCustomCheckboxIconValue(val)}
               placeholder="Select filters..."
               closeOnSelect={false}
               checkboxIcon={
@@ -1045,7 +1045,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={customSelectedIconValue}
-              onChange={(val) => setCustomSelectedIconValue(val)}
+              onValueChange={(val) => setCustomSelectedIconValue(val)}
               placeholder="Select category..."
               selectedIcon={
                 <svg
@@ -1080,7 +1080,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
-              onChange={() => {}}
+              onValueChange={() => {}}
               fullWidth
               placeholder="Select category..."
               classes={c.cascading}
@@ -1099,14 +1099,14 @@ const CascadingDropdownDemo = () => {
           <CascadingDropdown
             options={categoryOptions}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Scroll locked (default)"
             classes={c.cascading}
           />
           <CascadingDropdown
             options={categoryOptions}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Scroll allowed"
             lockScroll={false}
             classes={c.cascading}
@@ -1124,7 +1124,7 @@ const CascadingDropdownDemo = () => {
           <CascadingDropdown
             options={[]}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             loading
             loadingText="Fetching categories..."
             placeholder="Loading example..."
@@ -1146,7 +1146,7 @@ const CascadingDropdownDemo = () => {
           <CascadingDropdown
             options={[]}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             loading
             loadingText={
               <div className="space-y-2 p-2">
@@ -1173,14 +1173,14 @@ const CascadingDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div>
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
-            <CascadingDropdown options={categoryOptions} value={{}} onChange={() => {}} placeholder="Select..." classes={c.cascading} />
+            <CascadingDropdown options={categoryOptions} value={{}} onValueChange={() => {}} placeholder="Select..." classes={c.cascading} />
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Borderless</p>
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
-              onChange={() => {}}
+              onValueChange={() => {}}
               placeholder="Select..."
               classes={{
                 ...c.cascading,
@@ -1195,7 +1195,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
-              onChange={() => {}}
+              onValueChange={() => {}}
               placeholder="Select..."
               classes={{
                 ...c.cascading,
@@ -1210,7 +1210,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
-              onChange={() => {}}
+              onValueChange={() => {}}
               placeholder="Select..."
               classes={{
                 ...c.cascading,
@@ -1225,7 +1225,7 @@ const CascadingDropdownDemo = () => {
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
-              onChange={() => {}}
+              onValueChange={() => {}}
               placeholder="Select..."
               classes={{
                 ...c.cascading,
@@ -1248,7 +1248,7 @@ const CascadingDropdownDemo = () => {
           <CascadingDropdown
             options={categoryOptions}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Styled menus..."
             classes={{
               ...c.cascading,
@@ -1275,7 +1275,7 @@ const CascadingDropdownDemo = () => {
           <CascadingDropdown
             options={categoryOptions}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Compact..."
             classes={{
               ...c.cascading,
@@ -1307,7 +1307,7 @@ const CascadingDropdownDemo = () => {
           <CascadingDropdown
             options={categoryOptions}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Minimal..."
             showChevron={false}
             showSelectedIcon={false}
@@ -1378,7 +1378,7 @@ const CascadingDropdownDemo = () => {
               },
             ]}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Select department..."
             classes={{
               ...c.cascading,
@@ -1431,7 +1431,7 @@ const CascadingDropdownDemo = () => {
               },
             ]}
             value={{}}
-            onChange={() => {}}
+            onValueChange={() => {}}
             placeholder="Select technologies..."
             classes={{
               ...c.cascading,
@@ -1482,7 +1482,7 @@ const CascadingDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onChange"
+              name="onValueChange"
               type="(value, path) => void"
               description="Called when selection changes"
               isDarkMode={dark}
@@ -1547,10 +1547,10 @@ const CascadingDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="noResultsText"
-              type="string"
+              name="noResultsContent"
+              type="ReactNode"
               defaultVal='"No options available"'
-              description="Text shown when no options available"
+              description="Content shown when no options available"
               isDarkMode={dark}
             />
             <PropRow
@@ -1725,7 +1725,7 @@ const CascadingDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="container"
+              name="wrapper"
               type="string"
               description="Dropdown wrapper (relative positioned)"
               isDarkMode={dark}

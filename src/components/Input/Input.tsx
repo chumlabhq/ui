@@ -12,6 +12,7 @@ import { DEFAULT_INPUT_CLASSES, UNSTYLED_INPUT_CLASSES } from "./utils/constants
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
 export const InputLabel = FieldLabel;
@@ -76,22 +77,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       onChange: onValueChange,
     });
 
-    // Internal ref — merged with consumer's forwarded ref via callback
     const internalRef = useRef<HTMLInputElement | null>(null);
-
-    // Ref merge callback: assigns to both internal ref and consumer ref
-    const setRef = useCallback(
-      (node: HTMLInputElement | null) => {
-        internalRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLInputElement | null>).current =
-            node;
-        }
-      },
-      [ref],
-    );
+    const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
     // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
@@ -242,7 +229,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       >
         <input
           {...rest}
-          ref={setRef}
+          ref={mergedRef}
           id={inputId}
           name={name}
           type={type}

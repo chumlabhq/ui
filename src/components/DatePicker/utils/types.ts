@@ -1,5 +1,5 @@
 import type { Locale } from "date-fns";
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 
 export type { Locale };
 
@@ -130,7 +130,11 @@ export interface DatePickerClasses {
   dropdownItemSelected?: string;
 }
 
-export interface DatePickerProps {
+export interface DatePickerProps
+  extends Omit<
+    HTMLAttributes<HTMLDivElement>,
+    "children" | "defaultValue" | "onChange" | "value"
+  > {
   /** Selection mode */
   mode?: DatePickerMode;
 
@@ -143,9 +147,18 @@ export interface DatePickerProps {
   multipleValue?: Date[] | null;
 
   // ─── Callbacks ──────────────────────────────────────────────────────
-  onChange?: (date: Date | null, dateValue: DateValue | null) => void;
-  onRangeChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
-  onMultipleChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
+  /** Fires when the selected date changes (single mode). */
+  onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
+  /** Fires when the selected range changes (range mode). */
+  onRangeValueChange?: (
+    range: DateRange | null,
+    rangeValue: DateRangeValue | null,
+  ) => void;
+  /** Fires when the selected dates change (multiple mode). */
+  onMultipleValueChange?: (
+    dates: Date[] | null,
+    dateValues: DateValue[] | null,
+  ) => void;
   onClear?: () => void;
   onMonthChange?: (month: Date) => void;
   onOpen?: () => void;
@@ -207,7 +220,6 @@ export interface DatePickerProps {
   // ─── Styling ────────────────────────────────────────────────────────
   classes?: DatePickerClasses;
   unstyled?: boolean;
-  className?: string;
 
   // ─── Portal ─────────────────────────────────────────────────────────
   portalContainer?: HTMLElement | null;
@@ -236,9 +248,15 @@ export interface UseDatePickerProps {
   disabled: boolean;
   showWeekNumbers: boolean;
   markers?: DateMarker[];
-  onChange?: (date: Date | null, dateValue: DateValue | null) => void;
-  onRangeChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
-  onMultipleChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
+  onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
+  onRangeValueChange?: (
+    range: DateRange | null,
+    rangeValue: DateRangeValue | null,
+  ) => void;
+  onMultipleValueChange?: (
+    dates: Date[] | null,
+    dateValues: DateValue[] | null,
+  ) => void;
   onMonthChange?: (month: Date) => void;
 }
 

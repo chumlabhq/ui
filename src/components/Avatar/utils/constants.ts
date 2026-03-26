@@ -1,4 +1,4 @@
-import type { AvatarSize, AvatarStatus, AvatarClasses } from "../types";
+import type { AvatarSize, AvatarStatus, AvatarClasses } from "./types";
 
 export const DEFAULT_SIZE: AvatarSize = "md";
 export const DEFAULT_SHAPE = "circle" as const;

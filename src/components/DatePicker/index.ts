@@ -12,7 +12,7 @@ export type {
   CalendarDay,
   CalendarMonth,
   DateMarker,
-} from "./types";
+} from "./utils/types";
 
 export {
   DEFAULT_DATEPICKER_CLASSES,

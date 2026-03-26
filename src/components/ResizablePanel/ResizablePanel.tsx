@@ -4,7 +4,6 @@ import {
   useId,
   useRef,
   useEffect,
-  useLayoutEffect,
   useCallback,
   useMemo,
   type KeyboardEvent,
@@ -17,9 +16,7 @@ import {
 } from "./utils/constants";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
-
-const useIsomorphicLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 
 const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
   (props, ref) => {
@@ -54,16 +51,21 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       handle: classesProp?.handle ?? baseClasses.handle,
     }), [classesProp, baseClasses]);
 
+    const ariaLabelledBy = rest["aria-labelledby"];
     const warnedRef = useRef(false);
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
-        const r = rest as Record<string, unknown>;
-        if (!r["aria-label"] && !r["aria-labelledby"] && !warnedRef.current) {
+        const hasAccessibleName =
+          Boolean(String(ariaLabel ?? "").trim()) ||
+          (ariaLabelledBy != null && String(ariaLabelledBy).trim() !== "");
+        if (!hasAccessibleName && !warnedRef.current) {
           warnedRef.current = true;
-          console.warn("ResizablePanel: requires `aria-label` or `aria-labelledby` for accessibility.");
+          console.warn(
+            "ResizablePanel: requires `aria-label` or `aria-labelledby` for accessibility.",
+          );
         }
       }
-    }, [rest]);
+    }, [ariaLabel, ariaLabelledBy]);
 
     const boundsWarnedRef = useRef(false);
     useEffect(() => {
@@ -384,3 +386,4 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
 ResizablePanel.displayName = "ResizablePanel";
 
 export { ResizablePanel };
+export default ResizablePanel;

@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
-import type { TimeFormat, TimeValue, ClockSelectionMode } from "./types";
+import type { TimeFormat, TimeValue, ClockSelectionMode } from "./utils/types";
 
 interface ClockFaceProps {
   value: TimeValue | null;

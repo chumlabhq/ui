@@ -4,7 +4,7 @@ import type {
   CascadingValue,
   UseCascadingDropdownProps,
   UseCascadingDropdownReturn,
-} from "./types";
+} from "./utils/types";
 import { useControllableState } from "../../utils/useControllableState";
 
 export const useCascadingDropdown = ({
@@ -13,7 +13,7 @@ export const useCascadingDropdown = ({
   defaultValue,
   disabled = false,
   closeOnSelect = true,
-  onChange,
+  onValueChange,
   onLoadChildren,
   label,
   "aria-label": ariaLabel,
@@ -76,9 +76,9 @@ export const useCascadingDropdown = ({
   const updateValue = useCallback(
     (newValue: CascadingValue, path: CascadingOption[]) => {
       setInternalValue(newValue);
-      onChange?.(newValue, path);
+      onValueChange?.(newValue, path);
     },
-    [setInternalValue, onChange]
+    [setInternalValue, onValueChange]
   );
 
   const loadChildrenForOption = useCallback(

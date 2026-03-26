@@ -1,5 +1,5 @@
 import { forwardRef, useMemo } from "react";
-import type { AvatarGroupCountProps, AvatarTooltipConfig } from "../types";
+import type { AvatarGroupCountProps, AvatarTooltipConfig } from "../utils/types";
 import { Tooltip } from "../../Tooltip";
 import { Slot } from "../../../utils/Slot";
 import { DEFAULT_SIZE, DEFAULT_SHAPE } from "../utils/constants";

@@ -10,6 +10,7 @@ import {
 import { DefaultCheckIcon, DefaultIndeterminateIcon } from "./utils/icons";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/mergeRefs";
 
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
@@ -48,19 +49,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const descriptionId = `${checkboxId}-description`;
 
     const internalRef = useRef<HTMLInputElement>(null);
-
-    // Merge refs — callback ref pattern (safe, no non-null assertion)
-    const setRef = useCallback(
-      (node: HTMLInputElement | null) => {
-        internalRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [ref],
-    );
+    const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
     // Dev warnings — in useEffect to comply with React 19 ref access rules
     const warnedRef = useRef(false);
@@ -184,7 +173,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             data-error={error || undefined}
           >
             <input
-              ref={setRef}
+              ref={mergedRef}
               type="checkbox"
               id={checkboxId}
               name={name}

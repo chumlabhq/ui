@@ -4,7 +4,7 @@ import type {
   AvatarTooltipConfig,
   AvatarStatusConfig,
   AvatarClasses,
-} from "./types";
+} from "./utils/types";
 import { Tooltip } from "../Tooltip";
 import { Slot } from "../../utils/Slot";
 import {
@@ -80,6 +80,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const [imageLoaded, setImageLoaded] = useState(false);
     const [prevSrc, setPrevSrc] = useState(src);
 
+    // React-endorsed derived state reset: https://react.dev/reference/react/useState#storing-information-from-previous-renders
     if (prevSrc !== src) {
       setPrevSrc(src);
       setImageError(false);
@@ -278,3 +279,5 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 );
 
 Avatar.displayName = "Avatar";
+
+export default Avatar;

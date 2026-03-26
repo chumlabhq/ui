@@ -10,7 +10,7 @@ export interface MultiSelectOption {
 
 export interface MultiSelectSearchableDropdownClasses {
   root?: string;
-  container?: string;
+  wrapper?: string;
   trigger?: string;
   triggerText?: string;
   content?: string;
@@ -37,8 +37,9 @@ export interface MultiSelectSearchableDropdownClasses {
 
 export interface MultiSelectSearchableDropdownProps {
   options?: MultiSelectOption[];
-  value: string[];
-  onChange: (values: string[], options: MultiSelectOption[]) => void;
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
   placeholder?: string;
@@ -49,7 +50,7 @@ export interface MultiSelectSearchableDropdownProps {
   required?: boolean;
   showSearch?: boolean;
   searchPlaceholder?: string;
-  noResultsText?: string;
+  noResultsContent?: ReactNode;
   loadingText?: string;
   showChevron?: boolean;
   fullWidth?: boolean;
@@ -59,6 +60,8 @@ export interface MultiSelectSearchableDropdownProps {
   initialOptions?: MultiSelectOption[];
   onLoadInitialOptions?: () => Promise<MultiSelectOption[]>;
   loadInitialOnOpen?: boolean;
+  /** Called when async loading or search fails. */
+  onLoadError?: (error: unknown) => void;
   maxDisplayedChips?: number;
   showSelectedChips?: boolean;
   checkboxIcon?: ReactNode;
@@ -76,19 +79,25 @@ export interface MultiSelectSearchableDropdownProps {
   dropdownGap?: number;
   keepMounted?: boolean;
   "aria-label"?: string;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+  searchInputAriaLabel?: string;
 }
 
 export interface UseMultiSelectDropdownProps {
   options?: MultiSelectOption[];
-  value: string[];
+  value?: string[];
+  defaultValue?: string[];
   disabled?: boolean;
   showSearch?: boolean;
   onSearch?: (query: string) => Promise<MultiSelectOption[]>;
   searchDebounceMs?: number;
-  onChange: (values: string[], options: MultiSelectOption[]) => void;
+  onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   initialOptions?: MultiSelectOption[];
   onLoadInitialOptions?: () => Promise<MultiSelectOption[]>;
   loadInitialOnOpen?: boolean;
+  onLoadError?: (error: unknown) => void;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -104,6 +113,7 @@ export interface UseMultiSelectDropdownReturn {
   isLoadingInitial: boolean;
   displayOptions: MultiSelectOption[];
   selectedOptions: MultiSelectOption[];
+  selectedValues: string[];
   shouldRestoreFocusRef: MutableRefObject<boolean>;
   setSearchQuery: (query: string) => void;
   setFocusedIndex: (index: number) => void;

@@ -186,3 +186,5 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
 );
 
 CountryFlag.displayName = "CountryFlag";
+
+export default CountryFlag;

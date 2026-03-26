@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import type { UseTimePickerProps, UseTimePickerReturn } from "./types";
+import type { UseTimePickerProps, UseTimePickerReturn } from "./utils/types";
 import {
   generateTimeOptions,
   parseTimeInput,

@@ -14,18 +14,9 @@ import {
   DEFAULT_MULTISELECTDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
 } from "./utils/constants";
-
-const SR_ONLY_STYLE: CSSProperties = {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: "hidden",
-  clip: "rect(0,0,0,0)",
-  whiteSpace: "nowrap",
-  border: 0,
-};
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+import { mergeRefs } from "../../utils/mergeRefs";
+import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
 const MAX_STATUS_LABELS = 5;
 
@@ -64,6 +55,7 @@ function MultiSelectDropdownContent({
 }: MultiSelectDropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<DropdownCoords | null>(null);
+  const isPositionStable = useStablePositionAfterOpen(isOpen);
   const rafIdRef = useRef<number | null>(null);
 
   const updatePosition = useCallback(() => {
@@ -156,7 +148,8 @@ function MultiSelectDropdownContent({
   const dropdownStyle: CSSProperties = {
     position: "fixed",
     zIndex,
-    ...(coords
+    margin: 0,
+    ...(coords && isPositionStable
       ? { top: coords.top, left: coords.left, width: coords.width }
       : { visibility: "hidden" as const, top: 0, left: 0 }),
     ...(!isOpen && keepMounted ? { display: "none" } : {}),
@@ -164,10 +157,7 @@ function MultiSelectDropdownContent({
 
   return createPortal(
     <div
-      ref={(node) => {
-        (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (contentRef) (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+      ref={mergeRefs(dropdownRef, contentRef)}
       id={listboxId}
       role="listbox"
       aria-label={listboxAriaLabel}
@@ -193,6 +183,7 @@ const MultiSelectDropdown = forwardRef<
     {
       options = [],
       value,
+      defaultValue,
       onValueChange,
       id,
       name,
@@ -202,8 +193,7 @@ const MultiSelectDropdown = forwardRef<
       errorMessage,
       label,
       required = false,
-      noResultsText = "No options available",
-      noResultsContent,
+      noResultsContent = "No options found",
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
@@ -278,6 +268,7 @@ const MultiSelectDropdown = forwardRef<
 
     const {
       isOpen,
+      currentValue,
       focusedIndex,
       isLoadingOptions,
       displayOptions,
@@ -292,6 +283,7 @@ const MultiSelectDropdown = forwardRef<
     } = useMultiSelectDropdown({
       options,
       value,
+      defaultValue,
       disabled,
       onValueChange,
       onLoadOptions,
@@ -312,7 +304,7 @@ const MultiSelectDropdown = forwardRef<
     const loading = externalLoading || isLoadingOptions;
 
     const statusMessage = loading
-      ? "Loading options"
+      ? "Loading..."
       : isOpen
         ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
         : selectedOptions.length > 0
@@ -389,19 +381,17 @@ const MultiSelectDropdown = forwardRef<
         }
       };
       document.addEventListener("keydown", handleDocumentKeyDown, true);
-      window.addEventListener("keydown", handleDocumentKeyDown, true);
       return () => {
         document.removeEventListener("keydown", handleDocumentKeyDown, true);
-        window.removeEventListener("keydown", handleDocumentKeyDown, true);
       };
     }, [isOpen, handleClose, shouldRestoreFocusRef]);
 
-    const mergedTriggerRef = useCallback(
-      (node: HTMLButtonElement | null) => {
-        (triggerRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
-        setTriggerNode(node);
-      },
-      [],
+    const mergedTriggerRef = useMemo(
+      () =>
+        mergeRefs(triggerRef, (node: HTMLButtonElement | null) => {
+          setTriggerNode(node);
+        }),
+      [setTriggerNode],
     );
 
     const handleRemoveOptionAndFocus = useCallback(
@@ -549,14 +539,14 @@ const MultiSelectDropdown = forwardRef<
                 role="status"
                 className={mergedClasses.noResults || undefined}
               >
-                {noResultsContent ?? noResultsText}
+                {noResultsContent}
               </div>
             ) : (
               displayOptions.map((option, index) => (
                 <MultiSelectDropdownOption
                   key={option.value}
                   option={option}
-                  isSelected={value.includes(option.value)}
+                  isSelected={currentValue.includes(option.value)}
                   isFocused={index === focusedIndex}
                   dropdownId={dropdownId}
                   index={index}

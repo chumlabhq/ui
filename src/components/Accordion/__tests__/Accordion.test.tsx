@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import { createRef } from "react";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -10,6 +11,7 @@ import {
 import type {
   AccordionSingleProps,
   AccordionMultipleProps,
+  AccordionRef,
 } from "../utils/types";
 
 type RenderAccordionProps =
@@ -1004,7 +1006,7 @@ describe("Accordion", () => {
   describe("Imperative API fires onExpandedChange", () => {
     it("fires onExpandedChange from imperative expand", async () => {
       const onExpandedChange = vi.fn();
-      const ref = { current: null as any };
+      const ref = createRef<AccordionRef>();
 
       render(
         <Accordion type="multiple" ref={ref} onExpandedChange={onExpandedChange}>
@@ -1020,7 +1022,7 @@ describe("Accordion", () => {
       );
 
       act(() => {
-        ref.current.expand("item-1");
+        ref.current?.expand("item-1");
       });
 
       expect(onExpandedChange).toHaveBeenCalledWith(
@@ -1033,7 +1035,7 @@ describe("Accordion", () => {
 
     it("fires onExpandedChange from imperative collapse", async () => {
       const onExpandedChange = vi.fn();
-      const ref = { current: null as any };
+      const ref = createRef<AccordionRef>();
 
       render(
         <Accordion type="multiple" ref={ref} defaultValue={["item-1"]} onExpandedChange={onExpandedChange}>
@@ -1045,7 +1047,7 @@ describe("Accordion", () => {
       );
 
       act(() => {
-        ref.current.collapse("item-1");
+        ref.current?.collapse("item-1");
       });
 
       expect(onExpandedChange).toHaveBeenCalledWith(

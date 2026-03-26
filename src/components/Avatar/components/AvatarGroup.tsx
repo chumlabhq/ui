@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from "react";
-import type { AvatarGroupProps } from "../types";
+import type { AvatarGroupProps } from "../utils/types";
 import { AvatarGroupCount } from "./AvatarGroupCount";
 import { Slot } from "../../../utils/Slot";
 import {

@@ -42,10 +42,7 @@ export interface ToastConfig {
 
 export interface ToastProps extends Omit<ToastConfig, "id"> {
   id: string;
-  visible: boolean;
   onRemove: (id: string) => void;
-  position: ToastPosition;
-  animationDuration?: number;
   providerClasses?: ToastClasses;
   providerUnstyled?: boolean;
 }

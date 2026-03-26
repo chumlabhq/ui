@@ -13,7 +13,7 @@ import { TabPanelContext } from "./utils/context";
 import { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
 import TabButton from "./components/TabButton";
-import Tooltip from "../Tooltip/Tooltip";
+import { Tooltip } from "../Tooltip";
 
 const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
   (
@@ -84,17 +84,17 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     const [activatedTabs, setActivatedTabs] = useState<Set<string>>(
       () => new Set([resolvedValue]),
     );
+
     const [prevResolvedValue, setPrevResolvedValue] = useState(resolvedValue);
     if (prevResolvedValue !== resolvedValue) {
       setPrevResolvedValue(resolvedValue);
       setManualFocusId(null);
-      if (!activatedTabs.has(resolvedValue)) {
-        setActivatedTabs((prev) => {
-          const next = new Set(prev);
-          next.add(resolvedValue);
-          return next;
-        });
-      }
+      setActivatedTabs((prev) => {
+        if (prev.has(resolvedValue)) return prev;
+        const next = new Set(prev);
+        next.add(resolvedValue);
+        return next;
+      });
     }
 
     const tabbableTabId =

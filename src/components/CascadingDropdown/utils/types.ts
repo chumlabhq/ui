@@ -1,3 +1,4 @@
+import type React from "react";
 import type { ReactNode } from "react";
 
 export type SelectionMode = "single" | "multi";
@@ -19,7 +20,7 @@ export interface CascadingValue {
 
 export interface CascadingDropdownClasses {
   root?: string;
-  container?: string;
+  wrapper?: string;
   trigger?: string;
   menu?: string;
   menuItem?: string;
@@ -46,8 +47,11 @@ export interface CascadingDropdownProps {
   options: CascadingOption[];
   value?: CascadingValue;
   defaultValue?: CascadingValue;
-  onChange?: (value: CascadingValue, path: CascadingOption[]) => void;
+  onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
   onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
   id?: string;
   name?: string;
   placeholder?: string;
@@ -56,7 +60,7 @@ export interface CascadingDropdownProps {
   errorMessage?: ReactNode;
   label?: ReactNode;
   required?: boolean;
-  noResultsText?: string;
+  noResultsContent?: ReactNode;
   loadingText?: ReactNode;
   loading?: boolean;
   showChevron?: boolean;
@@ -80,7 +84,7 @@ export interface UseCascadingDropdownProps {
   defaultValue?: CascadingValue;
   disabled?: boolean;
   closeOnSelect?: boolean;
-  onChange?: (value: CascadingValue, path: CascadingOption[]) => void;
+  onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
   onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
   label?: ReactNode;
   "aria-label"?: string;

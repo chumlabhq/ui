@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Table, Pagination } from "../../components/Table";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Section, ComponentHeader } from "./components";
+import { Section, ComponentHeader, PropsTable, PropRow } from "./components";
 
 // Basic User interface
 interface User {
@@ -2017,6 +2017,46 @@ const TableDemo = () => {
           <code className="bg-gray-100 px-1 rounded">shimmerRowClassName</code>,
           etc.)
         </p>
+      </Section>
+
+      <Section
+        title="Core API (PropsTable)"
+        description="Shared documentation layout for primary Table props."
+      >
+        <PropsTable>
+          <PropRow
+            name="columns / COLUMNS"
+            type="ColumnDef[]"
+            description="TanStack column definitions (or COLUMNS static export)"
+          />
+          <PropRow
+            name="data / COLUMNS_DATA"
+            type="TData[]"
+            description="Row data (or COLUMNS_DATA static export)"
+          />
+          <PropRow
+            name="loading"
+            type="boolean"
+            defaultVal="false"
+            description="Shimmer loading state"
+          />
+          <PropRow
+            name="ariaLabel"
+            type="string"
+            defaultVal='"Data table"'
+            description="Accessible name for the table"
+          />
+          <PropRow
+            name="getRowId"
+            type="(row) => string"
+            description="Stable row id for selection and keys"
+          />
+          <PropRow
+            name="emptyContent"
+            type="ReactNode"
+            description="Custom empty state when data is empty"
+          />
+        </PropsTable>
       </Section>
     </>
   );

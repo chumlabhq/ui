@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, memo, useState } from "react";
+import { useEffect, useRef, useCallback, memo, useState, useMemo } from "react";
 import type { ToastProps, ToastClasses } from "./utils/types";
 import { CloseIcon, getDefaultIcon } from "./utils/icons";
 import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants";
@@ -17,15 +17,12 @@ const Toast = memo(function Toast({
   showCloseButton = true,
   onClose,
   onRemove,
-  visible: _visible,
-  position: _position,
   role: roleProp,
   classes: classesProp,
   unstyled = false,
   providerClasses,
   providerUnstyled = false,
   pauseOnHover = true,
-  animationDuration: _animationDuration,
   style,
   closeAriaLabel = "Close notification",
 }: ToastProps) {
@@ -59,7 +56,7 @@ const Toast = memo(function Toast({
 
   const isUnstyled = unstyled || providerUnstyled;
   const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;
-  const mergedClasses: Required<ToastClasses> = {
+  const mergedClasses: Required<ToastClasses> = useMemo(() => ({
     container: classesProp?.container ?? providerClasses?.container ?? baseClasses.container,
     content: classesProp?.content ?? providerClasses?.content ?? baseClasses.content,
     message: classesProp?.message ?? providerClasses?.message ?? baseClasses.message,
@@ -67,7 +64,7 @@ const Toast = memo(function Toast({
     progress: classesProp?.progress ?? providerClasses?.progress ?? baseClasses.progress,
     closeButton: classesProp?.closeButton ?? providerClasses?.closeButton ?? baseClasses.closeButton,
     icon: classesProp?.icon ?? providerClasses?.icon ?? baseClasses.icon,
-  };
+  }), [classesProp, providerClasses, baseClasses]);
 
   const defaultIcon = getDefaultIcon(type);
   const toastRole = roleProp ?? getRoleForType(type);

@@ -1,20 +1,11 @@
 import type { Ref } from "react";
+import { mergeRefs } from "../../../utils/mergeRefs";
 import { INTERACTIVE_TAGS, INTERACTIVE_QUERY } from "./constants";
-
-// ─── Ref merging ────────────────────────────────────────────────
 
 export function mergeTooltipRefs<T>(
   ...refs: (Ref<T> | undefined | null)[]
-): (node: T | null) => void {
-  return (node: T | null) => {
-    refs.forEach((ref) => {
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (ref != null) {
-        (ref as React.MutableRefObject<T | null>).current = node;
-      }
-    });
-  };
+): ReturnType<typeof mergeRefs<T>> {
+  return mergeRefs(...refs.filter((r): r is Ref<T> | undefined => r !== null));
 }
 
 // ─── Interactive child detection ────────────────────────────────

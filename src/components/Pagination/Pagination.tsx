@@ -225,7 +225,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       portalContainer,
       prevAriaLabel = "Previous page",
       nextAriaLabel = "Next page",
-      paginationAriaLabel = "Pagination",
+      paginationAriaLabel: paginationAriaLabelProp,
       pageAriaLabel,
       className,
       ...rest
@@ -233,23 +233,23 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     ref,
   ) => {
     const instanceId = useId();
+    const paginationAriaLabel = paginationAriaLabelProp ?? "Pagination";
 
-    // Dev warning for missing aria-label
     const warnedRef = useRef(false);
     useEffect(() => {
       if (
         process.env.NODE_ENV !== "production" &&
         !warnedRef.current &&
+        paginationAriaLabelProp === undefined &&
         !rest["aria-label"] &&
-        !rest["aria-labelledby"] &&
-        !paginationAriaLabel
+        !rest["aria-labelledby"]
       ) {
         warnedRef.current = true;
         console.warn(
-          "Pagination: Consider providing an `aria-label` or `paginationAriaLabel` for accessibility.",
+          "Pagination: Provide `paginationAriaLabel` or pass `aria-label` / `aria-labelledby` on the root for an accessible navigation name.",
         );
       }
-    }, [rest, paginationAriaLabel]);
+    }, [rest, paginationAriaLabelProp]);
 
     const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({

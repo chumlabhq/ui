@@ -4,7 +4,7 @@ import type {
   CalendarMonth,
   DateRange,
   DateRangeValue,
-} from "./types";
+} from "./utils/types";
 import {
   generateCalendarMonth,
   toDateValue,
@@ -37,11 +37,14 @@ export function useDatePicker({
   disabled,
   showWeekNumbers,
   markers,
-  onChange,
-  onRangeChange,
-  onMultipleChange,
+  onValueChange,
+  onRangeValueChange,
+  onMultipleValueChange,
   onMonthChange,
 }: UseDatePickerProps) {
+  const emitSingle = onValueChange;
+  const emitRange = onRangeValueChange;
+  const emitMultiple = onMultipleValueChange;
   const getInitialMonth = () => {
     if (mode === "single" && value) return startOfMonth(value);
     if (mode === "range" && rangeValue?.start)
@@ -153,7 +156,7 @@ export function useDatePicker({
 
       if (mode === "single") {
         const dateValue = toDateValue(normalizedDate);
-        onChange?.(normalizedDate, dateValue);
+        emitSingle?.(normalizedDate, dateValue);
         handleClose();
         return;
       }
@@ -165,7 +168,7 @@ export function useDatePicker({
             start: toDateValue(normalizedDate),
             end: null,
           };
-          onRangeChange?.(newRange, newRangeValue);
+          emitRange?.(newRange, newRangeValue);
           setRangeSelectionState("end");
         } else {
           const start = rangeValue?.start || normalizedDate;
@@ -185,7 +188,7 @@ export function useDatePicker({
             start: toDateValue(rangeStartDate),
             end: toDateValue(rangeEndDate),
           };
-          onRangeChange?.(newRange, newRangeValue);
+          emitRange?.(newRange, newRangeValue);
           setRangeSelectionState("start");
           handleClose();
         }
@@ -206,7 +209,7 @@ export function useDatePicker({
         }
 
         const dateValues = newDates.map(toDateValue);
-        onMultipleChange?.(
+        emitMultiple?.(
           newDates.length > 0 ? newDates : null,
           dateValues.length > 0 ? dateValues : null,
         );
@@ -219,9 +222,9 @@ export function useDatePicker({
       rangeSelectionState,
       rangeValue,
       multipleValue,
-      onChange,
-      onRangeChange,
-      onMultipleChange,
+      emitSingle,
+      emitRange,
+      emitMultiple,
       handleClose,
     ],
   );
@@ -279,14 +282,14 @@ export function useDatePicker({
 
   const handleClear = useCallback(() => {
     if (mode === "single") {
-      onChange?.(null, null);
+      emitSingle?.(null, null);
     } else if (mode === "range") {
-      onRangeChange?.(null, null);
+      emitRange?.(null, null);
       setRangeSelectionState("start");
     } else {
-      onMultipleChange?.(null, null);
+      emitMultiple?.(null, null);
     }
-  }, [mode, onChange, onRangeChange, onMultipleChange]);
+  }, [mode, emitSingle, emitRange, emitMultiple]);
 
   const handleTodayClick = useCallback(() => {
     const today = startOfDay(new Date());

@@ -9,20 +9,9 @@ import {
   type Ref,
   type CSSProperties,
 } from "react";
+import { mergeRefs } from "./mergeRefs";
 
 type AnyProps = Record<string, unknown>;
-
-function mergeRefs<T>(...refs: (Ref<T> | undefined)[]): Ref<T> {
-  return (value: T | null) => {
-    refs.forEach((ref) => {
-      if (typeof ref === "function") {
-        ref(value);
-      } else if (ref != null) {
-        (ref as React.MutableRefObject<T | null>).current = value;
-      }
-    });
-  };
-}
 
 function mergeProps(slotProps: AnyProps, childProps: AnyProps): AnyProps {
   const overrideProps: AnyProps = { ...childProps };
@@ -106,5 +95,6 @@ const Slot = forwardRef<HTMLElement, SlotProps>(
 
 Slot.displayName = "Slot";
 
-export { Slot, mergeRefs, mergeProps, getValidChild };
+export { Slot, mergeProps, getValidChild };
+export { mergeRefs } from "./mergeRefs";
 export type { SlotProps };

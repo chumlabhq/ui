@@ -1,4 +1,4 @@
-import type { DatePickerClasses } from "./types";
+import type { DatePickerClasses } from "./utils/types";
 
 export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   root: "",

@@ -1,4 +1,5 @@
 export { ResizablePanel } from "./ResizablePanel";
+export { default } from "./ResizablePanel";
 export type { ResizablePanelProps, ResizablePanelClasses } from "./utils/types";
 export {
   DEFAULT_RESIZABLEPANEL_CLASSES,

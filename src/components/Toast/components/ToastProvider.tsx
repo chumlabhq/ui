@@ -9,8 +9,7 @@ import Toast from "../Toast";
 import { ToastContext } from "../utils/context";
 import { positionClasses, stackDirectionClasses, PROGRESS_KEYFRAMES } from "../utils/constants";
 import { cn } from "../../../utils/cn";
-
-const isBrowser = typeof document !== "undefined";
+import { isBrowser } from "../../../utils/isBrowser";
 
 interface ToastState extends ToastConfig {
   visible: boolean;
@@ -108,7 +107,7 @@ export const ToastProvider = ({
 
       return id;
     },
-    [defaultDuration, maxToasts, removeToast],
+    [defaultDuration, maxToasts, removeToast, animationDuration],
   );
 
   const success = useCallback(
@@ -204,7 +203,9 @@ export const ToastProvider = ({
               role="region"
               aria-label={containerAriaLabel}
             >
-              {toasts.map((toast) => (
+              {toasts.map((toast) => {
+                const { visible: _, ...toastConfig } = toast;
+                return (
                 <div
                   key={toast.id}
                   className="pointer-events-auto grid"
@@ -219,16 +220,15 @@ export const ToastProvider = ({
                 >
                   <div className="overflow-hidden">
                     <Toast
-                      {...toast}
+                      {...toastConfig}
                       onRemove={removeToast}
-                      position={position}
-                      animationDuration={animationDuration}
                       providerClasses={providerClasses}
                       providerUnstyled={providerUnstyled}
                     />
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>,
           portalTarget,

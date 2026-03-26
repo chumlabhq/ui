@@ -1,4 +1,4 @@
-export const isBrowser = typeof window !== "undefined";
+export { isBrowser } from "../../../utils/isBrowser";
 
 export interface DropdownCoords {
   top: number;
@@ -36,9 +36,10 @@ export function computeDropdownCoords(
     : rect.bottom + gap;
 
   let left = rect.left;
-  const dropdownWidth = rect.width;
-  if (left + dropdownWidth > viewportWidth) {
-    left = Math.max(0, viewportWidth - dropdownWidth);
+  const dropdownRect = dropdownEl.getBoundingClientRect();
+  const actualWidth = Math.max(rect.width, dropdownRect.width);
+  if (left + actualWidth > viewportWidth) {
+    left = Math.max(0, viewportWidth - actualWidth);
   }
 
   return { top, left, width: rect.width, position };

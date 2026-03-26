@@ -272,7 +272,7 @@ const Demo = () => {
           ref={mainRef}
           className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
-          <div className="p-4 sm:p-6 lg:p-8 max-w-4xl">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
             <Outlet context={{ isDarkMode, toggleDarkMode }} />
           </div>
         </main>

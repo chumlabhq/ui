@@ -1,4 +1,4 @@
-export const isBrowser = typeof window !== "undefined";
+export { isBrowser } from "../../../utils/isBrowser";
 
 export interface DropdownCoords {
   top: number;

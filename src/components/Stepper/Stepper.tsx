@@ -418,7 +418,7 @@ const StepItem = memo(function StepItem({
             ? step.label
             : `Step ${index + 1} of ${totalSteps}`
         }
-        className="cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        className={classes.indicatorButton}
         data-status={status}
         data-clickable="true"
       >
@@ -555,6 +555,8 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
           classesProp?.stepInteractive ?? baseClasses.stepInteractive,
         stepDisabled: classesProp?.stepDisabled ?? baseClasses.stepDisabled,
         indicator: classesProp?.indicator ?? baseClasses.indicator,
+        indicatorButton:
+          classesProp?.indicatorButton ?? baseClasses.indicatorButton,
         indicatorIcon:
           classesProp?.indicatorIcon ?? baseClasses.indicatorIcon,
         indicatorActive:
@@ -628,24 +630,26 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     const getStatus = getStepStatus || defaultGetStepStatus;
     const checkClickable = isStepClickable || defaultIsStepClickable;
 
-    if (process.env.NODE_ENV !== "production") {
-      if (
-        valueProp !== undefined &&
-        steps.length > 0 &&
-        !steps.some((s) => s.id === valueProp)
-      ) {
-        const looseMatch = steps.find(
-          (s) => String(s.id) === String(valueProp),
-        );
-        if (looseMatch) {
-          console.warn(
-            `Stepper: value ${JSON.stringify(valueProp)} (${typeof valueProp}) does not match any step ID. ` +
-              `Did you mean ${JSON.stringify(looseMatch.id)} (${typeof looseMatch.id})? ` +
-              `Step IDs use strict equality (===) for matching.`,
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (
+          valueProp !== undefined &&
+          steps.length > 0 &&
+          !steps.some((s) => s.id === valueProp)
+        ) {
+          const looseMatch = steps.find(
+            (s) => String(s.id) === String(valueProp),
           );
+          if (looseMatch) {
+            console.warn(
+              `Stepper: value ${JSON.stringify(valueProp)} (${typeof valueProp}) does not match any step ID. ` +
+                `Did you mean ${JSON.stringify(looseMatch.id)} (${typeof looseMatch.id})? ` +
+                `Step IDs use strict equality (===) for matching.`,
+            );
+          }
         }
       }
-    }
+    }, [valueProp, steps]);
 
     const stepRefs = useRef<(HTMLElement | null)[]>([]);
     const getStatusRef = useRef(getStatus);

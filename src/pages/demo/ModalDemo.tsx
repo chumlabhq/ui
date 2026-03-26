@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal } from "../../components/Modal";
 import { Button } from "../../components/Button";
-import { Section, ComponentHeader } from "./components";
+import { Section, ComponentHeader, PropsTable, PropRow } from "./components";
 
 const modalContentClass =
   "w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden";
@@ -1490,46 +1490,23 @@ const ModalDemo = () => {
           Optional sub-components for more granular control over modal structure.
           These can be used instead of or in addition to the built-in header/body structure.
         </p>
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Component
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Props
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">ModalHeader</td>
-                <td className="py-2 pr-4 text-gray-600">children, className</td>
-                <td className="py-2 text-gray-600">
-                  Custom header wrapper with data-modal-header attribute
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">ModalBody</td>
-                <td className="py-2 pr-4 text-gray-600">children, className</td>
-                <td className="py-2 text-gray-600">
-                  Custom body wrapper with data-modal-body attribute
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">ModalFooter</td>
-                <td className="py-2 pr-4 text-gray-600">children, className</td>
-                <td className="py-2 text-gray-600">
-                  Custom footer wrapper with data-modal-footer attribute
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable>
+          <PropRow
+            name="ModalHeader"
+            type="ReactNode + className?"
+            description="Custom header wrapper with data-modal-header attribute"
+          />
+          <PropRow
+            name="ModalBody"
+            type="ReactNode + className?"
+            description="Custom body wrapper with data-modal-body attribute"
+          />
+          <PropRow
+            name="ModalFooter"
+            type="ReactNode + className?"
+            description="Custom footer wrapper with data-modal-footer attribute"
+          />
+        </PropsTable>
       </Section>
     </>
   );

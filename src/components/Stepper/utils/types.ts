@@ -48,6 +48,7 @@ export interface StepperClasses {
   stepInteractive?: string;
   stepDisabled?: string;
   indicator?: string;
+  indicatorButton?: string;
   indicatorIcon?: string;
   indicatorActive?: string;
   indicatorCompleted?: string;

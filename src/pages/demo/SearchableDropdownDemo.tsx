@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { SearchableDropdown } from "../../components/SearchableDropdown";
-import type { SearchableDropdownOptionType } from "../../components/SearchableDropdown";
+import type { SearchableDropdownOption } from "../../components/SearchableDropdown";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
@@ -24,7 +24,7 @@ interface RestCountryResponse {
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 
-const fruitOptions: SearchableDropdownOptionType[] = [
+const fruitOptions: SearchableDropdownOption[] = [
   { value: "apple", label: "Apple" },
   { value: "banana", label: "Banana" },
   { value: "cherry", label: "Cherry" },
@@ -37,7 +37,7 @@ const fruitOptions: SearchableDropdownOptionType[] = [
   { value: "lemon", label: "Lemon" },
 ];
 
-const countryOptions: SearchableDropdownOptionType[] = [
+const countryOptions: SearchableDropdownOption[] = [
   { value: "us", label: "United States", content: <span>🇺🇸 United States</span> },
   { value: "gb", label: "United Kingdom", content: <span>🇬🇧 United Kingdom</span> },
   { value: "ca", label: "Canada", content: <span>🇨🇦 Canada</span> },
@@ -47,7 +47,7 @@ const countryOptions: SearchableDropdownOptionType[] = [
   { value: "jp", label: "Japan", content: <span>🇯🇵 Japan</span> },
 ];
 
-const statusOptions: SearchableDropdownOptionType[] = [
+const statusOptions: SearchableDropdownOption[] = [
   {
     value: "active",
     label: "Active",
@@ -98,7 +98,7 @@ const statusOptions: SearchableDropdownOptionType[] = [
   },
 ];
 
-const disabledItemOptions: SearchableDropdownOptionType[] = [
+const disabledItemOptions: SearchableDropdownOption[] = [
   { value: "option1", label: "Available Option 1" },
   { value: "option2", label: "Disabled Option", disabled: true },
   { value: "option3", label: "Available Option 2" },
@@ -254,7 +254,7 @@ const SearchableDropdownDemo = () => {
   const [keyDownMessage, setKeyDownMessage] = useState<string>("");
 
   const mapCountryToOption = useCallback(
-    (country: RestCountryResponse): SearchableDropdownOptionType => ({
+    (country: RestCountryResponse): SearchableDropdownOption => ({
       value: country.cca2,
       label: country.name.common,
       content: (
@@ -277,7 +277,7 @@ const SearchableDropdownDemo = () => {
   );
 
   const handleAsyncSearch = useCallback(
-    async (query: string): Promise<SearchableDropdownOptionType[]> => {
+    async (query: string): Promise<SearchableDropdownOption[]> => {
       if (!query.trim()) return [];
       const response = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(query)}`);
       if (!response.ok) {
@@ -290,7 +290,7 @@ const SearchableDropdownDemo = () => {
     [mapCountryToOption],
   );
 
-  const handleLoadInitialOptions = useCallback(async (): Promise<SearchableDropdownOptionType[]> => {
+  const handleLoadInitialOptions = useCallback(async (): Promise<SearchableDropdownOption[]> => {
     const response = await fetch(
       "https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region",
     );

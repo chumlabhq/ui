@@ -12,7 +12,8 @@ function getFirstEnabledIndex(opts: MultiSelectOption[]): number {
 
 export function useMultiSelectDropdown({
   options = [],
-  value,
+  value: valueProp,
+  defaultValue: defaultValueProp,
   disabled = false,
   onValueChange,
   onLoadOptions,
@@ -24,6 +25,11 @@ export function useMultiSelectDropdown({
   label,
   "aria-label": ariaLabel,
 }: UseMultiSelectDropdownProps): UseMultiSelectDropdownReturn {
+  const [value, setValue] = useControllableState<string[]>({
+    value: valueProp,
+    defaultValue: defaultValueProp ?? [],
+  });
+
   const [isOpen, setIsOpen] = useControllableState<boolean>({
     value: openProp,
     defaultValue: defaultOpen,
@@ -123,24 +129,25 @@ export function useMultiSelectDropdown({
         ? value.filter((v) => v !== option.value)
         : [...value, option.value];
 
+      setValue(newValues);
       const newSelectedOptions = displayOptions.filter((opt) =>
         newValues.includes(opt.value),
       );
-
-      onValueChange(newValues, newSelectedOptions);
+      onValueChange?.(newValues, newSelectedOptions);
     },
-    [value, displayOptions, onValueChange],
+    [value, displayOptions, onValueChange, setValue],
   );
 
   const handleRemoveOption = useCallback(
     (optionValue: string) => {
       const newValues = value.filter((v) => v !== optionValue);
+      setValue(newValues);
       const newSelectedOptions = displayOptions.filter((opt) =>
         newValues.includes(opt.value),
       );
-      onValueChange(newValues, newSelectedOptions);
+      onValueChange?.(newValues, newSelectedOptions);
     },
-    [value, displayOptions, onValueChange],
+    [value, displayOptions, onValueChange, setValue],
   );
 
   const handleKeyDown = useCallback(
@@ -227,6 +234,7 @@ export function useMultiSelectDropdown({
 
   return {
     isOpen,
+    currentValue: value,
     focusedIndex,
     isLoadingOptions,
     displayOptions,

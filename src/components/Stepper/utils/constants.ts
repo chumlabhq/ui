@@ -10,6 +10,8 @@ export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   stepDisabled: "opacity-50 cursor-not-allowed",
   indicator:
     "shrink-0 rounded-full flex items-center justify-center transition-colors motion-reduce:transition-none",
+  indicatorButton:
+    "cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
   indicatorIcon: "",
   indicatorActive: "bg-blue-600 text-white",
   indicatorCompleted: "bg-green-500 text-white",
@@ -44,6 +46,7 @@ export const UNSTYLED_STEPPER_CLASSES: Required<StepperClasses> = {
   stepInteractive: "",
   stepDisabled: "",
   indicator: "",
+  indicatorButton: "",
   indicatorIcon: "",
   indicatorActive: "",
   indicatorCompleted: "",

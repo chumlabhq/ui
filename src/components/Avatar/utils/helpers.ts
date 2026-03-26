@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { AvatarSize, AvatarColors, AvatarStatus, CornerPosition, BadgeSize, BadgeOverlap, BadgeOffset } from "../types";
+import type { AvatarSize, AvatarColors, AvatarStatus, CornerPosition, BadgeSize, BadgeOverlap, BadgeOffset } from "./types";
 import {
   SIZE_MAP,
   FONT_SIZE_MAP,

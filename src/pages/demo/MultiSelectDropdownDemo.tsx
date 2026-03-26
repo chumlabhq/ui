@@ -1274,13 +1274,13 @@ const MultiSelectDropdownDemo = () => {
       {/* ─── Empty Options ───────────────────────────────────────────────── */}
       <Section
         title="Empty Options"
-        description="When no options are available, noResultsText or noResultsContent is shown."
+        description="When no options are available, noResultsContent is shown."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap gap-8">
             <div className="w-72">
-              <DemoLabel isDarkMode={dark}>Default text (noResultsText)</DemoLabel>
+              <DemoLabel isDarkMode={dark}>Default noResultsContent</DemoLabel>
               <MultiSelectDropdown
                 options={[]}
                 value={[]}
@@ -1393,8 +1393,7 @@ const MultiSelectDropdownDemo = () => {
             <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred list position" isDarkMode={dark} />
             <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="Listbox z-index" isDarkMode={dark} />
             <PropRow name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and list (px)" isDarkMode={dark} />
-            <PropRow name="noResultsText" type="string" defaultVal='"No options available"' description="Default empty state text" isDarkMode={dark} />
-            <PropRow name="noResultsContent" type="ReactNode" description="Empty state (overrides noResultsText when set)" isDarkMode={dark} />
+            <PropRow name="noResultsContent" type="ReactNode" defaultVal='"No options available"' description="Custom empty state content" isDarkMode={dark} />
             <PropRow name="aria-label" type="string" description="Listbox aria-label override" isDarkMode={dark} />
             <PropRow name="onBlur" type="() => void" description="Trigger blur callback" isDarkMode={dark} />
             <PropRow name="onFocus" type="() => void" description="Trigger focus callback" isDarkMode={dark} />

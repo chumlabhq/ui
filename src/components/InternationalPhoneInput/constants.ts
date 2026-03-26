@@ -1,4 +1,5 @@
-import type { CountryOption } from "./types";
+import type { CountryOption } from "./utils/types";
+import type { InternationalPhoneInputClasses } from "./utils/types";
 
 export const PHONE_FORMATTING_PATTERNS: Record<
   string,
@@ -20,6 +21,61 @@ export const PHONE_FORMATTING_PATTERNS: Record<
       return `${digits.slice(0, 5)} ${digits.slice(5, 8)} ${digits.slice(8)}`;
     },
     countries: ["gb"],
+  },
+  FRANCE: {
+    pattern: (digits: string) => {
+      if (digits.length <= 2) return digits;
+      const groups = digits.match(/.{1,2}/g) || [];
+      return groups.join(" ");
+    },
+    countries: ["fr"],
+  },
+  GERMANY: {
+    pattern: (digits: string) => {
+      if (digits.length <= 4) return digits;
+      if (digits.length <= 8) return `${digits.slice(0, 4)} ${digits.slice(4)}`;
+      return `${digits.slice(0, 4)} ${digits.slice(4, 8)} ${digits.slice(8)}`;
+    },
+    countries: ["de"],
+  },
+  JAPAN: {
+    pattern: (digits: string) => {
+      if (digits.length <= 3) return digits;
+      if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+      return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+    },
+    countries: ["jp"],
+  },
+  INDIA: {
+    pattern: (digits: string) => {
+      if (digits.length <= 5) return digits;
+      return `${digits.slice(0, 5)} ${digits.slice(5, 10)}`;
+    },
+    countries: ["in"],
+  },
+  AUSTRALIA: {
+    pattern: (digits: string) => {
+      if (digits.length <= 4) return digits;
+      return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+    },
+    countries: ["au"],
+  },
+  BRAZIL: {
+    pattern: (digits: string) => {
+      if (digits.length <= 2) return digits;
+      if (digits.length <= 7)
+        return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+      return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+    },
+    countries: ["br"],
+  },
+  CHINA: {
+    pattern: (digits: string) => {
+      if (digits.length <= 3) return digits;
+      if (digits.length <= 7) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+      return `${digits.slice(0, 3)} ${digits.slice(3, 7)} ${digits.slice(7)}`;
+    },
+    countries: ["cn"],
   },
   DEFAULT: {
     pattern: (digits: string) => {
@@ -88,5 +144,81 @@ export const PHONE_LENGTH_RULES: Record<string, { min: number; max: number }> = 
   DE: { min: 10, max: 11 },
   FR: { min: 9, max: 9 },
   IN: { min: 10, max: 10 },
+  JP: { min: 10, max: 11 },
+  CN: { min: 11, max: 11 },
+  KR: { min: 10, max: 11 },
+  SG: { min: 8, max: 8 },
+  HK: { min: 8, max: 8 },
+  BR: { min: 10, max: 11 },
+  MX: { min: 10, max: 10 },
+  IT: { min: 9, max: 11 },
+  ES: { min: 9, max: 9 },
+  NL: { min: 9, max: 9 },
+  BE: { min: 9, max: 9 },
+  CH: { min: 9, max: 9 },
+  AT: { min: 10, max: 13 },
+  SE: { min: 9, max: 10 },
+  NO: { min: 8, max: 8 },
+  DK: { min: 8, max: 8 },
+  FI: { min: 9, max: 10 },
+  IE: { min: 9, max: 9 },
+  PT: { min: 9, max: 9 },
+  PL: { min: 9, max: 9 },
+  CZ: { min: 9, max: 9 },
+  NZ: { min: 9, max: 10 },
+  AR: { min: 10, max: 10 },
+  ZA: { min: 9, max: 9 },
+  AE: { min: 9, max: 9 },
+  SA: { min: 9, max: 9 },
+  IL: { min: 9, max: 9 },
+  RU: { min: 10, max: 10 },
+  TR: { min: 10, max: 10 },
+  TH: { min: 9, max: 9 },
+  MY: { min: 9, max: 10 },
+  ID: { min: 10, max: 12 },
+  PH: { min: 10, max: 10 },
+  VN: { min: 9, max: 10 },
   DEFAULT: { min: 7, max: 15 },
+};
+
+export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {
+  root: "",
+  label: "",
+  wrapper: "",
+  input: "",
+  error: "",
+  success: "",
+  countrySelect: "",
+  countrySelectTrigger: "",
+  countrySelectDropdown: "",
+  countrySelectSearchInput: "",
+  countrySelectSearchInputElement: "",
+  countrySelectOption: "",
+  countrySelectOptionSelected: "",
+  countrySelectOptionList: "",
+  countrySelectChevron: "",
+  countrySelectCheckIcon: "",
+  countrySelectSearchIcon: "",
+  countrySelectNoResults: "",
+};
+
+export const UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {
+  root: "",
+  label: "",
+  wrapper: "",
+  input: "",
+  error: "",
+  success: "",
+  countrySelect: "",
+  countrySelectTrigger: "",
+  countrySelectDropdown: "",
+  countrySelectSearchInput: "",
+  countrySelectSearchInputElement: "",
+  countrySelectOption: "",
+  countrySelectOptionSelected: "",
+  countrySelectOptionList: "",
+  countrySelectChevron: "",
+  countrySelectCheckIcon: "",
+  countrySelectSearchIcon: "",
+  countrySelectNoResults: "",
 };

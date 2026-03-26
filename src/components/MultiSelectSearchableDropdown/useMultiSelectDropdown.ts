@@ -3,20 +3,26 @@ import type {
   MultiSelectOption,
   UseMultiSelectDropdownProps,
   UseMultiSelectDropdownReturn,
-} from "./types";
+} from "./utils/types";
 import { useControllableState } from "../../utils/useControllableState";
+
+function getFirstEnabledIndex(opts: MultiSelectOption[]): number {
+  return opts.findIndex((o) => !o.disabled);
+}
 
 export function useMultiSelectDropdown({
   options = [],
   value,
+  defaultValue,
   disabled = false,
   showSearch = true,
   onSearch,
   searchDebounceMs = 300,
-  onChange,
+  onValueChange,
   initialOptions = [],
   onLoadInitialOptions,
   loadInitialOnOpen = false,
+  onLoadError,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -27,6 +33,11 @@ export function useMultiSelectDropdown({
     value: openProp,
     defaultValue: defaultOpen,
     onChange: onOpenChange,
+  });
+
+  const [currentValues, setCurrentValues] = useControllableState<string[]>({
+    value,
+    defaultValue: defaultValue ?? [],
   });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,8 +80,8 @@ export function useMultiSelectDropdown({
   }, [options, asyncOptions, allInitialOptions, isAsync]);
 
   const selectedOptions = useMemo(
-    () => allOptions.filter((option) => value.includes(option.value)),
-    [allOptions, value]
+    () => allOptions.filter((option) => currentValues.includes(option.value)),
+    [allOptions, currentValues]
   );
 
   const filteredSyncOptions = useMemo(() => {
@@ -102,13 +113,13 @@ export function useMultiSelectDropdown({
         setLoadedInitialOptions(results);
         setHasLoadedInitial(true);
       })
-      .catch((error) => {
-        console.error("Failed to load initial options:", error);
+      .catch((error: unknown) => {
+        onLoadError?.(error);
       })
       .finally(() => {
         setIsLoadingInitial(false);
       });
-  }, [isOpen, loadInitialOnOpen, onLoadInitialOptions, hasLoadedInitial]);
+  }, [isOpen, loadInitialOnOpen, onLoadInitialOptions, hasLoadedInitial, onLoadError]);
 
   useEffect(() => {
     if (!isAsync || !onSearch || !searchQuery.trim()) {
@@ -127,8 +138,8 @@ export function useMultiSelectDropdown({
       try {
         const results = await onSearch(searchQuery);
         setAsyncOptions(results);
-      } catch (error) {
-        console.error("Search failed:", error);
+      } catch (error: unknown) {
+        onLoadError?.(error);
         setAsyncOptions([]);
       } finally {
         setIsSearching(false);
@@ -140,7 +151,7 @@ export function useMultiSelectDropdown({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchQuery, onSearch, searchDebounceMs, isAsync]);
+  }, [searchQuery, onSearch, searchDebounceMs, isAsync, onLoadError]);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
@@ -170,29 +181,30 @@ export function useMultiSelectDropdown({
     (option: MultiSelectOption) => {
       if (option.disabled) return;
 
-      const isSelected = value.includes(option.value);
+      const isSelected = currentValues.includes(option.value);
       const newValues = isSelected
-        ? value.filter((v) => v !== option.value)
-        : [...value, option.value];
+        ? currentValues.filter((v) => v !== option.value)
+        : [...currentValues, option.value];
 
+      setCurrentValues(newValues);
       const newSelectedOptions = allOptions.filter((opt) =>
         newValues.includes(opt.value)
       );
-
-      onChange(newValues, newSelectedOptions);
+      onValueChange?.(newValues, newSelectedOptions);
     },
-    [value, allOptions, onChange]
+    [currentValues, allOptions, onValueChange, setCurrentValues]
   );
 
   const handleRemoveOption = useCallback(
     (optionValue: string) => {
-      const newValues = value.filter((v) => v !== optionValue);
+      const newValues = currentValues.filter((v) => v !== optionValue);
+      setCurrentValues(newValues);
       const newSelectedOptions = allOptions.filter((opt) =>
         newValues.includes(opt.value)
       );
-      onChange(newValues, newSelectedOptions);
+      onValueChange?.(newValues, newSelectedOptions);
     },
-    [value, allOptions, onChange]
+    [currentValues, allOptions, onValueChange, setCurrentValues]
   );
 
   const handleKeyDown = useCallback(
@@ -228,28 +240,57 @@ export function useMultiSelectDropdown({
           event.preventDefault();
           if (!isOpen) {
             setIsOpen(true);
-            setFocusedIndex(0);
+            const first = getFirstEnabledIndex(displayOptions);
+            if (first !== -1) setFocusedIndex(first);
           } else {
-            setFocusedIndex((prev) =>
-              prev < displayOptions.length - 1 ? prev + 1 : 0
-            );
+            setFocusedIndex((prev) => {
+              const nextIndex = prev < displayOptions.length - 1 ? prev + 1 : 0;
+              for (let i = nextIndex; i < displayOptions.length; i++) {
+                if (!displayOptions[i].disabled) return i;
+              }
+              for (let i = 0; i < nextIndex; i++) {
+                if (!displayOptions[i].disabled) return i;
+              }
+              return prev;
+            });
           }
           break;
         case "ArrowUp":
           event.preventDefault();
           if (isOpen) {
-            setFocusedIndex((prev) =>
-              prev > 0 ? prev - 1 : displayOptions.length - 1
-            );
+            setFocusedIndex((prev) => {
+              const nextIndex = prev > 0 ? prev - 1 : displayOptions.length - 1;
+              for (let i = nextIndex; i >= 0; i--) {
+                if (!displayOptions[i].disabled) return i;
+              }
+              for (let i = displayOptions.length - 1; i > nextIndex; i--) {
+                if (!displayOptions[i].disabled) return i;
+              }
+              return prev;
+            });
           }
           break;
         case "Home":
           event.preventDefault();
-          if (isOpen) setFocusedIndex(0);
+          if (isOpen) {
+            const firstEnabledIndex = displayOptions.findIndex(
+              (option) => !option.disabled,
+            );
+            if (firstEnabledIndex !== -1) {
+              setFocusedIndex(firstEnabledIndex);
+            }
+          }
           break;
         case "End":
           event.preventDefault();
-          if (isOpen) setFocusedIndex(displayOptions.length - 1);
+          if (isOpen) {
+            for (let i = displayOptions.length - 1; i >= 0; i--) {
+              if (!displayOptions[i].disabled) {
+                setFocusedIndex(i);
+                break;
+              }
+            }
+          }
           break;
       }
     },
@@ -264,6 +305,7 @@ export function useMultiSelectDropdown({
     isLoadingInitial,
     displayOptions,
     selectedOptions,
+    selectedValues: currentValues,
     shouldRestoreFocusRef,
     setSearchQuery,
     setFocusedIndex,

@@ -1,5 +1,5 @@
 import { forwardRef, useMemo } from "react";
-import type { AvatarBadgeProps } from "../types";
+import type { AvatarBadgeProps } from "../utils/types";
 import { Slot } from "../../../utils/Slot";
 import { getBadgePosition, getBadgeSizeClasses } from "../utils/helpers";
 import { cn } from "../../../utils/cn";

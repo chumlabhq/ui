@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type { SearchableDropdownOption } from "./types";
 import { useControllableState } from "../../../utils/useControllableState";
+import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
 
 interface UseDropdownProps {
   options?: SearchableDropdownOption[];
@@ -166,19 +167,18 @@ export function useDropdown({
   }, [options, searchQuery, showSearch, isAsync]);
 
   const displayOptions = useMemo(() => {
-    let opts: SearchableDropdownOption[];
     if (isAsync) {
       if (searchQuery.trim()) {
-        opts = asyncOptions;
-      } else {
-        opts = allInitialOptions;
+        return asyncOptions;
       }
-    } else {
-      opts = filteredSyncOptions;
+      return allInitialOptions;
     }
-    displayOptionsRef.current = opts;
-    return opts;
+    return filteredSyncOptions;
   }, [isAsync, searchQuery, asyncOptions, allInitialOptions, filteredSyncOptions]);
+
+  useIsomorphicLayoutEffect(() => {
+    displayOptionsRef.current = displayOptions;
+  });
 
   useEffect(() => {
     loadInitialMountedRef.current = true;
@@ -187,45 +187,74 @@ export function useDropdown({
     };
   }, []);
 
-  useEffect(() => {
-    setHasLoadedInitial(false);
-  }, [onLoadInitialOptions, loadInitialOnOpen]);
-
-  useEffect(() => {
-    if (!isOpen || !loadInitialOnOpen || !onLoadInitialOptions || hasLoadedInitial) {
-      return;
+  // Reset hasLoadedInitial when load config changes (render-time derived state)
+  const [prevLoadConfig, setPrevLoadConfig] = useState({ onLoadInitialOptions, loadInitialOnOpen });
+  if (
+    prevLoadConfig.onLoadInitialOptions !== onLoadInitialOptions ||
+    prevLoadConfig.loadInitialOnOpen !== loadInitialOnOpen
+  ) {
+    setPrevLoadConfig({ onLoadInitialOptions, loadInitialOnOpen });
+    if (hasLoadedInitial) {
+      setHasLoadedInitial(false);
     }
+  }
 
-    setIsLoadingInitial(true);
+  // Derive: should load initial options
+  const shouldLoadInitial = isOpen && loadInitialOnOpen && !!onLoadInitialOptions && !hasLoadedInitial;
+
+  // Derive loading state from shouldLoadInitial (pre-fetch = loading)
+  const [prevShouldLoad, setPrevShouldLoad] = useState(false);
+  if (prevShouldLoad !== shouldLoadInitial) {
+    setPrevShouldLoad(shouldLoadInitial);
+    if (shouldLoadInitial) {
+      setIsLoadingInitial(true);
+    }
+  }
+
+  useEffect(() => {
+    if (!shouldLoadInitial || !onLoadInitialOptions) return;
+
+    let cancelled = false;
     onLoadInitialOptions()
       .then((results) => {
-        if (!loadInitialMountedRef.current) return;
+        if (cancelled) return;
         setLoadedInitialOptions(results);
         setHasLoadedInitial(true);
       })
-      .catch((error) => {
-        if (!loadInitialMountedRef.current) return;
+      .catch((error: unknown) => {
+        if (cancelled) return;
         onLoadError?.(error);
       })
       .finally(() => {
-        if (loadInitialMountedRef.current) {
+        if (!cancelled) {
           setIsLoadingInitial(false);
         }
       });
-  }, [isOpen, loadInitialOnOpen, onLoadInitialOptions, hasLoadedInitial, onLoadError]);
+    return () => { cancelled = true; };
+  }, [shouldLoadInitial, onLoadInitialOptions, onLoadError]);
+
+  // Derive: should we be in search mode
+  const hasActiveSearch = isAsync && !!onSearch && !!searchQuery.trim();
+
+  // Reset async state when search clears (render-time derived state)
+  const [prevHasActiveSearch, setPrevHasActiveSearch] = useState(false);
+  if (prevHasActiveSearch !== hasActiveSearch) {
+    setPrevHasActiveSearch(hasActiveSearch);
+    if (!hasActiveSearch) {
+      if (asyncOptions.length > 0) setAsyncOptions([]);
+      if (isSearching) setIsSearching(false);
+    } else {
+      if (!isSearching) setIsSearching(true);
+    }
+  }
 
   useEffect(() => {
-    if (!isAsync || !onSearch || !searchQuery.trim()) {
-      setAsyncOptions([]);
-      setIsSearching(false);
-      return;
-    }
+    if (!hasActiveSearch || !onSearch) return;
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
 
-    setIsSearching(true);
     const currentVersion = ++searchVersionRef.current;
 
     debounceRef.current = setTimeout(() => {
@@ -253,7 +282,7 @@ export function useDropdown({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchQuery, onSearch, searchDebounceMs, isAsync, onLoadError]);
+  }, [hasActiveSearch, searchQuery, onSearch, searchDebounceMs, isAsync, onLoadError]);
 
   const handleOpen = useCallback(() => {
     if (disabled) return;

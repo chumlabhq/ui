@@ -22,6 +22,3 @@ export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> = {
   overlay: "",
   panel: "",
 };
-
-/** @deprecated Use DEFAULT_DRAWER_CLASSES */
-export const DEFAULT_CLASS_NAMES = DEFAULT_DRAWER_CLASSES;

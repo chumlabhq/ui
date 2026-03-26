@@ -1,9 +1,25 @@
-import { useState, useCallback, useMemo, useId, forwardRef } from "react";
-import type { InternationalPhoneInputProps, CountryOption } from "./types";
+import {
+  useCallback,
+  useMemo,
+  useId,
+  forwardRef,
+  useRef,
+  useEffect,
+  useState,
+  type CSSProperties,
+} from "react";
+import type {
+  InternationalPhoneInputProps,
+  InternationalPhoneInputClasses,
+  CountryOption,
+  PhoneNumberValue,
+} from "./utils/types";
 import {
   DEFAULT_COUNTRIES,
   DEFAULT_PREFERRED_COUNTRIES,
   DEFAULT_COUNTRY,
+  DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES,
+  UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
 } from "./constants";
 import {
   findCountryByCode,
@@ -13,10 +29,48 @@ import {
   getDigitsOnly,
   parseInternationalNumber,
   formatForCopy,
+  computeCursorPosition,
 } from "./utils";
 import { CountryFlag } from "../CountryFlag";
 import { SearchableDropdown } from "../SearchableDropdown";
-import type { SearchableDropdownOptionType } from "../SearchableDropdown";
+import type { SearchableDropdownOption } from "../SearchableDropdown";
+import { useControllableState } from "../../utils/useControllableState";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
+import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/mergeRefs";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+
+function resolveInitialCountry(
+  value: PhoneNumberValue | undefined,
+  defaultValue: PhoneNumberValue | undefined,
+  defaultCountry: string,
+  countries: CountryOption[],
+): string {
+  const code = value?.countryCode || defaultValue?.countryCode;
+  if (code) {
+    const found = findCountryByCode(code, countries);
+    return found?.value || defaultCountry.toUpperCase();
+  }
+  const found = findCountryByCode(defaultCountry, countries);
+  return found?.value || "US";
+}
+
+function resolveInitialPhone(
+  value: PhoneNumberValue | undefined,
+  defaultValue: PhoneNumberValue | undefined,
+  defaultCountry: string,
+  countries: CountryOption[],
+): string {
+  const src = value || defaultValue;
+  if (src?.phoneNumber) {
+    const country = findCountryByCode(
+      src.countryCode || defaultCountry,
+      countries,
+    );
+    return formatPhoneNumber(src.phoneNumber, country);
+  }
+  return "";
+}
 
 const InternationalPhoneInput = forwardRef<
   HTMLInputElement,
@@ -25,7 +79,8 @@ const InternationalPhoneInput = forwardRef<
   (
     {
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
       onCountryChange,
       defaultCountry = DEFAULT_COUNTRY,
       countries = DEFAULT_COUNTRIES,
@@ -35,95 +90,189 @@ const InternationalPhoneInput = forwardRef<
       label,
       required = false,
       disabled = false,
+      readOnly = false,
       error = false,
       errorMessage,
+      success = false,
+      successMessage,
       placeholder = "Enter phone number",
       fullWidth = false,
       validateOnBlur = true,
-      containerClassName = "",
-      labelClassName = "",
-      errorClassName = "",
-      inputClassName = "",
-      inputFocusClassName = "",
-      inputWrapperClassName = "",
-      countrySelectClassName = "",
-      countrySelectTriggerClassName = "",
-      countrySelectDropdownClassName = "",
-      countrySelectSearchInputClassName = "",
-      countrySelectOptionClassName = "",
-      countrySelectOptionSelectedClassName = "",
-      countrySelectOptionListClassName = "",
-      countrySelectChevronClassName = "",
-      countrySelectSelectedIndicatorClassName = "",
-      countrySelectSelectedIndicator,
-      countrySelectSearchIconClassName = "",
-      countrySelectNoResultsClassName = "",
-      countryDropdownPlaceholder = "Country",
-      countrySearchPlaceholder = "Search countries...",
+      validationMessage,
       enablePasteDetection = false,
       copyFormat = "e164",
       onPasteDetected,
+      countryDropdownPlaceholder = "Country",
+      countrySearchPlaceholder = "Search countries...",
+      countryDropdownAriaLabel = "Select country",
+      selectedIcon,
+      renderCountryOption,
+      renderSelectedCountry,
+      formatPatterns,
+      lengthRules,
+      className,
+      style,
+      classes: classesProp,
+      unstyled = false,
+      onFocus,
+      onBlur,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      ...rest
     },
     ref,
   ) => {
+    const baseClasses = unstyled
+      ? UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES
+      : DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES;
+
+    const mergedClasses: Required<InternationalPhoneInputClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        label: classesProp?.label ?? baseClasses.label,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        input: classesProp?.input ?? baseClasses.input,
+        error: classesProp?.error ?? baseClasses.error,
+        success: classesProp?.success ?? baseClasses.success,
+        countrySelect: classesProp?.countrySelect ?? baseClasses.countrySelect,
+        countrySelectTrigger:
+          classesProp?.countrySelectTrigger ?? baseClasses.countrySelectTrigger,
+        countrySelectDropdown:
+          classesProp?.countrySelectDropdown ??
+          baseClasses.countrySelectDropdown,
+        countrySelectSearchInput:
+          classesProp?.countrySelectSearchInput ??
+          baseClasses.countrySelectSearchInput,
+        countrySelectSearchInputElement:
+          classesProp?.countrySelectSearchInputElement ??
+          baseClasses.countrySelectSearchInputElement,
+        countrySelectOption:
+          classesProp?.countrySelectOption ?? baseClasses.countrySelectOption,
+        countrySelectOptionSelected:
+          classesProp?.countrySelectOptionSelected ??
+          baseClasses.countrySelectOptionSelected,
+        countrySelectOptionList:
+          classesProp?.countrySelectOptionList ??
+          baseClasses.countrySelectOptionList,
+        countrySelectChevron:
+          classesProp?.countrySelectChevron ?? baseClasses.countrySelectChevron,
+        countrySelectCheckIcon:
+          classesProp?.countrySelectCheckIcon ??
+          baseClasses.countrySelectCheckIcon,
+        countrySelectSearchIcon:
+          classesProp?.countrySelectSearchIcon ??
+          baseClasses.countrySelectSearchIcon,
+        countrySelectNoResults:
+          classesProp?.countrySelectNoResults ??
+          baseClasses.countrySelectNoResults,
+      }),
+      [classesProp, baseClasses],
+    );
+
     const generatedId = useId();
-    const inputId = id || name || generatedId;
+    const inputId = id || generatedId;
+    const labelId = `${inputId}-label`;
     const errorId = `${inputId}-error`;
+    const successId = `${inputId}-success`;
+    const statusId = `${inputId}-status`;
+
+    const warnedRef = useRef(false);
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        if (!label && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
+          warnedRef.current = true;
+          console.warn(
+            "InternationalPhoneInput: A phone input without a label requires `aria-label` or `aria-labelledby` for accessibility.",
+          );
+        }
+      }
+    }, [label, ariaLabel, ariaLabelledBy]);
 
     const sortedCountries = useMemo(
       () => sortCountryOptions(countries, preferredCountries),
       [countries, preferredCountries],
     );
 
-    const [selectedCountryCode, setSelectedCountryCode] = useState<string>(
-      () => {
-        if (value?.countryCode) {
-          const found = findCountryByCode(value.countryCode, sortedCountries);
-          return found?.value || defaultCountry.toUpperCase();
-        }
-        const found = findCountryByCode(defaultCountry, sortedCountries);
-        return found?.value || "US";
-      },
+    const [initialCountry] = useState(() =>
+      resolveInitialCountry(value, defaultValue, defaultCountry, sortedCountries),
+    );
+    const [initialPhone] = useState(() =>
+      resolveInitialPhone(value, defaultValue, defaultCountry, sortedCountries),
     );
 
-    const [phoneInput, setPhoneInput] = useState<string>(() => {
-      if (value?.phoneNumber) {
-        const country = findCountryByCode(
-          value.countryCode || defaultCountry,
-          sortedCountries,
-        );
-        return formatPhoneNumber(value.phoneNumber, country);
-      }
-      return "";
+    const [selectedCountryCode, setSelectedCountryCode] =
+      useControllableState<string>({
+        value: value?.countryCode
+          ? findCountryByCode(value.countryCode, sortedCountries)?.value
+          : undefined,
+        defaultValue: initialCountry,
+      });
+
+    const [phoneInput, setPhoneInput] = useControllableState<string>({
+      value: value
+        ? formatPhoneNumber(
+            value.phoneNumber,
+            findCountryByCode(
+              value.countryCode || defaultCountry,
+              sortedCountries,
+            ),
+            formatPatterns,
+          )
+        : undefined,
+      defaultValue: initialPhone,
     });
 
-    const [validationError, setValidationError] = useState<string>("");
-    const [isFocused, setIsFocused] = useState<boolean>(false);
+    const [hasValidationError, setHasValidationError] = useState(false);
+
+    const internalInputRef = useRef<HTMLInputElement>(null);
+    const pendingCursorRef = useRef<number | null>(null);
+
+    const mergedInputRef = useMemo(() => mergeRefs(internalInputRef, ref), [ref]);
+
+    useIsomorphicLayoutEffect(() => {
+      if (pendingCursorRef.current !== null && internalInputRef.current) {
+        const pos = pendingCursorRef.current;
+        internalInputRef.current.setSelectionRange(pos, pos);
+        pendingCursorRef.current = null;
+      }
+    });
+
+    const phoneInputRef = useRef(phoneInput);
+    useEffect(() => {
+      phoneInputRef.current = phoneInput;
+    });
 
     const selectedCountry = useMemo(
       () => findCountryByCode(selectedCountryCode, sortedCountries),
       [selectedCountryCode, sortedCountries],
     );
 
-    const dropdownOptions: SearchableDropdownOptionType[] = useMemo(
+    const dropdownOptions: SearchableDropdownOption[] = useMemo(
       () =>
         sortedCountries.map((country) => ({
           value: country.value,
           label: `${country.name} ${country.dialCode}`,
-          content: (
+          content: renderCountryOption ? (
+            renderCountryOption({
+              country,
+              isSelected: country.value === selectedCountryCode,
+            })
+          ) : (
             <div className="flex items-center gap-2 min-w-0">
               <CountryFlag
                 code={country.flag}
                 size={22}
-                className="rounded-[2px]"
+                className="shrink-0 rounded-[2px]"
                 style={{ height: 17 }}
               />
-              <span className="truncate text-sm">
+              <span className="text-sm wrap-break-word min-w-0">
                 {country.name} ({country.dialCode})
               </span>
             </div>
           ),
-          selectedContent: (
+          selectedContent: renderSelectedCountry ? (
+            renderSelectedCountry(country)
+          ) : (
             <div className="flex items-center gap-2">
               <CountryFlag
                 code={country.flag}
@@ -135,75 +284,123 @@ const InternationalPhoneInput = forwardRef<
             </div>
           ),
         })),
-      [sortedCountries],
+      [
+        sortedCountries,
+        renderCountryOption,
+        renderSelectedCountry,
+        selectedCountryCode,
+      ],
     );
 
     const emitChange = useCallback(
       (digits: string, country: CountryOption | null) => {
-        if (!onChange) return;
-        const phoneData = validatePhoneNumber(digits, country);
-        onChange(phoneData);
+        if (!onValueChange) return;
+        const phoneData = validatePhoneNumber(
+          digits,
+          country,
+          lengthRules,
+          formatPatterns,
+        );
+        onValueChange(phoneData);
       },
-      [onChange],
+      [onValueChange, lengthRules, formatPatterns],
     );
 
     const handleCountrySelect = useCallback(
       (countryValue: string | null) => {
-        if (!countryValue) return;
+        if (!countryValue || readOnly) return;
         const country = sortedCountries.find((c) => c.value === countryValue);
         if (!country) return;
 
         setSelectedCountryCode(countryValue);
-        setValidationError("");
+        setHasValidationError(false);
 
         onCountryChange?.(country);
 
-        const digits = getDigitsOnly(phoneInput);
-        const formatted = formatPhoneNumber(digits, country);
+        const digits = getDigitsOnly(phoneInputRef.current);
+        const formatted = formatPhoneNumber(digits, country, formatPatterns);
         setPhoneInput(formatted);
         emitChange(digits, country);
       },
-      [sortedCountries, phoneInput, onCountryChange, emitChange],
+      [
+        sortedCountries,
+        onCountryChange,
+        emitChange,
+        readOnly,
+        setSelectedCountryCode,
+        setPhoneInput,
+        formatPatterns,
+      ],
     );
 
     const handlePhoneInputChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = e.target.value;
+        if (readOnly) return;
+        const input = e.target;
+        const rawValue = input.value;
+        const cursorPos = input.selectionStart ?? rawValue.length;
+
         const digits = getDigitsOnly(rawValue);
-        const formatted = formatPhoneNumber(digits, selectedCountry);
+        const formatted = formatPhoneNumber(
+          digits,
+          selectedCountry,
+          formatPatterns,
+        );
+
+        pendingCursorRef.current = computeCursorPosition(
+          rawValue,
+          formatted,
+          cursorPos,
+        );
 
         setPhoneInput(formatted);
-        setValidationError("");
+        setHasValidationError(false);
         emitChange(digits, selectedCountry);
       },
-      [selectedCountry, emitChange],
+      [selectedCountry, emitChange, readOnly, setPhoneInput, formatPatterns],
     );
 
-    const handleFocus = useCallback(() => {
-      setIsFocused(true);
-    }, []);
+    const handleBlur = useCallback(
+      (e: React.FocusEvent<HTMLInputElement>) => {
+        onBlur?.(e);
 
-    const handleBlur = useCallback(() => {
-      setIsFocused(false);
-      if (!validateOnBlur) return;
+        if (!validateOnBlur) return;
 
-      const digits = getDigitsOnly(phoneInput);
-      if (!digits) return;
+        const digits = getDigitsOnly(phoneInput);
+        if (!digits) return;
 
-      const phoneData = validatePhoneNumber(digits, selectedCountry);
-      if (!phoneData.isValid) {
-        setValidationError("Please enter a valid phone number");
-      }
-    }, [phoneInput, selectedCountry, validateOnBlur]);
+        const phoneData = validatePhoneNumber(
+          digits,
+          selectedCountry,
+          lengthRules,
+          formatPatterns,
+        );
+        if (!phoneData.isValid) {
+          setHasValidationError(true);
+        }
+      },
+      [
+        phoneInput,
+        selectedCountry,
+        validateOnBlur,
+        onBlur,
+        lengthRules,
+        formatPatterns,
+      ],
+    );
 
     const handlePaste = useCallback(
       (e: React.ClipboardEvent<HTMLInputElement>) => {
-        if (!enablePasteDetection) return;
+        if (!enablePasteDetection || readOnly) return;
 
         const pastedText = e.clipboardData.getData("text");
         if (!pastedText) return;
 
-        const parsed = parseInternationalNumber(pastedText, sortedCountries);
+        const parsed = parseInternationalNumber(
+          pastedText,
+          sortedCountries,
+          preferredCountries,
+        );
 
         if (parsed.detectedCountry) {
           e.preventDefault();
@@ -211,10 +408,11 @@ const InternationalPhoneInput = forwardRef<
           setSelectedCountryCode(parsed.detectedCountry.value);
           const formatted = formatPhoneNumber(
             parsed.phoneNumber,
-            parsed.detectedCountry
+            parsed.detectedCountry,
+            formatPatterns,
           );
           setPhoneInput(formatted);
-          setValidationError("");
+          setHasValidationError(false);
 
           onCountryChange?.(parsed.detectedCountry);
           emitChange(parsed.phoneNumber, parsed.detectedCountry);
@@ -227,9 +425,13 @@ const InternationalPhoneInput = forwardRef<
         } else if (parsed.phoneNumber) {
           e.preventDefault();
 
-          const formatted = formatPhoneNumber(parsed.phoneNumber, selectedCountry);
+          const formatted = formatPhoneNumber(
+            parsed.phoneNumber,
+            selectedCountry,
+            formatPatterns,
+          );
           setPhoneInput(formatted);
-          setValidationError("");
+          setHasValidationError(false);
           emitChange(parsed.phoneNumber, selectedCountry);
 
           onPasteDetected?.({
@@ -241,12 +443,17 @@ const InternationalPhoneInput = forwardRef<
       },
       [
         enablePasteDetection,
+        readOnly,
         sortedCountries,
+        preferredCountries,
         selectedCountry,
         onCountryChange,
         emitChange,
         onPasteDetected,
-      ]
+        setSelectedCountryCode,
+        setPhoneInput,
+        formatPatterns,
+      ],
     );
 
     const handleCopy = useCallback(
@@ -255,87 +462,179 @@ const InternationalPhoneInput = forwardRef<
         if (!digits) return;
 
         e.preventDefault();
-        const formatted = formatForCopy(digits, selectedCountry, copyFormat);
+        const formatted = formatForCopy(
+          digits,
+          selectedCountry,
+          copyFormat,
+          formatPatterns,
+        );
         e.clipboardData.setData("text/plain", formatted);
       },
-      [phoneInput, selectedCountry, copyFormat]
+      [phoneInput, selectedCountry, copyFormat, formatPatterns],
     );
 
-    const displayError = error || !!validationError;
-    const displayErrorMessage = errorMessage || validationError;
+    const displayError = error || hasValidationError;
+    const internalErrorMessage = hasValidationError
+      ? (validationMessage ?? "Please enter a valid phone number")
+      : undefined;
+    const displayErrorMessage = errorMessage || internalErrorMessage;
+    const displaySuccess = success && !displayError;
+    const displaySuccessMessage = displaySuccess ? successMessage : undefined;
+
+    const describedByParts: string[] = [];
+    if (displayError && displayErrorMessage) describedByParts.push(errorId);
+    if (displaySuccess && displaySuccessMessage)
+      describedByParts.push(successId);
+    const ariaDescribedBy =
+      describedByParts.length > 0 ? describedByParts.join(" ") : undefined;
+
+    const statusMessage = selectedCountry
+      ? `${selectedCountry.name} ${selectedCountry.dialCode}`
+      : "";
+
+    const rootClassName = cn(mergedClasses.root, className) || undefined;
+    const rootStyle: CSSProperties = {
+      ...(fullWidth ? { width: "100%" } : {}),
+      ...style,
+    };
+    const hasRootStyle = Object.keys(rootStyle).length > 0;
 
     return (
       <div
-        className={[containerClassName, fullWidth ? "w-full" : ""]
-          .filter(Boolean)
-          .join(" ")}
+        className={rootClassName}
+        style={hasRootStyle ? rootStyle : undefined}
+        data-slot="root"
         data-disabled={disabled || undefined}
         data-error={displayError || undefined}
+        data-success={displaySuccess || undefined}
+        data-readonly={readOnly || undefined}
+        data-full-width={fullWidth || undefined}
       >
         {label && (
-          <label htmlFor={inputId} className={labelClassName}>
+          <label
+            id={labelId}
+            htmlFor={inputId}
+            className={mergedClasses.label || undefined}
+            data-slot="label"
+          >
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
         )}
 
-        <div className={inputWrapperClassName}>
+        <div
+          className={mergedClasses.wrapper || undefined}
+          data-slot="wrapper"
+          role="group"
+          aria-labelledby={label ? labelId : undefined}
+          aria-label={!label ? (ariaLabel || "Phone number input") : undefined}
+        >
           <SearchableDropdown
             options={dropdownOptions}
             value={selectedCountryCode}
             onValueChange={handleCountrySelect}
             placeholder={countryDropdownPlaceholder}
-            disabled={disabled}
+            disabled={disabled || readOnly}
             showSearch={true}
             searchPlaceholder={countrySearchPlaceholder}
             showChevron={true}
-            selectedIcon={countrySelectSelectedIndicator}
+            selectedIcon={selectedIcon}
+            aria-label={countryDropdownAriaLabel}
             classes={{
-              root: countrySelectClassName,
-              trigger: countrySelectTriggerClassName,
-              content: countrySelectDropdownClassName,
-              searchInput: countrySelectSearchInputClassName,
-              option: countrySelectOptionClassName,
-              optionSelected: countrySelectOptionSelectedClassName,
-              optionList: countrySelectOptionListClassName,
-              chevron: countrySelectChevronClassName,
-              checkIcon: countrySelectSelectedIndicatorClassName,
-              searchIcon: countrySelectSearchIconClassName,
-              noResults: countrySelectNoResultsClassName,
+              root: mergedClasses.countrySelect,
+              trigger: mergedClasses.countrySelectTrigger,
+              content: mergedClasses.countrySelectDropdown,
+              searchInput: mergedClasses.countrySelectSearchInput,
+              searchInputElement: mergedClasses.countrySelectSearchInputElement,
+              option: mergedClasses.countrySelectOption,
+              optionSelected: mergedClasses.countrySelectOptionSelected,
+              optionList: mergedClasses.countrySelectOptionList,
+              chevron: mergedClasses.countrySelectChevron,
+              checkIcon: mergedClasses.countrySelectCheckIcon,
+              searchIcon: mergedClasses.countrySelectSearchIcon,
+              noResults: mergedClasses.countrySelectNoResults,
             }}
           />
 
           <input
-            ref={ref}
+            ref={mergedInputRef}
             id={inputId}
             type="tel"
-            name={name}
             value={phoneInput}
             onChange={handlePhoneInputChange}
-            onFocus={handleFocus}
+            onFocus={onFocus}
             onBlur={handleBlur}
             onPaste={handlePaste}
             onCopy={handleCopy}
             placeholder={placeholder}
             disabled={disabled}
+            readOnly={readOnly}
             required={required}
             aria-invalid={displayError || undefined}
-            aria-describedby={
-              displayError && displayErrorMessage ? errorId : undefined
-            }
+            aria-describedby={ariaDescribedBy}
             aria-required={required || undefined}
-            className={[inputClassName, isFocused ? inputFocusClassName : ""]
-              .filter(Boolean)
-              .join(" ")}
+            aria-label={!label ? ariaLabel : undefined}
+            aria-labelledby={!label ? ariaLabelledBy : undefined}
+            className={mergedClasses.input || undefined}
+            data-slot="input"
             data-disabled={disabled || undefined}
             data-error={displayError || undefined}
-            data-focused={isFocused || undefined}
+            data-success={displaySuccess || undefined}
+            data-readonly={readOnly || undefined}
+            {...rest}
           />
         </div>
 
+        {name && (
+          <>
+            <input
+              type="hidden"
+              name={`${name}_country`}
+              value={selectedCountryCode}
+              aria-hidden="true"
+            />
+            <input
+              type="hidden"
+              name={name}
+              value={
+                selectedCountry
+                  ? `${selectedCountry.dialCode}${getDigitsOnly(phoneInput)}`
+                  : getDigitsOnly(phoneInput)
+              }
+              aria-hidden="true"
+            />
+          </>
+        )}
+
+        <div
+          id={statusId}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={SR_ONLY_STYLE}
+        >
+          {statusMessage}
+        </div>
+
         {displayError && displayErrorMessage && (
-          <div id={errorId} role="alert" className={errorClassName}>
+          <div
+            id={errorId}
+            role="alert"
+            className={mergedClasses.error || undefined}
+            data-slot="error"
+          >
             {displayErrorMessage}
+          </div>
+        )}
+
+        {displaySuccess && displaySuccessMessage && (
+          <div
+            id={successId}
+            role="status"
+            className={mergedClasses.success || undefined}
+            data-slot="success"
+          >
+            {displaySuccessMessage}
           </div>
         )}
       </div>

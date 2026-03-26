@@ -1,8 +1,8 @@
-import type { MultiSelectSearchableDropdownClasses } from "./types";
+import type { MultiSelectSearchableDropdownClasses } from "./utils/types";
 
 export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelectSearchableDropdownClasses> = {
   root: "",
-  container: "",
+  wrapper: "",
   trigger: "",
   triggerText: "",
   content: "",
@@ -29,7 +29,7 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
 
 export const UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelectSearchableDropdownClasses> = {
   root: "",
-  container: "",
+  wrapper: "",
   trigger: "",
   triggerText: "",
   content: "",

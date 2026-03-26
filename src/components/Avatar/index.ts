@@ -1,4 +1,5 @@
 export { Avatar } from "./Avatar";
+export { default } from "./Avatar";
 export { AvatarGroup } from "./components/AvatarGroup";
 export { AvatarGroupCount } from "./components/AvatarGroupCount";
 export { AvatarBadge } from "./components/AvatarBadge";
@@ -32,4 +33,4 @@ export type {
   BadgeOverlap,
   CountVariant,
   GroupVariant,
-} from "./types";
+} from "./utils/types";

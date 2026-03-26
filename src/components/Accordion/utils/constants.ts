@@ -33,10 +33,6 @@ export const UNSTYLED_ACCORDION_CLASSES: Required<AccordionClasses> = {
   heading: "",
 };
 
-/** @deprecated Use DEFAULT_ACCORDION_CLASSES */
-export const DEFAULT_CLASS_NAMES = DEFAULT_ACCORDION_CLASSES;
-/** @deprecated Use UNSTYLED_ACCORDION_CLASSES */
-export const UNSTYLED_CLASS_NAMES = UNSTYLED_ACCORDION_CLASSES;
 
 export const DEFAULT_ANIMATION_DURATION = 300;
 export const DEFAULT_HEADING_LEVEL = 3 as const;
@@ -125,16 +121,3 @@ export function getDefaultStorageConfig(): Omit<StorageConfig, "key"> {
   };
 }
 
-/**
- * @deprecated Use `getDefaultStorageConfig()` instead to avoid SSR issues.
- */
-export const DEFAULT_STORAGE_CONFIG: Omit<StorageConfig, "key"> = {
-  serialize: (values: string[]) => JSON.stringify(values),
-  deserialize: (stored: string) => {
-    try {
-      return JSON.parse(stored);
-    } catch {
-      return [];
-    }
-  },
-};

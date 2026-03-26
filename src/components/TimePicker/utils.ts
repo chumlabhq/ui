@@ -1,4 +1,4 @@
-import type { TimeFormat, TimeValue } from "./types";
+import type { TimeFormat, TimeValue } from "./utils/types";
 
 const pad = (n: number): string => n.toString().padStart(2, "0");
 

@@ -1,8 +1,7 @@
 export { default as SearchableDropdown } from "./SearchableDropdown";
-export { SearchableDropdownOption } from "./components/SearchableDropdownOption";
 export { default as SearchableDropdownShimmer } from "./components/SearchableDropdownShimmer";
 export type {
-  SearchableDropdownOption as SearchableDropdownOptionType,
+  SearchableDropdownOption,
   SearchableDropdownProps,
   SearchableDropdownClasses,
   SearchableDropdownTriggerRenderProps,

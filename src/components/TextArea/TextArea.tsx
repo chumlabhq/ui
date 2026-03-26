@@ -12,6 +12,7 @@ import { DEFAULT_TEXTAREA_CLASSES, UNSTYLED_TEXTAREA_CLASSES } from "./utils/con
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
 export const TextAreaLabel = FieldLabel;
@@ -89,21 +90,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       onChange: onValueChange,
     });
 
-    // Internal ref — merged with consumer's forwarded ref via callback
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
-
-    const setRef = useCallback(
-      (node: HTMLTextAreaElement | null) => {
-        internalRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current =
-            node;
-        }
-      },
-      [ref],
-    );
+    const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
     // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
@@ -230,7 +218,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       >
         <textarea
           {...rest}
-          ref={setRef}
+          ref={mergedRef}
           id={textAreaId}
           name={name}
           required={required}

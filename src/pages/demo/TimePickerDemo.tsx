@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TimePicker, type TimeValue } from "../../components/TimePicker";
-import { Section, ComponentHeader } from "./components";
+import { Section, ComponentHeader, PropsTable, PropRow } from "./components";
 
 const triggerStyle =
   "flex items-center gap-2 w-full px-3 py-2 border border-gray-300 rounded-lg bg-white hover:border-gray-400 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent cursor-text";
@@ -1613,6 +1613,47 @@ const TimePickerDemo = () => {
             </tbody>
           </table>
         </div>
+      </Section>
+
+      <Section
+        title="Core API (PropsTable)"
+        description="Shared documentation layout for primary TimePicker props."
+      >
+        <PropsTable>
+          <PropRow
+            name="value"
+            type="string | null"
+            description="Controlled time value (HH:mm or 12h string per format)"
+          />
+          <PropRow
+            name="onChange"
+            type="(time, timeValue?) => void"
+            description="Called when the committed time changes"
+          />
+          <PropRow
+            name="format"
+            type='"12h" | "24h"'
+            defaultVal='"24h"'
+            description="12-hour or 24-hour display"
+          />
+          <PropRow
+            name="minuteStep"
+            type="number"
+            defaultVal="15"
+            description="Step between selectable minutes"
+          />
+          <PropRow
+            name="disabled"
+            type="boolean"
+            defaultVal="false"
+            description="Disables the control"
+          />
+          <PropRow
+            name="error"
+            type="boolean"
+            description="Error state for validation styling"
+          />
+        </PropsTable>
       </Section>
     </>
   );

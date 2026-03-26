@@ -40,8 +40,9 @@ import {
 import { DrawerContext } from "./utils/context";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
+import { mergeRefs } from "../../utils/mergeRefs";
 
-const isBrowser = typeof document !== "undefined";
+import { isBrowser } from "../../utils/isBrowser";
 
 const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (
@@ -86,6 +87,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const drawerId = `drawer-${generatedId}`;
     const titleId = `drawer-title-${generatedId}`;
     const panelRef = useRef<HTMLDivElement>(null);
+    const mergedPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
     const triggerRef = useRef<Element | null>(null);
     const restoreRafRef = useRef<number>(0);
     const [mounted, setMounted] = useState(open);
@@ -134,12 +136,15 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       [direction, size, fraction, effectiveDuration],
     );
 
-    if (open && !mounted) {
-      setMounted(true);
-    }
-
-    if (!open && visualOpen) {
-      setVisualOpen(false);
+    const [prevOpen, setPrevOpen] = useState(open);
+    if (prevOpen !== open) {
+      setPrevOpen(open);
+      if (open && !mounted) {
+        setMounted(true);
+      }
+      if (!open && visualOpen) {
+        setVisualOpen(false);
+      }
     }
 
     useEffect(() => {
@@ -514,16 +519,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
             )}
 
             <div
-              ref={(node) => {
-                (
-                  panelRef as React.MutableRefObject<HTMLDivElement | null>
-                ).current = node;
-                if (typeof ref === "function") ref(node);
-                else if (ref)
-                  (
-                    ref as React.MutableRefObject<HTMLDivElement | null>
-                  ).current = node;
-              }}
+              ref={mergedPanelRef}
               role="dialog"
               aria-modal={modal || undefined}
               aria-label={ariaLabel}

@@ -3,7 +3,7 @@ export type {
   MultiSelectOption,
   MultiSelectSearchableDropdownProps,
   MultiSelectSearchableDropdownClasses,
-} from "./types";
+} from "./utils/types";
 export { useMultiSelectDropdown } from "./useMultiSelectDropdown";
 export {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,

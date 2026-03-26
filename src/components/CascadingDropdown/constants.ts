@@ -1,8 +1,8 @@
-import type { CascadingDropdownClasses } from "./types";
+import type { CascadingDropdownClasses } from "./utils/types";
 
 export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
   root: "",
-  container: "",
+  wrapper: "",
   trigger: "flex items-center justify-between gap-2 w-full",
   menu: "min-w-[200px]",
   menuItem: "flex items-center justify-between cursor-pointer",
@@ -27,7 +27,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
 
 export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
   root: "",
-  container: "",
+  wrapper: "",
   trigger: "",
   menu: "",
   menuItem: "",

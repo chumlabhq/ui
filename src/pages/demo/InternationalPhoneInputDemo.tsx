@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   InternationalPhoneInput,
   type PhoneNumberData,
   type CountryOption,
   type PasteDetectedData,
+  type PhoneFormatPattern,
+  type PhoneLengthRule,
 } from "../../components/InternationalPhoneInput";
-import { Section, ComponentHeader } from "./components";
+import { CountryFlag } from "../../components/CountryFlag";
+import { useTheme } from "./ThemeContext";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+} from "./components";
 
-// Custom icon components
 const StarIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -16,49 +25,167 @@ const StarIcon = ({ className = "" }: { className?: string }) => (
 
 const CircleCheckIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
-    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+    <path
+      fillRule="evenodd"
+      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
 const DotIcon = ({ className = "" }: { className?: string }) => (
-  <span className={`inline-block w-2 h-2 rounded-full bg-current ${className}`} />
+  <span
+    className={`inline-block w-2 h-2 rounded-full bg-current ${className}`}
+  />
 );
 
-const containerStyle = "flex flex-col gap-1";
-const labelStyle = "text-sm font-medium text-gray-700";
-const inputWrapperStyle = "flex gap-2 items-stretch";
-const inputStyle =
-  "flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
-const errorInputStyle =
-  "flex-1 h-10 px-3 rounded-lg border border-red-500 bg-white text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-red-500";
-const inputFocusStyle = "ring-2 ring-blue-500 border-blue-500";
-const errorTextStyle = "text-sm text-red-500";
+const CheckSmallIcon = ({ className = "" }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+    <polyline points="22 4 12 14.01 9 11.01" />
+  </svg>
+);
 
-const countryTriggerStyle =
-  "flex items-center justify-between gap-2 h-10 px-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 outline-none min-w-[130px]";
-const countryDropdownStyle =
-  "absolute z-50 top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden";
-const countrySearchInputStyle =
-  "flex items-center gap-2 px-3 py-2 border-b border-gray-200";
-const countryOptionListStyle = "max-h-60 overflow-y-auto";
-const countryOptionStyle =
-  "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-gray-50 data-[focused]:bg-gray-100";
-const countryOptionSelectedStyle = "bg-blue-50";
-const countryChevronStyle = "w-4 h-4 shrink-0 transition-transform duration-200";
-const countrySelectedIndicatorStyle = "w-4 h-4 shrink-0 text-blue-600";
-const countrySearchIconStyle = "w-4 h-4 shrink-0 text-gray-400";
-const countryNoResultsStyle = "px-3 py-4 text-sm text-gray-500 text-center";
+const getClasses = (dark: boolean) => ({
+  phone: {
+    root: "flex flex-col gap-1",
+    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
+    wrapper: "flex gap-2 items-stretch",
+    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
+      dark
+        ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400/50 [color-scheme:dark]"
+        : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    }`,
+    error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
+    success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] ${
+      dark
+        ? "border-white/10 bg-white/4 hover:bg-white/6 text-gray-300"
+        : "border-gray-300 bg-white hover:bg-gray-50 text-gray-700"
+    }`,
+    countrySelectDropdown: `w-72 border rounded-lg shadow-lg overflow-hidden ${
+      dark
+        ? "bg-gray-800 border-white/10"
+        : "bg-white border-gray-200"
+    }`,
+    countrySelectSearchInput: `flex items-center gap-2 px-3 py-2 border-b ${
+      dark ? "border-white/10" : "border-gray-200"
+    }`,
+    countrySelectSearchInputElement: `flex-1 bg-transparent focus:outline-none text-sm ${
+      dark
+        ? "text-white placeholder:text-gray-400"
+        : "text-gray-900 placeholder:text-gray-400"
+    }`,
+    countrySelectOptionList: "max-h-60 overflow-y-auto",
+    countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
+      dark
+        ? "hover:bg-white/6 data-[focused]:bg-white/10 text-gray-300"
+        : "hover:bg-gray-50 data-[focused]:bg-gray-100 text-gray-700"
+    }`,
+    countrySelectOptionSelected: dark ? "bg-indigo-500/10" : "bg-blue-50",
+    countrySelectChevron:
+      "w-4 h-4 shrink-0 transition-transform duration-200",
+    countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-indigo-400" : "text-blue-600"}`,
+    countrySelectSearchIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
+    countrySelectNoResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-500" : "text-gray-500"}`,
+  },
+  phoneError: {
+    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
+      dark
+        ? "text-white placeholder:text-gray-500 border-red-400/40 bg-red-500/[0.06] focus:ring-2 focus:ring-red-500/25"
+        : "text-gray-900 placeholder:text-gray-400 border-red-500 bg-white focus:ring-2 focus:ring-red-500"
+    }`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] ${
+      dark
+        ? "border-red-400/40 bg-red-500/[0.06] hover:bg-red-500/10 text-gray-300"
+        : "border-red-500 bg-white hover:bg-red-50 text-gray-700"
+    }`,
+  },
+  phoneSuccess: {
+    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
+      dark
+        ? "text-white placeholder:text-gray-500 border-emerald-400/40 bg-emerald-500/[0.06] focus:ring-2 focus:ring-emerald-500/25"
+        : "text-gray-900 placeholder:text-gray-400 border-emerald-300 bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/15"
+    }`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] ${
+      dark
+        ? "border-emerald-400/40 bg-emerald-500/[0.06] text-gray-300"
+        : "border-emerald-300 bg-emerald-50/40 text-gray-700"
+    }`,
+  },
+  phoneDisabled: {
+    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm opacity-50 cursor-not-allowed ${
+      dark
+        ? "text-gray-500 placeholder:text-gray-600 border-white/5 bg-white/[0.02]"
+        : "text-gray-400 placeholder:text-gray-300 border-gray-200 bg-gray-50"
+    }`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] opacity-50 cursor-not-allowed ${
+      dark
+        ? "border-white/5 bg-white/[0.02] text-gray-500"
+        : "border-gray-200 bg-gray-50 text-gray-400"
+    }`,
+    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-500" : "text-gray-400"}`,
+  },
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  code: `px-1.5 py-0.5 rounded-md text-[11px] font-mono font-medium ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`,
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-600" : "text-gray-300"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
+  resultBox: `rounded-lg px-3 py-2 text-xs font-mono ${dark ? "bg-white/4 text-gray-400" : "bg-gray-50 text-gray-500"}`,
+});
+
+const EUROPEAN_COUNTRIES: CountryOption[] = [
+  { value: "GB", label: "United Kingdom (+44)", flag: "gb", dialCode: "+44", name: "United Kingdom" },
+  { value: "DE", label: "Germany (+49)", flag: "de", dialCode: "+49", name: "Germany" },
+  { value: "FR", label: "France (+33)", flag: "fr", dialCode: "+33", name: "France" },
+  { value: "IT", label: "Italy (+39)", flag: "it", dialCode: "+39", name: "Italy" },
+  { value: "ES", label: "Spain (+34)", flag: "es", dialCode: "+34", name: "Spain" },
+  { value: "NL", label: "Netherlands (+31)", flag: "nl", dialCode: "+31", name: "Netherlands" },
+  { value: "SE", label: "Sweden (+46)", flag: "se", dialCode: "+46", name: "Sweden" },
+];
+
+const CUSTOM_FORMAT_PATTERNS: Record<string, PhoneFormatPattern> = {
+  CUSTOM_SG: {
+    pattern: (digits: string) => {
+      if (digits.length <= 4) return digits;
+      return `${digits.slice(0, 4)}-${digits.slice(4, 8)}`;
+    },
+    countries: ["sg"],
+  },
+};
+
+const CUSTOM_LENGTH_RULES: Record<string, PhoneLengthRule> = {
+  SG: { min: 8, max: 8 },
+};
 
 const InternationalPhoneInputDemo = () => {
+  const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [basicValue, setBasicValue] = useState<PhoneNumberData | undefined>();
   const [labelValue, setLabelValue] = useState<PhoneNumberData | undefined>();
   const [errorValue, setErrorValue] = useState<PhoneNumberData | undefined>();
+  const [successValue, setSuccessValue] = useState<PhoneNumberData | undefined>();
   const [customValue, setCustomValue] = useState<PhoneNumberData | undefined>();
   const [copyPasteValue, setCopyPasteValue] = useState<PhoneNumberData | undefined>();
   const [lastPasteData, setLastPasteData] = useState<PasteDetectedData | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
-  
-  // Custom styling demo states
+  const [formValue, setFormValue] = useState<PhoneNumberData | undefined>();
+  const [refValue, setRefValue] = useState<PhoneNumberData | undefined>();
+
   const [customSelectedValue, setCustomSelectedValue] = useState<PhoneNumberData | undefined>();
   const [customIconValue, setCustomIconValue] = useState<PhoneNumberData | undefined>();
   const [noIconValue, setNoIconValue] = useState<PhoneNumberData | undefined>();
@@ -66,882 +193,1662 @@ const InternationalPhoneInputDemo = () => {
   const [greenFocusValue, setGreenFocusValue] = useState<PhoneNumberData | undefined>();
   const [orangeFocusValue, setOrangeFocusValue] = useState<PhoneNumberData | undefined>();
 
+  const [i18nValue, setI18nValue] = useState<PhoneNumberData | undefined>();
+  const [noBlurValidationValue, setNoBlurValidationValue] = useState<PhoneNumberData | undefined>();
+  const [copyFormatE164, setCopyFormatE164] = useState<PhoneNumberData | undefined>();
+  const [copyFormatIntl, setCopyFormatIntl] = useState<PhoneNumberData | undefined>();
+  const [copyFormatNational, setCopyFormatNational] = useState<PhoneNumberData | undefined>();
+  const [focusBlurValue, setFocusBlurValue] = useState<PhoneNumberData | undefined>();
+  const [focusBlurLog, setFocusBlurLog] = useState<string[]>([]);
+  const [renderCustomValue, setRenderCustomValue] = useState<PhoneNumberData | undefined>();
+  const [customPatternValue, setCustomPatternValue] = useState<PhoneNumberData | undefined>();
+  const [controlledResetValue, setControlledResetValue] = useState<PhoneNumberData | undefined>();
+  const [checkoutPhone, setCheckoutPhone] = useState<PhoneNumberData | undefined>();
+  const [checkoutName, setCheckoutName] = useState("");
+  const [checkoutEmail, setCheckoutEmail] = useState("");
+  const [combinedValue, setCombinedValue] = useState<PhoneNumberData | undefined>();
+  const [combinedCountry, setCombinedCountry] = useState<CountryOption | null>(null);
+  const [combinedPaste, setCombinedPaste] = useState<PasteDetectedData | null>(null);
+
+  const successOk = successValue?.isValid === true;
+
   return (
-    <>
-      <ComponentHeader
-        title="International Phone Input"
-        description="A phone number input with country code selection and automatic formatting."
-      />
-
-      <Section title="Basic Usage">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            value={basicValue}
-            onChange={setBasicValue}
-            placeholder="Enter phone number"
-            containerClassName={containerStyle}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={inputStyle}
-            inputFocusClassName={inputFocusStyle}
-            countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectSearchInputClassName={countrySearchInputStyle}
-            countrySelectOptionListClassName={countryOptionListStyle}
-            countrySelectOptionClassName={countryOptionStyle}
-            countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-            countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-            countrySelectSearchIconClassName={countrySearchIconStyle}
-            countrySelectNoResultsClassName={countryNoResultsStyle}
-          />
-          {basicValue && (
-            <div className="mt-3 p-3 bg-gray-50 rounded-lg text-sm space-y-1">
-              <p>
-                <span className="text-gray-500">Full number:</span>{" "}
-                <span className="font-mono">{basicValue.fullNumber || "-"}</span>
-              </p>
-              <p>
-                <span className="text-gray-500">Valid:</span>{" "}
-                <span
-                  className={basicValue.isValid ? "text-green-600" : "text-red-500"}
-                >
-                  {basicValue.isValid ? "Yes" : "No"}
-                </span>
-              </p>
-            </div>
-          )}
-        </div>
-      </Section>
-
-      <Section title="With Label">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            label="Phone Number"
-            required
-            value={labelValue}
-            onChange={setLabelValue}
-            placeholder="(555) 123-4567"
-            containerClassName={containerStyle}
-            labelClassName={labelStyle}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={inputStyle}
-            inputFocusClassName={inputFocusStyle}
-            countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectSearchInputClassName={countrySearchInputStyle}
-            countrySelectOptionListClassName={countryOptionListStyle}
-            countrySelectOptionClassName={countryOptionStyle}
-            countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-            countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-            countrySelectSearchIconClassName={countrySearchIconStyle}
-            countrySelectNoResultsClassName={countryNoResultsStyle}
-          />
-        </div>
-      </Section>
-
-      <Section title="Error State">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            label="Phone Number"
-            value={errorValue}
-            onChange={setErrorValue}
-            error
-            errorMessage="Please enter a valid phone number"
-            placeholder="Enter phone number"
-            containerClassName={containerStyle}
-            labelClassName={labelStyle}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={errorInputStyle}
-            errorClassName={errorTextStyle}
-            countrySelectTriggerClassName={`${countryTriggerStyle} border-red-500`}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectSearchInputClassName={countrySearchInputStyle}
-            countrySelectOptionListClassName={countryOptionListStyle}
-            countrySelectOptionClassName={countryOptionStyle}
-            countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-            countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-            countrySelectSearchIconClassName={countrySearchIconStyle}
-            countrySelectNoResultsClassName={countryNoResultsStyle}
-          />
-        </div>
-      </Section>
-
-      <Section title="With Country Change Callback">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            label="Phone Number"
-            value={customValue}
-            onChange={setCustomValue}
-            onCountryChange={setSelectedCountry}
-            placeholder="Enter phone number"
-            containerClassName={containerStyle}
-            labelClassName={labelStyle}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={inputStyle}
-            inputFocusClassName={inputFocusStyle}
-            countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectSearchInputClassName={countrySearchInputStyle}
-            countrySelectOptionListClassName={countryOptionListStyle}
-            countrySelectOptionClassName={countryOptionStyle}
-            countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-            countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-            countrySelectSearchIconClassName={countrySearchIconStyle}
-            countrySelectNoResultsClassName={countryNoResultsStyle}
-          />
-          {selectedCountry && (
-            <div className="mt-3 p-3 bg-blue-50 rounded-lg text-sm space-y-1">
-              <p>
-                <span className="text-gray-600">Country:</span>{" "}
-                {selectedCountry.name}
-              </p>
-              <p>
-                <span className="text-gray-600">Dial code:</span>{" "}
-                {selectedCountry.dialCode}
-              </p>
-            </div>
-          )}
-        </div>
-      </Section>
-
-      <Section title="Copy & Paste Detection">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            label="Phone Number"
-            value={copyPasteValue}
-            onChange={setCopyPasteValue}
-            enablePasteDetection
-            copyFormat="e164"
-            onPasteDetected={setLastPasteData}
-            placeholder="Try pasting +44 20 7123 4567"
-            containerClassName={containerStyle}
-            labelClassName={labelStyle}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={inputStyle}
-            inputFocusClassName={inputFocusStyle}
-            countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectSearchInputClassName={countrySearchInputStyle}
-            countrySelectOptionListClassName={countryOptionListStyle}
-            countrySelectOptionClassName={countryOptionStyle}
-            countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-            countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-            countrySelectSearchIconClassName={countrySearchIconStyle}
-            countrySelectNoResultsClassName={countryNoResultsStyle}
-          />
-          <div className="mt-3 space-y-2">
-            <p className="text-sm text-gray-500">
-              <strong>Paste:</strong> Try pasting numbers like <code className="bg-gray-100 px-1 rounded">+44 20 7123 4567</code> or <code className="bg-gray-100 px-1 rounded">+1 555 123 4567</code> - country auto-switches.
-            </p>
-            <p className="text-sm text-gray-500">
-              <strong>Copy:</strong> Select the number and press Ctrl+C - copies in E.164 format.
-            </p>
-          </div>
-          {lastPasteData && (
-            <div className="mt-3 p-3 bg-green-50 rounded-lg text-sm space-y-1">
-              <p className="font-medium text-green-700">Paste Detected:</p>
-              <p>
-                <span className="text-gray-600">Raw:</span>{" "}
-                <code className="bg-green-100 px-1 rounded">{lastPasteData.rawValue}</code>
-              </p>
-              <p>
-                <span className="text-gray-600">Country:</span>{" "}
-                {lastPasteData.detectedCountry?.name || "Not detected"}
-              </p>
-              <p>
-                <span className="text-gray-600">Phone:</span>{" "}
-                {lastPasteData.phoneNumber}
-              </p>
-            </div>
-          )}
-          {copyPasteValue && (
-            <div className="mt-3 p-3 bg-gray-50 rounded-lg text-sm space-y-1">
-              <p>
-                <span className="text-gray-500">E.164 (copied):</span>{" "}
-                <code className="bg-gray-100 px-1 rounded font-mono">{copyPasteValue.fullNumber}</code>
-              </p>
-              <p>
-                <span className="text-gray-500">Valid:</span>{" "}
-                <span className={copyPasteValue.isValid ? "text-green-600" : "text-red-500"}>
-                  {copyPasteValue.isValid ? "Yes" : "No"}
-                </span>
-              </p>
-            </div>
-          )}
-        </div>
-      </Section>
-
-      <Section title="Disabled State">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            label="Phone Number"
-            disabled
-            placeholder="Enter phone number"
-            containerClassName={containerStyle}
-            labelClassName={`${labelStyle} text-gray-400`}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={`${inputStyle} opacity-50 cursor-not-allowed`}
-            countrySelectTriggerClassName={`${countryTriggerStyle} opacity-50 cursor-not-allowed`}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-          />
-        </div>
-      </Section>
-
-      <Section title="Custom Preferred Countries">
-        <div className="w-full max-w-md">
-          <InternationalPhoneInput
-            label="Phone Number (UK, DE, FR first)"
-            preferredCountries={["gb", "de", "fr"]}
-            defaultCountry="gb"
-            placeholder="Enter phone number"
-            containerClassName={containerStyle}
-            labelClassName={labelStyle}
-            inputWrapperClassName={inputWrapperStyle}
-            inputClassName={inputStyle}
-            inputFocusClassName={inputFocusStyle}
-            countrySelectTriggerClassName={countryTriggerStyle}
-            countrySelectDropdownClassName={countryDropdownStyle}
-            countrySelectSearchInputClassName={countrySearchInputStyle}
-            countrySelectOptionListClassName={countryOptionListStyle}
-            countrySelectOptionClassName={countryOptionStyle}
-            countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-            countrySelectChevronClassName={countryChevronStyle}
-            countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-            countrySelectSearchIconClassName={countrySearchIconStyle}
-            countrySelectNoResultsClassName={countryNoResultsStyle}
-          />
-        </div>
-      </Section>
-
-      <Section title="Full Width">
-        <InternationalPhoneInput
-          label="Phone Number"
-          fullWidth
-          placeholder="Enter phone number"
-          containerClassName={containerStyle}
-          labelClassName={labelStyle}
-          inputWrapperClassName={inputWrapperStyle}
-          inputClassName={inputStyle}
-          inputFocusClassName={inputFocusStyle}
-          countrySelectTriggerClassName={countryTriggerStyle}
-          countrySelectDropdownClassName={countryDropdownStyle}
-          countrySelectSearchInputClassName={countrySearchInputStyle}
-          countrySelectOptionListClassName={countryOptionListStyle}
-          countrySelectOptionClassName={countryOptionStyle}
-          countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-          countrySelectChevronClassName={countryChevronStyle}
-          countrySelectSelectedIndicatorClassName={countrySelectedIndicatorStyle}
-          countrySelectSearchIconClassName={countrySearchIconStyle}
-          countrySelectNoResultsClassName={countryNoResultsStyle}
+    <div className="space-y-10">
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div
+          className={`absolute inset-0 ${
+            dark
+              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
+          }`}
         />
-      </Section>
-
-      <Section title="Custom Selected State Styling">
-        <div className="space-y-4">
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">With green highlight and left border:</p>
-            <InternationalPhoneInput
-              value={customSelectedValue}
-              onChange={setCustomSelectedValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName={inputStyle}
-              inputFocusClassName={inputFocusStyle}
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName={countryOptionStyle}
-              countrySelectOptionSelectedClassName="!bg-green-100 border-l-4 border-green-500"
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicatorClassName="w-4 h-4 shrink-0 text-green-600"
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
-            />
-          </div>
-          <p className="text-sm text-gray-500">
-            Use <code className="bg-gray-100 px-1 rounded">countrySelectOptionSelectedClassName</code> to add additional styles to the selected country option.
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
+        <div className="relative space-y-3">
+          <h1
+            className={`text-3xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            International Phone Input
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            A phone number input with country code selection, automatic
+            formatting, paste detection, copy formats, custom rendering,
+            extensible validation, and complete styling control through the
+            classes prop.
           </p>
+          <div className="pt-1">
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { InternationalPhoneInput } from "@kern-ui/international-phone-input";`}
+            />
+          </div>
+        </div>
+      </header>
+
+      <div className="space-y-8">
+        <Section
+          title="Basic Usage"
+          description="Minimal usage with just an onValueChange handler."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                aria-label="Phone number"
+                value={basicValue}
+                onValueChange={setBasicValue}
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+              {basicValue && (
+                <div className={`mt-3 ${c.resultBox}`}>
+                  <p>
+                    Full: {basicValue.fullNumber || "-"} | Valid:{" "}
+                    {basicValue.isValid ? "Yes" : "No"}
+                  </p>
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Uncontrolled Mode"
+          description="Use defaultValue for uncontrolled mode — no state management needed."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                defaultValue={{
+                  countryCode: "GB",
+                  phoneNumber: "2071234567",
+                }}
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="With Label"
+          description="Semantic label auto-associated via htmlFor."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                required
+                value={labelValue}
+                onValueChange={setLabelValue}
+                placeholder="(555) 123-4567"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Validation States"
+          description="Error and success feedback with proper ARIA attributes."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+              <div>
+                <span className={c.sectionLabel}>Error</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    label="Phone Number"
+                    value={errorValue}
+                    onValueChange={setErrorValue}
+                    error
+                    errorMessage="Please enter a valid phone number"
+                    placeholder="Enter phone number"
+                    classes={{
+                      ...c.phone,
+                      input: c.phoneError.input,
+                      countrySelectTrigger: c.phoneError.countrySelectTrigger,
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <span className={c.sectionLabel}>Success</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    label="Phone Number"
+                    value={successValue}
+                    onValueChange={setSuccessValue}
+                    success={successOk}
+                    successMessage={
+                      successOk ? (
+                        <>
+                          <CheckSmallIcon /> Phone number is valid
+                        </>
+                      ) : undefined
+                    }
+                    placeholder="Enter a valid number"
+                    classes={{
+                      ...c.phone,
+                      ...(successOk
+                        ? {
+                            input: c.phoneSuccess.input,
+                            countrySelectTrigger:
+                              c.phoneSuccess.countrySelectTrigger,
+                          }
+                        : {}),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Validation Message (i18n)"
+          description="Override the built-in validation message for internationalization or custom text."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+              <div>
+                <span className={c.sectionLabel}>Spanish</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    label="Teléfono"
+                    value={i18nValue}
+                    onValueChange={setI18nValue}
+                    validationMessage="Por favor ingrese un número válido"
+                    placeholder="Ingrese número de teléfono"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <span className={c.sectionLabel}>ReactNode message</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    label="Phone Number"
+                    validationMessage={
+                      <span className="flex items-center gap-1">
+                        <span>⚠️</span> Invalid number — check length
+                      </span>
+                    }
+                    placeholder="Enter phone number"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Validate On Blur Disabled"
+          description="Set validateOnBlur={false} to disable automatic validation on blur."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                validateOnBlur={false}
+                value={noBlurValidationValue}
+                onValueChange={setNoBlurValidationValue}
+                placeholder="No validation on blur"
+                classes={c.phone}
+              />
+              {noBlurValidationValue && (
+                <div className={`mt-3 ${c.resultBox}`}>
+                  Valid: {noBlurValidationValue.isValid ? "Yes" : "No"} (check
+                  onValueChange only)
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="With Country Change Callback"
+          description="Track country changes via onCountryChange."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                value={customValue}
+                onValueChange={setCustomValue}
+                onCountryChange={setSelectedCountry}
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+              {selectedCountry && (
+                <div className={`mt-3 ${c.resultBox}`}>
+                  Country: {selectedCountry.name} | Dial:{" "}
+                  {selectedCountry.dialCode}
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Copy & Paste Detection"
+          description="Auto-detect country from pasted international numbers. Copy in E.164 format."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                value={copyPasteValue}
+                onValueChange={setCopyPasteValue}
+                enablePasteDetection
+                copyFormat="e164"
+                onPasteDetected={setLastPasteData}
+                placeholder="Try pasting +44 20 7123 4567"
+                classes={c.phone}
+              />
+              <div className="mt-3 space-y-2">
+                <p
+                  className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  <strong>Paste:</strong> Try{" "}
+                  <code className={c.code}>+44 20 7123 4567</code> or{" "}
+                  <code className={c.code}>+1 555 123 4567</code>
+                </p>
+                <p
+                  className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  <strong>Copy:</strong> Select and Ctrl+C — copies in E.164
+                  format.
+                </p>
+              </div>
+              {lastPasteData && (
+                <div className={`mt-3 ${c.resultBox}`}>
+                  <p>
+                    Pasted: {lastPasteData.rawValue} | Country:{" "}
+                    {lastPasteData.detectedCountry?.name || "Not detected"} |
+                    Phone: {lastPasteData.phoneNumber}
+                  </p>
+                </div>
+              )}
+              {copyPasteValue && (
+                <div className={`mt-2 ${c.resultBox}`}>
+                  E.164: {copyPasteValue.fullNumber} | Valid:{" "}
+                  {copyPasteValue.isValid ? "Yes" : "No"}
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Copy Format Variants"
+          description="Control the format used when the user copies the phone number."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="space-y-6 w-full max-w-md">
+              <div>
+                <span className={c.sectionLabel}>E.164</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="E164 format"
+                    value={copyFormatE164}
+                    onValueChange={setCopyFormatE164}
+                    copyFormat="e164"
+                    placeholder="+15551234567"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <span className={c.sectionLabel}>International</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="International format"
+                    value={copyFormatIntl}
+                    onValueChange={setCopyFormatIntl}
+                    copyFormat="international"
+                    placeholder="+1 (555) 123-4567"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <span className={c.sectionLabel}>National</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="National format"
+                    value={copyFormatNational}
+                    onValueChange={setCopyFormatNational}
+                    copyFormat="national"
+                    placeholder="(555) 123-4567"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Disabled State"
+          description="Disable the entire component."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                disabled
+                placeholder="Enter phone number"
+                classes={{
+                  ...c.phone,
+                  ...c.phoneDisabled,
+                }}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Read-Only State"
+          description="Read-only allows selection and copy but prevents editing."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                readOnly
+                defaultValue={{
+                  countryCode: "US",
+                  phoneNumber: "5551234567",
+                }}
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Preferred Countries"
+          description="Control which countries appear at the top of the list."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number (UK, DE, FR first)"
+                preferredCountries={["gb", "de", "fr"]}
+                defaultCountry="gb"
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Countries List"
+          description="Pass a subset of countries via the countries prop."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="European Numbers Only"
+                countries={EUROPEAN_COUNTRIES}
+                preferredCountries={["gb"]}
+                defaultCountry="gb"
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Default Country"
+          description="Set the initially selected country without preferredCountries."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+              <div>
+                <span className={c.sectionLabel}>Japan</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Japan default"
+                    defaultCountry="jp"
+                    preferredCountries={[]}
+                    placeholder="Enter phone number"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <span className={c.sectionLabel}>India</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="India default"
+                    defaultCountry="in"
+                    preferredCountries={[]}
+                    placeholder="Enter phone number"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Full Width"
+          description="Spans the full container width."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <InternationalPhoneInput
+              label="Phone Number"
+              fullWidth
+              placeholder="Enter phone number"
+              classes={c.phone}
+            />
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Form Semantics"
+          description="Use the name prop for HTML form integration. Hidden inputs are rendered for country code and full number."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <form
+              className="w-full max-w-md space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                alert(
+                  `phone=${formData.get("phone")}\nphone_country=${formData.get("phone_country")}`,
+                );
+              }}
+            >
+              <InternationalPhoneInput
+                name="phone"
+                label="Phone Number"
+                required
+                value={formValue}
+                onValueChange={setFormValue}
+                classes={c.phone}
+              />
+              <button type="submit" className={c.btnPrimary}>
+                Submit Form
+              </button>
+            </form>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Ref Forwarding"
+          description="Access the native input for programmatic focus, selection, or value reads."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="space-y-4 w-full max-w-md">
+              <InternationalPhoneInput
+                ref={inputRef}
+                label="Phone Number"
+                value={refValue}
+                onValueChange={setRefValue}
+                classes={c.phone}
+              />
+              <div className="flex gap-2 flex-wrap">
+                {(["Focus", "Select All", "Get Value"] as const).map(
+                  (lbl) => (
+                    <button
+                      key={lbl}
+                      type="button"
+                      onClick={() => {
+                        if (lbl === "Focus") inputRef.current?.focus();
+                        else if (lbl === "Select All") {
+                          inputRef.current?.focus();
+                          inputRef.current?.select();
+                        } else if (lbl === "Get Value")
+                          alert(`"${inputRef.current?.value}"`);
+                      }}
+                      className={c.btn}
+                    >
+                      {lbl}
+                    </button>
+                  ),
+                )}
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Focus & Blur Events"
+          description="Track focus and blur events on the phone input."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md space-y-3">
+              <InternationalPhoneInput
+                label="Phone Number"
+                value={focusBlurValue}
+                onValueChange={setFocusBlurValue}
+                onFocus={() =>
+                  setFocusBlurLog((prev) => [
+                    ...prev.slice(-4),
+                    `focus @ ${new Date().toLocaleTimeString()}`,
+                  ])
+                }
+                onBlur={() =>
+                  setFocusBlurLog((prev) => [
+                    ...prev.slice(-4),
+                    `blur @ ${new Date().toLocaleTimeString()}`,
+                  ])
+                }
+                classes={c.phone}
+              />
+              {focusBlurLog.length > 0 && (
+                <div className={c.resultBox}>
+                  {focusBlurLog.map((entry, i) => (
+                    <div key={i}>{entry}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Selected State Styling"
+          description="Override selected option styles via the classes prop."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                aria-label="Phone with green highlight"
+                value={customSelectedValue}
+                onValueChange={setCustomSelectedValue}
+                placeholder="Enter phone number"
+                classes={{
+                  ...c.phone,
+                  countrySelectOptionSelected: dark
+                    ? "!bg-green-900/30 border-l-4 border-green-400"
+                    : "!bg-green-100 border-l-4 border-green-500",
+                  countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-green-400" : "text-green-600"}`,
+                }}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Selected Icon"
+          description="Provide a custom icon element for the selected country via selectedIcon."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="flex flex-wrap gap-8">
+              <div className="w-full max-w-md">
+                <span className={c.sectionLabel}>Star icon</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Star icon demo"
+                    value={customIconValue}
+                    onValueChange={setCustomIconValue}
+                    placeholder="Enter phone number"
+                    selectedIcon={
+                      <StarIcon className="w-4 h-4 shrink-0 text-yellow-500" />
+                    }
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div className="w-full max-w-md">
+                <span className={c.sectionLabel}>Circle check icon</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Circle check demo"
+                    value={customIconValue}
+                    onValueChange={setCustomIconValue}
+                    placeholder="Enter phone number"
+                    selectedIcon={
+                      <CircleCheckIcon className="w-4 h-4 shrink-0 text-green-600" />
+                    }
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div className="w-full max-w-md">
+                <span className={c.sectionLabel}>Dot indicator</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Dot indicator demo"
+                    value={noIconValue}
+                    onValueChange={setNoIconValue}
+                    placeholder="Enter phone number"
+                    selectedIcon={
+                      <DotIcon
+                        className={dark ? "text-indigo-400" : "text-blue-600"}
+                      />
+                    }
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Color Themes"
+          description="Full visual control through the classes prop."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="flex flex-wrap gap-8">
+              <div className="w-full max-w-md">
+                <span className={c.sectionLabel}>Purple theme</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Purple theme"
+                    value={purpleFocusValue}
+                    onValueChange={setPurpleFocusValue}
+                    placeholder="Enter phone number"
+                    classes={{
+                      ...c.phone,
+                      input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
+                        dark
+                          ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-purple-500/30 focus:border-purple-400/50"
+                          : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                      }`,
+                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
+                        dark
+                          ? "hover:bg-purple-500/10 data-[focused]:bg-purple-500/15 text-gray-300"
+                          : "hover:bg-purple-50 data-[focused]:bg-purple-100 text-gray-700"
+                      }`,
+                      countrySelectOptionSelected: dark
+                        ? "bg-purple-500/10"
+                        : "bg-purple-50",
+                      countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-purple-400" : "text-purple-600"}`,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="w-full max-w-md">
+                <span className={c.sectionLabel}>Green theme</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Green theme"
+                    value={greenFocusValue}
+                    onValueChange={setGreenFocusValue}
+                    placeholder="Enter phone number"
+                    classes={{
+                      ...c.phone,
+                      input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
+                        dark
+                          ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-green-500/30 focus:border-green-400/50"
+                          : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      }`,
+                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
+                        dark
+                          ? "hover:bg-green-500/10 data-[focused]:bg-green-500/15 text-gray-300"
+                          : "hover:bg-green-50 data-[focused]:bg-green-100 text-gray-700"
+                      }`,
+                      countrySelectOptionSelected: dark
+                        ? "bg-green-500/10"
+                        : "bg-green-50",
+                      countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-green-400" : "text-green-600"}`,
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="w-full max-w-md">
+                <span className={c.sectionLabel}>Orange theme</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Orange theme"
+                    value={orangeFocusValue}
+                    onValueChange={setOrangeFocusValue}
+                    placeholder="Enter phone number"
+                    classes={{
+                      ...c.phone,
+                      input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
+                        dark
+                          ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400/50"
+                          : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                      }`,
+                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
+                        dark
+                          ? "hover:bg-orange-500/10 data-[focused]:bg-orange-500/15 text-gray-300"
+                          : "hover:bg-orange-50 data-[focused]:bg-orange-100 text-gray-700"
+                      }`,
+                      countrySelectOptionSelected: dark
+                        ? "bg-orange-500/10"
+                        : "bg-orange-50",
+                      countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-orange-400" : "text-orange-600"}`,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Country Rendering"
+          description="Use renderCountryOption and renderSelectedCountry for full control over country rendering in the dropdown."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                value={renderCustomValue}
+                onValueChange={setRenderCustomValue}
+                placeholder="Enter phone number"
+                renderCountryOption={({ country, isSelected }) => (
+                  <div className="flex items-center gap-3 min-w-0">
+                    <CountryFlag
+                      code={country.flag}
+                      size={22}
+                      className="shrink-0 rounded-sm"
+                      style={{ height: 17 }}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className={`text-sm font-medium ${isSelected ? (dark ? "text-indigo-300" : "text-indigo-700") : ""}`}>
+                        {country.name}
+                      </div>
+                      <div className={`text-[11px] ${dark ? "text-gray-500" : "text-gray-400"}`}>
+                        {country.value} · {country.dialCode}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                renderSelectedCountry={(country) => (
+                  <div className="flex items-center gap-2">
+                    <CountryFlag
+                      code={country.flag}
+                      size={22}
+                      className="rounded-sm"
+                      style={{ height: 17 }}
+                    />
+                    <span className="text-xs font-medium">{country.value}</span>
+                    <span className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
+                      {country.dialCode}
+                    </span>
+                  </div>
+                )}
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Custom Format Patterns & Length Rules"
+          description="Extend or override formatting and validation rules via formatPatterns and lengthRules."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Singapore (custom format: XXXX-XXXX)"
+                defaultCountry="sg"
+                preferredCountries={["sg"]}
+                value={customPatternValue}
+                onValueChange={setCustomPatternValue}
+                formatPatterns={CUSTOM_FORMAT_PATTERNS}
+                lengthRules={CUSTOM_LENGTH_RULES}
+                placeholder="1234-5678"
+                classes={c.phone}
+              />
+              {customPatternValue && (
+                <div className={`mt-3 ${c.resultBox}`}>
+                  Full: {customPatternValue.fullNumber} | Valid:{" "}
+                  {customPatternValue.isValid ? "Yes" : "No"} | National:{" "}
+                  {customPatternValue.nationalNumber}
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Controlled Mode Reset"
+          description="Programmatically clear or reset the phone input value."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md space-y-4">
+              <InternationalPhoneInput
+                label="Phone Number"
+                value={controlledResetValue}
+                onValueChange={setControlledResetValue}
+                classes={c.phone}
+              />
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  className={c.btn}
+                  onClick={() => setControlledResetValue(undefined)}
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  className={c.btn}
+                  onClick={() =>
+                    setControlledResetValue({
+                      countryCode: "US",
+                      phoneNumber: "5551234567",
+                      fullNumber: "+15551234567",
+                      isValid: true,
+                    })
+                  }
+                >
+                  Set US Number
+                </button>
+                <button
+                  type="button"
+                  className={c.btn}
+                  onClick={() =>
+                    setControlledResetValue({
+                      countryCode: "GB",
+                      phoneNumber: "2071234567",
+                      fullNumber: "+442071234567",
+                      isValid: true,
+                    })
+                  }
+                >
+                  Set UK Number
+                </button>
+              </div>
+              {controlledResetValue && (
+                <div className={c.resultBox}>
+                  {controlledResetValue.fullNumber} |{" "}
+                  {controlledResetValue.isValid ? "Valid" : "Invalid"}
+                </div>
+              )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Unstyled Mode"
+          description="Use unstyled to strip all default classes and start from scratch."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                unstyled
+                placeholder="Unstyled input"
+                classes={{
+                  root: "flex flex-col gap-1",
+                  label: `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`,
+                  wrapper: "flex gap-2",
+                  input: `flex-1 h-10 px-3 rounded border ${dark ? "border-gray-600 bg-gray-800 text-white" : "border-gray-300 bg-white text-gray-900"}`,
+                  countrySelectTrigger: `h-10 px-3 rounded border ${dark ? "border-gray-600 bg-gray-800 text-white" : "border-gray-300 bg-white text-gray-900"}`,
+                }}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="aria-label & aria-labelledby"
+          description="Use aria-label or aria-labelledby when a visible label is not provided."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="space-y-6 w-full max-w-md">
+              <div>
+                <span className={c.sectionLabel}>aria-label</span>
+                <div className="mt-2">
+                  <InternationalPhoneInput
+                    aria-label="Mobile phone number"
+                    placeholder="No visible label"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <span className={c.sectionLabel}>aria-labelledby</span>
+                <div className="mt-2">
+                  <p
+                    id="custom-label-id"
+                    className={`text-sm mb-2 font-medium ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  >
+                    External label element
+                  </p>
+                  <InternationalPhoneInput
+                    aria-labelledby="custom-label-id"
+                    placeholder="Labeled via aria-labelledby"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Country Dropdown Customization"
+          description="Customize placeholder, search placeholder, and accessible label for the country dropdown."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                countryDropdownPlaceholder="Select region"
+                countrySearchPlaceholder="Type to filter..."
+                countryDropdownAriaLabel="Choose your country or region"
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Checkout Form"
+          description="Realistic checkout form with phone input alongside other fields."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <form
+              className="w-full max-w-md space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert(
+                  `Name: ${checkoutName}\nEmail: ${checkoutEmail}\nPhone: ${checkoutPhone?.fullNumber || "—"}\nValid: ${checkoutPhone?.isValid ? "Yes" : "No"}`,
+                );
+              }}
+            >
+              <div>
+                <label
+                  htmlFor="checkout-name"
+                  className={`text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`}
+                >
+                  Full Name
+                </label>
+                <input
+                  id="checkout-name"
+                  type="text"
+                  required
+                  value={checkoutName}
+                  onChange={(e) => setCheckoutName(e.target.value)}
+                  placeholder="John Doe"
+                  className={c.phone.input}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="checkout-email"
+                  className={`text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`}
+                >
+                  Email
+                </label>
+                <input
+                  id="checkout-email"
+                  type="email"
+                  required
+                  value={checkoutEmail}
+                  onChange={(e) => setCheckoutEmail(e.target.value)}
+                  placeholder="john@example.com"
+                  className={c.phone.input}
+                />
+              </div>
+              <InternationalPhoneInput
+                name="checkout_phone"
+                label="Phone Number"
+                required
+                value={checkoutPhone}
+                onValueChange={setCheckoutPhone}
+                enablePasteDetection
+                classes={c.phone}
+              />
+              <button type="submit" className={`w-full py-2.5 ${c.btnPrimary}`}>
+                Complete Checkout
+              </button>
+            </form>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Combined: All Features"
+          description="Kitchen-sink example combining controlled state, callbacks, paste detection, copy format, custom validation, and styling."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md space-y-3">
+              <InternationalPhoneInput
+                label="Phone Number"
+                required
+                value={combinedValue}
+                onValueChange={setCombinedValue}
+                onCountryChange={setCombinedCountry}
+                enablePasteDetection
+                onPasteDetected={setCombinedPaste}
+                copyFormat="international"
+                validateOnBlur
+                validationMessage="The phone number you entered is not valid"
+                countryDropdownAriaLabel="Select your country"
+                preferredCountries={["us", "gb", "ca", "in"]}
+                placeholder="Enter your phone number"
+                classes={c.phone}
+              />
+              <div className={c.resultBox}>
+                <div>
+                  Country: {combinedCountry?.name || combinedValue?.countryCode || "US"}{" "}
+                  {combinedCountry?.dialCode || ""}
+                </div>
+                <div>
+                  Number: {combinedValue?.fullNumber || "—"} |{" "}
+                  Valid: {combinedValue?.isValid ? "Yes" : "No"}
+                </div>
+                {combinedPaste && (
+                  <div>
+                    Last paste: {combinedPaste.rawValue} →{" "}
+                    {combinedPaste.detectedCountry?.name || "no country"}
+                  </div>
+                )}
+              </div>
+            </div>
+          </DemoWrapper>
+        </Section>
+      </div>
+
+      <Section title="InternationalPhoneInput Props" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="value"
+              type="PhoneNumberValue"
+              description="Controlled phone value ({ countryCode, phoneNumber })"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultValue"
+              type="PhoneNumberValue"
+              description="Initial phone value (uncontrolled)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(data: PhoneNumberData) => void"
+              description="Callback when phone data changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onCountryChange"
+              type="(country: CountryOption) => void"
+              description="Callback when country changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultCountry"
+              type="string"
+              defaultVal='"us"'
+              description="Default country code"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countries"
+              type="CountryOption[]"
+              defaultVal="DEFAULT_COUNTRIES"
+              description="List of available countries"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="preferredCountries"
+              type="string[]"
+              defaultVal='["us","gb","ca","au"]'
+              description="Countries to show at top of list"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="ReactNode"
+              description="Label text (auto-associated via htmlFor)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="required"
+              type="boolean"
+              defaultVal="false"
+              description="Whether the field is required"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Whether the input is disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="readOnly"
+              type="boolean"
+              defaultVal="false"
+              description="Whether the input is read-only"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="boolean"
+              defaultVal="false"
+              description="Whether to show error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorMessage"
+              type="ReactNode"
+              description='Error message (role="alert")'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="success"
+              type="boolean"
+              defaultVal="false"
+              description="Whether to show success state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="successMessage"
+              type="ReactNode"
+              description='Success message (role="status")'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="placeholder"
+              type="string"
+              defaultVal='"Enter phone number"'
+              description="Input placeholder text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fullWidth"
+              type="boolean"
+              defaultVal="false"
+              description="Whether to take full width"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="validateOnBlur"
+              type="boolean"
+              defaultVal="true"
+              description="Whether to validate on blur"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="validationMessage"
+              type="ReactNode"
+              description="Custom validation error message (i18n support)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="enablePasteDetection"
+              type="boolean"
+              defaultVal="false"
+              description="Auto-detect country from pasted numbers"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="copyFormat"
+              type='"e164"|"international"|"national"'
+              defaultVal='"e164"'
+              description="Format used when copying (Ctrl+C)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onPasteDetected"
+              type="(data: PasteDetectedData) => void"
+              description="Callback when paste is detected"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="name"
+              type="string"
+              description="Form field name (renders hidden inputs)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              description="Custom ID (auto-generated if omitted)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countryDropdownPlaceholder"
+              type="string"
+              defaultVal='"Country"'
+              description="Placeholder for country dropdown trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySearchPlaceholder"
+              type="string"
+              defaultVal='"Search countries..."'
+              description="Placeholder for country search input"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countryDropdownAriaLabel"
+              type="string"
+              defaultVal='"Select country"'
+              description="Accessible label for the country dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="selectedIcon"
+              type="ReactNode"
+              description="Custom icon for selected country option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderCountryOption"
+              type="(props: CountryOptionRenderProps) => ReactNode"
+              description="Custom renderer for country options in dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderSelectedCountry"
+              type="(country: CountryOption) => ReactNode"
+              description="Custom renderer for selected country in trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="formatPatterns"
+              type="Record<string, PhoneFormatPattern>"
+              description="Custom formatting patterns (extends defaults)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lengthRules"
+              type="Record<string, PhoneLengthRule>"
+              description="Custom validation length rules (extends defaults)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class for the root container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles for the root container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="InternationalPhoneInputClasses"
+              description="Slot-based class overrides for internal elements"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+          </PropsTable>
         </div>
       </Section>
 
-      <Section title="Custom Selected Icon">
-        <div className="flex flex-wrap gap-8">
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">Star icon:</p>
-            <InternationalPhoneInput
-              value={customIconValue}
-              onChange={setCustomIconValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName={inputStyle}
-              inputFocusClassName={inputFocusStyle}
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName={countryOptionStyle}
-              countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicator={<StarIcon className="w-4 h-4 shrink-0 text-yellow-500" />}
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
+      <Section title="InternationalPhoneInputClasses Slots" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="root"
+              type="string"
+              description="Outer container div"
+              isDarkMode={dark}
             />
-          </div>
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">Circle check icon:</p>
-            <InternationalPhoneInput
-              value={customIconValue}
-              onChange={setCustomIconValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName={inputStyle}
-              inputFocusClassName={inputFocusStyle}
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName={countryOptionStyle}
-              countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicator={<CircleCheckIcon className="w-4 h-4 shrink-0 text-green-600" />}
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
+            <PropRow
+              name="label"
+              type="string"
+              description="Label element"
+              isDarkMode={dark}
             />
-          </div>
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">Dot indicator:</p>
-            <InternationalPhoneInput
-              value={noIconValue}
-              onChange={setNoIconValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName={inputStyle}
-              inputFocusClassName={inputFocusStyle}
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName={countryOptionStyle}
-              countrySelectOptionSelectedClassName={countryOptionSelectedStyle}
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicator={<DotIcon className="text-blue-600" />}
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
+            <PropRow
+              name="wrapper"
+              type="string"
+              description="Wrapper around dropdown and input"
+              isDarkMode={dark}
             />
-          </div>
-        </div>
-        <p className="text-sm text-gray-500 mt-4">
-          Use <code className="bg-gray-100 px-1 rounded">countrySelectSelectedIndicator</code> to provide a custom icon element for the selected country.
-        </p>
-      </Section>
-
-      <Section title="Custom Focus State Styling">
-        <p className="text-sm text-gray-600 mb-4">
-          Customize the focus ring colors for both the input and country dropdown trigger.
-        </p>
-        <div className="flex flex-wrap gap-8">
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">Purple focus ring:</p>
-            <InternationalPhoneInput
-              value={purpleFocusValue}
-              onChange={setPurpleFocusValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName="flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none"
-              inputFocusClassName="ring-2 ring-purple-500 border-purple-500"
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-purple-50 data-[focused]:bg-purple-100"
-              countrySelectOptionSelectedClassName="bg-purple-50"
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicatorClassName="w-4 h-4 shrink-0 text-purple-600"
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
+            <PropRow
+              name="input"
+              type="string"
+              description="Phone number input element"
+              isDarkMode={dark}
             />
-          </div>
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">Green focus ring:</p>
-            <InternationalPhoneInput
-              value={greenFocusValue}
-              onChange={setGreenFocusValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName="flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none"
-              inputFocusClassName="ring-2 ring-green-500 border-green-500"
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-green-50 data-[focused]:bg-green-100"
-              countrySelectOptionSelectedClassName="bg-green-50"
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicatorClassName="w-4 h-4 shrink-0 text-green-600"
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
+            <PropRow
+              name="error"
+              type="string"
+              description="Error message div"
+              isDarkMode={dark}
             />
-          </div>
-          <div className="w-full max-w-md">
-            <p className="text-sm text-gray-600 mb-2">Orange focus ring:</p>
-            <InternationalPhoneInput
-              value={orangeFocusValue}
-              onChange={setOrangeFocusValue}
-              placeholder="Enter phone number"
-              containerClassName={containerStyle}
-              inputWrapperClassName={inputWrapperStyle}
-              inputClassName="flex-1 h-10 px-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 outline-none"
-              inputFocusClassName="ring-2 ring-orange-500 border-orange-500"
-              countrySelectTriggerClassName={countryTriggerStyle}
-              countrySelectDropdownClassName={countryDropdownStyle}
-              countrySelectSearchInputClassName={countrySearchInputStyle}
-              countrySelectOptionListClassName={countryOptionListStyle}
-              countrySelectOptionClassName="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-orange-50 data-[focused]:bg-orange-100"
-              countrySelectOptionSelectedClassName="bg-orange-50"
-              countrySelectChevronClassName={countryChevronStyle}
-              countrySelectSelectedIndicatorClassName="w-4 h-4 shrink-0 text-orange-600"
-              countrySelectSearchIconClassName={countrySearchIconStyle}
-              countrySelectNoResultsClassName={countryNoResultsStyle}
+            <PropRow
+              name="success"
+              type="string"
+              description="Success message div"
+              isDarkMode={dark}
             />
-          </div>
+            <PropRow
+              name="countrySelect"
+              type="string"
+              description="Country dropdown root"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectTrigger"
+              type="string"
+              description="Country dropdown trigger button"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectDropdown"
+              type="string"
+              description="Dropdown menu container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectSearchInput"
+              type="string"
+              description="Search input wrapper in dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectSearchInputElement"
+              type="string"
+              description="Search input element inside wrapper"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectOption"
+              type="string"
+              description="Individual country option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectOptionSelected"
+              type="string"
+              description="Additional classes for selected option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectOptionList"
+              type="string"
+              description="Options list container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectChevron"
+              type="string"
+              description="Chevron icon in trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectCheckIcon"
+              type="string"
+              description="Selected indicator icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectSearchIcon"
+              type="string"
+              description="Search icon in search input"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="countrySelectNoResults"
+              type="string"
+              description="No results message"
+              isDarkMode={dark}
+            />
+          </PropsTable>
         </div>
       </Section>
 
-      <Section title="Props Reference">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">ref</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  Ref&lt;HTMLInputElement&gt;
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Ref forwarded to the phone input element
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">id</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">auto-generated</td>
-                <td className="py-2 text-gray-600">Custom ID for the input</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">name</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Name attribute for the input</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">value</td>
-                <td className="py-2 pr-4 text-gray-600">PhoneNumberData</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Current phone number data</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onChange</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (data: PhoneNumberData) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Callback when phone data changes
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onCountryChange
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (country: CountryOption) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Callback when country changes
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  defaultCountry
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"us"</td>
-                <td className="py-2 text-gray-600">Default country code</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">countries</td>
-                <td className="py-2 pr-4 text-gray-600">CountryOption[]</td>
-                <td className="py-2 pr-4 text-gray-500">DEFAULT_COUNTRIES</td>
-                <td className="py-2 text-gray-600">List of available countries</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  preferredCountries
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string[]</td>
-                <td className="py-2 pr-4 text-gray-500">
-                  ["us", "gb", "ca", "au"]
-                </td>
-                <td className="py-2 text-gray-600">
-                  Countries to show at top of list
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">label</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Label text</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">required</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Whether the field is required
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">disabled</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Whether the input is disabled
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">error</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Whether to show error state</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">errorMessage</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Error message to display</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">placeholder</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Enter phone number"</td>
-                <td className="py-2 text-gray-600">Input placeholder text</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">fullWidth</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Whether to take full width</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  validateOnBlur
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Whether to validate on blur</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  enablePasteDetection
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Auto-detect country from pasted international numbers
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">copyFormat</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "e164" | "international" | "national"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">"e164"</td>
-                <td className="py-2 text-gray-600">
-                  Format used when copying (Ctrl+C)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onPasteDetected
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (data: PasteDetectedData) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Callback when paste is detected
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countryDropdownPlaceholder
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Country"</td>
-                <td className="py-2 text-gray-600">
-                  Placeholder for country dropdown
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySearchPlaceholder
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Search countries..."</td>
-                <td className="py-2 text-gray-600">
-                  Placeholder for country search input
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <Section title="PhoneNumberValue Type" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="countryCode"
+              type="string"
+              description='ISO country code (e.g., "US")'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="phoneNumber"
+              type="string"
+              description="Digits-only phone number"
+              isDarkMode={dark}
+            />
+          </PropsTable>
         </div>
       </Section>
 
-      <Section title="Styling Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  containerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Outer container wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">labelClassName</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Label element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  inputWrapperClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Wrapper around dropdown and input
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">inputClassName</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Phone number input</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  inputFocusClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Additional classes applied when input is focused
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">errorClassName</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Error message</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Country dropdown container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectTriggerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Country dropdown trigger button</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Additional classes applied when trigger is focused
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectDropdownClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Dropdown menu container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectSearchInputClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Search input wrapper in dropdown</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectOptionClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Individual country option</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectOptionSelectedClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Additional classes applied to the selected option
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectOptionListClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Options list container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectChevronClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Chevron icon in trigger</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectSelectedIndicatorClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Selected indicator icon styling (default check icon)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectSelectedIndicator
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 text-gray-600">
-                  Custom element to show for selected option (replaces check icon)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectSearchIconClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Search icon in search input</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  countrySelectNoResultsClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">No results message</td>
-              </tr>
-            </tbody>
-          </table>
+      <Section title="PhoneNumberData Type" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="countryCode"
+              type="string"
+              description='ISO country code (e.g., "US")'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="phoneNumber"
+              type="string"
+              description="Digits only phone number"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fullNumber"
+              type="string"
+              description="Full number with dial code"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="isValid"
+              type="boolean"
+              description="Whether the phone number is valid"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="nationalNumber"
+              type="string?"
+              description="National format number"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="internationalNumber"
+              type="string?"
+              description="International format number"
+              isDarkMode={dark}
+            />
+          </PropsTable>
         </div>
       </Section>
 
-      <Section title="PhoneNumberData Type">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Property
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">countryCode</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">ISO country code (e.g., "US")</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">phoneNumber</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Digits only phone number</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">fullNumber</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Full number with dial code</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">isValid</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 text-gray-600">
-                  Whether the phone number is valid
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">nationalNumber</td>
-                <td className="py-2 pr-4 text-gray-600">string?</td>
-                <td className="py-2 text-gray-600">National format number</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  internationalNumber
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string?</td>
-                <td className="py-2 text-gray-600">International format number</td>
-              </tr>
-            </tbody>
-          </table>
+      <Section title="CountryOptionRenderProps Type" isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="country"
+              type="CountryOption"
+              description="The country option being rendered"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="isSelected"
+              type="boolean"
+              description="Whether this option is currently selected"
+              isDarkMode={dark}
+            />
+          </PropsTable>
         </div>
       </Section>
-    </>
+
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="data-slot"
+              type="root, label, wrapper, input, error, success"
+              description="Always present — identifies structural parts"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, input"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-error"
+              type="root, input"
+              description="Present when error = true"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-success"
+              type="root, input"
+              description="Present when success = true (without error)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-readonly"
+              type="root, input"
+              description="Present when readOnly = true"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-full-width"
+              type="root"
+              description="Present when fullWidth = true"
+              isDarkMode={dark}
+            />
+          </PropsTable>
+        </div>
+      </Section>
+
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            {[
+              "Label auto-associated via htmlFor",
+              'Required inputs set aria-required="true"',
+              "Error state sets aria-invalid",
+              "Error connected via aria-describedby",
+              'Error messages use role="alert"',
+              'Success messages use role="status"',
+              'Country dropdown and input grouped via role="group"',
+              "Country dropdown has configurable aria-label",
+              "Country change announced via aria-live region",
+              "Dev warning fires for missing accessible names",
+              "Supports both controlled and uncontrolled modes",
+              "Hidden inputs for form submission when name prop is provided",
+              "Ref forwarding for programmatic focus management",
+              "Cursor position preserved during formatting",
+              "All native input attributes forwarded via rest spread",
+              "data-slot on every sub-element for CSS targeting",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
+                  &#10003;
+                </span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p
+            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+          >
+            Keyboard Reference
+          </p>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
+            {[
+              ["Tab", "Move focus between country dropdown and phone input"],
+              ["Enter", "Open/select in country dropdown"],
+              ["Space", "Open country dropdown"],
+              ["Arrow keys", "Navigate country options"],
+              ["Esc", "Close country dropdown"],
+              ["Ctrl+C", "Copy phone number in configured format"],
+              ["Ctrl+V", "Paste with auto-detection (when enabled)"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+    </div>
   );
 };
 

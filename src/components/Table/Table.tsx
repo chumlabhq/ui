@@ -7,7 +7,7 @@ import {
   type Cell,
   type Header,
 } from "@tanstack/react-table";
-import type { TableProps } from "./types";
+import type { TableProps } from "./utils/types";
 import { getColumnId, getSortDirection, isInteractiveElement } from "./utils";
 import TableShimmer from "./TableShimmer";
 import { PinIcon } from "./icons";

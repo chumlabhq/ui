@@ -36,8 +36,9 @@ export interface MultiSelectDropdownClasses {
 export interface MultiSelectDropdownProps {
   options?: MultiSelectOption[];
   /** Selected values. Values not present in options are not shown or submitted; prune when options change. */
-  value: string[];
-  onValueChange: (values: string[], options: MultiSelectOption[]) => void;
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
   /** Placeholder when nothing selected. Simple text or inline content recommended. */
@@ -47,8 +48,6 @@ export interface MultiSelectDropdownProps {
   errorMessage?: ReactNode;
   label?: ReactNode;
   required?: boolean;
-  noResultsText?: string;
-  /** Empty state content. When set, overrides noResultsText. */
   noResultsContent?: ReactNode;
   showChevron?: boolean;
   fullWidth?: boolean;
@@ -82,9 +81,10 @@ export interface MultiSelectDropdownProps {
 
 export interface UseMultiSelectDropdownProps {
   options?: MultiSelectOption[];
-  value: string[];
+  value?: string[];
+  defaultValue?: string[];
   disabled?: boolean;
-  onValueChange: (values: string[], options: MultiSelectOption[]) => void;
+  onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   onLoadOptions?: () => Promise<MultiSelectOption[]>;
   loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
@@ -97,6 +97,7 @@ export interface UseMultiSelectDropdownProps {
 
 export interface UseMultiSelectDropdownReturn {
   isOpen: boolean;
+  currentValue: string[];
   focusedIndex: number;
   isLoadingOptions: boolean;
   displayOptions: MultiSelectOption[];

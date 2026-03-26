@@ -266,7 +266,7 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               value={singleDate}
-              onChange={(date) => setSingleDate(date)}
+              onValueChange={(date) => setSingleDate(date)}
               label="Select a date"
               placeholder="Pick a date..."
               showClearButton
@@ -298,7 +298,7 @@ const DatePickerDemo = () => {
             <DatePicker
               mode="range"
               rangeValue={rangeValue}
-              onRangeChange={(range) => setRangeValue(range)}
+              onRangeValueChange={(range) => setRangeValue(range)}
               label="Select a range"
               placeholder="Start date – End date"
               showClearButton
@@ -336,7 +336,7 @@ const DatePickerDemo = () => {
                 <DatePicker
                   mode="range"
                   rangeValue={rangeValue}
-                  onRangeChange={(range) => setRangeValue(range)}
+                  onRangeValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -365,7 +365,7 @@ const DatePickerDemo = () => {
                 <DatePicker
                   mode="range"
                   rangeValue={rangeValue}
-                  onRangeChange={(range) => setRangeValue(range)}
+                  onRangeValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -394,7 +394,7 @@ const DatePickerDemo = () => {
                 <DatePicker
                   mode="range"
                   rangeValue={rangeValue}
-                  onRangeChange={(range) => setRangeValue(range)}
+                  onRangeValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -429,7 +429,7 @@ const DatePickerDemo = () => {
                 <DatePicker
                   mode="range"
                   rangeValue={rangeValue}
-                  onRangeChange={(range) => setRangeValue(range)}
+                  onRangeValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -462,7 +462,7 @@ const DatePickerDemo = () => {
             <DatePicker
               mode="multiple"
               multipleValue={multipleDates}
-              onMultipleChange={(dates) => setMultipleDates(dates)}
+              onMultipleValueChange={(dates) => setMultipleDates(dates)}
               label="Select dates"
               placeholder="Pick multiple dates..."
               showClearButton
@@ -495,7 +495,7 @@ const DatePickerDemo = () => {
             <DatePicker
               mode="range"
               rangeValue={rangeValue}
-              onRangeChange={(range) => setRangeValue(range)}
+              onRangeValueChange={(range) => setRangeValue(range)}
               label="Date range with presets"
               placeholder="Select range..."
               showPresets
@@ -525,7 +525,7 @@ const DatePickerDemo = () => {
               <div className="max-w-xs">
                 <DatePicker
                   value={singleDate}
-                  onChange={(date) => setSingleDate(date)}
+                  onValueChange={(date) => setSingleDate(date)}
                   label="Calendar with markers"
                   placeholder="Pick a date..."
                   markers={markers}
@@ -682,7 +682,7 @@ const DatePickerDemo = () => {
             <DatePicker
               mode="range"
               rangeValue={rangeValue}
-              onRangeChange={(range) => setRangeValue(range)}
+              onRangeValueChange={(range) => setRangeValue(range)}
               label="Two-month range picker"
               placeholder="Select range..."
               numberOfMonths={2}
@@ -903,7 +903,7 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               value={controlledDate}
-              onChange={(date) => setControlledDate(date)}
+              onValueChange={(date) => setControlledDate(date)}
               label="Controlled"
               placeholder="Pick a date..."
               showClearButton
@@ -979,7 +979,7 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               value={singleDate}
-              onChange={(date) => setSingleDate(date)}
+              onValueChange={(date) => setSingleDate(date)}
               label="Team Calendar"
               placeholder="Pick a date..."
               markers={eventMarkers}
@@ -1035,7 +1035,7 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               value={singleDate}
-              onChange={(date) => setSingleDate(date)}
+              onValueChange={(date) => setSingleDate(date)}
               label="Custom presets"
               placeholder="Pick a date..."
               showPresets
@@ -1062,7 +1062,7 @@ const DatePickerDemo = () => {
             <DatePicker
               mode="range"
               rangeValue={rangeValue}
-              onRangeChange={(range) => setRangeValue(range)}
+              onRangeValueChange={(range) => setRangeValue(range)}
               label="Analytics period"
               placeholder="Select range..."
               showPresets
@@ -1141,7 +1141,7 @@ const DatePickerDemo = () => {
                 <div className="max-w-xs">
                   <DatePicker
                     value={controlledDate}
-                    onChange={setControlledDate}
+                    onValueChange={setControlledDate}
                     dateFormat={fmt}
                     showClearButton
                     classes={c.datepicker}
@@ -1298,9 +1298,9 @@ const DatePickerDemo = () => {
                 log(`onMonthChange: ${month.toLocaleDateString()}`)
               }
               onClear={() => log("onClear fired")}
-              onChange={(date) => {
+              onValueChange={(date) => {
                 setSingleDate(date);
-                if (date) log(`onChange: ${date.toLocaleDateString()}`);
+                if (date) log(`onValueChange: ${date.toLocaleDateString()}`);
               }}
               value={singleDate}
               classes={c.datepicker}
@@ -1455,7 +1455,7 @@ const DatePickerDemo = () => {
                 <DatePicker
                   mode="range"
                   rangeValue={rangeValue}
-                  onRangeChange={(range) => setRangeValue(range)}
+                  onRangeValueChange={(range) => setRangeValue(range)}
                   placeholder="Styled presets"
                   showPresets
                   showClearButton
@@ -1642,19 +1642,19 @@ const DatePickerDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onChange"
+              name="onValueChange"
               type="(date, dateValue) => void"
               description="Single mode callback"
               isDarkMode={dark}
             />
             <PropRow
-              name="onRangeChange"
+              name="onRangeValueChange"
               type="(range, rangeValue) => void"
               description="Range mode callback"
               isDarkMode={dark}
             />
             <PropRow
-              name="onMultipleChange"
+              name="onMultipleValueChange"
               type="(dates, dateValues) => void"
               description="Multiple mode callback"
               isDarkMode={dark}

@@ -9,7 +9,7 @@ import {
   useMemo,
 } from "react";
 import type { ReactNode } from "react";
-import type { TimePickerProps, TimeValue } from "./types";
+import type { TimePickerProps, TimeValue } from "./utils/types";
 import { useTimePicker } from "./useTimePicker";
 import { ChevronDownIcon, CheckIcon } from "./icons";
 import { ClockFace } from "./ClockFace";

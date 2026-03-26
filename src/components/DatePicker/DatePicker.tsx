@@ -16,7 +16,7 @@ import type {
   DatePreset,
   DateRange,
   DateMarker,
-} from "./types";
+} from "./utils/types";
 import { useDatePicker } from "./useDatePicker";
 import {
   CalendarIcon,
@@ -43,6 +43,7 @@ import {
   getDefaultPresets,
 } from "./utils";
 import { cn } from "../../utils/cn";
+import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import {
   DEFAULT_DATEPICKER_CLASSES,
@@ -446,9 +447,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       value,
       rangeValue,
       multipleValue,
-      onChange,
-      onRangeChange,
-      onMultipleChange,
+      onValueChange,
+      onRangeValueChange,
+      onMultipleValueChange,
       onClear,
       minDate,
       maxDate,
@@ -620,11 +621,17 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       disabled,
       showWeekNumbers,
       markers,
-      onChange,
-      onRangeChange,
-      onMultipleChange,
+      onValueChange,
+      onRangeValueChange,
+      onMultipleValueChange,
       onMonthChange,
     });
+
+    const isCalendarPositionStable = useStablePositionAfterOpen(isOpen);
+
+    const emitSingle = onValueChange;
+    const emitRange = onRangeValueChange;
+    const emitMultiple = onMultipleValueChange;
 
     // ─── Open/close callbacks ──────────────────────────────────────────
     const prevIsOpenRef = useRef<boolean | null>(null);
@@ -642,10 +649,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     // ─── Calendar positioning ───────────────────────────────────────────
     useEffect(() => {
-      if (!isOpen || !triggerRef.current) {
-        setCalendarPos(null);
-        return;
-      }
+      if (!isOpen || !triggerRef.current) return;
 
       const updatePos = () => {
         if (!triggerRef.current) return;
@@ -656,10 +660,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         });
       };
 
-      // Initial position
       updatePos();
 
-      // Reposition synchronously on scroll and resize — no RAF delay = no jitter
       if (!lockScroll) {
         window.addEventListener("scroll", updatePos, true);
       }
@@ -765,7 +767,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             date: presetValue,
             dateString: presetValue.toISOString().split("T")[0],
           };
-          onChange?.(presetValue, dateValue);
+          emitSingle?.(presetValue, dateValue);
           handleClose();
         } else if (
           mode === "range" &&
@@ -773,7 +775,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           "start" in presetValue
         ) {
           const range = presetValue as DateRange;
-          onRangeChange?.(range, {
+          emitRange?.(range, {
             start: range.start
               ? {
                   date: range.start,
@@ -794,10 +796,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             date: d,
             dateString: d.toISOString().split("T")[0],
           }));
-          onMultipleChange?.(dates, dateValues);
+          emitMultiple?.(dates, dateValues);
         }
       },
-      [mode, onChange, onRangeChange, onMultipleChange, handleClose],
+      [mode, emitSingle, emitRange, emitMultiple, handleClose],
     );
 
     // ─── Derived ───────────────────────────────────────────────────────
@@ -831,6 +833,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     return (
       <div
         ref={ref}
+        {...rest}
         className={cn(mergedClasses.root, fullWidthClass, className)}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
@@ -871,8 +874,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             </span>
             <div className="flex items-center gap-1">
               {showClearButton && hasValue && !disabled && (
-                <span
-                  role="button"
+                <button
+                  type="button"
                   aria-label="Clear selection"
                   className={mergedClasses.clearButton}
                   onClick={handleClearClick}
@@ -882,10 +885,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       handleClearClick(e as unknown as React.MouseEvent);
                     }
                   }}
-                  tabIndex={0}
                 >
                   {clearIcon || <XIcon className="w-4 h-4" />}
-                </span>
+                </button>
               )}
               {showCalendarIcon &&
                 (calendarIcon || (
@@ -906,7 +908,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 position: "fixed",
                 zIndex: 50,
                 width: "max-content",
-                ...(calendarPos ? { top: calendarPos.top, left: calendarPos.left } : { visibility: "hidden" as const, top: 0, left: 0 }),
+                margin: 0,
+                ...(calendarPos && isCalendarPositionStable ? { top: calendarPos.top, left: calendarPos.left } : { visibility: "hidden" as const, top: 0, left: 0 }),
               }}
             >
               {showPresets && (

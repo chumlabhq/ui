@@ -1,10 +1,11 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
-import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./types";
+import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
 import { useCascadingDropdown } from "./useCascadingDropdown";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./icons";
 import { cn } from "../../utils/cn";
+import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -139,7 +140,7 @@ const Submenu = memo(function Submenu({
   focusedIndex,
   loading,
   classes,
-  noResultsText,
+  noResultsContent,
   loadingText,
   showSelectedIcon,
   selectedIcon,
@@ -155,7 +156,7 @@ const Submenu = memo(function Submenu({
   focusedIndex: number;
   loading: boolean;
   classes: Required<CascadingDropdownClasses>;
-  noResultsText: string;
+  noResultsContent: ReactNode;
   loadingText: ReactNode;
   showSelectedIcon: boolean;
   selectedIcon?: ReactNode;
@@ -178,7 +179,7 @@ const Submenu = memo(function Submenu({
       {loading ? (
         <div className={classes.loading || undefined}>{loadingText}</div>
       ) : options.length === 0 ? (
-        <div className={classes.noResults || undefined}>{noResultsText}</div>
+        <div className={classes.noResults || undefined}>{noResultsContent}</div>
       ) : (
         options.map((option, index) => (
           <SubmenuItem
@@ -208,8 +209,11 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       options = [],
       value,
       defaultValue,
-      onChange,
+      onValueChange,
       onLoadChildren,
+      onBlur,
+      onFocus,
+      onKeyDown: onKeyDownProp,
       id,
       name,
       placeholder = "Select an option",
@@ -218,7 +222,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       errorMessage,
       label,
       required = false,
-      noResultsText = "No options available",
+      noResultsContent = "No options found",
       loadingText = "Loading...",
       loading: externalLoading = false,
       showChevron = true,
@@ -242,7 +246,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        container: classesProp?.container ?? baseClasses.container,
+        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
         menu: classesProp?.menu ?? baseClasses.menu,
         menuItem: classesProp?.menuItem ?? baseClasses.menuItem,
@@ -302,7 +306,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       defaultValue,
       disabled,
       closeOnSelect,
-      onChange,
+      onValueChange,
       onLoadChildren,
       label,
       "aria-label": ariaLabel,
@@ -342,8 +346,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       };
     }, [lockScroll, isOpen]);
 
-    // Portal positioning — compute menu coordinates from trigger rect
     const [menuCoords, setMenuCoords] = useState<{ top: number; left: number; width: number } | null>(null);
+    const isPositionStable = useStablePositionAfterOpen(isOpen);
 
     const updateMenuPosition = useCallback(() => {
       if (!triggerRef.current) return;
@@ -368,6 +372,16 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
 
+    const combinedKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        onKeyDownProp?.(event);
+        if (!event.defaultPrevented) {
+          handleKeyDown(event);
+        }
+      },
+      [handleKeyDown, onKeyDownProp],
+    );
+
     const fullWidthClass = fullWidth ? "w-full" : "";
     const displayValue = getDisplayValue();
 
@@ -380,7 +394,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     return (
       <div
         ref={ref}
-        className={cn(mergedClasses.container, fullWidthClass) || undefined}
+        className={cn(mergedClasses.wrapper, fullWidthClass) || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
@@ -400,17 +414,17 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
             ref={triggerRef}
             type="button"
             id={triggerId}
-            role="combobox"
             aria-expanded={isOpen}
-            aria-haspopup="menu"
-            aria-controls={menuId}
+            aria-haspopup="true"
             aria-invalid={error || undefined}
             aria-describedby={error && errorMessage ? errorId : undefined}
             aria-required={required || undefined}
             aria-label={ariaLabel}
             disabled={disabled}
             onClick={handleToggle}
-            onKeyDown={handleKeyDown}
+            onKeyDown={combinedKeyDown}
+            onBlur={onBlur}
+            onFocus={onFocus}
             className={mergedClasses.trigger || undefined}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
@@ -436,7 +450,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               style={{
                 position: "fixed" as const,
                 zIndex: dropdownZIndex,
-                ...(menuCoords
+                margin: 0,
+                ...(menuCoords && isPositionStable
                   ? { top: menuCoords.top, left: menuCoords.left, width: menuCoords.width }
                   : { visibility: "hidden" as const, top: 0, left: 0 }),
               }}
@@ -444,7 +459,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               {externalLoading ? (
                 <div className={mergedClasses.loading || undefined}>{loadingText}</div>
               ) : options.length === 0 ? (
-                <div className={mergedClasses.noResults || undefined}>{noResultsText}</div>
+                <div className={mergedClasses.noResults || undefined}>{noResultsContent}</div>
               ) : (
                 options.map((option, index) => {
                   const staticChildren = option.children || [];
@@ -497,7 +512,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                             }
                             loading={isChildrenLoading}
                             classes={mergedClasses}
-                            noResultsText={noResultsText}
+                            noResultsContent={noResultsContent}
                             loadingText={loadingText}
                             showSelectedIcon={showSelectedIcon}
                             selectedIcon={selectedIcon}

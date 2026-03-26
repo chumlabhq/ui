@@ -9,7 +9,7 @@ import {
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
-import type { ReactNode, CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type {
   SearchableDropdownProps,
   SearchableDropdownClasses,
@@ -29,18 +29,9 @@ import {
   DEFAULT_SEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_SEARCHABLEDROPDOWN_CLASSES,
 } from "./utils/constants";
-
-const SR_ONLY_STYLE: CSSProperties = {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: "hidden",
-  clip: "rect(0,0,0,0)",
-  whiteSpace: "nowrap",
-  border: 0,
-};
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
+import { mergeRefs } from "../../utils/mergeRefs";
+import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
 const DefaultClearIcon = () => (
   <svg
@@ -112,6 +103,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
 }: SearchableDropdownContentProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<DropdownCoords | null>(null);
+  const isPositionStable = useStablePositionAfterOpen(isOpen);
   const rafIdRef = useRef<number | null>(null);
 
   const updatePosition = useCallback(() => {
@@ -251,18 +243,16 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   const dropdownStyle: CSSProperties = {
     position: "fixed",
     zIndex,
-    ...(coords
-      ? { top: coords.top, left: coords.left, width: coords.width }
+    margin: 0,
+    ...(coords && isPositionStable
+      ? { top: coords.top, left: coords.left, minWidth: coords.width }
       : { visibility: "hidden" as const, top: 0, left: 0 }),
     ...(!isOpen && keepMounted ? { display: "none" } : {}),
   };
 
   return createPortal(
     <div
-      ref={(node) => {
-        (dropdownRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (contentRef) (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-      }}
+      ref={mergeRefs(dropdownRef, contentRef)}
       id={listboxId}
       role="listbox"
       aria-label={ariaLabel}
@@ -319,7 +309,7 @@ const SearchableDropdown = forwardRef<
     clearable = false,
     showSearch = true,
     searchPlaceholder = "Search...",
-    noResultsContent = "No results found",
+    noResultsContent = "No options found",
     showChevron = true,
     showSelectedIcon = true,
     selectedIcon,
@@ -442,7 +432,7 @@ const SearchableDropdown = forwardRef<
       : undefined;
 
   const statusMessage = loading
-    ? "Loading options"
+    ? "Loading..."
     : isOpen
       ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
       : selectedOption
@@ -486,10 +476,8 @@ const SearchableDropdown = forwardRef<
     };
 
     document.addEventListener("keydown", handleDocumentKeyDown, true);
-    window.addEventListener("keydown", handleDocumentKeyDown, true);
     return () => {
       document.removeEventListener("keydown", handleDocumentKeyDown, true);
-      window.removeEventListener("keydown", handleDocumentKeyDown, true);
     };
   }, [isOpen, handleClose, shouldRestoreFocusRef]);
 
@@ -540,6 +528,14 @@ const SearchableDropdown = forwardRef<
     [onKeyDownProp, handleKeyDown],
   );
 
+  const handleSearchInputKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      event.stopPropagation();
+      handleKeyDown(event);
+    },
+    [handleKeyDown],
+  );
+
   const handleSearchInputKeyDownCapture = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.key !== "Escape" && event.key !== "Tab") return;
@@ -555,20 +551,17 @@ const SearchableDropdown = forwardRef<
 
   const mergedTriggerRef = useCallback(
     (node: HTMLButtonElement | null) => {
+      if (typeof forwardedRef === "function") forwardedRef(node);
+      else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
       setTriggerNode(node);
-      if (typeof forwardedRef === "function") {
-        forwardedRef(node);
-      } else if (forwardedRef) {
-        (
-          forwardedRef as React.MutableRefObject<HTMLButtonElement | null>
-        ).current = node;
-      }
     },
     [forwardedRef],
   );
 
   const renderTriggerRefCallback = useCallback(
     (node: HTMLElement | null) => {
+      if (typeof forwardedRef === "function") forwardedRef(node as HTMLButtonElement);
+      else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
       if (node && process.env.NODE_ENV !== "production") {
         if (node.tagName !== "BUTTON") {
           console.warn(
@@ -578,13 +571,6 @@ const SearchableDropdown = forwardRef<
         }
       }
       setTriggerNode(node);
-      if (typeof forwardedRef === "function") {
-        forwardedRef(node as HTMLButtonElement | null);
-      } else if (forwardedRef) {
-        (
-          forwardedRef as React.MutableRefObject<HTMLButtonElement | null>
-        ).current = node as HTMLButtonElement | null;
-      }
     },
     [forwardedRef],
   );
@@ -701,7 +687,7 @@ const SearchableDropdown = forwardRef<
           onSearchQueryChange={setSearchQuery}
           SearchIconComponent={SearchIconProp}
           searchInputRef={searchInputRef}
-          onSearchInputKeyDown={handleKeyDown}
+          onSearchInputKeyDown={handleSearchInputKeyDown}
           onSearchInputKeyDownCapture={handleSearchInputKeyDownCapture}
         >
           {loading ? (
