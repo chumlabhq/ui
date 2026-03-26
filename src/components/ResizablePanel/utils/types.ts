@@ -18,4 +18,5 @@ export interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
   disabled?: boolean;
   classes?: ResizablePanelClasses;
   handleContent?: ReactNode;
+  unstyled?: boolean;
 }

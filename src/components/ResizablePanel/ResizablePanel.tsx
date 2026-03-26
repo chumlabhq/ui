@@ -6,17 +6,20 @@ import {
   useEffect,
   useLayoutEffect,
   useCallback,
+  useMemo,
   type KeyboardEvent,
   type CSSProperties,
 } from "react";
-import type { ResizablePanelProps, ResizablePanelClasses } from "./utils/types";
+import type { ResizablePanelProps } from "./utils/types";
+import {
+  DEFAULT_RESIZABLEPANEL_CLASSES,
+  UNSTYLED_RESIZABLEPANEL_CLASSES,
+} from "./utils/constants";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
-
-const EMPTY_CLASSES: ResizablePanelClasses = {};
 
 const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
   (props, ref) => {
@@ -32,8 +35,9 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       resizeDirection = "right",
       step = 10,
       disabled = false,
+      unstyled = false,
       "aria-label": ariaLabel = "Resize panel",
-      classes: classesProp = EMPTY_CLASSES,
+      classes: classesProp,
       handleContent,
       className,
       style,
@@ -44,34 +48,57 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     const isVertical =
       resizeDirection === "top" || resizeDirection === "bottom";
 
-    if (process.env.NODE_ENV !== "production") {
-      if (minValue > maxValue) {
-        console.warn(
-          `ResizablePanel: minValue (${minValue}) is greater than maxValue (${maxValue}). ` +
-            `This will produce unexpected clamping behavior.`,
-        );
+    const baseClasses = unstyled ? UNSTYLED_RESIZABLEPANEL_CLASSES : DEFAULT_RESIZABLEPANEL_CLASSES;
+    const mergedClasses = useMemo(() => ({
+      root: classesProp?.root ?? baseClasses.root,
+      handle: classesProp?.handle ?? baseClasses.handle,
+    }), [classesProp, baseClasses]);
+
+    const warnedRef = useRef(false);
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production") {
+        const r = rest as Record<string, unknown>;
+        if (!r["aria-label"] && !r["aria-labelledby"] && !warnedRef.current) {
+          warnedRef.current = true;
+          console.warn("ResizablePanel: requires `aria-label` or `aria-labelledby` for accessibility.");
+        }
       }
-      if (
-        valueProp !== undefined &&
-        (valueProp < minValue || valueProp > maxValue)
-      ) {
-        console.warn(
-          `ResizablePanel: controlled value (${valueProp}) is outside the ` +
-            `[minValue=${minValue}, maxValue=${maxValue}] range. ` +
-            `The rendered size will be clamped.`,
-        );
+    }, [rest]);
+
+    const boundsWarnedRef = useRef(false);
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production" && !boundsWarnedRef.current) {
+        if (minValue > maxValue) {
+          boundsWarnedRef.current = true;
+          console.warn(
+            `ResizablePanel: minValue (${minValue}) is greater than maxValue (${maxValue}). ` +
+              `This will produce unexpected clamping behavior.`,
+          );
+        }
+        if (
+          valueProp !== undefined &&
+          (valueProp < minValue || valueProp > maxValue)
+        ) {
+          boundsWarnedRef.current = true;
+          console.warn(
+            `ResizablePanel: controlled value (${valueProp}) is outside the ` +
+              `[minValue=${minValue}, maxValue=${maxValue}] range. ` +
+              `The rendered size will be clamped.`,
+          );
+        }
+        if (
+          valueProp === undefined &&
+          (defaultValue < minValue || defaultValue > maxValue)
+        ) {
+          boundsWarnedRef.current = true;
+          console.warn(
+            `ResizablePanel: defaultValue (${defaultValue}) is outside the ` +
+              `[minValue=${minValue}, maxValue=${maxValue}] range. ` +
+              `The initial size will be clamped.`,
+          );
+        }
       }
-      if (
-        valueProp === undefined &&
-        (defaultValue < minValue || defaultValue > maxValue)
-      ) {
-        console.warn(
-          `ResizablePanel: defaultValue (${defaultValue}) is outside the ` +
-            `[minValue=${minValue}, maxValue=${maxValue}] range. ` +
-            `The initial size will be clamped.`,
-        );
-      }
-    }
+    }, [minValue, maxValue, valueProp, defaultValue]);
 
     const generatedId = useId();
     const panelId = idProp ?? generatedId;
@@ -298,7 +325,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         {...rest}
         ref={ref}
         id={panelId}
-        className={cn("relative", classesProp.root, className)}
+        className={cn("relative", mergedClasses.root, className)}
         style={
           {
             ...style,
@@ -341,7 +368,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
               : isVertical
                 ? "cursor-row-resize"
                 : "cursor-col-resize",
-            classesProp.handle,
+            mergedClasses.handle,
           )}
           data-resizing={isResizing || undefined}
           data-disabled={disabled || undefined}
