@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type { SearchableDropdownOption } from "./types";
+import { useControllableState } from "../../../utils/useControllableState";
 
 interface UseDropdownProps {
   options?: SearchableDropdownOption[];
@@ -19,6 +20,8 @@ interface UseDropdownProps {
   loadInitialOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   typeaheadTimeout?: number;
+  label?: React.ReactNode;
+  "aria-label"?: string;
 }
 
 interface UseDropdownReturn {
@@ -43,10 +46,10 @@ interface UseDropdownReturn {
 
 export function useDropdown({
   options = [],
-  value,
+  value: valueProp,
   defaultValue,
   onValueChange,
-  open,
+  open: openProp,
   defaultOpen = false,
   onOpenChange,
   disabled = false,
@@ -59,14 +62,39 @@ export function useDropdown({
   loadInitialOnOpen = false,
   onLoadError,
   typeaheadTimeout = 1000,
+  label,
+  "aria-label": ariaLabel,
 }: UseDropdownProps): UseDropdownReturn {
-  const isControlledValue = value !== undefined;
-  const isControlledOpen = open !== undefined;
+  const displayOptionsRef = useRef<SearchableDropdownOption[]>([]);
 
-  const [internalValue, setInternalValue] = useState<string | null>(
-    isControlledValue ? null : (defaultValue ?? null)
-  );
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const [currentValue, setCurrentValue] = useControllableState<string | null>({
+    value: valueProp,
+    defaultValue: defaultValue ?? null,
+    onChange: (newValue) => {
+      const option = displayOptionsRef.current.find((o) => o.value === newValue) || null;
+      onValueChange?.(newValue, option);
+    },
+  });
+
+  const [isOpen, setIsOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+
+  // Accessibility dev warning for missing label/aria-label
+  const warnedRef = useRef(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
+      if (!label && !ariaLabel) {
+        warnedRef.current = true;
+        console.warn(
+          "[SearchableDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
+          "so that screen readers can identify this dropdown."
+        );
+      }
+    }
+  }, [label, ariaLabel]);
   const [searchQuery, setSearchQuery] = useState("");
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);
@@ -112,8 +140,7 @@ export function useDropdown({
     return from;
   }
 
-  const isOpen = isControlledOpen ? open : internalOpen;
-  const currentValue = isControlledValue ? value : internalValue;
+  // isOpen and currentValue are now managed by useControllableState above
 
   const isAsync = typeof onSearch === "function";
 
@@ -139,13 +166,18 @@ export function useDropdown({
   }, [options, searchQuery, showSearch, isAsync]);
 
   const displayOptions = useMemo(() => {
+    let opts: SearchableDropdownOption[];
     if (isAsync) {
       if (searchQuery.trim()) {
-        return asyncOptions;
+        opts = asyncOptions;
+      } else {
+        opts = allInitialOptions;
       }
-      return allInitialOptions;
+    } else {
+      opts = filteredSyncOptions;
     }
-    return filteredSyncOptions;
+    displayOptionsRef.current = opts;
+    return opts;
   }, [isAsync, searchQuery, asyncOptions, allInitialOptions, filteredSyncOptions]);
 
   useEffect(() => {
@@ -225,53 +257,48 @@ export function useDropdown({
 
   const handleOpen = useCallback(() => {
     if (disabled) return;
-    if (!isControlledOpen) {
-      setInternalOpen(true);
-    }
-    onOpenChange?.(true);
-  }, [disabled, isControlledOpen, onOpenChange]);
+    setIsOpen(true);
+  }, [disabled, setIsOpen]);
 
   const handleClose = useCallback(() => {
-    if (!isControlledOpen) {
-      setInternalOpen(false);
-    }
-    onOpenChange?.(false);
+    setIsOpen(false);
     setSearchQuery("");
     setFocusedIndex(-1);
     setAsyncOptions([]);
     setTypeaheadQuery("");
     shouldRestoreFocusRef.current = true;
-  }, [isControlledOpen, onOpenChange]);
+  }, [setIsOpen]);
 
   const handleToggle = useCallback(() => {
-    if (isOpen) {
-      handleClose();
-    } else {
-      handleOpen();
-    }
-  }, [isOpen, handleOpen, handleClose]);
+    if (disabled) return;
+    setIsOpen((prev: boolean) => {
+      if (prev) {
+        setSearchQuery("");
+        setFocusedIndex(-1);
+        setAsyncOptions([]);
+        setTypeaheadQuery("");
+        shouldRestoreFocusRef.current = true;
+        return false;
+      }
+      return true;
+    });
+  }, [disabled, setIsOpen]);
 
   const handleClear = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
-      if (!isControlledValue) {
-        setInternalValue(null);
-      }
-      onValueChange?.(null, null);
+      setCurrentValue(null);
     },
-    [isControlledValue, onValueChange],
+    [setCurrentValue],
   );
 
   const handleOptionSelect = useCallback(
     (option: SearchableDropdownOption) => {
       if (option.disabled) return;
-      if (!isControlledValue) {
-        setInternalValue(option.value);
-      }
-      onValueChange?.(option.value, option);
+      setCurrentValue(option.value);
       handleClose();
     },
-    [isControlledValue, onValueChange, handleClose],
+    [setCurrentValue, handleClose],
   );
 
   const handleTypeahead = useCallback(

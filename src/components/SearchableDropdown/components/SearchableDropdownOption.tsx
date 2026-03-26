@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { SearchableDropdownOption as OptionType, SearchableDropdownClasses } from "../utils/types";
-import { joinClasses } from "../utils/helpers";
+import { cn } from "../../../utils/cn";
 import { CheckIcon } from "../utils/icons";
 
 export const SearchableDropdownOption = memo(function SearchableDropdownOption({
@@ -21,7 +21,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
   isFocused: boolean;
   dropdownId: string;
   index: number;
-  classes?: SearchableDropdownClasses;
+  classes: Required<SearchableDropdownClasses>;
   showSelectedIcon: boolean;
   selectedIcon?: React.ReactNode;
   CheckIconComponent?: React.ComponentType<{ className?: string }>;
@@ -29,11 +29,11 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
   onHover: (index: number) => void;
 }) {
   const combinedClassName =
-    joinClasses(
-      classes?.option,
-      isSelected && classes?.optionSelected,
-      isFocused && classes?.optionFocused,
-      option.disabled && classes?.optionDisabled,
+    cn(
+      classes.option,
+      isSelected && classes.optionSelected,
+      isFocused && classes.optionFocused,
+      option.disabled && classes.optionDisabled,
     ) || undefined;
 
   const IconComponent = CheckIconComponent || CheckIcon;
@@ -60,7 +60,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <IconComponent className={classes?.checkIcon} />
+          <IconComponent className={classes.checkIcon} />
         ))}
     </div>
   );

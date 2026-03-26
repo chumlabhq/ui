@@ -73,6 +73,8 @@ export interface SearchableDropdownProps {
   dropdownZIndex?: number;
   dropdownGap?: number;
   typeaheadTimeout?: number;
+  unstyled?: boolean;
+  lockScroll?: boolean;
   "aria-label"?: string;
   onBlur?: () => void;
   onFocus?: () => void;

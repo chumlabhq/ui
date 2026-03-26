@@ -9,3 +9,7 @@ export type {
 } from "./utils/types";
 export { useDropdown } from "./utils/useDropdown";
 export { ChevronDownIcon, CheckIcon, SearchIcon } from "./utils/icons";
+export {
+  DEFAULT_SEARCHABLEDROPDOWN_CLASSES,
+  UNSTYLED_SEARCHABLEDROPDOWN_CLASSES,
+} from "./utils/constants";
