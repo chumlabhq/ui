@@ -1,4 +1,4 @@
-import type { ToastType, ToastPosition } from "./types";
+import type { ToastType, ToastPosition, ToastClasses } from "./types";
 
 export const getRoleForType = (type: ToastType): "alert" | "status" => {
   switch (type) {
@@ -39,3 +39,23 @@ export const stackDirectionClasses: Record<"top" | "bottom", string> = {
 };
 
 export const PROGRESS_KEYFRAMES = `@keyframes kern-toast-progress{from{width:100%}to{width:0%}}`;
+
+export const DEFAULT_TOAST_CLASSES: Required<ToastClasses> = {
+  container: "",
+  content: "",
+  message: "",
+  description: "",
+  progress: "",
+  closeButton: "",
+  icon: "",
+};
+
+export const UNSTYLED_TOAST_CLASSES: Required<ToastClasses> = {
+  container: "",
+  content: "",
+  message: "",
+  description: "",
+  progress: "",
+  closeButton: "",
+  icon: "",
+};

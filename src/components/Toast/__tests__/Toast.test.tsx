@@ -664,7 +664,7 @@ describe("Toast", () => {
   });
 
   describe("Custom Styling", () => {
-    it("applies custom className to toast", async () => {
+    it("applies custom classes to toast", async () => {
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
@@ -672,7 +672,7 @@ describe("Toast", () => {
       );
 
       await act(async () => {
-        toastApi.info("Message", { className: "custom-toast-class" });
+        toastApi.info("Message", { classes: { container: "custom-toast-class" } });
       });
 
       expect(screen.getByRole("status")).toHaveClass("custom-toast-class");

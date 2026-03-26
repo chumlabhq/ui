@@ -10,6 +10,16 @@ export type ToastPosition =
   | "bottom-right"
   | "bottom-center";
 
+export interface ToastClasses {
+  container?: string;
+  content?: string;
+  message?: string;
+  description?: string;
+  progress?: string;
+  closeButton?: string;
+  icon?: string;
+}
+
 export interface ToastConfig {
   id: string;
   type?: ToastType;
@@ -23,16 +33,11 @@ export interface ToastConfig {
   showCloseButton?: boolean;
   onClose?: () => void;
   role?: "alert" | "status";
-  className?: string;
   style?: React.CSSProperties;
-  contentClassName?: string;
-  messageClassName?: string;
-  descriptionClassName?: string;
-  progressClassName?: string;
-  closeButtonClassName?: string;
-  iconClassName?: string;
   pauseOnHover?: boolean;
   closeAriaLabel?: string;
+  classes?: ToastClasses;
+  unstyled?: boolean;
 }
 
 export interface ToastProps extends Omit<ToastConfig, "id"> {
@@ -41,6 +46,8 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
   onRemove: (id: string) => void;
   position: ToastPosition;
   animationDuration?: number;
+  providerClasses?: ToastClasses;
+  providerUnstyled?: boolean;
 }
 
 export interface ToastProviderProps {
@@ -54,6 +61,8 @@ export interface ToastProviderProps {
   zIndex?: number;
   dismissOnEscape?: boolean;
   containerAriaLabel?: string;
+  classes?: ToastClasses;
+  unstyled?: boolean;
 }
 
 export interface ToastContextValue {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, memo, useState } from "react";
-import type { ToastProps } from "./utils/types";
+import type { ToastProps, ToastClasses } from "./utils/types";
 import { CloseIcon, getDefaultIcon } from "./utils/icons";
-import { getRoleForType, defaultContainerStyles } from "./utils/constants";
+import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants";
 import { cn } from "../../utils/cn";
 
 const Toast = memo(function Toast({
@@ -17,18 +17,15 @@ const Toast = memo(function Toast({
   showCloseButton = true,
   onClose,
   onRemove,
-  visible,
-  position,
+  visible: _visible,
+  position: _position,
   role: roleProp,
-  className,
-  contentClassName,
-  messageClassName,
-  descriptionClassName,
-  progressClassName,
-  closeButtonClassName,
-  iconClassName,
+  classes: classesProp,
+  unstyled = false,
+  providerClasses,
+  providerUnstyled = false,
   pauseOnHover = true,
-  animationDuration = 200,
+  animationDuration: _animationDuration,
   style,
   closeAriaLabel = "Close notification",
 }: ToastProps) {
@@ -59,6 +56,18 @@ const Toast = memo(function Toast({
     mql.addEventListener("change", handler);
     return () => mql.removeEventListener("change", handler);
   }, []);
+
+  const isUnstyled = unstyled || providerUnstyled;
+  const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;
+  const mergedClasses: Required<ToastClasses> = {
+    container: classesProp?.container ?? providerClasses?.container ?? baseClasses.container,
+    content: classesProp?.content ?? providerClasses?.content ?? baseClasses.content,
+    message: classesProp?.message ?? providerClasses?.message ?? baseClasses.message,
+    description: classesProp?.description ?? providerClasses?.description ?? baseClasses.description,
+    progress: classesProp?.progress ?? providerClasses?.progress ?? baseClasses.progress,
+    closeButton: classesProp?.closeButton ?? providerClasses?.closeButton ?? baseClasses.closeButton,
+    icon: classesProp?.icon ?? providerClasses?.icon ?? baseClasses.icon,
+  };
 
   const defaultIcon = getDefaultIcon(type);
   const toastRole = roleProp ?? getRoleForType(type);
@@ -104,15 +113,6 @@ const Toast = memo(function Toast({
     }
   }, [pauseOnHover, duration]);
 
-  const isTopPosition = position.startsWith("top");
-  const animationClass = visible
-    ? isTopPosition
-      ? "animate-toast-enter-top motion-reduce:animate-none"
-      : "animate-toast-enter-bottom motion-reduce:animate-none"
-    : isTopPosition
-      ? "animate-toast-leave-top motion-reduce:animate-none motion-reduce:opacity-0"
-      : "animate-toast-leave-bottom motion-reduce:animate-none motion-reduce:opacity-0";
-
   const hasFiniteDuration = duration !== Infinity && duration > 0;
   const progressAnimationStyle: React.CSSProperties | undefined =
     hasFiniteDuration && showProgress
@@ -131,23 +131,19 @@ const Toast = memo(function Toast({
       role={toastRole}
       aria-atomic="true"
       className={cn(
-        "relative overflow-hidden rounded-lg border shadow-lg",
-        defaultContainerStyles[type] ?? defaultContainerStyles.default,
-        animationClass,
-        className,
+        !isUnstyled && "relative overflow-hidden rounded-lg border shadow-lg",
+        !isUnstyled && (defaultContainerStyles[type] ?? defaultContainerStyles.default),
+        mergedClasses.container,
       )}
-      style={{
-        ...style,
-        animationDuration: `${animationDuration}ms`,
-      }}
+      style={style}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-toast-id={id}
       data-toast-type={type}
     >
-      <div className={cn("flex items-start gap-3 p-4", contentClassName)}>
+      <div className={cn(!isUnstyled && "flex items-start gap-3 p-4", mergedClasses.content)}>
         {(icon || defaultIcon) && (
-          <span className={cn("text-white", iconClassName)}>
+          <span className={cn(!isUnstyled && "text-white", mergedClasses.icon)}>
             {icon ?? defaultIcon}
           </span>
         )}
@@ -157,13 +153,13 @@ const Toast = memo(function Toast({
         ) : (
           <div className="flex-1 min-w-0">
             {message && (
-              <p className={cn("font-medium text-sm", messageClassName)}>
+              <p className={cn(!isUnstyled && "font-medium text-sm", mergedClasses.message)}>
                 {message}
               </p>
             )}
             {description && (
               <p
-                className={cn("text-sm mt-1 opacity-80", descriptionClassName)}
+                className={cn(!isUnstyled && "text-sm mt-1 opacity-80", mergedClasses.description)}
               >
                 {description}
               </p>
@@ -177,8 +173,8 @@ const Toast = memo(function Toast({
             type="button"
             onClick={handleClose}
             className={cn(
-              "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors",
-              closeButtonClassName,
+              !isUnstyled && "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors",
+              mergedClasses.closeButton,
             )}
             aria-label={closeAriaLabel}
           >
@@ -188,11 +184,11 @@ const Toast = memo(function Toast({
       </div>
 
       {showProgress && hasFiniteDuration && (
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+        <div className={cn(!isUnstyled && "absolute bottom-0 left-0 right-0 h-1 bg-white/20")}>
           <div
             className={cn(
-              "h-full bg-white/40",
-              progressClassName,
+              !isUnstyled && "h-full bg-white/40",
+              mergedClasses.progress,
             )}
             style={progressAnimationStyle}
           />

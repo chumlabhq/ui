@@ -22,11 +22,13 @@ export const ToastProvider = ({
   maxToasts = 5,
   containerClassName,
   defaultDuration = 5000,
-  animationDuration = 200,
+  animationDuration = 500,
   gap = 12,
   zIndex = 9999,
   dismissOnEscape = false,
   containerAriaLabel = "Notifications",
+  classes: providerClasses,
+  unstyled: providerUnstyled = false,
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<ToastState[]>([]);
   const idCounterRef = useRef(0);
@@ -88,11 +90,18 @@ export const ToastProvider = ({
       setToasts((prev) => {
         const newToasts = [...prev, toastConfig];
         if (newToasts.length > maxToasts) {
-          const toRemove = newToasts.slice(0, newToasts.length - maxToasts);
-          toRemove.forEach((t) => {
-            setTimeout(() => removeToast(t.id), 0);
-          });
-          return newToasts.slice(-maxToasts);
+          // Mark overflow toasts as invisible (triggers exit animation)
+          // but keep them in the array until the animation completes
+          const overflowCount = newToasts.length - maxToasts;
+          const result = newToasts.map((t, i) =>
+            i < overflowCount && t.visible ? { ...t, visible: false } : t,
+          );
+          // Remove them from DOM after exit animation finishes
+          const overflowIds = newToasts.slice(0, overflowCount).map((t) => t.id);
+          setTimeout(() => {
+            setToasts((cur) => cur.filter((t) => !overflowIds.includes(t.id)));
+          }, animationDuration);
+          return result;
         }
         return newToasts;
       });
@@ -191,18 +200,33 @@ export const ToastProvider = ({
                 stackDirectionClasses[stackDirection],
                 containerClassName,
               )}
-              style={{ gap: `${gap}px` }}
+              style={{ gap: 0 }}
               role="region"
               aria-label={containerAriaLabel}
             >
               {toasts.map((toast) => (
-                <div key={toast.id} className="pointer-events-auto">
-                  <Toast
-                    {...toast}
-                    onRemove={removeToast}
-                    position={position}
-                    animationDuration={animationDuration}
-                  />
+                <div
+                  key={toast.id}
+                  className="pointer-events-auto grid"
+                  style={{
+                    gridTemplateRows: toast.visible ? "1fr" : "0fr",
+                    opacity: toast.visible ? 1 : 0,
+                    transform: toast.visible ? "scale(1)" : "scale(0.96)",
+                    marginBottom: stackDirection === "bottom" ? (toast.visible ? gap : 0) : 0,
+                    marginTop: stackDirection === "top" ? (toast.visible ? gap : 0) : 0,
+                    transition: `grid-template-rows ${animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity ${Math.round(animationDuration * 0.5)}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), transform ${Math.round(animationDuration * 0.5)}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), margin ${animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
+                  }}
+                >
+                  <div className="overflow-hidden">
+                    <Toast
+                      {...toast}
+                      onRemove={removeToast}
+                      position={position}
+                      animationDuration={animationDuration}
+                      providerClasses={providerClasses}
+                      providerUnstyled={providerUnstyled}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
