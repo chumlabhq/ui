@@ -1,21 +1,82 @@
-import { useState } from "react";
-import { Modal } from "../../components/Modal";
-import { Button } from "../../components/Button";
-import { Section, PropsTable, PropRow } from "./components";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Modal, useModal } from "../../components/Modal";
+import {
+  Section,
+  CodeBlock,
+  DemoWrapper,
+  PropsTable,
+  PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
+} from "./components";
 import { useTheme } from "./ThemeContext";
 
-const modalContentClass =
-  "w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden";
-const modalHeaderClass = "flex items-start gap-3 p-6 pb-4";
-const modalTitleClass = "font-semibold text-lg text-gray-900";
-const modalDescriptionClass = "mt-1 text-sm text-gray-600";
-const modalCloseButtonClass =
-  "shrink-0 p-1 rounded-md hover:bg-gray-100 transition-colors ml-auto";
-const modalCloseIconClass = "w-5 h-5 text-gray-500";
-const modalBodyClass = "px-6 pb-6";
+// ─── Themed Classes ──────────────────────────────────────────────────────────
+
+const getClasses = (dark: boolean) => ({
+  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  btnPrimary:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
+  btnDanger:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-rose-500 text-white hover:bg-rose-600",
+  btnSuccess:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-emerald-500 text-white hover:bg-emerald-600",
+  btnWarning:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-amber-500 text-white hover:bg-amber-600",
+  btnGradient:
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-linear-to-r from-violet-600 to-purple-600 text-white hover:from-violet-700 hover:to-purple-700",
+  text: dark ? "text-gray-300" : "text-gray-600",
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  // Modal-specific
+  modalContent: "w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden",
+  modalHeader: "flex items-start gap-3 p-6 pb-4",
+  modalTitle: "font-semibold text-lg text-gray-900",
+  modalDescription: "mt-1 text-sm text-gray-600",
+  modalCloseBtn: "shrink-0 p-1 rounded-md hover:bg-gray-100 transition-colors ml-auto",
+  modalCloseIcon: "w-5 h-5 text-gray-500",
+  modalBody: "px-6 pb-6",
+});
+
+// ─── useModal Child Demo ────────────────────────────────────────────────────
+
+const ModalChildWithHook = () => {
+  const { close, nestingLevel } = useModal();
+  return (
+    <div className="space-y-3">
+      <p className="text-gray-600">
+        This component uses the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">useModal()</code> hook.
+      </p>
+      <div className="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
+        Current nesting level: <span className="font-bold">{nestingLevel}</span>
+      </div>
+      <button
+        onClick={close}
+        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Close via useModal().close()
+      </button>
+    </div>
+  );
+};
+
+// ─── Keep Mounted Logger ────────────────────────────────────────────────────
+
+const KeepMountedLogger = ({ onLog }: { onLog: (msg: string) => void }) => {
+  useEffect(() => {
+    onLog("Mounted");
+    return () => onLog("Unmounted");
+  }, [onLog]);
+  return <p className="text-gray-600">This content logs mount/unmount events.</p>;
+};
+
+// ─── Demo ────────────────────────────────────────────────────────────────────
 
 const ModalDemo = () => {
   const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
+
   const [basicOpen, setBasicOpen] = useState(false);
   const [withDescriptionOpen, setWithDescriptionOpen] = useState(false);
   const [withIconOpen, setWithIconOpen] = useState(false);
@@ -32,24 +93,36 @@ const ModalDemo = () => {
   const [nestedLevel1Open, setNestedLevel1Open] = useState(false);
   const [nestedLevel2Open, setNestedLevel2Open] = useState(false);
 
-  const buttonStyles =
-    "cursor-pointer px-4 py-2 rounded-lg font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2";
-  const primaryStyles = `${buttonStyles} bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-500`;
-  const secondaryStyles = `${buttonStyles} bg-slate-100 text-slate-700 hover:bg-slate-200 focus-visible:ring-slate-400`;
-  const successStyles = `${buttonStyles} bg-emerald-500 text-white hover:bg-emerald-600 focus-visible:ring-emerald-500`;
-  const dangerStyles = `${buttonStyles} bg-rose-500 text-white hover:bg-rose-600 focus-visible:ring-rose-500`;
-  const outlineStyles = `${buttonStyles} border border-slate-300 text-slate-600 hover:bg-slate-50 focus-visible:ring-slate-400`;
+  // New demo states
+  const [classesOpen, setClassesOpen] = useState(false);
+  const [unstyledOpen, setUnstyledOpen] = useState(false);
+  const [reduceMotionOpen, setReduceMotionOpen] = useState(false);
+  const [reduceMotionAutoOpen, setReduceMotionAutoOpen] = useState(false);
+  const [focusTrapOpen, setFocusTrapOpen] = useState(false);
+  const [noFocusTrapOpen, setNoFocusTrapOpen] = useState(false);
+  const [initialFocusOpen, setInitialFocusOpen] = useState(false);
+  const initialFocusRef = useRef<HTMLInputElement>(null);
+  const [keepMountedOpen, setKeepMountedOpen] = useState(false);
+  const [keepMountedLog, setKeepMountedLog] = useState<string[]>([]);
+  const handleKeepMountedLog = useCallback((msg: string) => {
+    setKeepMountedLog((prev) => [
+      ...prev,
+      `[${new Date().toLocaleTimeString()}] ${msg}`,
+    ]);
+  }, []);
+  const [customCloseIconOpen, setCustomCloseIconOpen] = useState(false);
+  const [disableAnimOpen, setDisableAnimOpen] = useState(false);
+  const [customZIndexOpen, setCustomZIndexOpen] = useState(false);
+  const [useModalOpen, setUseModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [refForwardOpen, setRefForwardOpen] = useState(false);
 
   return (
     <div className="space-y-10">
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
         <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
         />
         <div
           className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
@@ -57,7 +130,6 @@ const ModalDemo = () => {
         <div
           className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
         />
-
         <div className="relative">
           <h1
             className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
@@ -70,117 +142,683 @@ const ModalDemo = () => {
             Accessible dialog overlays for focused interactions and important
             content.
           </p>
+          <div className="mt-5">
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { Modal, useModal } from "@kern-ui/modal";`}
+            />
+          </div>
         </div>
       </header>
 
-      <Section title="Basic">
-        <Button className={primaryStyles} onClick={() => setBasicOpen(true)}>
-          Basic Modal
-        </Button>
-        <Button
-          className={primaryStyles}
-          onClick={() => setWithDescriptionOpen(true)}
-        >
-          With Description
-        </Button>
-        <Button className={primaryStyles} onClick={() => setWithIconOpen(true)}>
-          With Icon
-        </Button>
-        <Button
-          className={secondaryStyles}
-          onClick={() => setNoHeaderOpen(true)}
-        >
-          No Header
-        </Button>
+      {/* ─── Basic ───────────────────────────────────────────────────────── */}
+      <Section
+        title="Basic"
+        description="Simple modal dialogs with various header configurations."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btnPrimary} onClick={() => setBasicOpen(true)}>
+              Basic Modal
+            </button>
+            <button className={c.btnPrimary} onClick={() => setWithDescriptionOpen(true)}>
+              With Description
+            </button>
+            <button className={c.btnPrimary} onClick={() => setWithIconOpen(true)}>
+              With Icon
+            </button>
+            <button className={c.btn} onClick={() => setNoHeaderOpen(true)}>
+              No Header
+            </button>
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Use Cases">
-        <Button
-          className={dangerStyles}
-          onClick={() => setConfirmDeleteOpen(true)}
-        >
-          Confirm Delete
-        </Button>
-        <Button className={successStyles} onClick={() => setSuccessOpen(true)}>
-          Success State
-        </Button>
-        <Button className={primaryStyles} onClick={() => setFormOpen(true)}>
-          Form Modal
-        </Button>
-        <Button
-          className="cursor-pointer px-4 py-2 rounded-lg font-medium transition-colors bg-linear-to-r from-violet-600 to-purple-600 text-white hover:from-violet-700 hover:to-purple-700"
-          onClick={() => setUpgradeOpen(true)}
-        >
-          Upgrade Plan
-        </Button>
-        <Button
-          className={secondaryStyles}
-          onClick={() => setImagePreviewOpen(true)}
-        >
-          Image Preview
-        </Button>
+      {/* ─── Use Cases ───────────────────────────────────────────────────── */}
+      <Section
+        title="Use Cases"
+        description="Common modal patterns for confirmations, success states, forms, and previews."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btnDanger} onClick={() => setConfirmDeleteOpen(true)}>
+              Confirm Delete
+            </button>
+            <button className={c.btnSuccess} onClick={() => setSuccessOpen(true)}>
+              Success State
+            </button>
+            <button className={c.btnPrimary} onClick={() => setFormOpen(true)}>
+              Form Modal
+            </button>
+            <button className={c.btnGradient} onClick={() => setUpgradeOpen(true)}>
+              Upgrade Plan
+            </button>
+            <button className={c.btn} onClick={() => setImagePreviewOpen(true)}>
+              Image Preview
+            </button>
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Size & Position">
-        <Button
-          className={primaryStyles}
-          onClick={() => setCustomSizeOpen(true)}
-        >
-          Custom Size
-        </Button>
-        <Button
-          className={primaryStyles}
-          onClick={() => setFullScreenOpen(true)}
-        >
-          Full Screen
-        </Button>
+      {/* ─── Size & Position ─────────────────────────────────────────────── */}
+      <Section
+        title="Size & Position"
+        description="Control modal dimensions and screen placement."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btnPrimary} onClick={() => setCustomSizeOpen(true)}>
+              Custom Size
+            </button>
+            <button className={c.btnPrimary} onClick={() => setFullScreenOpen(true)}>
+              Full Screen
+            </button>
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Overlay & Behavior">
-        <Button
-          className={secondaryStyles}
-          onClick={() => setCustomOverlayOpen(true)}
-        >
-          Custom Overlay
-        </Button>
-        <Button
-          className={outlineStyles}
-          onClick={() => setPreventCloseOpen(true)}
-        >
-          Prevent Outside Click
-        </Button>
+      {/* ─── Overlay & Behavior ──────────────────────────────────────────── */}
+      <Section
+        title="Overlay & Behavior"
+        description="Customize the overlay backdrop and close behavior."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btn} onClick={() => setCustomOverlayOpen(true)}>
+              Custom Overlay
+            </button>
+            <button className={c.btn} onClick={() => setPreventCloseOpen(true)}>
+              Prevent Outside Click
+            </button>
+          </div>
+        </DemoWrapper>
       </Section>
 
-      <Section title="Nested Modals">
-        <Button
-          className={primaryStyles}
-          onClick={() => setNestedLevel1Open(true)}
-        >
-          Open Nested Modal
-        </Button>
+      {/* ─── Nested Modals ───────────────────────────────────────────────── */}
+      <Section
+        title="Nested Modals"
+        description="Stack multiple modals with proper nesting and z-index management."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setNestedLevel1Open(true)}>
+            Open Nested Modal
+          </button>
+        </DemoWrapper>
       </Section>
+
+      {/* ─── Classes System ──────────────────────────────────────────────── */}
+      <Section
+        title="Classes System"
+        description="Override individual sub-element styles via the classes prop."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setClassesOpen(true)}>
+            Modal with Classes
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Unstyled ────────────────────────────────────────────────────── */}
+      <Section
+        title="Unstyled"
+        description="Remove all default styles and build from scratch."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setUnstyledOpen(true)}>
+            Unstyled Modal
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Reduce Motion ───────────────────────────────────────────────── */}
+      <Section
+        title="Reduce Motion"
+        description="Respect prefers-reduced-motion or force-disable animations."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btnPrimary} onClick={() => setReduceMotionOpen(true)}>
+              reduceMotion=true
+            </button>
+            <button className={c.btn} onClick={() => setReduceMotionAutoOpen(true)}>
+              reduceMotion="auto"
+            </button>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Focus Trap ──────────────────────────────────────────────────── */}
+      <Section
+        title="Focus Trap"
+        description="Tab key cycles through focusable elements within the modal."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btnPrimary} onClick={() => setFocusTrapOpen(true)}>
+              With Focus Trap (default)
+            </button>
+            <button className={c.btn} onClick={() => setNoFocusTrapOpen(true)}>
+              Without Focus Trap
+            </button>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Initial Focus ───────────────────────────────────────────────── */}
+      <Section
+        title="Initial Focus"
+        description="Direct focus to a specific element when the modal opens."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setInitialFocusOpen(true)}>
+            Focus Specific Input
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Keep Mounted ────────────────────────────────────────────────── */}
+      <Section
+        title="Keep Mounted"
+        description="Preserve modal DOM when closed for faster re-opens."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="space-y-3">
+            <button className={c.btnPrimary} onClick={() => setKeepMountedOpen(true)}>
+              Keep Mounted Modal
+            </button>
+            {keepMountedLog.length > 0 && (
+              <div className={`text-xs font-mono p-3 rounded-lg max-h-32 overflow-auto ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
+                {keepMountedLog.map((log, i) => (
+                  <div key={i}>{log}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Close Icon ───────────────────────────────────────────── */}
+      <Section
+        title="Custom Close Icon"
+        description="Replace the default close button icon."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setCustomCloseIconOpen(true)}>
+            Custom Close Icon
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Disable Animation ───────────────────────────────────────────── */}
+      <Section
+        title="Disable Animation"
+        description="Instantly show and hide the modal without transitions."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setDisableAnimOpen(true)}>
+            No Animation Modal
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Z-Index ──────────────────────────────────────────────── */}
+      <Section
+        title="Custom Z-Index"
+        description="Override the default z-index for specific stacking contexts."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setCustomZIndexOpen(true)}>
+            z-index: 99999
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── useModal Hook ───────────────────────────────────────────────── */}
+      <Section
+        title="useModal Hook"
+        description="Access modal context (close function, nesting level) from child components."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <button className={c.btnPrimary} onClick={() => setUseModalOpen(true)}>
+            useModal Demo
+          </button>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Ref Forwarding ──────────────────────────────────────────────── */}
+      <Section
+        title="Ref Forwarding"
+        description="Forward a ref to the modal content element for imperative access."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-wrap gap-2">
+            <button className={c.btnPrimary} onClick={() => setRefForwardOpen(true)}>
+              Modal with Ref
+            </button>
+            <button className={c.btn} onClick={() => modalRef.current?.focus()}>
+              Focus Modal via Ref
+            </button>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
+      <Section
+        title="Data Attributes"
+        description="Data attributes emitted for CSS targeting and testing."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="space-y-3">
+            <p className={`text-sm ${c.text}`}>
+              The Modal emits the following <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${dark ? "bg-gray-800" : "bg-gray-100"}`}>data-*</code> attributes for styling and testing:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                { attr: "data-modal-root", desc: "Root portal wrapper" },
+                { attr: "data-modal-overlay", desc: "Backdrop overlay" },
+                { attr: "data-modal-container", desc: "Centering container" },
+                { attr: "data-modal-content", desc: "Content wrapper (role=dialog)" },
+                { attr: "data-modal-header", desc: "Header section" },
+                { attr: "data-modal-body", desc: "Body section" },
+                { attr: "data-modal-footer", desc: "Footer section" },
+                { attr: "data-open", desc: "Present when modal is open" },
+                { attr: "data-nesting-level", desc: "Current nesting depth (number)" },
+                { attr: "data-reduce-motion", desc: "Present when motion is reduced" },
+              ].map(({ attr, desc }) => (
+                <div
+                  key={attr}
+                  className={`flex items-start gap-3 p-2.5 rounded-lg text-sm ${dark ? "bg-gray-800/50" : "bg-gray-50"}`}
+                >
+                  <code className={`shrink-0 px-1.5 py-0.5 rounded text-xs font-mono ${dark ? "bg-gray-700 text-blue-400" : "bg-blue-50 text-blue-700"}`}>
+                    {attr}
+                  </code>
+                  <span className={c.text}>{desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Modal Instances ─────────────────────────────────────────────── */}
+
+      <Modal
+        open={classesOpen}
+        onOpenChange={setClassesOpen}
+        title="Classes System Demo"
+        description="Each slot is styled via the classes prop."
+        classes={{
+          root: "custom-root",
+          overlay: "backdrop-blur-sm",
+          content: `w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden ${dark ? "bg-gray-900" : "bg-white"}`,
+          header: "flex items-start gap-3 p-6 pb-4 border-b border-blue-200",
+          title: "font-semibold text-lg text-blue-700",
+          closeButton: "shrink-0 p-1 rounded-md hover:bg-blue-100 transition-colors ml-auto",
+          body: "px-6 pb-6 pt-4",
+        }}
+      >
+        <p className={c.text}>
+          The <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">classes</code> prop
+          accepts an object with keys for each slot: root, overlay, container, content, header, title,
+          description, icon, closeButton, closeIcon, and body.
+        </p>
+        <div className="flex justify-end mt-6">
+          <button className={c.btnPrimary} onClick={() => setClassesOpen(false)}>
+            Got it
+          </button>
+        </div>
+      </Modal>
+
+      <Modal
+        open={unstyledOpen}
+        onOpenChange={setUnstyledOpen}
+        title="Unstyled Modal"
+        unstyled
+        classes={{
+          overlay: "fixed inset-0 bg-black/50",
+          container: "fixed inset-0 flex items-center justify-center",
+          content: "w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden",
+          header: "flex items-center justify-between p-5 border-b border-gray-200",
+          title: "text-lg font-bold text-gray-900",
+          closeButton: "p-1.5 rounded-lg hover:bg-gray-100 transition-colors",
+          body: "p-5",
+        }}
+      >
+        <p className="text-gray-600">
+          With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">unstyled</code> all
+          default styles are stripped. You must provide all styling via
+          the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">classes</code> prop.
+        </p>
+        <div className="flex justify-end mt-5">
+          <button className={c.btnPrimary} onClick={() => setUnstyledOpen(false)}>
+            Close
+          </button>
+        </div>
+      </Modal>
+
+      <Modal
+        open={reduceMotionOpen}
+        onOpenChange={setReduceMotionOpen}
+        title="Reduce Motion (true)"
+        description="This modal has animations completely disabled."
+        reduceMotion={true}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <p className="text-gray-600">
+          With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">reduceMotion=true</code>,
+          all open/close animations are suppressed regardless of user preference.
+        </p>
+      </Modal>
+
+      <Modal
+        open={reduceMotionAutoOpen}
+        onOpenChange={setReduceMotionAutoOpen}
+        title='Reduce Motion ("auto")'
+        description="Respects the user's prefers-reduced-motion setting."
+        reduceMotion="auto"
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <p className="text-gray-600">
+          With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">reduceMotion="auto"</code>,
+          animations are disabled only when the OS/browser <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">prefers-reduced-motion</code> media
+          query matches.
+        </p>
+      </Modal>
+
+      <Modal
+        open={focusTrapOpen}
+        onOpenChange={setFocusTrapOpen}
+        title="Focus Trap Enabled"
+        description="Tab cycles through focusable elements inside this modal."
+        trapFocus={true}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <div className="space-y-3">
+          <p className="text-gray-600">Try pressing Tab - focus stays within the modal.</p>
+          <input
+            type="text"
+            placeholder="First input"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            placeholder="Second input"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="flex justify-end gap-3">
+            <button className={c.btn} onClick={() => setFocusTrapOpen(false)}>
+              Cancel
+            </button>
+            <button className={c.btnPrimary} onClick={() => setFocusTrapOpen(false)}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={noFocusTrapOpen}
+        onOpenChange={setNoFocusTrapOpen}
+        title="Focus Trap Disabled"
+        description="Tab can move focus outside the modal."
+        trapFocus={false}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <div className="space-y-3">
+          <p className="text-gray-600">
+            With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">trapFocus=false</code>,
+            pressing Tab can move focus to elements behind the modal.
+          </p>
+          <input
+            type="text"
+            placeholder="Input field"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="flex justify-end">
+            <button className={c.btnPrimary} onClick={() => setNoFocusTrapOpen(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={initialFocusOpen}
+        onOpenChange={setInitialFocusOpen}
+        title="Initial Focus"
+        description="The email input receives focus automatically on open."
+        initialFocus={initialFocusRef}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input
+              type="text"
+              placeholder="Your name"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email (auto-focused)</label>
+            <input
+              ref={initialFocusRef}
+              type="email"
+              placeholder="you@example.com"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="flex justify-end">
+            <button className={c.btnPrimary} onClick={() => setInitialFocusOpen(false)}>
+              Submit
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={keepMountedOpen}
+        onOpenChange={setKeepMountedOpen}
+        title="Keep Mounted"
+        description="This modal stays in the DOM even when closed."
+        keepMounted
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <KeepMountedLogger onLog={handleKeepMountedLog} />
+        <div className="flex justify-end mt-4">
+          <button className={c.btnPrimary} onClick={() => setKeepMountedOpen(false)}>
+            Close
+          </button>
+        </div>
+      </Modal>
+
+      <Modal
+        open={customCloseIconOpen}
+        onOpenChange={setCustomCloseIconOpen}
+        title="Custom Close Icon"
+        description="This modal uses a custom close icon."
+        closeIcon={
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4v16m8-8H4"
+              transform="rotate(45 12 12)"
+            />
+          </svg>
+        }
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        bodyClassName={c.modalBody}
+      >
+        <p className="text-gray-600">
+          Pass any ReactNode to the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">closeIcon</code> prop
+          to replace the default close icon.
+        </p>
+      </Modal>
+
+      <Modal
+        open={disableAnimOpen}
+        onOpenChange={setDisableAnimOpen}
+        title="No Animation"
+        description="This modal opens and closes instantly."
+        disableAnimation={true}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <p className="text-gray-600">
+          The <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">disableAnimation</code> prop
+          completely removes open/close transitions.
+        </p>
+      </Modal>
+
+      <Modal
+        open={customZIndexOpen}
+        onOpenChange={setCustomZIndexOpen}
+        title="Custom Z-Index"
+        description="This modal renders with z-index: 99999."
+        zIndex={99999}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <p className="text-gray-600">
+          Use the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">zIndex</code> prop
+          to control stacking order when integrating with other overlays.
+        </p>
+      </Modal>
+
+      <Modal
+        open={useModalOpen}
+        onOpenChange={setUseModalOpen}
+        title="useModal Hook"
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <ModalChildWithHook />
+      </Modal>
+
+      <Modal
+        ref={modalRef}
+        open={refForwardOpen}
+        onOpenChange={setRefForwardOpen}
+        title="Ref Forwarding"
+        description="A ref is attached to this modal's content element."
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
+      >
+        <p className="text-gray-600">
+          The parent holds a ref to this modal. Use it for imperative actions
+          like <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">ref.current?.focus()</code>.
+        </p>
+        <div className="flex justify-end mt-4">
+          <button className={c.btnPrimary} onClick={() => setRefForwardOpen(false)}>
+            Close
+          </button>
+        </div>
+      </Modal>
 
       <Modal
         open={basicOpen}
         onOpenChange={setBasicOpen}
         title="Welcome Back"
-        contentClassName={modalContentClass}
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <p className="text-gray-600">
           This is a basic modal with just a title. Modal content goes here.
         </p>
         <div className="flex justify-end gap-3 mt-6">
-          <Button className={outlineStyles} onClick={() => setBasicOpen(false)}>
+          <button className={c.btn} onClick={() => setBasicOpen(false)}>
             Cancel
-          </Button>
-          <Button className={primaryStyles} onClick={() => setBasicOpen(false)}>
+          </button>
+          <button className={c.btnPrimary} onClick={() => setBasicOpen(false)}>
             Continue
-          </Button>
+          </button>
         </div>
       </Modal>
 
@@ -189,25 +827,25 @@ const ModalDemo = () => {
         onOpenChange={setWithDescriptionOpen}
         title="Project Settings"
         description="Configure your project preferences and team access permissions."
-        contentClassName={modalContentClass}
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <p className="text-gray-600">
           Both title and description support ReactNode, allowing custom HTML or
           JSX.
         </p>
         <div className="flex justify-end gap-3 mt-6">
-          <Button
-            className={primaryStyles}
+          <button
+            className={c.btnPrimary}
             onClick={() => setWithDescriptionOpen(false)}
           >
             Got it
-          </Button>
+          </button>
         </div>
       </Modal>
 
@@ -234,14 +872,14 @@ const ModalDemo = () => {
             </svg>
           </div>
         }
-        contentClassName={modalContentClass}
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
         iconClassName="shrink-0"
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <ul className="space-y-2 text-gray-600">
           <li className="flex items-center gap-2">
@@ -294,12 +932,12 @@ const ModalDemo = () => {
           </li>
         </ul>
         <div className="flex justify-end gap-3 mt-6">
-          <Button
-            className={primaryStyles}
+          <button
+            className={c.btnPrimary}
             onClick={() => setWithIconOpen(false)}
           >
             Explore Features
-          </Button>
+          </button>
         </div>
       </Modal>
 
@@ -307,7 +945,7 @@ const ModalDemo = () => {
         open={noHeaderOpen}
         onOpenChange={setNoHeaderOpen}
         showHeader={false}
-        contentClassName={modalContentClass}
+        contentClassName={c.modalContent}
         bodyClassName="p-6"
       >
         <div className="text-center py-4">
@@ -332,12 +970,12 @@ const ModalDemo = () => {
           <p className="text-gray-500 mb-6">
             No header modal - perfect for custom layouts and centered content.
           </p>
-          <Button
-            className={primaryStyles}
+          <button
+            className={c.btnPrimary}
             onClick={() => setNoHeaderOpen(false)}
           >
             Get Started
-          </Button>
+          </button>
         </div>
       </Modal>
 
@@ -378,18 +1016,18 @@ const ModalDemo = () => {
             and all associated files. This action cannot be undone.
           </p>
           <div className="flex gap-3">
-            <Button
-              className={`flex-1 ${outlineStyles}`}
+            <button
+              className={`flex-1 ${c.btn}`}
               onClick={() => setConfirmDeleteOpen(false)}
             >
               Cancel
-            </Button>
-            <Button
-              className={`flex-1 ${dangerStyles}`}
+            </button>
+            <button
+              className={`flex-1 ${c.btnDanger}`}
               onClick={() => setConfirmDeleteOpen(false)}
             >
               Delete
-            </Button>
+            </button>
           </div>
         </div>
       </Modal>
@@ -429,12 +1067,12 @@ const ModalDemo = () => {
             <p className="text-sm text-gray-500 mb-1">Confirmation sent to</p>
             <p className="font-medium text-gray-900">john.doe@example.com</p>
           </div>
-          <Button
-            className={`w-full ${successStyles}`}
+          <button
+            className={`w-full ${c.btnSuccess}`}
             onClick={() => setSuccessOpen(false)}
           >
             Continue Shopping
-          </Button>
+          </button>
         </div>
       </Modal>
 
@@ -445,12 +1083,12 @@ const ModalDemo = () => {
         description="Fill in the details below to get started."
         maxWidth={480}
         contentClassName="w-full max-w-[480px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <form
           className="space-y-4"
@@ -502,16 +1140,16 @@ const ModalDemo = () => {
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
-            <Button
+            <button
               type="button"
-              className={outlineStyles}
+              className={c.btn}
               onClick={() => setFormOpen(false)}
             >
               Cancel
-            </Button>
-            <Button type="submit" className={primaryStyles}>
+            </button>
+            <button type="submit" className={c.btnPrimary}>
               Create Project
-            </Button>
+            </button>
           </div>
         </form>
       </Modal>
@@ -577,12 +1215,12 @@ const ModalDemo = () => {
             <span className="text-3xl font-bold text-gray-900">$29</span>
             <span className="text-gray-500">/month</span>
           </div>
-          <Button
+          <button
             onClick={() => setUpgradeOpen(false)}
             className="w-full py-3 bg-linear-to-r from-violet-600 to-purple-600 text-white rounded-lg hover:from-violet-700 hover:to-purple-700 transition-all font-semibold"
           >
             Upgrade Now
-          </Button>
+          </button>
           <button
             onClick={() => setUpgradeOpen(false)}
             className="w-full mt-3 text-sm text-gray-500 hover:text-gray-700"
@@ -672,12 +1310,12 @@ const ModalDemo = () => {
         maxHeight={400}
         minWidth={500}
         contentClassName="w-full m-4 rounded-xl shadow-2xl overflow-hidden"
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <div className="space-y-4">
           <p className="text-gray-600">
@@ -954,13 +1592,13 @@ const ModalDemo = () => {
         description="This modal has a purple overlay with higher opacity."
         overlayColor="#4c1d95"
         overlayOpacity={0.7}
-        contentClassName={modalContentClass}
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <p className="text-gray-600">
           Customize the overlay with overlayColor and overlayOpacity props.
@@ -993,30 +1631,30 @@ const ModalDemo = () => {
             </svg>
           </div>
         }
-        contentClassName={modalContentClass}
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
+        contentClassName={c.modalContent}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
         iconClassName="shrink-0"
-        bodyClassName={modalBodyClass}
+        bodyClassName={c.modalBody}
       >
         <p className="text-gray-600">
           This modal cannot be dismissed by clicking outside or pressing Escape.
           Use the buttons below.
         </p>
         <div className="flex justify-end gap-3 mt-6">
-          <Button
-            className={outlineStyles}
+          <button
+            className={c.btn}
             onClick={() => setPreventCloseOpen(false)}
           >
             Cancel
-          </Button>
-          <Button
-            className="cursor-pointer px-4 py-2 rounded-lg font-medium bg-amber-500 text-white hover:bg-amber-600"
+          </button>
+          <button
+            className={c.btnWarning}
             onClick={() => setPreventCloseOpen(false)}
           >
             I Understand
-          </Button>
+          </button>
         </div>
       </Modal>
 
@@ -1027,12 +1665,12 @@ const ModalDemo = () => {
         description="Configure your project preferences."
         maxWidth={520}
         contentClassName="w-full max-w-[520px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        headerClassName={modalHeaderClass}
-        titleClassName={modalTitleClass}
-        descriptionClassName={modalDescriptionClass}
-        closeButtonClassName={modalCloseButtonClass}
-        closeIconClassName={modalCloseIconClass}
-        bodyClassName={modalBodyClass}
+        headerClassName={c.modalHeader}
+        titleClassName={c.modalTitle}
+        descriptionClassName={c.modalDescription}
+        closeButtonClassName={c.modalCloseBtn}
+        closeIconClassName={c.modalCloseIcon}
+        bodyClassName={c.modalBody}
       >
         <div className="space-y-4">
           <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -1041,12 +1679,12 @@ const ModalDemo = () => {
                 <p className="font-medium text-blue-900">Team Members</p>
                 <p className="text-sm text-blue-600">5 members with access</p>
               </div>
-              <Button
+              <button
                 className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                 onClick={() => setNestedLevel2Open(true)}
               >
                 Manage
-              </Button>
+              </button>
             </div>
           </div>
           <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -1065,18 +1703,18 @@ const ModalDemo = () => {
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-          <Button
-            className={outlineStyles}
+          <button
+            className={c.btn}
             onClick={() => setNestedLevel1Open(false)}
           >
             Cancel
-          </Button>
-          <Button
-            className={primaryStyles}
+          </button>
+          <button
+            className={c.btnPrimary}
             onClick={() => setNestedLevel1Open(false)}
           >
             Save Changes
-          </Button>
+          </button>
         </div>
 
         <Modal
@@ -1086,12 +1724,12 @@ const ModalDemo = () => {
           description="Manage project access."
           maxWidth={450}
           contentClassName="w-full max-w-[450px] m-4 rounded-xl shadow-2xl overflow-hidden"
-          headerClassName={modalHeaderClass}
-          titleClassName={modalTitleClass}
-          descriptionClassName={modalDescriptionClass}
-          closeButtonClassName={modalCloseButtonClass}
-          closeIconClassName={modalCloseIconClass}
-          bodyClassName={modalBodyClass}
+          headerClassName={c.modalHeader}
+          titleClassName={c.modalTitle}
+          descriptionClassName={c.modalDescription}
+          closeButtonClassName={c.modalCloseBtn}
+          closeIconClassName={c.modalCloseIcon}
+          bodyClassName={c.modalBody}
         >
           <div className="space-y-3">
             {[
@@ -1132,15 +1770,17 @@ const ModalDemo = () => {
             Invite Member
           </button>
           <div className="flex justify-end mt-6 pt-4 border-t border-gray-100">
-            <Button
-              className={primaryStyles}
+            <button
+              className={c.btnPrimary}
               onClick={() => setNestedLevel2Open(false)}
             >
               Done
-            </Button>
+            </button>
           </div>
         </Modal>
       </Modal>
+
+      {/* ─── Props Tables ────────────────────────────────────────────────── */}
 
       <Section title="Modal Props" isDarkMode={dark}>
         <PropsTable isDarkMode={dark}>
@@ -1171,6 +1811,13 @@ const ModalDemo = () => {
           <PropRow isDarkMode={dark} name="nestingLevel" type="number" description="External nesting level override" />
           <PropRow isDarkMode={dark} name="maxNestingLevel" type="number" defaultVal="5" description="Maximum nested modal depth" />
           <PropRow isDarkMode={dark} name="zIndex" type="number" description="Custom z-index value" />
+          <PropRow isDarkMode={dark} name="classes" type="ModalClasses" description="Object with class overrides for each slot: root, overlay, container, content, header, title, description, icon, closeButton, closeIcon, body" />
+          <PropRow isDarkMode={dark} name="unstyled" type="boolean" defaultVal="false" description="Strips all default styles; use with classes prop for full control" />
+          <PropRow isDarkMode={dark} name="reduceMotion" type='boolean | "auto"' description='Disable animations (true) or respect prefers-reduced-motion ("auto")' />
+          <PropRow isDarkMode={dark} name="trapFocus" type="boolean" defaultVal="true" description="Trap focus within the modal when open" />
+          <PropRow isDarkMode={dark} name="restoreFocus" type="boolean" defaultVal="true" description="Restore focus to the trigger element on close" />
+          <PropRow isDarkMode={dark} name="initialFocus" type="RefObject<HTMLElement | null>" description="Element to receive focus when the modal opens" />
+          <PropRow isDarkMode={dark} name="keepMounted" type="boolean" defaultVal="false" description="Keep modal DOM mounted when closed (hidden via display:none)" />
           <PropRow isDarkMode={dark} name="aria-label" type="string" description="Accessible label for modal" />
           <PropRow isDarkMode={dark} name="aria-labelledby" type="string" description="ID of labelling element" />
           <PropRow isDarkMode={dark} name="aria-describedby" type="string" description="ID of describing element" />
@@ -1195,7 +1842,7 @@ const ModalDemo = () => {
       </Section>
 
       <Section title="Sub Components" isDarkMode={dark}>
-        <p className={`text-sm mb-4 ${dark ? "text-gray-400" : "text-gray-600"}`}>
+        <p className={`text-sm mb-4 ${c.text}`}>
           Optional sub-components for more granular control over modal structure.
           These can be used instead of or in addition to the built-in header/body structure.
         </p>
@@ -1220,6 +1867,32 @@ const ModalDemo = () => {
           />
         </PropsTable>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `open` with `onOpenChange` (and title/description props) for controlled visibility. Nesting levels are bounded—design flows that avoid deep modal stacks."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Route changes while open should close or confirm to avoid orphaned focus.",
+          "iOS Safari viewport and scroll quirks—test with fixed positioning.",
+          "Nested modals must manage focus return and z-index deliberately.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `aria-labelledby` / `aria-describedby` for title and description.",
+          "Trap focus and restore on close.",
+          "Close on Escape when appropriate and documented.",
+        ]}
+        donts={[
+          "Do not exceed `maxNestingLevel` in production flows.",
+          "Do not render essential page actions only inside a dismissed modal.",
+          "Do not remove visible focus outlines.",
+        ]}
+      />
     </div>
   );
 };

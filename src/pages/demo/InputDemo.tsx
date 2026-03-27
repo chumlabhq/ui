@@ -7,6 +7,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1618,7 +1621,7 @@ const InputDemo = () => {
               'Clear button has aria-label="Clear input"',
               'Character count uses aria-live="polite"',
               "Clickable icons are <button> with aria-label",
-              "Dev warnings fire for missing accessible names",
+              "Provide `label` or `aria-label` / `aria-labelledby` for an accessible name",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -1657,6 +1660,32 @@ const InputDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onChange` and/or `onValueChange` for controlled text. `onValueChange` receives the string only; `onChange` receives the native event (including clear). Use `defaultValue` for uncontrolled."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Autofill and password managers may bypass React—test real browsers.",
+          "Icon buttons need `startIconLabel` / `endIconLabel` when they perform actions.",
+          "`clearable` should sync with form libraries that track touched state.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `label` or `aria-label` / `aria-labelledby`.",
+          "Pair `error` with visible `errorMessage` and ids for `aria-describedby`.",
+          "Use `maxLength` with `showCount` when you enforce limits.",
+        ]}
+        donts={[
+          "Do not use both conflicting `value` and uncontrolled defaults without intent.",
+          "Do not remove visible labels and rely on placeholder alone.",
+          "Do not block paste for arbitrary security—prefer server validation.",
+        ]}
+      />
     </div>
   );
 };

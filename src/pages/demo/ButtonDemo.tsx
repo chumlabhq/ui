@@ -7,6 +7,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1268,7 +1271,7 @@ const ButtonDemo = () => {
               "Focus-visible ring for keyboard navigation",
               'Loader has aria-hidden="true" (decorative)',
               'ButtonGroup uses role="group" with aria-orientation',
-              "Dev warning fires when icon-only button lacks aria-label",
+              "Icon-only buttons need `aria-label` or `aria-labelledby` from the app",
               "prefers-reduced-motion respected via reduceMotion prop",
               "Disabled anchor links remove href and set tabIndex=-1",
             ].map((text) => (
@@ -1307,6 +1310,32 @@ const ButtonDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Button is presentational except for `loading` and `disabled`. Use normal React state in parents for toggles; do not expect internal value state beyond loading."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "`asChild` requires exactly one valid element child—merge event handlers carefully.",
+          "Anchor buttons (`as=\"a\"`) need `href` for keyboard and SR expectations.",
+          "Loading state should pair with `loadingText` or visible content so progress is clear.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide an accessible name for icon-only buttons.",
+          "Use `type=\"button\"` in forms unless you intend to submit.",
+          "Disable or show loading for async actions to prevent double submission.",
+        ]}
+        donts={[
+          "Do not rely on color alone for destructive actions.",
+          "Do not nest interactive elements inside the button when `asChild` is false.",
+          "Do not omit focus styles in custom themes.",
+        ]}
+      />
     </div>
   );
 };

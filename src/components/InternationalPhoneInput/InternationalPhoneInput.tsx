@@ -176,18 +176,6 @@ const InternationalPhoneInput = forwardRef<
     const successId = `${inputId}-success`;
     const statusId = `${inputId}-status`;
 
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (!label && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
-          warnedRef.current = true;
-          console.warn(
-            "InternationalPhoneInput: A phone input without a label requires `aria-label` or `aria-labelledby` for accessibility.",
-          );
-        }
-      }
-    }, [label, ariaLabel, ariaLabelledBy]);
-
     const sortedCountries = useMemo(
       () => sortCountryOptions(countries, preferredCountries),
       [countries, preferredCountries],

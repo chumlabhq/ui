@@ -7,6 +7,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -804,7 +807,7 @@ const CheckboxDemo = () => {
               'Error messages use role="alert" for screen reader announcements',
               "Description text linked via aria-describedby",
               "Indeterminate state set via DOM property (input.indeterminate)",
-              "Dev warning fires (once) when no label, aria-label, or aria-labelledby provided",
+              "Provide `label` or `aria-label` / `aria-labelledby` for standalone checkboxes",
               "Ref forwarding via callback ref pattern for programmatic focus",
               "Supports all native input attributes (tabIndex, autoFocus, form, value, etc.)",
             ].map((text) => (
@@ -840,6 +843,32 @@ const CheckboxDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `checked` with `onCheckedChange` for controlled mode, or `defaultChecked` for uncontrolled. The indeterminate state is set via the `indeterminate` prop and reflected on the native input."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Indeterminate is visual only for the mixed state—mirror your data model in the parent.",
+          "Clicking the label should toggle the box; avoid duplicate handlers on both.",
+          "Forms may need explicit `name` / `value` for serialization—test native submit.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Associate `label` or `aria-label` with every standalone checkbox.",
+          "Use `description` for helper text that should not be the sole accessible name.",
+          "Expose validation with `error` and `errorMessage` consistently with other fields.",
+        ]}
+        donts={[
+          "Do not use checkboxes for mutually exclusive options—use radio or segmented control.",
+          "Do not toggle controlled `checked` without updating the source of truth.",
+          "Do not rely on color alone for error state.",
+        ]}
+      />
     </div>
   );
 };

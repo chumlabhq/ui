@@ -6,10 +6,12 @@ import {
   useId,
   useContext,
   useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
 import type {
   ModalProps,
+  ModalClasses,
   ModalHeaderProps,
   ModalBodyProps,
   ModalFooterProps,
@@ -19,9 +21,13 @@ import { CloseIcon } from "./icons";
 import { ModalContext } from "./ModalContext";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
+import { useReducedMotion } from "../../utils/useReducedMotion";
+import { getFocusableElements } from "../../utils/focusUtils";
 
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
+
+const EMPTY_CLASSES: ModalClasses = {};
 
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
   (
@@ -34,12 +40,16 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       icon,
       showIcon = false,
       showCloseButton = true,
-      closeIcon,
+      closeIcon: closeIconProp,
       showHeader = true,
       showOverlay = true,
       preventOutsideClick = false,
       closeOnEscape = true,
       lockBackgroundScroll = true,
+      trapFocus = true,
+      restoreFocus = true,
+      initialFocus,
+      keepMounted = false,
       maxWidth,
       maxHeight,
       minWidth,
@@ -50,13 +60,17 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       overlayOpacity = 0.5,
       animationDuration = 200,
       disableAnimation = false,
+      reduceMotion = "auto",
       nestingLevel: externalNestingLevel,
       maxNestingLevel = 5,
       zIndex: customZIndex,
+      classes: classesProp,
+      unstyled = false,
       className = "",
+      contentStyle,
+      rootClassName = "",
       overlayClassName = "",
       contentClassName = "",
-      contentStyle = {},
       headerClassName = "",
       titleClassName = "",
       descriptionClassName = "",
@@ -64,7 +78,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       closeButtonClassName = "",
       closeIconClassName = "",
       bodyClassName = "",
-      rootClassName = "",
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
@@ -78,6 +91,35 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const contentRef = useRef<HTMLDivElement>(null);
     const mergedContentRef = useMemo(() => mergeRefs(contentRef, ref), [ref]);
     const previousActiveElement = useRef<HTMLElement | null>(null);
+    const [mounted, setMounted] = useState(open || keepMounted);
+
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
+    const effectiveDuration = prefersReducedMotion || disableAnimation ? 0 : animationDuration;
+    const shouldAnimate = effectiveDuration > 0;
+
+    // Merge classes: individual classNames take precedence over classes object
+    const mergedClasses = useMemo<Required<ModalClasses>>(() => {
+      const base = classesProp ?? EMPTY_CLASSES;
+      return {
+        root: rootClassName || base.root || "",
+        overlay: overlayClassName || base.overlay || "",
+        container: base.container || "",
+        content: contentClassName || base.content || "",
+        header: headerClassName || base.header || "",
+        title: titleClassName || base.title || "",
+        description: descriptionClassName || base.description || "",
+        icon: iconClassName || base.icon || "",
+        closeButton: closeButtonClassName || base.closeButton || "",
+        closeIcon: closeIconClassName || base.closeIcon || "",
+        body: bodyClassName || base.body || "",
+      };
+    }, [
+      classesProp,
+      rootClassName, overlayClassName, contentClassName,
+      headerClassName, titleClassName, descriptionClassName,
+      iconClassName, closeButtonClassName, closeIconClassName,
+      bodyClassName,
+    ]);
 
     const parentContext = useContext(ModalContext);
     const nestingLevel =
@@ -90,15 +132,92 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       onOpenChange(false);
     }, [onOpenChange]);
 
+    // Mount/unmount management
+    const [prevOpen, setPrevOpen] = useState(open);
+    if (prevOpen !== open) {
+      setPrevOpen(open);
+      if (open && !mounted) {
+        setMounted(true);
+      }
+    }
+
+    useEffect(() => {
+      if (!open && !keepMounted && mounted) {
+        const timer = setTimeout(() => setMounted(false), effectiveDuration);
+        return () => clearTimeout(timer);
+      }
+    }, [open, keepMounted, mounted, effectiveDuration]);
+
+    // Keyboard: Escape + Focus trap
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && open && closeOnEscape) {
+        if (!open) return;
+
+        if (event.key === "Escape" && closeOnEscape) {
           event.stopPropagation();
           handleClose();
+          return;
+        }
+
+        if (event.key === "Tab" && trapFocus) {
+          const content = contentRef.current;
+          if (!content) return;
+
+          const focusable = getFocusableElements(content);
+          if (focusable.length === 0) {
+            event.preventDefault();
+            return;
+          }
+
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
         }
       },
-      [open, closeOnEscape, handleClose],
+      [open, closeOnEscape, trapFocus, handleClose],
     );
+
+    useEffect(() => {
+      if (open) {
+        document.addEventListener("keydown", handleKeyDown, true);
+        return () => document.removeEventListener("keydown", handleKeyDown, true);
+      }
+    }, [open, handleKeyDown]);
+
+    // Scroll lock
+    useEffect(() => {
+      if (lockBackgroundScroll && open) {
+        acquireScrollLock();
+        return () => releaseScrollLock();
+      }
+    }, [open, lockBackgroundScroll]);
+
+    // Focus management
+    useEffect(() => {
+      if (open) {
+        previousActiveElement.current = document.activeElement as HTMLElement;
+        const timer = setTimeout(() => {
+          if (initialFocus?.current) {
+            initialFocus.current.focus();
+          } else {
+            contentRef.current?.focus();
+          }
+        }, 10);
+        return () => {
+          clearTimeout(timer);
+          if (restoreFocus && previousActiveElement.current?.focus) {
+            previousActiveElement.current.focus();
+          }
+        };
+      }
+    }, [open, initialFocus, restoreFocus]);
 
     const handleOverlayClick = useCallback(
       (event: React.MouseEvent<HTMLDivElement>) => {
@@ -118,66 +237,27 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       event.stopPropagation();
     }, []);
 
-    useEffect(() => {
-      if (lockBackgroundScroll && open) {
-        acquireScrollLock();
-        return () => releaseScrollLock();
-      }
-    }, [open, lockBackgroundScroll]);
-
-    useEffect(() => {
-      if (open) {
-        document.addEventListener("keydown", handleKeyDown, true);
-        return () => document.removeEventListener("keydown", handleKeyDown, true);
-      }
-    }, [open, handleKeyDown]);
-
-    useEffect(() => {
-      if (open) {
-        previousActiveElement.current = document.activeElement as HTMLElement;
-        const timer = setTimeout(() => {
-          contentRef.current?.focus();
-        }, 10);
-        return () => {
-          clearTimeout(timer);
-          if (previousActiveElement.current?.focus) {
-            previousActiveElement.current.focus();
-          }
-        };
-      }
-    }, [open]);
-
     const contentStyles = useMemo(() => {
       const styles: React.CSSProperties = {
-        ...contentStyle,
-        transitionDuration: disableAnimation ? "0ms" : `${animationDuration}ms`,
+        ...(contentStyle ?? undefined),
+        transitionDuration: `${effectiveDuration}ms`,
       };
 
       if (maxWidth) {
         styles.maxWidth = typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
       }
       if (maxHeight) {
-        styles.maxHeight =
-          typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
+        styles.maxHeight = typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
       }
       if (minWidth) {
         styles.minWidth = typeof minWidth === "number" ? `${minWidth}px` : minWidth;
       }
       if (minHeight) {
-        styles.minHeight =
-          typeof minHeight === "number" ? `${minHeight}px` : minHeight;
+        styles.minHeight = typeof minHeight === "number" ? `${minHeight}px` : minHeight;
       }
 
       return styles;
-    }, [
-      contentStyle,
-      maxWidth,
-      maxHeight,
-      minWidth,
-      minHeight,
-      animationDuration,
-      disableAnimation,
-    ]);
+    }, [contentStyle, maxWidth, maxHeight, minWidth, minHeight, effectiveDuration]);
 
     const contextValue = useMemo<ModalContextValue>(
       () => ({
@@ -186,48 +266,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }),
       [nestingLevel, handleClose],
     );
-
-    const renderHeader = () => {
-      if (!showHeader) return null;
-
-      const hasTitle = title !== undefined && title !== null;
-      const hasDescription = description !== undefined && description !== null;
-
-      return (
-        <div
-          className={headerClassName}
-          data-modal-header
-        >
-          {showIcon && icon && (
-            <span className={iconClassName}>
-              {icon}
-            </span>
-          )}
-          <div>
-            {hasTitle && (
-              <div id={titleId} className={titleClassName}>
-                {title}
-              </div>
-            )}
-            {hasDescription && (
-              <div id={descriptionId} className={descriptionClassName}>
-                {description}
-              </div>
-            )}
-          </div>
-          {showCloseButton && (
-            <button
-              type="button"
-              onClick={handleClose}
-              className={closeButtonClassName}
-              aria-label="Close modal"
-            >
-              {closeIcon || <CloseIcon className={closeIconClassName} />}
-            </button>
-          )}
-        </div>
-      );
-    };
 
     if (!isNestingAllowed && nestingLevel >= maxNestingLevel) {
       if (process.env.NODE_ENV !== "production") {
@@ -238,43 +276,49 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       return null;
     }
 
+    if (!mounted && !keepMounted) {
+      return null;
+    }
+
+    const hasTitle = title !== undefined && title !== null;
+    const hasDescription = description !== undefined && description !== null;
+
     const modalContent = (
       <ModalContext.Provider value={contextValue}>
         <div
           id={modalId}
-          className={[
+          className={unstyled ? mergedClasses.root : [
             "fixed inset-0",
-            !disableAnimation && "transition-opacity",
-            open
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none",
-            rootClassName,
+            shouldAnimate && "transition-opacity",
+            open ? "opacity-100" : "opacity-0",
+            mergedClasses.root,
           ]
             .filter(Boolean)
             .join(" ")}
           style={{
             zIndex,
-            transitionDuration: disableAnimation ? "0ms" : `${animationDuration}ms`,
+            transitionDuration: `${effectiveDuration}ms`,
+            pointerEvents: open ? undefined : "none",
+            visibility: open ? undefined : "hidden",
           }}
           data-modal-root
           data-open={open || undefined}
           data-nesting-level={nestingLevel}
+          data-reduce-motion={prefersReducedMotion || undefined}
         >
           {showOverlay && (
             <div
-              className={[
+              className={unstyled ? mergedClasses.overlay : [
                 "fixed inset-0",
-                !disableAnimation && "transition-opacity",
-                overlayClassName,
+                shouldAnimate && "transition-opacity",
+                mergedClasses.overlay,
               ]
                 .filter(Boolean)
                 .join(" ")}
               style={{
                 backgroundColor: overlayColor,
                 opacity: open ? overlayOpacity : 0,
-                transitionDuration: disableAnimation
-                  ? "0ms"
-                  : `${animationDuration}ms`,
+                transitionDuration: `${effectiveDuration}ms`,
               }}
               onClick={handleOverlayClick}
               aria-hidden="true"
@@ -283,9 +327,10 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           )}
 
           <div
-            className={[
+            className={unstyled ? mergedClasses.container : [
               "fixed inset-0 overflow-y-auto",
               centered && "flex items-center justify-center",
+              mergedClasses.container,
             ]
               .filter(Boolean)
               .join(" ")}
@@ -297,15 +342,15 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
               role="dialog"
               aria-modal="true"
               aria-label={ariaLabel}
-              aria-labelledby={title ? titleId : ariaLabelledBy}
-              aria-describedby={description ? descriptionId : ariaDescribedBy}
+              aria-labelledby={hasTitle ? titleId : ariaLabelledBy}
+              aria-describedby={hasDescription ? descriptionId : ariaDescribedBy}
               tabIndex={-1}
-              className={[
+              className={unstyled ? [mergedClasses.content, className].filter(Boolean).join(" ") : [
                 "relative outline-none bg-white",
-                !disableAnimation && "transition-all transform",
+                shouldAnimate && "transition-all transform",
                 fullScreen && "w-full h-full",
-                !disableAnimation && (open ? "opacity-100 scale-100" : "opacity-0 scale-95"),
-                contentClassName,
+                shouldAnimate && (open ? "opacity-100 scale-100" : "opacity-0 scale-95"),
+                mergedClasses.content,
                 className,
               ]
                 .filter(Boolean)
@@ -313,10 +358,39 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
               style={contentStyles}
               onClick={handleContentClick}
               data-modal-content
-              data-modal-ignore-outside
             >
-              {showHeader && renderHeader()}
-              <div className={bodyClassName} data-modal-body>
+              {showHeader && (hasTitle || hasDescription || showCloseButton) && (
+                <div className={mergedClasses.header || undefined} data-modal-header>
+                  {showIcon && icon && (
+                    <span className={mergedClasses.icon || undefined}>
+                      {icon}
+                    </span>
+                  )}
+                  <div>
+                    {hasTitle && (
+                      <div id={titleId} className={mergedClasses.title || undefined}>
+                        {title}
+                      </div>
+                    )}
+                    {hasDescription && (
+                      <div id={descriptionId} className={mergedClasses.description || undefined}>
+                        {description}
+                      </div>
+                    )}
+                  </div>
+                  {showCloseButton && (
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className={mergedClasses.closeButton || undefined}
+                      aria-label="Close modal"
+                    >
+                      {closeIconProp || <CloseIcon className={mergedClasses.closeIcon || undefined} />}
+                    </button>
+                  )}
+                </div>
+              )}
+              <div className={mergedClasses.body || undefined} data-modal-body>
                 {children}
               </div>
             </div>

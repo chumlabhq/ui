@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import type {
   CascadingOption,
   CascadingValue,
@@ -19,8 +19,6 @@ export const useCascadingDropdown = ({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
-  label,
-  "aria-label": ariaLabel,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
   const [internalValue, setInternalValue] = useControllableState<CascadingValue>({
     value,
@@ -42,20 +40,6 @@ export const useCascadingDropdown = ({
   const [loadedChildren, setLoadedChildren] = useState<Record<string, CascadingOption[]>>({});
   const submenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHoveringSubmenuRef = useRef(false);
-
-  // Accessibility dev warning for missing label/aria-label
-  const warnedRef = useRef(false);
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
-      if (!label && !ariaLabel) {
-        warnedRef.current = true;
-        console.warn(
-          "[CascadingDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
-          "so that screen readers can identify this dropdown."
-        );
-      }
-    }
-  }, [label, ariaLabel]);
 
   const clearSubmenuTimeout = useCallback(() => {
     if (submenuTimeoutRef.current) {

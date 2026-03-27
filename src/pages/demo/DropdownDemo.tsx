@@ -9,6 +9,9 @@ import {
   DemoLabel,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -1777,6 +1780,32 @@ const DropdownDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` and `onValueChange` for the selection, and `open` / `onOpenChange` when you control visibility. Async options should update the `options` array from the parent."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Empty or loading option lists need clear UI and SR feedback.",
+          "Virtualized or very long lists may need search—use SearchableDropdown when appropriate.",
+          "Form submission: ensure `name` and hidden inputs match your backend contract.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `label` or `aria-label` on the trigger.",
+          "Return a real `<button>` from `renderTrigger` for accessibility.",
+          "Restore focus to the trigger after close.",
+        ]}
+        donts={[
+          "Do not put essential navigation only inside the closed listbox.",
+          "Do not block keyboard type-ahead without an alternative.",
+          "Do not use duplicate `value` keys in `options`.",
+        ]}
+      />
     </div>
   );
 };

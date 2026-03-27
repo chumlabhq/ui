@@ -8,6 +8,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1650,6 +1653,32 @@ const TabPanelDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onValueChange` for controlled tabs, or `defaultValue` for uncontrolled. Match `activationMode` to whether focus moves or clicks activate panels."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Removing a tab while it is active requires moving `value` to a valid id.",
+          "Dynamic tab counts affect roving tabindex—retest after async loads.",
+          "Nested tab sets should have distinct labels and DOM structure.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `aria-label` or `aria-labelledby` on the tab list when needed.",
+          "Keep tab ids stable across renders for focus and announcements.",
+          "Use manual activation when panels contain heavy content or forms.",
+        ]}
+        donts={[
+          "Do not nest essential page navigation only inside tab panels.",
+          "Do not duplicate the same `id` across tabs.",
+          "Do not hide focus outlines on tab triggers.",
+        ]}
+      />
     </div>
   );
 };

@@ -7,6 +7,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -764,7 +767,7 @@ const OtpInputDemo = () => {
               "Label auto-associated via htmlFor",
               'autoComplete="one-time-code" on first input',
               'inputMode="numeric" for mobile keyboards',
-              "Dev warning for missing label/aria-label",
+              "Provide `label` or `aria-label` / `aria-labelledby` for the group",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -802,6 +805,32 @@ const OtpInputDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onValueChange` (and `onComplete`) for controlled OTP entry, or `defaultValue` for uncontrolled. Length is fixed by the `length` prop."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Paste from SMS may include spaces—validate or normalize in the parent.",
+          "Resend cooldown should disable submit, not only the OTP field.",
+          "Rate limiting and fraud checks belong outside the component.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide a visible label or `aria-label` / `aria-labelledby` for the group.",
+          "Mirror server errors with `error` and `errorMessage`.",
+          "Test with password managers and OS OTP autofill where applicable.",
+        ]}
+        donts={[
+          "Do not log OTP values to analytics or console.",
+          "Do not block paste unless a security policy explicitly requires it.",
+          "Do not shrink hit targets below accessible size on mobile.",
+        ]}
+      />
     </div>
   );
 };

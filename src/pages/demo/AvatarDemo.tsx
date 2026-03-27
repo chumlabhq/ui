@@ -14,6 +14,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1788,6 +1791,32 @@ const AvatarDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Image and fallback content are driven by props; there is no separate internal form state. Control `src` / `name` from your data layer and let the component handle loading and error fallbacks."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Broken image URLs should show the initials or fallback slot—verify your `onError` handling in design reviews.",
+          "Very long names truncate in initials; confirm max length with design tokens.",
+          "Status badges and groups add extra DOM—test zoom and high-contrast themes.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `name` or meaningful `alt` / `aria-label` for standalone avatars.",
+          "Use stable `src` URLs or cache-bust intentionally to avoid flicker.",
+          "Reserve group overflow counts for supplementary information, not primary identity.",
+        ]}
+        donts={[
+          "Do not use avatars as the only cue for critical account actions.",
+          "Do not omit accessible names on icon-only or image-only avatars.",
+          "Do not load huge unoptimized images without size constraints.",
+        ]}
+      />
     </div>
   );
 };

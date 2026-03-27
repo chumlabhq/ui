@@ -46,7 +46,10 @@ export interface TextAreaProps
   startIconLabel?: string;
   /** Accessible label for `endIcon` when it is clickable. Required with `onEndIconClick`. */
   endIconLabel?: string;
-  /** Convenience callback fired with the textarea's string value on change. */
+  /**
+   * Fired with the current string value when the value changes (including clear).
+   * Prefer this when you only need the value; use `onChange` when you need the DOM event.
+   */
   onValueChange?: (value: string) => void;
   /** Show a built-in clear button when the textarea has a value. */
   clearable?: boolean;

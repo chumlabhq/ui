@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useEffect, useState, useCallback, useMemo } from "react";
+import { forwardRef, useState, useCallback, useMemo } from "react";
 import type { SyntheticEvent } from "react";
 import type { CountryFlagProps, CountryFlagClasses, CountryFlagTooltipConfig } from "./utils/types";
 import {
@@ -36,18 +36,6 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     },
     ref,
   ) => {
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (!alt && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
-          warnedRef.current = true;
-          console.warn(
-            "CountryFlag: A flag without an alt prop requires `aria-label` or `aria-labelledby` for accessibility.",
-          );
-        }
-      }
-    }, [alt, rest]);
-
     const [hasError, setHasError] = useState(false);
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [prevCode, setPrevCode] = useState(code);

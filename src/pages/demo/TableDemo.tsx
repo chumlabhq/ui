@@ -1,7 +1,15 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Table, Pagination } from "../../components/Table";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Section, CodeBlock, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  CodeBlock,
+  PropsTable,
+  PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
+} from "./components";
 import { useTheme } from "./ThemeContext";
 
 // Basic User interface
@@ -1453,41 +1461,73 @@ const TableDemo = () => {
         title="Core API (PropsTable)"
         description="Shared documentation layout for primary Table props."
       >
-        <PropsTable>
+        <PropsTable isDarkMode={dark}>
           <PropRow
             name="columns / COLUMNS"
             type="ColumnDef[]"
             description="TanStack column definitions (or COLUMNS static export)"
+            isDarkMode={dark}
           />
           <PropRow
             name="data / COLUMNS_DATA"
             type="TData[]"
             description="Row data (or COLUMNS_DATA static export)"
+            isDarkMode={dark}
           />
           <PropRow
             name="loading"
             type="boolean"
             defaultVal="false"
             description="Shimmer loading state"
+            isDarkMode={dark}
           />
           <PropRow
             name="ariaLabel"
             type="string"
             defaultVal='"Data table"'
             description="Accessible name for the table"
+            isDarkMode={dark}
           />
           <PropRow
             name="getRowId"
             type="(row) => string"
             description="Stable row id for selection and keys"
+            isDarkMode={dark}
           />
           <PropRow
             name="emptyContent"
             type="ReactNode"
             description="Custom empty state when data is empty"
+            isDarkMode={dark}
           />
         </PropsTable>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Table is data-in: pass `columns` and `data` from TanStack definitions. Selection, pagination, and pinning are controlled via props; the component does not fetch."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Row ids must be stable for selection and virtualization.",
+          "Pinned columns and horizontal scroll interact—test on small screens.",
+          "Empty and loading states should be explicit for UX and SR.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `ariaLabel` for the table landmark.",
+          "Use `getRowId` when rows lack natural keys.",
+          "Keep column definitions memoized to avoid unnecessary work.",
+        ]}
+        donts={[
+          "Do not render thousands of rows without virtualization strategy.",
+          "Do not put interactive elements in headers without keyboard support.",
+          "Do not omit text alternatives for icon-only actions.",
+        ]}
+      />
     </>
   );
 };

@@ -7,6 +7,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 const getClasses = (dark: boolean) => ({
@@ -918,7 +921,7 @@ const SwitchDemo = () => {
               "aria-checked reflects the current state",
               "Label automatically associated with switch via htmlFor",
               "Description text linked via aria-describedby",
-              "Dev warning fires (once) when no label, aria-label, or aria-labelledby provided",
+              "Provide `label` or `aria-label` / `aria-labelledby` for standalone switches",
               "Hidden input for form submission when name prop is provided",
               "Supports both controlled and uncontrolled modes",
               "Respects prefers-reduced-motion via motion-reduce:transition-none",
@@ -958,6 +961,32 @@ const SwitchDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `checked` with `onCheckedChange` for controlled mode, or `defaultChecked` for uncontrolled. Keep boolean state in the parent for forms and analytics."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Async saves should disable the switch or show loading to prevent conflicting toggles.",
+          "Server truth may disagree with optimistic UI—reconcile on error.",
+          "Screen readers announce role and state; test with real SR + label pairings.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Pair every switch with a visible label or `aria-label`.",
+          "Use for binary settings; prefer explicit Save when changes are destructive.",
+          "Reflect validation with `error` and `errorMessage` like other fields.",
+        ]}
+        donts={[
+          "Do not use a switch for navigation or opening URLs.",
+          "Do not nest multiple switches without clear grouping.",
+          "Do not omit focus styles when customizing.",
+        ]}
+      />
     </div>
   );
 };

@@ -630,27 +630,6 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     const getStatus = getStepStatus || defaultGetStepStatus;
     const checkClickable = isStepClickable || defaultIsStepClickable;
 
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (
-          valueProp !== undefined &&
-          steps.length > 0 &&
-          !steps.some((s) => s.id === valueProp)
-        ) {
-          const looseMatch = steps.find(
-            (s) => String(s.id) === String(valueProp),
-          );
-          if (looseMatch) {
-            console.warn(
-              `Stepper: value ${JSON.stringify(valueProp)} (${typeof valueProp}) does not match any step ID. ` +
-                `Did you mean ${JSON.stringify(looseMatch.id)} (${typeof looseMatch.id})? ` +
-                `Step IDs use strict equality (===) for matching.`,
-            );
-          }
-        }
-      }
-    }, [valueProp, steps]);
-
     const stepRefs = useRef<(HTMLElement | null)[]>([]);
     const getStatusRef = useRef(getStatus);
     const checkClickableRef = useRef(checkClickable);

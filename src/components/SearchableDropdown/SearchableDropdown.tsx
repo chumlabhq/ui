@@ -563,15 +563,7 @@ const SearchableDropdown = forwardRef<
     (node: HTMLElement | null) => {
       if (typeof forwardedRef === "function") forwardedRef(node as HTMLButtonElement);
       else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      if (node && process.env.NODE_ENV !== "production") {
-        if (node.tagName !== "BUTTON") {
-          console.warn(
-            "[SearchableDropdown] renderTrigger must return a <button> element for proper accessibility. " +
-              `Received: <${node.tagName.toLowerCase()}>. Screen readers and keyboard navigation may not work correctly.`,
-          );
-        }
-      }
-      setTriggerNode(node);
+        setTriggerNode(node);
     },
     [forwardedRef],
   );

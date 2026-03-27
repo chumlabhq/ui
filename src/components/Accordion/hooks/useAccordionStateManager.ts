@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../../utils/useIsomorphicLayoutEffect";
 import { createExpandedStore } from "../utils/context";
 import type { AccordionExpandEvent, AccordionType } from "../utils/types";
@@ -56,21 +56,6 @@ export function useAccordionStateManager(
   } = options;
 
   const isControlled = controlledValue !== undefined;
-
-  // Warn on controlled/uncontrolled mode switching
-  const wasControlledRef = useRef(isControlled);
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production") {
-      if (wasControlledRef.current !== isControlled) {
-        console.warn(
-          `Accordion: Component switched from ${wasControlledRef.current ? "controlled" : "uncontrolled"} to ${isControlled ? "controlled" : "uncontrolled"}. ` +
-          "This is not supported and may cause unexpected behavior. " +
-          "Decide between using a controlled or uncontrolled accordion for the lifetime of the component.",
-        );
-      }
-      wasControlledRef.current = isControlled;
-    }
-  }, [isControlled]);
 
   // Use refs for latest callback values to avoid stale closures
   const onValueChangeRef = useRef(onValueChange);
@@ -131,40 +116,6 @@ export function useAccordionStateManager(
       }
     }
   }, [defaultExpandAll, type, isControlled, getOrderedItems]);
-
-  if (process.env.NODE_ENV !== "production") {
-    if (isControlled && onValueChange === undefined) {
-      console.warn(
-        "Accordion: A controlled component requires an `onValueChange` handler.",
-      );
-    }
-    if (type === "single" && maxExpanded !== undefined) {
-      console.warn(
-        "Accordion: maxExpanded is only supported in multiple mode.",
-      );
-    }
-    if (isControlled && defaultValue !== undefined) {
-      console.warn(
-        "Accordion: A component cannot be both controlled (`value`) and uncontrolled (`defaultValue`). " +
-        "The `defaultValue` prop will be ignored.",
-      );
-    }
-    if (defaultExpandAll && type === "single") {
-      console.warn(
-        "Accordion: defaultExpandAll is only supported in multiple mode.",
-      );
-    }
-    if (defaultExpandAll && isControlled) {
-      console.warn(
-        "Accordion: defaultExpandAll has no effect in controlled mode. Set the initial `value` instead.",
-      );
-    }
-    if (preventCloseTimeout <= 0) {
-      console.warn(
-        "Accordion: preventCloseTimeout must be a positive number.",
-      );
-    }
-  }
 
   // ─── Unified state change logic ──────────────────────────────────────────
 

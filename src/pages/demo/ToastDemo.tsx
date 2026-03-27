@@ -8,6 +8,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -44,7 +47,7 @@ const ToastDemoContent = ({
       {/* ─── Header ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
         <div
-          className={`absolute inset-0 ${dark ? "bg-gradient-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
+          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
         />
         <div
           className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
@@ -1401,6 +1404,32 @@ const ToastDemoContent = ({
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Toasts are pushed via `useToast()` from a `ToastProvider`. The provider owns position and queue; consumers only supply messages and options per call."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Rapid duplicate errors may need deduplication in the caller.",
+          "Long-running sessions should cap `maxToasts` to avoid DOM growth.",
+          "Screen readers: avoid stacking many simultaneous alerts.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Use for transient feedback; critical flows may still need inline errors.",
+          "Customize dismiss labels and durations per severity.",
+          "Keep messages concise and actionable.",
+        ]}
+        donts={[
+          "Do not use toasts for required form validation that blocks submit.",
+          "Do not spam toast on every keystroke.",
+          "Do not put essential-only content exclusively in a dismissed toast.",
+        ]}
+      />
     </div>
   );
 };

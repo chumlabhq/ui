@@ -17,6 +17,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 import { useTheme } from "./ThemeContext";
 
@@ -1162,15 +1165,24 @@ const AccordionDemo = () => {
               <AccordionItem key={item.id} value={item.id}>
                 <AccordionTrigger
                   rightSlot={
-                    <button
-                      className={`text-xs px-2 py-0.5 rounded ${dark ? "text-red-400 hover:bg-red-500/10" : "text-red-500 hover:bg-red-50"}`}
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={`text-xs px-2 py-0.5 rounded cursor-pointer ${dark ? "text-red-400 hover:bg-red-500/10" : "text-red-500 hover:bg-red-50"}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         removeItem(item.id);
                       }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          removeItem(item.id);
+                        }
+                      }}
                     >
                       Remove
-                    </button>
+                    </span>
                   }
                 >
                   {item.title}
@@ -1999,6 +2011,32 @@ const AccordionDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onValueChange` (single or multiple) when expansion state lives in React. Use `defaultValue` for uncontrolled usage. Pick one mode for the lifetime of the instance; avoid toggling between controlled and uncontrolled."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "`preventClose` can delay collapse until an async callback resolves—handle loading and errors in the parent.",
+          "Duplicate `AccordionItem` values break focus order and state; keep values unique.",
+          "When using persistence, reconcile stored IDs with the current item list before first paint to avoid flash.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide a visible label or `aria-label` / `aria-labelledby` on the root when there is no page heading.",
+          "Use `type=\"single\"` or `multiple` consistently with your product navigation model.",
+          "Test keyboard and screen reader behavior when nesting links or buttons inside triggers.",
+        ]}
+        donts={[
+          "Do not put essential page navigation only inside collapsed regions without an alternate path.",
+          "Do not switch from `defaultValue` to `value` (or the reverse) after mount.",
+          "Do not use duplicate item `value` strings across items.",
+        ]}
+      />
     </div>
   );
 };

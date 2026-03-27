@@ -8,6 +8,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -1080,6 +1083,32 @@ const TooltipDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `open` with `onOpenChange` when you must coordinate with other overlays; otherwise use the default hover/focus behavior. Tooltips are for non-interactive supplementary text."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Touch devices: hover-only patterns may not fire—ensure critical info is visible elsewhere.",
+          "Truncation with `truncate` may need layout width constraints.",
+          "Portals and z-index may conflict with modals—test stacking contexts.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Keep tooltip content short; move rich UI to a popover or dialog.",
+          "Prefer focusable triggers that expose name and role.",
+          "Respect reduced motion when customizing animations.",
+        ]}
+        donts={[
+          "Do not place buttons or forms inside a tooltip (use a popover).",
+          "Do not rely on tooltips for required field instructions.",
+          "Do not block pointer events on the trigger.",
+        ]}
+      />
     </div>
   );
 };

@@ -558,21 +558,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     // ─── Reduced motion ────────────────────────────────────────────────
     useReducedMotion(reduceMotion);
 
-    // ─── Dev warning ───────────────────────────────────────────────────
-    const ariaLabelProp = (rest as Record<string, unknown>)["aria-label"];
-    const ariaLabelledByProp = (rest as Record<string, unknown>)["aria-labelledby"];
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (!label && !ariaLabelProp && !ariaLabelledByProp && !warnedRef.current) {
-          warnedRef.current = true;
-          console.warn(
-            "DatePicker: A date picker without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
-          );
-        }
-      }
-    }, [label, ariaLabelProp, ariaLabelledByProp]);
-
     // ─── IDs ───────────────────────────────────────────────────────────
     const generatedId = useId();
     const datePickerId = id || name || generatedId;
@@ -872,8 +857,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             </span>
             <div className="flex items-center gap-1">
               {showClearButton && hasValue && !disabled && (
-                <button
-                  type="button"
+                <span
+                  role="button"
+                  tabIndex={0}
                   aria-label="Clear selection"
                   className={mergedClasses.clearButton}
                   onClick={handleClearClick}
@@ -885,7 +871,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   }}
                 >
                   {clearIcon || <XIcon className="w-4 h-4" />}
-                </button>
+                </span>
               )}
               {showCalendarIcon &&
                 (calendarIcon || (

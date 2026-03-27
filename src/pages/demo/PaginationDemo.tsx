@@ -8,6 +8,9 @@ import {
   DemoLabel,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1514,6 +1517,32 @@ const PaginationDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Wire `currentPage`, `totalPages`, `rowsPerPage`, and handlers from your data layer. The component does not fetch; it reflects the slice you already computed."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Zero or one total pages: hide or simplify controls per UX guidelines.",
+          "Changing `rowsPerPage` should reset or clamp `currentPage` in the parent.",
+          "Large page counts may need URL sync—keep focus stable after navigation.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `paginationAriaLabel` or root `aria-label` / `aria-labelledby`.",
+          "Keep keyboard order logical for prev/next and page buttons.",
+          "Announce loading states at the table level, not only inside cells.",
+        ]}
+        donts={[
+          "Do not use pagination as the only way to reach records—offer search/filter.",
+          "Do not omit disabled state for unavailable prev/next.",
+          "Do not generate thousands of page buttons without ellipsis.",
+        ]}
+      />
     </div>
   );
 };

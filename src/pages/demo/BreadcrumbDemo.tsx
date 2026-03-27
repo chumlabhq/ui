@@ -8,6 +8,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1231,6 +1234,32 @@ const BreadcrumbDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Trail state is defined by the `items` you pass; the component does not fetch routes. Control truncation and overflow menus from your router data."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Very deep trails may need truncation—test ellipsis and overflow menu with real locales.",
+          "Dynamic segments should use stable keys for focus management when items update.",
+          "Long titles in narrow layouts: verify wrapping vs truncation against design specs.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Mark the current page with `current` / `aria-current` semantics via props.",
+          "Keep the trail in sync with the router; avoid stale crumbs after navigation.",
+          "Provide a nav label (`aria-label` on the root) when multiple landmarks exist.",
+        ]}
+        donts={[
+          "Do not use breadcrumbs as the only navigation for essential tasks.",
+          "Do not omit keyboard access to overflow or ellipsis actions.",
+          "Do not render duplicate links to the same destination without clear reason.",
+        ]}
+      />
     </div>
   );
 };

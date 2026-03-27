@@ -9,6 +9,9 @@ import {
   DemoLabel,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -481,7 +484,7 @@ const SearchableDropdownDemo = () => {
         </DemoWrapper>
         <div className={c.note}>
           <p className="font-semibold mb-1">Important: renderTrigger must return a {'<button>'} element</p>
-          <p>The props include type=&quot;button&quot; so spreading ...rest prevents accidental form submission. A dev warning fires if a non-button element is detected.</p>
+          <p>The props include type=&quot;button&quot; so spreading ...rest prevents accidental form submission. Use `renderTrigger` to return a native `button` for listbox accessibility.</p>
         </div>
       </Section>
 
@@ -1229,6 +1232,32 @@ const SearchableDropdownDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Combine `value` / `onValueChange` with async `onSearch` or static `options`. Control `open` when coordinating with other overlays. Debounce network search in the parent."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Empty search results need a clear empty state and SR message.",
+          "Race conditions: ignore stale responses when queries overlap.",
+          "Highlighting active options must stay in sync with `aria-activedescendant`.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `label` or `aria-label` on the trigger.",
+          "Return a `<button>` from `renderTrigger`.",
+          "Debounce and cancel in-flight fetches for remote search.",
+        ]}
+        donts={[
+          "Do not fetch on every keystroke without debouncing.",
+          "Do not hide focus outlines on the trigger or listbox.",
+          "Do not use duplicate option values.",
+        ]}
+      />
     </div>
   );
 };

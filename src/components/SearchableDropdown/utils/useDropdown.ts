@@ -63,8 +63,6 @@ export function useDropdown({
   loadInitialOnOpen = false,
   onLoadError,
   typeaheadTimeout = 1000,
-  label,
-  "aria-label": ariaLabel,
 }: UseDropdownProps): UseDropdownReturn {
   const displayOptionsRef = useRef<SearchableDropdownOption[]>([]);
 
@@ -83,19 +81,6 @@ export function useDropdown({
     onChange: onOpenChange,
   });
 
-  // Accessibility dev warning for missing label/aria-label
-  const warnedRef = useRef(false);
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
-      if (!label && !ariaLabel) {
-        warnedRef.current = true;
-        console.warn(
-          "[SearchableDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
-          "so that screen readers can identify this dropdown."
-        );
-      }
-    }
-  }, [label, ariaLabel]);
   const [searchQuery, setSearchQuery] = useState("");
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [isSearching, setIsSearching] = useState(false);

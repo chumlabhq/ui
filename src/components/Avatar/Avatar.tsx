@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useEffect, useMemo, useRef } from "react";
+import { forwardRef, useState, useCallback, useMemo } from "react";
 import type {
   AvatarProps,
   AvatarTooltipConfig,
@@ -94,20 +94,6 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const borderRadius = getBorderRadius(effectiveShape);
 
     const baseClasses = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;
-
-    const ariaLabel = rest["aria-label"];
-    const ariaLabelledBy = rest["aria-labelledby"];
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (!name && !src && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
-          warnedRef.current = true;
-          console.warn(
-            "Avatar: An avatar without a name or src requires `aria-label` or `aria-labelledby` for accessibility.",
-          );
-        }
-      }
-    }, [name, src, ariaLabel, ariaLabelledBy]);
 
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({

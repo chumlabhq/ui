@@ -26,8 +26,6 @@ export function useMultiSelectDropdown({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
-  label,
-  "aria-label": ariaLabel,
 }: UseMultiSelectDropdownProps): UseMultiSelectDropdownReturn {
   const [isOpen, setIsOpen] = useControllableState<boolean>({
     value: openProp,
@@ -50,20 +48,6 @@ export function useMultiSelectDropdown({
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shouldRestoreFocusRef = useRef(false);
-
-  // Accessibility dev warning for missing label/aria-label
-  const warnedRef = useRef(false);
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
-      if (!label && !ariaLabel) {
-        warnedRef.current = true;
-        console.warn(
-          "[MultiSelectSearchableDropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
-          "so that screen readers can identify this dropdown."
-        );
-      }
-    }
-  }, [label, ariaLabel]);
 
   const isAsync = typeof onSearch === "function";
 

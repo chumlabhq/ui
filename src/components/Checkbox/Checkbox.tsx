@@ -53,24 +53,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const internalRef = useRef<HTMLInputElement>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
 
-    // Dev warnings — in useEffect to comply with React 19 ref access rules
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (
-          !label &&
-          !rest["aria-label"] &&
-          !rest["aria-labelledby"] &&
-          !warnedRef.current
-        ) {
-          warnedRef.current = true;
-          console.warn(
-            "Checkbox: A checkbox without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
-          );
-        }
-      }
-    }, [label, rest]);
-
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,

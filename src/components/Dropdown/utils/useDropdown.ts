@@ -38,8 +38,6 @@ export const useDropdown = ({
   onLoadError,
   dropdownId,
   typeaheadTimeout = 500,
-  label,
-  "aria-label": ariaLabel,
   loadingText = "Loading...",
 }: UseDropdownProps) => {
   const [currentValue, setCurrentValue] = useControllableState<string | null>({
@@ -72,20 +70,6 @@ export const useDropdown = ({
 
   const displayOptionsRef = useRef<DropdownOption[]>([]);
 
-  // Accessibility dev warning for missing label/aria-label
-  const warnedRef = useRef(false);
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production" && !warnedRef.current) {
-      if (!label && !ariaLabel) {
-        warnedRef.current = true;
-        console.warn(
-          "[Dropdown] Missing accessible name. Provide either a `label` or `aria-label` prop " +
-          "so that screen readers can identify this dropdown."
-        );
-      }
-    }
-  }, [label, ariaLabel]);
-
   useEffect(() => {
     mountedRef.current = true;
     return () => {
@@ -96,12 +80,16 @@ export const useDropdown = ({
     };
   }, []);
 
-  const [prevLoadOptions, setPrevLoadOptions] = useState(onLoadOptions);
-  if (prevLoadOptions !== onLoadOptions) {
-    setPrevLoadOptions(onLoadOptions);
-    setHasLoaded(false);
-    setLoadedOptions([]);
-  }
+  // Reset loaded state when onLoadOptions function changes
+  const prevLoadOptionsRef = useRef(onLoadOptions);
+  useIsomorphicLayoutEffect(() => {
+    if (prevLoadOptionsRef.current !== onLoadOptions) {
+      prevLoadOptionsRef.current = onLoadOptions;
+      hasLoadedRef.current = false;
+      setHasLoaded(false);
+      setLoadedOptions([]);
+    }
+  });
 
   // Sync hasLoadedRef after render to match hasLoaded state
   useIsomorphicLayoutEffect(() => {

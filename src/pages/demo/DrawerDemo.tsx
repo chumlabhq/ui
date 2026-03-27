@@ -13,6 +13,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1113,6 +1116,32 @@ const DrawerDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use the `open` prop with `onClose` for full control. For swipe and snap points, coordinate `activeSnapPointIndex` with `onSnapPointIndexChange` when you own that state."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Stacked drawers: confirm z-order and which drawer receives Escape.",
+          "Body scroll lock vs nested scroll areas—test on iOS Safari.",
+          "Focus restoration when `restoreFocus` conflicts with route changes.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `aria-label` / `aria-labelledby` / `aria-describedby` on the panel.",
+          "Trap focus when `modal` is true; test Tab order through header, body, footer.",
+          "Use `initialFocus` for primary actions in complex layouts.",
+        ]}
+        donts={[
+          "Do not nest modal dialogs that fight focus without a clear stack.",
+          "Do not render essential page content only inside a closed drawer.",
+          "Do not disable Escape handling without an obvious close affordance.",
+        ]}
+      />
     </div>
   );
 };

@@ -8,3 +8,8 @@ export {
   PropRow,
   PropsTable,
 } from "./Section";
+export {
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
+} from "./DocumentationBlocks";

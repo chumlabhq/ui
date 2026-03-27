@@ -8,6 +8,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -1298,7 +1301,7 @@ const TextAreaDemo = () => {
               'Clear button has aria-label="Clear textarea"',
               'Character count uses aria-live="polite"',
               "Clickable icons are <button> with aria-label",
-              "Dev warnings fire for missing accessible names",
+              "Provide `label` or `aria-label` / `aria-labelledby` for an accessible name",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -1339,6 +1342,32 @@ const TextAreaDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Same as Input: controlled via `value` with `onChange` / `onValueChange`, or `defaultValue` for uncontrolled. Long content should stay in sync with parent form state."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Resize behaviors and min/max rows affect layout—test in flex containers.",
+          "Screen readers may announce length limits—keep `maxLength` aligned with product copy.",
+          "Pasting large text can spike render cost—consider debounced validation.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide labels and error messages like other fields.",
+          "Use `rows` and design tokens for comfortable reading width.",
+          "Expose clear actions accessibly when `clearable` is on.",
+        ]}
+        donts={[
+          "Do not nest scrollable regions without visible overflow cues.",
+          "Do not strip newlines on paste unless the product requires it.",
+          "Do not rely on placeholder for the accessible name.",
+        ]}
+      />
     </div>
   );
 };

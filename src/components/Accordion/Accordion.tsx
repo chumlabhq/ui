@@ -77,13 +77,24 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     ...rest
   } = props;
 
+  // Extract union-discriminated props to prevent DOM leakage via ...rest
+  const {
+    collapsible: _c,
+    maxExpanded: _m,
+    value: _v,
+    defaultValue: _d,
+    onValueChange: _o,
+    ...domProps
+  } = rest as Record<string, unknown>;
+  void _c; void _m; void _v; void _d; void _o;
+
   const generatedId = useId();
   const accordionId = propId ?? `accordion-${generatedId}`;
-  const collapsible = type === "single" ? (props.collapsible ?? false) : true;
-  const maxExpanded = type === "multiple" ? props.maxExpanded : undefined;
-  const controlledValue = props.value;
-  const defaultValue = props.defaultValue;
-  const onValueChange = props.onValueChange;
+  const collapsible = type === "single" ? ((props as { collapsible?: boolean }).collapsible ?? false) : true;
+  const maxExpanded = type === "multiple" ? (props as { maxExpanded?: number }).maxExpanded : undefined;
+  const controlledValue = (props as { value?: string | string[] }).value;
+  const defaultValue = (props as { defaultValue?: string | string[] }).defaultValue;
+  const onValueChange = (props as { onValueChange?: (...args: unknown[]) => void }).onValueChange;
 
   const elementRef = useRef<HTMLDivElement>(null);
   const announcerRef = useRef<HTMLDivElement>(null);
@@ -326,7 +337,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
               aria-label={ariaLabel}
               aria-busy={ariaBusy}
               onKeyDown={onKeyDown ? handleKeyDown : undefined}
-              {...rest}
+              {...domProps}
             >
               {children}
               {announceExpanded && (

@@ -46,18 +46,6 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     },
     ref,
   ) => {
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (!ariaLabel && !ariaLabelledBy && !warnedRef.current) {
-          warnedRef.current = true;
-          console.warn(
-            "TabPanel: A tab panel without `aria-label` or `aria-labelledby` may not be accessible.",
-          );
-        }
-      }
-    }, [ariaLabel, ariaLabelledBy]);
-
     const [activeValue, setActiveValue] = useControllableState<string>({
       value: valueProp,
       defaultValue: defaultValue ?? tabs[0]?.id ?? "",

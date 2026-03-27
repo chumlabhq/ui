@@ -12,6 +12,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -1912,6 +1915,32 @@ const CascadingDropdownDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Control `value` and `onValueChange` for the full path; load child options asynchronously and update the `options` tree from the parent. Keep `open` controlled when coordinating with other UI."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Failed child loads should surface errors without trapping focus in submenus.",
+          "Deep trees need clear breadcrumbs or back affordances on small screens.",
+          "RTL layouts must mirror submenu placement.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `label` or `aria-label` for the root trigger.",
+          "Close submenus on Escape and restore sensible focus.",
+          "Cache loaded branches to avoid redundant network calls.",
+        ]}
+        donts={[
+          "Do not load unbounded children synchronously on main thread.",
+          "Do not hide keyboard paths to leaf selections.",
+          "Do not use duplicate values across sibling options.",
+        ]}
+      />
     </div>
   );
 };

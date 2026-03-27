@@ -20,7 +20,6 @@ import {
   wordWrapStyles,
   DEFAULT_TOOLTIP_CLASSES,
   UNSTYLED_TOOLTIP_CLASSES,
-  INTERACTIVE_QUERY,
 } from "./utils/constants";
 import {
   mergeTooltipRefs,
@@ -140,28 +139,6 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }
       return false;
     }, [childIsInteractiveElement, triggerNode, asChild]);
-
-    const warnedRef = useRef(false);
-
-    useEffect(() => {
-      if (
-        process.env.NODE_ENV !== "production" &&
-        !warnedRef.current &&
-        isOpen &&
-        tooltipRef.current
-      ) {
-        const interactiveEl =
-          tooltipRef.current.querySelector(INTERACTIVE_QUERY);
-        if (interactiveEl) {
-          warnedRef.current = true;
-          console.warn(
-            "Tooltip: Interactive content detected inside tooltip. " +
-              'Per WAI-ARIA guidelines, tooltips (role="tooltip") should not ' +
-              "contain interactive elements. Consider using a popover instead.",
-          );
-        }
-      }
-    }, [isOpen]);
 
     const setOpen = useCallback(
       (value: boolean) => {

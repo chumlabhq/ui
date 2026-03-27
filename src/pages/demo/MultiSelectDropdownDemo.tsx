@@ -9,6 +9,9 @@ import {
   DemoLabel,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -1513,6 +1516,32 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` (array) with `onValueChange` for controlled multi-select. Chips and overflow are presentation—keep canonical values in parent state."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Select-all vs partial selection—align with your data model and SR semantics.",
+          "Large lists may require virtualization or search (see Searchable variant).",
+          "Form posts may need hidden inputs or JSON—document the contract.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `label` or `aria-label` on the trigger.",
+          "Announce selection counts where helpful for screen readers.",
+          "Limit max selections in product logic when required.",
+        ]}
+        donts={[
+          "Do not allow duplicate selections in the value array.",
+          "Do not omit keyboard access to chip removal.",
+          "Do not overload chips with primary navigation actions.",
+        ]}
+      />
     </div>
   );
 };

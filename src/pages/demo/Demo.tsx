@@ -114,15 +114,6 @@ const Demo = () => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
-  // Close sidebar on navigation (render-time derived state)
-  const [prevPathname, setPrevPathname] = useState(location.pathname);
-  if (prevPathname !== location.pathname) {
-    setPrevPathname(location.pathname);
-    if (sidebarOpen) {
-      setSidebarOpen(false);
-    }
-  }
-
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
@@ -133,7 +124,16 @@ const Demo = () => {
     }
   }, [isDarkMode]);
 
-  // Scroll to top on navigation
+  // Close sidebar on route change (render-time derived state)
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+  if (prevPathname !== location.pathname) {
+    setPrevPathname(location.pathname);
+    if (sidebarOpen) {
+      setSidebarOpen(false);
+    }
+  }
+
+  // Scroll to top on route change
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0);
   }, [location.pathname]);

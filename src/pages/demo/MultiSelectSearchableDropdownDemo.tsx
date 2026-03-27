@@ -8,6 +8,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -1378,6 +1381,32 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Combine multi-value state with search or async `onSearch`. Parent owns the array of selected ids; debounce network calls and keep `options` consistent with results."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Selecting a result while a new search is in flight must resolve races.",
+          "Keyboard users need clear focus between search field and options.",
+          "Chips may wrap—layout should not break adjacent controls.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `label` or `aria-label`.",
+          "Clear search when closing if that matches your UX.",
+          "Return stable option `value` keys across renders.",
+        ]}
+        donts={[
+          "Do not fire network search on every keypress without debouncing.",
+          "Do not mix incompatible `value` types across options.",
+          "Do not hide selected state from assistive tech.",
+        ]}
+      />
     </div>
   );
 };

@@ -11,6 +11,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 import {
   subDays,
@@ -1979,7 +1982,7 @@ const DatePickerDemo = () => {
               "Day cells announce selected/today/disabled states",
               "Markers accessible via tooltip on hover/focus",
               "prefers-reduced-motion respected via reduceMotion prop",
-              "Dev warning fires for missing label/aria-label",
+              "Provide a visible label or `aria-label` / `aria-labelledby` on the trigger",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -2017,6 +2020,32 @@ const DatePickerDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` / `rangeValue` / `multipleValue` with the matching `on*Change` callbacks for controlled usage. Use defaults for uncontrolled. Pick one mode per instance and align `mode` with your form schema."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Time zones: store UTC in backend and format in UI when locale matters.",
+          "Disabled and blackout dates must stay in sync with server rules.",
+          "Mobile viewports: verify popover position and scroll lock with your layout shell.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide a visible label or `aria-label` / `aria-labelledby` on the trigger.",
+          "Use `minDate` / `maxDate` to match business constraints.",
+          "Announce errors with `errorMessage` and `error` for assistive tech.",
+        ]}
+        donts={[
+          "Do not switch modes (single/range/multiple) after mount without resetting state.",
+          "Do not block keyboard navigation inside the calendar for custom skins.",
+          "Do not rely on placeholder alone for the accessible name.",
+        ]}
+      />
     </div>
   );
 };

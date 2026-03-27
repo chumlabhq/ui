@@ -12,6 +12,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -754,6 +757,32 @@ const CountryFlagDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Flags are purely presentational from `code` (and optional image props). There is no internal country selection state—pair with a dropdown or form field when users pick a country."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Missing or invalid ISO codes should map to your `fallback` UI.",
+          "Tooltip and group layouts can overlap on small viewports—test responsive breakpoints.",
+          "CDN or sprite paths must be consistent across environments (basePath).",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `alt` text or `aria-label` when the flag conveys meaning.",
+          "Use consistent sizes within a row for visual rhythm.",
+          "Handle `onError` for broken flag assets in production monitoring.",
+        ]}
+        donts={[
+          "Do not use flags alone to select phone country without an explicit control.",
+          "Do not ship enormous raster assets for tiny sizes.",
+          "Do not rely on color alone for state—pair with labels where needed.",
+        ]}
+      />
     </div>
   );
 };

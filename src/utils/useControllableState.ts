@@ -13,22 +13,6 @@ export function useControllableState<T>({
 }: UseControllableStateOptions<T>): [T, (value: T | ((prev: T) => T)) => void] {
   const isControlled = controlledValue !== undefined;
 
-  // Warn on controlled/uncontrolled transition — in useEffect for React 19
-  const initialIsControlledRef = useRef(isControlled);
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "production") {
-      if (initialIsControlledRef.current !== isControlled) {
-        console.warn(
-          "useControllableState: A component is changing from " +
-            (initialIsControlledRef.current ? "controlled" : "uncontrolled") +
-            " to " +
-            (isControlled ? "controlled" : "uncontrolled") +
-            ". This is likely a bug.",
-        );
-      }
-    }
-  }, [isControlled]);
-
   const [internalValue, setInternalValue] = useState<T>(defaultValue);
   const value = isControlled ? controlledValue : internalValue;
 

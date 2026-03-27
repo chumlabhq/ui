@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { TimePicker, type TimeValue } from "../../components/TimePicker";
-import { Section, CodeBlock, PropsTable, PropRow } from "./components";
+import {
+  Section,
+  CodeBlock,
+  PropsTable,
+  PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
+} from "./components";
 import { useTheme } from "./ThemeContext";
 
 const triggerStyle =
@@ -1252,42 +1260,74 @@ const TimePickerDemo = () => {
         title="Core API (PropsTable)"
         description="Shared documentation layout for primary TimePicker props."
       >
-        <PropsTable>
+        <PropsTable isDarkMode={dark}>
           <PropRow
             name="value"
             type="string | null"
             description="Controlled time value (HH:mm or 12h string per format)"
+            isDarkMode={dark}
           />
           <PropRow
             name="onChange"
             type="(time, timeValue?) => void"
             description="Called when the committed time changes"
+            isDarkMode={dark}
           />
           <PropRow
             name="format"
             type='"12h" | "24h"'
             defaultVal='"24h"'
             description="12-hour or 24-hour display"
+            isDarkMode={dark}
           />
           <PropRow
             name="minuteStep"
             type="number"
             defaultVal="15"
             description="Step between selectable minutes"
+            isDarkMode={dark}
           />
           <PropRow
             name="disabled"
             type="boolean"
             defaultVal="false"
             description="Disables the control"
+            isDarkMode={dark}
           />
           <PropRow
             name="error"
             type="boolean"
             description="Error state for validation styling"
+            isDarkMode={dark}
           />
         </PropsTable>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onChange` for controlled time. Format and step are props—keep parent state in the same string format the component emits."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "12h vs 24h locales—align `format` with user settings.",
+          "Min/max time windows may need validation outside the picker.",
+          "Mobile keyboards and focus: test with real devices.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Associate labels and errors like other form fields.",
+          "Use consistent `minuteStep` with backend validation.",
+          "Keep the displayed format aligned with the `format` prop.",
+        ]}
+        donts={[
+          "Do not mix incompatible value formats after mount.",
+          "Do not rely on placeholder alone for the accessible name.",
+          "Do not block keyboard entry in the clock face.",
+        ]}
+      />
     </>
   );
 };

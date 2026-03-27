@@ -11,6 +11,9 @@ import {
   CodeBlock,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 import { useTheme } from "./ThemeContext";
 
@@ -1524,6 +1527,32 @@ const StepperDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onValueChange` for controlled flow; step ids must match with strict equality. Align optional steps with your backend workflow state."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Skipping steps may invalidate validation—coordinate with `beforeStepChange`.",
+          "Async step content should not steal focus unexpectedly.",
+          "Mobile horizontal scroll vs vertical layouts—test both.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Give each step a stable string or number id.",
+          "Expose current step to assistive tech via labels and announcements.",
+          "Disable steps that are not yet available.",
+        ]}
+        donts={[
+          "Do not change step ids after mount.",
+          "Do not use the stepper as the only progress indicator for long-running jobs.",
+          "Do not hide errors that block progression without messaging.",
+        ]}
+      />
     </div>
   );
 };

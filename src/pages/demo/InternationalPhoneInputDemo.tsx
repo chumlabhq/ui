@@ -15,6 +15,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 const StarIcon = ({ className = "" }: { className?: string }) => (
@@ -1803,7 +1806,7 @@ const InternationalPhoneInputDemo = () => {
               'Country dropdown and input grouped via role="group"',
               "Country dropdown has configurable aria-label",
               "Country change announced via aria-live region",
-              "Dev warning fires for missing accessible names",
+              "Provide `label` or `aria-label` / `aria-labelledby` for the field",
               "Supports both controlled and uncontrolled modes",
               "Hidden inputs for form submission when name prop is provided",
               "Ref forwarding for programmatic focus management",
@@ -1848,6 +1851,32 @@ const InternationalPhoneInputDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onValueChange` for full E.164-style data, or `defaultValue` for uncontrolled. Country and national number should stay in sync with your validation library."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Porting and country rules change—validate on the server, not only in the client.",
+          "Paste detection may need normalization for different locales.",
+          "VOIP and short codes may not fit generic length rules—allow overrides.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide a visible `label` or `aria-label` / `aria-labelledby`.",
+          "Mirror server validation errors with `error` and `errorMessage`.",
+          "Test autofill and SMS OTP flows on mobile.",
+        ]}
+        donts={[
+          "Do not store raw phone numbers in untrusted logs.",
+          "Do not block paste unless required by policy.",
+          "Do not assume one mask fits all countries.",
+        ]}
+      />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import {
   forwardRef,
   useCallback,
-  useEffect,
   useId,
   useMemo,
   useRef,
@@ -69,8 +68,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const isDisabled = disabled || loading;
     const isInteractive = !isDisabled && !readOnly;
 
-    // Controlled/uncontrolled state via shared hook
-    // (hook handles transition warnings internally)
     const [currentValue, setCurrentValue] = useControllableState({
       value: value !== undefined ? String(value) : undefined,
       defaultValue: (defaultValue as string) ?? "",
@@ -150,39 +147,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
       onChange?.(event as unknown as ChangeEvent<HTMLInputElement>);
     }, [onClear, onChange, setCurrentValue]);
-
-    // Extract aria values for stable effect deps (rest is a new object each render)
-    const ariaLabel = rest["aria-label"];
-    const ariaLabelledBy = rest["aria-labelledby"];
-
-    // Dev warnings — in useEffect to avoid double-firing in StrictMode
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        if (onStartIconClick && !startIconLabel) {
-          console.warn(
-            "Input: onStartIconClick is provided without startIconLabel. Add startIconLabel for accessibility.",
-          );
-        }
-        if (onEndIconClick && !endIconLabel) {
-          console.warn(
-            "Input: onEndIconClick is provided without endIconLabel. Add endIconLabel for accessibility.",
-          );
-        }
-        if (!label && !ariaLabel && !ariaLabelledBy) {
-          console.warn(
-            "Input: No accessible name provided. Add a `label`, `aria-label`, or `aria-labelledby` prop for accessibility.",
-          );
-        }
-      }
-    }, [
-      label,
-      ariaLabel,
-      ariaLabelledBy,
-      onStartIconClick,
-      startIconLabel,
-      onEndIconClick,
-      endIconLabel,
-    ]);
 
     return (
       <FieldWrapper

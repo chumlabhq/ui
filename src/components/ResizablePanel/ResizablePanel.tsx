@@ -51,57 +51,6 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       handle: classesProp?.handle ?? baseClasses.handle,
     }), [classesProp, baseClasses]);
 
-    const ariaLabelledBy = rest["aria-labelledby"];
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production") {
-        const hasAccessibleName =
-          Boolean(String(ariaLabel ?? "").trim()) ||
-          (ariaLabelledBy != null && String(ariaLabelledBy).trim() !== "");
-        if (!hasAccessibleName && !warnedRef.current) {
-          warnedRef.current = true;
-          console.warn(
-            "ResizablePanel: requires `aria-label` or `aria-labelledby` for accessibility.",
-          );
-        }
-      }
-    }, [ariaLabel, ariaLabelledBy]);
-
-    const boundsWarnedRef = useRef(false);
-    useEffect(() => {
-      if (process.env.NODE_ENV !== "production" && !boundsWarnedRef.current) {
-        if (minValue > maxValue) {
-          boundsWarnedRef.current = true;
-          console.warn(
-            `ResizablePanel: minValue (${minValue}) is greater than maxValue (${maxValue}). ` +
-              `This will produce unexpected clamping behavior.`,
-          );
-        }
-        if (
-          valueProp !== undefined &&
-          (valueProp < minValue || valueProp > maxValue)
-        ) {
-          boundsWarnedRef.current = true;
-          console.warn(
-            `ResizablePanel: controlled value (${valueProp}) is outside the ` +
-              `[minValue=${minValue}, maxValue=${maxValue}] range. ` +
-              `The rendered size will be clamped.`,
-          );
-        }
-        if (
-          valueProp === undefined &&
-          (defaultValue < minValue || defaultValue > maxValue)
-        ) {
-          boundsWarnedRef.current = true;
-          console.warn(
-            `ResizablePanel: defaultValue (${defaultValue}) is outside the ` +
-              `[minValue=${minValue}, maxValue=${maxValue}] range. ` +
-              `The initial size will be clamped.`,
-          );
-        }
-      }
-    }, [minValue, maxValue, valueProp, defaultValue]);
-
     const generatedId = useId();
     const panelId = idProp ?? generatedId;
 

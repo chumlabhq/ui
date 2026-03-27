@@ -235,22 +235,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const instanceId = useId();
     const paginationAriaLabel = paginationAriaLabelProp ?? "Pagination";
 
-    const warnedRef = useRef(false);
-    useEffect(() => {
-      if (
-        process.env.NODE_ENV !== "production" &&
-        !warnedRef.current &&
-        paginationAriaLabelProp === undefined &&
-        !rest["aria-label"] &&
-        !rest["aria-labelledby"]
-      ) {
-        warnedRef.current = true;
-        console.warn(
-          "Pagination: Provide `paginationAriaLabel` or pass `aria-label` / `aria-labelledby` on the root for an accessible navigation name.",
-        );
-      }
-    }, [rest, paginationAriaLabelProp]);
-
     const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,

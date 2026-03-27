@@ -1,4 +1,30 @@
-import type { ReactNode, CSSProperties } from "react";
+import type { ReactNode, CSSProperties, RefObject } from "react";
+
+/** CSS class overrides for modal sub-elements. */
+export interface ModalClasses {
+  /** Root fixed-position wrapper. */
+  root?: string;
+  /** Backdrop overlay. */
+  overlay?: string;
+  /** Scroll/centering container. */
+  container?: string;
+  /** Dialog content panel. */
+  content?: string;
+  /** Header section. */
+  header?: string;
+  /** Title element. */
+  title?: string;
+  /** Description element. */
+  description?: string;
+  /** Header icon wrapper. */
+  icon?: string;
+  /** Close button. */
+  closeButton?: string;
+  /** Close icon inside the close button. */
+  closeIcon?: string;
+  /** Body content area. */
+  body?: string;
+}
 
 export interface ModalProps {
   /** Whether the modal is visible. */
@@ -29,6 +55,14 @@ export interface ModalProps {
   closeOnEscape?: boolean;
   /** Locks body scroll when the modal is open. Default: `true`. */
   lockBackgroundScroll?: boolean;
+  /** Traps keyboard focus within the modal. Default: `true`. */
+  trapFocus?: boolean;
+  /** Restores focus to the previously focused element on close. Default: `true`. */
+  restoreFocus?: boolean;
+  /** Element to focus when the modal opens. Defaults to the dialog content. */
+  initialFocus?: RefObject<HTMLElement | null>;
+  /** Keeps the modal DOM mounted when closed. Default: `false`. */
+  keepMounted?: boolean;
   /** Maximum width of the modal dialog. */
   maxWidth?: string | number;
   /** Maximum height of the modal dialog. */
@@ -49,20 +83,28 @@ export interface ModalProps {
   animationDuration?: number;
   /** Disables open/close animations entirely. */
   disableAnimation?: boolean;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. Default: `"auto"`. */
+  reduceMotion?: boolean | "auto";
   /** Current nesting depth (for stacked modals). Managed automatically. */
   nestingLevel?: number;
   /** Maximum allowed nesting depth for stacked modals. */
   maxNestingLevel?: number;
   /** CSS z-index for the modal layer. */
   zIndex?: number;
-  /** CSS class for the modal wrapper. */
+  /** CSS class overrides for modal sub-elements. */
+  classes?: ModalClasses;
+  /** Removes all default styling, rendering a plain dialog. */
+  unstyled?: boolean;
+  /** Additional CSS class for the dialog content panel. */
   className?: string;
+  /** Inline styles for the dialog content panel. */
+  contentStyle?: CSSProperties;
+  /** CSS class for the root portal container. */
+  rootClassName?: string;
   /** CSS class for the backdrop overlay. */
   overlayClassName?: string;
   /** CSS class for the dialog content panel. */
   contentClassName?: string;
-  /** Inline styles for the dialog content panel. */
-  contentStyle?: CSSProperties;
   /** CSS class for the header section. */
   headerClassName?: string;
   /** CSS class for the title element. */
@@ -77,8 +119,6 @@ export interface ModalProps {
   closeIconClassName?: string;
   /** CSS class for the body section. */
   bodyClassName?: string;
-  /** CSS class for the root portal container. */
-  rootClassName?: string;
   /** Accessible label for the modal dialog. */
   "aria-label"?: string;
   /** ID of the element that labels the modal dialog. */

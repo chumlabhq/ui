@@ -177,6 +177,7 @@ export {
 export { useModal } from "./components/Modal/useModal";
 export type {
   ModalProps,
+  ModalClasses,
   ModalHeaderProps,
   ModalBodyProps,
   ModalFooterProps,

@@ -29,14 +29,6 @@ export function useAccordionFocus({ loop }: UseAccordionFocusOptions): UseAccord
   const registerItem = useCallback(
     (value: string, element: HTMLButtonElement | null) => {
       if (element) {
-        if (process.env.NODE_ENV !== "production") {
-          const existing = itemsRef.current.get(value);
-          if (existing && existing !== element) {
-            console.warn(
-              `Accordion: Duplicate item value "${value}" detected. Each AccordionItem must have a unique value.`,
-            );
-          }
-        }
         itemsRef.current.set(value, element);
         if (!itemOrderRef.current.has(value)) {
           itemOrderRef.current.set(value, orderCounterRef.current++);

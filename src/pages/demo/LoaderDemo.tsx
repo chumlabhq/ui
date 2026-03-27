@@ -6,6 +6,9 @@ import {
   DemoWrapper,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 const getClasses = (dark: boolean) => ({
@@ -283,7 +286,7 @@ const LoaderDemo = () => {
 
             {/* Card skeleton */}
             <div
-              className={`rounded-xl border p-8 flex flex-col items-center justify-center gap-3 ${dark ? "border-white/[0.06] bg-white/[0.02]" : "border-gray-200 bg-gray-50"}`}
+              className={`rounded-xl border p-8 flex flex-col items-center justify-center gap-3 ${dark ? "border-white/6 bg-white/2" : "border-gray-200 bg-gray-50"}`}
             >
               <CircularLoader
                 size={36}
@@ -448,6 +451,32 @@ const LoaderDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Loaders are presentational. Control visibility with parent loading state; there is no internal async state."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Long requests should pair with cancel/retry at the data layer.",
+          "Multiple inline loaders need distinct accessible names if labeled.",
+          "Reduced motion should shorten or disable endless spinners.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Mark decorative loaders with `aria-hidden` when adjacent text explains status.",
+          "Provide loading text for page-level busy regions when appropriate.",
+          "Keep contrast sufficient on all backgrounds.",
+        ]}
+        donts={[
+          "Do not use infinite spinners without timeout or error handling.",
+          "Do not rely on color-only loading indicators.",
+          "Do not nest focusable controls inside purely decorative loaders.",
+        ]}
+      />
     </div>
   );
 };

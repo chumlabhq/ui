@@ -162,7 +162,7 @@ export const PropRow: React.FC<PropRowProps> = ({
       {defaultVal ?? "-"}
     </td>
     <td
-      className={`px-4 py-2 text-[13px] align-top ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+      className={`px-4 py-2 text-[13px] align-top wrap-break-word ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
     >
       {description ?? "-"}
     </td>
@@ -178,8 +178,14 @@ export const PropsTable: React.FC<PropsTableProps> = ({
   children,
   isDarkMode = false,
 }) => (
-  <div className="overflow-x-auto w-full min-w-0 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 max-w-none">
-    <table className="w-full text-left min-w-[800px]">
+  <div className="overflow-x-auto w-full min-w-0 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 max-w-none self-stretch">
+    <table className="w-full table-fixed text-left min-w-[800px]">
+      <colgroup>
+        <col className="w-[22%]" />
+        <col className="w-[18%]" />
+        <col className="w-[10%]" />
+        <col className="w-[50%]" />
+      </colgroup>
       <thead>
         <tr
           className={`${isDarkMode ? "text-gray-500 border-gray-700/50" : "text-gray-400 border-gray-100"} border-b`}

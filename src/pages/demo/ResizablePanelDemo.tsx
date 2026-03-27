@@ -7,6 +7,9 @@ import {
   CodeBlock,
   PropsTable,
   PropRow,
+  DocControlledPattern,
+  DocEdgeCases,
+  DocDoDont,
 } from "./components";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
@@ -58,7 +61,7 @@ const ResizablePanelDemo = () => {
       <div className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-blue-400" : "text-blue-600"}`}>Sidebar</div>
       <div className="space-y-2">
         {["Dashboard", "Projects", "Team", "Settings"].map((item) => (
-          <div key={item} className={`px-3 py-1.5 rounded-md text-sm ${dark ? "text-gray-300 hover:bg-white/[0.04]" : "text-gray-600 hover:bg-gray-100"} cursor-pointer transition-colors`}>{item}</div>
+          <div key={item} className={`px-3 py-1.5 rounded-md text-sm ${dark ? "text-gray-300 hover:bg-white/4" : "text-gray-600 hover:bg-gray-100"} cursor-pointer transition-colors`}>{item}</div>
         ))}
       </div>
       <div className={`mt-auto text-[10px] font-mono ${dark ? "text-blue-500/60" : "text-blue-400/60"}`}>{Math.round(width)}px</div>
@@ -1229,6 +1232,32 @@ const ResizablePanelDemo = () => {
           </div>
         </div>
       </Section>
+
+      <DocControlledPattern
+        isDarkMode={dark}
+        summary="Use `value` with `onValueChange` for controlled size, or `defaultValue` for uncontrolled. Values are clamped to `minValue` and `maxValue`—keep parent state in range when possible."
+      />
+      <DocEdgeCases
+        isDarkMode={dark}
+        items={[
+          "Window resize can invalidate stored sizes—consider persisting ratios, not pixels.",
+          "Touch drag vs keyboard step may need different UX affordances.",
+          "Nested scroll areas can steal pointer events—test drag handles carefully.",
+        ]}
+      />
+      <DocDoDont
+        isDarkMode={dark}
+        dos={[
+          "Provide `aria-label` or `aria-labelledby` for the separator/handle.",
+          "Expose resize via keyboard per implementation (step, home/end).",
+          "Honor `prefers-reduced-motion` when animating layout changes.",
+        ]}
+        donts={[
+          "Do not set `minValue` greater than `maxValue`.",
+          "Do not use a zero-width handle without a visible focus ring.",
+          "Do not block critical content behind a zero-size panel.",
+        ]}
+      />
     </div>
   );
 };
