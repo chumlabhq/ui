@@ -1,4 +1,4 @@
-import type { CascadingDropdownClasses } from "./utils/types";
+import type { CascadingDropdownClasses } from "./types";
 
 export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
   root: "",
@@ -23,6 +23,8 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   checkboxChecked: "",
   noResults: "",
   loading: "",
+  shimmer: "",
+  shimmerItem: "",
 };
 
 export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
@@ -48,4 +50,6 @@ export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClass
   checkboxChecked: "",
   noResults: "",
   loading: "",
+  shimmer: "",
+  shimmerItem: "",
 };

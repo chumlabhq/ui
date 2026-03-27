@@ -178,7 +178,7 @@ export const PropsTable: React.FC<PropsTableProps> = ({
   children,
   isDarkMode = false,
 }) => (
-  <div className="overflow-x-auto -mx-1 w-full">
+  <div className="overflow-x-auto w-full min-w-0 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 max-w-none">
     <table className="w-full text-left min-w-[800px]">
       <thead>
         <tr

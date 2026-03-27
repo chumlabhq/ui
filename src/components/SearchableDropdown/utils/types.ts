@@ -84,6 +84,7 @@ export interface SearchableDropdownProps {
   CheckIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
   ClearIcon?: React.ComponentType<{ className?: string }>;
   SearchIcon?: React.ComponentType<{ className?: string }>;
+  loadingText?: ReactNode;
 }
 
 export interface SearchableDropdownTriggerRenderProps {

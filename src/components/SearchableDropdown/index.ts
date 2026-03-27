@@ -6,7 +6,7 @@ export type {
   SearchableDropdownClasses,
   SearchableDropdownTriggerRenderProps,
 } from "./utils/types";
-export { useDropdown } from "./utils/useDropdown";
+export { useDropdown as useSearchableDropdown } from "./utils/useDropdown";
 export { ChevronDownIcon, CheckIcon, SearchIcon } from "./utils/icons";
 export {
   DEFAULT_SEARCHABLEDROPDOWN_CLASSES,

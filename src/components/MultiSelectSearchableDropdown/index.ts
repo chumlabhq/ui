@@ -4,9 +4,9 @@ export type {
   MultiSelectSearchableDropdownProps,
   MultiSelectSearchableDropdownClasses,
 } from "./utils/types";
-export { useMultiSelectDropdown } from "./useMultiSelectDropdown";
+export { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
 export {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
-} from "./constants";
-export { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./icons";
+} from "./utils/constants";
+export { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./utils/icons";

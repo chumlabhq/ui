@@ -4,8 +4,8 @@ import type {
   CascadingValue,
   UseCascadingDropdownProps,
   UseCascadingDropdownReturn,
-} from "./utils/types";
-import { useControllableState } from "../../utils/useControllableState";
+} from "./types";
+import { useControllableState } from "../../../utils/useControllableState";
 
 export const useCascadingDropdown = ({
   options,
@@ -15,6 +15,10 @@ export const useCascadingDropdown = ({
   closeOnSelect = true,
   onValueChange,
   onLoadChildren,
+  onLoadError,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
   label,
   "aria-label": ariaLabel,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
@@ -26,7 +30,11 @@ export const useCascadingDropdown = ({
     },
   });
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [submenuFocusedIndex, setSubmenuFocusedIndex] = useState(-1);
@@ -63,7 +71,7 @@ export const useCascadingDropdown = ({
       setActiveSubmenu(null);
       setSubmenuFocusedIndex(-1);
     }
-  }, [disabled]);
+  }, [disabled, setIsOpen]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -71,7 +79,7 @@ export const useCascadingDropdown = ({
     setActiveSubmenu(null);
     setSubmenuFocusedIndex(-1);
     clearSubmenuTimeout();
-  }, [clearSubmenuTimeout]);
+  }, [clearSubmenuTimeout, setIsOpen]);
 
   const updateValue = useCallback(
     (newValue: CascadingValue, path: CascadingOption[]) => {
@@ -92,11 +100,13 @@ export const useCascadingDropdown = ({
       try {
         const children = await onLoadChildren(option);
         setLoadedChildren((prev) => ({ ...prev, [option.value]: children }));
+      } catch (error: unknown) {
+        onLoadError?.(error);
       } finally {
         setLoadingChildren((prev) => ({ ...prev, [option.value]: false }));
       }
     },
-    [onLoadChildren, loadedChildren, loadingChildren]
+    [onLoadChildren, loadedChildren, loadingChildren, onLoadError]
   );
 
   const handleMenuItemHover = useCallback(
@@ -371,6 +381,7 @@ export const useCascadingDropdown = ({
       handleClose,
       handleMenuItemClick,
       handleSubmenuItemClick,
+      setIsOpen,
     ]
   );
 

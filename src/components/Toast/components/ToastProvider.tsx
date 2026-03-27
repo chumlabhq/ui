@@ -107,7 +107,7 @@ export const ToastProvider = ({
 
       return id;
     },
-    [defaultDuration, maxToasts, removeToast, animationDuration],
+    [defaultDuration, maxToasts, animationDuration],
   );
 
   const success = useCallback(
@@ -204,7 +204,8 @@ export const ToastProvider = ({
               aria-label={containerAriaLabel}
             >
               {toasts.map((toast) => {
-                const { visible: _, ...toastConfig } = toast;
+                const { visible: _visible, ...toastConfig } = toast;
+                void _visible;
                 return (
                 <div
                   key={toast.id}

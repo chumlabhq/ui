@@ -1,5 +1,6 @@
 import { forwardRef, useId, useEffect, useRef, useMemo, useCallback } from "react";
 import type { CheckboxProps, CheckboxClasses } from "./utils/types";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import {
   SIZE_MAP,
   ICON_SIZE_MAP,
@@ -36,13 +37,14 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       indeterminateIcon,
       classes: classesProp,
       unstyled = false,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       reduceMotion,
       className,
       ...rest
     },
     ref,
   ) => {
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
+
     const generatedId = useId();
     const checkboxId = id || generatedId;
     const errorId = `${checkboxId}-error`;
@@ -162,6 +164,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         data-indeterminate={indeterminate || undefined}
         data-size={typeof size === "string" ? size : undefined}
         data-shape={shape || undefined}
+        data-reduce-motion={prefersReducedMotion || undefined}
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span

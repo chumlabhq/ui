@@ -2,14 +2,14 @@ import { useRef, useEffect, useId, forwardRef, memo, useMemo, useState, useCallb
 import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
-import { useCascadingDropdown } from "./useCascadingDropdown";
-import { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./icons";
+import { useCascadingDropdown } from "./utils/useCascadingDropdown";
+import { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
-} from "./constants";
+} from "./utils/constants";
 
 const isBrowser = typeof window !== "undefined";
 
@@ -211,6 +211,10 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       defaultValue,
       onValueChange,
       onLoadChildren,
+      onLoadError,
+      open,
+      defaultOpen,
+      onOpenChange,
       onBlur,
       onFocus,
       onKeyDown: onKeyDownProp,
@@ -224,6 +228,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       required = false,
       noResultsContent = "No options found",
       loadingText = "Loading...",
+      shimmerCount = 5,
       loading: externalLoading = false,
       showChevron = true,
       showSelectedIcon = true,
@@ -267,6 +272,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
         noResults: classesProp?.noResults ?? baseClasses.noResults,
         loading: classesProp?.loading ?? baseClasses.loading,
+        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
+        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
       }),
       [classesProp, baseClasses],
     );
@@ -308,6 +315,10 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       closeOnSelect,
       onValueChange,
       onLoadChildren,
+      onLoadError,
+      open,
+      defaultOpen,
+      onOpenChange,
       label,
       "aria-label": ariaLabel,
     });
@@ -457,7 +468,14 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               }}
             >
               {externalLoading ? (
-                <div className={mergedClasses.loading || undefined}>{loadingText}</div>
+                <>
+                  <div className={mergedClasses.loading || undefined}>{loadingText}</div>
+                  <div className={mergedClasses.shimmer || undefined}>
+                    {Array.from({ length: shimmerCount }).map((_, i) => (
+                      <div key={i} className={mergedClasses.shimmerItem || undefined} />
+                    ))}
+                  </div>
+                </>
               ) : options.length === 0 ? (
                 <div className={mergedClasses.noResults || undefined}>{noResultsContent}</div>
               ) : (

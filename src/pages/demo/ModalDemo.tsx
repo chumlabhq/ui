@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Modal } from "../../components/Modal";
 import { Button } from "../../components/Button";
-import { Section, ComponentHeader, PropsTable, PropRow } from "./components";
+import { Section, PropsTable, PropRow } from "./components";
+import { useTheme } from "./ThemeContext";
 
 const modalContentClass =
   "w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden";
@@ -14,6 +15,7 @@ const modalCloseIconClass = "w-5 h-5 text-gray-500";
 const modalBodyClass = "px-6 pb-6";
 
 const ModalDemo = () => {
+  const { isDarkMode: dark } = useTheme();
   const [basicOpen, setBasicOpen] = useState(false);
   const [withDescriptionOpen, setWithDescriptionOpen] = useState(false);
   const [withIconOpen, setWithIconOpen] = useState(false);
@@ -39,11 +41,37 @@ const ModalDemo = () => {
   const outlineStyles = `${buttonStyles} border border-slate-300 text-slate-600 hover:bg-slate-50 focus-visible:ring-slate-400`;
 
   return (
-    <>
-      <ComponentHeader
-        title="Modal"
-        description="Accessible dialog overlays for focused interactions and important content."
-      />
+    <div className="space-y-10">
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div
+          className={`absolute inset-0 ${
+            dark
+              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
+          }`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
+
+        <div className="relative">
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            Modal
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            Accessible dialog overlays for focused interactions and important
+            content.
+          </p>
+        </div>
+      </header>
 
       <Section title="Basic">
         <Button className={primaryStyles} onClick={() => setBasicOpen(true)}>
@@ -1114,401 +1142,85 @@ const ModalDemo = () => {
         </Modal>
       </Modal>
 
-      <Section title="Modal Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">open</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Controls modal visibility
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onOpenChange
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (open: boolean) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Callback when open state changes
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">children</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Modal body content</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">title</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Modal title (supports HTML)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  description
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Modal description</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">icon</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Icon to display in header</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">showIcon</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Show icon in header</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showCloseButton
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show close button</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">closeIcon</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Custom close icon</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showHeader
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show header section</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showOverlay
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show overlay backdrop</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  preventOutsideClick
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Prevent closing on outside click
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  closeOnEscape
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Close on Escape key</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  lockBackgroundScroll
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">
-                  Lock body scroll when open
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxWidth</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Maximum width</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxHeight</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Maximum height</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">minWidth</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Minimum width</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">minHeight</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Minimum height</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  fullScreen
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Full screen mode</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">centered</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Center modal vertically</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  overlayColor
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"black"</td>
-                <td className="py-2 text-gray-600">Overlay background color</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  overlayOpacity
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">0.5</td>
-                <td className="py-2 text-gray-600">Overlay opacity (0-1)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  animationDuration
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">200</td>
-                <td className="py-2 text-gray-600">Animation duration in ms</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  disableAnimation
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Disable open/close animations</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  nestingLevel
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  External nesting level override
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  maxNestingLevel
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">5</td>
-                <td className="py-2 text-gray-600">
-                  Maximum nested modal depth
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">zIndex</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Custom z-index value</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">aria-label</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Accessible label for modal</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  aria-labelledby
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">ID of labelling element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  aria-describedby
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">ID of describing element</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <Section title="Modal Props" isDarkMode={dark}>
+        <PropsTable isDarkMode={dark}>
+          <PropRow isDarkMode={dark} name="open" type="boolean" description="Controls modal visibility" />
+          <PropRow isDarkMode={dark} name="onOpenChange" type="(open: boolean) => void" description="Callback when open state changes" />
+          <PropRow isDarkMode={dark} name="children" type="ReactNode" description="Modal body content" />
+          <PropRow isDarkMode={dark} name="title" type="ReactNode" description="Modal title (supports HTML)" />
+          <PropRow isDarkMode={dark} name="description" type="ReactNode" description="Modal description" />
+          <PropRow isDarkMode={dark} name="icon" type="ReactNode" description="Icon to display in header" />
+          <PropRow isDarkMode={dark} name="showIcon" type="boolean" defaultVal="false" description="Show icon in header" />
+          <PropRow isDarkMode={dark} name="showCloseButton" type="boolean" defaultVal="true" description="Show close button" />
+          <PropRow isDarkMode={dark} name="closeIcon" type="ReactNode" description="Custom close icon" />
+          <PropRow isDarkMode={dark} name="showHeader" type="boolean" defaultVal="true" description="Show header section" />
+          <PropRow isDarkMode={dark} name="showOverlay" type="boolean" defaultVal="true" description="Show overlay backdrop" />
+          <PropRow isDarkMode={dark} name="preventOutsideClick" type="boolean" defaultVal="false" description="Prevent closing on outside click" />
+          <PropRow isDarkMode={dark} name="closeOnEscape" type="boolean" defaultVal="true" description="Close on Escape key" />
+          <PropRow isDarkMode={dark} name="lockBackgroundScroll" type="boolean" defaultVal="true" description="Lock body scroll when open" />
+          <PropRow isDarkMode={dark} name="maxWidth" type="string | number" description="Maximum width" />
+          <PropRow isDarkMode={dark} name="maxHeight" type="string | number" description="Maximum height" />
+          <PropRow isDarkMode={dark} name="minWidth" type="string | number" description="Minimum width" />
+          <PropRow isDarkMode={dark} name="minHeight" type="string | number" description="Minimum height" />
+          <PropRow isDarkMode={dark} name="fullScreen" type="boolean" defaultVal="false" description="Full screen mode" />
+          <PropRow isDarkMode={dark} name="centered" type="boolean" defaultVal="true" description="Center modal vertically" />
+          <PropRow isDarkMode={dark} name="overlayColor" type="string" defaultVal='"black"' description="Overlay background color" />
+          <PropRow isDarkMode={dark} name="overlayOpacity" type="number" defaultVal="0.5" description="Overlay opacity (0-1)" />
+          <PropRow isDarkMode={dark} name="animationDuration" type="number" defaultVal="200" description="Animation duration in ms" />
+          <PropRow isDarkMode={dark} name="disableAnimation" type="boolean" defaultVal="false" description="Disable open/close animations" />
+          <PropRow isDarkMode={dark} name="nestingLevel" type="number" description="External nesting level override" />
+          <PropRow isDarkMode={dark} name="maxNestingLevel" type="number" defaultVal="5" description="Maximum nested modal depth" />
+          <PropRow isDarkMode={dark} name="zIndex" type="number" description="Custom z-index value" />
+          <PropRow isDarkMode={dark} name="aria-label" type="string" description="Accessible label for modal" />
+          <PropRow isDarkMode={dark} name="aria-labelledby" type="string" description="ID of labelling element" />
+          <PropRow isDarkMode={dark} name="aria-describedby" type="string" description="ID of describing element" />
+        </PropsTable>
       </Section>
 
-      <Section title="Styling Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">className</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Additional class for modal content (merged with contentClassName)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rootClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Root wrapper element class
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  overlayClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Overlay backdrop class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  contentClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Modal content wrapper (size, rounded, shadow)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  contentStyle
-                </td>
-                <td className="py-2 pr-4 text-gray-600">CSSProperties</td>
-                <td className="py-2 text-gray-600">
-                  Inline styles for content wrapper
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  headerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Header section (layout, padding)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  titleClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Title text styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  descriptionClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Description text styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  iconClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Icon wrapper styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  closeButtonClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Close button styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  closeIconClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">Close icon styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  bodyClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 text-gray-600">
-                  Body content area (padding)
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <Section title="Styling Props" isDarkMode={dark}>
+        <PropsTable isDarkMode={dark}>
+          <PropRow isDarkMode={dark} name="className" type="string" description="Additional class for modal content (merged with contentClassName)" />
+          <PropRow isDarkMode={dark} name="rootClassName" type="string" description="Root wrapper element class" />
+          <PropRow isDarkMode={dark} name="overlayClassName" type="string" description="Overlay backdrop class" />
+          <PropRow isDarkMode={dark} name="contentClassName" type="string" description="Modal content wrapper (size, rounded, shadow)" />
+          <PropRow isDarkMode={dark} name="contentStyle" type="CSSProperties" description="Inline styles for content wrapper" />
+          <PropRow isDarkMode={dark} name="headerClassName" type="string" description="Header section (layout, padding)" />
+          <PropRow isDarkMode={dark} name="titleClassName" type="string" description="Title text styling" />
+          <PropRow isDarkMode={dark} name="descriptionClassName" type="string" description="Description text styling" />
+          <PropRow isDarkMode={dark} name="iconClassName" type="string" description="Icon wrapper styling" />
+          <PropRow isDarkMode={dark} name="closeButtonClassName" type="string" description="Close button styling" />
+          <PropRow isDarkMode={dark} name="closeIconClassName" type="string" description="Close icon styling" />
+          <PropRow isDarkMode={dark} name="bodyClassName" type="string" description="Body content area (padding)" />
+        </PropsTable>
       </Section>
 
-      <Section title="Sub Components">
-        <p className="text-gray-600 mb-4">
+      <Section title="Sub Components" isDarkMode={dark}>
+        <p className={`text-sm mb-4 ${dark ? "text-gray-400" : "text-gray-600"}`}>
           Optional sub-components for more granular control over modal structure.
           These can be used instead of or in addition to the built-in header/body structure.
         </p>
-        <PropsTable>
+        <PropsTable isDarkMode={dark}>
           <PropRow
+            isDarkMode={dark}
             name="ModalHeader"
             type="ReactNode + className?"
             description="Custom header wrapper with data-modal-header attribute"
           />
           <PropRow
+            isDarkMode={dark}
             name="ModalBody"
             type="ReactNode + className?"
             description="Custom body wrapper with data-modal-body attribute"
           />
           <PropRow
+            isDarkMode={dark}
             name="ModalFooter"
             type="ReactNode + className?"
             description="Custom footer wrapper with data-modal-footer attribute"
           />
         </PropsTable>
       </Section>
-    </>
+    </div>
   );
 };
 

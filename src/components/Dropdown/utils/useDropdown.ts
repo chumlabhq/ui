@@ -20,6 +20,7 @@ interface UseDropdownProps {
   typeaheadTimeout?: number;
   label?: React.ReactNode;
   "aria-label"?: string;
+  loadingText?: React.ReactNode;
 }
 
 export const useDropdown = ({
@@ -39,6 +40,7 @@ export const useDropdown = ({
   typeaheadTimeout = 500,
   label,
   "aria-label": ariaLabel,
+  loadingText = "Loading...",
 }: UseDropdownProps) => {
   const [currentValue, setCurrentValue] = useControllableState<string | null>({
     value: valueProp,
@@ -130,7 +132,7 @@ export const useDropdown = ({
 
     isLoadingRef.current = true;
     setIsLoadingOptions(true);
-    setStatusMessage("Loading...");
+    setStatusMessage(typeof loadingText === "string" ? loadingText : "Loading...");
 
     onLoadOptions()
       .then((results) => {
@@ -158,7 +160,7 @@ export const useDropdown = ({
           setIsLoadingOptions(false);
         }
       });
-  }, [loadOnOpen, onLoadOptions, onLoadError]);
+  }, [loadOnOpen, onLoadOptions, onLoadError, loadingText]);
 
   const getInitialFocusIndex = useCallback(() => {
     if (currentValue) {

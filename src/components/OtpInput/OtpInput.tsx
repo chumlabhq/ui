@@ -54,17 +54,19 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const errorId = `${inputId}-error`;
 
     // Dev warning — in useEffect for React 19 ref access compliance
+    const ariaLabel = rest["aria-label"];
+    const ariaLabelledBy = rest["aria-labelledby"];
     const warnedRef = useRef(false);
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
-        if (!label && !rest["aria-label"] && !rest["aria-labelledby"] && !warnedRef.current) {
+        if (!label && !ariaLabel && !ariaLabelledBy && !warnedRef.current) {
           warnedRef.current = true;
           console.warn(
             "OtpInput: An OTP input without a label requires `aria-label` or `aria-labelledby` for accessibility.",
           );
         }
       }
-    }, [label, rest]);
+    }, [label, ariaLabel, ariaLabelledBy]);
 
     const [value, setValue] = useControllableState({
       value: controlledValue,

@@ -41,6 +41,8 @@ export interface CascadingDropdownClasses {
   checkboxChecked?: string;
   noResults?: string;
   loading?: string;
+  shimmer?: string;
+  shimmerItem?: string;
 }
 
 export interface CascadingDropdownProps {
@@ -49,6 +51,12 @@ export interface CascadingDropdownProps {
   defaultValue?: CascadingValue;
   onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
   onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
+  /** Called when async child loading fails. */
+  onLoadError?: (error: unknown) => void;
+  /** Called when the dropdown open state changes. */
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onBlur?: () => void;
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
@@ -62,6 +70,7 @@ export interface CascadingDropdownProps {
   required?: boolean;
   noResultsContent?: ReactNode;
   loadingText?: ReactNode;
+  shimmerCount?: number;
   loading?: boolean;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
@@ -86,6 +95,10 @@ export interface UseCascadingDropdownProps {
   closeOnSelect?: boolean;
   onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
   onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
+  onLoadError?: (error: unknown) => void;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
   label?: ReactNode;
   "aria-label"?: string;
 }

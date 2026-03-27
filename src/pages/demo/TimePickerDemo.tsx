@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TimePicker, type TimeValue } from "../../components/TimePicker";
-import { Section, ComponentHeader, PropsTable, PropRow } from "./components";
+import { Section, CodeBlock, PropsTable, PropRow } from "./components";
+import { useTheme } from "./ThemeContext";
 
 const triggerStyle =
   "flex items-center gap-2 w-full px-3 py-2 border border-gray-300 rounded-lg bg-white hover:border-gray-400 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent cursor-text";
@@ -64,6 +65,7 @@ const BellIcon = ({ className = "" }: { className?: string }) => (
 );
 
 const TimePickerDemo = () => {
+  const { isDarkMode: dark } = useTheme();
   const [basic24Value, setBasic24Value] = useState<string | null>(null);
   const [basic12Value, setBasic12Value] = useState<string | null>(null);
   const [labelValue, setLabelValue] = useState<string | null>("14:30");
@@ -131,10 +133,43 @@ const TimePickerDemo = () => {
 
   return (
     <>
-      <ComponentHeader
-        title="TimePicker"
-        description="A flexible time picker with smart parsing, 12/24 hour format, and keyboard navigation."
-      />
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div
+          className={`absolute inset-0 ${
+            dark
+              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
+          }`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
+
+        <div className="relative">
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            TimePicker
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A flexible time picker with smart parsing, 12/24 hour format, and
+            keyboard navigation.
+          </p>
+
+          <div className="mt-5">
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { TimePicker } from "@kern-ui/time-picker";`}
+            />
+          </div>
+        </div>
+      </header>
 
       <Section title="24-Hour Format (Default)">
         <div className="w-48">
@@ -1136,325 +1171,51 @@ const TimePickerDemo = () => {
       </Section>
 
       <Section title="Props Reference">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">id</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">auto-generated</td>
-                <td className="py-2 text-gray-600">Custom ID for the picker</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">name</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Name attribute</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">value</td>
-                <td className="py-2 pr-4 text-gray-600">string | null</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Current time value (required)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onChange</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (time, timeValue) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Change handler (required)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onBlur</td>
-                <td className="py-2 pr-4 text-gray-600">() =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Blur event handler</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onCancel</td>
-                <td className="py-2 pr-4 text-gray-600">() =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Cancel callback (clock variant)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">onConfirm</td>
-                <td className="py-2 pr-4 text-gray-600">() =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Confirm callback (clock variant)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">label</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Label for the picker</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">required</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Whether field is required
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  placeholder
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">
-                  "hh:mm" / "hh:mm AM/PM"
-                </td>
-                <td className="py-2 text-gray-600">Input placeholder text</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  errorMessage
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Error message to display</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">fullWidth</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Take full container width
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">format</td>
-                <td className="py-2 pr-4 text-gray-600">"12h" | "24h"</td>
-                <td className="py-2 pr-4 text-gray-500">"24h"</td>
-                <td className="py-2 text-gray-600">Time format</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">variant</td>
-                <td className="py-2 pr-4 text-gray-600">
-                  "dropdown" | "clock"
-                </td>
-                <td className="py-2 pr-4 text-gray-500">"dropdown"</td>
-                <td className="py-2 text-gray-600">
-                  UI variant (list or circular clock)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  minuteStep
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">15</td>
-                <td className="py-2 text-gray-600">Interval between options</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">minTime</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Minimum selectable time</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxTime</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Maximum selectable time</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">disabled</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Disable the picker</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">error</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">Show error state</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showEndIcon
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show end icon</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">endIcon</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Custom end icon (default: chevron)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showSelectedIcon
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">
-                  Show icon for selected option
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  selectedIcon
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Custom icon for selected state
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  renderOptionContent
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (time, isSelected) =&gt; ReactNode
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Custom render function for option content
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="id" type="string" defaultVal="auto-generated" description="Custom ID for the picker" isDarkMode={dark} />
+          <PropRow name="name" type="string" description="Name attribute" isDarkMode={dark} />
+          <PropRow name="value" type="string | null" description="Current time value (required)" isDarkMode={dark} />
+          <PropRow name="onChange" type="(time, timeValue) => void" description="Change handler (required)" isDarkMode={dark} />
+          <PropRow name="onBlur" type="() => void" description="Blur event handler" isDarkMode={dark} />
+          <PropRow name="onCancel" type="() => void" description="Cancel callback (clock variant)" isDarkMode={dark} />
+          <PropRow name="onConfirm" type="() => void" description="Confirm callback (clock variant)" isDarkMode={dark} />
+          <PropRow name="label" type="ReactNode" description="Label for the picker" isDarkMode={dark} />
+          <PropRow name="required" type="boolean" defaultVal="false" description="Whether field is required" isDarkMode={dark} />
+          <PropRow name="placeholder" type="string" defaultVal='"hh:mm" / "hh:mm AM/PM"' description="Input placeholder text" isDarkMode={dark} />
+          <PropRow name="errorMessage" type="ReactNode" description="Error message to display" isDarkMode={dark} />
+          <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Take full container width" isDarkMode={dark} />
+          <PropRow name="format" type='"12h" | "24h"' defaultVal='"24h"' description="Time format" isDarkMode={dark} />
+          <PropRow name="variant" type='"dropdown" | "clock"' defaultVal='"dropdown"' description="UI variant (list or circular clock)" isDarkMode={dark} />
+          <PropRow name="minuteStep" type="number" defaultVal="15" description="Interval between options" isDarkMode={dark} />
+          <PropRow name="minTime" type="string" description="Minimum selectable time" isDarkMode={dark} />
+          <PropRow name="maxTime" type="string" description="Maximum selectable time" isDarkMode={dark} />
+          <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the picker" isDarkMode={dark} />
+          <PropRow name="error" type="boolean" defaultVal="false" description="Show error state" isDarkMode={dark} />
+          <PropRow name="showEndIcon" type="boolean" defaultVal="true" description="Show end icon" isDarkMode={dark} />
+          <PropRow name="endIcon" type="ReactNode" description="Custom end icon (default: chevron)" isDarkMode={dark} />
+          <PropRow name="showSelectedIcon" type="boolean" defaultVal="true" description="Show icon for selected option" isDarkMode={dark} />
+          <PropRow name="selectedIcon" type="ReactNode" description="Custom icon for selected state" isDarkMode={dark} />
+          <PropRow name="renderOptionContent" type="(time, isSelected) => ReactNode" description="Custom render function for option content" isDarkMode={dark} />
+        </PropsTable>
       </Section>
 
       <Section title="Styling Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">className</td>
-                <td className="py-2 text-gray-600">
-                  Dropdown wrapper (relative positioned)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  containerClassName
-                </td>
-                <td className="py-2 text-gray-600">Root container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  labelClassName
-                </td>
-                <td className="py-2 text-gray-600">Label element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  errorClassName
-                </td>
-                <td className="py-2 text-gray-600">Error message</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  triggerClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Trigger container (input + chevron)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  inputClassName
-                </td>
-                <td className="py-2 text-gray-600">Text input element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  dropdownClassName
-                </td>
-                <td className="py-2 text-gray-600">Dropdown container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  optionListClassName
-                </td>
-                <td className="py-2 text-gray-600">Options list wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  optionClassName
-                </td>
-                <td className="py-2 text-gray-600">Individual option</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  selectedOptionClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Additional styles for selected option
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  focusedOptionClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Additional styles for focused option (keyboard/hover)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  endIconClassName
-                </td>
-                <td className="py-2 text-gray-600">Trailing icon</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  selectedIconClassName
-                </td>
-                <td className="py-2 text-gray-600">Selected icon styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  noResultsClassName
-                </td>
-                <td className="py-2 text-gray-600">No results message</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="className" type="string" description="Dropdown wrapper (relative positioned)" isDarkMode={dark} />
+          <PropRow name="containerClassName" type="string" description="Root container" isDarkMode={dark} />
+          <PropRow name="labelClassName" type="string" description="Label element" isDarkMode={dark} />
+          <PropRow name="errorClassName" type="string" description="Error message" isDarkMode={dark} />
+          <PropRow name="triggerClassName" type="string" description="Trigger container (input + chevron)" isDarkMode={dark} />
+          <PropRow name="inputClassName" type="string" description="Text input element" isDarkMode={dark} />
+          <PropRow name="dropdownClassName" type="string" description="Dropdown container" isDarkMode={dark} />
+          <PropRow name="optionListClassName" type="string" description="Options list wrapper" isDarkMode={dark} />
+          <PropRow name="optionClassName" type="string" description="Individual option" isDarkMode={dark} />
+          <PropRow name="selectedOptionClassName" type="string" description="Additional styles for selected option" isDarkMode={dark} />
+          <PropRow name="focusedOptionClassName" type="string" description="Additional styles for focused option (keyboard/hover)" isDarkMode={dark} />
+          <PropRow name="endIconClassName" type="string" description="Trailing icon" isDarkMode={dark} />
+          <PropRow name="selectedIconClassName" type="string" description="Selected icon styling" isDarkMode={dark} />
+          <PropRow name="noResultsClassName" type="string" description="No results message" isDarkMode={dark} />
+        </PropsTable>
       </Section>
 
       <Section title="Clock Variant Styling Props">
@@ -1463,156 +1224,28 @@ const TimePickerDemo = () => {
           <code className="bg-gray-100 px-1 rounded">variant="clock"</code> is
           set.
         </p>
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockContainerClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Container for the clock popup
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockDisplayClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Hours:minutes display area
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockDisplayHoursClassName
-                </td>
-                <td className="py-2 text-gray-600">Hours button styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockDisplayMinutesClassName
-                </td>
-                <td className="py-2 text-gray-600">Minutes button styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockDisplayActiveClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Active state for hours/minutes
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockDisplaySeparatorClassName
-                </td>
-                <td className="py-2 text-gray-600">Colon separator styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockFaceClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Circular clock face container
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockHandClassName
-                </td>
-                <td className="py-2 text-gray-600">Clock hand container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockHandLineClassName
-                </td>
-                <td className="py-2 text-gray-600">Hand line (from center)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockHandDotClassName
-                </td>
-                <td className="py-2 text-gray-600">Dot at end of hand</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockCenterClassName
-                </td>
-                <td className="py-2 text-gray-600">Center point of clock</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockNumberClassName
-                </td>
-                <td className="py-2 text-gray-600">Clock number styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockNumberSelectedClassName
-                </td>
-                <td className="py-2 text-gray-600">Selected number styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockNumberInnerClassName
-                </td>
-                <td className="py-2 text-gray-600">Inner ring numbers (24h)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockActionsClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Cancel/OK button container
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockCancelButtonClassName
-                </td>
-                <td className="py-2 text-gray-600">Cancel button styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockOkButtonClassName
-                </td>
-                <td className="py-2 text-gray-600">OK button styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockPeriodToggleClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  AM/PM toggle container (12h)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockPeriodButtonClassName
-                </td>
-                <td className="py-2 text-gray-600">AM/PM button styling</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  clockPeriodActiveClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Active period button styling
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="clockContainerClassName" type="string" description="Container for the clock popup" isDarkMode={dark} />
+          <PropRow name="clockDisplayClassName" type="string" description="Hours:minutes display area" isDarkMode={dark} />
+          <PropRow name="clockDisplayHoursClassName" type="string" description="Hours button styling" isDarkMode={dark} />
+          <PropRow name="clockDisplayMinutesClassName" type="string" description="Minutes button styling" isDarkMode={dark} />
+          <PropRow name="clockDisplayActiveClassName" type="string" description="Active state for hours/minutes" isDarkMode={dark} />
+          <PropRow name="clockDisplaySeparatorClassName" type="string" description="Colon separator styling" isDarkMode={dark} />
+          <PropRow name="clockFaceClassName" type="string" description="Circular clock face container" isDarkMode={dark} />
+          <PropRow name="clockHandClassName" type="string" description="Clock hand container" isDarkMode={dark} />
+          <PropRow name="clockHandLineClassName" type="string" description="Hand line (from center)" isDarkMode={dark} />
+          <PropRow name="clockHandDotClassName" type="string" description="Dot at end of hand" isDarkMode={dark} />
+          <PropRow name="clockCenterClassName" type="string" description="Center point of clock" isDarkMode={dark} />
+          <PropRow name="clockNumberClassName" type="string" description="Clock number styling" isDarkMode={dark} />
+          <PropRow name="clockNumberSelectedClassName" type="string" description="Selected number styling" isDarkMode={dark} />
+          <PropRow name="clockNumberInnerClassName" type="string" description="Inner ring numbers (24h)" isDarkMode={dark} />
+          <PropRow name="clockActionsClassName" type="string" description="Cancel/OK button container" isDarkMode={dark} />
+          <PropRow name="clockCancelButtonClassName" type="string" description="Cancel button styling" isDarkMode={dark} />
+          <PropRow name="clockOkButtonClassName" type="string" description="OK button styling" isDarkMode={dark} />
+          <PropRow name="clockPeriodToggleClassName" type="string" description="AM/PM toggle container (12h)" isDarkMode={dark} />
+          <PropRow name="clockPeriodButtonClassName" type="string" description="AM/PM button styling" isDarkMode={dark} />
+          <PropRow name="clockPeriodActiveClassName" type="string" description="Active period button styling" isDarkMode={dark} />
+        </PropsTable>
       </Section>
 
       <Section

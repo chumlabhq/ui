@@ -24,6 +24,7 @@ const components: ComponentItem[] = [
     path: "international-phone-input",
     displayName: "International Phone Input",
   },
+  { path: "loader", displayName: "Loader" },
   { path: "modal", displayName: "Modal" },
   { path: "multi-select-dropdown", displayName: "Multi Select Dropdown" },
   {
@@ -113,6 +114,15 @@ const Demo = () => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
+  // Close sidebar on navigation (render-time derived state)
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+  if (prevPathname !== location.pathname) {
+    setPrevPathname(location.pathname);
+    if (sidebarOpen) {
+      setSidebarOpen(false);
+    }
+  }
+
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
@@ -122,13 +132,6 @@ const Demo = () => {
       localStorage.setItem("kern-ui-theme", "light");
     }
   }, [isDarkMode]);
-
-  // Close sidebar on navigation (state-based tracking, no ref during render)
-  const [prevPathname, setPrevPathname] = useState(location.pathname);
-  if (prevPathname !== location.pathname) {
-    setPrevPathname(location.pathname);
-    if (sidebarOpen) setSidebarOpen(false);
-  }
 
   // Scroll to top on navigation
   useEffect(() => {
@@ -272,7 +275,7 @@ const Demo = () => {
           ref={mainRef}
           className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
-          <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
+          <div className="p-4 sm:p-6 lg:p-8 w-full max-w-none min-w-0">
             <Outlet context={{ isDarkMode, toggleDarkMode }} />
           </div>
         </main>

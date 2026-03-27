@@ -77,6 +77,7 @@ export interface MultiSelectDropdownProps {
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
+  loadingText?: ReactNode;
 }
 
 export interface UseMultiSelectDropdownProps {

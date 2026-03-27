@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Table, Pagination } from "../../components/Table";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Section, ComponentHeader, PropsTable, PropRow } from "./components";
+import { Section, CodeBlock, PropsTable, PropRow } from "./components";
+import { useTheme } from "./ThemeContext";
 
 // Basic User interface
 interface User {
@@ -536,6 +537,7 @@ const PerformanceBadge = ({
 };
 
 const TableDemo = () => {
+  const { isDarkMode: dark } = useTheme();
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -788,10 +790,43 @@ const TableDemo = () => {
 
   return (
     <>
-      <ComponentHeader
-        title="Table"
-        description="A flexible data table with sorting, pagination, row selection, and pinned columns."
-      />
+      {/* ─── Header ─────────────────────────────────────────────────────── */}
+      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
+        <div
+          className={`absolute inset-0 ${
+            dark
+              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
+              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
+          }`}
+        />
+        <div
+          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
+        />
+        <div
+          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
+        />
+
+        <div className="relative">
+          <h1
+            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
+          >
+            Table
+          </h1>
+          <p
+            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+          >
+            A flexible data table with sorting, pagination, row selection, and
+            pinned columns.
+          </p>
+
+          <div className="mt-5">
+            <CodeBlock
+              isDarkMode={dark}
+              code={`import { Table, Pagination } from "@kern-ui/table";`}
+            />
+          </div>
+        </div>
+      </header>
 
       <Section title="Basic Usage">
         <Table
@@ -1315,701 +1350,96 @@ const TableDemo = () => {
       </Section>
 
       <Section title="Table Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">columns</td>
-                <td className="py-2 pr-4 text-gray-600">ColumnDef[]</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  TanStack table column definitions
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">COLUMNS</td>
-                <td className="py-2 pr-4 text-gray-600">ColumnDef[]</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Alternative to columns prop
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">data</td>
-                <td className="py-2 pr-4 text-gray-600">TData[]</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Table data array</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  COLUMNS_DATA
-                </td>
-                <td className="py-2 pr-4 text-gray-600">TData[]</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Alternative to data prop</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">loading</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Show loading shimmer state
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showHeader
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">Show/hide table header</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tableHeader
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Alternative to showHeader prop
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxWidth</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Maximum width with horizontal scroll
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">maxHeight</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Maximum height with vertical scroll
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">minHeight</td>
-                <td className="py-2 pr-4 text-gray-600">string | number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Minimum height of the table
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  hideVerticalScrollbar
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Hide vertical scrollbar while keeping scroll
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  hideHorizontalScrollbar
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Hide horizontal scrollbar while keeping scroll
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  stickyHeader
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Make header sticky during vertical scroll
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnedColumns
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string[]</td>
-                <td className="py-2 pr-4 text-gray-500">[]</td>
-                <td className="py-2 text-gray-600">Column IDs to pin left</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onPinColumn
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (columnId, isPinned) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Handler when column is pinned/unpinned
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnableColumns
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string[]</td>
-                <td className="py-2 pr-4 text-gray-500">all</td>
-                <td className="py-2 text-gray-600">
-                  Columns that can be pinned
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  maxPinnedColumns
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">3</td>
-                <td className="py-2 text-gray-600">
-                  Maximum pinnable columns (1-5)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">getRowId</td>
-                <td className="py-2 pr-4 text-gray-600">(row) =&gt; string</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Get unique row ID for selection
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  selectedRowId
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string | null</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Currently selected row ID
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onRowClick
-                </td>
-                <td className="py-2 pr-4 text-gray-600">(row) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Row click handler</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onRowHover
-                </td>
-                <td className="py-2 pr-4 text-gray-600">
-                  (index, ref) =&gt; void
-                </td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Row hover handler for floating actions
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  floatingActions
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Floating action buttons component
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  isFloatingActionsHovered
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Whether floating actions are hovered
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  isPopupOpen
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Whether a popup is open (prevents hover reset)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  emptyContent
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Custom empty state content
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">ariaLabel</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"Data table"</td>
-                <td className="py-2 text-gray-600">
-                  Accessibility label for the table
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  shimmerRowCount
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">10</td>
-                <td className="py-2 text-gray-600">
-                  Number of shimmer rows when loading
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">PinIcon</td>
-                <td className="py-2 pr-4 text-gray-600">ComponentType</td>
-                <td className="py-2 pr-4 text-gray-500">default</td>
-                <td className="py-2 text-gray-600">
-                  Custom icon for unpinned state
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  PinnedIcon
-                </td>
-                <td className="py-2 pr-4 text-gray-600">ComponentType</td>
-                <td className="py-2 pr-4 text-gray-500">PinIcon</td>
-                <td className="py-2 text-gray-600">
-                  Custom icon for pinned state
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onCursorPosition
-                </td>
-                <td className="py-2 pr-4 text-gray-600">(pos) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Cursor position callback</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onCursorOverHeader
-                </td>
-                <td className="py-2 pr-4 text-gray-600">(bool) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Cursor over header callback
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">children</td>
-                <td className="py-2 pr-4 text-gray-600">ReactNode</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Children rendered before table
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="columns" type="ColumnDef[]" description="TanStack table column definitions" isDarkMode={dark} />
+          <PropRow name="COLUMNS" type="ColumnDef[]" description="Alternative to columns prop" isDarkMode={dark} />
+          <PropRow name="data" type="TData[]" description="Table data array" isDarkMode={dark} />
+          <PropRow name="COLUMNS_DATA" type="TData[]" description="Alternative to data prop" isDarkMode={dark} />
+          <PropRow name="loading" type="boolean" defaultVal="false" description="Show loading shimmer state" isDarkMode={dark} />
+          <PropRow name="showHeader" type="boolean" defaultVal="true" description="Show/hide table header" isDarkMode={dark} />
+          <PropRow name="tableHeader" type="boolean" description="Alternative to showHeader prop" isDarkMode={dark} />
+          <PropRow name="maxWidth" type="string | number" description="Maximum width with horizontal scroll" isDarkMode={dark} />
+          <PropRow name="maxHeight" type="string | number" description="Maximum height with vertical scroll" isDarkMode={dark} />
+          <PropRow name="minHeight" type="string | number" description="Minimum height of the table" isDarkMode={dark} />
+          <PropRow name="hideVerticalScrollbar" type="boolean" defaultVal="false" description="Hide vertical scrollbar while keeping scroll" isDarkMode={dark} />
+          <PropRow name="hideHorizontalScrollbar" type="boolean" defaultVal="false" description="Hide horizontal scrollbar while keeping scroll" isDarkMode={dark} />
+          <PropRow name="stickyHeader" type="boolean" defaultVal="false" description="Make header sticky during vertical scroll" isDarkMode={dark} />
+          <PropRow name="pinnedColumns" type="string[]" defaultVal="[]" description="Column IDs to pin left" isDarkMode={dark} />
+          <PropRow name="onPinColumn" type="(columnId, isPinned) => void" description="Handler when column is pinned/unpinned" isDarkMode={dark} />
+          <PropRow name="pinnableColumns" type="string[]" defaultVal="all" description="Columns that can be pinned" isDarkMode={dark} />
+          <PropRow name="maxPinnedColumns" type="number" defaultVal="3" description="Maximum pinnable columns (1-5)" isDarkMode={dark} />
+          <PropRow name="getRowId" type="(row) => string" description="Get unique row ID for selection" isDarkMode={dark} />
+          <PropRow name="selectedRowId" type="string | null" description="Currently selected row ID" isDarkMode={dark} />
+          <PropRow name="onRowClick" type="(row) => void" description="Row click handler" isDarkMode={dark} />
+          <PropRow name="onRowHover" type="(index, ref) => void" description="Row hover handler for floating actions" isDarkMode={dark} />
+          <PropRow name="floatingActions" type="ReactNode" description="Floating action buttons component" isDarkMode={dark} />
+          <PropRow name="isFloatingActionsHovered" type="boolean" defaultVal="false" description="Whether floating actions are hovered" isDarkMode={dark} />
+          <PropRow name="isPopupOpen" type="boolean" defaultVal="false" description="Whether a popup is open (prevents hover reset)" isDarkMode={dark} />
+          <PropRow name="emptyContent" type="ReactNode" description="Custom empty state content" isDarkMode={dark} />
+          <PropRow name="ariaLabel" type="string" defaultVal='"Data table"' description="Accessibility label for the table" isDarkMode={dark} />
+          <PropRow name="shimmerRowCount" type="number" defaultVal="10" description="Number of shimmer rows when loading" isDarkMode={dark} />
+          <PropRow name="PinIcon" type="ComponentType" defaultVal="default" description="Custom icon for unpinned state" isDarkMode={dark} />
+          <PropRow name="PinnedIcon" type="ComponentType" defaultVal="PinIcon" description="Custom icon for pinned state" isDarkMode={dark} />
+          <PropRow name="onCursorPosition" type="(pos) => void" description="Cursor position callback" isDarkMode={dark} />
+          <PropRow name="onCursorOverHeader" type="(bool) => void" description="Cursor over header callback" isDarkMode={dark} />
+          <PropRow name="children" type="ReactNode" description="Children rendered before table" isDarkMode={dark} />
+        </PropsTable>
       </Section>
 
       <Section title="Pagination Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  currentPage
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Current active page (1-indexed)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  totalPages
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Total number of pages</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowsPerPage
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Current rows per page</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowOptions
-                </td>
-                <td className="py-2 pr-4 text-gray-600">number[]</td>
-                <td className="py-2 pr-4 text-gray-500">[5,10,25,50]</td>
-                <td className="py-2 text-gray-600">
-                  Available rows per page options
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onPageChange
-                </td>
-                <td className="py-2 pr-4 text-gray-600">(page) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">Page change handler</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  onRowsPerPageChange
-                </td>
-                <td className="py-2 pr-4 text-gray-600">(rows) =&gt; void</td>
-                <td className="py-2 pr-4 text-gray-500">-</td>
-                <td className="py-2 text-gray-600">
-                  Rows per page change handler
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  showRowsPerPage
-                </td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">true</td>
-                <td className="py-2 text-gray-600">
-                  Show rows per page selector
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowsPerPageLabel
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">"rows"</td>
-                <td className="py-2 text-gray-600">Label after row count</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">classes</td>
-                <td className="py-2 pr-4 text-gray-600">PaginationClasses</td>
-                <td className="py-2 pr-4 text-gray-500">{"{}"}</td>
-                <td className="py-2 text-gray-600">
-                  Slot class overrides (17 slots: root, nav, pageButtons,
-                  pageButton, activePageButton, navButton, ellipsis, selector,
-                  selectorButton, selectorDropdown, selectorOption, label, etc.)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">unstyled</td>
-                <td className="py-2 pr-4 text-gray-600">boolean</td>
-                <td className="py-2 pr-4 text-gray-500">false</td>
-                <td className="py-2 text-gray-600">
-                  Strip all default classes
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="currentPage" type="number" description="Current active page (1-indexed)" isDarkMode={dark} />
+          <PropRow name="totalPages" type="number" description="Total number of pages" isDarkMode={dark} />
+          <PropRow name="rowsPerPage" type="number" description="Current rows per page" isDarkMode={dark} />
+          <PropRow name="rowOptions" type="number[]" defaultVal="[5,10,25,50]" description="Available rows per page options" isDarkMode={dark} />
+          <PropRow name="onPageChange" type="(page) => void" description="Page change handler" isDarkMode={dark} />
+          <PropRow name="onRowsPerPageChange" type="(rows) => void" description="Rows per page change handler" isDarkMode={dark} />
+          <PropRow name="showRowsPerPage" type="boolean" defaultVal="true" description="Show rows per page selector" isDarkMode={dark} />
+          <PropRow name="rowsPerPageLabel" type="string" defaultVal='"rows"' description="Label after row count" isDarkMode={dark} />
+          <PropRow name="classes" type="PaginationClasses" defaultVal="{}" description="Slot class overrides (17 slots: root, nav, pageButtons, pageButton, activePageButton, navButton, ellipsis, selector, selectorButton, selectorDropdown, selectorOption, label, etc.)" isDarkMode={dark} />
+          <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
+        </PropsTable>
       </Section>
 
       <Section title="Table Styling Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  containerClassName
-                </td>
-                <td className="py-2 text-gray-600">Root container wrapper</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  tableClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Table element (default for both pinned/unpinned)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnedTableClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Pinned columns table element
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  unpinnedTableClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Unpinned columns table element
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  headerClassName
-                </td>
-                <td className="py-2 text-gray-600">thead element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  headerRowClassName
-                </td>
-                <td className="py-2 text-gray-600">Header row (tr) element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  headerCellClassName
-                </td>
-                <td className="py-2 text-gray-600">th elements</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  headerCellHoverClassName
-                </td>
-                <td className="py-2 text-gray-600">th hover state</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  headerCellContentClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Header cell content wrapper
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  bodyClassName
-                </td>
-                <td className="py-2 text-gray-600">tbody element</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowClassName
-                </td>
-                <td className="py-2 text-gray-600">tr elements (unselected)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  selectedRowClassName
-                </td>
-                <td className="py-2 text-gray-600">tr elements (selected)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  cellClassName
-                </td>
-                <td className="py-2 text-gray-600">td elements</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnedContainerClassName
-                </td>
-                <td className="py-2 text-gray-600">Pinned columns container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  unpinnedContainerClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Scrollable columns container
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  emptyClassName
-                </td>
-                <td className="py-2 text-gray-600">Empty state container</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinButtonClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Pin button (unpinned state)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnedPinButtonClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Pin button (pinned state)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinIconClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Pin icon (unpinned state)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinIconHoverClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Pin icon hover (unpinned)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnedPinIconClassName
-                </td>
-                <td className="py-2 text-gray-600">Pin icon (pinned state)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  pinnedPinIconHoverClassName
-                </td>
-                <td className="py-2 text-gray-600">Pin icon hover (pinned)</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  shimmerClassName
-                </td>
-                <td className="py-2 text-gray-600">Shimmer container class</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  shimmerRowClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Shimmer row wrapper class
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  shimmerCellClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Shimmer cell wrapper class
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  shimmerBarClassName
-                </td>
-                <td className="py-2 text-gray-600">
-                  Shimmer bar element class
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="containerClassName" type="string" description="Root container wrapper" isDarkMode={dark} />
+          <PropRow name="tableClassName" type="string" description="Table element (default for both pinned/unpinned)" isDarkMode={dark} />
+          <PropRow name="pinnedTableClassName" type="string" description="Pinned columns table element" isDarkMode={dark} />
+          <PropRow name="unpinnedTableClassName" type="string" description="Unpinned columns table element" isDarkMode={dark} />
+          <PropRow name="headerClassName" type="string" description="thead element" isDarkMode={dark} />
+          <PropRow name="headerRowClassName" type="string" description="Header row (tr) element" isDarkMode={dark} />
+          <PropRow name="headerCellClassName" type="string" description="th elements" isDarkMode={dark} />
+          <PropRow name="headerCellHoverClassName" type="string" description="th hover state" isDarkMode={dark} />
+          <PropRow name="headerCellContentClassName" type="string" description="Header cell content wrapper" isDarkMode={dark} />
+          <PropRow name="bodyClassName" type="string" description="tbody element" isDarkMode={dark} />
+          <PropRow name="rowClassName" type="string" description="tr elements (unselected)" isDarkMode={dark} />
+          <PropRow name="selectedRowClassName" type="string" description="tr elements (selected)" isDarkMode={dark} />
+          <PropRow name="cellClassName" type="string" description="td elements" isDarkMode={dark} />
+          <PropRow name="pinnedContainerClassName" type="string" description="Pinned columns container" isDarkMode={dark} />
+          <PropRow name="unpinnedContainerClassName" type="string" description="Scrollable columns container" isDarkMode={dark} />
+          <PropRow name="emptyClassName" type="string" description="Empty state container" isDarkMode={dark} />
+          <PropRow name="pinButtonClassName" type="string" description="Pin button (unpinned state)" isDarkMode={dark} />
+          <PropRow name="pinnedPinButtonClassName" type="string" description="Pin button (pinned state)" isDarkMode={dark} />
+          <PropRow name="pinIconClassName" type="string" description="Pin icon (unpinned state)" isDarkMode={dark} />
+          <PropRow name="pinIconHoverClassName" type="string" description="Pin icon hover (unpinned)" isDarkMode={dark} />
+          <PropRow name="pinnedPinIconClassName" type="string" description="Pin icon (pinned state)" isDarkMode={dark} />
+          <PropRow name="pinnedPinIconHoverClassName" type="string" description="Pin icon hover (pinned)" isDarkMode={dark} />
+          <PropRow name="shimmerClassName" type="string" description="Shimmer container class" isDarkMode={dark} />
+          <PropRow name="shimmerRowClassName" type="string" description="Shimmer row wrapper class" isDarkMode={dark} />
+          <PropRow name="shimmerCellClassName" type="string" description="Shimmer cell wrapper class" isDarkMode={dark} />
+          <PropRow name="shimmerBarClassName" type="string" description="Shimmer bar element class" isDarkMode={dark} />
+        </PropsTable>
       </Section>
 
       <Section title="TableShimmer Props">
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Prop
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Type
-                </th>
-                <th className="text-left py-2 pr-4 font-medium text-gray-900">
-                  Default
-                </th>
-                <th className="text-left py-2 font-medium text-gray-900">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">rowCount</td>
-                <td className="py-2 pr-4 text-gray-600">number</td>
-                <td className="py-2 pr-4 text-gray-500">10</td>
-                <td className="py-2 text-gray-600">Number of shimmer rows</td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">className</td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">default</td>
-                <td className="py-2 text-gray-600">
-                  Container class (via shimmerClassName on Table)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  rowClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">default</td>
-                <td className="py-2 text-gray-600">
-                  Row wrapper class (via shimmerRowClassName)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  cellClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">default</td>
-                <td className="py-2 text-gray-600">
-                  Cell wrapper class (via shimmerCellClassName)
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2 pr-4 font-mono text-blue-600">
-                  shimmerClassName
-                </td>
-                <td className="py-2 pr-4 text-gray-600">string</td>
-                <td className="py-2 pr-4 text-gray-500">default</td>
-                <td className="py-2 text-gray-600">
-                  Shimmer bar class (via shimmerBarClassName)
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <PropsTable isDarkMode={dark}>
+          <PropRow name="rowCount" type="number" defaultVal="10" description="Number of shimmer rows" isDarkMode={dark} />
+          <PropRow name="className" type="string" defaultVal="default" description="Container class (via shimmerClassName on Table)" isDarkMode={dark} />
+          <PropRow name="rowClassName" type="string" defaultVal="default" description="Row wrapper class (via shimmerRowClassName)" isDarkMode={dark} />
+          <PropRow name="cellClassName" type="string" defaultVal="default" description="Cell wrapper class (via shimmerCellClassName)" isDarkMode={dark} />
+          <PropRow name="shimmerClassName" type="string" defaultVal="default" description="Shimmer bar class (via shimmerBarClassName)" isDarkMode={dark} />
+        </PropsTable>
         <p className="mt-3 text-sm text-gray-500">
           Note: When using Table component, pass these props with the "shimmer"
           prefix (e.g.,{" "}

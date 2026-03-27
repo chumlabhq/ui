@@ -326,6 +326,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       loadOnOpen = false,
       onLoadError,
       shimmerCount = 5,
+      loadingText = "Loading...",
       unstyled = false,
       classes: classesProp,
       className,
@@ -420,6 +421,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       typeaheadTimeout,
       label,
       "aria-label": ariaLabel,
+      loadingText,
     });
 
     const loading = externalLoading || isLoadingOptions;

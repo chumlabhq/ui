@@ -322,6 +322,7 @@ const SearchableDropdown = forwardRef<
     loadInitialOnOpen = false,
     onLoadError,
     shimmerCount = 5,
+    loadingText = "Loading...",
     unstyled = false,
     classes: classesProp,
     className,
@@ -432,7 +433,7 @@ const SearchableDropdown = forwardRef<
       : undefined;
 
   const statusMessage = loading
-    ? "Loading..."
+    ? loadingText
     : isOpen
       ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
       : selectedOption

@@ -6,13 +6,13 @@ import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
-import { useMultiSelectDropdown } from "./useMultiSelectDropdown";
-import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./icons";
+import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
+import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
-} from "./constants";
+} from "./utils/constants";
 
 interface DropdownCoords {
   top: number;
@@ -310,6 +310,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       searchPlaceholder = "Search...",
       noResultsContent = "No options found",
       loadingText = "Loading...",
+      shimmerCount = 5,
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
@@ -367,6 +368,8 @@ const MultiSelectSearchableDropdown = forwardRef<
         chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,
         noResults: classesProp?.noResults ?? baseClasses.noResults,
         loading: classesProp?.loading ?? baseClasses.loading,
+        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
+        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
         searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
@@ -690,9 +693,16 @@ const MultiSelectSearchableDropdown = forwardRef<
 
             <div className={mergedClasses.optionList || undefined}>
               {loading ? (
-                <div role="status" className={mergedClasses.loading || undefined}>
-                  {loadingText}
-                </div>
+                <>
+                  <div role="status" className={mergedClasses.loading || undefined}>
+                    {loadingText}
+                  </div>
+                  <div className={mergedClasses.shimmer || undefined}>
+                    {Array.from({ length: shimmerCount }).map((_, i) => (
+                      <div key={i} className={mergedClasses.shimmerItem || undefined} />
+                    ))}
+                  </div>
+                </>
               ) : displayOptions.length === 0 ? (
                 <div role="status" className={mergedClasses.noResults || undefined}>
                   {noResultsContent}

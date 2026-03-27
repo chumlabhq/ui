@@ -105,4 +105,5 @@ export interface DropdownProps {
   ChevronIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   CheckIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   ClearIcon?: ComponentType<{ className?: string }>;
+  loadingText?: ReactNode;
 }

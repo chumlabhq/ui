@@ -1,6 +1,7 @@
 import { forwardRef, useRef, useEffect, useState } from "react";
 import { useAccordionConfig, useAccordionItemContext } from "../utils/context";
-import { Slot, mergeRefs } from "../../../utils/Slot";
+import { Slot } from "../../../utils/Slot";
+import { mergeRefs } from "../../../utils/mergeRefs";
 import type { AccordionContentProps } from "../utils/types";
 import { cn } from "../../../utils/cn";
 

@@ -81,7 +81,8 @@ function Table<TData>({
   } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line react-hooks/incompatible-library
+  // TanStack React Table v8 is a stable, widely-used library compatible with React 19.
+  // eslint-disable-next-line react-hooks/incompatible-library -- @tanstack/react-table@8 false positive
   const table = useReactTable({
     data: data ?? [],
     columns,

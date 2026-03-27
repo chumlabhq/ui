@@ -201,6 +201,7 @@ const MultiSelectDropdown = forwardRef<
       loadOnOpen = false,
       onLoadError,
       shimmerCount = 5,
+      loadingText = "Loading...",
       maxDisplayedChips = 3,
       showSelectedChips = true,
       checkboxIcon,
@@ -304,7 +305,7 @@ const MultiSelectDropdown = forwardRef<
     const loading = externalLoading || isLoadingOptions;
 
     const statusMessage = loading
-      ? "Loading..."
+      ? loadingText
       : isOpen
         ? `${displayOptions.length} option${displayOptions.length === 1 ? "" : "s"} available`
         : selectedOptions.length > 0

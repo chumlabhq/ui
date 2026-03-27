@@ -139,6 +139,30 @@ const MultiSelectSearchableDropdownDemo = () => {
   const [variantBottomValue, setVariantBottomValue] = useState<string[]>([]);
   const [variantGhostValue, setVariantGhostValue] = useState<string[]>([]);
   const [variantPillValue, setVariantPillValue] = useState<string[]>([]);
+  // Form integration
+  const [formValue, setFormValue] = useState<string[]>([]);
+  const [formEvents, setFormEvents] = useState<string[]>([]);
+  // Custom keydown
+  const [keyDownValue, setKeyDownValue] = useState<string[]>([]);
+  const [keyDownLog, setKeyDownLog] = useState<string[]>([]);
+  // className & style
+  const [classNameValue, setClassNameValue] = useState<string[]>([]);
+  // aria-label
+  const [ariaLabelValue, setAriaLabelValue] = useState<string[]>([]);
+  // Keep mounted
+  const [keepMountedValue, setKeepMountedValue] = useState<string[]>([]);
+  // Portal container
+  const [portalValue, setPortalValue] = useState<string[]>([]);
+  const [portalEl, setPortalEl] = useState<HTMLDivElement | null>(null);
+  // Custom gap
+  const [gapValue, setGapValue] = useState<string[]>([]);
+  // Custom z-index
+  const [zIndexValue, setZIndexValue] = useState<string[]>([]);
+  // Full width
+  const [fullWidthValue, setFullWidthValue] = useState<string[]>([]);
+  // Empty state
+  // Combined features
+  const [combinedValue, setCombinedValue] = useState<string[]>([]);
 
   const mapCountryToOption = useCallback((country: RestCountryResponse): MultiSelectOption => ({
     value: country.cca2,
@@ -798,6 +822,400 @@ const MultiSelectSearchableDropdownDemo = () => {
             />
           </div>
         </DemoWrapper>
+      </Section>
+
+      {/* ─── Uncontrolled ─────────────────────────────────────────────────── */}
+      <Section
+        title="Uncontrolled"
+        description="Use defaultValue for an uncontrolled component -- no state management needed."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              defaultValue={["apple", "cherry"]}
+              onValueChange={(values) => console.log("Uncontrolled change:", values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={3}
+              classes={c.dropdown}
+              aria-label="Uncontrolled fruits"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          The dropdown starts with Apple and Cherry pre-selected via defaultValue. No useState needed.
+        </div>
+      </Section>
+
+      {/* ─── Form Integration ──────────────────────────────────────────────── */}
+      <Section
+        title="Form Integration"
+        description="Use onBlur and onFocus handlers for form validation and event tracking."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              label="Favorite Fruits"
+              required
+              options={staticOptions}
+              value={formValue}
+              onValueChange={(values) => setFormValue(values)}
+              onFocus={() => setFormEvents((prev) => [...prev.slice(-4), `focus @ ${new Date().toLocaleTimeString()}`])}
+              onBlur={() => setFormEvents((prev) => [...prev.slice(-4), `blur @ ${new Date().toLocaleTimeString()}`])}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+            />
+          </div>
+        </DemoWrapper>
+        {formEvents.length > 0 && (
+          <div className={`mt-2 space-y-1`}>
+            {formEvents.map((event, i) => (
+              <p key={i} className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}>
+                {event}
+              </p>
+            ))}
+            <button
+              type="button"
+              className={c.btn}
+              onClick={() => setFormEvents([])}
+            >
+              Clear log
+            </button>
+          </div>
+        )}
+      </Section>
+
+      {/* ─── Custom KeyDown Handler ────────────────────────────────────────── */}
+      <Section
+        title="Custom KeyDown Handler"
+        description="Intercept keyboard events with onKeyDown for custom behavior."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={keyDownValue}
+              onValueChange={(values) => setKeyDownValue(values)}
+              onKeyDown={(e) => setKeyDownLog((prev) => [...prev.slice(-4), `${e.key} @ ${new Date().toLocaleTimeString()}`])}
+              placeholder="Press keys while open..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="KeyDown demo"
+            />
+          </div>
+        </DemoWrapper>
+        {keyDownLog.length > 0 && (
+          <div className={`mt-2 space-y-1`}>
+            {keyDownLog.map((entry, i) => (
+              <p key={i} className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}>
+                {entry}
+              </p>
+            ))}
+            <button
+              type="button"
+              className={c.btn}
+              onClick={() => setKeyDownLog([])}
+            >
+              Clear log
+            </button>
+          </div>
+        )}
+      </Section>
+
+      {/* ─── className & style ─────────────────────────────────────────────── */}
+      <Section
+        title="className & style"
+        description="Apply a custom className and inline style to the root element."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={classNameValue}
+              onValueChange={(values) => setClassNameValue(values)}
+              placeholder="Styled root..."
+              maxDisplayedChips={2}
+              className="my-custom-dropdown"
+              style={{ border: `2px dashed ${dark ? "#6366f1" : "#818cf8"}`, borderRadius: 12, padding: 4 }}
+              classes={c.dropdown}
+              aria-label="Custom className and style"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          The root element has className=&quot;my-custom-dropdown&quot; and a dashed indigo border via the style prop.
+        </div>
+      </Section>
+
+      {/* ─── aria-label ────────────────────────────────────────────────────── */}
+      <Section
+        title="aria-label (No Visible Label)"
+        description="When no visible label is provided, use aria-label for screen reader accessibility."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={countryOptions}
+              value={ariaLabelValue}
+              onValueChange={(values) => setAriaLabelValue(values)}
+              placeholder="Select countries..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Country selection without visible label"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          No label prop is used. Screen readers will announce &quot;Country selection without visible label&quot; via aria-label.
+        </div>
+      </Section>
+
+      {/* ─── Keep Mounted ──────────────────────────────────────────────────── */}
+      <Section
+        title="Keep Mounted"
+        description="Use keepMounted to keep the dropdown content in the DOM when closed (hidden via CSS). Useful for SEO or preserving scroll position."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={keepMountedValue}
+              onValueChange={(values) => setKeepMountedValue(values)}
+              keepMounted
+              placeholder="Keep mounted..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Keep mounted demo"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          The listbox remains in the DOM even when closed. Inspect the page to verify.
+        </div>
+      </Section>
+
+      {/* ─── Custom Portal Container ──────────────────────────────────────── */}
+      <Section
+        title="Custom Portal Container"
+        description="Render the dropdown into a specific DOM node instead of document.body."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="flex flex-col gap-4">
+            <div className="w-72">
+              <MultiSelectSearchableDropdown
+                options={staticOptions}
+                value={portalValue}
+                onValueChange={(values) => setPortalValue(values)}
+                portalContainer={portalEl}
+                placeholder="Custom portal target..."
+                maxDisplayedChips={2}
+                classes={c.dropdown}
+                aria-label="Portal container demo"
+              />
+            </div>
+            <div
+              ref={setPortalEl}
+              className={`relative min-h-[60px] rounded-lg border-2 border-dashed p-3 ${
+                dark ? "border-gray-600 bg-gray-800/50" : "border-gray-300 bg-gray-50"
+              }`}
+            >
+              <p className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
+                Portal target container -- the dropdown renders here
+              </p>
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Dropdown Gap ───────────────────────────────────────────── */}
+      <Section
+        title="Custom Dropdown Gap"
+        description="Adjust the spacing between the trigger and dropdown list using dropdownGap."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="flex items-start gap-6">
+            <div>
+              <p className={`mb-2 ${c.label}`}>Default (4px)</p>
+              <div className="w-56">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={gapValue}
+                  onValueChange={(values) => setGapValue(values)}
+                  placeholder="Gap: 4px..."
+                  maxDisplayedChips={1}
+                  classes={c.dropdown}
+                  aria-label="Default gap"
+                />
+              </div>
+            </div>
+            <div>
+              <p className={`mb-2 ${c.label}`}>Large (16px)</p>
+              <div className="w-56">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={gapValue}
+                  onValueChange={(values) => setGapValue(values)}
+                  dropdownGap={16}
+                  placeholder="Gap: 16px..."
+                  maxDisplayedChips={1}
+                  classes={c.dropdown}
+                  aria-label="Large gap"
+                />
+              </div>
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Z-Index ────────────────────────────────────────────────── */}
+      <Section
+        title="Custom Z-Index"
+        description="Override the dropdown z-index for layered UIs."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={zIndexValue}
+              onValueChange={(values) => setZIndexValue(values)}
+              dropdownZIndex={9999}
+              placeholder="z-index: 9999..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+              aria-label="Custom z-index"
+            />
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          The dropdown renders with z-index: 9999 -- useful when layered above modals or sticky headers.
+        </div>
+      </Section>
+
+      {/* ─── Full Width ────────────────────────────────────────────────────── */}
+      <Section
+        title="Full Width"
+        description="Use fullWidth to make the dropdown span its entire container."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-full max-w-md">
+            <MultiSelectSearchableDropdown
+              options={staticOptions}
+              value={fullWidthValue}
+              onValueChange={(values) => setFullWidthValue(values)}
+              fullWidth
+              placeholder="Full width dropdown..."
+              maxDisplayedChips={3}
+              classes={c.dropdown}
+              aria-label="Full width"
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Empty State (No Options) ──────────────────────────────────────── */}
+      <Section
+        title="Empty State (No Options)"
+        description='Pass an empty array to show the "no results" state.'
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="flex items-start gap-6">
+            <div>
+              <p className={`mb-2 ${c.label}`}>Default message</p>
+              <div className="w-56">
+                <MultiSelectSearchableDropdown
+                  options={[]}
+                  defaultOpen
+                  placeholder="No options..."
+                  classes={c.dropdown}
+                  aria-label="Empty default"
+                />
+              </div>
+            </div>
+            <div>
+              <p className={`mb-2 ${c.label}`}>Custom message</p>
+              <div className="w-56">
+                <MultiSelectSearchableDropdown
+                  options={[]}
+                  noResultsContent={
+                    <div className="flex flex-col items-center gap-1 py-2">
+                      <span className="text-lg">🍎</span>
+                      <span className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>No fruits available right now</span>
+                    </div>
+                  }
+                  placeholder="No options..."
+                  classes={c.dropdown}
+                  aria-label="Empty custom message"
+                />
+              </div>
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Combined Features ─────────────────────────────────────────────── */}
+      <Section
+        title="Combined Features"
+        description="A single dropdown combining many features: label, required, error state, custom classes, keepMounted, custom gap, and event handlers."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-80">
+            <MultiSelectSearchableDropdown
+              label="Select Countries"
+              required
+              options={countryOptions}
+              value={combinedValue}
+              onValueChange={(values) => setCombinedValue(values)}
+              error={combinedValue.length === 0}
+              errorMessage={combinedValue.length === 0 ? "Please select at least one country" : undefined}
+              placeholder="Pick countries..."
+              maxDisplayedChips={2}
+              fullWidth
+              keepMounted
+              dropdownGap={8}
+              dropdownZIndex={100}
+              searchPlaceholder="Filter countries..."
+              onFocus={() => console.log("Combined: focus")}
+              onBlur={() => console.log("Combined: blur")}
+              onKeyDown={(e) => console.log("Combined keydown:", e.key)}
+              classes={{
+                ...c.dropdown,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors min-h-[42px] ${
+                  dark
+                    ? "border-indigo-700 bg-indigo-950/40 text-indigo-200 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    : "border-indigo-300 bg-indigo-50 text-indigo-900 hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                }`,
+                triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                content: `rounded-lg shadow-lg overflow-hidden ${
+                  dark ? "bg-indigo-950 border border-indigo-800" : "bg-indigo-50 border border-indigo-200"
+                }`,
+                optionSelected: dark ? "bg-indigo-900/60" : "bg-indigo-100",
+                optionFocused: dark ? "bg-indigo-900/40" : "bg-indigo-50",
+                checkboxChecked: "bg-indigo-600 border-indigo-600 text-white",
+                chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${
+                  dark ? "bg-indigo-900/60 text-indigo-200" : "bg-indigo-200 text-indigo-800"
+                }`,
+              }}
+            />
+          </div>
+        </DemoWrapper>
+        {combinedValue.length > 0 && (
+          <p className={`text-sm mt-2 ${dark ? "text-indigo-400" : "text-indigo-600"}`}>
+            Selected: {combinedValue.join(", ")}
+          </p>
+        )}
       </Section>
 
       {/* ─── Props ────────────────────────────────────────────────────────── */}

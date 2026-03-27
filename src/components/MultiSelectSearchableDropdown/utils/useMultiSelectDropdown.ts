@@ -3,8 +3,8 @@ import type {
   MultiSelectOption,
   UseMultiSelectDropdownProps,
   UseMultiSelectDropdownReturn,
-} from "./utils/types";
-import { useControllableState } from "../../utils/useControllableState";
+} from "./types";
+import { useControllableState } from "../../../utils/useControllableState";
 
 function getFirstEnabledIndex(opts: MultiSelectOption[]): number {
   return opts.findIndex((o) => !o.disabled);

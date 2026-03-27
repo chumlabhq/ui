@@ -18,6 +18,7 @@ import type {
 import { CloseIcon } from "./icons";
 import { ModalContext } from "./ModalContext";
 import { mergeRefs } from "../../utils/mergeRefs";
+import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
 
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
@@ -119,20 +120,8 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
     useEffect(() => {
       if (lockBackgroundScroll && open) {
-        const scrollbarWidth =
-          window.innerWidth - document.documentElement.clientWidth;
-        const originalOverflow = document.body.style.overflow || "";
-        const originalPaddingRight = document.body.style.paddingRight || "";
-
-        document.body.style.overflow = "hidden";
-        if (scrollbarWidth > 0) {
-          document.body.style.paddingRight = `${scrollbarWidth}px`;
-        }
-
-        return () => {
-          document.body.style.overflow = originalOverflow;
-          document.body.style.paddingRight = originalPaddingRight;
-        };
+        acquireScrollLock();
+        return () => releaseScrollLock();
       }
     }, [open, lockBackgroundScroll]);
 
@@ -241,9 +230,11 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     };
 
     if (!isNestingAllowed && nestingLevel >= maxNestingLevel) {
-      console.warn(
-        `Modal: Maximum nesting level (${maxNestingLevel}) reached. Modal will not render.`,
-      );
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          `Modal: Maximum nesting level (${maxNestingLevel}) reached. Modal will not render.`,
+        );
+      }
       return null;
     }
 

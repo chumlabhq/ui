@@ -1113,9 +1113,9 @@ describe('Dropdown - Accessibility', () => {
 describe('Dropdown - Custom Trigger', () => {
   it('should render custom trigger via renderTrigger', () => {
     render(
-      <Dropdown 
+      <Dropdown
         options={fruitOptions}
-        renderTrigger={({ isOpen, selectedOption, ...rest }) => (
+        renderTrigger={({ selectedOption, ...rest }) => (
           <button {...rest} type="button">
             Custom: {selectedOption?.label ?? 'None'}
           </button>

@@ -13,6 +13,7 @@ import DrawerDemo from "./pages/demo/DrawerDemo";
 import DropdownDemo from "./pages/demo/DropdownDemo";
 import InputDemo from "./pages/demo/InputDemo";
 import InternationalPhoneInputDemo from "./pages/demo/InternationalPhoneInputDemo";
+import LoaderDemo from "./pages/demo/LoaderDemo";
 import ModalDemo from "./pages/demo/ModalDemo";
 import MultiSelectDropdownDemo from "./pages/demo/MultiSelectDropdownDemo";
 import MultiSelectSearchableDropdownDemo from "./pages/demo/MultiSelectSearchableDropdownDemo";
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="dropdown" element={<DropdownDemo />} />
         <Route path="input" element={<InputDemo />} />
         <Route path="international-phone-input" element={<InternationalPhoneInputDemo />} />
+        <Route path="loader" element={<LoaderDemo />} />
         <Route path="modal" element={<ModalDemo />} />
         <Route path="multi-select-dropdown" element={<MultiSelectDropdownDemo />} />
         <Route path="multi-select-searchable-dropdown" element={<MultiSelectSearchableDropdownDemo />} />

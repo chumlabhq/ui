@@ -51,18 +51,19 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
   // Dev warning — in useEffect for React 19 ref access compliance
+  const ariaLabelProp = (rest as Record<string, unknown>)["aria-label"];
+  const ariaLabelledByProp = (rest as Record<string, unknown>)["aria-labelledby"];
   const warnedRef = useRef(false);
   useEffect(() => {
     if (process.env.NODE_ENV !== "production") {
-      const r = rest as Record<string, unknown>;
-      if (!children && !r["aria-label"] && !r["aria-labelledby"] && !warnedRef.current) {
+      if (!children && !ariaLabelProp && !ariaLabelledByProp && !warnedRef.current) {
         warnedRef.current = true;
         console.warn(
           "Button: A button without children requires an `aria-label` or `aria-labelledby` for accessibility.",
         );
       }
     }
-  }, [children, rest]);
+  }, [children, ariaLabelProp, ariaLabelledByProp]);
 
   // ─── Merged classes system ──────────────────────────────────────────
   const baseClasses = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;
@@ -193,9 +194,10 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       rel,
       onClick,
       style,
-      disabled: _disabledProp,
+      disabled: _anchorDisabled,
       ...anchorRest
     } = rest as ButtonAsAnchorProps & { disabled?: boolean };
+    void _anchorDisabled;
 
     return wrapWithTooltip(
       <a
@@ -220,9 +222,10 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     const {
       onClick,
       style,
-      disabled: _disabledProp,
+      disabled: _spanDisabled,
       ...spanRest
     } = rest as ButtonAsSpanProps & { disabled?: boolean };
+    void _spanDisabled;
 
     return wrapWithTooltip(
       <span

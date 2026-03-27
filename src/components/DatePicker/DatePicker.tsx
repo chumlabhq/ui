@@ -261,6 +261,7 @@ interface DayCellProps {
   showOutsideDays: boolean;
   showMarkerIndicator: boolean;
   showMarkerTooltip: boolean;
+  showTodayIndicator: boolean;
   portalContainer?: HTMLElement | null;
   onSelect: (date: Date, isOutside: boolean) => void;
   onHover: (date: Date | null) => void;
@@ -274,6 +275,7 @@ const DayCell = memo(function DayCell({
   classes: cls,
   isFocused,
   showOutsideDays,
+  showTodayIndicator,
   showMarkerIndicator,
   showMarkerTooltip,
   portalContainer,
@@ -297,7 +299,7 @@ const DayCell = memo(function DayCell({
   const classNames = cn(
     cls.day,
     day.isSelected && cls.daySelected,
-    day.isToday && cls.dayToday,
+    day.isToday && showTodayIndicator && cls.dayToday,
     day.isDisabled && cls.dayDisabled,
     day.isOutside && cls.dayOutside,
     day.isRangeStart && cls.dayRangeStart,
@@ -557,23 +559,19 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     useReducedMotion(reduceMotion);
 
     // ─── Dev warning ───────────────────────────────────────────────────
+    const ariaLabelProp = (rest as Record<string, unknown>)["aria-label"];
+    const ariaLabelledByProp = (rest as Record<string, unknown>)["aria-labelledby"];
     const warnedRef = useRef(false);
     useEffect(() => {
       if (process.env.NODE_ENV !== "production") {
-        if (
-          !label &&
-          !(rest as Record<string, unknown>)["aria-label"] &&
-          !(rest as Record<string, unknown>)["aria-labelledby"] &&
-          !warnedRef.current
-        ) {
+        if (!label && !ariaLabelProp && !ariaLabelledByProp && !warnedRef.current) {
           warnedRef.current = true;
           console.warn(
             "DatePicker: A date picker without a label requires an `aria-label` or `aria-labelledby` for accessibility.",
           );
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [label]);
+    }, [label, ariaLabelProp, ariaLabelledByProp]);
 
     // ─── IDs ───────────────────────────────────────────────────────────
     const generatedId = useId();
@@ -1078,6 +1076,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                     : false
                                 }
                                 showOutsideDays={showOutsideDays}
+                                showTodayIndicator={showTodayIndicator}
                                 showMarkerIndicator={showMarkerIndicator}
                                 showMarkerTooltip={showMarkerTooltip}
                                 portalContainer={portalContainer}

@@ -27,6 +27,8 @@ export interface MultiSelectSearchableDropdownClasses {
   chipRemove?: string;
   noResults?: string;
   loading?: string;
+  shimmer?: string;
+  shimmerItem?: string;
   label?: string;
   error?: string;
   searchInput?: string;
@@ -52,6 +54,7 @@ export interface MultiSelectSearchableDropdownProps {
   searchPlaceholder?: string;
   noResultsContent?: ReactNode;
   loadingText?: string;
+  shimmerCount?: number;
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;

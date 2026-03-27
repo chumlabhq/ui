@@ -6,9 +6,9 @@ export type {
   CascadingDropdownClasses,
   SelectionMode,
 } from "./utils/types";
-export { useCascadingDropdown } from "./useCascadingDropdown";
-export { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./icons";
+export { useCascadingDropdown } from "./utils/useCascadingDropdown";
+export { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./utils/icons";
 export {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
-} from "./constants";
+} from "./utils/constants";
