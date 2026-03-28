@@ -1,4 +1,4 @@
-export function DefaultCheckIcon({ className, size }: { className?: string; size?: number }) {
+export function CheckIcon({ className, size }: { className?: string; size?: number }) {
   return (
     <svg
       className={className}
@@ -14,9 +14,9 @@ export function DefaultCheckIcon({ className, size }: { className?: string; size
   );
 }
 
-DefaultCheckIcon.displayName = "DefaultCheckIcon";
+CheckIcon.displayName = "CheckIcon";
 
-export function DefaultIndeterminateIcon({ className, size }: { className?: string; size?: number }) {
+export function IndeterminateIcon({ className, size }: { className?: string; size?: number }) {
   return (
     <svg
       className={className}
@@ -32,4 +32,4 @@ export function DefaultIndeterminateIcon({ className, size }: { className?: stri
   );
 }
 
-DefaultIndeterminateIcon.displayName = "DefaultIndeterminateIcon";
+IndeterminateIcon.displayName = "IndeterminateIcon";

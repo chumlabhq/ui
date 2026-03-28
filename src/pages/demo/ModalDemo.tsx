@@ -519,13 +519,15 @@ const ModalDemo = () => {
         title="Reduce Motion (true)"
         description="This modal has animations completely disabled."
         reduceMotion={true}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">reduceMotion=true</code>,
@@ -539,13 +541,15 @@ const ModalDemo = () => {
         title='Reduce Motion ("auto")'
         description="Respects the user's prefers-reduced-motion setting."
         reduceMotion="auto"
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">reduceMotion="auto"</code>,
@@ -560,13 +564,15 @@ const ModalDemo = () => {
         title="Focus Trap Enabled"
         description="Tab cycles through focusable elements inside this modal."
         trapFocus={true}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <div className="space-y-3">
           <p className="text-gray-600">Try pressing Tab - focus stays within the modal.</p>
@@ -597,13 +603,15 @@ const ModalDemo = () => {
         title="Focus Trap Disabled"
         description="Tab can move focus outside the modal."
         trapFocus={false}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <div className="space-y-3">
           <p className="text-gray-600">
@@ -629,13 +637,15 @@ const ModalDemo = () => {
         title="Initial Focus"
         description="The email input receives focus automatically on open."
         initialFocus={initialFocusRef}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <div className="space-y-3">
           <div>
@@ -669,13 +679,15 @@ const ModalDemo = () => {
         title="Keep Mounted"
         description="This modal stays in the DOM even when closed."
         keepMounted
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <KeepMountedLogger onLog={handleKeepMountedLog} />
         <div className="flex justify-end mt-4">
@@ -706,12 +718,14 @@ const ModalDemo = () => {
             />
           </svg>
         }
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           Pass any ReactNode to the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">closeIcon</code> prop
@@ -725,13 +739,15 @@ const ModalDemo = () => {
         title="No Animation"
         description="This modal opens and closes instantly."
         disableAnimation={true}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           The <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">disableAnimation</code> prop
@@ -745,13 +761,15 @@ const ModalDemo = () => {
         title="Custom Z-Index"
         description="This modal renders with z-index: 99999."
         zIndex={99999}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           Use the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">zIndex</code> prop
@@ -763,12 +781,14 @@ const ModalDemo = () => {
         open={useModalOpen}
         onOpenChange={setUseModalOpen}
         title="useModal Hook"
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <ModalChildWithHook />
       </Modal>
@@ -779,13 +799,15 @@ const ModalDemo = () => {
         onOpenChange={setRefForwardOpen}
         title="Ref Forwarding"
         description="A ref is attached to this modal's content element."
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           The parent holds a ref to this modal. Use it for imperative actions
@@ -802,12 +824,14 @@ const ModalDemo = () => {
         open={basicOpen}
         onOpenChange={setBasicOpen}
         title="Welcome Back"
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           This is a basic modal with just a title. Modal content goes here.
@@ -827,13 +851,15 @@ const ModalDemo = () => {
         onOpenChange={setWithDescriptionOpen}
         title="Project Settings"
         description="Configure your project preferences and team access permissions."
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           Both title and description support ReactNode, allowing custom HTML or
@@ -872,14 +898,16 @@ const ModalDemo = () => {
             </svg>
           </div>
         }
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        iconClassName="shrink-0"
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          icon: "shrink-0",
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <ul className="space-y-2 text-gray-600">
           <li className="flex items-center gap-2">
@@ -945,8 +973,10 @@ const ModalDemo = () => {
         open={noHeaderOpen}
         onOpenChange={setNoHeaderOpen}
         showHeader={false}
-        contentClassName={c.modalContent}
-        bodyClassName="p-6"
+        classes={{
+          content: c.modalContent,
+          body: "p-6",
+        }}
       >
         <div className="text-center py-4">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
@@ -986,8 +1016,10 @@ const ModalDemo = () => {
         preventOutsideClick
         closeOnEscape={false}
         maxWidth={400}
-        contentClassName="w-full max-w-[400px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        bodyClassName="p-6"
+        classes={{
+          content: "w-full max-w-[400px] m-4 rounded-xl shadow-2xl overflow-hidden",
+          body: "p-6",
+        }}
       >
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
@@ -1037,8 +1069,10 @@ const ModalDemo = () => {
         onOpenChange={setSuccessOpen}
         showHeader={false}
         maxWidth={400}
-        contentClassName="w-full max-w-[400px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        bodyClassName="p-6"
+        classes={{
+          content: "w-full max-w-[400px] m-4 rounded-xl shadow-2xl overflow-hidden",
+          body: "p-6",
+        }}
       >
         <div className="text-center py-4">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-200">
@@ -1082,13 +1116,15 @@ const ModalDemo = () => {
         title="Create New Project"
         description="Fill in the details below to get started."
         maxWidth={480}
-        contentClassName="w-full max-w-[480px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: "w-full max-w-[480px] m-4 rounded-xl shadow-2xl overflow-hidden",
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <form
           className="space-y-4"
@@ -1159,8 +1195,10 @@ const ModalDemo = () => {
         onOpenChange={setUpgradeOpen}
         showHeader={false}
         maxWidth={440}
-        contentClassName="w-full max-w-[440px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        bodyClassName="p-0"
+        classes={{
+          content: "w-full max-w-[440px] m-4 rounded-xl shadow-2xl overflow-hidden",
+          body: "p-0",
+        }}
       >
         <div className="bg-linear-to-br from-violet-600 via-purple-600 to-indigo-700 p-8 text-center text-white">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
@@ -1236,8 +1274,10 @@ const ModalDemo = () => {
         showHeader={false}
         maxWidth={700}
         overlayOpacity={0.85}
-        contentClassName="w-full max-w-[700px] m-4 rounded-xl shadow-2xl overflow-hidden bg-gray-900"
-        bodyClassName="p-0"
+        classes={{
+          content: "w-full max-w-[700px] m-4 rounded-xl shadow-2xl overflow-hidden bg-gray-900",
+          body: "p-0",
+        }}
       >
         <div className="relative">
           <button
@@ -1309,13 +1349,15 @@ const ModalDemo = () => {
         maxWidth={700}
         maxHeight={400}
         minWidth={500}
-        contentClassName="w-full m-4 rounded-xl shadow-2xl overflow-hidden"
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: "w-full m-4 rounded-xl shadow-2xl overflow-hidden",
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <div className="space-y-4">
           <p className="text-gray-600">
@@ -1345,8 +1387,10 @@ const ModalDemo = () => {
         showHeader={false}
         fullScreen
         centered={false}
-        contentClassName="bg-gray-50"
-        bodyClassName="p-0 h-full"
+        classes={{
+          content: "bg-gray-50",
+          body: "p-0 h-full",
+        }}
       >
         <div className="h-full flex flex-col">
           <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0">
@@ -1592,13 +1636,15 @@ const ModalDemo = () => {
         description="This modal has a purple overlay with higher opacity."
         overlayColor="#4c1d95"
         overlayOpacity={0.7}
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           Customize the overlay with overlayColor and overlayOpacity props.
@@ -1631,12 +1677,14 @@ const ModalDemo = () => {
             </svg>
           </div>
         }
-        contentClassName={c.modalContent}
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        iconClassName="shrink-0"
-        bodyClassName={c.modalBody}
+        classes={{
+          content: c.modalContent,
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          icon: "shrink-0",
+          body: c.modalBody,
+        }}
       >
         <p className="text-gray-600">
           This modal cannot be dismissed by clicking outside or pressing Escape.
@@ -1664,13 +1712,15 @@ const ModalDemo = () => {
         title="Project Settings"
         description="Configure your project preferences."
         maxWidth={520}
-        contentClassName="w-full max-w-[520px] m-4 rounded-xl shadow-2xl overflow-hidden"
-        headerClassName={c.modalHeader}
-        titleClassName={c.modalTitle}
-        descriptionClassName={c.modalDescription}
-        closeButtonClassName={c.modalCloseBtn}
-        closeIconClassName={c.modalCloseIcon}
-        bodyClassName={c.modalBody}
+        classes={{
+          content: "w-full max-w-[520px] m-4 rounded-xl shadow-2xl overflow-hidden",
+          header: c.modalHeader,
+          title: c.modalTitle,
+          description: c.modalDescription,
+          closeButton: c.modalCloseBtn,
+          closeIcon: c.modalCloseIcon,
+          body: c.modalBody,
+        }}
       >
         <div className="space-y-4">
           <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -1723,13 +1773,15 @@ const ModalDemo = () => {
           title="Team Members"
           description="Manage project access."
           maxWidth={450}
-          contentClassName="w-full max-w-[450px] m-4 rounded-xl shadow-2xl overflow-hidden"
-          headerClassName={c.modalHeader}
-          titleClassName={c.modalTitle}
-          descriptionClassName={c.modalDescription}
-          closeButtonClassName={c.modalCloseBtn}
-          closeIconClassName={c.modalCloseIcon}
-          bodyClassName={c.modalBody}
+          classes={{
+            content: "w-full max-w-[450px] m-4 rounded-xl shadow-2xl overflow-hidden",
+            header: c.modalHeader,
+            title: c.modalTitle,
+            description: c.modalDescription,
+            closeButton: c.modalCloseBtn,
+            closeIcon: c.modalCloseIcon,
+            body: c.modalBody,
+          }}
         >
           <div className="space-y-3">
             {[
@@ -1797,7 +1849,7 @@ const ModalDemo = () => {
           <PropRow isDarkMode={dark} name="showOverlay" type="boolean" defaultVal="true" description="Show overlay backdrop" />
           <PropRow isDarkMode={dark} name="preventOutsideClick" type="boolean" defaultVal="false" description="Prevent closing on outside click" />
           <PropRow isDarkMode={dark} name="closeOnEscape" type="boolean" defaultVal="true" description="Close on Escape key" />
-          <PropRow isDarkMode={dark} name="lockBackgroundScroll" type="boolean" defaultVal="true" description="Lock body scroll when open" />
+          <PropRow isDarkMode={dark} name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll when open" />
           <PropRow isDarkMode={dark} name="maxWidth" type="string | number" description="Maximum width" />
           <PropRow isDarkMode={dark} name="maxHeight" type="string | number" description="Maximum height" />
           <PropRow isDarkMode={dark} name="minWidth" type="string | number" description="Minimum width" />
@@ -1826,18 +1878,9 @@ const ModalDemo = () => {
 
       <Section title="Styling Props" isDarkMode={dark}>
         <PropsTable isDarkMode={dark}>
-          <PropRow isDarkMode={dark} name="className" type="string" description="Additional class for modal content (merged with contentClassName)" />
-          <PropRow isDarkMode={dark} name="rootClassName" type="string" description="Root wrapper element class" />
-          <PropRow isDarkMode={dark} name="overlayClassName" type="string" description="Overlay backdrop class" />
-          <PropRow isDarkMode={dark} name="contentClassName" type="string" description="Modal content wrapper (size, rounded, shadow)" />
+          <PropRow isDarkMode={dark} name="className" type="string" description="Additional class for modal content" />
           <PropRow isDarkMode={dark} name="contentStyle" type="CSSProperties" description="Inline styles for content wrapper" />
-          <PropRow isDarkMode={dark} name="headerClassName" type="string" description="Header section (layout, padding)" />
-          <PropRow isDarkMode={dark} name="titleClassName" type="string" description="Title text styling" />
-          <PropRow isDarkMode={dark} name="descriptionClassName" type="string" description="Description text styling" />
-          <PropRow isDarkMode={dark} name="iconClassName" type="string" description="Icon wrapper styling" />
-          <PropRow isDarkMode={dark} name="closeButtonClassName" type="string" description="Close button styling" />
-          <PropRow isDarkMode={dark} name="closeIconClassName" type="string" description="Close icon styling" />
-          <PropRow isDarkMode={dark} name="bodyClassName" type="string" description="Body content area (padding)" />
+          <PropRow isDarkMode={dark} name="classes" type="ModalClasses" description="CSS class overrides for modal sub-elements (root, overlay, container, content, header, title, description, icon, closeButton, closeIcon, body)" />
         </PropsTable>
       </Section>
 

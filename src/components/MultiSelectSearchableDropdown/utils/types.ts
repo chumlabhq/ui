@@ -26,6 +26,7 @@ export interface MultiSelectSearchableDropdownClasses {
   chip?: string;
   chipRemove?: string;
   noResults?: string;
+  clearIcon?: string;
   loading?: string;
   shimmer?: string;
   shimmerItem?: string;
@@ -55,6 +56,7 @@ export interface MultiSelectSearchableDropdownProps {
   noResultsContent?: ReactNode;
   loadingText?: string;
   shimmerCount?: number;
+  clearable?: boolean;
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
@@ -85,7 +87,34 @@ export interface MultiSelectSearchableDropdownProps {
   onBlur?: () => void;
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
+  ClearIcon?: React.ComponentType<{ className?: string }>;
+  renderTrigger?: (props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode;
   searchInputAriaLabel?: string;
+}
+
+export interface MultiSelectSearchableDropdownTriggerRenderProps {
+  ref: React.RefCallback<HTMLElement>;
+  id: string;
+  role: "combobox";
+  "aria-expanded": boolean;
+  "aria-haspopup": "listbox";
+  "aria-controls": string;
+  "aria-activedescendant": string | undefined;
+  "aria-invalid": boolean | undefined;
+  "aria-describedby": string | undefined;
+  "aria-required": boolean | undefined;
+  "aria-labelledby": string | undefined;
+  disabled: boolean;
+  onClick: () => void;
+  onKeyDown: (event: React.KeyboardEvent) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  "data-disabled": true | undefined;
+  "data-error": true | undefined;
+  "data-open": true | undefined;
+  isOpen: boolean;
+  selectedOptions: MultiSelectOption[];
+  placeholder: string;
 }
 
 export interface UseMultiSelectDropdownProps {

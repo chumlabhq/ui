@@ -7,9 +7,9 @@ export type {
   DropdownTriggerRenderProps,
 } from "./utils/types";
 export {
-  DefaultChevronIcon,
-  DefaultCheckIcon,
-  DefaultClearIcon,
+  ChevronDownIcon,
+  CheckIcon,
+  ClearIcon,
 } from "./utils/icons";
 export {
   DEFAULT_DROPDOWN_CLASSES,

@@ -5,7 +5,7 @@ import type { MultiSelectDropdownProps, MultiSelectDropdownClasses } from "./uti
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
 import { computeDropdownCoords, scrollOptionIntoView, isBrowser } from "./utils/helpers";
 import type { DropdownCoords } from "./utils/helpers";
-import { ChevronDownIcon } from "./utils/icons";
+import { ChevronDownIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
 import MultiSelectDropdownShimmer from "./components/MultiSelectDropdownShimmer";
 import { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption";
 import { SelectedChip } from "./components/SelectedChip";
@@ -194,6 +194,7 @@ const MultiSelectDropdown = forwardRef<
       label,
       required = false,
       noResultsContent = "No options found",
+      clearable = false,
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
@@ -206,7 +207,7 @@ const MultiSelectDropdown = forwardRef<
       showSelectedChips = true,
       checkboxIcon,
       unstyled = false,
-      lockScroll = true,
+      lockScroll = false,
       classes: classesProp,
       className,
       style,
@@ -218,6 +219,8 @@ const MultiSelectDropdown = forwardRef<
       onFocus,
       onKeyDown: onKeyDownProp,
       ChevronIcon: ChevronIconProp = ChevronDownIcon,
+      ClearIcon: ClearIconProp = ClearIconDefault,
+      renderTrigger,
       keepMounted = false,
       portalContainer,
       dropdownPosition = "bottom",
@@ -247,6 +250,7 @@ const MultiSelectDropdown = forwardRef<
         chip: classesProp?.chip ?? baseClasses.chip,
         chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,
         noResults: classesProp?.noResults ?? baseClasses.noResults,
+        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
@@ -317,7 +321,7 @@ const MultiSelectDropdown = forwardRef<
     useEffect(() => {
       if (!isOpen && prevIsOpenRef.current) {
         if (shouldRestoreFocusRef.current) {
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
           shouldRestoreFocusRef.current = false;
         }
       }
@@ -395,10 +399,23 @@ const MultiSelectDropdown = forwardRef<
       [setTriggerNode],
     );
 
+    const handleClear = useCallback(() => {
+      if (onValueChange) {
+        onValueChange([], []);
+      }
+    }, [onValueChange]);
+
+    const renderTriggerRefCallback = useCallback(
+      (node: HTMLElement | null) => {
+        setTriggerNode(node);
+      },
+      [setTriggerNode],
+    );
+
     const handleRemoveOptionAndFocus = useCallback(
       (optionValue: string) => {
         handleRemoveOption(optionValue);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
       },
       [handleRemoveOption],
     );
@@ -458,61 +475,104 @@ const MultiSelectDropdown = forwardRef<
         <div
           className={cn("relative", mergedClasses.wrapper) || undefined}
         >
-          <button
-            ref={mergedTriggerRef}
-            type="button"
-            id={triggerId}
-            role="combobox"
-            aria-expanded={isOpen}
-            aria-haspopup="listbox"
-            aria-controls={listboxId}
-            aria-activedescendant={activeDescendantId}
-            aria-labelledby={label ? labelId : undefined}
-            aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorId : undefined}
-            aria-required={required || undefined}
-            disabled={disabled}
-            onClick={handleToggle}
-            onKeyDown={handleKeyDownWithPassthrough}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            className={mergedClasses.trigger || undefined}
-            data-disabled={disabled || undefined}
-            data-error={error || undefined}
-            data-open={isOpen || undefined}
-          >
-            <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
-              {showSelectedChips && selectedOptions.length > 0 ? (
-                <>
-                  {displayedChips.map((option) => (
-                    <SelectedChip
-                      key={option.value}
-                      option={option}
-                      classes={mergedClasses}
-                      onRemove={handleRemoveOptionAndFocus}
-                    />
-                  ))}
-                  {remainingCount > 0 && (
-                    <span className={mergedClasses.moreCount || undefined}>
-                      +{remainingCount}
-                    </span>
-                  )}
-                </>
-              ) : selectedOptions.length > 0 ? (
-                <span className="truncate">
-                  {selectedOptions.length} selected
-                </span>
-              ) : (
-                <span className="truncate">{placeholder}</span>
+          {renderTrigger ? (
+            renderTrigger({
+              ref: renderTriggerRefCallback,
+              id: triggerId,
+              role: "combobox",
+              "aria-expanded": isOpen,
+              "aria-haspopup": "listbox",
+              "aria-controls": listboxId,
+              "aria-activedescendant": activeDescendantId,
+              "aria-invalid": (error || undefined) as boolean | undefined,
+              "aria-describedby": error && errorMessage ? errorId : undefined,
+              "aria-required": (required || undefined) as boolean | undefined,
+              "aria-labelledby": label ? labelId : undefined,
+              disabled,
+              onClick: handleToggle,
+              onKeyDown: handleKeyDownWithPassthrough,
+              onFocus,
+              onBlur,
+              "data-disabled": (disabled || undefined) as true | undefined,
+              "data-error": (error || undefined) as true | undefined,
+              "data-open": (isOpen || undefined) as true | undefined,
+              isOpen,
+              selectedOptions,
+              placeholder,
+            })
+          ) : (
+            <button
+              ref={mergedTriggerRef}
+              type="button"
+              id={triggerId}
+              role="combobox"
+              aria-expanded={isOpen}
+              aria-haspopup="listbox"
+              aria-controls={listboxId}
+              aria-activedescendant={activeDescendantId}
+              aria-labelledby={label ? labelId : undefined}
+              aria-invalid={error || undefined}
+              aria-describedby={error && errorMessage ? errorId : undefined}
+              aria-required={required || undefined}
+              disabled={disabled}
+              onClick={handleToggle}
+              onKeyDown={handleKeyDownWithPassthrough}
+              onFocus={onFocus}
+              onBlur={onBlur}
+              className={mergedClasses.trigger || undefined}
+              data-disabled={disabled || undefined}
+              data-error={error || undefined}
+              data-open={isOpen || undefined}
+            >
+              <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
+                {showSelectedChips && selectedOptions.length > 0 ? (
+                  <>
+                    {displayedChips.map((option) => (
+                      <SelectedChip
+                        key={option.value}
+                        option={option}
+                        classes={mergedClasses}
+                        onRemove={handleRemoveOptionAndFocus}
+                      />
+                    ))}
+                    {remainingCount > 0 && (
+                      <span className={mergedClasses.moreCount || undefined}>
+                        +{remainingCount}
+                      </span>
+                    )}
+                  </>
+                ) : selectedOptions.length > 0 ? (
+                  <span className="truncate">
+                    {selectedOptions.length} selected
+                  </span>
+                ) : (
+                  <span className="truncate">{placeholder}</span>
+                )}
+              </span>
+              {showChevron && (
+                <ChevronIconProp
+                  className={mergedClasses.chevron || undefined}
+                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                />
               )}
-            </span>
-            {showChevron && (
-              <ChevronIconProp
-                className={mergedClasses.chevron || undefined}
-                style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-              />
-            )}
-          </button>
+            </button>
+          )}
+
+          {clearable && currentValue.length > 0 && (
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Clear all selections"
+              className={mergedClasses.clearIcon || undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClear();
+                triggerNode?.focus({ preventScroll: true });
+              }}
+            >
+              <ClearIconProp className="w-4 h-4" />
+            </button>
+          )}
 
           <MultiSelectDropdownContent
             triggerElement={triggerNode}

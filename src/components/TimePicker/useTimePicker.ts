@@ -1,10 +1,10 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import type { UseTimePickerProps, UseTimePickerReturn } from "./utils/types";
 import {
   generateTimeOptions,
   parseTimeInput,
   formatTimeValue,
-  timeValueFromString,
+  clampMinuteStep,
 } from "./utils";
 
 function computeInputValue(
@@ -12,7 +12,7 @@ function computeInputValue(
   format: "12h" | "24h"
 ): { inputValue: string; lastValid: string } {
   if (value) {
-    const timeValue = timeValueFromString(value, format);
+    const timeValue = parseTimeInput(value, format);
     if (timeValue) {
       const formatted = formatTimeValue(timeValue, format);
       return { inputValue: formatted, lastValid: formatted };
@@ -29,26 +29,45 @@ export function useTimePicker({
   minTime,
   maxTime,
   disabled,
-  onChange,
+  onValueChange,
 }: UseTimePickerProps): UseTimePickerReturn {
-  const [isOpen, setIsOpen] = useState(false);
+  const safeStep = clampMinuteStep(minuteStep);
   const [inputValue, setInputValue] = useState(() => computeInputValue(value, format).inputValue);
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  const [isTyping, setIsTyping] = useState(false);
-  const [prevValue, setPrevValue] = useState(value);
+  const isTypingRef = useRef(false);
+  const prevFormatRef = useRef(format);
+
   const [lastValidValue, setLastValidValue] = useState(() => computeInputValue(value, format).lastValid);
 
+  // Use refs for values needed in commitValue to avoid stale closures
+  const lastValidRef = useRef(lastValidValue);
+  lastValidRef.current = lastValidValue;
+
+  const inputValueRef = useRef(inputValue);
+  inputValueRef.current = inputValue;
+
   const timeOptions = useMemo(
-    () => generateTimeOptions(format, minuteStep, minTime, maxTime),
-    [format, minuteStep, minTime, maxTime]
+    () => generateTimeOptions(format, safeStep, minTime, maxTime),
+    [format, safeStep, minTime, maxTime]
   );
 
-  if (value !== prevValue && !isTyping) {
-    setPrevValue(value);
+  useEffect(() => {
+    const formatChanged = prevFormatRef.current !== format;
+    if (formatChanged) {
+      prevFormatRef.current = format;
+    }
+
     const computed = computeInputValue(value, format);
+    if (formatChanged) {
+      setInputValue(computed.inputValue);
+      setLastValidValue(computed.lastValid);
+      isTypingRef.current = false;
+      return;
+    }
+    if (isTypingRef.current) return;
     setInputValue(computed.inputValue);
     setLastValidValue(computed.lastValid);
-  }
+  }, [value, format]);
 
   const displayOptions = useMemo(() => {
     if (!inputValue.trim()) return timeOptions;
@@ -58,7 +77,6 @@ export function useTimePicker({
     const exactMatch: string[] = [];
     const startsWith: string[] = [];
     const contains: string[] = [];
-    const rest: string[] = [];
 
     for (const option of timeOptions) {
       const optionLower = option.toLowerCase().replace(/\s+/g, "");
@@ -69,61 +87,63 @@ export function useTimePicker({
         startsWith.push(option);
       } else if (optionLower.includes(searchLower)) {
         contains.push(option);
-      } else {
-        rest.push(option);
       }
     }
 
-    return [...exactMatch, ...startsWith, ...contains, ...rest];
+    return [...exactMatch, ...startsWith, ...contains];
   }, [inputValue, timeOptions]);
 
   const commitValue = useCallback(() => {
-    if (!inputValue.trim()) {
+    const currentInput = inputValueRef.current;
+    const currentLastValid = lastValidRef.current;
+
+    if (!currentInput.trim()) {
       setLastValidValue("");
-      onChange(null, null);
-      setIsTyping(false);
+      onValueChange(null, null);
+      isTypingRef.current = false;
       return;
     }
 
-    const parsed = parseTimeInput(inputValue, format);
+    const parsed = parseTimeInput(currentInput, format);
     if (parsed) {
       const formatted = formatTimeValue(parsed, format);
       setInputValue(formatted);
       setLastValidValue(formatted);
-      onChange(formatted, parsed);
+      onValueChange(formatted, parsed);
     } else {
-      setInputValue(lastValidValue);
+      setInputValue(currentLastValid);
     }
-    setIsTyping(false);
-  }, [inputValue, format, onChange, lastValidValue]);
+    isTypingRef.current = false;
+  }, [format, onValueChange]);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
-    setIsOpen((prev) => !prev);
     setFocusedIndex(-1);
   }, [disabled]);
 
   const handleClose = useCallback(() => {
-    setIsOpen(false);
+    setFocusedIndex(-1);
+  }, []);
+
+  const handleOpen = useCallback(() => {
     setFocusedIndex(-1);
   }, []);
 
   const handleInputChange = useCallback((newValue: string) => {
     const cleaned = newValue.replace(/[^0-9:aAmMpP\s]/g, "");
     setInputValue(cleaned);
-    setIsTyping(true);
-    setIsOpen(true);
+    isTypingRef.current = true;
   }, []);
 
   const handleOptionSelect = useCallback(
     (time: string) => {
-      const timeValue = timeValueFromString(time, format);
+      const timeValue = parseTimeInput(time, format);
       setInputValue(time);
-      onChange(time, timeValue);
-      setIsTyping(false);
-      handleClose();
+      setLastValidValue(time);
+      onValueChange(time, timeValue);
+      isTypingRef.current = false;
     },
-    [format, onChange, handleClose]
+    [format, onValueChange]
   );
 
   const handleBlur = useCallback(() => {
@@ -137,68 +157,54 @@ export function useTimePicker({
       switch (event.key) {
         case "Enter":
           event.preventDefault();
-          if (isOpen && focusedIndex >= 0 && displayOptions[focusedIndex]) {
+          if (focusedIndex >= 0 && displayOptions[focusedIndex]) {
             handleOptionSelect(displayOptions[focusedIndex]);
           } else {
             commitValue();
-            handleClose();
           }
           break;
         case "Tab":
           commitValue();
-          handleClose();
           break;
         case "Escape":
-          if (isOpen) {
-            event.preventDefault();
-            handleClose();
-          }
+          event.preventDefault();
           break;
         case "ArrowDown":
           event.preventDefault();
-          if (!isOpen) {
-            setIsOpen(true);
-            setFocusedIndex(0);
-          } else {
-            setFocusedIndex((prev) =>
-              prev < displayOptions.length - 1 ? prev + 1 : 0
-            );
-          }
+          setFocusedIndex((prev) =>
+            prev < displayOptions.length - 1 ? prev + 1 : 0
+          );
           break;
         case "ArrowUp":
           event.preventDefault();
-          if (isOpen) {
-            setFocusedIndex((prev) =>
-              prev > 0 ? prev - 1 : displayOptions.length - 1
-            );
-          }
+          setFocusedIndex((prev) =>
+            prev > 0 ? prev - 1 : displayOptions.length - 1
+          );
           break;
         case "Home":
           event.preventDefault();
-          if (isOpen) setFocusedIndex(0);
+          setFocusedIndex(0);
           break;
         case "End":
           event.preventDefault();
-          if (isOpen) setFocusedIndex(displayOptions.length - 1);
+          setFocusedIndex(displayOptions.length - 1);
           break;
       }
     },
-    [disabled, isOpen, focusedIndex, displayOptions, handleOptionSelect, commitValue, handleClose]
+    [disabled, focusedIndex, displayOptions, handleOptionSelect, commitValue]
   );
 
   return {
-    isOpen,
     inputValue,
     focusedIndex,
     displayOptions,
-    setInputValue,
     setFocusedIndex,
     handleToggle,
     handleClose,
+    handleOpen,
     handleInputChange,
     handleOptionSelect,
     handleKeyDown,
     handleBlur,
-    commitValue,
   };
 }

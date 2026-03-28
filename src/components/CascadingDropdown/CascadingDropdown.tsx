@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown";
-import { ChevronDownIcon, ChevronRightIcon, CheckIcon } from "./utils/icons";
+import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import {
@@ -230,6 +230,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       loadingText = "Loading...",
       shimmerCount = 5,
       loading: externalLoading = false,
+      clearable = false,
       showChevron = true,
       showSelectedIcon = true,
       selectedIcon,
@@ -239,9 +240,13 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       closeOnSelect = true,
       classes: classesProp,
       unstyled = false,
-      lockScroll = true,
+      lockScroll = false,
       portalContainer,
       dropdownZIndex = 50,
+      className,
+      style,
+      ClearIcon: ClearIconProp,
+      renderTrigger,
       "aria-label": ariaLabel,
     },
     ref,
@@ -271,6 +276,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
         checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
         noResults: classesProp?.noResults ?? baseClasses.noResults,
+        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
         loading: classesProp?.loading ?? baseClasses.loading,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
@@ -393,8 +399,24 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       [handleKeyDown, onKeyDownProp],
     );
 
+    const handleClear = useCallback(() => {
+      if (onValueChange) {
+        onValueChange({}, []);
+      }
+    }, [onValueChange]);
+
+    const ClearIconComponent = ClearIconProp ?? ClearIconDefault;
+
+    const renderTriggerRefCallback = useCallback(
+      (node: HTMLElement | null) => {
+        (triggerRef as React.MutableRefObject<HTMLButtonElement | null>).current = node as HTMLButtonElement | null;
+      },
+      [],
+    );
+
     const fullWidthClass = fullWidth ? "w-full" : "";
     const displayValue = getDisplayValue();
+    const hasValue = Object.keys(internalValue).length > 0;
 
     const getSelectedValuesForParent = (parentValue: string): string[] => {
       const selection = internalValue[parentValue];
@@ -405,7 +427,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     return (
       <div
         ref={ref}
-        className={cn(mergedClasses.wrapper, fullWidthClass) || undefined}
+        className={cn(mergedClasses.wrapper, fullWidthClass, className) || undefined}
+        style={style}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
@@ -421,35 +444,75 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
           ref={containerRef}
           className={cn("relative", mergedClasses.root) || undefined}
         >
-          <button
-            ref={triggerRef}
-            type="button"
-            id={triggerId}
-            aria-expanded={isOpen}
-            aria-haspopup="true"
-            aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorId : undefined}
-            aria-required={required || undefined}
-            aria-label={ariaLabel}
-            disabled={disabled}
-            onClick={handleToggle}
-            onKeyDown={combinedKeyDown}
-            onBlur={onBlur}
-            onFocus={onFocus}
-            className={mergedClasses.trigger || undefined}
-            data-disabled={disabled || undefined}
-            data-error={error || undefined}
-            data-open={isOpen || undefined}
-          >
-            <span className="flex-1 text-left truncate">
-              {displayValue || placeholder}
-            </span>
-            {showChevron && (
-              <ChevronDownIcon
-                className={cn(mergedClasses.chevron, isOpen && "rotate-180") || undefined}
-              />
-            )}
-          </button>
+          {renderTrigger ? (
+            renderTrigger({
+              ref: renderTriggerRefCallback,
+              id: triggerId,
+              "aria-expanded": isOpen,
+              "aria-haspopup": "true",
+              "aria-invalid": (error || undefined) as boolean | undefined,
+              "aria-describedby": error && errorMessage ? errorId : undefined,
+              "aria-required": (required || undefined) as boolean | undefined,
+              "aria-label": ariaLabel,
+              disabled,
+              onClick: handleToggle,
+              onKeyDown: combinedKeyDown,
+              onFocus: onFocus,
+              onBlur: onBlur,
+              "data-disabled": (disabled || undefined) as true | undefined,
+              "data-error": (error || undefined) as true | undefined,
+              "data-open": (isOpen || undefined) as true | undefined,
+              isOpen,
+              displayValue,
+              placeholder: placeholder as string,
+            })
+          ) : (
+            <button
+              ref={triggerRef}
+              type="button"
+              id={triggerId}
+              aria-expanded={isOpen}
+              aria-haspopup="true"
+              aria-invalid={error || undefined}
+              aria-describedby={error && errorMessage ? errorId : undefined}
+              aria-required={required || undefined}
+              aria-label={ariaLabel}
+              disabled={disabled}
+              onClick={handleToggle}
+              onKeyDown={combinedKeyDown}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              className={mergedClasses.trigger || undefined}
+              data-disabled={disabled || undefined}
+              data-error={error || undefined}
+              data-open={isOpen || undefined}
+            >
+              <span className="flex-1 text-left truncate">
+                {displayValue || placeholder}
+              </span>
+              {showChevron && (
+                <ChevronDownIcon
+                  className={cn(mergedClasses.chevron, isOpen && "rotate-180") || undefined}
+                />
+              )}
+            </button>
+          )}
+
+          {clearable && hasValue && (
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Clear selection"
+              className={mergedClasses.clearIcon || undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClear();
+                triggerRef.current?.focus({ preventScroll: true });
+              }}
+            >
+              <ClearIconComponent className="w-4 h-4" />
+            </button>
+          )}
 
           {isOpen && portalTarget && createPortal(
             <div

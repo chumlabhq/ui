@@ -163,9 +163,28 @@ export type {
   PhoneFormatPattern,
 } from "./components/InternationalPhoneInput/utils/types";
 
+// ─── Slider ──────────────────────────────────────────────────────────────────
+export { default as Slider } from "./components/Slider/Slider";
+export { DEFAULT_SLIDER_CLASSES, UNSTYLED_SLIDER_CLASSES } from "./components/Slider/utils/constants";
+export type {
+  SliderProps,
+  SliderClasses,
+  SliderValue,
+  SliderMark,
+  SliderThumbRenderProps,
+} from "./components/Slider/utils/types";
+
 // ─── Loader ──────────────────────────────────────────────────────────────────
 export { default as CircularLoader } from "./components/Loader/CircularLoader";
-export type { CircularLoaderProps } from "./components/Loader/utils/types";
+export { default as LinearLoader } from "./components/Loader/LinearLoader";
+export { default as DotLoader } from "./components/Loader/DotLoader";
+export { default as PulseLoader } from "./components/Loader/PulseLoader";
+export type {
+  CircularLoaderProps,
+  LinearLoaderProps,
+  DotLoaderProps,
+  PulseLoaderProps,
+} from "./components/Loader/utils/types";
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 export {
@@ -278,10 +297,20 @@ export type {
 
 // ─── TimePicker ──────────────────────────────────────────────────────────────
 export { default as TimePicker } from "./components/TimePicker/TimePicker";
+export { ClockFace } from "./components/TimePicker/ClockFace";
+export { useTimePicker } from "./components/TimePicker/useTimePicker";
 export type {
   TimePickerProps,
+  TimePickerClasses,
+  ClockFaceClasses,
+  ClockFaceProps,
   TimeFormat,
   TimeValue,
+  TimePickerVariant,
+  TimePickerIconProps,
+  ClockSelectionMode,
+  UseTimePickerProps,
+  UseTimePickerReturn,
 } from "./components/TimePicker/utils/types";
 
 // ─── Toast ───────────────────────────────────────────────────────────────────

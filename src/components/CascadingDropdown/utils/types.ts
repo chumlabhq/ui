@@ -41,6 +41,7 @@ export interface CascadingDropdownClasses {
   checkboxChecked?: string;
   noResults?: string;
   loading?: string;
+  clearIcon?: string;
   shimmer?: string;
   shimmerItem?: string;
 }
@@ -72,6 +73,7 @@ export interface CascadingDropdownProps {
   loadingText?: ReactNode;
   shimmerCount?: number;
   loading?: boolean;
+  clearable?: boolean;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
   selectedIcon?: ReactNode;
@@ -84,7 +86,33 @@ export interface CascadingDropdownProps {
   lockScroll?: boolean;
   portalContainer?: HTMLElement | null;
   dropdownZIndex?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  ClearIcon?: React.ComponentType<{ className?: string }>;
+  renderTrigger?: (props: CascadingDropdownTriggerRenderProps) => React.ReactNode;
   "aria-label"?: string;
+}
+
+export interface CascadingDropdownTriggerRenderProps {
+  ref: React.RefCallback<HTMLElement>;
+  id: string;
+  "aria-expanded": boolean;
+  "aria-haspopup": "true";
+  "aria-invalid": boolean | undefined;
+  "aria-describedby": string | undefined;
+  "aria-required": boolean | undefined;
+  "aria-label": string | undefined;
+  disabled: boolean;
+  onClick: () => void;
+  onKeyDown: (event: React.KeyboardEvent) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  "data-disabled": true | undefined;
+  "data-error": true | undefined;
+  "data-open": true | undefined;
+  isOpen: boolean;
+  displayValue: string;
+  placeholder: string;
 }
 
 export interface UseCascadingDropdownProps {

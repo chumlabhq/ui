@@ -15,7 +15,10 @@ import type {
   CalendarDay,
   DatePreset,
   DateRange,
+  DateRangeValue,
+  DateValue,
   DateMarker,
+  UseDatePickerProps,
 } from "./utils/types";
 import { useDatePicker } from "./useDatePicker";
 import {
@@ -447,11 +450,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     {
       mode = "single",
       value,
-      rangeValue,
-      multipleValue,
       onValueChange,
-      onRangeValueChange,
-      onMultipleValueChange,
       onClear,
       minDate,
       maxDate,
@@ -499,8 +498,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       lockScroll = false,
       reduceMotion = "auto",
       onMonthChange,
-      onOpen,
-      onClose,
+      open: openProp,
+      defaultOpen = false,
+      onOpenChange,
       ...rest
     },
     ref,
@@ -591,8 +591,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     } = useDatePicker({
       mode,
       value,
-      rangeValue,
-      multipleValue,
+      onValueChange,
       minDate,
       maxDate,
       disabledDates,
@@ -604,31 +603,28 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       disabled,
       showWeekNumbers,
       markers,
-      onValueChange,
-      onRangeValueChange,
-      onMultipleValueChange,
+      open: openProp,
+      defaultOpen,
+      onOpenChange,
       onMonthChange,
-    });
+    } as UseDatePickerProps);
 
     const isCalendarPositionStable = useStablePositionAfterOpen(isOpen);
 
-    const emitSingle = onValueChange;
-    const emitRange = onRangeValueChange;
-    const emitMultiple = onMultipleValueChange;
+    // Internal typed accessors for the unified value
+    const singleValue = mode === "single" ? (value as Date | null | undefined) : undefined;
+    const rangeValue = mode === "range" ? (value as DateRange | null | undefined) : undefined;
+    const multipleValue = mode === "multiple" ? (value as Date[] | null | undefined) : undefined;
 
-    // ─── Open/close callbacks ──────────────────────────────────────────
-    const prevIsOpenRef = useRef<boolean | null>(null);
-
-    useEffect(() => {
-      if (prevIsOpenRef.current !== null && prevIsOpenRef.current !== isOpen) {
-        if (isOpen) {
-          onOpen?.();
-        } else {
-          onClose?.();
-        }
-      }
-      prevIsOpenRef.current = isOpen;
-    }, [isOpen, onOpen, onClose]);
+    const emitSingle = mode === "single"
+      ? (onValueChange as ((date: Date | null, dateValue: DateValue | null) => void) | undefined)
+      : undefined;
+    const emitRange = mode === "range"
+      ? (onValueChange as ((range: DateRange | null, rangeValue: DateRangeValue | null) => void) | undefined)
+      : undefined;
+    const emitMultiple = mode === "multiple"
+      ? (onValueChange as ((dates: Date[] | null, dateValues: DateValue[] | null) => void) | undefined)
+      : undefined;
 
     // ─── Calendar positioning ───────────────────────────────────────────
     useEffect(() => {
@@ -711,8 +707,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     // ─── Display value ─────────────────────────────────────────────────
     const displayValue = (() => {
-      if (mode === "single" && value) {
-        return formatDate(value, dateFormat, locale);
+      if (mode === "single" && singleValue) {
+        return formatDate(singleValue, dateFormat, locale);
       }
       if (mode === "range" && (rangeValue?.start || rangeValue?.end)) {
         return formatDateRange(rangeValue, dateFormat, locale);
@@ -900,7 +896,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 <PresetsPanel
                   presets={effectivePresets}
                   mode={mode}
-                  value={value}
+                  value={singleValue}
                   rangeValue={rangeValue}
                   multipleValue={multipleValue}
                   presetsClassName={mergedClasses.presets}

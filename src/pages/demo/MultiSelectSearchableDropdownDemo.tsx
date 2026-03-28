@@ -514,31 +514,31 @@ const MultiSelectSearchableDropdownDemo = () => {
       {/* ─── Scroll Lock ──────────────────────────────────────────────────── */}
       <Section
         title="Scroll Lock"
-        description="By default, body scroll is locked when the dropdown is open. Set lockScroll={false} to allow background scrolling."
+        description="By default, the page remains scrollable when the dropdown is open. Set lockScroll to lock body scroll while open."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
-              value={scrollLockValue}
-              onValueChange={(values) => setScrollLockValue(values)}
-              placeholder="Scroll locked (default)"
+              value={scrollUnlockedValue}
+              onValueChange={(values) => setScrollUnlockedValue(values)}
+              placeholder="Default (scrollable)"
               maxDisplayedChips={2}
               classes={c.dropdown}
-              aria-label="Scroll locked dropdown"
+              aria-label="Scroll unlocked dropdown"
             />
           </div>
           <div className="w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
-              value={scrollUnlockedValue}
-              onValueChange={(values) => setScrollUnlockedValue(values)}
-              placeholder="Scroll allowed"
-              lockScroll={false}
+              value={scrollLockValue}
+              onValueChange={(values) => setScrollLockValue(values)}
+              placeholder="lockScroll enabled"
+              lockScroll
               maxDisplayedChips={2}
               classes={c.dropdown}
-              aria-label="Scroll unlocked dropdown"
+              aria-label="Scroll locked dropdown"
             />
           </div>
         </DemoWrapper>
@@ -1249,9 +1249,10 @@ const MultiSelectSearchableDropdownDemo = () => {
             <PropRow name="loadInitialOnOpen" type="boolean" defaultVal="false" description="Load initial options when dropdown opens" isDarkMode={dark} />
             <PropRow name="maxDisplayedChips" type="number" defaultVal="3" description="Max chips before showing +N" isDarkMode={dark} />
             <PropRow name="showSelectedChips" type="boolean" defaultVal="true" description="Show chips or count only" isDarkMode={dark} />
+            <PropRow name="clearable" type="boolean" defaultVal="false" description="Show a clear button to deselect all values" isDarkMode={dark} />
             <PropRow name="checkboxIcon" type="ReactNode" defaultVal="CheckIcon" description="Custom checkbox icon" isDarkMode={dark} />
             <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
+            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
             <PropRow name="open" type="boolean" description="Controlled open state" isDarkMode={dark} />
             <PropRow name="defaultOpen" type="boolean" defaultVal="false" description="Initial open state (uncontrolled)" isDarkMode={dark} />
             <PropRow name="onOpenChange" type="(open: boolean) => void" description="Called when open state changes" isDarkMode={dark} />
@@ -1266,6 +1267,8 @@ const MultiSelectSearchableDropdownDemo = () => {
             <PropRow name="noResultsContent" type="ReactNode" defaultVal='"No results found"' description="Custom no-results content" isDarkMode={dark} />
             <PropRow name="loadingText" type="string" defaultVal='"Loading..."' description="Loading state text" isDarkMode={dark} />
             <PropRow name="aria-label" type="string" description="Accessible label for the dropdown" isDarkMode={dark} />
+            <PropRow name="ClearIcon" type="ComponentType" description="Custom clear icon component" isDarkMode={dark} />
+            <PropRow name="renderTrigger" type="(props) => ReactNode" description="Custom trigger renderer — receives ARIA props, isOpen, selectedOptions, and placeholder" isDarkMode={dark} />
           </PropsTable>
         </div>
       </Section>

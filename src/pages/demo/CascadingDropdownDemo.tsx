@@ -1095,7 +1095,7 @@ const CascadingDropdownDemo = () => {
       {/* ─── Scroll Lock ──────────────────────────────────────────────── */}
       <Section
         title="Scroll Lock"
-        description="By default, body scroll is locked when the dropdown is open. Set lockScroll={false} to allow background scrolling."
+        description="By default, the page remains scrollable when the dropdown is open. Set lockScroll to lock body scroll while open."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1103,15 +1103,15 @@ const CascadingDropdownDemo = () => {
             options={categoryOptions}
             value={{}}
             onValueChange={() => {}}
-            placeholder="Scroll locked (default)"
+            placeholder="Default (scrollable)"
             classes={c.cascading}
           />
           <CascadingDropdown
             options={categoryOptions}
             value={{}}
             onValueChange={() => {}}
-            placeholder="Scroll allowed"
-            lockScroll={false}
+            placeholder="lockScroll enabled"
+            lockScroll
             classes={c.cascading}
           />
         </DemoWrapper>
@@ -1591,9 +1591,22 @@ const CascadingDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="clearable"
+              type="boolean"
+              defaultVal="false"
+              description="Show a clear button to deselect all values"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="checkboxIcon"
               type="ReactNode"
               description="Custom icon inside checkbox for multi-select mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ClearIcon"
+              type="ComponentType"
+              description="Custom clear icon component"
               isDarkMode={dark}
             />
             <PropRow
@@ -1624,6 +1637,18 @@ const CascadingDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="className"
+              type="string"
+              description="Additional CSS class for the root element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles for the root element"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="unstyled"
               type="boolean"
               defaultVal="false"
@@ -1633,7 +1658,7 @@ const CascadingDropdownDemo = () => {
             <PropRow
               name="lockScroll"
               type="boolean"
-              defaultVal="true"
+              defaultVal="false"
               description="Lock body scroll when dropdown is open"
               isDarkMode={dark}
             />
@@ -1655,6 +1680,12 @@ const CascadingDropdownDemo = () => {
               name="aria-label"
               type="string"
               description="Accessible label for the dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderTrigger"
+              type="(props) => ReactNode"
+              description="Custom trigger renderer — receives ARIA props, isOpen, displayValue, and placeholder"
               isDarkMode={dark}
             />
           </PropsTable>

@@ -130,39 +130,19 @@ export interface DatePickerClasses {
   dropdownItemSelected?: string;
 }
 
-export interface DatePickerProps
+/** Shared props for all DatePicker modes. */
+interface BaseDatePickerProps
   extends Omit<
     HTMLAttributes<HTMLDivElement>,
     "children" | "defaultValue" | "onChange" | "value"
   > {
-  /** Selection mode */
-  mode?: DatePickerMode;
-
-  // ─── Values ─────────────────────────────────────────────────────────
-  /** Selected date (single mode) */
-  value?: Date | null;
-  /** Selected range (range mode) */
-  rangeValue?: DateRange | null;
-  /** Selected dates (multiple mode) */
-  multipleValue?: Date[] | null;
-
-  // ─── Callbacks ──────────────────────────────────────────────────────
-  /** Fires when the selected date changes (single mode). */
-  onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
-  /** Fires when the selected range changes (range mode). */
-  onRangeValueChange?: (
-    range: DateRange | null,
-    rangeValue: DateRangeValue | null,
-  ) => void;
-  /** Fires when the selected dates change (multiple mode). */
-  onMultipleValueChange?: (
-    dates: Date[] | null,
-    dateValues: DateValue[] | null,
-  ) => void;
   onClear?: () => void;
   onMonthChange?: (month: Date) => void;
-  onOpen?: () => void;
-  onClose?: () => void;
+
+  // ─── Controlled open state ────────────────────────────────────────
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 
   // ─── Constraints ────────────────────────────────────────────────────
   minDate?: Date;
@@ -225,18 +205,46 @@ export interface DatePickerProps
   portalContainer?: HTMLElement | null;
 
   // ─── Scroll behavior ──────────────────────────────────────────────
-  /** When true, locks body scroll while the calendar is open. Default: false (calendar repositions on scroll). */
   lockScroll?: boolean;
 
   // ─── Motion ─────────────────────────────────────────────────────────
   reduceMotion?: boolean | "auto";
 }
 
-export interface UseDatePickerProps {
-  mode: DatePickerMode;
+/** Single date selection mode. */
+interface SingleDatePickerProps extends BaseDatePickerProps {
+  mode?: "single";
+  /** Selected date. */
   value?: Date | null;
-  rangeValue?: DateRange | null;
-  multipleValue?: Date[] | null;
+  /** Fires when the selected date changes. */
+  onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
+}
+
+/** Date range selection mode. */
+interface RangeDatePickerProps extends BaseDatePickerProps {
+  mode: "range";
+  /** Selected date range. */
+  value?: DateRange | null;
+  /** Fires when the selected range changes. */
+  onValueChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
+}
+
+/** Multiple date selection mode. */
+interface MultipleDatePickerProps extends BaseDatePickerProps {
+  mode: "multiple";
+  /** Selected dates. */
+  value?: Date[] | null;
+  /** Fires when the selected dates change. */
+  onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
+}
+
+/** DatePicker props — discriminated by `mode`. */
+export type DatePickerProps =
+  | SingleDatePickerProps
+  | RangeDatePickerProps
+  | MultipleDatePickerProps;
+
+interface BaseUseDatePickerProps {
   minDate?: Date;
   maxDate?: Date;
   disabledDates?: DisabledDateOptions;
@@ -248,17 +256,34 @@ export interface UseDatePickerProps {
   disabled: boolean;
   showWeekNumbers: boolean;
   markers?: DateMarker[];
-  onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
-  onRangeValueChange?: (
-    range: DateRange | null,
-    rangeValue: DateRangeValue | null,
-  ) => void;
-  onMultipleValueChange?: (
-    dates: Date[] | null,
-    dateValues: DateValue[] | null,
-  ) => void;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onMonthChange?: (month: Date) => void;
 }
+
+interface SingleUseDatePickerProps extends BaseUseDatePickerProps {
+  mode: "single";
+  value?: Date | null;
+  onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
+}
+
+interface RangeUseDatePickerProps extends BaseUseDatePickerProps {
+  mode: "range";
+  value?: DateRange | null;
+  onValueChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
+}
+
+interface MultipleUseDatePickerProps extends BaseUseDatePickerProps {
+  mode: "multiple";
+  value?: Date[] | null;
+  onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
+}
+
+export type UseDatePickerProps =
+  | SingleUseDatePickerProps
+  | RangeUseDatePickerProps
+  | MultipleUseDatePickerProps;
 
 export interface CalendarDay {
   date: Date;

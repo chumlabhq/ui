@@ -11,7 +11,10 @@ export interface DrawerClasses {
 export interface DrawerProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "onTransitionEnd"> {
   open: boolean;
-  onClose: () => void;
+  /** Callback when the drawer's open state changes. Primary API — prefer over `onClose`. */
+  onOpenChange?: (open: boolean) => void;
+  /** @deprecated Use `onOpenChange` instead. Convenience alias for closing. */
+  onClose?: () => void;
   children?: ReactNode;
   direction?: DrawerDirection;
   size?: string;

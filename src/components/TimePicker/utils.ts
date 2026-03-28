@@ -1,6 +1,27 @@
 import type { TimeFormat, TimeValue } from "./utils/types";
 
-const pad = (n: number): string => n.toString().padStart(2, "0");
+/** Zero-pads a number to two digits. Internal utility. */
+export const pad = (n: number): string => n.toString().padStart(2, "0");
+
+export function clampMinuteStep(minuteStep: number): number {
+  const n = Math.floor(Number(minuteStep));
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.min(60, n);
+}
+
+export function getDefaultTimeValue(format: TimeFormat): TimeValue {
+  const now = new Date();
+  const hours24 = now.getHours();
+  const minutes = now.getMinutes();
+
+  if (format === "12h") {
+    const period = hours24 >= 12 ? "PM" : "AM";
+    const hours12 =
+      hours24 === 0 ? 12 : hours24 > 12 ? hours24 - 12 : hours24;
+    return { hours: hours12, minutes, period };
+  }
+  return { hours: hours24, minutes };
+}
 
 export function generateTimeOptions(
   format: TimeFormat,
@@ -9,10 +30,11 @@ export function generateTimeOptions(
   maxTime?: string
 ): string[] {
   const options: string[] = [];
+  const step = clampMinuteStep(minuteStep);
   const minMinutes = minTime ? parseTimeToMinutes(minTime, format) : 0;
   const maxMinutes = maxTime ? parseTimeToMinutes(maxTime, format) : 24 * 60 - 1;
 
-  for (let totalMinutes = 0; totalMinutes < 24 * 60; totalMinutes += minuteStep) {
+  for (let totalMinutes = 0; totalMinutes < 24 * 60; totalMinutes += step) {
     if (totalMinutes < minMinutes || totalMinutes > maxMinutes) continue;
 
     const hours24 = Math.floor(totalMinutes / 60);
@@ -151,6 +173,30 @@ export function convertTimeFormat(time: string, fromFormat: TimeFormat, toFormat
   return formatTimeValue(parsed, toFormat);
 }
 
-export function timeValueFromString(time: string, format: TimeFormat): TimeValue | null {
-  return parseTimeInput(time, format);
+/**
+ * Convert a TimeValue to total minutes from midnight.
+ * Useful for comparing against min/max bounds.
+ */
+export function timeValueToMinutes(tv: TimeValue, format: TimeFormat): number {
+  let hours24 = tv.hours;
+  if (format === "12h" && tv.period) {
+    if (tv.period === "PM" && tv.hours !== 12) hours24 = tv.hours + 12;
+    else if (tv.period === "AM" && tv.hours === 12) hours24 = 0;
+  }
+  return hours24 * 60 + tv.minutes;
+}
+
+/**
+ * Check whether a total-minutes value falls within optional min/max bounds.
+ */
+export function isMinutesInRange(
+  totalMinutes: number,
+  format: TimeFormat,
+  minTime?: string,
+  maxTime?: string,
+): boolean {
+  if (!minTime && !maxTime) return true;
+  const minMinutes = minTime ? parseTimeToMinutes(minTime, format) : 0;
+  const maxMinutes = maxTime ? parseTimeToMinutes(maxTime, format) : 24 * 60 - 1;
+  return totalMinutes >= minMinutes && totalMinutes <= maxMinutes;
 }

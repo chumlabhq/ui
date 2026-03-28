@@ -20,33 +20,47 @@ import {
   sortDates,
   addMonths,
 } from "./utils";
+import { useControllableState } from "../../utils/useControllableState";
 
-export function useDatePicker({
-  mode,
-  value,
-  rangeValue,
-  multipleValue,
-  minDate,
-  maxDate,
-  disabledDates,
-  weekStartsOn,
-  numberOfMonths,
-  showOutsideDays,
-  outsideDaysSelectable,
-  fixedWeeks,
-  disabled,
-  showWeekNumbers,
-  markers,
-  onValueChange,
-  onRangeValueChange,
-  onMultipleValueChange,
-  onMonthChange,
-}: UseDatePickerProps) {
-  const emitSingle = onValueChange;
-  const emitRange = onRangeValueChange;
-  const emitMultiple = onMultipleValueChange;
+export function useDatePicker(props: UseDatePickerProps) {
+  const {
+    mode,
+    value,
+    onValueChange,
+    minDate,
+    maxDate,
+    disabledDates,
+    weekStartsOn,
+    numberOfMonths,
+    showOutsideDays,
+    outsideDaysSelectable,
+    fixedWeeks,
+    disabled,
+    showWeekNumbers,
+    markers,
+    open: openProp,
+    defaultOpen = false,
+    onOpenChange,
+    onMonthChange,
+  } = props;
+
+  // Internal typed accessors for the unified value/onValueChange
+  const singleValue = mode === "single" ? (value as Date | null | undefined) : undefined;
+  const rangeValue = mode === "range" ? (value as DateRange | null | undefined) : undefined;
+  const multipleValue = mode === "multiple" ? (value as Date[] | null | undefined) : undefined;
+
+  const emitSingle = mode === "single"
+    ? (onValueChange as ((date: Date | null, dateValue: import("./utils/types").DateValue | null) => void) | undefined)
+    : undefined;
+  const emitRange = mode === "range"
+    ? (onValueChange as ((range: DateRange | null, rangeValue: DateRangeValue | null) => void) | undefined)
+    : undefined;
+  const emitMultiple = mode === "multiple"
+    ? (onValueChange as ((dates: Date[] | null, dateValues: import("./utils/types").DateValue[] | null) => void) | undefined)
+    : undefined;
+
   const getInitialMonth = () => {
-    if (mode === "single" && value) return startOfMonth(value);
+    if (mode === "single" && singleValue) return startOfMonth(singleValue);
     if (mode === "range" && rangeValue?.start)
       return startOfMonth(rangeValue.start);
     if (mode === "multiple" && multipleValue?.length)
@@ -54,7 +68,11 @@ export function useDatePicker({
     return startOfMonth(new Date());
   };
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
   const [displayMonth, setDisplayMonth] = useState<Date>(getInitialMonth);
   const [hoverDate, setHoverDate] = useState<Date | null>(null);
   const [focusedDate, setFocusedDate] = useState<Date | null>(null);
@@ -64,7 +82,7 @@ export function useDatePicker({
 
   const selectedDates = useMemo(() => {
     if (mode === "single") {
-      return value ? [value] : [];
+      return singleValue ? [singleValue] : [];
     }
     if (mode === "range") {
       const dates: Date[] = [];
@@ -73,7 +91,7 @@ export function useDatePicker({
       return dates;
     }
     return multipleValue || [];
-  }, [mode, value, rangeValue, multipleValue]);
+  }, [mode, singleValue, rangeValue, multipleValue]);
 
   const rangeStart = mode === "range" ? rangeValue?.start || null : null;
   const rangeEnd = mode === "range" ? rangeValue?.end || null : null;
@@ -121,14 +139,14 @@ export function useDatePicker({
     if (disabled) return;
     setIsOpen(true);
     setFocusedDate(null);
-    if (mode === "single" && value) {
-      setDisplayMonth(startOfMonth(value));
+    if (mode === "single" && singleValue) {
+      setDisplayMonth(startOfMonth(singleValue));
     } else if (mode === "range" && rangeValue?.start) {
       setDisplayMonth(startOfMonth(rangeValue.start));
     } else if (mode === "multiple" && multipleValue?.length) {
       setDisplayMonth(startOfMonth(multipleValue[0]));
     }
-  }, [disabled, mode, value, rangeValue, multipleValue]);
+  }, [disabled, mode, singleValue, rangeValue, multipleValue]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);

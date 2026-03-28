@@ -12,4 +12,4 @@ export {
   UNSTYLED_CHECKBOX_CLASSES,
 } from "./utils/constants";
 
-export { DefaultCheckIcon, DefaultIndeterminateIcon } from "./utils/icons";
+export { CheckIcon, IndeterminateIcon } from "./utils/icons";

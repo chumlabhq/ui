@@ -96,6 +96,9 @@ const DatePickerDemo = () => {
   const [multipleDates, setMultipleDates] = useState<Date[] | null>(null);
   // Controlled
   const [controlledDate, setControlledDate] = useState<Date | null>(new Date());
+  // Controlled open
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [openControlDate, setOpenControlDate] = useState<Date | null>(null);
   // Event log
   const [eventLog, setEventLog] = useState<string[]>([]);
   const log = (msg: string) =>
@@ -300,8 +303,8 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               mode="range"
-              rangeValue={rangeValue}
-              onRangeValueChange={(range) => setRangeValue(range)}
+              value={rangeValue}
+              onValueChange={(range) => setRangeValue(range)}
               label="Select a range"
               placeholder="Start date – End date"
               showClearButton
@@ -338,8 +341,8 @@ const DatePickerDemo = () => {
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
-                  rangeValue={rangeValue}
-                  onRangeValueChange={(range) => setRangeValue(range)}
+                  value={rangeValue}
+                  onValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -367,8 +370,8 @@ const DatePickerDemo = () => {
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
-                  rangeValue={rangeValue}
-                  onRangeValueChange={(range) => setRangeValue(range)}
+                  value={rangeValue}
+                  onValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -396,8 +399,8 @@ const DatePickerDemo = () => {
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
-                  rangeValue={rangeValue}
-                  onRangeValueChange={(range) => setRangeValue(range)}
+                  value={rangeValue}
+                  onValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -431,8 +434,8 @@ const DatePickerDemo = () => {
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
-                  rangeValue={rangeValue}
-                  onRangeValueChange={(range) => setRangeValue(range)}
+                  value={rangeValue}
+                  onValueChange={(range) => setRangeValue(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
@@ -464,8 +467,8 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               mode="multiple"
-              multipleValue={multipleDates}
-              onMultipleValueChange={(dates) => setMultipleDates(dates)}
+              value={multipleDates}
+              onValueChange={(dates) => setMultipleDates(dates)}
               label="Select dates"
               placeholder="Pick multiple dates..."
               showClearButton
@@ -497,8 +500,8 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               mode="range"
-              rangeValue={rangeValue}
-              onRangeValueChange={(range) => setRangeValue(range)}
+              value={rangeValue}
+              onValueChange={(range) => setRangeValue(range)}
               label="Date range with presets"
               placeholder="Select range..."
               showPresets
@@ -684,8 +687,8 @@ const DatePickerDemo = () => {
           <div className="max-w-md">
             <DatePicker
               mode="range"
-              rangeValue={rangeValue}
-              onRangeValueChange={(range) => setRangeValue(range)}
+              value={rangeValue}
+              onValueChange={(range) => setRangeValue(range)}
               label="Two-month range picker"
               placeholder="Select range..."
               numberOfMonths={2}
@@ -916,6 +919,63 @@ const DatePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Controlled Open State ──────────────────────────────────────── */}
+      <Section
+        title="Controlled Open"
+        description="Externally control the calendar open state with open + onOpenChange."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
+          <div className="flex items-center gap-4">
+            <button
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600`}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={() => setCalendarOpen((o) => !o)}
+            >
+              {calendarOpen ? "Close" : "Open"} Calendar
+            </button>
+            <div className="max-w-xs">
+              <DatePicker
+                value={openControlDate}
+                onValueChange={(date) => setOpenControlDate(date)}
+                open={calendarOpen}
+                onOpenChange={setCalendarOpen}
+                placeholder="Controlled open..."
+                classes={c.datepicker}
+              />
+            </div>
+            <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+              Open: {String(calendarOpen)} | Selected: {openControlDate?.toLocaleDateString() ?? "none"}
+            </span>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Default Open ─────────────────────────────────────────────────── */}
+      <Section
+        title="Default Open"
+        description="Start with the calendar open using defaultOpen."
+        isDarkMode={dark}
+      >
+        <DemoWrapper
+          isDarkMode={dark}
+          layout="block"
+          className="overflow-visible"
+        >
+          <div className="max-w-xs">
+            <DatePicker
+              defaultOpen
+              placeholder="Starts open..."
+              classes={c.datepicker}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Full Width ─────────────────────────────────────────────────── */}
       <Section
         title="Full Width"
@@ -1064,8 +1124,8 @@ const DatePickerDemo = () => {
           <div className="max-w-xs">
             <DatePicker
               mode="range"
-              rangeValue={rangeValue}
-              onRangeValueChange={(range) => setRangeValue(range)}
+              value={rangeValue}
+              onValueChange={(range) => setRangeValue(range)}
               label="Analytics period"
               placeholder="Select range..."
               showPresets
@@ -1282,7 +1342,7 @@ const DatePickerDemo = () => {
       {/* ─── Callbacks ──────────────────────────────────────────────────── */}
       <Section
         title="Event Callbacks"
-        description="onOpen, onClose, onMonthChange, and onClear callbacks."
+        description="onOpenChange, onMonthChange, and onClear callbacks."
         isDarkMode={dark}
       >
         <DemoWrapper
@@ -1295,8 +1355,7 @@ const DatePickerDemo = () => {
               label="Watch the log below"
               placeholder="Interact with me..."
               showClearButton
-              onOpen={() => log("onOpen fired")}
-              onClose={() => log("onClose fired")}
+              onOpenChange={(isOpen) => log(`onOpenChange: ${isOpen ? "opened" : "closed"}`)}
               onMonthChange={(month) =>
                 log(`onMonthChange: ${month.toLocaleDateString()}`)
               }
@@ -1457,8 +1516,8 @@ const DatePickerDemo = () => {
               <div className="max-w-xs">
                 <DatePicker
                   mode="range"
-                  rangeValue={rangeValue}
-                  onRangeValueChange={(range) => setRangeValue(range)}
+                  value={rangeValue}
+                  onValueChange={(range) => setRangeValue(range)}
                   placeholder="Styled presets"
                   showPresets
                   showClearButton
@@ -1628,38 +1687,14 @@ const DatePickerDemo = () => {
             />
             <PropRow
               name="value"
-              type="Date | null"
-              description="Selected date (single mode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="rangeValue"
-              type="DateRange | null"
-              description="Selected range (range mode)"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="multipleValue"
-              type="Date[] | null"
-              description="Selected dates (multiple mode)"
+              type="Date | null (single) · DateRange | null (range) · Date[] | null (multiple)"
+              description="Selected value — type depends on mode"
               isDarkMode={dark}
             />
             <PropRow
               name="onValueChange"
-              type="(date, dateValue) => void"
-              description="Single mode callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onRangeValueChange"
-              type="(range, rangeValue) => void"
-              description="Range mode callback"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onMultipleValueChange"
-              type="(dates, dateValues) => void"
-              description="Multiple mode callback"
+              type="(value, richValue) => void"
+              description="Fires when selection changes — callback signature depends on mode"
               isDarkMode={dark}
             />
             <PropRow
@@ -1869,15 +1904,22 @@ const DatePickerDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onOpen"
-              type="() => void"
-              description="Calendar open callback"
+              name="open"
+              type="boolean"
+              description="Controlled open state of the calendar"
               isDarkMode={dark}
             />
             <PropRow
-              name="onClose"
-              type="() => void"
-              description="Calendar close callback"
+              name="defaultOpen"
+              type="boolean"
+              defaultVal="false"
+              description="Default open state (uncontrolled)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onOpenChange"
+              type="(open: boolean) => void"
+              description="Called when the open state changes"
               isDarkMode={dark}
             />
             <PropRow
@@ -2023,7 +2065,7 @@ const DatePickerDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Use `value` / `rangeValue` / `multipleValue` with the matching `on*Change` callbacks for controlled usage. Use defaults for uncontrolled. Pick one mode per instance and align `mode` with your form schema."
+        summary="Use `value` with `onValueChange` for controlled usage — the value type depends on `mode` (Date for single, DateRange for range, Date[] for multiple). For calendar visibility, omit `open` to let the component manage it, or pass `open` + `onOpenChange` for external control. Use `defaultOpen` to start with the calendar open."
       />
       <DocEdgeCases
         isDarkMode={dark}

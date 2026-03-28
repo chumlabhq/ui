@@ -692,16 +692,16 @@ const MultiSelectDropdownDemo = () => {
       {/* ─── Scroll Lock ─────────────────────────────────────────────────── */}
       <Section
         title="Scroll Lock"
-        description="By default, body scroll is locked when the dropdown is open. Set lockScroll={false} to allow background scrolling."
+        description="By default, the page remains scrollable when the dropdown is open. Set lockScroll to lock body scroll while open."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-72">
             <MultiSelectDropdown
               options={staticOptions}
-              value={scrollLockValue}
-              onValueChange={setScrollLockValue}
-              placeholder="Scroll locked (default)"
+              value={scrollUnlockedValue}
+              onValueChange={setScrollUnlockedValue}
+              placeholder="Default (scrollable)"
               maxDisplayedChips={2}
               classes={c.dropdown}
             />
@@ -709,10 +709,10 @@ const MultiSelectDropdownDemo = () => {
           <div className="w-72">
             <MultiSelectDropdown
               options={staticOptions}
-              value={scrollUnlockedValue}
-              onValueChange={setScrollUnlockedValue}
-              placeholder="Scroll allowed"
-              lockScroll={false}
+              value={scrollLockValue}
+              onValueChange={setScrollLockValue}
+              placeholder="lockScroll enabled"
+              lockScroll
               maxDisplayedChips={2}
               classes={c.dropdown}
             />
@@ -1382,9 +1382,10 @@ const MultiSelectDropdownDemo = () => {
             <PropRow name="shimmerCount" type="number" defaultVal="5" description="Number of shimmer items" isDarkMode={dark} />
             <PropRow name="maxDisplayedChips" type="number" defaultVal="3" description="Max chips before showing +N" isDarkMode={dark} />
             <PropRow name="showSelectedChips" type="boolean" defaultVal="true" description="Show chips or count only" isDarkMode={dark} />
+            <PropRow name="clearable" type="boolean" defaultVal="false" description="Show a clear button to deselect all values" isDarkMode={dark} />
             <PropRow name="checkboxIcon" type="ReactNode" defaultVal="CheckIcon" description="Custom checkbox icon" isDarkMode={dark} />
             <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
+            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
             <PropRow name="open" type="boolean" description="Controlled open state" isDarkMode={dark} />
             <PropRow name="defaultOpen" type="boolean" defaultVal="false" description="Initial open state (uncontrolled)" isDarkMode={dark} />
             <PropRow name="onOpenChange" type="(open: boolean) => void" description="Called when open state changes" isDarkMode={dark} />
@@ -1402,6 +1403,8 @@ const MultiSelectDropdownDemo = () => {
             <PropRow name="onFocus" type="() => void" description="Trigger focus callback" isDarkMode={dark} />
             <PropRow name="onKeyDown" type="(e: KeyboardEvent) => void" description="Custom keydown (preventDefault to override)" isDarkMode={dark} />
             <PropRow name="ChevronIcon" type="ComponentType" defaultVal="ChevronDownIcon" description="Custom chevron icon component" isDarkMode={dark} />
+            <PropRow name="ClearIcon" type="ComponentType" description="Custom clear icon component" isDarkMode={dark} />
+            <PropRow name="renderTrigger" type="(props) => ReactNode" description="Custom trigger renderer — receives ARIA props, isOpen, selectedOptions, and placeholder" isDarkMode={dark} />
           </PropsTable>
         </div>
       </Section>

@@ -233,7 +233,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
 
   useEffect(() => {
     if (isOpen && showSearch && searchInputRef.current) {
-      searchInputRef.current.focus();
+      searchInputRef.current.focus({ preventScroll: true });
     }
   }, [isOpen, showSearch, searchInputRef]);
 
@@ -329,7 +329,7 @@ const SearchableDropdown = forwardRef<
     style,
     keepMounted = false,
     portalContainer,
-    lockScroll = true,
+    lockScroll = false,
     dropdownPosition = "bottom",
     dropdownZIndex = 50,
     dropdownGap = 4,
@@ -484,7 +484,7 @@ const SearchableDropdown = forwardRef<
 
   useEffect(() => {
     if (!isOpen && shouldRestoreFocusRef.current) {
-      triggerNode?.focus();
+      triggerNode?.focus({ preventScroll: true });
       shouldRestoreFocusRef.current = false;
     }
   }, [isOpen, shouldRestoreFocusRef, triggerNode]);
@@ -652,7 +652,7 @@ const SearchableDropdown = forwardRef<
             onClick={(e) => {
               e.stopPropagation();
               handleClear(e);
-              triggerNode?.focus();
+              triggerNode?.focus({ preventScroll: true });
             }}
           >
             <ClearIconProp />

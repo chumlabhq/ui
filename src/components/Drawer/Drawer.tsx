@@ -48,7 +48,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (
     {
       open,
-      onClose,
+      onOpenChange,
+      onClose: onCloseProp,
       children,
       direction = DEFAULT_DIRECTION,
       size = DEFAULT_SIZE,
@@ -83,6 +84,11 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     },
     ref,
   ) => {
+    const handleClose = useCallback(() => {
+      onOpenChange?.(false);
+      onCloseProp?.();
+    }, [onOpenChange, onCloseProp]);
+
     const generatedId = useId();
     const drawerId = `drawer-${generatedId}`;
     const titleId = `drawer-title-${generatedId}`;
@@ -248,7 +254,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         if (event.key === "Escape" && closeOnEscape) {
           if (!isTopDrawer(drawerId)) return;
           event.stopImmediatePropagation();
-          onClose();
+          handleClose();
           return;
         }
 
@@ -274,14 +280,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           }
         }
       },
-      [onClose, closeOnEscape, trapFocus, modal, drawerId],
+      [handleClose, closeOnEscape, trapFocus, modal, drawerId],
     );
 
     const handleOverlayClick = useCallback(() => {
       if (closeOnOverlayClick) {
-        onClose();
+        handleClose();
       }
-    }, [closeOnOverlayClick, onClose]);
+    }, [closeOnOverlayClick, handleClose]);
 
     useEffect(() => {
       if (!isBrowser) return;
@@ -406,7 +412,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
             currentFraction <= 0 ||
             (velocity > VELOCITY_THRESHOLD && clampedSnapIndex === 0)
           ) {
-            onClose();
+            handleClose();
             return;
           }
 
@@ -432,7 +438,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
             dragFraction > swipeThreshold ||
             velocity > VELOCITY_THRESHOLD
           ) {
-            onClose();
+            handleClose();
           }
         }
       },
@@ -442,7 +448,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         snapPoints,
         clampedSnapIndex,
         swipeThreshold,
-        onClose,
+        handleClose,
         setSnapIndex,
       ],
     );
@@ -460,8 +466,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     }, []);
 
     const contextValue = useMemo(
-      () => ({ onClose, titleId }),
-      [onClose, titleId],
+      () => ({ onClose: handleClose, titleId }),
+      [handleClose, titleId],
     );
 
     if (!isBrowser) return null;

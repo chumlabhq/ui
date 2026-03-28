@@ -718,19 +718,19 @@ const SearchableDropdownDemo = () => {
       {/* ─── Scroll Lock ──────────────────────────────────────────────── */}
       <Section
         title="Scroll Lock"
-        description="By default, body scroll is locked when the dropdown is open. Set lockScroll={false} to allow background scrolling."
+        description="By default, the page remains scrollable when the dropdown is open. Set lockScroll to lock body scroll while open."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <SearchableDropdown
             options={fruitOptions}
-            placeholder="Scroll locked (default)"
+            placeholder="Default (scrollable)"
             classes={c.dropdown}
           />
           <SearchableDropdown
             options={fruitOptions}
-            placeholder="Scroll allowed"
-            lockScroll={false}
+            placeholder="lockScroll enabled"
+            lockScroll
             classes={c.dropdown}
           />
         </DemoWrapper>
@@ -1091,7 +1091,7 @@ const SearchableDropdownDemo = () => {
             <PropRow name="className" type="string" description="Root class name (merged with classes.root)" isDarkMode={dark} />
             <PropRow name="style" type="CSSProperties" description="Root inline styles" isDarkMode={dark} />
             <PropRow name="keepMounted" type="boolean" defaultVal="false" description="Keep portal in DOM when closed" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
+            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
             <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Portal target container" isDarkMode={dark} />
             <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred popup position (auto-flips)" isDarkMode={dark} />
             <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="z-index of the popup" isDarkMode={dark} />

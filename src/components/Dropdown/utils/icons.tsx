@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-export const DefaultChevronIcon = ({
+export const ChevronDownIcon = ({
   className,
   style,
 }: {
@@ -25,7 +25,7 @@ export const DefaultChevronIcon = ({
   </svg>
 );
 
-export const DefaultCheckIcon = ({
+export const CheckIcon = ({
   className,
   style,
 }: {
@@ -50,7 +50,7 @@ export const DefaultCheckIcon = ({
   </svg>
 );
 
-export const DefaultClearIcon = ({
+export const ClearIcon = ({
   className,
 }: {
   className?: string;

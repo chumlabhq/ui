@@ -28,6 +28,7 @@ export interface MultiSelectDropdownClasses {
   noResults?: string;
   label?: string;
   error?: string;
+  clearIcon?: string;
   shimmer?: string;
   shimmerItem?: string;
   moreCount?: string;
@@ -49,6 +50,7 @@ export interface MultiSelectDropdownProps {
   label?: ReactNode;
   required?: boolean;
   noResultsContent?: ReactNode;
+  clearable?: boolean;
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
@@ -78,6 +80,33 @@ export interface MultiSelectDropdownProps {
   onKeyDown?: (event: React.KeyboardEvent) => void;
   ChevronIcon?: React.ComponentType<{ className?: string; style?: CSSProperties }>;
   loadingText?: ReactNode;
+  ClearIcon?: React.ComponentType<{ className?: string }>;
+  renderTrigger?: (props: MultiSelectDropdownTriggerRenderProps) => ReactNode;
+}
+
+export interface MultiSelectDropdownTriggerRenderProps {
+  ref: React.RefCallback<HTMLElement>;
+  id: string;
+  role: "combobox";
+  "aria-expanded": boolean;
+  "aria-haspopup": "listbox";
+  "aria-controls": string;
+  "aria-activedescendant": string | undefined;
+  "aria-invalid": boolean | undefined;
+  "aria-describedby": string | undefined;
+  "aria-required": boolean | undefined;
+  "aria-labelledby": string | undefined;
+  disabled: boolean;
+  onClick: () => void;
+  onKeyDown: (event: React.KeyboardEvent) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  "data-disabled": true | undefined;
+  "data-error": true | undefined;
+  "data-open": true | undefined;
+  isOpen: boolean;
+  selectedOptions: MultiSelectOption[];
+  placeholder: ReactNode;
 }
 
 export interface UseMultiSelectDropdownProps {

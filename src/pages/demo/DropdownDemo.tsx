@@ -1050,19 +1050,19 @@ const DropdownDemo = () => {
       {/* ─── Scroll Lock ──────────────────────────────────────────────── */}
       <Section
         title="Scroll Lock"
-        description="By default, body scroll is locked when the dropdown is open. Set lockScroll={false} to allow background scrolling."
+        description="By default, the page remains scrollable when the dropdown is open. Set lockScroll to lock body scroll while open."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <Dropdown
             options={fruitOptions}
-            placeholder="Scroll locked (default)"
+            placeholder="Default (scrollable)"
             classes={c.dropdown}
           />
           <Dropdown
             options={fruitOptions}
-            placeholder="Scroll allowed"
-            lockScroll={false}
+            placeholder="lockScroll enabled"
+            lockScroll
             classes={c.dropdown}
           />
         </DemoWrapper>
@@ -1646,7 +1646,7 @@ const DropdownDemo = () => {
             <PropRow name="className" type="string" description="Root class name (merged with classes.root)" isDarkMode={dark} />
             <PropRow name="style" type="CSSProperties" description="Root inline styles" isDarkMode={dark} />
             <PropRow name="keepMounted" type="boolean" defaultVal="false" description="Keep portal in DOM when closed" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="true" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
+            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
             <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Portal target container" isDarkMode={dark} />
             <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred popup position (auto-flips)" isDarkMode={dark} />
             <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="z-index of the popup" isDarkMode={dark} />
@@ -1657,9 +1657,9 @@ const DropdownDemo = () => {
             <PropRow name="onFocus" type="() => void" description="Called when trigger gains focus" isDarkMode={dark} />
             <PropRow name="onKeyDown" type="(event: React.KeyboardEvent) => void" description="Custom keydown handler" isDarkMode={dark} />
             <PropRow name="renderTrigger" type="(props: DropdownTriggerRenderProps) => ReactNode" description="Custom trigger render function" isDarkMode={dark} />
-            <PropRow name="ChevronIcon" type="ComponentType" defaultVal="DefaultChevronIcon" description="Custom chevron icon component" isDarkMode={dark} />
-            <PropRow name="CheckIcon" type="ComponentType" defaultVal="DefaultCheckIcon" description="Custom check icon component" isDarkMode={dark} />
-            <PropRow name="ClearIcon" type="ComponentType" defaultVal="DefaultClearIcon" description="Custom clear icon component" isDarkMode={dark} />
+            <PropRow name="ChevronIcon" type="ComponentType" defaultVal="ChevronDownIcon" description="Custom chevron icon component" isDarkMode={dark} />
+            <PropRow name="CheckIcon" type="ComponentType" defaultVal="CheckIcon" description="Custom check icon component" isDarkMode={dark} />
+            <PropRow name="ClearIcon" type="ComponentType" defaultVal="ClearIcon" description="Custom clear icon component" isDarkMode={dark} />
           </PropsTable>
         </div>
       </Section>

@@ -54,7 +54,7 @@ export interface ModalProps {
   /** Enables closing via the Escape key. Default: `true`. */
   closeOnEscape?: boolean;
   /** Locks body scroll when the modal is open. Default: `true`. */
-  lockBackgroundScroll?: boolean;
+  lockScroll?: boolean;
   /** Traps keyboard focus within the modal. Default: `true`. */
   trapFocus?: boolean;
   /** Restores focus to the previously focused element on close. Default: `true`. */
@@ -99,26 +99,6 @@ export interface ModalProps {
   className?: string;
   /** Inline styles for the dialog content panel. */
   contentStyle?: CSSProperties;
-  /** CSS class for the root portal container. */
-  rootClassName?: string;
-  /** CSS class for the backdrop overlay. */
-  overlayClassName?: string;
-  /** CSS class for the dialog content panel. */
-  contentClassName?: string;
-  /** CSS class for the header section. */
-  headerClassName?: string;
-  /** CSS class for the title element. */
-  titleClassName?: string;
-  /** CSS class for the description element. */
-  descriptionClassName?: string;
-  /** CSS class for the header icon. */
-  iconClassName?: string;
-  /** CSS class for the close button. */
-  closeButtonClassName?: string;
-  /** CSS class for the close icon inside the close button. */
-  closeIconClassName?: string;
-  /** CSS class for the body section. */
-  bodyClassName?: string;
   /** Accessible label for the modal dialog. */
   "aria-label"?: string;
   /** ID of the element that labels the modal dialog. */

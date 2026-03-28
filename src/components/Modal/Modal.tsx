@@ -23,11 +23,13 @@ import { mergeRefs } from "../../utils/mergeRefs";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { getFocusableElements } from "../../utils/focusUtils";
+import {
+  DEFAULT_MODAL_CLASSES,
+  UNSTYLED_MODAL_CLASSES,
+} from "./utils/constants";
 
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
-
-const EMPTY_CLASSES: ModalClasses = {};
 
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
   (
@@ -45,7 +47,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       showOverlay = true,
       preventOutsideClick = false,
       closeOnEscape = true,
-      lockBackgroundScroll = true,
+      lockScroll = true,
       trapFocus = true,
       restoreFocus = true,
       initialFocus,
@@ -68,16 +70,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       unstyled = false,
       className = "",
       contentStyle,
-      rootClassName = "",
-      overlayClassName = "",
-      contentClassName = "",
-      headerClassName = "",
-      titleClassName = "",
-      descriptionClassName = "",
-      iconClassName = "",
-      closeButtonClassName = "",
-      closeIconClassName = "",
-      bodyClassName = "",
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       "aria-describedby": ariaDescribedBy,
@@ -98,28 +90,23 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const shouldAnimate = effectiveDuration > 0;
 
     // Merge classes: individual classNames take precedence over classes object
-    const mergedClasses = useMemo<Required<ModalClasses>>(() => {
-      const base = classesProp ?? EMPTY_CLASSES;
-      return {
-        root: rootClassName || base.root || "",
-        overlay: overlayClassName || base.overlay || "",
-        container: base.container || "",
-        content: contentClassName || base.content || "",
-        header: headerClassName || base.header || "",
-        title: titleClassName || base.title || "",
-        description: descriptionClassName || base.description || "",
-        icon: iconClassName || base.icon || "",
-        closeButton: closeButtonClassName || base.closeButton || "",
-        closeIcon: closeIconClassName || base.closeIcon || "",
-        body: bodyClassName || base.body || "",
-      };
-    }, [
-      classesProp,
-      rootClassName, overlayClassName, contentClassName,
-      headerClassName, titleClassName, descriptionClassName,
-      iconClassName, closeButtonClassName, closeIconClassName,
-      bodyClassName,
-    ]);
+    const baseClasses = unstyled
+      ? UNSTYLED_MODAL_CLASSES
+      : DEFAULT_MODAL_CLASSES;
+
+    const mergedClasses = useMemo<Required<ModalClasses>>(() => ({
+      root: classesProp?.root ?? baseClasses.root,
+      overlay: classesProp?.overlay ?? baseClasses.overlay,
+      container: classesProp?.container ?? baseClasses.container,
+      content: classesProp?.content ?? baseClasses.content,
+      header: classesProp?.header ?? baseClasses.header,
+      title: classesProp?.title ?? baseClasses.title,
+      description: classesProp?.description ?? baseClasses.description,
+      icon: classesProp?.icon ?? baseClasses.icon,
+      closeButton: classesProp?.closeButton ?? baseClasses.closeButton,
+      closeIcon: classesProp?.closeIcon ?? baseClasses.closeIcon,
+      body: classesProp?.body ?? baseClasses.body,
+    }), [classesProp, baseClasses]);
 
     const parentContext = useContext(ModalContext);
     const nestingLevel =
@@ -193,11 +180,11 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
     // Scroll lock
     useEffect(() => {
-      if (lockBackgroundScroll && open) {
+      if (lockScroll && open) {
         acquireScrollLock();
         return () => releaseScrollLock();
       }
-    }, [open, lockBackgroundScroll]);
+    }, [open, lockScroll]);
 
     // Focus management
     useEffect(() => {

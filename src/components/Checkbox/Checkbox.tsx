@@ -8,7 +8,7 @@ import {
   DEFAULT_CHECKBOX_CLASSES,
   UNSTYLED_CHECKBOX_CLASSES,
 } from "./utils/constants";
-import { DefaultCheckIcon, DefaultIndeterminateIcon } from "./utils/icons";
+import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
 import { mergeRefs } from "../../utils/mergeRefs";
@@ -121,10 +121,10 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // ─── Icon ───────────────────────────────────────────────────────────
     const renderedIcon = useMemo(() => {
       if (indeterminate) {
-        return indeterminateIcon || <DefaultIndeterminateIcon className={mergedClasses.icon || undefined} size={iconSize} />;
+        return indeterminateIcon || <IndeterminateIcon className={mergedClasses.icon || undefined} size={iconSize} />;
       }
       if (isChecked) {
-        return checkedIcon || <DefaultCheckIcon className={mergedClasses.icon || undefined} size={iconSize} />;
+        return checkedIcon || <CheckIconDefault className={mergedClasses.icon || undefined} size={iconSize} />;
       }
       return uncheckedIcon || null;
     }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, mergedClasses.icon, iconSize]);

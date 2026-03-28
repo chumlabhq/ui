@@ -57,7 +57,12 @@ const getClasses = (dark: boolean) => ({
 
 function useDrawerState(initial = false) {
   const [open, setOpen] = useState(initial);
-  return { open, onOpen: () => setOpen(true), onClose: () => setOpen(false) };
+  return {
+    open,
+    onOpen: () => setOpen(true),
+    onOpenChange: (o: boolean) => setOpen(o),
+    onClose: () => setOpen(false),
+  };
 }
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -170,7 +175,7 @@ const DrawerDemo = () => {
             Open Drawer
           </button>
         </DemoWrapper>
-        <Drawer open={basic.open} onClose={basic.onClose}>
+        <Drawer open={basic.open} onOpenChange={basic.onOpenChange}>
           {renderDrawerContent("Basic Drawer", basic.onClose)}
         </Drawer>
       </Section>
@@ -196,7 +201,7 @@ const DrawerDemo = () => {
           <Drawer
             key={dir}
             open={directions[dir].open}
-            onClose={directions[dir].onClose}
+            onOpenChange={directions[dir].onOpenChange}
             direction={dir}
             size={dir === "top" || dir === "bottom" ? "250px" : "320px"}
           >
@@ -219,7 +224,7 @@ const DrawerDemo = () => {
             Open 500px Drawer
           </button>
         </DemoWrapper>
-        <Drawer open={sized.open} onClose={sized.onClose} size="500px">
+        <Drawer open={sized.open} onOpenChange={sized.onOpenChange} size="500px">
           {renderDrawerContent("500px Wide Drawer", sized.onClose)}
         </Drawer>
       </Section>
@@ -240,14 +245,14 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={overlay.open}
-          onClose={overlay.onClose}
+          onOpenChange={overlay.onOpenChange}
           overlayOpacity={0.7}
         >
           {renderDrawerContent("Dark Overlay", overlay.onClose)}
         </Drawer>
         <Drawer
           open={blurOverlay.open}
-          onClose={blurOverlay.onClose}
+          onOpenChange={blurOverlay.onOpenChange}
           overlayBlur={8}
           overlayOpacity={0.3}
         >
@@ -271,7 +276,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={noOverlayClose.open}
-          onClose={noOverlayClose.onClose}
+          onOpenChange={noOverlayClose.onOpenChange}
           closeOnOverlayClick={false}
         >
           {renderDrawerContent(
@@ -281,7 +286,7 @@ const DrawerDemo = () => {
         </Drawer>
         <Drawer
           open={noEscClose.open}
-          onClose={noEscClose.onClose}
+          onOpenChange={noEscClose.onOpenChange}
           closeOnEscape={false}
         >
           {renderDrawerContent("Escape key won't close", noEscClose.onClose)}
@@ -301,7 +306,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={keepMounted.open}
-          onClose={keepMounted.onClose}
+          onOpenChange={keepMounted.onOpenChange}
           keepMounted
         >
           {renderDrawerContent(
@@ -325,7 +330,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={nonModal.open}
-          onClose={nonModal.onClose}
+          onOpenChange={nonModal.onOpenChange}
           modal={false}
           direction="right"
           lockScroll={false}
@@ -351,7 +356,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={customDuration.open}
-          onClose={customDuration.onClose}
+          onOpenChange={customDuration.onOpenChange}
           duration={600}
         >
           {renderDrawerContent("Slow Animation", customDuration.onClose)}
@@ -371,7 +376,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={swipeable.open}
-          onClose={swipeable.onClose}
+          onOpenChange={swipeable.onOpenChange}
           swipeable
           direction="bottom"
           size="300px"
@@ -400,7 +405,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={snapPoints.open}
-          onClose={snapPoints.onClose}
+          onOpenChange={snapPoints.onOpenChange}
           swipeable
           direction="bottom"
           size="85vh"
@@ -464,7 +469,7 @@ const DrawerDemo = () => {
             Open First
           </button>
         </DemoWrapper>
-        <Drawer open={stacked1.open} onClose={stacked1.onClose}>
+        <Drawer open={stacked1.open} onOpenChange={stacked1.onOpenChange}>
           <div className={c.panel}>
             <DrawerHeader className={c.header}>
               <h2 className={c.title}>First Drawer</h2>
@@ -482,7 +487,7 @@ const DrawerDemo = () => {
             </DrawerBody>
           </div>
         </Drawer>
-        <Drawer open={stacked2.open} onClose={stacked2.onClose} size="280px">
+        <Drawer open={stacked2.open} onOpenChange={stacked2.onOpenChange} size="280px">
           {renderDrawerContent(
             "Second Drawer",
             stacked2.onClose,
@@ -504,7 +509,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={initialFocus.open}
-          onClose={initialFocus.onClose}
+          onOpenChange={initialFocus.onOpenChange}
           initialFocus={initialFocusRef}
         >
           <div className={c.panel}>
@@ -549,7 +554,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={transitionCb.open}
-          onClose={transitionCb.onClose}
+          onOpenChange={transitionCb.onOpenChange}
           onTransitionEnd={(isOpen) =>
             setTransitionLog((prev) => [
               `onTransitionEnd: ${isOpen ? "opened" : "closed"}`,
@@ -574,7 +579,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={classesDemo.open}
-          onClose={classesDemo.onClose}
+          onOpenChange={classesDemo.onOpenChange}
           direction="right"
           size="360px"
           classes={{
@@ -623,7 +628,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={unstyledDemo.open}
-          onClose={unstyledDemo.onClose}
+          onOpenChange={unstyledDemo.onOpenChange}
           unstyled
           classes={{
             root: "fixed inset-0 z-50",
@@ -662,7 +667,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={reduceMotionDemo.open}
-          onClose={reduceMotionDemo.onClose}
+          onOpenChange={reduceMotionDemo.onOpenChange}
           reduceMotion={true}
         >
           {renderDrawerContent(
@@ -686,7 +691,7 @@ const DrawerDemo = () => {
         </DemoWrapper>
         <Drawer
           open={formDrawer.open}
-          onClose={formDrawer.onClose}
+          onOpenChange={formDrawer.onOpenChange}
           direction="right"
           size="400px"
         >
@@ -770,10 +775,17 @@ const DrawerDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="onOpenChange"
+              type="(open: boolean) => void"
+              defaultVal="required"
+              description="Called when the drawer's open state changes"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="onClose"
               type="() => void"
               defaultVal="required"
-              description="Called when the drawer should close"
+              description="@deprecated Use onOpenChange. Called when the drawer should close"
               isDarkMode={dark}
             />
             <PropRow
@@ -1119,7 +1131,7 @@ const DrawerDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Use the `open` prop with `onClose` for full control. For swipe and snap points, coordinate `activeSnapPointIndex` with `onSnapPointIndexChange` when you own that state."
+        summary="Use the `open` prop with `onOpenChange` for full control. For swipe and snap points, coordinate `activeSnapPointIndex` with `onSnapPointIndexChange` when you own that state."
       />
       <DocEdgeCases
         isDarkMode={dark}

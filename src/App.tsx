@@ -21,10 +21,11 @@ import OtpInputDemo from "./pages/demo/OtpInputDemo";
 import PaginationDemo from "./pages/demo/PaginationDemo";
 import ResizablePanelDemo from "./pages/demo/ResizablePanelDemo";
 import SearchableDropdownDemo from "./pages/demo/SearchableDropdownDemo";
+import SliderDemo from "./pages/demo/SliderDemo";
 import StepperDemo from "./pages/demo/StepperDemo";
 import SwitchDemo from "./pages/demo/SwitchDemo";
 import TabPanelDemo from "./pages/demo/TabPanelDemo";
-import TableDemo from "./pages/demo/TableDemo";
+// import TableDemo from "./pages/demo/TableDemo";
 import TextAreaDemo from "./pages/demo/TextAreaDemo";
 import TimePickerDemo from "./pages/demo/TimePickerDemo";
 import ToastDemo from "./pages/demo/ToastDemo";
@@ -55,10 +56,11 @@ const App = () => {
         <Route path="pagination" element={<PaginationDemo />} />
         <Route path="resizable-panel" element={<ResizablePanelDemo />} />
         <Route path="searchable-dropdown" element={<SearchableDropdownDemo />} />
+        <Route path="slider" element={<SliderDemo />} />
         <Route path="stepper" element={<StepperDemo />} />
         <Route path="switch" element={<SwitchDemo />} />
         <Route path="tab-panel" element={<TabPanelDemo />} />
-        <Route path="table" element={<TableDemo />} />
+        {/* <Route path="table" element={<TableDemo />} /> */}
         <Route path="text-area" element={<TextAreaDemo />} />
         <Route path="time-picker" element={<TimePickerDemo />} />
         <Route path="toast" element={<ToastDemo />} />

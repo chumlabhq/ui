@@ -7,7 +7,7 @@ import { mergeRefs } from "../../utils/mergeRefs";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
-import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon } from "./utils/icons";
+import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
@@ -311,6 +311,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       noResultsContent = "No options found",
       loadingText = "Loading...",
       shimmerCount = 5,
+      clearable = false,
       showChevron = true,
       fullWidth = false,
       loading: externalLoading = false,
@@ -324,7 +325,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       showSelectedChips = true,
       checkboxIcon,
       unstyled = false,
-      lockScroll = true,
+      lockScroll = false,
       classes: classesProp,
       className,
       style,
@@ -340,6 +341,8 @@ const MultiSelectSearchableDropdown = forwardRef<
       onBlur: onBlurProp,
       onFocus: onFocusProp,
       onKeyDown: onKeyDownProp,
+      ClearIcon: ClearIconProp,
+      renderTrigger,
       searchInputAriaLabel = "Search options",
     },
     ref
@@ -367,6 +370,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         chip: classesProp?.chip ?? baseClasses.chip,
         chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,
         noResults: classesProp?.noResults ?? baseClasses.noResults,
+        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
         loading: classesProp?.loading ?? baseClasses.loading,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
@@ -445,7 +449,7 @@ const MultiSelectSearchableDropdown = forwardRef<
     // Focus search input when dropdown opens
     useEffect(() => {
       if (isOpen && showSearch) {
-        const timer = setTimeout(() => searchInputRef.current?.focus(), 10);
+        const timer = setTimeout(() => searchInputRef.current?.focus({ preventScroll: true }), 10);
         return () => clearTimeout(timer);
       }
     }, [isOpen, showSearch]);
@@ -454,7 +458,7 @@ const MultiSelectSearchableDropdown = forwardRef<
     useEffect(() => {
       if (!isOpen && prevIsOpenRef.current) {
         if (shouldRestoreFocusRef.current) {
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
           shouldRestoreFocusRef.current = false;
         }
       }
@@ -540,10 +544,25 @@ const MultiSelectSearchableDropdown = forwardRef<
       [setTriggerNode],
     );
 
+    const handleClear = useCallback(() => {
+      if (onValueChange) {
+        onValueChange([], []);
+      }
+    }, [onValueChange]);
+
+    const ClearIconComponent = ClearIconProp ?? ClearIconDefault;
+
+    const renderTriggerRefCallback = useCallback(
+      (node: HTMLElement | null) => {
+        setTriggerNode(node);
+      },
+      [setTriggerNode],
+    );
+
     const handleRemoveOptionAndFocus = useCallback(
       (optionValue: string) => {
         handleRemoveOption(optionValue);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
       },
       [handleRemoveOption],
     );
@@ -603,61 +622,104 @@ const MultiSelectSearchableDropdown = forwardRef<
         <div
           className={cn("relative", mergedClasses.wrapper) || undefined}
         >
-          <button
-            ref={mergedTriggerRef}
-            type="button"
-            id={triggerId}
-            role="combobox"
-            aria-expanded={isOpen}
-            aria-haspopup="listbox"
-            aria-controls={listboxId}
-            aria-activedescendant={activeDescendantId}
-            aria-labelledby={label ? labelId : undefined}
-            aria-invalid={error || undefined}
-            aria-describedby={error && errorMessage ? errorId : undefined}
-            aria-required={required || undefined}
-            disabled={disabled}
-            onClick={handleToggle}
-            onFocus={onFocusProp}
-            onBlur={onBlurProp}
-            onKeyDown={handleKeyDownWithPassthrough}
-            className={mergedClasses.trigger || undefined}
-            data-disabled={disabled || undefined}
-            data-error={error || undefined}
-            data-open={isOpen || undefined}
-          >
-            <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
-              {showSelectedChips && selectedOptions.length > 0 ? (
-                <>
-                  {displayedChips.map((option) => (
-                    <SelectedChip
-                      key={option.value}
-                      option={option}
-                      classes={mergedClasses}
-                      onRemove={handleRemoveOptionAndFocus}
-                    />
-                  ))}
-                  {remainingCount > 0 && (
-                    <span className={mergedClasses.moreCount || undefined}>
-                      +{remainingCount}
-                    </span>
-                  )}
-                </>
-              ) : selectedOptions.length > 0 ? (
-                <span className="truncate">
-                  {selectedOptions.length} selected
-                </span>
-              ) : (
-                <span className="truncate">{placeholder}</span>
+          {renderTrigger ? (
+            renderTrigger({
+              ref: renderTriggerRefCallback,
+              id: triggerId,
+              role: "combobox",
+              "aria-expanded": isOpen,
+              "aria-haspopup": "listbox",
+              "aria-controls": listboxId,
+              "aria-activedescendant": activeDescendantId,
+              "aria-invalid": (error || undefined) as boolean | undefined,
+              "aria-describedby": error && errorMessage ? errorId : undefined,
+              "aria-required": (required || undefined) as boolean | undefined,
+              "aria-labelledby": label ? labelId : undefined,
+              disabled,
+              onClick: handleToggle,
+              onKeyDown: handleKeyDownWithPassthrough,
+              onFocus: onFocusProp,
+              onBlur: onBlurProp,
+              "data-disabled": (disabled || undefined) as true | undefined,
+              "data-error": (error || undefined) as true | undefined,
+              "data-open": (isOpen || undefined) as true | undefined,
+              isOpen,
+              selectedOptions,
+              placeholder,
+            })
+          ) : (
+            <button
+              ref={mergedTriggerRef}
+              type="button"
+              id={triggerId}
+              role="combobox"
+              aria-expanded={isOpen}
+              aria-haspopup="listbox"
+              aria-controls={listboxId}
+              aria-activedescendant={activeDescendantId}
+              aria-labelledby={label ? labelId : undefined}
+              aria-invalid={error || undefined}
+              aria-describedby={error && errorMessage ? errorId : undefined}
+              aria-required={required || undefined}
+              disabled={disabled}
+              onClick={handleToggle}
+              onFocus={onFocusProp}
+              onBlur={onBlurProp}
+              onKeyDown={handleKeyDownWithPassthrough}
+              className={mergedClasses.trigger || undefined}
+              data-disabled={disabled || undefined}
+              data-error={error || undefined}
+              data-open={isOpen || undefined}
+            >
+              <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
+                {showSelectedChips && selectedOptions.length > 0 ? (
+                  <>
+                    {displayedChips.map((option) => (
+                      <SelectedChip
+                        key={option.value}
+                        option={option}
+                        classes={mergedClasses}
+                        onRemove={handleRemoveOptionAndFocus}
+                      />
+                    ))}
+                    {remainingCount > 0 && (
+                      <span className={mergedClasses.moreCount || undefined}>
+                        +{remainingCount}
+                      </span>
+                    )}
+                  </>
+                ) : selectedOptions.length > 0 ? (
+                  <span className="truncate">
+                    {selectedOptions.length} selected
+                  </span>
+                ) : (
+                  <span className="truncate">{placeholder}</span>
+                )}
+              </span>
+              {showChevron && (
+                <ChevronDownIcon
+                  className={mergedClasses.chevron || undefined}
+                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+                />
               )}
-            </span>
-            {showChevron && (
-              <ChevronDownIcon
-                className={mergedClasses.chevron || undefined}
-                style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-              />
-            )}
-          </button>
+            </button>
+          )}
+
+          {clearable && selectedValues.length > 0 && (
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Clear all selections"
+              className={mergedClasses.clearIcon || undefined}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClear();
+                triggerNode?.focus({ preventScroll: true });
+              }}
+            >
+              <ClearIconComponent className="w-4 h-4" />
+            </button>
+          )}
 
           <DropdownContent
             triggerElement={triggerNode}

@@ -17,9 +17,9 @@ import type {
 } from "./utils/types";
 import { useDropdown } from "./utils/useDropdown";
 import {
-  DefaultChevronIcon,
-  DefaultCheckIcon,
-  DefaultClearIcon,
+  ChevronDownIcon,
+  CheckIcon as CheckIconDefault,
+  ClearIcon as ClearIconDefault,
 } from "./utils/icons";
 import {
   computeDropdownCoords,
@@ -333,7 +333,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       style,
       keepMounted = false,
       portalContainer,
-      lockScroll = true,
+      lockScroll = false,
       dropdownPosition = "bottom",
       dropdownZIndex = 50,
       dropdownGap = 4,
@@ -343,9 +343,9 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       onFocus,
       onKeyDown: onKeyDownProp,
       renderTrigger,
-      ChevronIcon = DefaultChevronIcon,
-      CheckIcon: CheckIconProp = DefaultCheckIcon,
-      ClearIcon: ClearIconProp = DefaultClearIcon,
+      ChevronIcon = ChevronDownIcon,
+      CheckIcon: CheckIconProp = CheckIconDefault,
+      ClearIcon: ClearIconProp = ClearIconDefault,
     } = props;
 
     const baseClasses = unstyled
@@ -428,7 +428,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
 
     useEffect(() => {
       if (!isOpen && shouldRestoreFocusRef.current) {
-        triggerNode?.focus();
+        triggerNode?.focus({ preventScroll: true });
         shouldRestoreFocusRef.current = false;
       }
     }, [isOpen, shouldRestoreFocusRef, triggerNode]);
@@ -605,7 +605,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
-                triggerNode?.focus();
+                triggerNode?.focus({ preventScroll: true });
               }}
             >
               <ClearIconProp />
