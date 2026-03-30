@@ -20,6 +20,7 @@ import type {
 import { CloseIcon } from "./icons";
 import { ModalContext } from "./ModalContext";
 import { mergeRefs } from "../../utils/mergeRefs";
+import { useControllableState } from "../../utils/useControllableState";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { getFocusableElements } from "../../utils/focusUtils";
@@ -34,8 +35,9 @@ const Z_INDEX_INCREMENT = 10;
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
   (
     {
-      open,
+      open: openProp,
       onOpenChange,
+      defaultOpen = false,
       children,
       title,
       description,
@@ -76,6 +78,12 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     },
     ref,
   ) => {
+    const [isOpen, setIsOpen] = useControllableState({
+      value: openProp,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
+
     const generatedId = useId();
     const modalId = `modal-${generatedId}`;
     const titleId = `${modalId}-title`;
@@ -83,7 +91,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const contentRef = useRef<HTMLDivElement>(null);
     const mergedContentRef = useMemo(() => mergeRefs(contentRef, ref), [ref]);
     const previousActiveElement = useRef<HTMLElement | null>(null);
-    const [mounted, setMounted] = useState(open || keepMounted);
+    const [mounted, setMounted] = useState(isOpen || keepMounted);
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const effectiveDuration = prefersReducedMotion || disableAnimation ? 0 : animationDuration;
@@ -116,29 +124,29 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const zIndex = customZIndex ?? BASE_Z_INDEX + nestingLevel * Z_INDEX_INCREMENT;
 
     const handleClose = useCallback(() => {
-      onOpenChange(false);
-    }, [onOpenChange]);
+      setIsOpen(false);
+    }, [setIsOpen]);
 
     // Mount/unmount management
-    const [prevOpen, setPrevOpen] = useState(open);
-    if (prevOpen !== open) {
-      setPrevOpen(open);
-      if (open && !mounted) {
+    const [prevOpen, setPrevOpen] = useState(isOpen);
+    if (prevOpen !== isOpen) {
+      setPrevOpen(isOpen);
+      if (isOpen && !mounted) {
         setMounted(true);
       }
     }
 
     useEffect(() => {
-      if (!open && !keepMounted && mounted) {
+      if (!isOpen && !keepMounted && mounted) {
         const timer = setTimeout(() => setMounted(false), effectiveDuration);
         return () => clearTimeout(timer);
       }
-    }, [open, keepMounted, mounted, effectiveDuration]);
+    }, [isOpen, keepMounted, mounted, effectiveDuration]);
 
     // Keyboard: Escape + Focus trap
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (!open) return;
+        if (!isOpen) return;
 
         if (event.key === "Escape" && closeOnEscape) {
           event.stopPropagation();
@@ -168,27 +176,27 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           }
         }
       },
-      [open, closeOnEscape, trapFocus, handleClose],
+      [isOpen, closeOnEscape, trapFocus, handleClose],
     );
 
     useEffect(() => {
-      if (open) {
+      if (isOpen) {
         document.addEventListener("keydown", handleKeyDown, true);
         return () => document.removeEventListener("keydown", handleKeyDown, true);
       }
-    }, [open, handleKeyDown]);
+    }, [isOpen, handleKeyDown]);
 
     // Scroll lock
     useEffect(() => {
-      if (lockScroll && open) {
+      if (lockScroll && isOpen) {
         acquireScrollLock();
         return () => releaseScrollLock();
       }
-    }, [open, lockScroll]);
+    }, [isOpen, lockScroll]);
 
     // Focus management
     useEffect(() => {
-      if (open) {
+      if (isOpen) {
         previousActiveElement.current = document.activeElement as HTMLElement;
         const timer = setTimeout(() => {
           if (initialFocus?.current) {
@@ -204,7 +212,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           }
         };
       }
-    }, [open, initialFocus, restoreFocus]);
+    }, [isOpen, initialFocus, restoreFocus]);
 
     const handleOverlayClick = useCallback(
       (event: React.MouseEvent<HTMLDivElement>) => {
@@ -277,7 +285,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           className={unstyled ? mergedClasses.root : [
             "fixed inset-0",
             shouldAnimate && "transition-opacity",
-            open ? "opacity-100" : "opacity-0",
+            isOpen ? "opacity-100" : "opacity-0",
             mergedClasses.root,
           ]
             .filter(Boolean)
@@ -285,11 +293,11 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           style={{
             zIndex,
             transitionDuration: `${effectiveDuration}ms`,
-            pointerEvents: open ? undefined : "none",
-            visibility: open ? undefined : "hidden",
+            pointerEvents: isOpen ? undefined : "none",
+            visibility: isOpen ? undefined : "hidden",
           }}
           data-modal-root
-          data-open={open || undefined}
+          data-open={isOpen || undefined}
           data-nesting-level={nestingLevel}
           data-reduce-motion={prefersReducedMotion || undefined}
         >
@@ -304,7 +312,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 .join(" ")}
               style={{
                 backgroundColor: overlayColor,
-                opacity: open ? overlayOpacity : 0,
+                opacity: isOpen ? overlayOpacity : 0,
                 transitionDuration: `${effectiveDuration}ms`,
               }}
               onClick={handleOverlayClick}
@@ -336,7 +344,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 "relative outline-none bg-white",
                 shouldAnimate && "transition-all transform",
                 fullScreen && "w-full h-full",
-                shouldAnimate && (open ? "opacity-100 scale-100" : "opacity-0 scale-95"),
+                shouldAnimate && (isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"),
                 mergedClasses.content,
                 className,
               ]

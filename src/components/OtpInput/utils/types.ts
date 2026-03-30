@@ -16,6 +16,8 @@ export interface OtpInputClasses {
   label?: string;
   error?: string;
   separator?: string;
+  description?: string;
+  success?: string;
 }
 
 export interface OtpInputRenderProps {
@@ -40,8 +42,12 @@ export interface OtpInputProps
   id?: string;
   name?: string;
   required?: boolean;
+  description?: ReactNode;
   error?: boolean;
   errorMessage?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
+  loading?: boolean;
   disabled?: boolean;
   groups?: number[];
   separator?: ReactNode;

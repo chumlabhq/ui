@@ -120,6 +120,10 @@ const MultiSelectSearchableDropdownDemo = () => {
   const [disabledValue, setDisabledValue] = useState<string[]>(["apple", "banana"]);
   // Error
   const [errorValue, setErrorValue] = useState<string[]>([]);
+  // Description
+  const [descriptionValue, setDescriptionValue] = useState<string[]>([]);
+  // Success
+  const [successValue, setSuccessValue] = useState<string[]>([]);
   // Without search
   const [noSearchValue, setNoSearchValue] = useState<string[]>([]);
   // Controlled open
@@ -441,6 +445,51 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500` }}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── With Description ────────────────────────────────────────────── */}
+      <Section
+        title="With Description"
+        description="Use the description prop to show helper text below the label."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              label="Favorite Fruits"
+              description="Select one or more fruits from the list."
+              options={staticOptions}
+              value={descriptionValue}
+              onValueChange={(values) => setDescriptionValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Success State ─────────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Show success feedback with success and successMessage props."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectSearchableDropdown
+              label="Required Fruits"
+              options={staticOptions}
+              value={successValue}
+              onValueChange={(values) => setSuccessValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              success={successValue.length > 0}
+              successMessage="Selection saved successfully"
+              classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger}${successValue.length > 0 ? " border-green-500 focus:ring-green-500" : ""}` }}
             />
           </div>
         </DemoWrapper>
@@ -1316,7 +1365,12 @@ const MultiSelectSearchableDropdownDemo = () => {
             <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
             <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
+            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
             <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
+            <PropRow name="data-placeholder" type="trigger" description="Present when no option is selected" isDarkMode={dark} />
+            <PropRow name="data-selected" type="option" description="Present on selected options" isDarkMode={dark} />
+            <PropRow name="data-focused" type="option" description="Present on the keyboard-focused option" isDarkMode={dark} />
+            <PropRow name="data-value" type="option" description="The option's value string" isDarkMode={dark} />
             <PropRow name="data-state" type="content (portal)" description='"open" or "closed"' isDarkMode={dark} />
             <PropRow name="data-position" type="content (portal)" description='"top" or "bottom" (actual position)' isDarkMode={dark} />
           </PropsTable>

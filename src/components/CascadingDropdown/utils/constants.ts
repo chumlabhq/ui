@@ -15,7 +15,9 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   submenuItemSelected: "",
   submenuItemFocused: "",
   label: "",
-  error: "",
+  error: "text-sm text-red-500 dark:text-red-400 mt-1",
+  description: "text-xs text-gray-500 mb-1",
+  success: "text-sm text-green-600 dark:text-green-400 mt-1",
   chevron: "w-4 h-4 shrink-0 transition-transform duration-200",
   submenuChevron: "w-4 h-4 shrink-0",
   checkIcon: "w-4 h-4 shrink-0",
@@ -26,6 +28,11 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   loading: "",
   shimmer: "",
   shimmerItem: "",
+  content: "",
+  option: "",
+  optionSelected: "",
+  optionFocused: "",
+  optionDisabled: "",
 };
 
 export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
@@ -44,6 +51,8 @@ export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClass
   submenuItemFocused: "",
   label: "",
   error: "",
+  description: "",
+  success: "",
   chevron: "",
   submenuChevron: "",
   checkIcon: "",
@@ -54,4 +63,9 @@ export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClass
   loading: "",
   shimmer: "",
   shimmerItem: "",
+  content: "",
+  option: "",
+  optionSelected: "",
+  optionFocused: "",
+  optionDisabled: "",
 };

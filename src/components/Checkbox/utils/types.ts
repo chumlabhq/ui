@@ -28,6 +28,8 @@ export interface CheckboxClasses {
   icon?: string;
   /** Error message element. */
   error?: string;
+  /** Success message element. */
+  success?: string;
 }
 
 export interface CheckboxProps
@@ -44,6 +46,8 @@ export interface CheckboxProps
   indeterminate?: boolean;
   /** Fires when the checked state changes. */
   onCheckedChange?: (checked: boolean) => void;
+  /** Unified event name alias for onCheckedChange. */
+  onValueChange?: (checked: boolean) => void;
   /** Fires when the checkbox receives focus. */
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   /** Fires when the checkbox loses focus. */
@@ -52,6 +56,12 @@ export interface CheckboxProps
   error?: boolean;
   /** Error message displayed below the checkbox. */
   errorMessage?: ReactNode;
+  /** Displays the checkbox in a success state. */
+  success?: boolean;
+  /** Success message displayed below the checkbox. */
+  successMessage?: ReactNode;
+  /** Displays the checkbox in a loading state. */
+  loading?: boolean;
   /** Size of the checkbox indicator. Default: `"md"`. */
   size?: CheckboxSize;
   /** Shape of the checkbox indicator. Default: `"rounded"`. */

@@ -2,6 +2,7 @@ import { useId, useMemo, forwardRef, useCallback } from "react";
 import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/types";
 import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import { cn } from "../../utils/cn";
 
 const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
@@ -13,6 +14,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       checked: controlledChecked,
       defaultChecked = false,
       onCheckedChange,
+      onValueChange,
       name,
       value = "on",
       required = false,
@@ -20,6 +22,11 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       disabled = false,
       error = false,
       errorMessage,
+      success = false,
+      successMessage,
+      loading = false,
+      loader,
+      loaderSize = 16,
       classes: classesProp,
       unstyled = false,
       checkedIcon,
@@ -28,12 +35,15 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       transitionTimingFunction,
       renderLabel,
       renderDescription,
+      style,
+      reduceMotion,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
       ...buttonProps
     },
     ref,
   ) => {
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
     const generatedId = useId();
     const switchId = id || generatedId;
     const errorId = `${switchId}-error`;
@@ -43,7 +53,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
-      onChange: onCheckedChange,
+      onChange: onValueChange ?? onCheckedChange,
     });
 
     const handleToggle = useCallback(() => {
@@ -70,13 +80,15 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         checkedThumb: classesProp?.checkedThumb ?? baseClasses.checkedThumb,
         uncheckedThumb: classesProp?.uncheckedThumb ?? baseClasses.uncheckedThumb,
         error: classesProp?.error ?? baseClasses.error,
+        success: classesProp?.success ?? baseClasses.success,
+        loading: classesProp?.loading ?? baseClasses.loading,
       }),
       [classesProp, baseClasses],
     );
 
     const renderProps: SwitchRenderProps = useMemo(
-      () => ({ checked: isChecked, disabled, error, switchId, descriptionId }),
-      [isChecked, disabled, error, switchId, descriptionId],
+      () => ({ checked: isChecked, disabled, error, loading, success, switchId, descriptionId }),
+      [isChecked, disabled, error, loading, success, switchId, descriptionId],
     );
 
     const transitionStyle = useMemo(() => {
@@ -95,9 +107,13 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     return (
       <div
         className={cn(mergedClasses.root, className) || undefined}
+        style={style}
         data-disabled={disabled || undefined}
         data-checked={isChecked || undefined}
         data-error={error || undefined}
+        data-loading={loading || undefined}
+        data-success={success || undefined}
+        data-reduce-motion={prefersReducedMotion || undefined}
       >
         <div className={mergedClasses.innerRow || undefined}>
           {hasLabelContent && (
@@ -152,6 +168,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
               mergedClasses.tracker,
               disabled && mergedClasses.disabledTracker,
               isChecked ? mergedClasses.checkedTracker : mergedClasses.uncheckedTracker,
+              loading && "opacity-50 pointer-events-none",
             ) || undefined}
             style={transitionStyle}
             data-disabled={disabled || undefined}
@@ -169,6 +186,35 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             </span>
           </button>
 
+          {loading && (
+            loader || (
+              <svg
+                className={cn("animate-spin", mergedClasses.loading) || undefined}
+                width={loaderSize}
+                height={loaderSize}
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  opacity="0.25"
+                />
+                <path
+                  d="M4 12a8 8 0 018-8"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  opacity="0.75"
+                />
+              </svg>
+            )
+          )}
+
           {name && (
             <input
               type="hidden"
@@ -181,6 +227,10 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
         {error && errorMessage && (
           <div id={errorId} role="alert" className={mergedClasses.error || undefined}>{errorMessage}</div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

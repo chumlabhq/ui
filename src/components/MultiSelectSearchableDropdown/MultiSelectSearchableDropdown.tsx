@@ -305,6 +305,9 @@ const MultiSelectSearchableDropdown = forwardRef<
       error = false,
       errorMessage,
       label,
+      description,
+      success = false,
+      successMessage,
       required = false,
       showSearch = true,
       searchPlaceholder = "Search...",
@@ -376,6 +379,8 @@ const MultiSelectSearchableDropdown = forwardRef<
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
+        description: classesProp?.description ?? baseClasses.description,
+        success: classesProp?.success ?? baseClasses.success,
         searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
         searchInputElement: classesProp?.searchInputElement ?? baseClasses.searchInputElement,
         searchIcon: classesProp?.searchIcon ?? baseClasses.searchIcon,
@@ -607,6 +612,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-full-width={fullWidth || undefined}
+        data-success={success || undefined}
       >
         {label && (
           <label
@@ -617,6 +623,10 @@ const MultiSelectSearchableDropdown = forwardRef<
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
+        )}
+
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div
@@ -803,6 +813,10 @@ const MultiSelectSearchableDropdown = forwardRef<
           >
             {errorMessage}
           </div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

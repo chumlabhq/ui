@@ -26,10 +26,14 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled = false,
       required = false,
       onCheckedChange,
+      onValueChange,
       onFocus,
       onBlur,
       error = false,
       errorMessage,
+      success = false,
+      successMessage,
+      loading = false,
       size,
       shape,
       checkedIcon,
@@ -56,7 +60,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
-      onChange: onCheckedChange,
+      onChange: onValueChange ?? onCheckedChange,
     });
 
     useEffect(() => {
@@ -79,6 +83,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         indeterminate: classesProp?.indeterminate ?? baseClasses.indeterminate,
         icon: classesProp?.icon ?? baseClasses.icon,
         error: classesProp?.error ?? baseClasses.error,
+        success: classesProp?.success ?? baseClasses.success,
       }),
       [classesProp, baseClasses],
     );
@@ -139,7 +144,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div
-        className={cn(mergedClasses.root, className) || undefined}
+        className={cn(mergedClasses.root, className, loading && "opacity-50 pointer-events-none") || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-checked={isChecked || undefined}
@@ -147,6 +152,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         data-size={typeof size === "string" ? size : undefined}
         data-shape={shape || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
+        data-loading={loading || undefined}
+        data-success={success || undefined}
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span
@@ -207,6 +214,10 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           <div id={errorId} role="alert" className={mergedClasses.error || undefined}>
             {errorMessage}
           </div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

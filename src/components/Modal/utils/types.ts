@@ -27,10 +27,12 @@ export interface ModalClasses {
 }
 
 export interface ModalProps {
-  /** Whether the modal is visible. */
-  open: boolean;
+  /** Whether the modal is visible (controlled). */
+  open?: boolean;
   /** Callback when the modal's open state changes (close button, overlay click, Escape key). */
-  onOpenChange: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
+  /** Whether the modal is initially open (uncontrolled). Default: `false`. */
+  defaultOpen?: boolean;
   /** Modal body content. Use `ModalHeader`, `ModalBody`, `ModalFooter` for structure. */
   children: ReactNode;
   /** Title rendered in the modal header. */

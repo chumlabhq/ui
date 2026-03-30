@@ -847,6 +847,78 @@ const DatePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── With Description ──────────────────────────────────────────── */}
+      <Section title="With Description" description="Add helper text below the label." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <DatePicker
+            label="Start Date"
+            description="Select the project start date"
+            placeholder="Pick a date"
+          />
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<DatePicker
+  label="Start Date"
+  description="Select the project start date"
+  placeholder="Pick a date"
+/>`} />
+      </Section>
+
+      {/* ─── Success State ────────────────────────────────────────────────── */}
+      <Section title="Success State" description="Display a success message when a valid date is selected." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const [date, setDate] = useState<Date | null>(new Date());
+            return (
+              <DatePicker
+                label="Event Date"
+                value={date}
+                onValueChange={(d) => setDate(d)}
+                success={!!date}
+                successMessage="Date is available"
+              />
+            );
+          })()}
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<DatePicker
+  label="Event Date"
+  value={date}
+  onValueChange={(d) => setDate(d)}
+  success={!!date}
+  successMessage="Date is available"
+/>`} />
+      </Section>
+
+      {/* ─── Loading State ────────────────────────────────────────────────── */}
+      <Section title="Loading State" description="Show a loading state while checking date availability." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <DatePicker label="Checking availability..." loading placeholder="Pick a date" />
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<DatePicker label="Checking availability..." loading placeholder="Pick a date" />`} />
+      </Section>
+
+      {/* ─── Clearable ────────────────────────────────────────────────────── */}
+      <Section title="Clearable (Unified API)" description="Use the clearable prop as a unified alternative to showClearButton." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const [date, setDate] = useState<Date | null>(new Date());
+            return (
+              <DatePicker
+                label="Clearable Date"
+                value={date}
+                onValueChange={(d) => setDate(d)}
+                clearable
+              />
+            );
+          })()}
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<DatePicker
+  label="Clearable Date"
+  value={date}
+  onValueChange={(d) => setDate(d)}
+  clearable
+/>`} />
+      </Section>
+
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
       <Section
         title="Disabled"
@@ -1933,15 +2005,9 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" isDarkMode={dark}>
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow
-              name="data-open"
-              type="root"
-              description="Present when calendar is open"
-              isDarkMode={dark}
-            />
             <PropRow
               name="data-disabled"
               type="root, trigger"
@@ -1952,6 +2018,24 @@ const DatePickerDemo = () => {
               name="data-error"
               type="root"
               description="Present when error=true"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-open"
+              type="root"
+              description="Present when calendar is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-success"
+              type="root"
+              description="Present when success=true (without error)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-loading"
+              type="root"
+              description="Present when loading=true"
               isDarkMode={dark}
             />
             <PropRow
@@ -2007,24 +2091,25 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section title="Accessibility" isDarkMode={dark}>
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div
             className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
             {[
-              "Calendar opens via click, Enter, Space, or ArrowDown on trigger",
-              "Full arrow key navigation within calendar (←→↑↓ move days)",
-              "Enter/Space selects the focused date",
-              "Escape closes the calendar and restores focus to trigger",
-              "Tab closes the calendar",
-              "Month/year dropdowns support keyboard navigation",
+              'Calendar grid uses role="grid" with accessible row and cell structure',
+              "aria-label on each day cell announces the full date for screen readers",
+              "Month and year navigation buttons are labeled for assistive technology",
+              "Date range selection is announced with start and end dates",
+              "Disabled dates are marked with aria-disabled and excluded from tab order",
+              "Full keyboard navigation within the calendar grid",
+              "aria-invalid set on the trigger when error=true",
+              "aria-describedby links error and success messages to the trigger",
               "label prop auto-associated with trigger via htmlFor",
-              "aria-expanded on trigger reflects calendar state",
-              "Day cells announce selected/today/disabled states",
+              "aria-expanded on trigger reflects calendar open state",
+              "Day cells announce selected, today, and disabled states",
               "Markers accessible via tooltip on hover/focus",
               "prefers-reduced-motion respected via reduceMotion prop",
-              "Provide a visible label or `aria-label` / `aria-labelledby` on the trigger",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -2047,12 +2132,13 @@ const DatePickerDemo = () => {
             className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
             {[
-              ["Enter / Space", "Open calendar / select focused date"],
-              ["Escape", "Close calendar, restore focus"],
-              ["Arrow Down", "Open calendar / move to next week"],
-              ["Arrow Up", "Move to previous week"],
+              ["Tab", "Move focus to/from the trigger"],
               ["Arrow Left / Right", "Move to previous/next day"],
-              ["Tab", "Close calendar"],
+              ["Arrow Up / Down", "Move to previous/next week"],
+              ["Enter / Space", "Open calendar / select focused date"],
+              ["Escape", "Close calendar, restore focus to trigger"],
+              ["Page Up", "Go to previous month"],
+              ["Page Down", "Go to next month"],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>

@@ -1,9 +1,11 @@
-import type { ReactNode, ButtonHTMLAttributes } from "react";
+import type { ReactNode, ButtonHTMLAttributes, CSSProperties } from "react";
 
 export interface SwitchRenderProps {
   checked: boolean;
   disabled: boolean;
   error: boolean;
+  loading: boolean;
+  success: boolean;
   switchId: string;
   descriptionId?: string;
 }
@@ -23,6 +25,8 @@ export interface SwitchClasses {
   checkedThumb?: string;
   uncheckedThumb?: string;
   error?: string;
+  success?: string;
+  loading?: string;
 }
 
 export interface SwitchProps
@@ -36,6 +40,7 @@ export interface SwitchProps
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  onValueChange?: (checked: boolean) => void;
   name?: string;
   value?: string;
   required?: boolean;
@@ -43,6 +48,11 @@ export interface SwitchProps
   disabled?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
+  loading?: boolean;
+  loader?: ReactNode;
+  loaderSize?: number;
   checkedIcon?: ReactNode;
   uncheckedIcon?: ReactNode;
   transitionDuration?: number;
@@ -51,4 +61,8 @@ export interface SwitchProps
   renderDescription?: (props: SwitchRenderProps) => ReactNode;
   classes?: SwitchClasses;
   unstyled?: boolean;
+  /** Inline styles applied to the root element. */
+  style?: CSSProperties;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
 }

@@ -11,6 +11,8 @@ export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
   trackColor?: string;
   /** Spinner color (applied via currentColor / className) */
   color?: string;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
 }
 
 export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,6 +26,8 @@ export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
   trackColor?: string;
   /** Border radius in pixels. Default: 9999 (pill) */
   borderRadius?: number;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
 }
 
 export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -35,6 +39,8 @@ export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
   count?: number;
   /** Full animation cycle duration in seconds. Default: 1.4 */
   speed?: number;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
 }
 
 export interface PulseLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -44,4 +50,6 @@ export interface PulseLoaderProps extends HTMLAttributes<HTMLDivElement> {
   speed?: number;
   /** Number of ripple rings. Default: 2 */
   rings?: number;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
 }

@@ -1430,6 +1430,48 @@ const ToastDemoContent = ({
           "Do not put essential-only content exclusively in a dismissed toast.",
         ]}
       />
+
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-toast-id" type="toast" description="Unique identifier for the toast instance" isDarkMode={dark} />
+            <PropRow name="data-toast-type" type="toast" description="'success' | 'error' | 'warning' | 'info' | 'default'" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+        <div className={c.card}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              "role=\"alert\" or role=\"status\" based on toast type",
+              "aria-live regions for dynamic announcements",
+              "Close button includes aria-label for screen readers",
+              "Auto-dismiss with pauseOnHover to avoid dismissing while reading",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["Escape", "Dismiss all toasts (via provider)"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
   );
 };

@@ -551,6 +551,61 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── With Description ────────────────────────────────────────────── */}
+      <Section title="With Description" description="Add helper text below the label." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <TimePicker
+            label="Meeting Time"
+            description="Select a time during business hours"
+            placeholder="Pick a time"
+            minTime="09:00"
+            maxTime="17:00"
+            classes={c.timepicker}
+          />
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<TimePicker
+  label="Meeting Time"
+  description="Select a time during business hours"
+  placeholder="Pick a time"
+  minTime="09:00"
+  maxTime="17:00"
+/>`} />
+      </Section>
+
+      {/* ─── Success State ─────────────────────────────────────────────────── */}
+      <Section title="Success State" description="Display a success message when a valid time is selected." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const [time, setTime] = useState<string | null>("14:00");
+            return (
+              <TimePicker
+                label="Appointment Time"
+                value={time}
+                onValueChange={(t) => setTime(t)}
+                success={!!time}
+                successMessage="Time slot is available"
+                classes={c.timepicker}
+              />
+            );
+          })()}
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<TimePicker
+  label="Appointment Time"
+  value={time}
+  onValueChange={(t) => setTime(t)}
+  success={!!time}
+  successMessage="Time slot is available"
+/>`} />
+      </Section>
+
+      {/* ─── Loading State ─────────────────────────────────────────────────── */}
+      <Section title="Loading State" description="Show a loading state while checking availability." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <TimePicker label="Checking slots..." loading placeholder="Pick a time" classes={c.timepicker} />
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<TimePicker label="Checking slots..." loading placeholder="Pick a time" />`} />
+      </Section>
+
       {/* ─── 7. Disabled ─────────────────────────────────────────────────── */}
       <Section
         title="Disabled"
@@ -1484,21 +1539,39 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 36. Accessibility ───────────────────────────────────────────── */}
-      <Section title="Accessibility" isDarkMode={dark}>
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-disabled" type="root, trigger" description="Present when disabled" isDarkMode={dark} />
+            <PropRow name="data-error" type="root" description="Present when error=true" isDarkMode={dark} />
+            <PropRow name="data-open" type="root" description="Present when dropdown/clock is open" isDarkMode={dark} />
+            <PropRow name="data-loading" type="root" description="Present when loading=true" isDarkMode={dark} />
+            <PropRow name="data-success" type="root" description="Present when success=true (without error)" isDarkMode={dark} />
+            <PropRow name="data-position" type="dropdown" description='"top" or "bottom" — current dropdown position' isDarkMode={dark} />
+            <PropRow name="data-selected" type="option" description="Present on the currently selected time option" isDarkMode={dark} />
+            <PropRow name="data-focused" type="option" description="Present on the keyboard-focused time option" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div
             className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
             {[
-              "The text input uses role=\"combobox\" with aria-expanded, aria-haspopup (listbox for dropdown, dialog for clock), and aria-controls pointing at the portal target when open.",
-              "Dropdown mode: aria-activedescendant on the input references the focused option id for screen readers.",
-              "Clock mode: the clock face uses role=\"slider\" with aria-valuemin, aria-valuemax, aria-valuenow. Focus is trapped within the clock panel.",
-              "Label is associated with the input via htmlFor / id. When no label is provided, use aria-label for accessibility.",
-              "When name is set, a hidden input carries the committed value for native form submission.",
-              "Escape closes the popover; Tab commits typed input and closes.",
-              "reduceMotion disables chevron rotation and reduces motion on the clock face.",
-              "HTML attributes (data-testid, aria-*, etc.) pass through to the root element via rest props.",
+              'Listbox pattern for time options with role="listbox" and role="option" on each time slot',
+              "aria-selected marks the currently selected time option for screen readers",
+              "aria-label on the trigger button describes the current time value",
+              'Clock variant face is accessible with role="slider" for hour/minute selection',
+              "aria-invalid set on the input when error=true",
+              "aria-describedby links error and success messages to the input",
+              "Label is associated with the input via htmlFor / id",
+              "Hidden input carries the committed value for native form submission when name is set",
+              "Escape closes the popover; Tab commits typed input and closes",
+              "reduceMotion disables chevron rotation and reduces motion on the clock face",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -1521,15 +1594,11 @@ const TimePickerDemo = () => {
             className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
             {[
-              ["Enter", "Commit text or select highlighted option"],
+              ["Tab", "Move focus to/from the time picker"],
+              ["Arrow Up", "Move highlight to previous time option"],
+              ["Arrow Down", "Open list or move highlight to next time option"],
+              ["Enter", "Select the highlighted time option"],
               ["Escape", "Close popover without committing"],
-              ["Arrow Down", "Open list or move highlight down"],
-              ["Arrow Up", "Move highlight up (wraps)"],
-              ["Home / End", "Jump to first / last option"],
-              ["Tab", "Commit and close"],
-              ["Clock: Arrow keys", "Adjust hours or minutes by 1 step"],
-              ["Clock: Page Up/Down", "Adjust by larger steps"],
-              ["Clock: Home / End", "Jump to first / last value"],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>

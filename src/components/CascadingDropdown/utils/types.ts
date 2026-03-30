@@ -34,6 +34,8 @@ export interface CascadingDropdownClasses {
   submenuItemFocused?: string;
   label?: string;
   error?: string;
+  description?: string;
+  success?: string;
   chevron?: string;
   submenuChevron?: string;
   checkIcon?: string;
@@ -44,6 +46,16 @@ export interface CascadingDropdownClasses {
   clearIcon?: string;
   shimmer?: string;
   shimmerItem?: string;
+  /** Alias for `menu` — matches Dropdown naming convention. */
+  content?: string;
+  /** Alias for `menuItem` — matches Dropdown naming convention. */
+  option?: string;
+  /** Alias for `menuItemSelected` — matches Dropdown naming convention. */
+  optionSelected?: string;
+  /** Alias for `menuItemFocused` — matches Dropdown naming convention. */
+  optionFocused?: string;
+  /** Alias for `menuItemDisabled` — matches Dropdown naming convention. */
+  optionDisabled?: string;
 }
 
 export interface CascadingDropdownProps {
@@ -63,11 +75,14 @@ export interface CascadingDropdownProps {
   onKeyDown?: (event: React.KeyboardEvent) => void;
   id?: string;
   name?: string;
-  placeholder?: string;
+  placeholder?: ReactNode;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
+  description?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
   required?: boolean;
   noResultsContent?: ReactNode;
   loadingText?: ReactNode;
@@ -80,12 +95,16 @@ export interface CascadingDropdownProps {
   checkboxIcon?: ReactNode;
   fullWidth?: boolean;
   submenuPosition?: "right" | "left";
+  dropdownPosition?: "top" | "bottom";
   closeOnSelect?: boolean;
   classes?: CascadingDropdownClasses;
   unstyled?: boolean;
   lockScroll?: boolean;
   portalContainer?: HTMLElement | null;
   dropdownZIndex?: number;
+  dropdownGap?: number;
+  /** Keep the dropdown DOM mounted when closed. */
+  keepMounted?: boolean;
   className?: string;
   style?: React.CSSProperties;
   ClearIcon?: React.ComponentType<{ className?: string }>;
@@ -112,7 +131,7 @@ export interface CascadingDropdownTriggerRenderProps {
   "data-open": true | undefined;
   isOpen: boolean;
   displayValue: string;
-  placeholder: string;
+  placeholder: ReactNode;
 }
 
 export interface UseCascadingDropdownProps {

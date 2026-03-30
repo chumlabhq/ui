@@ -141,7 +141,7 @@ export type {
 } from "./components/Dropdown/utils/types";
 
 // ─── Input ───────────────────────────────────────────────────────────────────
-export { default as Input } from "./components/Input/Input";
+export { default as Input, InputLabel } from "./components/Input/Input";
 export type {
   InputProps,
   InputSize,
@@ -218,7 +218,8 @@ export type {
 } from "./components/MultiSelectSearchableDropdown/utils/types";
 
 // ─── OtpInput ────────────────────────────────────────────────────────────────
-export { default as OtpInput } from "./components/OtpInput/OtpInput";
+export { default as OtpInput, OtpInputLabel } from "./components/OtpInput/OtpInput";
+export { PRESET_OTPINPUT_CLASSES } from "./components/OtpInput/utils/constants";
 export type {
   OtpInputProps,
   OtpInputClasses,
@@ -275,6 +276,7 @@ export { default as Table } from "./components/Table/Table";
 export { default as TableShimmer } from "./components/Table/TableShimmer";
 export type {
   TableProps,
+  TableClasses,
   TableShimmerProps,
 } from "./components/Table/utils/types";
 
@@ -288,7 +290,7 @@ export type {
 } from "./components/TabPanel/utils/types";
 
 // ─── TextArea ────────────────────────────────────────────────────────────────
-export { default as TextArea } from "./components/TextArea/TextArea";
+export { default as TextArea, TextAreaLabel } from "./components/TextArea/TextArea";
 export type {
   TextAreaProps,
   TextAreaSize,

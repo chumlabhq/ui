@@ -25,6 +25,8 @@ export interface DropdownClasses {
   noResults?: string;
   label?: string;
   error?: string;
+  description?: string;
+  success?: string;
   shimmer?: string;
   shimmerItem?: string;
 }
@@ -73,6 +75,9 @@ export interface DropdownProps {
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
+  description?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
   required?: boolean;
   clearable?: boolean;
   noResultsContent?: ReactNode;

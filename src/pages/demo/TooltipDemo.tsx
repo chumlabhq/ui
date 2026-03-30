@@ -1109,6 +1109,50 @@ const TooltipDemo = () => {
           "Do not block pointer events on the trigger.",
         ]}
       />
+
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-state" type="trigger" description="'open' or 'closed' — inherited via asChild" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+        <div className={c.card}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              "aria-describedby on the trigger references the tooltip content",
+              "role=\"tooltip\" on the tooltip element",
+              "Triggered on hover and focus for mouse and keyboard users",
+              "Touch long-press support for mobile devices",
+              "Escape key dismisses the tooltip",
+              "disableHoverableContent prevents tooltip from staying open on content hover",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["Tab", "Trigger tooltip via focus"],
+              ["Escape", "Dismiss the tooltip"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
   );
 };

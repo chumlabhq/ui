@@ -28,7 +28,9 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   uncheckedTracker: "bg-[var(--switch-tracker-unchecked-bg,#d1d5db)]",
   checkedThumb: "translate-x-4.5",
   uncheckedThumb: "translate-x-0.5",
-  error: "text-sm text-red-500 mt-2",
+  error: "text-sm text-red-500 dark:text-red-400 mt-2",
+  success: "text-sm text-green-600 dark:text-green-400 mt-2",
+  loading: "",
 };
 
 export const UNSTYLED_SWITCH_CLASSES: Required<SwitchClasses> = {
@@ -46,4 +48,6 @@ export const UNSTYLED_SWITCH_CLASSES: Required<SwitchClasses> = {
   checkedThumb: "",
   uncheckedThumb: "",
   error: "",
+  success: "",
+  loading: "",
 };

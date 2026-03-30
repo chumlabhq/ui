@@ -1154,6 +1154,54 @@ const DrawerDemo = () => {
           "Do not disable Escape handling without an obvious close affordance.",
         ]}
       />
+
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-state" type="root" description="'open' or 'closed'" isDarkMode={dark} />
+            <PropRow name="data-direction" type="root" description="'left' | 'right' | 'top' | 'bottom'" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+        <div className={c.card}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              "role=\"dialog\" applied to the drawer panel",
+              "aria-modal=\"true\" when rendered as a modal overlay",
+              "Focus trap with Tab / Shift+Tab keeps focus within the drawer",
+              "Focus restoration returns focus to the trigger on close",
+              "Supports aria-label, aria-labelledby, and aria-describedby",
+              "lockScroll prevents background scroll while open",
+              "closeOnEscape allows dismissal via the Escape key",
+              "Swipeable dismiss on touch devices",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["Escape", "Close the drawer"],
+              ["Tab", "Move focus to the next focusable element (trapped)"],
+              ["Shift+Tab", "Move focus to the previous focusable element (trapped)"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
   );
 };

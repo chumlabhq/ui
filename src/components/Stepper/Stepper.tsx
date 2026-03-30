@@ -27,6 +27,7 @@ import { CheckIcon, ErrorIcon, DotIcon } from "./utils/icons";
 import { Tooltip } from "../Tooltip";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import { isTooltipConfig } from "../../utils/isTooltipConfig";
 import {
   DEFAULT_STEPPER_CLASSES,
@@ -536,11 +537,13 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       id: idProp,
       disabled = false,
       loop = false,
+      reduceMotion,
       renderStep,
       beforeStepChange,
     },
     ref,
   ) => {
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
     const baseClasses = unstyled
       ? UNSTYLED_STEPPER_CLASSES
       : DEFAULT_STEPPER_CLASSES;
@@ -827,6 +830,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         data-orientation={orientation}
         data-variant={variant}
         data-disabled={disabled || undefined}
+        data-reduce-motion={prefersReducedMotion || undefined}
       >
         <ol
           className={cn(

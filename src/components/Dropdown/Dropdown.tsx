@@ -297,7 +297,7 @@ const DropdownContent = memo(function DropdownContent({
   );
 });
 
-const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
+const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   (props, forwardedRef) => {
     const {
       options = [],
@@ -314,6 +314,9 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
       error = false,
       errorMessage,
       label,
+      description,
+      success = false,
+      successMessage,
       required = false,
       clearable = false,
       noResultsContent = "No options found",
@@ -372,6 +375,8 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         noResults: classesProp?.noResults ?? baseClasses.noResults,
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
+        description: classesProp?.description ?? baseClasses.description,
+        success: classesProp?.success ?? baseClasses.success,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
       }),
@@ -506,20 +511,16 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
 
     const mergedTriggerRef = useCallback(
       (node: HTMLButtonElement | null) => {
-        if (typeof forwardedRef === "function") forwardedRef(node);
-        else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
         setTriggerNode(node);
       },
-      [forwardedRef],
+      [],
     );
 
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
-        if (typeof forwardedRef === "function") forwardedRef(node as HTMLButtonElement);
-        else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
         setTriggerNode(node);
       },
-      [forwardedRef],
+      [],
     );
 
     const triggerProps = {
@@ -546,12 +547,14 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
 
     return (
       <div
+        ref={forwardedRef}
         className={rootClassName}
         style={hasRootStyle ? rootStyle : undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-full-width={fullWidth || undefined}
+        data-success={success || undefined}
       >
         {label && (
           <label
@@ -562,6 +565,10 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
+        )}
+
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div className={mergedClasses.wrapper || undefined}>
@@ -689,6 +696,10 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
           >
             {errorMessage}
           </div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

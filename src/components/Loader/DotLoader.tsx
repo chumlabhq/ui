@@ -1,5 +1,6 @@
 import { forwardRef, type CSSProperties } from "react";
 import type { DotLoaderProps } from "./utils/types";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
   (
@@ -8,12 +9,14 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
       gap = 4,
       count = 3,
       speed = 1.4,
+      reduceMotion,
       className = "",
       style,
       ...rest
     },
     ref,
   ) => {
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
     const dots = Array.from({ length: count });
 
     const rootStyle: CSSProperties = {
@@ -30,6 +33,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
         aria-label="Loading"
         className={className}
         style={rootStyle}
+        data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
       >
         {dots.map((_, i) => (
@@ -40,8 +44,8 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
               height: `${dotSize}px`,
               borderRadius: "50%",
               backgroundColor: "currentColor",
-              animation: `dot-loader-bounce ${speed}s ease-in-out infinite`,
-              animationDelay: `${(i * speed) / (count + 1)}s`,
+              animation: prefersReducedMotion ? "none" : `dot-loader-bounce ${speed}s ease-in-out infinite`,
+              animationDelay: prefersReducedMotion ? undefined : `${(i * speed) / (count + 1)}s`,
             }}
           />
         ))}

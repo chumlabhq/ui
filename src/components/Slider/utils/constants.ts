@@ -17,7 +17,8 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   markDot: "rounded-full bg-white border-2 border-gray-300",
   markDotActive: "border-indigo-500 bg-white",
   markLabel: "text-xs text-gray-500",
-  error: "text-sm text-red-500 mt-1",
+  error: "text-sm text-red-500 dark:text-red-400 mt-1",
+  success: "text-sm text-green-600 dark:text-green-400 mt-1",
 };
 
 export const UNSTYLED_SLIDER_CLASSES: Required<SliderClasses> = {
@@ -36,4 +37,5 @@ export const UNSTYLED_SLIDER_CLASSES: Required<SliderClasses> = {
   markDotActive: "",
   markLabel: "",
   error: "",
+  success: "",
 };

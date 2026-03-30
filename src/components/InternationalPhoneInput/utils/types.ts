@@ -62,6 +62,7 @@ export interface InternationalPhoneInputClasses {
   countrySelectCheckIcon?: string;
   countrySelectSearchIcon?: string;
   countrySelectNoResults?: string;
+  description?: string;
 }
 
 export interface InternationalPhoneInputProps
@@ -89,6 +90,14 @@ export interface InternationalPhoneInputProps
   id?: string;
   name?: string;
   label?: ReactNode;
+  /** Helper text displayed below the label. */
+  description?: ReactNode;
+  /** When true, the input is in a loading state. */
+  loading?: boolean;
+  /** When true, shows a clear button to reset the phone number. */
+  clearable?: boolean;
+  /** Called when the clear button is clicked. */
+  onClear?: () => void;
   required?: boolean;
   disabled?: boolean;
   readOnly?: boolean;

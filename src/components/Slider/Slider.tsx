@@ -216,6 +216,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       required = false,
       error = false,
       errorMessage,
+      success,
+      successMessage,
+      loading,
       classes: classesProp,
       unstyled = false,
       className,
@@ -278,6 +281,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         markDotActive: classesProp?.markDotActive ?? baseClasses.markDotActive,
         markLabel: classesProp?.markLabel ?? baseClasses.markLabel,
         error: classesProp?.error ?? baseClasses.error,
+        success: classesProp?.success ?? baseClasses.success,
       }),
       [classesProp, baseClasses],
     );
@@ -516,6 +520,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         style={style}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
+        data-loading={loading || undefined}
+        data-success={success || undefined}
         data-orientation={orientation}
         {...rest}
       >
@@ -542,7 +548,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         <div
           ref={trackRef}
           className={cn(mc.wrapper) || undefined}
-          style={{ position: "relative", overflow: "visible", ...wrapperStyle }}
+          style={{ position: "relative", overflow: "visible", ...wrapperStyle, ...(loading ? { opacity: 0.5, pointerEvents: "none" } : {}) }}
           onPointerDown={handleTrackPointerDown}
           data-orientation={orientation}
         >
@@ -710,6 +716,13 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {error && errorMessage && (
           <div id={errorId} role="alert" className={mc.error || undefined}>
             {errorMessage}
+          </div>
+        )}
+
+        {/* Success */}
+        {success && successMessage && !error && (
+          <div id={`${sliderId}-success`} className={mc.success || undefined}>
+            {successMessage}
           </div>
         )}
       </div>

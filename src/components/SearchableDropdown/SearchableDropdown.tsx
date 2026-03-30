@@ -67,6 +67,7 @@ interface SearchableDropdownContentProps {
   ariaLabel: string;
   showSearch: boolean;
   searchPlaceholder: string;
+  searchInputAriaLabel: string;
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
   SearchIconComponent: React.ComponentType<{ className?: string }>;
@@ -93,6 +94,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   ariaLabel,
   showSearch,
   searchPlaceholder,
+  searchInputAriaLabel,
   searchQuery,
   onSearchQueryChange,
   SearchIconComponent,
@@ -275,7 +277,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
             onKeyDownCapture={onSearchInputKeyDownCapture}
             placeholder={searchPlaceholder}
             className={classes.searchInputElement || undefined}
-            aria-label="Search options"
+            aria-label={searchInputAriaLabel}
             aria-autocomplete="list"
           />
         </div>
@@ -287,7 +289,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
 });
 
 const SearchableDropdown = forwardRef<
-  HTMLButtonElement,
+  HTMLDivElement,
   SearchableDropdownProps
 >((props, forwardedRef) => {
   const {
@@ -305,10 +307,14 @@ const SearchableDropdown = forwardRef<
     error = false,
     errorMessage,
     label,
+    description,
+    success = false,
+    successMessage,
     required = false,
     clearable = false,
     showSearch = true,
     searchPlaceholder = "Search...",
+    searchInputAriaLabel = "Search options",
     noResultsContent = "No options found",
     showChevron = true,
     showSelectedIcon = true,
@@ -365,6 +371,8 @@ const SearchableDropdown = forwardRef<
       noResults: classesProp?.noResults ?? baseClasses.noResults,
       label: classesProp?.label ?? baseClasses.label,
       error: classesProp?.error ?? baseClasses.error,
+      description: classesProp?.description ?? baseClasses.description,
+      success: classesProp?.success ?? baseClasses.success,
       searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
       searchInputElement: classesProp?.searchInputElement ?? baseClasses.searchInputElement,
       searchIcon: classesProp?.searchIcon ?? baseClasses.searchIcon,
@@ -552,20 +560,16 @@ const SearchableDropdown = forwardRef<
 
   const mergedTriggerRef = useCallback(
     (node: HTMLButtonElement | null) => {
-      if (typeof forwardedRef === "function") forwardedRef(node);
-      else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
       setTriggerNode(node);
     },
-    [forwardedRef],
+    [],
   );
 
   const renderTriggerRefCallback = useCallback(
     (node: HTMLElement | null) => {
-      if (typeof forwardedRef === "function") forwardedRef(node as HTMLButtonElement);
-      else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
-        setTriggerNode(node);
+      setTriggerNode(node);
     },
-    [forwardedRef],
+    [],
   );
 
   const triggerProps = {
@@ -593,12 +597,14 @@ const SearchableDropdown = forwardRef<
 
   return (
     <div
+      ref={forwardedRef}
       className={rootClassName}
       style={hasRootStyle ? rootStyle : undefined}
       data-disabled={disabled || undefined}
       data-error={error || undefined}
       data-open={isOpen || undefined}
       data-full-width={fullWidth || undefined}
+      data-success={success || undefined}
     >
       {label && (
         <label
@@ -609,6 +615,10 @@ const SearchableDropdown = forwardRef<
           {label}
           {required && <span aria-hidden="true">*</span>}
         </label>
+      )}
+
+      {description && (
+        <div className={mergedClasses.description || undefined}>{description}</div>
       )}
 
       <div className={mergedClasses.wrapper || undefined}>
@@ -676,6 +686,7 @@ const SearchableDropdown = forwardRef<
           ariaLabel={listboxAriaLabel}
           showSearch={showSearch}
           searchPlaceholder={searchPlaceholder}
+          searchInputAriaLabel={searchInputAriaLabel}
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
           SearchIconComponent={SearchIconProp}
@@ -741,6 +752,10 @@ const SearchableDropdown = forwardRef<
         >
           {errorMessage}
         </div>
+      )}
+
+      {success && successMessage && !error && (
+        <div className={mergedClasses.success || undefined}>{successMessage}</div>
       )}
     </div>
   );

@@ -225,6 +225,9 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       error = false,
       errorMessage,
       label,
+      description,
+      success = false,
+      successMessage,
       required = false,
       noResultsContent = "No options found",
       loadingText = "Loading...",
@@ -237,12 +240,15 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       checkboxIcon,
       fullWidth = false,
       submenuPosition = "right",
+      dropdownPosition = "bottom",
       closeOnSelect = true,
       classes: classesProp,
       unstyled = false,
       lockScroll = false,
       portalContainer,
       dropdownZIndex = 50,
+      dropdownGap = 4,
+      keepMounted = false,
       className,
       style,
       ClearIcon: ClearIconProp,
@@ -270,6 +276,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         submenuItemFocused: classesProp?.submenuItemFocused ?? baseClasses.submenuItemFocused,
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
+        description: classesProp?.description ?? baseClasses.description,
+        success: classesProp?.success ?? baseClasses.success,
         chevron: classesProp?.chevron ?? baseClasses.chevron,
         submenuChevron: classesProp?.submenuChevron ?? baseClasses.submenuChevron,
         checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
@@ -280,6 +288,11 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         loading: classesProp?.loading ?? baseClasses.loading,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+        content: classesProp?.content ?? classesProp?.menu ?? baseClasses.menu,
+        option: classesProp?.option ?? classesProp?.menuItem ?? baseClasses.menuItem,
+        optionSelected: classesProp?.optionSelected ?? classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
+        optionFocused: classesProp?.optionFocused ?? classesProp?.menuItemFocused ?? baseClasses.menuItemFocused,
+        optionDisabled: classesProp?.optionDisabled ?? classesProp?.menuItemDisabled ?? baseClasses.menuItemDisabled,
       }),
       [classesProp, baseClasses],
     );
@@ -369,12 +382,15 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const updateMenuPosition = useCallback(() => {
       if (!triggerRef.current) return;
       const rect = triggerRef.current.getBoundingClientRect();
+      const menuHeight = menuRef.current?.offsetHeight ?? 0;
       setMenuCoords({
-        top: rect.bottom + 4,
+        top: dropdownPosition === "top"
+          ? rect.top - menuHeight - dropdownGap
+          : rect.bottom + dropdownGap,
         left: rect.left,
         width: rect.width,
       });
-    }, []);
+    }, [dropdownPosition, dropdownGap]);
 
     useEffect(() => {
       if (!isOpen || !isBrowser) return;
@@ -432,12 +448,18 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
+        data-success={success || undefined}
+        data-full-width={fullWidth || undefined}
       >
         {label && (
           <label htmlFor={triggerId} className={mergedClasses.label || undefined}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
+        )}
+
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div
@@ -514,7 +536,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
             </button>
           )}
 
-          {isOpen && portalTarget && createPortal(
+          {(isOpen || keepMounted) && portalTarget && createPortal(
             <div
               ref={menuRef}
               id={menuId}
@@ -525,7 +547,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                 position: "fixed" as const,
                 zIndex: dropdownZIndex,
                 margin: 0,
-                ...(menuCoords && isPositionStable
+                ...(!isOpen ? { display: "none" } : menuCoords && isPositionStable
                   ? { top: menuCoords.top, left: menuCoords.left, width: menuCoords.width }
                   : { visibility: "hidden" as const, top: 0, left: 0 }),
               }}
@@ -613,10 +635,23 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
           portalTarget)}
         </div>
 
+        {name && (
+          <input
+            type="hidden"
+            name={name}
+            value={JSON.stringify(internalValue)}
+            aria-hidden="true"
+          />
+        )}
+
         {error && errorMessage && (
           <div id={errorId} role="alert" className={mergedClasses.error || undefined}>
             {errorMessage}
           </div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

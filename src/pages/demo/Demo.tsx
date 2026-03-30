@@ -39,7 +39,7 @@ const components: ComponentItem[] = [
   { path: "stepper", displayName: "Stepper" },
   { path: "switch", displayName: "Switch" },
   { path: "tab-panel", displayName: "Tab Panel" },
-  // { path: "table", displayName: "Table" },
+  { path: "table", displayName: "Table" },
   { path: "text-area", displayName: "Text Area" },
   { path: "time-picker", displayName: "Time Picker" },
   { path: "toast", displayName: "Toast" },

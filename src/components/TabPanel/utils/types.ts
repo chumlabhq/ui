@@ -59,6 +59,8 @@ export interface TabPanelProps {
   tooltipPosition?: TooltipPosition;
   tooltipOffset?: number;
   disabled?: boolean;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
   unstyled?: boolean;
   renderTab?: (
     props: TabRenderProps,

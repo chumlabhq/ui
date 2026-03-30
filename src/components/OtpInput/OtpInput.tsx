@@ -23,9 +23,13 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       onValueChange,
       onComplete,
       label,
+      description,
       required = false,
       error = false,
       errorMessage,
+      success = false,
+      successMessage,
+      loading = false,
       disabled = false,
       groups,
       separator,
@@ -89,6 +93,8 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
         separator: classesProp?.separator ?? baseClasses.separator,
+        description: classesProp?.description ?? baseClasses.description,
+        success: classesProp?.success ?? baseClasses.success,
       }),
       [classesProp, baseClasses],
     );
@@ -282,13 +288,18 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         className={cn(mergedClasses.root, fullWidth && "w-full", className) || undefined}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
+        data-loading={loading || undefined}
+        data-success={success || undefined}
         {...rest}
       >
         {label && (
           <OtpInputLabel label={label} required={required} htmlFor={inputId} className={mergedClasses.label || undefined} />
         )}
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
+        )}
         <div
-          className={mergedClasses.wrapper || undefined}
+          className={cn(mergedClasses.wrapper, loading && "opacity-50 pointer-events-none") || undefined}
           onPaste={handlePaste}
           role="group"
           aria-label={groupAriaLabel}
@@ -298,6 +309,9 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         {name && <input type="hidden" name={name} value={value} disabled={disabled} />}
         {error && errorMessage && (
           <div id={errorId} role="alert" className={mergedClasses.error || undefined}>{errorMessage}</div>
+        )}
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

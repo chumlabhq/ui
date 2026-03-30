@@ -116,7 +116,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
     const errorId = `${fieldId}-error`;
     const successId = `${fieldId}-success`;
     const descriptionId = `${fieldId}-description`;
-    const isDisabled = disabled || loading;
+    const isDisabled = disabled;
     const showSuccess = !error && success;
 
     const loaderElement = loading
@@ -129,7 +129,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       <div
         ref={ref}
         data-slot="container"
-        className={cn(fullWidth && "w-full", className) || undefined}
+        className={cn(fullWidth && "w-full", loading && "opacity-50 pointer-events-none", className) || undefined}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}
         data-success={showSuccess || undefined}

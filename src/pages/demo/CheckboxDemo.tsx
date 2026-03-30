@@ -82,6 +82,8 @@ const CheckboxDemo = () => {
   const [customHeart, setCustomHeart] = useState(false);
   const [customStar, setCustomStar] = useState(true);
   const [errorDemo, setErrorDemo] = useState(false);
+  const [successDemo, setSuccessDemo] = useState(true);
+  const [onValueChangeDemo, setOnValueChangeDemo] = useState(false);
   const [controlled, setControlled] = useState(false);
 
   const [sizeXs, setSizeXs] = useState(true);
@@ -381,6 +383,98 @@ const CheckboxDemo = () => {
             }}
           />
         </DemoWrapper>
+      </Section>
+
+      {/* ─── Success State ──────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Display a success message when validation passes."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Checkbox
+            label="I agree to the terms"
+            checked={successDemo}
+            onValueChange={setSuccessDemo}
+            success={successDemo}
+            successMessage="Terms accepted"
+            size="md"
+            shape="rounded"
+            classes={c.checkbox}
+          />
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<Checkbox
+  label="I agree to the terms"
+  checked={checked}
+  onValueChange={setChecked}
+  success={checked}
+  successMessage="Terms accepted"
+/>`}
+        />
+      </Section>
+
+      {/* ─── Loading State ───────────────────────────────────────────────── */}
+      <Section
+        title="Loading State"
+        description="Display a loading state while processing."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="flex flex-col gap-4">
+            <Checkbox
+              label="Processing..."
+              loading
+              checked
+              size="md"
+              shape="rounded"
+              classes={c.checkbox}
+            />
+            <Checkbox
+              label="Normal checkbox"
+              checked
+              size="md"
+              shape="rounded"
+              classes={c.checkbox}
+            />
+          </div>
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<Checkbox label="Processing..." loading checked />
+<Checkbox label="Normal checkbox" checked />`}
+        />
+      </Section>
+
+      {/* ─── onValueChange Callback ──────────────────────────────────────── */}
+      <Section
+        title="onValueChange Callback"
+        description="Unified event handler that works alongside onCheckedChange."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-2">
+            <Checkbox
+              label="Using onValueChange"
+              onValueChange={setOnValueChangeDemo}
+              checked={onValueChangeDemo}
+              size="md"
+              shape="rounded"
+              classes={c.checkbox}
+            />
+            <p
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-600"}`}
+            >
+              Checked: {String(onValueChangeDemo)}
+            </p>
+          </div>
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`const [value, setValue] = useState(false);
+<Checkbox label="Using onValueChange" onValueChange={setValue} checked={value} />`}
+        />
       </Section>
 
       {/* ─── Controlled ─────────────────────────────────────────────────── */}

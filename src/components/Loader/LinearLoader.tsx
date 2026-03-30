@@ -1,5 +1,6 @@
 import { forwardRef, type CSSProperties } from "react";
 import type { LinearLoaderProps } from "./utils/types";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
   (
@@ -9,12 +10,14 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       speed = 1.5,
       trackColor,
       borderRadius = 9999,
+      reduceMotion,
       className = "",
       style,
       ...rest
     },
     ref,
   ) => {
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
     const trackBg = trackColor ?? "currentColor";
     const w = typeof width === "number" ? `${width}px` : width;
 
@@ -34,7 +37,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       inset: 0,
       borderRadius: "inherit",
       backgroundColor: "currentColor",
-      animation: `linear-loader-slide ${speed}s ease-in-out infinite`,
+      animation: prefersReducedMotion ? "none" : `linear-loader-slide ${speed}s ease-in-out infinite`,
     };
 
     return (
@@ -44,6 +47,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
         aria-label="Loading"
         className={`inline-block ${className}`}
         style={rootStyle}
+        data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
       >
         <div style={barStyle} />

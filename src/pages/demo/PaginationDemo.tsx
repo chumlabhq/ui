@@ -284,6 +284,7 @@ const PaginationDemo = () => {
   const [refPage, setRefPage] = useState(1);
   const [zIndexPage, setZIndexPage] = useState(1);
   const [zIndexRowsPerPage, setZIndexRowsPerPage] = useState(10);
+  const [valuePage, setValuePage] = useState(1);
 
   return (
     <div className="space-y-10">
@@ -1103,6 +1104,39 @@ const PaginationDemo = () => {
               ...c.pagination,
               root: "flex items-center justify-between gap-4",
             }}
+          />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Disabled State ─────────────────────────────────────────── */}
+      <Section
+        title="Disabled State"
+        description="Use the disabled prop to prevent user interaction with the pagination controls."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <Pagination
+            currentPage={3}
+            totalPages={10}
+            onPageChange={() => {}}
+            disabled
+            classes={c.pagination}
+          />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── onValueChange Callback ───────────────────────────────────── */}
+      <Section
+        title="onValueChange Callback"
+        description="Use value and onValueChange as unified alternatives to currentPage and onPageChange."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <Pagination
+            value={valuePage}
+            totalPages={10}
+            onValueChange={setValuePage}
+            classes={c.pagination}
           />
         </DemoWrapper>
       </Section>

@@ -32,6 +32,8 @@ export interface MultiSelectSearchableDropdownClasses {
   shimmerItem?: string;
   label?: string;
   error?: string;
+  description?: string;
+  success?: string;
   searchInput?: string;
   searchInputElement?: string;
   searchIcon?: string;
@@ -45,16 +47,19 @@ export interface MultiSelectSearchableDropdownProps {
   onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
-  placeholder?: string;
+  placeholder?: ReactNode;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
+  description?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
   required?: boolean;
   showSearch?: boolean;
   searchPlaceholder?: string;
   noResultsContent?: ReactNode;
-  loadingText?: string;
+  loadingText?: ReactNode;
   shimmerCount?: number;
   clearable?: boolean;
   showChevron?: boolean;
@@ -114,7 +119,7 @@ export interface MultiSelectSearchableDropdownTriggerRenderProps {
   "data-open": true | undefined;
   isOpen: boolean;
   selectedOptions: MultiSelectOption[];
-  placeholder: string;
+  placeholder: ReactNode;
 }
 
 export interface UseMultiSelectDropdownProps {

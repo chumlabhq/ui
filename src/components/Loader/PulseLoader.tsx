@@ -1,5 +1,6 @@
 import { forwardRef, type CSSProperties } from "react";
 import type { PulseLoaderProps } from "./utils/types";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
   (
@@ -7,6 +8,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
       size = 40,
       speed = 1.5,
       rings = 2,
+      reduceMotion,
       className = "",
       style,
       ...rest
@@ -25,6 +27,8 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
 
     const ringElements = Array.from({ length: rings });
 
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
+
     return (
       <div
         ref={ref}
@@ -32,6 +36,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
         aria-label="Loading"
         className={className}
         style={rootStyle}
+        data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
       >
         {/* Core dot */}
@@ -42,7 +47,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
             height: `${size * 0.3}px`,
             borderRadius: "50%",
             backgroundColor: "currentColor",
-            animation: `pulse-loader-core ${speed}s ease-in-out infinite`,
+            animation: prefersReducedMotion ? "none" : `pulse-loader-core ${speed}s ease-in-out infinite`,
           }}
         />
         {/* Ripple rings */}
@@ -55,9 +60,9 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
               height: "100%",
               borderRadius: "50%",
               border: "2px solid currentColor",
-              opacity: 0,
-              animation: `pulse-loader-ring ${speed}s ease-out infinite`,
-              animationDelay: `${(i * speed) / rings}s`,
+              opacity: prefersReducedMotion ? 0.4 : 0,
+              animation: prefersReducedMotion ? "none" : `pulse-loader-ring ${speed}s ease-out infinite`,
+              animationDelay: prefersReducedMotion ? undefined : `${(i * speed) / rings}s`,
             }}
           />
         ))}

@@ -318,6 +318,73 @@ const SwitchDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ── Success State ────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Display a success message when validation passes."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const [checked, setChecked] = useState(true);
+            return (
+              <Switch
+                label="Email notifications"
+                checked={checked}
+                onValueChange={setChecked}
+                success={checked}
+                successMessage="Notifications are enabled"
+                classes={c.switch}
+              />
+            );
+          })()}
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<Switch
+  label="Email notifications"
+  checked={checked}
+  onValueChange={setChecked}
+  success={checked}
+  successMessage="Notifications are enabled"
+/>`} />
+      </Section>
+
+      {/* ── Loading State ────────────────────────────────────────────── */}
+      <Section
+        title="Loading State"
+        description="Display a loading indicator while an async action is pending."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="flex flex-col gap-4">
+            <Switch label="Sync in progress" loading checked classes={c.switch} />
+            <Switch label="Not loading" checked classes={c.switch} />
+          </div>
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<Switch label="Sync in progress" loading checked />
+<Switch label="Not loading" checked />`} />
+      </Section>
+
+      {/* ── onValueChange Callback ───────────────────────────────────── */}
+      <Section
+        title="onValueChange Callback"
+        description="Unified event handler that works alongside onCheckedChange."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const [value, setValue] = useState(false);
+            return (
+              <div className="flex flex-col gap-2">
+                <Switch label="Using onValueChange" onValueChange={setValue} checked={value} classes={c.switch} />
+                <p className={`text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`}>Value: {String(value)}</p>
+              </div>
+            );
+          })()}
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`const [value, setValue] = useState(false);
+<Switch label="Using onValueChange" onValueChange={setValue} checked={value} />`} />
+      </Section>
+
       {/* ── Custom Colors ──────────────────────────────────────────────── */}
       <Section
         title="Custom Colors"

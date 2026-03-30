@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import {
   Section,
   CodeBlock,
+  DemoWrapper,
   PropsTable,
   PropRow,
   DocControlledPattern,
@@ -837,18 +838,20 @@ const TableDemo = () => {
       </header>
 
       <Section title="Basic Usage">
-        <Table
-          columns={columns}
-          data={sampleData.slice(0, 5)}
-          containerClassName={containerStyle}
-          tableClassName={tableStyle}
-          headerRowClassName={headerRowStyle}
-          headerCellClassName={headerCellStyle}
-          bodyClassName={bodyStyle}
-          rowClassName={rowStyle}
-          cellClassName={cellStyle}
-          emptyClassName={emptyStyle}
-        />
+        <DemoWrapper isDarkMode={dark}>
+          <Table
+            columns={columns}
+            data={sampleData.slice(0, 5)}
+            containerClassName={containerStyle}
+            tableClassName={tableStyle}
+            headerRowClassName={headerRowStyle}
+            headerCellClassName={headerCellStyle}
+            bodyClassName={bodyStyle}
+            rowClassName={rowStyle}
+            cellClassName={cellStyle}
+            emptyClassName={emptyStyle}
+          />
+        </DemoWrapper>
       </Section>
 
       <Section title="With Row Selection">
@@ -1501,6 +1504,60 @@ const TableDemo = () => {
             isDarkMode={dark}
           />
         </PropsTable>
+      </Section>
+
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={`rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-table-container" type="root" description="Always present on the scrollable container" isDarkMode={dark} />
+            <PropRow name="data-testid" type="root" description="Test identifier for integration tests" isDarkMode={dark} />
+            <PropRow name="data-pinned" type="cell, header" description='Present on pinned columns ("left" or "right")' isDarkMode={dark} />
+            <PropRow name="data-column-index" type="cell, header" description="Zero-based column index for CSS targeting" isDarkMode={dark} />
+            <PropRow name="data-selected" type="row" description="Present on selected rows" isDarkMode={dark} />
+            <PropRow name="data-clickable" type="row" description="Present when onRowClick is provided" isDarkMode={dark} />
+            <PropRow name="data-focused" type="cell" description="Present on the keyboard-focused cell" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+        <div className={`rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              'Table uses role="grid" with role="row", role="gridcell", and role="columnheader" for proper structure',
+              "aria-label on the table element provides an accessible name for the grid landmark",
+              "aria-sort on sortable column headers announces current sort direction",
+              "aria-selected on focused cells indicates the active cell to screen readers",
+              "aria-rowindex on each row for virtual scrolling context",
+              "Full keyboard grid navigation between cells, rows, and headers",
+              'Pin button includes aria-label describing the pin action and target column',
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`rounded-2xl border p-5 mt-3 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>
+            Keyboard Reference
+          </p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["Arrow keys", "Navigate between cells in the grid"],
+              ["Escape", "Clear cell focus and exit grid navigation"],
+              ["Tab", "Exit the grid and move to next focusable element"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={`px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </Section>
 
       <DocControlledPattern

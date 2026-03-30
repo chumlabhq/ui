@@ -12,6 +12,7 @@ import type { Tab, TabPanelProps, ResolvedClasses, TabRenderProps } from "./util
 import { TabPanelContext } from "./utils/context";
 import { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import TabButton from "./components/TabButton";
 import { Tooltip } from "../Tooltip";
 
@@ -34,6 +35,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       tooltipPosition = "bottom",
       tooltipOffset = 4,
       disabled = false,
+      reduceMotion,
       unstyled = false,
       renderTab: renderTabProp,
       "aria-label": ariaLabel = "Tabs",
@@ -46,6 +48,8 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     },
     ref,
   ) => {
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
+
     const [activeValue, setActiveValue] = useControllableState<string>({
       value: valueProp,
       defaultValue: defaultValue ?? tabs[0]?.id ?? "",
@@ -264,6 +268,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
           style={style}
           data-disabled={disabled || undefined}
           data-orientation={orientation}
+          data-reduce-motion={prefersReducedMotion || undefined}
         >
           <div
             role="tablist"

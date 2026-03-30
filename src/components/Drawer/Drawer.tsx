@@ -48,8 +48,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (
     {
       open,
+      defaultOpen = false,
       onOpenChange,
       onClose: onCloseProp,
+      zIndex = 9999,
       children,
       direction = DEFAULT_DIRECTION,
       size = DEFAULT_SIZE,
@@ -84,10 +86,16 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     },
     ref,
   ) => {
+    const [isOpen, setIsOpen] = useControllableState({
+      value: open,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
+
     const handleClose = useCallback(() => {
-      onOpenChange?.(false);
+      setIsOpen(false);
       onCloseProp?.();
-    }, [onOpenChange, onCloseProp]);
+    }, [setIsOpen, onCloseProp]);
 
     const generatedId = useId();
     const drawerId = `drawer-${generatedId}`;
@@ -96,7 +104,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const mergedPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
     const triggerRef = useRef<Element | null>(null);
     const restoreRafRef = useRef<number>(0);
-    const [mounted, setMounted] = useState(open);
+    const [mounted, setMounted] = useState(isOpen);
     const [visualOpen, setVisualOpen] = useState(false);
     const prefersReducedMotion = useReducedMotion(reduceMotionProp);
 
@@ -142,58 +150,58 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       [direction, size, fraction, effectiveDuration],
     );
 
-    const [prevOpen, setPrevOpen] = useState(open);
-    if (prevOpen !== open) {
-      setPrevOpen(open);
-      if (open && !mounted) {
+    const [prevOpen, setPrevOpen] = useState(isOpen);
+    if (prevOpen !== isOpen) {
+      setPrevOpen(isOpen);
+      if (isOpen && !mounted) {
         setMounted(true);
       }
-      if (!open && visualOpen) {
+      if (!isOpen && visualOpen) {
         setVisualOpen(false);
       }
     }
 
     useEffect(() => {
-      if (!open && !keepMounted) {
+      if (!isOpen && !keepMounted) {
         const timer = setTimeout(() => setMounted(false), effectiveDuration);
         return () => clearTimeout(timer);
       }
-    }, [open, effectiveDuration, keepMounted]);
+    }, [isOpen, effectiveDuration, keepMounted]);
 
     useEffect(() => {
-      if (mounted && open) {
+      if (mounted && isOpen) {
         const raf = requestAnimationFrame(() => {
           setVisualOpen(true);
         });
         return () => cancelAnimationFrame(raf);
       }
-    }, [mounted, open]);
+    }, [mounted, isOpen]);
 
-    const prevOpenRef = useRef(open);
+    const prevOpenRef = useRef(isOpen);
     useEffect(() => {
-      const changed = prevOpenRef.current !== open;
-      prevOpenRef.current = open;
+      const changed = prevOpenRef.current !== isOpen;
+      prevOpenRef.current = isOpen;
 
       if (!changed || !onTransitionEndProp) return;
       const timer = setTimeout(
-        () => onTransitionEndProp(open),
+        () => onTransitionEndProp(isOpen),
         effectiveDuration,
       );
       return () => clearTimeout(timer);
-    }, [open, effectiveDuration, onTransitionEndProp]);
+    }, [isOpen, effectiveDuration, onTransitionEndProp]);
 
     const prevOpenForCapture = useRef(false);
     useEffect(() => {
       const wasOpen = prevOpenForCapture.current;
-      prevOpenForCapture.current = open;
+      prevOpenForCapture.current = isOpen;
 
-      if (open && !wasOpen && restoreFocus && modal) {
+      if (isOpen && !wasOpen && restoreFocus && modal) {
         triggerRef.current = document.activeElement;
       }
-    }, [open, restoreFocus, modal]);
+    }, [isOpen, restoreFocus, modal]);
 
     useEffect(() => {
-      if (!open && restoreFocus && modal && triggerRef.current) {
+      if (!isOpen && restoreFocus && modal && triggerRef.current) {
         const el = triggerRef.current as HTMLElement;
         triggerRef.current = null;
         if (typeof el.focus === "function") {
@@ -209,10 +217,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           restoreRafRef.current = 0;
         }
       };
-    }, [open, restoreFocus, modal]);
+    }, [isOpen, restoreFocus, modal]);
 
     useEffect(() => {
-      if (open && modal) {
+      if (isOpen && modal) {
         const panel = panelRef.current;
         if (!panel) return;
 
@@ -240,14 +248,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
         return () => cancelAnimationFrame(timer);
       }
-    }, [open, modal, initialFocus]);
+    }, [isOpen, modal, initialFocus]);
 
     useEffect(() => {
-      if (open) {
+      if (isOpen) {
         pushDrawer(drawerId);
         return () => popDrawer(drawerId);
       }
-    }, [open, drawerId]);
+    }, [isOpen, drawerId]);
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -291,19 +299,19 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
     useEffect(() => {
       if (!isBrowser) return;
-      if (lockScroll && open && modal) {
+      if (lockScroll && isOpen && modal) {
         acquireScrollLock();
         return () => releaseScrollLock();
       }
-    }, [open, lockScroll, modal]);
+    }, [isOpen, lockScroll, modal]);
 
     useEffect(() => {
       if (!isBrowser) return;
-      if (open) {
+      if (isOpen) {
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
       }
-    }, [open, handleKeyDown]);
+    }, [isOpen, handleKeyDown]);
 
     const dragRef = useRef({
       startX: 0,
@@ -315,7 +323,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
     const handlePanelPointerDown = useCallback(
       (e: React.PointerEvent) => {
-        if (!swipeable || !open) return;
+        if (!swipeable || !isOpen) return;
 
         dragRef.current = {
           startX: e.clientX,
@@ -325,7 +333,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           hasMoved: false,
         };
       },
-      [swipeable, open],
+      [swipeable, isOpen],
     );
 
     const handlePanelPointerMove = useCallback(
@@ -474,7 +482,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     if (!keepMounted && !mounted) return null;
 
     const container = portalContainer ?? document.body;
-    const isClosed = !open;
+    const isClosed = !isOpen;
     const isHiddenMounted = keepMounted && isClosed;
 
     return (
@@ -495,7 +503,8 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                 mergedClasses.root,
               ) || undefined
             }
-            data-state={open ? "open" : "closed"}
+            style={{ zIndex }}
+            data-state={isOpen ? "open" : "closed"}
             data-direction={direction}
             aria-hidden={isHiddenMounted || undefined}
           >

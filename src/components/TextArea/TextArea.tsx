@@ -63,8 +63,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const successId = `${textAreaId}-success`;
     const descriptionId = `${textAreaId}-description`;
     const countId = `${textAreaId}-count`;
-    const isDisabled = disabled || loading;
-    const isInteractive = !isDisabled && !readOnly;
+    const isDisabled = disabled;
+    const isInteractive = !isDisabled && !readOnly && !loading;
 
     // ─── Merged classes ─────────────────────────────────────────────────
     const baseClasses = unstyled ? UNSTYLED_TEXTAREA_CLASSES : DEFAULT_TEXTAREA_CLASSES;

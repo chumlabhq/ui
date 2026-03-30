@@ -250,6 +250,8 @@ const SearchableDropdownDemo = () => {
   const [customCheckIconValue, setCustomCheckIconValue] = useState<string | null>(null);
   const [customKeyDownValue, setCustomKeyDownValue] = useState<string | null>(null);
   const [classNameStyleValue, setClassNameStyleValue] = useState<string | null>(null);
+  const [descriptionValue, setDescriptionValue] = useState<string | null>(null);
+  const [successValue, setSuccessValue] = useState<string | null>(null);
 
   const [controlledOpen, setControlledOpen] = useState(false);
   const [controlledValue, setControlledValue] = useState<string | null>(null);
@@ -678,6 +680,32 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-64">
             <SearchableDropdown label="Required Field" options={fruitOptions} value={errorValue} onValueChange={(v) => setErrorValue(v)} required error errorMessage="This field is required" placeholder="Search fruits..." classes={{ ...c.dropdown, trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${dark ? "border-red-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500" : "border-red-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"}` }} />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── With Description ────────────────────────────────────────────── */}
+      <Section
+        title="With Description"
+        description="Use the description prop to show helper text below the label."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-64">
+            <SearchableDropdown label="Favorite Fruit" description="Pick the fruit you enjoy the most." options={fruitOptions} value={descriptionValue} onValueChange={(v) => setDescriptionValue(v)} placeholder="Search fruits..." classes={c.dropdown} />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Success State ─────────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Use success and successMessage to display a success confirmation. The trigger receives data-success for custom styling."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-64">
+            <SearchableDropdown label="Favorite Fruit" options={fruitOptions} value={successValue} onValueChange={(v) => setSuccessValue(v)} success={!!successValue} successMessage={successValue ? "Great choice!" : undefined} placeholder="Search fruits..." classes={{ ...c.dropdown, trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${successValue ? (dark ? "border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500" : "border-green-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500") : (dark ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent")}` }} />
           </div>
         </DemoWrapper>
       </Section>
@@ -1152,6 +1180,7 @@ const SearchableDropdownDemo = () => {
             <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
             <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
+            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
             <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
             <PropRow name="data-placeholder" type="trigger" description="Present when no option is selected" isDarkMode={dark} />
             <PropRow name="data-selected" type="option" description="Present on the selected option" isDarkMode={dark} />

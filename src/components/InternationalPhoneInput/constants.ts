@@ -184,6 +184,7 @@ export const PHONE_LENGTH_RULES: Record<string, { min: number; max: number }> = 
 export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {
   root: "",
   label: "",
+  description: "",
   wrapper: "",
   input: "",
   error: "",
@@ -205,6 +206,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
 export const UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {
   root: "",
   label: "",
+  description: "",
   wrapper: "",
   input: "",
   error: "",

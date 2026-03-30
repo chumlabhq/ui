@@ -16,6 +16,8 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   selectedIcon: "",
   noResults: "",
   error: "",
+  description: "",
+  success: "",
   clockContainer: "",
   clockDisplay: "",
   clockDisplayHours: "",

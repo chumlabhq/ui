@@ -16,6 +16,8 @@ export interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
   resizeDirection?: "left" | "right" | "top" | "bottom";
   step?: number;
   disabled?: boolean;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
   classes?: ResizablePanelClasses;
   handleContent?: ReactNode;
   unstyled?: boolean;

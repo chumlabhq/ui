@@ -7,7 +7,9 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   calendarIcon: "w-5 h-5 shrink-0 text-gray-400",
   clearButton: "p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors shrink-0",
   label: "block text-sm font-medium text-gray-700 mb-1.5",
-  error: "text-sm text-red-500 mt-1.5",
+  error: "text-sm text-red-500 dark:text-red-400 mt-1.5",
+  description: "text-xs text-gray-500 mb-1.5",
+  success: "text-sm text-green-600 dark:text-green-400 mt-1.5",
   calendar: "bg-white border border-gray-200 rounded-xl shadow-xl p-4",
   header: "flex items-center justify-between mb-4",
   monthNav: "flex items-center gap-1",
@@ -47,7 +49,7 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
 
 export const UNSTYLED_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   root: "", trigger: "", input: "", calendarIcon: "", clearButton: "",
-  label: "", error: "", calendar: "", header: "", monthNav: "",
+  label: "", error: "", description: "", success: "", calendar: "", header: "", monthNav: "",
   navButton: "", navButtonDisabled: "", monthGrid: "", grid: "",
   weekdayHeader: "", weekday: "", day: "", daySelected: "", dayToday: "",
   dayDisabled: "", dayOutside: "", dayRangeStart: "", dayRangeEnd: "",

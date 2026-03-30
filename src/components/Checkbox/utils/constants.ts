@@ -32,7 +32,8 @@ export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   unchecked: "bg-white border-gray-300",
   indeterminate: "bg-blue-600 border-blue-600 text-white",
   icon: "",
-  error: "text-sm text-red-500",
+  error: "text-sm text-red-500 dark:text-red-400",
+  success: "text-sm text-green-600 dark:text-green-400",
 };
 
 export const UNSTYLED_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
@@ -46,4 +47,5 @@ export const UNSTYLED_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   indeterminate: "",
   icon: "",
   error: "",
+  success: "",
 };

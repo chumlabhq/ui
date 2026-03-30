@@ -478,6 +478,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       error = false,
       errorMessage,
       label,
+      description,
+      success = false,
+      successMessage,
+      loading = false,
+      clearable,
       required = false,
       fullWidth = false,
       showClearButton = true,
@@ -496,6 +501,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       className = "",
       portalContainer,
       lockScroll = false,
+      dropdownZIndex = 50,
+      dropdownPosition = "bottom",
+      dropdownGap = 4,
+      keepMounted = false,
       reduceMotion = "auto",
       onMonthChange,
       open: openProp,
@@ -505,6 +514,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     },
     ref,
   ) => {
+    // ─── Resolved props ───────────────────────────────────────────────
+    const resolvedShowClearButton = showClearButton ?? clearable ?? true;
+
     // ─── Merged classes ────────────────────────────────────────────────
     const baseClasses = unstyled
       ? UNSTYLED_DATEPICKER_CLASSES
@@ -518,6 +530,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       clearButton: classesProp?.clearButton ?? baseClasses.clearButton,
       label: classesProp?.label ?? baseClasses.label,
       error: classesProp?.error ?? baseClasses.error,
+      description: classesProp?.description ?? baseClasses.description,
+      success: classesProp?.success ?? baseClasses.success,
       calendar: classesProp?.calendar ?? baseClasses.calendar,
       header: classesProp?.header ?? baseClasses.header,
       monthNav: classesProp?.monthNav ?? baseClasses.monthNav,
@@ -633,8 +647,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       const updatePos = () => {
         if (!triggerRef.current) return;
         const rect = triggerRef.current.getBoundingClientRect();
+        const calendarHeight = calendarRef.current?.offsetHeight ?? 0;
         setCalendarPos({
-          top: rect.bottom + 4,
+          top: dropdownPosition === "top"
+            ? rect.top - calendarHeight - dropdownGap
+            : rect.bottom + dropdownGap,
           left: rect.left,
         });
       };
@@ -817,12 +834,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
+        data-loading={loading || undefined}
+        data-success={success || undefined}
       >
         {label && (
           <label htmlFor={triggerId} className={mergedClasses.label}>
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
+        )}
+
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div
@@ -843,7 +866,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             disabled={disabled}
             onClick={handleToggle}
             onKeyDown={handleKeyDown}
-            className={mergedClasses.trigger}
+            className={cn(mergedClasses.trigger, loading && "opacity-50 pointer-events-none")}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
             data-open={isOpen || undefined}
@@ -852,7 +875,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               {hasValue ? displayValue : placeholder || defaultPlaceholder}
             </span>
             <div className="flex items-center gap-1">
-              {showClearButton && hasValue && !disabled && (
+              {resolvedShowClearButton && hasValue && !disabled && (
                 <span
                   role="button"
                   tabIndex={0}
@@ -876,7 +899,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             </div>
           </button>
 
-          {isOpen && createPortal(
+          {(isOpen || keepMounted) && createPortal(
             <div
               ref={calendarRef}
               id={calendarId}
@@ -886,10 +909,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               className={mergedClasses.calendar}
               style={{
                 position: "fixed",
-                zIndex: 50,
+                zIndex: dropdownZIndex,
                 width: "max-content",
                 margin: 0,
-                ...(calendarPos && isCalendarPositionStable ? { top: calendarPos.top, left: calendarPos.left } : { visibility: "hidden" as const, top: 0, left: 0 }),
+                ...(!isOpen ? { display: "none" } : calendarPos && isCalendarPositionStable ? { top: calendarPos.top, left: calendarPos.left } : { visibility: "hidden" as const, top: 0, left: 0 }),
               }}
             >
               {showPresets && (
@@ -1113,6 +1136,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           <div id={errorId} role="alert" className={mergedClasses.error}>
             {errorMessage}
           </div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

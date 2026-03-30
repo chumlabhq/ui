@@ -16,6 +16,7 @@ import {
 } from "./utils/constants";
 import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 
 const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
@@ -32,6 +33,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       resizeDirection = "right",
       step = 10,
       disabled = false,
+      reduceMotion,
       unstyled = false,
       "aria-label": ariaLabel = "Resize panel",
       classes: classesProp,
@@ -41,6 +43,8 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       id: idProp,
       ...rest
     } = props;
+
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
 
     const isVertical =
       resizeDirection === "top" || resizeDirection === "bottom";
@@ -288,6 +292,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         }
         data-resizing={isResizing || undefined}
         data-disabled={disabled || undefined}
+        data-reduce-motion={prefersReducedMotion || undefined}
       >
         {children}
         <div

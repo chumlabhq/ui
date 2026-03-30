@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, memo } from "react";
+import { useState, useCallback, useMemo, useRef, memo, forwardRef } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,66 +12,100 @@ import { getColumnId, getSortDirection, isInteractiveElement } from "./utils";
 import TableShimmer from "./TableShimmer";
 import { PinIcon } from "./icons";
 
-function Table<TData>({
-  columns: columnsProp,
-  data: dataProp,
-  COLUMNS,
-  COLUMNS_DATA,
-  loading = false,
-  showHeader = true,
-  tableHeader,
-  pinnedColumns = [],
-  onPinColumn,
-  pinnableColumns,
-  maxPinnedColumns = 3,
-  onCursorPosition,
-  onCursorOverHeader,
-  emptyContent,
-  ariaLabel = "Data table",
-  getRowId,
-  selectedRowId,
-  onRowClick,
-  onRowHover,
-  floatingActions,
-  isFloatingActionsHovered = false,
-  isPopupOpen = false,
-  maxWidth,
-  maxHeight,
-  minHeight,
-  hideVerticalScrollbar = false,
-  hideHorizontalScrollbar = false,
-  stickyHeader = false,
-  containerClassName = "",
-  tableClassName = "",
-  headerClassName = "",
-  headerRowClassName = "",
-  headerCellClassName = "",
-  headerCellHoverClassName = "",
-  headerCellContentClassName = "",
-  PinIcon: CustomPinIcon,
-  PinnedIcon: CustomPinnedIcon,
-  pinIconClassName = "",
-  pinIconHoverClassName = "",
-  pinnedPinIconClassName = "",
-  pinnedPinIconHoverClassName = "",
-  pinButtonClassName = "",
-  pinnedPinButtonClassName = "",
-  bodyClassName = "",
-  rowClassName = "",
-  cellClassName = "",
-  selectedRowClassName = "",
-  pinnedContainerClassName = "",
-  pinnedTableClassName = "",
-  unpinnedContainerClassName = "",
-  unpinnedTableClassName = "",
-  emptyClassName = "",
-  shimmerRowCount = 10,
-  shimmerClassName,
-  shimmerRowClassName,
-  shimmerCellClassName,
-  shimmerBarClassName,
-  children,
-}: TableProps<TData>) {
+function TableInner<TData>(
+  {
+    columns: columnsProp,
+    data: dataProp,
+    COLUMNS,
+    COLUMNS_DATA,
+    loading = false,
+    showHeader = true,
+    tableHeader,
+    pinnedColumns = [],
+    onPinColumn,
+    pinnableColumns,
+    maxPinnedColumns = 3,
+    onCursorPosition,
+    onCursorOverHeader,
+    emptyContent,
+    ariaLabel = "Data table",
+    getRowId,
+    selectedRowId,
+    onRowClick,
+    onRowHover,
+    floatingActions,
+    isFloatingActionsHovered = false,
+    isPopupOpen = false,
+    maxWidth,
+    maxHeight,
+    minHeight,
+    hideVerticalScrollbar = false,
+    hideHorizontalScrollbar = false,
+    stickyHeader = false,
+    classes: classesProp,
+    unstyled: _unstyled = false,
+    style: styleProp,
+    containerClassName: containerClassNameProp = "",
+    tableClassName: tableClassNameProp = "",
+    headerClassName: headerClassNameProp = "",
+    headerRowClassName: headerRowClassNameProp = "",
+    headerCellClassName: headerCellClassNameProp = "",
+    headerCellHoverClassName: headerCellHoverClassNameProp = "",
+    headerCellContentClassName: headerCellContentClassNameProp = "",
+    PinIcon: CustomPinIcon,
+    PinnedIcon: CustomPinnedIcon,
+    pinIconClassName: pinIconClassNameProp = "",
+    pinIconHoverClassName: pinIconHoverClassNameProp = "",
+    pinnedPinIconClassName: pinnedPinIconClassNameProp = "",
+    pinnedPinIconHoverClassName: pinnedPinIconHoverClassNameProp = "",
+    pinButtonClassName: pinButtonClassNameProp = "",
+    pinnedPinButtonClassName: pinnedPinButtonClassNameProp = "",
+    bodyClassName: bodyClassNameProp = "",
+    rowClassName: rowClassNameProp = "",
+    cellClassName: cellClassNameProp = "",
+    selectedRowClassName: selectedRowClassNameProp = "",
+    pinnedContainerClassName: pinnedContainerClassNameProp = "",
+    pinnedTableClassName: pinnedTableClassNameProp = "",
+    unpinnedContainerClassName: unpinnedContainerClassNameProp = "",
+    unpinnedTableClassName: unpinnedTableClassNameProp = "",
+    emptyClassName: emptyClassNameProp = "",
+    shimmerRowCount = 10,
+    shimmerClassName: shimmerClassNameProp,
+    shimmerRowClassName: shimmerRowClassNameProp,
+    shimmerCellClassName: shimmerCellClassNameProp,
+    shimmerBarClassName: shimmerBarClassNameProp,
+    className,
+    children,
+  }: TableProps<TData>,
+  ref: React.Ref<HTMLDivElement>,
+) {
+  // Merge classes prop with individual className props (classes takes precedence)
+  const containerClassName = classesProp?.container ?? containerClassNameProp;
+  const tableClassName = classesProp?.table ?? tableClassNameProp;
+  const headerClassName = classesProp?.header ?? headerClassNameProp;
+  const headerRowClassName = classesProp?.headerRow ?? headerRowClassNameProp;
+  const headerCellClassName = classesProp?.headerCell ?? headerCellClassNameProp;
+  const headerCellHoverClassName = classesProp?.headerCellHover ?? headerCellHoverClassNameProp;
+  const headerCellContentClassName = classesProp?.headerCellContent ?? headerCellContentClassNameProp;
+  const bodyClassName = classesProp?.body ?? bodyClassNameProp;
+  const rowClassName = classesProp?.row ?? rowClassNameProp;
+  const cellClassName = classesProp?.cell ?? cellClassNameProp;
+  const selectedRowClassName = classesProp?.selectedRow ?? selectedRowClassNameProp;
+  const pinnedContainerClassName = classesProp?.pinnedContainer ?? pinnedContainerClassNameProp;
+  const pinnedTableClassName = classesProp?.pinnedTable ?? pinnedTableClassNameProp;
+  const unpinnedContainerClassName = classesProp?.unpinnedContainer ?? unpinnedContainerClassNameProp;
+  const unpinnedTableClassName = classesProp?.unpinnedTable ?? unpinnedTableClassNameProp;
+  const emptyClassName = classesProp?.empty ?? emptyClassNameProp;
+  const pinIconClassName = classesProp?.pinIcon ?? pinIconClassNameProp;
+  const pinIconHoverClassName = classesProp?.pinIconHover ?? pinIconHoverClassNameProp;
+  const pinnedPinIconClassName = classesProp?.pinnedPinIcon ?? pinnedPinIconClassNameProp;
+  const pinnedPinIconHoverClassName = classesProp?.pinnedPinIconHover ?? pinnedPinIconHoverClassNameProp;
+  const pinButtonClassName = classesProp?.pinButton ?? pinButtonClassNameProp;
+  const pinnedPinButtonClassName = classesProp?.pinnedPinButton ?? pinnedPinButtonClassNameProp;
+  const shimmerClassName = classesProp?.shimmer ?? shimmerClassNameProp;
+  const shimmerRowClassName = classesProp?.shimmerRow ?? shimmerRowClassNameProp;
+  const shimmerCellClassName = classesProp?.shimmerCell ?? shimmerCellClassNameProp;
+  const shimmerBarClassName = classesProp?.shimmerBar ?? shimmerBarClassNameProp;
   const columns = columnsProp ?? COLUMNS ?? [];
   const data = dataProp ?? COLUMNS_DATA ?? [];
   const shouldShowHeader = tableHeader ?? showHeader;
@@ -508,7 +542,7 @@ function Table<TData>({
 
   if (loading) {
     return (
-      <div className={containerClassName} style={containerStyle}>
+      <div ref={ref} className={`${containerClassName} ${className ?? ""}`.trim() || undefined} style={{ ...containerStyle, ...styleProp }}>
         <TableShimmer
           rowCount={shimmerRowCount}
           className={shimmerClassName}
@@ -549,9 +583,13 @@ function Table<TData>({
 
   return (
     <div
-      ref={containerRef}
-      className={`${containerClassName} ${scrollbarHideClass}`.trim()}
-      style={{ position: "relative", ...containerStyle }}
+      ref={(node) => {
+        (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
+      className={`${containerClassName} ${scrollbarHideClass} ${className ?? ""}`.trim() || undefined}
+      style={{ position: "relative", ...containerStyle, ...styleProp }}
       role="region"
       aria-label={ariaLabel}
       data-table-container
@@ -598,5 +636,9 @@ function Table<TData>({
     </div>
   );
 }
+
+const Table = forwardRef(TableInner) as <TData>(
+  props: TableProps<TData> & { ref?: React.Ref<HTMLDivElement> },
+) => React.ReactElement | null;
 
 export default memo(Table) as typeof Table;

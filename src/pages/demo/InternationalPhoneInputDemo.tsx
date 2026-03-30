@@ -212,6 +212,8 @@ const InternationalPhoneInputDemo = () => {
   const [combinedValue, setCombinedValue] = useState<PhoneNumberData | undefined>();
   const [combinedCountry, setCombinedCountry] = useState<CountryOption | null>(null);
   const [combinedPaste, setCombinedPaste] = useState<PasteDetectedData | null>(null);
+  const [descriptionValue, setDescriptionValue] = useState<PhoneNumberData | undefined>();
+  const [loadingValue, setLoadingValue] = useState<PhoneNumberData | undefined>();
 
   const successOk = successValue?.isValid === true;
 
@@ -1302,6 +1304,46 @@ const InternationalPhoneInputDemo = () => {
             </div>
           </DemoWrapper>
         </Section>
+
+        {/* ─── With Description ─────────────────────────────────────── */}
+        <Section
+          title="With Description"
+          description="Use the description prop to display helper text below the label."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                description="We'll use this number for two-factor authentication."
+                value={descriptionValue}
+                onValueChange={setDescriptionValue}
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        {/* ─── Loading State ────────────────────────────────────────── */}
+        <Section
+          title="Loading State"
+          description="Use the loading prop to indicate an in-progress operation."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md">
+              <InternationalPhoneInput
+                label="Phone Number"
+                loading
+                value={loadingValue}
+                onValueChange={setLoadingValue}
+                placeholder="Enter phone number"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
       </div>
 
       <Section title="InternationalPhoneInput Props" isDarkMode={dark}>
@@ -1783,6 +1825,12 @@ const InternationalPhoneInputDemo = () => {
               description="Present when fullWidth = true"
               isDarkMode={dark}
             />
+            <PropRow
+              name="data-loading"
+              type="root"
+              description="Present when loading = true"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1813,6 +1861,7 @@ const InternationalPhoneInputDemo = () => {
               "Cursor position preserved during formatting",
               "All native input attributes forwarded via rest spread",
               "data-slot on every sub-element for CSS targeting",
+              "Clear button includes aria-label for screen reader identification",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
@@ -1842,6 +1891,7 @@ const InternationalPhoneInputDemo = () => {
               ["Esc", "Close country dropdown"],
               ["Ctrl+C", "Copy phone number in configured format"],
               ["Ctrl+V", "Paste with auto-detection (when enabled)"],
+              ["Type", "Search countries by name in the dropdown"],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
                 <kbd className={c.kbd}>{key}</kbd>

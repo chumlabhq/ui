@@ -325,6 +325,8 @@ const CascadingDropdownDemo = () => {
   const [simpleValue, setSimpleValue] = useState<CascadingValue>({});
   const [disabledValue, setDisabledValue] = useState<CascadingValue>({});
   const [labeledValue, setLabeledValue] = useState<CascadingValue>({});
+  const [descriptionValue, setDescriptionValue] = useState<CascadingValue>({});
+  const [successValue, setSuccessValue] = useState<CascadingValue>({});
   const [errorValue, setErrorValue] = useState<CascadingValue>({});
   const [leftPositionValue, setLeftPositionValue] = useState<CascadingValue>({});
   const [noCloseValue, setNoCloseValue] = useState<CascadingValue>({});
@@ -733,6 +735,60 @@ const CascadingDropdownDemo = () => {
               onValueChange={(val) => setLabeledValue(val)}
               placeholder="Select category..."
               classes={c.cascading}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── With Description ──────────────────────────────────────────── */}
+      <Section
+        title="With Description"
+        description="Add helper text below the label using the description prop."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <CascadingDropdown
+              label="Product Category"
+              description="Choose the category that best fits your product."
+              options={categoryOptions}
+              value={descriptionValue}
+              onValueChange={(val) => setDescriptionValue(val)}
+              placeholder="Select category..."
+              classes={c.cascading}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Success State ───────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Show a success message after a valid selection."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <CascadingDropdown
+              label="Product Category"
+              options={categoryOptions}
+              value={successValue}
+              onValueChange={(val) => setSuccessValue(val)}
+              placeholder="Select category..."
+              success={Object.keys(successValue).length > 0}
+              successMessage={
+                Object.keys(successValue).length > 0
+                  ? "Category selected successfully"
+                  : undefined
+              }
+              classes={{
+                ...c.cascading,
+                trigger: `${c.cascading.trigger} ${
+                  Object.keys(successValue).length > 0
+                    ? "border-green-500 focus:ring-green-500"
+                    : ""
+                }`,
+              }}
             />
           </div>
         </DemoWrapper>
@@ -1888,6 +1944,20 @@ const CascadingDropdownDemo = () => {
         </div>
       </Section>
 
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
+            <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
+            <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
+            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
+            <PropRow name="data-has-submenu" type="option" description="Present on options that have child submenus" isDarkMode={dark} />
+            <PropRow name="data-value" type="option" description="The option's value string" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
       {/* ─── Accessibility ──────────────────────────────────────────────── */}
       <Section
         title="Accessibility"
@@ -1908,6 +1978,7 @@ const CascadingDropdownDemo = () => {
               "Required state sets aria-required on the trigger",
               "Focus management follows WAI-ARIA combobox best practices",
               "Supports all standard keyboard navigation patterns",
+              'Hidden <input type="hidden"> for native form participation when name is set',
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span

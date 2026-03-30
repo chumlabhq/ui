@@ -37,6 +37,7 @@ const getClasses = (dark: boolean) => ({
   modalCloseBtn: "shrink-0 p-1 rounded-md hover:bg-gray-100 transition-colors ml-auto",
   modalCloseIcon: "w-5 h-5 text-gray-500",
   modalBody: "px-6 pb-6",
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
 });
 
 // ─── useModal Child Demo ────────────────────────────────────────────────────
@@ -1936,6 +1937,62 @@ const ModalDemo = () => {
           "Do not remove visible focus outlines.",
         ]}
       />
+
+      {/* ─── Data Attributes ──────────────────────────────────────────── */}
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow name="data-modal-root" type="root" description="Marks the modal root wrapper" isDarkMode={dark} />
+            <PropRow name="data-open" type="root" description="'true' when the modal is open" isDarkMode={dark} />
+            <PropRow name="data-nesting-level" type="root" description="Current nesting depth (0-based)" isDarkMode={dark} />
+            <PropRow name="data-reduce-motion" type="root" description="'true' when reduced motion is enabled" isDarkMode={dark} />
+            <PropRow name="data-modal-overlay" type="overlay" description="Marks the overlay/backdrop element" isDarkMode={dark} />
+            <PropRow name="data-modal-container" type="container" description="Marks the modal container" isDarkMode={dark} />
+            <PropRow name="data-modal-content" type="content" description="Marks the modal content wrapper" isDarkMode={dark} />
+            <PropRow name="data-modal-header" type="header" description="Marks the modal header area" isDarkMode={dark} />
+            <PropRow name="data-modal-body" type="body" description="Marks the modal body area" isDarkMode={dark} />
+            <PropRow name="data-modal-footer" type="footer" description="Marks the modal footer area" isDarkMode={dark} />
+          </PropsTable>
+        </div>
+      </Section>
+
+      {/* ─── Accessibility ────────────────────────────────────────────── */}
+      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+        <div className={c.card}>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              "role=\"dialog\" applied to the modal content",
+              "aria-modal=\"true\" to indicate a modal dialog",
+              "Focus trap keeps keyboard navigation within the modal",
+              "Focus restoration returns focus to the trigger on close",
+              "Supports aria-label, aria-labelledby, and aria-describedby",
+              "Nesting support with proper focus stack management",
+              "closeOnEscape allows dismissal via the Escape key",
+              "preventOutsideClick option to require explicit close action",
+            ].map((text) => (
+              <p key={text} className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span>{text}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["Escape", "Close the modal"],
+              ["Tab", "Move focus to the next focusable element (trapped)"],
+              ["Shift+Tab", "Move focus to the previous focusable element (trapped)"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
     </div>
   );
 };

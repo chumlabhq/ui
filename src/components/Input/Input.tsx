@@ -65,8 +65,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const successId = `${inputId}-success`;
     const descriptionId = `${inputId}-description`;
     const countId = `${inputId}-count`;
-    const isDisabled = disabled || loading;
-    const isInteractive = !isDisabled && !readOnly;
+    const isDisabled = disabled;
+    const isInteractive = !isDisabled && !readOnly && !loading;
 
     const [currentValue, setCurrentValue] = useControllableState({
       value: value !== undefined ? String(value) : undefined,

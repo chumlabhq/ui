@@ -16,7 +16,9 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   clearIcon: "",
   noResults: "",
   label: "",
-  error: "",
+  error: "text-sm text-red-500 dark:text-red-400 mt-1",
+  description: "text-xs text-gray-500 mb-1",
+  success: "text-sm text-green-600 dark:text-green-400 mt-1",
   shimmer: "",
   shimmerItem: "",
 };
@@ -38,6 +40,8 @@ export const UNSTYLED_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   noResults: "",
   label: "",
   error: "",
+  description: "",
+  success: "",
   shimmer: "",
   shimmerItem: "",
 };

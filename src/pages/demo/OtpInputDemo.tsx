@@ -25,6 +25,7 @@ const getClasses = (dark: boolean) => ({
     }`,
     label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
     error: `text-xs mt-2 ${dark ? "text-red-400" : "text-red-500"}`,
+    success: `text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`,
     separator: `text-lg select-none ${dark ? "text-gray-600" : "text-gray-300"}`,
   },
   card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
@@ -112,6 +113,30 @@ const OtpInputDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <OtpInput label="Verification Code" classes={c.otp} />
         </DemoWrapper>
+      </Section>
+
+      {/* ─── With Description ────────────────────────────────────────── */}
+      <Section
+        title="With Description"
+        description="Add helper text below the label."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            label="Verification Code"
+            description="Enter the 6-digit code sent to your email"
+            length={6}
+            classes={c.otp}
+          />
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<OtpInput
+  label="Verification Code"
+  description="Enter the 6-digit code sent to your email"
+  length={6}
+/>`}
+        />
       </Section>
 
       {/* ─── Required ───────────────────────────────────────────────────── */}
@@ -274,6 +299,60 @@ const OtpInputDemo = () => {
             }}
           />
         </DemoWrapper>
+      </Section>
+
+      {/* ─── Success State ───────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Display a success message when the code is verified."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            label="Verification Code"
+            value="123456"
+            success
+            successMessage="Code verified successfully"
+            length={6}
+            classes={c.otp}
+          />
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<OtpInput
+  label="Verification Code"
+  value="123456"
+  success
+  successMessage="Code verified successfully"
+  length={6}
+/>`}
+        />
+      </Section>
+
+      {/* ─── Loading State ────────────────────────────────────────────── */}
+      <Section
+        title="Loading State"
+        description="Show a loading state while verifying the code."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <OtpInput
+            label="Verifying..."
+            value="123456"
+            loading
+            length={6}
+            classes={c.otp}
+          />
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<OtpInput
+  label="Verifying..."
+  value="123456"
+  loading
+  length={6}
+/>`}
+        />
       </Section>
 
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
@@ -614,6 +693,12 @@ const OtpInputDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="description"
+              type="ReactNode"
+              description="Helper text below label"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="required"
               type="boolean"
               defaultVal="false"
@@ -631,6 +716,26 @@ const OtpInputDemo = () => {
               name="errorMessage"
               type="ReactNode"
               description="Error text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="success"
+              type="boolean"
+              defaultVal="false"
+              description="Success state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="successMessage"
+              type="ReactNode"
+              description="Success text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loading"
+              type="boolean"
+              defaultVal="false"
+              description="Loading state"
               isDarkMode={dark}
             />
             <PropRow

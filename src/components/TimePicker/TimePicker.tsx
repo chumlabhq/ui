@@ -148,6 +148,10 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       disabled = false,
       error = false,
       errorMessage,
+      description,
+      success,
+      successMessage,
+      loading,
       label,
       required = false,
       showEndIcon = true,
@@ -203,6 +207,8 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       selectedIcon: classesProp?.selectedIcon ?? baseClasses.selectedIcon,
       noResults: classesProp?.noResults ?? baseClasses.noResults,
       error: classesProp?.error ?? baseClasses.error,
+      description: classesProp?.description ?? baseClasses.description,
+      success: classesProp?.success ?? baseClasses.success,
       clockContainer: classesProp?.clockContainer ?? baseClasses.clockContainer,
       clockDisplay: classesProp?.clockDisplay ?? baseClasses.clockDisplay,
       clockDisplayHours: classesProp?.clockDisplayHours ?? baseClasses.clockDisplayHours,
@@ -644,6 +650,8 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
+        data-loading={loading || undefined}
+        data-success={success || undefined}
       >
         {name ? (
           <input type="hidden" name={name} value={value ?? ""} readOnly tabIndex={-1} aria-hidden />
@@ -654,10 +662,13 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             {required && <span aria-hidden="true">*</span>}
           </label>
         )}
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
+        )}
 
         <div
           ref={containerRef}
-          className={[wrapperLayoutClass, mergedClasses.wrapper].filter(Boolean).join(" ")}
+          className={[wrapperLayoutClass, mergedClasses.wrapper, loading ? "opacity-50 pointer-events-none" : ""].filter(Boolean).join(" ")}
         >
           <div
             ref={triggerElRef}
@@ -752,6 +763,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           <div id={errorId} role="alert" className={mergedClasses.error}>
             {errorMessage}
           </div>
+        )}
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

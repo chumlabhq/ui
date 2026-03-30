@@ -148,6 +148,8 @@ const getClasses = (dark: boolean) => ({
     noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
     label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
     error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
+    description: `text-xs mb-1 ${dark ? "text-gray-400" : "text-gray-500"}`,
+    success: `text-sm mt-1 ${dark ? "text-green-400" : "text-green-600"}`,
     chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${dark ? "bg-gray-600 text-gray-200" : "bg-blue-100 text-blue-800"}`,
     chipRemove: `w-3 h-3 shrink-0 cursor-pointer ${dark ? "hover:text-gray-300" : "hover:text-blue-600"}`,
     moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-md shrink-0 ${dark ? "bg-gray-600 text-gray-300" : "bg-gray-100 text-gray-600"}`,
@@ -187,6 +189,10 @@ const MultiSelectDropdownDemo = () => {
   const [disabledValue, setDisabledValue] = useState<string[]>(["apple", "banana"]);
   // Error
   const [errorValue, setErrorValue] = useState<string[]>([]);
+  // Description
+  const [descriptionValue, setDescriptionValue] = useState<string[]>([]);
+  // Success
+  const [successValue, setSuccessValue] = useState<string[]>([]);
   // Form integration
   const [formIntegrationValue, setFormIntegrationValue] = useState<string[]>([]);
   // Chevron
@@ -605,6 +611,51 @@ const MultiSelectDropdownDemo = () => {
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500` }}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── With Description ────────────────────────────────────────────── */}
+      <Section
+        title="With Description"
+        description="Use the description prop to show helper text below the label."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectDropdown
+              label="Favorite Fruits"
+              description="Pick one or more fruits you enjoy."
+              options={staticOptions}
+              value={descriptionValue}
+              onValueChange={(values) => setDescriptionValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              classes={c.dropdown}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Success State ─────────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Use success and successMessage props to indicate valid selections."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-72">
+            <MultiSelectDropdown
+              label="Favorite Fruits"
+              options={staticOptions}
+              value={successValue}
+              onValueChange={(values) => setSuccessValue(values)}
+              placeholder="Select fruits..."
+              maxDisplayedChips={2}
+              success={successValue.length > 0}
+              successMessage={`${successValue.length} fruit${successValue.length === 1 ? "" : "s"} selected`}
+              classes={{ ...c.dropdown, trigger: successValue.length > 0 ? `${c.dropdown.trigger} border-green-500 focus:ring-green-500` : c.dropdown.trigger }}
             />
           </div>
         </DemoWrapper>
@@ -1371,6 +1422,9 @@ const MultiSelectDropdownDemo = () => {
             <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the dropdown" isDarkMode={dark} />
             <PropRow name="error" type="boolean" defaultVal="false" description="Show error state" isDarkMode={dark} />
             <PropRow name="errorMessage" type="ReactNode" description="Error message to display" isDarkMode={dark} />
+            <PropRow name="description" type="ReactNode" description="Helper text displayed below the label" isDarkMode={dark} />
+            <PropRow name="success" type="boolean" defaultVal="false" description="Show success state" isDarkMode={dark} />
+            <PropRow name="successMessage" type="ReactNode" description="Success message to display" isDarkMode={dark} />
             <PropRow name="label" type="ReactNode" description="Label for the dropdown" isDarkMode={dark} />
             <PropRow name="required" type="boolean" defaultVal="false" description="Whether field is required" isDarkMode={dark} />
             <PropRow name="showChevron" type="boolean" defaultVal="true" description="Show dropdown chevron" isDarkMode={dark} />
@@ -1433,6 +1487,8 @@ const MultiSelectDropdownDemo = () => {
             <PropRow name="noResults" type="string" description="No results message" isDarkMode={dark} />
             <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
             <PropRow name="error" type="string" description="Error message" isDarkMode={dark} />
+            <PropRow name="description" type="string" description="Description/helper text" isDarkMode={dark} />
+            <PropRow name="success" type="string" description="Success message" isDarkMode={dark} />
             <PropRow name="shimmer" type="string" description="Shimmer container" isDarkMode={dark} />
             <PropRow name="shimmerItem" type="string" description="Individual shimmer item" isDarkMode={dark} />
           </PropsTable>
@@ -1450,7 +1506,12 @@ const MultiSelectDropdownDemo = () => {
             <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
             <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
+            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
             <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
+            <PropRow name="data-placeholder" type="trigger" description="Present when no option is selected" isDarkMode={dark} />
+            <PropRow name="data-selected" type="option" description="Present on selected options" isDarkMode={dark} />
+            <PropRow name="data-focused" type="option" description="Present on the keyboard-focused option" isDarkMode={dark} />
+            <PropRow name="data-value" type="option" description="The option's value string" isDarkMode={dark} />
             <PropRow name="data-state" type="content (portal)" description='"open" or "closed"' isDarkMode={dark} />
             <PropRow name="data-position" type="content (portal)" description='"top" or "bottom" (actual position)' isDarkMode={dark} />
           </PropsTable>

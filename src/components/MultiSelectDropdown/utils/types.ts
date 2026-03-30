@@ -1,12 +1,7 @@
 import type { CSSProperties, MutableRefObject, ReactNode } from "react";
+import type { DropdownOption } from "../../Dropdown/utils/types";
 
-export interface MultiSelectOption {
-  value: string;
-  label: string;
-  content?: ReactNode;
-  selectedContent?: ReactNode;
-  disabled?: boolean;
-}
+export type MultiSelectOption = DropdownOption;
 
 export interface MultiSelectDropdownClasses {
   root?: string;
@@ -28,6 +23,8 @@ export interface MultiSelectDropdownClasses {
   noResults?: string;
   label?: string;
   error?: string;
+  description?: string;
+  success?: string;
   clearIcon?: string;
   shimmer?: string;
   shimmerItem?: string;
@@ -48,6 +45,9 @@ export interface MultiSelectDropdownProps {
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
+  description?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
   required?: boolean;
   noResultsContent?: ReactNode;
   clearable?: boolean;

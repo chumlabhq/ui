@@ -23,6 +23,7 @@ const getClasses = (dark: boolean) => ({
   badge: `inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums ${dark ? "bg-gray-800 text-gray-300 border border-white/10" : "bg-gray-100 text-gray-700 border border-gray-200"}`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
   note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
   slider: {
     root: "flex flex-col gap-2 w-full",
@@ -486,6 +487,40 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ── Success State ─────────────────────────────────────────────── */}
+      <Section title="Success State" description="Display a success message for valid slider values." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          {(() => {
+            const [val, setVal] = useState(75);
+            return (
+              <Slider
+                label="Volume"
+                value={val}
+                onValueChange={(v) => setVal(v as number)}
+                success={val >= 50}
+                successMessage="Good volume level"
+                classes={c.slider}
+              />
+            );
+          })()}
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<Slider
+  label="Volume"
+  value={val}
+  onValueChange={(v) => setVal(v as number)}
+  success={val >= 50}
+  successMessage="Good volume level"
+/>`} />
+      </Section>
+
+      {/* ── Loading State ─────────────────────────────────────────────── */}
+      <Section title="Loading State" description="Show a loading state while the value is being saved." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark}>
+          <Slider label="Saving preference..." defaultValue={50} loading classes={c.slider} />
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<Slider label="Saving preference..." defaultValue={50} loading />`} />
+      </Section>
+
       {/* ── Vertical ─────────────────────────────────────────────────── */}
       <Section title="Vertical" description="Set orientation to 'vertical' for a vertical slider." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
@@ -715,14 +750,17 @@ const SliderDemo = () => {
       </Section>
 
       {/* ── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Available data attributes for CSS targeting." isDarkMode={dark}>
+      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
             <PropRow name="data-disabled" type="Root, thumb" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-error" type="Root" description="Present when error state is active" isDarkMode={dark} />
+            <PropRow name="data-loading" type="Root" description="Present when loading=true" isDarkMode={dark} />
+            <PropRow name="data-success" type="Root" description="Present when success=true (without error)" isDarkMode={dark} />
             <PropRow name="data-orientation" type="Root, wrapper" description='"horizontal" or "vertical"' isDarkMode={dark} />
-            <PropRow name="data-dragging" type="Thumb" description="Present when thumb is being dragged" isDarkMode={dark} />
             <PropRow name="data-index" type="Thumb" description="0 for single/first thumb, 1 for second range thumb" isDarkMode={dark} />
+            <PropRow name="data-dragging" type="Thumb" description="Present when thumb is being dragged" isDarkMode={dark} />
+            <PropRow name="data-disabled" type="Thumb" description="Present on disabled thumbs" isDarkMode={dark} />
           </PropsTable>
         </div>
       </Section>
@@ -732,19 +770,39 @@ const SliderDemo = () => {
         <div className={c.card}>
           <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
             {[
-              'Each thumb renders role="slider" with aria-valuenow, aria-valuemin, aria-valuemax, and aria-valuetext.',
-              "Full keyboard support: Arrow keys (step), Shift+Arrow (10x step), Home/End (min/max), Page Up/Down (10x step).",
-              'aria-orientation is set to match the orientation prop ("horizontal" or "vertical").',
-              "Label is linked via aria-labelledby when provided.",
-              "Error message is linked via aria-describedby for screen reader announcements.",
-              "Focus ring is visible on keyboard navigation with ring-offset for contrast.",
-              "Hidden inputs are rendered for native form submission when name is set.",
-              "Range sliders render two separate slider roles — one per thumb.",
+              'Each thumb renders role="slider" with aria-valuenow, aria-valuemin, and aria-valuemax',
+              "aria-label per thumb provides an accessible name for screen readers",
+              "Full keyboard control for value adjustment",
+              'aria-orientation is set to match the orientation prop ("horizontal" or "vertical")',
+              "Label is linked via aria-labelledby when provided",
+              "Error message is linked via aria-describedby for screen reader announcements",
+              "Hidden inputs are rendered for native form submission when name is set",
+              "Range sliders render two separate slider roles — one per thumb",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
                 <span>{text}</span>
               </p>
+            ))}
+          </div>
+        </div>
+        <div className={`${c.card} mt-3`}>
+          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>
+            Keyboard Reference
+          </p>
+          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            {[
+              ["Arrow Left / Down", "Decrease value by one step"],
+              ["Arrow Right / Up", "Increase value by one step"],
+              ["Home", "Set to minimum value"],
+              ["End", "Set to maximum value"],
+              ["Page Up", "Increase by larger step (10x)"],
+              ["Page Down", "Decrease by larger step (10x)"],
+            ].map(([key, desc]) => (
+              <div key={key} className="flex items-center gap-3">
+                <kbd className={c.kbd}>{key}</kbd>
+                <span>{desc}</span>
+              </div>
             ))}
           </div>
         </div>

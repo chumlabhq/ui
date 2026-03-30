@@ -16,6 +16,7 @@ import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CL
 import { getVisiblePages } from "./utils/helpers";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";
 import { cn } from "../../utils/cn";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const isBrowser = typeof window !== "undefined";
 
@@ -207,19 +208,28 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       rowsPerPage,
       rowOptions,
       onPageChange,
+      onValueChange,
+      value,
+      disabled,
+      label,
+      error,
+      errorMessage,
       onRowsPerPageChange,
       showRowsPerPage = false,
       rowsPerPageLabel = "rows",
       showLabel = "Show",
       dropdownAriaLabel = "Rows per page",
-      dropdownDirection = "up",
+      dropdownDirection,
+      dropdownPosition = "top",
       dropdownZIndex = 50,
+      dropdownGap = 4,
       dropdownIcon,
       prevIcon,
       nextIcon,
       renderEllipsis,
       renderPageInfo,
       sectionOrder = DEFAULT_SECTION_ORDER,
+      reduceMotion,
       classes: classesProp,
       unstyled = false,
       portalContainer,
@@ -233,7 +243,11 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     ref,
   ) => {
     const instanceId = useId();
+    const prefersReducedMotion = useReducedMotion(reduceMotion);
     const paginationAriaLabel = paginationAriaLabelProp ?? "Pagination";
+
+    const resolvedCurrentPage = value ?? currentPage ?? 1;
+    const resolvedOnPageChange = onValueChange ?? onPageChange;
 
     const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
@@ -262,7 +276,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     );
 
     const safeTotalPages = Math.max(0, Math.floor(totalPages));
-    const safeCurrentPage = Math.max(1, Math.min(currentPage, safeTotalPages || 1));
+    const safeCurrentPage = Math.max(1, Math.min(resolvedCurrentPage, safeTotalPages || 1));
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [activeOptionIndex, setActiveOptionIndex] = useState(-1);
@@ -385,15 +399,15 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const handlePrevPage = useCallback(() => {
       if (safeCurrentPage > 1) {
-        onPageChange(safeCurrentPage - 1);
+        resolvedOnPageChange?.(safeCurrentPage - 1);
       }
-    }, [safeCurrentPage, onPageChange]);
+    }, [safeCurrentPage, resolvedOnPageChange]);
 
     const handleNextPage = useCallback(() => {
       if (safeCurrentPage < safeTotalPages) {
-        onPageChange(safeCurrentPage + 1);
+        resolvedOnPageChange?.(safeCurrentPage + 1);
       }
-    }, [safeCurrentPage, safeTotalPages, onPageChange]);
+    }, [safeCurrentPage, safeTotalPages, resolvedOnPageChange]);
 
     const dropdownIconClass = cn(
       "w-3 h-3 transition-transform duration-200",
@@ -442,9 +456,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             {isDropdownOpen && (
               <RowSelectorPortal
                 triggerRef={triggerRef}
-                direction={dropdownDirection}
+                direction={dropdownDirection ?? (dropdownPosition === "top" ? "up" : "down")}
                 zIndex={dropdownZIndex}
-                gap={4}
+                gap={dropdownGap}
                 dropdownClassName={mergedClasses.selectorDropdown}
                 optionClassName={mergedClasses.selectorOption}
                 listboxId={listboxId}
@@ -496,7 +510,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 <Fragment key={`ellipsis-${index}`}>
                   {renderEllipsis({
                     position: index < visiblePages.length / 2 ? "start" : "end",
-                    onPageChange,
+                    onPageChange: resolvedOnPageChange!,
                   })}
                 </Fragment>
               ) : (
@@ -512,7 +526,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               <button
                 key={item}
                 type="button"
-                onClick={() => onPageChange(item)}
+                onClick={() => resolvedOnPageChange?.(item)}
                 className={
                   safeCurrentPage === item
                     ? mergedClasses.activePageButton
@@ -551,7 +565,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       <nav
         ref={ref as React.Ref<HTMLElement>}
         aria-label={paginationAriaLabel}
-        className={cn(mergedClasses.root, className)}
+        aria-disabled={disabled || undefined}
+        data-disabled={disabled || undefined}
+        data-reduce-motion={prefersReducedMotion || undefined}
+        className={cn(mergedClasses.root, className, disabled && "opacity-50 pointer-events-none")}
         {...rest}
       >
         {sectionOrder.map((section) => (

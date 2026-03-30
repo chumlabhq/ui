@@ -47,6 +47,10 @@ export interface TimePickerClasses {
   noResults?: string;
   /** Error message element. */
   error?: string;
+  /** Description element. */
+  description?: string;
+  /** Success message element. */
+  success?: string;
 
   // ── Clock variant slots ──────────────────────────────────────────────
   /** Clock variant outermost container. */
@@ -188,6 +192,14 @@ export interface TimePickerProps
   error?: boolean;
   /** Error message displayed below the input. */
   errorMessage?: ReactNode;
+  /** Helper text displayed below the label. */
+  description?: ReactNode;
+  /** Success state. */
+  success?: boolean;
+  /** Success message text. */
+  successMessage?: ReactNode;
+  /** Loading state. */
+  loading?: boolean;
   /** Label displayed above the input. */
   label?: ReactNode;
   /** Shows a required indicator on the label. */

@@ -36,6 +36,8 @@ export interface SliderClasses {
   markLabel?: string;
   /** Error message */
   error?: string;
+  /** Success message */
+  success?: string;
 }
 
 export type SliderValue = number | [number, number];
@@ -112,6 +114,9 @@ export interface SliderProps
   required?: boolean;
   error?: boolean;
   errorMessage?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
+  loading?: boolean;
 
   // ─── Styling ────────────────────────────────────────────────────────
   classes?: SliderClasses;

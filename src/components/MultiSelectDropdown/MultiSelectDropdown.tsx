@@ -192,6 +192,9 @@ const MultiSelectDropdown = forwardRef<
       error = false,
       errorMessage,
       label,
+      description,
+      success = false,
+      successMessage,
       required = false,
       noResultsContent = "No options found",
       clearable = false,
@@ -253,6 +256,8 @@ const MultiSelectDropdown = forwardRef<
         clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
         label: classesProp?.label ?? baseClasses.label,
         error: classesProp?.error ?? baseClasses.error,
+        description: classesProp?.description ?? baseClasses.description,
+        success: classesProp?.success ?? baseClasses.success,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
         moreCount: classesProp?.moreCount ?? baseClasses.moreCount,
@@ -460,6 +465,7 @@ const MultiSelectDropdown = forwardRef<
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-full-width={fullWidth || undefined}
+        data-success={success || undefined}
       >
         {label && (
           <label
@@ -470,6 +476,10 @@ const MultiSelectDropdown = forwardRef<
             {label}
             {required && <span aria-hidden="true">*</span>}
           </label>
+        )}
+
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div
@@ -648,6 +658,10 @@ const MultiSelectDropdown = forwardRef<
           >
             {errorMessage}
           </div>
+        )}
+
+        {success && successMessage && !error && (
+          <div className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

@@ -621,27 +621,6 @@ const Home = () => {
             </div>
           </section>
 
-          {/* ── STATS STRIP ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-24">
-            <div className="flex items-center justify-center gap-8 sm:gap-16 text-center">
-              {[
-                ["12+", "Components"],
-                ["100%", "Accessible"],
-                ["0", "Dependencies"],
-                ["180+", "Tests"],
-              ].map(([num, label]) => (
-                <div key={label}>
-                  <div className="text-xl sm:text-2xl font-bold tracking-tight bg-linear-to-b from-white to-gray-500 bg-clip-text text-transparent">
-                    {num}
-                  </div>
-                  <div className="text-[10px] text-gray-600 uppercase tracking-wider mt-0.5">
-                    {label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
           {/* ── WHY CHURN LAB ── */}
           <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-28">
             <div className="text-center mb-12">

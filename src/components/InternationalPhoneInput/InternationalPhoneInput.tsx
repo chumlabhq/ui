@@ -88,6 +88,10 @@ const InternationalPhoneInput = forwardRef<
       id,
       name,
       label,
+      description,
+      loading = false,
+      clearable = false,
+      onClear,
       required = false,
       disabled = false,
       readOnly = false,
@@ -130,6 +134,7 @@ const InternationalPhoneInput = forwardRef<
       () => ({
         root: classesProp?.root ?? baseClasses.root,
         label: classesProp?.label ?? baseClasses.label,
+        description: classesProp?.description ?? baseClasses.description,
         wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
         input: classesProp?.input ?? baseClasses.input,
         error: classesProp?.error ?? baseClasses.error,
@@ -461,6 +466,16 @@ const InternationalPhoneInput = forwardRef<
       [phoneInput, selectedCountry, copyFormat, formatPatterns],
     );
 
+    const handleClear = useCallback(() => {
+      if (onClear) {
+        onClear();
+        return;
+      }
+      setPhoneInput("");
+      setHasValidationError(false);
+      emitChange("", selectedCountry);
+    }, [onClear, setPhoneInput, emitChange, selectedCountry]);
+
     const displayError = error || hasValidationError;
     const internalErrorMessage = hasValidationError
       ? (validationMessage ?? "Please enter a valid phone number")
@@ -497,6 +512,7 @@ const InternationalPhoneInput = forwardRef<
         data-success={displaySuccess || undefined}
         data-readonly={readOnly || undefined}
         data-full-width={fullWidth || undefined}
+        data-loading={loading || undefined}
       >
         {label && (
           <label
@@ -510,8 +526,12 @@ const InternationalPhoneInput = forwardRef<
           </label>
         )}
 
+        {description && (
+          <div className={mergedClasses.description || undefined}>{description}</div>
+        )}
+
         <div
-          className={mergedClasses.wrapper || undefined}
+          className={cn(mergedClasses.wrapper, loading && "opacity-50 pointer-events-none") || undefined}
           data-slot="wrapper"
           role="group"
           aria-labelledby={label ? labelId : undefined}
@@ -571,6 +591,19 @@ const InternationalPhoneInput = forwardRef<
             data-readonly={readOnly || undefined}
             {...rest}
           />
+          {clearable && phoneInput && !disabled && !readOnly && (
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Clear phone number"
+              onClick={handleClear}
+              style={{ cursor: "pointer" }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {name && (

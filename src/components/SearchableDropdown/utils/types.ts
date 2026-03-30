@@ -1,12 +1,7 @@
 import type { ReactNode, CSSProperties } from "react";
+import type { DropdownOption } from "../../Dropdown/utils/types";
 
-export interface SearchableDropdownOption {
-  value: string;
-  label: string;
-  content?: ReactNode;
-  selectedContent?: ReactNode;
-  disabled?: boolean;
-}
+export type SearchableDropdownOption = DropdownOption;
 
 export interface SearchableDropdownClasses {
   root?: string;
@@ -25,6 +20,8 @@ export interface SearchableDropdownClasses {
   noResults?: string;
   label?: string;
   error?: string;
+  description?: string;
+  success?: string;
   searchInput?: string;
   searchInputElement?: string;
   searchIcon?: string;
@@ -47,10 +44,15 @@ export interface SearchableDropdownProps {
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
+  description?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
   required?: boolean;
   clearable?: boolean;
   showSearch?: boolean;
   searchPlaceholder?: string;
+  /** Custom aria-label for the search input. Defaults to "Search options". */
+  searchInputAriaLabel?: string;
   noResultsContent?: ReactNode;
   showChevron?: boolean;
   showSelectedIcon?: boolean;
@@ -88,7 +90,7 @@ export interface SearchableDropdownProps {
 }
 
 export interface SearchableDropdownTriggerRenderProps {
-  ref: React.RefCallback<HTMLButtonElement>;
+  ref: React.RefCallback<HTMLElement>;
   isOpen: boolean;
   selectedOption: SearchableDropdownOption | null;
   placeholder: ReactNode;

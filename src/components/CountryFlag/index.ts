@@ -1,5 +1,4 @@
 export { CountryFlag } from "./CountryFlag";
-export { default } from "./CountryFlag";
 export { CountryFlagGroup, CountryFlagGroupCount } from "./components/CountryFlagGroup";
 export {
   CountryFlagShimmer,

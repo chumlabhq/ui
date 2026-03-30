@@ -130,6 +130,8 @@ export interface StepperProps {
   tooltipDefaults?: StepperTooltipDefaults;
   /** Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. */
   indicatorSize?: number;
+  /** Controls motion preferences. `"auto"` respects the user's OS setting. */
+  reduceMotion?: boolean | "auto";
   classes?: StepperClasses;
   unstyled?: boolean;
   className?: string;

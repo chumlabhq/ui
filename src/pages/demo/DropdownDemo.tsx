@@ -270,6 +270,8 @@ const DropdownDemo = () => {
   const [disabledValue] = useState<string | null>("apple");
   // Error
   const [errorValue, setErrorValue] = useState<string | null>(null);
+
+  const [successValue, setSuccessValue] = useState<string | null>(null);
   // Chevron
   const [customChevronValue, setCustomChevronValue] = useState<string | null>(null);
   const [noChevronValue, setNoChevronValue] = useState<string | null>(null);
@@ -993,6 +995,58 @@ const DropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── With Description ──────────────────────────────────────────── */}
+      <Section
+        title="With Description"
+        description="Add helper text below the label."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <Dropdown
+            label="Country"
+            description="Select your country of residence"
+            options={fruitOptions}
+            placeholder="Choose a country"
+            classes={c.dropdown}
+          />
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<Dropdown
+  label="Country"
+  description="Select your country of residence"
+  options={options}
+  placeholder="Choose a country"
+/>`} />
+      </Section>
+
+      {/* ─── Success State ────────────────────────────────────────────────── */}
+      <Section
+        title="Success State"
+        description="Display a success message when a valid selection is made."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <div className="w-64">
+            <Dropdown
+              label="Plan"
+              options={fruitOptions}
+              value={successValue}
+              onValueChange={(v) => setSuccessValue(v)}
+              success={!!successValue}
+              successMessage="Great choice!"
+              classes={c.dropdown}
+            />
+          </div>
+        </DemoWrapper>
+        <CodeBlock isDarkMode={dark} code={`<Dropdown
+  label="Plan"
+  options={options}
+  value={val}
+  onValueChange={(v) => setVal(v)}
+  success={!!val}
+  successMessage="Great choice!"
+/>`} />
+      </Section>
+
       {/* ─── Custom Chevron & No Chevron ─────────────────────────────────── */}
       <Section
         title="Custom Chevron & No Chevron"
@@ -1701,6 +1755,7 @@ const DropdownDemo = () => {
             <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
             <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
+            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
             <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
             <PropRow name="data-placeholder" type="trigger" description="Present when no option is selected" isDarkMode={dark} />
             <PropRow name="data-selected" type="option" description="Present on the selected option" isDarkMode={dark} />

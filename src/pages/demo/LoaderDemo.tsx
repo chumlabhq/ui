@@ -536,6 +536,7 @@ const LoaderDemo = () => {
               "SVG/DOM elements are decorative and inherit accessible names from the parent.",
               "Supports ref forwarding for programmatic focus management if needed.",
               "Use aria-hidden on decorative loaders when adjacent text explains status.",
+              "Reduced motion support via CSS prefers-reduced-motion media query.",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>
@@ -545,6 +546,24 @@ const LoaderDemo = () => {
               </p>
             ))}
           </div>
+        </div>
+      </Section>
+
+      {/* ── Data Attributes ────────────────────────────────────────────── */}
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
+        <div className={c.card}>
+          <PropsTable isDarkMode={dark}>
+            <PropRow
+              name="data-reduce-motion"
+              type="root"
+              description="Present when reduced motion is active"
+              isDarkMode={dark}
+            />
+          </PropsTable>
         </div>
       </Section>
 

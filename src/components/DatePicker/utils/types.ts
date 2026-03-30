@@ -58,6 +58,10 @@ export interface DatePickerClasses {
   label?: string;
   /** Error message below trigger */
   error?: string;
+  /** Description text below label */
+  description?: string;
+  /** Success message below trigger */
+  success?: string;
   /** Calendar popover container */
   calendar?: string;
   /** Calendar header (month/year nav) */
@@ -179,6 +183,11 @@ interface BaseDatePickerProps
   error?: boolean;
   errorMessage?: ReactNode;
   label?: ReactNode;
+  description?: ReactNode;
+  success?: boolean;
+  successMessage?: ReactNode;
+  loading?: boolean;
+  clearable?: boolean;
   required?: boolean;
   fullWidth?: boolean;
 
@@ -206,6 +215,16 @@ interface BaseDatePickerProps
 
   // ─── Scroll behavior ──────────────────────────────────────────────
   lockScroll?: boolean;
+
+  // ─── Dropdown positioning ────────────────────────────────────────
+  /** Z-index of the calendar popup. */
+  dropdownZIndex?: number;
+  /** Vertical placement of the calendar popup relative to the trigger. */
+  dropdownPosition?: "top" | "bottom";
+  /** Gap in pixels between trigger and calendar popup. */
+  dropdownGap?: number;
+  /** Keep the calendar DOM mounted when closed. */
+  keepMounted?: boolean;
 
   // ─── Motion ─────────────────────────────────────────────────────────
   reduceMotion?: boolean | "auto";
