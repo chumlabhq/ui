@@ -144,7 +144,7 @@ export function DiagramFrontendArchitecture() {
       {items.map((item) => (
         <div
           key={item.label}
-          className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 flex flex-col items-center gap-3 hover:bg-white/[0.06] transition-colors"
+          className="rounded-xl border border-white/8 bg-white/3 p-6 flex flex-col items-center gap-3 hover:bg-white/6 transition-colors"
         >
           <div
             className="w-14 h-14 rounded-xl flex items-center justify-center"
@@ -163,7 +163,7 @@ export function DiagramFrontendArchitecture() {
 export function DiagramFrontendVsBackend() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.05] p-6">
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-6">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -182,7 +182,7 @@ export function DiagramFrontendVsBackend() {
           ))}
         </div>
       </div>
-      <div className="rounded-xl border border-purple-500/20 bg-purple-500/[0.05] p-6">
+      <div className="rounded-xl border border-purple-500/20 bg-purple-500/5 p-6">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -209,7 +209,7 @@ export function DiagramFrontendVsBackend() {
 
 export function DiagramComponentBasedUI() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex items-center gap-2 mb-5 text-sm text-gray-400 font-medium">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="7" height="7" />
@@ -220,34 +220,34 @@ export function DiagramComponentBasedUI() {
         Component Tree
       </div>
       <div className="flex flex-col gap-3">
-        <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/[0.08] px-5 py-3 text-sm text-emerald-300 font-semibold">
+        <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/8 px-5 py-3 text-sm text-emerald-300 font-semibold">
           &lt;App /&gt;
         </div>
-        <div className="pl-6 border-l border-white/[0.06] ml-4 flex flex-col gap-3">
-          <div className="rounded-lg border border-blue-500/25 bg-blue-500/[0.08] px-5 py-3 text-sm text-blue-300 font-medium">
+        <div className="pl-6 border-l border-white/6 ml-4 flex flex-col gap-3">
+          <div className="rounded-lg border border-blue-500/25 bg-blue-500/8 px-5 py-3 text-sm text-blue-300 font-medium">
             &lt;Header /&gt;
           </div>
-          <div className="rounded-lg border border-blue-500/25 bg-blue-500/[0.08] px-5 py-3 text-sm text-blue-300 font-medium">
+          <div className="rounded-lg border border-blue-500/25 bg-blue-500/8 px-5 py-3 text-sm text-blue-300 font-medium">
             &lt;MainContent /&gt;
           </div>
-          <div className="pl-6 border-l border-white/[0.06] ml-4 flex flex-col gap-3">
+          <div className="pl-6 border-l border-white/6 ml-4 flex flex-col gap-3">
             <div className="flex flex-wrap gap-3">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="rounded-lg border border-violet-500/25 bg-violet-500/[0.08] px-4 py-2.5 text-sm text-violet-300">
+                <div key={n} className="rounded-lg border border-violet-500/25 bg-violet-500/8 px-4 py-2.5 text-sm text-violet-300">
                   &lt;Card /&gt;
                 </div>
               ))}
             </div>
             <div className="flex flex-wrap gap-3">
-              <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.08] px-4 py-2.5 text-sm text-amber-300">
+              <div className="rounded-lg border border-amber-500/25 bg-amber-500/8 px-4 py-2.5 text-sm text-amber-300">
                 &lt;Button /&gt;
               </div>
-              <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.08] px-4 py-2.5 text-sm text-amber-300">
+              <div className="rounded-lg border border-amber-500/25 bg-amber-500/8 px-4 py-2.5 text-sm text-amber-300">
                 &lt;Input /&gt;
               </div>
             </div>
           </div>
-          <div className="rounded-lg border border-blue-500/25 bg-blue-500/[0.08] px-5 py-3 text-sm text-blue-300 font-medium">
+          <div className="rounded-lg border border-blue-500/25 bg-blue-500/8 px-5 py-3 text-sm text-blue-300 font-medium">
             &lt;Footer /&gt;
           </div>
         </div>
@@ -281,7 +281,7 @@ export function DiagramLearningPath() {
               {i + 1}
             </div>
             {i < steps.length - 1 && (
-              <div className="w-0.5 h-8 bg-white/[0.08]" />
+              <div className="w-0.5 h-8 bg-white/8" />
             )}
           </div>
           <div className="pt-2 pb-5">
@@ -310,7 +310,7 @@ export function DiagramHtmlStructure() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-4">Page Structure</div>
       <div className="flex flex-col gap-2.5">
         {elements.map((el) => (
@@ -335,7 +335,7 @@ export function DiagramHtmlStructure() {
 export function DiagramBeforeAfterCss() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+      <div className="rounded-xl border border-white/8 bg-white/3 p-6">
         <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-4">Without CSS</div>
         <div className="space-y-2 font-serif">
           <div className="text-base text-gray-400 underline">Welcome</div>
@@ -343,7 +343,7 @@ export function DiagramBeforeAfterCss() {
           <div className="text-sm text-gray-500 border border-gray-600 px-2 py-0.5 inline-block">Click Me</div>
         </div>
       </div>
-      <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-6">
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/4 p-6">
         <div className="text-xs text-blue-400 font-medium uppercase tracking-wider mb-4">With CSS</div>
         <div className="space-y-3">
           <div className="text-xl font-bold text-white">Welcome</div>
@@ -364,7 +364,7 @@ export function DiagramInteractionFlow() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-stretch gap-3">
         {steps.map((step, i) => (
           <div key={step.label} className="flex-1 flex items-center gap-3">
@@ -396,7 +396,7 @@ export function DiagramInteractionFlow() {
 
 export function DiagramCombinedFlow() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-3">
         {[
           { label: "HTML", sub: "Structure", color: "#e44d26" },
@@ -426,7 +426,7 @@ export function DiagramCombinedFlow() {
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />
         </svg>
-        <div className="flex-1 w-full sm:w-auto rounded-lg border border-emerald-500/30 bg-emerald-500/[0.08] px-4 py-3 text-center">
+        <div className="flex-1 w-full sm:w-auto rounded-lg border border-emerald-500/30 bg-emerald-500/8 px-4 py-3 text-center">
           <div className="text-sm font-bold text-emerald-400">Webpage</div>
           <div className="text-xs text-gray-500 mt-0.5">Final Result</div>
         </div>
@@ -459,7 +459,7 @@ export function DiagramHtmlCssJsPath() {
             >
               {i + 1}
             </div>
-            {i < steps.length - 1 && <div className="w-0.5 h-8 bg-white/[0.08]" />}
+            {i < steps.length - 1 && <div className="w-0.5 h-8 bg-white/8" />}
           </div>
           <div className="pt-2 pb-5">
             <span className="text-base text-white font-semibold">{step.label}</span>
@@ -500,7 +500,7 @@ export function DiagramWebFlowOverview() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 overflow-x-auto">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6 overflow-x-auto">
       <div className="flex items-center gap-1 min-w-max diagram-stagger">
         {steps.map((step, i) => (
           <div key={step.label} className="flex items-center gap-1">
@@ -531,22 +531,22 @@ export function DiagramWebFlowOverview() {
 
 export function DiagramUrlBreakdown() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="font-mono text-sm sm:text-base text-gray-400 mb-5 flex flex-wrap gap-0 diagram-stagger">
         <span className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded">https://</span>
         <span className="text-blue-400 bg-blue-400/10 px-1.5 py-0.5 rounded">example.com</span>
         <span className="text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded">/about</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 diagram-scale-stagger">
-        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-3">
+        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
           <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Protocol</div>
           <div className="text-sm text-gray-400">How data is transferred (securely)</div>
         </div>
-        <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.05] px-4 py-3">
+        <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 px-4 py-3">
           <div className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">Domain</div>
           <div className="text-sm text-gray-400">Human-readable server address</div>
         </div>
-        <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.05] px-4 py-3">
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-3">
           <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Path</div>
           <div className="text-sm text-gray-400">Which page you want</div>
         </div>
@@ -563,7 +563,7 @@ export function DiagramDnsFlow() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-stretch gap-3">
         {steps.map((step, i) => (
           <div key={step.label} className="flex items-center gap-3 flex-1">
@@ -589,19 +589,19 @@ export function DiagramDnsFlow() {
 
 export function DiagramRenderingPipeline() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-4">
         {/* Parse row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div
-            className="rounded-lg border border-blue-500/25 bg-blue-500/[0.06] px-4 py-3 text-center animate-pipeline-glow"
+            className="rounded-lg border border-blue-500/25 bg-blue-500/6 px-4 py-3 text-center animate-pipeline-glow"
             style={{ "--glow-color": "rgba(59,130,246,0.15)", animationDelay: "0s" } as React.CSSProperties}
           >
             <div className="text-xs text-gray-500 mb-1">HTML</div>
             <div className="text-sm font-semibold text-blue-400">DOM</div>
           </div>
           <div
-            className="rounded-lg border border-violet-500/25 bg-violet-500/[0.06] px-4 py-3 text-center animate-pipeline-glow"
+            className="rounded-lg border border-violet-500/25 bg-violet-500/6 px-4 py-3 text-center animate-pipeline-glow"
             style={{ "--glow-color": "rgba(139,92,246,0.15)", animationDelay: "0.3s" } as React.CSSProperties}
           >
             <div className="text-xs text-gray-500 mb-1">CSS</div>
@@ -617,7 +617,7 @@ export function DiagramRenderingPipeline() {
         </div>
         {/* Merge */}
         <div
-          className="rounded-lg border border-emerald-500/25 bg-emerald-500/[0.06] px-4 py-3 text-center animate-pipeline-glow"
+          className="rounded-lg border border-emerald-500/25 bg-emerald-500/6 px-4 py-3 text-center animate-pipeline-glow"
           style={{ "--glow-color": "rgba(16,185,129,0.15)", animationDelay: "0.6s" } as React.CSSProperties}
         >
           <div className="text-sm font-semibold text-emerald-400">Render Tree</div>
@@ -633,14 +633,14 @@ export function DiagramRenderingPipeline() {
         {/* Final row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div
-            className="rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-center animate-pipeline-glow"
+            className="rounded-lg border border-amber-500/25 bg-amber-500/6 px-4 py-3 text-center animate-pipeline-glow"
             style={{ "--glow-color": "rgba(245,158,11,0.15)", animationDelay: "0.9s" } as React.CSSProperties}
           >
             <div className="text-sm font-semibold text-amber-400">Layout</div>
             <div className="text-xs text-gray-500 mt-1">Calculate positions and sizes</div>
           </div>
           <div
-            className="rounded-lg border border-rose-500/25 bg-rose-500/[0.06] px-4 py-3 text-center animate-pipeline-glow"
+            className="rounded-lg border border-rose-500/25 bg-rose-500/6 px-4 py-3 text-center animate-pipeline-glow"
             style={{ "--glow-color": "rgba(244,63,94,0.15)", animationDelay: "1.2s" } as React.CSSProperties}
           >
             <div className="text-sm font-semibold text-rose-400">Paint</div>
@@ -685,7 +685,7 @@ export function DiagramDomTree() {
   const nodeH = 32;
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 sm:p-6 overflow-x-auto">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-4 sm:p-6 overflow-x-auto">
       <svg viewBox="0 0 480 310" className="w-full max-w-[520px] mx-auto" style={{ minWidth: 360 }}>
         {/* Edges */}
         {edges.map(([fi, ti]) => {
@@ -753,7 +753,7 @@ export function DiagramDomRenderingPipeline() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {stages.map((stage, i) => (
           <div
@@ -784,7 +784,7 @@ export function DiagramDomUpdateCycle() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-stretch gap-3">
         {steps.map((step, i) => (
           <div key={step.label} className="flex items-center gap-3 flex-1">
@@ -813,10 +813,10 @@ export function DiagramDomUpdateCycle() {
 export function DiagramFlexboxLayout() {
   const items = ["Logo", "Home", "About", "Contact", "Login"];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">display: flex</div>
       {/* Container outline */}
-      <div className="rounded-lg border border-dashed border-pink-500/30 bg-pink-500/[0.03] p-4">
+      <div className="rounded-lg border border-dashed border-pink-500/30 bg-pink-500/3 p-4">
         <div className="flex items-center justify-between gap-3">
           {items.map((item, i) => (
             <div
@@ -835,7 +835,7 @@ export function DiagramFlexboxLayout() {
           ))}
         </div>
         {/* Axis arrow */}
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/[0.04]">
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/4">
           <svg width="100%" height="12" className="text-pink-500/30">
             <line x1="0" y1="6" x2="100%" y2="6" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" />
             <polygon points="100%,6 94%,2 94%,10" fill="currentColor" />
@@ -850,9 +850,9 @@ export function DiagramFlexboxLayout() {
 export function DiagramGridLayout() {
   const cells = Array.from({ length: 6 }, (_, i) => `Card ${i + 1}`);
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-3">display: grid</div>
-      <div className="rounded-lg border border-dashed border-orange-500/30 bg-orange-500/[0.03] p-4">
+      <div className="rounded-lg border border-dashed border-orange-500/30 bg-orange-500/3 p-4">
         <div className="grid grid-cols-3 gap-3">
           {cells.map((cell, i) => (
             <div
@@ -871,7 +871,7 @@ export function DiagramGridLayout() {
           ))}
         </div>
         {/* Axis labels */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.04]">
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/4">
           <span className="text-[10px] text-orange-400/50">3 columns \u00d7 2 rows</span>
           <span className="text-[10px] text-orange-400/50">gap: 16px</span>
         </div>
@@ -890,10 +890,10 @@ export function DiagramFlexboxVsGridTable() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] overflow-hidden">
+    <div className="rounded-xl border border-white/8 bg-white/3 overflow-hidden">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/[0.06]">
+          <tr className="border-b border-white/6">
             <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Feature</th>
             <th className="px-5 py-3 text-left text-xs font-semibold text-pink-400 uppercase tracking-wider">Flexbox</th>
             <th className="px-5 py-3 text-left text-xs font-semibold text-orange-400 uppercase tracking-wider">Grid</th>
@@ -901,7 +901,7 @@ export function DiagramFlexboxVsGridTable() {
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={row.feature} className={i < rows.length - 1 ? "border-b border-white/[0.04]" : ""}>
+            <tr key={row.feature} className={i < rows.length - 1 ? "border-b border-white/4" : ""}>
               <td className="px-5 py-3 text-gray-400 font-medium">{row.feature}</td>
               <td className="px-5 py-3 text-gray-300">{row.flex}</td>
               <td className="px-5 py-3 text-gray-300">{row.grid}</td>
@@ -915,16 +915,16 @@ export function DiagramFlexboxVsGridTable() {
 
 export function DiagramLayoutDecisionFlow() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col items-center gap-2">
         {/* Question */}
-        <div className="rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white text-center">
+        <div className="rounded-xl border border-white/12 bg-white/4 px-6 py-3.5 text-sm font-semibold text-white text-center">
           How many directions do you need?
         </div>
         {/* Branch lines */}
         <div className="flex items-start w-full max-w-md">
           <div className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-px h-6 bg-white/[0.1]" />
+            <div className="w-px h-6 bg-white/10" />
             <div className="text-xs text-gray-600 mb-1">One direction</div>
             <div
               className="rounded-xl border px-6 py-4 text-center w-full animate-pipeline-glow"
@@ -936,7 +936,7 @@ export function DiagramLayoutDecisionFlow() {
           </div>
           <div className="w-12" />
           <div className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-px h-6 bg-white/[0.1]" />
+            <div className="w-px h-6 bg-white/10" />
             <div className="text-xs text-gray-600 mb-1">Two directions</div>
             <div
               className="rounded-xl border px-6 py-4 text-center w-full animate-pipeline-glow"
@@ -948,8 +948,8 @@ export function DiagramLayoutDecisionFlow() {
           </div>
         </div>
         {/* Both */}
-        <div className="w-px h-4 bg-white/[0.06]" />
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] px-6 py-3 text-center">
+        <div className="w-px h-4 bg-white/6" />
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/6 px-6 py-3 text-center">
           <div className="text-sm font-semibold text-emerald-400">Both? Use both together.</div>
           <div className="text-xs text-gray-500 mt-0.5">Grid for structure, Flexbox for alignment</div>
         </div>
@@ -962,11 +962,11 @@ export function DiagramLayoutDecisionFlow() {
 
 export function DiagramJsVsTsLayers() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col items-center gap-0 max-w-sm mx-auto">
         {/* TypeScript layer */}
         <div
-          className="w-full rounded-t-xl border border-blue-500/30 bg-blue-500/[0.08] px-6 py-5 text-center animate-pipeline-glow"
+          className="w-full rounded-t-xl border border-blue-500/30 bg-blue-500/8 px-6 py-5 text-center animate-pipeline-glow"
           style={{ "--glow-color": "rgba(59,130,246,0.12)", animationDelay: "0.5s" } as React.CSSProperties}
         >
           <div className="text-base font-bold text-blue-400 mb-1">TypeScript</div>
@@ -974,7 +974,7 @@ export function DiagramJsVsTsLayers() {
         </div>
         {/* JS layer */}
         <div
-          className="w-full rounded-b-xl border border-t-0 border-yellow-500/30 bg-yellow-500/[0.08] px-6 py-5 text-center animate-pipeline-glow"
+          className="w-full rounded-b-xl border border-t-0 border-yellow-500/30 bg-yellow-500/8 px-6 py-5 text-center animate-pipeline-glow"
           style={{ "--glow-color": "rgba(234,179,8,0.12)" } as React.CSSProperties}
         >
           <div className="text-base font-bold text-yellow-400 mb-1">JavaScript</div>
@@ -996,10 +996,10 @@ export function DiagramJsVsTsTable() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] overflow-hidden">
+    <div className="rounded-xl border border-white/8 bg-white/3 overflow-hidden">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/[0.06]">
+          <tr className="border-b border-white/6">
             <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Aspect</th>
             <th className="px-5 py-3 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">JavaScript</th>
             <th className="px-5 py-3 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">TypeScript</th>
@@ -1007,7 +1007,7 @@ export function DiagramJsVsTsTable() {
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={row.aspect} className={i < rows.length - 1 ? "border-b border-white/[0.04]" : ""}>
+            <tr key={row.aspect} className={i < rows.length - 1 ? "border-b border-white/4" : ""}>
               <td className="px-5 py-3 text-gray-400 font-medium">{row.aspect}</td>
               <td className="px-5 py-3 text-gray-300">{row.js}</td>
               <td className="px-5 py-3 text-gray-300">{row.ts}</td>
@@ -1021,10 +1021,10 @@ export function DiagramJsVsTsTable() {
 
 export function DiagramJsTsErrorTimeline() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* JS side */}
-        <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/[0.04] p-5">
+        <div className="rounded-xl border border-yellow-500/20 bg-yellow-500/4 p-5">
           <div className="text-sm font-bold text-yellow-400 mb-4">JavaScript</div>
           <div className="flex flex-col gap-2">
             {["Write code", "Ship to production", "User hits the bug", "You find out"].map((step, i) => (
@@ -1045,7 +1045,7 @@ export function DiagramJsTsErrorTimeline() {
           </div>
         </div>
         {/* TS side */}
-        <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
+        <div className="rounded-xl border border-blue-500/20 bg-blue-500/4 p-5">
           <div className="text-sm font-bold text-blue-400 mb-4">TypeScript</div>
           <div className="flex flex-col gap-2">
             {["Write code", "Editor shows error", "You fix it instantly", "Ship safely"].map((step, i) => (
@@ -1094,7 +1094,7 @@ export function DiagramJsTsLearningPath() {
             >
               {i + 1}
             </div>
-            {i < steps.length - 1 && <div className="w-0.5 h-8 bg-white/[0.08]" />}
+            {i < steps.length - 1 && <div className="w-0.5 h-8 bg-white/8" />}
           </div>
           <div className="pt-2 pb-5">
             <span className="text-base text-white font-semibold">{step.label}</span>
@@ -1117,36 +1117,36 @@ export function DiagramSyncVsAsync() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {/* Sync */}
-      <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-5">
+      <div className="rounded-xl border border-white/8 bg-white/3 p-5">
         <div className="text-sm font-bold text-gray-300 mb-4">Synchronous</div>
         <div className="flex flex-col gap-2">
           {["Task 1", "Task 2", "Task 3"].map((task, i) => (
             <div key={task} className="flex items-center gap-3">
               <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border border-gray-600/30 bg-gray-600/10 text-gray-400">{i + 1}</div>
-              <div className="flex-1 h-9 rounded-lg border border-gray-500/20 bg-gray-500/[0.06] flex items-center px-3 text-xs text-gray-400 font-medium">{task}</div>
+              <div className="flex-1 h-9 rounded-lg border border-gray-500/20 bg-gray-500/6 flex items-center px-3 text-xs text-gray-400 font-medium">{task}</div>
             </div>
           ))}
           <div className="text-[10px] text-gray-600 mt-1 text-center">Each waits for the previous</div>
         </div>
       </div>
       {/* Async */}
-      <div className="rounded-xl border border-orange-500/15 bg-orange-500/[0.03] p-5">
+      <div className="rounded-xl border border-orange-500/15 bg-orange-500/3 p-5">
         <div className="text-sm font-bold text-orange-400 mb-4">Asynchronous</div>
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border border-orange-500/30 bg-orange-500/10 text-orange-400">1</div>
-            <div className="flex-1 h-9 rounded-lg border border-orange-500/20 bg-orange-500/[0.06] flex items-center px-3 text-xs text-orange-300 font-medium">Task 1</div>
+            <div className="flex-1 h-9 rounded-lg border border-orange-500/20 bg-orange-500/6 flex items-center px-3 text-xs text-orange-300 font-medium">Task 1</div>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border border-violet-500/30 bg-violet-500/10 text-violet-400">2</div>
-            <div className="flex-1 h-9 rounded-lg border border-dashed border-violet-500/25 bg-violet-500/[0.04] flex items-center px-3 text-xs text-violet-400 font-medium gap-2">
+            <div className="flex-1 h-9 rounded-lg border border-dashed border-violet-500/25 bg-violet-500/4 flex items-center px-3 text-xs text-violet-400 font-medium gap-2">
               Task 2
               <span className="text-[9px] text-violet-500/60 bg-violet-500/10 px-1.5 py-0.5 rounded">async</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold border border-orange-500/30 bg-orange-500/10 text-orange-400">3</div>
-            <div className="flex-1 h-9 rounded-lg border border-orange-500/20 bg-orange-500/[0.06] flex items-center px-3 text-xs text-orange-300 font-medium">Task 3 (runs before Task 2 finishes)</div>
+            <div className="flex-1 h-9 rounded-lg border border-orange-500/20 bg-orange-500/6 flex items-center px-3 text-xs text-orange-300 font-medium">Task 3 (runs before Task 2 finishes)</div>
           </div>
           <div className="text-[10px] text-gray-600 mt-1 text-center">JS doesn't wait, it moves on</div>
         </div>
@@ -1163,7 +1163,7 @@ export function DiagramEventLoop() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         {boxes.map((box) => (
           <div
@@ -1181,7 +1181,7 @@ export function DiagramEventLoop() {
         ))}
       </div>
       {/* Event loop indicator */}
-      <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/[0.06] px-5 py-3 text-center animate-pipeline-glow" style={{ "--glow-color": "rgba(16,185,129,0.15)", animationDelay: "0.5s" } as React.CSSProperties}>
+      <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/6 px-5 py-3 text-center animate-pipeline-glow" style={{ "--glow-color": "rgba(16,185,129,0.15)", animationDelay: "0.5s" } as React.CSSProperties}>
         <div className="text-sm font-bold text-emerald-400 mb-0.5">Event Loop</div>
         <div className="text-[11px] text-gray-500">Checks: Is the call stack empty? Move next task from queue.</div>
       </div>
@@ -1197,7 +1197,7 @@ export function DiagramPromiseLifecycle() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col items-center gap-2">
         {/* Pending */}
         <div
@@ -1210,7 +1210,7 @@ export function DiagramPromiseLifecycle() {
         {/* Branch */}
         <div className="flex items-start w-full max-w-md">
           <div className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-px h-6 bg-white/[0.1]" />
+            <div className="w-px h-6 bg-white/10" />
             <div
               className="rounded-xl border px-5 py-3 text-center w-full animate-pipeline-glow"
               style={{ borderColor: states[1].color + "30", backgroundColor: states[1].color + "0a", "--glow-color": states[1].color + "15", animationDelay: "0.6s" } as React.CSSProperties}
@@ -1221,7 +1221,7 @@ export function DiagramPromiseLifecycle() {
           </div>
           <div className="w-8" />
           <div className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-px h-6 bg-white/[0.1]" />
+            <div className="w-px h-6 bg-white/10" />
             <div
               className="rounded-xl border px-5 py-3 text-center w-full animate-pipeline-glow"
               style={{ borderColor: states[2].color + "30", backgroundColor: states[2].color + "0a", "--glow-color": states[2].color + "15", animationDelay: "1.2s" } as React.CSSProperties}
@@ -1245,7 +1245,7 @@ export function DiagramAsyncAwaitFlow() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-stretch gap-3">
         {steps.map((step, i) => (
           <div key={step.label} className="flex items-center gap-3 flex-1">
@@ -1278,7 +1278,7 @@ export function DiagramFullAsyncFlow() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 overflow-x-auto">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6 overflow-x-auto">
       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-1 min-w-0 sm:min-w-max">
         {steps.flatMap((step, i) => {
           const box = (
@@ -1334,10 +1334,10 @@ export function DiagramFullAsyncFlow() {
 
 export function DiagramApiCommunication() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-          <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/[0.08] px-6 py-4 text-center w-full sm:max-w-[200px]">
+          <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/8 px-6 py-4 text-center w-full sm:max-w-[200px]">
             <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1">Frontend</div>
             <div className="text-sm text-gray-200 font-medium">Client app</div>
             <div className="text-[11px] text-gray-500 mt-1">Browser / mobile WebView</div>
@@ -1354,7 +1354,7 @@ export function DiagramApiCommunication() {
               <path d="m12 5 7 7-7 7" />
             </svg>
           </div>
-          <div className="rounded-xl border border-violet-500/30 bg-violet-500/[0.08] px-6 py-4 text-center w-full sm:max-w-[200px]">
+          <div className="rounded-xl border border-violet-500/30 bg-violet-500/8 px-6 py-4 text-center w-full sm:max-w-[200px]">
             <div className="text-[10px] font-bold text-violet-400 uppercase tracking-wider mb-1">API server</div>
             <div className="text-sm text-gray-200 font-medium">Backend</div>
             <div className="text-[11px] text-gray-500 mt-1">Validates, reads DB, returns JSON</div>
@@ -1375,7 +1375,7 @@ export function DiagramFullApiRequestFlow() {
     { n: "5", label: "UI updates", sub: "Render state, lists, errors", color: "#22c55e" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-0 max-w-lg mx-auto">
         {steps.map((step, i) => (
           <div key={step.label} className="flex gap-4">
@@ -1386,7 +1386,7 @@ export function DiagramFullApiRequestFlow() {
               >
                 {step.n}
               </div>
-              {i < steps.length - 1 && <div className="w-0.5 flex-1 min-h-6 bg-white/[0.08]" />}
+              {i < steps.length - 1 && <div className="w-0.5 flex-1 min-h-6 bg-white/8" />}
             </div>
             <div className="pb-6 pt-1.5">
               <div className="text-sm font-semibold text-white">{step.label}</div>
@@ -1406,7 +1406,7 @@ export function DiagramRestApiStructure() {
     { method: "GET", path: "/api/posts", color: "#8b5cf6" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-stretch gap-4">
         <div className="flex-1 space-y-2">
           <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Frontend requests</div>
@@ -1429,7 +1429,7 @@ export function DiagramRestApiStructure() {
             <path d="m12 5 7 7-7 7" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </div>
-        <div className="flex-1 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.06] p-4 flex flex-col justify-center text-center">
+        <div className="flex-1 rounded-xl border border-emerald-500/25 bg-emerald-500/6 p-4 flex flex-col justify-center text-center">
           <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">REST API</div>
           <div className="text-sm text-gray-200 font-medium">One resource per URL</div>
           <div className="text-[11px] text-gray-500 mt-2 leading-relaxed">Each endpoint returns a fixed shape. Combine data by calling multiple routes.</div>
@@ -1441,9 +1441,9 @@ export function DiagramRestApiStructure() {
 
 export function DiagramGraphqlFlow() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-stretch">
-        <div className="flex-1 rounded-lg border border-pink-500/25 bg-pink-500/[0.06] p-4">
+        <div className="flex-1 rounded-lg border border-pink-500/25 bg-pink-500/6 p-4">
           <div className="text-[10px] font-bold text-pink-400 uppercase tracking-wider mb-2">Single endpoint</div>
           <div className="text-xs font-mono text-gray-300 mb-3">POST /graphql</div>
           <pre className="text-[10px] sm:text-[11px] text-gray-400 font-mono leading-relaxed whitespace-pre-wrap">{`{
@@ -1459,7 +1459,7 @@ export function DiagramGraphqlFlow() {
             <path d="m12 5 7 7-7 7" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </div>
-        <div className="flex-1 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.06] p-4 flex flex-col justify-center">
+        <div className="flex-1 rounded-lg border border-emerald-500/25 bg-emerald-500/6 p-4 flex flex-col justify-center">
           <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-2">Response</div>
           <pre className="text-[10px] sm:text-[11px] text-gray-300 font-mono leading-relaxed whitespace-pre-wrap">{`{
   "data": {
@@ -1479,18 +1479,18 @@ export function DiagramGraphqlFlow() {
 export function DiagramRestVsGraphql() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/4 p-5">
         <div className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3">REST</div>
         <div className="space-y-2 mb-3">
           {["GET /user/1", "GET /user/1/posts"].map((line) => (
-            <div key={line} className="rounded-md border border-blue-500/20 bg-blue-500/[0.06] px-3 py-2 text-[11px] font-mono text-gray-300">
+            <div key={line} className="rounded-md border border-blue-500/20 bg-blue-500/6 px-3 py-2 text-[11px] font-mono text-gray-300">
               {line}
             </div>
           ))}
         </div>
         <p className="text-[11px] text-gray-500 leading-relaxed">Multiple round-trips to assemble a screen. Each response shape is whatever the server defined for that route.</p>
       </div>
-      <div className="rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/[0.04] p-5">
+      <div className="rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/4 p-5">
         <div className="text-xs font-bold text-fuchsia-400 uppercase tracking-wider mb-3">GraphQL</div>
         <pre className="text-[10px] text-gray-300 font-mono leading-relaxed whitespace-pre-wrap mb-3">{`{
   user(id: 1) {
@@ -1506,19 +1506,19 @@ export function DiagramRestVsGraphql() {
 
 export function DiagramApiDecisionFlow() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col items-center gap-3 max-w-md mx-auto text-center">
-        <div className="rounded-lg border border-gray-500/25 bg-white/[0.04] px-5 py-3 w-full">
+        <div className="rounded-lg border border-gray-500/25 bg-white/4 px-5 py-3 w-full">
           <div className="text-xs text-gray-400">What are you building?</div>
         </div>
         <div className="w-px h-4 bg-white/10" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-          <div className="rounded-lg border border-blue-500/30 bg-blue-500/[0.08] px-4 py-3">
+          <div className="rounded-lg border border-blue-500/30 bg-blue-500/8 px-4 py-3">
             <div className="text-[10px] font-bold text-blue-400 uppercase mb-1">Simple / stable</div>
             <div className="text-sm text-gray-200">Fixed resources, few clients</div>
             <div className="text-xs text-blue-300/80 mt-2 font-semibold">→ REST is often enough</div>
           </div>
-          <div className="rounded-lg border border-fuchsia-500/30 bg-fuchsia-500/[0.08] px-4 py-3">
+          <div className="rounded-lg border border-fuchsia-500/30 bg-fuchsia-500/8 px-4 py-3">
             <div className="text-[10px] font-bold text-fuchsia-400 uppercase mb-1">Complex / varied</div>
             <div className="text-sm text-gray-200">Many screens, evolving fields</div>
             <div className="text-xs text-fuchsia-300/80 mt-2 font-semibold">→ Consider GraphQL</div>
@@ -1540,7 +1540,7 @@ export function DiagramLocalStorageLifecycle() {
     { label: "Quit browser", ok: true, sub: "Persists until cleared" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-3">
         {events.map((ev, i) => (
           <div key={ev.label} className="flex items-start gap-3">
@@ -1572,7 +1572,7 @@ export function DiagramSessionStorageLifecycle() {
     { label: "Tab closed", state: "gone", sub: "SessionStorage wiped for that tab" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-3">
         {events.map((ev, i) => (
           <div key={ev.label} className="flex items-start gap-3">
@@ -1588,7 +1588,7 @@ export function DiagramSessionStorageLifecycle() {
               >
                 {ev.state === "gone" ? "✕" : ev.state === "copy" ? "~" : "●"}
               </div>
-              {i < events.length - 1 && <div className="w-0.5 flex-1 min-h-4 bg-white/[0.06]" />}
+              {i < events.length - 1 && <div className="w-0.5 flex-1 min-h-4 bg-white/6" />}
             </div>
             <div className="pb-2 pt-0.5">
               <div className="text-sm font-medium text-gray-200">{ev.label}</div>
@@ -1606,9 +1606,9 @@ export function DiagramSessionStorageLifecycle() {
 
 export function DiagramCookieFlow() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-5">
-        <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-center">
+        <div className="rounded-lg border border-amber-500/25 bg-amber-500/6 px-4 py-3 text-center">
           <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider mb-1">Browser stores cookies</div>
           <div className="text-[11px] text-gray-400 font-mono">Set-Cookie: session=abc; Path=/; HttpOnly; Secure</div>
         </div>
@@ -1620,7 +1620,7 @@ export function DiagramCookieFlow() {
           </svg>
           <span className="text-violet-200/80">Browser attaches Cookie header</span>
         </div>
-        <div className="rounded-lg border border-violet-500/25 bg-violet-500/[0.06] px-4 py-3">
+        <div className="rounded-lg border border-violet-500/25 bg-violet-500/6 px-4 py-3">
           <div className="text-[10px] font-bold text-violet-400 uppercase tracking-wider mb-2 text-center">HTTP request</div>
           <div className="text-[11px] text-gray-400 font-mono">GET /dashboard HTTP/1.1{"\n"}Cookie: session=abc</div>
         </div>
@@ -1630,7 +1630,7 @@ export function DiagramCookieFlow() {
             <path d="m5 12 7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </div>
-        <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/[0.06] px-4 py-3 text-center">
+        <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/6 px-4 py-3 text-center">
           <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">Server</div>
           <div className="text-[11px] text-gray-400">Reads cookie → session / auth / personalization</div>
         </div>
@@ -1693,9 +1693,9 @@ export function DiagramStorageUseCaseComparison() {
 
 export function DiagramStorageDecisionFlow() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col items-center gap-2 max-w-lg mx-auto text-center">
-        <div className="rounded-lg border border-gray-500/25 bg-white/[0.04] px-5 py-3 w-full text-sm text-gray-200">What are you storing?</div>
+        <div className="rounded-lg border border-gray-500/25 bg-white/4 px-5 py-3 w-full text-sm text-gray-200">What are you storing?</div>
         <div className="w-px h-3 bg-white/10" />
         <div className="grid grid-cols-1 gap-2 w-full">
           <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/[0.07] px-4 py-2.5 text-left">
@@ -1732,7 +1732,7 @@ export function DiagramReactComponentTree() {
     </span>
   );
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <p className="text-[11px] text-gray-500 mb-4">Small pieces compose into screens; data flows down via props.</p>
       <div className="space-y-3 text-[11px]">
         <div>{chip("App", "#22d3ee")}</div>
@@ -1761,7 +1761,7 @@ export function DiagramReactStateFlow() {
     { label: "Update DOM", color: "#22c55e" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-1">
         {steps.flatMap((step, i) => {
           const box = (
@@ -1809,7 +1809,7 @@ export function DiagramReactHookLifecycle() {
     { title: "Unmount", sub: "Cleanup runs on teardown", color: "#ef4444" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {phases.map((p) => (
           <div
@@ -1824,7 +1824,7 @@ export function DiagramReactHookLifecycle() {
           </div>
         ))}
       </div>
-      <pre className="mt-4 text-[10px] text-gray-400 font-mono rounded-lg border border-white/[0.06] bg-[#0d0d1a] p-3 overflow-x-auto whitespace-pre">{`useEffect(() => {
+      <pre className="mt-4 text-[10px] text-gray-400 font-mono rounded-lg border border-white/6 bg-[#0d0d1a] p-3 overflow-x-auto whitespace-pre">{`useEffect(() => {
   return () => { /* cleanup */ };
 }, [depA, depB]);`}</pre>
     </div>
@@ -1834,7 +1834,7 @@ export function DiagramReactHookLifecycle() {
 export function DiagramReactVirtualDom() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-cyan-500/25 bg-cyan-500/[0.06] p-4">
+      <div className="rounded-xl border border-cyan-500/25 bg-cyan-500/6 p-4">
         <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Virtual tree</div>
         <div className="space-y-2 text-[11px] text-gray-300 font-mono">
           <div>{"<App>"}</div>
@@ -1843,7 +1843,7 @@ export function DiagramReactVirtualDom() {
         </div>
         <p className="text-[10px] text-gray-500 mt-3 leading-relaxed">Plain JS descriptions of UI — cheap to create and compare.</p>
       </div>
-      <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/[0.06] p-4">
+      <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/6 p-4">
         <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">Real DOM</div>
         <div className="rounded border border-white/10 bg-black/20 p-3 text-[11px] text-gray-400 font-mono">
           browser nodes · layout · paint
@@ -1865,7 +1865,7 @@ export function DiagramUseStateFlow() {
     { label: "Re-render", sub: "new UI snapshot", color: "#a855f7" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-1">
         {steps.flatMap((step, i) => {
           const box = (
@@ -1925,7 +1925,7 @@ export function DiagramUseEffectFlow() {
     </div>
   );
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6 space-y-4">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6 space-y-4">
       {row("1", "Render committed", "Paint hits the screen", "#6366f1")}
       {row("2", "useEffect runs", "After commit; async to the paint you just saw", "#22c55e")}
       {row("3", "Dependency change", "React runs cleanup (if any), then the new effect body", "#eab308")}
@@ -1940,7 +1940,7 @@ export function DiagramUseEffectFlow() {
 export function DiagramUseMemoOptimization() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-rose-500/25 bg-rose-500/[0.05] p-4">
+      <div className="rounded-xl border border-rose-500/25 bg-rose-500/5 p-4">
         <div className="text-xs font-bold text-rose-400 uppercase tracking-wider mb-2">Without useMemo</div>
         <p className="text-[11px] text-gray-400 mb-3">Parent re-renders → expensive function runs again even when inputs did not change.</p>
         <div className="flex flex-wrap gap-1">
@@ -1951,7 +1951,7 @@ export function DiagramUseMemoOptimization() {
           ))}
         </div>
       </div>
-      <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/[0.05] p-4">
+      <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-4">
         <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">With useMemo</div>
         <p className="text-[11px] text-gray-400 mb-3">Dependency array unchanged → reuse cached result; skip redundant work.</p>
         <div className="flex flex-wrap gap-1 items-center">
@@ -1970,7 +1970,7 @@ export function DiagramHooksCombinedFlow() {
     { title: "useMemo", sub: "Derive total from users", color: "#34d399" },
   ];
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row sm:items-stretch gap-3 sm:gap-2">
         {blocks.flatMap((b, i) => {
           const card = (
@@ -2017,7 +2017,7 @@ export function DiagramHooksCombinedFlow() {
 export function DiagramEs6Transformation() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.04] p-5">
+      <div className="rounded-xl border border-rose-500/20 bg-rose-500/4 p-5">
         <div className="text-xs font-bold text-rose-400 uppercase tracking-wider mb-3">Before (pre-ES6)</div>
         <pre className="text-[11px] sm:text-xs text-gray-400 font-mono leading-relaxed whitespace-pre-wrap break-all">
           {`var count = 0;
@@ -2028,7 +2028,7 @@ var msg = "Hi " + user.name;`}
         </pre>
         <p className="mt-3 text-[10px] text-gray-500 leading-relaxed">Hoisting, noisy concatenation, easy to leak `var` across blocks.</p>
       </div>
-      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-5">
+      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/4 p-5">
         <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-3">After (ES6+)</div>
         <pre className="text-[11px] sm:text-xs text-gray-300 font-mono leading-relaxed whitespace-pre-wrap break-all">
           {`let count = 0;
@@ -2172,6 +2172,18 @@ export function BlogDiagram({ type }: { type: string }) {
       return <DiagramRenderingCsrVsSsr />;
     case "react-nextjs-decision":
       return <DiagramReactNextjsDecision />;
+    case "framework-comparison-table":
+      return <DiagramFrameworkComparisonTable />;
+    case "framework-decision-flow":
+      return <DiagramFrameworkDecisionFlow />;
+    case "vue-react-learning-curve":
+      return <DiagramVueReactLearningCurve />;
+    case "vue-react-decision":
+      return <DiagramVueReactDecision />;
+    case "vue-react-comparison-table":
+      return <DiagramVueReactComparisonTable />;
+    case "angular-decision-flow":
+      return <DiagramAngularDecisionFlow />;
     default:
       return null;
   }
@@ -2181,15 +2193,15 @@ export function BlogDiagram({ type }: { type: string }) {
 
 function DiagramReactRerenderControl() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-red-500/15 bg-red-500/[0.03] p-5">
+        <div className="rounded-xl border border-red-500/15 bg-red-500/3 p-5">
           <div className="text-sm font-bold text-red-400 mb-3">Without React.memo</div>
           <div className="flex flex-col gap-2">
-            <div className="rounded-lg border border-red-500/25 bg-red-500/[0.08] px-4 py-2.5 text-xs text-red-300 font-medium">Parent re-renders</div>
-            <div className="pl-5 border-l border-white/[0.06] ml-3 flex flex-col gap-2">
+            <div className="rounded-lg border border-red-500/25 bg-red-500/8 px-4 py-2.5 text-xs text-red-300 font-medium">Parent re-renders</div>
+            <div className="pl-5 border-l border-white/6 ml-3 flex flex-col gap-2">
               {["Child A", "Child B", "Child C"].map((c) => (
-                <div key={c} className="rounded-lg border border-red-500/20 bg-red-500/[0.05] px-3 py-2 text-xs text-red-400/70 flex items-center gap-2">
+                <div key={c} className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs text-red-400/70 flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
                   {c} re-renders
                 </div>
@@ -2197,17 +2209,17 @@ function DiagramReactRerenderControl() {
             </div>
           </div>
         </div>
-        <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/[0.03] p-5">
+        <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/3 p-5">
           <div className="text-sm font-bold text-emerald-400 mb-3">With React.memo</div>
           <div className="flex flex-col gap-2">
-            <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/[0.08] px-4 py-2.5 text-xs text-emerald-300 font-medium">Parent re-renders</div>
-            <div className="pl-5 border-l border-white/[0.06] ml-3 flex flex-col gap-2">
-              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-3 py-2 text-xs text-emerald-400/70 flex items-center gap-2">
+            <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/8 px-4 py-2.5 text-xs text-emerald-300 font-medium">Parent re-renders</div>
+            <div className="pl-5 border-l border-white/6 ml-3 flex flex-col gap-2">
+              <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-xs text-emerald-400/70 flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 Child A (props changed)
               </div>
               {["Child B", "Child C"].map((c) => (
-                <div key={c} className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-xs text-gray-600 flex items-center gap-2">
+                <div key={c} className="rounded-lg border border-white/6 bg-white/2 px-3 py-2 text-xs text-gray-600 flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
                   {c} skipped
                 </div>
@@ -2223,22 +2235,22 @@ function DiagramReactRerenderControl() {
 function DiagramReactLazyLoading() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-5">
+      <div className="rounded-xl border border-white/8 bg-white/3 p-5">
         <div className="text-sm font-bold text-gray-300 mb-3">Without Code Splitting</div>
-        <div className="rounded-lg border border-red-500/20 bg-red-500/[0.05] px-4 py-6 text-center">
+        <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-6 text-center">
           <div className="text-2xl font-bold text-red-400 mb-1">1.8 MB</div>
           <div className="text-xs text-gray-500">Single bundle, loads everything</div>
         </div>
       </div>
-      <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/[0.03] p-5">
+      <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/3 p-5">
         <div className="text-sm font-bold text-emerald-400 mb-3">With Lazy Loading</div>
         <div className="flex flex-col gap-2">
-          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-4 py-2 text-center animate-pipeline-glow" style={{ "--glow-color": "rgba(16,185,129,0.12)" } as React.CSSProperties}>
+          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-2 text-center animate-pipeline-glow" style={{ "--glow-color": "rgba(16,185,129,0.12)" } as React.CSSProperties}>
             <div className="text-sm font-bold text-emerald-400">200 KB</div>
             <div className="text-[10px] text-gray-500">Initial bundle</div>
           </div>
           {["Route A: 80 KB", "Route B: 120 KB", "Modal: 60 KB"].map((chunk) => (
-            <div key={chunk} className="rounded-lg border border-dashed border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-center">
+            <div key={chunk} className="rounded-lg border border-dashed border-white/8 bg-white/2 px-3 py-1.5 text-center">
               <div className="text-[11px] text-gray-500">{chunk} <span className="text-gray-600">(on demand)</span></div>
             </div>
           ))}
@@ -2251,26 +2263,26 @@ function DiagramReactLazyLoading() {
 function DiagramReactVirtualization() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-5">
+      <div className="rounded-xl border border-white/8 bg-white/3 p-5">
         <div className="text-sm font-bold text-gray-300 mb-3">No Virtualization</div>
-        <div className="rounded-lg border border-white/[0.06] overflow-hidden">
+        <div className="rounded-lg border border-white/6 overflow-hidden">
           {Array.from({ length: 8 }, (_, i) => (
-            <div key={i} className={`px-3 py-1.5 text-[10px] border-b border-white/[0.04] ${i < 3 ? "text-red-400/70 bg-red-500/[0.04]" : "text-red-400/40 bg-red-500/[0.02]"}`}>
+            <div key={i} className={`px-3 py-1.5 text-[10px] border-b border-white/4 ${i < 3 ? "text-red-400/70 bg-red-500/4" : "text-red-400/40 bg-red-500/2"}`}>
               Item {i + 1} {i >= 3 && <span className="text-gray-700">(off screen, still mounted)</span>}
             </div>
           ))}
-          <div className="px-3 py-1 text-[9px] text-gray-700 bg-red-500/[0.02]">... 992 more items mounted</div>
+          <div className="px-3 py-1 text-[9px] text-gray-700 bg-red-500/2">... 992 more items mounted</div>
         </div>
       </div>
-      <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/[0.03] p-5">
+      <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/3 p-5">
         <div className="text-sm font-bold text-emerald-400 mb-3">With Virtualization</div>
-        <div className="rounded-lg border border-white/[0.06] overflow-hidden">
+        <div className="rounded-lg border border-white/6 overflow-hidden">
           {Array.from({ length: 3 }, (_, i) => (
-            <div key={i} className="px-3 py-1.5 text-[10px] border-b border-white/[0.04] text-emerald-400/70 bg-emerald-500/[0.04]">
+            <div key={i} className="px-3 py-1.5 text-[10px] border-b border-white/4 text-emerald-400/70 bg-emerald-500/4">
               Item {i + 1} <span className="text-emerald-500/40">(visible, mounted)</span>
             </div>
           ))}
-          <div className="px-3 py-2 text-[9px] text-gray-600 bg-white/[0.02] text-center">
+          <div className="px-3 py-2 text-[9px] text-gray-600 bg-white/2 text-center">
             997 items exist but are <span className="text-emerald-400/60 font-medium">not in the DOM</span>
           </div>
         </div>
@@ -2288,7 +2300,7 @@ function DiagramReactRenderingFlow() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col sm:flex-row items-stretch gap-3">
         {steps.map((step, i) => (
           <div key={step.label} className="flex items-center gap-3 flex-1">
@@ -2322,7 +2334,7 @@ function DiagramReactFeatureStructure() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-4">features/</div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {features.map((f) => (
@@ -2334,7 +2346,7 @@ function DiagramReactFeatureStructure() {
             <div className="text-sm font-bold mb-3" style={{ color: f.color }}>{f.name}/</div>
             <div className="flex flex-col gap-1.5">
               {f.items.map((item) => (
-                <div key={item} className="text-xs text-gray-500 font-mono pl-3 border-l border-white/[0.06]">{item}</div>
+                <div key={item} className="text-xs text-gray-500 font-mono pl-3 border-l border-white/6">{item}</div>
               ))}
             </div>
           </div>
@@ -2346,9 +2358,9 @@ function DiagramReactFeatureStructure() {
 
 function DiagramReactComponentLayers() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
+        <div className="rounded-xl border border-blue-500/20 bg-blue-500/4 p-5">
           <div className="text-sm font-bold text-blue-400 mb-3">Container (Logic)</div>
           <div className="flex flex-col gap-2 text-xs text-gray-400">
             <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-400/50" />Fetches data</div>
@@ -2357,7 +2369,7 @@ function DiagramReactComponentLayers() {
             <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-400/50" />Passes props down</div>
           </div>
         </div>
-        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-5">
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/4 p-5">
           <div className="text-sm font-bold text-emerald-400 mb-3">UI (Presentation)</div>
           <div className="flex flex-col gap-2 text-xs text-gray-400">
             <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400/50" />Receives props</div>
@@ -2379,7 +2391,7 @@ function DiagramReactStateLayers() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col gap-3">
         {layers.map((layer, i) => (
           <div
@@ -2396,7 +2408,7 @@ function DiagramReactStateLayers() {
               <div className="text-sm font-bold" style={{ color: layer.color }}>{layer.label}</div>
               <div className="text-xs text-gray-500 mt-0.5">{layer.sub}</div>
             </div>
-            <div className="text-[10px] text-gray-600 bg-white/[0.04] px-2.5 py-1 rounded-full font-medium">{layer.scope}</div>
+            <div className="text-[10px] text-gray-600 bg-white/4 px-2.5 py-1 rounded-full font-medium">{layer.scope}</div>
           </div>
         ))}
       </div>
@@ -2413,7 +2425,7 @@ function DiagramReactFullArchitecture() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-4">src/</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {sections.map((s) => (
@@ -2425,7 +2437,7 @@ function DiagramReactFullArchitecture() {
             <div className="text-sm font-bold font-mono mb-2" style={{ color: s.color }}>{s.name}</div>
             <div className="flex flex-wrap gap-1.5">
               {s.items.map((item) => (
-                <span key={item} className="text-[11px] text-gray-500 font-mono bg-white/[0.04] px-2 py-0.5 rounded">{item}</span>
+                <span key={item} className="text-[11px] text-gray-500 font-mono bg-white/4 px-2 py-0.5 rounded">{item}</span>
               ))}
             </div>
           </div>
@@ -2447,14 +2459,14 @@ function DiagramNextjsFileRouting() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider pb-2">File</div>
         <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider pb-2 hidden sm:block">Route</div>
         {routes.map((r) => (
           <div key={r.file} className="contents">
-            <div className="text-sm font-mono text-gray-400 py-1.5 border-t border-white/[0.04]">{r.file}</div>
-            <div className="text-sm font-mono font-semibold py-1.5 border-t border-white/[0.04]" style={{ color: r.color }}>
+            <div className="text-sm font-mono text-gray-400 py-1.5 border-t border-white/4">{r.file}</div>
+            <div className="text-sm font-mono font-semibold py-1.5 border-t border-white/4" style={{ color: r.color }}>
               <span className="sm:hidden text-gray-600">{"\u2192 "}</span>{r.route}
             </div>
           </div>
@@ -2473,7 +2485,7 @@ function DiagramNextjsRenderingStrategies() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {strategies.map((s) => (
           <div
@@ -2506,10 +2518,10 @@ function DiagramNextjsUseCases() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {cases.map((c) => (
-          <div key={c.use} className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 flex items-center justify-between">
+          <div key={c.use} className="rounded-lg border border-white/6 bg-white/2 px-4 py-3 flex items-center justify-between">
             <span className="text-sm text-gray-300 font-medium">{c.use}</span>
             <span
               className="text-xs font-bold px-2.5 py-1 rounded-full"
@@ -2535,10 +2547,10 @@ function DiagramNextjsVsReactTable() {
   ];
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] overflow-hidden">
+    <div className="rounded-xl border border-white/8 bg-white/3 overflow-hidden">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/[0.06]">
+          <tr className="border-b border-white/6">
             <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Feature</th>
             <th className="px-5 py-3 text-left text-xs font-semibold text-cyan-400 uppercase tracking-wider">React</th>
             <th className="px-5 py-3 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider">Next.js</th>
@@ -2546,7 +2558,7 @@ function DiagramNextjsVsReactTable() {
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={row.feature} className={i < rows.length - 1 ? "border-b border-white/[0.04]" : ""}>
+            <tr key={row.feature} className={i < rows.length - 1 ? "border-b border-white/4" : ""}>
               <td className="px-5 py-3 text-gray-400 font-medium">{row.feature}</td>
               <td className="px-5 py-3 text-gray-300">{row.react}</td>
               <td className="px-5 py-3 text-gray-300">{row.next}</td>
@@ -2563,7 +2575,7 @@ function DiagramNextjsVsReactTable() {
 function DiagramReactNextjsComparison() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/[0.04] p-5">
+      <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/4 p-5">
         <div className="text-lg font-bold text-cyan-400 mb-4">React</div>
         <div className="text-xs text-gray-500 uppercase tracking-wider mb-3">Library</div>
         <div className="flex flex-col gap-2">
@@ -2573,11 +2585,11 @@ function DiagramReactNextjsComparison() {
             </div>
           ))}
         </div>
-        <div className="mt-4 pt-3 border-t border-white/[0.06] text-xs text-gray-600">
+        <div className="mt-4 pt-3 border-t border-white/6 text-xs text-gray-600">
           You add: routing, SEO, APIs, build config
         </div>
       </div>
-      <div className="rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
+      <div className="rounded-xl border border-blue-500/20 bg-blue-500/4 p-5">
         <div className="text-lg font-bold text-blue-400 mb-4">Next.js</div>
         <div className="text-xs text-gray-500 uppercase tracking-wider mb-3">Framework (includes React)</div>
         <div className="flex flex-col gap-2">
@@ -2594,9 +2606,9 @@ function DiagramReactNextjsComparison() {
 
 function DiagramRenderingCsrVsSsr() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/[0.04] p-5">
+        <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/4 p-5">
           <div className="text-sm font-bold text-yellow-400 mb-3">CSR (React default)</div>
           <div className="flex flex-col gap-2">
             {[
@@ -2612,7 +2624,7 @@ function DiagramRenderingCsrVsSsr() {
             ))}
           </div>
         </div>
-        <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.04] p-5">
+        <div className="rounded-lg border border-blue-500/20 bg-blue-500/4 p-5">
           <div className="text-sm font-bold text-blue-400 mb-3">SSR (Next.js)</div>
           <div className="flex flex-col gap-2">
             {[
@@ -2635,14 +2647,14 @@ function DiagramRenderingCsrVsSsr() {
 
 function DiagramReactNextjsDecision() {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-6">
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
       <div className="flex flex-col items-center gap-2">
-        <div className="rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white text-center">
+        <div className="rounded-xl border border-white/12 bg-white/4 px-6 py-3.5 text-sm font-semibold text-white text-center">
           What are you building?
         </div>
         <div className="flex items-start w-full max-w-lg">
           <div className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-px h-6 bg-white/[0.1]" />
+            <div className="w-px h-6 bg-white/10" />
             <div className="text-xs text-gray-600 mb-1">Learning / Simple SPA / No SEO</div>
             <div
               className="rounded-xl border px-5 py-4 text-center w-full animate-pipeline-glow"
@@ -2654,7 +2666,7 @@ function DiagramReactNextjsDecision() {
           </div>
           <div className="w-10" />
           <div className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-px h-6 bg-white/[0.1]" />
+            <div className="w-px h-6 bg-white/10" />
             <div className="text-xs text-gray-600 mb-1">Production / SEO / Full-stack</div>
             <div
               className="rounded-xl border px-5 py-4 text-center w-full animate-pipeline-glow"
@@ -2663,6 +2675,252 @@ function DiagramReactNextjsDecision() {
               <div className="text-base font-bold text-blue-400 mb-1">Next.js</div>
               <div className="text-xs text-gray-500">Built-in everything, ship faster</div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Blog: React vs Angular vs Vue diagrams ───────────────────────────────────
+
+function DiagramFrameworkComparisonTable() {
+  const rows = [
+    { feature: "Type", react: "Library", angular: "Full Framework", vue: "Framework" },
+    { feature: "Learning Curve", react: "Moderate", angular: "Steep", vue: "Easy" },
+    { feature: "Flexibility", react: "High", angular: "Low", vue: "Medium" },
+    { feature: "Structure", react: "You decide", angular: "Strict", vue: "Balanced" },
+    { feature: "TypeScript", react: "Optional", angular: "Required", vue: "Optional" },
+    { feature: "Ecosystem", react: "Massive", angular: "Built-in", vue: "Growing" },
+    { feature: "Meta-framework", react: "Next.js", angular: "Universal", vue: "Nuxt.js" },
+    { feature: "Job Market", react: "Largest", angular: "Enterprise", vue: "Niche" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/3 overflow-x-auto">
+      <table className="w-full text-sm min-w-[500px]">
+        <thead>
+          <tr className="border-b border-white/6">
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Feature</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-cyan-400 uppercase tracking-wider">React</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-red-400 uppercase tracking-wider">Angular</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-emerald-400 uppercase tracking-wider">Vue</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={row.feature} className={i < rows.length - 1 ? "border-b border-white/4" : ""}>
+              <td className="px-4 py-2.5 text-gray-400 font-medium">{row.feature}</td>
+              <td className="px-4 py-2.5 text-gray-300">{row.react}</td>
+              <td className="px-4 py-2.5 text-gray-300">{row.angular}</td>
+              <td className="px-4 py-2.5 text-gray-300">{row.vue}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function DiagramFrameworkDecisionFlow() {
+  const options = [
+    { label: "React", sub: "Flexibility, ecosystem, startups", color: "#61dafb", trigger: "Need flexibility and control" },
+    { label: "Angular", sub: "Structure, enterprise, large teams", color: "#dd0031", trigger: "Need strict architecture" },
+    { label: "Vue", sub: "Simplicity, speed, small teams", color: "#42b883", trigger: "Need easy learning curve" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
+      <div className="flex flex-col items-center gap-3">
+        <div className="rounded-xl border border-white/12 bg-white/4 px-6 py-3.5 text-sm font-semibold text-white text-center">
+          What matters most for your project?
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+          {options.map((opt, i) => (
+            <div key={opt.label} className="flex flex-col items-center gap-2">
+              <div className="w-px h-5 bg-white/10" />
+              <div className="text-[11px] text-gray-600 text-center">{opt.trigger}</div>
+              <div
+                className="rounded-xl border px-5 py-4 text-center w-full animate-pipeline-glow"
+                style={{
+                  borderColor: opt.color + "30",
+                  backgroundColor: opt.color + "10",
+                  "--glow-color": opt.color + "15",
+                  animationDelay: `${i * 0.4}s`,
+                } as React.CSSProperties}
+              >
+                <div className="text-base font-bold mb-1" style={{ color: opt.color }}>{opt.label}</div>
+                <div className="text-xs text-gray-500">{opt.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Blog: Vue.js vs React diagrams ───────────────────────────────────────────
+
+function DiagramVueReactLearningCurve() {
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/4 p-5">
+          <div className="text-base font-bold text-emerald-400 mb-4">Vue</div>
+          <div className="flex flex-col gap-2">
+            {[
+              { week: "Week 1", skill: "Building real components", pct: 60 },
+              { week: "Week 2", skill: "Routing and state", pct: 75 },
+              { week: "Week 4", skill: "Full app with Nuxt", pct: 90 },
+            ].map((s) => (
+              <div key={s.week}>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="text-gray-400">{s.week}</span>
+                  <span className="text-gray-500">{s.skill}</span>
+                </div>
+                <div className="h-2 rounded-full bg-white/6 overflow-hidden">
+                  <div className="h-full rounded-full bg-emerald-500/40" style={{ width: `${s.pct}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-[11px] text-emerald-400/60 mt-3 text-center">Gentle, steady progression</div>
+        </div>
+        <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/4 p-5">
+          <div className="text-base font-bold text-cyan-400 mb-4">React</div>
+          <div className="flex flex-col gap-2">
+            {[
+              { week: "Week 1", skill: "JSX and basic hooks", pct: 35 },
+              { week: "Week 2", skill: "Understanding re-renders", pct: 55 },
+              { week: "Week 4", skill: "Ecosystem + patterns", pct: 80 },
+            ].map((s) => (
+              <div key={s.week}>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="text-gray-400">{s.week}</span>
+                  <span className="text-gray-500">{s.skill}</span>
+                </div>
+                <div className="h-2 rounded-full bg-white/6 overflow-hidden">
+                  <div className="h-full rounded-full bg-cyan-500/40" style={{ width: `${s.pct}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-[11px] text-cyan-400/60 mt-3 text-center">Steeper start, deeper knowledge</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DiagramVueReactDecision() {
+  const scenarios = [
+    { scenario: "Complete beginner", pick: "Vue", color: "#42b883" },
+    { scenario: "Strong JS skills", pick: "React", color: "#61dafb" },
+    { scenario: "Ship fast", pick: "Vue", color: "#42b883" },
+    { scenario: "Career at big tech", pick: "React", color: "#61dafb" },
+    { scenario: "Freelancing", pick: "Either", color: "#a78bfa" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
+      <div className="flex flex-col gap-2.5">
+        {scenarios.map((s) => (
+          <div key={s.scenario} className="flex items-center justify-between rounded-lg border border-white/6 bg-white/2 px-4 py-3">
+            <span className="text-sm text-gray-300">{s.scenario}</span>
+            <span
+              className="text-xs font-bold px-3 py-1 rounded-full"
+              style={{ color: s.color, backgroundColor: s.color + "18" }}
+            >
+              {s.pick}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DiagramVueReactComparisonTable() {
+  const rows = [
+    { factor: "Learning Curve", vue: "Easy", react: "Moderate" },
+    { factor: "Syntax", vue: "HTML templates", react: "JSX (JS-heavy)" },
+    { factor: "Setup Required", vue: "Minimal", react: "More decisions" },
+    { factor: "Flexibility", vue: "Medium", react: "High" },
+    { factor: "Ecosystem", vue: "Cohesive", react: "Massive" },
+    { factor: "Job Market", vue: "Growing", react: "Dominant" },
+    { factor: "Meta-framework", vue: "Nuxt.js", react: "Next.js" },
+    { factor: "Best For", vue: "Fast start", react: "Long-term depth" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/3 overflow-x-auto">
+      <table className="w-full text-sm min-w-[400px]">
+        <thead>
+          <tr className="border-b border-white/6">
+            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Factor</th>
+            <th className="px-5 py-3 text-left text-xs font-semibold text-emerald-400 uppercase tracking-wider">Vue</th>
+            <th className="px-5 py-3 text-left text-xs font-semibold text-cyan-400 uppercase tracking-wider">React</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={row.factor} className={i < rows.length - 1 ? "border-b border-white/4" : ""}>
+              <td className="px-5 py-2.5 text-gray-400 font-medium">{row.factor}</td>
+              <td className="px-5 py-2.5 text-gray-300">{row.vue}</td>
+              <td className="px-5 py-2.5 text-gray-300">{row.react}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ─── Blog: When to Use Angular diagram ────────────────────────────────────────
+
+function DiagramAngularDecisionFlow() {
+  const yes = [
+    { scenario: "Large team (5+ devs)", color: "#dd0031" },
+    { scenario: "Long-term project (2+ years)", color: "#dd0031" },
+    { scenario: "Complex forms and data flows", color: "#dd0031" },
+    { scenario: "Enterprise compliance needs", color: "#dd0031" },
+  ];
+  const no = [
+    { scenario: "Small project or MVP", color: "#6b7280" },
+    { scenario: "Rapid prototyping", color: "#6b7280" },
+    { scenario: "First framework to learn", color: "#6b7280" },
+    { scenario: "Team of 1 to 3 developers", color: "#6b7280" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-white/8 bg-white/3 p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/3 p-5">
+          <div className="text-sm font-bold text-red-400 mb-4">Use Angular</div>
+          <div className="flex flex-col gap-2">
+            {yes.map((item) => (
+              <div key={item.scenario} className="flex items-center gap-2.5 text-sm text-gray-300">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-red-400">
+                  <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                </svg>
+                {item.scenario}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-xl border border-white/6 bg-white/2 p-5">
+          <div className="text-sm font-bold text-gray-400 mb-4">Skip Angular</div>
+          <div className="flex flex-col gap-2">
+            {no.map((item) => (
+              <div key={item.scenario} className="flex items-center gap-2.5 text-sm text-gray-500">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-gray-600">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                {item.scenario}
+              </div>
+            ))}
           </div>
         </div>
       </div>

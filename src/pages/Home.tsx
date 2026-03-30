@@ -525,12 +525,6 @@ const Home = () => {
                   to="/accordion"
                   className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
                 >
-                  Docs
-                </Link>
-                <Link
-                  to="/accordion"
-                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
-                >
                   Components
                 </Link>
                 <Link
@@ -795,12 +789,6 @@ const Home = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-5">
-                  <Link
-                    to="/accordion"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    Docs
-                  </Link>
                   <Link
                     to="/button"
                     className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"

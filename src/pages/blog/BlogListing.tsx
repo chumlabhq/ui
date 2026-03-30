@@ -98,12 +98,6 @@ export default function BlogListing() {
                   to="/accordion"
                   className="text-sm text-gray-400 hover:text-white transition-colors duration-300 px-4 py-2 rounded-lg hover:bg-white/[0.05]"
                 >
-                  Docs
-                </Link>
-                <Link
-                  to="/accordion"
-                  className="text-sm text-gray-400 hover:text-white transition-colors duration-300 px-4 py-2 rounded-lg hover:bg-white/[0.05]"
-                >
                   Components
                 </Link>
                 <Link
@@ -162,12 +156,6 @@ export default function BlogListing() {
                   </span>
                 </div>
                 <div className="flex items-center gap-6">
-                  <Link
-                    to="/accordion"
-                    className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
-                  >
-                    Docs
-                  </Link>
                   <Link
                     to="/button"
                     className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
