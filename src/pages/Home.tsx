@@ -534,6 +534,12 @@ const Home = () => {
                   Components
                 </Link>
                 <Link
+                  to="/blog"
+                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
+                >
+                  Blog
+                </Link>
+                <Link
                   to="/accordion"
                   className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]"
                 >
@@ -800,6 +806,12 @@ const Home = () => {
                     className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
                   >
                     Components
+                  </Link>
+                  <Link
+                    to="/blog"
+                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Blog
                   </Link>
                   <a
                     href="https://github.com"

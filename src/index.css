@@ -154,3 +154,70 @@
 .animate-toast-leave-top {
   animation: toast-slide-out-top 0.2s ease-in forwards;
 }
+
+/* ─── Blog diagram animations ─── */
+
+@keyframes diagram-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes diagram-scale-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-travel {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes arrow-draw {
+  from { stroke-dashoffset: 30; opacity: 0.05; }
+  to { stroke-dashoffset: 0; opacity: 0.2; }
+}
+
+@keyframes pipeline-glow {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 12px 2px var(--glow-color, rgba(99,102,241,0.15)); }
+}
+
+.diagram-stagger > * {
+  opacity: 0;
+  animation: diagram-fade-in 0.4s ease-out forwards;
+}
+.diagram-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.diagram-stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.diagram-stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.diagram-stagger > *:nth-child(4) { animation-delay: 0.2s; }
+.diagram-stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.diagram-stagger > *:nth-child(6) { animation-delay: 0.3s; }
+.diagram-stagger > *:nth-child(7) { animation-delay: 0.35s; }
+.diagram-stagger > *:nth-child(8) { animation-delay: 0.4s; }
+.diagram-stagger > *:nth-child(9) { animation-delay: 0.45s; }
+.diagram-stagger > *:nth-child(10) { animation-delay: 0.5s; }
+.diagram-stagger > *:nth-child(11) { animation-delay: 0.55s; }
+.diagram-stagger > *:nth-child(12) { animation-delay: 0.6s; }
+.diagram-stagger > *:nth-child(13) { animation-delay: 0.65s; }
+.diagram-stagger > *:nth-child(14) { animation-delay: 0.7s; }
+.diagram-stagger > *:nth-child(15) { animation-delay: 0.75s; }
+
+.diagram-scale-stagger > * {
+  opacity: 0;
+  animation: diagram-scale-in 0.35s ease-out forwards;
+}
+.diagram-scale-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+.diagram-scale-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+.diagram-scale-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+.diagram-scale-stagger > *:nth-child(4) { animation-delay: 0.4s; }
+.diagram-scale-stagger > *:nth-child(5) { animation-delay: 0.5s; }
+.diagram-scale-stagger > *:nth-child(6) { animation-delay: 0.6s; }
+
+.animate-arrow-draw {
+  stroke-dasharray: 30;
+  animation: arrow-draw 0.5s ease-out forwards;
+}
+
+.animate-pipeline-glow {
+  animation: pipeline-glow 2.5s ease-in-out infinite;
+}

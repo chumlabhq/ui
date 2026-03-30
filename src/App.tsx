@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
+import BlogListing from "./pages/blog/BlogListing";
+import BlogDetail from "./pages/blog/BlogDetail";
 import Demo from "./pages/demo/Demo";
 import AccordionDemo from "./pages/demo/AccordionDemo";
 import AvatarDemo from "./pages/demo/AvatarDemo";
@@ -35,6 +37,8 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/blog" element={<BlogListing />} />
+      <Route path="/blog/:id" element={<BlogDetail />} />
       <Route element={<Demo />}>
         <Route path="accordion" element={<AccordionDemo />} />
         <Route path="avatar" element={<AvatarDemo />} />
