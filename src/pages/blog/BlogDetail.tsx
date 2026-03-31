@@ -212,8 +212,8 @@ export default function BlogDetail() {
 
       <div className="relative z-10">
         {/* ── HEADER ── */}
-        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60 border-b border-white/[0.04]">
-          <div className="w-full px-6 sm:px-8">
+        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
+          <div className="w-full px-5 sm:px-8">
             <div className="flex items-center justify-between py-3.5">
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="relative group-hover:scale-105 transition-transform duration-500">
@@ -225,19 +225,19 @@ export default function BlogDetail() {
               <div className="flex items-center gap-1">
                 <Link
                   to="/accordion"
-                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/[0.04]"
+                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
                 >
                   Components
                 </Link>
                 <Link
                   to="/blog"
-                  className="text-[12px] text-white font-medium transition-colors duration-300 px-3.5 py-1.5 rounded-lg bg-white/[0.05]"
+                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
                 >
                   Blog
                 </Link>
                 <Link
                   to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.08] hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]"
+                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]"
                 >
                   Get Started
                 </Link>
@@ -352,13 +352,13 @@ export default function BlogDetail() {
           </div>
 
           {/* ── FOOTER ── */}
-          <footer className="max-w-6xl mx-auto px-6 sm:px-8 pb-8 pt-4">
-            <div className="border-t border-white/[0.06] pt-6">
+          <footer className="w-full px-5 sm:px-8 pb-6">
+            <div className="border-t border-white/4 pt-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <LogoMark size={28} />
-                  <LogoWordmark className="text-[16px]" />
-                  <span className="text-xs text-gray-600 ml-2">
+                  <LogoMark size={32} />
+                  <LogoWordmark className="text-[18px]" />
+                  <span className="text-[10px] text-gray-700 ml-2">
                     MIT License
                   </span>
                 </div>
