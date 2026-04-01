@@ -22,7 +22,7 @@ describe("Pagination", () => {
   describe("Rendering", () => {
     it("renders as a nav element with aria-label", () => {
       render(
-        <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={5} onValueChange={() => {}} />
       );
 
       const nav = screen.getByRole("navigation", { name: "Pagination" });
@@ -31,7 +31,7 @@ describe("Pagination", () => {
 
     it("renders page buttons for all pages when few pages", () => {
       render(
-        <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={5} onValueChange={() => {}} />
       );
 
       for (let i = 1; i <= 5; i++) {
@@ -41,7 +41,7 @@ describe("Pagination", () => {
 
     it("renders prev and next navigation buttons", () => {
       render(
-        <Pagination currentPage={3} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={3} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Previous page" })).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("Pagination", () => {
 
     it("marks the active page with aria-current='page'", () => {
       render(
-        <Pagination currentPage={3} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={3} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Page 3" })).toHaveAttribute("aria-current", "page");
@@ -59,7 +59,7 @@ describe("Pagination", () => {
 
     it("marks the active page with data-active", () => {
       render(
-        <Pagination currentPage={3} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={3} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Page 3" })).toHaveAttribute("data-active");
@@ -68,7 +68,7 @@ describe("Pagination", () => {
 
     it("disables prev button on first page", () => {
       render(
-        <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={5} onValueChange={() => {}} />
       );
 
       const prev = screen.getByRole("button", { name: "Previous page" });
@@ -78,7 +78,7 @@ describe("Pagination", () => {
 
     it("disables next button on last page", () => {
       render(
-        <Pagination currentPage={5} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={5} totalPages={5} onValueChange={() => {}} />
       );
 
       const next = screen.getByRole("button", { name: "Next page" });
@@ -88,7 +88,7 @@ describe("Pagination", () => {
 
     it("renders ellipsis for many pages", () => {
       render(
-        <Pagination currentPage={1} totalPages={50} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={50} onValueChange={() => {}} />
       );
 
       const nav = screen.getByRole("navigation");
@@ -97,7 +97,7 @@ describe("Pagination", () => {
 
     it("renders no page buttons when totalPages is 0", () => {
       render(
-        <Pagination currentPage={1} totalPages={0} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={0} onValueChange={() => {}} />
       );
 
       expect(screen.queryByRole("button", { name: /^Page / })).not.toBeInTheDocument();
@@ -105,7 +105,7 @@ describe("Pagination", () => {
 
     it("renders correctly with a single page", () => {
       render(
-        <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={1} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Page 1" })).toBeInTheDocument();
@@ -115,7 +115,7 @@ describe("Pagination", () => {
 
     it("clamps currentPage when it exceeds totalPages", () => {
       render(
-        <Pagination currentPage={100} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={100} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Page 5" })).toHaveAttribute("aria-current", "page");
@@ -124,9 +124,9 @@ describe("Pagination", () => {
     it("applies custom className", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={5}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           className="custom-class"
         />
       );
@@ -137,9 +137,9 @@ describe("Pagination", () => {
     it("allows aria-label override via rest props", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={5}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           aria-label="Navigation des pages"
         />
       );
@@ -149,73 +149,73 @@ describe("Pagination", () => {
   });
 
   describe("Navigation", () => {
-    it("calls onPageChange when clicking a page button", async () => {
+    it("calls onValueChange when clicking a page button", async () => {
       const user = userEvent.setup();
-      const onPageChange = vi.fn();
+      const onValueChange = vi.fn();
 
       render(
-        <Pagination currentPage={1} totalPages={5} onPageChange={onPageChange} />
+        <Pagination value={1} totalPages={5} onValueChange={onValueChange} />
       );
 
       await user.click(screen.getByRole("button", { name: "Page 3" }));
-      expect(onPageChange).toHaveBeenCalledWith(3);
+      expect(onValueChange).toHaveBeenCalledWith(3);
     });
 
-    it("calls onPageChange with previous page when clicking prev", async () => {
+    it("calls onValueChange with previous page when clicking prev", async () => {
       const user = userEvent.setup();
-      const onPageChange = vi.fn();
+      const onValueChange = vi.fn();
 
       render(
-        <Pagination currentPage={3} totalPages={5} onPageChange={onPageChange} />
+        <Pagination value={3} totalPages={5} onValueChange={onValueChange} />
       );
 
       await user.click(screen.getByRole("button", { name: "Previous page" }));
-      expect(onPageChange).toHaveBeenCalledWith(2);
+      expect(onValueChange).toHaveBeenCalledWith(2);
     });
 
-    it("calls onPageChange with next page when clicking next", async () => {
+    it("calls onValueChange with next page when clicking next", async () => {
       const user = userEvent.setup();
-      const onPageChange = vi.fn();
+      const onValueChange = vi.fn();
 
       render(
-        <Pagination currentPage={3} totalPages={5} onPageChange={onPageChange} />
+        <Pagination value={3} totalPages={5} onValueChange={onValueChange} />
       );
 
       await user.click(screen.getByRole("button", { name: "Next page" }));
-      expect(onPageChange).toHaveBeenCalledWith(4);
+      expect(onValueChange).toHaveBeenCalledWith(4);
     });
 
-    it("does not fire onPageChange when clicking disabled prev", async () => {
+    it("does not fire onValueChange when clicking disabled prev", async () => {
       const user = userEvent.setup();
-      const onPageChange = vi.fn();
+      const onValueChange = vi.fn();
 
       render(
-        <Pagination currentPage={1} totalPages={5} onPageChange={onPageChange} />
+        <Pagination value={1} totalPages={5} onValueChange={onValueChange} />
       );
 
       await user.click(screen.getByRole("button", { name: "Previous page" }));
-      expect(onPageChange).not.toHaveBeenCalled();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
 
-    it("does not fire onPageChange when clicking disabled next", async () => {
+    it("does not fire onValueChange when clicking disabled next", async () => {
       const user = userEvent.setup();
-      const onPageChange = vi.fn();
+      const onValueChange = vi.fn();
 
       render(
-        <Pagination currentPage={5} totalPages={5} onPageChange={onPageChange} />
+        <Pagination value={5} totalPages={5} onValueChange={onValueChange} />
       );
 
       await user.click(screen.getByRole("button", { name: "Next page" }));
-      expect(onPageChange).not.toHaveBeenCalled();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
   });
 
   describe("Rows Per Page Dropdown", () => {
     const renderWithDropdown = (overrides = {}) => {
       const defaults = {
-        currentPage: 1,
+        value: 1,
         totalPages: 10,
-        onPageChange: vi.fn(),
+        onValueChange: vi.fn(),
         showRowsPerPage: true,
         rowsPerPage: 25,
         onRowsPerPageChange: vi.fn(),
@@ -235,9 +235,9 @@ describe("Pagination", () => {
     it("does not render selector when showRowsPerPage is false", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={10}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           rowsPerPage={25}
         />
       );
@@ -415,16 +415,16 @@ describe("Pagination", () => {
       render(
         <div>
           <Pagination
-            currentPage={1}
+            value={1}
             totalPages={5}
-            onPageChange={() => {}}
+            onValueChange={() => {}}
             showRowsPerPage
             rowsPerPage={25}
           />
           <Pagination
-            currentPage={1}
+            value={1}
             totalPages={5}
-            onPageChange={() => {}}
+            onValueChange={() => {}}
             showRowsPerPage
             rowsPerPage={50}
           />
@@ -446,9 +446,9 @@ describe("Pagination", () => {
     it("renders custom ellipsis via renderEllipsis", () => {
       render(
         <Pagination
-          currentPage={25}
+          value={25}
           totalPages={50}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           renderEllipsis={({ position }) => (
             <span data-testid={`ellipsis-${position}`}>jump</span>
           )}
@@ -459,14 +459,14 @@ describe("Pagination", () => {
       expect(screen.getByTestId("ellipsis-end")).toBeInTheDocument();
     });
 
-    it("passes onPageChange to renderEllipsis", () => {
-      const onPageChange = vi.fn();
+    it("passes onValueChange to renderEllipsis", () => {
+      const onValueChange = vi.fn();
 
       render(
         <Pagination
-          currentPage={25}
+          value={25}
           totalPages={50}
-          onPageChange={onPageChange}
+          onValueChange={onValueChange}
           renderEllipsis={({ onPageChange: go }) => (
             <button type="button" onClick={() => go(10)} data-testid="jump-btn">
               Go
@@ -477,15 +477,15 @@ describe("Pagination", () => {
 
       const buttons = screen.getAllByTestId("jump-btn");
       buttons[0].click();
-      expect(onPageChange).toHaveBeenCalledWith(10);
+      expect(onValueChange).toHaveBeenCalledWith(10);
     });
 
     it("assigns correct position to ellipsis elements", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={50}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           renderEllipsis={({ position }) => (
             <span data-testid={`pos-${position}`}>{position}</span>
           )}
@@ -501,9 +501,9 @@ describe("Pagination", () => {
     it("renders page info via renderPageInfo", () => {
       render(
         <Pagination
-          currentPage={3}
+          value={3}
           totalPages={10}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           renderPageInfo={({ currentPage, totalPages }) => (
             <span data-testid="page-info">Page {currentPage} of {totalPages}</span>
           )}
@@ -516,10 +516,10 @@ describe("Pagination", () => {
     it("passes rowsPerPage to renderPageInfo", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={10}
           rowsPerPage={25}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           renderPageInfo={({ rowsPerPage }) => (
             <span data-testid="info">{rowsPerPage} per page</span>
           )}
@@ -531,7 +531,7 @@ describe("Pagination", () => {
 
     it("does not render page info when renderPageInfo is not provided", () => {
       const { container } = render(
-        <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(container.querySelector("[class*=pageInfo]")).not.toBeInTheDocument();
@@ -542,9 +542,9 @@ describe("Pagination", () => {
     it("renders sections in default order", () => {
       const { container } = render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={10}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           showRowsPerPage
           rowsPerPage={25}
           renderPageInfo={() => <span data-testid="info">info</span>}
@@ -564,9 +564,9 @@ describe("Pagination", () => {
     it("renders sections in custom order", () => {
       const { container } = render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={10}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           showRowsPerPage
           rowsPerPage={25}
           renderPageInfo={() => <span data-testid="info">info</span>}
@@ -587,9 +587,9 @@ describe("Pagination", () => {
     it("omits sections not in sectionOrder", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={10}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           showRowsPerPage
           rowsPerPage={25}
           sectionOrder={["nav"]}
@@ -612,9 +612,9 @@ describe("Pagination", () => {
 
       render(
         <Pagination
-          currentPage={3}
+          value={3}
           totalPages={5}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           prevIcon={CustomPrev}
           nextIcon={CustomNext}
         />
@@ -627,9 +627,9 @@ describe("Pagination", () => {
     it("renders custom icons as ReactNode", () => {
       render(
         <Pagination
-          currentPage={3}
+          value={3}
           totalPages={5}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           prevIcon={<span data-testid="node-prev">←</span>}
           nextIcon={<span data-testid="node-next">→</span>}
         />
@@ -645,7 +645,7 @@ describe("Pagination", () => {
       const ref = vi.fn();
 
       render(
-        <Pagination ref={ref} currentPage={1} totalPages={5} onPageChange={() => {}} />
+        <Pagination ref={ref} value={1} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(ref).toHaveBeenCalled();
@@ -657,9 +657,9 @@ describe("Pagination", () => {
     it("spreads additional HTML attributes onto nav", () => {
       render(
         <Pagination
-          currentPage={1}
+          value={1}
           totalPages={5}
-          onPageChange={() => {}}
+          onValueChange={() => {}}
           data-testid="my-pagination"
           id="pg-1"
         />
@@ -674,7 +674,7 @@ describe("Pagination", () => {
   describe("Edge Cases", () => {
     it("handles negative totalPages gracefully", () => {
       render(
-        <Pagination currentPage={1} totalPages={-5} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={-5} onValueChange={() => {}} />
       );
 
       expect(screen.queryByRole("button", { name: /^Page / })).not.toBeInTheDocument();
@@ -682,7 +682,7 @@ describe("Pagination", () => {
 
     it("handles fractional totalPages by flooring", () => {
       render(
-        <Pagination currentPage={1} totalPages={3.7} onPageChange={() => {}} />
+        <Pagination value={1} totalPages={3.7} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Page 3" })).toBeInTheDocument();
@@ -691,7 +691,7 @@ describe("Pagination", () => {
 
     it("handles currentPage less than 1", () => {
       render(
-        <Pagination currentPage={-1} totalPages={5} onPageChange={() => {}} />
+        <Pagination value={-1} totalPages={5} onValueChange={() => {}} />
       );
 
       expect(screen.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page");

@@ -38,8 +38,16 @@ const fruitOptions: DropdownOption[] = [
 ];
 
 const countryOptions: DropdownOption[] = [
-  { value: "us", label: "United States", content: <span>🇺🇸 United States</span> },
-  { value: "gb", label: "United Kingdom", content: <span>🇬🇧 United Kingdom</span> },
+  {
+    value: "us",
+    label: "United States",
+    content: <span>🇺🇸 United States</span>,
+  },
+  {
+    value: "gb",
+    label: "United Kingdom",
+    content: <span>🇬🇧 United Kingdom</span>,
+  },
   { value: "ca", label: "Canada", content: <span>🇨🇦 Canada</span> },
   { value: "au", label: "Australia", content: <span>🇦🇺 Australia</span> },
   { value: "de", label: "Germany", content: <span>🇩🇪 Germany</span> },
@@ -108,9 +116,27 @@ const disabledItemOptions: DropdownOption[] = [
 
 // ─── Icons ──────────────────────────────────────────────────────────────────
 
-const CustomChevronIcon = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className={className} style={style} aria-hidden="true" width={16} height={16}>
-    <path fillRule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+const CustomChevronIcon = ({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) => (
+  <svg
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    width={16}
+    height={16}
+  >
+    <path
+      fillRule="evenodd"
+      d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -136,7 +162,9 @@ const getClasses = (dark: boolean) => ({
         ? "text-gray-200 hover:bg-gray-700"
         : "text-gray-700 hover:bg-gray-50"
     }`,
-    optionSelected: dark ? "bg-blue-900/50 font-medium" : "bg-blue-50 font-medium",
+    optionSelected: dark
+      ? "bg-blue-900/50 font-medium"
+      : "bg-blue-50 font-medium",
     optionFocused: dark ? "bg-gray-700" : "bg-gray-100",
     optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
     chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
@@ -159,11 +187,14 @@ const getClasses = (dark: boolean) => ({
 
 const darkTheme = {
   wrapper: "relative",
-  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500",
+  trigger:
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500",
   triggerText: "flex-1 truncate",
-  content: "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
+  content:
+    "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors",
+  option:
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors",
   optionSelected: "bg-gray-600",
   optionFocused: "bg-gray-700",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
@@ -174,11 +205,14 @@ const darkTheme = {
 
 const warmTheme = {
   wrapper: "relative",
-  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400",
+  trigger:
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400",
   triggerText: "flex-1 truncate",
-  content: "rounded-lg shadow-lg overflow-hidden bg-amber-50 border border-amber-200",
+  content:
+    "rounded-lg shadow-lg overflow-hidden bg-amber-50 border border-amber-200",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-amber-900 hover:bg-amber-100 transition-colors",
+  option:
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-amber-900 hover:bg-amber-100 transition-colors",
   optionSelected: "bg-amber-200",
   optionFocused: "bg-amber-100",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
@@ -189,11 +223,14 @@ const warmTheme = {
 
 const coolTheme = {
   wrapper: "relative",
-  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cyan-300 rounded-lg bg-cyan-50 text-cyan-900 hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400",
+  trigger:
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cyan-300 rounded-lg bg-cyan-50 text-cyan-900 hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400",
   triggerText: "flex-1 truncate",
-  content: "rounded-lg shadow-lg overflow-hidden bg-cyan-50 border border-cyan-200",
+  content:
+    "rounded-lg shadow-lg overflow-hidden bg-cyan-50 border border-cyan-200",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-cyan-900 hover:bg-cyan-100 transition-colors",
+  option:
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-cyan-900 hover:bg-cyan-100 transition-colors",
   optionSelected: "bg-cyan-200",
   optionFocused: "bg-cyan-100",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
@@ -242,15 +279,21 @@ const DropdownDemo = () => {
   // Clearable
   const [clearableValue, setClearableValue] = useState<string | null>(null);
   // Render trigger
-  const [renderTriggerValue, setRenderTriggerValue] = useState<string | null>(null);
+  const [renderTriggerValue, setRenderTriggerValue] = useState<string | null>(
+    null,
+  );
   // Custom content
   const [countryValue, setCountryValue] = useState<string | null>(null);
   // Async
-  const [asyncCountryValue, setAsyncCountryValue] = useState<string | null>(null);
+  const [asyncCountryValue, setAsyncCountryValue] = useState<string | null>(
+    null,
+  );
   // Status
   const [statusValue, setStatusValue] = useState<string | null>(null);
   // Custom selected & icons
-  const [customSelectedValue, setCustomSelectedValue] = useState<string | null>(null);
+  const [customSelectedValue, setCustomSelectedValue] = useState<string | null>(
+    null,
+  );
   const [customIconValue, setCustomIconValue] = useState<string | null>(null);
   const [noIconValue, setNoIconValue] = useState<string | null>(null);
   // Focus styling
@@ -260,9 +303,13 @@ const DropdownDemo = () => {
   const [darkThemeValue, setDarkThemeValue] = useState<string | null>(null);
   const [warmThemeValue, setWarmThemeValue] = useState<string | null>(null);
   const [coolThemeValue, setCoolThemeValue] = useState<string | null>(null);
-  const [minimalThemeValue, setMinimalThemeValue] = useState<string | null>(null);
+  const [minimalThemeValue, setMinimalThemeValue] = useState<string | null>(
+    null,
+  );
   // Disabled items
-  const [disabledItemValue, setDisabledItemValue] = useState<string | null>(null);
+  const [disabledItemValue, setDisabledItemValue] = useState<string | null>(
+    null,
+  );
   // Label & required
   const [labeledValue, setLabeledValue] = useState<string | null>(null);
   const [requiredValue, setRequiredValue] = useState<string | null>(null);
@@ -273,7 +320,9 @@ const DropdownDemo = () => {
 
   const [successValue, setSuccessValue] = useState<string | null>(null);
   // Chevron
-  const [customChevronValue, setCustomChevronValue] = useState<string | null>(null);
+  const [customChevronValue, setCustomChevronValue] = useState<string | null>(
+    null,
+  );
   const [noChevronValue, setNoChevronValue] = useState<string | null>(null);
   // Full width
   const [fullWidthValue, setFullWidthValue] = useState<string | null>(null);
@@ -285,21 +334,33 @@ const DropdownDemo = () => {
   // Gap
   const [customGapValue, setCustomGapValue] = useState<string | null>(null);
   // Typeahead timeout
-  const [customTimeoutValue, setCustomTimeoutValue] = useState<string | null>(null);
+  const [customTimeoutValue, setCustomTimeoutValue] = useState<string | null>(
+    null,
+  );
   // Z-index
   const [zIndexValue, setZIndexValue] = useState<string | null>(null);
   // Custom clear icon
-  const [customClearIconValue, setCustomClearIconValue] = useState<string | null>("apple");
+  const [customClearIconValue, setCustomClearIconValue] = useState<
+    string | null
+  >("apple");
   // Custom check icon
-  const [customCheckIconValue, setCustomCheckIconValue] = useState<string | null>(null);
+  const [customCheckIconValue, setCustomCheckIconValue] = useState<
+    string | null
+  >(null);
   // Form integration
-  const [formIntegrationValue, setFormIntegrationValue] = useState<string | null>(null);
+  const [formIntegrationValue, setFormIntegrationValue] = useState<
+    string | null
+  >(null);
   const [focusMessage, setFocusMessage] = useState<string>("");
   // Custom key down
-  const [customKeyDownValue, setCustomKeyDownValue] = useState<string | null>(null);
+  const [customKeyDownValue, setCustomKeyDownValue] = useState<string | null>(
+    null,
+  );
   const [keyDownMessage, setKeyDownMessage] = useState<string>("");
   // className / style
-  const [classNameStyleValue, setClassNameStyleValue] = useState<string | null>(null);
+  const [classNameStyleValue, setClassNameStyleValue] = useState<string | null>(
+    null,
+  );
 
   const mapCountryToOption = useCallback(
     (country: RestCountryResponse): DropdownOption => ({
@@ -307,16 +368,28 @@ const DropdownDemo = () => {
       label: country.name.common,
       content: (
         <span className="flex items-center gap-2">
-          <img src={country.flags.png} alt={`${country.name.common} flag`} className="w-5 h-4 object-cover rounded-sm" />
+          <img
+            src={country.flags.png}
+            alt={`${country.name.common} flag`}
+            className="w-5 h-4 object-cover rounded-sm"
+          />
           <span className="flex flex-col">
             <span className="text-sm">{country.name.common}</span>
-            <span className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>{country.capital?.[0] || country.region}</span>
+            <span
+              className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              {country.capital?.[0] || country.region}
+            </span>
           </span>
         </span>
       ),
       selectedContent: (
         <span className="flex items-center gap-2">
-          <img src={country.flags.png} alt={`${country.name.common} flag`} className="w-5 h-4 object-cover rounded-sm" />
+          <img
+            src={country.flags.png}
+            alt={`${country.name.common} flag`}
+            className="w-5 h-4 object-cover rounded-sm"
+          />
           <span>{country.name.common}</span>
         </span>
       ),
@@ -324,7 +397,9 @@ const DropdownDemo = () => {
     [dark],
   );
 
-  const handleLoadCountries = useCallback(async (): Promise<DropdownOption[]> => {
+  const handleLoadCountries = useCallback(async (): Promise<
+    DropdownOption[]
+  > => {
     const response = await fetch(
       "https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region",
     );
@@ -359,8 +434,8 @@ const DropdownDemo = () => {
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
           >
-            A fully accessible select dropdown component for choosing from a list
-            of options. Supports controlled and uncontrolled modes, portal
+            A fully accessible select dropdown component for choosing from a
+            list of options. Supports controlled and uncontrolled modes, portal
             rendering, keyboard navigation with type-ahead search, async option
             loading, clearable selection, custom trigger rendering, and complete
             style customization via a classes object.
@@ -392,7 +467,9 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         {basicValue && (
-          <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+          >
             Selected: {basicValue}
           </p>
         )}
@@ -554,7 +631,9 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         {clearableValue && (
-          <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+          >
             Selected: {clearableValue}
           </p>
         )}
@@ -574,7 +653,13 @@ const DropdownDemo = () => {
               onValueChange={(v) => setRenderTriggerValue(v)}
               placeholder="Pick a fruit..."
               classes={c.dropdown}
-              renderTrigger={({ ref, isOpen, selectedOption, placeholder: ph, ...rest }) => (
+              renderTrigger={({
+                ref,
+                isOpen,
+                selectedOption,
+                placeholder: ph,
+                ...rest
+              }) => (
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...rest}
@@ -589,17 +674,25 @@ const DropdownDemo = () => {
                         : "border-gray-300 bg-white text-gray-900 hover:border-gray-400"
                   }`}
                 >
-                  <span className={`text-xl ${selectedOption ? "" : "opacity-50"}`}>
+                  <span
+                    className={`text-xl ${selectedOption ? "" : "opacity-50"}`}
+                  >
                     {selectedOption ? "🍎" : "🔍"}
                   </span>
                   <span className="flex-1 truncate font-medium">
                     {selectedOption?.label ?? ph}
                   </span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    isOpen
-                      ? dark ? "bg-blue-900 text-blue-300" : "bg-blue-100 text-blue-700"
-                      : dark ? "bg-gray-700 text-gray-400" : "bg-gray-100 text-gray-500"
-                  }`}>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${
+                      isOpen
+                        ? dark
+                          ? "bg-blue-900 text-blue-300"
+                          : "bg-blue-100 text-blue-700"
+                        : dark
+                          ? "bg-gray-700 text-gray-400"
+                          : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
                     {isOpen ? "Open" : "Closed"}
                   </span>
                 </button>
@@ -608,10 +701,13 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          <p className="font-semibold mb-1">Important: renderTrigger must return a {'<button>'} element</p>
+          <p className="font-semibold mb-1">
+            Important: renderTrigger must return a {"<button>"} element
+          </p>
           <p>
-            For proper accessibility, the custom trigger MUST be a native button element with type=&quot;button&quot;.
-            Using div or span elements will break keyboard navigation and screen reader support.
+            For proper accessibility, the custom trigger MUST be a native button
+            element with type=&quot;button&quot;. Using div or span elements
+            will break keyboard navigation and screen reader support.
           </p>
         </div>
       </Section>
@@ -655,8 +751,11 @@ const DropdownDemo = () => {
             />
           </div>
         </DemoWrapper>
-        <p className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-500"}`}>
-          Options are fetched from the REST Countries API when the dropdown opens.
+        <p
+          className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+        >
+          Options are fetched from the REST Countries API when the dropdown
+          opens.
         </p>
       </Section>
 
@@ -687,7 +786,9 @@ const DropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div>
-            <DemoLabel isDarkMode={dark}>Green accent + left border on selected</DemoLabel>
+            <DemoLabel isDarkMode={dark}>
+              Green accent + left border on selected
+            </DemoLabel>
             <div className="w-64">
               <Dropdown
                 options={fruitOptions}
@@ -705,7 +806,9 @@ const DropdownDemo = () => {
             </div>
           </div>
           <div>
-            <DemoLabel isDarkMode={dark}>Star icon instead of checkmark</DemoLabel>
+            <DemoLabel isDarkMode={dark}>
+              Star icon instead of checkmark
+            </DemoLabel>
             <div className="w-64">
               <Dropdown
                 options={fruitOptions}
@@ -713,7 +816,12 @@ const DropdownDemo = () => {
                 onValueChange={(v) => setCustomIconValue(v)}
                 placeholder="Select a fruit..."
                 selectedIcon={
-                  <svg viewBox="0 0 20 20" fill="currentColor" className={`w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`} aria-hidden="true">
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className={`w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`}
+                    aria-hidden="true"
+                  >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 }
@@ -728,14 +836,18 @@ const DropdownDemo = () => {
                 options={fruitOptions}
                 placeholder="Select a fruit..."
                 selectedIcon={
-                  <span className={`w-2 h-2 rounded-full shrink-0 ${dark ? "bg-indigo-400" : "bg-indigo-600"}`} />
+                  <span
+                    className={`w-2 h-2 rounded-full shrink-0 ${dark ? "bg-indigo-400" : "bg-indigo-600"}`}
+                  />
                 }
                 classes={c.dropdown}
               />
             </div>
           </div>
           <div>
-            <DemoLabel isDarkMode={dark}>No icon (showSelectedIcon=false)</DemoLabel>
+            <DemoLabel isDarkMode={dark}>
+              No icon (showSelectedIcon=false)
+            </DemoLabel>
             <div className="w-64">
               <Dropdown
                 options={fruitOptions}
@@ -1010,12 +1122,15 @@ const DropdownDemo = () => {
             classes={c.dropdown}
           />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<Dropdown
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<Dropdown
   label="Country"
   description="Select your country of residence"
   options={options}
   placeholder="Choose a country"
-/>`} />
+/>`}
+        />
       </Section>
 
       {/* ─── Success State ────────────────────────────────────────────────── */}
@@ -1037,14 +1152,17 @@ const DropdownDemo = () => {
             />
           </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<Dropdown
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<Dropdown
   label="Plan"
   options={options}
   value={val}
   onValueChange={(v) => setVal(v)}
   success={!!val}
   successMessage="Great choice!"
-/>`} />
+/>`}
+        />
       </Section>
 
       {/* ─── Custom Chevron & No Chevron ─────────────────────────────────── */}
@@ -1131,7 +1249,11 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div>
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
-            <Dropdown options={fruitOptions} placeholder="Select..." classes={c.dropdown} />
+            <Dropdown
+              options={fruitOptions}
+              placeholder="Select..."
+              classes={c.dropdown}
+            />
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Borderless</p>
@@ -1174,7 +1296,7 @@ const DropdownDemo = () => {
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
                   dark
-                    ? "text-gray-300 hover:bg-white/[0.06]"
+                    ? "text-gray-300 hover:bg-white/60"
                     : "text-gray-600 hover:bg-gray-50"
                 }`,
                 triggerText: "flex-1 text-left truncate",
@@ -1209,7 +1331,9 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-8">
             <div>
-              <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;bottom&quot; (default)</DemoLabel>
+              <DemoLabel isDarkMode={dark}>
+                dropdownPosition=&quot;bottom&quot; (default)
+              </DemoLabel>
               <div className="w-64">
                 <Dropdown
                   options={fruitOptions}
@@ -1222,7 +1346,9 @@ const DropdownDemo = () => {
               </div>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;top&quot;</DemoLabel>
+              <DemoLabel isDarkMode={dark}>
+                dropdownPosition=&quot;top&quot;
+              </DemoLabel>
               <div className="w-64">
                 <Dropdown
                   options={fruitOptions}
@@ -1237,11 +1363,11 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          The dropdown renders via a React Portal into document.body (or a custom
-          container via portalContainer), so it is never clipped by overflow: hidden
-          ancestors. Position updates react to window resize, scroll, container
-          resize (via ResizeObserver), and iOS Safari virtual keyboard changes (via
-          visualViewport).
+          The dropdown renders via a React Portal into document.body (or a
+          custom container via portalContainer), so it is never clipped by
+          overflow: hidden ancestors. Position updates react to window resize,
+          scroll, container resize (via ResizeObserver), and iOS Safari virtual
+          keyboard changes (via visualViewport).
         </div>
       </Section>
 
@@ -1262,9 +1388,9 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Pass a specific HTMLElement to portalContainer or null for document.body
-          (default). This is useful when working with modals, iframes, or when you
-          need precise control over the portal mount point.
+          Pass a specific HTMLElement to portalContainer or null for
+          document.body (default). This is useful when working with modals,
+          iframes, or when you need precise control over the portal mount point.
         </div>
       </Section>
 
@@ -1424,8 +1550,17 @@ const DropdownDemo = () => {
               clearable
               placeholder="Select a fruit..."
               ClearIcon={() => (
-                <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               )}
               classes={c.dropdown}
@@ -1448,7 +1583,15 @@ const DropdownDemo = () => {
               onValueChange={(v) => setCustomCheckIconValue(v)}
               placeholder="Select a fruit..."
               CheckIcon={({ className }) => (
-                <svg viewBox="0 0 20 20" fill="currentColor" className={className || `w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`} aria-hidden="true">
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className={
+                    className ||
+                    `w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`
+                  }
+                  aria-hidden="true"
+                >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               )}
@@ -1481,13 +1624,15 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         {focusMessage && (
-          <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+          >
             {focusMessage}
           </p>
         )}
         <div className={c.note}>
-          These callbacks fire on the trigger button's focus/blur events. Perfect
-          for form validation libraries that track field touch state.
+          These callbacks fire on the trigger button's focus/blur events.
+          Perfect for form validation libraries that track field touch state.
         </div>
       </Section>
 
@@ -1507,7 +1652,9 @@ const DropdownDemo = () => {
               onKeyDown={(event) => {
                 if (event.key === "x" || event.key === "X") {
                   event.preventDefault();
-                  setKeyDownMessage("You pressed 'x' - custom handler intercepted!");
+                  setKeyDownMessage(
+                    "You pressed 'x' - custom handler intercepted!",
+                  );
                   setTimeout(() => setKeyDownMessage(""), 2000);
                 }
               }}
@@ -1516,7 +1663,9 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         {keyDownMessage && (
-          <p className={`text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`}>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`}
+          >
             {keyDownMessage}
           </p>
         )}
@@ -1624,8 +1773,16 @@ const DropdownDemo = () => {
                 placeholder="Custom empty..."
                 noResultsContent={
                   <span className="flex flex-col items-center gap-1 py-2">
-                    <span className={`text-lg ${dark ? "text-gray-500" : "text-gray-400"}`}>🔍</span>
-                    <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Nothing here yet</span>
+                    <span
+                      className={`text-lg ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    >
+                      🔍
+                    </span>
+                    <span
+                      className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      Nothing here yet
+                    </span>
                   </span>
                 }
                 classes={c.dropdown}
@@ -1652,8 +1809,17 @@ const DropdownDemo = () => {
               placeholder="Select a fruit..."
               ChevronIcon={CustomChevronIcon}
               CheckIcon={({ className }) => (
-                <svg viewBox="0 0 20 20" fill="currentColor" className={className} aria-hidden="true">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className={className}
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               )}
               classes={c.dropdown}
@@ -1670,50 +1836,295 @@ const DropdownDemo = () => {
       <Section title="Dropdown Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="options" type="DropdownOption[]" defaultVal="[]" description="Array of selectable options" isDarkMode={dark} />
-            <PropRow name="value" type="string | null" description="Controlled selected value" isDarkMode={dark} />
-            <PropRow name="defaultValue" type="string" description="Initial value in uncontrolled mode" isDarkMode={dark} />
-            <PropRow name="onValueChange" type="(value: string | null, option: DropdownOption | null) => void" description="Callback when selection changes (null when cleared)" isDarkMode={dark} />
-            <PropRow name="open" type="boolean" description="Controlled open state" isDarkMode={dark} />
-            <PropRow name="defaultOpen" type="boolean" defaultVal="false" description="Initial open state in uncontrolled mode" isDarkMode={dark} />
-            <PropRow name="onOpenChange" type="(open: boolean) => void" description="Callback when open state changes" isDarkMode={dark} />
-            <PropRow name="id" type="string" defaultVal="auto-generated" description="ID for ARIA attribute generation" isDarkMode={dark} />
-            <PropRow name="name" type="string" description="Form field name -- renders a hidden input for native form submission" isDarkMode={dark} />
-            <PropRow name="placeholder" type="ReactNode" defaultVal='"Select an option"' description="Placeholder content when no selection" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the entire dropdown" isDarkMode={dark} />
-            <PropRow name="error" type="boolean" defaultVal="false" description="Show error state" isDarkMode={dark} />
-            <PropRow name="errorMessage" type="ReactNode" description="Error message displayed below trigger" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Accessible label element" isDarkMode={dark} />
-            <PropRow name="required" type="boolean" defaultVal="false" description="Whether the field is required" isDarkMode={dark} />
-            <PropRow name="clearable" type="boolean" defaultVal="false" description="Show clear button and allow deselection" isDarkMode={dark} />
-            <PropRow name="noResultsContent" type="ReactNode" defaultVal='"No options available"' description="Content shown when options is empty" isDarkMode={dark} />
-            <PropRow name="showChevron" type="boolean" defaultVal="true" description="Show the dropdown chevron icon" isDarkMode={dark} />
-            <PropRow name="showSelectedIcon" type="boolean" defaultVal="true" description="Show check icon on selected option" isDarkMode={dark} />
-            <PropRow name="selectedIcon" type="ReactNode" description="Custom icon for selected option" isDarkMode={dark} />
-            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Stretch to fill container width" isDarkMode={dark} />
-            <PropRow name="loading" type="boolean" defaultVal="false" description="External loading state" isDarkMode={dark} />
-            <PropRow name="onLoadOptions" type="() => Promise<DropdownOption[]>" description="Async function to load options" isDarkMode={dark} />
-            <PropRow name="loadOnOpen" type="boolean" defaultVal="false" description="Trigger onLoadOptions when dropdown opens" isDarkMode={dark} />
-            <PropRow name="onLoadError" type="(error: unknown) => void" description="Callback when async loading fails" isDarkMode={dark} />
-            <PropRow name="shimmerCount" type="number" defaultVal="5" description="Number of shimmer skeleton items" isDarkMode={dark} />
-            <PropRow name="classes" type="DropdownClasses" description="Class names for all internal elements" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="Root class name (merged with classes.root)" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Root inline styles" isDarkMode={dark} />
-            <PropRow name="keepMounted" type="boolean" defaultVal="false" description="Keep portal in DOM when closed" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
-            <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Portal target container" isDarkMode={dark} />
-            <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred popup position (auto-flips)" isDarkMode={dark} />
-            <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="z-index of the popup" isDarkMode={dark} />
-            <PropRow name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and popup (px)" isDarkMode={dark} />
-            <PropRow name="typeaheadTimeout" type="number" defaultVal="500" description="Typeahead buffer timeout in ms" isDarkMode={dark} />
-            <PropRow name="aria-label" type="string" description="Listbox aria-label (falls back to label text)" isDarkMode={dark} />
-            <PropRow name="onBlur" type="() => void" description="Called when trigger loses focus" isDarkMode={dark} />
-            <PropRow name="onFocus" type="() => void" description="Called when trigger gains focus" isDarkMode={dark} />
-            <PropRow name="onKeyDown" type="(event: React.KeyboardEvent) => void" description="Custom keydown handler" isDarkMode={dark} />
-            <PropRow name="renderTrigger" type="(props: DropdownTriggerRenderProps) => ReactNode" description="Custom trigger render function" isDarkMode={dark} />
-            <PropRow name="ChevronIcon" type="ComponentType" defaultVal="ChevronDownIcon" description="Custom chevron icon component" isDarkMode={dark} />
-            <PropRow name="CheckIcon" type="ComponentType" defaultVal="CheckIcon" description="Custom check icon component" isDarkMode={dark} />
-            <PropRow name="ClearIcon" type="ComponentType" defaultVal="ClearIcon" description="Custom clear icon component" isDarkMode={dark} />
+            <PropRow
+              name="options"
+              type="DropdownOption[]"
+              defaultVal="[]"
+              description="Array of selectable options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="string | null"
+              description="Controlled selected value"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultValue"
+              type="string"
+              description="Initial value in uncontrolled mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(value: string | null, option: DropdownOption | null) => void"
+              description="Callback when selection changes (null when cleared)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="open"
+              type="boolean"
+              description="Controlled open state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultOpen"
+              type="boolean"
+              defaultVal="false"
+              description="Initial open state in uncontrolled mode"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onOpenChange"
+              type="(open: boolean) => void"
+              description="Callback when open state changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              defaultVal="auto-generated"
+              description="ID for ARIA attribute generation"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="name"
+              type="string"
+              description="Form field name -- renders a hidden input for native form submission"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="placeholder"
+              type="ReactNode"
+              defaultVal='"Select an option"'
+              description="Placeholder content when no selection"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable the entire dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="boolean"
+              defaultVal="false"
+              description="Show error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorMessage"
+              type="ReactNode"
+              description="Error message displayed below trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="ReactNode"
+              description="Accessible label element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="required"
+              type="boolean"
+              defaultVal="false"
+              description="Whether the field is required"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="clearable"
+              type="boolean"
+              defaultVal="false"
+              description="Show clear button and allow deselection"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="noResultsContent"
+              type="ReactNode"
+              defaultVal='"No options available"'
+              description="Content shown when options is empty"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showChevron"
+              type="boolean"
+              defaultVal="true"
+              description="Show the dropdown chevron icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showSelectedIcon"
+              type="boolean"
+              defaultVal="true"
+              description="Show check icon on selected option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="selectedIcon"
+              type="ReactNode"
+              description="Custom icon for selected option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fullWidth"
+              type="boolean"
+              defaultVal="false"
+              description="Stretch to fill container width"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loading"
+              type="boolean"
+              defaultVal="false"
+              description="External loading state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onLoadOptions"
+              type="() => Promise<DropdownOption[]>"
+              description="Async function to load options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loadOnOpen"
+              type="boolean"
+              defaultVal="false"
+              description="Trigger onLoadOptions when dropdown opens"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onLoadError"
+              type="(error: unknown) => void"
+              description="Callback when async loading fails"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shimmerCount"
+              type="number"
+              defaultVal="5"
+              description="Number of shimmer skeleton items"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="DropdownClasses"
+              description="Class names for all internal elements"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="Root class name (merged with classes.root)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Root inline styles"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="keepMounted"
+              type="boolean"
+              defaultVal="false"
+              description="Keep portal in DOM when closed"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lockScroll"
+              type="boolean"
+              defaultVal="false"
+              description="Lock body scroll while dropdown is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="portalContainer"
+              type="HTMLElement | null"
+              defaultVal="document.body"
+              description="Portal target container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownPosition"
+              type='"top" | "bottom"'
+              defaultVal='"bottom"'
+              description="Preferred popup position (auto-flips)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownZIndex"
+              type="number"
+              defaultVal="50"
+              description="z-index of the popup"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownGap"
+              type="number"
+              defaultVal="4"
+              description="Gap between trigger and popup (px)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="typeaheadTimeout"
+              type="number"
+              defaultVal="500"
+              description="Typeahead buffer timeout in ms"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="aria-label"
+              type="string"
+              description="Listbox aria-label (falls back to label text)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onBlur"
+              type="() => void"
+              description="Called when trigger loses focus"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onFocus"
+              type="() => void"
+              description="Called when trigger gains focus"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onKeyDown"
+              type="(event: React.KeyboardEvent) => void"
+              description="Custom keydown handler"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderTrigger"
+              type="(props: DropdownTriggerRenderProps) => ReactNode"
+              description="Custom trigger render function"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ChevronIcon"
+              type="ComponentType"
+              defaultVal="ChevronDownIcon"
+              description="Custom chevron icon component"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="CheckIcon"
+              type="ComponentType"
+              defaultVal="CheckIcon"
+              description="Custom check icon component"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ClearIcon"
+              type="ComponentType"
+              defaultVal="ClearIcon"
+              description="Custom clear icon component"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1722,24 +2133,114 @@ const DropdownDemo = () => {
       <Section title="DropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="root" type="string" description="Root container element" isDarkMode={dark} />
-            <PropRow name="wrapper" type="string" description="Inner wrapper around trigger and portal" isDarkMode={dark} />
-            <PropRow name="trigger" type="string" description="Trigger button (combobox)" isDarkMode={dark} />
-            <PropRow name="triggerText" type="string" description="Text span inside trigger" isDarkMode={dark} />
-            <PropRow name="content" type="string" description="Dropdown popup container (portal)" isDarkMode={dark} />
-            <PropRow name="optionList" type="string" description="Scrollable option list wrapper" isDarkMode={dark} />
-            <PropRow name="option" type="string" description="Individual option element" isDarkMode={dark} />
-            <PropRow name="optionSelected" type="string" description="Additional class for selected option" isDarkMode={dark} />
-            <PropRow name="optionFocused" type="string" description="Additional class for keyboard-focused option" isDarkMode={dark} />
-            <PropRow name="optionDisabled" type="string" description="Additional class for disabled option" isDarkMode={dark} />
-            <PropRow name="chevron" type="string" description="Chevron icon element" isDarkMode={dark} />
-            <PropRow name="checkIcon" type="string" description="Check/selected icon element" isDarkMode={dark} />
-            <PropRow name="clearIcon" type="string" description="Clear button element (shown when clearable)" isDarkMode={dark} />
-            <PropRow name="noResults" type="string" description="Empty state container" isDarkMode={dark} />
-            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
-            <PropRow name="error" type="string" description="Error message element" isDarkMode={dark} />
-            <PropRow name="shimmer" type="string" description="Shimmer container" isDarkMode={dark} />
-            <PropRow name="shimmerItem" type="string" description="Individual shimmer skeleton item" isDarkMode={dark} />
+            <PropRow
+              name="root"
+              type="string"
+              description="Root container element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="wrapper"
+              type="string"
+              description="Inner wrapper around trigger and portal"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="trigger"
+              type="string"
+              description="Trigger button (combobox)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="triggerText"
+              type="string"
+              description="Text span inside trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="content"
+              type="string"
+              description="Dropdown popup container (portal)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionList"
+              type="string"
+              description="Scrollable option list wrapper"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="option"
+              type="string"
+              description="Individual option element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionSelected"
+              type="string"
+              description="Additional class for selected option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionFocused"
+              type="string"
+              description="Additional class for keyboard-focused option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionDisabled"
+              type="string"
+              description="Additional class for disabled option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="chevron"
+              type="string"
+              description="Chevron icon element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkIcon"
+              type="string"
+              description="Check/selected icon element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="clearIcon"
+              type="string"
+              description="Clear button element (shown when clearable)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="noResults"
+              type="string"
+              description="Empty state container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="string"
+              description="Label element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="string"
+              description="Error message element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shimmer"
+              type="string"
+              description="Shimmer container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shimmerItem"
+              type="string"
+              description="Individual shimmer skeleton item"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1752,17 +2253,72 @@ const DropdownDemo = () => {
       >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
-            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
-            <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
-            <PropRow name="data-placeholder" type="trigger" description="Present when no option is selected" isDarkMode={dark} />
-            <PropRow name="data-selected" type="option" description="Present on the selected option" isDarkMode={dark} />
-            <PropRow name="data-focused" type="option" description="Present on the keyboard-focused option" isDarkMode={dark} />
-            <PropRow name="data-value" type="option" description="The option's value string" isDarkMode={dark} />
-            <PropRow name="data-state" type='content (portal)' description='"open" or "closed"' isDarkMode={dark} />
-            <PropRow name="data-position" type='content (portal)' description='"top" or "bottom" (actual position)' isDarkMode={dark} />
+            <PropRow
+              name="data-open"
+              type="root, trigger"
+              description="Present when the dropdown is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, trigger, option"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-error"
+              type="root, trigger"
+              description="Present when in error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-success"
+              type="root, trigger"
+              description="Present when in success state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-full-width"
+              type="root"
+              description="Present when fullWidth is true"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-placeholder"
+              type="trigger"
+              description="Present when no option is selected"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-selected"
+              type="option"
+              description="Present on the selected option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-focused"
+              type="option"
+              description="Present on the keyboard-focused option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-value"
+              type="option"
+              description="The option's value string"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-state"
+              type="content (portal)"
+              description='"open" or "closed"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-position"
+              type="content (portal)"
+              description='"top" or "bottom" (actual position)'
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>

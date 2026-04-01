@@ -202,12 +202,10 @@ const DEFAULT_SECTION_ORDER: SectionName[] = ["selector", "pageInfo", "nav"];
 const Pagination = forwardRef<HTMLElement, PaginationProps>(
   (
     {
-      currentPage,
       totalPages,
       siblingCount = 1,
       rowsPerPage,
       rowOptions,
-      onPageChange,
       onValueChange,
       value,
       disabled,
@@ -219,7 +217,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       rowsPerPageLabel = "rows",
       showLabel = "Show",
       dropdownAriaLabel = "Rows per page",
-      dropdownDirection,
       dropdownPosition = "top",
       dropdownZIndex = 50,
       dropdownGap = 4,
@@ -246,8 +243,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const paginationAriaLabel = paginationAriaLabelProp ?? "Pagination";
 
-    const resolvedCurrentPage = value ?? currentPage ?? 1;
-    const resolvedOnPageChange = onValueChange ?? onPageChange;
+    const resolvedCurrentPage = value ?? 1;
+    const resolvedOnPageChange = onValueChange;
 
     const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
@@ -456,7 +453,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             {isDropdownOpen && (
               <RowSelectorPortal
                 triggerRef={triggerRef}
-                direction={dropdownDirection ?? (dropdownPosition === "top" ? "up" : "down")}
+                direction={dropdownPosition === "top" ? "up" : "down"}
                 zIndex={dropdownZIndex}
                 gap={dropdownGap}
                 dropdownClassName={mergedClasses.selectorDropdown}

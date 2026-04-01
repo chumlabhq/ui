@@ -589,6 +589,8 @@ const MultiSelectSearchableDropdown = forwardRef<
 
     const rootClassName =
       cn(
+        // layout containment: keep in-flow subtree from inflating document scroll metrics
+        "min-w-0 [contain:layout]",
         mergedClasses.root,
         className,
         fullWidth && "w-full",

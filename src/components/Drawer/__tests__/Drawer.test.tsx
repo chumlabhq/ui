@@ -13,13 +13,13 @@ import {
 function renderDrawer(
   props: Partial<React.ComponentProps<typeof Drawer>> = {},
 ) {
-  const onClose = props.onClose ?? vi.fn();
+  const onOpenChange = props.onOpenChange ?? vi.fn();
   return {
-    onClose: onClose as ReturnType<typeof vi.fn>,
+    onOpenChange: onOpenChange as ReturnType<typeof vi.fn>,
     ...render(
       <Drawer
         open={true}
-        onClose={onClose}
+        onOpenChange={onOpenChange}
         aria-label="Test drawer"
         duration={0}
         {...props}
@@ -89,7 +89,7 @@ describe("Drawer", () => {
       const { rerender } = render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="State test"
           duration={0}
           keepMounted
@@ -101,7 +101,7 @@ describe("Drawer", () => {
       rerender(
         <Drawer
           open={false}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="State test"
           duration={0}
           keepMounted
@@ -118,7 +118,7 @@ describe("Drawer", () => {
       const { rerender } = render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Inert test"
           duration={0}
           keepMounted
@@ -130,7 +130,7 @@ describe("Drawer", () => {
       rerender(
         <Drawer
           open={false}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Inert test"
           duration={0}
           keepMounted
@@ -147,56 +147,56 @@ describe("Drawer", () => {
   });
 
   describe("Closing Behavior", () => {
-    it("calls onClose on overlay click", async () => {
-      const { onClose } = renderDrawer();
+    it("calls onOpenChange on overlay click", async () => {
+      const { onOpenChange } = renderDrawer();
       const overlay = document.querySelector("[data-drawer-overlay]")!;
 
       await act(() => {
         overlay.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
-      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
     });
 
-    it("does not call onClose when closeOnOverlayClick is false", async () => {
-      const { onClose } = renderDrawer({ closeOnOverlayClick: false });
+    it("does not call onOpenChange when closeOnOverlayClick is false", async () => {
+      const { onOpenChange } = renderDrawer({ closeOnOverlayClick: false });
       const overlay = document.querySelector("[data-drawer-overlay]")!;
 
       await act(() => {
         overlay.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       });
 
-      expect(onClose).not.toHaveBeenCalled();
+      expect(onOpenChange).not.toHaveBeenCalled();
     });
 
-    it("calls onClose on Escape keydown", async () => {
+    it("calls onOpenChange on Escape keydown", async () => {
       const user = userEvent.setup();
-      const { onClose } = renderDrawer();
+      const { onOpenChange } = renderDrawer();
 
       await user.keyboard("{Escape}");
 
-      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
     });
 
-    it("does not call onClose on Escape when closeOnEscape is false", async () => {
+    it("does not call onOpenChange on Escape when closeOnEscape is false", async () => {
       const user = userEvent.setup();
-      const { onClose } = renderDrawer({ closeOnEscape: false });
+      const { onOpenChange } = renderDrawer({ closeOnEscape: false });
 
       await user.keyboard("{Escape}");
 
-      expect(onClose).not.toHaveBeenCalled();
+      expect(onOpenChange).not.toHaveBeenCalled();
     });
 
     it("only closes topmost drawer on Escape when stacked", async () => {
       const user = userEvent.setup();
-      const outerClose = vi.fn();
-      const innerClose = vi.fn();
+      const outerOpenChange = vi.fn();
+      const innerOpenChange = vi.fn();
 
       render(
         <>
           <Drawer
             open={true}
-            onClose={outerClose}
+            onOpenChange={outerOpenChange}
             aria-label="Outer"
             duration={0}
           >
@@ -204,7 +204,7 @@ describe("Drawer", () => {
           </Drawer>
           <Drawer
             open={true}
-            onClose={innerClose}
+            onOpenChange={innerOpenChange}
             aria-label="Inner"
             duration={0}
           >
@@ -215,20 +215,20 @@ describe("Drawer", () => {
 
       await user.keyboard("{Escape}");
 
-      expect(innerClose).toHaveBeenCalledTimes(1);
-      expect(outerClose).not.toHaveBeenCalled();
+      expect(innerOpenChange).toHaveBeenCalledTimes(1);
+      expect(outerOpenChange).not.toHaveBeenCalled();
     });
   });
 
   describe("DrawerCloseButton", () => {
-    it("calls onClose via context", async () => {
+    it("calls onOpenChange via context", async () => {
       const user = userEvent.setup();
-      const onClose = vi.fn();
+      const onOpenChange = vi.fn();
 
       render(
         <Drawer
           open={true}
-          onClose={onClose}
+          onOpenChange={onOpenChange}
           aria-label="Close test"
           duration={0}
         >
@@ -237,14 +237,14 @@ describe("Drawer", () => {
       );
 
       await user.click(screen.getByTestId("close-btn"));
-      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
     });
 
     it("renders default icon when no children", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Icon test"
           duration={0}
         >
@@ -260,7 +260,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Custom test"
           duration={0}
         >
@@ -279,7 +279,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="A11y test"
           duration={0}
         >
@@ -333,7 +333,7 @@ describe("Drawer", () => {
             <button onClick={() => setOpen(true)}>Open</button>
             <Drawer
               open={open}
-              onClose={() => setOpen(false)}
+              onOpenChange={(o) => setOpen(o)}
               aria-label="Restore focus test"
               duration={0}
             >
@@ -368,7 +368,7 @@ describe("Drawer", () => {
         return (
           <Drawer
             open={true}
-            onClose={() => {}}
+            onOpenChange={() => {}}
             aria-label="Initial focus test"
             duration={0}
             initialFocus={inputRef}
@@ -394,7 +394,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Autofocus test"
           duration={0}
         >
@@ -418,7 +418,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Fallback focus test"
           duration={0}
         >
@@ -442,7 +442,7 @@ describe("Drawer", () => {
           <button data-testid="outside">Outside</button>
           <Drawer
             open={true}
-            onClose={() => {}}
+            onOpenChange={() => {}}
             aria-label="Non-modal test"
             duration={0}
             modal={false}
@@ -493,7 +493,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           duration={0}
         >
           <DrawerHeader>Title</DrawerHeader>
@@ -515,7 +515,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-labelledby="custom-id"
           duration={0}
         >
@@ -567,7 +567,7 @@ describe("Drawer", () => {
       const { rerender } = render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Keep mounted"
           duration={0}
           keepMounted
@@ -579,7 +579,7 @@ describe("Drawer", () => {
       rerender(
         <Drawer
           open={false}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Keep mounted"
           duration={0}
           keepMounted
@@ -599,7 +599,7 @@ describe("Drawer", () => {
       const { rerender } = render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Not kept"
           duration={0}
         >
@@ -610,7 +610,7 @@ describe("Drawer", () => {
       rerender(
         <Drawer
           open={false}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Not kept"
           duration={0}
         >
@@ -641,7 +641,7 @@ describe("Drawer", () => {
       const { rerender } = render(
         <Drawer
           open={false}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Transition test"
           duration={200}
           onTransitionEnd={onTransitionEnd}
@@ -654,7 +654,7 @@ describe("Drawer", () => {
       rerender(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Transition test"
           duration={200}
           onTransitionEnd={onTransitionEnd}
@@ -677,7 +677,7 @@ describe("Drawer", () => {
       const { rerender } = render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Transition test"
           duration={200}
           onTransitionEnd={onTransitionEnd}
@@ -695,7 +695,7 @@ describe("Drawer", () => {
       rerender(
         <Drawer
           open={false}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Transition test"
           duration={200}
           onTransitionEnd={onTransitionEnd}
@@ -765,7 +765,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Snap test"
           duration={0}
           swipeable
@@ -784,7 +784,7 @@ describe("Drawer", () => {
       render(
         <Drawer
           open={true}
-          onClose={() => {}}
+          onOpenChange={() => {}}
           aria-label="Snap test"
           duration={0}
           swipeable

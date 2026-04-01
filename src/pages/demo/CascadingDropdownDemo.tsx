@@ -31,19 +31,59 @@ interface CountryApiResponse {
 // ─── Static Data ────────────────────────────────────────────────────────────
 
 const regionOptionsMulti: CascadingOption[] = [
-  { value: "Africa", label: "Africa", hasChildren: true, selectionMode: "multi" },
-  { value: "Americas", label: "Americas", hasChildren: true, selectionMode: "multi" },
+  {
+    value: "Africa",
+    label: "Africa",
+    hasChildren: true,
+    selectionMode: "multi",
+  },
+  {
+    value: "Americas",
+    label: "Americas",
+    hasChildren: true,
+    selectionMode: "multi",
+  },
   { value: "Asia", label: "Asia", hasChildren: true, selectionMode: "multi" },
-  { value: "Europe", label: "Europe", hasChildren: true, selectionMode: "multi" },
-  { value: "Oceania", label: "Oceania", hasChildren: true, selectionMode: "multi" },
+  {
+    value: "Europe",
+    label: "Europe",
+    hasChildren: true,
+    selectionMode: "multi",
+  },
+  {
+    value: "Oceania",
+    label: "Oceania",
+    hasChildren: true,
+    selectionMode: "multi",
+  },
 ];
 
 const regionOptionsSingle: CascadingOption[] = [
-  { value: "Africa", label: "Africa", hasChildren: true, selectionMode: "single" },
-  { value: "Americas", label: "Americas", hasChildren: true, selectionMode: "single" },
+  {
+    value: "Africa",
+    label: "Africa",
+    hasChildren: true,
+    selectionMode: "single",
+  },
+  {
+    value: "Americas",
+    label: "Americas",
+    hasChildren: true,
+    selectionMode: "single",
+  },
   { value: "Asia", label: "Asia", hasChildren: true, selectionMode: "single" },
-  { value: "Europe", label: "Europe", hasChildren: true, selectionMode: "single" },
-  { value: "Oceania", label: "Oceania", hasChildren: true, selectionMode: "single" },
+  {
+    value: "Europe",
+    label: "Europe",
+    hasChildren: true,
+    selectionMode: "single",
+  },
+  {
+    value: "Oceania",
+    label: "Oceania",
+    hasChildren: true,
+    selectionMode: "single",
+  },
 ];
 
 const loadCountriesForRegion = async (
@@ -259,7 +299,9 @@ const getClasses = (dark: boolean) => ({
     checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${
       dark ? "border-gray-500" : "border-gray-300"
     }`,
-    checkboxChecked: dark ? "bg-blue-500 border-blue-500 text-white" : "bg-blue-600 border-blue-600 text-white",
+    checkboxChecked: dark
+      ? "bg-blue-500 border-blue-500 text-white"
+      : "bg-blue-600 border-blue-600 text-white",
     noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
     loading: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
   } satisfies CascadingDropdownClasses,
@@ -284,7 +326,9 @@ const getPurpleClasses = (dark: boolean): CascadingDropdownClasses => ({
       : "border-purple-300 bg-purple-50 text-purple-900 hover:border-purple-400"
   }`,
   menu: `rounded-lg shadow-lg overflow-visible ${
-    dark ? "bg-purple-950 border border-purple-800" : "bg-purple-50 border border-purple-200"
+    dark
+      ? "bg-purple-950 border border-purple-800"
+      : "bg-purple-50 border border-purple-200"
   }`,
   menuItem: `flex items-center justify-between px-3 py-2 cursor-pointer ${
     dark
@@ -293,7 +337,9 @@ const getPurpleClasses = (dark: boolean): CascadingDropdownClasses => ({
   }`,
   menuItemFocused: dark ? "bg-purple-900/60" : "bg-purple-100",
   submenu: `min-w-[180px] rounded-lg shadow-lg ml-1 ${
-    dark ? "bg-purple-950 border border-purple-800" : "bg-purple-50 border border-purple-200"
+    dark
+      ? "bg-purple-950 border border-purple-800"
+      : "bg-purple-50 border border-purple-200"
   }`,
   submenuItem: `flex items-center gap-2 px-3 py-2 cursor-pointer ${
     dark
@@ -308,7 +354,9 @@ const getPurpleClasses = (dark: boolean): CascadingDropdownClasses => ({
   checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${
     dark ? "border-purple-500" : "border-purple-400"
   }`,
-  checkboxChecked: dark ? "bg-purple-500 border-purple-500 text-white" : "bg-purple-600 border-purple-600 text-white",
+  checkboxChecked: dark
+    ? "bg-purple-500 border-purple-500 text-white"
+    : "bg-purple-600 border-purple-600 text-white",
   noResults: `px-3 py-4 text-sm text-center ${dark ? "text-purple-400" : "text-purple-500"}`,
 });
 
@@ -328,20 +376,33 @@ const CascadingDropdownDemo = () => {
   const [descriptionValue, setDescriptionValue] = useState<CascadingValue>({});
   const [successValue, setSuccessValue] = useState<CascadingValue>({});
   const [errorValue, setErrorValue] = useState<CascadingValue>({});
-  const [leftPositionValue, setLeftPositionValue] = useState<CascadingValue>({});
+  const [leftPositionValue, setLeftPositionValue] = useState<CascadingValue>(
+    {},
+  );
   const [noCloseValue, setNoCloseValue] = useState<CascadingValue>({});
   const [asyncMultiValue, setAsyncMultiValue] = useState<CascadingValue>({});
   const [asyncSingleValue, setAsyncSingleValue] = useState<CascadingValue>({});
-  const [disabledDropdownValue] = useState<CascadingValue>({ electronics: "phones" });
+  const [disabledDropdownValue] = useState<CascadingValue>({
+    electronics: "phones",
+  });
   const [darkThemeValue, setDarkThemeValue] = useState<CascadingValue>({});
-  const [darkThemeMultiValue, setDarkThemeMultiValue] = useState<CascadingValue>({});
+  const [darkThemeMultiValue, setDarkThemeMultiValue] =
+    useState<CascadingValue>({});
   const [purpleThemeValue, setPurpleThemeValue] = useState<CascadingValue>({});
-  const [purpleThemeMultiValue, setPurpleThemeMultiValue] = useState<CascadingValue>({});
-  const [greenCheckboxValue, setGreenCheckboxValue] = useState<CascadingValue>({});
-  const [orangeCheckboxValue, setOrangeCheckboxValue] = useState<CascadingValue>({});
-  const [customCheckboxIconValue, setCustomCheckboxIconValue] = useState<CascadingValue>({});
-  const [customSelectedIconValue, setCustomSelectedIconValue] = useState<CascadingValue>({});
-  const [uncontrolledDefaultValue] = useState<CascadingValue>({ electronics: "laptops" });
+  const [purpleThemeMultiValue, setPurpleThemeMultiValue] =
+    useState<CascadingValue>({});
+  const [greenCheckboxValue, setGreenCheckboxValue] = useState<CascadingValue>(
+    {},
+  );
+  const [orangeCheckboxValue, setOrangeCheckboxValue] =
+    useState<CascadingValue>({});
+  const [customCheckboxIconValue, setCustomCheckboxIconValue] =
+    useState<CascadingValue>({});
+  const [customSelectedIconValue, setCustomSelectedIconValue] =
+    useState<CascadingValue>({});
+  const [uncontrolledDefaultValue] = useState<CascadingValue>({
+    electronics: "laptops",
+  });
 
   // ─── Prefetch on Mount ──────────────────────────────────────────────────
   const [prefetchValue, setPrefetchValue] = useState<CascadingValue>({});
@@ -351,10 +412,13 @@ const CascadingDropdownDemo = () => {
 
   // ─── Load on Open ──────────────────────────────────────────────────────
   const [loadOnOpenValue, setLoadOnOpenValue] = useState<CascadingValue>({});
-  const [loadOnOpenOptions, setLoadOnOpenOptions] = useState<CascadingOption[]>([]);
+  const [loadOnOpenOptions, setLoadOnOpenOptions] = useState<CascadingOption[]>(
+    [],
+  );
   const [isLoadOnOpenLoading, setIsLoadOnOpenLoading] = useState(false);
   const [hasLoadOnOpenLoaded, setHasLoadOnOpenLoaded] = useState(false);
-  const [loadOnOpenDropdownClicked, setLoadOnOpenDropdownClicked] = useState(false);
+  const [loadOnOpenDropdownClicked, setLoadOnOpenDropdownClicked] =
+    useState(false);
 
   const handleLoadChildren = useCallback(async (parent: CascadingOption) => {
     return loadCountriesForRegion(parent);
@@ -362,9 +426,13 @@ const CascadingDropdownDemo = () => {
 
   const fetchRegions = useCallback(async (): Promise<CascadingOption[]> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = await fetch("https://restcountries.com/v3.1/all?fields=region");
+    const response = await fetch(
+      "https://restcountries.com/v3.1/all?fields=region",
+    );
     const data: { region: string }[] = await response.json();
-    const uniqueRegions = [...new Set(data.map((r) => r.region).filter(Boolean))].sort();
+    const uniqueRegions = [
+      ...new Set(data.map((r) => r.region).filter(Boolean)),
+    ].sort();
     return uniqueRegions.map((region) => ({
       value: region,
       label: region,
@@ -389,7 +457,11 @@ const CascadingDropdownDemo = () => {
   }, [fetchRegions]);
 
   useEffect(() => {
-    if (loadOnOpenDropdownClicked && !hasLoadOnOpenLoaded && !isLoadOnOpenLoading) {
+    if (
+      loadOnOpenDropdownClicked &&
+      !hasLoadOnOpenLoaded &&
+      !isLoadOnOpenLoading
+    ) {
       const loadOnOpen = async () => {
         setIsLoadOnOpenLoading(true);
         try {
@@ -404,7 +476,12 @@ const CascadingDropdownDemo = () => {
       };
       loadOnOpen();
     }
-  }, [loadOnOpenDropdownClicked, hasLoadOnOpenLoaded, isLoadOnOpenLoading, fetchRegions]);
+  }, [
+    loadOnOpenDropdownClicked,
+    hasLoadOnOpenLoaded,
+    isLoadOnOpenLoading,
+    fetchRegions,
+  ]);
 
   const resetLoadOnOpenDemo = useCallback(() => {
     setHasLoadOnOpenLoaded(false);
@@ -435,8 +512,7 @@ const CascadingDropdownDemo = () => {
       "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
     submenuItemSelected: "bg-gray-600",
     submenuItemFocused: "bg-gray-700",
-    chevron:
-      "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
+    chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
     submenuChevron: "w-4 h-4 shrink-0 text-gray-500",
     checkIcon: "w-4 h-4 shrink-0 text-blue-400",
     checkbox:
@@ -467,8 +543,9 @@ const CascadingDropdownDemo = () => {
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
           >
-            A nested dropdown component with support for submenus, single/multi-select
-            modes, async loading of children, custom icons, and full keyboard navigation.
+            A nested dropdown component with support for submenus,
+            single/multi-select modes, async loading of children, custom icons,
+            and full keyboard navigation.
           </p>
           <div className="mt-5">
             <CodeBlock
@@ -594,7 +671,10 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96" onClick={() => setLoadOnOpenDropdownClicked(true)}>
+          <div
+            className="w-96"
+            onClick={() => setLoadOnOpenDropdownClicked(true)}
+          >
             <CascadingDropdown
               options={loadOnOpenOptions}
               value={loadOnOpenValue}
@@ -603,7 +683,11 @@ const CascadingDropdownDemo = () => {
               placeholder="Click to load regions..."
               loading={isLoadOnOpenLoading}
               loadingText="Loading regions..."
-              noResultsContent={hasLoadOnOpenLoaded ? "No regions found" : "Click to load regions"}
+              noResultsContent={
+                hasLoadOnOpenLoaded
+                  ? "No regions found"
+                  : "Click to load regions"
+              }
               classes={{
                 ...c.cascading,
                 submenu: `${c.cascading.submenu} max-h-64 overflow-y-auto`,
@@ -1077,7 +1161,11 @@ const CascadingDropdownDemo = () => {
               placeholder="Select filters..."
               closeOnSelect={false}
               checkboxIcon={
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               }
@@ -1211,8 +1299,13 @@ const CascadingDropdownDemo = () => {
               <div className="space-y-2 p-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className={`h-4 rounded animate-pulse ${dark ? "bg-gray-700" : "bg-gray-200"}`} style={{ width: `${50 + i * 12}%` }} />
-                    <div className={`h-3 w-3 rounded-sm animate-pulse ${dark ? "bg-gray-700" : "bg-gray-200"}`} />
+                    <div
+                      className={`h-4 rounded animate-pulse ${dark ? "bg-gray-700" : "bg-gray-200"}`}
+                      style={{ width: `${50 + i * 12}%` }}
+                    />
+                    <div
+                      className={`h-3 w-3 rounded-sm animate-pulse ${dark ? "bg-gray-700" : "bg-gray-200"}`}
+                    />
                   </div>
                 ))}
               </div>
@@ -1232,7 +1325,13 @@ const CascadingDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div>
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
-            <CascadingDropdown options={categoryOptions} value={{}} onValueChange={() => {}} placeholder="Select..." classes={c.cascading} />
+            <CascadingDropdown
+              options={categoryOptions}
+              value={{}}
+              onValueChange={() => {}}
+              placeholder="Select..."
+              classes={c.cascading}
+            />
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Borderless</p>
@@ -1244,7 +1343,9 @@ const CascadingDropdownDemo = () => {
               classes={{
                 ...c.cascading,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-                  dark ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]" : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  dark
+                    ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]"
+                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
                 }`,
               }}
             />
@@ -1259,7 +1360,9 @@ const CascadingDropdownDemo = () => {
               classes={{
                 ...c.cascading,
                 trigger: `flex items-center justify-between gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer ${
-                  dark ? "border-gray-600 text-gray-200 hover:border-indigo-400" : "border-gray-200 text-gray-700 hover:border-indigo-500"
+                  dark
+                    ? "border-gray-600 text-gray-200 hover:border-indigo-400"
+                    : "border-gray-200 text-gray-700 hover:border-indigo-500"
                 }`,
               }}
             />
@@ -1274,7 +1377,9 @@ const CascadingDropdownDemo = () => {
               classes={{
                 ...c.cascading,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-                  dark ? "text-gray-300 hover:bg-white/[0.06]" : "text-gray-600 hover:bg-gray-50"
+                  dark
+                    ? "text-gray-300 hover:bg-white/60"
+                    : "text-gray-600 hover:bg-gray-50"
                 }`,
               }}
             />
@@ -1289,7 +1394,9 @@ const CascadingDropdownDemo = () => {
               classes={{
                 ...c.cascading,
                 trigger: `flex items-center justify-between gap-2 px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer ${
-                  dark ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500" : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
+                  dark
+                    ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
+                    : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
                 }`,
               }}
             />
@@ -1318,7 +1425,9 @@ const CascadingDropdownDemo = () => {
               submenuItem: `flex items-center gap-2 px-4 py-2 cursor-pointer text-sm ${dark ? "text-gray-300 hover:bg-indigo-900/20" : "hover:bg-indigo-50"}`,
               submenuItemFocused: dark ? "bg-indigo-900/20" : "bg-indigo-50",
               checkbox: `w-4 h-4 rounded-md border-2 flex items-center justify-center transition-colors ${dark ? "border-indigo-500" : "border-indigo-400"}`,
-              checkboxChecked: dark ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600",
+              checkboxChecked: dark
+                ? "bg-indigo-500 border-indigo-500"
+                : "bg-indigo-600 border-indigo-600",
             }}
           />
         </DemoWrapper>
@@ -1339,7 +1448,9 @@ const CascadingDropdownDemo = () => {
             classes={{
               ...c.cascading,
               trigger: `flex items-center justify-between gap-1.5 w-full px-2.5 py-1.5 text-xs rounded-md border transition-colors cursor-pointer ${
-                dark ? "border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600" : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
+                dark
+                  ? "border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600"
+                  : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
               }`,
               menu: `rounded-md shadow-lg overflow-visible ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
               menuItem: `flex items-center justify-between px-2.5 py-1.5 cursor-pointer text-xs ${dark ? "text-gray-300 hover:bg-gray-700" : "hover:bg-gray-50"}`,
@@ -1350,7 +1461,9 @@ const CascadingDropdownDemo = () => {
               chevron: "w-3 h-3",
               submenuChevron: "w-3 h-3",
               checkbox: `w-3.5 h-3.5 rounded border flex items-center justify-center ${dark ? "border-gray-500" : "border-gray-300"}`,
-              checkboxChecked: dark ? "bg-blue-500 border-blue-500" : "bg-blue-600 border-blue-600",
+              checkboxChecked: dark
+                ? "bg-blue-500 border-blue-500"
+                : "bg-blue-600 border-blue-600",
             }}
           />
         </DemoWrapper>
@@ -1391,7 +1504,11 @@ const CascadingDropdownDemo = () => {
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-purple-500" />
                     <span>Design</span>
-                    <span className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-purple-900/40 text-purple-300" : "bg-purple-100 text-purple-700"}`}>3 items</span>
+                    <span
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-purple-900/40 text-purple-300" : "bg-purple-100 text-purple-700"}`}
+                    >
+                      3 items
+                    </span>
                   </div>
                 ),
                 selectionMode: "single",
@@ -1408,7 +1525,11 @@ const CascadingDropdownDemo = () => {
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-500" />
                     <span>Engineering</span>
-                    <span className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-blue-900/40 text-blue-300" : "bg-blue-100 text-blue-700"}`}>4 items</span>
+                    <span
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-blue-900/40 text-blue-300" : "bg-blue-100 text-blue-700"}`}
+                    >
+                      4 items
+                    </span>
                   </div>
                 ),
                 selectionMode: "multi",
@@ -1426,7 +1547,11 @@ const CascadingDropdownDemo = () => {
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span>Marketing</span>
-                    <span className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-emerald-900/40 text-emerald-300" : "bg-emerald-100 text-emerald-700"}`}>2 items</span>
+                    <span
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-emerald-900/40 text-emerald-300" : "bg-emerald-100 text-emerald-700"}`}
+                    >
+                      2 items
+                    </span>
                   </div>
                 ),
                 selectionMode: "single",
@@ -1461,10 +1586,25 @@ const CascadingDropdownDemo = () => {
                 label: "Frontend Development Frameworks & Libraries",
                 selectionMode: "multi",
                 children: [
-                  { value: "react", label: "React — A JavaScript library for building user interfaces" },
-                  { value: "vue", label: "Vue.js — The progressive JavaScript framework" },
-                  { value: "angular", label: "Angular — Platform for building mobile and desktop web apps" },
-                  { value: "svelte", label: "Svelte — Cybernetically enhanced web apps with zero runtime" },
+                  {
+                    value: "react",
+                    label:
+                      "React — A JavaScript library for building user interfaces",
+                  },
+                  {
+                    value: "vue",
+                    label: "Vue.js — The progressive JavaScript framework",
+                  },
+                  {
+                    value: "angular",
+                    label:
+                      "Angular — Platform for building mobile and desktop web apps",
+                  },
+                  {
+                    value: "svelte",
+                    label:
+                      "Svelte — Cybernetically enhanced web apps with zero runtime",
+                  },
                 ],
               },
               {
@@ -1472,10 +1612,26 @@ const CascadingDropdownDemo = () => {
                 label: "Backend & Server-Side Technologies",
                 selectionMode: "multi",
                 children: [
-                  { value: "node", label: "Node.js — JavaScript runtime built on Chrome's V8 engine" },
-                  { value: "django", label: "Django — The web framework for perfectionists with deadlines" },
-                  { value: "rails", label: "Ruby on Rails — Convention over configuration web framework" },
-                  { value: "go", label: "Go (Golang) — Efficient, reliable, and fast compiled language by Google" },
+                  {
+                    value: "node",
+                    label:
+                      "Node.js — JavaScript runtime built on Chrome's V8 engine",
+                  },
+                  {
+                    value: "django",
+                    label:
+                      "Django — The web framework for perfectionists with deadlines",
+                  },
+                  {
+                    value: "rails",
+                    label:
+                      "Ruby on Rails — Convention over configuration web framework",
+                  },
+                  {
+                    value: "go",
+                    label:
+                      "Go (Golang) — Efficient, reliable, and fast compiled language by Google",
+                  },
                 ],
               },
               {
@@ -1483,9 +1639,21 @@ const CascadingDropdownDemo = () => {
                 label: "DevOps, CI/CD & Cloud Infrastructure",
                 selectionMode: "single",
                 children: [
-                  { value: "docker", label: "Docker — Build, ship, and run distributed applications" },
-                  { value: "k8s", label: "Kubernetes — Production-grade container orchestration at scale" },
-                  { value: "terraform", label: "Terraform — Infrastructure as code for multi-cloud provisioning" },
+                  {
+                    value: "docker",
+                    label:
+                      "Docker — Build, ship, and run distributed applications",
+                  },
+                  {
+                    value: "k8s",
+                    label:
+                      "Kubernetes — Production-grade container orchestration at scale",
+                  },
+                  {
+                    value: "terraform",
+                    label:
+                      "Terraform — Infrastructure as code for multi-cloud provisioning",
+                  },
                 ],
               },
             ]}
@@ -1495,14 +1663,18 @@ const CascadingDropdownDemo = () => {
             classes={{
               ...c.cascading,
               menu: `rounded-lg shadow-lg overflow-visible w-[260px] ${
-                dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
+                dark
+                  ? "bg-gray-800 border border-gray-700"
+                  : "bg-white border border-gray-200"
               }`,
               menuItem: `flex items-center justify-between px-3 py-2.5 cursor-pointer text-sm leading-snug ${
                 dark ? "text-gray-200 hover:bg-gray-700" : "hover:bg-gray-50"
               }`,
               menuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
               submenu: `rounded-lg shadow-lg ml-1 w-[280px] max-h-[260px] overflow-y-auto ${
-                dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
+                dark
+                  ? "bg-gray-800 border border-gray-700"
+                  : "bg-white border border-gray-200"
               }`,
               submenuItem: `flex items-center gap-2 px-3 py-2.5 cursor-pointer text-sm leading-snug ${
                 dark ? "text-gray-300 hover:bg-gray-700" : "hover:bg-gray-50"
@@ -1512,7 +1684,10 @@ const CascadingDropdownDemo = () => {
           />
         </DemoWrapper>
         <div className={c.note}>
-          The parent menu is fixed at 260px and the submenu at 280px. The parent uses overflow-visible so submenus aren't clipped. The submenu has max-height with overflow-y-auto for scrolling long lists. Long labels wrap naturally using leading-snug.
+          The parent menu is fixed at 260px and the submenu at 280px. The parent
+          uses overflow-visible so submenus aren't clipped. The submenu has
+          max-height with overflow-y-auto for scrolling long lists. Long labels
+          wrap naturally using leading-snug.
         </div>
       </Section>
 
@@ -1945,15 +2120,49 @@ const CascadingDropdownDemo = () => {
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
-            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
-            <PropRow name="data-has-submenu" type="option" description="Present on options that have child submenus" isDarkMode={dark} />
-            <PropRow name="data-value" type="option" description="The option's value string" isDarkMode={dark} />
+            <PropRow
+              name="data-open"
+              type="root, trigger"
+              description="Present when the dropdown is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, trigger, option"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-error"
+              type="root, trigger"
+              description="Present when in error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-success"
+              type="root, trigger"
+              description="Present when in success state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-has-submenu"
+              type="option"
+              description="Present on options that have child submenus"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-value"
+              type="option"
+              description="The option's value string"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1970,7 +2179,7 @@ const CascadingDropdownDemo = () => {
           >
             {[
               "Uses combobox / listbox ARIA pattern with proper roles",
-              "Menu items have role=\"option\" with aria-selected state",
+              'Menu items have role="option" with aria-selected state',
               "Submenus announced via aria-haspopup and aria-expanded",
               "Disabled items marked with aria-disabled",
               "Label auto-associated via id linking",

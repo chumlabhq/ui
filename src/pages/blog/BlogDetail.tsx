@@ -127,15 +127,29 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
         <div className="my-6 rounded-xl border border-white/[0.08] bg-[#0d0d1a] overflow-hidden">
           {section.language && (
             <div className="flex items-center gap-2 px-5 py-2.5 border-b border-white/[0.06] bg-white/[0.02]">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-gray-500"
+              >
                 <polyline points="16 18 22 12 16 6" />
                 <polyline points="8 6 2 12 8 18" />
               </svg>
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{section.language}</span>
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {section.language}
+              </span>
             </div>
           )}
           <pre className="px-5 py-4 overflow-x-auto">
-            <code className="text-sm leading-relaxed text-gray-300 font-mono">{section.content}</code>
+            <code className="text-sm leading-relaxed text-gray-300 font-mono">
+              {section.content}
+            </code>
           </pre>
         </div>
       );
@@ -143,13 +157,13 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
     case "divider":
       return (
         <div className="my-10 flex items-center gap-4">
-          <div className="flex-1 h-px bg-white/[0.06]" />
+          <div className="flex-1 h-px bg-white/60" />
           <div className="flex gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-white/[0.12]" />
             <div className="w-1.5 h-1.5 rounded-full bg-white/[0.08]" />
             <div className="w-1.5 h-1.5 rounded-full bg-white/[0.05]" />
           </div>
-          <div className="flex-1 h-px bg-white/[0.06]" />
+          <div className="flex-1 h-px bg-white/60" />
         </div>
       );
 

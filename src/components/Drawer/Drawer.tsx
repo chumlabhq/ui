@@ -50,7 +50,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       open,
       defaultOpen = false,
       onOpenChange,
-      onClose: onCloseProp,
       zIndex = 9999,
       children,
       direction = DEFAULT_DIRECTION,
@@ -94,8 +93,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
     const handleClose = useCallback(() => {
       setIsOpen(false);
-      onCloseProp?.();
-    }, [setIsOpen, onCloseProp]);
+    }, [setIsOpen]);
 
     const generatedId = useId();
     const drawerId = `drawer-${generatedId}`;

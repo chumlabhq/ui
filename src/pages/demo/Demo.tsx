@@ -274,9 +274,9 @@ const Demo = () => {
         {/* ── Main content ── */}
         <main
           ref={mainRef}
-          className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className={`flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto overscroll-y-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${bg}`}
         >
-          <div className="p-4 sm:p-6 lg:p-8 w-full max-w-none min-w-0">
+          <div className="p-4 sm:p-6 lg:p-8 w-full max-w-none min-w-0 min-h-0">
             <Outlet context={{ isDarkMode, toggleDarkMode }} />
           </div>
         </main>

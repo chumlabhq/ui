@@ -38,14 +38,10 @@ export interface PaginationClasses {
 }
 
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onChange"> {
-  /** @deprecated Use `value` instead. */
-  currentPage?: number;
   totalPages: number;
   siblingCount?: number;
   rowsPerPage?: number;
   rowOptions?: number[];
-  /** @deprecated Use `onValueChange` instead. */
-  onPageChange?: (page: number) => void;
   disabled?: boolean;
   onValueChange?: (page: number) => void;
   value?: number;
@@ -57,8 +53,6 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   rowsPerPageLabel?: string;
   showLabel?: string;
   dropdownAriaLabel?: string;
-  /** @deprecated Use `dropdownPosition` instead. */
-  dropdownDirection?: "up" | "down";
   dropdownPosition?: "top" | "bottom";
   dropdownZIndex?: number;
   dropdownGap?: number;

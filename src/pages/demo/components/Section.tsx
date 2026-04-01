@@ -178,7 +178,13 @@ export const PropsTable: React.FC<PropsTableProps> = ({
   children,
   isDarkMode = false,
 }) => (
-  <div className="overflow-x-auto w-full min-w-0 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 max-w-none self-stretch">
+  <div
+    className={`overflow-x-auto w-full min-w-0 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 max-w-none self-stretch rounded-xl border ${
+      isDarkMode
+        ? "border-white/6 bg-[#111118]"
+        : "border-gray-200 bg-white shadow-sm shadow-gray-900/4"
+    }`}
+  >
     <table className="w-full table-fixed text-left min-w-[800px]">
       <colgroup>
         <col className="w-[22%]" />

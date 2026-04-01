@@ -39,8 +39,16 @@ const staticOptions: MultiSelectOption[] = [
 ];
 
 const countryOptions: MultiSelectOption[] = [
-  { value: "us", label: "United States", content: <span>🇺🇸 United States</span> },
-  { value: "gb", label: "United Kingdom", content: <span>🇬🇧 United Kingdom</span> },
+  {
+    value: "us",
+    label: "United States",
+    content: <span>🇺🇸 United States</span>,
+  },
+  {
+    value: "gb",
+    label: "United Kingdom",
+    content: <span>🇬🇧 United Kingdom</span>,
+  },
   { value: "ca", label: "Canada", content: <span>🇨🇦 Canada</span> },
   { value: "au", label: "Australia", content: <span>🇦🇺 Australia</span> },
   { value: "de", label: "Germany", content: <span>🇩🇪 Germany</span> },
@@ -110,9 +118,27 @@ const disabledItemOptions: MultiSelectOption[] = [
 
 // ─── Icons ──────────────────────────────────────────────────────────────────
 
-const CustomChevronIcon = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className={className} style={style} aria-hidden="true" width={16} height={16}>
-    <path fillRule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+const CustomChevronIcon = ({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) => (
+  <svg
+    viewBox="0 0 20 20"
+    fill="currentColor"
+    className={className}
+    style={style}
+    aria-hidden="true"
+    width={16}
+    height={16}
+  >
+    <path
+      fillRule="evenodd"
+      d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -186,7 +212,10 @@ const MultiSelectDropdownDemo = () => {
   // No chips
   const [noChipsValue, setNoChipsValue] = useState<string[]>([]);
   // Disabled state
-  const [disabledValue, setDisabledValue] = useState<string[]>(["apple", "banana"]);
+  const [disabledValue, setDisabledValue] = useState<string[]>([
+    "apple",
+    "banana",
+  ]);
   // Error
   const [errorValue, setErrorValue] = useState<string[]>([]);
   // Description
@@ -194,7 +223,9 @@ const MultiSelectDropdownDemo = () => {
   // Success
   const [successValue, setSuccessValue] = useState<string[]>([]);
   // Form integration
-  const [formIntegrationValue, setFormIntegrationValue] = useState<string[]>([]);
+  const [formIntegrationValue, setFormIntegrationValue] = useState<string[]>(
+    [],
+  );
   // Chevron
   const [noChevronValue, setNoChevronValue] = useState<string[]>([]);
   // Full width
@@ -231,28 +262,45 @@ const MultiSelectDropdownDemo = () => {
   const [scrollUnlockedValue, setScrollUnlockedValue] = useState<string[]>([]);
   // Style variants
   const [variantDefaultValue, setVariantDefaultValue] = useState<string[]>([]);
-  const [variantBorderlessValue, setVariantBorderlessValue] = useState<string[]>([]);
+  const [variantBorderlessValue, setVariantBorderlessValue] = useState<
+    string[]
+  >([]);
   const [variantBottomValue, setVariantBottomValue] = useState<string[]>([]);
   const [variantGhostValue, setVariantGhostValue] = useState<string[]>([]);
   const [variantPillValue, setVariantPillValue] = useState<string[]>([]);
 
-  const mapCountryToOption = useCallback((country: RestCountryResponse): MultiSelectOption => ({
-    value: country.cca2,
-    label: country.name.common,
-    content: (
-      <div className="flex items-center gap-2">
-        <img src={country.flags.png} alt="" className="w-5 h-4 object-cover rounded-sm" />
-        <div className="flex flex-col">
-          <span className="text-sm">{country.name.common}</span>
-          <span className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>{country.capital?.[0] || country.region}</span>
+  const mapCountryToOption = useCallback(
+    (country: RestCountryResponse): MultiSelectOption => ({
+      value: country.cca2,
+      label: country.name.common,
+      content: (
+        <div className="flex items-center gap-2">
+          <img
+            src={country.flags.png}
+            alt=""
+            className="w-5 h-4 object-cover rounded-sm"
+          />
+          <div className="flex flex-col">
+            <span className="text-sm">{country.name.common}</span>
+            <span
+              className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              {country.capital?.[0] || country.region}
+            </span>
+          </div>
         </div>
-      </div>
-    ),
-    selectedContent: <span className="truncate">{country.name.common}</span>,
-  }), [dark]);
+      ),
+      selectedContent: <span className="truncate">{country.name.common}</span>,
+    }),
+    [dark],
+  );
 
-  const handleLoadOptions = useCallback(async (): Promise<MultiSelectOption[]> => {
-    const response = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region");
+  const handleLoadOptions = useCallback(async (): Promise<
+    MultiSelectOption[]
+  > => {
+    const response = await fetch(
+      "https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region",
+    );
     if (!response.ok) throw new Error("Failed to fetch countries");
     const data: RestCountryResponse[] = await response.json();
     const codes = ["US", "GB", "DE", "FR", "JP", "CA", "AU", "IN", "BR", "IT"];
@@ -284,8 +332,9 @@ const MultiSelectDropdownDemo = () => {
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
           >
-            A multi-select dropdown component without search. Supports keyboard navigation,
-            async option loading, chips or count display, and full customization via the classes prop.
+            A multi-select dropdown component without search. Supports keyboard
+            navigation, async option loading, chips or count display, and full
+            customization via the classes prop.
           </p>
           <div className="mt-5">
             <CodeBlock
@@ -315,7 +364,9 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         {basicValue.length > 0 && (
-          <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+          >
             Selected: {basicValue.join(", ")}
           </p>
         )}
@@ -360,7 +411,10 @@ const MultiSelectDropdownDemo = () => {
                 disabled
                 placeholder="Select fruits..."
                 maxDisplayedChips={2}
-                classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed` }}
+                classes={{
+                  ...c.dropdown,
+                  trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed`,
+                }}
               />
             </div>
             <div>
@@ -372,7 +426,10 @@ const MultiSelectDropdownDemo = () => {
                 error
                 errorMessage="Please select at least one"
                 placeholder="Select fruits..."
-                classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500` }}
+                classes={{
+                  ...c.dropdown,
+                  trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500`,
+                }}
               />
             </div>
             <div>
@@ -463,7 +520,8 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Options are fetched from the REST Countries API when the dropdown opens.
+          Options are fetched from the REST Countries API when the dropdown
+          opens.
         </div>
       </Section>
 
@@ -586,7 +644,10 @@ const MultiSelectDropdownDemo = () => {
               disabled
               placeholder="Select fruits..."
               maxDisplayedChips={2}
-              classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed` }}
+              classes={{
+                ...c.dropdown,
+                trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed`,
+              }}
             />
           </div>
         </DemoWrapper>
@@ -610,7 +671,10 @@ const MultiSelectDropdownDemo = () => {
               errorMessage="Please select at least one option"
               placeholder="Select fruits..."
               maxDisplayedChips={2}
-              classes={{ ...c.dropdown, trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500` }}
+              classes={{
+                ...c.dropdown,
+                trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500`,
+              }}
             />
           </div>
         </DemoWrapper>
@@ -655,7 +719,13 @@ const MultiSelectDropdownDemo = () => {
               maxDisplayedChips={2}
               success={successValue.length > 0}
               successMessage={`${successValue.length} fruit${successValue.length === 1 ? "" : "s"} selected`}
-              classes={{ ...c.dropdown, trigger: successValue.length > 0 ? `${c.dropdown.trigger} border-green-500 focus:ring-green-500` : c.dropdown.trigger }}
+              classes={{
+                ...c.dropdown,
+                trigger:
+                  successValue.length > 0
+                    ? `${c.dropdown.trigger} border-green-500 focus:ring-green-500`
+                    : c.dropdown.trigger,
+              }}
             />
           </div>
         </DemoWrapper>
@@ -688,10 +758,7 @@ const MultiSelectDropdownDemo = () => {
                 classes={c.dropdown}
               />
             </div>
-            <button
-              type="submit"
-              className={c.btn}
-            >
+            <button type="submit" className={c.btn}>
               Submit
             </button>
           </form>
@@ -807,7 +874,8 @@ const MultiSelectDropdownDemo = () => {
                       ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]"
                       : "bg-gray-50 text-gray-700 hover:bg-gray-100"
                   }`,
-                  triggerText: "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
+                  triggerText:
+                    "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}
               />
             </div>
@@ -828,7 +896,8 @@ const MultiSelectDropdownDemo = () => {
                       ? "border-gray-600 text-gray-200 hover:border-indigo-400 focus-within:border-indigo-400"
                       : "border-gray-200 text-gray-700 hover:border-indigo-500 focus-within:border-indigo-500"
                   }`,
-                  triggerText: "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
+                  triggerText:
+                    "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}
               />
             </div>
@@ -846,10 +915,11 @@ const MultiSelectDropdownDemo = () => {
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer min-h-[42px] ${
                     dark
-                      ? "text-gray-300 hover:bg-white/[0.06]"
+                      ? "text-gray-300 hover:bg-white/60"
                       : "text-gray-600 hover:bg-gray-50"
                   }`,
-                  triggerText: "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
+                  triggerText:
+                    "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}
               />
             </div>
@@ -870,7 +940,8 @@ const MultiSelectDropdownDemo = () => {
                       ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
                       : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
                   }`,
-                  triggerText: "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
+                  triggerText:
+                    "flex-1 flex items-center gap-1 min-w-0 overflow-hidden",
                 }}
               />
             </div>
@@ -887,7 +958,9 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div className="w-full space-y-8">
             <div>
-              <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;bottom&quot; (default)</DemoLabel>
+              <DemoLabel isDarkMode={dark}>
+                dropdownPosition=&quot;bottom&quot; (default)
+              </DemoLabel>
               <div className="w-72">
                 <MultiSelectDropdown
                   options={staticOptions}
@@ -901,7 +974,9 @@ const MultiSelectDropdownDemo = () => {
               </div>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;top&quot;</DemoLabel>
+              <DemoLabel isDarkMode={dark}>
+                dropdownPosition=&quot;top&quot;
+              </DemoLabel>
               <div className="w-72">
                 <MultiSelectDropdown
                   options={staticOptions}
@@ -917,7 +992,8 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          The dropdown renders via a React Portal into document.body (or a custom container via portalContainer).
+          The dropdown renders via a React Portal into document.body (or a
+          custom container via portalContainer).
         </div>
       </Section>
 
@@ -1043,7 +1119,11 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         {focusMessage && (
-          <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>{focusMessage}</p>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+          >
+            {focusMessage}
+          </p>
         )}
       </Section>
 
@@ -1073,7 +1153,11 @@ const MultiSelectDropdownDemo = () => {
           </div>
         </DemoWrapper>
         {keyDownMessage && (
-          <p className={`text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`}>{keyDownMessage}</p>
+          <p
+            className={`text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`}
+          >
+            {keyDownMessage}
+          </p>
         )}
       </Section>
 
@@ -1114,7 +1198,9 @@ const MultiSelectDropdownDemo = () => {
               </div>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>aria-label=&quot;Fruit options&quot;</DemoLabel>
+              <DemoLabel isDarkMode={dark}>
+                aria-label=&quot;Fruit options&quot;
+              </DemoLabel>
               <div className="w-72">
                 <MultiSelectDropdown
                   options={staticOptions}
@@ -1147,17 +1233,24 @@ const MultiSelectDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 min-h-[42px]",
-                content: "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
-                option: "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
+                trigger:
+                  "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 min-h-[42px]",
+                content:
+                  "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
+                option:
+                  "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
                 optionSelected: "bg-gray-700",
                 optionFocused: "bg-gray-600",
-                chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
-                checkbox: "w-4 h-4 shrink-0 border border-gray-500 rounded flex items-center justify-center",
+                chevron:
+                  "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
+                checkbox:
+                  "w-4 h-4 shrink-0 border border-gray-500 rounded flex items-center justify-center",
                 checkboxChecked: "bg-blue-500 border-blue-500 text-white",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-gray-600 text-gray-200 rounded-md shrink-0 max-w-[100px]",
-                chipRemove: "w-3 h-3 shrink-0 cursor-pointer hover:text-gray-300",
-                moreCount: "inline-flex items-center px-2 py-0.5 text-xs bg-gray-600 text-gray-300 rounded-md shrink-0",
+                chipRemove:
+                  "w-3 h-3 shrink-0 cursor-pointer hover:text-gray-300",
+                moreCount:
+                  "inline-flex items-center px-2 py-0.5 text-xs bg-gray-600 text-gray-300 rounded-md shrink-0",
               }}
             />
           </div>
@@ -1185,24 +1278,35 @@ const MultiSelectDropdownDemo = () => {
                     ? "border-purple-700 bg-purple-950/60 text-purple-200 hover:border-purple-500"
                     : "border-purple-300 bg-purple-50 text-purple-900 hover:border-purple-400"
                 }`,
-                triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
+                triggerText:
+                  "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-lg shadow-lg overflow-hidden ${
-                  dark ? "bg-purple-950 border border-purple-800" : "bg-purple-50 border border-purple-200"
+                  dark
+                    ? "bg-purple-950 border border-purple-800"
+                    : "bg-purple-50 border border-purple-200"
                 }`,
                 option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed ${
-                  dark ? "text-purple-200 hover:bg-purple-900/60" : "text-purple-900 hover:bg-purple-100"
+                  dark
+                    ? "text-purple-200 hover:bg-purple-900/60"
+                    : "text-purple-900 hover:bg-purple-100"
                 }`,
                 optionSelected: dark ? "bg-purple-900/80" : "bg-purple-200",
                 optionFocused: dark ? "bg-purple-900/60" : "bg-purple-100",
                 chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-purple-400" : "text-purple-600"}`,
                 checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-purple-500" : "border-purple-400"}`,
-                checkboxChecked: dark ? "bg-purple-500 border-purple-500 text-white" : "bg-purple-600 border-purple-600 text-white",
+                checkboxChecked: dark
+                  ? "bg-purple-500 border-purple-500 text-white"
+                  : "bg-purple-600 border-purple-600 text-white",
                 chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${
-                  dark ? "bg-purple-900/60 text-purple-200" : "bg-purple-200 text-purple-800"
+                  dark
+                    ? "bg-purple-900/60 text-purple-200"
+                    : "bg-purple-200 text-purple-800"
                 }`,
                 chipRemove: `w-3 h-3 shrink-0 cursor-pointer ${dark ? "hover:text-purple-300" : "hover:text-purple-600"}`,
                 moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-md shrink-0 ${
-                  dark ? "bg-purple-900/40 text-purple-300" : "bg-purple-100 text-purple-700"
+                  dark
+                    ? "bg-purple-900/40 text-purple-300"
+                    : "bg-purple-100 text-purple-700"
                 }`,
                 label: `block text-sm font-medium mb-1 ${dark ? "text-purple-300" : "text-purple-900"}`,
                 error: `text-sm mt-1 ${dark ? "text-purple-400" : "text-purple-600"}`,
@@ -1252,7 +1356,8 @@ const MultiSelectDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                checkbox: "w-5 h-5 shrink-0 border-2 border-orange-300 rounded-sm flex items-center justify-center",
+                checkbox:
+                  "w-5 h-5 shrink-0 border-2 border-orange-300 rounded-sm flex items-center justify-center",
                 checkboxChecked: "bg-orange-500 border-orange-500 text-white",
               }}
             />
@@ -1275,13 +1380,19 @@ const MultiSelectDropdownDemo = () => {
               placeholder="Select fruits..."
               maxDisplayedChips={2}
               checkboxIcon={
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  aria-hidden
+                >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               }
               classes={{
                 ...c.dropdown,
-                checkbox: "w-4 h-4 shrink-0 border border-amber-400 rounded flex items-center justify-center",
+                checkbox:
+                  "w-4 h-4 shrink-0 border border-amber-400 rounded flex items-center justify-center",
                 checkboxChecked: "bg-amber-500 border-amber-500 text-white",
               }}
             />
@@ -1352,8 +1463,16 @@ const MultiSelectDropdownDemo = () => {
                 placeholder="Custom empty..."
                 noResultsContent={
                   <span className="flex flex-col items-center gap-1 py-2">
-                    <span className={`text-lg ${dark ? "text-gray-500" : "text-gray-400"}`}>📭</span>
-                    <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Nothing here yet</span>
+                    <span
+                      className={`text-lg ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    >
+                      📭
+                    </span>
+                    <span
+                      className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      Nothing here yet
+                    </span>
                   </span>
                 }
                 classes={c.dropdown}
@@ -1413,52 +1532,308 @@ const MultiSelectDropdownDemo = () => {
       <Section title="MultiSelectDropdown Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="options" type="MultiSelectOption[]" defaultVal="[]" description="Array of options to display" isDarkMode={dark} />
-            <PropRow name="value" type="string[]" description="Selected values (required)" isDarkMode={dark} />
-            <PropRow name="onValueChange" type="(values, options) => void" description="Change handler (required)" isDarkMode={dark} />
-            <PropRow name="id" type="string" defaultVal="auto-generated" description="ID for ARIA and form association" isDarkMode={dark} />
-            <PropRow name="name" type="string" description="Form field name -- hidden input with comma-separated values" isDarkMode={dark} />
-            <PropRow name="placeholder" type="ReactNode" defaultVal='"Select options..."' description="Placeholder when nothing selected" isDarkMode={dark} />
-            <PropRow name="disabled" type="boolean" defaultVal="false" description="Disable the dropdown" isDarkMode={dark} />
-            <PropRow name="error" type="boolean" defaultVal="false" description="Show error state" isDarkMode={dark} />
-            <PropRow name="errorMessage" type="ReactNode" description="Error message to display" isDarkMode={dark} />
-            <PropRow name="description" type="ReactNode" description="Helper text displayed below the label" isDarkMode={dark} />
-            <PropRow name="success" type="boolean" defaultVal="false" description="Show success state" isDarkMode={dark} />
-            <PropRow name="successMessage" type="ReactNode" description="Success message to display" isDarkMode={dark} />
-            <PropRow name="label" type="ReactNode" description="Label for the dropdown" isDarkMode={dark} />
-            <PropRow name="required" type="boolean" defaultVal="false" description="Whether field is required" isDarkMode={dark} />
-            <PropRow name="showChevron" type="boolean" defaultVal="true" description="Show dropdown chevron" isDarkMode={dark} />
-            <PropRow name="fullWidth" type="boolean" defaultVal="false" description="Take full container width" isDarkMode={dark} />
-            <PropRow name="loading" type="boolean" defaultVal="false" description="External loading state" isDarkMode={dark} />
-            <PropRow name="onLoadOptions" type="() => Promise<Option[]>" description="Async function to load options" isDarkMode={dark} />
-            <PropRow name="loadOnOpen" type="boolean" defaultVal="false" description="Load options when dropdown opens" isDarkMode={dark} />
-            <PropRow name="onLoadError" type="(error: unknown) => void" description="Callback when async loading fails" isDarkMode={dark} />
-            <PropRow name="shimmerCount" type="number" defaultVal="5" description="Number of shimmer items" isDarkMode={dark} />
-            <PropRow name="maxDisplayedChips" type="number" defaultVal="3" description="Max chips before showing +N" isDarkMode={dark} />
-            <PropRow name="showSelectedChips" type="boolean" defaultVal="true" description="Show chips or count only" isDarkMode={dark} />
-            <PropRow name="clearable" type="boolean" defaultVal="false" description="Show a clear button to deselect all values" isDarkMode={dark} />
-            <PropRow name="checkboxIcon" type="ReactNode" defaultVal="CheckIcon" description="Custom checkbox icon" isDarkMode={dark} />
-            <PropRow name="unstyled" type="boolean" defaultVal="false" description="Strip all default classes" isDarkMode={dark} />
-            <PropRow name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll while dropdown is open" isDarkMode={dark} />
-            <PropRow name="open" type="boolean" description="Controlled open state" isDarkMode={dark} />
-            <PropRow name="defaultOpen" type="boolean" defaultVal="false" description="Initial open state (uncontrolled)" isDarkMode={dark} />
-            <PropRow name="onOpenChange" type="(open: boolean) => void" description="Called when open state changes" isDarkMode={dark} />
-            <PropRow name="classes" type="MultiSelectDropdownClasses" description="Class names for internal elements" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="Root class name" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Root inline styles" isDarkMode={dark} />
-            <PropRow name="keepMounted" type="boolean" defaultVal="false" description="Keep listbox in DOM when closed" isDarkMode={dark} />
-            <PropRow name="portalContainer" type="HTMLElement | null" defaultVal="document.body" description="Portal target" isDarkMode={dark} />
-            <PropRow name="dropdownPosition" type='"top" | "bottom"' defaultVal='"bottom"' description="Preferred list position" isDarkMode={dark} />
-            <PropRow name="dropdownZIndex" type="number" defaultVal="50" description="Listbox z-index" isDarkMode={dark} />
-            <PropRow name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and list (px)" isDarkMode={dark} />
-            <PropRow name="noResultsContent" type="ReactNode" defaultVal='"No options available"' description="Custom empty state content" isDarkMode={dark} />
-            <PropRow name="aria-label" type="string" description="Listbox aria-label override" isDarkMode={dark} />
-            <PropRow name="onBlur" type="() => void" description="Trigger blur callback" isDarkMode={dark} />
-            <PropRow name="onFocus" type="() => void" description="Trigger focus callback" isDarkMode={dark} />
-            <PropRow name="onKeyDown" type="(e: KeyboardEvent) => void" description="Custom keydown (preventDefault to override)" isDarkMode={dark} />
-            <PropRow name="ChevronIcon" type="ComponentType" defaultVal="ChevronDownIcon" description="Custom chevron icon component" isDarkMode={dark} />
-            <PropRow name="ClearIcon" type="ComponentType" description="Custom clear icon component" isDarkMode={dark} />
-            <PropRow name="renderTrigger" type="(props) => ReactNode" description="Custom trigger renderer — receives ARIA props, isOpen, selectedOptions, and placeholder" isDarkMode={dark} />
+            <PropRow
+              name="options"
+              type="MultiSelectOption[]"
+              defaultVal="[]"
+              description="Array of options to display"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="value"
+              type="string[]"
+              description="Selected values (required)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onValueChange"
+              type="(values, options) => void"
+              description="Change handler (required)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="id"
+              type="string"
+              defaultVal="auto-generated"
+              description="ID for ARIA and form association"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="name"
+              type="string"
+              description="Form field name -- hidden input with comma-separated values"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="placeholder"
+              type="ReactNode"
+              defaultVal='"Select options..."'
+              description="Placeholder when nothing selected"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="disabled"
+              type="boolean"
+              defaultVal="false"
+              description="Disable the dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="boolean"
+              defaultVal="false"
+              description="Show error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="errorMessage"
+              type="ReactNode"
+              description="Error message to display"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="description"
+              type="ReactNode"
+              description="Helper text displayed below the label"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="success"
+              type="boolean"
+              defaultVal="false"
+              description="Show success state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="successMessage"
+              type="ReactNode"
+              description="Success message to display"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="ReactNode"
+              description="Label for the dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="required"
+              type="boolean"
+              defaultVal="false"
+              description="Whether field is required"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showChevron"
+              type="boolean"
+              defaultVal="true"
+              description="Show dropdown chevron"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="fullWidth"
+              type="boolean"
+              defaultVal="false"
+              description="Take full container width"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loading"
+              type="boolean"
+              defaultVal="false"
+              description="External loading state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onLoadOptions"
+              type="() => Promise<Option[]>"
+              description="Async function to load options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="loadOnOpen"
+              type="boolean"
+              defaultVal="false"
+              description="Load options when dropdown opens"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onLoadError"
+              type="(error: unknown) => void"
+              description="Callback when async loading fails"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shimmerCount"
+              type="number"
+              defaultVal="5"
+              description="Number of shimmer items"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="maxDisplayedChips"
+              type="number"
+              defaultVal="3"
+              description="Max chips before showing +N"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showSelectedChips"
+              type="boolean"
+              defaultVal="true"
+              description="Show chips or count only"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="clearable"
+              type="boolean"
+              defaultVal="false"
+              description="Show a clear button to deselect all values"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkboxIcon"
+              type="ReactNode"
+              defaultVal="CheckIcon"
+              description="Custom checkbox icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="unstyled"
+              type="boolean"
+              defaultVal="false"
+              description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lockScroll"
+              type="boolean"
+              defaultVal="false"
+              description="Lock body scroll while dropdown is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="open"
+              type="boolean"
+              description="Controlled open state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultOpen"
+              type="boolean"
+              defaultVal="false"
+              description="Initial open state (uncontrolled)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onOpenChange"
+              type="(open: boolean) => void"
+              description="Called when open state changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="classes"
+              type="MultiSelectDropdownClasses"
+              description="Class names for internal elements"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="Root class name"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Root inline styles"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="keepMounted"
+              type="boolean"
+              defaultVal="false"
+              description="Keep listbox in DOM when closed"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="portalContainer"
+              type="HTMLElement | null"
+              defaultVal="document.body"
+              description="Portal target"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownPosition"
+              type='"top" | "bottom"'
+              defaultVal='"bottom"'
+              description="Preferred list position"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownZIndex"
+              type="number"
+              defaultVal="50"
+              description="Listbox z-index"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownGap"
+              type="number"
+              defaultVal="4"
+              description="Gap between trigger and list (px)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="noResultsContent"
+              type="ReactNode"
+              defaultVal='"No options available"'
+              description="Custom empty state content"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="aria-label"
+              type="string"
+              description="Listbox aria-label override"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onBlur"
+              type="() => void"
+              description="Trigger blur callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onFocus"
+              type="() => void"
+              description="Trigger focus callback"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onKeyDown"
+              type="(e: KeyboardEvent) => void"
+              description="Custom keydown (preventDefault to override)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ChevronIcon"
+              type="ComponentType"
+              defaultVal="ChevronDownIcon"
+              description="Custom chevron icon component"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ClearIcon"
+              type="ComponentType"
+              description="Custom clear icon component"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="renderTrigger"
+              type="(props) => ReactNode"
+              description="Custom trigger renderer — receives ARIA props, isOpen, selectedOptions, and placeholder"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1467,30 +1842,150 @@ const MultiSelectDropdownDemo = () => {
       <Section title="MultiSelectDropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="root" type="string" description="Root container element" isDarkMode={dark} />
-            <PropRow name="wrapper" type="string" description="Inner wrapper (relative positioned)" isDarkMode={dark} />
-            <PropRow name="trigger" type="string" description="Trigger button" isDarkMode={dark} />
-            <PropRow name="triggerText" type="string" description="Text span inside trigger" isDarkMode={dark} />
-            <PropRow name="content" type="string" description="Dropdown menu container" isDarkMode={dark} />
-            <PropRow name="optionList" type="string" description="Options list wrapper" isDarkMode={dark} />
-            <PropRow name="option" type="string" description="Base option styling" isDarkMode={dark} />
-            <PropRow name="optionSelected" type="string" description="Additional class for selected options" isDarkMode={dark} />
-            <PropRow name="optionFocused" type="string" description="Additional class for keyboard-focused options" isDarkMode={dark} />
-            <PropRow name="optionDisabled" type="string" description="Additional class for disabled options" isDarkMode={dark} />
-            <PropRow name="chevron" type="string" description="Chevron icon" isDarkMode={dark} />
-            <PropRow name="checkbox" type="string" description="Base checkbox styling" isDarkMode={dark} />
-            <PropRow name="checkboxChecked" type="string" description="Additional class for checked checkbox" isDarkMode={dark} />
-            <PropRow name="checkboxIcon" type="string" description="Checkbox icon styling" isDarkMode={dark} />
-            <PropRow name="chip" type="string" description="Selected chip styling" isDarkMode={dark} />
-            <PropRow name="chipRemove" type="string" description="Chip remove button" isDarkMode={dark} />
-            <PropRow name="moreCount" type="string" description='"+N more" badge' isDarkMode={dark} />
-            <PropRow name="noResults" type="string" description="No results message" isDarkMode={dark} />
-            <PropRow name="label" type="string" description="Label element" isDarkMode={dark} />
-            <PropRow name="error" type="string" description="Error message" isDarkMode={dark} />
-            <PropRow name="description" type="string" description="Description/helper text" isDarkMode={dark} />
-            <PropRow name="success" type="string" description="Success message" isDarkMode={dark} />
-            <PropRow name="shimmer" type="string" description="Shimmer container" isDarkMode={dark} />
-            <PropRow name="shimmerItem" type="string" description="Individual shimmer item" isDarkMode={dark} />
+            <PropRow
+              name="root"
+              type="string"
+              description="Root container element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="wrapper"
+              type="string"
+              description="Inner wrapper (relative positioned)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="trigger"
+              type="string"
+              description="Trigger button"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="triggerText"
+              type="string"
+              description="Text span inside trigger"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="content"
+              type="string"
+              description="Dropdown menu container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionList"
+              type="string"
+              description="Options list wrapper"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="option"
+              type="string"
+              description="Base option styling"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionSelected"
+              type="string"
+              description="Additional class for selected options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionFocused"
+              type="string"
+              description="Additional class for keyboard-focused options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="optionDisabled"
+              type="string"
+              description="Additional class for disabled options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="chevron"
+              type="string"
+              description="Chevron icon"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkbox"
+              type="string"
+              description="Base checkbox styling"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkboxChecked"
+              type="string"
+              description="Additional class for checked checkbox"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="checkboxIcon"
+              type="string"
+              description="Checkbox icon styling"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="chip"
+              type="string"
+              description="Selected chip styling"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="chipRemove"
+              type="string"
+              description="Chip remove button"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="moreCount"
+              type="string"
+              description='"+N more" badge'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="noResults"
+              type="string"
+              description="No results message"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="label"
+              type="string"
+              description="Label element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="error"
+              type="string"
+              description="Error message"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="description"
+              type="string"
+              description="Description/helper text"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="success"
+              type="string"
+              description="Success message"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shimmer"
+              type="string"
+              description="Shimmer container"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="shimmerItem"
+              type="string"
+              description="Individual shimmer item"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -1503,17 +1998,72 @@ const MultiSelectDropdownDemo = () => {
       >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="data-open" type="root, trigger" description="Present when the dropdown is open" isDarkMode={dark} />
-            <PropRow name="data-disabled" type="root, trigger, option" description="Present when disabled" isDarkMode={dark} />
-            <PropRow name="data-error" type="root, trigger" description="Present when in error state" isDarkMode={dark} />
-            <PropRow name="data-success" type="root, trigger" description="Present when in success state" isDarkMode={dark} />
-            <PropRow name="data-full-width" type="root" description="Present when fullWidth is true" isDarkMode={dark} />
-            <PropRow name="data-placeholder" type="trigger" description="Present when no option is selected" isDarkMode={dark} />
-            <PropRow name="data-selected" type="option" description="Present on selected options" isDarkMode={dark} />
-            <PropRow name="data-focused" type="option" description="Present on the keyboard-focused option" isDarkMode={dark} />
-            <PropRow name="data-value" type="option" description="The option's value string" isDarkMode={dark} />
-            <PropRow name="data-state" type="content (portal)" description='"open" or "closed"' isDarkMode={dark} />
-            <PropRow name="data-position" type="content (portal)" description='"top" or "bottom" (actual position)' isDarkMode={dark} />
+            <PropRow
+              name="data-open"
+              type="root, trigger"
+              description="Present when the dropdown is open"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-disabled"
+              type="root, trigger, option"
+              description="Present when disabled"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-error"
+              type="root, trigger"
+              description="Present when in error state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-success"
+              type="root, trigger"
+              description="Present when in success state"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-full-width"
+              type="root"
+              description="Present when fullWidth is true"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-placeholder"
+              type="trigger"
+              description="Present when no option is selected"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-selected"
+              type="option"
+              description="Present on selected options"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-focused"
+              type="option"
+              description="Present on the keyboard-focused option"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-value"
+              type="option"
+              description="The option's value string"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-state"
+              type="content (portal)"
+              description='"open" or "closed"'
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="data-position"
+              type="content (portal)"
+              description='"top" or "bottom" (actual position)'
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>

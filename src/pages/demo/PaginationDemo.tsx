@@ -330,9 +330,9 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={basicPage}
+            value={basicPage}
             totalPages={5}
-            onPageChange={setBasicPage}
+            onValueChange={setBasicPage}
             classes={c.pagination}
           />
         </DemoWrapper>
@@ -346,10 +346,10 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={rowsPage}
+            value={rowsPage}
             totalPages={Math.ceil(100 / rowsPerPage)}
             rowsPerPage={rowsPerPage}
-            onPageChange={setRowsPage}
+            onValueChange={setRowsPage}
             onRowsPerPageChange={(rows) => {
               setRowsPerPage(rows);
               setRowsPage(1);
@@ -374,10 +374,10 @@ const PaginationDemo = () => {
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>siblingCount=1 (default)</DemoLabel>
               <Pagination
-                currentPage={manyPagesPage}
+                value={manyPagesPage}
                 totalPages={50}
                 siblingCount={1}
-                onPageChange={setManyPagesPage}
+                onValueChange={setManyPagesPage}
                 classes={c.pagination}
               />
             </div>
@@ -387,10 +387,10 @@ const PaginationDemo = () => {
               <div className="space-y-3">
                 <DemoLabel isDarkMode={dark}>siblingCount=2</DemoLabel>
                 <Pagination
-                  currentPage={sibling2Page}
+                  value={sibling2Page}
                   totalPages={30}
                   siblingCount={2}
-                  onPageChange={setSibling2Page}
+                  onValueChange={setSibling2Page}
                   classes={c.pagination}
                 />
               </div>
@@ -410,9 +410,9 @@ const PaginationDemo = () => {
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>Default - bordered input</DemoLabel>
               <Pagination
-                currentPage={jumpPage}
+                value={jumpPage}
                 totalPages={50}
-                onPageChange={setJumpPage}
+                onValueChange={setJumpPage}
                 renderEllipsis={({ onPageChange }) => (
                   <JumpToPageEllipsis
                     onPageChange={onPageChange}
@@ -431,9 +431,9 @@ const PaginationDemo = () => {
                   Pill - circular input matching pill-style buttons
                 </DemoLabel>
                 <Pagination
-                  currentPage={jumpPillPage}
+                  value={jumpPillPage}
                   totalPages={50}
-                  onPageChange={setJumpPillPage}
+                  onValueChange={setJumpPillPage}
                   renderEllipsis={({ onPageChange }) => (
                     <JumpToPageEllipsis
                       onPageChange={onPageChange}
@@ -471,9 +471,9 @@ const PaginationDemo = () => {
                   Ghost - underline-only input for minimal styles
                 </DemoLabel>
                 <Pagination
-                  currentPage={jumpGhostPage}
+                  value={jumpGhostPage}
                   totalPages={30}
-                  onPageChange={setJumpGhostPage}
+                  onValueChange={setJumpGhostPage}
                   renderEllipsis={({ onPageChange }) => (
                     <JumpToPageEllipsis
                       onPageChange={onPageChange}
@@ -516,10 +516,10 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={pageInfoPage}
+            value={pageInfoPage}
             totalPages={Math.ceil(100 / pageInfoRowsPerPage)}
             rowsPerPage={pageInfoRowsPerPage}
-            onPageChange={setPageInfoPage}
+            onValueChange={setPageInfoPage}
             onRowsPerPageChange={(rows) => {
               setPageInfoRowsPerPage(rows);
               setPageInfoPage(1);
@@ -549,10 +549,10 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={reorderedPage}
+            value={reorderedPage}
             totalPages={Math.ceil(100 / reorderedRowsPerPage)}
             rowsPerPage={reorderedRowsPerPage}
-            onPageChange={setReorderedPage}
+            onValueChange={setReorderedPage}
             onRowsPerPageChange={(rows) => {
               setReorderedRowsPerPage(rows);
               setReorderedPage(1);
@@ -609,9 +609,9 @@ const PaginationDemo = () => {
               ))}
             </div>
             <Pagination
-              currentPage={externalPage}
+              value={externalPage}
               totalPages={Math.ceil(200 / externalRows)}
-              onPageChange={setExternalPage}
+              onValueChange={setExternalPage}
               classes={c.pagination}
             />
           </div>
@@ -626,10 +626,10 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={i18nPage}
+            value={i18nPage}
             totalPages={Math.ceil(100 / i18nRowsPerPage)}
             rowsPerPage={i18nRowsPerPage}
-            onPageChange={setI18nPage}
+            onValueChange={setI18nPage}
             onRowsPerPageChange={(rows) => {
               setI18nRowsPerPage(rows);
               setI18nPage(1);
@@ -670,10 +670,10 @@ const PaginationDemo = () => {
                 Component functions (ArrowLeft / ArrowRight / CaretDown)
               </DemoLabel>
               <Pagination
-                currentPage={customIconsPage}
+                value={customIconsPage}
                 totalPages={Math.ceil(100 / customIconsRowsPerPage)}
                 rowsPerPage={customIconsRowsPerPage}
-                onPageChange={setCustomIconsPage}
+                onValueChange={setCustomIconsPage}
                 onRowsPerPageChange={(rows) => {
                   setCustomIconsRowsPerPage(rows);
                   setCustomIconsPage(1);
@@ -706,9 +706,9 @@ const PaginationDemo = () => {
                 </DemoLabel>
                 <div className="flex justify-center">
                   <Pagination
-                    currentPage={doubleArrowPage}
+                    value={doubleArrowPage}
                     totalPages={20}
-                    onPageChange={setDoubleArrowPage}
+                    onValueChange={setDoubleArrowPage}
                     prevIcon={
                       <DoubleArrowLeftIcon
                         className={`w-5 h-5 ${dark ? "text-emerald-300" : "text-emerald-600"}`}
@@ -745,11 +745,11 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={customRowsPage}
+            value={customRowsPage}
             totalPages={Math.ceil(200 / customRowsPerPage)}
             rowsPerPage={customRowsPerPage}
             rowOptions={[20, 40, 60, 80, 100]}
-            onPageChange={setCustomRowsPage}
+            onValueChange={setCustomRowsPage}
             onRowsPerPageChange={(rows) => {
               setCustomRowsPerPage(rows);
               setCustomRowsPage(1);
@@ -775,16 +775,16 @@ const PaginationDemo = () => {
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>direction="up" (default)</DemoLabel>
               <Pagination
-                currentPage={dropdownUpPage}
+                value={dropdownUpPage}
                 totalPages={Math.ceil(100 / dropdownUpRowsPerPage)}
                 rowsPerPage={dropdownUpRowsPerPage}
-                onPageChange={setDropdownUpPage}
+                onValueChange={setDropdownUpPage}
                 onRowsPerPageChange={(rows) => {
                   setDropdownUpRowsPerPage(rows);
                   setDropdownUpPage(1);
                 }}
                 showRowsPerPage
-                dropdownDirection="up"
+                dropdownPosition="top"
                 classes={{
                   ...c.pagination,
                   root: "flex items-center justify-between gap-4",
@@ -797,16 +797,16 @@ const PaginationDemo = () => {
               <div className="space-y-3">
                 <DemoLabel isDarkMode={dark}>direction="down"</DemoLabel>
                 <Pagination
-                  currentPage={dropdownDownPage}
+                  value={dropdownDownPage}
                   totalPages={Math.ceil(100 / dropdownDownRowsPerPage)}
                   rowsPerPage={dropdownDownRowsPerPage}
-                  onPageChange={setDropdownDownPage}
+                  onValueChange={setDropdownDownPage}
                   onRowsPerPageChange={(rows) => {
                     setDropdownDownRowsPerPage(rows);
                     setDropdownDownPage(1);
                   }}
                   showRowsPerPage
-                  dropdownDirection="down"
+                  dropdownPosition="bottom"
                   classes={{
                     ...c.pagination,
                     root: "flex items-center justify-between gap-4",
@@ -832,10 +832,10 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={styledPage}
+            value={styledPage}
             totalPages={10}
             rowsPerPage={styledRowsPerPage}
-            onPageChange={setStyledPage}
+            onValueChange={setStyledPage}
             onRowsPerPageChange={(rows) => {
               setStyledRowsPerPage(rows);
               setStyledPage(1);
@@ -891,9 +891,9 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={dataAttrPage}
+            value={dataAttrPage}
             totalPages={10}
-            onPageChange={setDataAttrPage}
+            onValueChange={setDataAttrPage}
             classes={{
               ...c.pagination,
               navButton: `p-2 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
@@ -925,9 +925,9 @@ const PaginationDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex justify-center">
             <Pagination
-              currentPage={minimalPage}
+              value={minimalPage}
               totalPages={12}
-              onPageChange={setMinimalPage}
+              onValueChange={setMinimalPage}
               classes={{
                 ...c.pagination,
                 root: "flex items-center",
@@ -963,9 +963,9 @@ const PaginationDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex justify-center">
             <Pagination
-              currentPage={compactPage}
+              value={compactPage}
               totalPages={8}
-              onPageChange={setCompactPage}
+              onValueChange={setCompactPage}
               classes={{
                 ...c.pagination,
                 root: "flex items-center gap-0.5",
@@ -1002,9 +1002,9 @@ const PaginationDemo = () => {
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>totalPages=0</DemoLabel>
               <Pagination
-                currentPage={1}
+                value={1}
                 totalPages={0}
-                onPageChange={() => {}}
+                onValueChange={() => {}}
                 classes={c.pagination}
               />
               <p className={c.label}>Both buttons disabled, no page buttons</p>
@@ -1012,9 +1012,9 @@ const PaginationDemo = () => {
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>totalPages=1</DemoLabel>
               <Pagination
-                currentPage={edgeSinglePage}
+                value={edgeSinglePage}
                 totalPages={1}
-                onPageChange={setEdgeSinglePage}
+                onValueChange={setEdgeSinglePage}
                 classes={c.pagination}
               />
               <p className={c.label}>
@@ -1024,9 +1024,9 @@ const PaginationDemo = () => {
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>First & last page</DemoLabel>
               <Pagination
-                currentPage={edgeBoundaryPage}
+                value={edgeBoundaryPage}
                 totalPages={3}
-                onPageChange={setEdgeBoundaryPage}
+                onValueChange={setEdgeBoundaryPage}
                 classes={c.pagination}
               />
               <p className={c.label}>
@@ -1073,9 +1073,9 @@ const PaginationDemo = () => {
             id="ref-demo-pagination"
             data-section="footer"
             tabIndex={-1}
-            currentPage={refPage}
+            value={refPage}
             totalPages={5}
-            onPageChange={setRefPage}
+            onValueChange={setRefPage}
             className={`p-3 rounded-lg transition-all ${dark ? "focus:bg-gray-700/50" : "focus:bg-blue-50"}`}
             classes={c.pagination}
           />
@@ -1090,9 +1090,9 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={zIndexPage}
+            value={zIndexPage}
             totalPages={10}
-            onPageChange={setZIndexPage}
+            onValueChange={setZIndexPage}
             showRowsPerPage
             rowsPerPage={zIndexRowsPerPage}
             onRowsPerPageChange={(rows) => {
@@ -1116,9 +1116,9 @@ const PaginationDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <Pagination
-            currentPage={3}
+            value={3}
             totalPages={10}
-            onPageChange={() => {}}
+            onValueChange={() => {}}
             disabled
             classes={c.pagination}
           />

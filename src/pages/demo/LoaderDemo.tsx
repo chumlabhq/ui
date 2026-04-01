@@ -1,4 +1,9 @@
-import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "../../components/Loader";
+import {
+  CircularLoader,
+  LinearLoader,
+  DotLoader,
+  PulseLoader,
+} from "../../components/Loader";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
@@ -72,19 +77,32 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-center gap-12 flex-wrap">
             <div className="flex flex-col items-center gap-3">
-              <CircularLoader size={32} className={dark ? "text-indigo-400" : "text-indigo-600"} />
+              <CircularLoader
+                size={32}
+                className={dark ? "text-indigo-400" : "text-indigo-600"}
+              />
               <span className={c.label}>Circular</span>
             </div>
             <div className="flex flex-col items-center gap-3 w-40">
-              <LinearLoader className={dark ? "text-indigo-400" : "text-indigo-600"} width="100%" trackColor={dark ? "rgba(255,255,255,0.1)" : undefined} />
+              <LinearLoader
+                className={dark ? "text-indigo-400" : "text-indigo-600"}
+                width="100%"
+                trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
+              />
               <span className={c.label}>Linear</span>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <DotLoader dotSize={10} className={dark ? "text-indigo-400" : "text-indigo-600"} />
+              <DotLoader
+                dotSize={10}
+                className={dark ? "text-indigo-400" : "text-indigo-600"}
+              />
               <span className={c.label}>Dot</span>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <PulseLoader size={40} className={dark ? "text-indigo-400" : "text-indigo-600"} />
+              <PulseLoader
+                size={40}
+                className={dark ? "text-indigo-400" : "text-indigo-600"}
+              />
               <span className={c.label}>Pulse</span>
             </div>
           </div>
@@ -103,7 +121,10 @@ const LoaderDemo = () => {
           <div className="flex items-center gap-8">
             {[16, 24, 40, 64].map((s) => (
               <div key={s} className="flex flex-col items-center gap-2">
-                <CircularLoader size={s} className={dark ? "text-gray-300" : "text-gray-700"} />
+                <CircularLoader
+                  size={s}
+                  className={dark ? "text-gray-300" : "text-gray-700"}
+                />
                 <span className={c.label}>{s}px</span>
               </div>
             ))}
@@ -120,10 +141,19 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-center gap-8">
             {[
-              { cls: dark ? "text-indigo-400" : "text-indigo-500", name: "Indigo" },
-              { cls: dark ? "text-emerald-400" : "text-emerald-500", name: "Emerald" },
+              {
+                cls: dark ? "text-indigo-400" : "text-indigo-500",
+                name: "Indigo",
+              },
+              {
+                cls: dark ? "text-emerald-400" : "text-emerald-500",
+                name: "Emerald",
+              },
               { cls: dark ? "text-rose-400" : "text-rose-500", name: "Rose" },
-              { cls: dark ? "text-amber-400" : "text-amber-500", name: "Amber" },
+              {
+                cls: dark ? "text-amber-400" : "text-amber-500",
+                name: "Amber",
+              },
             ].map(({ cls, name }) => (
               <div key={name} className="flex flex-col items-center gap-2">
                 <CircularLoader size={32} className={cls} />
@@ -148,7 +178,11 @@ const LoaderDemo = () => {
               { speed: 0.35, label: "Fast (0.35s)" },
             ].map(({ speed, label }) => (
               <div key={label} className="flex flex-col items-center gap-2">
-                <CircularLoader size={32} speed={speed} className={dark ? "text-gray-300" : "text-gray-700"} />
+                <CircularLoader
+                  size={32}
+                  speed={speed}
+                  className={dark ? "text-gray-300" : "text-gray-700"}
+                />
                 <span className={c.label}>{label}</span>
               </div>
             ))}
@@ -165,19 +199,34 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-center gap-8">
             <div className="flex flex-col items-center gap-2">
-              <CircularLoader size={32} className={dark ? "text-indigo-400" : "text-indigo-500"} />
+              <CircularLoader
+                size={32}
+                className={dark ? "text-indigo-400" : "text-indigo-500"}
+              />
               <span className={c.label}>Default track</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <CircularLoader size={32} className={dark ? "text-indigo-400" : "text-indigo-500"} trackColor={dark ? "#4338ca" : "#c7d2fe"} />
+              <CircularLoader
+                size={32}
+                className={dark ? "text-indigo-400" : "text-indigo-500"}
+                trackColor={dark ? "#4338ca" : "#c7d2fe"}
+              />
               <span className={c.label}>Indigo track</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <CircularLoader size={32} className={dark ? "text-emerald-400" : "text-emerald-500"} trackColor={dark ? "#065f46" : "#d1fae5"} />
+              <CircularLoader
+                size={32}
+                className={dark ? "text-emerald-400" : "text-emerald-500"}
+                trackColor={dark ? "#065f46" : "#d1fae5"}
+              />
               <span className={c.label}>Emerald track</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <CircularLoader size={32} className={dark ? "text-rose-400" : "text-rose-500"} trackColor={dark ? "#881337" : "#ffe4e6"} />
+              <CircularLoader
+                size={32}
+                className={dark ? "text-rose-400" : "text-rose-500"}
+                trackColor={dark ? "#881337" : "#ffe4e6"}
+              />
               <span className={c.label}>Rose track</span>
             </div>
           </div>
@@ -199,7 +248,11 @@ const LoaderDemo = () => {
               { thickness: 6, label: "Extra thick (6)" },
             ].map(({ thickness, label }) => (
               <div key={label} className="flex flex-col items-center gap-2">
-                <CircularLoader size={40} thickness={thickness} className={dark ? "text-gray-300" : "text-gray-700"} />
+                <CircularLoader
+                  size={40}
+                  thickness={thickness}
+                  className={dark ? "text-gray-300" : "text-gray-700"}
+                />
                 <span className={c.label}>{label}</span>
               </div>
             ))}
@@ -217,7 +270,10 @@ const LoaderDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full max-w-md">
-            <LinearLoader className={dark ? "text-indigo-400" : "text-indigo-600"} trackColor={dark ? "rgba(255,255,255,0.1)" : undefined} />
+            <LinearLoader
+              className={dark ? "text-indigo-400" : "text-indigo-600"}
+              trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
+            />
           </div>
         </DemoWrapper>
       </Section>
@@ -233,7 +289,11 @@ const LoaderDemo = () => {
             {[2, 4, 8].map((h) => (
               <div key={h} className="space-y-1">
                 <span className={c.label}>{h}px</span>
-                <LinearLoader height={h} className={dark ? "text-indigo-400" : "text-indigo-600"} trackColor={dark ? "rgba(255,255,255,0.1)" : undefined} />
+                <LinearLoader
+                  height={h}
+                  className={dark ? "text-indigo-400" : "text-indigo-600"}
+                  trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
+                />
               </div>
             ))}
           </div>
@@ -248,9 +308,18 @@ const LoaderDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-4 w-full max-w-md">
-            <LinearLoader className={dark ? "text-emerald-400" : "text-emerald-500"} trackColor={dark ? "rgba(255,255,255,0.08)" : "#d1fae5"} />
-            <LinearLoader className={dark ? "text-rose-400" : "text-rose-500"} trackColor={dark ? "rgba(255,255,255,0.08)" : "#ffe4e6"} />
-            <LinearLoader className={dark ? "text-amber-400" : "text-amber-500"} trackColor={dark ? "rgba(255,255,255,0.08)" : "#fef3c7"} />
+            <LinearLoader
+              className={dark ? "text-emerald-400" : "text-emerald-500"}
+              trackColor={dark ? "rgba(255,255,255,0.08)" : "#d1fae5"}
+            />
+            <LinearLoader
+              className={dark ? "text-rose-400" : "text-rose-500"}
+              trackColor={dark ? "rgba(255,255,255,0.08)" : "#ffe4e6"}
+            />
+            <LinearLoader
+              className={dark ? "text-amber-400" : "text-amber-500"}
+              trackColor={dark ? "rgba(255,255,255,0.08)" : "#fef3c7"}
+            />
           </div>
         </DemoWrapper>
       </Section>
@@ -270,7 +339,11 @@ const LoaderDemo = () => {
             ].map(({ speed, label }) => (
               <div key={label} className="space-y-1">
                 <span className={c.label}>{label}</span>
-                <LinearLoader speed={speed} className={dark ? "text-indigo-400" : "text-indigo-600"} trackColor={dark ? "rgba(255,255,255,0.1)" : undefined} />
+                <LinearLoader
+                  speed={speed}
+                  className={dark ? "text-indigo-400" : "text-indigo-600"}
+                  trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
+                />
               </div>
             ))}
           </div>
@@ -286,7 +359,10 @@ const LoaderDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <DotLoader dotSize={10} className={dark ? "text-gray-300" : "text-gray-700"} />
+          <DotLoader
+            dotSize={10}
+            className={dark ? "text-gray-300" : "text-gray-700"}
+          />
         </DemoWrapper>
       </Section>
 
@@ -299,19 +375,34 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-center gap-10">
             <div className="flex flex-col items-center gap-2">
-              <DotLoader dotSize={6} gap={3} className={dark ? "text-gray-300" : "text-gray-700"} />
+              <DotLoader
+                dotSize={6}
+                gap={3}
+                className={dark ? "text-gray-300" : "text-gray-700"}
+              />
               <span className={c.label}>Small</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <DotLoader dotSize={10} className={dark ? "text-gray-300" : "text-gray-700"} />
+              <DotLoader
+                dotSize={10}
+                className={dark ? "text-gray-300" : "text-gray-700"}
+              />
               <span className={c.label}>Default</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <DotLoader dotSize={14} gap={6} className={dark ? "text-gray-300" : "text-gray-700"} />
+              <DotLoader
+                dotSize={14}
+                gap={6}
+                className={dark ? "text-gray-300" : "text-gray-700"}
+              />
               <span className={c.label}>Large</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <DotLoader dotSize={8} count={5} className={dark ? "text-indigo-400" : "text-indigo-500"} />
+              <DotLoader
+                dotSize={8}
+                count={5}
+                className={dark ? "text-indigo-400" : "text-indigo-500"}
+              />
               <span className={c.label}>5 dots</span>
             </div>
           </div>
@@ -327,10 +418,19 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-center gap-10">
             {[
-              { cls: dark ? "text-indigo-400" : "text-indigo-500", name: "Indigo" },
-              { cls: dark ? "text-emerald-400" : "text-emerald-500", name: "Emerald" },
+              {
+                cls: dark ? "text-indigo-400" : "text-indigo-500",
+                name: "Indigo",
+              },
+              {
+                cls: dark ? "text-emerald-400" : "text-emerald-500",
+                name: "Emerald",
+              },
               { cls: dark ? "text-rose-400" : "text-rose-500", name: "Rose" },
-              { cls: dark ? "text-amber-400" : "text-amber-500", name: "Amber" },
+              {
+                cls: dark ? "text-amber-400" : "text-amber-500",
+                name: "Amber",
+              },
             ].map(({ cls, name }) => (
               <div key={name} className="flex flex-col items-center gap-2">
                 <DotLoader dotSize={10} className={cls} />
@@ -350,7 +450,10 @@ const LoaderDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <PulseLoader size={48} className={dark ? "text-indigo-400" : "text-indigo-600"} />
+          <PulseLoader
+            size={48}
+            className={dark ? "text-indigo-400" : "text-indigo-600"}
+          />
         </DemoWrapper>
       </Section>
 
@@ -363,19 +466,32 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-center gap-12">
             <div className="flex flex-col items-center gap-2">
-              <PulseLoader size={24} className={dark ? "text-gray-300" : "text-gray-700"} />
+              <PulseLoader
+                size={24}
+                className={dark ? "text-gray-300" : "text-gray-700"}
+              />
               <span className={c.label}>24px</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <PulseLoader size={40} className={dark ? "text-gray-300" : "text-gray-700"} />
+              <PulseLoader
+                size={40}
+                className={dark ? "text-gray-300" : "text-gray-700"}
+              />
               <span className={c.label}>40px</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <PulseLoader size={64} className={dark ? "text-gray-300" : "text-gray-700"} />
+              <PulseLoader
+                size={64}
+                className={dark ? "text-gray-300" : "text-gray-700"}
+              />
               <span className={c.label}>64px</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <PulseLoader size={48} rings={3} className={dark ? "text-indigo-400" : "text-indigo-600"} />
+              <PulseLoader
+                size={48}
+                rings={3}
+                className={dark ? "text-indigo-400" : "text-indigo-600"}
+              />
               <span className={c.label}>3 rings</span>
             </div>
           </div>
@@ -393,16 +509,27 @@ const LoaderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
-              <CircularLoader size={20} className={dark ? "text-indigo-400" : "text-indigo-500"} />
+              <CircularLoader
+                size={20}
+                className={dark ? "text-indigo-400" : "text-indigo-500"}
+              />
               <span className={c.text}>Loading...</span>
             </div>
             <div className="flex items-center gap-3">
-              <DotLoader dotSize={6} className={dark ? "text-emerald-400" : "text-emerald-500"} />
+              <DotLoader
+                dotSize={6}
+                className={dark ? "text-emerald-400" : "text-emerald-500"}
+              />
               <span className={c.textMuted}>Typing</span>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <PulseLoader size={48} className={dark ? "text-indigo-400" : "text-indigo-500"} />
-              <span className={`text-sm font-medium ${dark ? "text-gray-300" : "text-gray-600"}`}>
+              <PulseLoader
+                size={48}
+                className={dark ? "text-indigo-400" : "text-indigo-500"}
+              />
+              <span
+                className={`text-sm font-medium ${dark ? "text-gray-300" : "text-gray-600"}`}
+              >
                 Please wait...
               </span>
             </div>
@@ -421,7 +548,10 @@ const LoaderDemo = () => {
             {/* Buttons */}
             <div className="flex items-center gap-4">
               <button type="button" className={c.btnDisabled} disabled>
-                <CircularLoader size={16} className={dark ? "text-gray-500" : "text-gray-400"} />
+                <CircularLoader
+                  size={16}
+                  className={dark ? "text-gray-500" : "text-gray-400"}
+                />
                 Saving...
               </button>
               <button type="button" className={c.btn}>
@@ -444,17 +574,32 @@ const LoaderDemo = () => {
             </div>
 
             {/* Full-width linear bar */}
-            <div className={`rounded-xl border overflow-hidden ${dark ? "border-white/[0.06]" : "border-gray-200"}`}>
-              <LinearLoader height={3} className={dark ? "text-indigo-400" : "text-indigo-600"} trackColor={dark ? "rgba(255,255,255,0.06)" : "#f3f4f6"} borderRadius={0} />
+            <div
+              className={`rounded-xl border overflow-hidden ${dark ? "border-white/[0.06]" : "border-gray-200"}`}
+            >
+              <LinearLoader
+                height={3}
+                className={dark ? "text-indigo-400" : "text-indigo-600"}
+                trackColor={dark ? "rgba(255,255,255,0.06)" : "#f3f4f6"}
+                borderRadius={0}
+              />
               <div className={`p-6 ${dark ? "bg-white/[0.02]" : "bg-white"}`}>
-                <div className={`h-4 w-48 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`} />
-                <div className={`mt-2 h-3 w-64 rounded ${dark ? "bg-white/[0.04]" : "bg-gray-50"}`} />
+                <div
+                  className={`h-4 w-48 rounded ${dark ? "bg-white/60" : "bg-gray-100"}`}
+                />
+                <div
+                  className={`mt-2 h-3 w-64 rounded ${dark ? "bg-white/[0.04]" : "bg-gray-50"}`}
+                />
               </div>
             </div>
 
             {/* Inline alert */}
             <div className={c.inlineAlert}>
-              <CircularLoader size={14} thickness={2} className="text-amber-500" />
+              <CircularLoader
+                size={14}
+                thickness={2}
+                className="text-amber-500"
+              />
               Syncing your data...
             </div>
           </div>
@@ -465,13 +610,52 @@ const LoaderDemo = () => {
       <Section title="CircularLoader Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="size" type="number" defaultVal="20" description="Width and height of the loader in pixels" isDarkMode={dark} />
-            <PropRow name="thickness" type="number" defaultVal="2" description="Stroke width of the track and spinner arc" isDarkMode={dark} />
-            <PropRow name="speed" type="number" defaultVal="0.75" description="Animation duration in seconds (lower = faster)" isDarkMode={dark} />
-            <PropRow name="trackColor" type="string" defaultVal="currentColor" description="Color of the background track circle (rendered at 20% opacity)" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="CSS class(es) on the root div" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Inline styles on the root div" isDarkMode={dark} />
-            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Forwarded ref to the root div" isDarkMode={dark} />
+            <PropRow
+              name="size"
+              type="number"
+              defaultVal="20"
+              description="Width and height of the loader in pixels"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="thickness"
+              type="number"
+              defaultVal="2"
+              description="Stroke width of the track and spinner arc"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="speed"
+              type="number"
+              defaultVal="0.75"
+              description="Animation duration in seconds (lower = faster)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="trackColor"
+              type="string"
+              defaultVal="currentColor"
+              description="Color of the background track circle (rendered at 20% opacity)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class(es) on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ref"
+              type="Ref<HTMLDivElement>"
+              description="Forwarded ref to the root div"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -480,14 +664,58 @@ const LoaderDemo = () => {
       <Section title="LinearLoader Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="height" type="number" defaultVal="4" description="Height of the bar in pixels" isDarkMode={dark} />
-            <PropRow name="width" type="string | number" defaultVal='"100%"' description="Width of the bar (CSS value)" isDarkMode={dark} />
-            <PropRow name="speed" type="number" defaultVal="1.5" description="Animation duration in seconds" isDarkMode={dark} />
-            <PropRow name="trackColor" type="string" description="Background track color" isDarkMode={dark} />
-            <PropRow name="borderRadius" type="number" defaultVal="9999" description="Border radius in pixels (pill by default)" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="CSS class(es) on the root div" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Inline styles on the root div" isDarkMode={dark} />
-            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Forwarded ref to the root div" isDarkMode={dark} />
+            <PropRow
+              name="height"
+              type="number"
+              defaultVal="4"
+              description="Height of the bar in pixels"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="width"
+              type="string | number"
+              defaultVal='"100%"'
+              description="Width of the bar (CSS value)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="speed"
+              type="number"
+              defaultVal="1.5"
+              description="Animation duration in seconds"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="trackColor"
+              type="string"
+              description="Background track color"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="borderRadius"
+              type="number"
+              defaultVal="9999"
+              description="Border radius in pixels (pill by default)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class(es) on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ref"
+              type="Ref<HTMLDivElement>"
+              description="Forwarded ref to the root div"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -496,13 +724,52 @@ const LoaderDemo = () => {
       <Section title="DotLoader Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="dotSize" type="number" defaultVal="8" description="Diameter of each dot in pixels" isDarkMode={dark} />
-            <PropRow name="gap" type="number" defaultVal="4" description="Gap between dots in pixels" isDarkMode={dark} />
-            <PropRow name="count" type="number" defaultVal="3" description="Number of dots" isDarkMode={dark} />
-            <PropRow name="speed" type="number" defaultVal="1.4" description="Full animation cycle duration in seconds" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="CSS class(es) on the root div" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Inline styles on the root div" isDarkMode={dark} />
-            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Forwarded ref to the root div" isDarkMode={dark} />
+            <PropRow
+              name="dotSize"
+              type="number"
+              defaultVal="8"
+              description="Diameter of each dot in pixels"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="gap"
+              type="number"
+              defaultVal="4"
+              description="Gap between dots in pixels"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="count"
+              type="number"
+              defaultVal="3"
+              description="Number of dots"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="speed"
+              type="number"
+              defaultVal="1.4"
+              description="Full animation cycle duration in seconds"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class(es) on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ref"
+              type="Ref<HTMLDivElement>"
+              description="Forwarded ref to the root div"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -511,12 +778,45 @@ const LoaderDemo = () => {
       <Section title="PulseLoader Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
-            <PropRow name="size" type="number" defaultVal="40" description="Diameter of the circle in pixels" isDarkMode={dark} />
-            <PropRow name="speed" type="number" defaultVal="1.5" description="Animation duration in seconds" isDarkMode={dark} />
-            <PropRow name="rings" type="number" defaultVal="2" description="Number of ripple rings" isDarkMode={dark} />
-            <PropRow name="className" type="string" description="CSS class(es) on the root div" isDarkMode={dark} />
-            <PropRow name="style" type="CSSProperties" description="Inline styles on the root div" isDarkMode={dark} />
-            <PropRow name="ref" type="Ref<HTMLDivElement>" description="Forwarded ref to the root div" isDarkMode={dark} />
+            <PropRow
+              name="size"
+              type="number"
+              defaultVal="40"
+              description="Diameter of the circle in pixels"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="speed"
+              type="number"
+              defaultVal="1.5"
+              description="Animation duration in seconds"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="rings"
+              type="number"
+              defaultVal="2"
+              description="Number of ripple rings"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="className"
+              type="string"
+              description="CSS class(es) on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="style"
+              type="CSSProperties"
+              description="Inline styles on the root div"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="ref"
+              type="Ref<HTMLDivElement>"
+              description="Forwarded ref to the root div"
+              isDarkMode={dark}
+            />
           </PropsTable>
         </div>
       </Section>
@@ -528,7 +828,9 @@ const LoaderDemo = () => {
         isDarkMode={dark}
       >
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div
+            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          >
             {[
               'All variants render role="status" so screen readers announce them as live regions.',
               'All include aria-label="Loading" by default — override via props for specific messages.',
@@ -539,7 +841,9 @@ const LoaderDemo = () => {
               "Reduced motion support via CSS prefers-reduced-motion media query.",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>
+                <span
+                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                >
                   &#10003;
                 </span>
                 <span>{text}</span>
