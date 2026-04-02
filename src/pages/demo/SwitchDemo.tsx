@@ -111,6 +111,8 @@ const SwitchDemo = () => {
   const [formSwitch, setFormSwitch] = useState(false);
   const [requiredSwitch, setRequiredSwitch] = useState(false);
   const [refSwitch, setRefSwitch] = useState(false);
+  const [successSwitch, setSuccessSwitch] = useState(true);
+  const [callbackSwitch, setCallbackSwitch] = useState(false);
   const [unstyledSwitch, setUnstyledSwitch] = useState(false);
 
   return (
@@ -325,19 +327,14 @@ const SwitchDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {(() => {
-            const [checked, setChecked] = useState(true);
-            return (
-              <Switch
-                label="Email notifications"
-                checked={checked}
-                onValueChange={setChecked}
-                success={checked}
-                successMessage="Notifications are enabled"
-                classes={c.switch}
-              />
-            );
-          })()}
+          <Switch
+            label="Email notifications"
+            checked={successSwitch}
+            onValueChange={setSuccessSwitch}
+            success={successSwitch}
+            successMessage="Notifications are enabled"
+            classes={c.switch}
+          />
         </DemoWrapper>
         <CodeBlock isDarkMode={dark} code={`<Switch
   label="Email notifications"
@@ -371,15 +368,10 @@ const SwitchDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {(() => {
-            const [value, setValue] = useState(false);
-            return (
-              <div className="flex flex-col gap-2">
-                <Switch label="Using onValueChange" onValueChange={setValue} checked={value} classes={c.switch} />
-                <p className={`text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`}>Value: {String(value)}</p>
-              </div>
-            );
-          })()}
+          <div className="flex flex-col gap-2">
+            <Switch label="Using onValueChange" onValueChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
+            <p className={`text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`}>Value: {String(callbackSwitch)}</p>
+          </div>
         </DemoWrapper>
         <CodeBlock isDarkMode={dark} code={`const [value, setValue] = useState(false);
 <Switch label="Using onValueChange" onValueChange={setValue} checked={value} />`} />

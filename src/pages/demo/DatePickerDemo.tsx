@@ -101,6 +101,8 @@ const DatePickerDemo = () => {
   const [openControlDate, setOpenControlDate] = useState<Date | null>(null);
   // Event log
   const [eventLog, setEventLog] = useState<string[]>([]);
+  const [successDate, setSuccessDate] = useState<Date | null>(new Date());
+  const [clearableDate, setClearableDate] = useState<Date | null>(new Date());
   const log = (msg: string) =>
     setEventLog((prev) => [msg, ...prev.slice(0, 4)]);
 
@@ -866,18 +868,13 @@ const DatePickerDemo = () => {
       {/* ─── Success State ────────────────────────────────────────────────── */}
       <Section title="Success State" description="Display a success message when a valid date is selected." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          {(() => {
-            const [date, setDate] = useState<Date | null>(new Date());
-            return (
-              <DatePicker
-                label="Event Date"
-                value={date}
-                onValueChange={(d) => setDate(d)}
-                success={!!date}
-                successMessage="Date is available"
-              />
-            );
-          })()}
+          <DatePicker
+            label="Event Date"
+            value={successDate}
+            onValueChange={(d) => setSuccessDate(d)}
+            success={!!successDate}
+            successMessage="Date is available"
+          />
         </DemoWrapper>
         <CodeBlock isDarkMode={dark} code={`<DatePicker
   label="Event Date"
@@ -899,17 +896,12 @@ const DatePickerDemo = () => {
       {/* ─── Clearable ────────────────────────────────────────────────────── */}
       <Section title="Clearable (Unified API)" description="Use the clearable prop as a unified alternative to showClearButton." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          {(() => {
-            const [date, setDate] = useState<Date | null>(new Date());
-            return (
-              <DatePicker
-                label="Clearable Date"
-                value={date}
-                onValueChange={(d) => setDate(d)}
-                clearable
-              />
-            );
-          })()}
+          <DatePicker
+            label="Clearable Date"
+            value={clearableDate}
+            onValueChange={(d) => setClearableDate(d)}
+            clearable
+          />
         </DemoWrapper>
         <CodeBlock isDarkMode={dark} code={`<DatePicker
   label="Clearable Date"

@@ -624,6 +624,7 @@ function TableInner<TData>(
     expandColumnPosition,
     dragColumnPosition,
     filterableColumns,
+    selectAllMode,
   ]);
 
   // Density padding class

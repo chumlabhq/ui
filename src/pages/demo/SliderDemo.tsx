@@ -86,6 +86,7 @@ const SliderDemo = () => {
   const [minDist, setMinDist] = useState<SliderValue>([20, 80]);
   const [commitVal, setCommitVal] = useState(50);
   const [lastCommit, setLastCommit] = useState(50);
+  const [successVal, setSuccessVal] = useState(75);
 
   const tempMarks: SliderMark[] = [
     { value: 16, label: "16\u00b0C" },
@@ -490,19 +491,14 @@ const SliderDemo = () => {
       {/* ── Success State ─────────────────────────────────────────────── */}
       <Section title="Success State" description="Display a success message for valid slider values." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          {(() => {
-            const [val, setVal] = useState(75);
-            return (
-              <Slider
-                label="Volume"
-                value={val}
-                onValueChange={(v) => setVal(v as number)}
-                success={val >= 50}
-                successMessage="Good volume level"
-                classes={c.slider}
-              />
-            );
-          })()}
+          <Slider
+            label="Volume"
+            value={successVal}
+            onValueChange={(v) => setSuccessVal(v as number)}
+            success={successVal >= 50}
+            successMessage="Good volume level"
+            classes={c.slider}
+          />
         </DemoWrapper>
         <CodeBlock isDarkMode={dark} code={`<Slider
   label="Volume"

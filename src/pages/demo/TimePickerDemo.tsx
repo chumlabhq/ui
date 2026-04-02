@@ -281,6 +281,7 @@ const TimePickerDemo = () => {
   const [disabledVal] = useState<string | null>("09:30");
   const [fullWidthVal, setFullWidthVal] = useState<string | null>(null);
   const [controlled, setControlled] = useState<string | null>(null);
+  const [successTime, setSuccessTime] = useState<string | null>("14:00");
   const [controlledOpen, setControlledOpen] = useState(false);
   const [scrollLockDefault, setScrollLockDefault] = useState<string | null>(null);
   const [scrollLockEnabled, setScrollLockEnabled] = useState<string | null>(null);
@@ -575,19 +576,14 @@ const TimePickerDemo = () => {
       {/* ─── Success State ─────────────────────────────────────────────────── */}
       <Section title="Success State" description="Display a success message when a valid time is selected." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          {(() => {
-            const [time, setTime] = useState<string | null>("14:00");
-            return (
-              <TimePicker
-                label="Appointment Time"
-                value={time}
-                onValueChange={(t) => setTime(t)}
-                success={!!time}
-                successMessage="Time slot is available"
-                classes={c.timepicker}
-              />
-            );
-          })()}
+          <TimePicker
+            label="Appointment Time"
+            value={successTime}
+            onValueChange={(t) => setSuccessTime(t)}
+            success={!!successTime}
+            successMessage="Time slot is available"
+            classes={c.timepicker}
+          />
         </DemoWrapper>
         <CodeBlock isDarkMode={dark} code={`<TimePicker
   label="Appointment Time"
