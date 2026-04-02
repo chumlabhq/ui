@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo } from "react";
 import type { StorageConfig } from "../utils/types";
 import { getDefaultStorageConfig } from "../utils/constants";
+import { isBrowser } from "../../../utils/isBrowser";
 
 export function resolveStorageConfig(
   storageKey: string | StorageConfig | undefined,
@@ -43,7 +44,7 @@ export function useAccordionStorage({
   );
 
   const readFromStorage = useCallback((): string[] | null => {
-    if (!storageConfig || typeof window === "undefined") return null;
+    if (!storageConfig || !isBrowser) return null;
 
     try {
       const stored = storageConfig.storage?.getItem(storageConfig.key);

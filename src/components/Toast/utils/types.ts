@@ -31,6 +31,12 @@ export interface ToastConfig {
   progressColor?: string;
   icon?: ReactNode;
   showCloseButton?: boolean;
+  /** Fires when the toast is dismissed. */
+  onDismiss?: () => void;
+  /**
+   * @deprecated Use `onDismiss` instead — kept for backward compatibility.
+   * If both are provided, `onDismiss` takes precedence.
+   */
   onClose?: () => void;
   role?: "alert" | "status";
   style?: React.CSSProperties;

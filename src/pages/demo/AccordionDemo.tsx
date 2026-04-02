@@ -1468,34 +1468,34 @@ const AccordionDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Item onToggle ────────────────────────────────────────────── */}
+      {/* ─── Item onExpandedChange ──────────────────────────────────── */}
       <Section
-        title="Per-Item Toggle Callback"
-        description="Use onToggle on AccordionItem to react to individual item state changes."
+        title="Per-Item Expanded Callback"
+        description="Use onExpandedChange on AccordionItem to react to individual item state changes. (onToggle is deprecated.)"
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Accordion type="multiple" classes={c.accordion}>
             <AccordionItem
               value="tog-1"
-              onToggle={(expanded) =>
+              onExpandedChange={(expanded) =>
                 console.log(`Item 1: ${expanded ? "opened" : "closed"}`)
               }
             >
               <AccordionTrigger>Item 1 (check console)</AccordionTrigger>
               <AccordionContent>
-                onToggle fires with the new expanded state.
+                onExpandedChange fires with the new expanded state.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem
               value="tog-2"
-              onToggle={(expanded) =>
+              onExpandedChange={(expanded) =>
                 console.log(`Item 2: ${expanded ? "opened" : "closed"}`)
               }
             >
               <AccordionTrigger>Item 2 (check console)</AccordionTrigger>
               <AccordionContent>
-                Each item can have its own toggle callback.
+                Each item can have its own expanded change callback.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -1740,9 +1740,15 @@ const AccordionDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="onExpandedChange"
+              type="(isExpanded: boolean) => void"
+              description="Callback when this item expands or collapses"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="onToggle"
-              type="(isExpanded) => void"
-              description="Callback when this item toggles"
+              type="(isExpanded: boolean) => void"
+              description="Deprecated — use onExpandedChange instead"
               isDarkMode={dark}
             />
             <PropRow

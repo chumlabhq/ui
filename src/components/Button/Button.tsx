@@ -22,6 +22,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion";
 const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const {
     children,
+    size,
     startIcon,
     endIcon,
     loading = false,
@@ -121,6 +122,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     "data-loading": loading || undefined,
     "data-disabled": isDisabled || undefined,
     "data-full-width": fullWidth || undefined,
+    "data-size": size || undefined,
   };
 
   // Stable disabled click handler — shared across all paths
@@ -182,7 +184,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       disabled: _anchorDisabled,
       ...anchorRest
     } = rest as ButtonAsAnchorProps & { disabled?: boolean };
-    void _anchorDisabled;
 
     return wrapWithTooltip(
       <a
@@ -210,7 +211,6 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       disabled: _spanDisabled,
       ...spanRest
     } = rest as ButtonAsSpanProps & { disabled?: boolean };
-    void _spanDisabled;
 
     return wrapWithTooltip(
       <span

@@ -22,8 +22,7 @@ import { ChevronRightIcon, EllipsisIcon as DefaultEllipsisIcon } from "./icons";
 import BreadcrumbItemContent from "./components/BreadcrumbItemContent";
 import Tooltip from "../Tooltip/Tooltip";
 import { cn } from "../../utils/cn";
-
-const isBrowser = typeof window !== "undefined";
+import { isBrowser } from "../../utils/isBrowser";
 
 interface DropdownCoords {
   top: number;

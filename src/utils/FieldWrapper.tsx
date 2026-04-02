@@ -177,7 +177,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
                 type="button"
                 className={cn("inline-flex shrink-0 cursor-pointer")}
                 onClick={onStartIconClick}
-                disabled={isDisabled}
+                disabled={isDisabled || loading}
                 aria-label={startIconLabel}
               >
                 {startIcon}
@@ -198,6 +198,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
               type="button"
               className="inline-flex shrink-0 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
               onClick={onClearClick}
+              disabled={isDisabled || loading}
               aria-label={clearLabel}
             >
               <ClearIcon />
@@ -210,7 +211,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
                 type="button"
                 className={cn("inline-flex shrink-0 cursor-pointer")}
                 onClick={onEndIconClick}
-                disabled={isDisabled}
+                disabled={isDisabled || loading}
                 aria-label={endIconLabel}
               >
                 {endIcon}

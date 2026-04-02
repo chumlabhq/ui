@@ -503,14 +503,13 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         };
 
     // ─── aria-describedby ───────────────────────────────────────────────
-    const _ariaDescribedBy =
+    const ariaDescribedBy =
       [
         description ? descriptionId : null,
         error && errorMessage ? errorId : null,
       ]
         .filter(Boolean)
         .join(" ") || undefined;
-    void _ariaDescribedBy; // reserved for future use on the track wrapper
 
     // ─── Render ─────────────────────────────────────────────────────────
     return (
@@ -550,6 +549,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           className={cn(mc.wrapper) || undefined}
           style={{ position: "relative", overflow: "visible", ...wrapperStyle, ...(loading ? { opacity: 0.5, pointerEvents: "none" } : {}) }}
           onPointerDown={handleTrackPointerDown}
+          aria-describedby={ariaDescribedBy}
           data-orientation={orientation}
         >
           {/* Track background */}

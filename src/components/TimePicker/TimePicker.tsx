@@ -22,8 +22,7 @@ import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOp
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons";
 import { ClockFace } from "./ClockFace";
 import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils";
-
-const isBrowser = typeof window !== "undefined";
+import { isBrowser } from "../../utils/isBrowser";
 
 interface DropdownCoords {
   top: number;

@@ -205,7 +205,6 @@ export const ToastProvider = ({
             >
               {toasts.map((toast) => {
                 const { visible: _visible, ...toastConfig } = toast;
-                void _visible;
                 return (
                 <div
                   key={toast.id}

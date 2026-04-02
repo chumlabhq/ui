@@ -28,8 +28,7 @@ import {
   type Position,
 } from "./utils/helpers";
 import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger";
-
-const isBrowser = typeof window !== "undefined";
+import { isBrowser } from "../../utils/isBrowser";
 
 const INTERACTIVE_ELEMENT_TYPES = new Set([
   "button",

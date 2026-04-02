@@ -79,14 +79,13 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
 
   // Extract union-discriminated props to prevent DOM leakage via ...rest
   const {
-    collapsible: _c,
-    maxExpanded: _m,
-    value: _v,
-    defaultValue: _d,
-    onValueChange: _o,
+    collapsible: _collapsible,
+    maxExpanded: _maxExpanded,
+    value: _value,
+    defaultValue: _defaultValue,
+    onValueChange: _onValueChange,
     ...domProps
   } = rest as Record<string, unknown>;
-  void _c; void _m; void _v; void _d; void _o;
 
   const generatedId = useId();
   const accordionId = propId ?? `accordion-${generatedId}`;

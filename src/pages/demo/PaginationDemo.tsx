@@ -325,7 +325,7 @@ const PaginationDemo = () => {
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Pagination"
-        description="Minimal setup with currentPage, totalPages, and onPageChange."
+        description="Minimal setup with value, totalPages, and onValueChange."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1128,7 +1128,7 @@ const PaginationDemo = () => {
       {/* ─── onValueChange Callback ───────────────────────────────────── */}
       <Section
         title="onValueChange Callback"
-        description="Use value and onValueChange as unified alternatives to currentPage and onPageChange."
+        description="Use value and onValueChange to control the active page. Pair with defaultValue for uncontrolled usage."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1146,9 +1146,16 @@ const PaginationDemo = () => {
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
             <PropRow
-              name="currentPage"
+              name="value"
               type="number"
-              description="Current active page (1-indexed)"
+              description="Current active page (1-indexed, controlled)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="defaultValue"
+              type="number"
+              defaultVal="1"
+              description="Initial page for uncontrolled usage"
               isDarkMode={dark}
             />
             <PropRow
@@ -1158,7 +1165,7 @@ const PaginationDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onPageChange"
+              name="onValueChange"
               type="(page: number) => void"
               description="Callback when page changes"
               isDarkMode={dark}
@@ -1252,13 +1259,13 @@ const PaginationDemo = () => {
             <PropRow
               name="renderEllipsis"
               type="(props) => ReactNode"
-              description="Custom render for ellipsis. Receives { position, onPageChange }"
+              description="Custom render for ellipsis. Receives { position, onValueChange }"
               isDarkMode={dark}
             />
             <PropRow
               name="renderPageInfo"
               type="(props) => ReactNode"
-              description="Custom render for page info. Receives { currentPage, totalPages, rowsPerPage }"
+              description="Custom render for page info. Receives { value, totalPages, rowsPerPage }"
               isDarkMode={dark}
             />
             <PropRow
@@ -1554,13 +1561,13 @@ const PaginationDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Wire `currentPage`, `totalPages`, `rowsPerPage`, and handlers from your data layer. The component does not fetch; it reflects the slice you already computed."
+        summary="Wire `value`, `totalPages`, `rowsPerPage`, and handlers from your data layer. The component does not fetch; it reflects the slice you already computed."
       />
       <DocEdgeCases
         isDarkMode={dark}
         items={[
           "Zero or one total pages: hide or simplify controls per UX guidelines.",
-          "Changing `rowsPerPage` should reset or clamp `currentPage` in the parent.",
+          "Changing `rowsPerPage` should reset or clamp `value` in the parent.",
           "Large page counts may need URL sync—keep focus stable after navigation.",
         ]}
       />

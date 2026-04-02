@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -41,6 +42,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       clearable = false,
       onClear,
       showCount = false,
+      autoResize = false,
       loading = false,
       loader,
       loaderSize = 16,
@@ -91,6 +93,18 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     const internalRef = useRef<HTMLTextAreaElement | null>(null);
     const mergedRef = useMemo(() => mergeRefs(internalRef, ref), [ref]);
+
+    // ─── Auto-resize ─────────────────────────────────────────────────
+    const adjustHeight = useCallback(() => {
+      const el = internalRef.current;
+      if (!el || !autoResize) return;
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }, [autoResize]);
+
+    useEffect(() => {
+      adjustHeight();
+    }, [currentValue, adjustHeight]);
 
     // Build aria-describedby from description + error/success/count IDs
     const ariaDescribedBy =
@@ -181,6 +195,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         wrapperAlign="items-start"
         data-size={size || undefined}
         data-readonly={readOnly || undefined}
+        data-auto-resize={autoResize || undefined}
       >
         <textarea
           {...rest}
@@ -188,12 +203,13 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           id={textAreaId}
           name={name}
           required={required}
-          disabled={isDisabled}
+          disabled={isDisabled || loading}
           readOnly={readOnly}
           maxLength={maxLength}
           rows={rows}
           data-slot="textarea"
           className={cn("flex-1 min-w-0", mergedClasses.textarea)}
+          style={autoResize ? { overflow: "hidden", resize: "none" } : undefined}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
           aria-errormessage={error && errorMessage ? errorId : undefined}

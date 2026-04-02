@@ -759,7 +759,7 @@ const ToastDemoContent = ({
       {/* ─── Callbacks ────────────────────────────────────────────────── */}
       <Section
         title="Callbacks"
-        description="Use onClose callback to execute code when a toast is dismissed."
+        description="Use onDismiss callback to execute code when a toast is dismissed. (onClose is deprecated — use onDismiss instead.)"
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -768,22 +768,22 @@ const ToastDemoContent = ({
             onClick={() =>
               toast.info("Toast with callback", {
                 description: "Check console when this closes",
-                onClose: () => console.log("Toast was closed!"),
+                onDismiss: () => console.log("Toast was dismissed!"),
               })
             }
           >
-            With onClose Callback
+            With onDismiss Callback
           </button>
           <button
             className={c.btn}
             onClick={() =>
               toast.success("Action completed", {
-                description: "Alert will show when closed",
-                onClose: () => alert("Toast closed! Performing cleanup..."),
+                description: "Alert will show when dismissed",
+                onDismiss: () => alert("Toast dismissed! Performing cleanup..."),
               })
             }
           >
-            Alert on Close
+            Alert on Dismiss
           </button>
         </DemoWrapper>
       </Section>
@@ -1127,9 +1127,15 @@ const ToastDemoContent = ({
               isDarkMode={dark}
             />
             <PropRow
-              name="onClose"
+              name="onDismiss"
               type="() => void"
               description="Callback fired when toast is dismissed"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onClose"
+              type="() => void"
+              description="Deprecated — use onDismiss instead"
               isDarkMode={dark}
             />
             <PropRow

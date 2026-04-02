@@ -21,6 +21,7 @@ import MultiSelectDropdownDemo from "./pages/demo/MultiSelectDropdownDemo";
 import MultiSelectSearchableDropdownDemo from "./pages/demo/MultiSelectSearchableDropdownDemo";
 import OtpInputDemo from "./pages/demo/OtpInputDemo";
 import PaginationDemo from "./pages/demo/PaginationDemo";
+import RadioButtonDemo from "./pages/demo/RadioButtonDemo";
 import ResizablePanelDemo from "./pages/demo/ResizablePanelDemo";
 import SearchableDropdownDemo from "./pages/demo/SearchableDropdownDemo";
 import SliderDemo from "./pages/demo/SliderDemo";
@@ -31,6 +32,7 @@ import TableDemo from "./pages/demo/TableDemo";
 import TextAreaDemo from "./pages/demo/TextAreaDemo";
 import TimePickerDemo from "./pages/demo/TimePickerDemo";
 import ToastDemo from "./pages/demo/ToastDemo";
+import ToggleDemo from "./pages/demo/ToggleDemo";
 import TooltipDemo from "./pages/demo/TooltipDemo";
 
 const App = () => {
@@ -67,6 +69,7 @@ const App = () => {
         />
         <Route path="otp-input" element={<OtpInputDemo />} />
         <Route path="pagination" element={<PaginationDemo />} />
+        <Route path="radio-button" element={<RadioButtonDemo />} />
         <Route path="resizable-panel" element={<ResizablePanelDemo />} />
         <Route
           path="searchable-dropdown"
@@ -80,6 +83,7 @@ const App = () => {
         <Route path="text-area" element={<TextAreaDemo />} />
         <Route path="time-picker" element={<TimePickerDemo />} />
         <Route path="toast" element={<ToastDemo />} />
+        <Route path="toggle" element={<ToggleDemo />} />
         <Route path="tooltip" element={<TooltipDemo />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

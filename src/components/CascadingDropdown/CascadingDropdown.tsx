@@ -6,12 +6,11 @@ import { useCascadingDropdown } from "./utils/useCascadingDropdown";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
+import { isBrowser } from "../../utils/isBrowser";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
 } from "./utils/constants";
-
-const isBrowser = typeof window !== "undefined";
 
 const SubmenuItem = memo(function SubmenuItem({
   option,

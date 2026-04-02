@@ -110,6 +110,12 @@ export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>,
   disabled?: boolean;
   children: ReactNode;
   asChild?: boolean;
+  /** Fires when the item's expanded state changes. */
+  onExpandedChange?: (isExpanded: boolean) => void;
+  /**
+   * @deprecated Use `onExpandedChange` instead — kept for backward compatibility.
+   * If both are provided, `onExpandedChange` takes precedence.
+   */
   onToggle?: (isExpanded: boolean) => void;
   "aria-describedby"?: string;
 }

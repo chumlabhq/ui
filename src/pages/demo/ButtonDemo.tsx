@@ -704,6 +704,42 @@ const ButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Sizes ─────────────────────────────────────────────────────── */}
+      <Section
+        title="Sizes"
+        description='Use size="sm", "md" (default), or "lg" to control button dimensions via the data-size attribute.'
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <Button className={c.primary} size="sm">
+            Small
+          </Button>
+          <Button className={c.primary} size="md">
+            Medium
+          </Button>
+          <Button className={c.primary} size="lg">
+            Large
+          </Button>
+        </DemoWrapper>
+        <DemoWrapper isDarkMode={dark}>
+          <Button className={c.outline} size="sm" startIcon={<PlusIcon />}>
+            Small
+          </Button>
+          <Button className={c.outline} size="md" startIcon={<PlusIcon />}>
+            Medium
+          </Button>
+          <Button className={c.outline} size="lg" startIcon={<PlusIcon />}>
+            Large
+          </Button>
+        </DemoWrapper>
+        <CodeBlock
+          isDarkMode={dark}
+          code={`<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>`}
+        />
+      </Section>
+
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
       <Section
         title="Disabled State"
@@ -1004,6 +1040,12 @@ const ButtonDemo = () => {
               type="boolean"
               defaultVal="false"
               description="Merge props onto child element"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="size"
+              type='"sm"|"md"|"lg"'
+              description="Size variant — emits data-size on the root element"
               isDarkMode={dark}
             />
             <PropRow

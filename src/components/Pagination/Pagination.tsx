@@ -17,8 +17,8 @@ import { getVisiblePages } from "./utils/helpers";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
-
-const isBrowser = typeof window !== "undefined";
+import { useControllableState } from "../../utils/useControllableState";
+import { isBrowser } from "../../utils/isBrowser";
 
 interface DropdownCoords {
   top: number;
@@ -207,7 +207,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       rowsPerPage,
       rowOptions,
       onValueChange,
-      value,
+      value: valueProp,
+      defaultValue = 1,
       disabled,
       label,
       error,
@@ -243,8 +244,13 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const paginationAriaLabel = paginationAriaLabelProp ?? "Pagination";
 
-    const resolvedCurrentPage = value ?? 1;
-    const resolvedOnPageChange = onValueChange;
+    const [currentPage, setCurrentPage] = useControllableState({
+      value: valueProp,
+      defaultValue,
+      onChange: onValueChange,
+    });
+    const resolvedCurrentPage = currentPage ?? 1;
+    const resolvedOnPageChange = setCurrentPage;
 
     const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
@@ -480,6 +486,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const pageInfoSection = renderPageInfo ? (
       <div className={mergedClasses.pageInfo}>
         {renderPageInfo({
+          value: safeCurrentPage,
           currentPage: safeCurrentPage,
           totalPages: safeTotalPages,
           rowsPerPage,
@@ -507,6 +514,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 <Fragment key={`ellipsis-${index}`}>
                   {renderEllipsis({
                     position: index < visiblePages.length / 2 ? "start" : "end",
+                    onValueChange: resolvedOnPageChange!,
                     onPageChange: resolvedOnPageChange!,
                   })}
                 </Fragment>

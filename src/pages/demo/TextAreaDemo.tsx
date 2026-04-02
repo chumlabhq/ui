@@ -392,6 +392,38 @@ const TextAreaDemo = () => {
           </DemoWrapper>
         </Section>
 
+        {/* Auto Resize */}
+        <Section
+          title="Auto Resize"
+          description="Set autoResize to automatically grow/shrink the textarea height to fit content."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full max-w-md space-y-3">
+              <TextArea
+                label="Auto-resizing textarea"
+                placeholder="Start typing — the textarea grows as you type..."
+                autoResize
+                rows={2}
+                classes={c.textarea}
+              />
+              <TextArea
+                label="Auto-resize with max length"
+                placeholder="Grows up to 200 characters..."
+                autoResize
+                rows={2}
+                maxLength={200}
+                showCount
+                classes={c.textarea}
+              />
+            </div>
+          </DemoWrapper>
+          <CodeBlock
+            isDarkMode={dark}
+            code={`<TextArea autoResize rows={2} placeholder="Grows as you type..." />`}
+          />
+        </Section>
+
         {/* Icons */}
         <Section
           title="Icons"
@@ -1106,6 +1138,13 @@ const TextAreaDemo = () => {
               type="boolean"
               defaultVal="false"
               description="Show character count (needs maxLength)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="autoResize"
+              type="boolean"
+              defaultVal="false"
+              description="Auto-grow/shrink height to fit content"
               isDarkMode={dark}
             />
             <PropRow

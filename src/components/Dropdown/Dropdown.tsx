@@ -319,7 +319,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       successMessage,
       required = false,
       clearable = false,
-      noResultsContent = "No options found",
+      noResultsContent = "No options available",
       showChevron = true,
       showSelectedIcon = true,
       selectedIcon,

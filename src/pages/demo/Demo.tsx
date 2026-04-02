@@ -33,6 +33,7 @@ const components: ComponentItem[] = [
   },
   { path: "otp-input", displayName: "OTP Input" },
   { path: "pagination", displayName: "Pagination" },
+  { path: "radio-button", displayName: "Radio Button" },
   { path: "resizable-panel", displayName: "Resizable Panel" },
   { path: "searchable-dropdown", displayName: "Searchable Dropdown" },
   { path: "slider", displayName: "Slider" },
@@ -43,6 +44,7 @@ const components: ComponentItem[] = [
   { path: "text-area", displayName: "Text Area" },
   { path: "time-picker", displayName: "Time Picker" },
   { path: "toast", displayName: "Toast" },
+  { path: "toggle", displayName: "Toggle" },
   { path: "tooltip", displayName: "Tooltip" },
 ];
 

@@ -17,6 +17,9 @@ export type IconAnimation =
   | "pulse"
   | "spin";
 
+/** Preset size variant for the button. */
+export type ButtonSize = "sm" | "md" | "lg";
+
 /** Side on which the tooltip appears relative to the button. */
 export type TooltipSide = "top" | "right" | "bottom" | "left";
 
@@ -60,6 +63,8 @@ export interface ButtonClasses {
 interface ButtonSharedProps {
   /** Button content. */
   children?: ReactNode;
+  /** Size variant. Emits `data-size` on the root element. Default: `"md"`. */
+  size?: ButtonSize;
   /** Disables interaction and applies disabled styling. */
   disabled?: boolean;
   /** Icon rendered before the button label. */

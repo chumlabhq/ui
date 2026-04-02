@@ -101,7 +101,6 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const panelRef = useRef<HTMLDivElement>(null);
     const mergedPanelRef = useMemo(() => mergeRefs(panelRef, ref), [ref]);
     const triggerRef = useRef<Element | null>(null);
-    const restoreRafRef = useRef<number>(0);
     const [mounted, setMounted] = useState(isOpen);
     const [visualOpen, setVisualOpen] = useState(false);
     const prefersReducedMotion = useReducedMotion(reduceMotionProp);
@@ -148,16 +147,14 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       [direction, size, fraction, effectiveDuration],
     );
 
-    const [prevOpen, setPrevOpen] = useState(isOpen);
-    if (prevOpen !== isOpen) {
-      setPrevOpen(isOpen);
+    useEffect(() => {
       if (isOpen && !mounted) {
         setMounted(true);
       }
       if (!isOpen && visualOpen) {
         setVisualOpen(false);
       }
-    }
+    }, [isOpen, mounted, visualOpen]);
 
     useEffect(() => {
       if (!isOpen && !keepMounted) {
@@ -203,18 +200,9 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         const el = triggerRef.current as HTMLElement;
         triggerRef.current = null;
         if (typeof el.focus === "function") {
-          restoreRafRef.current = requestAnimationFrame(() => {
-            el.focus();
-            restoreRafRef.current = 0;
-          });
+          el.focus();
         }
       }
-      return () => {
-        if (restoreRafRef.current) {
-          cancelAnimationFrame(restoreRafRef.current);
-          restoreRafRef.current = 0;
-        }
-      };
     }, [isOpen, restoreFocus, modal]);
 
     useEffect(() => {

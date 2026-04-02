@@ -45,9 +45,12 @@ export interface CheckboxProps
   /** Displays the indeterminate (minus) indicator instead of a checkmark. */
   indeterminate?: boolean;
   /** Fires when the checked state changes. */
-  onCheckedChange?: (checked: boolean) => void;
-  /** Unified event name alias for onCheckedChange. */
   onValueChange?: (checked: boolean) => void;
+  /**
+   * @deprecated Use `onValueChange` instead — kept for backward compatibility.
+   * If both are provided, `onValueChange` takes precedence.
+   */
+  onCheckedChange?: (checked: boolean) => void;
   /** Fires when the checkbox receives focus. */
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   /** Fires when the checkbox loses focus. */

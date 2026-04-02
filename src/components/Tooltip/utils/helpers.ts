@@ -1,6 +1,7 @@
 import type { Ref } from "react";
 import { mergeRefs } from "../../../utils/mergeRefs";
 import { INTERACTIVE_TAGS, INTERACTIVE_QUERY } from "./constants";
+import { isBrowser } from "../../../utils/isBrowser";
 
 export function mergeTooltipRefs<T>(
   ...refs: (Ref<T> | undefined | null)[]
@@ -131,7 +132,7 @@ export const wouldOverflow = (
 };
 
 function getViewportSize(): { width: number; height: number } {
-  if (typeof window === "undefined") return { width: 0, height: 0 };
+  if (!isBrowser) return { width: 0, height: 0 };
   const vv = window.visualViewport;
   if (vv) return { width: vv.width, height: vv.height };
   return { width: window.innerWidth, height: window.innerHeight };

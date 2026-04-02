@@ -143,7 +143,7 @@ const CheckboxDemo = () => {
           <Checkbox
             aria-label="Basic checkbox"
             checked={basic}
-            onCheckedChange={setBasic}
+            onValueChange={setBasic}
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -161,7 +161,7 @@ const CheckboxDemo = () => {
           <Checkbox
             label="Accept terms and conditions"
             checked={withLabel}
-            onCheckedChange={setWithLabel}
+            onValueChange={setWithLabel}
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -180,7 +180,7 @@ const CheckboxDemo = () => {
             label="Email notifications"
             description="Receive email updates about your account activity"
             checked={withDesc}
-            onCheckedChange={setWithDesc}
+            onValueChange={setWithDesc}
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -217,7 +217,7 @@ const CheckboxDemo = () => {
             label="Select all items"
             indeterminate={indeterminate}
             checked={false}
-            onCheckedChange={() => setIndeterminate(!indeterminate)}
+            onValueChange={() => setIndeterminate(!indeterminate)}
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -243,7 +243,7 @@ const CheckboxDemo = () => {
               <Checkbox
                 aria-label={`Size ${s}`}
                 checked={val}
-                onCheckedChange={set}
+                onValueChange={set}
                 size={s}
                 shape="rounded"
                 classes={c.checkbox}
@@ -280,7 +280,7 @@ const CheckboxDemo = () => {
               <Checkbox
                 aria-label={`Shape ${sh}`}
                 checked={val}
-                onCheckedChange={set}
+                onValueChange={set}
                 size="lg"
                 shape={sh}
                 classes={c.checkbox}
@@ -301,7 +301,7 @@ const CheckboxDemo = () => {
           <Checkbox
             label="Add to favorites"
             checked={customHeart}
-            onCheckedChange={setCustomHeart}
+            onValueChange={setCustomHeart}
             checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
             uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-gray-400" />}
             size="md"
@@ -314,7 +314,7 @@ const CheckboxDemo = () => {
           <Checkbox
             label="Star this item"
             checked={customStar}
-            onCheckedChange={setCustomStar}
+            onValueChange={setCustomStar}
             checkedIcon={<StarIcon className="w-3 h-3 text-white" />}
             size="md"
             shape="rounded"
@@ -367,7 +367,7 @@ const CheckboxDemo = () => {
           <Checkbox
             label="I accept the terms"
             checked={errorDemo}
-            onCheckedChange={setErrorDemo}
+            onValueChange={setErrorDemo}
             error={!errorDemo}
             errorMessage={
               !errorDemo ? "You must accept the terms to continue" : undefined
@@ -450,7 +450,7 @@ const CheckboxDemo = () => {
       {/* ─── onValueChange Callback ──────────────────────────────────────── */}
       <Section
         title="onValueChange Callback"
-        description="Unified event handler that works alongside onCheckedChange."
+        description="Primary event handler for checked state changes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -480,7 +480,7 @@ const CheckboxDemo = () => {
       {/* ─── Controlled ─────────────────────────────────────────────────── */}
       <Section
         title="Controlled Mode"
-        description="External state control via checked + onCheckedChange."
+        description="External state control via checked + onValueChange."
         isDarkMode={dark}
       >
         <div
@@ -507,7 +507,7 @@ const CheckboxDemo = () => {
           <Checkbox
             label="Controlled checkbox"
             checked={controlled}
-            onCheckedChange={setControlled}
+            onValueChange={setControlled}
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -670,9 +670,15 @@ const CheckboxDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onCheckedChange"
+              name="onValueChange"
               type="(checked: boolean) => void"
               description="Callback when checked changes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onCheckedChange"
+              type="(checked: boolean) => void"
+              description="Deprecated — use onValueChange instead"
               isDarkMode={dark}
             />
             <PropRow
@@ -940,7 +946,7 @@ const CheckboxDemo = () => {
 
       <DocControlledPattern
         isDarkMode={dark}
-        summary="Use `checked` with `onCheckedChange` for controlled mode, or `defaultChecked` for uncontrolled. The indeterminate state is set via the `indeterminate` prop and reflected on the native input."
+        summary="Use `checked` with `onValueChange` for controlled mode, or `defaultChecked` for uncontrolled. The indeterminate state is set via the `indeterminate` prop and reflected on the native input."
       />
       <DocEdgeCases
         isDarkMode={dark}

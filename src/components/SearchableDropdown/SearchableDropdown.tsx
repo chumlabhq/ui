@@ -315,7 +315,7 @@ const SearchableDropdown = forwardRef<
     showSearch = true,
     searchPlaceholder = "Search...",
     searchInputAriaLabel = "Search options",
-    noResultsContent = "No options found",
+    noResultsContent = "No results found",
     showChevron = true,
     showSelectedIcon = true,
     selectedIcon,

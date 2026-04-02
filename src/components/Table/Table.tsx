@@ -8,6 +8,7 @@ import {
   forwardRef,
 } from "react";
 import { createPortal } from "react-dom";
+import { isBrowser } from "../../utils/isBrowser";
 import {
   useReactTable,
   getCoreRowModel,
@@ -59,10 +60,10 @@ const densityPaddingMap = {
 /** Hook to track viewport width for responsive breakpoint. */
 function useViewportWidth(): number {
   const [width, setWidth] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth : 1024,
+    isBrowser ? window.innerWidth : 1024,
   );
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!isBrowser) return;
     const handler = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);

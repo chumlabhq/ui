@@ -61,6 +61,8 @@ export interface TextAreaProps
   onClear?: () => void;
   /** Show character count (requires maxLength to be set). */
   showCount?: boolean;
+  /** Automatically resize height to fit content. When `true`, the textarea grows/shrinks as the user types. */
+  autoResize?: boolean;
   loading?: boolean;
   loader?: ReactNode;
   /**

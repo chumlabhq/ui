@@ -22,6 +22,14 @@ import {
 } from "./components";
 import { useTheme } from "./ThemeContext";
 
+// ─── Themed Classes ──────────────────────────────────────────────────────────
+
+const getClasses = (dark: boolean) => ({
+  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
+  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+});
+
 // Basic User interface
 interface User {
   id: string;
@@ -1075,6 +1083,7 @@ function ServerApiDemo({
 
 const TableDemo = () => {
   const { isDarkMode: dark } = useTheme();
+  const c = getClasses(dark);
   const s = getTableClasses(dark);
   const pClasses = getPaginationClasses(dark);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
@@ -7607,6 +7616,7 @@ const TableDemo = () => {
       </Section>
 
       <Section title="Table Props" isDarkMode={dark}>
+        <div className={c.card}>
         <PropsTable isDarkMode={dark}>
           <PropRow
             name="columns"
@@ -8268,14 +8278,23 @@ const TableDemo = () => {
             isDarkMode={dark}
           />
         </PropsTable>
+        </div>
       </Section>
 
       <Section title="Pagination Props" isDarkMode={dark}>
+        <div className={c.card}>
         <PropsTable isDarkMode={dark}>
           <PropRow
-            name="currentPage"
+            name="value"
             type="number"
-            description="Current active page (1-indexed)"
+            description="Current active page (1-indexed, controlled)"
+            isDarkMode={dark}
+          />
+          <PropRow
+            name="defaultValue"
+            type="number"
+            defaultVal="1"
+            description="Initial page for uncontrolled usage"
             isDarkMode={dark}
           />
           <PropRow
@@ -8298,7 +8317,7 @@ const TableDemo = () => {
             isDarkMode={dark}
           />
           <PropRow
-            name="onPageChange"
+            name="onValueChange"
             type="(page) => void"
             description="Page change handler"
             isDarkMode={dark}
@@ -8338,9 +8357,11 @@ const TableDemo = () => {
             isDarkMode={dark}
           />
         </PropsTable>
+        </div>
       </Section>
 
       <Section title="Table Styling Props" isDarkMode={dark}>
+        <div className={c.card}>
         <PropsTable isDarkMode={dark}>
           <PropRow
             name="containerClassName"
@@ -8499,9 +8520,11 @@ const TableDemo = () => {
             isDarkMode={dark}
           />
         </PropsTable>
+        </div>
       </Section>
 
       <Section title="TableShimmer Props" isDarkMode={dark}>
+        <div className={c.card}>
         <PropsTable isDarkMode={dark}>
           <PropRow
             name="rowCount"
@@ -8557,6 +8580,7 @@ const TableDemo = () => {
           </code>
           , etc.)
         </p>
+        </div>
       </Section>
 
       <Section
@@ -8564,6 +8588,7 @@ const TableDemo = () => {
         description="Shared documentation layout for primary Table props."
         isDarkMode={dark}
       >
+        <div className={c.card}>
         <PropsTable isDarkMode={dark}>
           <PropRow
             name="columns / COLUMNS"
@@ -8604,6 +8629,7 @@ const TableDemo = () => {
             isDarkMode={dark}
           />
         </PropsTable>
+        </div>
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
@@ -8612,9 +8638,7 @@ const TableDemo = () => {
         description="Use for CSS-based state styling."
         isDarkMode={dark}
       >
-        <div
-          className={`rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`}
-        >
+        <div className={c.card}>
           <PropsTable isDarkMode={dark}>
             <PropRow
               name="data-table-container"
@@ -8704,9 +8728,7 @@ const TableDemo = () => {
         description="Built-in accessibility features."
         isDarkMode={dark}
       >
-        <div
-          className={`rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`}
-        >
+        <div className={c.card}>
           <div
             className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
@@ -8730,9 +8752,7 @@ const TableDemo = () => {
             ))}
           </div>
         </div>
-        <div
-          className={`rounded-2xl border p-5 mt-3 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`}
-        >
+        <div className={`${c.card} mt-3`}>
           <p
             className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
           >
@@ -8747,9 +8767,7 @@ const TableDemo = () => {
               ["Tab", "Exit the grid and move to next focusable element"],
             ].map(([key, desc]) => (
               <div key={key} className="flex items-center gap-3">
-                <kbd
-                  className={`px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`}
-                >
+                <kbd className={c.kbd}>
                   {key}
                 </kbd>
                 <span>{desc}</span>

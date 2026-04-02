@@ -1,4 +1,5 @@
 import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig } from "./types";
+import { isBrowser } from "../../../utils/isBrowser";
 
 export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",
@@ -109,7 +110,7 @@ export const PRINT_STYLES = `
 
 export function getDefaultStorageConfig(): Omit<StorageConfig, "key"> {
   return {
-    storage: typeof window !== "undefined" ? window.localStorage : undefined,
+    storage: isBrowser ? window.localStorage : undefined,
     serialize: (values: string[]) => JSON.stringify(values),
     deserialize: (stored: string) => {
       try {

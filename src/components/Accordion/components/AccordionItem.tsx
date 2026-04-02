@@ -11,10 +11,12 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     children,
     className,
     asChild = false,
+    onExpandedChange,
     onToggle,
     "aria-describedby": ariaDescribedBy,
     ...rest
   }, ref) => {
+    const resolvedCallback = onExpandedChange ?? onToggle;
     const config = useAccordionConfig();
     const context = useAccordionContext();
     const isExpanded = useIsItemExpanded(value);
@@ -27,11 +29,11 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     const prevExpandedRef = useRef(isExpanded);
     useEffect(() => {
-      if (prevExpandedRef.current !== isExpanded && onToggle) {
-        onToggle(isExpanded);
+      if (prevExpandedRef.current !== isExpanded && resolvedCallback) {
+        resolvedCallback(isExpanded);
       }
       prevExpandedRef.current = isExpanded;
-    }, [isExpanded, onToggle]);
+    }, [isExpanded, resolvedCallback]);
 
     const itemContextValue: AccordionItemContextValue = useMemo(
       () => ({
@@ -43,9 +45,9 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
         // Only set descriptionId when explicitly provided — auto-generating
         // an ID that points to a non-existent DOM element is an a11y anti-pattern
         descriptionId: ariaDescribedBy,
-        onToggle,
+        onToggle: resolvedCallback,
       }),
-      [value, disabled, isExpanded, triggerId, contentId, ariaDescribedBy, onToggle]
+      [value, disabled, isExpanded, triggerId, contentId, ariaDescribedBy, resolvedCallback]
     );
 
     const dataState = isExpanded ? "open" : "closed";

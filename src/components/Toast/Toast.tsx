@@ -4,6 +4,7 @@ import { CloseIcon } from "./utils/icons";
 import { getDefaultIcon } from "./utils/getDefaultIcon";
 import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants";
 import { cn } from "../../utils/cn";
+import { isBrowser } from "../../utils/isBrowser";
 
 const Toast = memo(function Toast({
   id,
@@ -16,6 +17,7 @@ const Toast = memo(function Toast({
   progressColor,
   icon,
   showCloseButton = true,
+  onDismiss,
   onClose,
   onRemove,
   role: roleProp,
@@ -32,23 +34,24 @@ const Toast = memo(function Toast({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toastRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const onCloseRef = useRef(onClose);
+  const resolvedDismissCallback = onDismiss ?? onClose;
+  const onCloseRef = useRef(resolvedDismissCallback);
   const onRemoveRef = useRef(onRemove);
 
   useEffect(() => {
-    onCloseRef.current = onClose;
+    onCloseRef.current = onDismiss ?? onClose;
     onRemoveRef.current = onRemove;
   });
   const [isPaused, setIsPaused] = useState(false);
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
-    if (typeof window === "undefined") return false;
+    if (!isBrowser) return false;
     return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
   });
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!isBrowser) return;
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mql.addEventListener("change", handler);
