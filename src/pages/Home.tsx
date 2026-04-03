@@ -909,7 +909,7 @@ const Home = () => {
                   trigger:
                     "flex w-full items-center justify-between px-6 py-5 text-left text-[15px] font-medium text-white/90 transition-all duration-300 hover:bg-white/[0.04] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-inset",
                   triggerInner: "flex-1 text-left",
-                  content: "px-6 pt-0 pb-5 text-[15px] text-gray-400 leading-relaxed",
+                  content: "px-6 py-5 text-[15px] text-gray-400 leading-relaxed",
                   contentWrapper:
                     "overflow-hidden transition-[max-height,opacity,visibility]",
                   icon: "shrink-0 text-white/40",
