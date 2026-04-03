@@ -62,7 +62,7 @@ const LoaderDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@kern-ui/loader";`}
+              code={`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@chumlab/ui/loader";`}
             />
           </div>
         </div>

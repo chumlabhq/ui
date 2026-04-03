@@ -245,7 +245,7 @@ const ButtonDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Button, ButtonGroup } from "@kern-ui/button";`}
+              code={`import { Button, ButtonGroup } from "@chumlab/ui/button";`}
             />
           </div>
         </div>

@@ -466,6 +466,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
           className={cn("relative", mergedClasses.root) || undefined}
         >
           {renderTrigger ? (
+            // eslint-disable-next-line react-hooks/refs -- ref callback is intentionally passed to render prop for consumer to attach
             renderTrigger({
               ref: renderTriggerRefCallback,
               id: triggerId,

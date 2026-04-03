@@ -158,7 +158,7 @@ const DrawerDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import {\n  Drawer, DrawerHeader, DrawerBody,\n  DrawerFooter, DrawerCloseButton,\n} from "@kern-ui/drawer";`}
+              code={`import {\n  Drawer, DrawerHeader, DrawerBody,\n  DrawerFooter, DrawerCloseButton,\n} from "@chumlab/ui/drawer";`}
             />
           </div>
         </div>

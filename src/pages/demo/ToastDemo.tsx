@@ -71,7 +71,7 @@ const ToastDemoContent = ({
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { ToastProvider, useToast } from "@kern-ui/toast";`}
+              code={`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}
             />
           </div>
         </div>

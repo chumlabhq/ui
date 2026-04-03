@@ -71,6 +71,9 @@ function useViewportWidth(): number {
   return width;
 }
 
+const FALLBACK_COLUMNS: never[] = [];
+const FALLBACK_DATA: never[] = [];
+
 function TableInner<TData>(
   {
     columns: columnsProp,
@@ -264,8 +267,8 @@ function TableInner<TData>(
   const loadingMoreClassName = classesProp?.loadingMore ?? "";
   const searchInputClassName = classesProp?.searchInput ?? "";
 
-  const columns = columnsProp ?? COLUMNS ?? [];
-  const data = dataProp ?? COLUMNS_DATA ?? [];
+  const columns = columnsProp ?? COLUMNS ?? FALLBACK_COLUMNS;
+  const data = dataProp ?? COLUMNS_DATA ?? FALLBACK_DATA;
   const shouldShowHeader = tableHeader ?? showHeader;
   const [focusedCell, setFocusedCell] = useState<{
     row: number;
@@ -637,8 +640,6 @@ function TableInner<TData>(
     showSearch ||
     !!filterableColumns;
 
-  // TanStack React Table v8 is a stable, widely-used library compatible with React 19.
-  // eslint-disable-next-line react-hooks/incompatible-library -- @tanstack/react-table@8 false positive
   const table = useReactTable({
     data: data ?? [],
     columns: augmentedColumns,
@@ -1295,11 +1296,8 @@ function TableInner<TData>(
       filterableColumns,
       CustomFilterIcon,
       filterIconClassName,
-      filterDropdownClassName,
       openFilterColumn,
       getColumnFilterValues,
-      setColumnFilterValues,
-      renderColumnFilter,
     ],
   );
 
@@ -1528,6 +1526,7 @@ function TableInner<TData>(
         </React.Fragment>
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- React (Fragment) is a stable module import
     [
       isRowSelected,
       selectedRowClassName,
@@ -1549,6 +1548,8 @@ function TableInner<TData>(
       onContextMenu,
       grouping,
       groupHeaderClassName,
+      expandOnRowClick,
+      stripedClassNameProp,
     ],
   );
 

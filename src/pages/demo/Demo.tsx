@@ -112,7 +112,7 @@ const Demo = () => {
   const mainRef = useRef<HTMLElement>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const stored = localStorage.getItem("kern-ui-theme");
+    const stored = localStorage.getItem("chumlab-ui-theme");
     if (stored) return stored === "dark";
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
@@ -120,10 +120,10 @@ const Demo = () => {
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("kern-ui-theme", "dark");
+      localStorage.setItem("chumlab-ui-theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("kern-ui-theme", "light");
+      localStorage.setItem("chumlab-ui-theme", "light");
     }
   }, [isDarkMode]);
 

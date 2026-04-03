@@ -265,7 +265,7 @@ const StepperDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Stepper } from "@kern-ui/stepper";`}
+              code={`import { Stepper } from "@chumlab/ui/stepper";`}
             />
           </div>
         </div>

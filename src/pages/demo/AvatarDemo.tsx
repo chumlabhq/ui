@@ -121,7 +121,7 @@ const AvatarDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import {\n  Avatar, AvatarGroup, AvatarGroupCount,\n  AvatarBadge, AvatarShimmer, AvatarGroupShimmer,\n} from "@kern-ui/avatar";`}
+              code={`import {\n  Avatar, AvatarGroup, AvatarGroupCount,\n  AvatarBadge, AvatarShimmer, AvatarGroupShimmer,\n} from "@chumlab/ui/avatar";`}
             />
           </div>
         </div>

@@ -550,7 +550,7 @@ const CascadingDropdownDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { CascadingDropdown } from "@kern-ui/cascading-dropdown";`}
+              code={`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}
             />
           </div>
         </div>

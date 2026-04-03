@@ -146,7 +146,7 @@ export function useDatePicker(props: UseDatePickerProps) {
     } else if (mode === "multiple" && multipleValue?.length) {
       setDisplayMonth(startOfMonth(multipleValue[0]));
     }
-  }, [disabled, mode, singleValue, rangeValue, multipleValue]);
+  }, [disabled, mode, singleValue, rangeValue, multipleValue, setIsOpen]);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -155,7 +155,7 @@ export function useDatePicker(props: UseDatePickerProps) {
     if (mode === "range" && rangeValue?.start && !rangeValue?.end) {
       setRangeSelectionState("start");
     }
-  }, [mode, rangeValue]);
+  }, [mode, rangeValue, setIsOpen]);
 
   const handleToggle = useCallback(() => {
     if (isOpen) {

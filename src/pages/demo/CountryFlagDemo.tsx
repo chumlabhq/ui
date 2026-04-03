@@ -78,7 +78,7 @@ const CountryFlagDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import {\n  CountryFlag, CountryFlagGroup,\n  CountryFlagShimmer, CountryFlagGroupShimmer,\n} from "@kern-ui/country-flag";`}
+              code={`import {\n  CountryFlag, CountryFlagGroup,\n  CountryFlagShimmer, CountryFlagGroupShimmer,\n} from "@chumlab/ui/country-flag";`}
             />
           </div>
         </div>

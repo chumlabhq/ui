@@ -190,7 +190,7 @@ const ResizablePanelDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { ResizablePanel } from "@kern-ui/resizable-panel";`}
+              code={`import { ResizablePanel } from "@chumlab/ui/resizable-panel";`}
             />
           </div>
         </div>

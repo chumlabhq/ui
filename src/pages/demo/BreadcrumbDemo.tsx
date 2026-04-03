@@ -224,7 +224,7 @@ const BreadcrumbDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Breadcrumb } from "@kern-ui/breadcrumb";`}
+              code={`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}
             />
           </div>
         </div>

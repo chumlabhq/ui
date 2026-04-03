@@ -39,18 +39,25 @@ export function useTimePicker({
 
   const [lastValidValue, setLastValidValue] = useState(() => computeInputValue(value, format).lastValid);
 
-  // Use refs for values needed in commitValue to avoid stale closures
+  // Refs for values needed in commitValue to avoid stale closures
   const lastValidRef = useRef(lastValidValue);
-  lastValidRef.current = lastValidValue;
-
   const inputValueRef = useRef(inputValue);
-  inputValueRef.current = inputValue;
+
+  useEffect(() => {
+    lastValidRef.current = lastValidValue;
+  }, [lastValidValue]);
+
+  useEffect(() => {
+    inputValueRef.current = inputValue;
+  }, [inputValue]);
 
   const timeOptions = useMemo(
     () => generateTimeOptions(format, safeStep, minTime, maxTime),
     [format, safeStep, minTime, maxTime]
   );
 
+  // Sync input display when value or format changes from outside.
+  /* eslint-disable react-hooks/set-state-in-effect -- batched state sync on prop change */
   useEffect(() => {
     const formatChanged = prevFormatRef.current !== format;
     if (formatChanged) {
@@ -68,6 +75,7 @@ export function useTimePicker({
     setInputValue(computed.inputValue);
     setLastValidValue(computed.lastValid);
   }, [value, format]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const displayOptions = useMemo(() => {
     if (!inputValue.trim()) return timeOptions;

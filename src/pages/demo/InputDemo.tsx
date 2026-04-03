@@ -319,7 +319,7 @@ const InputDemo = () => {
           <div className="pt-1">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Input, InputLabel } from "@kern-ui/input";`}
+              code={`import { Input, InputLabel } from "@chumlab/ui/input";`}
             />
           </div>
         </div>

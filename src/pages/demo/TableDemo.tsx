@@ -1636,7 +1636,7 @@ const TableDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Table } from "@kern-ui/table";\nimport { Pagination } from "@kern-ui/pagination";`}
+              code={`import { Table } from "@chumlab/ui/table";\nimport { Pagination } from "@chumlab/ui/pagination";`}
             />
           </div>
         </div>
@@ -1802,6 +1802,7 @@ const TableDemo = () => {
                   ),
                 },
               ],
+              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
               [dark],
             );
 
@@ -4721,6 +4722,7 @@ const TableDemo = () => {
                   size: 150,
                 },
               ],
+              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
               [dark],
             );
 
@@ -5128,6 +5130,7 @@ const TableDemo = () => {
                 },
                 ...columns,
               ],
+              // eslint-disable-next-line react-hooks/exhaustive-deps -- dark triggers theme-aware column re-creation
               [dark],
             );
 

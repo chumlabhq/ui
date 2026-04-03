@@ -223,7 +223,7 @@ const AccordionDemo = () => {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@kern-ui/accordion";`}
+} from "@chumlab/ui/accordion";`}
             />
           </div>
         </div>

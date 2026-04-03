@@ -167,7 +167,7 @@ const RadioButtonDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { RadioGroup, RadioButton } from "@kern-ui/radio-button";`}
+              code={`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}
             />
           </div>
         </div>

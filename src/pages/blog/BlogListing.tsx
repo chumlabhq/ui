@@ -136,9 +136,11 @@ export default function BlogListing() {
   }, [currentPage, filteredPosts]);
 
   // Reset to page 1 when filters change
-  useEffect(() => {
+  const [prevFilters, setPrevFilters] = useState({ searchQuery, activeCategory });
+  if (prevFilters.searchQuery !== searchQuery || prevFilters.activeCategory !== activeCategory) {
+    setPrevFilters({ searchQuery, activeCategory });
     setCurrentPage(1);
-  }, [searchQuery, activeCategory]);
+  }
 
   // Smooth scroll to grid on page change (not on initial load)
   const isFirstRender = useRef(true);

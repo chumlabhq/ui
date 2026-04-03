@@ -360,7 +360,7 @@ const TabPanelDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { TabPanel } from "@kern-ui/tab-panel";`}
+              code={`import { TabPanel } from "@chumlab/ui/tab-panel";`}
             />
           </div>
         </div>

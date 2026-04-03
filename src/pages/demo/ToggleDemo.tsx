@@ -229,7 +229,7 @@ export default function ToggleDemo() {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import Toggle from "@kern-ui/toggle";`}
+              code={`import Toggle from "@chumlab/ui/toggle";`}
             />
           </div>
         </div>

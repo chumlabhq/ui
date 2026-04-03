@@ -316,7 +316,7 @@ const PaginationDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Pagination } from "@kern-ui/pagination";`}
+              code={`import { Pagination } from "@chumlab/ui/pagination";`}
             />
           </div>
         </div>

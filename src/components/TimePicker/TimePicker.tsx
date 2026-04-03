@@ -612,7 +612,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           ref={dropdownContentRef}
           id={clockPopupId}
           role="dialog"
-          aria-modal="false"
+          aria-modal="true"
           aria-label={typeof label === "string" ? label : "Select time"}
           style={portalDropdownStyle}
         >

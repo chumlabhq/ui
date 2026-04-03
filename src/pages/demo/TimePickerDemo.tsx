@@ -370,7 +370,7 @@ const TimePickerDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { TimePicker } from "@kern-ui/time-picker";`}
+              code={`import { TimePicker } from "@chumlab/ui/time-picker";`}
             />
           </div>
         </div>

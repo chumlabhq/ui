@@ -147,6 +147,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       [direction, size, fraction, effectiveDuration],
     );
 
+    /* eslint-disable react-hooks/set-state-in-effect -- synchronizes mount/visual state with isOpen prop */
     useEffect(() => {
       if (isOpen && !mounted) {
         setMounted(true);
@@ -155,6 +156,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         setVisualOpen(false);
       }
     }, [isOpen, mounted, visualOpen]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     useEffect(() => {
       if (!isOpen && !keepMounted) {

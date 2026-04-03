@@ -146,7 +146,7 @@ const ModalDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Modal, useModal } from "@kern-ui/modal";`}
+              code={`import { Modal, useModal } from "@chumlab/ui/modal";`}
             />
           </div>
         </div>

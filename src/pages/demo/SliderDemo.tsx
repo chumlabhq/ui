@@ -121,7 +121,7 @@ const SliderDemo = () => {
             standard classes/unstyled system.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import { Slider } from "@kern-ui/slider";`} />
+            <CodeBlock isDarkMode={dark} code={`import { Slider } from "@chumlab/ui/slider";`} />
           </div>
         </div>
       </header>

@@ -299,11 +299,20 @@ describe("Drawer", () => {
       const user = userEvent.setup();
       renderDrawer();
 
-      const buttons = screen.getAllByRole("button");
+      // Wait for drawer to fully mount and attach event listeners
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 100));
+      });
+
+      const dialog = screen.getByRole("dialog");
+      const buttons = dialog.querySelectorAll("button");
       const first = buttons[0];
       const last = buttons[buttons.length - 1];
 
-      last.focus();
+      (last as HTMLElement).focus();
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 50));
+      });
       await user.tab();
 
       expect(document.activeElement).toBe(first);

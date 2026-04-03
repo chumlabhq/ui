@@ -250,7 +250,7 @@ const InternationalPhoneInputDemo = () => {
           <div className="pt-1">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { InternationalPhoneInput } from "@kern-ui/international-phone-input";`}
+              code={`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";`}
             />
           </div>
         </div>

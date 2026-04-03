@@ -127,7 +127,7 @@ const CheckboxDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Checkbox } from "@kern-ui/checkbox";`}
+              code={`import { Checkbox } from "@chumlab/ui/checkbox";`}
             />
           </div>
         </div>

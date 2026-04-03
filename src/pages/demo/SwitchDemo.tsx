@@ -144,7 +144,7 @@ const SwitchDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Switch } from "@kern-ui/switch";`}
+              code={`import { Switch } from "@chumlab/ui/switch";`}
             />
           </div>
         </div>

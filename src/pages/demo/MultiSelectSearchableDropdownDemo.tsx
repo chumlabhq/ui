@@ -285,7 +285,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { MultiSelectSearchableDropdown } from "@kern-ui/multi-select-searchable-dropdown";`}
+              code={`import { MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";`}
             />
           </div>
         </div>

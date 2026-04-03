@@ -103,7 +103,7 @@ const TooltipDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Tooltip } from "@kern-ui/tooltip";`}
+              code={`import { Tooltip } from "@chumlab/ui/tooltip";`}
             />
           </div>
         </div>

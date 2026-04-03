@@ -338,7 +338,7 @@ const SearchableDropdownDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { SearchableDropdown } from "@kern-ui/searchable-dropdown";`}
+              code={`import { SearchableDropdown } from "@chumlab/ui/searchable-dropdown";`}
             />
           </div>
         </div>

@@ -1,8 +1,8 @@
 /**
- * Churn Lab brand logo — blue tone palette.
+ * Chumlab brand logo — blue tone palette.
  *
  * Icon: A vortex/spiral — three arcs spinning inward.
- * Wordmark: "churn lab" in Space Grotesk.
+ * Wordmark: "chumlab" in Space Grotesk.
  */
 
 import { useId } from "react";
@@ -25,7 +25,7 @@ export const LogoMark = ({ size = 32, className = "" }: LogoMarkProps) => {
       viewBox="0 0 36 36"
       fill="none"
       className={className}
-      aria-label="Churn Lab"
+      aria-label="Chumlab"
     >
       <defs>
         <linearGradient id={idA} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -67,7 +67,7 @@ export const LogoWordmark = ({ className = "" }: LogoWordmarkProps) => (
     className={`inline-flex items-baseline gap-[0.15em] ${className}`}
     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
   >
-    <span className="font-bold tracking-[-0.01em]">churn</span>
+    <span className="font-bold tracking-[-0.01em]">chum</span>
     <span className="font-normal tracking-[0.04em] opacity-50">lab</span>
   </span>
 );

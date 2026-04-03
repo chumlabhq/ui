@@ -443,7 +443,7 @@ const DropdownDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { Dropdown } from "@kern-ui/dropdown";`}
+              code={`import { Dropdown } from "@chumlab/ui/dropdown";`}
             />
           </div>
         </div>

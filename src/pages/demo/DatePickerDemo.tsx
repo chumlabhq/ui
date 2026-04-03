@@ -254,7 +254,7 @@ const DatePickerDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { DatePicker } from "@kern-ui/date-picker";`}
+              code={`import { DatePicker } from "@chumlab/ui/date-picker";`}
             />
           </div>
         </div>

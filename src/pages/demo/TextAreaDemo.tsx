@@ -239,7 +239,7 @@ const TextAreaDemo = () => {
           <div className="pt-1">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { TextArea, TextAreaLabel } from "@kern-ui/textarea";`}
+              code={`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}
             />
           </div>
         </div>

@@ -1,11 +1,11 @@
-# kern-ui
+# Chumlab UI
 
 A production-grade React component library built with TypeScript, Tailwind CSS v4, and modern React 19 patterns. Designed for full customizability through composable APIs, CSS class overrides, and unstyled modes.
 
 ## Installation
 
 ```bash
-npm install kern-ui
+npm install @chumlab/ui
 ```
 
 **Peer dependencies:** React 19+, Tailwind CSS 4+
@@ -13,7 +13,7 @@ npm install kern-ui
 ## Quick Start
 
 ```tsx
-import { Button, Input, Modal } from "kern-ui";
+import { Button, Input, Modal } from "@chumlab/ui";
 
 function App() {
   return (
@@ -28,8 +28,8 @@ function App() {
 Or import from individual component paths:
 
 ```tsx
-import { Button } from "kern-ui/components/Button";
-import type { ButtonProps } from "kern-ui/components/Button";
+import { Button } from "@chumlab/ui/components/Button";
+import type { ButtonProps } from "@chumlab/ui/components/Button";
 ```
 
 ## Components

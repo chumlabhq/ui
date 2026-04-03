@@ -22,6 +22,7 @@ import { ModalContext } from "./ModalContext";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
+import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { getFocusableElements } from "../../utils/focusUtils";
 import {
@@ -394,6 +395,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       </ModalContext.Provider>
     );
 
+    if (!isBrowser) return null;
     return createPortal(modalContent, document.body);
   },
 );

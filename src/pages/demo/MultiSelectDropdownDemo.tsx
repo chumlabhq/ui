@@ -339,7 +339,7 @@ const MultiSelectDropdownDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { MultiSelectDropdown } from "@kern-ui/multi-select-dropdown";`}
+              code={`import { MultiSelectDropdown } from "@chumlab/ui/multi-select-dropdown";`}
             />
           </div>
         </div>

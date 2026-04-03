@@ -38,7 +38,7 @@ export const stackDirectionClasses: Record<"top" | "bottom", string> = {
   bottom: "flex-col-reverse",
 };
 
-export const PROGRESS_KEYFRAMES = `@keyframes kern-toast-progress{from{width:100%}to{width:0%}}`;
+export const PROGRESS_KEYFRAMES = `@keyframes chumlab-toast-progress{from{width:100%}to{width:0%}}`;
 
 export const DEFAULT_TOAST_CLASSES: Required<ToastClasses> = {
   container: "",

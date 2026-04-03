@@ -86,6 +86,26 @@ const components = [
     desc: "Select menus with keyboard navigation and accessible labeling.",
   },
   {
+    name: "SearchableDropdown",
+    path: "searchable-dropdown",
+    desc: "Filterable select menus with type-ahead search and keyboard navigation.",
+  },
+  {
+    name: "MultiSelectDropdown",
+    path: "multi-select-dropdown",
+    desc: "Multi-selection dropdowns with chips, clear-all, and overflow counts.",
+  },
+  {
+    name: "MultiSelectSearchableDropdown",
+    path: "multi-select-searchable-dropdown",
+    desc: "Searchable multi-select with filtering, chips, and keyboard support.",
+  },
+  {
+    name: "CascadingDropdown",
+    path: "cascading-dropdown",
+    desc: "Hierarchical dropdowns with nested submenus and multi-level selection.",
+  },
+  {
     name: "Modal",
     path: "modal",
     desc: "Accessible dialogs with focus trapping and scroll lock.",
@@ -121,9 +141,84 @@ const components = [
     desc: "Calendar date selection with range support.",
   },
   {
+    name: "TimePicker",
+    path: "time-picker",
+    desc: "Time selection with dropdown list and clock face variants.",
+  },
+  {
     name: "Switch",
     path: "switch",
     desc: "Toggle controls with labels and controlled/uncontrolled modes.",
+  },
+  {
+    name: "Checkbox",
+    path: "checkbox",
+    desc: "Checkboxes with indeterminate state, labels, and validation.",
+  },
+  {
+    name: "RadioButton",
+    path: "radio-button",
+    desc: "Radio groups with keyboard navigation and custom styling.",
+  },
+  {
+    name: "Toggle",
+    path: "toggle",
+    desc: "Pressable toggle buttons with aria-pressed and size variants.",
+  },
+  {
+    name: "Slider",
+    path: "slider",
+    desc: "Range sliders with single and dual thumbs, marks, and tooltips.",
+  },
+  {
+    name: "OtpInput",
+    path: "otp-input",
+    desc: "One-time password inputs with auto-advance and paste support.",
+  },
+  {
+    name: "Tooltip",
+    path: "tooltip",
+    desc: "Accessible tooltips with configurable placement and arrow.",
+  },
+  {
+    name: "Pagination",
+    path: "pagination",
+    desc: "Page navigation with rows-per-page selector and keyboard support.",
+  },
+  {
+    name: "Breadcrumb",
+    path: "breadcrumb",
+    desc: "Navigation breadcrumbs with truncation and dropdown overflow.",
+  },
+  {
+    name: "Stepper",
+    path: "stepper",
+    desc: "Step indicators with numbered, icon, and dot variants.",
+  },
+  {
+    name: "Avatar",
+    path: "avatar",
+    desc: "User avatars with image, initials, badges, and group stacking.",
+  },
+  {
+    name: "CountryFlag",
+    path: "country-flag",
+    desc: "Country flag icons with group display and shimmer loading.",
+  },
+  {
+    name: "Loader",
+    path: "loader",
+    desc: "Loading indicators: circular, linear, dot, and pulse variants.",
+  },
+  {
+    name: "ResizablePanel",
+    path: "resizable-panel",
+    desc: "Resizable split panels with drag handles and min/max constraints.",
+  },
+  {
+    name: "InternationalPhoneInput",
+    path: "international-phone-input",
+    desc: "Phone input with country selector, formatting, and validation.",
   },
 ];
 
@@ -560,7 +655,7 @@ const Home = () => {
 
               <p className="animate-fade-up-d2 text-[15px] sm:text-[17px] text-gray-400 leading-[1.7] max-w-lg mx-auto mb-8">
                 The best teams don't waste engineering cycles on UI plumbing.
-                Churn Lab gives you the same production ready components that
+                Chumlab gives you the same production ready components that
                 top startups use so your team can focus on the product, not the
                 infrastructure.
               </p>
@@ -593,11 +688,11 @@ const Home = () => {
                   <span className="text-gray-700 select-none">$</span>
                   <span>
                     npm install{" "}
-                    <span className="text-gray-400">@churnlab/ui</span>
+                    <span className="text-gray-400">@chumlab/ui</span>
                   </span>
                   <button
                     onClick={() =>
-                      navigator.clipboard.writeText("npm install @churnlab/ui")
+                      navigator.clipboard.writeText("npm install @chumlab/ui")
                     }
                     className="text-gray-600 hover:text-gray-300 transition-colors duration-300"
                     aria-label="Copy"
@@ -621,11 +716,11 @@ const Home = () => {
             </div>
           </section>
 
-          {/* ── WHY CHURN LAB ── */}
+          {/* ── WHY CHUMLAB ── */}
           <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-28">
             <div className="text-center mb-12">
               <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 mb-3 block">
-                Why churn lab
+                Why chumlab
               </span>
               <h2 className="text-lg sm:text-xl font-bold tracking-tight">
                 The components your team keeps rebuilding
@@ -636,14 +731,14 @@ const Home = () => {
                 {
                   icon: "M9 12l2 2 4-4|M22 11.08V12a10 10 0 1 1-5.93-9.14",
                   title: "Accessible from day one",
-                  desc: "Most startups skip accessibility until a customer complains or an audit fails. Every churn lab component ships with full keyboard navigation, screen reader support, and WCAG 2.1 AA compliance built in.",
+                  desc: "Most startups skip accessibility until a customer complains or an audit fails. Every Chumlab component ships with full keyboard navigation, screen reader support, and WCAG 2.1 AA compliance built in.",
                   ic: "text-emerald-400",
                   float: "animate-float",
                 },
                 {
                   icon: "M12 2L2 7l10 5 10-5-10-5z|M2 17l10 5 10-5|M2 12l10 5 10-5",
                   title: "Your brand, not ours",
-                  desc: "Most component libraries force you into their visual style and then you spend weeks overriding it. Churn lab gives you className props on every single element so your components look like yours from day one.",
+                  desc: "Most component libraries force you into their visual style and then you spend weeks overriding it. Chumlab gives you className props on every single element so your components look like yours from day one.",
                   ic: "text-blue-400",
                   float: "animate-float-d1",
                 },

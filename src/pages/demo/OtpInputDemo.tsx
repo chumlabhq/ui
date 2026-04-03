@@ -80,7 +80,7 @@ const OtpInputDemo = () => {
           <div className="mt-5">
             <CodeBlock
               isDarkMode={dark}
-              code={`import { OtpInput } from "@kern-ui/otp-input";`}
+              code={`import { OtpInput } from "@chumlab/ui/otp-input";`}
             />
           </div>
         </div>

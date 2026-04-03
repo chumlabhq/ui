@@ -122,7 +122,7 @@ const Toast = memo(function Toast({
         : {
             width: "0%",
             backgroundColor: progressColor,
-            animation: `kern-toast-progress ${animDuration}ms linear forwards`,
+            animation: `chumlab-toast-progress ${animDuration}ms linear forwards`,
           }
       : undefined;
 
@@ -130,6 +130,7 @@ const Toast = memo(function Toast({
     <div
       ref={toastRef}
       role={toastRole}
+      aria-live={toastRole === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
       className={cn(
         !isUnstyled && "relative overflow-hidden rounded-lg border shadow-lg",

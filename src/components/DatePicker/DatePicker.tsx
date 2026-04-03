@@ -669,7 +669,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         }
         window.removeEventListener("resize", updatePos);
       };
-    }, [isOpen, lockScroll]);
+    }, [isOpen, lockScroll, dropdownGap, dropdownPosition]);
 
     // ─── Scroll lock ─────────────────────────────────────────────────────
     useEffect(() => {
