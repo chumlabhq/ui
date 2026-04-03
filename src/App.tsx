@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useScrollToTop } from "./hooks/useScrollToTop";
 import Home from "./pages/Home";
+import Faq from "./pages/Faq";
 import BlogListing from "./pages/blog/BlogListing";
 import BlogDetail from "./pages/blog/BlogDetail";
 import Demo from "./pages/demo/Demo";
@@ -36,9 +38,12 @@ import ToggleDemo from "./pages/demo/ToggleDemo";
 import TooltipDemo from "./pages/demo/TooltipDemo";
 
 const App = () => {
+  useScrollToTop();
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/faq" element={<Faq />} />
       <Route path="/blog" element={<BlogListing />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route element={<Demo />}>

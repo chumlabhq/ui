@@ -65,5 +65,6 @@ Unlike headless libraries (Radix, Headless UI), Chumlab UI ships with polished d
 ## Documentation
 
 - Component docs: https://chumlab.com/accordion (and each component path)
+- FAQ: https://chumlab.com/faq
 - Blog: https://chumlab.com/blog
 - GitHub README: https://github.com/chumlabhq/ui#readme

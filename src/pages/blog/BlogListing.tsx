@@ -179,28 +179,47 @@ export default function BlogListing() {
         <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
           <div className="w-full px-5 sm:px-8">
             <div className="flex items-center justify-between py-3.5">
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="relative">
-                  <LogoMark size={160} />
-                  <div className="absolute -inset-3 rounded-full bg-indigo-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
+              <Link to="/" className="flex items-center gap-3">
+                <LogoMark size={160} />
               </Link>
               <div className="flex items-center gap-1">
                 <Link
                   to="/accordion"
-                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
+                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
                 >
                   Components
                 </Link>
                 <Link
                   to="/blog"
-                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
+                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
                 >
                   Blog
                 </Link>
                 <Link
+                  to="/faq"
+                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
+                >
+                  FAQ
+                </Link>
+                <a
+                  href="https://github.com/chumlabhq/ui"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
+                  aria-label="GitHub"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                  </svg>
+                </a>
+                <Link
                   to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]"
+                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-2"
                 >
                   Get Started
                 </Link>
@@ -211,41 +230,48 @@ export default function BlogListing() {
 
         <main>
           {/* ── HERO ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-8 pt-28 sm:pt-32 pb-6">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1] mb-4 text-white">
-              Insights & Guides
-            </h1>
-            <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
-              Practical articles on frontend development, component design, and
-              building modern web experiences.
-            </p>
+          <section className="px-6 sm:px-10 pt-28 sm:pt-32 pb-16">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
+                Insights &{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+                  Guides
+                </span>
+              </h1>
+
+              <p className="text-lg text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Practical articles on frontend development, component design,
+                and building modern web experiences.
+              </p>
+
+              <div className="relative max-w-xl mx-auto">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search articles..."
+                  className="w-full h-12 pl-11 pr-4 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder:text-white/25 text-[15px] outline-none focus:border-blue-500/30 focus:bg-white/[0.06] transition-all duration-300"
+                />
+              </div>
+            </div>
           </section>
 
-          {/* ── SEARCH + FILTERS ── */}
+          {/* ── FILTERS ── */}
           <section className="max-w-6xl mx-auto px-6 sm:px-8 pb-8">
-            {/* Search bar */}
-            <div className="relative mb-5">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                <SearchIcon />
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search articles by title, category, or topic..."
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.03] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/40 focus:bg-white/[0.05] transition-all"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-gray-500 hover:text-white hover:bg-white/[0.08] transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
 
             {/* Category pills */}
             <div className="flex flex-wrap gap-2">
@@ -374,6 +400,12 @@ export default function BlogListing() {
                     className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
                   >
                     Blog
+                  </Link>
+                  <Link
+                    to="/faq"
+                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                  >
+                    FAQ
                   </Link>
                   <a
                     href="https://github.com"
