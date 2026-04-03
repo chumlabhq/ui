@@ -18,9 +18,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/chumlab-ui.js",
-      "require": "./dist/chumlab-ui.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/chumlab-ui.cjs"
     },
     "./styles": "./dist/style.css"
   },

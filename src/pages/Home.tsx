@@ -491,7 +491,6 @@ const Home = () => {
           <div className="animate-orbit-2 absolute w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.08)_0%,transparent_65%)] blur-[70px]" />
           <div className="animate-orbit-3 absolute w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.06)_0%,transparent_65%)] blur-[70px]" />
         </div>
-        <div className="absolute top-[33%] left-0 w-full h-px bg-linear-to-r from-transparent via-purple-400/10 to-transparent" />
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-[0.025]">
           <div className="animate-beam absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(90deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)]" />
         </div>
