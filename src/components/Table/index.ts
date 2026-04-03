@@ -10,7 +10,7 @@ export type {
   ColumnSizingState,
   TableView,
 } from "./utils/types";
-export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT } from "./constants";
+export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT, DEFAULT_TABLE_CLASSES, UNSTYLED_TABLE_CLASSES } from "./constants";
 export { getColumnId, getSortDirection, isInteractiveElement, exportTableToCSV, copyToClipboard } from "./utils";
 export {
   ChevronDownIcon,

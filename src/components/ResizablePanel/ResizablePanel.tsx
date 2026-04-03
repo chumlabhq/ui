@@ -18,6 +18,7 @@ import { cn } from "../../utils/cn";
 import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
+import { isBrowser } from "../../utils/isBrowser";
 
 const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
   (props, ref) => {
@@ -114,6 +115,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     }, []);
 
     const restoreBodyStyles = useCallback(() => {
+      if (!isBrowser) return;
       document.body.style.cursor = savedBodyCursorRef.current;
       document.body.style.userSelect = savedBodyUserSelectRef.current;
     }, []);
@@ -137,6 +139,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     }, [restoreBodyStyles, releasePointerCapture]);
 
     useEffect(() => {
+      if (!isBrowser) return;
       const clamp = (v: number) =>
         Math.max(minValueRef.current, Math.min(maxValueRef.current, v));
 

@@ -19,6 +19,7 @@ import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useControllableState } from "../../utils/useControllableState";
 import { isBrowser } from "../../utils/isBrowser";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 
 interface DropdownCoords {
   top: number;
@@ -293,7 +294,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     );
 
     useEffect(() => {
-      if (!isDropdownOpen) return;
+      if (!isDropdownOpen || !isBrowser) return;
 
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
@@ -579,6 +580,14 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         {sectionOrder.map((section) => (
           <Fragment key={section}>{sections[section]}</Fragment>
         ))}
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={SR_ONLY_STYLE}
+        >
+          {`Page ${safeCurrentPage} of ${safeTotalPages}`}
+        </div>
       </nav>
     );
   },

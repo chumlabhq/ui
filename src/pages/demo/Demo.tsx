@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, Outlet, useLocation, Link } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
-import { LogoMark, LogoWordmark } from "../../components/brand/Logo";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import logoDark from "../../assets/images/logo-dark.png";
+import logoLight from "../../assets/images/logo-light.png";
 
 interface ComponentItem {
   path: string;
@@ -48,30 +50,55 @@ const components: ComponentItem[] = [
   { path: "tooltip", displayName: "Tooltip" },
 ];
 
-const SunIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className={className}
+const ThemeToggle = ({
+  isDarkMode,
+  toggle,
+}: {
+  isDarkMode: boolean;
+  toggle: () => void;
+}) => (
+  <button
+    onClick={toggle}
+    aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+    className={`relative h-8 w-8 rounded-lg cursor-pointer group transition-colors duration-200 ${
+      isDarkMode
+        ? "hover:bg-white/8 active:bg-white/12"
+        : "hover:bg-black/5 active:bg-black/10"
+    }`}
   >
-    <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.06 1.06l1.06 1.06z" />
-  </svg>
-);
-
-const MoonIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className={className}
-  >
-    <path
-      fillRule="evenodd"
-      d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z"
-      clipRule="evenodd"
-    />
-  </svg>
+    {/* Sun – visible in dark mode */}
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className={`absolute inset-0 m-auto transition-all duration-500 ease-out ${
+        isDarkMode
+          ? "opacity-100 rotate-0 scale-100 text-amber-400 group-hover:text-amber-300 group-hover:scale-110"
+          : "opacity-0 rotate-180 scale-0"
+      }`}
+    >
+      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.06 1.06l1.06 1.06z" />
+    </svg>
+    {/* Moon – visible in light mode */}
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className={`absolute inset-0 m-auto transition-all duration-500 ease-out ${
+        isDarkMode
+          ? "opacity-0 -rotate-180 scale-0"
+          : "opacity-100 rotate-0 scale-100 text-slate-500 group-hover:text-indigo-500 group-hover:scale-110"
+      }`}
+    >
+      <path
+        fillRule="evenodd"
+        d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z"
+        clipRule="evenodd"
+      />
+    </svg>
+  </button>
 );
 
 const MenuIcon = () => (
@@ -111,6 +138,12 @@ const Demo = () => {
   const location = useLocation();
   const mainRef = useRef<HTMLElement>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // SEO: Set document title based on the active component route
+  const activeComponent = components.find(
+    (c) => location.pathname === `/${c.path}`
+  );
+  useDocumentTitle(activeComponent ? `${activeComponent.displayName} Component` : "Components");
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const stored = localStorage.getItem("chumlab-ui-theme");
     if (stored) return stored === "dark";
@@ -151,37 +184,22 @@ const Demo = () => {
     ? "bg-blue-500/15 text-blue-400 font-medium"
     : "bg-blue-50 text-blue-700 font-medium";
   const inactiveLink = isDarkMode
-    ? "text-gray-500 hover:bg-white/4 hover:text-gray-300"
-    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900";
+    ? "text-white/90 hover:bg-white/4 hover:text-white"
+    : "text-black/90 hover:bg-gray-50 hover:text-black";
 
   const sidebarContent = (
     <>
-      <div className="flex items-center justify-between mb-6">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative group-hover:scale-105 transition-transform duration-300">
-            <LogoMark size={28} />
+      <div className="flex items-center mb-8">
+        <Link to="/" className="flex items-center group">
+          <div className="relative">
+            <img
+              src={isDarkMode ? logoLight : logoDark}
+              alt="Chumlab"
+              height={36}
+              style={{ height: 36, width: "auto", objectFit: "contain" }}
+            />
           </div>
-          <LogoWordmark
-            className={`text-[15px] ${isDarkMode ? "text-white" : "text-gray-900"}`}
-          />
         </Link>
-        <button
-          onClick={toggleDarkMode}
-          aria-label="Toggle dark mode"
-          className={`p-1.5 rounded-lg transition-all duration-300 ${isDarkMode ? "text-blue-400 hover:bg-white/6" : "text-amber-500 hover:bg-gray-100"}`}
-        >
-          {isDarkMode ? (
-            <MoonIcon className="h-4 w-4" />
-          ) : (
-            <SunIcon className="h-4 w-4" />
-          )}
-        </button>
-      </div>
-
-      <div
-        className={`text-[10px] lg:text-xs uppercase tracking-[0.15em] mb-3 px-3 ${isDarkMode ? "text-gray-600" : "text-gray-400"}`}
-      >
-        Components
       </div>
 
       <nav className="flex flex-col gap-0.5">
@@ -210,23 +228,15 @@ const Demo = () => {
           className={`lg:hidden flex items-center justify-between px-4 py-3 border-b shrink-0 ${sidebarBg} ${borderColor}`}
         >
           <Link to="/" className="flex items-center gap-2">
-            <LogoMark size={24} />
-            <LogoWordmark
-              className={`text-[13px] ${isDarkMode ? "text-white" : "text-gray-900"}`}
+            <img
+              src={isDarkMode ? logoLight : logoDark}
+              alt="Chumlab"
+              height={32}
+              style={{ height: 32, width: "auto", objectFit: "contain" }}
             />
           </Link>
           <div className="flex items-center gap-3">
-            <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle dark mode"
-              className={`p-1.5 rounded-lg transition-all duration-300 ${isDarkMode ? "text-blue-400 hover:bg-white/6" : "text-amber-500 hover:bg-gray-100"}`}
-            >
-              {isDarkMode ? (
-                <MoonIcon className="h-4 w-4" />
-              ) : (
-                <SunIcon className="h-4 w-4" />
-              )}
-            </button>
+            <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className={`p-1.5 rounded-lg transition-colors ${isDarkMode ? "text-gray-400 hover:bg-white/6" : "text-gray-600 hover:bg-gray-100"}`}
@@ -278,7 +288,12 @@ const Demo = () => {
           ref={mainRef}
           className={`flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto overscroll-y-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${bg}`}
         >
-          <div className="p-4 sm:p-6 lg:p-8 w-full max-w-none min-w-0 min-h-0">
+          {/* ── Top bar with theme toggle ── */}
+          <div className="sticky top-0 z-10 flex justify-end px-4 sm:px-6 lg:px-8 py-3">
+            <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
+          </div>
+
+          <div className="p-4 sm:p-6 lg:p-8 pt-0 w-full max-w-none min-w-0 min-h-0">
             <Outlet context={{ isDarkMode, toggleDarkMode }} />
           </div>
         </main>

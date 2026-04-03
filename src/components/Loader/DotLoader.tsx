@@ -1,5 +1,10 @@
-import { forwardRef, type CSSProperties } from "react";
-import type { DotLoaderProps } from "./utils/types";
+import { forwardRef, useMemo, type CSSProperties } from "react";
+import type { DotLoaderProps, DotLoaderClasses } from "./utils/types";
+import {
+  DEFAULT_DOT_LOADER_CLASSES,
+  UNSTYLED_DOT_LOADER_CLASSES,
+} from "./utils/constants";
+import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
@@ -10,6 +15,8 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
       count = 3,
       speed = 1.4,
       reduceMotion,
+      classes: classesProp,
+      unstyled = false,
       className = "",
       style,
       ...rest
@@ -18,6 +25,17 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
   ) => {
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const dots = Array.from({ length: count });
+
+    const baseClasses = unstyled
+      ? UNSTYLED_DOT_LOADER_CLASSES
+      : DEFAULT_DOT_LOADER_CLASSES;
+    const mergedClasses: Required<DotLoaderClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        dot: classesProp?.dot ?? baseClasses.dot,
+      }),
+      [classesProp, baseClasses],
+    );
 
     const rootStyle: CSSProperties = {
       display: "inline-flex",
@@ -31,7 +49,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
         ref={ref}
         role="status"
         aria-label="Loading"
-        className={className}
+        className={cn(mergedClasses.root, className) || undefined}
         style={rootStyle}
         data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
@@ -39,6 +57,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
         {dots.map((_, i) => (
           <span
             key={i}
+            className={mergedClasses.dot || undefined}
             style={{
               width: `${dotSize}px`,
               height: `${dotSize}px`,

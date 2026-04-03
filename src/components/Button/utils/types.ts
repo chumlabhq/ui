@@ -4,6 +4,7 @@ import type {
   ReactNode,
   CSSProperties,
   HTMLAttributes,
+  MouseEvent,
 } from "react";
 
 /** Animation type applied to leading/trailing icons. */
@@ -146,7 +147,7 @@ export interface ButtonAsChildProps extends ButtonSharedProps {
   rel?: never;
   className?: string;
   style?: CSSProperties;
-  onClick?: (...args: unknown[]) => void;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
 }
 
 /**

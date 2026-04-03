@@ -47,6 +47,7 @@ import {
 } from "./utils";
 import { cn } from "../../utils/cn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
+import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import {
   DEFAULT_DATEPICKER_CLASSES,
@@ -85,6 +86,7 @@ const CustomDropdown = memo(function CustomDropdown({
   const selectedOption = options.find((opt) => opt.value === value);
 
   useEffect(() => {
+    if (!isBrowser) return;
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
         dropdownRef.current &&

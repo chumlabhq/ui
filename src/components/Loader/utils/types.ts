@@ -1,5 +1,47 @@
 import type { HTMLAttributes } from "react";
 
+// ─── Classes types ──────────────────────────────────────────────────────────
+
+/** CSS class overrides for CircularLoader sub-elements. */
+export interface CircularLoaderClasses {
+  /** Root wrapper element. */
+  root?: string;
+  /** SVG element. */
+  svg?: string;
+  /** Background track circle. */
+  track?: string;
+  /** Foreground arc circle. */
+  indicator?: string;
+}
+
+/** CSS class overrides for LinearLoader sub-elements. */
+export interface LinearLoaderClasses {
+  /** Root wrapper element. */
+  root?: string;
+  /** Animated bar element. */
+  bar?: string;
+}
+
+/** CSS class overrides for DotLoader sub-elements. */
+export interface DotLoaderClasses {
+  /** Root wrapper element. */
+  root?: string;
+  /** Individual dot element. */
+  dot?: string;
+}
+
+/** CSS class overrides for PulseLoader sub-elements. */
+export interface PulseLoaderClasses {
+  /** Root wrapper element. */
+  root?: string;
+  /** Core dot element. */
+  core?: string;
+  /** Ripple ring element. */
+  ring?: string;
+}
+
+// ─── Props types ────────────────────────────────────────────────────────────
+
 export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Width and height in pixels. Default: 20 */
   size?: number;
@@ -13,6 +55,10 @@ export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
   color?: string;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
+  /** CSS class overrides for sub-elements. */
+  classes?: CircularLoaderClasses;
+  /** Removes all default styling. */
+  unstyled?: boolean;
 }
 
 export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -28,6 +74,10 @@ export interface LinearLoaderProps extends HTMLAttributes<HTMLDivElement> {
   borderRadius?: number;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
+  /** CSS class overrides for sub-elements. */
+  classes?: LinearLoaderClasses;
+  /** Removes all default styling. */
+  unstyled?: boolean;
 }
 
 export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -41,6 +91,10 @@ export interface DotLoaderProps extends HTMLAttributes<HTMLDivElement> {
   speed?: number;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
+  /** CSS class overrides for sub-elements. */
+  classes?: DotLoaderClasses;
+  /** Removes all default styling. */
+  unstyled?: boolean;
 }
 
 export interface PulseLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -52,4 +106,8 @@ export interface PulseLoaderProps extends HTMLAttributes<HTMLDivElement> {
   rings?: number;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
+  /** CSS class overrides for sub-elements. */
+  classes?: PulseLoaderClasses;
+  /** Removes all default styling. */
+  unstyled?: boolean;
 }

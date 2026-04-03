@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
     return {
       plugins: [react(), tailwindcss()],
       build: {
+        sourcemap: false,
         lib: {
           entry: resolve(__dirname, "src/index.ts"),
           name: "ChumlabUI",
@@ -30,5 +31,16 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tailwindcss()],
+    build: {
+      sourcemap: false,
+    },
+    server: {
+      headers: {
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+      },
+    },
   };
 });

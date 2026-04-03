@@ -1,5 +1,10 @@
-import { forwardRef, type CSSProperties } from "react";
-import type { PulseLoaderProps } from "./utils/types";
+import { forwardRef, useMemo, type CSSProperties } from "react";
+import type { PulseLoaderProps, PulseLoaderClasses } from "./utils/types";
+import {
+  DEFAULT_PULSE_LOADER_CLASSES,
+  UNSTYLED_PULSE_LOADER_CLASSES,
+} from "./utils/constants";
+import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
@@ -9,6 +14,8 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
       speed = 1.5,
       rings = 2,
       reduceMotion,
+      classes: classesProp,
+      unstyled = false,
       className = "",
       style,
       ...rest
@@ -29,18 +36,31 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
 
+    const baseClasses = unstyled
+      ? UNSTYLED_PULSE_LOADER_CLASSES
+      : DEFAULT_PULSE_LOADER_CLASSES;
+    const mergedClasses: Required<PulseLoaderClasses> = useMemo(
+      () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        core: classesProp?.core ?? baseClasses.core,
+        ring: classesProp?.ring ?? baseClasses.ring,
+      }),
+      [classesProp, baseClasses],
+    );
+
     return (
       <div
         ref={ref}
         role="status"
         aria-label="Loading"
-        className={className}
+        className={cn(mergedClasses.root, className) || undefined}
         style={rootStyle}
         data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
       >
         {/* Core dot */}
         <span
+          className={mergedClasses.core || undefined}
           style={{
             position: "absolute",
             width: `${size * 0.3}px`,
@@ -54,6 +74,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
         {ringElements.map((_, i) => (
           <span
             key={i}
+            className={mergedClasses.ring || undefined}
             style={{
               position: "absolute",
               width: "100%",

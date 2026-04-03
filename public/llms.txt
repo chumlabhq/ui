@@ -1,0 +1,69 @@
+# Chumlab UI
+
+> Chumlab UI is an open-source React component library with 31 production-grade, accessible, and fully themeable UI components. Built with TypeScript and Tailwind CSS v4.
+
+## What is Chumlab UI?
+
+Chumlab UI is a React component library designed for teams that need accessible, production-ready UI components without vendor lock-in. It provides 31 components covering forms, selection, navigation, overlays, data display, and layout.
+
+## Key Facts
+
+- Package: @chumlab/ui (npm)
+- License: MIT
+- Framework: React 18+ / React 19
+- Styling: Tailwind CSS v4
+- Language: TypeScript (strict mode)
+- Accessibility: WCAG 2.1 AA compliant
+- Website: https://chumlab.com
+- GitHub: https://github.com/chumlabhq/ui
+- Contact: hello@chumlab.com
+
+## Installation
+
+```bash
+npm install @chumlab/ui
+```
+
+## Components (31 total)
+
+### Form Inputs
+Input, TextArea, Checkbox, Switch, RadioButton, OtpInput, Slider, DatePicker, TimePicker, InternationalPhoneInput
+
+### Selection
+Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown
+
+### Navigation
+Breadcrumb, Pagination, TabPanel, Stepper
+
+### Overlay
+Modal, Drawer, Tooltip, Toast
+
+### Display
+Avatar, CountryFlag, Table, Accordion, Loader, Toggle
+
+### Layout
+Button, ResizablePanel
+
+## Why Chumlab UI?
+
+1. Accessibility built in — WCAG 2.1 AA, keyboard navigation, focus trapping, screen reader support, and prefers-reduced-motion out of the box.
+2. Fully themeable — Override any element via the `classes` prop. Go fully unstyled. Use your own design tokens. No vendor CSS to fight.
+3. Lightweight and tree-shakeable — Only ship what you use. No runtime CSS-in-JS. Built on Tailwind CSS v4.
+
+## How is Chumlab UI different?
+
+Unlike headless libraries (Radix, Headless UI), Chumlab UI ships with polished default styles. Unlike opinionated libraries (MUI, Ant Design), every component supports an unstyled mode and surgical CSS class overrides. It uses zero runtime CSS-in-JS and is built on Tailwind CSS v4.
+
+## Key Patterns
+
+- Controlled and uncontrolled state for all stateful components
+- CSS class overrides via `classes` prop targeting internal elements
+- `unstyled` prop to strip all default styles
+- `data-*` attributes for CSS targeting
+- Compound components (Modal.Header, Modal.Body, Modal.Footer)
+
+## Documentation
+
+- Component docs: https://chumlab.com/accordion (and each component path)
+- Blog: https://chumlab.com/blog
+- GitHub README: https://github.com/chumlabhq/ui#readme

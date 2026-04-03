@@ -62,11 +62,20 @@ function useViewportWidth(): number {
   const [width, setWidth] = useState(() =>
     isBrowser ? window.innerWidth : 1024,
   );
+  const rafId = useRef(0);
   useEffect(() => {
     if (!isBrowser) return;
-    const handler = () => setWidth(window.innerWidth);
+    const handler = () => {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = requestAnimationFrame(() => {
+        setWidth(window.innerWidth);
+      });
+    };
     window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
+    return () => {
+      cancelAnimationFrame(rafId.current);
+      window.removeEventListener("resize", handler);
+    };
   }, []);
   return width;
 }

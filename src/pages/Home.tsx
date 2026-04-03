@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useCallback, useState } from "react";
-import { LogoMark, LogoWordmark } from "../components/brand/Logo";
+import { LogoMark } from "../components/brand/Logo";
+import { BLOG_POSTS } from "./blog/blogData";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 // ─── Typing animation component ────────────────────────────────────────────
 
@@ -9,10 +11,8 @@ const phrases = ["in half the time", "users remember", "teams dream of"];
 function TypingHeadline() {
   const [display, setDisplay] = useState("");
   const [phraseIdx, setPhraseIdx] = useState(0);
-  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    if (done) return;
     const phrase = phrases[phraseIdx];
     let charIdx = 0;
     let deleting = false;
@@ -20,16 +20,9 @@ function TypingHeadline() {
 
     const tick = () => {
       if (!deleting) {
-        // Typing forward
         charIdx++;
         setDisplay(phrase.slice(0, charIdx));
         if (charIdx === phrase.length) {
-          // Pause at full phrase
-          if (phraseIdx === phrases.length - 1) {
-            // Last phrase — stop
-            setTimeout(() => setDone(true), 800);
-            return;
-          }
           timeout = setTimeout(() => {
             deleting = true;
             tick();
@@ -38,12 +31,11 @@ function TypingHeadline() {
         }
         timeout = setTimeout(tick, 60 + Math.random() * 40);
       } else {
-        // Deleting
         charIdx--;
         setDisplay(phrase.slice(0, charIdx));
         if (charIdx === 0) {
           deleting = false;
-          setPhraseIdx((prev) => prev + 1);
+          setPhraseIdx((prev) => (prev + 1) % phrases.length);
           return;
         }
         timeout = setTimeout(tick, 30 + Math.random() * 20);
@@ -52,177 +44,66 @@ function TypingHeadline() {
 
     timeout = setTimeout(tick, phraseIdx === 0 ? 600 : 200);
     return () => clearTimeout(timeout);
-  }, [phraseIdx, done]);
+  }, [phraseIdx]);
 
   return (
     <span className="animate-shimmer bg-[linear-gradient(110deg,#60a5fa_0%,#38bdf8_20%,#818cf8_40%,#6366f1_60%,#38bdf8_80%,#60a5fa_100%)] bg-clip-text text-transparent">
       {display}
-      {!done && (
-        <span className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-blue-400 ml-1 align-middle animate-pulse rounded-full" />
-      )}
+      <span className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-blue-400 ml-1 align-middle animate-pulse rounded-full" />
     </span>
   );
 }
 
-const components = [
+// ─── Why Chumlab features ───────────────────────────────────────────────────
+
+const features = [
   {
-    name: "Input",
-    path: "input",
-    desc: "Rich text fields with validation, icons, prefix/suffix, clearable, and character counts.",
+    title: "Accessibility built in, not bolted on",
+    desc: "Full keyboard navigation, screen reader announcements, focus trapping, and WCAG 2.1 AA compliance across every component. Pass audits without a single retrofit.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor">
+        <path
+          fillRule="evenodd"
+          d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/[0.08]",
+    border: "border-emerald-500/20",
   },
   {
-    name: "TextArea",
-    path: "text-area",
-    desc: "Multi-line text input with live validation, clearable, and character counting.",
+    title: "Fully themeable, zero lock in",
+    desc: "Override any element with className props. Go fully unstyled. Use CSS variables for theming. Your design system stays yours we just handle the hard parts.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor">
+        <path
+          fillRule="evenodd"
+          d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm4.75 11.25a.75.75 0 001.5 0v-2.546l.943.942a.75.75 0 001.06-1.06l-2.22-2.22a.75.75 0 00-1.06 0l-2.22 2.22a.75.75 0 001.06 1.06l.937-.938v2.542z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
+    color: "text-blue-400",
+    bg: "bg-blue-500/[0.08]",
+    border: "border-blue-500/20",
   },
   {
-    name: "Button",
-    path: "button",
-    desc: "Actions with loading states, start/end icons, and size variants.",
-  },
-  {
-    name: "Dropdown",
-    path: "dropdown",
-    desc: "Select menus with keyboard navigation and accessible labeling.",
-  },
-  {
-    name: "SearchableDropdown",
-    path: "searchable-dropdown",
-    desc: "Filterable select menus with type-ahead search and keyboard navigation.",
-  },
-  {
-    name: "MultiSelectDropdown",
-    path: "multi-select-dropdown",
-    desc: "Multi-selection dropdowns with chips, clear-all, and overflow counts.",
-  },
-  {
-    name: "MultiSelectSearchableDropdown",
-    path: "multi-select-searchable-dropdown",
-    desc: "Searchable multi-select with filtering, chips, and keyboard support.",
-  },
-  {
-    name: "CascadingDropdown",
-    path: "cascading-dropdown",
-    desc: "Hierarchical dropdowns with nested submenus and multi-level selection.",
-  },
-  {
-    name: "Modal",
-    path: "modal",
-    desc: "Accessible dialogs with focus trapping and scroll lock.",
-  },
-  {
-    name: "Drawer",
-    path: "drawer",
-    desc: "Slide-out panels with configurable snap points and gestures.",
-  },
-  {
-    name: "Table",
-    path: "table",
-    desc: "Data tables with column sorting, pagination, and row selection.",
-  },
-  {
-    name: "Toast",
-    path: "toast",
-    desc: "Notification system with auto-dismiss, stacking, and positions.",
-  },
-  {
-    name: "Accordion",
-    path: "accordion",
-    desc: "Collapsible content panels with smooth animations.",
-  },
-  {
-    name: "Tabs",
-    path: "tab-panel",
-    desc: "Tabbed navigation with roving focus and ARIA compliance.",
-  },
-  {
-    name: "DatePicker",
-    path: "date-picker",
-    desc: "Calendar date selection with range support.",
-  },
-  {
-    name: "TimePicker",
-    path: "time-picker",
-    desc: "Time selection with dropdown list and clock face variants.",
-  },
-  {
-    name: "Switch",
-    path: "switch",
-    desc: "Toggle controls with labels and controlled/uncontrolled modes.",
-  },
-  {
-    name: "Checkbox",
-    path: "checkbox",
-    desc: "Checkboxes with indeterminate state, labels, and validation.",
-  },
-  {
-    name: "RadioButton",
-    path: "radio-button",
-    desc: "Radio groups with keyboard navigation and custom styling.",
-  },
-  {
-    name: "Toggle",
-    path: "toggle",
-    desc: "Pressable toggle buttons with aria-pressed and size variants.",
-  },
-  {
-    name: "Slider",
-    path: "slider",
-    desc: "Range sliders with single and dual thumbs, marks, and tooltips.",
-  },
-  {
-    name: "OtpInput",
-    path: "otp-input",
-    desc: "One-time password inputs with auto-advance and paste support.",
-  },
-  {
-    name: "Tooltip",
-    path: "tooltip",
-    desc: "Accessible tooltips with configurable placement and arrow.",
-  },
-  {
-    name: "Pagination",
-    path: "pagination",
-    desc: "Page navigation with rows-per-page selector and keyboard support.",
-  },
-  {
-    name: "Breadcrumb",
-    path: "breadcrumb",
-    desc: "Navigation breadcrumbs with truncation and dropdown overflow.",
-  },
-  {
-    name: "Stepper",
-    path: "stepper",
-    desc: "Step indicators with numbered, icon, and dot variants.",
-  },
-  {
-    name: "Avatar",
-    path: "avatar",
-    desc: "User avatars with image, initials, badges, and group stacking.",
-  },
-  {
-    name: "CountryFlag",
-    path: "country-flag",
-    desc: "Country flag icons with group display and shimmer loading.",
-  },
-  {
-    name: "Loader",
-    path: "loader",
-    desc: "Loading indicators: circular, linear, dot, and pulse variants.",
-  },
-  {
-    name: "ResizablePanel",
-    path: "resizable-panel",
-    desc: "Resizable split panels with drag handles and min/max constraints.",
-  },
-  {
-    name: "InternationalPhoneInput",
-    path: "international-phone-input",
-    desc: "Phone input with country selector, formatting, and validation.",
+    title: "Battle tested for production",
+    desc: "Controlled and uncontrolled modes that actually work together. SSR safe rendering, proper ref forwarding, TypeScript strict types, and edge case handling so you ship with confidence.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M11.983 1.907a.75.75 0 00-1.292-.657l-8.5 9.5A.75.75 0 002.75 12h6.572l-1.305 6.093a.75.75 0 001.292.657l8.5-9.5A.75.75 0 0017.25 8h-6.572l1.305-6.093z" />
+      </svg>
+    ),
+    color: "text-amber-400",
+    bg: "bg-amber-500/[0.08]",
+    border: "border-amber-500/20",
   },
 ];
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// ─── Space scene ────────────────────────────────────────────────────────────
 
 interface Star {
   x: number;
@@ -310,13 +191,12 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
       const mx = (m.x - 0.5) * 2,
         my = (m.y - 0.5) * 2;
 
-      // ═══ STARS ═══
       for (const s of stars) {
         const px = s.x * w + mx * s.z * 45,
-          py = s.y * h + my * s.z * 45,
-          tw = Math.sin(t * s.ts + s.to),
-          al = s.a * (0.35 + 0.65 * tw),
-          sz = s.size * (0.35 + s.z * 0.85);
+          py = s.y * h + my * s.z * 45;
+        const tw = Math.sin(t * s.ts + s.to),
+          al = s.a * (0.35 + 0.65 * tw);
+        const sz = s.size * (0.35 + s.z * 0.85);
         ctx.beginPath();
         ctx.arc(px, py, sz, 0, 6.28);
         ctx.fillStyle = `hsla(${s.hue},${25 + al * 75}%,${60 + al * 40}%,${al})`;
@@ -336,13 +216,12 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         }
       }
 
-      // ═══ SATELLITE ═══
       sat.angle += 0.003;
       const satCX = w * 0.8,
-        satCY = h * 0.18,
-        satX = satCX + Math.cos(sat.angle) * w * 0.12 + mx * 30,
-        satY = satCY + Math.sin(sat.angle) * h * 0.06 + my * 20,
-        satSc = 0.85 + Math.sin(sat.angle) * 0.15,
+        satCY = h * 0.18;
+      const satX = satCX + Math.cos(sat.angle) * w * 0.12 + mx * 30;
+      const satY = satCY + Math.sin(sat.angle) * h * 0.06 + my * 20;
+      const satSc = 0.85 + Math.sin(sat.angle) * 0.15,
         S = 8;
       ctx.save();
       ctx.translate(satX, satY);
@@ -363,14 +242,6 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         ctx.lineTo(S * 2 + i * S * 1.125, S * 0.6);
         ctx.stroke();
       }
-      ctx.beginPath();
-      ctx.moveTo(-S * 6.5, 0);
-      ctx.lineTo(-S * 2, 0);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(S * 2, 0);
-      ctx.lineTo(S * 6.5, 0);
-      ctx.stroke();
       ctx.fillStyle = "rgba(190,200,220,0.85)";
       ctx.fillRect(-S * 1.5, -S, S * 3, S * 2);
       ctx.strokeStyle = "rgba(220,225,240,0.4)";
@@ -398,7 +269,6 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         ctx.fill();
       }
 
-      // ═══ COMET ═══
       cometTimer--;
       if (cometTimer <= 0 && !comet.active) {
         comet.active = true;
@@ -414,10 +284,10 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         comet.y += comet.vy * 0.003;
         comet.life++;
         const cx = comet.x * w,
-          cy = comet.y * h,
-          fade = Math.min(1, comet.life / 40),
-          tailLen = 300 + Math.sin(t) * 40,
-          tailX = cx - tailLen,
+          cy = comet.y * h;
+        const fade = Math.min(1, comet.life / 40);
+        const tailLen = 300 + Math.sin(t) * 40;
+        const tailX = cx - tailLen,
           tailY = cy - tailLen * 0.25;
         ctx.save();
         ctx.globalAlpha = fade * 0.6;
@@ -470,7 +340,6 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         if (comet.x > 1.3 || comet.y > 1.2) comet.active = false;
       }
 
-      // ═══ SHOOTING STARS — travel fully across screen, every 5-10s ═══
       ssTimer--;
       if (ssTimer <= 0) {
         ssTimer = 300 + Math.floor(Math.random() * 300);
@@ -500,20 +369,13 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
           shootingStars.splice(i, 1);
           continue;
         }
-
         const fadeIn = Math.min(1, s.life / 15);
-        const fadeOut = offScreen
-          ? 0
-          : s.x > w - 150
-            ? Math.max(0, (w + 100 - s.x) / 250)
-            : 1;
+        const fadeOut = s.x > w - 150 ? Math.max(0, (w + 100 - s.x) / 250) : 1;
         const fade = fadeIn * fadeOut;
-
         const trailLen = 120 + s.size * 25;
         const norm = Math.sqrt(s.vx * s.vx + s.vy * s.vy);
         const tx = s.x - (s.vx / norm) * trailLen * fade;
         const ty = s.y - (s.vy / norm) * trailLen * fade;
-
         const sg = ctx.createLinearGradient(tx, ty, s.x, s.y);
         sg.addColorStop(0, "transparent");
         sg.addColorStop(0.4, `rgba(180,200,255,${0.25 * fade})`);
@@ -525,14 +387,9 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         ctx.lineWidth = s.size;
         ctx.lineCap = "round";
         ctx.stroke();
-
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.size * 1.5 * fade, 0, 6.28);
         ctx.fillStyle = `rgba(255,255,255,${0.9 * fade})`;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size * 4 * fade, 0, 6.28);
-        ctx.fillStyle = `rgba(200,215,255,${0.08 * fade})`;
         ctx.fill();
       }
 
@@ -549,11 +406,15 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
-const staggerClass = (i: number) => `stagger-${i + 1}`;
-
 const Home = () => {
+  useDocumentTitle("Accessible React Components for Modern Teams");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useSpaceScene(canvasRef);
+
+  const [randomBlogs] = useState(() => {
+    const shuffled = [...BLOG_POSTS].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 3);
+  });
 
   return (
     <div className="min-h-screen bg-[#04040a] text-white overflow-hidden selection:bg-indigo-500/30">
@@ -576,13 +437,11 @@ const Home = () => {
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-[0.025]">
           <div className="animate-beam absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[linear-gradient(90deg,transparent_40%,rgba(255,255,255,0.15)_50%,transparent_60%)]" />
         </div>
-        {/* Vignette — shifted right so bottom-left sun is not covered */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_55%_40%,transparent_0%,rgba(4,4,10,0.3)_60%,rgba(4,4,10,0.6)_80%,#04040a_100%)]" />
-        {/* Bottom fade — only right side, left is open for sun */}
         <div className="absolute bottom-0 left-[25%] right-0 h-[20%] bg-linear-to-t from-[#04040a]/40 to-transparent" />
       </div>
 
-      {/* ═══ SUN — very subtle warm presence, bottom-left ═══ */}
+      {/* Sun */}
       <div
         className="fixed bottom-0 left-0 pointer-events-none z-2 opacity-50"
         aria-hidden="true"
@@ -592,14 +451,6 @@ const Home = () => {
         <div className="absolute -bottom-[25%] -left-[12%] w-[40vmin] h-[40vmin] rounded-full bg-[radial-gradient(circle,rgba(255,190,90,0.05)_0%,rgba(255,140,40,0.015)_50%,transparent_75%)]" />
         <div className="absolute -bottom-[20%] -left-[8%] w-[28vmin] h-[28vmin] rounded-full bg-[radial-gradient(circle,rgba(255,210,130,0.07)_0%,rgba(255,160,50,0.02)_50%,transparent_75%)]" />
         <div className="absolute -bottom-[16%] -left-[5%] w-[18vmin] h-[18vmin] rounded-full bg-[radial-gradient(circle,rgba(255,240,210,0.18)_0%,rgba(255,200,110,0.08)_30%,rgba(255,160,45,0.03)_60%,transparent_85%)]" />
-        <div className="absolute -bottom-[14%] -left-[3.5%] w-[12vmin] h-[12vmin] rounded-full bg-[radial-gradient(circle,rgba(255,250,235,0.12)_0%,rgba(255,240,210,0.04)_45%,transparent_70%)]" />
-        <div
-          className="absolute bottom-[7%] -left-[5%] w-[40vw] h-[0.3vmin]"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 10%, rgba(255,235,190,0.03) 30%, rgba(255,245,215,0.06) 45%, rgba(255,245,215,0.06) 55%, rgba(255,235,190,0.03) 70%, transparent 90%)",
-          }}
-        />
       </div>
 
       {/* ═══ CONTENT ═══ */}
@@ -608,29 +459,41 @@ const Home = () => {
         <header className="pointer-events-auto fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
           <div className="w-full px-5 sm:px-8">
             <div className="flex items-center justify-between py-3.5">
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="relative group-hover:scale-105 transition-transform duration-500">
-                  <LogoMark size={40} />
-                  <div className="absolute -inset-3 rounded-full bg-indigo-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-                <LogoWordmark className="text-[22px]" />
+              <Link to="/" className="flex items-center gap-3">
+                <LogoMark size={160} />
               </Link>
               <div className="flex items-center gap-1">
                 <Link
                   to="/accordion"
-                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
+                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
                 >
                   Components
                 </Link>
                 <Link
                   to="/blog"
-                  className="text-[12px] text-gray-500 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/4"
+                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
                 >
                   Blog
                 </Link>
+                <a
+                  href="https://github.com/chumlabhq/ui"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
+                  aria-label="GitHub"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                  </svg>
+                </a>
                 <Link
                   to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-3 hover:shadow-[0_0_20px_rgba(168,85,247,0.12)]"
+                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-2"
                 >
                   Get Started
                 </Link>
@@ -640,30 +503,30 @@ const Home = () => {
         </header>
 
         <main className="pointer-events-auto">
-          {/* ── HERO ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-10 pt-28 sm:pt-36 pb-28 text-center">
-            <div className="max-w-3xl mx-auto">
-              {/* Decorative orbital ring behind heading */}
+          {/* ══════════════════════════════════════════════════════════════════
+              SECTION 1 — HERO (full viewport, centered)
+          ══════════════════════════════════════════════════════════════════ */}
+          <section className="h-screen flex items-center justify-center px-6 sm:px-10 pt-[56px]">
+            <div className="text-center max-w-5xl mx-auto">
               <div className="relative">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/2 animate-float opacity-60" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full border border-white/1.5 animate-float-d1 opacity-40" />
-
-                <h1 className="relative animate-fade-up-d1 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] mb-6 whitespace-nowrap">
+                <h1 className="relative animate-fade-up-d1 text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6 whitespace-nowrap">
                   Ship products <TypingHeadline />
                 </h1>
               </div>
 
-              <p className="animate-fade-up-d2 text-[15px] sm:text-[17px] text-gray-400 leading-[1.7] max-w-lg mx-auto mb-8">
+              <p className="animate-fade-up-d2 text-base sm:text-lg text-gray-400 leading-[1.7] max-w-2xl mx-auto mb-10">
                 The best teams don't waste engineering cycles on UI plumbing.
-                Chumlab gives you the same production ready components that
-                top startups use so your team can focus on the product, not the
+                Chumlab gives you the same production ready components that top
+                startups use so your team can focus on the product, not the
                 infrastructure.
               </p>
 
-              <div className="animate-fade-up-d3 flex flex-col items-center gap-4">
+              <div className="animate-fade-up-d3 flex flex-col items-center gap-5">
                 <Link
                   to="/accordion"
-                  className="group relative inline-flex items-center gap-2 px-7 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all"
+                  className="group relative inline-flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-medium text-white overflow-hidden transition-all"
                 >
                   <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-violet-600" />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500" />
@@ -671,8 +534,8 @@ const Home = () => {
                   <span className="relative">Explore Components</span>
                   <svg
                     className="relative group-hover:translate-x-0.5 transition-transform duration-300"
-                    width="14"
-                    height="14"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -684,7 +547,7 @@ const Home = () => {
                     <path d="m12 5 7 7-7 7" />
                   </svg>
                 </Link>
-                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-lg bg-white/2.5 border border-white/5 text-[12px] font-mono text-gray-500">
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-lg bg-white/2.5 border border-white/5 text-[13px] font-mono text-gray-500">
                   <span className="text-gray-700 select-none">$</span>
                   <span>
                     npm install{" "}
@@ -698,8 +561,8 @@ const Home = () => {
                     aria-label="Copy"
                   >
                     <svg
-                      width="12"
-                      height="12"
+                      width="14"
+                      height="14"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -716,147 +579,344 @@ const Home = () => {
             </div>
           </section>
 
-          {/* ── WHY CHUMLAB ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-28">
-            <div className="text-center mb-12">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 mb-3 block">
-                Why chumlab
-              </span>
-              <h2 className="text-lg sm:text-xl font-bold tracking-tight">
-                The components your team keeps rebuilding
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-              {[
-                {
-                  icon: "M9 12l2 2 4-4|M22 11.08V12a10 10 0 1 1-5.93-9.14",
-                  title: "Accessible from day one",
-                  desc: "Most startups skip accessibility until a customer complains or an audit fails. Every Chumlab component ships with full keyboard navigation, screen reader support, and WCAG 2.1 AA compliance built in.",
-                  ic: "text-emerald-400",
-                  float: "animate-float",
-                },
-                {
-                  icon: "M12 2L2 7l10 5 10-5-10-5z|M2 17l10 5 10-5|M2 12l10 5 10-5",
-                  title: "Your brand, not ours",
-                  desc: "Most component libraries force you into their visual style and then you spend weeks overriding it. Chumlab gives you className props on every single element so your components look like yours from day one.",
-                  ic: "text-blue-400",
-                  float: "animate-float-d1",
-                },
-                {
-                  icon: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
-                  title: "Actually production ready",
-                  desc: "We handle the edge cases that bite you at 2am. Controlled and uncontrolled modes that actually work together, proper event contracts, ref forwarding, and dev warnings that catch bugs before your users do.",
-                  ic: "text-amber-400",
-                  float: "animate-float-d2",
-                },
-              ].map((f) => (
-                <div
-                  key={f.title}
-                  className={`card-glow rounded-2xl p-5 transition-all duration-500 backdrop-blur-sm animate-pulse-glow`}
-                >
-                  <div className={`${f.float} mb-4`}>
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={f.ic}
-                    >
-                      {f.icon.split("|").map((d, i) => (
-                        <path key={i} d={d} />
-                      ))}
-                    </svg>
-                  </div>
-                  <h3 className="text-[13px] font-semibold mb-1.5">
-                    {f.title}
-                  </h3>
-                  <p className="text-[11px] text-gray-500 leading-relaxed">
-                    {f.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ── COMPONENTS ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-28">
-            {/* Section header with decorative line */}
-            <div className="flex items-center gap-4 mb-10">
-              <div className="h-px flex-1 bg-linear-to-r from-transparent to-white/6" />
-              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 shrink-0">
-                Components
-              </span>
-              <div className="h-px flex-1 bg-linear-to-l from-transparent to-white/6" />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-4xl mx-auto">
-              {components.map((c, i) => (
-                <Link
-                  key={c.path}
-                  to={`/${c.path}`}
-                  className={`card-glow group relative rounded-xl p-4 transition-all duration-500 backdrop-blur-sm ${staggerClass(i)}`}
-                >
-                  <div className="absolute inset-0 rounded-xl bg-linear-to-br from-blue-500/3 via-transparent to-indigo-500/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="relative flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-[13px] font-medium group-hover:text-blue-300 transition-colors duration-300">
-                        {c.name}
-                      </span>
-                    </div>
-                    <svg
-                      width="13"
-                      height="13"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-gray-700 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all duration-300"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  </div>
-                  <p className="relative text-[11px] text-gray-600 leading-relaxed mt-1.5 group-hover:text-gray-400 transition-colors duration-300">
-                    {c.desc}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </section>
-
-          {/* ── CTA BAND ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-24">
-            <div className="relative rounded-2xl overflow-hidden p-8 sm:p-12 text-center">
-              {/* Background glow */}
-              <div className="absolute inset-0 bg-linear-to-br from-blue-500/4 via-transparent to-indigo-500/3" />
-              <div className="absolute inset-0 border border-white/4 rounded-2xl" />
-              <div className="relative">
-                <h3 className="text-lg sm:text-xl font-bold tracking-tight mb-2">
-                  Ship your product, not your component library
-                </h3>
-                <p className="text-[13px] text-gray-500 mb-6 max-w-md mx-auto">
-                  Your engineering team should be building features that move
-                  the needle for your business, not spending another sprint
-                  rebuilding a dropdown.
+          {/* ══════════════════════════════════════════════════════════════════
+              SECTION 2 — WHY CHUMLAB (full viewport, centered)
+          ══════════════════════════════════════════════════════════════════ */}
+          <section className="min-h-screen flex items-center justify-center px-6 sm:px-10 py-20">
+            <style>{`
+              @property --border-angle {
+                syntax: "<angle>";
+                initial-value: 0deg;
+                inherits: false;
+              }
+              .glow-border {
+                --border-angle: 0deg;
+                animation: border-rotate 3s linear infinite;
+              }
+              .glow-border::before {
+                content: "";
+                position: absolute;
+                inset: -1px;
+                border-radius: 1rem;
+                padding: 1px;
+                background: conic-gradient(from var(--border-angle), transparent 30%, var(--glow-color) 50%, transparent 70%);
+                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask-composite: exclude;
+                -webkit-mask-composite: xor;
+                opacity: 0.5;
+                transition: opacity 0.4s;
+              }
+              .glow-border:hover::before {
+                opacity: 1;
+              }
+              @keyframes border-rotate {
+                to { --border-angle: 360deg; }
+              }
+            `}</style>
+            <div className="max-w-5xl mx-auto w-full">
+              <div className="text-center mb-20">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
+                  Stop rebuilding UI from scratch
+                </h2>
+                <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                  Your team has built the same dropdown three times. The same
+                  modal twice. Chumlab gives you 31 production grade components
+                  so you can ship features, not infrastructure.
                 </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                {features.map((f) => (
+                  <div
+                    key={f.title}
+                    className={`glow-border relative group rounded-2xl p-7 border ${f.border} ${f.bg} hover:bg-white/[0.06] transition-all duration-500 backdrop-blur-sm`}
+                    style={
+                      {
+                        "--glow-color":
+                          f.color === "text-emerald-400"
+                            ? "#34d399"
+                            : f.color === "text-blue-400"
+                              ? "#60a5fa"
+                              : "#fbbf24",
+                      } as React.CSSProperties
+                    }
+                  >
+                    <div
+                      className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-5 ${f.bg} ${f.color}`}
+                    >
+                      {f.icon}
+                    </div>
+                    <h3 className="text-base font-semibold mb-2 text-white">
+                      {f.title}
+                    </h3>
+                    <p className="text-[13px] text-gray-300 leading-[1.7]">
+                      {f.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════════════════════════════
+              SECTION 3 — COMPONENTS (top 6)
+          ══════════════════════════════════════════════════════════════════ */}
+          <section className="px-6 sm:px-10 py-28">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-20">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
+                  Everything you need to ship faster
+                </h2>
+                <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                  31 accessible, themeable, SSR-safe components with full
+                  TypeScript support. Here are the ones teams reach for first.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {[
+                  {
+                    name: "Table",
+                    path: "table",
+                    desc: "Sorting, pagination, row selection, column pinning, resizing, and infinite scroll — all in one.",
+                    icon: (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2 0v3h6V5H5zm8 0v3h6V5h-6zM5 10v4h6v-4H5zm8 0v4h6v-4h-6zM5 16v3h6v-3H5zm8 0v3h6v-3h-6z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    name: "Modal",
+                    path: "modal",
+                    desc: "Focus trapping, scroll lock, nested stacking, escape handling, and smooth enter/exit animations.",
+                    icon: (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4 1a1 1 0 000 2h10a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    name: "DatePicker",
+                    path: "date-picker",
+                    desc: "Single date, range, and multi select modes with calendar grid, presets, and keyboard navigation.",
+                    icon: (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M6 3a1 1 0 011 1v1h10V4a1 1 0 112 0v1h1a3 3 0 013 3v10a3 3 0 01-3 3H4a3 3 0 01-3-3V8a3 3 0 013-3h1V4a1 1 0 011-1zm-2 7v8a1 1 0 001 1h14a1 1 0 001-1v-8H4zm3 2a1 1 0 011-1h.01a1 1 0 110 2H8a1 1 0 01-1-1zm4 0a1 1 0 011-1h.01a1 1 0 110 2H12a1 1 0 01-1-1zm4 0a1 1 0 011-1h.01a1 1 0 110 2H16a1 1 0 01-1-1zm-8 4a1 1 0 011-1h.01a1 1 0 110 2H8a1 1 0 01-1-1zm4 0a1 1 0 011-1h.01a1 1 0 110 2H12a1 1 0 01-1-1z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    name: "Dropdown",
+                    path: "dropdown",
+                    desc: "Single select with search, keyboard nav, portal positioning, and shimmer loading states.",
+                    icon: (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2 6a2 2 0 00-2 2v2a2 2 0 002 2h14a2 2 0 002-2v-2a2 2 0 00-2-2H5zm0 8a1 1 0 100 2h4a1 1 0 100-2H5z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    name: "Toast",
+                    path: "toast",
+                    desc: "Auto dismiss notifications with stacking, pause on hover, progress bars, and position control.",
+                    icon: (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M5.85 3.5a.75.75 0 00-1.117-1 9.719 9.719 0 00-2.348 4.876.75.75 0 001.479.248A8.219 8.219 0 015.85 3.5zM19.267 2.5a.75.75 0 10-1.118 1 8.22 8.22 0 011.987 4.124.75.75 0 001.48-.248A9.72 9.72 0 0019.266 2.5zM12 2.25A6.75 6.75 0 005.25 9v.75a8.217 8.217 0 01-2.119 5.52.75.75 0 00.298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 107.48 0 24.583 24.583 0 004.83-1.244.75.75 0 00.298-1.205 8.217 8.217 0 01-2.118-5.52V9A6.75 6.75 0 0012 2.25zM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 004.496 0l.002.1a2.25 2.25 0 01-4.5 0z" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    name: "Input",
+                    path: "input",
+                    desc: "Text fields with validation, icons, prefix/suffix slots, clearable, character counts, and error states.",
+                    icon: (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M3.5 5A1.5 1.5 0 002 6.5v3A1.5 1.5 0 003.5 11h.294a1 1 0 01.768.36l1.07 1.284a.5.5 0 00.768 0l1.07-1.284A1 1 0 018.206 11H8.5A1.5 1.5 0 0010 9.5v-3A1.5 1.5 0 008.5 5h-5zM14 7a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2h-6zm-1 5a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1zm-11 0a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H4z" />
+                      </svg>
+                    ),
+                  },
+                ].map((c, i) => (
+                  <Link
+                    key={c.path}
+                    to={`/${c.path}`}
+                    className="glow-border group relative rounded-2xl p-6 border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-500 backdrop-blur-sm"
+                    style={
+                      {
+                        "--glow-color": "#6366f1",
+                        animationDelay: `${i * -0.5}s`,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-blue-500/5 via-transparent to-indigo-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="relative">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-500/[0.08] text-indigo-400 group-hover:bg-indigo-500/[0.15] group-hover:text-indigo-300 transition-all duration-300">
+                          {c.icon}
+                        </div>
+                        <h3 className="text-[15px] font-semibold text-white group-hover:text-blue-200 transition-colors duration-300">
+                          {c.name}
+                        </h3>
+                      </div>
+                      <p className="text-[13px] text-gray-400 leading-[1.7] group-hover:text-gray-300 transition-colors duration-300">
+                        {c.desc}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="text-center mt-14">
                 <Link
                   to="/accordion"
-                  className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-medium text-white overflow-hidden transition-all"
+                  className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-xl text-sm font-medium text-white overflow-hidden transition-all"
                 >
                   <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-violet-600" />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500" />
                   <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.2)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] transition-shadow duration-500" />
-                  <span className="relative">Browse Documentation</span>
+                  <span className="relative">View all 31 components</span>
                   <svg
                     className="relative group-hover:translate-x-0.5 transition-transform duration-300"
-                    width="14"
-                    height="14"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* ══════════════════════════════════════════════════════════════════
+              SECTION 4 — BLOGS (3 random)
+          ══════════════════════════════════════════════════════════════════ */}
+          <section className="px-6 sm:px-10 py-28">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-20">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
+                  Learn, build, ship
+                </h2>
+                <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                  Practical guides on React architecture, performance patterns,
+                  and frontend best practices from the team behind Chumlab.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-14">
+                {randomBlogs.map((post) => (
+                  <Link
+                    key={post.id}
+                    to={`/blog/${post.id}`}
+                    className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden transition-all duration-500 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-1"
+                  >
+                    <div className="relative h-44 overflow-hidden">
+                      {post.coverImage ? (
+                        <img
+                          src={post.coverImage}
+                          alt={post.title}
+                          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full"
+                          style={{
+                            background: `linear-gradient(135deg, ${post.coverGradient[0]}18, ${post.coverGradient[1]}14)`,
+                          }}
+                        />
+                      )}
+                    </div>
+
+                    <div className="p-5">
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <span className="text-[11px] font-medium text-gray-500 bg-white/[0.05] px-2 py-0.5 rounded-full">
+                          {post.category}
+                        </span>
+                        <span className="text-xs text-gray-600">
+                          {post.readTime}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-white leading-snug mb-2 group-hover:text-blue-100 transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-gray-400 leading-relaxed line-clamp-2 mb-4">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between pt-3 border-t border-white/[0.06]">
+                        <span className="text-xs text-gray-500">
+                          {post.date}
+                        </span>
+                        <span className="text-xs font-medium text-blue-400 group-hover:text-blue-300 transition-colors flex items-center gap-1.5">
+                          Read more
+                          <svg
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="group-hover:translate-x-0.5 transition-transform"
+                          >
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Link
+                  to="/blog"
+                  className="group relative inline-flex items-center gap-2.5 px-8 py-3 rounded-xl text-sm font-medium text-white overflow-hidden transition-all"
+                >
+                  <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-violet-600" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500" />
+                  <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.25)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.45)] transition-shadow duration-500" />
+                  <span className="relative">Read all articles</span>
+                  <svg
+                    className="relative group-hover:translate-x-0.5 transition-transform duration-300"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -873,36 +933,58 @@ const Home = () => {
           </section>
 
           {/* ── FOOTER ── */}
-          <footer className="w-full px-5 sm:px-8 pb-6">
-            <div className="border-t border-white/4 pt-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <LogoMark size={32} />
-                  <LogoWordmark className="text-[18px]" />
-                  <span className="text-[10px] text-gray-700 ml-2">
-                    MIT License
-                  </span>
-                </div>
-                <div className="flex items-center gap-5">
+          <footer className="w-full px-6 sm:px-10 pt-16 pb-8">
+            <div className="border-t border-white/[0.08] pt-8">
+              {/* Row: logo — nav links — social */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+                <LogoMark size={120} />
+                <div className="flex items-center gap-6">
                   <Link
-                    to="/button"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    to="/accordion"
+                    className="text-sm text-white/70 hover:text-white transition-colors duration-300"
                   >
                     Components
                   </Link>
                   <Link
                     to="/blog"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    className="text-sm text-white/70 hover:text-white transition-colors duration-300"
                   >
                     Blog
                   </Link>
                   <a
-                    href="https://github.com"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    href="https://github.com/chumlabhq/ui"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/70 hover:text-white transition-colors duration-300"
+                    aria-label="GitHub"
                   >
-                    GitHub
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg>
                   </a>
                 </div>
+              </div>
+
+              {/* Bottom row */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-white/50">
+                <span>
+                  &copy; {new Date().getFullYear()} Chumlab &middot; MIT License
+                  &middot; Built with {"☕"} and way too many tabs
+                </span>
+                <a
+                  href="mailto:hello@chumlab.com"
+                  className="text-white/60 hover:text-white transition-colors duration-300"
+                >
+                  {"💬"} Got feedback? Ping us at{" "}
+                  <span className="underline underline-offset-2">
+                    hello@chumlab.com
+                  </span>
+                </a>
               </div>
             </div>
           </footer>

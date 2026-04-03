@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, memo, useState, useMemo } from "react";
+import { useEffect, useRef, useCallback, memo, forwardRef, useState, useMemo } from "react";
 import type { ToastProps, ToastClasses } from "./utils/types";
 import { CloseIcon } from "./utils/icons";
 import { getDefaultIcon } from "./utils/getDefaultIcon";
@@ -6,7 +6,7 @@ import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED
 import { cn } from "../../utils/cn";
 import { isBrowser } from "../../utils/isBrowser";
 
-const Toast = memo(function Toast({
+const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   id,
   type = "info",
   message,
@@ -28,7 +28,7 @@ const Toast = memo(function Toast({
   pauseOnHover = true,
   style,
   closeAriaLabel = "Close notification",
-}: ToastProps) {
+}, ref) {
   const deadlineRef = useRef<number>(0);
   const remainingRef = useRef<number>(duration);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -41,7 +41,7 @@ const Toast = memo(function Toast({
   useEffect(() => {
     onCloseRef.current = onDismiss ?? onClose;
     onRemoveRef.current = onRemove;
-  });
+  }, [onDismiss, onClose, onRemove]);
   const [isPaused, setIsPaused] = useState(false);
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
@@ -128,7 +128,11 @@ const Toast = memo(function Toast({
 
   return (
     <div
-      ref={toastRef}
+      ref={(node) => {
+        (toastRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       role={toastRole}
       aria-live={toastRole === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
@@ -198,6 +202,6 @@ const Toast = memo(function Toast({
       )}
     </div>
   );
-});
+}));
 
 export default Toast;

@@ -32,6 +32,7 @@ export const ToastProvider = ({
   const [toasts, setToasts] = useState<ToastState[]>([]);
   const idCounterRef = useRef(0);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
   const portalTarget = isBrowser ? document.body : null;
 
@@ -47,7 +48,8 @@ export const ToastProvider = ({
       prev.map((t) => (t.id === id ? { ...t, visible: false } : t))
     );
 
-    setTimeout(() => {
+    const tid = setTimeout(() => {
+      timeoutIdsRef.current.delete(tid);
       setToasts((prev) => {
         const next = prev.filter((t) => t.id !== id);
         if (next.length === 0) {
@@ -56,6 +58,7 @@ export const ToastProvider = ({
         return next;
       });
     }, animationDuration);
+    timeoutIdsRef.current.add(tid);
   }, [animationDuration, restoreFocus]);
 
   const addToast = useCallback(
@@ -97,9 +100,11 @@ export const ToastProvider = ({
           );
           // Remove them from DOM after exit animation finishes
           const overflowIds = newToasts.slice(0, overflowCount).map((t) => t.id);
-          setTimeout(() => {
+          const tid = setTimeout(() => {
+            timeoutIdsRef.current.delete(tid);
             setToasts((cur) => cur.filter((t) => !overflowIds.includes(t.id)));
           }, animationDuration);
+          timeoutIdsRef.current.add(tid);
           return result;
         }
         return newToasts;
@@ -147,10 +152,12 @@ export const ToastProvider = ({
 
   const dismissAll = useCallback(() => {
     setToasts((prev) => prev.map((t) => ({ ...t, visible: false })));
-    setTimeout(() => {
+    const tid = setTimeout(() => {
+      timeoutIdsRef.current.delete(tid);
       setToasts([]);
       restoreFocus();
     }, animationDuration);
+    timeoutIdsRef.current.add(tid);
   }, [animationDuration, restoreFocus]);
 
   useEffect(() => {
@@ -165,6 +172,14 @@ export const ToastProvider = ({
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [dismissOnEscape, toasts.length, dismissAll]);
+
+  useEffect(() => {
+    const ids = timeoutIdsRef.current;
+    return () => {
+      ids.forEach(clearTimeout);
+      ids.clear();
+    };
+  }, []);
 
   const contextValue: ToastContextValue = {
     toast: addToast,

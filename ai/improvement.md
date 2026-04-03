@@ -1,208 +1,199 @@
-# CHUMLAB DESIGN SYSTEM — SELF-IMPROVEMENT PATCH (v2)
+# SELF-IMPROVEMENT PATCH — Chumlab UI
+
+**Date:** 2026-04-03
+**Architect:** Principal Architect (System + Prompt Optimizer)
+
+---
 
 ## INPUT
 
-- **Audit report (v2)**: 5 blockers, 5 high-risk issues found
-- **Fix summary**: All 5 blockers resolved — 0 ESLint errors, 0 warnings, 1497/1497 tests pass, unused code removed, dependencies corrected
-- **Verifier report (v2)**: SAFE TO SHIP, HIGH confidence
+- **Audit report:** 8 blockers (B1-B8), 14 high-risk issues (H1-H14)
+- **Fix summary:** B1-B5, B8, H1-H3, H8-H9 resolved. B6-B7, H4-H7, H10-H14 deferred.
+- **Verification:** 1497/1497 tests pass, 0 type errors, 0 lint warnings. Verdict: NOT SAFE TO SHIP (e2e gaps, JSDoc gaps).
 
 ---
 
-## 1. IDENTIFY
+## 1. MISSED ISSUES
 
-### Missed Issues
+### A. isBrowser Import Missing from Dropdown/helpers.ts
+- **What happened:** SSR fix agent added `isBrowser` usage but used `export { isBrowser } from ...` (re-export only, no local binding). This crashed all Dropdown tests.
+- **Root cause:** Agent confused `export { X } from` (re-export) with `import { X } from` (local import).
+- **Detection gap:** No type-check was run between fix and test.
 
-| Issue | Why Missed | Impact |
-|-------|-----------|--------|
-| `eslint-disable` suppressions count as technical debt | Audit focused on presence of errors, not on whether suppressions are the right fix | 3 suppressions remain as permanent escape hatches |
-| `React` as a useCallback dependency is a false positive | ESLint doesn't know module-level imports are stable | Required suppression comment |
+### B. Pagination aria-label Broke Test Accessible Name Queries
+- **What happened:** Adding `aria-label="${option} rows per page"` to options that already had text content changed the accessible name from "50" to "50 rows per page", breaking `getByRole("option", { name: "50" })`.
+- **Root cause:** Agent didn't check if text content already provided an accessible name before adding aria-label.
+- **Detection gap:** No test run after accessibility fixes.
 
-### Weak Detection Areas
-
-1. **setState-in-effect patterns**: The audit correctly identified these, but the fix phase attempted to refactor them to render-time derivation. This introduced NEW errors (ref-during-render) because refs can't be mutated during render. The fix had to be reverted to eslint-disable. **Root cause**: Insufficient analysis of which state patterns CAN be refactored vs which MUST remain as effects.
-
-2. **Dependency array analysis**: The audit correctly flagged missing/unnecessary deps, but the fix for Table's `React` dep required understanding that `React` is a module namespace (stable) not a reactive value. The lint rule can't distinguish these.
-
-3. **Test isolation issues**: The Drawer focus-forward test passed in isolation but failed in the full suite. The audit identified it as a "timing issue" but didn't analyze the cross-test pollution mechanism (jsdom global state, event listener accumulation).
-
-### Repeated Failure Patterns
-
-1. **Refactoring useEffect to render-time state → introduces ref-during-render errors**
-   - Occurred in: TimePicker/useTimePicker.ts
-   - Pattern: Moving `ref.current = x` from effect body to render body
-   - Prevention: Before refactoring any useEffect, check if the body reads/writes refs
-
-2. **eslint-disable-next-line vs block-level disable**
-   - Occurred in: TimePicker, Table
-   - Pattern: `eslint-disable-next-line` doesn't cover multi-line patterns
-   - Prevention: Always use block-level `/* eslint-disable */` ... `/* eslint-enable */` for effect bodies
-
-3. **Test timing in jsdom**
-   - Occurred in: Drawer, Slider
-   - Pattern: useEffect listeners not attached before test assertions
-   - Prevention: Always `await act(async () => { await timeout(100); })` before testing effect-dependent behavior
+### C. SearchableDropdown Duplicate "No Results" Text
+- **What happened:** Agent changed status message from "0 options available" to "No results found", duplicating the visible empty state text, breaking `getByText`.
+- **Root cause:** Agent didn't check that the visible component already rendered "No results found" separately.
+- **Detection gap:** No awareness of existing visible text vs. SR-only text distinction.
 
 ---
 
-## 2. IMPROVE
+## 2. WEAK DETECTION AREAS
 
-### Audit Coverage Improvements
+### A. SSR Guards
+- **Current:** Audit found 8 files with window/document access. Agent fix missed import issue.
+- **Improvement:** Run `tsc --noEmit` AND `vitest run` after EACH file modification, not in batch.
+
+### B. Accessibility
+- **Current:** Audit flagged missing accessible names correctly, but fix introduced regressions by adding redundant aria-labels.
+- **Improvement:** Before adding aria-label, verify: does the element already have an accessible name via text content, aria-labelledby, or title? Only add aria-label if no accessible name exists.
+
+### C. Test Awareness
+- **Current:** Fixes applied without consulting test expectations.
+- **Improvement:** Read test file for any component before modifying that component.
+
+---
+
+## 3. PROMPT IMPROVEMENTS
+
+### A. Audit Prompt Additions
 
 ```
 ADDITIONAL AUDIT RULES:
-
-• When reporting setState-in-effect: classify whether the effect body:
-  a) Reads/writes refs (CANNOT be moved to render phase)
-  b) Only reads props/state (CAN potentially be refactored to render-time derivation)
-  c) Calls external APIs (MUST remain in effect)
-
-• When reporting unused code: verify by running `grep -r "import.*<name>" src/`
-  before reporting. Zero false positives allowed.
-
-• When reporting dependency issues in package.json:
-  - Check if the dep is imported in src/components/ (library code)
-  - Check if the dep is only imported in src/pages/ (demo code)
-  - Check if the dep is only imported in config files (build tools)
-
-• For EACH ESLint error/warning, provide:
-  1. Exact file:line
-  2. Rule name
-  3. Whether it can be structurally fixed vs requires suppression
-  4. If suppression: the justification text
+- For each SSR issue: verify the isBrowser utility exists AND document the exact import path needed.
+- For each accessibility issue: document whether the element ALREADY has an accessible name (via text content, aria-label, or aria-labelledby) vs. truly missing one.
+- For each consistency issue: note whether fixing it would break existing test assertions.
+- After detecting deprecated props: check if the deprecated prop is TESTED and whether removal would break tests.
 ```
 
-### Fix Rules Improvements
+### B. Fix Prompt Additions
 
 ```
 ADDITIONAL FIX RULES:
-
-• NEVER move ref mutations from useEffect to render phase.
-  Refs (useRef) can ONLY be read/written in:
-  - Event handlers
-  - useEffect / useLayoutEffect
-  - useCallback bodies (when called from event handlers)
-  NOT in the component render body.
-
-• When suppressing ESLint rules:
-  - Use block-level /* eslint-disable RULE */ ... /* eslint-enable RULE */
-  - NEVER use inline eslint-disable-next-line for multi-line patterns
-  - ALWAYS include a justification comment explaining WHY the suppression is needed
-
-• When fixing dependency arrays:
-  - Module-level imports (React, constants) are stable — suppress with comment
-  - Function/object props are unstable — must be included or memoized
-  - Class strings from prop destructuring are unstable — extract to useMemo if used in deps
-
-• When fixing tests:
-  - Always wrap effect-dependent assertions in act() + timeout
-  - Run tests BOTH in isolation AND as part of full suite to catch isolation issues
-  - Use waitFor() for async state changes, not bare expect()
+- After EVERY file edit, run `tsc --noEmit` before moving to the next file.
+- Before modifying accessibility attributes, read the component's test file to understand expected accessible names.
+- When adding imports: NEVER use `export { X } from` when you need a local binding. Use `import { X } from` followed by separate `export { X }` if re-export is also needed.
+- When adding aria-label to elements with text content: the aria-label OVERRIDES the text content as the accessible name. Only add it if the text content is insufficient.
+- When adding SR-only status text: ensure the text is DIFFERENT from any visible text to avoid duplicate element queries in tests.
 ```
 
-### Validation Strictness Improvements
+### C. Verify Prompt Additions
 
 ```
-ADDITIONAL VERIFICATION CHECKS:
-
-• Run `npx eslint .` and verify LITERALLY 0 output (not just 0 errors)
-• Run `npx vitest run` THREE times to catch flaky tests
-• For each eslint-disable: verify the suppressed rule actually fires without it
-• Count total eslint-disable comments — each is technical debt. Report the count.
-• Verify `npm run build` produces zero TypeScript errors
-• Verify package.json dependencies: no dev/build tools in dependencies
+ADDITIONAL VERIFICATION RULES:
+- Run full test suite (`vitest run`) as the FIRST validation step, not just tsc.
+- Check for new console.warn/error output in test runs that wasn't there before.
+- Verify that aria-live regions don't duplicate visible text.
+- Verify that new imports are actual imports (not just re-exports) when used locally.
 ```
 
 ---
 
-## 3. GENERATE
+## 4. NEW RULES TO ADD
 
-### A. PROMPT IMPROVEMENTS
+### Rule 1: Test-Before-Fix
+Before modifying any component file, read its `__tests__/*.test.tsx` file to understand:
+- What accessible names are queried (getByRole name parameter)
+- What text content is queried (getByText)
+- What ARIA attributes are asserted
 
-**For audit.md:**
-Add to RULES section:
-```
-• For each ESLint issue, classify fix approach: STRUCTURAL vs SUPPRESSION
-• For setState-in-effect: check if body accesses refs before suggesting refactor
-• For unused code: verify with grep before reporting
-• For dependency issues: trace import paths to classify (library vs demo vs build)
-```
+### Rule 2: Import vs Re-export
+- `import { X } from "path"` — creates a local binding, usable in the file
+- `export { X } from "path"` — creates a re-export, NOT usable locally
+- When you need BOTH: `import { X } from "path"; export { X };`
 
-**For fix.md:**
-Add to STRICT RULES section:
-```
-• NEVER move ref.current mutations to render phase
-• Use block-level eslint-disable for multi-line patterns
-• Run tests both isolated and in full suite after each fix
-• After fixing a useCallback/useMemo dependency array, verify the hook still works correctly
-```
+### Rule 3: Accessible Name Priority
+Per WAI-ARIA name computation: aria-labelledby > aria-label > text content > title. Adding aria-label to an element with sufficient text content CHANGES the accessible name. Never add aria-label unless text content is missing or inadequate.
 
-**For verify.md:**
-Add to CHECK section:
-```
-• ESLint output is LITERALLY empty (zero characters)
-• Run test suite 3x to catch flaky tests
-• Count and report eslint-disable suppressions as technical debt
-• Verify npm run build has zero TypeScript errors
-```
+### Rule 4: SR-Only Text Must Be Unique
+Visually hidden status regions (aria-live) must use text that differs from any visible text in the same component tree to avoid `getByText` ambiguity.
 
-### B. NEW RULES TO ADD
+### Rule 5: Incremental Validation
+After each file modification:
+1. `tsc --noEmit` (type safety)
+2. `vitest run <component>` (unit tests)
+3. Only proceed to next file if both pass
 
-1. **Ref Safety Rule**: Before refactoring any useEffect, scan the body for `ref.current`. If found, the effect CANNOT be converted to render-time state derivation.
+---
 
-2. **Suppress vs Fix Decision Tree**:
-   - Can the code be restructured without changing the public API? → STRUCTURAL FIX
-   - Does restructuring introduce new errors (ref-in-render, stale closures)? → SUPPRESSION
-   - Is the lint rule a false positive (e.g., React as dep)? → SUPPRESSION with documented justification
+## 5. PATTERN FIXES
 
-3. **Test Stability Rule**: Every test that depends on useEffect must include `act()` wrapper with sufficient timeout. Never use bare `await user.tab()` after render without ensuring effects have run.
-
-4. **Dependency Classification Rule**: For package.json audit:
-   - `dependencies`: Only packages imported at runtime by library code (`src/components/`, `src/utils/`)
-   - `peerDependencies`: Framework deps consumers must provide (react, react-dom)
-   - `devDependencies`: Everything else (build tools, test tools, demo deps, CSS tools)
-
-### C. PATTERN FIXES
-
-1. **setState-in-effect → Suppression Pattern**:
+### Pattern: SSR Guard Application
 ```typescript
-/* eslint-disable react-hooks/set-state-in-effect -- [JUSTIFICATION] */
-useEffect(() => {
-  // state sync logic
-}, [deps]);
-/* eslint-enable react-hooks/set-state-in-effect */
+// WRONG: re-export only, no local binding
+export { isBrowser } from "../../utils/isBrowser";
+const x = isBrowser ? window.foo : fallback; // ReferenceError!
+
+// CORRECT: import for local use + re-export if needed
+import { isBrowser } from "../../utils/isBrowser";
+export { isBrowser };
+const x = isBrowser ? window.foo : fallback; // Works
 ```
 
-2. **Stable-import dependency → Suppression Pattern**:
-```typescript
-// eslint-disable-next-line react-hooks/exhaustive-deps -- React is a stable module import
-[dep1, dep2],
+### Pattern: Accessibility Fix for Options
+```tsx
+// WRONG: adds aria-label when text content already exists
+<div role="option" aria-label={`${option} rows per page`}>
+  {option}  {/* "50" — this already provides accessible name "50" */}
+</div>
+
+// CORRECT: text content is the accessible name, use aria-label only if no text
+<div role="option">
+  {option}  {/* accessible name: "50" */}
+</div>
 ```
 
-3. **Test effect timing → act() Pattern**:
-```typescript
-await act(async () => {
-  await new Promise((r) => setTimeout(r, 100));
-});
-// NOW safe to assert on effect-dependent state
+### Pattern: SR-Only Status vs Visible Text
+```tsx
+// WRONG: SR-only duplicates visible text
+<div>No results found</div>  {/* visible */}
+<div style={SR_ONLY_STYLE} aria-live="polite">No results found</div>  {/* SR — DUPLICATE */}
+
+// CORRECT: SR-only provides different context
+<div>No results found</div>  {/* visible */}
+<div style={SR_ONLY_STYLE} aria-live="polite">0 options available</div>  {/* SR — distinct */}
 ```
 
-### D. FAILURE PREVENTION STRATEGIES
+---
 
-1. **Pre-fix checklist**: Before modifying any useEffect:
-   - [ ] Does the body read/write `ref.current`? If yes → SUPPRESSION only
-   - [ ] Does the body call setState? If yes → check if render-time derivation is safe
-   - [ ] Does the body call external APIs? If yes → keep as effect
+## 6. FAILURE PREVENTION STRATEGIES
 
-2. **Post-fix validation sequence**:
-   ```bash
-   npx eslint . 2>&1 | wc -l  # Must be 0
-   npx vitest run              # Must be 100% pass
-   npx vitest run              # Run again for flake detection
-   npm run build               # Must succeed
-   ```
+### Strategy 1: Gate-Based Fix Pipeline
+Each fix must pass through gates:
+1. **Pre-fix:** Read component file + test file
+2. **Fix:** Apply minimal change
+3. **Gate 1:** tsc --noEmit passes
+4. **Gate 2:** Component tests pass
+5. **Post-fix:** Move to next component
 
-3. **eslint-disable audit**: After all fixes, count suppressions:
-   ```bash
-   grep -r "eslint-disable" src/ | grep -v node_modules | wc -l
-   ```
-   Current count: 7 (3 component, 3 demo, 1 build tool). Target: minimize but accept when justified.
+### Strategy 2: Accessibility Regression Prevention
+Before any a11y fix:
+- Grep test file for `getByRole`, `getByText`, `getByLabelText`
+- Document current accessible names
+- Verify fix doesn't change names that tests depend on
+
+### Strategy 3: SSR Fix Validation
+After any SSR guard fix:
+- Verify the guard variable is imported (not just re-exported)
+- Check if the function is called at module level (needs different pattern than in useEffect)
+- Run tests in jsdom (simulates missing window APIs)
+
+### Strategy 4: Deferred Work Tracking
+Issues deferred from this cycle should be tracked as tech debt:
+- B6: E2E tests for 13 components
+- B7: JSDoc for 39 component files
+- H4-H7: Performance optimizations
+- H10-H14: Consistency improvements
+
+---
+
+## [SELF-IMPROVEMENT PATCH]
+
+Append to system prompt:
+
+```
+CRITICAL RULES (learned from Chumlab UI audit cycle):
+
+1. NEVER use `export { X } from "path"` when X is used locally in the same file. Use `import` + separate `export`.
+2. NEVER add aria-label to elements that already have accessible names via text content.
+3. NEVER add SR-only text that duplicates visible text in the same component tree.
+4. ALWAYS read the test file before modifying a component.
+5. ALWAYS run type-check and component tests after EACH file modification.
+6. When fixing SSR issues, verify the guard utility is IMPORTED, not just re-exported.
+7. When fixing accessibility, document the current accessible name BEFORE changing it.
+8. Deferred issues must be explicitly listed with severity — never silently drop them.
+```

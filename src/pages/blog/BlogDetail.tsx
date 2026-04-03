@@ -1,7 +1,8 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { LogoMark, LogoWordmark } from "../../components/brand/Logo";
+import { LogoMark } from "../../components/brand/Logo";
 import { getBlogById } from "./blogData";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import type { BlogSection } from "./blogData";
 import { BlogDiagram } from "./BlogIllustrations";
 
@@ -207,6 +208,7 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
 export default function BlogDetail() {
   const { id } = useParams<{ id: string }>();
   const post = id ? getBlogById(id) : undefined;
+  useDocumentTitle(post?.title ?? "Blog");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -230,11 +232,10 @@ export default function BlogDetail() {
           <div className="w-full px-5 sm:px-8">
             <div className="flex items-center justify-between py-3.5">
               <Link to="/" className="flex items-center gap-3 group">
-                <div className="relative group-hover:scale-105 transition-transform duration-500">
-                  <LogoMark size={40} />
+                <div className="relative">
+                  <LogoMark size={160} />
                   <div className="absolute -inset-3 rounded-full bg-indigo-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-                <LogoWordmark className="text-[22px]" />
               </Link>
               <div className="flex items-center gap-1">
                 <Link
@@ -370,8 +371,7 @@ export default function BlogDetail() {
             <div className="border-t border-white/4 pt-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <LogoMark size={32} />
-                  <LogoWordmark className="text-[18px]" />
+                  <LogoMark size={140} />
                   <span className="text-[10px] text-gray-700 ml-2">
                     MIT License
                   </span>

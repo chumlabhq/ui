@@ -212,14 +212,27 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
       ...spanRest
     } = rest as ButtonAsSpanProps & { disabled?: boolean };
 
+    if (process.env.NODE_ENV !== "production") {
+      const hasAriaLabel =
+        "aria-label" in (rest as Record<string, unknown>) ||
+        "aria-labelledby" in (rest as Record<string, unknown>);
+      if (!children && !hasAriaLabel) {
+        console.warn(
+          'Button: A <span role="button"> without text content should have an `aria-label` or `aria-labelledby` attribute for accessibility.',
+        );
+      }
+    }
+
     return wrapWithTooltip(
       <span
         ref={ref as React.Ref<HTMLSpanElement>}
         role="button"
         tabIndex={isDisabled ? -1 : 0}
         onKeyDown={(e) => {
-          if (!isDisabled && (e.key === "Enter" || e.key === " ")) {
+          if (e.key === " ") {
             e.preventDefault();
+          }
+          if (!isDisabled && (e.key === "Enter" || e.key === " ")) {
             (onClick as React.MouseEventHandler<HTMLSpanElement> | undefined)?.(
               e as unknown as React.MouseEvent<HTMLSpanElement>,
             );

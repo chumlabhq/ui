@@ -73,6 +73,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       role="option"
       aria-selected={isSelected}
       aria-disabled={isDisabled || undefined}
+      aria-label={option.label}
       className={
         cn(
           classes.option,

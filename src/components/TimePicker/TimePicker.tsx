@@ -39,8 +39,8 @@ function computeDropdownCoords(
 ): DropdownCoords {
   const rect = triggerEl.getBoundingClientRect();
   const dropdownHeight = dropdownEl.getBoundingClientRect().height;
-  const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-  const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+  const viewportHeight = isBrowser ? (window.visualViewport?.height ?? window.innerHeight) : 768;
+  const viewportWidth = isBrowser ? (window.visualViewport?.width ?? window.innerWidth) : 1024;
 
   let position = preferredPosition;
   if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
