@@ -264,7 +264,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     );
 
     if (!isNestingAllowed && nestingLevel >= maxNestingLevel) {
-      if (process.env.NODE_ENV !== "production") {
+      if (import.meta.env.DEV) {
         console.warn(
           `Modal: Maximum nesting level (${maxNestingLevel}) reached. Modal will not render.`,
         );
