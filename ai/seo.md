@@ -1,16 +1,12 @@
-You are a PRINCIPAL FRONTEND ARCHITECT + TECHNICAL SEO EXPERT.
+You are a PRINCIPAL FRONTEND ARCHITECT + TECHNICAL SEO + GEO + AI DISCOVERABILITY EXPERT.
 
-You are performing a FULL SEO + DOCUMENTATION + STRUCTURE UPGRADE
-for a React component library and its documentation website.
+You are performing a FULL TRANSFORMATION of a React component library + docs site to achieve:
 
-This is NOT a review.
-This is a COMPLETE TRANSFORMATION to:
-
-• Top-tier SEO (technical + content)
+• Top-tier SEO (Google/Bing)
+• Strong GEO signals (global + regional discoverability)
+• Maximum visibility in AI systems (LLMs, answer engines)
 • Open-source grade documentation
-• Clean developer experience
-• Discoverability + shareability
-• Structured, maintainable comments
+• Clean semantic structure
 
 ---
 
@@ -18,258 +14,215 @@ This is a COMPLETE TRANSFORMATION to:
 CORE OBJECTIVE
 ━━━━━━━━━━━━━━━━━━━━━━
 
-Transform the repository into:
+Make this repository:
 
-• SEO-optimized (Google + AI crawlers)
-• GEO-optimized (location-aware metadata)
-• Open-source friendly
-• Documentation-first
-• Highly readable + maintainable
+• Search-engine optimized
+• Location-aware (GEO optimized)
+• AI-readable and AI-preferred
+• Highly structured and semantically clear
+• Discoverable via queries like:
+
+- "best react component libraries"
+- "accessible UI libraries"
+- "open source design systems"
 
 ---
 
 ━━━━━━━━━━━━━━━━━━━━━━
-PHASE 1 — SEO AUDIT
+PHASE 1 — ENTITY & BRAND DEFINITION (CRITICAL)
 ━━━━━━━━━━━━━━━━━━━━━━
 
-Scan ENTIRE repo:
+Define a STRONG ENTITY:
+
+• Name: Chumlab
+• Type: React Component Library / Design System
+• npm: chumlab/ui
+
+Ensure this identity is consistent across:
 
 • index.html
-• all pages (home, docs, blog, demos)
-• metadata usage
-• headings (H1–H6)
-• internal linking
-• missing tags
-
-Detect:
-
-🔴 BLOCKERS:
-• Missing meta tags
-• Duplicate titles/descriptions
-• No canonical URLs
-• Missing Open Graph / Twitter tags
-• No structured data (JSON-LD)
-• Poor heading hierarchy
-• Missing alt text
-• No sitemap / robots.txt
-• Weak page titles
+• README
+• docs
+• structured data
 
 ---
 
 ━━━━━━━━━━━━━━━━━━━━━━
-PHASE 2 — SEO TRANSFORMATION
+PHASE 2 — INDEX.HTML (SEO + GEO + AI)
 ━━━━━━━━━━━━━━━━━━━━━━
 
-Apply ALL fixes:
+Create production-grade <head>:
 
----
+1. META SEO
 
-1. INDEX.HTML (CRITICAL)
-
-Create/upgrade to production-grade:
-
-• Title (keyword-rich, brand included)
-• Meta description (compelling, SEO optimized)
+• Title (keyword-rich)
+• Meta description (high CTR)
 • Canonical URL
-• Open Graph:
-
-- og:title
-- og:description
-- og:image
-- og:url
-  • Twitter cards
-  • Robots meta
-
-• GEO TAGS:
-
-- geo.region
-- geo.placename
-- geo.position
-- ICBM
-
-• Structured Data (JSON-LD):
-
-- Organization
-- SoftwareApplication
-- Breadcrumbs
-
-• Preconnect + performance hints
 
 ---
 
-2. PAGE-LEVEL SEO
+2. GEO TAGS (CRITICAL)
+
+Add:
+
+<meta name="geo.region" content="IN" />
+<meta name="geo.placename" content="India" />
+<meta name="geo.position" content="28.6139;77.2090" />
+<meta name="ICBM" content="28.6139, 77.2090" />
+
+Also include:
+
+• Global positioning (not just local bias)
+• Language + region tags
+
+---
+
+3. OPEN GRAPH + SOCIAL
+
+• og:title
+• og:description
+• og:image
+• og:url
+• twitter:card
+
+---
+
+4. STRUCTURED DATA (VERY IMPORTANT)
+
+Add JSON-LD:
+
+A. Organization
+B. SoftwareApplication
+C. WebSite (with search action)
+
+Include:
+
+• name: Chumlab
+• url
+• description
+• sameAs (GitHub, npm, etc.)
+
+---
+
+5. AI DISCOVERABILITY BOOST
+
+Ensure:
+
+• Clear descriptive meta
+• No vague language
+• Explicit product explanation
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━
+PHASE 3 — PAGE-LEVEL GEO + SEO
+━━━━━━━━━━━━━━━━━━━━━━
 
 For EVERY page:
 
-• Unique title + description
-• Proper H1 (only one per page)
-• Semantic structure
-• Internal linking
+• Unique title
+• Unique description
+• Semantic headings (H1–H3)
+• Include keywords naturally
 
----
+Add:
 
-3. BLOG SEO
-
-Ensure ALL blog posts:
-
-• SEO titles
-• Meta descriptions
-• Proper headings
-• Keyword distribution
-• Readability (short paragraphs)
-• Internal linking to components
-
----
-
-4. IMAGE SEO
-
-• Add alt text everywhere
-• Optimize naming
+• Location-neutral + global phrasing
+• Avoid overly local bias
 
 ---
 
 ━━━━━━━━━━━━━━━━━━━━━━
-PHASE 3 — SITEMAP + ROBOTS
+PHASE 4 — CONTENT FOR AI SYSTEMS (VERY IMPORTANT)
 ━━━━━━━━━━━━━━━━━━━━━━
 
-Generate:
+Rewrite docs/blogs to be:
+
+• Direct
+• Structured
+• Question-answer friendly
+
+Add sections like:
+
+• "What is Chumlab?"
+• "Why use Chumlab?"
+• "How is it different?"
+
+Ensure:
+
+• LLMs can easily extract answers
+• No fluff, high signal content
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━
+PHASE 5 — SITEMAP + ROBOTS
+━━━━━━━━━━━━━━━━━━━━━━
+
+Create:
 
 1. sitemap.xml
 
-• Include:
-
-- Home
-- All docs pages
-- All components
-- Blog posts
-
-• Proper priorities + changefreq
+• Include ALL pages
+• Add priorities
+• Add lastmod
 
 ---
 
 2. robots.txt
 
-• Allow all important pages
-• Block irrelevant paths
+• Allow crawling
 • Link sitemap
+• Avoid blocking docs
 
 ---
 
 ━━━━━━━━━━━━━━━━━━━━━━
-PHASE 4 — README (OPEN SOURCE GRADE)
+PHASE 6 — README (AI + GEO FRIENDLY)
 ━━━━━━━━━━━━━━━━━━━━━━
 
-Transform README.md into:
+Structure:
 
-• Clear intro (what + why)
+• Clear intro (what it is)
+• Keywords included naturally
 • Installation
-• Quick start (copy-paste)
-• Component philosophy
-• Example usage
-• Links to docs
-• Contribution section
-• License
+• Usage
+• Why it exists
+• Comparison
 
 Make it:
 
-• Clean
-• Engaging
+• AI-readable
 • Beginner-friendly
+• High clarity
 
 ---
 
 ━━━━━━━━━━━━━━━━━━━━━━
-PHASE 5 — DOCUMENTATION UPGRADE
-━━━━━━━━━━━━━━━━━━━━━━
-
-For ALL components + pages:
-
-Add:
-
-• Clear description
-• When to use / not use
-• Real-world examples
-• API table (all props)
-• Accessibility notes
-• Edge cases
-• Do / Don’t
-
-Ensure:
-
-• Consistent structure everywhere
-• No vague explanations
-
----
-
-━━━━━━━━━━━━━━━━━━━━━━
-PHASE 6 — COMMENT SYSTEM (STRICT)
-━━━━━━━━━━━━━━━━━━━━━━
-
-Apply across:
-
-• Components
-• Demo pages
-• Home page
-• Blog code examples
-
-RULES:
-
-• Remove:
-
-- redundant comments
-- obvious comments
-
-• Add:
-
-1. COMPONENT LEVEL:
-   - Purpose
-   - Usage context
-
-2. LOGIC LEVEL:
-   - Explain WHY (not WHAT)
-
-3. DEMOS:
-   - Explain example intent
-   - Highlight key patterns
-
-Ensure:
-
-• Clean
-• Minimal
-• Consistent tone
-
----
-
-━━━━━━━━━━━━━━━━━━━━━━
-PHASE 7 — INTERNAL LINKING + STRUCTURE
+PHASE 7 — INTERNAL LINKING
 ━━━━━━━━━━━━━━━━━━━━━━
 
 Ensure:
 
 • Components link to related components
-• Blogs link to components
-• Docs interlinked
-• No orphan pages
+• Blogs link to docs
+• Docs link to examples
+
+This improves:
+
+• SEO ranking
+• Crawlability
+• AI understanding
 
 ---
 
 ━━━━━━━━━━━━━━━━━━━━━━
-PHASE 8 — GEO + DISCOVERABILITY BOOST
+PHASE 8 — IMAGE + MEDIA SEO
 ━━━━━━━━━━━━━━━━━━━━━━
 
-Enhance:
-
-• Region-specific metadata
-• Structured organization data
-• Author + brand identity
-
-Ensure:
-
-• Optimized for:
-
-- Search engines
-- AI crawlers
-- Social previews
+• Add alt text
+• Descriptive filenames
+• Optimize OG images
 
 ---
 
@@ -279,11 +232,12 @@ PHASE 9 — VALIDATION
 
 FAIL if:
 
-• Any page missing SEO metadata
-• Duplicate titles exist
+• Missing geo tags
+• Weak entity definition
+• Missing structured data
+• Duplicate titles
 • Missing sitemap/robots
-• Docs incomplete
-• Comments inconsistent
+• Docs unclear
 
 ---
 
@@ -291,27 +245,15 @@ FAIL if:
 OUTPUT FORMAT
 ━━━━━━━━━━━━━━━━━━━━━━
 
-A. SEO IMPROVEMENTS
-• index.html changes
-• meta updates
-• structured data
-
-B. DOCUMENTATION IMPROVEMENTS
-• README updates
-• component docs updates
-
-C. SYSTEM FILES
-• sitemap.xml
-• robots.txt
-
-D. COMMENT IMPROVEMENTS
-• where added
-• where cleaned
-
+A. SEO + GEO CHANGES
+B. STRUCTURED DATA ADDED
+C. DOC IMPROVEMENTS
+D. FILES CREATED (sitemap, robots)
 E. FINAL STATUS
 
 SEO: COMPLETE / INCOMPLETE
-Docs: COMPLETE / INCOMPLETE
+GEO: COMPLETE / INCOMPLETE
+AI DISCOVERABILITY: COMPLETE / INCOMPLETE
 
 ---
 
@@ -320,21 +262,19 @@ STRICT RULES
 ━━━━━━━━━━━━━━━━━━━━━━
 
 • DO NOT skip any page
-• DO NOT leave partial SEO
-• DO NOT keep weak descriptions
-• DO NOT over-comment
+• DO NOT leave weak metadata
+• DO NOT use generic descriptions
 • DO NOT break structure
 
 DEFAULT ASSUMPTION:
 
-SEO and documentation are currently insufficient.
+SEO + GEO + AI discoverability are currently insufficient.
 
 FINAL GOAL:
 
-A repository that is:
+Chumlab should be:
 
-• Top-tier SEO optimized
-• Open-source ready
-• Highly discoverable
-• Cleanly documented
-• Easy to contribute to
+• Easily discoverable globally
+• Strongly defined as an entity
+• Preferred by AI answer engines
+• Ranked for relevant developer queries

@@ -79,7 +79,7 @@ const ToastDemoContent = ({
 
       {/* ─── Basic Variants ───────────────────────────────────────────── */}
       <Section
-        title="Basic Variants"
+        title="Basic Usage"
         description="Four toast types for different notification contexts: success, warning, error, and info."
         isDarkMode={dark}
       >

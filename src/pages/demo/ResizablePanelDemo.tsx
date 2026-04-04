@@ -196,6 +196,27 @@ const ResizablePanelDemo = () => {
         </div>
       </header>
 
+      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
+      <Section
+        title="Basic Usage"
+        description="A resizable panel with default settings. Drag the right edge to resize."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <ResizablePanel
+            defaultValue={300}
+            minValue={150}
+            maxValue={500}
+          >
+            <div className="h-full p-4">
+              <div className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
+                Drag the edge to resize.
+              </div>
+            </div>
+          </ResizablePanel>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Right Resize (Default) ───────────────────────────────────── */}
       <Section
         title="Right Resize (Default)"

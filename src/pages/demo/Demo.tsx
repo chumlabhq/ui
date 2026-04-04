@@ -46,7 +46,6 @@ const components: ComponentItem[] = [
   { path: "text-area", displayName: "Text Area" },
   { path: "time-picker", displayName: "Time Picker" },
   { path: "toast", displayName: "Toast" },
-  { path: "toggle", displayName: "Toggle" },
   { path: "tooltip", displayName: "Tooltip" },
 ];
 
@@ -195,8 +194,9 @@ const Demo = () => {
             <img
               src={isDarkMode ? logoLight : logoDark}
               alt="Chumlab"
-              height={36}
-              style={{ height: 36, width: "auto", objectFit: "contain" }}
+              width={160}
+              height={160}
+              style={{ width: 160, height: "auto", objectFit: "contain" }}
             />
           </div>
         </Link>
@@ -231,8 +231,9 @@ const Demo = () => {
             <img
               src={isDarkMode ? logoLight : logoDark}
               alt="Chumlab"
-              height={32}
-              style={{ height: 32, width: "auto", objectFit: "contain" }}
+              width={160}
+              height={160}
+              style={{ width: 160, height: "auto", objectFit: "contain" }}
             />
           </Link>
           <div className="flex items-center gap-3">
@@ -257,7 +258,7 @@ const Demo = () => {
 
         {/* ── Mobile sidebar drawer ── */}
         <aside
-          className={`lg:hidden fixed top-0 right-0 z-50 h-full w-[280px] p-5 overflow-y-auto transition-transform duration-300 ease-out
+          className={`lg:hidden fixed top-0 right-0 z-50 h-full w-[280px] max-w-[80vw] p-5 overflow-y-auto transition-transform duration-300 ease-out
           [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
           ${sidebarOpen ? "translate-x-0" : "translate-x-full"}
           ${sidebarBg}`}
@@ -288,8 +289,8 @@ const Demo = () => {
           ref={mainRef}
           className={`flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto overscroll-y-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${bg}`}
         >
-          {/* ── Top bar with theme toggle ── */}
-          <div className="sticky top-0 z-10 flex justify-end px-4 sm:px-6 lg:px-8 py-3">
+          {/* ── Top bar with theme toggle (desktop only — mobile has it in top bar) ── */}
+          <div className="sticky top-0 z-10 hidden lg:flex justify-end px-4 sm:px-6 lg:px-8 py-3">
             <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
           </div>
 

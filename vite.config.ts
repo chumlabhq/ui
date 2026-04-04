@@ -17,7 +17,13 @@ export default defineConfig(({ mode }) => {
           fileName: "chumlab-ui",
         },
         rollupOptions: {
-          external: ["react", "react-dom", "react/jsx-runtime"],
+          external: [
+            "react",
+            "react-dom",
+            "react/jsx-runtime",
+            "@tanstack/react-table",
+            "date-fns",
+          ],
           output: {
             globals: {
               react: "React",
@@ -40,6 +46,8 @@ export default defineConfig(({ mode }) => {
         "X-Frame-Options": "DENY",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
       },
     },
   };

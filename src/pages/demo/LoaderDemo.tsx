@@ -68,6 +68,17 @@ const LoaderDemo = () => {
         </div>
       </header>
 
+      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
+      <Section
+        title="Basic Usage"
+        description="A simple circular loading indicator with no configuration needed."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <CircularLoader />
+        </DemoWrapper>
+      </Section>
+
       {/* ── All Variants ───────────────────────────────────────────────── */}
       <Section
         title="All Variants"

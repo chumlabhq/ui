@@ -127,7 +127,7 @@ const SliderDemo = () => {
       </header>
 
       {/* ── Basic ────────────────────────────────────────────────────── */}
-      <Section title="Basic Slider" description="A single-value slider with default settings (0–100, step 1)." isDarkMode={dark}>
+      <Section title="Basic Usage" description="A single-value slider with default settings (0–100, step 1)." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full max-w-sm space-y-3">
             <Slider value={basic} onValueChange={(v) => setBasic(v as number)} classes={c.slider} />

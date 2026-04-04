@@ -34,7 +34,6 @@ import TableDemo from "./pages/demo/TableDemo";
 import TextAreaDemo from "./pages/demo/TextAreaDemo";
 import TimePickerDemo from "./pages/demo/TimePickerDemo";
 import ToastDemo from "./pages/demo/ToastDemo";
-import ToggleDemo from "./pages/demo/ToggleDemo";
 import TooltipDemo from "./pages/demo/TooltipDemo";
 
 const App = () => {
@@ -88,7 +87,6 @@ const App = () => {
         <Route path="text-area" element={<TextAreaDemo />} />
         <Route path="time-picker" element={<TimePickerDemo />} />
         <Route path="toast" element={<ToastDemo />} />
-        <Route path="toggle" element={<ToggleDemo />} />
         <Route path="tooltip" element={<TooltipDemo />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

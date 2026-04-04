@@ -366,6 +366,21 @@ const TabPanelDemo = () => {
         </div>
       </header>
 
+      {/* ─── Basic Usage ────────────────────────────────────────────────── */}
+      <Section
+        title="Basic Usage"
+        description="Minimal tab panel with simple text labels."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <TabPanel
+            tabs={basicTabs}
+            defaultValue="home"
+            classes={c.tabs.underline}
+          />
+        </DemoWrapper>
+      </Section>
+
       {/* ─── 1. Underlined Style ─────────────────────────────────────────── */}
       <Section
         title="Underlined Style"
@@ -483,7 +498,7 @@ const TabPanelDemo = () => {
                     <div key={label} className={c.contentCard}>
                       <div className={c.statLabel}>{label}</div>
                       <div className={c.stat}>{value}</div>
-                      <div className="text-xs text-emerald-500 font-medium">{change}</div>
+                      <div className={`text-xs font-medium ${dark ? "text-emerald-400" : "text-emerald-600"}`}>{change}</div>
                     </div>
                   ))}
                 </div>
@@ -1047,7 +1062,7 @@ const TabPanelDemo = () => {
               <div key={props.tab.id} className="relative">
                 {defaultElement}
                 {props.tab.count != null && props.tab.count > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
+                  <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-[10px] flex items-center justify-center ${dark ? "bg-red-400" : "bg-red-500"}`}>
                     {props.tab.count}
                   </span>
                 )}

@@ -141,7 +141,7 @@ function FloatingActions<T>({
         top: displayState.top,
         transform: "translate(-50%, -50%)",
         position: "absolute",
-        left: "30%",
+        left: "clamp(1rem, 30%, calc(100% - 6rem))",
       }}
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
@@ -2503,7 +2503,7 @@ const TableDemo = () => {
           <div className="flex items-center gap-4 flex-wrap">
             <button
               onClick={() => setCompIsLoading(true)}
-              className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors cursor-pointer"
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${dark ? "text-white bg-blue-500 hover:bg-blue-400" : "text-white bg-blue-600 hover:bg-blue-700"}`}
             >
               Simulate Loading
             </button>
@@ -2607,7 +2607,7 @@ const TableDemo = () => {
                 className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 ${dark ? "bg-blue-500/10" : "bg-blue-50"}`}
               >
                 <svg
-                  className="w-10 h-10 text-blue-500"
+                  className={`w-10 h-10 ${dark ? "text-blue-400" : "text-blue-500"}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -2638,7 +2638,7 @@ const TableDemo = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-3">
-                <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                <button className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${dark ? "text-white bg-blue-500 hover:bg-blue-400" : "text-white bg-blue-600 hover:bg-blue-700"}`}>
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -2721,7 +2721,7 @@ const TableDemo = () => {
                     alert(`Deleting rows: ${multiSelectedIds.join(", ")}`);
                     setMultiSelectedIds([]);
                   }}
-                  className="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 transition-colors cursor-pointer"
+                  className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${dark ? "text-white bg-red-500 hover:bg-red-400" : "text-white bg-red-600 hover:bg-red-700"}`}
                 >
                   Delete Selected
                 </button>
@@ -4832,7 +4832,7 @@ const TableDemo = () => {
               onClick={() =>
                 exportTableToCSV(sampleData, columns, "users-export")
               }
-              className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors cursor-pointer"
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${dark ? "text-white bg-green-500 hover:bg-green-400" : "text-white bg-green-600 hover:bg-green-700"}`}
             >
               Export to CSV
             </button>
@@ -5529,7 +5529,7 @@ const TableDemo = () => {
                     <span
                       className={`flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
                     >
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      <span className={`w-2 h-2 rounded-full ${dark ? "bg-emerald-400" : "bg-emerald-500"}`} />
                       {
                         sampleData
                           .slice(0, 5)
@@ -5553,7 +5553,7 @@ const TableDemo = () => {
                     <span
                       className={`flex items-center gap-1.5 ${dark ? "text-amber-400" : "text-amber-600"}`}
                     >
-                      <span className="w-2 h-2 rounded-full bg-amber-500" />
+                      <span className={`w-2 h-2 rounded-full ${dark ? "bg-amber-400" : "bg-amber-500"}`} />
                       {
                         sampleData
                           .slice(0, 5)

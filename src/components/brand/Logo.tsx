@@ -46,3 +46,7 @@ export const LogoFull = ({ size = 28, className = "", textClassName = "" }: Logo
     <LogoWordmark className={textClassName} />
   </span>
 );
+
+LogoMark.displayName = "LogoMark";
+LogoWordmark.displayName = "LogoWordmark";
+LogoFull.displayName = "LogoFull";

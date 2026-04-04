@@ -525,7 +525,7 @@ const MultiSelectSearchableDropdown = forwardRef<
 
     // Global keyboard handling for Escape/Tab when portal is open
     useEffect(() => {
-      if (!isOpen || typeof document === "undefined") return;
+      if (!isOpen || !isBrowser) return;
       const handleDocumentKeyDown = (event: globalThis.KeyboardEvent) => {
         if (event.key !== "Escape" && event.key !== "Tab") return;
         handleClose();

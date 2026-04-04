@@ -58,7 +58,7 @@ const HOME_FAQS = [
   {
     question: "What components are included?",
     answer:
-      "Chumlab UI includes 31 production-grade components covering forms, selection, navigation, overlays, data display, and layout — including Button, Input, Modal, Drawer, Table, DatePicker, and more.",
+      "Chumlab UI includes a comprehensive set of production-grade components covering forms, selection, navigation, overlays, data display, and layout. Think Button, Input, Modal, Drawer, Table, DatePicker, and more.",
   },
 ];
 
@@ -469,6 +469,8 @@ const Home = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useSpaceScene(canvasRef);
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const [randomBlogs] = useState(() => {
     const shuffled = [...BLOG_POSTS].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 3);
@@ -484,7 +486,7 @@ const Home = () => {
       />
 
       {/* CSS nebula layers */}
-      <div className="fixed inset-0 pointer-events-none z-1" aria-hidden="true">
+      <div className="fixed inset-0 pointer-events-none z-1 overflow-hidden" aria-hidden="true">
         <div className="animate-nebula-pulse absolute top-[12%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse,rgba(168,85,247,0.12)_0%,rgba(99,102,241,0.05)_35%,transparent_65%)] blur-[50px]" />
         <div className="absolute top-[28%] left-1/2 w-0 h-0">
           <div className="animate-orbit-1 absolute w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.10)_0%,transparent_65%)] blur-[70px]" />
@@ -520,50 +522,122 @@ const Home = () => {
                 <LogoMark size={160} />
               </Link>
               <div className="flex items-center gap-1">
-                <Link
-                  to="/accordion"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  Components
-                </Link>
-                <Link
-                  to="/blog"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  Blog
-                </Link>
-                <Link
-                  to="/faq"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  FAQ
-                </Link>
-                <a
-                  href="https://github.com/chumlabhq/ui"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
-                  aria-label="GitHub"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                <div className="hidden sm:flex items-center gap-1">
+                  <Link
+                    to="/accordion"
+                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
                   >
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                  </svg>
-                </a>
+                    Components
+                  </Link>
+                  <Link
+                    to="/blog"
+                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
+                  >
+                    Blog
+                  </Link>
+                  <Link
+                    to="/faq"
+                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
+                  >
+                    FAQ
+                  </Link>
+                  <a
+                    href="https://github.com/chumlabhq/ui"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
+                    aria-label="GitHub"
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg>
+                  </a>
+                </div>
                 <Link
                   to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-2"
+                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 sm:ml-2"
                 >
                   Get Started
                 </Link>
+
+                {/* Hamburger button — mobile only */}
+                <button
+                  className="sm:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-white/[0.08] transition-colors duration-300 ml-1"
+                  onClick={() => setMenuOpen(true)}
+                  aria-label="Open menu"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/90">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
         </header>
+
+        {/* ── MOBILE MENU OVERLAY ── */}
+        {menuOpen && (
+          <div className="pointer-events-auto fixed inset-0 z-[60] sm:hidden">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setMenuOpen(false)}
+            />
+            {/* Drawer */}
+            <nav className="absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.08] shadow-2xl animate-slide-in-right flex flex-col py-6 px-5">
+              <button
+                className="self-end mb-6 flex items-center justify-center w-9 h-9 rounded-lg hover:bg-white/[0.08] transition-colors duration-300"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/90">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+              <Link
+                to="/accordion"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              >
+                Components
+              </Link>
+              <Link
+                to="/blog"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              >
+                Blog
+              </Link>
+              <Link
+                to="/faq"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              >
+                FAQ
+              </Link>
+              <a
+                href="https://github.com/chumlabhq/ui"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300 flex items-center gap-2"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                </svg>
+                GitHub
+              </a>
+            </nav>
+          </div>
+        )}
 
         <main className="pointer-events-auto">
           {/* ══════════════════════════════════════════════════════════════════
@@ -572,9 +646,9 @@ const Home = () => {
           <section className="h-screen flex items-center justify-center px-6 sm:px-10 pt-[56px]">
             <div className="text-center max-w-5xl mx-auto">
               <div className="relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-white/2 animate-float opacity-60" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full border border-white/1.5 animate-float-d1 opacity-40" />
-                <h1 className="relative animate-fade-up-d1 text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6 whitespace-nowrap">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full border border-white/2 animate-float opacity-60" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px] sm:w-[380px] sm:h-[380px] rounded-full border border-white/1.5 animate-float-d1 opacity-40" />
+                <h1 className="relative animate-fade-up-d1 text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6">
                   Ship products <TypingHeadline />
                 </h1>
               </div>
@@ -610,9 +684,9 @@ const Home = () => {
                     <path d="m12 5 7 7-7 7" />
                   </svg>
                 </Link>
-                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-lg bg-white/2.5 border border-white/5 text-[13px] font-mono text-gray-500">
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-lg bg-white/2.5 border border-white/5 text-[13px] font-mono text-gray-500 max-w-full overflow-hidden">
                   <span className="text-gray-700 select-none">$</span>
-                  <span>
+                  <span className="text-xs sm:text-sm truncate">
                     npm install{" "}
                     <span className="text-gray-400">@chumlab/ui</span>
                   </span>
@@ -683,16 +757,16 @@ const Home = () => {
                 </h2>
                 <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
                   Your team has built the same dropdown three times. The same
-                  modal twice. Chumlab gives you 31 production grade components
+                  modal twice. Chumlab gives you production-grade components
                   so you can ship features, not infrastructure.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
                 {features.map((f) => (
                   <div
                     key={f.title}
-                    className={`glow-border relative group rounded-2xl p-7 border ${f.border} ${f.bg} hover:bg-white/[0.06] transition-all duration-500 backdrop-blur-sm`}
+                    className={`glow-border relative group rounded-2xl p-5 sm:p-7 border ${f.border} ${f.bg} hover:bg-white/[0.06] transition-all duration-500 backdrop-blur-sm`}
                     style={
                       {
                         "--glow-color":
@@ -724,14 +798,14 @@ const Home = () => {
           {/* ══════════════════════════════════════════════════════════════════
               SECTION 3 — COMPONENTS (top 6)
           ══════════════════════════════════════════════════════════════════ */}
-          <section className="px-6 sm:px-10 py-28">
+          <section className="px-6 sm:px-10 py-16 sm:py-28">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-20">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
                   Everything you need to ship faster
                 </h2>
                 <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                  31 accessible, themeable, SSR-safe components with full
+                  Accessible, themeable, SSR-safe components with full
                   TypeScript support. Here are the ones teams reach for first.
                 </p>
               </div>
@@ -741,7 +815,7 @@ const Home = () => {
                   {
                     name: "Table",
                     path: "table",
-                    desc: "Sorting, pagination, row selection, column pinning, resizing, and infinite scroll — all in one.",
+                    desc: "Sorting, pagination, row selection, column pinning, resizing, and infinite scroll. All in one.",
                     icon: (
                       <svg
                         width="20"
@@ -866,7 +940,7 @@ const Home = () => {
                   <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-violet-600" />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500 via-indigo-400 to-violet-500 transition-opacity duration-500" />
                   <div className="absolute inset-0 rounded-xl shadow-[0_0_24px_rgba(99,102,241,0.2)] group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] transition-shadow duration-500" />
-                  <span className="relative">View all 31 components</span>
+                  <span className="relative">View all components</span>
                   <svg
                     className="relative group-hover:translate-x-0.5 transition-transform duration-300"
                     width="16"
@@ -889,7 +963,7 @@ const Home = () => {
           {/* ══════════════════════════════════════════════════════════════════
               SECTION 4 — FAQ PREVIEW
           ══════════════════════════════════════════════════════════════════ */}
-          <section className="px-6 sm:px-10 py-28">
+          <section className="px-6 sm:px-10 py-16 sm:py-28">
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-16">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
@@ -907,9 +981,9 @@ const Home = () => {
                   root: "w-full rounded-2xl border border-white/[0.08] overflow-hidden bg-white/[0.02]",
                   item: "border-b border-white/[0.06] last:border-b-0",
                   trigger:
-                    "flex w-full items-center justify-between px-6 py-5 text-left text-[15px] font-medium text-white/90 transition-all duration-300 hover:bg-white/[0.04] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-inset",
+                    "flex w-full items-center justify-between px-4 sm:px-6 py-4 sm:py-5 text-left text-[15px] font-medium text-white/90 transition-all duration-300 hover:bg-white/[0.04] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-inset",
                   triggerInner: "flex-1 text-left",
-                  content: "px-6 py-5 text-[15px] text-gray-400 leading-relaxed",
+                  content: "px-4 sm:px-6 py-4 sm:py-5 text-[15px] text-gray-400 leading-relaxed",
                   contentWrapper:
                     "overflow-hidden transition-[max-height,opacity,visibility]",
                   icon: "shrink-0 text-white/40",
@@ -966,7 +1040,7 @@ const Home = () => {
           {/* ══════════════════════════════════════════════════════════════════
               SECTION 5 — BLOGS (3 random)
           ══════════════════════════════════════════════════════════════════ */}
-          <section className="px-6 sm:px-10 py-28">
+          <section className="px-6 sm:px-10 py-16 sm:py-28">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-20">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
@@ -978,14 +1052,14 @@ const Home = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-14">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
                 {randomBlogs.map((post) => (
                   <Link
                     key={post.id}
                     to={`/blog/${post.id}`}
                     className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden transition-all duration-500 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-1"
                   >
-                    <div className="relative h-44 overflow-hidden">
+                    <div className="relative h-36 sm:h-44 overflow-hidden">
                       {post.coverImage ? (
                         <img
                           src={post.coverImage}
@@ -1002,7 +1076,7 @@ const Home = () => {
                       )}
                     </div>
 
-                    <div className="p-5">
+                    <div className="p-4 sm:p-5">
                       <div className="flex items-center gap-2.5 mb-3">
                         <span className="text-[11px] font-medium text-gray-500 bg-white/[0.05] px-2 py-0.5 rounded-full">
                           {post.category}
@@ -1076,7 +1150,7 @@ const Home = () => {
           <footer className="w-full px-6 sm:px-10 pt-16 pb-8">
             <div className="border-t border-white/[0.08] pt-8">
               {/* Row: logo — nav links — social */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-8">
                 <LogoMark size={120} />
                 <div className="flex items-center gap-6">
                   <Link
@@ -1117,14 +1191,14 @@ const Home = () => {
               </div>
 
               {/* Bottom row */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-white/50">
-                <span>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-white/50">
+                <span className="text-xs sm:text-sm">
                   &copy; {new Date().getFullYear()} Chumlab &middot; MIT License
                   &middot; Built with {"☕"} and way too many tabs
                 </span>
                 <a
                   href="mailto:hello@chumlab.com"
-                  className="text-white/60 hover:text-white transition-colors duration-300"
+                  className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors duration-300"
                 >
                   {"💬"} Got feedback? Ping us at{" "}
                   <span className="underline underline-offset-2">

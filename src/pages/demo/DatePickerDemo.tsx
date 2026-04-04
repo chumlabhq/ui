@@ -262,8 +262,8 @@ const DatePickerDemo = () => {
 
       {/* ─── Single Date ────────────────────────────────────────────────── */}
       <Section
-        title="Single Date Selection"
-        description="Default mode. Click a day to select it."
+        title="Basic Usage"
+        description="Default single-date mode. Click a day to select it."
         isDarkMode={dark}
       >
         <DemoWrapper

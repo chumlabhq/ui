@@ -231,8 +231,8 @@ const AccordionDemo = () => {
 
       {/* ─── Basic (Single Mode) ────────────────────────────────────────── */}
       <Section
-        title="Basic Accordion (Single Mode)"
-        description="Only one item can be expanded at a time. Click to expand, click again to collapse."
+        title="Basic Usage"
+        description="A simple accordion where only one item can be expanded at a time."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">

@@ -380,7 +380,7 @@ const MultiSelectDropdown = forwardRef<
     }, [isOpen, handleClose, triggerNode, dropdownId]);
 
     useEffect(() => {
-      if (!isOpen || typeof document === "undefined") return;
+      if (!isOpen || !isBrowser) return;
       const handleDocumentKeyDown = (event: KeyboardEvent) => {
         if (event.key !== "Escape" && event.key !== "Tab") return;
         handleClose();

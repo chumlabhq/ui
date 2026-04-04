@@ -3,7 +3,7 @@ import type { ReactElement, Ref } from "react";
 import { cn } from "../../../utils/cn";
 import { mergeTooltipRefs } from "../utils/helpers";
 
-export const TooltipAsChildTrigger: React.FC<{
+interface TooltipAsChildTriggerProps {
   child: ReactElement<Record<string, unknown>>;
   setTriggerNode: (node: HTMLElement | null) => void;
   onMouseEnter: () => void;
@@ -17,7 +17,9 @@ export const TooltipAsChildTrigger: React.FC<{
   tooltipId: string;
   triggerClassName?: string;
   tooltipContent: React.ReactNode;
-}> = ({
+}
+
+export function TooltipAsChildTrigger({
   child,
   setTriggerNode,
   onMouseEnter,
@@ -31,7 +33,7 @@ export const TooltipAsChildTrigger: React.FC<{
   tooltipId,
   triggerClassName,
   tooltipContent,
-}) => {
+}: TooltipAsChildTriggerProps) {
   const childRef = (child.props as { ref?: Ref<HTMLElement> }).ref;
 
   return (
@@ -99,6 +101,4 @@ export const TooltipAsChildTrigger: React.FC<{
       {tooltipContent}
     </>
   );
-};
-
-TooltipAsChildTrigger.displayName = "TooltipAsChildTrigger";
+}

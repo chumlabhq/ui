@@ -277,7 +277,7 @@ const MultiSelectDropdownDemo = () => {
         <div className="flex items-center gap-2">
           <img
             src={country.flags.png}
-            alt=""
+            alt={`${country.name.common} flag`}
             className="w-5 h-4 object-cover rounded-sm"
           />
           <div className="flex flex-col">
@@ -1516,7 +1516,7 @@ const MultiSelectDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-64">
+          <div className="w-full max-w-64">
             <MultiSelectDropdown
               options={staticOptions}
               value={keyboardDemoValue}

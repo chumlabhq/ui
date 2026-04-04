@@ -139,7 +139,7 @@ const tooltipConfigSteps: Step[] = [
       content: (
         <div className="space-y-1">
           <div className="font-semibold">Configure Settings</div>
-          <div className="text-gray-500 text-xs">
+          <div className="text-gray-400 text-xs">
             Customize your preferences here
           </div>
         </div>
@@ -273,7 +273,7 @@ const StepperDemo = () => {
 
       {/* ─── Basic ────────────────────────────────────────────────────── */}
       <Section
-        title="Basic Stepper"
+        title="Basic Usage"
         description="Default numbered variant with horizontal layout. Click a step or use the buttons to navigate."
         isDarkMode={dark}
       >

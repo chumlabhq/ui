@@ -324,7 +324,7 @@ const PaginationDemo = () => {
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
-        title="Basic Pagination"
+        title="Basic Usage"
         description="Minimal setup with value, totalPages, and onValueChange."
         isDarkMode={dark}
       >

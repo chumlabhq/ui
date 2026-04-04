@@ -2152,4 +2152,6 @@ const Table = forwardRef(TableInner) as <TData>(
   props: TableProps<TData> & { ref?: React.Ref<HTMLDivElement> },
 ) => React.ReactElement | null;
 
+(Table as { displayName?: string }).displayName = "Table";
+
 export default memo(Table) as typeof Table;

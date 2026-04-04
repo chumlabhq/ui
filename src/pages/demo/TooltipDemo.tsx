@@ -111,7 +111,7 @@ const TooltipDemo = () => {
 
       {/* ─── Basic Tooltip ────────────────────────────────────────────── */}
       <Section
-        title="Basic Tooltip"
+        title="Basic Usage"
         description="Wrap any element with Tooltip and provide content to display on hover."
         isDarkMode={dark}
       >
@@ -594,7 +594,7 @@ const TooltipDemo = () => {
               <p className={`text-sm mb-3 ${dark ? "text-gray-400" : "text-gray-500"}`}>
                 Tooltip only appears when text is truncated:
               </p>
-              <div className={`w-[220px] p-3 rounded-lg shadow-sm border ${dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
+              <div className={`w-full max-w-[220px] p-3 rounded-lg shadow-sm border ${dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
                 <Tooltip
                   truncate
                   truncateWidth={196}
@@ -608,7 +608,7 @@ const TooltipDemo = () => {
               <p className={`text-sm mb-3 ${dark ? "text-gray-400" : "text-gray-500"}`}>
                 Short text - no tooltip needed:
               </p>
-              <div className={`w-[220px] p-3 rounded-lg shadow-sm border ${dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
+              <div className={`w-full max-w-[220px] p-3 rounded-lg shadow-sm border ${dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
                 <Tooltip
                   truncate
                   truncateWidth={196}
@@ -630,7 +630,7 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className={`w-full rounded-xl border overflow-hidden ${dark ? "border-gray-600" : "border-gray-200"}`}>
-            <div className={`grid grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
               <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${dark ? "bg-gray-700 text-gray-400" : "bg-gray-50 text-gray-500"}`}>
                 Title
               </div>
@@ -641,7 +641,7 @@ const TooltipDemo = () => {
                 Author
               </div>
             </div>
-            <div className={`grid grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
               <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
                 <Tooltip
                   truncate
@@ -670,7 +670,7 @@ const TooltipDemo = () => {
                 </Tooltip>
               </div>
             </div>
-            <div className={`grid grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
               <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
                 <Tooltip
                   truncate

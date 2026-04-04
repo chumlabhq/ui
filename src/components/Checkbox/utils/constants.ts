@@ -27,7 +27,7 @@ export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   labelContainer: "flex flex-col",
   label: "text-sm font-medium text-gray-700",
   description: "text-xs text-gray-500",
-  checkbox: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2",
+  checkbox: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
   checked: "bg-blue-600 border-blue-600 text-white",
   unchecked: "bg-white border-gray-300",
   indeterminate: "bg-blue-600 border-blue-600 text-white",

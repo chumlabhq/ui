@@ -41,7 +41,7 @@ function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
       to={`/blog/${post.id}`}
       className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden transition-all duration-500 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-1"
     >
-      <div className="relative h-44 overflow-hidden">
+      <div className="relative h-36 sm:h-44 overflow-hidden">
         {post.coverImage ? (
           <img
             src={post.coverImage}
@@ -58,7 +58,7 @@ function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
         )}
       </div>
 
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         <div className="flex items-center gap-2.5 mb-3">
           <span className="text-[11px] font-medium text-gray-500 bg-white/[0.05] px-2 py-0.5 rounded-full">
             {post.category}
@@ -102,10 +102,11 @@ function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
 // ─── Blog Listing Page ──────────────────────────────────────────────────────
 
 export default function BlogListing() {
-  useDocumentTitle("Blog — Insights & Guides on Frontend Development");
+  useDocumentTitle("Blog");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Filter posts by search and category
@@ -183,54 +184,84 @@ export default function BlogListing() {
                 <LogoMark size={160} />
               </Link>
               <div className="flex items-center gap-1">
-                <Link
-                  to="/accordion"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  Components
-                </Link>
-                <Link
-                  to="/blog"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  Blog
-                </Link>
-                <Link
-                  to="/faq"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  FAQ
-                </Link>
-                <a
-                  href="https://github.com/chumlabhq/ui"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
-                  aria-label="GitHub"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                <div className="hidden sm:flex items-center gap-1">
+                  <Link
+                    to="/accordion"
+                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
                   >
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                  </svg>
-                </a>
+                    Components
+                  </Link>
+                  <Link
+                    to="/blog"
+                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
+                  >
+                    Blog
+                  </Link>
+                  <Link
+                    to="/faq"
+                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
+                  >
+                    FAQ
+                  </Link>
+                  <a
+                    href="https://github.com/chumlabhq/ui"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
+                    aria-label="GitHub"
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg>
+                  </a>
+                </div>
                 <Link
                   to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-2"
+                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 sm:ml-2"
                 >
                   Get Started
                 </Link>
+                <button onClick={() => setMenuOpen(true)} className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1" aria-label="Open menu">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
         </header>
 
+        {/* Mobile menu overlay */}
+        {menuOpen && (
+          <div className="fixed inset-0 z-[60] sm:hidden">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} />
+            <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.06] p-6 flex flex-col gap-1">
+              <div className="flex justify-end mb-6">
+                <button onClick={() => setMenuOpen(false)} className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors" aria-label="Close menu">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+              <Link to="/accordion" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">Components</Link>
+              <Link to="/blog" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">Blog</Link>
+              <Link to="/faq" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">FAQ</Link>
+              <a href="https://github.com/chumlabhq/ui" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">GitHub</a>
+            </div>
+          </div>
+        )}
+
         <main>
           {/* ── HERO ── */}
-          <section className="px-6 sm:px-10 pt-28 sm:pt-32 pb-16">
+          <section className="px-4 sm:px-6 lg:px-10 pt-28 sm:pt-32 pb-10 sm:pb-16">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
                 Insights &{" "}
@@ -239,7 +270,7 @@ export default function BlogListing() {
                 </span>
               </h1>
 
-              <p className="text-lg text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
+              <p className="text-base sm:text-lg text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
                 Practical articles on frontend development, component design,
                 and building modern web experiences.
               </p>
@@ -263,7 +294,8 @@ export default function BlogListing() {
           <section className="max-w-6xl mx-auto px-6 sm:px-8 pb-8">
 
             {/* Category pills */}
-            <div className="flex flex-wrap gap-2">
+            <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
               <button
                 onClick={() => setActiveCategory(null)}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
@@ -291,6 +323,7 @@ export default function BlogListing() {
                   </button>
                 );
               })}
+            </div>
             </div>
 
             {/* Active filter info */}
@@ -323,8 +356,8 @@ export default function BlogListing() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20">
-                <div className="text-gray-600 text-lg mb-2">No articles found</div>
+              <div className="text-center py-12 sm:py-20 px-4 sm:px-0">
+                <div className="text-gray-600 text-sm sm:text-lg mb-2">No articles found</div>
                 <p className="text-gray-600 text-sm">
                   Try adjusting your search or category filter.
                 </p>
@@ -345,12 +378,12 @@ export default function BlogListing() {
                     nav: "flex items-center gap-2",
                     pageButtons: "flex items-center gap-1",
                     pageButton:
-                      "w-9 h-9 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
+                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
                     activePageButton:
-                      "w-9 h-9 rounded-lg text-sm font-medium bg-blue-600 text-white flex items-center justify-center cursor-pointer",
+                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-sm font-medium bg-blue-600 text-white flex items-center justify-center cursor-pointer",
                     navButton:
-                      "w-9 h-9 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
-                    ellipsis: "w-9 h-9 flex items-center justify-center text-gray-600",
+                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
+                    ellipsis: "w-10 h-10 sm:w-9 sm:h-9 flex items-center justify-center text-gray-600",
                     selector: "",
                     selectorButton: "",
                     selectorDropdown: "",
@@ -370,35 +403,35 @@ export default function BlogListing() {
           {/* ── FOOTER ── */}
           <footer className="w-full px-5 sm:px-8 pb-6">
             <div className="border-t border-white/4 pt-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <LogoMark size={140} />
-                  <span className="text-[10px] text-gray-700 ml-2">
+                  <LogoMark size={120} />
+                  <span className="text-xs text-gray-700 ml-2">
                     MIT License
                   </span>
                 </div>
                 <div className="flex items-center gap-5">
                   <Link
                     to="/button"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
                   >
                     Components
                   </Link>
                   <Link
                     to="/blog"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
                   >
                     Blog
                   </Link>
                   <Link
                     to="/faq"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
                   >
                     FAQ
                   </Link>
                   <a
                     href="https://github.com"
-                    className="text-[11px] text-gray-600 hover:text-gray-300 transition-colors duration-300"
+                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
                   >
                     GitHub
                   </a>

@@ -1,7 +1,7 @@
 {
-  "name": "Chumlab UI — React Component Library",
+  "name": "Chumlab UI | React Component Library",
   "short_name": "Chumlab UI",
-  "description": "31 production-grade, accessible React components built with TypeScript and Tailwind CSS v4.",
+  "description": "Production-grade, accessible React components built with TypeScript and Tailwind CSS v4.",
   "start_url": "/",
   "scope": "/",
   "icons": [

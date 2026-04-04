@@ -135,7 +135,7 @@ const CheckboxDemo = () => {
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
-        title="Basic Checkbox"
+        title="Basic Usage"
         description="A simple checkbox with no label."
         isDarkMode={dark}
       >

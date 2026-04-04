@@ -1,10 +1,10 @@
 # Chumlab UI
 
-> Chumlab UI is an open-source React component library with 31 production-grade, accessible, and fully themeable UI components. Built with TypeScript and Tailwind CSS v4.
+> Chumlab UI is an open-source React component library with production-grade, accessible, and fully themeable UI components. Built with TypeScript and Tailwind CSS v4.
 
 ## What is Chumlab UI?
 
-Chumlab UI is a React component library designed for teams that need accessible, production-ready UI components without vendor lock-in. It provides 31 components covering forms, selection, navigation, overlays, data display, and layout.
+Chumlab UI is a React component library designed for teams that need accessible, production-ready UI components without vendor lock-in. It provides a growing collection of components covering forms, selection, navigation, overlays, data display, and layout.
 
 ## Key Facts
 
@@ -24,7 +24,7 @@ Chumlab UI is a React component library designed for teams that need accessible,
 npm install @chumlab/ui
 ```
 
-## Components (31 total)
+## Components
 
 ### Form Inputs
 Input, TextArea, Checkbox, Switch, RadioButton, OtpInput, Slider, DatePicker, TimePicker, InternationalPhoneInput
@@ -39,16 +39,16 @@ Breadcrumb, Pagination, TabPanel, Stepper
 Modal, Drawer, Tooltip, Toast
 
 ### Display
-Avatar, CountryFlag, Table, Accordion, Loader, Toggle
+Avatar, CountryFlag, Table, Accordion, Loader
 
 ### Layout
 Button, ResizablePanel
 
 ## Why Chumlab UI?
 
-1. Accessibility built in — WCAG 2.1 AA, keyboard navigation, focus trapping, screen reader support, and prefers-reduced-motion out of the box.
-2. Fully themeable — Override any element via the `classes` prop. Go fully unstyled. Use your own design tokens. No vendor CSS to fight.
-3. Lightweight and tree-shakeable — Only ship what you use. No runtime CSS-in-JS. Built on Tailwind CSS v4.
+1. Accessibility built in. WCAG 2.1 AA, keyboard navigation, focus trapping, screen reader support, and prefers-reduced-motion out of the box.
+2. Fully themeable. Override any element via the `classes` prop. Go fully unstyled. Use your own design tokens. No vendor CSS to fight.
+3. Lightweight and tree-shakeable. Only ship what you use. No runtime CSS-in-JS. Built on Tailwind CSS v4.
 
 ## How is Chumlab UI different?
 

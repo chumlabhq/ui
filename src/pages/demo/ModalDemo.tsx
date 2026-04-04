@@ -154,7 +154,7 @@ const ModalDemo = () => {
 
       {/* ─── Basic ───────────────────────────────────────────────────────── */}
       <Section
-        title="Basic"
+        title="Basic Usage"
         description="Simple modal dialogs with various header configurations."
         isDarkMode={dark}
       >
@@ -1154,7 +1154,7 @@ const ModalDemo = () => {
               className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Category
@@ -1365,7 +1365,7 @@ const ModalDemo = () => {
             Use maxWidth, maxHeight, minWidth, and minHeight props to control
             modal dimensions.
           </p>
-          <div className="grid grid-cols-2 gap-4 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <div className="p-3 bg-gray-50 rounded-lg">
               <span className="text-gray-500">maxWidth:</span>{" "}
               <span className="font-mono">700px</span>
@@ -1516,7 +1516,7 @@ const ModalDemo = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">
                     Key Metrics
                   </h3>
-                  <div className="grid grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
                       <p className="text-sm text-emerald-600 font-medium">
                         Revenue

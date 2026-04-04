@@ -204,4 +204,6 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   );
 }));
 
+Toast.displayName = "Toast";
+
 export default Toast;

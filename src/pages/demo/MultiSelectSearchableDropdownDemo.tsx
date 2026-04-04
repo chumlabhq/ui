@@ -193,7 +193,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           />
           <div className="flex flex-col">
             <span className="text-sm">{country.name.common}</span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-400">
               {country.capital?.[0] || country.region}
             </span>
           </div>

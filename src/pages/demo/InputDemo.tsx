@@ -329,7 +329,7 @@ const InputDemo = () => {
       <div className="space-y-8">
         {/* Basic */}
         <Section
-          title="Basic Input"
+          title="Basic Usage"
           description="Minimal usage with just a placeholder."
           isDarkMode={dark}
         >
@@ -1187,7 +1187,7 @@ const InputDemo = () => {
                 >
                   <input
                     type="checkbox"
-                    className="rounded border-gray-300 accent-indigo-500"
+                    className={`rounded accent-indigo-500 ${dark ? "border-gray-600 bg-gray-800" : "border-gray-300"}`}
                   />{" "}
                   Remember me
                 </label>

@@ -556,6 +556,25 @@ const CascadingDropdownDemo = () => {
         </div>
       </header>
 
+      {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
+      <Section
+        title="Basic Usage"
+        description="A simple cascading dropdown with static nested options."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-96">
+            <CascadingDropdown
+              options={categoryOptions}
+              value={{}}
+              onValueChange={() => {}}
+              placeholder="Select a category..."
+              classes={c.cascading}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Async Single-Select (Countries API) ────────────────────────── */}
       <Section
         title="Async Single-Select (Countries API)"
@@ -792,7 +811,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-64">
+          <div className="w-full max-w-64">
             <CascadingDropdown
               options={simpleOptions}
               value={simpleValue}
@@ -1662,7 +1681,7 @@ const CascadingDropdownDemo = () => {
             placeholder="Select technologies..."
             classes={{
               ...c.cascading,
-              menu: `rounded-lg shadow-lg overflow-visible w-[260px] ${
+              menu: `rounded-lg shadow-lg overflow-visible w-full max-w-[260px] ${
                 dark
                   ? "bg-gray-800 border border-gray-700"
                   : "bg-white border border-gray-200"
@@ -1671,7 +1690,7 @@ const CascadingDropdownDemo = () => {
                 dark ? "text-gray-200 hover:bg-gray-700" : "hover:bg-gray-50"
               }`,
               menuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
-              submenu: `rounded-lg shadow-lg ml-1 w-[280px] max-h-[260px] overflow-y-auto ${
+              submenu: `rounded-lg shadow-lg ml-1 w-full max-w-[280px] max-h-[260px] overflow-y-auto ${
                 dark
                   ? "bg-gray-800 border border-gray-700"
                   : "bg-white border border-gray-200"

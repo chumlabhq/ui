@@ -249,7 +249,7 @@ const TextAreaDemo = () => {
       <div className="space-y-8">
         {/* Basic */}
         <Section
-          title="Basic TextArea"
+          title="Basic Usage"
           description="Minimal usage with just a placeholder."
           isDarkMode={dark}
         >

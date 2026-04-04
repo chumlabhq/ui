@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { PRINT_STYLES } from "../utils/constants";
+import { isBrowser } from "../../../utils/isBrowser";
 
 let printStyleRefCount = 0;
 let printStyleElement: HTMLStyleElement | null = null;
 
 export function usePrintStyles(enabled: boolean) {
   useEffect(() => {
-    if (!enabled || typeof document === "undefined") return;
+    if (!enabled || !isBrowser) return;
 
     printStyleRefCount++;
     if (printStyleRefCount === 1) {

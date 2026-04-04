@@ -252,4 +252,6 @@ export const ToastProvider = ({
   );
 };
 
+ToastProvider.displayName = "ToastProvider";
+
 export default ToastProvider;

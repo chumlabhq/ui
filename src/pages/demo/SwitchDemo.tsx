@@ -152,7 +152,7 @@ const SwitchDemo = () => {
 
       {/* ── Basic ──────────────────────────────────────────────────────── */}
       <Section
-        title="Basic Switch"
+        title="Basic Usage"
         description="A simple switch with no visible label. Use aria-label for accessibility."
         isDarkMode={dark}
       >
@@ -600,7 +600,7 @@ const SwitchDemo = () => {
                 Event Log:
               </p>
               {focusLog.length === 0 ? (
-                <span className="text-gray-400">
+                <span className={dark ? "text-gray-500" : "text-gray-400"}>
                   Focus or blur the switch to see events...
                 </span>
               ) : (

@@ -175,7 +175,7 @@ const RadioButtonDemo = () => {
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
-        title="Basic Radio Group"
+        title="Basic Usage"
         description="A simple radio group with three options."
         isDarkMode={dark}
       >

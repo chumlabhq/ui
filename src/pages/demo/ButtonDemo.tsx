@@ -251,6 +251,17 @@ const ButtonDemo = () => {
         </div>
       </header>
 
+      {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
+      <Section
+        title="Basic Usage"
+        description="A simple button with default behavior."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark}>
+          <Button className={c.primary}>Click Me</Button>
+        </DemoWrapper>
+      </Section>
+
       {/* ─── Basic Variants ─────────────────────────────────────────────── */}
       <Section
         title="Basic Variants"

@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="src/assets/images/logo-dark.png" alt="Chumlab UI — open-source React component library" height="60" />
+  <img src="src/assets/images/logo-dark.png" alt="Chumlab UI, open-source React component library" height="60" />
 </p>
 
 <h1 align="center">Chumlab UI</h1>
 
 <p align="center">
-  31 production-grade React components. Accessible. Themeable. Zero lock-in.
+  Production-grade React components. Accessible. Themeable. Zero lock-in.
 </p>
 
 <p align="center">
@@ -27,16 +27,16 @@
 
 ## What is Chumlab UI?
 
-Chumlab UI is an open-source React component library that provides 31 production-grade, accessible, and fully themeable UI components. It is built with TypeScript and Tailwind CSS v4, and designed for teams who need polished interfaces without sacrificing control over design or accessibility.
+Chumlab UI is an open-source React component library that provides production-grade, accessible, and fully themeable UI components. It is built with TypeScript and Tailwind CSS v4, and designed for teams who need polished interfaces without sacrificing control over design or accessibility.
 
 **Package:** `@chumlab/ui` on [npm](https://www.npmjs.com/package/@chumlab/ui)
 
 ## Why Chumlab UI?
 
-- **Accessibility built in** — WCAG 2.1 AA, keyboard navigation, focus trapping, screen reader support, and `prefers-reduced-motion` out of the box. Not retrofitted — engineered from the start.
-- **Fully themeable** — Override any element via the `classes` prop. Go fully unstyled. Use your own design tokens. No vendor CSS to fight.
-- **Lightweight & tree-shakeable** — Only ship what you use. No runtime CSS-in-JS. Built on Tailwind CSS v4 for optimal bundle size.
-- **TypeScript-first** — Strict types, full IntelliSense, and exported prop types for every component.
+- **Accessibility built in.** WCAG 2.1 AA, keyboard navigation, focus trapping, screen reader support, and `prefers-reduced-motion` out of the box. Not retrofitted, engineered from the start.
+- **Fully themeable.** Override any element via the `classes` prop. Go fully unstyled. Use your own design tokens. No vendor CSS to fight.
+- **Lightweight & tree-shakeable.** Only ship what you use. No runtime CSS-in-JS. Built on Tailwind CSS v4 for optimal bundle size.
+- **TypeScript-first.** Strict types, full IntelliSense, and exported prop types for every component.
 
 ## How is Chumlab UI different from other React component libraries?
 
@@ -82,7 +82,7 @@ import { Button } from "@chumlab/ui/components/Button";
 import type { ButtonProps } from "@chumlab/ui/components/Button";
 ```
 
-## Components (31)
+## Components
 
 ### Form Inputs
 
@@ -136,7 +136,6 @@ import type { ButtonProps } from "@chumlab/ui/components/Button";
 | [`Table`](https://chumlab.com/table) | Data table with sorting (TanStack Table) |
 | [`Accordion`](https://chumlab.com/accordion) | Expandable sections with animations |
 | [`Loader`](https://chumlab.com/loader) | Circular loading spinner |
-| [`Toggle`](https://chumlab.com/toggle) | Toggle button with pressed state |
 
 ### Layout
 
@@ -152,10 +151,10 @@ import type { ButtonProps } from "@chumlab/ui/components/Button";
 Every stateful component supports both patterns:
 
 ```tsx
-// Uncontrolled — component manages its own state
+// Uncontrolled: component manages its own state
 <Input defaultValue="hello" />
 
-// Controlled — you own the state
+// Controlled: you own the state
 <Input value={text} onValueChange={setText} />
 ```
 

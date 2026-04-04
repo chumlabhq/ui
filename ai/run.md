@@ -10,4 +10,4 @@
 4. Execute improve.md using:
    - audit-report.md
    - verify-report.md
-   → Save output to ai/improvement.md
+     → Save output to ai/improvement.md

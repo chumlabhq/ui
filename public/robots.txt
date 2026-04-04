@@ -1,4 +1,4 @@
-# Chumlab UI — https://chumlab.com
+# Chumlab UI | https://chumlab.com
 # Open-source React component library
 
 User-agent: *
