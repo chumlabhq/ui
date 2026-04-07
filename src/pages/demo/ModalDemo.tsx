@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Modal, useModal } from "../../components/Modal";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -144,10 +143,9 @@ const ModalDemo = () => {
             content.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Modal, useModal } from "@chumlab/ui/modal";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Modal, useModal } from "@chumlab/ui/modal";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -155,11 +153,11 @@ const ModalDemo = () => {
       {/* ─── Basic ───────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple modal dialog triggered by a button."
+        description="Works out-of-the-box with built-in styles, dark mode, focus trapping, and Escape to close. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Basic usage — open/close via controlled state */}
+          {/* Basic usage — open/close via controlled state, built-in defaults */}
           <button className={c.btnPrimary} onClick={() => setBasicOpen(true)}>
             Open Modal
           </button>
@@ -257,8 +255,8 @@ const ModalDemo = () => {
 
       {/* ─── Unstyled ────────────────────────────────────────────────────── */}
       <Section
-        title="Unstyled"
-        description="Remove all default styles and build from scratch."
+        title="Unstyled Mode"
+        description="Set unstyled=true to strip all defaults. Provide your own styling via the classes prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -409,44 +407,6 @@ const ModalDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Data Attributes ─────────────────────────────────────────────── */}
-      <Section
-        title="Data Attributes"
-        description="Data attributes emitted for CSS targeting and testing."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="space-y-3">
-            <p className={`text-sm ${c.text}`}>
-              The Modal emits the following <code className={`px-1.5 py-0.5 rounded text-xs font-mono ${dark ? "bg-gray-800" : "bg-gray-100"}`}>data-*</code> attributes for styling and testing:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {[
-                { attr: "data-modal-root", desc: "Root portal wrapper" },
-                { attr: "data-modal-overlay", desc: "Backdrop overlay" },
-                { attr: "data-modal-container", desc: "Centering container" },
-                { attr: "data-modal-content", desc: "Content wrapper (role=dialog)" },
-                { attr: "data-modal-header", desc: "Header section" },
-                { attr: "data-modal-body", desc: "Body section" },
-                { attr: "data-modal-footer", desc: "Footer section" },
-                { attr: "data-open", desc: "Present when modal is open" },
-                { attr: "data-nesting-level", desc: "Current nesting depth (number)" },
-                { attr: "data-reduce-motion", desc: "Present when motion is reduced" },
-              ].map(({ attr, desc }) => (
-                <div
-                  key={attr}
-                  className={`flex items-start gap-3 p-2.5 rounded-lg text-sm ${dark ? "bg-gray-800/50" : "bg-gray-50"}`}
-                >
-                  <code className={`shrink-0 px-1.5 py-0.5 rounded text-xs font-mono ${dark ? "bg-gray-700 text-blue-400" : "bg-blue-50 text-blue-700"}`}>
-                    {attr}
-                  </code>
-                  <span className={c.text}>{desc}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </DemoWrapper>
-      </Section>
 
       {/* ─── Modal Instances ─────────────────────────────────────────────── */}
 
@@ -477,16 +437,33 @@ const ModalDemo = () => {
         </div>
       </Modal>
 
-      {/* Truly unstyled — no classes, bare HTML structure */}
       <Modal
         open={unstyledOpen}
         onOpenChange={setUnstyledOpen}
-        title="Unstyled Modal"
+        title="Custom Modal"
         unstyled
+        classes={{
+          root: "fixed inset-0 z-50 flex items-center justify-center",
+          overlay: `fixed inset-0 transition-opacity ${dark ? "bg-black/70" : "bg-black/40"} backdrop-blur-sm`,
+          container: "relative z-10 flex items-center justify-center p-4",
+          content: `w-full max-w-md rounded-2xl shadow-2xl overflow-hidden ${dark ? "bg-gray-900 border border-gray-700" : "bg-white border border-gray-200"}`,
+          header: "flex items-start gap-3 p-5 pb-3",
+          title: `font-bold text-lg ${dark ? "text-white" : "text-gray-900"}`,
+          closeButton: `shrink-0 p-1.5 rounded-lg ml-auto transition-colors ${dark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`,
+          closeIcon: "w-5 h-5",
+          body: "px-5 pb-5",
+        }}
       >
-        <p>All default styles stripped — only raw HTML structure renders.</p>
-        <div className="mt-4">
-          <button onClick={() => setUnstyledOpen(false)}>Close</button>
+        <p className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
+          This modal uses <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800" : "bg-gray-100"}`}>unstyled</code> + <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800" : "bg-gray-100"}`}>classes</code> for a fully custom look.
+        </p>
+        <div className="flex justify-end gap-3 mt-5">
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-teal-500 text-white hover:bg-teal-400" : "bg-teal-600 text-white hover:bg-teal-700"}`}
+            onClick={() => setUnstyledOpen(false)}
+          >
+            Got it
+          </button>
         </div>
       </Modal>
 
@@ -801,23 +778,22 @@ const ModalDemo = () => {
         open={basicOpen}
         onOpenChange={setBasicOpen}
         title="Welcome Back"
-        classes={{
-          content: c.modalContent,
-          header: c.modalHeader,
-          title: c.modalTitle,
-          closeButton: c.modalCloseBtn,
-          closeIcon: c.modalCloseIcon,
-          body: c.modalBody,
-        }}
+        description="Your session has been restored. You can continue where you left off."
       >
-        <p className="text-gray-600">
-          This is a basic modal with just a title. Modal content goes here.
+        <p className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
+          This modal uses only built-in default styles. It includes a title, description, close button, overlay with blur, focus trapping, and Escape key support — all out-of-the-box.
         </p>
         <div className="flex justify-end gap-3 mt-6">
-          <button className={c.btn} onClick={() => setBasicOpen(false)}>
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            onClick={() => setBasicOpen(false)}
+          >
             Cancel
           </button>
-          <button className={c.btnPrimary} onClick={() => setBasicOpen(false)}>
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+            onClick={() => setBasicOpen(false)}
+          >
             Continue
           </button>
         </div>
@@ -992,50 +968,46 @@ const ModalDemo = () => {
         showHeader={false}
         preventOutsideClick
         closeOnEscape={false}
-        maxWidth={400}
-        classes={{
-          content: "w-full max-w-[400px] m-4 rounded-xl shadow-2xl overflow-hidden",
-          body: "p-6",
-        }}
+        classes={{ body: "p-6" }}
       >
-        <div className="text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
-            <svg
-              className="h-7 w-7 text-red-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
+        <div className="flex flex-col items-center">
+          {/* Animated danger icon */}
+          <div className={`relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl ${dark ? "bg-red-500/10" : "bg-red-50"}`}>
+            <div className={`absolute inset-0 rounded-2xl ${dark ? "bg-red-500/5" : "bg-red-100/50"} animate-pulse`} />
+            <svg className={`relative h-8 w-8 ${dark ? "text-red-400" : "text-red-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Delete Project?
-          </h3>
-          <p className="text-gray-500 mb-6">
-            This will permanently delete{" "}
-            <span className="font-medium text-gray-700">
-              "Marketing Website"
-            </span>{" "}
-            and all associated files. This action cannot be undone.
+
+          <h3 className={`text-lg font-bold mb-1 ${dark ? "text-white" : "text-gray-900"}`}>Delete this project?</h3>
+          <p className={`text-sm text-center mb-5 max-w-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>
+            This will permanently remove <span className={`font-semibold ${dark ? "text-red-400" : "text-red-600"}`}>"Marketing Website"</span> and all its data. This cannot be undone.
           </p>
-          <div className="flex gap-3">
+
+          {/* Danger zone card */}
+          <div className={`w-full rounded-xl p-4 mb-6 border ${dark ? "bg-red-950/20 border-red-900/40" : "bg-red-50 border-red-100"}`}>
+            <div className="flex items-start gap-3">
+              <svg className={`h-5 w-5 mt-0.5 shrink-0 ${dark ? "text-red-400" : "text-red-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p className={`text-sm font-medium ${dark ? "text-red-300" : "text-red-800"}`}>What will be deleted:</p>
+                <ul className={`text-xs mt-1.5 space-y-1 ${dark ? "text-red-400/80" : "text-red-600/80"}`}>
+                  <li>12 pages and all content</li>
+                  <li>3 team members will lose access</li>
+                  <li>Connected analytics data</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex w-full gap-3">
+            <button className={`flex-1 ${c.btn}`} onClick={() => setConfirmDeleteOpen(false)}>Keep Project</button>
             <button
-              className={`flex-1 ${c.btn}`}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-white ${dark ? "bg-red-500 hover:bg-red-400" : "bg-red-600 hover:bg-red-700"}`}
               onClick={() => setConfirmDeleteOpen(false)}
             >
-              Cancel
-            </button>
-            <button
-              className={`flex-1 ${c.btnDanger}`}
-              onClick={() => setConfirmDeleteOpen(false)}
-            >
-              Delete
+              Yes, Delete
             </button>
           </div>
         </div>
@@ -1045,45 +1017,47 @@ const ModalDemo = () => {
         open={successOpen}
         onOpenChange={setSuccessOpen}
         showHeader={false}
-        maxWidth={400}
-        classes={{
-          content: "w-full max-w-[400px] m-4 rounded-xl shadow-2xl overflow-hidden",
-          body: "p-6",
-        }}
+        classes={{ body: "p-6" }}
       >
-        <div className="text-center py-4">
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-200">
-            <svg
-              className="h-8 w-8 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <div className="flex flex-col items-center">
+          {/* Animated success icon */}
+          <div className="relative mb-5">
+            <div className={`absolute -inset-3 rounded-full blur-xl ${dark ? "bg-emerald-500/20" : "bg-emerald-400/25"}`} />
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/25">
+              <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+
+          <h3 className={`text-xl font-bold mb-1 ${dark ? "text-white" : "text-gray-900"}`}>Payment Successful!</h3>
+          <p className={`text-sm mb-5 ${dark ? "text-gray-400" : "text-gray-500"}`}>Your order has been confirmed and is being processed.</p>
+
+          {/* Order details card */}
+          <div className={`w-full rounded-xl border divide-y mb-6 ${dark ? "border-gray-700 divide-gray-700 bg-gray-800/50" : "border-gray-100 divide-gray-100 bg-gray-50"}`}>
+            <div className="flex items-center justify-between px-4 py-3">
+              <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Order</span>
+              <span className={`text-sm font-mono font-medium ${dark ? "text-gray-200" : "text-gray-900"}`}>#ORD-2024-8847</span>
+            </div>
+            <div className="flex items-center justify-between px-4 py-3">
+              <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Amount</span>
+              <span className={`text-sm font-bold ${dark ? "text-emerald-400" : "text-emerald-600"}`}>$149.00</span>
+            </div>
+            <div className="flex items-center justify-between px-4 py-3">
+              <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Confirmation</span>
+              <span className={`text-sm ${dark ? "text-gray-300" : "text-gray-700"}`}>john.doe@example.com</span>
+            </div>
+          </div>
+
+          <div className="flex w-full gap-3">
+            <button className={`flex-1 ${c.btn}`} onClick={() => setSuccessOpen(false)}>View Order</button>
+            <button
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-white ${dark ? "bg-emerald-500 hover:bg-emerald-400" : "bg-emerald-600 hover:bg-emerald-700"}`}
+              onClick={() => setSuccessOpen(false)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
+              Continue Shopping
+            </button>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Payment Successful!
-          </h3>
-          <p className="text-gray-500 mb-2">Your order has been confirmed.</p>
-          <p className="text-sm text-gray-400 mb-6">
-            Order #ORD-2024-8847 • $149.00
-          </p>
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-500 mb-1">Confirmation sent to</p>
-            <p className="font-medium text-gray-900">john.doe@example.com</p>
-          </div>
-          <button
-            className={`w-full ${c.btnSuccess}`}
-            onClick={() => setSuccessOpen(false)}
-          >
-            Continue Shopping
-          </button>
         </div>
       </Modal>
 
@@ -1092,77 +1066,40 @@ const ModalDemo = () => {
         onOpenChange={setFormOpen}
         title="Create New Project"
         description="Fill in the details below to get started."
-        maxWidth={480}
-        classes={{
-          content: "w-full max-w-[480px] m-4 rounded-xl shadow-2xl overflow-hidden",
-          header: c.modalHeader,
-          title: c.modalTitle,
-          description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
-          closeIcon: c.modalCloseIcon,
-          body: c.modalBody,
-        }}
       >
         <form
           className="space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setFormOpen(false);
-          }}
+          onSubmit={(e) => { e.preventDefault(); setFormOpen(false); }}
         >
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Project Name
-            </label>
-            <input
-              type="text"
-              placeholder="e.g., Marketing Campaign"
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-            />
+            <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Project Name</label>
+            <input type="text" placeholder="e.g., Marketing Campaign" className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${dark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-200 text-gray-900"}`} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Description
-            </label>
-            <textarea
-              rows={3}
-              placeholder="Describe your project..."
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
-            />
+            <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Description</label>
+            <textarea rows={3} placeholder="Describe your project..." className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none ${dark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-200 text-gray-900"}`} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Category
-              </label>
-              <select className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+              <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Category</label>
+              <select className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${dark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-200 text-gray-900"}`}>
                 <option>Design</option>
                 <option>Development</option>
                 <option>Marketing</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Priority
-              </label>
-              <select className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+              <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Priority</label>
+              <select className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${dark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-200 text-gray-900"}`}>
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
               </select>
             </div>
           </div>
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
-            <button
-              type="button"
-              className={c.btn}
-              onClick={() => setFormOpen(false)}
-            >
-              Cancel
-            </button>
-            <button type="submit" className={c.btnPrimary}>
-              Create Project
-            </button>
+          <div className={`flex justify-end gap-3 pt-4 border-t mt-6 ${dark ? "border-gray-700" : "border-gray-100"}`}>
+            <button type="button" className={c.btn} onClick={() => setFormOpen(false)}>Cancel</button>
+            <button type="submit" className={c.btnPrimary}>Create Project</button>
           </div>
         </form>
       </Modal>
@@ -1171,11 +1108,7 @@ const ModalDemo = () => {
         open={upgradeOpen}
         onOpenChange={setUpgradeOpen}
         showHeader={false}
-        maxWidth={440}
-        classes={{
-          content: "w-full max-w-[440px] m-4 rounded-xl shadow-2xl overflow-hidden",
-          body: "p-0",
-        }}
+        classes={{ body: "p-0" }}
       >
         <div className="bg-linear-to-br from-violet-600 via-purple-600 to-indigo-700 p-8 text-center text-white">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
@@ -1200,35 +1133,20 @@ const ModalDemo = () => {
         </div>
         <div className="p-6">
           <ul className="space-y-3 mb-6">
-            {[
-              "Unlimited projects",
-              "Advanced analytics",
-              "Priority support",
-              "API access",
-            ].map((feature, i) => (
+            {["Unlimited projects", "Advanced analytics", "Priority support", "API access"].map((feature, i) => (
               <li key={i} className="flex items-center gap-3">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-100">
-                  <svg
-                    className="h-3 w-3 text-violet-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
+                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${dark ? "bg-violet-900/40" : "bg-violet-100"}`}>
+                  <svg className={`h-3 w-3 ${dark ? "text-violet-400" : "text-violet-600"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-gray-700">{feature}</span>
+                <span className={dark ? "text-gray-300" : "text-gray-700"}>{feature}</span>
               </li>
             ))}
           </ul>
           <div className="flex items-baseline gap-1 justify-center mb-6">
-            <span className="text-3xl font-bold text-gray-900">$29</span>
-            <span className="text-gray-500">/month</span>
+            <span className={`text-3xl font-bold ${dark ? "text-white" : "text-gray-900"}`}>$29</span>
+            <span className={dark ? "text-gray-400" : "text-gray-500"}>/month</span>
           </div>
           <button
             onClick={() => setUpgradeOpen(false)}
@@ -1238,7 +1156,7 @@ const ModalDemo = () => {
           </button>
           <button
             onClick={() => setUpgradeOpen(false)}
-            className="w-full mt-3 text-sm text-gray-500 hover:text-gray-700"
+            className={`w-full mt-3 text-sm ${dark ? "text-gray-400 hover:text-gray-200" : "text-gray-500 hover:text-gray-700"}`}
           >
             Maybe later
           </button>
@@ -1249,12 +1167,8 @@ const ModalDemo = () => {
         open={imagePreviewOpen}
         onOpenChange={setImagePreviewOpen}
         showHeader={false}
-        maxWidth={700}
         overlayOpacity={0.85}
-        classes={{
-          content: "w-full max-w-[700px] m-4 rounded-xl shadow-2xl overflow-hidden bg-gray-900",
-          body: "p-0",
-        }}
+        classes={{ content: `${dark ? "bg-gray-900" : "bg-gray-900"}`, body: "p-0" }}
       >
         <div className="relative">
           <button
@@ -1687,39 +1601,27 @@ const ModalDemo = () => {
         open={nestedLevel1Open}
         onOpenChange={setNestedLevel1Open}
         title="Project Settings"
-        description="Configure your project preferences."
-        maxWidth={520}
-        classes={{
-          content: "w-full max-w-[520px] m-4 rounded-xl shadow-2xl overflow-hidden",
-          header: c.modalHeader,
-          title: c.modalTitle,
-          description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
-          closeIcon: c.modalCloseIcon,
-          body: c.modalBody,
-        }}
+        description="Configure your project preferences and team access."
       >
         <div className="space-y-4">
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className={`p-4 rounded-lg border ${dark ? "bg-blue-900/20 border-blue-800/40" : "bg-blue-50 border-blue-200"}`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-blue-900">Team Members</p>
-                <p className="text-sm text-blue-600">5 members with access</p>
+                <p className={`font-medium ${dark ? "text-blue-300" : "text-blue-900"}`}>Team Members</p>
+                <p className={`text-sm ${dark ? "text-blue-400" : "text-blue-600"}`}>5 members with access</p>
               </div>
               <button
-                className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                className={`px-3 py-1.5 text-white text-sm rounded-lg transition-colors ${dark ? "bg-blue-500 hover:bg-blue-400" : "bg-blue-600 hover:bg-blue-700"}`}
                 onClick={() => setNestedLevel2Open(true)}
               >
                 Manage
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+          <div className={`flex items-center justify-between p-4 border rounded-lg ${dark ? "border-gray-700" : "border-gray-200"}`}>
             <div>
-              <p className="font-medium text-gray-900">Notifications</p>
-              <p className="text-sm text-gray-500">
-                Email & push notifications
-              </p>
+              <p className={`font-medium ${dark ? "text-gray-200" : "text-gray-900"}`}>Notifications</p>
+              <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Email & push notifications</p>
             </div>
             <button
               type="button"
@@ -1729,7 +1631,7 @@ const ModalDemo = () => {
             </button>
           </div>
         </div>
-        <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+        <div className={`flex justify-end gap-3 mt-6 pt-4 border-t ${dark ? "border-gray-700" : "border-gray-100"}`}>
           <button
             className={c.btn}
             onClick={() => setNestedLevel1Open(false)}
@@ -1748,17 +1650,8 @@ const ModalDemo = () => {
           open={nestedLevel2Open}
           onOpenChange={setNestedLevel2Open}
           title="Team Members"
-          description="Manage project access."
-          maxWidth={450}
-          classes={{
-            content: "w-full max-w-[450px] m-4 rounded-xl shadow-2xl overflow-hidden",
-            header: c.modalHeader,
-            title: c.modalTitle,
-            description: c.modalDescription,
-            closeButton: c.modalCloseBtn,
-            closeIcon: c.modalCloseIcon,
-            body: c.modalBody,
-          }}
+          description="Manage project access and roles."
+          nestingLevel={1}
         >
           <div className="space-y-3">
             {[
@@ -1768,21 +1661,21 @@ const ModalDemo = () => {
             ].map((member, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className={`flex items-center justify-between p-3 rounded-lg ${dark ? "bg-gray-700/50" : "bg-gray-50"}`}
               >
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-400 to-blue-600 text-white text-sm font-medium">
                     {member.initials}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{member.name}</p>
-                    <p className="text-sm text-gray-500">{member.role}</p>
+                    <p className={`font-medium ${dark ? "text-gray-200" : "text-gray-900"}`}>{member.name}</p>
+                    <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>{member.role}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <button className="w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed border-gray-200 rounded-lg text-gray-500 hover:border-blue-300 hover:text-blue-600 transition-colors">
+          <button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-lg transition-colors ${dark ? "border-gray-600 text-gray-400 hover:border-blue-400 hover:text-blue-400" : "border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-600"}`}>
             <svg
               className="h-5 w-5"
               fill="none"
@@ -1798,7 +1691,7 @@ const ModalDemo = () => {
             </svg>
             Invite Member
           </button>
-          <div className="flex justify-end mt-6 pt-4 border-t border-gray-100">
+          <div className={`flex justify-end mt-6 pt-4 border-t ${dark ? "border-gray-700" : "border-gray-100"}`}>
             <button
               className={c.btnPrimary}
               onClick={() => setNestedLevel2Open(false)}

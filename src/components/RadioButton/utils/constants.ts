@@ -42,10 +42,10 @@ export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> = {
 
 export const DEFAULT_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
   root: "",
-  label: "text-sm font-medium mb-2 block",
-  description: "text-xs text-gray-500 mb-3",
-  error: "text-xs text-red-500 mt-2",
-  success: "text-xs text-emerald-600 mt-2",
+  label: "text-sm font-medium mb-2 block text-gray-900 dark:text-white",
+  description: "text-xs text-gray-500 dark:text-gray-400 mb-3",
+  error: "text-xs text-red-500 dark:text-red-400 mt-2",
+  success: "text-xs text-emerald-600 dark:text-emerald-400 mt-2",
 };
 
 export const UNSTYLED_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {

@@ -33,6 +33,20 @@ import {
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
 
+/**
+ * Component: Modal
+ *
+ * Purpose: Accessible dialog overlay with focus trapping, scroll lock, nested modals,
+ * animations, Escape to close, and full keyboard navigation.
+ *
+ * AI Usage Guidelines:
+ * - Use `open` + `onOpenChange` for controlled state (or `useModal()` hook)
+ * - Pass `title` and optional `description` for header content
+ * - Use `nestingLevel` for stacked modals
+ * - Built-in overlay, focus trap, scroll lock, and focus restore
+ *
+ * Reference: MODAL.ai.md (this directory), src/pages/demo/ModalDemo.tsx
+ */
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
   (
     {
