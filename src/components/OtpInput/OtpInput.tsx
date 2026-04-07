@@ -14,6 +14,19 @@ import { useControllableState } from "../../utils/useControllableState";
 
 export { OtpInputLabel };
 
+/**
+ * Component: OtpInput
+ *
+ * Purpose: One-time password input with per-character fields, paste support, and validation.
+ *
+ * AI Usage Guidelines:
+ * - Use `length` to set number of digits (default 6)
+ * - Use `type` for numeric/alphanumeric restriction
+ * - Use `groupPattern` for visual grouping (e.g., [3,3])
+ * - Use `masked` for password-style dots
+ *
+ * Reference: OTPINPUT.ai.md (this directory), src/pages/demo/OtpInputDemo.tsx
+ */
 const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
   (
     {

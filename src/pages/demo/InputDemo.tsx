@@ -3,7 +3,6 @@ import { Input, InputLabel } from "../../components/Input";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -317,10 +316,9 @@ const InputDemo = () => {
             prop.
           </p>
           <div className="pt-1">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Input, InputLabel } from "@chumlab/ui/input";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Input, InputLabel } from "@chumlab/ui/input";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -330,15 +328,26 @@ const InputDemo = () => {
         {/* Basic */}
         <Section
           title="Basic Usage"
-          description="Minimal usage with just a placeholder."
+          description="Works out-of-the-box with built-in styles, dark mode, and focus states. No custom classes needed."
           isDarkMode={dark}
         >
-          <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-sm">
+          <DemoWrapper isDarkMode={dark} layout="block">
+            <div className="flex flex-col gap-4 max-w-sm">
               {/* Basic usage — works out-of-the-box with built-in styles */}
               <Input
-                aria-label="Basic input"
-                placeholder="Enter text..."
+                label="Full Name"
+                placeholder="Enter your name..."
+              />
+              <Input
+                label="Email"
+                placeholder="you@example.com"
+                description="We'll never share your email"
+              />
+              <Input
+                label="Password"
+                type="password"
+                placeholder="Enter password..."
+                required
               />
             </div>
           </DemoWrapper>

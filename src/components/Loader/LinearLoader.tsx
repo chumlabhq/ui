@@ -62,6 +62,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
       <div
         ref={ref}
         role="status"
+        aria-live="polite"
         aria-label="Loading"
         className={cn(mergedClasses.root, className) || undefined}
         style={rootStyle}

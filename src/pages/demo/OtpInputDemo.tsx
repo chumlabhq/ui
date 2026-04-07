@@ -3,7 +3,6 @@ import { OtpInput } from "../../components/OtpInput";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -78,10 +77,9 @@ const OtpInputDemo = () => {
             customizable styling.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { OtpInput } from "@chumlab/ui/otp-input";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { OtpInput } from "@chumlab/ui/otp-input";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -89,12 +87,19 @@ const OtpInputDemo = () => {
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A 6-digit OTP input."
+        description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Basic usage — works out-of-the-box with built-in styles */}
-          <OtpInput value={basic} onValueChange={setBasic} />
+          <div className="flex flex-col gap-4">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
+            <OtpInput
+              label="Verification Code"
+              description="Enter the 6-digit code sent to your phone"
+              value={basic}
+              onValueChange={setBasic}
+            />
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -123,14 +128,6 @@ const OtpInputDemo = () => {
             classes={c.otp}
           />
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<OtpInput
-  label="Verification Code"
-  description="Enter the 6-digit code sent to your email"
-  length={6}
-/>`}
-        />
       </Section>
 
       {/* ─── Required ───────────────────────────────────────────────────── */}
@@ -311,16 +308,6 @@ const OtpInputDemo = () => {
             classes={c.otp}
           />
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<OtpInput
-  label="Verification Code"
-  value="123456"
-  success
-  successMessage="Code verified successfully"
-  length={6}
-/>`}
-        />
       </Section>
 
       {/* ─── Loading State ────────────────────────────────────────────── */}
@@ -338,15 +325,6 @@ const OtpInputDemo = () => {
             classes={c.otp}
           />
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<OtpInput
-  label="Verifying..."
-  value="123456"
-  loading
-  length={6}
-/>`}
-        />
       </Section>
 
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
@@ -519,12 +497,32 @@ const OtpInputDemo = () => {
       {/* ─── Unstyled ───────────────────────────────────────────────────── */}
       <Section
         title="Unstyled Mode"
-        description="unstyled=true strips all defaults."
+        description="unstyled=true strips all defaults. Provide your own styling via the classes prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <OtpInput unstyled length={4} />
+          <div className="flex flex-col gap-6">
+            <OtpInput
+              unstyled
+              label="Rounded pill style"
+              length={4}
+              classes={{
+                wrapper: "flex items-center gap-3",
+                input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none ${dark ? "bg-gray-800 border-violet-500 text-white focus:ring-2 focus:ring-violet-400/30" : "bg-white border-violet-500 text-gray-900 focus:ring-2 focus:ring-violet-500/20"}`,
+                label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
+              }}
+            />
+            <OtpInput
+              unstyled
+              label="Underline minimal"
+              length={6}
+              classes={{
+                wrapper: "flex items-center gap-2",
+                input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none ${dark ? "border-gray-600 text-gray-100 focus:border-teal-400" : "border-gray-300 text-gray-900 focus:border-teal-600"}`,
+                label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
+              }}
+            />
+          </div>
         </DemoWrapper>
       </Section>
 

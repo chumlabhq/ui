@@ -1,3 +1,4 @@
+// AI Knowledge: See SLIDER.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Slider } from "./Slider";
 export type {
   SliderProps,

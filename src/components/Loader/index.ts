@@ -1,3 +1,4 @@
+// AI Knowledge: See LOADER.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as CircularLoader } from "./CircularLoader";
 export { default as LinearLoader } from "./LinearLoader";
 export { default as DotLoader } from "./DotLoader";

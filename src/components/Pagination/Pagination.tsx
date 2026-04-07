@@ -200,6 +200,18 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
 
 const DEFAULT_SECTION_ORDER: SectionName[] = ["selector", "pageInfo", "nav"];
 
+/**
+ * Component: Pagination
+ *
+ * Purpose: Page navigation with buttons, rows-per-page selector, and ellipsis truncation.
+ *
+ * AI Usage Guidelines:
+ * - Use `value` + `onValueChange` + `totalPages` for basic setup
+ * - Use `showRowsPerPage` for data table pagination
+ * - Use `sectionOrder` to rearrange layout sections
+ *
+ * Reference: PAGINATION.ai.md (this directory), src/pages/demo/PaginationDemo.tsx
+ */
 const Pagination = forwardRef<HTMLElement, PaginationProps>(
   (
     {

@@ -8,7 +8,6 @@ import {
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -66,7 +65,7 @@ const CountryFlagDemo = () => {
           <h1
             className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
           >
-            CountryFlag
+            Country Flag
           </h1>
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
@@ -76,10 +75,11 @@ const CountryFlagDemo = () => {
             loading shimmer, error fallback, and fully customizable styling.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import {\n  CountryFlag, CountryFlagGroup,\n  CountryFlagShimmer, CountryFlagGroupShimmer,\n} from "@chumlab/ui/country-flag";`}
-            />
+            <pre
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+            >
+              <code>{`import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";`}</code>
+            </pre>
           </div>
         </div>
       </header>

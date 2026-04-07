@@ -14,6 +14,23 @@ import { Tooltip } from "../Tooltip";
 import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+/**
+ * Component: CountryFlag
+ *
+ * Purpose:
+ * Renders a country flag image from a two-letter ISO code. Supports sizes,
+ * tooltips, grouping with overflow, shimmer loading, and error fallback.
+ *
+ * AI Usage Guidelines:
+ * - Pass `code` as lowercase two-letter ISO 3166-1 alpha-2
+ * - Use `size` for presets (xs-2xl) or pixel number
+ * - Use `fallback` for custom error UI
+ * - Use `<CountryFlagGroup max={N}>` for overflow grouping
+ *
+ * Reference:
+ * - COUNTRYFLAG.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/CountryFlagDemo.tsx — live demo
+ */
 export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
   (
     {

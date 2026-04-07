@@ -242,6 +242,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
             id={countId}
             data-slot="count"
             className={countClassName}
+            role="status"
             aria-live="polite"
           >
             {currentLength}/{maxLength}

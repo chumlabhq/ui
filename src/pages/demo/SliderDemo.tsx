@@ -4,7 +4,6 @@ import type { SliderValue, SliderMark } from "../../components/Slider";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -121,17 +120,28 @@ const SliderDemo = () => {
             standard classes/unstyled system.
           </p>
           <div className="mt-5">
-            <CodeBlock isDarkMode={dark} code={`import { Slider } from "@chumlab/ui/slider";`} />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Slider } from "@chumlab/ui/slider";`}</code>
+            </pre>
           </div>
         </div>
       </header>
 
       {/* ── Basic ────────────────────────────────────────────────────── */}
-      <Section title="Basic Usage" description="A single-value slider with default settings (0–100, step 1)." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm">
+      <Section title="Basic Usage" description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation (arrow keys). No custom classes needed." isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-6 max-w-sm">
             {/* Basic usage — works out-of-the-box with built-in styles */}
-            <Slider value={basic} onValueChange={(v) => setBasic(v as number)} />
+            <Slider
+              label="Volume"
+              value={basic}
+              onValueChange={(v) => setBasic(v as number)}
+            />
+            <Slider
+              label="Brightness"
+              defaultValue={75}
+              description="Adjust screen brightness"
+            />
           </div>
         </DemoWrapper>
       </Section>
@@ -500,13 +510,6 @@ const SliderDemo = () => {
             classes={c.slider}
           />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<Slider
-  label="Volume"
-  value={val}
-  onValueChange={(v) => setVal(v as number)}
-  success={val >= 50}
-  successMessage="Good volume level"
-/>`} />
       </Section>
 
       {/* ── Loading State ─────────────────────────────────────────────── */}
@@ -514,7 +517,6 @@ const SliderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <Slider label="Saving preference..." defaultValue={50} loading classes={c.slider} />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<Slider label="Saving preference..." defaultValue={50} loading />`} />
       </Section>
 
       {/* ── Vertical ─────────────────────────────────────────────────── */}

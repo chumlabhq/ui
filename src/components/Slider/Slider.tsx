@@ -187,6 +187,19 @@ function Thumb({
 
 // ─── Slider ───────────────────────────────────────────────────────────────────
 
+/**
+ * Component: Slider
+ *
+ * Purpose: Range slider with single/dual thumbs, marks, tooltips, vertical orientation.
+ *
+ * AI Usage Guidelines:
+ * - Use `number` value for single, `[number, number]` for range
+ * - Use `marks` for labeled positions on the track
+ * - Use `showTooltip` to display value above thumb
+ * - Use `orientation="vertical"` for vertical sliders
+ *
+ * Reference: SLIDER.ai.md (this directory), src/pages/demo/SliderDemo.tsx
+ */
 const Slider = forwardRef<HTMLDivElement, SliderProps>(
   (
     {

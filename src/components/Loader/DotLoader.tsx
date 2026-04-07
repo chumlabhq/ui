@@ -48,6 +48,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
       <div
         ref={ref}
         role="status"
+        aria-live="polite"
         aria-label="Loading"
         className={cn(mergedClasses.root, className) || undefined}
         style={rootStyle}

@@ -8,7 +8,7 @@ import type {
 // ─── CircularLoader ─────────────────────────────────────────────────────────
 
 export const DEFAULT_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> = {
-  root: "inline-flex shrink-0",
+  root: "inline-flex shrink-0 text-indigo-600 dark:text-indigo-400",
   svg: "h-full w-full animate-spin",
   track: "opacity-20",
   indicator: "",
@@ -24,7 +24,7 @@ export const UNSTYLED_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> =
 // ─── LinearLoader ───────────────────────────────────────────────────────────
 
 export const DEFAULT_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> = {
-  root: "inline-block",
+  root: "inline-block text-indigo-600 dark:text-indigo-400",
   bar: "",
 };
 
@@ -36,7 +36,7 @@ export const UNSTYLED_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> = {
 // ─── DotLoader ──────────────────────────────────────────────────────────────
 
 export const DEFAULT_DOT_LOADER_CLASSES: Required<DotLoaderClasses> = {
-  root: "",
+  root: "text-indigo-600 dark:text-indigo-400",
   dot: "",
 };
 
@@ -48,7 +48,7 @@ export const UNSTYLED_DOT_LOADER_CLASSES: Required<DotLoaderClasses> = {
 // ─── PulseLoader ────────────────────────────────────────────────────────────
 
 export const DEFAULT_PULSE_LOADER_CLASSES: Required<PulseLoaderClasses> = {
-  root: "",
+  root: "text-indigo-600 dark:text-indigo-400",
   core: "",
   ring: "",
 };

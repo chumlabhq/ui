@@ -7,7 +7,6 @@ import {
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -60,10 +59,9 @@ const LoaderDemo = () => {
             <code className="text-xs">aria-label</code> out of the box.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@chumlab/ui/loader";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@chumlab/ui/loader";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -71,11 +69,14 @@ const LoaderDemo = () => {
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple circular loading indicator with no configuration needed."
+        description="All four loader variants work out-of-the-box with built-in styles and proper aria attributes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <CircularLoader />
+          <LinearLoader />
+          <DotLoader />
+          <PulseLoader />
         </DemoWrapper>
       </Section>
 

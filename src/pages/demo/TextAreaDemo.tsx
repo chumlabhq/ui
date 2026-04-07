@@ -4,7 +4,6 @@ import type { TextAreaClasses } from "../../components/TextArea";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -226,7 +225,7 @@ const TextAreaDemo = () => {
           <h1
             className={`text-3xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
           >
-            TextArea
+            Text Area
           </h1>
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-500"}`}
@@ -237,10 +236,11 @@ const TextAreaDemo = () => {
             <code>classes</code> prop.
           </p>
           <div className="pt-1">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}
-            />
+            <pre
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+            >
+              <code>{`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -250,15 +250,19 @@ const TextAreaDemo = () => {
         {/* Basic */}
         <Section
           title="Basic Usage"
-          description="Minimal usage with just a placeholder."
+          description="Works out-of-the-box with built-in styles, dark mode, and focus states. No custom classes needed."
           isDarkMode={dark}
         >
-          <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+          <DemoWrapper isDarkMode={dark} layout="block">
+            <div className="flex flex-col gap-4 max-w-md">
               {/* Basic usage — works out-of-the-box with built-in styles */}
+              <TextArea label="Message" placeholder="Write your message..." />
               <TextArea
-                aria-label="Basic textarea"
-                placeholder="Enter text..."
+                label="Bio"
+                placeholder="Tell us about yourself..."
+                description="Max 200 characters"
+                maxLength={200}
+                showCount
               />
             </div>
           </DemoWrapper>
@@ -418,10 +422,6 @@ const TextAreaDemo = () => {
               />
             </div>
           </DemoWrapper>
-          <CodeBlock
-            isDarkMode={dark}
-            code={`<TextArea autoResize rows={2} placeholder="Grows as you type..." />`}
-          />
         </Section>
 
         {/* Icons */}

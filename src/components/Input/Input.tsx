@@ -16,6 +16,23 @@ import { useControllableState } from "../../utils/useControllableState";
 
 export const InputLabel = FieldLabel;
 
+/**
+ * Component: Input
+ *
+ * Purpose:
+ * Production-grade text input with labels, icons, prefix/suffix, clearable,
+ * character count, validation states, and full form integration.
+ *
+ * AI Usage Guidelines:
+ * - Use `label` for accessible labeling (auto-linked via htmlFor)
+ * - Use `onValueChange` for simple string callback
+ * - Use `error` + `errorMessage` for validation feedback
+ * - Use `startIcon`/`endIcon` with click handlers for interactive icons
+ *
+ * Reference:
+ * - INPUT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/InputDemo.tsx — live demo
+ */
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -205,7 +222,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={cn("flex-1 min-w-0", mergedClasses.input)}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
-          aria-errormessage={error && errorMessage ? errorId : undefined}
           aria-required={required || undefined}
           data-disabled={isDisabled || undefined}
           data-error={error || undefined}

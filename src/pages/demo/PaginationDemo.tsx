@@ -3,7 +3,6 @@ import { Pagination } from "../../components/Pagination";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   DemoLabel,
   PropsTable,
@@ -314,10 +313,9 @@ const PaginationDemo = () => {
             class-driven styling via the classes prop.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Pagination } from "@chumlab/ui/pagination";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Pagination } from "@chumlab/ui/pagination";`}</code>
+            </pre>
           </div>
         </div>
       </header>

@@ -17,6 +17,23 @@ import { useControllableState } from "../../utils/useControllableState";
 
 export const TextAreaLabel = FieldLabel;
 
+/**
+ * Component: TextArea
+ *
+ * Purpose:
+ * Multi-line text input with auto-resize, character count, validation states,
+ * icons, clearable, and full form integration.
+ *
+ * AI Usage Guidelines:
+ * - Use `label` for accessible labeling
+ * - Use `autoResize` for content-growing textarea
+ * - Use `showCount` + `maxLength` for character limits
+ * - Use `onValueChange` for simple string callback
+ *
+ * Reference:
+ * - TEXTAREA.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/TextAreaDemo.tsx — live demo
+ */
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   (
     {
@@ -212,7 +229,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           style={autoResize ? { overflow: "hidden", resize: "none" } : undefined}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
-          aria-errormessage={error && errorMessage ? errorId : undefined}
           aria-required={required || undefined}
           data-disabled={isDisabled || undefined}
           data-error={error || undefined}

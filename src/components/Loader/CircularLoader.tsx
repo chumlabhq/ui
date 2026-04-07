@@ -7,6 +7,13 @@ import {
 import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+/**
+ * Component: CircularLoader
+ *
+ * Purpose: Spinning circle loading indicator with configurable size, color, speed.
+ *
+ * Reference: LOADER.ai.md (this directory), src/pages/demo/LoaderDemo.tsx
+ */
 const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
   (
     {
@@ -51,6 +58,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
       <div
         ref={ref}
         role="status"
+        aria-live="polite"
         aria-label="Loading"
         className={cn(mergedClasses.root, !unstyled && "h-(--loader-size) w-(--loader-size)", className) || undefined}
         style={loaderStyle}
