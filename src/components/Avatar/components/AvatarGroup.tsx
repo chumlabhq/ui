@@ -12,7 +12,7 @@ import { cn } from "../../../utils/cn";
 
 const variantClassNames = {
   stack: "flex items-center",
-  grid: "grid grid-cols-auto gap-2",
+  grid: "flex flex-wrap items-center gap-2",
   inline: "inline-flex items-center",
 };
 

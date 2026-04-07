@@ -67,7 +67,7 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
 }) => {
   const layoutClasses =
     layout === "flex-row"
-      ? "flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4"
+      ? "flex flex-col sm:flex-row flex-wrap items-center gap-4"
       : layout === "flex-col"
         ? "flex flex-col gap-4"
         : "";
