@@ -10,7 +10,6 @@ import {
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -100,10 +99,9 @@ const AvatarDemo = () => {
             the classes system.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import {\n  Avatar, AvatarGroup, AvatarGroupCount,\n  AvatarBadge, AvatarShimmer, AvatarGroupShimmer,\n} from "@chumlab/ui/avatar";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge } from "@chumlab/ui/avatar";`}</code>
+            </pre>
           </div>
         </div>
       </header>

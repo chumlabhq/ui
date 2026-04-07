@@ -129,6 +129,9 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                   React.isValidElement(child) ? (child.key ?? index) : index
                 }
                 className={itemClassName || undefined}
+                role={onAvatarClick ? "button" : undefined}
+                tabIndex={onAvatarClick ? 0 : undefined}
+                aria-label={onAvatarClick ? childName || `Avatar ${index + 1}` : undefined}
                 style={{
                   marginInlineStart: index === 0 ? 0 : effectiveSpacing,
                   zIndex: visibleChildren.length - index,
@@ -138,6 +141,16 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 onClick={
                   onAvatarClick
                     ? (e: React.MouseEvent) => onAvatarClick({ index, name: childName }, e)
+                    : undefined
+                }
+                onKeyDown={
+                  onAvatarClick
+                    ? (e: React.KeyboardEvent) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onAvatarClick({ index, name: childName }, e as unknown as React.MouseEvent);
+                        }
+                      }
                     : undefined
                 }
               >

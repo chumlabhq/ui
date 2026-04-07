@@ -647,6 +647,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           className={mergedClasses.ellipsisButton || undefined}
           aria-expanded={isDropdownOpen}
           aria-haspopup="menu"
+          aria-controls={isDropdownOpen ? dropdownId : undefined}
           aria-label={ellipsisAriaLabel}
         >
           <EllipsisComponent {...iconSizeProps} />

@@ -1,9 +1,11 @@
 STEP 1: Execute /ai/branding.md
 STEP 2: Execute /ai/seo.md
 STEP 3: Execute /ai/standardisation.md
-STEP 3: Execute /ai/run.md
-STEP 4: Execute /ai/secure.md
-STEP 5: Execute /ai/responsive.md
+STEP 4: Execute /ai/accessibility.md
+STEP 5: Execute /ai/run.md
+STEP 6: Execute /ai/secure.md
+STEP 7: Execute /ai/responsive.md
+STEP 8: Execute /ai/knowledge-builder.md
 
 Rules:
 

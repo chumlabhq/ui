@@ -3,7 +3,6 @@ import { Button, ButtonGroup } from "../../components/Button";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -243,10 +242,9 @@ const ButtonDemo = () => {
             span), and extensive customization via the classes system.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Button, ButtonGroup } from "@chumlab/ui/button";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Button, ButtonGroup } from "@chumlab/ui/button";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -747,12 +745,6 @@ const ButtonDemo = () => {
             Large
           </Button>
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
-<Button size="lg">Large</Button>`}
-        />
       </Section>
 
       {/* ─── Disabled ───────────────────────────────────────────────────── */}

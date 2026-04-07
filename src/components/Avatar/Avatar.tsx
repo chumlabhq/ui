@@ -216,7 +216,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             <img
               ref={imgRef}
               src={src}
-              alt={alt || ""}
+              alt={alt || name || ""}
               srcSet={imageConfig?.srcSet}
               sizes={imageConfig?.sizes}
               loading={imageConfig?.loading ?? "lazy"}

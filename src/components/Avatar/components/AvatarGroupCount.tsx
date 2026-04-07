@@ -70,7 +70,7 @@ export const AvatarGroupCount = forwardRef<
     const countElement = (
       <Comp
         ref={ref}
-        role="img"
+        role={onClick ? "button" : "status"}
         className={cn(
           "shrink-0 inline-flex items-center justify-center",
           variantClassNames[variant],

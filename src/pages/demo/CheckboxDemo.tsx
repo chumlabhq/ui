@@ -3,7 +3,6 @@ import { Checkbox } from "../../components/Checkbox";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -125,10 +124,9 @@ const CheckboxDemo = () => {
             error handling, and fully accessible via native input.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Checkbox } from "@chumlab/ui/checkbox";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Checkbox } from "@chumlab/ui/checkbox";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -136,16 +134,26 @@ const CheckboxDemo = () => {
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple checkbox with no label."
+        description="A simple checkbox with built-in styles. Works out-of-the-box with proper sizing, dark mode, and keyboard support (Space to toggle)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="block">
           {/* Basic usage — works out-of-the-box with built-in styles */}
-          <Checkbox
-            aria-label="Basic checkbox"
-            checked={basic}
-            onValueChange={setBasic}
-          />
+          <div className="flex flex-col gap-3">
+            <Checkbox
+              label="Accept terms and conditions"
+              checked={basic}
+              onValueChange={setBasic}
+            />
+            <Checkbox
+              label="Subscribe to newsletter"
+              description="Get weekly updates about new features"
+            />
+            <Checkbox
+              label="Remember me"
+              defaultChecked
+            />
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -401,16 +409,6 @@ const CheckboxDemo = () => {
             classes={c.checkbox}
           />
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<Checkbox
-  label="I agree to the terms"
-  checked={checked}
-  onValueChange={setChecked}
-  success={checked}
-  successMessage="Terms accepted"
-/>`}
-        />
       </Section>
 
       {/* ─── Loading State ───────────────────────────────────────────────── */}
@@ -438,11 +436,6 @@ const CheckboxDemo = () => {
             />
           </div>
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<Checkbox label="Processing..." loading checked />
-<Checkbox label="Normal checkbox" checked />`}
-        />
       </Section>
 
       {/* ─── onValueChange Callback ──────────────────────────────────────── */}
@@ -468,11 +461,6 @@ const CheckboxDemo = () => {
             </p>
           </div>
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`const [value, setValue] = useState(false);
-<Checkbox label="Using onValueChange" onValueChange={setValue} checked={value} />`}
-        />
       </Section>
 
       {/* ─── Controlled ─────────────────────────────────────────────────── */}
@@ -510,6 +498,35 @@ const CheckboxDemo = () => {
             shape="rounded"
             classes={c.checkbox}
           />
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Keyboard Navigation ──────────────────────────────────────── */}
+      <Section
+        title="Keyboard Navigation"
+        description="Tab to focus, Space to toggle. Native <input> provides full keyboard support out-of-the-box."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-3">
+            <p className={`text-xs mb-1 ${dark ? "text-gray-500" : "text-gray-400"}`}>
+              Try: Tab into the checkboxes below, then press Space to toggle them.
+            </p>
+            <Checkbox
+              label="First option"
+              defaultChecked
+              classes={c.checkbox}
+            />
+            <Checkbox
+              label="Second option"
+              classes={c.checkbox}
+            />
+            <Checkbox
+              label="Third option (disabled)"
+              disabled
+              classes={c.checkbox}
+            />
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -578,15 +595,40 @@ const CheckboxDemo = () => {
       {/* ─── Unstyled ───────────────────────────────────────────────────── */}
       <Section
         title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build from scratch."
+        description="Set unstyled=true to strip all default classes. Provide your own styling via the classes prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <Checkbox
-            label="Unstyled checkbox"
-            unstyled
-          />
+          <div className="flex flex-col gap-3">
+            <Checkbox
+              label="Custom styled checkbox"
+              unstyled
+              checked={basic}
+              onValueChange={setBasic}
+              classes={{
+                checkbox: `inline-flex items-center justify-center border-2 rounded cursor-pointer ${dark ? "border-gray-500" : "border-gray-400"}`,
+                checked: `${dark ? "bg-violet-500 border-violet-500" : "bg-violet-600 border-violet-600"} text-white`,
+                unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
+                label: `text-sm ${dark ? "text-gray-200" : "text-gray-700"}`,
+                description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
+              }}
+            />
+            <Checkbox
+              label="Another unstyled variant"
+              description="With description text"
+              unstyled
+              defaultChecked
+              classes={{
+                checkbox: `inline-flex items-center justify-center border rounded-full cursor-pointer ${dark ? "border-gray-500" : "border-gray-400"}`,
+                checked: `${dark ? "bg-teal-500 border-teal-500" : "bg-teal-600 border-teal-600"} text-white`,
+                unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
+                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+                description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
+                labelContainer: "flex flex-col",
+              }}
+              shape="circle"
+            />
+          </div>
         </DemoWrapper>
       </Section>
 

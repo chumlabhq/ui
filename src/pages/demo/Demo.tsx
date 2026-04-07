@@ -8,45 +8,48 @@ import logoLight from "../../assets/images/logo-light.png";
 interface ComponentItem {
   path: string;
   displayName: string;
+  description?: string;
 }
 
 const components: ComponentItem[] = [
-  { path: "accordion", displayName: "Accordion" },
-  { path: "avatar", displayName: "Avatar" },
-  { path: "breadcrumb", displayName: "Breadcrumb" },
-  { path: "button", displayName: "Button" },
-  { path: "cascading-dropdown", displayName: "Cascading Dropdown" },
-  { path: "checkbox", displayName: "Checkbox" },
-  { path: "country-flag", displayName: "Country Flag" },
-  { path: "date-picker", displayName: "Date Picker" },
-  { path: "drawer", displayName: "Drawer" },
-  { path: "dropdown", displayName: "Dropdown" },
-  { path: "input", displayName: "Input" },
+  { path: "accordion", displayName: "Accordion", description: "Accessible, animated accordion component for React. Supports single and multiple expand modes, keyboard navigation, controlled state, and full Tailwind CSS customization." },
+  { path: "avatar", displayName: "Avatar", description: "React avatar component with image, initials, and icon support. Includes avatar groups, status indicators, badges, auto-generated colors, and loading shimmer states." },
+  { path: "breadcrumb", displayName: "Breadcrumb", description: "Accessible breadcrumb navigation for React. Features truncation with dropdown, custom separators, icons, tooltips, and per-item click handlers." },
+  { path: "button", displayName: "Button", description: "Production-grade React button with variants, sizes, icon animations, loading states, tooltips, button groups, and polymorphic rendering via the as prop." },
+  { path: "cascading-dropdown", displayName: "Cascading Dropdown", description: "Multi-level cascading dropdown for React with nested submenus, single and multi-select, async data loading, search with debounce, and REST API integration." },
+  { path: "checkbox", displayName: "Checkbox", description: "Accessible React checkbox with indeterminate state, custom icons, label positioning, and full keyboard support." },
+  { path: "country-flag", displayName: "Country Flag", description: "Render country flag images by ISO code. Supports multiple sizes, custom fallback, and lazy loading." },
+  { path: "date-picker", displayName: "Date Picker", description: "Full-featured React date picker with range selection, min/max dates, disabled dates, keyboard navigation, and locale support." },
+  { path: "drawer", displayName: "Drawer", description: "Accessible slide-out drawer component for React. Supports all four directions, focus trapping, backdrop, and nested drawers." },
+  { path: "dropdown", displayName: "Dropdown", description: "Accessible React dropdown select with keyboard navigation, search filtering, custom rendering, and portal-based positioning." },
+  { path: "input", displayName: "Input", description: "Versatile React input component with validation states, prefix/suffix slots, clearable option, and full form integration." },
   {
     path: "international-phone-input",
     displayName: "International Phone Input",
+    description: "International phone number input for React with country code selector, flag display, and phone number formatting.",
   },
-  { path: "loader", displayName: "Loader" },
-  { path: "modal", displayName: "Modal" },
-  { path: "multi-select-dropdown", displayName: "Multi Select Dropdown" },
+  { path: "loader", displayName: "Loader", description: "Animated loading indicators for React. Multiple variants including spinner, dots, pulse, and skeleton shimmer." },
+  { path: "modal", displayName: "Modal", description: "Accessible React modal dialog with focus trapping, keyboard dismiss, nested modals, and customizable overlay." },
+  { path: "multi-select-dropdown", displayName: "Multi Select Dropdown", description: "Multi-select dropdown for React with chip display, select all, max selection limits, and keyboard navigation." },
   {
     path: "multi-select-searchable-dropdown",
     displayName: "Multi Select Searchable Dropdown",
+    description: "Searchable multi-select dropdown for React with async search, debounce, chip display, and custom option rendering.",
   },
-  { path: "otp-input", displayName: "OTP Input" },
-  { path: "pagination", displayName: "Pagination" },
-  { path: "radio-button", displayName: "Radio Button" },
-  { path: "resizable-panel", displayName: "Resizable Panel" },
-  { path: "searchable-dropdown", displayName: "Searchable Dropdown" },
-  { path: "slider", displayName: "Slider" },
-  { path: "stepper", displayName: "Stepper" },
-  { path: "switch", displayName: "Switch" },
-  { path: "tab-panel", displayName: "Tab Panel" },
-  { path: "table", displayName: "Table" },
-  { path: "text-area", displayName: "Text Area" },
-  { path: "time-picker", displayName: "Time Picker" },
-  { path: "toast", displayName: "Toast" },
-  { path: "tooltip", displayName: "Tooltip" },
+  { path: "otp-input", displayName: "OTP Input", description: "One-time password input for React with auto-focus advance, paste support, masked mode, and configurable length." },
+  { path: "pagination", displayName: "Pagination", description: "Accessible React pagination with page size selector, jump-to-page, ellipsis truncation, and responsive layout." },
+  { path: "radio-button", displayName: "Radio Button", description: "Accessible React radio button group with horizontal and vertical layouts, custom icons, and controlled state." },
+  { path: "resizable-panel", displayName: "Resizable Panel", description: "Draggable resizable panel layout for React with min/max constraints, collapse, and nested panels." },
+  { path: "searchable-dropdown", displayName: "Searchable Dropdown", description: "Searchable dropdown for React with async search, debounce, initial options, custom rendering, and keyboard navigation." },
+  { path: "slider", displayName: "Slider", description: "Accessible React slider with range mode, step marks, tooltips, vertical orientation, and custom track styling." },
+  { path: "stepper", displayName: "Stepper", description: "Multi-step progress indicator for React with horizontal and vertical layouts, clickable steps, and custom icons." },
+  { path: "switch", displayName: "Switch", description: "Accessible React toggle switch with labels, sizes, custom track and thumb styling, and reduced motion support." },
+  { path: "tab-panel", displayName: "Tab Panel", description: "Accessible React tabs with lazy loading, closable tabs, overflow scroll, vertical orientation, and keyboard navigation." },
+  { path: "table", displayName: "Table", description: "Feature-rich React data table with sorting, filtering, pagination, row selection, expandable rows, and sticky columns." },
+  { path: "text-area", displayName: "Text Area", description: "React textarea with auto-resize, character count, validation states, and full form integration." },
+  { path: "time-picker", displayName: "Time Picker", description: "Accessible React time picker with 12/24 hour format, minute intervals, min/max time, and keyboard input." },
+  { path: "toast", displayName: "Toast", description: "Toast notification system for React with multiple positions, auto-dismiss, progress bar, and stacking." },
+  { path: "tooltip", displayName: "Tooltip", description: "Accessible React tooltip with configurable placement, delay, arrow, and rich content support." },
 ];
 
 const ThemeToggle = ({
@@ -143,7 +146,10 @@ const Demo = () => {
   const activeComponent = components.find(
     (c) => location.pathname === `/${c.path}`
   );
-  useDocumentTitle(activeComponent ? `${activeComponent.displayName} Component` : "Components");
+  useDocumentTitle(
+    activeComponent ? `${activeComponent.displayName} Component` : "Components",
+    activeComponent?.description
+  );
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const stored = localStorage.getItem("chumlab-ui-theme");
     if (stored) return stored === "dark";

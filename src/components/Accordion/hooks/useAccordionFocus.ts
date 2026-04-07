@@ -66,7 +66,7 @@ export function useAccordionFocus({ loop }: UseAccordionFocusOptions): UseAccord
       const items = getOrderedItems();
       if (items.length === 0) return;
 
-      const currentElement = document.activeElement;
+      const currentElement = typeof document !== "undefined" ? document.activeElement : null;
       let currentIndex = -1;
 
       for (let i = 0; i < items.length; i++) {

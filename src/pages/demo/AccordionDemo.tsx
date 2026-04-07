@@ -13,7 +13,6 @@ import {
 import type { AccordionRef } from "../../components/Accordion";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -216,15 +215,9 @@ const AccordionDemo = () => {
           </p>
 
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@chumlab/ui/accordion";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@chumlab/ui/accordion";`}</code>
+            </pre>
           </div>
         </div>
       </header>

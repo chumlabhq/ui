@@ -1,3 +1,4 @@
+// AI Knowledge: See CHECKBOX.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Checkbox } from "./Checkbox";
 
 export type {

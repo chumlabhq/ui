@@ -8,7 +8,6 @@ import type {
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -254,6 +253,140 @@ const disabledOptions: CascadingOption[] = [
   },
 ];
 
+// ─── Searchable options (large list for search demos) ────────────────────────
+
+const searchableCategoryOptions: CascadingOption[] = [
+  {
+    value: "electronics",
+    label: "Electronics",
+    selectionMode: "single" as const,
+    children: [
+      { value: "smartphones", label: "Smartphones" },
+      { value: "laptops", label: "Laptops" },
+      { value: "tablets", label: "Tablets" },
+      { value: "headphones", label: "Headphones" },
+      { value: "cameras", label: "Cameras" },
+      { value: "speakers", label: "Speakers" },
+      { value: "monitors", label: "Monitors" },
+      { value: "keyboards", label: "Keyboards" },
+      { value: "mice", label: "Mice" },
+      { value: "printers", label: "Printers" },
+    ],
+  },
+  {
+    value: "clothing",
+    label: "Clothing",
+    selectionMode: "multi" as const,
+    children: [
+      { value: "shirts", label: "Shirts" },
+      { value: "pants", label: "Pants" },
+      { value: "dresses", label: "Dresses" },
+      { value: "jackets", label: "Jackets" },
+      { value: "shoes", label: "Shoes" },
+      { value: "hats", label: "Hats" },
+      { value: "socks", label: "Socks" },
+      { value: "scarves", label: "Scarves" },
+      { value: "belts", label: "Belts" },
+      { value: "gloves", label: "Gloves" },
+    ],
+  },
+  {
+    value: "home",
+    label: "Home & Garden",
+    selectionMode: "single" as const,
+    children: [
+      { value: "furniture", label: "Furniture" },
+      { value: "lighting", label: "Lighting" },
+      { value: "rugs", label: "Rugs" },
+      { value: "curtains", label: "Curtains" },
+      { value: "bedding", label: "Bedding" },
+      { value: "kitchenware", label: "Kitchenware" },
+      { value: "gardening", label: "Gardening Tools" },
+      { value: "plants", label: "Plants" },
+    ],
+  },
+  {
+    value: "sports",
+    label: "Sports & Outdoors",
+    selectionMode: "multi" as const,
+    children: [
+      { value: "running", label: "Running" },
+      { value: "cycling", label: "Cycling" },
+      { value: "swimming", label: "Swimming" },
+      { value: "yoga", label: "Yoga" },
+      { value: "camping", label: "Camping" },
+      { value: "hiking", label: "Hiking" },
+      { value: "fishing", label: "Fishing" },
+      { value: "basketball", label: "Basketball" },
+    ],
+  },
+  {
+    value: "books",
+    label: "Books",
+    selectionMode: "single" as const,
+    children: [
+      { value: "fiction", label: "Fiction" },
+      { value: "non-fiction", label: "Non-Fiction" },
+      { value: "science", label: "Science" },
+      { value: "history", label: "History" },
+      { value: "biography", label: "Biography" },
+      { value: "poetry", label: "Poetry" },
+      { value: "comics", label: "Comics & Manga" },
+    ],
+  },
+];
+
+/** Async search: fetches regions from REST Countries API matching the query */
+/** Async search: fetches all countries matching the query, groups by region */
+const asyncSearchRegions = async (
+  query: string,
+): Promise<CascadingOption[]> => {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/name/${encodeURIComponent(query)}?fields=name,region`,
+  );
+  if (!response.ok) return [];
+  const data: { name: { common: string }; region: string }[] = await response.json();
+  // Return unique regions that have matching countries
+  const regionSet = new Set(data.map((c) => c.region).filter(Boolean));
+  return Array.from(regionSet)
+    .sort()
+    .map((r) => ({
+      value: r,
+      label: `${r} (${data.filter((c) => c.region === r).length} matches)`,
+      hasChildren: true,
+      selectionMode: "multi" as const,
+    }));
+};
+
+/** Async search: fetches countries in a region matching the query from REST Countries API */
+const asyncSearchCountries = async (
+  query: string,
+  parent: CascadingOption,
+): Promise<CascadingOption[]> => {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/region/${parent.value.toLowerCase()}?fields=name,flags,cca2`,
+  );
+  const data: CountryApiResponse[] = await response.json();
+  const q = query.toLowerCase();
+  return data
+    .filter((c) => c.name.common.toLowerCase().includes(q))
+    .sort((a, b) => a.name.common.localeCompare(b.name.common))
+    .map((country) => ({
+      value: country.cca2,
+      label: country.name.common,
+      content: (
+        <span className="flex items-center gap-2">
+          <img
+            src={country.flags.png}
+            alt={`${country.name.common} flag`}
+            className="w-5 h-4 object-cover rounded-sm"
+          />
+          <span className="truncate">{country.name.common}</span>
+        </span>
+      ),
+    }));
+};
+
 // ─── Themed Classes ─────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
@@ -420,6 +553,12 @@ const CascadingDropdownDemo = () => {
   const [loadOnOpenDropdownClicked, setLoadOnOpenDropdownClicked] =
     useState(false);
 
+  // Search demos
+  const [syncSearchValue, setSyncSearchValue] = useState<CascadingValue>({});
+  const [asyncSearchValue, setAsyncSearchValue] = useState<CascadingValue>({});
+  const [styledSearchValue1, setStyledSearchValue1] = useState<CascadingValue>({});
+  const [styledSearchValue2, setStyledSearchValue2] = useState<CascadingValue>({});
+
   const handleLoadChildren = useCallback(async (parent: CascadingOption) => {
     return loadCountriesForRegion(parent);
   }, []);
@@ -548,10 +687,9 @@ const CascadingDropdownDemo = () => {
             and full keyboard navigation.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -1028,6 +1166,176 @@ const CascadingDropdownDemo = () => {
               defaultValue={uncontrolledDefaultValue}
               placeholder="Select category..."
               classes={c.cascading}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Client-Side Search ─────────────────────────────────────────── */}
+      <Section
+        title="Client-Side Search"
+        description="Instant filtering in both menu and submenu. No server call — options are filtered by label match."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-96">
+            <CascadingDropdown
+              options={searchableCategoryOptions}
+              value={syncSearchValue}
+              onValueChange={(val) => setSyncSearchValue(val)}
+              placeholder="Search categories & items..."
+              showMenuSearch
+              showSubmenuSearch
+              menuSearchPlaceholder="Filter categories..."
+              submenuSearchPlaceholder="Filter items..."
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Async Server-Side Search ─────────────────────────────────────── */}
+      <Section
+        title="Async Server-Side Search (Debounced)"
+        description="Both menu and submenu call the REST Countries API with 300ms debounce. Menu searches countries by name and groups matching regions. Submenu fetches and filters countries within a region. Static initial options are shown before the user types."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-96">
+            <CascadingDropdown
+              options={regionOptionsMulti}
+              value={asyncSearchValue}
+              onValueChange={(val) => setAsyncSearchValue(val)}
+              onLoadChildren={loadCountriesForRegion}
+              placeholder="Search regions & countries..."
+              showMenuSearch
+              showSubmenuSearch
+              menuSearchPlaceholder="Search regions..."
+              submenuSearchPlaceholder="Search countries..."
+              onMenuSearch={asyncSearchRegions}
+              onSubmenuSearch={asyncSearchCountries}
+              searchDebounceMs={300}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Search Styling: Teal (Different Menu vs Submenu) ──────── */}
+      <Section
+        title="Custom Search Styling: Teal"
+        description="Menu uses a teal border-bottom search bar with large icon. Submenu uses a compact teal pill-style input — demonstrating independent styling via submenuSearchInput/submenuSearchInputElement/submenuSearchIcon slots."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-96">
+            <CascadingDropdown
+              options={searchableCategoryOptions}
+              value={styledSearchValue1}
+              onValueChange={(val) => setStyledSearchValue1(val)}
+              placeholder="Teal search theme..."
+              showMenuSearch
+              showSubmenuSearch
+              menuSearchPlaceholder="Search categories..."
+              submenuSearchPlaceholder="Filter items..."
+              SearchIcon={({ className }) => (
+                <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              )}
+              classes={{
+                // Menu search: full-width border-bottom style
+                searchInput: `flex items-center gap-2 px-3 py-2.5 border-b-2 ${
+                  dark
+                    ? "border-teal-600 bg-gray-800/50"
+                    : "border-teal-200 bg-teal-50/30"
+                }`,
+                searchInputElement: `flex-1 bg-transparent text-sm focus:outline-none ${
+                  dark
+                    ? "text-white placeholder-teal-400/60"
+                    : "text-gray-900 placeholder-teal-500/50"
+                }`,
+                searchIcon: `w-5 h-5 shrink-0 ${
+                  dark ? "text-teal-400" : "text-teal-600"
+                }`,
+                // Submenu search: compact pill style
+                submenuSearchInput: `flex items-center gap-1.5 mx-2 my-1.5 px-2.5 py-1 rounded-full ${
+                  dark
+                    ? "bg-teal-900/30 ring-1 ring-teal-500/20"
+                    : "bg-teal-50 ring-1 ring-teal-200"
+                }`,
+                submenuSearchInputElement: `flex-1 bg-transparent text-xs focus:outline-none ${
+                  dark
+                    ? "text-teal-100 placeholder-teal-400/50"
+                    : "text-teal-900 placeholder-teal-500/60"
+                }`,
+                submenuSearchIcon: `w-3 h-3 shrink-0 ${
+                  dark ? "text-teal-400/70" : "text-teal-500"
+                }`,
+              }}
+            />
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Custom Search Styling: Purple with Filter Icon ───────────────── */}
+      <Section
+        title="Custom Search Styling: Purple with Filter Icon"
+        description="Menu uses a wide purple search bar. Submenu uses a different icon (filter) and a compact underline style — each panel is fully independent."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="w-96">
+            <CascadingDropdown
+              options={searchableCategoryOptions}
+              value={styledSearchValue2}
+              onValueChange={(val) => setStyledSearchValue2(val)}
+              placeholder="Purple search theme..."
+              showMenuSearch
+              showSubmenuSearch
+              menuSearchPlaceholder="Search categories..."
+              submenuSearchPlaceholder="Filter items..."
+              SearchIcon={({ className }) => (
+                <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              )}
+              classes={{
+                // Menu search: full-width purple background
+                searchInput: `flex items-center gap-2 px-3 py-2.5 ${
+                  dark
+                    ? "bg-purple-900/30 border-b border-purple-500/30"
+                    : "bg-purple-50 border-b border-purple-200"
+                }`,
+                searchInputElement: `flex-1 bg-transparent text-sm focus:outline-none ${
+                  dark
+                    ? "text-purple-100 placeholder-purple-400/60"
+                    : "text-purple-900 placeholder-purple-400"
+                }`,
+                searchIcon: `w-4 h-4 shrink-0 ${
+                  dark ? "text-purple-400" : "text-purple-500"
+                }`,
+                // Submenu search: compact underline style with filter icon
+                submenuSearchInput: `flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b ${
+                  dark
+                    ? "border-purple-500/30"
+                    : "border-purple-200"
+                }`,
+                submenuSearchInputElement: `flex-1 bg-transparent text-xs focus:outline-none ${
+                  dark
+                    ? "text-purple-200 placeholder-purple-400/50"
+                    : "text-purple-800 placeholder-purple-400/70"
+                }`,
+                submenuSearchIcon: `w-3 h-3 shrink-0 ${
+                  dark ? "text-purple-400/60" : "text-purple-400"
+                }`,
+              }}
             />
           </div>
         </DemoWrapper>
@@ -1881,9 +2189,62 @@ const CascadingDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="showMenuSearch"
+              type="boolean"
+              defaultVal="false"
+              description="Show search input in the main menu"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="showSubmenuSearch"
+              type="boolean"
+              defaultVal="false"
+              description="Show search input in submenus"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="menuSearchPlaceholder"
+              type="string"
+              defaultVal='"Search..."'
+              description="Placeholder for the menu search input"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="submenuSearchPlaceholder"
+              type="string"
+              defaultVal='"Search..."'
+              description="Placeholder for the submenu search input"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onMenuSearch"
+              type="(query) => Promise<CascadingOption[]>"
+              description="Async search for main menu. Disables client-side filtering when provided."
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="onSubmenuSearch"
+              type="(query, parent) => Promise<CascadingOption[]>"
+              description="Async search for submenus. Receives parent option and query string."
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="searchDebounceMs"
+              type="number"
+              defaultVal="300"
+              description="Debounce delay (ms) for async search callbacks"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="SearchIcon"
+              type="ComponentType<{ className?: string }>"
+              description="Custom search icon component"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="classes"
               type="CascadingDropdownClasses"
-              description="Slot class overrides (22 slots)"
+              description="Slot class overrides (25 slots including searchInput, searchInputElement, searchIcon)"
               isDarkMode={dark}
             />
             <PropRow
@@ -2132,6 +2493,42 @@ const CascadingDropdownDemo = () => {
               name="loading"
               type="string"
               description="Loading message"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="searchInput"
+              type="string"
+              description="Search input wrapper (contains icon + input element)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="searchInputElement"
+              type="string"
+              description="The search <input> element itself"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="searchIcon"
+              type="string"
+              description="Search icon inside the menu search input"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="submenuSearchInput"
+              type="string"
+              description="Search input wrapper in submenus (falls back to searchInput if not set)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="submenuSearchInputElement"
+              type="string"
+              description="Search <input> element in submenus (falls back to searchInputElement)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="submenuSearchIcon"
+              type="string"
+              description="Search icon in submenus (falls back to searchIcon)"
               isDarkMode={dark}
             />
           </PropsTable>

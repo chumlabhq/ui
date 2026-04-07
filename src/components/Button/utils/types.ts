@@ -90,7 +90,7 @@ interface ButtonSharedProps {
   unstyled?: boolean;
   /** Animation applied to icons on hover. */
   iconAnimation?: IconAnimation;
-  /** Enables icon animation on hover. Default: `false`. */
+  /** Enables icon animation on hover. Default: `true`. */
   animateOnHover?: boolean;
   /** Which icon(s) to animate: leading, trailing, or both. */
   animateIcon?: "leading" | "trailing" | "both";

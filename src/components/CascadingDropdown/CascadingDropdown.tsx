@@ -1,9 +1,9 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
-import type { ReactNode } from "react";
+import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown";
-import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
+import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons";
 import { cn } from "../../utils/cn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
@@ -54,6 +54,7 @@ const SubmenuItem = memo(function SubmenuItem({
     <div
       id={`${parentValue}-submenu-option-${index}`}
       role="menuitemcheckbox"
+      tabIndex={isFocused ? 0 : -1}
       aria-checked={isSelected}
       aria-disabled={option.disabled}
       className={combinedClassName || undefined}
@@ -114,6 +115,7 @@ const MenuItem = memo(function MenuItem({
     <div
       id={`${dropdownId}-option-${index}`}
       role={hasSubmenu ? "menuitem" : "menuitemradio"}
+      tabIndex={isFocused ? 0 : -1}
       aria-haspopup={hasSubmenu ? "menu" : undefined}
       aria-expanded={hasSubmenu ? isSubmenuOpen : undefined}
       aria-checked={!hasSubmenu ? isSelected : undefined}
@@ -148,6 +150,16 @@ const Submenu = memo(function Submenu({
   onItemHover,
   onMouseEnter,
   onMouseLeave,
+  showSearch,
+  searchQuery,
+  onSearchChange,
+  searchPlaceholder,
+  searchAriaLabel,
+  SearchIconComponent,
+  isSearching,
+  submenuSearchInputClass,
+  submenuSearchInputElementClass,
+  submenuSearchIconClass,
 }: {
   parent: CascadingOption;
   options: CascadingOption[];
@@ -164,8 +176,19 @@ const Submenu = memo(function Submenu({
   onItemHover: (index: number) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  showSearch?: boolean;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  searchPlaceholder?: string;
+  searchAriaLabel?: string;
+  SearchIconComponent?: ComponentType<{ className?: string }>;
+  isSearching?: boolean;
+  submenuSearchInputClass?: string;
+  submenuSearchInputElementClass?: string;
+  submenuSearchIconClass?: string;
 }) {
   const selectionMode = parent.selectionMode || "single";
+  const SearchIcon = SearchIconComponent || SearchIconDefault;
 
   return (
     <div
@@ -175,7 +198,22 @@ const Submenu = memo(function Submenu({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {loading ? (
+      {showSearch && (
+        <div className={submenuSearchInputClass || classes.searchInput || undefined}>
+          <SearchIcon className={submenuSearchIconClass || classes.searchIcon || undefined} />
+          <input
+            type="text"
+            value={searchQuery || ""}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            placeholder={searchPlaceholder || "Search..."}
+            className={submenuSearchInputElementClass || classes.searchInputElement || undefined}
+            aria-label={searchAriaLabel || "Search submenu"}
+            aria-autocomplete="list"
+          />
+        </div>
+      )}
+      {loading || isSearching ? (
         <div className={classes.loading || undefined}>{loadingText}</div>
       ) : options.length === 0 ? (
         <div className={classes.noResults || undefined}>{noResultsContent}</div>
@@ -202,6 +240,30 @@ const Submenu = memo(function Submenu({
   );
 });
 
+/**
+ * Component: CascadingDropdown
+ *
+ * Purpose:
+ * A multi-level dropdown menu with nested submenus for hierarchical data.
+ * Supports single and multi-select per level, async child loading, and
+ * search with debounce for both menu and submenu levels.
+ *
+ * AI Usage Guidelines:
+ * - Pass `options` with nested `children` for static data
+ * - Use `onLoadChildren` + `hasChildren: true` for async child loading
+ * - Use `showMenuSearch` / `showSubmenuSearch` for search bars
+ * - Use `onMenuSearch` / `onSubmenuSearch` for server-side search
+ * - Value shape: `{ parentValue: "child" | string[] }`
+ *
+ * Behavior:
+ * - Menu renders via portal to avoid overflow clipping
+ * - Children are cached after first load
+ * - Search uses useEffect-based debounce with version tracking
+ *
+ * Reference:
+ * - CASCADINGDROPDOWN.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/CascadingDropdownDemo.tsx — live demo
+ */
 const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
   (
     {
@@ -230,7 +292,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       required = false,
       noResultsContent = "No options found",
       loadingText = "Loading...",
-      shimmerCount = 5,
+      shimmerCount: rawShimmerCount = 5,
       loading: externalLoading = false,
       clearable = false,
       showChevron = true,
@@ -252,10 +314,21 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       style,
       ClearIcon: ClearIconProp,
       renderTrigger,
+      showMenuSearch = false,
+      showSubmenuSearch = false,
+      menuSearchPlaceholder = "Search...",
+      submenuSearchPlaceholder = "Search...",
+      onMenuSearch,
+      onSubmenuSearch,
+      searchDebounceMs = 300,
+      SearchIcon: SearchIconProp,
+      menuSearchAriaLabel = "Search menu",
+      submenuSearchAriaLabel = "Search submenu",
       "aria-label": ariaLabel,
     },
     ref,
   ) => {
+    const shimmerCount = Math.min(Math.max(0, rawShimmerCount), 50);
     const baseClasses = unstyled ? UNSTYLED_CASCADINGDROPDOWN_CLASSES : DEFAULT_CASCADINGDROPDOWN_CLASSES;
 
     const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
@@ -287,6 +360,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         loading: classesProp?.loading ?? baseClasses.loading,
         shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
         shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+        searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
+        searchInputElement: classesProp?.searchInputElement ?? baseClasses.searchInputElement,
+        searchIcon: classesProp?.searchIcon ?? baseClasses.searchIcon,
+        submenuSearchInput: classesProp?.submenuSearchInput ?? classesProp?.searchInput ?? (baseClasses.submenuSearchInput || baseClasses.searchInput),
+        submenuSearchInputElement: classesProp?.submenuSearchInputElement ?? classesProp?.searchInputElement ?? (baseClasses.submenuSearchInputElement || baseClasses.searchInputElement),
+        submenuSearchIcon: classesProp?.submenuSearchIcon ?? classesProp?.searchIcon ?? (baseClasses.submenuSearchIcon || baseClasses.searchIcon),
         content: classesProp?.content ?? classesProp?.menu ?? baseClasses.menu,
         option: classesProp?.option ?? classesProp?.menuItem ?? baseClasses.menuItem,
         optionSelected: classesProp?.optionSelected ?? classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
@@ -325,6 +404,14 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       handleKeyDown,
       getDisplayValue,
       isSubmenuOpen,
+      filteredOptions,
+      menuSearchQuery,
+      onMenuSearchChange,
+      submenuSearchQuery,
+      onSubmenuSearchChange,
+      isMenuSearching,
+      isSubmenuSearching,
+      getFilteredSubmenuOptions,
     } = useCascadingDropdown({
       options,
       value,
@@ -339,7 +426,23 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       onOpenChange,
       label,
       "aria-label": ariaLabel,
+      showMenuSearch,
+      showSubmenuSearch,
+      onMenuSearch,
+      onSubmenuSearch,
+      searchDebounceMs,
     });
+
+    const SearchIconComponent = SearchIconProp || SearchIconDefault;
+
+    // Restore focus to trigger when dropdown closes
+    const prevOpenRef = useRef(false);
+    useEffect(() => {
+      if (prevOpenRef.current && !isOpen) {
+        triggerRef.current?.focus();
+      }
+      prevOpenRef.current = isOpen;
+    }, [isOpen]);
 
     useEffect(() => {
       if (!isOpen) return;
@@ -405,7 +508,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
 
     const combinedKeyDown = useCallback(
-      (event: React.KeyboardEvent) => {
+      (event: KeyboardEvent) => {
         onKeyDownProp?.(event);
         if (!event.defaultPrevented) {
           handleKeyDown(event);
@@ -424,7 +527,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     const renderTriggerRefCallback = useCallback(
       (node: HTMLElement | null) => {
-        (triggerRef as React.MutableRefObject<HTMLButtonElement | null>).current = node as HTMLButtonElement | null;
+        (triggerRef as MutableRefObject<HTMLButtonElement | null>).current = node as HTMLButtonElement | null;
       },
       [],
     );
@@ -495,6 +598,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               id={triggerId}
               aria-expanded={isOpen}
               aria-haspopup="true"
+              aria-controls={isOpen ? menuId : undefined}
               aria-invalid={error || undefined}
               aria-describedby={error && errorMessage ? errorId : undefined}
               aria-required={required || undefined}
@@ -542,6 +646,8 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               id={menuId}
               role="menu"
               aria-label={typeof label === "string" ? label : ariaLabel || "Options"}
+              aria-live={showMenuSearch ? "polite" : undefined}
+              aria-busy={isMenuSearching || undefined}
               className={mergedClasses.menu || undefined}
               style={{
                 position: "fixed" as const,
@@ -552,7 +658,22 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                   : { visibility: "hidden" as const, top: 0, left: 0 }),
               }}
             >
-              {externalLoading ? (
+              {showMenuSearch && (
+                <div className={mergedClasses.searchInput || undefined}>
+                  <SearchIconComponent className={mergedClasses.searchIcon || undefined} />
+                  <input
+                    type="text"
+                    value={menuSearchQuery}
+                    onChange={(e) => onMenuSearchChange(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={menuSearchPlaceholder}
+                    className={mergedClasses.searchInputElement || undefined}
+                    aria-label={menuSearchAriaLabel}
+                    aria-autocomplete="list"
+                  />
+                </div>
+              )}
+              {externalLoading || isMenuSearching ? (
                 <>
                   <div className={mergedClasses.loading || undefined}>{loadingText}</div>
                   <div className={mergedClasses.shimmer || undefined}>
@@ -561,10 +682,10 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                     ))}
                   </div>
                 </>
-              ) : options.length === 0 ? (
+              ) : filteredOptions.length === 0 ? (
                 <div className={mergedClasses.noResults || undefined}>{noResultsContent}</div>
               ) : (
-                options.map((option, index) => {
+                filteredOptions.map((option, index) => {
                   const staticChildren = option.children || [];
                   const dynamicChildren = loadedChildren[option.value] || [];
                   const children =
@@ -575,6 +696,9 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                   const submenuOpen = isSubmenuOpen(option.value);
                   const isChildrenLoading =
                     loadingChildren[option.value] || false;
+                  const submenuChildren = showSubmenuSearch
+                    ? getFilteredSubmenuOptions(option)
+                    : children;
 
                   return (
                     <div key={option.value} className="relative">
@@ -597,14 +721,14 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                         <div
                           className={cn(
                             submenuPosition === "right"
-                              ? "absolute left-full top-0"
-                              : "absolute right-full top-0",
+                              ? "absolute left-full top-0 pl-1"
+                              : "absolute right-full top-0 pr-1",
                             mergedClasses.submenuContainer,
                           ) || undefined}
                         >
                           <Submenu
                             parent={option}
-                            options={children}
+                            options={submenuChildren}
                             selectedValues={getSelectedValuesForParent(
                               option.value,
                             )}
@@ -624,6 +748,16 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                             onItemHover={handleSubmenuItemHover}
                             onMouseEnter={handleSubmenuMouseEnter}
                             onMouseLeave={handleSubmenuMouseLeave}
+                            showSearch={showSubmenuSearch}
+                            searchQuery={submenuSearchQuery}
+                            onSearchChange={onSubmenuSearchChange}
+                            searchPlaceholder={submenuSearchPlaceholder}
+                            searchAriaLabel={submenuSearchAriaLabel}
+                            SearchIconComponent={SearchIconComponent}
+                            isSearching={isSubmenuSearching}
+                            submenuSearchInputClass={mergedClasses.submenuSearchInput}
+                            submenuSearchInputElementClass={mergedClasses.submenuSearchInputElement}
+                            submenuSearchIconClass={mergedClasses.submenuSearchIcon}
                           />
                         </div>
                       )}

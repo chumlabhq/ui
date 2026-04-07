@@ -67,7 +67,7 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
 }) => {
   const layoutClasses =
     layout === "flex-row"
-      ? "flex flex-wrap items-center gap-4"
+      ? "flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4"
       : layout === "flex-col"
         ? "flex flex-col gap-4"
         : "";
@@ -178,13 +178,13 @@ export const PropsTable: React.FC<PropsTableProps> = ({
   children,
   isDarkMode = false,
 }) => (
-  <div className="overflow-x-auto w-full min-w-0">
-    <table className={`w-full table-fixed text-left min-w-[800px]`}>
+  <div className="overflow-x-auto w-full min-w-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+    <table className={`w-full table-fixed text-left min-w-[600px]`}>
       <colgroup>
-        <col className="w-1/4" />
-        <col className="w-1/4" />
-        <col className="w-1/4" />
-        <col className="w-1/4" />
+        <col className="w-[22%]" />
+        <col className="w-[25%]" />
+        <col className="w-[13%]" />
+        <col className="w-[40%]" />
       </colgroup>
       <thead>
         <tr

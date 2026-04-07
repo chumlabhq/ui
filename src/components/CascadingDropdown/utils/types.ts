@@ -46,6 +46,18 @@ export interface CascadingDropdownClasses {
   clearIcon?: string;
   shimmer?: string;
   shimmerItem?: string;
+  /** Search input wrapper in the main menu (contains icon + input). */
+  searchInput?: string;
+  /** The search `<input>` element in the main menu. */
+  searchInputElement?: string;
+  /** Search icon in the main menu search input. */
+  searchIcon?: string;
+  /** Search input wrapper in submenus. Falls back to `searchInput` if not set. */
+  submenuSearchInput?: string;
+  /** The search `<input>` element in submenus. Falls back to `searchInputElement` if not set. */
+  submenuSearchInputElement?: string;
+  /** Search icon in submenu search inputs. Falls back to `searchIcon` if not set. */
+  submenuSearchIcon?: string;
   /** Alias for `menu` — matches Dropdown naming convention. */
   content?: string;
   /** Alias for `menuItem` — matches Dropdown naming convention. */
@@ -109,6 +121,26 @@ export interface CascadingDropdownProps {
   style?: React.CSSProperties;
   ClearIcon?: React.ComponentType<{ className?: string }>;
   renderTrigger?: (props: CascadingDropdownTriggerRenderProps) => React.ReactNode;
+  /** Show a search input inside the main menu. */
+  showMenuSearch?: boolean;
+  /** Show a search input inside submenus. */
+  showSubmenuSearch?: boolean;
+  /** Placeholder text for the main menu search input. */
+  menuSearchPlaceholder?: string;
+  /** Placeholder text for the submenu search input. */
+  submenuSearchPlaceholder?: string;
+  /** Async search callback for main menu. Return filtered options. When provided, client-side filtering is disabled for the menu. */
+  onMenuSearch?: (query: string) => Promise<CascadingOption[]>;
+  /** Async search callback for submenu. Receives parent option + query. Return filtered children. When provided, client-side filtering is disabled for the submenu. */
+  onSubmenuSearch?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
+  /** Debounce delay in ms for async search callbacks. Defaults to 300. */
+  searchDebounceMs?: number;
+  /** Custom search icon component. */
+  SearchIcon?: React.ComponentType<{ className?: string }>;
+  /** Accessible label for the menu search input. */
+  menuSearchAriaLabel?: string;
+  /** Accessible label for the submenu search input. */
+  submenuSearchAriaLabel?: string;
   "aria-label"?: string;
 }
 
@@ -148,6 +180,11 @@ export interface UseCascadingDropdownProps {
   onOpenChange?: (open: boolean) => void;
   label?: ReactNode;
   "aria-label"?: string;
+  showMenuSearch?: boolean;
+  showSubmenuSearch?: boolean;
+  onMenuSearch?: (query: string) => Promise<CascadingOption[]>;
+  onSubmenuSearch?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
+  searchDebounceMs?: number;
 }
 
 export interface UseCascadingDropdownReturn {
@@ -171,4 +208,14 @@ export interface UseCascadingDropdownReturn {
   handleKeyDown: (event: React.KeyboardEvent) => void;
   getDisplayValue: () => string;
   isSubmenuOpen: (value: string) => boolean;
+  /** Filtered main menu options (after search). Use this instead of raw options for rendering. */
+  filteredOptions: CascadingOption[];
+  menuSearchQuery: string;
+  onMenuSearchChange: (query: string) => void;
+  submenuSearchQuery: string;
+  onSubmenuSearchChange: (query: string) => void;
+  isMenuSearching: boolean;
+  isSubmenuSearching: boolean;
+  /** Filtered submenu options for the active submenu parent. */
+  getFilteredSubmenuOptions: (parent: CascadingOption) => CascadingOption[];
 }

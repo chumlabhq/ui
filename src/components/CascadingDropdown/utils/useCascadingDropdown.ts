@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type {
   CascadingOption,
   CascadingValue,
@@ -19,6 +19,11 @@ export const useCascadingDropdown = ({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
+  showMenuSearch = false,
+  showSubmenuSearch = false,
+  onMenuSearch,
+  onSubmenuSearch,
+  searchDebounceMs = 300,
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
   const [internalValue, setInternalValue] = useControllableState<CascadingValue>({
     value,
@@ -41,6 +46,145 @@ export const useCascadingDropdown = ({
   const submenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHoveringSubmenuRef = useRef(false);
 
+  // ─── Search state ─────────────────────────────────────────────────
+  const [menuSearchQuery, setMenuSearchQuery] = useState("");
+  const [submenuSearchQuery, setSubmenuSearchQuery] = useState("");
+  const [isMenuSearching, setIsMenuSearching] = useState(false);
+  const [isSubmenuSearching, setIsSubmenuSearching] = useState(false);
+  const [asyncMenuResults, setAsyncMenuResults] = useState<CascadingOption[] | null>(null);
+  const [asyncSubmenuResults, setAsyncSubmenuResults] = useState<CascadingOption[] | null>(null);
+  const menuSearchVersionRef = useRef(0);
+  const submenuSearchVersionRef = useRef(0);
+
+  // ─── Menu search: useEffect-based debounce (matches SearchableDropdown pattern)
+  const hasActiveMenuSearch = !!onMenuSearch && !!menuSearchQuery.trim();
+
+  useEffect(() => {
+    if (!hasActiveMenuSearch) {
+      setIsMenuSearching(false);
+      setAsyncMenuResults(null);
+      return;
+    }
+    setIsMenuSearching(true);
+    const currentVersion = ++menuSearchVersionRef.current;
+
+    const timer = setTimeout(() => {
+      onMenuSearch!(menuSearchQuery)
+        .then((results) => {
+          if (menuSearchVersionRef.current === currentVersion) {
+            setAsyncMenuResults(results);
+          }
+        })
+        .catch(() => {
+          if (menuSearchVersionRef.current === currentVersion) {
+            setAsyncMenuResults(null);
+          }
+        })
+        .finally(() => {
+          if (menuSearchVersionRef.current === currentVersion) {
+            setIsMenuSearching(false);
+          }
+        });
+    }, searchDebounceMs);
+
+    return () => clearTimeout(timer);
+  }, [hasActiveMenuSearch, menuSearchQuery, onMenuSearch, searchDebounceMs]);
+
+  // ─── Submenu search: useEffect-based debounce
+  const activeSubmenuParent = useMemo(
+    () => (activeSubmenu ? options.find((opt) => opt.value === activeSubmenu) ?? null : null),
+    [activeSubmenu, options],
+  );
+  const hasActiveSubmenuSearch = !!onSubmenuSearch && !!submenuSearchQuery.trim() && !!activeSubmenuParent;
+
+  useEffect(() => {
+    if (!hasActiveSubmenuSearch || !activeSubmenuParent) {
+      setIsSubmenuSearching(false);
+      setAsyncSubmenuResults(null);
+      return;
+    }
+    setIsSubmenuSearching(true);
+    const currentVersion = ++submenuSearchVersionRef.current;
+    const parent = activeSubmenuParent;
+
+    const timer = setTimeout(() => {
+      onSubmenuSearch!(submenuSearchQuery, parent)
+        .then((results) => {
+          if (submenuSearchVersionRef.current === currentVersion) {
+            setAsyncSubmenuResults(results);
+          }
+        })
+        .catch(() => {
+          if (submenuSearchVersionRef.current === currentVersion) {
+            setAsyncSubmenuResults(null);
+          }
+        })
+        .finally(() => {
+          if (submenuSearchVersionRef.current === currentVersion) {
+            setIsSubmenuSearching(false);
+          }
+        });
+    }, searchDebounceMs);
+
+    return () => clearTimeout(timer);
+  }, [hasActiveSubmenuSearch, submenuSearchQuery, onSubmenuSearch, searchDebounceMs, activeSubmenuParent]);
+
+  // ─── Derived filtered options ─────────────────────────────────────
+  const isMenuAsync = !!onMenuSearch;
+  const filteredOptions = useMemo(() => {
+    if (isMenuAsync) {
+      // Async mode: show async results when searching, otherwise show all options
+      if (menuSearchQuery.trim()) {
+        return asyncMenuResults ?? options;
+      }
+      return options;
+    }
+    if (!showMenuSearch || !menuSearchQuery.trim()) {
+      return options;
+    }
+    // Client-side filter
+    const q = menuSearchQuery.toLowerCase();
+    return options.filter((opt) => opt.label.toLowerCase().includes(q));
+  }, [isMenuAsync, showMenuSearch, menuSearchQuery, options, asyncMenuResults]);
+
+  const isSubmenuAsync = !!onSubmenuSearch;
+  const getFilteredSubmenuOptions = useCallback(
+    (parent: CascadingOption): CascadingOption[] => {
+      const dynamicChildren = loadedChildren[parent.value];
+      const children = dynamicChildren && dynamicChildren.length > 0 ? dynamicChildren : parent.children || [];
+
+      if (isSubmenuAsync) {
+        if (submenuSearchQuery.trim()) {
+          return asyncSubmenuResults ?? children;
+        }
+        return children;
+      }
+      if (!showSubmenuSearch || !submenuSearchQuery.trim()) {
+        return children;
+      }
+      const q = submenuSearchQuery.toLowerCase();
+      return children.filter((opt) => opt.label.toLowerCase().includes(q));
+    },
+    [isSubmenuAsync, showSubmenuSearch, submenuSearchQuery, asyncSubmenuResults, loadedChildren],
+  );
+
+  // ─── Search change handlers (simple state setters) ────────────────
+  const onMenuSearchChange = useCallback(
+    (query: string) => {
+      setMenuSearchQuery(query);
+      setFocusedIndex(-1);
+    },
+    [],
+  );
+
+  const onSubmenuSearchChange = useCallback(
+    (query: string) => {
+      setSubmenuSearchQuery(query);
+      setSubmenuFocusedIndex(-1);
+    },
+    [],
+  );
+
   const clearSubmenuTimeout = useCallback(() => {
     if (submenuTimeoutRef.current) {
       clearTimeout(submenuTimeoutRef.current);
@@ -54,6 +198,10 @@ export const useCascadingDropdown = ({
       setFocusedIndex(-1);
       setActiveSubmenu(null);
       setSubmenuFocusedIndex(-1);
+      setMenuSearchQuery("");
+      setSubmenuSearchQuery("");
+      setAsyncMenuResults(null);
+      setAsyncSubmenuResults(null);
     }
   }, [disabled, setIsOpen]);
 
@@ -62,6 +210,10 @@ export const useCascadingDropdown = ({
     setFocusedIndex(-1);
     setActiveSubmenu(null);
     setSubmenuFocusedIndex(-1);
+    setMenuSearchQuery("");
+    setSubmenuSearchQuery("");
+    setAsyncMenuResults(null);
+    setAsyncSubmenuResults(null);
     clearSubmenuTimeout();
   }, [clearSubmenuTimeout, setIsOpen]);
 
@@ -105,6 +257,8 @@ export const useCascadingDropdown = ({
       if (hasStaticChildren || hasLoadedChildren || canLoadChildren) {
         setActiveSubmenu(option.value);
         setSubmenuFocusedIndex(-1);
+        setSubmenuSearchQuery("");
+        setAsyncSubmenuResults(null);
 
         if (canLoadChildren) {
           loadChildrenForOption(option);
@@ -201,20 +355,21 @@ export const useCascadingDropdown = ({
       if (disabled) return;
 
       const activeParent = getActiveParent();
-      const submenuOptions = activeParent?.children || [];
+      const submenuOpts = activeParent ? getFilteredSubmenuOptions(activeParent) : [];
       const isInSubmenu = activeSubmenu && submenuFocusedIndex >= 0;
+      const menuOpts = filteredOptions;
 
       switch (event.key) {
         case "Enter":
         case " ":
           event.preventDefault();
-          if (isInSubmenu && submenuOptions[submenuFocusedIndex]) {
+          if (isInSubmenu && submenuOpts[submenuFocusedIndex]) {
             handleSubmenuItemClick(
               activeParent!,
-              submenuOptions[submenuFocusedIndex]
+              submenuOpts[submenuFocusedIndex]
             );
-          } else if (focusedIndex >= 0 && options[focusedIndex]) {
-            const option = options[focusedIndex];
+          } else if (focusedIndex >= 0 && menuOpts[focusedIndex]) {
+            const option = menuOpts[focusedIndex];
             if (option.children && option.children.length > 0) {
               setActiveSubmenu(option.value);
               setSubmenuFocusedIndex(0);
@@ -243,23 +398,23 @@ export const useCascadingDropdown = ({
             setFocusedIndex(0);
           } else if (isInSubmenu) {
             setSubmenuFocusedIndex((prev) => {
-              const next = prev < submenuOptions.length - 1 ? prev + 1 : 0;
-              for (let i = next; i < submenuOptions.length; i++) {
-                if (!submenuOptions[i].disabled) return i;
+              const next = prev < submenuOpts.length - 1 ? prev + 1 : 0;
+              for (let i = next; i < submenuOpts.length; i++) {
+                if (!submenuOpts[i].disabled) return i;
               }
               for (let i = 0; i < next; i++) {
-                if (!submenuOptions[i].disabled) return i;
+                if (!submenuOpts[i].disabled) return i;
               }
               return prev;
             });
           } else {
             setFocusedIndex((prev) => {
-              const next = prev < options.length - 1 ? prev + 1 : 0;
-              for (let i = next; i < options.length; i++) {
-                if (!options[i].disabled) return i;
+              const next = prev < menuOpts.length - 1 ? prev + 1 : 0;
+              for (let i = next; i < menuOpts.length; i++) {
+                if (!menuOpts[i].disabled) return i;
               }
               for (let i = 0; i < next; i++) {
-                if (!options[i].disabled) return i;
+                if (!menuOpts[i].disabled) return i;
               }
               return prev;
             });
@@ -271,23 +426,23 @@ export const useCascadingDropdown = ({
           if (isOpen) {
             if (isInSubmenu) {
               setSubmenuFocusedIndex((prev) => {
-                const next = prev > 0 ? prev - 1 : submenuOptions.length - 1;
+                const next = prev > 0 ? prev - 1 : submenuOpts.length - 1;
                 for (let i = next; i >= 0; i--) {
-                  if (!submenuOptions[i].disabled) return i;
+                  if (!submenuOpts[i].disabled) return i;
                 }
-                for (let i = submenuOptions.length - 1; i > next; i--) {
-                  if (!submenuOptions[i].disabled) return i;
+                for (let i = submenuOpts.length - 1; i > next; i--) {
+                  if (!submenuOpts[i].disabled) return i;
                 }
                 return prev;
               });
             } else {
               setFocusedIndex((prev) => {
-                const next = prev > 0 ? prev - 1 : options.length - 1;
+                const next = prev > 0 ? prev - 1 : menuOpts.length - 1;
                 for (let i = next; i >= 0; i--) {
-                  if (!options[i].disabled) return i;
+                  if (!menuOpts[i].disabled) return i;
                 }
-                for (let i = options.length - 1; i > next; i--) {
-                  if (!options[i].disabled) return i;
+                for (let i = menuOpts.length - 1; i > next; i--) {
+                  if (!menuOpts[i].disabled) return i;
                 }
                 return prev;
               });
@@ -298,8 +453,8 @@ export const useCascadingDropdown = ({
         case "ArrowRight":
           event.preventDefault();
           if (isOpen && focusedIndex >= 0) {
-            const option = options[focusedIndex];
-            if (option.children && option.children.length > 0) {
+            const option = menuOpts[focusedIndex];
+            if (option?.children && option.children.length > 0) {
               setActiveSubmenu(option.value);
               setSubmenuFocusedIndex(0);
             }
@@ -318,10 +473,10 @@ export const useCascadingDropdown = ({
           event.preventDefault();
           if (isOpen) {
             if (isInSubmenu) {
-              const firstEnabled = submenuOptions.findIndex((o) => !o.disabled);
+              const firstEnabled = submenuOpts.findIndex((o) => !o.disabled);
               if (firstEnabled !== -1) setSubmenuFocusedIndex(firstEnabled);
             } else {
-              const firstEnabled = options.findIndex((o) => !o.disabled);
+              const firstEnabled = menuOpts.findIndex((o) => !o.disabled);
               if (firstEnabled !== -1) setFocusedIndex(firstEnabled);
             }
           }
@@ -331,15 +486,15 @@ export const useCascadingDropdown = ({
           event.preventDefault();
           if (isOpen) {
             if (isInSubmenu) {
-              for (let i = submenuOptions.length - 1; i >= 0; i--) {
-                if (!submenuOptions[i].disabled) {
+              for (let i = submenuOpts.length - 1; i >= 0; i--) {
+                if (!submenuOpts[i].disabled) {
                   setSubmenuFocusedIndex(i);
                   break;
                 }
               }
             } else {
-              for (let i = options.length - 1; i >= 0; i--) {
-                if (!options[i].disabled) {
+              for (let i = menuOpts.length - 1; i >= 0; i--) {
+                if (!menuOpts[i].disabled) {
                   setFocusedIndex(i);
                   break;
                 }
@@ -359,8 +514,9 @@ export const useCascadingDropdown = ({
       focusedIndex,
       activeSubmenu,
       submenuFocusedIndex,
-      options,
+      filteredOptions,
       getActiveParent,
+      getFilteredSubmenuOptions,
       handleToggle,
       handleClose,
       handleMenuItemClick,
@@ -427,6 +583,14 @@ export const useCascadingDropdown = ({
       handleKeyDown,
       getDisplayValue,
       isSubmenuOpen,
+      filteredOptions,
+      menuSearchQuery,
+      onMenuSearchChange,
+      submenuSearchQuery,
+      onSubmenuSearchChange,
+      isMenuSearching,
+      isSubmenuSearching,
+      getFilteredSubmenuOptions,
     }),
     [
       isOpen,
@@ -447,6 +611,14 @@ export const useCascadingDropdown = ({
       handleKeyDown,
       getDisplayValue,
       isSubmenuOpen,
+      filteredOptions,
+      menuSearchQuery,
+      onMenuSearchChange,
+      submenuSearchQuery,
+      onSubmenuSearchChange,
+      isMenuSearching,
+      isSubmenuSearching,
+      getFilteredSubmenuOptions,
     ]
   );
 };

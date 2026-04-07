@@ -13,6 +13,28 @@ import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/cn";
 import { mergeRefs } from "../../utils/mergeRefs";
 
+/**
+ * Component: Checkbox
+ *
+ * Purpose:
+ * Accessible checkbox with label, description, indeterminate state,
+ * custom icons, sizes, shapes, and full form integration.
+ *
+ * AI Usage Guidelines:
+ * - Use `checked` + `onValueChange` for controlled mode
+ * - Use `indeterminate` for "select all" patterns (visual only)
+ * - Use `shape` for square/rounded/circle variants
+ * - Use `classes` for per-slot styling overrides
+ *
+ * Behavior:
+ * - Native `<input type="checkbox">` inside implicit `<label>`
+ * - `indeterminate` is set programmatically via ref
+ * - Error/success messages use `role="alert"` for live announcements
+ *
+ * Reference:
+ * - CHECKBOX.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/CheckboxDemo.tsx — live demo
+ */
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
@@ -34,8 +56,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       success = false,
       successMessage,
       loading = false,
-      size,
-      shape,
+      size = "md",
+      shape = "rounded",
       checkedIcon,
       uncheckedIcon,
       indeterminateIcon,
@@ -90,9 +112,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     // ─── Size & shape ───────────────────────────────────────────────────
     const { boxSize, iconSize } = useMemo(() => {
-      if (size === undefined) {
-        return { boxSize: undefined, iconSize: undefined };
-      }
       if (typeof size === "number") {
         return { boxSize: size, iconSize: Math.round(size * 0.6) };
       }
@@ -175,6 +194,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               onChange={handleChange}
               onFocus={onFocus}
               onBlur={onBlur}
+              aria-checked={indeterminate ? "mixed" : undefined}
               aria-invalid={error || undefined}
               aria-describedby={describedBy || undefined}
               aria-required={required || undefined}

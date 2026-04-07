@@ -4,7 +4,6 @@ import type { BreadcrumbItem } from "../../components/Breadcrumb";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -222,10 +221,9 @@ const BreadcrumbDemo = () => {
             separators, and full keyboard navigation.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}</code>
+            </pre>
           </div>
         </div>
       </header>
