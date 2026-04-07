@@ -457,22 +457,15 @@ const DropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full max-w-64">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
             <Dropdown
               options={fruitOptions}
               value={basicValue}
               onValueChange={(v) => setBasicValue(v)}
               placeholder="Select a fruit..."
-              classes={c.dropdown}
             />
           </div>
         </DemoWrapper>
-        {basicValue && (
-          <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
-          >
-            Selected: {basicValue}
-          </p>
-        )}
       </Section>
 
       {/* ─── State Variations ────────────────────────────────────────────── */}

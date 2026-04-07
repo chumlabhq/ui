@@ -44,6 +44,32 @@ import { useReducedMotion } from "./hooks/useReducedMotion";
 
 const DEFAULT_PREVENT_CLOSE_TIMEOUT = 10000;
 
+/**
+ * Component: Accordion
+ *
+ * Purpose:
+ * A vertically stacked set of collapsible sections. Each item has a trigger
+ * (header) that toggles the visibility of its associated content panel.
+ *
+ * AI Usage Guidelines:
+ * - Use type="single" collapsible for FAQs and settings panels
+ * - Use type="multiple" for multi-section forms or filter panels
+ * - Works out-of-the-box with no props beyond type and children
+ * - Prefer variant/size props over custom classes for common styling
+ * - Use defaultValue (uncontrolled) or value+onValueChange (controlled)
+ *
+ * Behavior:
+ * - Single mode: one item open at a time (collapsible allows closing all)
+ * - Multiple mode: any number open, optional maxExpanded limit
+ * - Full keyboard navigation (Arrow keys, Home, End, Enter/Space)
+ * - ARIA-compliant with aria-expanded, role="region", aria-live announcements
+ * - Smooth CSS transitions with configurable duration/easing
+ * - Supports unstyled mode for fully custom styling
+ *
+ * Reference:
+ * - ACCORDION.ai.md (this directory) — full AI knowledge doc with props, styling guide, patterns
+ * - src/pages/demo/AccordionDemo.tsx — live demo with all features implemented
+ */
 const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const {
     type,

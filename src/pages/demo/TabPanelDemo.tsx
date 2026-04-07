@@ -373,10 +373,10 @@ const TabPanelDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <TabPanel
             tabs={basicTabs}
             defaultValue="home"
-            classes={c.tabs.underline}
           />
         </DemoWrapper>
       </Section>

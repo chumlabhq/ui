@@ -181,10 +181,10 @@ export const PropsTable: React.FC<PropsTableProps> = ({
   <div className="overflow-x-auto w-full min-w-0">
     <table className={`w-full table-fixed text-left min-w-[800px]`}>
       <colgroup>
-        <col className="w-[22%]" />
-        <col className="w-[18%]" />
-        <col className="w-[10%]" />
-        <col className="w-[50%]" />
+        <col className="w-1/4" />
+        <col className="w-1/4" />
+        <col className="w-1/4" />
+        <col className="w-1/4" />
       </colgroup>
       <thead>
         <tr

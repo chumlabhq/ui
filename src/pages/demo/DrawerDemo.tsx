@@ -170,6 +170,7 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
+          {/* Basic usage — open/close via controlled state */}
           <button className={c.btnPrimary} onClick={basic.onOpen}>
             Open Drawer
           </button>
@@ -625,30 +626,20 @@ const DrawerDemo = () => {
             Open Unstyled
           </button>
         </DemoWrapper>
+        {/* Truly unstyled — no classes, bare HTML structure */}
         <Drawer
           open={unstyledDemo.open}
           onOpenChange={unstyledDemo.onOpenChange}
           unstyled
-          classes={{
-            root: "fixed inset-0 z-50",
-            overlay: "fixed inset-0 bg-black/40 transition-opacity",
-            panel: "fixed top-0 right-0 h-full z-50",
-          }}
           direction="right"
           size="320px"
         >
-          <div
-            className={`flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"}`}
-          >
-            <div className="flex items-center justify-between px-5 py-4">
-              <h2 className="text-lg font-bold">Unstyled Drawer</h2>
-              <button onClick={unstyledDemo.onClose} className="p-1">
-                <CloseIcon />
-              </button>
-            </div>
-            <div className="flex-1 px-5 py-4 text-sm">
-              <p>All default classes stripped. Everything is custom.</p>
-            </div>
+          <div className="p-5">
+            <h2 className="text-lg font-bold mb-2">Unstyled Drawer</h2>
+            <p className="text-sm">All default classes stripped. Only raw HTML structure renders.</p>
+            <button onClick={unstyledDemo.onClose} className="mt-4 px-3 py-1 text-sm border rounded">
+              Close
+            </button>
           </div>
         </Drawer>
       </Section>

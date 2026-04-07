@@ -329,11 +329,11 @@ const PaginationDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <Pagination
             value={basicPage}
             totalPages={5}
             onValueChange={setBasicPage}
-            classes={c.pagination}
           />
         </DemoWrapper>
       </Section>

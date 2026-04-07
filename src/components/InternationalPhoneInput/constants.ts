@@ -182,25 +182,39 @@ export const PHONE_LENGTH_RULES: Record<string, { min: number; max: number }> = 
 };
 
 export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {
-  root: "",
-  label: "",
-  description: "",
-  wrapper: "",
-  input: "",
-  error: "",
-  success: "",
+  root: "flex flex-col gap-1",
+  label:
+    "text-[13px] font-medium mb-1.5 block text-gray-700 dark:text-gray-300",
+  description: "text-xs mt-1 mb-1.5 text-gray-400 dark:text-gray-500",
+  wrapper: "flex gap-2 items-stretch",
+  input:
+    "flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-white/10 bg-white dark:bg-white/4 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500/30 focus:border-blue-500 dark:focus:border-indigo-400/50",
+  error:
+    "text-xs mt-1.5 flex items-center gap-1.5 text-red-500 dark:text-red-400",
+  success:
+    "text-xs mt-1.5 flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400",
   countrySelect: "",
-  countrySelectTrigger: "",
-  countrySelectDropdown: "",
-  countrySelectSearchInput: "",
-  countrySelectSearchInputElement: "",
-  countrySelectOption: "",
-  countrySelectOptionSelected: "",
-  countrySelectOptionList: "",
-  countrySelectChevron: "",
-  countrySelectCheckIcon: "",
-  countrySelectSearchIcon: "",
-  countrySelectNoResults: "",
+  countrySelectTrigger:
+    "flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] border-gray-300 dark:border-white/10 bg-white dark:bg-white/4 hover:bg-gray-50 dark:hover:bg-white/6 text-gray-700 dark:text-gray-300",
+  countrySelectDropdown:
+    "w-72 border rounded-lg shadow-lg overflow-hidden bg-white dark:bg-gray-800 border-gray-200 dark:border-white/10",
+  countrySelectSearchInput:
+    "flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-white/10",
+  countrySelectSearchInputElement:
+    "flex-1 bg-transparent focus:outline-none text-sm text-gray-900 dark:text-white placeholder:text-gray-400",
+  countrySelectOption:
+    "flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/6 data-[focused]:bg-gray-100 dark:data-[focused]:bg-white/10 text-gray-700 dark:text-gray-300",
+  countrySelectOptionSelected:
+    "bg-blue-50 dark:bg-indigo-500/10",
+  countrySelectOptionList: "max-h-60 overflow-y-auto",
+  countrySelectChevron:
+    "w-4 h-4 shrink-0 transition-transform duration-200",
+  countrySelectCheckIcon:
+    "w-4 h-4 shrink-0 text-blue-600 dark:text-indigo-400",
+  countrySelectSearchIcon:
+    "w-4 h-4 shrink-0 text-gray-400 dark:text-gray-500",
+  countrySelectNoResults:
+    "px-3 py-4 text-sm text-center text-gray-500",
 };
 
 export const UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {

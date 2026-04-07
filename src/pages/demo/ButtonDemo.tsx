@@ -258,7 +258,8 @@ const ButtonDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <Button className={c.primary}>Click Me</Button>
+          {/* Basic usage — works out-of-the-box with built-in focus styles */}
+          <Button>Click Me</Button>
         </DemoWrapper>
       </Section>
 

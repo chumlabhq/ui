@@ -155,24 +155,14 @@ const ModalDemo = () => {
       {/* ─── Basic ───────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="Simple modal dialogs with various header configurations."
+        description="A simple modal dialog triggered by a button."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="flex flex-wrap gap-2">
-            <button className={c.btnPrimary} onClick={() => setBasicOpen(true)}>
-              Basic Modal
-            </button>
-            <button className={c.btnPrimary} onClick={() => setWithDescriptionOpen(true)}>
-              With Description
-            </button>
-            <button className={c.btnPrimary} onClick={() => setWithIconOpen(true)}>
-              With Icon
-            </button>
-            <button className={c.btn} onClick={() => setNoHeaderOpen(true)}>
-              No Header
-            </button>
-          </div>
+          {/* Basic usage — open/close via controlled state */}
+          <button className={c.btnPrimary} onClick={() => setBasicOpen(true)}>
+            Open Modal
+          </button>
         </DemoWrapper>
       </Section>
 
@@ -487,30 +477,16 @@ const ModalDemo = () => {
         </div>
       </Modal>
 
+      {/* Truly unstyled — no classes, bare HTML structure */}
       <Modal
         open={unstyledOpen}
         onOpenChange={setUnstyledOpen}
         title="Unstyled Modal"
         unstyled
-        classes={{
-          overlay: "fixed inset-0 bg-black/50",
-          container: "fixed inset-0 flex items-center justify-center",
-          content: "w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden",
-          header: "flex items-center justify-between p-5 border-b border-gray-200",
-          title: "text-lg font-bold text-gray-900",
-          closeButton: "p-1.5 rounded-lg hover:bg-gray-100 transition-colors",
-          body: "p-5",
-        }}
       >
-        <p className="text-gray-600">
-          With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">unstyled</code> all
-          default styles are stripped. You must provide all styling via
-          the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">classes</code> prop.
-        </p>
-        <div className="flex justify-end mt-5">
-          <button className={c.btnPrimary} onClick={() => setUnstyledOpen(false)}>
-            Close
-          </button>
+        <p>All default styles stripped — only raw HTML structure renders.</p>
+        <div className="mt-4">
+          <button onClick={() => setUnstyledOpen(false)}>Close</button>
         </div>
       </Modal>
 

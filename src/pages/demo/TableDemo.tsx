@@ -1642,9 +1642,10 @@ const TableDemo = () => {
         </div>
       </header>
 
-      <Section title="Basic Usage" isDarkMode={dark}>
+      <Section title="Basic Usage" description="A simple table with columns and data." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <Table columns={columns} data={sampleData.slice(0, 5)} classes={s} />
+          {/* Basic usage — works out-of-the-box with built-in styles */}
+          <Table columns={columns} data={sampleData.slice(0, 5)} />
         </DemoWrapper>
       </Section>
 

@@ -93,14 +93,8 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput value={basic} onValueChange={setBasic} classes={c.otp} />
-          {basic && (
-            <p
-              className={`text-xs font-mono mt-3 ${dark ? "text-gray-400" : "text-gray-500"}`}
-            >
-              Value: {basic}
-            </p>
-          )}
+          {/* Basic usage — works out-of-the-box with built-in styles */}
+          <OtpInput value={basic} onValueChange={setBasic} />
         </DemoWrapper>
       </Section>
 
@@ -529,14 +523,8 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput
-            unstyled
-            length={4}
-            classes={{
-              wrapper: "flex items-center gap-4",
-              input: `w-16 h-16 text-center text-2xl font-black rounded-2xl border-2 transition-all focus:outline-none ${dark ? "bg-linear-to-br from-purple-900/50 to-pink-900/50 border-purple-500/50 text-purple-300 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30" : "bg-linear-to-br from-purple-50 to-pink-50 border-purple-300 text-purple-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"}`,
-            }}
-          />
+          {/* Truly unstyled — no classes, bare HTML structure */}
+          <OtpInput unstyled length={4} />
         </DemoWrapper>
       </Section>
 

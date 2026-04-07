@@ -116,11 +116,9 @@ const TooltipDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — wrap any element to show a tooltip on hover */}
           <Tooltip content="This is a basic tooltip">
             <button className={c.trigger}>Hover me</button>
-          </Tooltip>
-          <Tooltip content="Another tooltip with more content that wraps nicely when the text is long">
-            <button className={c.trigger}>More content</button>
           </Tooltip>
         </DemoWrapper>
       </Section>

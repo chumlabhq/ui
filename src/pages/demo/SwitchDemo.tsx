@@ -157,11 +157,11 @@ const SwitchDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <Switch
             aria-label="Toggle feature"
             checked={basicSwitch}
             onValueChange={setBasicSwitch}
-            classes={c.switch}
           />
         </DemoWrapper>
       </Section>
@@ -685,20 +685,12 @@ const SwitchDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Truly unstyled — no classes, bare HTML structure */}
           <Switch
             label="Unstyled switch"
             checked={unstyledSwitch}
             onValueChange={setUnstyledSwitch}
             unstyled
-            classes={{
-              root: "flex flex-col",
-              innerRow: "flex items-center gap-3",
-              label: `text-sm ${dark ? "text-gray-300" : "text-gray-700"} cursor-pointer`,
-              tracker: `relative inline-flex items-center h-6 w-11 rounded-md border-2 ${unstyledSwitch ? (dark ? "border-green-400 bg-green-900" : "border-green-600 bg-green-100") : dark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-gray-50"} cursor-pointer transition-colors`,
-              thumb: `inline-flex items-center justify-center h-4 w-4 rounded-sm transition-transform ${unstyledSwitch ? (dark ? "bg-green-400" : "bg-green-600") : dark ? "bg-gray-500" : "bg-gray-400"}`,
-              checkedThumb: "translate-x-5.5",
-              uncheckedThumb: "translate-x-0.5",
-            }}
           />
         </DemoWrapper>
       </Section>

@@ -382,21 +382,16 @@ const TimePickerDemo = () => {
 
       {/* ─── 1. Basic (24h) ──────────────────────────────────────────────── */}
       <Section
-        title="Basic Usage (24h)"
+        title="Basic Usage"
         description="Default dropdown variant with 24-hour format and 15-minute steps."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-          <div className="flex items-center gap-4">
-            <TimePicker
-              value={basic24}
-              onValueChange={(v) => setBasic24(v)}
-              classes={c.timepicker}
-            />
-            <span className={`text-sm ${c.text}`}>
-              Selected: {basic24 ?? "none"}
-            </span>
-          </div>
+          {/* Basic usage — works out-of-the-box with built-in styles */}
+          <TimePicker
+            value={basic24}
+            onValueChange={(v) => setBasic24(v)}
+          />
         </DemoWrapper>
       </Section>
 
@@ -1446,32 +1441,12 @@ const TimePickerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-          <div className="flex items-center gap-4">
-            <TimePicker
-              value={unstyledVal}
-              onValueChange={(v) => setUnstyledVal(v)}
-              unstyled
-              classes={{
-                root: "inline-flex flex-col gap-1",
-                trigger: `flex items-center gap-2 px-3 py-2 border-2 border-dashed rounded-xl ${
-                  dark ? "border-indigo-500 bg-gray-900 text-gray-200" : "border-indigo-400 bg-indigo-50 text-gray-900"
-                }`,
-                input: "bg-transparent outline-none text-sm flex-1",
-                endIcon: `w-4 h-4 ${dark ? "text-indigo-400" : "text-indigo-500"}`,
-                dropdown: `border-2 border-dashed rounded-xl overflow-hidden ${
-                  dark ? "border-indigo-500 bg-gray-900" : "border-indigo-400 bg-indigo-50"
-                }`,
-                optionList: "max-h-48 overflow-y-auto",
-                option: `px-3 py-2 cursor-pointer text-sm ${dark ? "text-gray-200 hover:bg-indigo-900/40" : "text-gray-700 hover:bg-indigo-100"}`,
-                optionSelected: dark ? "bg-indigo-900/60 font-medium" : "bg-indigo-200 font-medium",
-                optionFocused: dark ? "bg-indigo-900/30" : "bg-indigo-100",
-                noResults: "px-3 py-4 text-sm text-center text-gray-400",
-              }}
-            />
-            <span className={`text-sm ${c.text}`}>
-              Selected: {unstyledVal ?? "none"}
-            </span>
-          </div>
+          {/* Truly unstyled — no classes, bare HTML structure */}
+          <TimePicker
+            value={unstyledVal}
+            onValueChange={(v) => setUnstyledVal(v)}
+            unstyled
+          />
         </DemoWrapper>
       </Section>
 

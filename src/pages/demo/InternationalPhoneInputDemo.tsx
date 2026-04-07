@@ -264,21 +264,13 @@ const InternationalPhoneInputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-md">
+              {/* Basic usage — works out-of-the-box with built-in styles */}
               <InternationalPhoneInput
                 aria-label="Phone number"
                 value={basicValue}
                 onValueChange={setBasicValue}
                 placeholder="Enter phone number"
-                classes={c.phone}
               />
-              {basicValue && (
-                <div className={`mt-3 ${c.resultBox}`}>
-                  <p>
-                    Full: {basicValue.fullNumber || "-"} | Valid:{" "}
-                    {basicValue.isValid ? "Yes" : "No"}
-                  </p>
-                </div>
-              )}
             </div>
           </DemoWrapper>
         </Section>
@@ -1125,17 +1117,11 @@ const InternationalPhoneInputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-md">
+              {/* Truly unstyled — no classes, bare HTML structure */}
               <InternationalPhoneInput
                 label="Phone Number"
                 unstyled
                 placeholder="Unstyled input"
-                classes={{
-                  root: "flex flex-col gap-1",
-                  label: `text-sm ${dark ? "text-gray-300" : "text-gray-700"}`,
-                  wrapper: "flex gap-2",
-                  input: `flex-1 h-10 px-3 rounded border ${dark ? "border-gray-600 bg-gray-800 text-white" : "border-gray-300 bg-white text-gray-900"}`,
-                  countrySelectTrigger: `h-10 px-3 rounded border ${dark ? "border-gray-600 bg-gray-800 text-white" : "border-gray-300 bg-white text-gray-900"}`,
-                }}
               />
             </div>
           </DemoWrapper>

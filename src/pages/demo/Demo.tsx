@@ -59,36 +59,36 @@ const ThemeToggle = ({
   <button
     onClick={toggle}
     aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-    className={`relative h-8 w-8 rounded-lg cursor-pointer group transition-colors duration-200 ${
+    className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer group transition-colors duration-200 text-sm font-medium ${
       isDarkMode
-        ? "hover:bg-white/8 active:bg-white/12"
-        : "hover:bg-black/5 active:bg-black/10"
+        ? "hover:bg-white/8 active:bg-white/12 text-gray-300"
+        : "hover:bg-black/5 active:bg-black/10 text-gray-600"
     }`}
   >
-    {/* Sun – visible in dark mode */}
+    {/* Sun icon */}
     <svg
-      width="18"
-      height="18"
+      width="20"
+      height="20"
       viewBox="0 0 20 20"
       fill="currentColor"
-      className={`absolute inset-0 m-auto transition-all duration-500 ease-out ${
+      className={`transition-all duration-300 ease-out ${
         isDarkMode
-          ? "opacity-100 rotate-0 scale-100 text-amber-400 group-hover:text-amber-300 group-hover:scale-110"
-          : "opacity-0 rotate-180 scale-0"
+          ? "text-amber-400 group-hover:text-amber-300"
+          : "hidden"
       }`}
     >
       <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.06 1.06l1.06 1.06z" />
     </svg>
-    {/* Moon – visible in light mode */}
+    {/* Moon icon */}
     <svg
-      width="18"
-      height="18"
+      width="20"
+      height="20"
       viewBox="0 0 20 20"
       fill="currentColor"
-      className={`absolute inset-0 m-auto transition-all duration-500 ease-out ${
+      className={`transition-all duration-300 ease-out ${
         isDarkMode
-          ? "opacity-0 -rotate-180 scale-0"
-          : "opacity-100 rotate-0 scale-100 text-slate-500 group-hover:text-indigo-500 group-hover:scale-110"
+          ? "hidden"
+          : "text-slate-500 group-hover:text-indigo-500"
       }`}
     >
       <path
@@ -97,6 +97,7 @@ const ThemeToggle = ({
         clipRule="evenodd"
       />
     </svg>
+    <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
   </button>
 );
 
@@ -263,7 +264,16 @@ const Demo = () => {
           ${sidebarOpen ? "translate-x-0" : "translate-x-full"}
           ${sidebarBg}`}
         >
-          <div className="flex justify-end mb-4">
+          <div className="flex items-center justify-between mb-8">
+            <Link to="/" className="flex items-center" onClick={() => setSidebarOpen(false)}>
+              <img
+                src={isDarkMode ? logoLight : logoDark}
+                alt="Chumlab"
+                width={160}
+                height={160}
+                style={{ width: 160, height: "auto", objectFit: "contain" }}
+              />
+            </Link>
             <button
               onClick={() => setSidebarOpen(false)}
               className={`p-1.5 rounded-lg transition-colors ${isDarkMode ? "text-gray-400 hover:bg-white/6" : "text-gray-600 hover:bg-gray-100"}`}
@@ -272,7 +282,19 @@ const Demo = () => {
               <CloseMenuIcon />
             </button>
           </div>
-          {sidebarContent}
+          <nav className="flex flex-col gap-0.5">
+            {components.map(({ path, displayName }) => (
+              <NavLink
+                key={path}
+                to={`/${path}`}
+                className={({ isActive }) =>
+                  `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
+                }
+              >
+                {displayName}
+              </NavLink>
+            ))}
+          </nav>
         </aside>
 
         {/* ── Desktop sidebar ── */}
@@ -290,11 +312,11 @@ const Demo = () => {
           className={`flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto overscroll-y-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${bg}`}
         >
           {/* ── Top bar with theme toggle (desktop only — mobile has it in top bar) ── */}
-          <div className="sticky top-0 z-10 hidden lg:flex justify-end px-4 sm:px-6 lg:px-8 py-3">
+          <div className="hidden lg:flex justify-end px-4 sm:px-6 lg:px-8 py-3">
             <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
           </div>
 
-          <div className="p-4 sm:p-6 lg:p-8 pt-0 w-full max-w-none min-w-0 min-h-0">
+          <div className="p-4 sm:p-6 lg:p-8 pt-4 sm:pt-6 lg:pt-0 w-full max-w-none min-w-0 min-h-0">
             <Outlet context={{ isDarkMode, toggleDarkMode }} />
           </div>
         </main>

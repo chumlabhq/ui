@@ -203,6 +203,7 @@ const ResizablePanelDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — drag the edge to resize */}
           <ResizablePanel
             defaultValue={300}
             minValue={150}

@@ -299,24 +299,16 @@ const MultiSelectSearchableDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-72">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={basicValue}
               onValueChange={(values) => setBasicValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
-              classes={c.dropdown}
               aria-label="Select fruits"
             />
           </div>
         </DemoWrapper>
-        {basicValue.length > 0 && (
-          <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
-          >
-            Selected: {basicValue.join(", ")}
-          </p>
-        )}
       </Section>
 
       {/* ─── With Custom Content ──────────────────────────────────────────── */}

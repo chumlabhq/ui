@@ -236,11 +236,11 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <Accordion
             type="single"
             defaultValue="basic-1"
             collapsible
-            classes={c.accordion}
           >
             <AccordionItem value="basic-1">
               <AccordionTrigger>What is React?</AccordionTrigger>
@@ -1297,37 +1297,22 @@ const AccordionDemo = () => {
       {/* ─── Unstyled ───────────────────────────────────────────────────── */}
       <Section
         title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Apply your own via the classes prop."
+        description="Set unstyled=true to strip all default classes, giving you a blank slate. Then apply your own styles via the classes prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion
-            type="single"
-            collapsible
-            unstyled
-            classes={{
-              root: "w-full",
-              item: `border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
-              trigger: `flex w-full items-center justify-between py-3 text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`,
-              triggerInner: "flex-1 text-left",
-              content: `py-2 text-sm ${dark ? "text-gray-400" : "text-gray-600"}`,
-              contentWrapper:
-                "overflow-hidden transition-[max-height,opacity,visibility]",
-              icon: `w-4 h-4 transition-transform duration-200 ${dark ? "text-gray-500" : "text-gray-400"}`,
-              iconWrapper: "shrink-0",
-              heading: "",
-            }}
-          >
+          {/* Truly unstyled — no classes at all, bare HTML structure */}
+          <Accordion type="single" collapsible unstyled>
             <AccordionItem value="unstyled-1">
-              <AccordionTrigger>Custom Styled Item</AccordionTrigger>
+              <AccordionTrigger>Unstyled Item</AccordionTrigger>
               <AccordionContent>
-                All styling provided via classes prop.
+                This accordion has unstyled=true with no classes prop — only the raw HTML structure renders.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="unstyled-2">
-              <AccordionTrigger>Another Custom Item</AccordionTrigger>
+              <AccordionTrigger>Another Unstyled Item</AccordionTrigger>
               <AccordionContent>
-                Full control over every class.
+                Compare this with Basic Usage above to see the difference.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

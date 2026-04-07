@@ -180,15 +180,11 @@ const RadioButtonDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <RadioGroup
-            name="basic"
-            defaultValue="option-a"
-            size="md"
-            classes={c.group}
-          >
-            <RadioButton value="option-a" label="Option A" classes={c.radio} />
-            <RadioButton value="option-b" label="Option B" classes={c.radio} />
-            <RadioButton value="option-c" label="Option C" classes={c.radio} />
+          {/* Basic usage — works out-of-the-box with built-in styles */}
+          <RadioGroup name="basic" defaultValue="option-a">
+            <RadioButton value="option-a" label="Option A" />
+            <RadioButton value="option-b" label="Option B" />
+            <RadioButton value="option-c" label="Option C" />
           </RadioGroup>
         </DemoWrapper>
       </Section>
@@ -808,34 +804,10 @@ const RadioButtonDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <RadioGroup
-            name="unstyled"
-            defaultValue="custom-a"
-            unstyled
-            size="md"
-          >
-            <RadioButton
-              value="custom-a"
-              label="Custom styled A"
-              classes={{
-                root: "flex items-center gap-2",
-                label: `text-sm font-bold ${dark ? "text-purple-300" : "text-purple-700"}`,
-                radio: `inline-flex items-center justify-center w-6 h-6 rounded-full border-2 ${dark ? "border-purple-400" : "border-purple-500"}`,
-                checked: `${dark ? "bg-purple-500 border-purple-500" : "bg-purple-600 border-purple-600"}`,
-                unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
-              }}
-            />
-            <RadioButton
-              value="custom-b"
-              label="Custom styled B"
-              classes={{
-                root: "flex items-center gap-2",
-                label: `text-sm font-bold ${dark ? "text-purple-300" : "text-purple-700"}`,
-                radio: `inline-flex items-center justify-center w-6 h-6 rounded-full border-2 ${dark ? "border-purple-400" : "border-purple-500"}`,
-                checked: `${dark ? "bg-purple-500 border-purple-500" : "bg-purple-600 border-purple-600"}`,
-                unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
-              }}
-            />
+          {/* Truly unstyled — no classes, bare HTML structure */}
+          <RadioGroup name="unstyled" defaultValue="custom-a" unstyled>
+            <RadioButton value="custom-a" label="Unstyled A" />
+            <RadioButton value="custom-b" label="Unstyled B" />
           </RadioGroup>
         </DemoWrapper>
       </Section>

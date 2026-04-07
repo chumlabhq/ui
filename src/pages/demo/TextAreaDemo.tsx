@@ -255,10 +255,10 @@ const TextAreaDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-md">
+              {/* Basic usage — works out-of-the-box with built-in styles */}
               <TextArea
                 aria-label="Basic textarea"
                 placeholder="Enter text..."
-                classes={c.textarea}
               />
             </div>
           </DemoWrapper>

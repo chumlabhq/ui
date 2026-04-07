@@ -353,23 +353,15 @@ const MultiSelectDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="w-72">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
             <MultiSelectDropdown
               options={staticOptions}
               value={basicValue}
               onValueChange={(values) => setBasicValue(values)}
               placeholder="Select fruits..."
-              maxDisplayedChips={2}
-              classes={c.dropdown}
             />
           </div>
         </DemoWrapper>
-        {basicValue.length > 0 && (
-          <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
-          >
-            Selected: {basicValue.join(", ")}
-          </p>
-        )}
       </Section>
 
       {/* ─── State Variations ────────────────────────────────────────────── */}

@@ -140,13 +140,11 @@ const CheckboxDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <Checkbox
             aria-label="Basic checkbox"
             checked={basic}
             onValueChange={setBasic}
-            size="md"
-            shape="rounded"
-            classes={c.checkbox}
           />
         </DemoWrapper>
       </Section>
@@ -584,19 +582,10 @@ const CheckboxDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
+          {/* Truly unstyled — no classes, bare HTML structure */}
           <Checkbox
-            label="Custom styled checkbox"
+            label="Unstyled checkbox"
             unstyled
-            classes={{
-              root: "",
-              labelContainer: "flex flex-col",
-              label: `text-sm font-bold ${dark ? "text-purple-300" : "text-purple-700"}`,
-              checkbox: `inline-flex items-center justify-center w-6 h-6 rounded-lg border-2 cursor-pointer ${dark ? "border-purple-400" : "border-purple-500"}`,
-              checked: `${dark ? "bg-purple-500 border-purple-500" : "bg-purple-600 border-purple-600"} text-white`,
-              unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
-            }}
-            size="md"
-            shape="rounded"
           />
         </DemoWrapper>
       </Section>

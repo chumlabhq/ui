@@ -278,28 +278,14 @@ const StepperDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full space-y-4">
+          <div className="w-full">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
             <Stepper
               steps={basicSteps}
               value={basicStep}
               onValueChange={(id) => setBasicStep(id as number)}
               isStepClickable={() => true}
-              classes={c.stepper}
             />
-            <div className="flex gap-2">
-              <button
-                onClick={() => setBasicStep(Math.max(1, basicStep - 1))}
-                className={c.btn}
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => setBasicStep(Math.min(4, basicStep + 1))}
-                className={c.btnPrimary}
-              >
-                Next
-              </button>
-            </div>
           </div>
         </DemoWrapper>
       </Section>
@@ -853,28 +839,12 @@ const StepperDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Truly unstyled — no classes, bare HTML structure */}
           <Stepper
             steps={basicSteps}
             value={2}
             onValueChange={() => {}}
-            isStepClickable={() => true}
             unstyled
-            classes={{
-              list: "flex items-center gap-0 list-none m-0 p-0",
-              step: `flex items-center gap-2 px-3 py-2 rounded-xl border-2 transition-all ${dark ? "border-gray-700" : "border-gray-200"}`,
-              stepInteractive: `cursor-pointer ${dark ? "hover:border-indigo-400/50" : "hover:border-indigo-300"}`,
-              indicator: `shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-600"}`,
-              indicatorActive: dark
-                ? "bg-indigo-500 text-white"
-                : "bg-indigo-600 text-white",
-              indicatorCompleted: dark
-                ? "bg-emerald-500 text-white"
-                : "bg-emerald-600 text-white",
-              label: `text-sm font-medium ${dark ? "text-gray-300" : "text-gray-700"}`,
-              labelActive: dark ? "text-indigo-400" : "text-indigo-600",
-              labelCompleted: dark ? "text-emerald-400" : "text-emerald-600",
-              connectorHorizontal: `w-6 h-0.5 ${dark ? "bg-gray-700" : "bg-gray-200"}`,
-            }}
           />
         </DemoWrapper>
       </Section>

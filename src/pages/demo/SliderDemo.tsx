@@ -129,9 +129,9 @@ const SliderDemo = () => {
       {/* ── Basic ────────────────────────────────────────────────────── */}
       <Section title="Basic Usage" description="A single-value slider with default settings (0–100, step 1)." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-3">
-            <Slider value={basic} onValueChange={(v) => setBasic(v as number)} classes={c.slider} />
-            <div className={c.text}>Value: <span className={c.badge}>{basic}</span></div>
+          <div className="w-full max-w-sm">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
+            <Slider value={basic} onValueChange={(v) => setBasic(v as number)} />
           </div>
         </DemoWrapper>
       </Section>
@@ -620,18 +620,8 @@ const SliderDemo = () => {
       <Section title="Unstyled" description="Set unstyled to remove all default classes. Build from scratch." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full max-w-sm">
-            <Slider
-              defaultValue={50}
-              unstyled
-              classes={{
-                root: "flex flex-col gap-2",
-                wrapper: "relative select-none touch-none",
-                track: `h-1 rounded ${dark ? "bg-gray-700" : "bg-gray-300"}`,
-                range: `rounded ${dark ? "bg-blue-400" : "bg-blue-600"}`,
-                thumb: `absolute w-5 h-5 rounded-full ${dark ? "bg-gray-200 border-2 border-blue-400" : "bg-white border-2 border-blue-600"} shadow cursor-grab focus:outline-none`,
-                thumbActive: "cursor-grabbing",
-              }}
-            />
+            {/* Truly unstyled — no classes, bare HTML structure */}
+            <Slider defaultValue={50} unstyled />
           </div>
         </DemoWrapper>
       </Section>

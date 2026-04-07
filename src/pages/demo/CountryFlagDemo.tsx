@@ -91,8 +91,9 @@ const CountryFlagDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — just pass a country code */}
           {["us", "gb", "jp", "de", "fr", "in", "br", "ca"].map((code) => (
-            <CountryFlag key={code} code={code} size={48} className={c.flag} />
+            <CountryFlag key={code} code={code} size={48} />
           ))}
         </DemoWrapper>
       </Section>
@@ -473,14 +474,8 @@ const CountryFlagDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <CountryFlag
-            code="us"
-            size={48}
-            unstyled
-            classes={{
-              root: "inline-block overflow-hidden rounded-2xl border-2 border-indigo-400 shadow-xl",
-            }}
-          />
+          {/* Truly unstyled — no classes, bare HTML structure */}
+          <CountryFlag code="us" size={48} unstyled />
         </DemoWrapper>
       </Section>
 

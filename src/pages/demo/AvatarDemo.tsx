@@ -19,25 +19,6 @@ import {
   DocDoDont,
 } from "./components";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
-
-const UserIcon = ({ className = "" }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    className={className}
-  >
-    <path
-      fillRule="evenodd"
-      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
@@ -130,21 +111,18 @@ const AvatarDemo = () => {
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="Avatar with image, initials, and custom fallback content."
+        description="Avatar with image, initials, and custom fallback."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <Avatar
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
             alt="John Doe"
             name="John Doe"
           />
-          <Avatar name="Jane Smith" autoColor colors={c.subtleColors} />
-          <Avatar name="Alex" autoColor colors={c.subtleColors} />
-          <Avatar
-            fallback={<UserIcon className="w-5 h-5 text-gray-400" />}
-            className={c.fallbackBg}
-          />
+          <Avatar name="Jane Smith" autoColor />
+          <Avatar name="Alex" autoColor />
         </DemoWrapper>
       </Section>
 

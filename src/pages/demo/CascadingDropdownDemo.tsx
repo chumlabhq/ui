@@ -564,12 +564,12 @@ const CascadingDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="w-96">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
               onValueChange={() => {}}
               placeholder="Select a category..."
-              classes={c.cascading}
             />
           </div>
         </DemoWrapper>

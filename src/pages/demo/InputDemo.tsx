@@ -335,10 +335,10 @@ const InputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-sm">
+              {/* Basic usage — works out-of-the-box with built-in styles */}
               <Input
                 aria-label="Basic input"
                 placeholder="Enter text..."
-                classes={c.input}
               />
             </div>
           </DemoWrapper>

@@ -272,22 +272,14 @@ const DatePickerDemo = () => {
           className="overflow-visible"
         >
           <div className="max-w-xs">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
             <DatePicker
               value={singleDate}
               onValueChange={(date) => setSingleDate(date)}
               label="Select a date"
               placeholder="Pick a date..."
-              showClearButton
-              classes={c.datepicker}
             />
           </div>
-          {singleDate && (
-            <p
-              className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
-            >
-              Selected: {singleDate.toLocaleDateString()}
-            </p>
-          )}
         </DemoWrapper>
       </Section>
 
@@ -1686,33 +1678,8 @@ const DatePickerDemo = () => {
           className="overflow-visible"
         >
           <div className="max-w-xs">
-            <DatePicker
-              unstyled
-              placeholder="Fully custom"
-              classes={{
-                trigger: `flex items-center gap-2 w-full px-4 py-3 rounded-2xl font-medium text-sm cursor-pointer ${dark ? "bg-linear-to-r from-purple-600 to-pink-600 text-white" : "bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25"}`,
-                input: "flex-1 text-left truncate",
-                calendarIcon: "w-5 h-5 shrink-0 text-white/70",
-                calendar: `rounded-2xl shadow-2xl p-5 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-                header: "flex items-center justify-between mb-4",
-                monthNav: "flex items-center gap-1",
-                navButton: `p-2 rounded-xl transition-colors ${dark ? "text-gray-400 hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"}`,
-                weekdayHeader: "grid grid-cols-7 mb-2",
-                weekday: `text-xs font-bold text-center py-2 ${dark ? "text-gray-500" : "text-gray-400"}`,
-                day: `w-10 h-10 flex items-center justify-center text-sm rounded-xl cursor-pointer transition-all ${dark ? "hover:bg-white/10 text-gray-200" : "hover:bg-purple-50 text-gray-700"}`,
-                daySelected: dark
-                  ? "bg-purple-500 text-white"
-                  : "bg-purple-600 text-white",
-                dayToday: `font-bold ${dark ? "text-purple-400" : "text-purple-600"}`,
-                dayDisabled: "opacity-30 cursor-not-allowed",
-                dayOutside: "opacity-20",
-                monthSelect: `px-2 py-1 text-sm font-bold rounded-lg cursor-pointer ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-                yearSelect: `px-2 py-1 text-sm font-bold rounded-lg cursor-pointer ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-                dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-xl shadow-xl py-1 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-                dropdownItem: `flex items-center justify-between px-3 py-2 text-sm cursor-pointer ${dark ? "text-gray-300 hover:bg-white/6" : "text-gray-700 hover:bg-purple-50"}`,
-                dropdownItemSelected: `font-medium ${dark ? "text-purple-300" : "text-purple-600"}`,
-              }}
-            />
+            {/* Truly unstyled — no classes, bare HTML structure */}
+            <DatePicker unstyled placeholder="Unstyled date picker" />
           </div>
         </DemoWrapper>
       </Section>

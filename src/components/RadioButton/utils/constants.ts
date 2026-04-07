@@ -18,11 +18,11 @@ export const ICON_SIZE_MAP: Record<Exclude<RadioButtonSize, number>, number> = {
 
 export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
   root: "flex items-start gap-2 cursor-pointer",
-  label: "text-sm font-medium",
-  description: "text-xs text-gray-500",
-  radio: "shrink-0 flex items-center justify-center rounded-full border-2 border-gray-300 transition-colors",
+  label: "text-sm font-medium text-gray-700 dark:text-gray-200",
+  description: "text-xs text-gray-500 dark:text-gray-400",
+  radio: "shrink-0 flex items-center justify-center rounded-full border-2 border-gray-300 dark:border-gray-600 transition-colors",
   checked: "border-blue-600 bg-blue-600",
-  unchecked: "border-gray-300 bg-white",
+  unchecked: "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800",
   icon: "",
   error: "text-xs text-red-500 mt-1",
   success: "text-xs text-emerald-600 mt-1",

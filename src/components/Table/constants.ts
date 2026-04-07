@@ -6,32 +6,41 @@ export {
 } from "../Pagination";
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
-  container: "",
-  table: "",
+  container:
+    "w-full border rounded-lg overflow-hidden border-gray-200 dark:border-white/[0.06]",
+  table: "w-full border-collapse",
   header: "",
   headerRow: "",
-  headerCell: "",
-  headerCellHover: "",
+  headerCell:
+    "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-[#111118] border-gray-200 dark:border-white/[0.06]",
+  headerCellHover: "bg-gray-100 dark:bg-white/[0.06]",
   headerCellContent: "",
   body: "",
-  row: "",
-  cell: "",
-  selectedRow: "",
-  pinnedContainer: "",
-  pinnedTable: "",
-  unpinnedContainer: "",
-  unpinnedTable: "",
-  empty: "",
-  pinIcon: "",
+  row: "border-b transition-colors data-[clickable]:cursor-pointer border-gray-100 dark:border-white/[0.04] hover:bg-gray-100 dark:hover:bg-white/[0.06]",
+  cell: "px-4 py-3 text-sm whitespace-nowrap text-gray-900 dark:text-gray-100",
+  selectedRow:
+    "border-b transition-colors data-[clickable]:cursor-pointer border-gray-100 dark:border-white/[0.04] bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/15",
+  pinnedContainer:
+    "shrink-0 sticky left-0 z-20 border-r-2 border-blue-200 dark:border-blue-500/30 bg-white dark:bg-gray-900",
+  pinnedTable: "border-collapse",
+  unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
+  unpinnedTable: "w-full border-collapse",
+  empty:
+    "flex items-center justify-center py-12 text-gray-500 dark:text-gray-400",
+  pinIcon: "text-gray-400",
   pinIconHover: "",
-  pinnedPinIcon: "",
+  pinnedPinIcon: "text-blue-600",
   pinnedPinIconHover: "",
-  pinButton: "",
-  pinnedPinButton: "",
-  shimmer: "",
-  shimmerRow: "",
-  shimmerCell: "",
-  shimmerBar: "",
+  pinButton:
+    "ml-2 p-1 rounded transition-colors hover:bg-gray-200 dark:hover:bg-gray-700",
+  pinnedPinButton:
+    "ml-2 p-1 rounded transition-colors hover:bg-blue-100",
+  shimmer:
+    "w-full border rounded-lg overflow-hidden border-gray-200 dark:border-white/[0.06]",
+  shimmerRow: "border-b border-gray-100 dark:border-white/[0.04]",
+  shimmerCell: "px-4 py-2 h-14",
+  shimmerBar:
+    "h-full w-full bg-linear-to-r rounded animate-pulse from-gray-200 dark:from-gray-700 via-gray-300 dark:via-gray-600 to-gray-200 dark:to-gray-700",
   checkbox: "",
   checkboxCell: "",
   sortIcon: "",

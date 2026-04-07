@@ -84,6 +84,7 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Basic usage — call toast methods to show notifications */}
           <button
             className={c.btnSuccess}
             onClick={() => toast.success("Operation completed successfully!")}
@@ -1030,19 +1031,15 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
+          {/* Truly unstyled — no classes, bare HTML structure */}
           <button
             className={c.btn}
             onClick={() =>
               toast.toast({
                 type: "info",
-                message: "Fully custom toast",
-                description: "Built from scratch with unstyled + classes",
+                message: "Unstyled toast",
+                description: "All default styles stripped — only raw HTML structure renders.",
                 unstyled: true,
-                classes: {
-                  container: `p-4 rounded-xl border ${dark ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-200 text-gray-900"} shadow-lg`,
-                  message: "font-semibold text-sm",
-                  description: `text-xs mt-1 ${dark ? "text-gray-400" : "text-gray-500"}`,
-                },
               })
             }
           >

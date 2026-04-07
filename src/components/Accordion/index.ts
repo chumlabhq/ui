@@ -1,3 +1,5 @@
+// AI Knowledge: See ACCORDION.ai.md in this directory for full usage guide, props, styling, and patterns.
+
 export { default as Accordion } from "./Accordion";
 export { default as AccordionItem } from "./components/AccordionItem";
 export { default as AccordionTrigger } from "./components/AccordionTrigger";

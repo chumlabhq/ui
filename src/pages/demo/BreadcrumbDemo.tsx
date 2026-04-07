@@ -237,19 +237,12 @@ const BreadcrumbDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
+          {/* Basic usage — works out-of-the-box with built-in styles */}
           <Breadcrumb
             items={basicItems}
-            classes={c.breadcrumb}
             onItemClick={handleItemClick}
           />
         </DemoWrapper>
-        {clickedItem && (
-          <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
-          >
-            Clicked: {clickedItem}
-          </p>
-        )}
       </Section>
 
       {/* ─── Truncation ─────────────────────────────────────────────────── */}
@@ -764,17 +757,8 @@ const BreadcrumbDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <Breadcrumb
-            items={basicItems}
-            unstyled
-            classes={{
-              list: "flex items-center gap-2",
-              item: `text-sm ${dark ? "text-gray-400" : "text-gray-500"}`,
-              itemActive: `text-sm font-bold ${dark ? "text-white" : "text-gray-900"}`,
-              separator: dark ? "text-gray-700" : "text-gray-300",
-            }}
-            onItemClick={handleItemClick}
-          />
+          {/* Truly unstyled — no classes, bare HTML structure */}
+          <Breadcrumb items={basicItems} unstyled onItemClick={handleItemClick} />
         </DemoWrapper>
       </Section>
 
