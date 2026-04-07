@@ -38,6 +38,20 @@ const INTERACTIVE_ELEMENT_TYPES = new Set([
   "select",
 ]);
 
+/**
+ * Component: Tooltip
+ *
+ * Purpose: Accessible tooltip with configurable positioning, delays, rich content,
+ * arrows, shadows, auto-truncation, and full dark mode support.
+ *
+ * AI Usage Guidelines:
+ * - Wrap any element: `<Tooltip content="text"><button>...</button></Tooltip>`
+ * - Use `side` for placement, `align` for alignment
+ * - Use `asChild` to merge props onto the child instead of wrapping
+ * - Use `truncate` for auto-ellipsis with tooltip on overflow
+ *
+ * Reference: TOOLTIP.ai.md (this directory), src/pages/demo/TooltipDemo.tsx
+ */
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   (
     {

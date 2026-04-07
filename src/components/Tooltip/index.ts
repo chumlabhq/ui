@@ -1,3 +1,4 @@
+// AI Knowledge: See TOOLTIP.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Tooltip } from "./Tooltip";
 export type {
   TooltipProps,

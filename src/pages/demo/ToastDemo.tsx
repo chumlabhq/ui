@@ -4,7 +4,6 @@ import type { ToastPosition } from "../../components/Toast/utils/types";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -69,10 +68,9 @@ const ToastDemoContent = ({
             progress indicators, custom content, and extensive styling options.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -1031,19 +1029,43 @@ const ToastDemoContent = ({
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {/* Truly unstyled — no classes, bare HTML structure */}
           <button
             className={c.btn}
             onClick={() =>
               toast.toast({
-                type: "info",
-                message: "Unstyled toast",
-                description: "All default styles stripped — only raw HTML structure renders.",
+                type: "success",
+                message: "Custom styled toast",
+                description: "Built from scratch using unstyled + classes prop.",
                 unstyled: true,
+                classes: {
+                  container: `flex items-start gap-3 px-4 py-3 rounded-xl border shadow-lg backdrop-blur-sm ${dark ? "bg-emerald-950/90 border-emerald-800/50 text-emerald-200" : "bg-emerald-50 border-emerald-200 text-emerald-900"}`,
+                  message: "text-sm font-semibold",
+                  description: `text-xs mt-0.5 ${dark ? "text-emerald-400" : "text-emerald-700"}`,
+                  closeButton: `shrink-0 p-0.5 rounded transition-colors ${dark ? "hover:bg-emerald-800 text-emerald-400" : "hover:bg-emerald-200 text-emerald-600"}`,
+                },
               })
             }
           >
-            Unstyled Toast
+            Custom Styled
+          </button>
+          <button
+            className={c.btn}
+            onClick={() =>
+              toast.toast({
+                type: "error",
+                message: "Minimal unstyled toast",
+                description: "With a completely different visual style.",
+                unstyled: true,
+                classes: {
+                  container: `flex items-start gap-3 px-4 py-3 rounded-lg border-l-4 shadow-md ${dark ? "bg-gray-800 border-red-500 text-gray-200" : "bg-white border-red-500 text-gray-900"}`,
+                  message: "text-sm font-bold",
+                  description: `text-xs mt-0.5 ${dark ? "text-gray-400" : "text-gray-500"}`,
+                  closeButton: `shrink-0 p-0.5 rounded transition-colors ${dark ? "hover:bg-gray-700 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`,
+                },
+              })
+            }
+          >
+            Left Border Style
           </button>
         </DemoWrapper>
       </Section>

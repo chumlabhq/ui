@@ -4,7 +4,6 @@ import { Button } from "../../components/Button";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -101,10 +100,9 @@ const TooltipDemo = () => {
             on overflow.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Tooltip } from "@chumlab/ui/tooltip";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Tooltip } from "@chumlab/ui/tooltip";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -112,13 +110,19 @@ const TooltipDemo = () => {
       {/* ─── Basic Tooltip ────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="Wrap any element with Tooltip and provide content to display on hover."
+        description="Works out-of-the-box with built-in styles and dark mode. Wrap any element to show a tooltip on hover."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           {/* Basic usage — wrap any element to show a tooltip on hover */}
-          <Tooltip content="This is a basic tooltip">
+          <Tooltip content="Save your changes">
             <button className={c.trigger}>Hover me</button>
+          </Tooltip>
+          <Tooltip content="Edit profile settings" side="bottom">
+            <button className={c.trigger}>Bottom tooltip</button>
+          </Tooltip>
+          <Tooltip content="This action cannot be undone" side="right">
+            <button className={c.trigger}>Right tooltip</button>
           </Tooltip>
         </DemoWrapper>
       </Section>

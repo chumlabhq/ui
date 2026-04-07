@@ -6,6 +6,20 @@ import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED
 import { cn } from "../../utils/cn";
 import { isBrowser } from "../../utils/isBrowser";
 
+/**
+ * Component: Toast
+ *
+ * Purpose: Individual toast notification with auto-dismiss, progress bar, icons,
+ * close button, and aria-live announcements.
+ *
+ * AI Usage Guidelines:
+ * - Use via `useToast()` hook inside `<ToastProvider>`
+ * - Call `toast.success()`, `.error()`, `.warning()`, `.info()` for typed toasts
+ * - Use `content` prop for fully custom toast layout
+ * - Use `classes` prop for per-slot styling overrides
+ *
+ * Reference: TOAST.ai.md (this directory), src/pages/demo/ToastDemo.tsx
+ */
 const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   id,
   type = "info",
