@@ -25,7 +25,7 @@ export const CONTINUOUS_ANIMATION_MAP: Record<IconAnimation, string> = {
 };
 
 export const DEFAULT_BUTTON_CLASSES: Required<ButtonClasses> = {
-  root: "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+  root: "cursor-pointer text-sm font-medium px-4 py-2.5 rounded-xl transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
   content: "inline-flex items-center justify-center gap-2",
   startIcon: "inline-flex shrink-0",
   endIcon: "inline-flex shrink-0",

@@ -39,6 +39,28 @@ const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
   );
 };
 
+/**
+ * Component: Avatar
+ *
+ * Purpose:
+ * Displays a user representation as an image, initials (from name), or custom
+ * fallback content. Auto-falls back through image → fallback → initials.
+ *
+ * AI Usage Guidelines:
+ * - Use `name` for initials and `src` for images — both can coexist (image wins, initials are fallback)
+ * - Use `autoColor` for deterministic colors from the name hash
+ * - Wrap in `<AvatarGroup max={N}>` for stacked groups with overflow counting
+ * - Use `<AvatarBadge>` as a sibling inside a relative container for notifications
+ *
+ * Behavior:
+ * - Image loads: shows image. Image fails: shows initials or fallback.
+ * - `loading={true}` shows shimmer in place of content.
+ * - AvatarGroup provides size/shape/bordered via context to all children.
+ *
+ * Reference:
+ * - AVATAR.ai.md (this directory) — full AI knowledge doc with props, styling guide, patterns
+ * - src/pages/demo/AvatarDemo.tsx — live demo with all features implemented
+ */
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   (
     {

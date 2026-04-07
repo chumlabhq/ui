@@ -22,7 +22,10 @@ export { default as Avatar } from "./components/Avatar/Avatar";
 export { AvatarGroup } from "./components/Avatar/components/AvatarGroup";
 export { AvatarGroupCount } from "./components/Avatar/components/AvatarGroupCount";
 export { AvatarBadge } from "./components/Avatar/components/AvatarBadge";
-export { AvatarShimmer, AvatarGroupShimmer } from "./components/Avatar/components/AvatarShimmer";
+export {
+  AvatarShimmer,
+  AvatarGroupShimmer,
+} from "./components/Avatar/components/AvatarShimmer";
 export type {
   AvatarProps,
   AvatarGroupProps,
@@ -67,7 +70,10 @@ export type {
 } from "./components/Button/utils/types";
 
 // ─── RadioButton ─────────────────────────────────────────────────────────────
-export { default as RadioGroup, RadioButton } from "./components/RadioButton/RadioButton";
+export {
+  default as RadioGroup,
+  RadioButton,
+} from "./components/RadioButton/RadioButton";
 export type {
   RadioGroupProps,
   RadioButtonProps,
@@ -97,7 +103,10 @@ export type {
 // ─── CountryFlag ─────────────────────────────────────────────────────────────
 export { CountryFlag } from "./components/CountryFlag";
 export { CountryFlagGroup } from "./components/CountryFlag/components/CountryFlagGroup";
-export { CountryFlagShimmer, CountryFlagGroupShimmer } from "./components/CountryFlag/components/CountryFlagShimmer";
+export {
+  CountryFlagShimmer,
+  CountryFlagGroupShimmer,
+} from "./components/CountryFlag/components/CountryFlagShimmer";
 export type {
   CountryFlagProps,
   CountryFlagGroupProps,
@@ -176,7 +185,10 @@ export type {
 
 // ─── Slider ──────────────────────────────────────────────────────────────────
 export { default as Slider } from "./components/Slider/Slider";
-export { DEFAULT_SLIDER_CLASSES, UNSTYLED_SLIDER_CLASSES } from "./components/Slider/utils/constants";
+export {
+  DEFAULT_SLIDER_CLASSES,
+  UNSTYLED_SLIDER_CLASSES,
+} from "./components/Slider/utils/constants";
 export type {
   SliderProps,
   SliderClasses,
@@ -229,7 +241,10 @@ export type {
 } from "./components/MultiSelectSearchableDropdown/utils/types";
 
 // ─── OtpInput ────────────────────────────────────────────────────────────────
-export { default as OtpInput, OtpInputLabel } from "./components/OtpInput/OtpInput";
+export {
+  default as OtpInput,
+  OtpInputLabel,
+} from "./components/OtpInput/OtpInput";
 export { PRESET_OTPINPUT_CLASSES } from "./components/OtpInput/utils/constants";
 export type {
   OtpInputProps,
@@ -285,8 +300,19 @@ export type {
 // ─── Table ───────────────────────────────────────────────────────────────────
 export { default as Table } from "./components/Table/Table";
 export { default as TableShimmer } from "./components/Table/TableShimmer";
-export { DEFAULT_ROW_OPTIONS, DEFAULT_VISIBLE_PAGE_COUNT, DEFAULT_TABLE_CLASSES, UNSTYLED_TABLE_CLASSES } from "./components/Table/constants";
-export { getColumnId, getSortDirection, isInteractiveElement, exportTableToCSV, copyToClipboard } from "./components/Table/utils";
+export {
+  DEFAULT_ROW_OPTIONS,
+  DEFAULT_VISIBLE_PAGE_COUNT,
+  DEFAULT_TABLE_CLASSES,
+  UNSTYLED_TABLE_CLASSES,
+} from "./components/Table/constants";
+export {
+  getColumnId,
+  getSortDirection,
+  isInteractiveElement,
+  exportTableToCSV,
+  copyToClipboard,
+} from "./components/Table/utils";
 export type {
   TableProps,
   TableClasses,
@@ -308,7 +334,10 @@ export type {
 } from "./components/TabPanel/utils/types";
 
 // ─── TextArea ────────────────────────────────────────────────────────────────
-export { default as TextArea, TextAreaLabel } from "./components/TextArea/TextArea";
+export {
+  default as TextArea,
+  TextAreaLabel,
+} from "./components/TextArea/TextArea";
 export type {
   TextAreaProps,
   TextAreaSize,
@@ -357,7 +386,7 @@ export type {
 } from "./components/Tooltip/utils/types";
 
 // ─── Brand ──────────────────────────────────────────────────────────────────
-export { LogoMark, LogoWordmark, LogoFull } from "./components/brand";
+export { LogoMark, LogoWordmark, LogoFull } from "./components/BrandLogo";
 
 // ─── Utilities ───────────────────────────────────────────────────────────────
 export { cn } from "./utils/cn";

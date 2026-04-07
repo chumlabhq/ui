@@ -254,12 +254,15 @@ const ButtonDemo = () => {
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple button with default behavior."
+        description="The component provides structure (padding, focus ring, disabled state). Pass a className for visual styling."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {/* Basic usage — works out-of-the-box with built-in focus styles */}
-          <Button>Click Me</Button>
+          {/* Basic usage — className provides the visual theme */}
+          <Button className={c.primary}>Primary</Button>
+          <Button className={c.secondary}>Secondary</Button>
+          <Button className={c.outline}>Outline</Button>
+          <Button className={c.ghost}>Ghost</Button>
         </DemoWrapper>
       </Section>
 

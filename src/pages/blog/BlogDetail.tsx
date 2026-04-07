@@ -1,6 +1,6 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { LogoMark } from "../../components/brand/Logo";
+import { LogoMark } from "../../components/BrandLogo/Logo";
 import { getBlogById } from "./blogData";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import type { BlogSection } from "./blogData";
@@ -278,8 +278,21 @@ export default function BlogDetail() {
                 >
                   Get Started
                 </Link>
-                <button onClick={() => setMenuOpen(true)} className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1" aria-label="Open menu">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <button
+                  onClick={() => setMenuOpen(true)}
+                  className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1"
+                  aria-label="Open menu"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <line x1="3" y1="12" x2="21" y2="12" />
                     <line x1="3" y1="18" x2="21" y2="18" />
@@ -292,20 +305,62 @@ export default function BlogDetail() {
 
         {menuOpen && (
           <div className="fixed inset-0 z-[60] sm:hidden">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} />
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setMenuOpen(false)}
+            />
             <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.06] p-6 flex flex-col gap-1">
               <div className="flex justify-end mb-6">
-                <button onClick={() => setMenuOpen(false)} className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors" aria-label="Close menu">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors"
+                  aria-label="Close menu"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 </button>
               </div>
-              <Link to="/accordion" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">Components</Link>
-              <Link to="/blog" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">Blog</Link>
-              <Link to="/faq" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">FAQ</Link>
-              <a href="https://github.com/chumlabhq/ui" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">GitHub</a>
+              <Link
+                to="/accordion"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                Components
+              </Link>
+              <Link
+                to="/blog"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                Blog
+              </Link>
+              <Link
+                to="/faq"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                FAQ
+              </Link>
+              <a
+                href="https://github.com/chumlabhq/ui"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                GitHub
+              </a>
             </div>
           </div>
         )}

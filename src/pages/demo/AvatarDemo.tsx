@@ -56,7 +56,7 @@ const getClasses = (dark: boolean) => ({
   note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
   fallbackBg: dark ? "bg-gray-700" : "bg-gray-100",
   stateDisplay: `text-sm font-mono ${dark ? "text-gray-400" : "text-gray-600"}`,
-  darkBg: `p-4 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-800"}`,
+  darkBg: `p-4 rounded-lg ${dark ? "bg-gray-900" : "bg-gray-900"}`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -664,27 +664,34 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Custom ring color (dark background)
+              Ring color on dark background (compare default vs matched)
             </p>
             <DemoWrapper
               isDarkMode={dark}
               layout="block"
               className="overflow-visible"
             >
-              <div className={c.darkBg}>
-                <AvatarGroup ringColor="#1f2937">
-                  <Avatar
-                    name="Alice Brown"
-                    autoColor
-                    colors={c.subtleColors}
-                  />
-                  <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
-                  <Avatar
-                    name="Charlie Davis"
-                    autoColor
-                    colors={c.subtleColors}
-                  />
-                </AvatarGroup>
+              <div className="flex items-center gap-6">
+                <div>
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (white ring)</p>
+                  <div className={c.darkBg}>
+                    <AvatarGroup>
+                      <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
+                      <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
+                      <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                    </AvatarGroup>
+                  </div>
+                </div>
+                <div>
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (#111827)</p>
+                  <div className={c.darkBg}>
+                    <AvatarGroup ringColor="#111827">
+                      <Avatar name="Alice Brown" autoColor colors={c.subtleColors} />
+                      <Avatar name="Bob Chen" autoColor colors={c.subtleColors} />
+                      <Avatar name="Charlie Davis" autoColor colors={c.subtleColors} />
+                    </AvatarGroup>
+                  </div>
+                </div>
               </div>
             </DemoWrapper>
           </div>
@@ -910,19 +917,33 @@ const AvatarDemo = () => {
         <div className="space-y-4 mt-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Group shimmer with count
+              Group shimmer with count badge (showCount)
             </p>
             <DemoWrapper isDarkMode={dark}>
-              <AvatarGroupShimmer count={4} showCount />
+              <AvatarGroupShimmer count={3} showCount />
+              <span className={`ml-3 text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>
+                3 avatars + 1 count placeholder
+              </span>
             </DemoWrapper>
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Custom ring color on dark background
+              Ring color matching dark background
             </p>
             <DemoWrapper isDarkMode={dark}>
-              <div className={c.darkBg}>
-                <AvatarGroupShimmer count={3} ringColor="#1f2937" />
+              <div className="flex items-center gap-6">
+                <div>
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (white ring)</p>
+                  <div className={c.darkBg}>
+                    <AvatarGroupShimmer count={3} />
+                  </div>
+                </div>
+                <div>
+                  <p className={`text-[10px] mb-1.5 ${c.label}`}>Matched ring (#111827)</p>
+                  <div className={c.darkBg}>
+                    <AvatarGroupShimmer count={3} ringColor="#111827" />
+                  </div>
+                </div>
               </div>
             </DemoWrapper>
           </div>

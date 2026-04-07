@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { LogoMark } from "../../components/brand/Logo";
+import { LogoMark } from "../../components/BrandLogo/Logo";
 import { BLOG_POSTS } from "./blogData";
 import { Pagination } from "../../components/Pagination";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
@@ -8,9 +8,7 @@ import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 const POSTS_PER_PAGE = 6;
 
 // Extract unique categories from blog data
-const ALL_CATEGORIES = Array.from(
-  new Set(BLOG_POSTS.map((p) => p.category))
-);
+const ALL_CATEGORIES = Array.from(new Set(BLOG_POSTS.map((p) => p.category)));
 
 // ─── Search Icon ────────────────────────────────────────────────────────────
 
@@ -124,7 +122,7 @@ export default function BlogListing() {
           p.title.toLowerCase().includes(q) ||
           p.category.toLowerCase().includes(q) ||
           p.tags.some((t) => t.toLowerCase().includes(q)) ||
-          p.excerpt.toLowerCase().includes(q)
+          p.excerpt.toLowerCase().includes(q),
       );
     }
 
@@ -139,8 +137,14 @@ export default function BlogListing() {
   }, [currentPage, filteredPosts]);
 
   // Reset to page 1 when filters change
-  const [prevFilters, setPrevFilters] = useState({ searchQuery, activeCategory });
-  if (prevFilters.searchQuery !== searchQuery || prevFilters.activeCategory !== activeCategory) {
+  const [prevFilters, setPrevFilters] = useState({
+    searchQuery,
+    activeCategory,
+  });
+  if (
+    prevFilters.searchQuery !== searchQuery ||
+    prevFilters.activeCategory !== activeCategory
+  ) {
     setPrevFilters({ searchQuery, activeCategory });
     setCurrentPage(1);
   }
@@ -153,7 +157,8 @@ export default function BlogListing() {
       return;
     }
     if (gridRef.current) {
-      const y = gridRef.current.getBoundingClientRect().top + window.scrollY - 100;
+      const y =
+        gridRef.current.getBoundingClientRect().top + window.scrollY - 100;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   }, [currentPage]);
@@ -226,8 +231,21 @@ export default function BlogListing() {
                 >
                   Get Started
                 </Link>
-                <button onClick={() => setMenuOpen(true)} className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1" aria-label="Open menu">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <button
+                  onClick={() => setMenuOpen(true)}
+                  className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1"
+                  aria-label="Open menu"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <line x1="3" y1="6" x2="21" y2="6" />
                     <line x1="3" y1="12" x2="21" y2="12" />
                     <line x1="3" y1="18" x2="21" y2="18" />
@@ -241,20 +259,62 @@ export default function BlogListing() {
         {/* Mobile menu overlay */}
         {menuOpen && (
           <div className="fixed inset-0 z-[60] sm:hidden">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuOpen(false)} />
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setMenuOpen(false)}
+            />
             <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.06] p-6 flex flex-col gap-1">
               <div className="flex justify-end mb-6">
-                <button onClick={() => setMenuOpen(false)} className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors" aria-label="Close menu">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors"
+                  aria-label="Close menu"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                   </svg>
                 </button>
               </div>
-              <Link to="/accordion" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">Components</Link>
-              <Link to="/blog" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">Blog</Link>
-              <Link to="/faq" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">FAQ</Link>
-              <a href="https://github.com/chumlabhq/ui" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors">GitHub</a>
+              <Link
+                to="/accordion"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                Components
+              </Link>
+              <Link
+                to="/blog"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                Blog
+              </Link>
+              <Link
+                to="/faq"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                FAQ
+              </Link>
+              <a
+                href="https://github.com/chumlabhq/ui"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+              >
+                GitHub
+              </a>
             </div>
           </div>
         )}
@@ -292,45 +352,47 @@ export default function BlogListing() {
 
           {/* ── FILTERS ── */}
           <section className="max-w-6xl mx-auto px-6 sm:px-8 pb-8">
-
             {/* Category pills */}
             <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
-              <button
-                onClick={() => setActiveCategory(null)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                  activeCategory === null
-                    ? "bg-blue-600 text-white cursor-pointer"
-                    : "bg-white/[0.05] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06] cursor-pointer"
-                }`}
-              >
-                All
-              </button>
-              {ALL_CATEGORIES.map((cat) => {
-                const count = BLOG_POSTS.filter((p) => p.category === cat).length;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => handleCategoryClick(cat)}
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
-                      activeCategory === cat
-                        ? "bg-blue-600 text-white"
-                        : "bg-white/[0.05] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]"
-                    }`}
-                  >
-                    {cat}
-                    <span className="ml-1.5 text-xs opacity-60">{count}</span>
-                  </button>
-                );
-              })}
-            </div>
+              <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
+                <button
+                  onClick={() => setActiveCategory(null)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                    activeCategory === null
+                      ? "bg-blue-600 text-white cursor-pointer"
+                      : "bg-white/[0.05] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06] cursor-pointer"
+                  }`}
+                >
+                  All
+                </button>
+                {ALL_CATEGORIES.map((cat) => {
+                  const count = BLOG_POSTS.filter(
+                    (p) => p.category === cat,
+                  ).length;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => handleCategoryClick(cat)}
+                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
+                        activeCategory === cat
+                          ? "bg-blue-600 text-white"
+                          : "bg-white/[0.05] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]"
+                      }`}
+                    >
+                      {cat}
+                      <span className="ml-1.5 text-xs opacity-60">{count}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Active filter info */}
             {(searchQuery || activeCategory) && (
               <div className="mt-4 flex items-center gap-3 text-sm text-gray-500">
                 <span>
-                  {filteredPosts.length} {filteredPosts.length === 1 ? "article" : "articles"} found
+                  {filteredPosts.length}{" "}
+                  {filteredPosts.length === 1 ? "article" : "articles"} found
                 </span>
                 {(searchQuery || activeCategory) && (
                   <button
@@ -348,7 +410,10 @@ export default function BlogListing() {
           </section>
 
           {/* ── BLOG GRID ── */}
-          <section ref={gridRef} className="max-w-6xl mx-auto px-6 sm:px-8 pb-8">
+          <section
+            ref={gridRef}
+            className="max-w-6xl mx-auto px-6 sm:px-8 pb-8"
+          >
             {paginatedPosts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {paginatedPosts.map((post) => (
@@ -357,7 +422,9 @@ export default function BlogListing() {
               </div>
             ) : (
               <div className="text-center py-12 sm:py-20 px-4 sm:px-0">
-                <div className="text-gray-600 text-sm sm:text-lg mb-2">No articles found</div>
+                <div className="text-gray-600 text-sm sm:text-lg mb-2">
+                  No articles found
+                </div>
                 <p className="text-gray-600 text-sm">
                   Try adjusting your search or category filter.
                 </p>
@@ -383,7 +450,8 @@ export default function BlogListing() {
                       "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-sm font-medium bg-blue-600 text-white flex items-center justify-center cursor-pointer",
                     navButton:
                       "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
-                    ellipsis: "w-10 h-10 sm:w-9 sm:h-9 flex items-center justify-center text-gray-600",
+                    ellipsis:
+                      "w-10 h-10 sm:w-9 sm:h-9 flex items-center justify-center text-gray-600",
                     selector: "",
                     selectorButton: "",
                     selectorDropdown: "",

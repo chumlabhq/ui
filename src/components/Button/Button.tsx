@@ -19,6 +19,29 @@ import { Slot } from "../../utils/Slot";
 import { cn } from "../../utils/cn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+/**
+ * Component: Button
+ *
+ * Purpose:
+ * A polymorphic, accessible button rendering as `<button>`, `<a>`, or `<span>`.
+ * Provides structural defaults (padding, focus ring, disabled) — visual theme
+ * is applied via className.
+ *
+ * AI Usage Guidelines:
+ * - Always pass className for visual styling — defaults have no colors
+ * - Use as="a" with href for links, as="span" for non-semantic triggers
+ * - Use startIcon/endIcon for icons, loading for async states
+ * - See "Common variant recipes" in BUTTON.ai.md for copy-paste className values
+ *
+ * Behavior:
+ * - className merges after defaults: cn(classes.root, fullWidth, group, className)
+ * - loading=true auto-disables and shows spinner
+ * - Icon animations via iconAnimation prop (hover or continuous)
+ *
+ * Reference:
+ * - BUTTON.ai.md (this directory) — full AI knowledge doc with variant recipes and patterns
+ * - src/pages/demo/ButtonDemo.tsx — live demo with all features implemented
+ */
 const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const {
     children,

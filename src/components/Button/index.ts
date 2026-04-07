@@ -1,3 +1,5 @@
+// AI Knowledge: See BUTTON.ai.md in this directory for full usage guide, variant recipes, styling, and patterns.
+
 export { default as Button } from "./Button";
 export { default as ButtonGroup } from "./components/ButtonGroup";
 

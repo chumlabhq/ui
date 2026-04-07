@@ -252,6 +252,28 @@ DropdownPortal.displayName = "DropdownPortal";
 
 // ─── Breadcrumb ────────────────────────────────────────────────────────────
 
+/**
+ * Component: Breadcrumb
+ *
+ * Purpose:
+ * A navigation trail showing the user's location in a page hierarchy.
+ * Automatically truncates long trails into a dropdown with keyboard navigation.
+ *
+ * AI Usage Guidelines:
+ * - Pass an `items` array — last item is always the active page
+ * - Use `maxVisibleItems` to collapse deep hierarchies
+ * - Items with `href` render as links, others as buttons
+ * - Use `onItemClick` for SPA navigation (preventDefault is handled)
+ *
+ * Behavior:
+ * - Truncation: first item + last N-1 items visible, middle items in dropdown
+ * - Dropdown: portal-rendered, keyboard navigable, closes on outside click/Escape
+ * - Disabled items: skipped in navigation, `aria-disabled`, no click handlers
+ *
+ * Reference:
+ * - BREADCRUMB.ai.md (this directory) — full AI knowledge doc with props, styling guide, patterns
+ * - src/pages/demo/BreadcrumbDemo.tsx — live demo with all features implemented
+ */
 const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
   (
     {
