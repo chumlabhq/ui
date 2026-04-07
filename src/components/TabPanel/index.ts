@@ -1,3 +1,4 @@
+// AI Knowledge: See TABPANEL.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as TabPanel } from "./TabPanel";
 export { default as TabButton } from "./components/TabButton";
 export { DEFAULT_TABPANEL_CLASSES, UNSTYLED_TABPANEL_CLASSES } from "./utils/constants";

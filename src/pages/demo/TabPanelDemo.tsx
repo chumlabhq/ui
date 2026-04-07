@@ -4,7 +4,6 @@ import type { Tab } from "../../components/TabPanel";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -358,10 +357,9 @@ const TabPanelDemo = () => {
             fallback, and both controlled and uncontrolled modes.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { TabPanel } from "@chumlab/ui/tab-panel";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { TabPanel } from "@chumlab/ui/tab-panel";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -369,7 +367,7 @@ const TabPanelDemo = () => {
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="Minimal tab panel with simple text labels."
+        description="Works out-of-the-box with built-in styles and dark mode. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>

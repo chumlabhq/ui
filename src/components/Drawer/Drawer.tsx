@@ -44,6 +44,20 @@ import { mergeRefs } from "../../utils/mergeRefs";
 
 import { isBrowser } from "../../utils/isBrowser";
 
+/**
+ * Component: Drawer
+ *
+ * Purpose: Sliding panel overlay with focus trapping, scroll lock, swipe-to-close,
+ * snap points, stacked drawer support, and accessible keyboard navigation.
+ *
+ * AI Usage Guidelines:
+ * - Use `direction` for slide direction (left/right/top/bottom)
+ * - Use DrawerHeader/Body/Footer/CloseButton as children
+ * - Use `swipeable` + `snapPoints` for bottom sheet patterns
+ * - Focus is trapped and restored automatically
+ *
+ * Reference: DRAWER.ai.md (this directory), src/pages/demo/DrawerDemo.tsx
+ */
 const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (
     {
@@ -525,7 +539,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               ref={mergedPanelRef}
               role="dialog"
               aria-modal={modal || undefined}
-              aria-label={ariaLabel}
+              aria-label={ariaLabel ?? (!ariaLabelledBy && !titleId ? "Dialog" : undefined)}
               aria-labelledby={
                 ariaLabelledBy ?? (!ariaLabel ? titleId : undefined)
               }

@@ -1294,18 +1294,30 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Truly unstyled — no classes at all, bare HTML structure */}
-          <Accordion type="single" collapsible unstyled>
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="unstyled-1"
+            unstyled
+            classes={{
+              root: "w-full divide-y divide-gray-200 dark:divide-gray-700",
+              item: "",
+              trigger: `w-full flex items-center justify-between py-3 px-4 text-left text-sm font-medium cursor-pointer transition-colors ${dark ? "text-gray-200 hover:bg-gray-800" : "text-gray-800 hover:bg-gray-50"}`,
+              content: `text-sm px-4 pb-3 ${dark ? "text-gray-400" : "text-gray-600"}`,
+              contentWrapper: "overflow-hidden",
+              icon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-500" : "text-gray-400"}`,
+            }}
+          >
             <AccordionItem value="unstyled-1">
-              <AccordionTrigger>Unstyled Item</AccordionTrigger>
+              <AccordionTrigger>Custom styled item</AccordionTrigger>
               <AccordionContent>
-                This accordion has unstyled=true with no classes prop — only the raw HTML structure renders.
+                This accordion uses unstyled + classes to build a completely custom look.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="unstyled-2">
-              <AccordionTrigger>Another Unstyled Item</AccordionTrigger>
+              <AccordionTrigger>Another custom item</AccordionTrigger>
               <AccordionContent>
-                Compare this with Basic Usage above to see the difference.
+                Every slot is styled from scratch via the classes prop.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

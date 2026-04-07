@@ -3,7 +3,6 @@ import { RadioGroup, RadioButton } from "../../components/RadioButton";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -165,10 +164,9 @@ const RadioButtonDemo = () => {
             radio inputs.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -176,15 +174,21 @@ const RadioButtonDemo = () => {
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple radio group with three options."
+        description="Works out-of-the-box with built-in styles and dark mode. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           {/* Basic usage — works out-of-the-box with built-in styles */}
-          <RadioGroup name="basic" defaultValue="option-a">
-            <RadioButton value="option-a" label="Option A" />
-            <RadioButton value="option-b" label="Option B" />
-            <RadioButton value="option-c" label="Option C" />
+          <RadioGroup
+            name="basic"
+            defaultValue="email"
+            label="Notification preference"
+            description="Choose how you'd like to receive updates"
+          >
+            <RadioButton value="email" label="Email" description="Receive updates via email" />
+            <RadioButton value="sms" label="SMS" description="Text messages to your phone" />
+            <RadioButton value="push" label="Push notifications" description="In-app and browser alerts" />
+            <RadioButton value="none" label="None" description="Opt out of all notifications" disabled />
           </RadioGroup>
         </DemoWrapper>
       </Section>
@@ -355,22 +359,6 @@ const RadioButtonDemo = () => {
             </div>
           </div>
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`{/* Outlined: transparent bg, colored inner dot */}
-<RadioButton
-  value="a"
-  label="Option A"
-  classes={{
-    radio: "...",
-    checked: "border-indigo-600 bg-transparent",
-    unchecked: "bg-transparent border-gray-300",
-  }}
-  checkedIcon={
-    <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 block" />
-  }
-/>`}
-        />
       </Section>
 
       {/* ─── Custom Colors ────────────────────────────────────────────── */}
@@ -406,17 +394,6 @@ const RadioButtonDemo = () => {
             </RadioGroup>
           </div>
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<RadioButton
-  value="a"
-  label="Green"
-  classes={{
-    ...baseClasses,
-    checked: "bg-emerald-600 border-emerald-600",
-  }}
-/>`}
-        />
       </Section>
 
       {/* ─── Custom Icons ─────────────────────────────────────────────── */}
@@ -526,18 +503,6 @@ const RadioButtonDemo = () => {
             </div>
           </div>
         </DemoWrapper>
-        <CodeBlock
-          isDarkMode={dark}
-          code={`<RadioButton
-  value="a"
-  label="Favorite option"
-  checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-  classes={{
-    ...baseClasses,
-    checked: "bg-rose-500 border-rose-500",
-  }}
-/>`}
-        />
       </Section>
 
       {/* ─── Classes System ───────────────────────────────────────────── */}
@@ -804,10 +769,38 @@ const RadioButtonDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <RadioGroup name="unstyled" defaultValue="custom-a" unstyled>
-            <RadioButton value="custom-a" label="Unstyled A" />
-            <RadioButton value="custom-b" label="Unstyled B" />
+          <RadioGroup
+            name="unstyled"
+            defaultValue="custom-a"
+            unstyled
+            classes={{
+              root: "flex flex-col gap-3",
+            }}
+          >
+            <RadioButton
+              value="custom-a"
+              label="Card option A"
+              description="First custom styled option"
+              classes={{
+                root: `flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-colors ${dark ? "border-gray-700 hover:border-violet-500" : "border-gray-200 hover:border-violet-400"}`,
+                radio: `w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${dark ? "border-gray-600" : "border-gray-300"}`,
+                checked: `${dark ? "border-violet-400 bg-violet-500" : "border-violet-600 bg-violet-600"}`,
+                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`,
+                description: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
+              }}
+            />
+            <RadioButton
+              value="custom-b"
+              label="Card option B"
+              description="Second custom styled option"
+              classes={{
+                root: `flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-colors ${dark ? "border-gray-700 hover:border-violet-500" : "border-gray-200 hover:border-violet-400"}`,
+                radio: `w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${dark ? "border-gray-600" : "border-gray-300"}`,
+                checked: `${dark ? "border-violet-400 bg-violet-500" : "border-violet-600 bg-violet-600"}`,
+                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`,
+                description: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
+              }}
+            />
           </RadioGroup>
         </DemoWrapper>
       </Section>

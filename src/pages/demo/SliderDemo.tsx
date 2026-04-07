@@ -619,11 +619,22 @@ const SliderDemo = () => {
       </Section>
 
       {/* ── Unstyled ─────────────────────────────────────────────────── */}
-      <Section title="Unstyled" description="Set unstyled to remove all default classes. Build from scratch." isDarkMode={dark}>
+      <Section title="Unstyled" description="Set unstyled to remove all default classes. Provide your own styling via the classes prop." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full max-w-sm">
-            {/* Truly unstyled — no classes, bare HTML structure */}
-            <Slider defaultValue={50} unstyled />
+            <Slider
+              label="Custom slider"
+              defaultValue={50}
+              unstyled
+              classes={{
+                root: "flex flex-col gap-2",
+                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+                wrapper: "relative h-6 select-none touch-none",
+                track: `absolute top-1/2 -translate-y-1/2 w-full h-2 rounded-full ${dark ? "bg-gray-700" : "bg-gray-200"}`,
+                range: `absolute h-2 rounded-full top-1/2 -translate-y-1/2 ${dark ? "bg-emerald-400" : "bg-emerald-500"}`,
+                thumb: `absolute w-5 h-5 rounded-full border-2 shadow-md cursor-grab ${dark ? "bg-gray-200 border-emerald-400" : "bg-white border-emerald-500"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500`,
+              }}
+            />
           </div>
         </DemoWrapper>
       </Section>

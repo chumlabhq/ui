@@ -474,8 +474,18 @@ const CountryFlagDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <CountryFlag code="us" size={48} unstyled />
+          {["us", "gb", "jp", "de"].map((code) => (
+            <CountryFlag
+              key={code}
+              code={code}
+              size={48}
+              unstyled
+              classes={{
+                root: `inline-flex items-center justify-center overflow-hidden rounded-lg border-2 shadow-sm ${dark ? "border-gray-600" : "border-gray-200"}`,
+                image: "w-full h-full object-cover",
+              }}
+            />
+          ))}
         </DemoWrapper>
       </Section>
 

@@ -9,7 +9,6 @@ import {
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -155,10 +154,9 @@ const DrawerDemo = () => {
             accessible keyboard navigation.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import {\n  Drawer, DrawerHeader, DrawerBody,\n  DrawerFooter, DrawerCloseButton,\n} from "@chumlab/ui/drawer";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerCloseButton } from "@chumlab/ui/drawer";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -166,7 +164,7 @@ const DrawerDemo = () => {
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple drawer with header, body, footer, and close button."
+        description="Works out-of-the-box with built-in styles, overlay, focus trapping, and dark mode. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -626,20 +624,40 @@ const DrawerDemo = () => {
             Open Unstyled
           </button>
         </DemoWrapper>
-        {/* Truly unstyled — no classes, bare HTML structure */}
         <Drawer
           open={unstyledDemo.open}
           onOpenChange={unstyledDemo.onOpenChange}
           unstyled
           direction="right"
-          size="320px"
+          size="360px"
+          classes={{
+            root: "z-[9999]",
+            overlay: `fixed inset-0 transition-opacity ${dark ? "bg-black/60" : "bg-black/40"} backdrop-blur-sm`,
+            panel: `fixed z-[9999] shadow-2xl ${dark ? "bg-gray-900 border-l border-gray-700" : "bg-white border-l border-gray-200"}`,
+          }}
         >
-          <div className="p-5">
-            <h2 className="text-lg font-bold mb-2">Unstyled Drawer</h2>
-            <p className="text-sm">All default classes stripped. Only raw HTML structure renders.</p>
-            <button onClick={unstyledDemo.onClose} className="mt-4 px-3 py-1 text-sm border rounded">
-              Close
-            </button>
+          <div className="flex flex-col h-full">
+            <div className={`flex items-center justify-between px-5 py-4 border-b ${dark ? "border-gray-700" : "border-gray-200"}`}>
+              <h2 className={`text-lg font-bold ${dark ? "text-white" : "text-gray-900"}`}>Custom Drawer</h2>
+              <button
+                onClick={unstyledDemo.onClose}
+                className={`p-1.5 rounded-lg transition-colors ${dark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`}
+                aria-label="Close"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+              </button>
+            </div>
+            <div className={`flex-1 px-5 py-4 text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
+              <p>This drawer uses <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}>unstyled</code> + <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}>classes</code> to build a completely custom look.</p>
+            </div>
+            <div className={`px-5 py-4 border-t ${dark ? "border-gray-700" : "border-gray-200"}`}>
+              <button
+                onClick={unstyledDemo.onClose}
+                className={`w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+              >
+                Done
+              </button>
+            </div>
           </div>
         </Drawer>
       </Section>

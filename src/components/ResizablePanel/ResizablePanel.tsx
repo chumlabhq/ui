@@ -20,6 +20,13 @@ import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import { isBrowser } from "../../utils/isBrowser";
 
+/**
+ * Component: ResizablePanel
+ *
+ * Purpose: Draggable resizable panel with constraints, keyboard resizing, and WAI-ARIA separator.
+ *
+ * Reference: RESIZABLEPANEL.ai.md (this directory), src/pages/demo/ResizablePanelDemo.tsx
+ */
 const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
   (props, ref) => {
     const {

@@ -16,6 +16,14 @@ import { useReducedMotion } from "../../utils/useReducedMotion";
 import TabButton from "./components/TabButton";
 import { Tooltip } from "../Tooltip";
 
+/**
+ * Component: TabPanel
+ *
+ * Purpose: Accessible tabbed interface with icons, badges, closable tabs, vertical orientation,
+ * lazy loading, and roving tabindex keyboard navigation.
+ *
+ * Reference: TABPANEL.ai.md (this directory), src/pages/demo/TabPanelDemo.tsx
+ */
 const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
   (
     {

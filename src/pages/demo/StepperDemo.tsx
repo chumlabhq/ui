@@ -8,7 +8,6 @@ import type {
 import {
   Section,
   DemoWrapper,
-  CodeBlock,
   PropsTable,
   PropRow,
   DocControlledPattern,
@@ -263,10 +262,9 @@ const StepperDemo = () => {
             steps, and focus-visible ring for keyboard accessibility.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Stepper } from "@chumlab/ui/stepper";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Stepper } from "@chumlab/ui/stepper";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -274,7 +272,7 @@ const StepperDemo = () => {
       {/* ─── Basic ────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="Default numbered variant with horizontal layout. Click a step or use the buttons to navigate."
+        description="Works out-of-the-box with built-in styles and dark mode. Click a step or use the buttons to navigate. No custom classes needed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -839,12 +837,22 @@ const StepperDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          {/* Truly unstyled — no classes, bare HTML structure */}
           <Stepper
             steps={basicSteps}
             value={2}
             onValueChange={() => {}}
             unstyled
+            classes={{
+              list: "flex items-center gap-4",
+              step: "flex items-center gap-2",
+              indicator: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 ${dark ? "border-gray-600 text-gray-400" : "border-gray-300 text-gray-500"}`,
+              indicatorActive: `${dark ? "border-violet-400 text-violet-400 bg-violet-900/30" : "border-violet-600 text-violet-600 bg-violet-50"}`,
+              indicatorCompleted: `${dark ? "border-emerald-400 bg-emerald-500 text-white" : "border-emerald-600 bg-emerald-600 text-white"}`,
+              label: `text-sm ${dark ? "text-gray-400" : "text-gray-600"}`,
+              labelActive: `font-semibold ${dark ? "text-white" : "text-gray-900"}`,
+              connector: `flex-1 h-0.5 ${dark ? "bg-gray-700" : "bg-gray-200"}`,
+              connectorCompleted: `${dark ? "bg-emerald-400" : "bg-emerald-500"}`,
+            }}
           />
         </DemoWrapper>
       </Section>

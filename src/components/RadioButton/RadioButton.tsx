@@ -45,6 +45,14 @@ function useRadioGroupContext() {
 
 // ─── RadioGroup ───────────────────────────────────────────────────────────────
 
+/**
+ * Component: RadioGroup + RadioButton
+ *
+ * Purpose: Radio button group with labels, descriptions, custom icons, sizes, and validation.
+ * Uses native <input type="radio"> for full browser keyboard support.
+ *
+ * Reference: RADIOBUTTON.ai.md (this directory), src/pages/demo/RadioButtonDemo.tsx
+ */
 const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   (
     {
@@ -63,7 +71,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       success = false,
       successMessage,
       loading = false,
-      size,
+      size = "md",
       orientation = "vertical",
       classes: classesProp,
       unstyled = false,
@@ -307,7 +315,6 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
             onChange={handleChange}
             onFocus={ctx.onFocus}
             onBlur={ctx.onBlur}
-            aria-checked={isChecked}
             style={{
               position: "absolute",
               inset: 0,

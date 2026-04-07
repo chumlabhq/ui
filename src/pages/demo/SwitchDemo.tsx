@@ -3,7 +3,6 @@ import { Switch } from "../../components/Switch";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -142,10 +141,9 @@ const SwitchDemo = () => {
             customizable via the classes slot system.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Switch } from "@chumlab/ui/switch";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Switch } from "@chumlab/ui/switch";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -153,16 +151,26 @@ const SwitchDemo = () => {
       {/* ── Basic ──────────────────────────────────────────────────────── */}
       <Section
         title="Basic Usage"
-        description="A simple switch with no visible label. Use aria-label for accessibility."
+        description="Works out-of-the-box with built-in styles and dark mode. No custom classes needed."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          {/* Basic usage — works out-of-the-box with built-in styles */}
-          <Switch
-            aria-label="Toggle feature"
-            checked={basicSwitch}
-            onValueChange={setBasicSwitch}
-          />
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-4">
+            {/* Basic usage — works out-of-the-box with built-in styles */}
+            <Switch
+              label="Email notifications"
+              checked={basicSwitch}
+              onValueChange={setBasicSwitch}
+            />
+            <Switch
+              label="Dark mode"
+              defaultChecked
+            />
+            <Switch
+              label="Maintenance mode"
+              disabled
+            />
+          </div>
         </DemoWrapper>
       </Section>
 
@@ -336,13 +344,6 @@ const SwitchDemo = () => {
             classes={c.switch}
           />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<Switch
-  label="Email notifications"
-  checked={checked}
-  onValueChange={setChecked}
-  success={checked}
-  successMessage="Notifications are enabled"
-/>`} />
       </Section>
 
       {/* ── Loading State ────────────────────────────────────────────── */}
@@ -357,8 +358,6 @@ const SwitchDemo = () => {
             <Switch label="Not loading" checked classes={c.switch} />
           </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<Switch label="Sync in progress" loading checked />
-<Switch label="Not loading" checked />`} />
       </Section>
 
       {/* ── onValueChange Callback ───────────────────────────────────── */}
@@ -373,8 +372,6 @@ const SwitchDemo = () => {
             <p className={`text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`}>Value: {String(callbackSwitch)}</p>
           </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`const [value, setValue] = useState(false);
-<Switch label="Using onValueChange" onValueChange={setValue} checked={value} />`} />
       </Section>
 
       {/* ── Custom Colors ──────────────────────────────────────────────── */}
@@ -684,14 +681,36 @@ const SwitchDemo = () => {
         description="Use unstyled to strip all default classes and start from scratch."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <Switch
-            label="Unstyled switch"
-            checked={unstyledSwitch}
-            onValueChange={setUnstyledSwitch}
-            unstyled
-          />
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-4">
+            <Switch
+              label="Pill toggle"
+              checked={unstyledSwitch}
+              onValueChange={setUnstyledSwitch}
+              unstyled
+              classes={{
+                root: "flex items-center gap-3",
+                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+                tracker: `relative inline-flex items-center w-11 h-6 rounded-full cursor-pointer transition-colors ${dark ? "bg-gray-700" : "bg-gray-300"}`,
+                checkedTracker: `${dark ? "bg-teal-500" : "bg-teal-600"}`,
+                thumb: "absolute w-5 h-5 rounded-full bg-white shadow-sm transition-transform translate-x-0.5",
+                checkedThumb: "translate-x-[22px]",
+              }}
+            />
+            <Switch
+              label="Square toggle"
+              defaultChecked
+              unstyled
+              classes={{
+                root: "flex items-center gap-3",
+                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+                tracker: `relative inline-flex items-center w-12 h-7 rounded-md cursor-pointer transition-colors ${dark ? "bg-gray-700" : "bg-gray-300"}`,
+                checkedTracker: `${dark ? "bg-indigo-500" : "bg-indigo-600"}`,
+                thumb: "absolute w-5 h-5 rounded-sm bg-white shadow-sm transition-transform translate-x-1",
+                checkedThumb: "translate-x-[22px]",
+              }}
+            />
+          </div>
         </DemoWrapper>
       </Section>
 

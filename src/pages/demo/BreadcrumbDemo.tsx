@@ -755,8 +755,17 @@ const BreadcrumbDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <Breadcrumb items={basicItems} unstyled onItemClick={handleItemClick} />
+          <Breadcrumb
+            items={basicItems}
+            unstyled
+            onItemClick={handleItemClick}
+            classes={{
+              list: "flex items-center gap-1",
+              item: `px-2 py-1 text-sm rounded cursor-pointer transition-colors ${dark ? "text-gray-300 hover:text-white hover:bg-gray-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`,
+              itemActive: `px-2 py-1 text-sm font-semibold ${dark ? "text-white" : "text-gray-900"}`,
+              separator: `mx-1 ${dark ? "text-gray-600" : "text-gray-300"}`,
+            }}
+          />
         </DemoWrapper>
       </Section>
 

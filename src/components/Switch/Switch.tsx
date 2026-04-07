@@ -5,6 +5,20 @@ import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { cn } from "../../utils/cn";
 
+/**
+ * Component: Switch
+ *
+ * Purpose: Toggle switch for binary on/off states with labels, validation,
+ * loading, custom thumb icons, and full WAI-ARIA switch pattern.
+ *
+ * AI Usage Guidelines:
+ * - Use `label` for visible labeling, or `aria-label` for icon-only
+ * - Use `checked` + `onValueChange` for controlled mode
+ * - Use `checkedIcon`/`uncheckedIcon` for thumb icons
+ * - CSS custom properties available for easy theming
+ *
+ * Reference: SWITCH.ai.md (this directory), src/pages/demo/SwitchDemo.tsx
+ */
 const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
   (
     {
@@ -92,6 +106,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     );
 
     const transitionStyle = useMemo(() => {
+      if (prefersReducedMotion) return { transitionDuration: "0ms" };
       if (!transitionDuration && !transitionTimingFunction) return undefined;
       return {
         transitionDuration: transitionDuration
@@ -99,7 +114,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           : undefined,
         transitionTimingFunction: transitionTimingFunction,
       };
-    }, [transitionDuration, transitionTimingFunction]);
+    }, [transitionDuration, transitionTimingFunction, prefersReducedMotion]);
 
     const hasLabelContent =
       label || description || renderLabel || renderDescription;

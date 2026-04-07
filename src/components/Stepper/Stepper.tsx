@@ -507,6 +507,20 @@ const StepItem = memo(function StepItem({
   );
 });
 
+/**
+ * Component: Stepper
+ *
+ * Purpose: Step progress indicator with numbered/icon variants, horizontal/vertical
+ * layouts, clickable steps, and keyboard navigation.
+ *
+ * AI Usage Guidelines:
+ * - Pass `steps` array with `id` and `label`
+ * - Use `value` + `onValueChange` for controlled active step
+ * - Use `isStepClickable` to control which steps are interactive
+ * - Use `variant="icon"` for icon-based indicators
+ *
+ * Reference: STEPPER.ai.md (this directory), src/pages/demo/StepperDemo.tsx
+ */
 const Stepper = forwardRef<HTMLDivElement, StepperProps>(
   (
     {
