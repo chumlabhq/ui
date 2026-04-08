@@ -135,7 +135,7 @@ const itemsWithDisabled: BreadcrumbItem[] = [
 
 const getClasses = (dark: boolean) => ({
   breadcrumb: {
-    list: "flex items-center gap-1",
+    list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border-none rounded ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
     itemActive: `flex items-center gap-1 px-2 py-1 text-sm font-medium bg-transparent border-none cursor-default ${dark ? "text-white" : "text-gray-900"}`,
     itemDisabled: dark
@@ -152,7 +152,7 @@ const getClasses = (dark: boolean) => ({
       : "opacity-50 cursor-not-allowed",
   },
   pill: {
-    list: "flex items-center gap-2",
+    list: "flex flex-wrap items-center gap-2",
     item: `flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all border cursor-pointer bg-transparent ${dark ? "text-gray-400 hover:text-gray-200 bg-gray-800 hover:bg-gray-700 border-gray-700" : "text-gray-600 hover:text-gray-900 bg-white hover:bg-gray-50 border-gray-200 hover:shadow-sm"}`,
     itemActive: `flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full border-none cursor-default shadow-md ${dark ? "text-white bg-linear-to-r from-indigo-600 to-purple-600" : "text-white bg-linear-to-r from-indigo-500 to-purple-500"}`,
     separator: dark ? "text-gray-600" : "text-gray-300",
@@ -162,7 +162,7 @@ const getClasses = (dark: boolean) => ({
   },
   colored: {
     root: `p-4 rounded-lg ${dark ? "bg-blue-950" : "bg-blue-50"}`,
-    list: "flex items-center gap-1",
+    list: "flex flex-wrap items-center gap-1",
     item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border-none ${dark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900" : "text-blue-600 hover:text-blue-800 hover:bg-blue-100"}`,
     itemActive: `flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full border-none cursor-default ${dark ? "text-white bg-blue-600" : "text-white bg-blue-600"}`,
     separator: dark ? "text-blue-700" : "text-blue-300",
@@ -221,7 +221,7 @@ const BreadcrumbDemo = () => {
             separators, and full keyboard navigation.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}</code>
             </pre>
           </div>
@@ -760,7 +760,7 @@ const BreadcrumbDemo = () => {
             unstyled
             onItemClick={handleItemClick}
             classes={{
-              list: "flex items-center gap-1",
+              list: "flex flex-wrap items-center gap-1",
               item: `px-2 py-1 text-sm rounded cursor-pointer transition-colors ${dark ? "text-gray-300 hover:text-white hover:bg-gray-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`,
               itemActive: `px-2 py-1 text-sm font-semibold ${dark ? "text-white" : "text-gray-900"}`,
               separator: `mx-1 ${dark ? "text-gray-600" : "text-gray-300"}`,

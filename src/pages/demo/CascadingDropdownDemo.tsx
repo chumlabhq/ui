@@ -687,7 +687,7 @@ const CascadingDropdownDemo = () => {
             and full keyboard navigation.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}</code>
             </pre>
           </div>
@@ -701,7 +701,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <CascadingDropdown
               options={categoryOptions}
@@ -720,7 +720,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={regionOptionsSingle}
               value={asyncSingleValue}
@@ -752,7 +752,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={regionOptionsMulti}
               value={asyncMultiValue}
@@ -785,7 +785,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={prefetchOptions}
               value={prefetchValue}
@@ -829,7 +829,7 @@ const CascadingDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div
-            className="w-96"
+            className="w-full sm:max-w-96"
             onClick={() => setLoadOnOpenDropdownClicked(true)}
           >
             <CascadingDropdown
@@ -890,7 +890,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={basicValue}
@@ -909,7 +909,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={filterOptions}
               value={multiValue}
@@ -929,7 +929,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-80">
+          <div className="w-full sm:max-w-80">
             <CascadingDropdown
               options={mixedOptions}
               value={mixedValue}
@@ -949,7 +949,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-64">
+          <div className="w-full sm:max-w-64">
             <CascadingDropdown
               options={simpleOptions}
               value={simpleValue}
@@ -968,7 +968,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               label="Product Category"
               options={categoryOptions}
@@ -988,7 +988,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               label="Product Category"
               description="Choose the category that best fits your product."
@@ -1009,7 +1009,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               label="Product Category"
               options={categoryOptions}
@@ -1042,7 +1042,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               label="Required Category"
               required
@@ -1076,7 +1076,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={disabledDropdownValue}
@@ -1098,7 +1098,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={disabledOptions}
               value={disabledValue}
@@ -1117,7 +1117,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={leftPositionValue}
@@ -1140,7 +1140,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={noCloseValue}
@@ -1160,7 +1160,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               defaultValue={uncontrolledDefaultValue}
@@ -1178,7 +1178,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={searchableCategoryOptions}
               value={syncSearchValue}
@@ -1200,7 +1200,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={regionOptionsMulti}
               value={asyncSearchValue}
@@ -1226,7 +1226,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={searchableCategoryOptions}
               value={styledSearchValue1}
@@ -1287,7 +1287,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-96">
+          <div className="w-full sm:max-w-96">
             <CascadingDropdown
               options={searchableCategoryOptions}
               value={styledSearchValue2}
@@ -1348,7 +1348,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={darkThemeValue}
@@ -1367,7 +1367,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={filterOptions}
               value={darkThemeMultiValue}
@@ -1387,7 +1387,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={purpleThemeValue}
@@ -1406,7 +1406,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={filterOptions}
               value={purpleThemeMultiValue}
@@ -1426,7 +1426,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={filterOptions}
               value={greenCheckboxValue}
@@ -1453,7 +1453,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={filterOptions}
               value={orangeCheckboxValue}
@@ -1480,7 +1480,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={filterOptions}
               value={customCheckboxIconValue}
@@ -1515,7 +1515,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <CascadingDropdown
               options={categoryOptions}
               value={customSelectedIconValue}
@@ -1550,7 +1550,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-full max-w-md">
+          <div className="w-full sm:max-w-md">
             <CascadingDropdown
               options={categoryOptions}
               value={{}}
@@ -1650,7 +1650,7 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">
-          <div>
+          <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
             <CascadingDropdown
               options={categoryOptions}
@@ -1660,7 +1660,7 @@ const CascadingDropdownDemo = () => {
               classes={c.cascading}
             />
           </div>
-          <div>
+          <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Borderless</p>
             <CascadingDropdown
               options={categoryOptions}
@@ -1677,7 +1677,7 @@ const CascadingDropdownDemo = () => {
               }}
             />
           </div>
-          <div>
+          <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Bottom border only</p>
             <CascadingDropdown
               options={categoryOptions}
@@ -1694,7 +1694,7 @@ const CascadingDropdownDemo = () => {
               }}
             />
           </div>
-          <div>
+          <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Ghost</p>
             <CascadingDropdown
               options={categoryOptions}
@@ -1711,7 +1711,7 @@ const CascadingDropdownDemo = () => {
               }}
             />
           </div>
-          <div>
+          <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Pill</p>
             <CascadingDropdown
               options={categoryOptions}
@@ -1720,7 +1720,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer ${
+                trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer ${
                   dark
                     ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
                     : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"

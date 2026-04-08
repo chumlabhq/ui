@@ -237,7 +237,7 @@ const TextAreaDemo = () => {
           </p>
           <div className="pt-1">
             <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
             >
               <code>{`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}</code>
             </pre>
@@ -254,7 +254,7 @@ const TextAreaDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark} layout="block">
-            <div className="flex flex-col gap-4 max-w-md">
+            <div className="flex flex-col gap-4 w-full sm:max-w-md">
               {/* Basic usage — works out-of-the-box with built-in styles */}
               <TextArea label="Message" placeholder="Write your message..." />
               <TextArea
@@ -955,7 +955,7 @@ const TextAreaDemo = () => {
                   We'd love to hear from you
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className={c.container}>
                   <label htmlFor="contact-name" className={c.textarea.label}>
                     Name

@@ -242,7 +242,7 @@ const ButtonDemo = () => {
             span), and extensive customization via the classes system.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Button, ButtonGroup } from "@chumlab/ui/button";`}</code>
             </pre>
           </div>
@@ -255,7 +255,7 @@ const ButtonDemo = () => {
         description="The component provides structure (padding, focus ring, disabled state). Pass a className for visual styling."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — className provides the visual theme */}
           <Button className={c.primary}>Primary</Button>
           <Button className={c.secondary}>Secondary</Button>
@@ -270,7 +270,7 @@ const ButtonDemo = () => {
         description="Different button styles for various use cases."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary}>Primary</Button>
           <Button className={c.secondary}>Secondary</Button>
           <Button className={c.outline}>Outline</Button>
@@ -286,7 +286,7 @@ const ButtonDemo = () => {
         description="Add leading and trailing icons using startIcon and endIcon props."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} startIcon={<PlusIcon />}>
             Add Item
           </Button>
@@ -315,7 +315,7 @@ const ButtonDemo = () => {
         description="Always provide aria-label for accessibility."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.iconOnly}
             startIcon={<SearchIcon />}
@@ -355,7 +355,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               as=&quot;button&quot; (default)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button
                 className={c.primary}
                 onClick={() => alert("Button clicked!")}
@@ -368,7 +368,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               as=&quot;a&quot; (anchor link)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button
                 as="a"
                 href="https://example.com"
@@ -404,7 +404,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               as=&quot;span&quot; (keyboard accessible)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button as="span" className={c.text}>
                 Text Button
               </Button>
@@ -427,7 +427,7 @@ const ButtonDemo = () => {
         description="Animate icons on hover using iconAnimation prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.primary}
             endIcon={<ArrowRightIcon />}
@@ -466,7 +466,7 @@ const ButtonDemo = () => {
         description="Bounce, pulse, and spin effects."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.primary}
             endIcon={<ArrowRightIcon />}
@@ -499,7 +499,7 @@ const ButtonDemo = () => {
         description='Use animateIcon="both" to animate leading and trailing icons together.'
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.primary}
             startIcon={<ArrowRightIcon />}
@@ -527,7 +527,7 @@ const ButtonDemo = () => {
         description="Set animateOnHover={false} for always-running animations."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.primary}
             endIcon={<ArrowRightIcon />}
@@ -563,7 +563,7 @@ const ButtonDemo = () => {
         description='Set reduceMotion={true} to disable all icon animations. "auto" respects prefers-reduced-motion.'
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <Button
               className={c.primary}
@@ -599,7 +599,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Default (loader on right)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button className={c.primary} loading>
                 Loading
               </Button>
@@ -612,7 +612,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               loaderPosition=&quot;left&quot;
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button className={c.primary} loading loaderPosition="left">
                 Processing
               </Button>
@@ -622,7 +622,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               With loadingText
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button className={c.outline} loading loadingText="Submitting...">
                 Submit
               </Button>
@@ -632,7 +632,7 @@ const ButtonDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Loading with icon (icon remains visible)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Button
                 className={c.success}
                 loading
@@ -651,7 +651,7 @@ const ButtonDemo = () => {
         description="Provide a custom loader via the loader prop. Control size with loaderSize."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} loading loaderSize={12}>
             Small Loader
           </Button>
@@ -702,7 +702,7 @@ const ButtonDemo = () => {
         description="Click to trigger a loading state."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.primary}
             loading={loading}
@@ -723,7 +723,7 @@ const ButtonDemo = () => {
         description='Use size="sm", "md" (default), or "lg" to control button dimensions via the data-size attribute.'
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} size="sm">
             Small
           </Button>
@@ -734,7 +734,7 @@ const ButtonDemo = () => {
             Large
           </Button>
         </DemoWrapper>
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.outline} size="sm" startIcon={<PlusIcon />}>
             Small
           </Button>
@@ -753,7 +753,7 @@ const ButtonDemo = () => {
         description="Use disabled to disable the button."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} disabled>
             Disabled Primary
           </Button>
@@ -797,7 +797,7 @@ const ButtonDemo = () => {
         description="Use the classes prop to override internal element styling. Slots: root, content, startIcon, endIcon, loader."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             className={c.primary}
             classes={{
@@ -835,7 +835,7 @@ const ButtonDemo = () => {
         description="Set unstyled=true to strip all default classes. Build from scratch."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button
             unstyled
             className={`px-4 py-2 rounded-full font-bold ${dark ? "bg-linear-to-r from-purple-500 to-pink-500 text-white" : "bg-linear-to-r from-purple-500 to-pink-500 text-white"}`}
@@ -851,7 +851,7 @@ const ButtonDemo = () => {
         description="Merge button props onto a child element for maximum flexibility."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} asChild>
             <a href="https://example.com" target="_blank" rel="noreferrer">
               Link as Button
@@ -875,7 +875,7 @@ const ButtonDemo = () => {
         description="Add tooltips using the tooltip prop. Customize with tooltipProps."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Button className={c.primary} tooltip="Save your changes">
             Save
           </Button>
@@ -909,7 +909,7 @@ const ButtonDemo = () => {
         description="Control tooltip side, offset, and arrow."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["top", "right", "bottom", "left"] as const).map((side) => (
             <Button
               key={side}
@@ -1012,7 +1012,7 @@ const ButtonDemo = () => {
               e.preventDefault();
               alert("Form submitted!");
             }}
-            className="flex items-center gap-3"
+            className="flex flex-wrap items-center gap-3"
           >
             <Button className={c.primary} type="submit">
               Submit (type=submit)

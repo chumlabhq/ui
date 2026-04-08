@@ -59,7 +59,7 @@ const LoaderDemo = () => {
             <code className="text-xs">aria-label</code> out of the box.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { CircularLoader, LinearLoader, DotLoader, PulseLoader } from "@chumlab/ui/loader";`}</code>
             </pre>
           </div>
@@ -72,7 +72,7 @@ const LoaderDemo = () => {
         description="All four loader variants work out-of-the-box with built-in styles and proper aria attributes."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <CircularLoader />
           <LinearLoader />
           <DotLoader />
@@ -86,8 +86,8 @@ const LoaderDemo = () => {
         description="Four loader variants for different use cases."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-12 flex-wrap">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-6 sm:gap-12 flex-wrap">
             <div className="flex flex-col items-center gap-3">
               <CircularLoader
                 size={32}
@@ -95,7 +95,7 @@ const LoaderDemo = () => {
               />
               <span className={c.label}>Circular</span>
             </div>
-            <div className="flex flex-col items-center gap-3 w-40">
+            <div className="flex flex-col items-center gap-3 w-32 sm:w-40">
               <LinearLoader
                 className={dark ? "text-indigo-400" : "text-indigo-600"}
                 width="100%"
@@ -129,8 +129,8 @@ const LoaderDemo = () => {
         description="Use the size prop to control dimensions in pixels."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-8">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             {[16, 24, 40, 64].map((s) => (
               <div key={s} className="flex flex-col items-center gap-2">
                 <CircularLoader
@@ -150,8 +150,8 @@ const LoaderDemo = () => {
         description="The spinner uses currentColor, so you can set the color via a CSS class or inline style."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-8">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             {[
               {
                 cls: dark ? "text-indigo-400" : "text-indigo-500",
@@ -182,8 +182,8 @@ const LoaderDemo = () => {
         description="Control the animation duration in seconds. Lower values spin faster."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-8">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             {[
               { speed: 2, label: "Slow (2s)" },
               { speed: 0.75, label: "Normal (0.75s)" },
@@ -208,8 +208,8 @@ const LoaderDemo = () => {
         description="The trackColor prop sets the background circle color. By default it uses currentColor at 20% opacity."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-8">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             <div className="flex flex-col items-center gap-2">
               <CircularLoader
                 size={32}
@@ -251,8 +251,8 @@ const LoaderDemo = () => {
         description="The thickness prop controls the stroke width of both the track and the spinner arc."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-8">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-4 sm:gap-8 flex-wrap">
             {[
               { thickness: 1, label: "Thin (1)" },
               { thickness: 2, label: "Normal (2)" },
@@ -280,8 +280,8 @@ const LoaderDemo = () => {
         description="An indeterminate horizontal progress bar. Great for page-level or section-level loading states."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-md">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="w-full max-w-xs sm:max-w-md">
             <LinearLoader
               className={dark ? "text-indigo-400" : "text-indigo-600"}
               trackColor={dark ? "rgba(255,255,255,0.1)" : undefined}
@@ -296,8 +296,8 @@ const LoaderDemo = () => {
         description="The height prop controls bar thickness in pixels."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-6 w-full max-w-md">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex flex-col gap-6 w-full max-w-xs sm:max-w-md">
             {[2, 4, 8].map((h) => (
               <div key={h} className="space-y-1">
                 <span className={c.label}>{h}px</span>
@@ -318,8 +318,8 @@ const LoaderDemo = () => {
         description="Uses currentColor for the bar and a separate trackColor for the background."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-4 w-full max-w-md">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex flex-col gap-4 w-full max-w-xs sm:max-w-md">
             <LinearLoader
               className={dark ? "text-emerald-400" : "text-emerald-500"}
               trackColor={dark ? "rgba(255,255,255,0.08)" : "#d1fae5"}
@@ -342,8 +342,8 @@ const LoaderDemo = () => {
         description="Animation duration in seconds via the speed prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-4 w-full max-w-md">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex flex-col gap-4 w-full max-w-xs sm:max-w-md">
             {[
               { speed: 3, label: "Slow (3s)" },
               { speed: 1.5, label: "Normal (1.5s)" },
@@ -370,7 +370,7 @@ const LoaderDemo = () => {
         description="Three bouncing dots. A common pattern in messaging and chat interfaces."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <DotLoader
             dotSize={10}
             className={dark ? "text-gray-300" : "text-gray-700"}
@@ -384,8 +384,8 @@ const LoaderDemo = () => {
         description="Control the dot diameter, gap, and number of dots."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-10">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-6 sm:gap-10 flex-wrap">
             <div className="flex flex-col items-center gap-2">
               <DotLoader
                 dotSize={6}
@@ -427,8 +427,8 @@ const LoaderDemo = () => {
         description="Uses currentColor, so apply any color class or inline style."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-10">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-6 sm:gap-10 flex-wrap">
             {[
               {
                 cls: dark ? "text-indigo-400" : "text-indigo-500",
@@ -461,7 +461,7 @@ const LoaderDemo = () => {
         description="A pulsing dot with expanding ripple rings. Great for center-screen loading states."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <PulseLoader
             size={48}
             className={dark ? "text-indigo-400" : "text-indigo-600"}
@@ -475,8 +475,8 @@ const LoaderDemo = () => {
         description="Control the circle diameter and the number of ripple rings."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-center gap-12">
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="flex items-center gap-6 sm:gap-12 flex-wrap">
             <div className="flex flex-col items-center gap-2">
               <PulseLoader
                 size={24}
@@ -518,7 +518,7 @@ const LoaderDemo = () => {
         description="Pair loaders with text for a common loading pattern."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <CircularLoader
@@ -555,10 +555,10 @@ const LoaderDemo = () => {
         description="Real-world usage patterns showing loaders in buttons, cards, and inline alerts."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-6">
             {/* Buttons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
               <button type="button" className={c.btnDisabled} disabled>
                 <CircularLoader
                   size={16}
@@ -597,10 +597,10 @@ const LoaderDemo = () => {
               />
               <div className={`p-6 ${dark ? "bg-white/[0.02]" : "bg-white"}`}>
                 <div
-                  className={`h-4 w-48 rounded ${dark ? "bg-white/60" : "bg-gray-100"}`}
+                  className={`h-4 w-32 sm:w-48 rounded ${dark ? "bg-white/60" : "bg-gray-100"}`}
                 />
                 <div
-                  className={`mt-2 h-3 w-64 rounded ${dark ? "bg-white/[0.04]" : "bg-gray-50"}`}
+                  className={`mt-2 h-3 w-48 sm:w-64 rounded ${dark ? "bg-white/[0.04]" : "bg-gray-50"}`}
                 />
               </div>
             </div>

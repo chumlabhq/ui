@@ -52,8 +52,10 @@ export const CheckIcon = ({
 
 export const ClearIcon = ({
   className,
+  style,
 }: {
   className?: string;
+  style?: CSSProperties;
 }) => (
   <svg
     viewBox="0 0 20 20"
@@ -61,6 +63,7 @@ export const ClearIcon = ({
     width={14}
     height={14}
     className={className}
+    style={style}
     aria-hidden="true"
     focusable="false"
   >

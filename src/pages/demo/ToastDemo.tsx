@@ -61,14 +61,14 @@ const ToastDemoContent = ({
             Toast
           </h1>
           <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+            className={`text-sm leading-relaxed w-full sm:max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
           >
             A flexible, accessible notification system for displaying brief
             messages to users. Supports multiple variants, customizable durations,
             progress indicators, custom content, and extensive styling options.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}</code>
             </pre>
           </div>
@@ -81,7 +81,7 @@ const ToastDemoContent = ({
         description="Four toast types for different notification contexts: success, warning, error, and info."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — call toast methods to show notifications */}
           <button
             className={c.btnSuccess}
@@ -118,7 +118,7 @@ const ToastDemoContent = ({
         description="Add secondary text using the description prop for more context."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnSuccess}
             onClick={() =>
@@ -161,7 +161,7 @@ const ToastDemoContent = ({
         description="Control how long toasts stay visible with the duration prop (in milliseconds). Use Infinity for persistent toasts."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -215,7 +215,7 @@ const ToastDemoContent = ({
         description="Toggle the progress indicator with showProgress. The bar shows remaining time before auto-dismiss."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -247,7 +247,7 @@ const ToastDemoContent = ({
         description="Customize the progress bar with progressColor (inline style) or classes.progress (Tailwind classes)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btn}
             onClick={() =>
@@ -299,7 +299,7 @@ const ToastDemoContent = ({
         description="Toggle the close button visibility with showCloseButton prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -332,7 +332,7 @@ const ToastDemoContent = ({
         description="Control whether the auto-dismiss timer pauses when hovering over the toast."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -366,7 +366,7 @@ const ToastDemoContent = ({
         description="Enable keyboard dismissal with the dismissOnEscape prop on ToastProvider."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -404,7 +404,7 @@ const ToastDemoContent = ({
         description="Replace the default type icon with a custom icon using the icon prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -468,7 +468,7 @@ const ToastDemoContent = ({
         description="Customize the icon wrapper with classes.icon slot."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btn}
             onClick={() =>
@@ -601,7 +601,7 @@ const ToastDemoContent = ({
         description="Customize toast appearance using the classes prop with slot overrides."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btn}
             onClick={() =>
@@ -674,7 +674,7 @@ const ToastDemoContent = ({
         description="Use the style prop for inline CSS customization."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btn}
             onClick={() =>
@@ -731,7 +731,7 @@ const ToastDemoContent = ({
         description="Toast colors can be customized globally using CSS custom properties for design system integration."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnSuccess}
             onClick={() =>
@@ -761,7 +761,7 @@ const ToastDemoContent = ({
         description="Use onDismiss callback to execute code when a toast is dismissed. (onClose is deprecated — use onDismiss instead.)"
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -842,7 +842,7 @@ const ToastDemoContent = ({
         description="Toasts stack automatically. When maxToasts is exceeded, oldest toasts are dismissed."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() => {
@@ -932,7 +932,7 @@ const ToastDemoContent = ({
         description="Use toast.toast() for full configuration control, or pass a simple string for quick notifications."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btn}
             onClick={() => toast.toast("Simple string message")}
@@ -962,7 +962,7 @@ const ToastDemoContent = ({
         description="Use closeAriaLabel to provide a localized or context-specific accessible label for the close button."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btnInfo}
             onClick={() =>
@@ -995,7 +995,7 @@ const ToastDemoContent = ({
         description="Control the speed of toast enter/exit animations via animationDuration on the ToastProvider (in milliseconds). Default is 200ms."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <p
             className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
@@ -1011,7 +1011,7 @@ const ToastDemoContent = ({
         description='Customize the accessible label for the toast container region via containerAriaLabel on the ToastProvider. Defaults to "Notifications".'
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <p
             className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
           >
@@ -1028,7 +1028,7 @@ const ToastDemoContent = ({
         description="Set unstyled=true to strip all default styles and build from scratch using the classes prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             className={c.btn}
             onClick={() =>

@@ -202,14 +202,6 @@ interface ShootingStar {
   maxLife: number;
   size: number;
 }
-interface Comet {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-  active: boolean;
-}
 
 function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
   const mouse = useRef({ x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 });
@@ -237,16 +229,9 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
     }));
 
     const shootingStars: ShootingStar[] = [];
-    let ssTimer = 400;
-    const comet: Comet = {
-      x: -0.15,
-      y: 0,
-      vx: 0,
-      vy: 0,
-      life: 0,
-      active: false,
-    };
-    let cometTimer = 120;
+    let ssFromLeft = true;
+    let ssWaiting = true;
+    let ssGapTimer = 60;
     const sat = { angle: 0 };
 
     const resize = () => {
@@ -347,94 +332,37 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         ctx.fill();
       }
 
-      cometTimer--;
-      if (cometTimer <= 0 && !comet.active) {
-        comet.active = true;
-        comet.life = 0;
-        comet.x = -0.1;
-        comet.y = 0.08 + Math.random() * 0.25;
-        comet.vx = 0.45 + Math.random() * 0.3;
-        comet.vy = 0.08 + Math.random() * 0.15;
-        cometTimer = 500 + Math.random() * 600;
-      }
-      if (comet.active) {
-        comet.x += comet.vx * 0.003;
-        comet.y += comet.vy * 0.003;
-        comet.life++;
-        const cx = comet.x * w,
-          cy = comet.y * h;
-        const fade = Math.min(1, comet.life / 40);
-        const tailLen = 300 + Math.sin(t) * 40;
-        const tailX = cx - tailLen,
-          tailY = cy - tailLen * 0.25;
-        ctx.save();
-        ctx.globalAlpha = fade * 0.6;
-        const tg2 = ctx.createLinearGradient(tailX - 80, tailY, cx, cy);
-        tg2.addColorStop(0, "transparent");
-        tg2.addColorStop(0.5, "rgba(120,140,220,0.06)");
-        tg2.addColorStop(1, "rgba(180,200,255,0.15)");
-        ctx.beginPath();
-        ctx.moveTo(tailX - 80, tailY - 20);
-        ctx.quadraticCurveTo(cx - tailLen * 0.4, cy - 15, cx, cy);
-        ctx.quadraticCurveTo(
-          cx - tailLen * 0.4,
-          cy + 15,
-          tailX - 80,
-          tailY + 20,
-        );
-        ctx.closePath();
-        ctx.fillStyle = tg2;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.restore();
-        const tg = ctx.createLinearGradient(tailX, tailY, cx, cy);
-        tg.addColorStop(0, "transparent");
-        tg.addColorStop(0.4, `rgba(160,180,255,${0.12 * fade})`);
-        tg.addColorStop(0.8, `rgba(210,220,255,${0.4 * fade})`);
-        tg.addColorStop(1, `rgba(255,255,255,${0.8 * fade})`);
-        ctx.beginPath();
-        ctx.moveTo(tailX, tailY - 2);
-        ctx.quadraticCurveTo(cx - tailLen * 0.3, cy - 5, cx, cy);
-        ctx.quadraticCurveTo(cx - tailLen * 0.3, cy + 5, tailX, tailY + 2);
-        ctx.closePath();
-        ctx.fillStyle = tg;
-        ctx.fill();
-        const hg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 35);
-        hg.addColorStop(0, `rgba(220,235,255,${0.6 * fade})`);
-        hg.addColorStop(0.4, `rgba(150,180,255,${0.2 * fade})`);
-        hg.addColorStop(1, "transparent");
-        ctx.beginPath();
-        ctx.arc(cx, cy, 35, 0, 6.28);
-        ctx.fillStyle = hg;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(cx, cy, 5, 0, 6.28);
-        ctx.fillStyle = `rgba(255,255,255,${0.95 * fade})`;
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(cx, cy, 3, 0, 6.28);
-        ctx.fillStyle = `rgba(255,255,240,${fade})`;
-        ctx.fill();
-        if (comet.x > 1.3 || comet.y > 1.2) comet.active = false;
-      }
-
-      ssTimer--;
-      if (ssTimer <= 0) {
-        ssTimer = 300 + Math.floor(Math.random() * 300);
-        const startEdge = Math.random() > 0.5;
-        const sx = startEdge ? -20 : w * (0.1 + Math.random() * 0.3);
-        const sy = Math.random() * h * 0.35;
-        const angle = 0.15 + Math.random() * 0.35;
-        const speed = 8 + Math.random() * 6;
-        shootingStars.push({
-          x: sx,
-          y: sy,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 0,
-          maxLife: 999,
-          size: 2 + Math.random() * 1.5,
-        });
+      // Spawn next shooting star only after the previous one is gone
+      if (ssWaiting) {
+        ssGapTimer--;
+        if (ssGapTimer <= 0) {
+          const speed = 8 + Math.random() * 6;
+          if (ssFromLeft) {
+            const angle = 0.15 + Math.random() * 0.35;
+            shootingStars.push({
+              x: -20 + Math.random() * w * 0.2,
+              y: -20 + Math.random() * h * 0.1,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              life: 0,
+              maxLife: 999,
+              size: 2 + Math.random() * 1.5,
+            });
+          } else {
+            const angle = Math.PI - 0.15 - Math.random() * 0.35;
+            shootingStars.push({
+              x: w + 20 - Math.random() * w * 0.2,
+              y: -20 + Math.random() * h * 0.1,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              life: 0,
+              maxLife: 999,
+              size: 2 + Math.random() * 1.5,
+            });
+          }
+          ssFromLeft = !ssFromLeft;
+          ssWaiting = false;
+        }
       }
       for (let i = shootingStars.length - 1; i >= 0; i--) {
         const s = shootingStars[i];
@@ -442,13 +370,18 @@ function useSpaceScene(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
         s.y += s.vy;
         s.life++;
         const offScreen =
-          s.x > w + 100 || s.y > h + 100 || s.x < -200 || s.y < -100;
+          s.x > w + 200 || s.y > h + 100 || s.x < -200 || s.y < -100;
         if (offScreen) {
           shootingStars.splice(i, 1);
+          ssWaiting = true;
+          ssGapTimer = 60;
           continue;
         }
         const fadeIn = Math.min(1, s.life / 15);
-        const fadeOut = s.x > w - 150 ? Math.max(0, (w + 100 - s.x) / 250) : 1;
+        const fadeOutR = s.x > w - 150 ? Math.max(0, (w + 100 - s.x) / 250) : 1;
+        const fadeOutL =
+          s.x < 150 && s.vx < 0 ? Math.max(0, (s.x + 200) / 350) : 1;
+        const fadeOut = Math.min(fadeOutR, fadeOutL);
         const fade = fadeIn * fadeOut;
         const trailLen = 120 + s.size * 25;
         const norm = Math.sqrt(s.vx * s.vx + s.vy * s.vy);
@@ -1204,19 +1137,19 @@ const Home = () => {
                 <div className="flex items-center gap-6">
                   <Link
                     to="/accordion"
-                    className="text-sm text-white/70 hover:text-white transition-colors duration-300"
+                    className="text-sm text-white transition-colors duration-300"
                   >
                     Components
                   </Link>
                   <Link
                     to="/blog"
-                    className="text-sm text-white/70 hover:text-white transition-colors duration-300"
+                    className="text-sm text-white transition-colors duration-300"
                   >
                     Blog
                   </Link>
                   <Link
                     to="/faq"
-                    className="text-sm text-white/70 hover:text-white transition-colors duration-300"
+                    className="text-sm text-white transition-colors duration-300"
                   >
                     FAQ
                   </Link>
@@ -1224,7 +1157,7 @@ const Home = () => {
                     href="https://github.com/chumlabhq/ui"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/70 hover:text-white transition-colors duration-300"
+                    className="text-white transition-colors duration-300"
                     aria-label="GitHub"
                   >
                     <svg
@@ -1240,14 +1173,15 @@ const Home = () => {
               </div>
 
               {/* Bottom row */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-white/50">
-                <span className="text-xs sm:text-sm">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 text-xs sm:text-sm text-white">
+                <span className="text-xs sm:text-sm text-left w-full sm:w-auto">
                   &copy; {new Date().getFullYear()} Chumlab &middot; MIT License
-                  &middot; Built with {"☕"} and way too many tabs
+                  <br className="sm:hidden" />
+                  <span className="hidden sm:inline">&middot; </span>Built with {"☕"} and way too many tabs
                 </span>
                 <a
                   href="mailto:hello@chumlab.com"
-                  className="text-xs sm:text-sm text-white/60 hover:text-white transition-colors duration-300"
+                  className="text-xs sm:text-sm text-white transition-colors duration-300 text-left sm:text-right w-full sm:w-auto shrink-0"
                 >
                   {"💬"} Got feedback? Ping us at{" "}
                   <span className="underline underline-offset-2">

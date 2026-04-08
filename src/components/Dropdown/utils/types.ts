@@ -96,9 +96,10 @@ export interface DropdownProps {
   style?: CSSProperties;
   keepMounted?: boolean;
   portalContainer?: HTMLElement | null;
-  /** When true, locks body scroll while the dropdown is open. Default: true. */
+  /** When true, locks body scroll while the dropdown is open. Default: false. */
   lockScroll?: boolean;
   dropdownPosition?: "top" | "bottom";
+  forceDropdownPosition?: boolean;
   dropdownZIndex?: number;
   dropdownGap?: number;
   typeaheadTimeout?: number;
@@ -109,6 +110,6 @@ export interface DropdownProps {
   renderTrigger?: (props: DropdownTriggerRenderProps) => ReactNode;
   ChevronIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   CheckIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
-  ClearIcon?: ComponentType<{ className?: string }>;
+  ClearIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   loadingText?: ReactNode;
 }

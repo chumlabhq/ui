@@ -215,7 +215,7 @@ const AccordionDemo = () => {
           </p>
 
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@chumlab/ui/accordion";`}</code>
             </pre>
           </div>
@@ -418,15 +418,17 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
         >
-          <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
-          >
-            Current:
-          </span>
-          <span className={c.stateDisplay}>{singleValue ?? "null"}</span>
-          <div className="ml-auto flex gap-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span
+              className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Current:
+            </span>
+            <span className={c.stateDisplay}>{singleValue ?? "null"}</span>
+          </div>
+          <div className="sm:ml-auto flex gap-2">
             <button
               className={c.btnPrimary}
               onClick={() => setSingleValue("item-2")}
@@ -469,15 +471,17 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
         >
-          <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
-          >
-            Current:
-          </span>
-          <span className={c.stateDisplay}>[{multipleValue.join(", ")}]</span>
-          <div className="ml-auto flex gap-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span
+              className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Current:
+            </span>
+            <span className={c.stateDisplay}>[{multipleValue.join(", ")}]</span>
+          </div>
+          <div className="sm:ml-auto flex gap-2">
             <button
               className={c.btnPrimary}
               onClick={() =>
@@ -984,7 +988,7 @@ const AccordionDemo = () => {
         <div
           className={`mb-4 p-4 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}
         >
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
             {[
               ["Space / Enter", "Toggle expanded state"],
               ["↓ / ↑", "Next / previous item (vertical)"],

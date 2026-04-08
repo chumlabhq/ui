@@ -187,7 +187,7 @@ const ResizablePanelDemo = () => {
             via WAI-ARIA separator semantics.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { ResizablePanel } from "@chumlab/ui/resizable-panel";`}</code>
             </pre>
           </div>
@@ -738,7 +738,7 @@ const ResizablePanelDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex h-64 w-full">
+          <div className="flex flex-col sm:flex-row h-auto sm:h-64 w-full">
             <ResizablePanel
               defaultValue={sidebarWidth}
               minValue={150}
@@ -776,7 +776,7 @@ const ResizablePanelDemo = () => {
               </div>
             </ResizablePanel>
             <div
-              className={`flex-1 p-4 border border-l-0 rounded-r-lg ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+              className={`flex-1 p-4 border rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
             >
               <p
                 className={`font-medium ${dark ? "text-white" : "text-gray-800"}`}
@@ -800,7 +800,7 @@ const ResizablePanelDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex h-80 w-full">
+          <div className="flex flex-col sm:flex-row h-auto sm:h-80 w-full">
             <ResizablePanel
               defaultValue={leftPanelWidth}
               minValue={150}
@@ -841,7 +841,7 @@ const ResizablePanelDemo = () => {
             </ResizablePanel>
 
             <div
-              className={`flex-1 p-4 flex flex-col border-y ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+              className={`flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
             >
               <p
                 className={`font-medium ${dark ? "text-white" : "text-gray-800"}`}

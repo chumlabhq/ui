@@ -154,7 +154,7 @@ const DrawerDemo = () => {
             accessible keyboard navigation.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerCloseButton } from "@chumlab/ui/drawer";`}</code>
             </pre>
           </div>
@@ -184,7 +184,7 @@ const DrawerDemo = () => {
         description="Slide from left, right, top, or bottom."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["left", "right", "top", "bottom"] as const).map((dir) => (
             <button
               key={dir}
@@ -233,7 +233,7 @@ const DrawerDemo = () => {
         description="Custom overlay color, opacity, and blur."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button className={c.btn} onClick={overlay.onOpen}>
             Custom Opacity (0.7)
           </button>
@@ -264,7 +264,7 @@ const DrawerDemo = () => {
         description="Disable overlay click or Escape key closing."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button className={c.btn} onClick={noOverlayClose.onOpen}>
             No Overlay Close
           </button>
@@ -390,7 +390,7 @@ const DrawerDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <button className={c.btnPrimary} onClick={snapPoints.onOpen}>
               Open Bottom Sheet
             </button>

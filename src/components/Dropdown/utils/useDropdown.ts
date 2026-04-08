@@ -396,7 +396,6 @@ export const useDropdown = ({
     statusMessage,
     setFocusedIndex,
     handleToggle,
-    handleOpen,
     handleClose,
     handleOptionSelect,
     handleClear,

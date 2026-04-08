@@ -106,6 +106,7 @@ interface DropdownContentProps {
   isOpen: boolean;
   keepMounted: boolean;
   position: "top" | "bottom";
+  forcePosition: boolean;
   zIndex: number;
   gap: number;
   portalContainer?: HTMLElement | null;
@@ -124,6 +125,7 @@ const DropdownContent = memo(function DropdownContent({
   isOpen,
   keepMounted,
   position: preferredPosition,
+  forcePosition,
   zIndex,
   gap,
   portalContainer,
@@ -149,9 +151,10 @@ const DropdownContent = memo(function DropdownContent({
         dropdownRef.current,
         preferredPosition,
         gap,
+        forcePosition,
       ),
     );
-  }, [triggerElement, preferredPosition, gap]);
+  }, [triggerElement, preferredPosition, gap, forcePosition]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -298,6 +301,29 @@ const DropdownContent = memo(function DropdownContent({
   );
 });
 
+/**
+ * Component: Dropdown
+ *
+ * Purpose:
+ * A single-select dropdown (combobox) with portal rendering, keyboard navigation,
+ * async loading, and full style customization via a classes object.
+ *
+ * AI Usage Guidelines:
+ * - Use for selecting one value from a list of options
+ * - Minimum required: `options` array with `{ value, label }` objects
+ * - Pair `value` with `onValueChange` for controlled mode, or use `defaultValue`
+ * - Avoid combining `value` and `defaultValue`
+ *
+ * Behavior:
+ * - Portal-rendered popup (never clipped by overflow ancestors)
+ * - Auto-flips position when insufficient viewport space (disable with `forceDropdownPosition`)
+ * - Full keyboard navigation with type-ahead search
+ * - Async option loading with shimmer states
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/DropdownDemo.tsx — live demo
+ */
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   (props, forwardedRef) => {
     const {
@@ -339,6 +365,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       portalContainer,
       lockScroll = false,
       dropdownPosition = "bottom",
+      forceDropdownPosition = false,
       dropdownZIndex = 50,
       dropdownGap = 4,
       typeaheadTimeout = 500,
@@ -535,6 +562,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       "aria-describedby": error && errorMessage ? errorId : undefined,
       "aria-required": (required || undefined) as boolean | undefined,
       "aria-labelledby": label ? labelId : undefined,
+      "aria-label": !label ? ariaLabel : undefined,
       disabled,
       onClick: handleToggle,
       onKeyDown: handleKeyDownWithPassthrough,
@@ -625,6 +653,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             isOpen={isOpen}
             keepMounted={keepMounted}
             position={dropdownPosition}
+            forcePosition={forceDropdownPosition}
             zIndex={dropdownZIndex}
             gap={dropdownGap}
             portalContainer={portalContainer}

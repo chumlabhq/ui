@@ -14,6 +14,7 @@ export function computeDropdownCoords(
   dropdownEl: HTMLElement,
   preferredPosition: "top" | "bottom",
   gap: number,
+  forcePosition = false,
 ): DropdownCoords {
   const rect = triggerEl.getBoundingClientRect();
   const dropdownHeight = dropdownEl.getBoundingClientRect().height;
@@ -23,13 +24,15 @@ export function computeDropdownCoords(
 
   let position = preferredPosition;
 
-  if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
-    if (rect.top - gap - dropdownHeight > 0) {
-      position = "top";
-    }
-  } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
-    if (rect.bottom + gap + dropdownHeight <= viewportHeight) {
-      position = "bottom";
+  if (!forcePosition) {
+    if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
+      if (rect.top - gap - dropdownHeight > 0) {
+        position = "top";
+      }
+    } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
+      if (rect.bottom + gap + dropdownHeight <= viewportHeight) {
+        position = "bottom";
+      }
     }
   }
 

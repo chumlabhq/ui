@@ -42,7 +42,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   isDarkMode = false,
 }) => (
   <pre
-    className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${
+    className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${
       isDarkMode
         ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6"
         : "bg-gray-50 text-gray-700 border border-gray-200"
@@ -56,7 +56,7 @@ interface DemoWrapperProps {
   children: React.ReactNode;
   isDarkMode?: boolean;
   className?: string;
-  layout?: "flex-row" | "flex-col" | "block";
+  layout?: "flex-row" | "flex-col" | "block" | "inline";
 }
 
 export const DemoWrapper: React.FC<DemoWrapperProps> = ({
@@ -67,10 +67,12 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
 }) => {
   const layoutClasses =
     layout === "flex-row"
-      ? "flex flex-col sm:flex-row flex-wrap items-center gap-4"
+      ? "flex flex-col sm:flex-row flex-wrap items-stretch sm:items-start gap-4"
       : layout === "flex-col"
         ? "flex flex-col gap-4"
-        : "";
+        : layout === "inline"
+          ? "flex flex-row flex-wrap items-center gap-4"
+          : "";
 
   return (
     <div
@@ -147,22 +149,22 @@ export const PropRow: React.FC<PropRowProps> = ({
     className={`border-t ${isDarkMode ? "border-gray-700/50" : "border-gray-100"}`}
   >
     <td
-      className={`px-4 py-2 font-mono text-[13px] whitespace-nowrap align-top ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+      className={`px-4 py-2 font-mono text-[13px] break-words align-top ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
     >
       {name}
     </td>
     <td
-      className={`px-4 py-2 font-mono text-xs align-top ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
+      className={`px-4 py-2 font-mono text-xs break-words align-top ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
     >
       {type}
     </td>
     <td
-      className={`px-4 py-2 font-mono text-xs whitespace-nowrap align-top ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
+      className={`px-4 py-2 font-mono text-xs break-words align-top ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
     >
       {defaultVal ?? "-"}
     </td>
     <td
-      className={`px-4 py-2 text-[13px] align-top wrap-break-word ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+      className={`px-4 py-2 text-[13px] break-words align-top ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
     >
       {description ?? "-"}
     </td>

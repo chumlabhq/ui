@@ -505,6 +505,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       lockScroll = false,
       dropdownZIndex = 50,
       dropdownPosition = "bottom",
+      forceDropdownPosition = false,
       dropdownGap = 4,
       keepMounted = false,
       reduceMotion = "auto",
@@ -650,8 +651,23 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         if (!triggerRef.current) return;
         const rect = triggerRef.current.getBoundingClientRect();
         const calendarHeight = calendarRef.current?.offsetHeight ?? 0;
+        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+
+        let position = dropdownPosition;
+        if (!forceDropdownPosition) {
+          if (position === "bottom" && rect.bottom + dropdownGap + calendarHeight > viewportHeight) {
+            if (rect.top - dropdownGap - calendarHeight > 0) {
+              position = "top";
+            }
+          } else if (position === "top" && rect.top - dropdownGap - calendarHeight < 0) {
+            if (rect.bottom + dropdownGap + calendarHeight <= viewportHeight) {
+              position = "bottom";
+            }
+          }
+        }
+
         setCalendarPos({
-          top: dropdownPosition === "top"
+          top: position === "top"
             ? rect.top - calendarHeight - dropdownGap
             : rect.bottom + dropdownGap,
           left: rect.left,
@@ -671,7 +687,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         }
         window.removeEventListener("resize", updatePos);
       };
-    }, [isOpen, lockScroll, dropdownGap, dropdownPosition]);
+    }, [isOpen, lockScroll, dropdownGap, dropdownPosition, forceDropdownPosition]);
 
     // ─── Scroll lock ─────────────────────────────────────────────────────
     useEffect(() => {

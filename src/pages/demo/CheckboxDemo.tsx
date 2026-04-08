@@ -124,7 +124,7 @@ const CheckboxDemo = () => {
             error handling, and fully accessible via native input.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Checkbox } from "@chumlab/ui/checkbox";`}</code>
             </pre>
           </div>
@@ -237,7 +237,7 @@ const CheckboxDemo = () => {
         description="Presets: xs, sm, md, lg, xl, or any custom number."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {[
             { s: "xs" as const, val: sizeXs, set: setSizeXs },
             { s: "sm" as const, val: sizeSm, set: setSizeSm },
@@ -276,7 +276,7 @@ const CheckboxDemo = () => {
         description="square, rounded (default), and circle."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {[
             { sh: "square" as const, val: shapeSquare, set: setShapeSquare },
             { sh: "rounded" as const, val: shapeRounded, set: setShapeRounded },
@@ -303,7 +303,7 @@ const CheckboxDemo = () => {
         description="Replace default checkmark with custom icons."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Checkbox
             label="Add to favorites"
             checked={customHeart}
@@ -338,7 +338,7 @@ const CheckboxDemo = () => {
         description="Use disabled to prevent interaction."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Checkbox
             label="Disabled unchecked"
             disabled
@@ -417,7 +417,7 @@ const CheckboxDemo = () => {
         description="Display a loading state while processing."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-4">
             <Checkbox
               label="Processing..."
@@ -638,7 +638,7 @@ const CheckboxDemo = () => {
         description="Override any internal element with the classes prop. 10 slots available."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Checkbox
             label="Green theme"
             checked

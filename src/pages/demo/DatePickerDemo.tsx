@@ -7,7 +7,6 @@ import {
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -103,6 +102,8 @@ const DatePickerDemo = () => {
   const [eventLog, setEventLog] = useState<string[]>([]);
   const [successDate, setSuccessDate] = useState<Date | null>(new Date());
   const [clearableDate, setClearableDate] = useState<Date | null>(new Date());
+  const [forceBotDate, setForceBotDate] = useState<Date | null>(null);
+  const [forceTopDate, setForceTopDate] = useState<Date | null>(null);
   const log = (msg: string) =>
     setEventLog((prev) => [msg, ...prev.slice(0, 4)]);
 
@@ -241,7 +242,7 @@ const DatePickerDemo = () => {
           <h1
             className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
           >
-            DatePicker
+            Date Picker
           </h1>
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
@@ -252,10 +253,11 @@ const DatePickerDemo = () => {
             classes system.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { DatePicker } from "@chumlab/ui/date-picker";`}
-            />
+            <pre
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+            >
+              <code>{`import { DatePicker } from "@chumlab/ui/date-picker";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -271,7 +273,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <DatePicker
               value={singleDate}
@@ -294,7 +296,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               mode="range"
               value={rangeValue}
@@ -332,7 +334,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
                   value={rangeValue}
@@ -361,7 +363,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
                   value={rangeValue}
@@ -390,7 +392,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
                   value={rangeValue}
@@ -425,7 +427,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
                   value={rangeValue}
@@ -458,7 +460,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               mode="multiple"
               value={multipleDates}
@@ -491,7 +493,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               mode="range"
               value={rangeValue}
@@ -522,7 +524,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   value={singleDate}
                   onValueChange={(date) => setSingleDate(date)}
@@ -546,7 +548,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Dots only..."
                   markers={markers}
@@ -566,7 +568,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Colored dots..."
                   markers={[
@@ -618,7 +620,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="No past dates"
                   disabledDates={{ disablePast: true }}
@@ -636,7 +638,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="No weekends"
                   disabledDates={{ daysOfWeek: [0, 6] }}
@@ -654,7 +656,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Limited range"
                   minDate={subDays(today, 7)}
@@ -678,7 +680,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-md">
+          <div className="w-full sm:max-w-md">
             <DatePicker
               mode="range"
               value={rangeValue}
@@ -704,7 +706,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               placeholder="With week numbers"
               showWeekNumbers
@@ -730,7 +732,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Clean calendar"
                   classes={c.datepicker}
@@ -747,7 +749,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Indicator only"
                   showTodayIndicator
@@ -765,7 +767,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Button only"
                   showTodayButton
@@ -783,7 +785,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Both enabled"
                   showTodayIndicator
@@ -807,7 +809,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               placeholder="Monday start"
               weekStartsOn={1}
@@ -828,7 +830,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               label="Required date"
               placeholder="Pick a date..."
@@ -842,65 +844,74 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── With Description ──────────────────────────────────────────── */}
-      <Section title="With Description" description="Add helper text below the label." isDarkMode={dark}>
+      <Section
+        title="With Description"
+        description="Add helper text below the label."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <DatePicker
-            label="Start Date"
-            description="Select the project start date"
-            placeholder="Pick a date"
-          />
+          <div className="w-full sm:max-w-xs">
+            <DatePicker
+              label="Start Date"
+              description="Select the project start date"
+              placeholder="Pick a date"
+            />
+          </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<DatePicker
-  label="Start Date"
-  description="Select the project start date"
-  placeholder="Pick a date"
-/>`} />
       </Section>
 
       {/* ─── Success State ────────────────────────────────────────────────── */}
-      <Section title="Success State" description="Display a success message when a valid date is selected." isDarkMode={dark}>
+      <Section
+        title="Success State"
+        description="Display a success message when a valid date is selected."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <DatePicker
-            label="Event Date"
-            value={successDate}
-            onValueChange={(d) => setSuccessDate(d)}
-            success={!!successDate}
-            successMessage="Date is available"
-          />
+          <div className="w-full sm:max-w-xs">
+            <DatePicker
+              label="Event Date"
+              value={successDate}
+              onValueChange={(d) => setSuccessDate(d)}
+              success={!!successDate}
+              successMessage="Date is available"
+            />
+          </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<DatePicker
-  label="Event Date"
-  value={date}
-  onValueChange={(d) => setDate(d)}
-  success={!!date}
-  successMessage="Date is available"
-/>`} />
       </Section>
 
       {/* ─── Loading State ────────────────────────────────────────────────── */}
-      <Section title="Loading State" description="Show a loading state while checking date availability." isDarkMode={dark}>
+      <Section
+        title="Loading State"
+        description="Show a loading state while checking date availability."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <DatePicker label="Checking availability..." loading placeholder="Pick a date" />
+          <div className="w-full sm:max-w-xs">
+            <DatePicker
+              label="Checking availability..."
+              loading
+              placeholder="Pick a date"
+            />
+          </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<DatePicker label="Checking availability..." loading placeholder="Pick a date" />`} />
       </Section>
 
       {/* ─── Clearable ────────────────────────────────────────────────────── */}
-      <Section title="Clearable (Unified API)" description="Use the clearable prop as a unified alternative to showClearButton." isDarkMode={dark}>
+      <Section
+        title="Clearable (Unified API)"
+        description="Use the clearable prop as a unified alternative to showClearButton."
+        isDarkMode={dark}
+      >
         <DemoWrapper isDarkMode={dark}>
-          <DatePicker
-            label="Clearable Date"
-            value={clearableDate}
-            onValueChange={(d) => setClearableDate(d)}
-            clearable
-          />
+          <div className="w-full sm:max-w-xs">
+            <DatePicker
+              label="Clearable Date"
+              value={clearableDate}
+              onValueChange={(d) => setClearableDate(d)}
+              clearable
+            />
+          </div>
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<DatePicker
-  label="Clearable Date"
-  value={date}
-  onValueChange={(d) => setDate(d)}
-  clearable
-/>`} />
       </Section>
 
       {/* ─── Disabled ───────────────────────────────────────────────────── */}
@@ -914,7 +925,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               label="Disabled picker"
               placeholder="Cannot select"
@@ -962,7 +973,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               value={controlledDate}
               onValueChange={(date) => setControlledDate(date)}
@@ -986,15 +997,15 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <button
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 shrink-0`}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setCalendarOpen((o) => !o)}
             >
               {calendarOpen ? "Close" : "Open"} Calendar
             </button>
-            <div className="max-w-xs">
+            <div className="w-full sm:max-w-xs">
               <DatePicker
                 value={openControlDate}
                 onValueChange={(date) => setOpenControlDate(date)}
@@ -1004,8 +1015,11 @@ const DatePickerDemo = () => {
                 classes={c.datepicker}
               />
             </div>
-            <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
-              Open: {String(calendarOpen)} | Selected: {openControlDate?.toLocaleDateString() ?? "none"}
+            <span
+              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            >
+              Open: {String(calendarOpen)} | Selected:{" "}
+              {openControlDate?.toLocaleDateString() ?? "none"}
             </span>
           </div>
         </DemoWrapper>
@@ -1022,7 +1036,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               defaultOpen
               placeholder="Starts open..."
@@ -1095,7 +1109,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               value={singleDate}
               onValueChange={(date) => setSingleDate(date)}
@@ -1151,7 +1165,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               value={singleDate}
               onValueChange={(date) => setSingleDate(date)}
@@ -1177,7 +1191,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               mode="range"
               value={rangeValue}
@@ -1207,7 +1221,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Choisir une date..."
                   locale={fr}
@@ -1224,7 +1238,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Datum auswählen..."
                   locale={de}
@@ -1257,7 +1271,7 @@ const DatePickerDemo = () => {
                 layout="block"
                 className="overflow-visible"
               >
-                <div className="max-w-xs">
+                <div className="w-full sm:max-w-xs">
                   <DatePicker
                     value={controlledDate}
                     onValueChange={setControlledDate}
@@ -1288,7 +1302,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Outside days visible & selectable"
                   showOutsideDays
@@ -1307,7 +1321,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Outside days hidden"
                   showOutsideDays={false}
@@ -1330,7 +1344,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               placeholder="Fixed 6 weeks"
               fixedWeeks
@@ -1356,7 +1370,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Some dates blocked"
                   disabledDates={{
@@ -1380,7 +1394,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Tue & Thu only"
                   disabledDates={{
@@ -1406,12 +1420,14 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               label="Watch the log below"
               placeholder="Interact with me..."
               showClearButton
-              onOpenChange={(isOpen) => log(`onOpenChange: ${isOpen ? "opened" : "closed"}`)}
+              onOpenChange={(isOpen) =>
+                log(`onOpenChange: ${isOpen ? "opened" : "closed"}`)
+              }
               onMonthChange={(month) =>
                 log(`onMonthChange: ${month.toLocaleDateString()}`)
               }
@@ -1452,7 +1468,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Pink theme"
                   classes={{
@@ -1544,7 +1560,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Custom nav"
                   classes={{
@@ -1569,7 +1585,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
                   value={rangeValue}
@@ -1605,7 +1621,7 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Scroll the page..."
                   showClearButton
@@ -1623,11 +1639,101 @@ const DatePickerDemo = () => {
               layout="block"
               className="overflow-visible"
             >
-              <div className="max-w-xs">
+              <div className="w-full sm:max-w-xs">
                 <DatePicker
                   placeholder="Open me, then try scrolling..."
                   lockScroll
                   showClearButton
+                  classes={c.datepicker}
+                />
+              </div>
+            </DemoWrapper>
+          </div>
+        </div>
+      </Section>
+
+      {/* ─── Dropdown Position ───────────────────────────────────────────── */}
+      <Section
+        title="Dropdown Position"
+        description="Control whether the calendar opens above or below the trigger. Auto-flips when there isn't enough space."
+        isDarkMode={dark}
+      >
+        <div className="space-y-4">
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              dropdownPosition=&quot;bottom&quot; (default, auto-flips)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
+              <div className="w-full sm:max-w-xs">
+                <DatePicker
+                  value={forceBotDate}
+                  onValueChange={(d) => setForceBotDate(d)}
+                  dropdownPosition="bottom"
+                  placeholder="Opens below..."
+                  classes={c.datepicker}
+                />
+              </div>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              forceDropdownPosition (forced bottom, no auto-flip)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
+              <div className="w-full sm:max-w-xs">
+                <DatePicker
+                  value={forceTopDate}
+                  onValueChange={(d) => setForceTopDate(d)}
+                  dropdownPosition="bottom"
+                  forceDropdownPosition
+                  placeholder="Always opens below..."
+                  classes={c.datepicker}
+                />
+              </div>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              forceDropdownPosition (forced top, no auto-flip)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
+              <div className="w-full sm:max-w-xs">
+                <DatePicker
+                  dropdownPosition="top"
+                  forceDropdownPosition
+                  placeholder="Always opens above..."
+                  classes={c.datepicker}
+                />
+              </div>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              forceDropdownPosition + lockScroll
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
+              <div className="w-full sm:max-w-xs">
+                <DatePicker
+                  dropdownPosition="bottom"
+                  forceDropdownPosition
+                  lockScroll
+                  placeholder="Forced bottom + scroll locked"
                   classes={c.datepicker}
                 />
               </div>
@@ -1647,7 +1753,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               placeholder="Custom icons"
               calendarIcon={<span className="text-lg">📅</span>}
@@ -1677,7 +1783,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             {/* Truly unstyled — no classes, bare HTML structure */}
             <DatePicker unstyled placeholder="Unstyled date picker" />
           </div>
@@ -1695,7 +1801,7 @@ const DatePickerDemo = () => {
           layout="block"
           className="overflow-visible"
         >
-          <div className="max-w-xs">
+          <div className="w-full sm:max-w-xs">
             <DatePicker
               placeholder="No transitions"
               reduceMotion={true}
@@ -1935,6 +2041,34 @@ const DatePickerDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="dropdownPosition"
+              type='"top" | "bottom"'
+              defaultVal='"bottom"'
+              description="Preferred calendar position (auto-flips when insufficient space)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="forceDropdownPosition"
+              type="boolean"
+              defaultVal="false"
+              description="When true, locks the calendar to the specified dropdownPosition without auto-flipping"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownZIndex"
+              type="number"
+              defaultVal="50"
+              description="z-index of the calendar popup"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownGap"
+              type="number"
+              defaultVal="4"
+              description="Gap in pixels between trigger and calendar popup"
+              isDarkMode={dark}
+            />
+            <PropRow
               name="open"
               type="boolean"
               description="Controlled open state of the calendar"
@@ -1964,7 +2098,11 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Data Attributes ──────────────────────────────────────────── */}
-      <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
+      <Section
+        title="Data Attributes"
+        description="Use for CSS-based state styling."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
             <PropRow
@@ -2050,7 +2188,11 @@ const DatePickerDemo = () => {
       </Section>
 
       {/* ─── Accessibility ────────────────────────────────────────────── */}
-      <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
+      <Section
+        title="Accessibility"
+        description="Built-in accessibility features."
+        isDarkMode={dark}
+      >
         <div className={c.card}>
           <div
             className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}

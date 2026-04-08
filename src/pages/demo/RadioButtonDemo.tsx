@@ -164,7 +164,7 @@ const RadioButtonDemo = () => {
             radio inputs.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}</code>
             </pre>
           </div>
@@ -277,7 +277,7 @@ const RadioButtonDemo = () => {
         description="Presets: xs, sm, md, lg, xl. Also supports a custom number."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["xs", "sm", "md", "lg", "xl"] as const).map((s) => (
             <div key={s} className="text-center">
               <RadioGroup
@@ -367,7 +367,7 @@ const RadioButtonDemo = () => {
         description="Override the checked class to use any color."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-1.5 text-center">
             <RadioGroup name="color-green" defaultValue="a" size="lg" classes={c.group}>
               <RadioButton value="a" label="Green" classes={c.radioGreen} />

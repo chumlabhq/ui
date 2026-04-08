@@ -99,7 +99,7 @@ const AvatarDemo = () => {
             the classes system.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge } from "@chumlab/ui/avatar";`}</code>
             </pre>
           </div>
@@ -112,7 +112,7 @@ const AvatarDemo = () => {
         description="Avatar with image, initials, and custom fallback."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — works out-of-the-box with built-in styles */}
           <Avatar
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
@@ -130,7 +130,7 @@ const AvatarDemo = () => {
         description="Presets: xs, sm, md, lg, xl, or any custom pixel number."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["xs", "sm", "md", "lg", "xl"] as const).map((s) => (
             <div key={s} className="text-center">
               <Avatar
@@ -155,7 +155,7 @@ const AvatarDemo = () => {
         description="circle (default), rounded, and square."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["circle", "rounded", "square"] as const).map((s) => (
             <div key={s} className="text-center">
               <Avatar
@@ -177,7 +177,7 @@ const AvatarDemo = () => {
         description="Control how many initials are shown with maxInitials."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <Avatar
               name="John Michael Doe"
@@ -214,7 +214,7 @@ const AvatarDemo = () => {
         description="autoColor generates consistent colors based on the name hash."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {[
             "Alice",
             "Bob",
@@ -241,7 +241,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Subtle pastel palette
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               {["Custom 1", "Custom 2", "Custom 3"].map((n) => (
                 <Avatar
                   key={n}
@@ -259,7 +259,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Brand colors (white text on dark backgrounds)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               {["Brand A", "Brand B", "Brand C", "Brand D"].map((n) => (
                 <Avatar key={n} name={n} autoColor colors={c.brandColors} />
               ))}
@@ -274,7 +274,7 @@ const AvatarDemo = () => {
         description="Customize initials via classes.initials or textStyle."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Avatar
             name="Bold"
             autoColor
@@ -307,7 +307,7 @@ const AvatarDemo = () => {
         description="bordered={true} for auto-generated color, or a CSS border string."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <Avatar name="Auto" autoColor colors={c.subtleColors} bordered />
             <p className={`text-xs mt-2 ${c.label}`}>bordered=true</p>
@@ -338,7 +338,7 @@ const AvatarDemo = () => {
         description="Show online/offline/away/busy status. Use a string shorthand or config object."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["online", "offline", "away", "busy"] as const).map((s) => (
             <div key={s} className="text-center">
               <Avatar name={s} autoColor colors={c.subtleColors} status={s} />
@@ -355,7 +355,7 @@ const AvatarDemo = () => {
         isDarkMode={dark}
       >
         <div className="space-y-4">
-          <DemoWrapper isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark} layout="inline">
             {(
               ["top-right", "top-left", "bottom-right", "bottom-left"] as const
             ).map((pos) => (
@@ -370,7 +370,7 @@ const AvatarDemo = () => {
               </div>
             ))}
           </DemoWrapper>
-          <DemoWrapper isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark} layout="inline">
             <Avatar
               name="Purple"
               autoColor
@@ -399,7 +399,7 @@ const AvatarDemo = () => {
         description="Simple string tooltip or full config object with side, offset, delay."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Avatar
             name="Simple"
             autoColor
@@ -442,7 +442,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Variants & dot
             </p>
-            <DemoWrapper isDarkMode={dark} className="overflow-visible">
+            <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
               {[
                 { label: "count", props: { count: 5 } },
                 { label: "max=99", props: { count: 150, max: 99 } },
@@ -473,7 +473,7 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Sizes</p>
-            <DemoWrapper isDarkMode={dark} className="overflow-visible">
+            <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
               {(["xs", "sm", "md", "lg"] as const).map((s) => (
                 <div key={s} className="text-center pt-2 pb-1">
                   <div className="relative inline-flex">
@@ -487,7 +487,7 @@ const AvatarDemo = () => {
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Positions</p>
-            <DemoWrapper isDarkMode={dark} className="overflow-visible">
+            <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
               {(
                 [
                   "top-right",
@@ -514,7 +514,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Overlap modes & custom offset
             </p>
-            <DemoWrapper isDarkMode={dark} className="overflow-visible">
+            <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
               <div className="text-center pt-2 pb-1">
                 <div className="relative inline-flex">
                   <Avatar name="Circ" autoColor colors={c.subtleColors} />
@@ -641,7 +641,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Custom spacing
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <div className="text-center">
                 <AvatarGroup spacing={-16}>
                   <Avatar name="A" autoColor colors={c.subtleColors} />
@@ -812,7 +812,7 @@ const AvatarDemo = () => {
         <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>Variants</p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               {(["solid", "outline", "ghost"] as const).map((v) => (
                 <div key={v} className="text-center">
                   <AvatarGroupCount count={5} variant={v} />
@@ -825,7 +825,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Custom format & showPlus
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <div className="text-center">
                 <AvatarGroupCount count={12} showPlus />
                 <p className={`text-xs mt-2 ${c.label}`}>+12</p>
@@ -849,7 +849,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               With tooltip & click
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <AvatarGroupCount
                 count={8}
                 tooltip="View all 8 members"
@@ -871,7 +871,7 @@ const AvatarDemo = () => {
             {isLoading ? "Show Content" : "Show Shimmer"}
           </button>
         </div>
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {isLoading ? (
             <>
               <AvatarShimmer size="sm" />
@@ -917,7 +917,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Group shimmer with count badge (showCount)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <AvatarGroupShimmer count={3} showCount />
               <span className={`ml-3 text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>
                 3 avatars + 1 count placeholder
@@ -928,7 +928,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Ring color matching dark background
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <div className="flex items-center gap-6">
                 <div>
                   <p className={`text-[10px] mb-1.5 ${c.label}`}>Default (white ring)</p>
@@ -954,7 +954,7 @@ const AvatarDemo = () => {
         description="Fine-tune image loading: lazy/eager, priority, srcSet, crossOrigin."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <Avatar
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
@@ -988,7 +988,7 @@ const AvatarDemo = () => {
         description="Graceful fallback to initials when image fails to load."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Avatar
             src={imageError ? "" : "https://invalid-url.example/image.jpg"}
             name="John Doe"
@@ -1010,7 +1010,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Custom initials styling
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Avatar
                 name="Bold"
                 autoColor
@@ -1029,7 +1029,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Custom status class (ring effect)
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Avatar
                 name="Ring"
                 autoColor
@@ -1045,7 +1045,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               unstyled + gradient root
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <Avatar
                 name="Custom"
                 unstyled
@@ -1067,7 +1067,7 @@ const AvatarDemo = () => {
         description="Wrap avatars in buttons or links. Prefer wrapping over asChild for focus management."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             onClick={() => alert("Avatar clicked!")}
             className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 rounded-full"
@@ -1104,7 +1104,7 @@ const AvatarDemo = () => {
         description="Set loading={true} directly on Avatar to show a shimmer in its place."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <Avatar loading />
             <p className={`text-xs mt-2 ${c.label}`}>loading=true</p>
@@ -1204,7 +1204,7 @@ const AvatarDemo = () => {
         description="Use invisible to hide a badge without unmounting (preserves layout)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark} className="overflow-visible">
+        <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
           <div className="text-center pt-2 pb-1">
             <div className="relative inline-flex">
               <Avatar name="Visible" autoColor colors={c.subtleColors} />
@@ -1233,7 +1233,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Large + rounded
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <AvatarGroupShimmer count={4} size="lg" shape="rounded" />
             </DemoWrapper>
           </div>
@@ -1241,7 +1241,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               Custom spacing
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <AvatarGroupShimmer count={3} spacing={-16} />
             </DemoWrapper>
           </div>
@@ -1249,7 +1249,7 @@ const AvatarDemo = () => {
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
               No animation
             </p>
-            <DemoWrapper isDarkMode={dark}>
+            <DemoWrapper isDarkMode={dark} layout="inline">
               <AvatarGroupShimmer count={3} animate={false} />
             </DemoWrapper>
           </div>
@@ -1262,7 +1262,7 @@ const AvatarDemo = () => {
         description="Set reduceMotion={true} to disable image fade-in and shimmer pulse animations."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <Avatar
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"

@@ -141,7 +141,7 @@ const SwitchDemo = () => {
             customizable via the classes slot system.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Switch } from "@chumlab/ui/switch";`}</code>
             </pre>
           </div>
@@ -180,7 +180,7 @@ const SwitchDemo = () => {
         description="Use defaultChecked for uncontrolled mode — no state management needed."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             label="Uncontrolled switch"
             defaultChecked
@@ -195,7 +195,7 @@ const SwitchDemo = () => {
         description="The label prop adds an accessible label linked via htmlFor."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             label="Enable notifications"
             checked={labelSwitch}
@@ -211,7 +211,7 @@ const SwitchDemo = () => {
         description="Add additional context using the description prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             label="Dark mode"
             description="Enable dark theme for the application"
@@ -228,7 +228,7 @@ const SwitchDemo = () => {
         description="The required prop adds aria-required and shows an asterisk after the label."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             label="Accept terms of service"
             required
@@ -245,7 +245,7 @@ const SwitchDemo = () => {
         description="Add icons inside the thumb using checkedIcon and uncheckedIcon."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Feature enabled"
@@ -280,7 +280,7 @@ const SwitchDemo = () => {
         description="Disable the switch with the disabled prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Disabled (off)"
@@ -304,7 +304,7 @@ const SwitchDemo = () => {
         description="Use error and errorMessage props to display validation errors."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Accept terms of service"
@@ -334,7 +334,7 @@ const SwitchDemo = () => {
         description="Display a success message when validation passes."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             label="Email notifications"
             checked={successSwitch}
@@ -352,7 +352,7 @@ const SwitchDemo = () => {
         description="Display a loading indicator while an async action is pending."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-4">
             <Switch label="Sync in progress" loading checked classes={c.switch} />
             <Switch label="Not loading" checked classes={c.switch} />
@@ -366,7 +366,7 @@ const SwitchDemo = () => {
         description="Primary event handler for checked state changes."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-2">
             <Switch label="Using onValueChange" onValueChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
             <p className={`text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`}>Value: {String(callbackSwitch)}</p>
@@ -380,7 +380,7 @@ const SwitchDemo = () => {
         description="Override tracker colors via the classes prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Purple theme"
@@ -414,7 +414,7 @@ const SwitchDemo = () => {
         description="Override tracker and thumb sizes via classes."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Small switch"
@@ -460,7 +460,7 @@ const SwitchDemo = () => {
         description="Use CSS custom properties to theme switches globally or per-instance."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <div
               style={{
@@ -510,7 +510,7 @@ const SwitchDemo = () => {
         description="Use transitionDuration and transitionTimingFunction for custom animations."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Slow transition (500ms)"
@@ -538,7 +538,7 @@ const SwitchDemo = () => {
         description="Use renderLabel and renderDescription for dynamic content based on switch state."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
             checked={renderPropsSwitch}
             onValueChange={setRenderPropsSwitch}
@@ -568,7 +568,7 @@ const SwitchDemo = () => {
         description="Native button events are forwarded via the spread operator."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               label="Focus me to see events"
@@ -614,7 +614,7 @@ const SwitchDemo = () => {
         description="Use name and value props for HTML form integration. A hidden input is automatically rendered."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <form
             className="space-y-4"
             onSubmit={(e) => {
@@ -646,7 +646,7 @@ const SwitchDemo = () => {
         description="Access the underlying button element using React refs."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
               ref={switchRef}

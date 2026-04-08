@@ -76,7 +76,7 @@ const CountryFlagDemo = () => {
           </p>
           <div className="mt-5">
             <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
             >
               <code>{`import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";`}</code>
             </pre>
@@ -90,7 +90,7 @@ const CountryFlagDemo = () => {
         description="Render a flag by passing a two-letter ISO country code."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — just pass a country code */}
           {["us", "gb", "jp", "de", "fr", "in", "br", "ca"].map((code) => (
             <CountryFlag key={code} code={code} size={48} />
@@ -104,7 +104,7 @@ const CountryFlagDemo = () => {
         description="Presets: xs, sm, md, lg, xl, 2xl, or any custom pixel number."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {(["xs", "sm", "md", "lg", "xl", "2xl"] as const).map((s) => (
             <div key={s} className="text-center">
               <CountryFlag code="us" size={s} className={c.flag} />
@@ -128,7 +128,7 @@ const CountryFlagDemo = () => {
         description="Control height via aspectRatio (height/width). Default is 0.75 (4:3)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {[0.5, 0.625, 0.75, 1].map((ratio) => (
             <div key={ratio} className="text-center">
               <CountryFlag
@@ -149,7 +149,7 @@ const CountryFlagDemo = () => {
         description="Add tooltips via string or config object."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <CountryFlag
             code="us"
             size={48}
@@ -183,7 +183,7 @@ const CountryFlagDemo = () => {
         description="Custom fallback content when the flag image fails to load."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <CountryFlag
               code="xx"
@@ -259,7 +259,7 @@ const CountryFlagDemo = () => {
             {isLoading ? "Show Flags" : "Show Shimmer"}
           </button>
         </div>
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {isLoading ? (
             <>
               <CountryFlagShimmer size={32} className="rounded-[3px]" />
@@ -278,7 +278,7 @@ const CountryFlagDemo = () => {
           <p className={`text-xs font-medium mb-2 ${c.label}`}>
             loading prop on CountryFlag
           </p>
-          <DemoWrapper isDarkMode={dark}>
+          <DemoWrapper isDarkMode={dark} layout="inline">
             <CountryFlag
               code="us"
               loading
@@ -426,7 +426,7 @@ const CountryFlagDemo = () => {
         description="Loading placeholder for flag groups."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <CountryFlagGroupShimmer
             count={4}
             size={48}
@@ -442,7 +442,7 @@ const CountryFlagDemo = () => {
         description="Override internal elements with the classes prop. Slots: root, image, fallback."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <CountryFlag
             code="us"
             size={48}
@@ -473,7 +473,7 @@ const CountryFlagDemo = () => {
         description="Set unstyled=true to strip all default classes. Build from scratch."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {["us", "gb", "jp", "de"].map((code) => (
             <CountryFlag
               key={code}
@@ -495,7 +495,7 @@ const CountryFlagDemo = () => {
         description="Disable fade-in transition and shimmer pulse."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="text-center">
             <CountryFlag code="us" size={48} className={c.flag} />
             <p className={`text-xs mt-2 ${c.label}`}>default (auto)</p>

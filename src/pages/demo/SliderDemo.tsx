@@ -120,7 +120,7 @@ const SliderDemo = () => {
             standard classes/unstyled system.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Slider } from "@chumlab/ui/slider";`}</code>
             </pre>
           </div>
@@ -130,7 +130,7 @@ const SliderDemo = () => {
       {/* ── Basic ────────────────────────────────────────────────────── */}
       <Section title="Basic Usage" description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation (arrow keys). No custom classes needed." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="flex flex-col gap-6 max-w-sm">
+          <div className="flex flex-col gap-6 w-full sm:max-w-sm">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <Slider
               label="Volume"
@@ -149,7 +149,7 @@ const SliderDemo = () => {
       {/* ── Range ────────────────────────────────────────────────────── */}
       <Section title="Range Slider" description="Pass a [number, number] tuple as value for two-thumb range selection." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-3">
+          <div className="w-full sm:max-w-sm space-y-3">
             <Slider value={range} onValueChange={setRange} classes={c.slider} />
             <div className={c.text}>
               Range: <span className={c.badge}>{(range as [number, number])[0]}</span> – <span className={c.badge}>{(range as [number, number])[1]}</span>
@@ -161,7 +161,7 @@ const SliderDemo = () => {
       {/* ── With Label & Description ──────────────────────────────── */}
       <Section title="Label & Description" description="Form-integrated slider with label, description, and error state." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-8 w-full max-w-sm">
+          <div className="flex flex-col gap-8 w-full sm:max-w-sm">
             <Slider
               label="Volume"
               description="Adjust the playback volume"
@@ -187,7 +187,7 @@ const SliderDemo = () => {
       {/* ── Steps ────────────────────────────────────────────────────── */}
       <Section title="Steps" description="Discrete step increments snap the thumb to fixed values." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-8 w-full max-w-sm">
+          <div className="flex flex-col gap-8 w-full sm:max-w-sm">
             <div className="space-y-2">
               <Slider value={stepped} onValueChange={(v) => setStepped(v as number)} step={10} classes={c.slider} showTooltip />
               <div className={c.textMuted}>Step: 10 — Value: {stepped}</div>
@@ -203,7 +203,7 @@ const SliderDemo = () => {
       {/* ── Marks ────────────────────────────────────────────────────── */}
       <Section title="Marks" description="Visual tick marks with optional labels along the track. Customise dot size, style, or use renderMark for fully custom dots." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-12 w-full max-w-md">
+          <div className="flex flex-col gap-12 w-full sm:max-w-md">
             {/* Default marks */}
             <div className="space-y-1">
               <span className={c.label}>Default marks with labels</span>
@@ -323,7 +323,7 @@ const SliderDemo = () => {
       {/* ── Tooltip ──────────────────────────────────────────────────── */}
       <Section title="Tooltip" description="Show a value tooltip on hover/drag, or always. Use formatTooltip for custom display." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-10 w-full max-w-sm">
+          <div className="flex flex-col gap-10 w-full sm:max-w-sm">
             <div className="space-y-1">
               <span className={c.label}>On hover/drag</span>
               <Slider value={basic} onValueChange={(v) => setBasic(v as number)} showTooltip classes={c.slider} />
@@ -352,7 +352,7 @@ const SliderDemo = () => {
       {/* ── Custom Thumb ─────────────────────────────────────────────── */}
       <Section title="Custom Thumb" description="Use renderThumb to render icons, images, or any content inside the thumb." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-10 w-full max-w-sm">
+          <div className="flex flex-col gap-10 w-full sm:max-w-sm">
             <div className="space-y-1">
               <span className={c.label}>Heart icon</span>
               <Slider
@@ -430,7 +430,7 @@ const SliderDemo = () => {
       {/* ── Min Steps Between Thumbs ─────────────────────────────────── */}
       <Section title="Min Steps Between Thumbs" description="Enforce a minimum distance between range thumbs." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-3">
+          <div className="w-full sm:max-w-sm space-y-3">
             <Slider
               value={minDist}
               onValueChange={setMinDist}
@@ -446,7 +446,7 @@ const SliderDemo = () => {
       {/* ── Controlled ───────────────────────────────────────────────── */}
       <Section title="Controlled" description="Fully controlled via value and onValueChange. External buttons can set the value." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-4">
+          <div className="w-full sm:max-w-sm space-y-4">
             <Slider value={controlled} onValueChange={(v) => setControlled(v as number)} classes={c.slider} showTooltip />
             <div className="flex gap-2 flex-wrap">
               {[0, 25, 50, 75, 100].map((v) => (
@@ -463,7 +463,7 @@ const SliderDemo = () => {
       {/* ── Uncontrolled ─────────────────────────────────────────────── */}
       <Section title="Uncontrolled (defaultValue)" description="Use defaultValue for uncontrolled mode. The slider manages its own state." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm">
+          <div className="w-full sm:max-w-sm">
             <Slider defaultValue={40} classes={c.slider} showTooltip />
           </div>
         </DemoWrapper>
@@ -472,7 +472,7 @@ const SliderDemo = () => {
       {/* ── onValueCommit ────────────────────────────────────────────── */}
       <Section title="onValueCommit" description="Fires only when the user finishes dragging (pointer up). Useful for debounced API calls." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-3">
+          <div className="w-full sm:max-w-sm space-y-3">
             <Slider
               value={commitVal}
               onValueChange={(v) => setCommitVal(v as number)}
@@ -491,7 +491,7 @@ const SliderDemo = () => {
       {/* ── Disabled ─────────────────────────────────────────────────── */}
       <Section title="Disabled" description="The slider is non-interactive when disabled." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-6 w-full max-w-sm">
+          <div className="flex flex-col gap-6 w-full sm:max-w-sm">
             <Slider value={50} disabled classes={c.slider} />
             <Slider value={[20, 80]} disabled classes={c.slider} />
           </div>
@@ -522,7 +522,7 @@ const SliderDemo = () => {
       {/* ── Vertical ─────────────────────────────────────────────────── */}
       <Section title="Vertical" description="Set orientation to 'vertical' for a vertical slider." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex items-end gap-10 h-52">
+          <div className="flex flex-wrap items-end gap-10 h-52">
             <div className="flex flex-col items-center gap-2">
               <Slider
                 value={vertical}
@@ -551,7 +551,7 @@ const SliderDemo = () => {
       {/* ── Inverted ─────────────────────────────────────────────────── */}
       <Section title="Inverted" description="Reverse the slider direction with the inverted prop." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-3">
+          <div className="w-full sm:max-w-sm space-y-3">
             <Slider value={invertedVal} onValueChange={(v) => setInvertedVal(v as number)} inverted showTooltip classes={c.slider} />
             <div className={c.textMuted}>Inverted — Value: {invertedVal}</div>
           </div>
@@ -561,7 +561,7 @@ const SliderDemo = () => {
       {/* ── Color Variants ───────────────────────────────────────────── */}
       <Section title="Color Variants" description="Override the range and thumb classes for custom colors." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-6 w-full max-w-sm">
+          <div className="flex flex-col gap-6 w-full sm:max-w-sm">
             {[
               { range: "bg-emerald-500", border: "border-emerald-500", ring: "ring-emerald-500", name: "Emerald", val: 65 },
               { range: "bg-rose-500", border: "border-rose-500", ring: "ring-rose-500", name: "Rose", val: 45 },
@@ -588,7 +588,7 @@ const SliderDemo = () => {
       {/* ── Custom Styling ───────────────────────────────────────────── */}
       <Section title="Custom Styling" description="Full control via the classes prop. Every part of the slider is customisable." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="flex flex-col gap-6 w-full max-w-sm">
+          <div className="flex flex-col gap-6 w-full sm:max-w-sm">
             {/* Rounded rectangle thumb */}
             <div className="space-y-1">
               <span className={c.label}>Rounded rectangle thumb</span>
@@ -621,7 +621,7 @@ const SliderDemo = () => {
       {/* ── Unstyled ─────────────────────────────────────────────────── */}
       <Section title="Unstyled" description="Set unstyled to remove all default classes. Provide your own styling via the classes prop." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm">
+          <div className="w-full sm:max-w-sm">
             <Slider
               label="Custom slider"
               defaultValue={50}
@@ -642,7 +642,7 @@ const SliderDemo = () => {
       {/* ── Form Integration ─────────────────────────────────────────── */}
       <Section title="Form Integration" description="Hidden inputs are rendered when name is set. The value is submitted with the form." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-sm space-y-3">
+          <div className="w-full sm:max-w-sm space-y-3">
             <Slider
               name="brightness"
               label="Brightness"
@@ -661,7 +661,7 @@ const SliderDemo = () => {
       {/* ── Real World: Price Range ──────────────────────────────────── */}
       <Section title="Real World — Price Range Filter" description="A practical example: filtering products by price range with formatted tooltip." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-md space-y-4">
+          <div className="w-full sm:max-w-md space-y-4">
             <Slider
               label="Price Range"
               value={price}

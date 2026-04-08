@@ -70,14 +70,14 @@ const OtpInputDemo = () => {
             OTP Input
           </h1>
           <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
+            className={`text-sm leading-relaxed w-full sm:max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
           >
             A one-time password input with per-character fields, keyboard
             navigation, paste support, grouping, validation, and fully
             customizable styling.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { OtpInput } from "@chumlab/ui/otp-input";`}</code>
             </pre>
           </div>
@@ -233,7 +233,7 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-lg flex flex-wrap items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
         >
           <span
             className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}

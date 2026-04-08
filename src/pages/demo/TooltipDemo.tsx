@@ -100,7 +100,7 @@ const TooltipDemo = () => {
             on overflow.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Tooltip } from "@chumlab/ui/tooltip";`}</code>
             </pre>
           </div>
@@ -113,7 +113,7 @@ const TooltipDemo = () => {
         description="Works out-of-the-box with built-in styles and dark mode. Wrap any element to show a tooltip on hover."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Basic usage — wrap any element to show a tooltip on hover */}
           <Tooltip content="Save your changes">
             <button className={c.trigger}>Hover me</button>
@@ -133,7 +133,7 @@ const TooltipDemo = () => {
         description="Use the side prop to control tooltip placement: top, right, bottom, or left."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Top tooltip" side="top">
             <button className={c.trigger}>Top</button>
           </Tooltip>
@@ -155,7 +155,7 @@ const TooltipDemo = () => {
         description="Use align prop to control tooltip alignment along the side axis: start, center, or end."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Start aligned tooltip" side="bottom" align="start">
             <button className={c.trigger}>Start</button>
           </Tooltip>
@@ -174,7 +174,7 @@ const TooltipDemo = () => {
         description="Use sideOffset and alignOffset to fine-tune tooltip positioning."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Default offset (6px)" side="top">
             <button className={c.trigger}>Default</button>
           </Tooltip>
@@ -196,7 +196,7 @@ const TooltipDemo = () => {
         description="Toggle the arrow visibility with showArrow prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Arrow visible on this tooltip" showArrow={true}>
             <button className={c.trigger}>With Arrow</button>
           </Tooltip>
@@ -212,7 +212,7 @@ const TooltipDemo = () => {
         description="Control how long to wait before showing the tooltip with delayDuration (in milliseconds)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Instant appearance (0ms)" delayDuration={0}>
             <button className={c.trigger}>Instant</button>
           </Tooltip>
@@ -234,7 +234,7 @@ const TooltipDemo = () => {
         description="Control tooltip width with maxWidth prop (number for pixels or string for CSS value)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="This is a tooltip with a very narrow max width that will wrap text quickly"
             maxWidth={150}
@@ -259,7 +259,7 @@ const TooltipDemo = () => {
         description="Control how text wraps using wordWrap prop: 'break-word' (default), 'normal', or 'nowrap'."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="This is a very long tooltip with superlongwordthatwillbreakifneeded to demonstrate break-word behavior"
             maxWidth={200}
@@ -315,7 +315,7 @@ const TooltipDemo = () => {
             Toggle: {controlled ? "Open" : "Closed"}
           </button>
         </div>
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="This tooltip is controlled programmatically"
             open={controlled}
@@ -332,7 +332,7 @@ const TooltipDemo = () => {
         description="Use asChild to clone tooltip handlers onto the child element instead of wrapping it in a span. This avoids double tab-stops for interactive elements."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="No wrapper span - handlers cloned onto button" asChild>
             <Button className={c.trigger}>asChild Button</Button>
           </Tooltip>
@@ -353,7 +353,7 @@ const TooltipDemo = () => {
         description="Use disabled prop to prevent tooltip from showing."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="This won't show" disabled>
             <button className={c.trigger}>Disabled Tooltip</button>
           </Tooltip>
@@ -369,7 +369,7 @@ const TooltipDemo = () => {
         description="By default, moving mouse to tooltip keeps it open. Use disableHoverableContent to disable."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Move mouse to tooltip - it stays open" disableHoverableContent={false}>
             <button className={c.trigger}>Hoverable (default)</button>
           </Tooltip>
@@ -385,7 +385,7 @@ const TooltipDemo = () => {
         description="The content prop accepts ReactNode for rich formatted content."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content={richContentProTip} maxWidth={280}>
             <button className={c.trigger}>Rich Content</button>
           </Tooltip>
@@ -401,7 +401,7 @@ const TooltipDemo = () => {
         description="Use classes prop to customize tooltip appearance."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Dark theme tooltip"
             classes={{ content: contentClassNameDark, arrow: "fill-gray-900" }}
@@ -435,7 +435,7 @@ const TooltipDemo = () => {
         description="Use shadow prop with presets: none, sm, md, lg (default), xl, 2xl."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="No shadow" shadow="none">
             <button className={c.trigger}>None</button>
           </Tooltip>
@@ -463,7 +463,7 @@ const TooltipDemo = () => {
         description="Pass a custom CSS box-shadow string to the shadow prop."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Custom blue glow shadow" shadow={shadowBlueGlow}>
             <button className={c.trigger}>Blue Glow</button>
           </Tooltip>
@@ -485,7 +485,7 @@ const TooltipDemo = () => {
         description="Use contentStyle for gradient backgrounds and arrowColor to match the arrow."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Purple gradient with arrow"
             classes={{ content: contentClassNameGradient }}
@@ -527,7 +527,7 @@ const TooltipDemo = () => {
         description="Use arrowColor to tint the arrow independently. Pair with classes.content or contentStyle to match."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Indigo arrow"
             arrowColor={dark ? "#818cf8" : "#4f46e5"}
@@ -571,7 +571,7 @@ const TooltipDemo = () => {
         description="Use zIndex prop to control stacking order (default: 9999)."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Default z-index (9999)" zIndex={9999}>
             <button className={c.trigger}>Default</button>
           </Tooltip>
@@ -752,7 +752,7 @@ const TooltipDemo = () => {
         description="The Tooltip trigger wrapper applies data attributes for CSS-based styling."
         isDarkMode={dark}
       >
-        <DemoWrapper isDarkMode={dark}>
+        <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip content="Inspect me to see aria-describedby">
             <button className={c.trigger}>Inspect trigger</button>
           </Tooltip>

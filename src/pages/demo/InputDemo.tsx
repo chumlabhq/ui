@@ -316,7 +316,7 @@ const InputDemo = () => {
             prop.
           </p>
           <div className="pt-1">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Input, InputLabel } from "@chumlab/ui/input";`}</code>
             </pre>
           </div>
@@ -332,7 +332,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark} layout="block">
-            <div className="flex flex-col gap-4 max-w-sm">
+            <div className="flex flex-col gap-4 w-full sm:max-w-sm">
               {/* Basic usage — works out-of-the-box with built-in styles */}
               <Input
                 label="Full Name"
@@ -399,7 +399,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
                 label="Email address"
                 description="We'll never share your email."
@@ -424,7 +424,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               {(
                 [
                   [
@@ -487,7 +487,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
                 label="Price"
                 placeholder="0.00"
@@ -531,7 +531,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
                 label="Controlled"
                 placeholder="Type something..."
@@ -560,7 +560,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
                 label="Bio"
                 placeholder="Tell us about yourself..."
@@ -640,7 +640,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-sm">
+            <div className="w-full sm:max-w-sm">
               <Input
                 label="Email"
                 placeholder="you@example.com"
@@ -675,7 +675,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-sm">
+            <div className="w-full sm:max-w-sm">
               <Input
                 label="Password"
                 type={showPw ? "text" : "password"}
@@ -704,7 +704,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-sm space-y-3">
+            <div className="w-full sm:max-w-sm space-y-3">
               <Input
                 label="Type anything"
                 placeholder="Watch the value below..."
@@ -897,7 +897,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
                 label="Zip code (pattern)"
                 placeholder="12345"
@@ -966,7 +966,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-4 w-full max-w-sm">
+            <div className="space-y-4 w-full sm:max-w-sm">
               <Input
                 ref={inputRef}
                 aria-label="Ref demo"
@@ -1006,7 +1006,7 @@ const InputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-4 w-full max-w-sm">
+            <div className="space-y-4 w-full sm:max-w-sm">
               <div>
                 <InputLabel
                   label="Custom Layout"
@@ -1151,7 +1151,7 @@ const InputDemo = () => {
                 e.preventDefault();
                 alert("Signed in!");
               }}
-              className="w-full max-w-sm space-y-5"
+              className="w-full sm:max-w-sm space-y-5"
             >
               <div className="text-center space-y-1 mb-8">
                 <h3
@@ -1229,9 +1229,9 @@ const InputDemo = () => {
                 e.preventDefault();
                 alert("Created!");
               }}
-              className="w-full max-w-md space-y-5"
+              className="w-full sm:max-w-md space-y-5"
             >
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label="First name"
                   placeholder="John"

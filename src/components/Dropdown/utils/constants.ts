@@ -4,13 +4,13 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   root: "",
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2.5 text-left border rounded-lg transition-colors border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
   triggerText: "flex-1 text-left truncate",
   content:
     "rounded-lg shadow-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
   optionList: "max-h-60 overflow-y-auto",
   option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700",
+    "flex items-center justify-between px-3 py-2.5 cursor-pointer transition-colors text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700",
   optionSelected: "bg-blue-50 dark:bg-blue-900/50 font-medium",
   optionFocused: "bg-gray-100 dark:bg-gray-700",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",

@@ -2,7 +2,7 @@ import type { BreadcrumbClasses } from "./types";
 
 export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   root: "",
-  list: "flex items-center gap-1",
+  list: "flex flex-wrap items-center gap-1",
   item: "flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border-none text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-900",
   itemActive: "flex items-center gap-1 px-2 py-1 text-sm font-medium bg-transparent border-none cursor-default text-gray-900 dark:text-white",
   itemDisabled: "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-gray-500 dark:hover:text-gray-400",
