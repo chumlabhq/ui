@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Avatar",
+  "description": "A user avatar component displaying an image, initials, or fallback content with optional status indicator and tooltip.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "User's display name, used for initials and accessible labels."
+    },
+    "src": {
+      "type": "string",
+      "description": "Image URL for the avatar. Falls back to initials, then fallback content."
+    },
+    "alt": {
+      "type": "string",
+      "description": "Alt text for the avatar image."
+    },
+    "size": {
+      "oneOf": [
+        { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl"] },
+        { "type": "number" }
+      ],
+      "description": "Avatar size as a preset or numeric pixel value.",
+      "default": "md"
+    },
+    "shape": {
+      "type": "string",
+      "enum": ["circle", "square", "rounded"],
+      "description": "Visual shape of the avatar.",
+      "default": "circle"
+    },
+    "maxInitials": {
+      "type": "number",
+      "description": "Maximum number of initials to show.",
+      "default": 2
+    },
+    "fallback": {
+      "type": "object",
+      "description": "React.ReactNode — Custom fallback content when no image or name is available."
+    },
+    "autoColor": {
+      "type": "boolean",
+      "description": "Generates a deterministic background color from the name."
+    },
+    "colors": {
+      "type": "object",
+      "description": "Custom color palettes for auto-colored mode.",
+      "properties": {
+        "backgrounds": { "type": "array", "items": { "type": "string" } },
+        "borders": { "type": "array", "items": { "type": "string" } },
+        "text": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "bordered": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string" }
+      ],
+      "description": "Adds a border ring. Pass true for default color or a CSS color string."
+    },
+    "status": {
+      "oneOf": [
+        { "type": "string", "enum": ["online", "offline", "away", "busy"] },
+        {
+          "type": "object",
+          "description": "AvatarStatusConfig",
+          "properties": {
+            "type": { "type": "string", "enum": ["online", "offline", "away", "busy"] },
+            "position": { "type": "string", "enum": ["top-right", "top-left", "bottom-right", "bottom-left"] },
+            "className": { "type": "string" },
+            "color": { "type": "string" }
+          },
+          "required": ["type"]
+        }
+      ],
+      "description": "Presence status indicator. Pass a string for defaults or a config object."
+    },
+    "tooltip": {
+      "oneOf": [
+        { "type": "object", "description": "React.ReactNode" },
+        {
+          "type": "object",
+          "description": "AvatarTooltipConfig",
+          "properties": {
+            "content": { "type": "object", "description": "React.ReactNode" },
+            "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
+            "align": { "type": "string", "enum": ["start", "center", "end"] },
+            "sideOffset": { "type": "number" },
+            "delayDuration": { "type": "number" },
+            "className": { "type": "string" },
+            "showArrow": { "type": "boolean" }
+          },
+          "required": ["content"]
+        }
+      ],
+      "description": "Tooltip shown on hover. Pass a string/ReactNode or a config object."
+    },
+    "imageConfig": {
+      "type": "object",
+      "description": "Advanced image loading configuration (srcSet, loading, decoding, CORS).",
+      "properties": {
+        "srcSet": { "type": "string" },
+        "sizes": { "type": "string" },
+        "loading": { "type": "string", "enum": ["lazy", "eager"] },
+        "decoding": { "type": "string", "enum": ["sync", "async", "auto"] },
+        "crossOrigin": { "type": "string" },
+        "referrerPolicy": { "type": "string" },
+        "fetchPriority": { "type": "string", "enum": ["high", "low", "auto"] },
+        "className": { "type": "string" }
+      }
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for avatar sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "inner": { "type": "string" },
+        "image": { "type": "string" },
+        "initials": { "type": "string" },
+        "fallback": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "textStyle": {
+      "type": "object",
+      "description": "CSSProperties — Inline styles for the initials text."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows a loading shimmer placeholder."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects OS setting."
+    },
+    "onLoad": {
+      "type": "object",
+      "description": "() => void — Fires when the avatar image finishes loading."
+    },
+    "onError": {
+      "type": "object",
+      "description": "() => void — Fires when the avatar image fails to load."
+    },
+    "asChild": {
+      "type": "boolean",
+      "description": "Merges avatar props onto the child element via Slot."
+    }
+  },
+  "required": []
+}

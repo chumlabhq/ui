@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InternationalPhoneInput",
+  "description": "A phone number input with country code selector, validation, formatting, paste detection, and copy format support.",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "object",
+      "description": "PhoneNumberValue - Controlled phone value with countryCode and phoneNumber fields.",
+      "properties": {
+        "countryCode": { "type": "string" },
+        "phoneNumber": { "type": "string" }
+      }
+    },
+    "defaultValue": {
+      "type": "object",
+      "description": "PhoneNumberValue - Default phone value for uncontrolled usage.",
+      "properties": {
+        "countryCode": { "type": "string" },
+        "phoneNumber": { "type": "string" }
+      }
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data."
+    },
+    "onCountryChange": {
+      "type": "object",
+      "description": "(country: CountryOption) => void - Fires when the selected country changes."
+    },
+    "defaultCountry": {
+      "type": "string",
+      "description": "ISO country code for the default selected country."
+    },
+    "countries": {
+      "type": "array",
+      "description": "Custom list of country options to display.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "string" },
+          "label": { "type": "string" },
+          "flag": { "type": "string" },
+          "dialCode": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "required": ["value", "label", "flag", "dialCode", "name"]
+      }
+    },
+    "preferredCountries": {
+      "type": "array",
+      "description": "ISO country codes to show at the top of the country list.",
+      "items": { "type": "string" }
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode - Label rendered above the input."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode - Helper text displayed below the label."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "When true, the input is in a loading state."
+    },
+    "clearable": {
+      "type": "boolean",
+      "description": "When true, shows a clear button to reset the phone number."
+    },
+    "onClear": {
+      "type": "object",
+      "description": "() => void - Called when the clear button is clicked."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Marks the field as required."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables the input."
+    },
+    "readOnly": {
+      "type": "boolean",
+      "description": "Makes the input read-only."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays the input in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Error message displayed below the input."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Displays the input in a success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Success message displayed below the input."
+    },
+    "placeholder": {
+      "type": "string",
+      "description": "Placeholder text for the phone number input."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Makes the input span the full width of its container."
+    },
+    "validateOnBlur": {
+      "type": "boolean",
+      "description": "Validates the phone number when the input loses focus."
+    },
+    "validationMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Custom validation message shown on blur validation."
+    },
+    "enablePasteDetection": {
+      "type": "boolean",
+      "description": "Enables automatic detection and parsing of pasted phone numbers."
+    },
+    "copyFormat": {
+      "type": "string",
+      "enum": ["e164", "international", "national"],
+      "description": "Format used when copying the phone number."
+    },
+    "onPasteDetected": {
+      "type": "object",
+      "description": "(data: PasteDetectedData) => void - Fires when a phone number paste is detected."
+    },
+    "countryDropdownPlaceholder": {
+      "type": "string",
+      "description": "Placeholder text for the country dropdown."
+    },
+    "countrySearchPlaceholder": {
+      "type": "string",
+      "description": "Placeholder text for the country search input."
+    },
+    "countryDropdownAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the country dropdown."
+    },
+    "selectedIcon": {
+      "type": "object",
+      "description": "React.ReactNode - Custom icon for the selected country indicator."
+    },
+    "renderCountryOption": {
+      "type": "object",
+      "description": "(props: CountryOptionRenderProps) => ReactNode - Custom render function for country options."
+    },
+    "renderSelectedCountry": {
+      "type": "object",
+      "description": "(country: CountryOption) => ReactNode - Custom render function for the selected country display."
+    },
+    "formatPatterns": {
+      "type": "object",
+      "description": "Record<string, PhoneFormatPattern> - Custom phone number formatting patterns by country."
+    },
+    "lengthRules": {
+      "type": "object",
+      "description": "Record<string, PhoneLengthRule> - Custom phone number length validation rules by country."
+    },
+    "className": {
+      "type": "string",
+      "description": "Additional CSS class for the root element."
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles for the root element."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "label": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "input": { "type": "string" },
+        "error": { "type": "string" },
+        "success": { "type": "string" },
+        "countrySelect": { "type": "string" },
+        "countrySelectTrigger": { "type": "string" },
+        "countrySelectDropdown": { "type": "string" },
+        "countrySelectSearchInput": { "type": "string" },
+        "countrySelectSearchInputElement": { "type": "string" },
+        "countrySelectOption": { "type": "string" },
+        "countrySelectOptionSelected": { "type": "string" },
+        "countrySelectOptionList": { "type": "string" },
+        "countrySelectChevron": { "type": "string" },
+        "countrySelectCheckIcon": { "type": "string" },
+        "countrySelectSearchIcon": { "type": "string" },
+        "countrySelectNoResults": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "dropdownPosition": {
+      "type": "string",
+      "enum": ["top", "bottom"],
+      "description": "Vertical placement of the country dropdown relative to the trigger."
+    },
+    "forceDropdownPosition": {
+      "type": "boolean",
+      "description": "Locks the country dropdown to the specified position without auto-flipping."
+    },
+    "dropdownZIndex": {
+      "type": "number",
+      "description": "Z-index of the country dropdown popup."
+    },
+    "dropdownGap": {
+      "type": "number",
+      "description": "Gap in pixels between trigger and country dropdown popup."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null - Portal target for the country dropdown."
+    },
+    "lockScroll": {
+      "type": "boolean",
+      "description": "Locks body scroll while the country dropdown is open."
+    }
+  },
+  "required": []
+}

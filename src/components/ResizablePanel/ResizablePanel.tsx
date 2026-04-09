@@ -208,10 +208,12 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         startDirectionRef.current = resizeDirection;
         startPosRef.current = isVertical ? e.clientY : e.clientX;
         startSizeRef.current = sizeRef.current;
-        savedBodyCursorRef.current = document.body.style.cursor;
-        savedBodyUserSelectRef.current = document.body.style.userSelect;
-        document.body.style.cursor = isVertical ? "row-resize" : "col-resize";
-        document.body.style.userSelect = "none";
+        if (isBrowser) {
+          savedBodyCursorRef.current = document.body.style.cursor;
+          savedBodyUserSelectRef.current = document.body.style.userSelect;
+          document.body.style.cursor = isVertical ? "row-resize" : "col-resize";
+          document.body.style.userSelect = "none";
+        }
         captureTargetRef.current = e.currentTarget;
         pointerIdRef.current = e.pointerId;
         e.currentTarget.setPointerCapture(e.pointerId);

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TabPanel",
+  "description": "A tabbed interface component with keyboard navigation, icons, counts, tooltips, and horizontal/vertical orientation.",
+  "type": "object",
+  "properties": {
+    "tabs": {
+      "type": "array",
+      "description": "Array of tab definitions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Unique tab identifier." },
+          "label": { "type": "string", "description": "Tab label text." },
+          "icon": { "type": "object", "description": "React.ReactNode — Icon displayed in the tab." },
+          "count": { "type": "number", "description": "Badge count displayed on the tab." },
+          "disabled": { "type": "boolean", "description": "Whether the tab is disabled." },
+          "tooltip": { "type": "object", "description": "React.ReactNode — Tooltip content for the tab." }
+        },
+        "required": ["id", "label"]
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "value": {
+      "type": "string",
+      "description": "Controlled active tab ID."
+    },
+    "defaultValue": {
+      "type": "string",
+      "description": "Default uncontrolled active tab ID."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(tabId: string) => void — Callback fired when the active tab changes."
+    },
+    "children": {
+      "type": "object",
+      "description": "React.ReactNode | ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function."
+    },
+    "orientation": {
+      "type": "string",
+      "enum": ["horizontal", "vertical"],
+      "description": "Layout orientation of the tab list."
+    },
+    "activationMode": {
+      "type": "string",
+      "enum": ["automatic", "manual"],
+      "description": "Whether tabs activate automatically on focus or require manual activation."
+    },
+    "loop": {
+      "type": "boolean",
+      "description": "Whether keyboard navigation loops from last tab to first."
+    },
+    "iconPosition": {
+      "type": "string",
+      "enum": ["left", "right"],
+      "description": "Position of tab icons relative to the label."
+    },
+    "showZeroCount": {
+      "type": "boolean",
+      "description": "Whether to show a count badge when the count is zero."
+    },
+    "alwaysShowLabels": {
+      "type": "boolean",
+      "description": "Whether to always show tab labels (even when icons are present)."
+    },
+    "showTooltips": {
+      "type": "boolean",
+      "description": "Whether to show tooltips on tabs."
+    },
+    "tooltipPosition": {
+      "type": "string",
+      "enum": ["top", "bottom", "left", "right"],
+      "description": "Position of tab tooltips."
+    },
+    "tooltipOffset": {
+      "type": "number",
+      "description": "Offset distance for tab tooltips in pixels."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the entire tab panel is disabled."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting."
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    },
+    "renderTab": {
+      "type": "object",
+      "description": "(props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the tab list."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "ID of the element that labels the tab list."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "tabList": { "type": "string" },
+        "tab": { "type": "string" },
+        "tabActive": { "type": "string" },
+        "tabInactive": { "type": "string" },
+        "tabDisabled": { "type": "string" },
+        "tabFocus": { "type": "string" },
+        "label": { "type": "string" },
+        "labelActive": { "type": "string" },
+        "labelInactive": { "type": "string" },
+        "icon": { "type": "string" },
+        "iconActive": { "type": "string" },
+        "iconInactive": { "type": "string" },
+        "count": { "type": "string" },
+        "countActive": { "type": "string" },
+        "countInactive": { "type": "string" },
+        "indicator": { "type": "string" },
+        "panel": { "type": "string" }
+      }
+    },
+    "className": {
+      "type": "string",
+      "description": "CSS class for the root element."
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles applied to the root element."
+    },
+    "forceMount": {
+      "type": "boolean",
+      "description": "Force mount all tab panels regardless of active state."
+    },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keep previously mounted tab panels in the DOM."
+    }
+  },
+  "required": ["tabs"]
+}

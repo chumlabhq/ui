@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CascadingDropdown",
+  "description": "A multi-level cascading dropdown supporting single and multi-select modes, async child loading, and search filtering.",
+  "type": "object",
+  "properties": {
+    "options": {
+      "type": "array",
+      "description": "Top-level options for the dropdown.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "string" },
+          "label": { "type": "string" },
+          "content": { "type": "object", "description": "React.ReactNode — Custom display content." },
+          "selectedContent": { "type": "object", "description": "React.ReactNode — Content shown when selected." },
+          "disabled": { "type": "boolean" },
+          "children": { "type": "array", "description": "Nested child options.", "items": { "type": "object" } },
+          "selectionMode": { "type": "string", "enum": ["single", "multi"] },
+          "hasChildren": { "type": "boolean", "description": "Indicates async children are available." }
+        },
+        "required": ["value", "label"]
+      }
+    },
+    "value": {
+      "type": "object",
+      "description": "Controlled selection value as { [parentValue]: string | string[] }."
+    },
+    "defaultValue": {
+      "type": "object",
+      "description": "Initial selection value for uncontrolled usage."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(value: CascadingValue, path: CascadingOption[]) => void"
+    },
+    "onLoadChildren": {
+      "type": "object",
+      "description": "(parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader."
+    },
+    "onLoadError": {
+      "type": "object",
+      "description": "(error: unknown) => void — Called when async child loading fails."
+    },
+    "open": {
+      "type": "boolean",
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "description": "Initial open state for uncontrolled usage."
+    },
+    "onOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void"
+    },
+    "onBlur": {
+      "type": "object",
+      "description": "() => void"
+    },
+    "onFocus": {
+      "type": "object",
+      "description": "() => void"
+    },
+    "onKeyDown": {
+      "type": "object",
+      "description": "(event: React.KeyboardEvent) => void"
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name."
+    },
+    "placeholder": {
+      "type": "object",
+      "description": "React.ReactNode — Placeholder content when no value is selected."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables the dropdown."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Error message."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode — Label above the trigger."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode — Description text."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Displays success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Success message."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Marks the field as required."
+    },
+    "noResultsContent": {
+      "type": "object",
+      "description": "React.ReactNode — Content shown when no results match."
+    },
+    "loadingText": {
+      "type": "object",
+      "description": "React.ReactNode — Text shown during async loading."
+    },
+    "shimmerCount": {
+      "type": "number",
+      "description": "Number of shimmer placeholders during loading."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows loading state."
+    },
+    "clearable": {
+      "type": "boolean",
+      "description": "Shows a clear button to reset the selection."
+    },
+    "showChevron": {
+      "type": "boolean",
+      "description": "Shows a chevron indicator on the trigger."
+    },
+    "showSelectedIcon": {
+      "type": "boolean",
+      "description": "Shows an icon on selected items."
+    },
+    "selectedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom icon for selected items."
+    },
+    "checkboxIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom checkbox icon for multi-select."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Stretches the dropdown to fill its container width."
+    },
+    "submenuPosition": {
+      "type": "string",
+      "enum": ["right", "left"],
+      "description": "Horizontal position of submenus."
+    },
+    "dropdownPosition": {
+      "type": "string",
+      "enum": ["top", "bottom"],
+      "description": "Vertical position of the dropdown."
+    },
+    "closeOnSelect": {
+      "type": "boolean",
+      "description": "Closes the dropdown after an item is selected."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for dropdown sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "trigger": { "type": "string" },
+        "menu": { "type": "string" },
+        "menuItem": { "type": "string" },
+        "menuItemSelected": { "type": "string" },
+        "menuItemFocused": { "type": "string" },
+        "menuItemDisabled": { "type": "string" },
+        "submenu": { "type": "string" },
+        "submenuContainer": { "type": "string" },
+        "submenuItem": { "type": "string" },
+        "submenuItemSelected": { "type": "string" },
+        "submenuItemFocused": { "type": "string" },
+        "label": { "type": "string" },
+        "error": { "type": "string" },
+        "description": { "type": "string" },
+        "success": { "type": "string" },
+        "chevron": { "type": "string" },
+        "submenuChevron": { "type": "string" },
+        "checkIcon": { "type": "string" },
+        "checkbox": { "type": "string" },
+        "checkboxChecked": { "type": "string" },
+        "noResults": { "type": "string" },
+        "loading": { "type": "string" },
+        "clearIcon": { "type": "string" },
+        "shimmer": { "type": "string" },
+        "shimmerItem": { "type": "string" },
+        "searchInput": { "type": "string" },
+        "searchInputElement": { "type": "string" },
+        "searchIcon": { "type": "string" },
+        "submenuSearchInput": { "type": "string" },
+        "submenuSearchInputElement": { "type": "string" },
+        "submenuSearchIcon": { "type": "string" },
+        "content": { "type": "string" },
+        "option": { "type": "string" },
+        "optionSelected": { "type": "string" },
+        "optionFocused": { "type": "string" },
+        "optionDisabled": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "lockScroll": {
+      "type": "boolean",
+      "description": "Locks body scroll when the dropdown is open."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null — Portal container for the dropdown."
+    },
+    "dropdownZIndex": {
+      "type": "number",
+      "description": "Z-index of the dropdown."
+    },
+    "dropdownGap": {
+      "type": "number",
+      "description": "Gap in pixels between trigger and dropdown."
+    },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keep the dropdown DOM mounted when closed."
+    },
+    "className": {
+      "type": "string",
+      "description": "CSS class for the root element."
+    },
+    "style": {
+      "type": "object",
+      "description": "CSSProperties — Inline styles."
+    },
+    "ClearIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string }> — Custom clear icon component."
+    },
+    "renderTrigger": {
+      "type": "object",
+      "description": "(props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function."
+    },
+    "showMenuSearch": {
+      "type": "boolean",
+      "description": "Show a search input inside the main menu."
+    },
+    "showSubmenuSearch": {
+      "type": "boolean",
+      "description": "Show a search input inside submenus."
+    },
+    "menuSearchPlaceholder": {
+      "type": "string",
+      "description": "Placeholder text for the main menu search input."
+    },
+    "submenuSearchPlaceholder": {
+      "type": "string",
+      "description": "Placeholder text for the submenu search input."
+    },
+    "onMenuSearch": {
+      "type": "object",
+      "description": "(query: string) => Promise<CascadingOption[]> — Async search for main menu."
+    },
+    "onSubmenuSearch": {
+      "type": "object",
+      "description": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu."
+    },
+    "searchDebounceMs": {
+      "type": "number",
+      "description": "Debounce delay in ms for async search callbacks.",
+      "default": 300
+    },
+    "SearchIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string }> — Custom search icon component."
+    },
+    "menuSearchAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the menu search input."
+    },
+    "submenuSearchAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the submenu search input."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the dropdown."
+    }
+  },
+  "required": ["options"]
+}

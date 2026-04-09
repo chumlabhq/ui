@@ -1,0 +1,248 @@
+{
+  "components": [
+    "Accordion", "Avatar", "BrandLogo", "Breadcrumb", "Button",
+    "CascadingDropdown", "Checkbox", "CountryFlag", "DatePicker", "Drawer",
+    "Dropdown", "Input", "InternationalPhoneInput", "Loader", "Modal",
+    "MultiSelectDropdown", "MultiSelectSearchableDropdown", "OtpInput",
+    "Pagination", "RadioButton", "ResizablePanel", "SearchableDropdown",
+    "Slider", "Stepper", "Switch", "Table", "TabPanel", "TextArea",
+    "TimePicker", "Toast", "Tooltip"
+  ],
+  "pipeline": {
+    "currentStep": 13,
+    "stepName": "13-embeddings",
+    "status": "COMPLETE",
+    "allStepsComplete": true
+  },
+  "issues": {
+    "blockers": [],
+    "high": [],
+    "low": [
+      {
+        "id": "TYPE-001",
+        "type": "type-safety",
+        "component": "Table",
+        "file": "src/components/Table/Table.tsx",
+        "description": "Unsafe double assertions for columns/events - contained, would break API to fix",
+        "status": "deferred"
+      },
+      {
+        "id": "TYPE-002",
+        "type": "type-safety",
+        "component": "Button",
+        "file": "src/components/Button/Button.tsx",
+        "description": "Double casting for polymorphic element support - necessary for API",
+        "status": "deferred"
+      },
+      {
+        "id": "TYPE-003",
+        "type": "type-safety",
+        "component": "Modal",
+        "file": "src/components/Modal/Modal.tsx",
+        "description": "document.activeElement cast as HTMLElement without null check"
+      },
+      {
+        "id": "TYPE-004",
+        "type": "type-safety",
+        "component": "Stepper",
+        "file": "src/components/Stepper/Stepper.tsx",
+        "description": "Double casting icon as unknown as ComponentType"
+      },
+      {
+        "id": "TYPE-005",
+        "type": "type-safety",
+        "component": "AvatarGroup",
+        "file": "src/components/Avatar/components/AvatarGroup.tsx",
+        "description": "KeyboardEvent cast as unknown as MouseEvent in onKeyDown handler"
+      },
+      {
+        "id": "TYPE-006",
+        "type": "type-safety",
+        "component": "DatePicker",
+        "file": "src/components/DatePicker/DatePicker.tsx",
+        "description": "KeyboardEvent cast as unknown as MouseEvent in handleClearClick"
+      },
+      {
+        "id": "TYPE-007",
+        "type": "type-safety",
+        "component": "SearchableDropdown",
+        "file": "src/components/SearchableDropdown/utils/useDropdown.ts",
+        "description": "Event type mismatch - cast as unknown as MouseEvent"
+      },
+      {
+        "id": "TYPE-008",
+        "type": "type-safety",
+        "component": "Input",
+        "file": "src/components/Input/Input.tsx",
+        "description": "Event cast as unknown as ChangeEvent<HTMLInputElement>"
+      },
+      {
+        "id": "TYPE-009",
+        "type": "type-safety",
+        "component": "TextArea",
+        "file": "src/components/TextArea/TextArea.tsx",
+        "description": "Event cast as unknown as ChangeEvent<HTMLTextAreaElement>"
+      },
+      {
+        "id": "PERF-001",
+        "type": "performance",
+        "component": "Multiple",
+        "description": "80+ inline style objects in JSX break memoization (Table, Slider, DatePicker, Modal, etc.)"
+      },
+      {
+        "id": "PERF-003",
+        "type": "performance",
+        "component": "MultiSelectDropdown",
+        "description": "MultiSelectDropdownContent not wrapped in React.memo"
+      },
+      {
+        "id": "PERF-004",
+        "type": "performance",
+        "component": "AvatarGroup",
+        "description": "Falls back to index as key"
+      },
+      {
+        "id": "A11Y-BREADCRUMB-001",
+        "type": "accessibility",
+        "component": "Breadcrumb",
+        "file": "src/components/Breadcrumb/Breadcrumb.tsx",
+        "description": "Uses role=menu/menuitem instead of listbox/option for navigation breadcrumb"
+      },
+      {
+        "id": "A11Y-TOOLTIP-001",
+        "type": "accessibility",
+        "component": "Tooltip",
+        "file": "src/components/Tooltip/Tooltip.tsx",
+        "description": "Escape key does not stopPropagation - may close parent Modal instead of Tooltip"
+      }
+    ]
+  },
+  "fixes": [
+    {
+      "id": "FIX-SSR",
+      "fixed": ["SSR-001", "SSR-002", "SSR-003", "SSR-007"],
+      "description": "Added SSR guards to Drawer, TimePicker, ResizablePanel, MultiSelectSearchableDropdown"
+    },
+    {
+      "id": "FIX-SSR-VERIFIED",
+      "fixed": ["SSR-004", "SSR-005", "SSR-006", "SSR-008"],
+      "description": "Verified Pagination, Tooltip, Breadcrumb, Accordion already had proper guards"
+    },
+    {
+      "id": "FIX-A11Y",
+      "fixed": ["A11Y-001", "A11Y-002", "A11Y-003", "A11Y-004"],
+      "description": "Added aria-hidden to Button icons, keyboard nav to Dropdown, role/aria-label to Switch/Input loading states"
+    },
+    {
+      "id": "FIX-THEME",
+      "fixed": ["THEME-001", "THEME-002", "THEME-004", "THEME-005", "THEME-006", "THEME-008", "THEME-010", "THEME-011", "THEME-012"],
+      "description": "Added dark: variants to OtpInput, DatePicker, RadioButton, Stepper, TimePicker, Checkbox, MultiSelectDropdown, SearchableDropdown, InternationalPhoneInput"
+    },
+    {
+      "id": "FIX-RESP",
+      "fixed": ["RESP-001"],
+      "description": "Increased tap target padding on clear/close/pin buttons across 6 components"
+    },
+    {
+      "id": "FIX-TEST",
+      "fixed": ["test-regression"],
+      "description": "Updated Input test to expect aria-busy when loading"
+    },
+    {
+      "id": "FIX-A11Y-CHIP",
+      "fixed": ["A11Y-CHIP-001"],
+      "description": "Changed SelectedChip remove from span[role=button][tabIndex=-1] to native <button> with tabIndex=0"
+    },
+    {
+      "id": "FIX-SSR-TABLE",
+      "fixed": ["SSR-TABLE-001"],
+      "description": "Added SSR guards to exportTableToCSV() and copyToClipboard() in Table/utils.ts"
+    },
+    {
+      "id": "FIX-A11Y-AVATAR",
+      "fixed": ["A11Y-AVATAR-001"],
+      "description": "Changed Avatar image alt fallback from empty string to 'Avatar'"
+    },
+    {
+      "id": "FIX-RESP-OTP",
+      "fixed": ["RESP-OTP-001"],
+      "description": "Changed OtpInput from fixed w-12 h-12 to responsive w-10 h-10 sm:w-12 sm:h-12"
+    },
+    {
+      "id": "FIX-RESP-TIME",
+      "fixed": ["RESP-TIME-001"],
+      "description": "TimePicker: trigger w-full sm:w-56, clock face w-44 h-44 sm:w-52 sm:h-52, container p-3 sm:p-4"
+    },
+    {
+      "id": "FIX-THEME-AVATAR",
+      "fixed": ["THEME-AVATAR-001"],
+      "description": "Added dark color palettes and CSS custom properties for Avatar auto-color dark mode support"
+    },
+    {
+      "id": "FIX-THEME-DATEPICKER",
+      "fixed": ["THEME-DATEPICKER-001"],
+      "description": "Replaced hardcoded inline tooltip colors with Tailwind dark: variant classes"
+    },
+    {
+      "id": "FIX-THEME-TABLE-ICON",
+      "fixed": ["THEME-TABLE-ICON-001"],
+      "description": "Changed PinIcon clipPath fill from #fff to currentColor"
+    },
+    {
+      "id": "FIX-RESP-BREADCRUMB",
+      "fixed": ["RESP-BREADCRUMB-001"],
+      "description": "Increased Breadcrumb ellipsis button from w-8 h-8 to w-10 h-10"
+    },
+    {
+      "id": "FIX-RESP-CHIP",
+      "fixed": ["RESP-CHIP-001"],
+      "description": "Increased MultiSelectDropdown chipRemove from w-3 h-3 to w-4 h-4 with p-0.5 and native button"
+    },
+    {
+      "id": "FIX-RESP-MODAL",
+      "fixed": ["RESP-MODAL-001"],
+      "description": "Modal container padding p-4 to p-2 sm:p-4"
+    },
+    {
+      "id": "FIX-RESP-DATEPICKER",
+      "fixed": ["RESP-DATEPICKER-CAL"],
+      "description": "DatePicker calendar padding p-4 to p-2 sm:p-4"
+    },
+    {
+      "id": "FIX-RESP-CASCADING",
+      "fixed": ["RESP-CASCADING-001"],
+      "description": "CascadingDropdown menu/submenu min-w from fixed to min-w-full sm:min-w-[200px/180px]"
+    },
+    {
+      "id": "FIX-KNOWLEDGE",
+      "fixed": ["KNOWLEDGE-001"],
+      "description": "Created 31 .schema.json files for all components"
+    }
+  ],
+  "regressions": [],
+  "coverage": {
+    "tests": 65.88,
+    "a11y": 95,
+    "responsive": 98,
+    "theme": 98,
+    "schema": 100,
+    "index": 100,
+    "embeddings": 100
+  },
+  "validation": {
+    "typescript": "PASS - 0 errors",
+    "tests": "PASS - 1477/1477 (30/30 files)",
+    "ssr": "PASS - all issues fixed",
+    "accessibility": "PASS - all blockers and high issues fixed",
+    "theme": "PASS - dark mode complete across all components",
+    "responsive": "PASS - responsive breakpoints added, tap targets fixed",
+    "security": "PASS - no vulnerabilities",
+    "seo": "PASS - comprehensive structured data, GEO, OG tags",
+    "brand": "PASS - consistent Chumlab/@chumlab/ui",
+    "demos": "PASS - all 31 components have demos",
+    "knowledge": "PASS - .ai.md + .schema.json for all 31 components",
+    "aiIndex": "PASS - component-index.json with 31 entries",
+    "embeddings": "PASS - 31/31 semantic text descriptions, correct structure, no fake vectors, index-matched"
+  },
+  "confidence": "HIGH"
+}

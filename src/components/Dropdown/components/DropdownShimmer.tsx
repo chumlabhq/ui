@@ -12,7 +12,7 @@ const DropdownShimmer = memo(function DropdownShimmer({
   itemClassName,
 }: DropdownShimmerProps) {
   return (
-    <div className={className || undefined}>
+    <div className={className || undefined} role="status" aria-busy="true" aria-label="Loading options">
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}

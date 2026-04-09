@@ -18,7 +18,7 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
     "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-500 dark:text-gray-400",
   checkIcon: "w-4 h-4 shrink-0 text-blue-600 dark:text-blue-400",
   clearIcon:
-    "absolute right-8 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer text-gray-500 dark:text-gray-400",
+    "absolute right-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer text-gray-500 dark:text-gray-400",
   noResults:
     "px-3 py-4 text-sm text-center text-gray-500 dark:text-gray-400",
   label:

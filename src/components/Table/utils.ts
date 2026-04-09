@@ -46,6 +46,7 @@ export function exportTableToCSV<TData>(
   columns: ColumnDef<TData>[],
   filename = "table-export",
 ): void {
+  if (typeof document === "undefined") return;
   // Build header row and accessor functions
   const headers: string[] = [];
   const accessors: ((row: TData) => unknown)[] = [];
@@ -93,6 +94,7 @@ export function exportTableToCSV<TData>(
  * Copy text to the clipboard using the Clipboard API with a fallback.
  */
 export async function copyToClipboard(text: string): Promise<boolean> {
+  if (typeof document === "undefined") return false;
   try {
     if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
       await navigator.clipboard.writeText(text);

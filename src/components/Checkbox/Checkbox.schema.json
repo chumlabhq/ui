@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Checkbox",
+  "description": "A checkbox input component with label, description, indeterminate state, and validation support.",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode — Text label rendered beside the checkbox."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode — Helper text rendered below the label."
+    },
+    "checked": {
+      "type": "boolean",
+      "description": "Controlled checked state."
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "description": "Initial checked state for uncontrolled usage."
+    },
+    "indeterminate": {
+      "type": "boolean",
+      "description": "Displays the indeterminate (minus) indicator instead of a checkmark."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(checked: boolean) => void — Fires when the checked state changes."
+    },
+    "onCheckedChange": {
+      "type": "object",
+      "description": "(checked: boolean) => void — Deprecated: use onValueChange instead."
+    },
+    "onFocus": {
+      "type": "object",
+      "description": "(event: FocusEvent) => void"
+    },
+    "onBlur": {
+      "type": "object",
+      "description": "(event: FocusEvent) => void"
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays the checkbox in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Error message displayed below the checkbox."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Displays the checkbox in a success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Success message displayed below the checkbox."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Displays the checkbox in a loading state."
+    },
+    "size": {
+      "oneOf": [
+        { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl"] },
+        { "type": "number" }
+      ],
+      "description": "Size of the checkbox indicator.",
+      "default": "md"
+    },
+    "shape": {
+      "type": "string",
+      "enum": ["square", "rounded", "circle"],
+      "description": "Shape of the checkbox indicator.",
+      "default": "rounded"
+    },
+    "checkedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom icon for the checked state."
+    },
+    "uncheckedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom icon for the unchecked state."
+    },
+    "indeterminateIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom icon for the indeterminate state."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for checkbox sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "labelContainer": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "checkbox": { "type": "string" },
+        "checked": { "type": "string" },
+        "unchecked": { "type": "string" },
+        "indeterminate": { "type": "string" },
+        "icon": { "type": "string" },
+        "error": { "type": "string" },
+        "success": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects OS setting."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables the checkbox."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name."
+    },
+    "value": {
+      "type": "string",
+      "description": "Form field value."
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Marks the checkbox as required."
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Slider",
+  "description": "A range slider component supporting single and dual-thumb modes with marks, tooltips, and form integration.",
+  "type": "object",
+  "properties": {
+    "value": {
+      "oneOf": [
+        { "type": "number" },
+        { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+      ],
+      "description": "Current value (number for single thumb, [number, number] for range)."
+    },
+    "defaultValue": {
+      "oneOf": [
+        { "type": "number" },
+        { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+      ],
+      "description": "Default uncontrolled value."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(value: SliderValue) => void — Fires when the value changes."
+    },
+    "onValueCommit": {
+      "type": "object",
+      "description": "(value: SliderValue) => void — Fires when a drag interaction ends (commit)."
+    },
+    "min": {
+      "type": "number",
+      "description": "Minimum value.",
+      "default": 0
+    },
+    "max": {
+      "type": "number",
+      "description": "Maximum value.",
+      "default": 100
+    },
+    "step": {
+      "type": "number",
+      "description": "Step increment.",
+      "default": 1
+    },
+    "minStepsBetweenThumbs": {
+      "type": "number",
+      "description": "Minimum distance between range thumbs.",
+      "default": 0
+    },
+    "orientation": {
+      "type": "string",
+      "enum": ["horizontal", "vertical"],
+      "description": "Orientation of the slider.",
+      "default": "horizontal"
+    },
+    "inverted": {
+      "type": "boolean",
+      "description": "Reverse the slider direction.",
+      "default": false
+    },
+    "showTooltip": {
+      "type": "boolean",
+      "description": "Show value tooltip on hover/drag.",
+      "default": false
+    },
+    "tooltipAlways": {
+      "type": "boolean",
+      "description": "Always show tooltip, not just on hover/drag.",
+      "default": false
+    },
+    "formatTooltip": {
+      "type": "object",
+      "description": "(value: number) => string — Format the tooltip display value."
+    },
+    "marks": {
+      "type": "array",
+      "description": "Marks/ticks on the track.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "number" },
+          "label": { "type": "object", "description": "React.ReactNode" }
+        },
+        "required": ["value"]
+      }
+    },
+    "showMarkLabels": {
+      "type": "boolean",
+      "description": "Show mark labels. Defaults to true when marks are provided."
+    },
+    "renderThumb": {
+      "type": "object",
+      "description": "(props: SliderThumbRenderProps) => ReactNode — Custom thumb content renderer."
+    },
+    "renderMark": {
+      "type": "object",
+      "description": "(props: SliderMarkRenderProps) => ReactNode — Custom mark dot renderer."
+    },
+    "markDotSize": {
+      "type": "number",
+      "description": "Size of mark dots in pixels.",
+      "default": 6
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name attribute."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode — Label displayed above the slider."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode — Description text."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the slider is disabled."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Whether the field is required."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Whether the slider is in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Error message displayed below the slider."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Whether the slider is in a success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Success message displayed below the slider."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Whether the slider is in a loading state."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "track": { "type": "string" },
+        "range": { "type": "string" },
+        "thumb": { "type": "string" },
+        "thumbActive": { "type": "string" },
+        "thumbDisabled": { "type": "string" },
+        "tooltip": { "type": "string" },
+        "mark": { "type": "string" },
+        "markDot": { "type": "string" },
+        "markDotActive": { "type": "string" },
+        "markLabel": { "type": "string" },
+        "error": { "type": "string" },
+        "success": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the slider."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "ID of the element that labels the slider."
+    },
+    "aria-valuetext": {
+      "type": "string",
+      "description": "Human-readable text alternative for the current value."
+    }
+  },
+  "required": []
+}

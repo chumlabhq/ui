@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RadioButton",
+  "description": "A radio button component with RadioButton and RadioGroup for single-selection within a group.",
+  "type": "object",
+  "definitions": {
+    "RadioButtonSize": {
+      "description": "Preset or numeric pixel size for the radio button.",
+      "oneOf": [
+        { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl"] },
+        { "type": "number" }
+      ]
+    },
+    "RadioButtonProps": {
+      "type": "object",
+      "description": "Props for an individual RadioButton.",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Unique value for this radio option."
+        },
+        "label": {
+          "type": "object",
+          "description": "React.ReactNode - Text label rendered beside the radio."
+        },
+        "description": {
+          "type": "object",
+          "description": "React.ReactNode - Helper text rendered below the label."
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Disables this radio option."
+        },
+        "size": {
+          "$ref": "#/definitions/RadioButtonSize",
+          "description": "Size of the radio indicator."
+        },
+        "checkedIcon": {
+          "type": "object",
+          "description": "React.ReactNode - Custom icon for the checked state."
+        },
+        "uncheckedIcon": {
+          "type": "object",
+          "description": "React.ReactNode - Custom icon for the unchecked state."
+        },
+        "classes": {
+          "type": "object",
+          "description": "CSS class overrides for radio sub-elements.",
+          "properties": {
+            "root": { "type": "string" },
+            "label": { "type": "string" },
+            "description": { "type": "string" },
+            "radio": { "type": "string" },
+            "checked": { "type": "string" },
+            "unchecked": { "type": "string" },
+            "icon": { "type": "string" },
+            "error": { "type": "string" },
+            "success": { "type": "string" }
+          }
+        }
+      },
+      "required": ["value"]
+    },
+    "RadioGroupProps": {
+      "type": "object",
+      "description": "Props for the RadioGroup container.",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Currently selected value."
+        },
+        "defaultValue": {
+          "type": "string",
+          "description": "Initial selected value for uncontrolled usage."
+        },
+        "onValueChange": {
+          "type": "object",
+          "description": "(value: string) => void - Fires when the selected value changes."
+        },
+        "onFocus": {
+          "type": "object",
+          "description": "(event: FocusEvent<HTMLInputElement>) => void - Fires when a radio receives focus."
+        },
+        "onBlur": {
+          "type": "object",
+          "description": "(event: FocusEvent<HTMLInputElement>) => void - Fires when a radio loses focus."
+        },
+        "label": {
+          "type": "object",
+          "description": "React.ReactNode - Text label for the group."
+        },
+        "description": {
+          "type": "object",
+          "description": "React.ReactNode - Helper text for the group."
+        },
+        "name": {
+          "type": "string",
+          "description": "Field name for form submission."
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Required field indicator."
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Disables all radio buttons in the group."
+        },
+        "error": {
+          "type": "boolean",
+          "description": "Displays the group in an error state."
+        },
+        "errorMessage": {
+          "type": "object",
+          "description": "React.ReactNode - Error message displayed below the group."
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Displays the group in a success state."
+        },
+        "successMessage": {
+          "type": "object",
+          "description": "React.ReactNode - Success message displayed below the group."
+        },
+        "loading": {
+          "type": "boolean",
+          "description": "Loading state."
+        },
+        "size": {
+          "$ref": "#/definitions/RadioButtonSize",
+          "description": "Size of all radio indicators."
+        },
+        "orientation": {
+          "type": "string",
+          "enum": ["horizontal", "vertical"],
+          "description": "Layout orientation.",
+          "default": "vertical"
+        },
+        "classes": {
+          "type": "object",
+          "description": "CSS class overrides for group sub-elements.",
+          "properties": {
+            "root": { "type": "string" },
+            "label": { "type": "string" },
+            "description": { "type": "string" },
+            "error": { "type": "string" },
+            "success": { "type": "string" }
+          }
+        },
+        "unstyled": {
+          "type": "boolean",
+          "description": "Removes all default styling."
+        },
+        "reduceMotion": {
+          "type": ["boolean", "string"],
+          "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+          "enum": [true, false, "auto"]
+        },
+        "children": {
+          "type": "object",
+          "description": "React.ReactNode - RadioButton children."
+        }
+      },
+      "required": ["children"]
+    }
+  },
+  "properties": {
+    "RadioButton": { "$ref": "#/definitions/RadioButtonProps" },
+    "RadioGroup": { "$ref": "#/definitions/RadioGroupProps" }
+  }
+}

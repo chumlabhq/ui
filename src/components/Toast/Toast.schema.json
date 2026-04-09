@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Toast",
+  "description": "A notification toast component with success, warning, error, and info types, progress bar, and configurable position.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the toast."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["success", "warning", "error", "info"],
+      "description": "Visual type/severity of the toast."
+    },
+    "message": {
+      "type": "object",
+      "description": "React.ReactNode — Primary message content."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode — Secondary description text."
+    },
+    "content": {
+      "type": "object",
+      "description": "React.ReactNode — Custom content that replaces message and description."
+    },
+    "duration": {
+      "type": "number",
+      "description": "Auto-dismiss duration in milliseconds."
+    },
+    "showProgress": {
+      "type": "boolean",
+      "description": "Whether to show a progress bar countdown."
+    },
+    "progressColor": {
+      "type": "string",
+      "description": "Custom color for the progress bar."
+    },
+    "icon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom icon replacing the default type icon."
+    },
+    "showCloseButton": {
+      "type": "boolean",
+      "description": "Whether to show a close/dismiss button."
+    },
+    "onDismiss": {
+      "type": "object",
+      "description": "() => void — Fires when the toast is dismissed."
+    },
+    "onClose": {
+      "type": "object",
+      "description": "() => void — Deprecated: use onDismiss instead."
+    },
+    "role": {
+      "type": "string",
+      "enum": ["alert", "status"],
+      "description": "ARIA role for the toast element."
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles applied to the toast element."
+    },
+    "pauseOnHover": {
+      "type": "boolean",
+      "description": "Whether to pause the auto-dismiss timer on hover."
+    },
+    "closeAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the close button."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "container": { "type": "string" },
+        "content": { "type": "string" },
+        "message": { "type": "string" },
+        "description": { "type": "string" },
+        "progress": { "type": "string" },
+        "closeButton": { "type": "string" },
+        "icon": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    },
+    "onRemove": {
+      "type": "object",
+      "description": "(id: string) => void — Internal callback to remove the toast from the provider."
+    }
+  },
+  "required": ["id", "onRemove"]
+}

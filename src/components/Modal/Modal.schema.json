@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Modal",
+  "description": "An accessible modal dialog with focus trapping, scroll locking, animations, nesting support, and compound sub-components.",
+  "type": "object",
+  "properties": {
+    "open": {
+      "type": "boolean",
+      "description": "Whether the modal is visible (controlled)."
+    },
+    "onOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void - Callback when the modal's open state changes."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "description": "Whether the modal is initially open (uncontrolled).",
+      "default": false
+    },
+    "children": {
+      "type": "object",
+      "description": "React.ReactNode - Modal body content. Use ModalHeader, ModalBody, ModalFooter for structure."
+    },
+    "title": {
+      "type": "object",
+      "description": "React.ReactNode - Title rendered in the modal header."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode - Description rendered below the title in the header."
+    },
+    "icon": {
+      "type": "object",
+      "description": "React.ReactNode - Icon rendered in the modal header."
+    },
+    "showIcon": {
+      "type": "boolean",
+      "description": "Whether to display the icon in the header.",
+      "default": false
+    },
+    "showCloseButton": {
+      "type": "boolean",
+      "description": "Whether to display the close button.",
+      "default": true
+    },
+    "closeIcon": {
+      "type": "object",
+      "description": "React.ReactNode - Custom close button icon."
+    },
+    "showHeader": {
+      "type": "boolean",
+      "description": "Whether to render the built-in header section.",
+      "default": true
+    },
+    "showOverlay": {
+      "type": "boolean",
+      "description": "Whether to render the backdrop overlay.",
+      "default": true
+    },
+    "preventOutsideClick": {
+      "type": "boolean",
+      "description": "Prevents closing when clicking outside the modal content.",
+      "default": false
+    },
+    "closeOnEscape": {
+      "type": "boolean",
+      "description": "Enables closing via the Escape key.",
+      "default": true
+    },
+    "lockScroll": {
+      "type": "boolean",
+      "description": "Locks body scroll when the modal is open.",
+      "default": true
+    },
+    "trapFocus": {
+      "type": "boolean",
+      "description": "Traps keyboard focus within the modal.",
+      "default": true
+    },
+    "restoreFocus": {
+      "type": "boolean",
+      "description": "Restores focus to the previously focused element on close.",
+      "default": true
+    },
+    "initialFocus": {
+      "type": "object",
+      "description": "RefObject<HTMLElement | null> - Element to focus when the modal opens."
+    },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keeps the modal DOM mounted when closed.",
+      "default": false
+    },
+    "maxWidth": {
+      "type": ["string", "number"],
+      "description": "Maximum width of the modal dialog."
+    },
+    "maxHeight": {
+      "type": ["string", "number"],
+      "description": "Maximum height of the modal dialog."
+    },
+    "minWidth": {
+      "type": ["string", "number"],
+      "description": "Minimum width of the modal dialog."
+    },
+    "minHeight": {
+      "type": ["string", "number"],
+      "description": "Minimum height of the modal dialog."
+    },
+    "fullScreen": {
+      "type": "boolean",
+      "description": "Expands the modal to fill the viewport."
+    },
+    "centered": {
+      "type": "boolean",
+      "description": "Vertically centers the modal in the viewport.",
+      "default": true
+    },
+    "overlayColor": {
+      "type": "string",
+      "description": "Custom overlay background color."
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "description": "Overlay background opacity (0-1)."
+    },
+    "animationDuration": {
+      "type": "number",
+      "description": "Open/close animation duration in milliseconds."
+    },
+    "disableAnimation": {
+      "type": "boolean",
+      "description": "Disables open/close animations entirely."
+    },
+    "reduceMotion": {
+      "type": ["boolean", "string"],
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+      "default": "auto"
+    },
+    "nestingLevel": {
+      "type": "number",
+      "description": "Current nesting depth for stacked modals. Managed automatically."
+    },
+    "maxNestingLevel": {
+      "type": "number",
+      "description": "Maximum allowed nesting depth for stacked modals."
+    },
+    "zIndex": {
+      "type": "number",
+      "description": "CSS z-index for the modal layer."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for modal sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "overlay": { "type": "string" },
+        "container": { "type": "string" },
+        "content": { "type": "string" },
+        "header": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" },
+        "closeButton": { "type": "string" },
+        "closeIcon": { "type": "string" },
+        "body": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling, rendering a plain dialog."
+    },
+    "className": {
+      "type": "string",
+      "description": "Additional CSS class for the dialog content panel."
+    },
+    "contentStyle": {
+      "type": "object",
+      "description": "Inline styles for the dialog content panel."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the modal dialog."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "ID of the element that labels the modal dialog."
+    },
+    "aria-describedby": {
+      "type": "string",
+      "description": "ID of the element that describes the modal dialog."
+    }
+  },
+  "required": ["children"]
+}

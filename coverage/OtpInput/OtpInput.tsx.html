@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.93% </span>
+                <span class="strong">81.34% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>162/193</span>
+                <span class='fraction'>157/193</span>
             </div>
         
             
@@ -386,7 +386,33 @@
 <a name='L321'></a><a href='#L321'>321</a>
 <a name='L322'></a><a href='#L322'>322</a>
 <a name='L323'></a><a href='#L323'>323</a>
-<a name='L324'></a><a href='#L324'>324</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -725,6 +751,19 @@ import { useControllableState } from "../../utils/useControllableState";
 &nbsp;
 export { OtpInputLabel };
 &nbsp;
+/**
+ * Component: OtpInput
+ *
+ * Purpose: One-time password input with per-character fields, paste support, and validation.
+ *
+ * AI Usage Guidelines:
+ * - Use `length` to set number of digits (default 6)
+ * - Use `type` for numeric/alphanumeric restriction
+ * - Use `groupPattern` for visual grouping (e.g., [3,3])
+ * - Use `masked` for password-style dots
+ *
+ * Reference: OTPINPUT.ai.md (this directory), src/pages/demo/OtpInputDemo.tsx
+ */
 const OtpInput = forwardRef&lt;HTMLInputElement, OtpInputProps&gt;(
   (
     {
@@ -983,10 +1022,10 @@ const OtpInput = forwardRef&lt;HTMLInputElement, OtpInputProps&gt;(
             currentIndex++;
           }
           groupElements.push(
-            &lt;div key={`group-${groupIndex}`} className={mergedClasses.group || undefined} data-group={groupIndex}&gt;{groupInputs}&lt;/div&gt;,
+            &lt;div key={`group-${groupIndex}`} className={mergedClasses.group || <span class="branch-1 cbranch-no" title="branch not covered" >undefined} d</span>ata-group={groupIndex}&gt;{groupInputs}&lt;/div&gt;,
           );
           if (groupIndex &lt; groups.length - 1 &amp;&amp; separator) {
-            groupElements.push(&lt;span key={`sep-${groupIndex}`} className={mergedClasses.separator || undefined}&gt;{separator}&lt;/span&gt;);
+            groupElements.push(&lt;span key={`sep-${groupIndex}`} className={mergedClasses.separator || <span class="branch-1 cbranch-no" title="branch not covered" >undefined}&gt;{s</span>eparator}&lt;/span&gt;);
           }
         });
         return groupElements;
@@ -1004,13 +1043,13 @@ const OtpInput = forwardRef&lt;HTMLInputElement, OtpInputProps&gt;(
         {...rest}
       &gt;
         {label &amp;&amp; (
-          &lt;OtpInputLabel label={label} required={required} htmlFor={inputId} className={mergedClasses.label || undefined} /&gt;
+          &lt;OtpInputLabel label={label} required={required} htmlFor={inputId} className={mergedClasses.label || <span class="branch-1 cbranch-no" title="branch not covered" >undefined} /</span>&gt;
         )}
         {description &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >          &lt;div className={mergedClasses.description || undefined}&gt;{description}&lt;/div&gt;</span>
         )}
         &lt;div
-          className={cn(mergedClasses.wrapper, loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >"opacity-50 pointer-events-none")</span> || undefined}
+          className={cn(mergedClasses.wrapper, loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >"opacity-50 pointer-events-none")</span> || <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
           onPaste={handlePaste}
           role="group"
           aria-label={groupAriaLabel}
@@ -1019,7 +1058,7 @@ const OtpInput = forwardRef&lt;HTMLInputElement, OtpInputProps&gt;(
         &lt;/div&gt;
         {name &amp;&amp; &lt;input type="hidden" name={name} value={value} disabled={disabled} /&gt;}
         {error &amp;&amp; errorMessage &amp;&amp; (
-          &lt;div id={errorId} role="alert" className={mergedClasses.error || undefined}&gt;{errorMessage}&lt;/div&gt;
+          &lt;div id={errorId} role="alert" className={mergedClasses.error || <span class="branch-1 cbranch-no" title="branch not covered" >undefined}&gt;{e</span>rrorMessage}&lt;/div&gt;
         )}
         {success &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >successMessage &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!</span>error &amp;&amp; (</span>
 <span class="branch-3 cbranch-no" title="branch not covered" >          &lt;div className={mergedClasses.success || undefined}&gt;{successMessage}&lt;/div&gt;</span>
@@ -1039,7 +1078,7 @@ export default OtpInput;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T11:43:37.836Z
+                at 2026-04-09T11:20:43.907Z
             </div>
         <script src="../prettify.js"></script>
         <script>

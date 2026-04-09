@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">95.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/22</span>
+                <span class='fraction'>23/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.2% </span>
+                <span class="strong">85.51% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>125/145</span>
+                <span class='fraction'>124/145</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>21/21</span>
+                <span class='fraction'>22/22</span>
             </div>
         
             
@@ -305,7 +305,37 @@
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -399,6 +429,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">69x</span>
+<span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -544,6 +575,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -554,6 +586,20 @@ import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { cn } from "../../utils/cn";
 &nbsp;
+/**
+ * Component: Switch
+ *
+ * Purpose: Toggle switch for binary on/off states with labels, validation,
+ * loading, custom thumb icons, and full WAI-ARIA switch pattern.
+ *
+ * AI Usage Guidelines:
+ * - Use `label` for visible labeling, or `aria-label` for icon-only
+ * - Use `checked` + `onValueChange` for controlled mode
+ * - Use `checkedIcon`/`uncheckedIcon` for thumb icons
+ * - CSS custom properties available for easy theming
+ *
+ * Reference: SWITCH.ai.md (this directory), src/pages/demo/SwitchDemo.tsx
+ */
 const Switch = forwardRef&lt;HTMLButtonElement, SwitchProps&gt;(
   (
     {
@@ -641,6 +687,7 @@ const Switch = forwardRef&lt;HTMLButtonElement, SwitchProps&gt;(
     );
 &nbsp;
     const transitionStyle = useMemo(() =&gt; {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (prefersReducedMotion) <span class="cstat-no" title="statement not covered" >return { transitionDuration: "0ms" };</span>
       if (!transitionDuration &amp;&amp; !transitionTimingFunction) return undefined;
       return {
         transitionDuration: transitionDuration
@@ -648,7 +695,7 @@ const Switch = forwardRef&lt;HTMLButtonElement, SwitchProps&gt;(
           : undefined,
         transitionTimingFunction: transitionTimingFunction,
       };
-    }, [transitionDuration, transitionTimingFunction]);
+    }, [transitionDuration, transitionTimingFunction, prefersReducedMotion]);
 &nbsp;
     const hasLabelContent =
       label || description || renderLabel || renderDescription;
@@ -709,7 +756,6 @@ const Switch = forwardRef&lt;HTMLButtonElement, SwitchProps&gt;(
                 .filter(Boolean)
                 .join(" ") || undefined
             }
-            aria-disabled={disabled || undefined}
             aria-required={required || undefined}
             disabled={disabled}
             onClick={handleToggle}
@@ -738,6 +784,8 @@ const Switch = forwardRef&lt;HTMLButtonElement, SwitchProps&gt;(
           {loading &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >            loader || (</span>
 <span class="branch-2 cbranch-no" title="branch not covered" >              &lt;svg</span>
+                role="status"
+                aria-label="Loading"
                 className={cn("animate-spin", mergedClasses.loading) || undefined}
                 width={loaderSize}
                 height={loaderSize}
@@ -796,7 +844,7 @@ export default Switch;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T11:43:37.836Z
+                at 2026-04-09T11:20:43.907Z
             </div>
         <script src="../prettify.js"></script>
         <script>

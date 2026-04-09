@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Switch",
+  "description": "A toggle switch component with label, description, loading state, and custom icons.",
+  "type": "object",
+  "properties": {
+    "className": {
+      "type": "string",
+      "description": "CSS class for the root element."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode — Label displayed alongside the switch."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode — Description text below the label."
+    },
+    "checked": {
+      "type": "boolean",
+      "description": "Controlled checked state."
+    },
+    "defaultChecked": {
+      "type": "boolean",
+      "description": "Default uncontrolled checked state."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(checked: boolean) => void — Fires when the checked state changes."
+    },
+    "onCheckedChange": {
+      "type": "object",
+      "description": "(checked: boolean) => void — Deprecated: use onValueChange instead."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name attribute."
+    },
+    "value": {
+      "type": "string",
+      "description": "Value attribute for the hidden input element."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Whether the field is required."
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the switch is disabled."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Whether the switch is in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Error message displayed below the switch."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Whether the switch is in a success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Success message displayed below the switch."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Whether the switch is in a loading state."
+    },
+    "loader": {
+      "type": "object",
+      "description": "React.ReactNode — Custom loader element."
+    },
+    "loaderSize": {
+      "type": "number",
+      "description": "Size of the default loader in pixels."
+    },
+    "checkedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Icon displayed inside the thumb when checked."
+    },
+    "uncheckedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Icon displayed inside the thumb when unchecked."
+    },
+    "transitionDuration": {
+      "type": "number",
+      "description": "Duration of the toggle transition in milliseconds."
+    },
+    "transitionTimingFunction": {
+      "type": "string",
+      "description": "CSS timing function for the toggle transition."
+    },
+    "renderLabel": {
+      "type": "object",
+      "description": "(props: SwitchRenderProps) => ReactNode — Custom label render function."
+    },
+    "renderDescription": {
+      "type": "object",
+      "description": "(props: SwitchRenderProps) => ReactNode — Custom description render function."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "innerRow": { "type": "string" },
+        "labelContainer": { "type": "string" },
+        "label": { "type": "string" },
+        "disabledLabel": { "type": "string" },
+        "description": { "type": "string" },
+        "tracker": { "type": "string" },
+        "disabledTracker": { "type": "string" },
+        "thumb": { "type": "string" },
+        "checkedTracker": { "type": "string" },
+        "uncheckedTracker": { "type": "string" },
+        "checkedThumb": { "type": "string" },
+        "uncheckedThumb": { "type": "string" },
+        "error": { "type": "string" },
+        "success": { "type": "string" },
+        "loading": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles applied to the root element."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting."
+    }
+  },
+  "required": []
+}

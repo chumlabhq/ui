@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tooltip",
+  "description": "A tooltip component with configurable positioning, arrow, shadow, truncation, and portal support.",
+  "type": "object",
+  "properties": {
+    "children": {
+      "type": "object",
+      "description": "React.ReactNode — The trigger element that the tooltip is attached to."
+    },
+    "content": {
+      "type": "object",
+      "description": "React.ReactNode — Content displayed inside the tooltip."
+    },
+    "side": {
+      "type": "string",
+      "enum": ["top", "right", "bottom", "left"],
+      "description": "Preferred side of the trigger to display the tooltip."
+    },
+    "align": {
+      "type": "string",
+      "enum": ["start", "center", "end"],
+      "description": "Alignment of the tooltip along the side."
+    },
+    "sideOffset": {
+      "type": "number",
+      "description": "Distance in pixels from the trigger along the side axis."
+    },
+    "alignOffset": {
+      "type": "number",
+      "description": "Offset in pixels along the alignment axis."
+    },
+    "maxWidth": {
+      "type": ["string", "number"],
+      "description": "Maximum width of the tooltip content."
+    },
+    "wordWrap": {
+      "type": "string",
+      "enum": ["normal", "break-word", "nowrap"],
+      "description": "Word wrap behavior for tooltip content."
+    },
+    "delayDuration": {
+      "type": "number",
+      "description": "Delay in milliseconds before showing the tooltip."
+    },
+    "hideDelayDuration": {
+      "type": "number",
+      "description": "Delay in milliseconds before hiding the tooltip."
+    },
+    "disableHoverableContent": {
+      "type": "boolean",
+      "description": "When true, the tooltip content is not hoverable (closes on mouse leave of trigger)."
+    },
+    "open": {
+      "type": "boolean",
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "description": "Default uncontrolled open state."
+    },
+    "onOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void — Callback when the open state changes."
+    },
+    "showArrow": {
+      "type": "boolean",
+      "description": "Whether to show the tooltip arrow."
+    },
+    "arrowSize": {
+      "type": "number",
+      "description": "Size of the tooltip arrow in pixels."
+    },
+    "arrowColor": {
+      "type": "string",
+      "description": "Color of the tooltip arrow."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the tooltip is disabled."
+    },
+    "truncate": {
+      "type": "boolean",
+      "description": "Whether to truncate the trigger content with ellipsis."
+    },
+    "truncateWidth": {
+      "type": ["number", "string"],
+      "description": "Width at which to truncate the trigger content."
+    },
+    "shadow": {
+      "type": "string",
+      "description": "Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'."
+    },
+    "zIndex": {
+      "type": "number",
+      "description": "Z-index for the tooltip."
+    },
+    "portal": {
+      "type": "boolean",
+      "description": "Whether to render the tooltip in a portal."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null — Custom container element for the tooltip portal."
+    },
+    "asChild": {
+      "type": "boolean",
+      "description": "When true, the trigger renders as the child element instead of wrapping it."
+    },
+    "triggerDisplay": {
+      "type": "string",
+      "description": "CSS display property for the trigger wrapper."
+    },
+    "className": {
+      "type": "string",
+      "description": "CSS class for the trigger wrapper element."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "trigger": { "type": "string" },
+        "content": { "type": "string" },
+        "arrow": { "type": "string" },
+        "baseArrow": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    },
+    "contentStyle": {
+      "type": "object",
+      "description": "Inline styles applied to the tooltip content element."
+    },
+    "arrowStyle": {
+      "type": "object",
+      "description": "Inline styles applied to the tooltip arrow element."
+    },
+    "baseArrowStyle": {
+      "type": "object",
+      "description": "Inline styles applied to the base arrow element."
+    }
+  },
+  "required": ["children"]
+}

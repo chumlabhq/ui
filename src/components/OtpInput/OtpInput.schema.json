@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OtpInput",
+  "description": "A one-time password input with configurable length, grouping, paste support, and custom input rendering.",
+  "type": "object",
+  "properties": {
+    "length": {
+      "type": "number",
+      "description": "Number of OTP input fields."
+    },
+    "value": {
+      "type": "string",
+      "description": "Controlled OTP value."
+    },
+    "defaultValue": {
+      "type": "string",
+      "description": "Initial OTP value for uncontrolled usage."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(value: string) => void - Fires when the OTP value changes."
+    },
+    "onComplete": {
+      "type": "object",
+      "description": "(value: string) => void - Fires when all fields are filled."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode - Label rendered above the input."
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Marks the field as required."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode - Helper text rendered below the label."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays the input in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Error message displayed below the input."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Displays the input in a success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Success message displayed below the input."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows a loading state."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables all input fields."
+    },
+    "groups": {
+      "type": "array",
+      "description": "Defines grouping of input fields (e.g. [3, 3] for two groups of 3).",
+      "items": { "type": "number" }
+    },
+    "separator": {
+      "type": "object",
+      "description": "React.ReactNode - Content rendered between groups."
+    },
+    "allowPaste": {
+      "type": "boolean",
+      "description": "Enables pasting OTP values."
+    },
+    "autoFocusFirst": {
+      "type": "boolean",
+      "description": "Automatically focuses the first input on mount."
+    },
+    "inputType": {
+      "type": "string",
+      "enum": ["text", "password", "tel"],
+      "description": "HTML input type for each field."
+    },
+    "inputPattern": {
+      "type": "string",
+      "description": "HTML pattern attribute for input validation."
+    },
+    "inputClassNames": {
+      "type": "array",
+      "description": "Per-input CSS class overrides.",
+      "items": { "type": "string" }
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Makes the input span the full width of its container."
+    },
+    "renderInput": {
+      "type": "object",
+      "description": "(props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields."
+    },
+    "validate": {
+      "type": "object",
+      "description": "(char: string) => boolean - Custom validation function for each character."
+    },
+    "inputAriaLabel": {
+      "type": "object",
+      "description": "(index: number, length: number) => string - Function to generate aria-label for each input."
+    },
+    "groupAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the input group."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "group": { "type": "string" },
+        "input": { "type": "string" },
+        "inputFocused": { "type": "string" },
+        "label": { "type": "string" },
+        "error": { "type": "string" },
+        "separator": { "type": "string" },
+        "description": { "type": "string" },
+        "success": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    }
+  },
+  "required": []
+}

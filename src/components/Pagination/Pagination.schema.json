@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pagination",
+  "description": "A pagination control with page buttons, rows-per-page selector, ellipsis, and customizable navigation icons.",
+  "type": "object",
+  "properties": {
+    "totalPages": {
+      "type": "number",
+      "description": "Total number of pages."
+    },
+    "siblingCount": {
+      "type": "number",
+      "description": "Number of sibling page buttons to show on each side of the current page."
+    },
+    "rowsPerPage": {
+      "type": "number",
+      "description": "Current number of rows displayed per page."
+    },
+    "rowOptions": {
+      "type": "array",
+      "description": "Available row-per-page options for the selector.",
+      "items": { "type": "number" }
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables the entire pagination control."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(page: number) => void - Fires when the current page changes."
+    },
+    "value": {
+      "type": "number",
+      "description": "Controlled current page number."
+    },
+    "defaultValue": {
+      "type": "number",
+      "description": "Initial page number for uncontrolled usage."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode - Label for the pagination."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays the pagination in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Error message displayed below the pagination."
+    },
+    "onRowsPerPageChange": {
+      "type": "object",
+      "description": "(rows: number) => void - Fires when the rows-per-page value changes."
+    },
+    "showRowsPerPage": {
+      "type": "boolean",
+      "description": "Whether to show the rows-per-page selector."
+    },
+    "rowsPerPageLabel": {
+      "type": "string",
+      "description": "Label text for the rows-per-page selector."
+    },
+    "showLabel": {
+      "type": "string",
+      "description": "Label text for the 'show' section of the rows-per-page selector."
+    },
+    "dropdownAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the rows-per-page dropdown."
+    },
+    "dropdownPosition": {
+      "type": "string",
+      "enum": ["top", "bottom"],
+      "description": "Vertical placement of the rows-per-page dropdown."
+    },
+    "dropdownZIndex": {
+      "type": "number",
+      "description": "Z-index of the rows-per-page dropdown."
+    },
+    "dropdownGap": {
+      "type": "number",
+      "description": "Gap in pixels between trigger and dropdown."
+    },
+    "dropdownIcon": {
+      "type": "object",
+      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the rows-per-page dropdown."
+    },
+    "prevIcon": {
+      "type": "object",
+      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the previous page button."
+    },
+    "nextIcon": {
+      "type": "object",
+      "description": "React.ComponentType<IconProps> | React.ReactNode - Custom icon for the next page button."
+    },
+    "renderEllipsis": {
+      "type": "object",
+      "description": "(props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element."
+    },
+    "renderPageInfo": {
+      "type": "object",
+      "description": "(props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display."
+    },
+    "sectionOrder": {
+      "type": "array",
+      "description": "Order of pagination sections.",
+      "items": {
+        "type": "string",
+        "enum": ["selector", "pageInfo", "nav"]
+      }
+    },
+    "reduceMotion": {
+      "type": ["boolean", "string"],
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+      "enum": [true, false, "auto"]
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for pagination sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "nav": { "type": "string" },
+        "pageButtons": { "type": "string" },
+        "pageButton": { "type": "string" },
+        "activePageButton": { "type": "string" },
+        "navButton": { "type": "string" },
+        "ellipsis": { "type": "string" },
+        "selector": { "type": "string" },
+        "selectorButton": { "type": "string" },
+        "selectorDropdown": { "type": "string" },
+        "selectorDropdownWrapper": { "type": "string" },
+        "selectorOption": { "type": "string" },
+        "label": { "type": "string" },
+        "dropdownIcon": { "type": "string" },
+        "prevIcon": { "type": "string" },
+        "nextIcon": { "type": "string" },
+        "pageInfo": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null - Portal target for the rows-per-page dropdown."
+    },
+    "prevAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the previous page button."
+    },
+    "nextAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the next page button."
+    },
+    "paginationAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the pagination nav element."
+    },
+    "pageAriaLabel": {
+      "type": "object",
+      "description": "(page: number) => string - Function to generate aria-label for each page button."
+    }
+  },
+  "required": ["totalPages"]
+}

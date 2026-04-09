@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Button",
+  "description": "A polymorphic button component that renders as button, anchor, span, or merges into a child element via asChild.",
+  "type": "object",
+  "properties": {
+    "children": {
+      "type": "object",
+      "description": "React.ReactNode — Button content."
+    },
+    "as": {
+      "type": "string",
+      "enum": ["button", "a", "span"],
+      "description": "HTML element to render as.",
+      "default": "button"
+    },
+    "asChild": {
+      "type": "boolean",
+      "description": "Merges button props onto a child element via Slot."
+    },
+    "size": {
+      "type": "string",
+      "enum": ["sm", "md", "lg"],
+      "description": "Size variant.",
+      "default": "md"
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables interaction and applies disabled styling."
+    },
+    "startIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Icon rendered before the button label."
+    },
+    "endIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Icon rendered after the button label."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows a loading spinner and disables interaction."
+    },
+    "loadingText": {
+      "type": "object",
+      "description": "React.ReactNode — Text displayed alongside the loading spinner."
+    },
+    "loaderPosition": {
+      "type": "string",
+      "enum": ["left", "right"],
+      "description": "Which side of the label the loader appears on."
+    },
+    "loaderSize": {
+      "type": "number",
+      "description": "Pixel size of the loading spinner."
+    },
+    "loader": {
+      "type": "object",
+      "description": "React.ReactNode — Custom loader element replacing the default spinner."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Stretches the button to fill its container width."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for button sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "content": { "type": "string" },
+        "startIcon": { "type": "string" },
+        "endIcon": { "type": "string" },
+        "loader": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling, rendering a plain element."
+    },
+    "iconAnimation": {
+      "type": "string",
+      "enum": ["none", "slideRight", "slideLeft", "slideUp", "slideDown", "bounce", "pulse", "spin"],
+      "description": "Animation applied to icons on hover."
+    },
+    "animateOnHover": {
+      "type": "boolean",
+      "description": "Enables icon animation on hover.",
+      "default": true
+    },
+    "animateIcon": {
+      "type": "string",
+      "enum": ["leading", "trailing", "both"],
+      "description": "Which icon(s) to animate."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects OS setting."
+    },
+    "tooltip": {
+      "type": "object",
+      "description": "React.ReactNode — Tooltip content shown on hover."
+    },
+    "tooltipProps": {
+      "type": "object",
+      "description": "Configuration for tooltip positioning and appearance.",
+      "properties": {
+        "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
+        "align": { "type": "string", "enum": ["start", "center", "end"] },
+        "sideOffset": { "type": "number" },
+        "maxWidth": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
+        "delayDuration": { "type": "number" },
+        "showArrow": { "type": "boolean" },
+        "contentClassName": { "type": "string" },
+        "contentStyle": { "type": "object", "description": "CSSProperties" }
+      }
+    },
+    "href": {
+      "type": "string",
+      "description": "Link destination (required when as='a')."
+    },
+    "target": {
+      "type": "string",
+      "description": "Link target attribute (when as='a')."
+    },
+    "rel": {
+      "type": "string",
+      "description": "Link rel attribute (when as='a')."
+    }
+  },
+  "required": []
+}

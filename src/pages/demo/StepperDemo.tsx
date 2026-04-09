@@ -5,6 +5,7 @@ import type {
   StepStatus,
   StepTooltipConfig,
 } from "../../components/Stepper";
+import { useTheme } from "./ThemeContext";
 import {
   Section,
   DemoWrapper,
@@ -14,7 +15,6 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-import { useTheme } from "./ThemeContext";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

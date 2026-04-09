@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Accordion",
+  "description": "A collapsible content panel component supporting single or multiple expanded items, keyboard navigation, and persistent state.",
+  "type": "object",
+  "oneOf": [
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "single",
+          "description": "Only one item can be expanded at a time."
+        },
+        "collapsible": {
+          "type": "boolean",
+          "description": "Whether the expanded item can be collapsed by clicking it again."
+        },
+        "value": {
+          "type": "string",
+          "description": "Controlled expanded item value."
+        },
+        "defaultValue": {
+          "type": "string",
+          "description": "Initial expanded item value for uncontrolled usage."
+        },
+        "onValueChange": {
+          "type": "object",
+          "description": "(value: string | null) => void"
+        }
+      },
+      "required": ["type"]
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "multiple",
+          "description": "Multiple items can be expanded simultaneously."
+        },
+        "maxExpanded": {
+          "type": "number",
+          "description": "Maximum number of simultaneously expanded items."
+        },
+        "value": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Controlled list of expanded item values."
+        },
+        "defaultValue": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Initial expanded item values for uncontrolled usage."
+        },
+        "onValueChange": {
+          "type": "object",
+          "description": "(value: string[]) => void"
+        }
+      },
+      "required": ["type"]
+    }
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["single", "multiple"],
+      "description": "Selection mode: single or multiple expanded items."
+    },
+    "orientation": {
+      "type": "string",
+      "enum": ["vertical", "horizontal"],
+      "description": "Layout orientation for keyboard navigation.",
+      "default": "vertical"
+    },
+    "dir": {
+      "type": "string",
+      "enum": ["ltr", "rtl"],
+      "description": "Text direction for RTL-aware layouts.",
+      "default": "ltr"
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables all accordion items."
+    },
+    "loop": {
+      "type": "boolean",
+      "description": "Whether keyboard navigation wraps from last to first item."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for accordion sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "item": { "type": "string" },
+        "trigger": { "type": "string" },
+        "triggerInner": { "type": "string" },
+        "content": { "type": "string" },
+        "contentWrapper": { "type": "string" },
+        "icon": { "type": "string" },
+        "iconWrapper": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "triggerLeft": { "type": "string" },
+        "triggerRight": { "type": "string" },
+        "contentInner": { "type": "string" },
+        "heading": { "type": "string" }
+      }
+    },
+    "headingLevel": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4, 5, 6],
+      "description": "HTML heading level for accordion item triggers."
+    },
+    "children": {
+      "type": "object",
+      "description": "React.ReactNode — AccordionItem children."
+    },
+    "asChild": {
+      "type": "boolean",
+      "description": "Merges accordion props onto a child element via Slot."
+    },
+    "size": {
+      "type": "string",
+      "enum": ["sm", "md", "lg"],
+      "description": "Preset size variant.",
+      "default": "md"
+    },
+    "variant": {
+      "type": "string",
+      "enum": ["default", "bordered", "separated", "flush"],
+      "description": "Visual style variant.",
+      "default": "default"
+    },
+    "animationEasing": {
+      "type": "string",
+      "description": "CSS easing function for expand/collapse animation.",
+      "default": "ease"
+    },
+    "animationDuration": {
+      "type": "number",
+      "description": "Duration in milliseconds for expand/collapse animation."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects OS setting."
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "defaultExpandAll": {
+      "type": "boolean",
+      "description": "Expands all items on initial render."
+    },
+    "expandOnPrint": {
+      "type": "boolean",
+      "description": "Expands all items when printing."
+    },
+    "storageKey": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "description": "StorageConfig for persistent state.",
+          "properties": {
+            "key": { "type": "string" },
+            "storage": { "type": "object", "description": "Storage interface (localStorage, sessionStorage)." }
+          },
+          "required": ["key"]
+        }
+      ],
+      "description": "Key or config for persisting expanded state to storage."
+    },
+    "onExpandedChange": {
+      "type": "object",
+      "description": "(event: AccordionExpandEvent) => void"
+    },
+    "onKeyDown": {
+      "type": "object",
+      "description": "(event: KeyboardEvent, itemValue: string | null) => void"
+    },
+    "preventClose": {
+      "type": "object",
+      "description": "(value: string) => boolean | Promise<boolean>"
+    },
+    "preventCloseTimeout": {
+      "type": "number",
+      "description": "Timeout in ms for the preventClose callback."
+    },
+    "onFocusCapture": {
+      "type": "object",
+      "description": "(event: FocusEvent) => void"
+    },
+    "onBlurCapture": {
+      "type": "object",
+      "description": "(event: FocusEvent) => void"
+    },
+    "aria-busy": {
+      "type": "boolean",
+      "description": "ARIA busy state for async content."
+    },
+    "aria-live": {
+      "type": "string",
+      "enum": ["off", "polite", "assertive"],
+      "description": "ARIA live region behavior."
+    },
+    "announceExpanded": {
+      "type": "boolean",
+      "description": "Announces expanded state changes to screen readers."
+    }
+  },
+  "required": ["type", "children"]
+}

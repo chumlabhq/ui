@@ -10,7 +10,7 @@ export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   separator: "text-gray-400 dark:text-gray-600",
   icon: "shrink-0",
   ellipsis: "",
-  ellipsisButton: "flex items-center justify-center w-8 h-8 rounded-md transition-colors cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-900",
+  ellipsisButton: "flex items-center justify-center w-10 h-10 rounded-md transition-colors cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-900",
   dropdown: "min-w-40 rounded-lg shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
   dropdownItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border-none text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500",
   dropdownItemDisabled: "opacity-50 cursor-not-allowed",

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResizablePanel",
+  "description": "A panel component with a draggable resize handle that supports horizontal and vertical resizing.",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "Controlled size value of the panel in pixels."
+    },
+    "defaultValue": {
+      "type": "number",
+      "description": "Default uncontrolled size value of the panel in pixels."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(value: number) => void — Callback fired when the panel size changes."
+    },
+    "onResizeStart": {
+      "type": "object",
+      "description": "(value: number) => void — Callback fired when a resize drag begins."
+    },
+    "onResizeEnd": {
+      "type": "object",
+      "description": "(value: number) => void — Callback fired when a resize drag ends."
+    },
+    "minValue": {
+      "type": "number",
+      "description": "Minimum allowed size value in pixels."
+    },
+    "maxValue": {
+      "type": "number",
+      "description": "Maximum allowed size value in pixels."
+    },
+    "resizeDirection": {
+      "type": "string",
+      "enum": ["left", "right", "top", "bottom"],
+      "description": "Direction from which the panel can be resized."
+    },
+    "step": {
+      "type": "number",
+      "description": "Step increment for resize value changes."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the resize handle is disabled."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "handle": { "type": "string" }
+      }
+    },
+    "handleContent": {
+      "type": "object",
+      "description": "React.ReactNode — Custom content rendered inside the resize handle."
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    }
+  },
+  "required": []
+}

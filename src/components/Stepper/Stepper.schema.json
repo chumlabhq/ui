@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stepper",
+  "description": "A multi-step progress indicator with numbered, icon, or dot variants and horizontal/vertical orientation.",
+  "type": "object",
+  "properties": {
+    "steps": {
+      "type": "array",
+      "description": "Array of step definitions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": ["string", "number"], "description": "Unique step identifier." },
+          "label": { "type": "object", "description": "React.ReactNode — Step label text." },
+          "description": { "type": "object", "description": "React.ReactNode — Step description text." },
+          "icon": { "type": "object", "description": "React.ComponentType | React.ReactNode — Custom icon for the step." },
+          "completedIcon": { "type": "object", "description": "React.ComponentType | React.ReactNode — Icon shown when step is completed." },
+          "errorIcon": { "type": "object", "description": "React.ComponentType | React.ReactNode — Icon shown when step has an error." },
+          "disabled": { "type": "boolean", "description": "Whether the step is disabled." },
+          "tooltip": { "type": "object", "description": "React.ReactNode | StepTooltipConfig — Tooltip content or configuration for the step." }
+        },
+        "required": ["id"]
+      }
+    },
+    "value": {
+      "type": ["string", "number"],
+      "description": "Controlled active step ID."
+    },
+    "defaultValue": {
+      "type": ["string", "number"],
+      "description": "Default uncontrolled active step ID."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(stepId: string | number) => void — Callback fired when the active step changes."
+    },
+    "beforeStepChange": {
+      "type": "object",
+      "description": "(nextStepId: string | number, currentStepId: string | number) => boolean — Guard callback invoked before changing steps. Return false to prevent the change."
+    },
+    "orientation": {
+      "type": "string",
+      "enum": ["horizontal", "vertical"],
+      "description": "Layout orientation of the stepper."
+    },
+    "variant": {
+      "type": "string",
+      "enum": ["numbered", "icon", "dot"],
+      "description": "Visual variant of the step indicators."
+    },
+    "activationMode": {
+      "type": "string",
+      "enum": ["automatic", "manual"],
+      "description": "Whether steps activate automatically on focus or require manual activation."
+    },
+    "isStepClickable": {
+      "type": "object",
+      "description": "(stepId: string | number, status: StepStatus) => boolean — Determines whether a step is clickable."
+    },
+    "getStepStatus": {
+      "type": "object",
+      "description": "(stepId: string | number, index: number, activeIndex: number) => StepStatus — Custom function to determine step status."
+    },
+    "showLabels": {
+      "type": "boolean",
+      "description": "Whether to show step labels."
+    },
+    "showDescriptions": {
+      "type": "boolean",
+      "description": "Whether to show step descriptions."
+    },
+    "showConnectors": {
+      "type": "boolean",
+      "description": "Whether to show connectors between steps."
+    },
+    "labelPosition": {
+      "type": "string",
+      "enum": ["bottom", "right"],
+      "description": "Position of step labels relative to the indicator."
+    },
+    "completedIcon": {
+      "type": "object",
+      "description": "React.ComponentType | React.ReactNode — Default icon for completed steps."
+    },
+    "errorIcon": {
+      "type": "object",
+      "description": "React.ComponentType | React.ReactNode — Default icon for error steps."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Whether the stepper expands to fill its container."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the stepper."
+    },
+    "showTooltips": {
+      "type": "boolean",
+      "description": "Whether to show tooltips on steps."
+    },
+    "tooltipDefaults": {
+      "type": "object",
+      "description": "Default tooltip configuration applied to all step tooltips.",
+      "properties": {
+        "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
+        "align": { "type": "string", "enum": ["start", "center", "end"] },
+        "sideOffset": { "type": "number" },
+        "alignOffset": { "type": "number" },
+        "maxWidth": { "type": ["string", "number"] },
+        "delayDuration": { "type": "number" },
+        "showArrow": { "type": "boolean" },
+        "arrowColor": { "type": "string" },
+        "shadow": { "type": "string" },
+        "contentClassName": { "type": "string" },
+        "contentStyle": { "type": "object" },
+        "arrowClassName": { "type": "string" },
+        "arrowStyle": { "type": "object" }
+      }
+    },
+    "indicatorSize": {
+      "type": "number",
+      "description": "Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects the user's OS setting."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "list": { "type": "string" },
+        "stepContainer": { "type": "string" },
+        "step": { "type": "string" },
+        "stepInteractive": { "type": "string" },
+        "stepDisabled": { "type": "string" },
+        "indicator": { "type": "string" },
+        "indicatorButton": { "type": "string" },
+        "indicatorIcon": { "type": "string" },
+        "indicatorActive": { "type": "string" },
+        "indicatorCompleted": { "type": "string" },
+        "indicatorPending": { "type": "string" },
+        "indicatorError": { "type": "string" },
+        "labelWrapper": { "type": "string" },
+        "labelWrapperBottom": { "type": "string" },
+        "label": { "type": "string" },
+        "labelActive": { "type": "string" },
+        "labelCompleted": { "type": "string" },
+        "labelPending": { "type": "string" },
+        "labelError": { "type": "string" },
+        "description": { "type": "string" },
+        "descriptionActive": { "type": "string" },
+        "descriptionCompleted": { "type": "string" },
+        "descriptionPending": { "type": "string" },
+        "descriptionError": { "type": "string" },
+        "connector": { "type": "string" },
+        "connectorHorizontal": { "type": "string" },
+        "connectorVertical": { "type": "string" },
+        "connectorActive": { "type": "string" },
+        "connectorCompleted": { "type": "string" },
+        "connectorPending": { "type": "string" },
+        "connectorError": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, removes all default styling."
+    },
+    "className": {
+      "type": "string",
+      "description": "CSS class for the root element."
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles applied to the root element."
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the entire stepper is disabled."
+    },
+    "loop": {
+      "type": "boolean",
+      "description": "Whether keyboard navigation loops from last step to first."
+    },
+    "renderStep": {
+      "type": "object",
+      "description": "(props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function."
+    }
+  },
+  "required": ["steps"]
+}

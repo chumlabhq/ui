@@ -187,10 +187,18 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       height: numericSize,
       borderRadius,
       fontSize,
-      backgroundColor: generatedColors?.background,
-      color: generatedColors?.text,
-      border: parseBorder(effectiveBordered, generatedColors?.border),
+      backgroundColor: generatedColors ? `var(--avatar-bg, ${generatedColors.background})` : undefined,
+      color: generatedColors ? `var(--avatar-text, ${generatedColors.text})` : undefined,
+      border: parseBorder(effectiveBordered, generatedColors ? `var(--avatar-border, ${generatedColors.border})` : undefined),
       position: "relative",
+      ...(generatedColors ? {
+        "--avatar-bg": generatedColors.background,
+        "--avatar-text": generatedColors.text,
+        "--avatar-border": generatedColors.border,
+        "--avatar-dark-bg": generatedColors.darkBackground,
+        "--avatar-dark-text": generatedColors.darkText,
+        "--avatar-dark-border": generatedColors.darkBorder,
+      } as React.CSSProperties : {}),
       ...(groupCtx ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` } : {}),
       ...style,
     };
@@ -216,7 +224,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             <img
               ref={imgRef}
               src={src}
-              alt={alt || name || ""}
+              alt={alt || name || "Avatar"}
               srcSet={imageConfig?.srcSet}
               sizes={imageConfig?.sizes}
               loading={imageConfig?.loading ?? "lazy"}

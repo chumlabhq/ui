@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TimePicker",
+  "description": "A time selection component with dropdown list or analog clock face variant, supporting 12h/24h formats and min/max time constraints.",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": ["string", "null"],
+      "description": "Current time value (e.g. '14:30' or '2:30 PM')."
+    },
+    "defaultValue": {
+      "type": ["string", "null"],
+      "description": "Default time value for uncontrolled usage."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(time: string | null, timeValue: TimeValue | null) => void — Called when the selected time changes."
+    },
+    "onBlur": {
+      "type": "object",
+      "description": "() => void — Called when the input loses focus."
+    },
+    "format": {
+      "type": "string",
+      "enum": ["12h", "24h"],
+      "description": "Time display format.",
+      "default": "24h"
+    },
+    "minuteStep": {
+      "type": "number",
+      "description": "Minute interval for dropdown options and clock snapping. Clamped to 1-60."
+    },
+    "minTime": {
+      "type": "string",
+      "description": "Minimum selectable time (e.g. '09:00')."
+    },
+    "maxTime": {
+      "type": "string",
+      "description": "Maximum selectable time (e.g. '17:00')."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name for the hidden input for form submission."
+    },
+    "placeholder": {
+      "type": "string",
+      "description": "Placeholder text for the input."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables the component."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Marks the component as having an error."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Error message displayed below the input."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode — Helper text displayed below the label."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode — Success message text."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Loading state."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode — Label displayed above the input."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Shows a required indicator on the label."
+    },
+    "showEndIcon": {
+      "type": "boolean",
+      "description": "Show the chevron/end icon in the trigger.",
+      "default": true
+    },
+    "endIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom end icon element replacing the default chevron."
+    },
+    "showSelectedIcon": {
+      "type": "boolean",
+      "description": "Show a check icon on the selected option.",
+      "default": true
+    },
+    "selectedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom selected icon element."
+    },
+    "renderOptionContent": {
+      "type": "object",
+      "description": "(time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Expand the picker to fill its parent container."
+    },
+    "variant": {
+      "type": "string",
+      "enum": ["dropdown", "clock"],
+      "description": "Visual variant: dropdown list or analog clock face.",
+      "default": "dropdown"
+    },
+    "clearable": {
+      "type": "boolean",
+      "description": "Show a clear button when a value is selected.",
+      "default": false
+    },
+    "onClear": {
+      "type": "object",
+      "description": "() => void — Called when the clear button is clicked."
+    },
+    "open": {
+      "type": "boolean",
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "description": "Default open state (uncontrolled)."
+    },
+    "onOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void — Called when the open state changes."
+    },
+    "lockScroll": {
+      "type": "boolean",
+      "description": "Lock body scroll when dropdown is open.",
+      "default": false
+    },
+    "dropdownPosition": {
+      "type": "string",
+      "enum": ["top", "bottom"],
+      "description": "Position of the dropdown relative to the trigger.",
+      "default": "bottom"
+    },
+    "forceDropdownPosition": {
+      "type": "boolean",
+      "description": "When true, locks the dropdown to the specified position without auto-flipping."
+    },
+    "dropdownZIndex": {
+      "type": "number",
+      "description": "Z-index for the dropdown.",
+      "default": 50
+    },
+    "dropdownGap": {
+      "type": "number",
+      "description": "Gap between trigger and dropdown in pixels.",
+      "default": 4
+    },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keep dropdown DOM mounted when closed (dropdown variant only).",
+      "default": false
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null — Custom container element for the dropdown portal."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for all sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "label": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "trigger": { "type": "string" },
+        "input": { "type": "string" },
+        "endIcon": { "type": "string" },
+        "clearIcon": { "type": "string" },
+        "dropdown": { "type": "string" },
+        "optionList": { "type": "string" },
+        "option": { "type": "string" },
+        "optionSelected": { "type": "string" },
+        "optionFocused": { "type": "string" },
+        "selectedIcon": { "type": "string" },
+        "noResults": { "type": "string" },
+        "error": { "type": "string" },
+        "description": { "type": "string" },
+        "success": { "type": "string" },
+        "clockContainer": { "type": "string" },
+        "clockDisplay": { "type": "string" },
+        "clockDisplayHours": { "type": "string" },
+        "clockDisplayMinutes": { "type": "string" },
+        "clockDisplayActive": { "type": "string" },
+        "clockDisplaySeparator": { "type": "string" },
+        "clockFace": { "type": "string" },
+        "clockHand": { "type": "string" },
+        "clockHandLine": { "type": "string" },
+        "clockHandDot": { "type": "string" },
+        "clockNumber": { "type": "string" },
+        "clockNumberSelected": { "type": "string" },
+        "clockNumberInner": { "type": "string" },
+        "clockNumberDisabled": { "type": "string" },
+        "clockCenter": { "type": "string" },
+        "clockActions": { "type": "string" },
+        "clockCancelButton": { "type": "string" },
+        "clockOkButton": { "type": "string" },
+        "clockPeriodToggle": { "type": "string" },
+        "clockPeriodButton": { "type": "string" },
+        "clockPeriodActive": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Omits built-in layout helpers so layout comes entirely from classes."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting."
+    },
+    "onCancel": {
+      "type": "object",
+      "description": "() => void — Called when the clock cancel button is pressed."
+    },
+    "onConfirm": {
+      "type": "object",
+      "description": "() => void — Called when the clock confirm button is pressed."
+    },
+    "cancelText": {
+      "type": "string",
+      "description": "Text for the clock cancel button.",
+      "default": "Cancel"
+    },
+    "okText": {
+      "type": "string",
+      "description": "Text for the clock OK button.",
+      "default": "OK"
+    }
+  },
+  "required": []
+}

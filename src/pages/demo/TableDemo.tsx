@@ -10,6 +10,7 @@ import { Table, exportTableToCSV } from "../../components/Table";
 import { Pagination } from "../../components/Pagination";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { SortingState } from "../../components/Table";
+import { useTheme } from "./ThemeContext";
 import {
   Section,
   DemoWrapper,
@@ -19,7 +20,6 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-import { useTheme } from "./ThemeContext";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 

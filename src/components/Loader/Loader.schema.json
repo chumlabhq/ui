@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Loader",
+  "description": "Loading indicator components in four variants: CircularLoader, LinearLoader, DotLoader, and PulseLoader.",
+  "type": "object",
+  "oneOf": [
+    {
+      "title": "CircularLoader",
+      "description": "A spinning circular loading indicator.",
+      "type": "object",
+      "properties": {
+        "variant": { "type": "string", "const": "circular" },
+        "size": {
+          "type": "number",
+          "description": "Width and height in pixels.",
+          "default": 20
+        },
+        "thickness": {
+          "type": "number",
+          "description": "Stroke width of track and arc.",
+          "default": 2
+        },
+        "speed": {
+          "type": "number",
+          "description": "Animation duration in seconds (lower = faster).",
+          "default": 0.75
+        },
+        "trackColor": {
+          "type": "string",
+          "description": "Background track color. Default: currentColor at 20% opacity."
+        },
+        "color": {
+          "type": "string",
+          "description": "Spinner color (applied via currentColor / className)."
+        },
+        "reduceMotion": {
+          "type": ["boolean", "string"],
+          "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+          "enum": [true, false, "auto"]
+        },
+        "classes": {
+          "type": "object",
+          "description": "CSS class overrides for sub-elements.",
+          "properties": {
+            "root": { "type": "string" },
+            "svg": { "type": "string" },
+            "track": { "type": "string" },
+            "indicator": { "type": "string" }
+          }
+        },
+        "unstyled": {
+          "type": "boolean",
+          "description": "Removes all default styling."
+        }
+      },
+      "required": []
+    },
+    {
+      "title": "LinearLoader",
+      "description": "A horizontal progress bar loading indicator.",
+      "type": "object",
+      "properties": {
+        "variant": { "type": "string", "const": "linear" },
+        "height": {
+          "type": "number",
+          "description": "Height of the bar in pixels.",
+          "default": 4
+        },
+        "width": {
+          "type": ["string", "number"],
+          "description": "Width of the bar (CSS value).",
+          "default": "100%"
+        },
+        "speed": {
+          "type": "number",
+          "description": "Animation duration in seconds.",
+          "default": 1.5
+        },
+        "trackColor": {
+          "type": "string",
+          "description": "Background track color."
+        },
+        "borderRadius": {
+          "type": "number",
+          "description": "Border radius in pixels.",
+          "default": 9999
+        },
+        "reduceMotion": {
+          "type": ["boolean", "string"],
+          "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+          "enum": [true, false, "auto"]
+        },
+        "classes": {
+          "type": "object",
+          "description": "CSS class overrides for sub-elements.",
+          "properties": {
+            "root": { "type": "string" },
+            "bar": { "type": "string" }
+          }
+        },
+        "unstyled": {
+          "type": "boolean",
+          "description": "Removes all default styling."
+        }
+      },
+      "required": []
+    },
+    {
+      "title": "DotLoader",
+      "description": "An animated bouncing dots loading indicator.",
+      "type": "object",
+      "properties": {
+        "variant": { "type": "string", "const": "dot" },
+        "dotSize": {
+          "type": "number",
+          "description": "Diameter of each dot in pixels.",
+          "default": 8
+        },
+        "gap": {
+          "type": "number",
+          "description": "Gap between dots in pixels.",
+          "default": 4
+        },
+        "count": {
+          "type": "number",
+          "description": "Number of dots.",
+          "default": 3
+        },
+        "speed": {
+          "type": "number",
+          "description": "Full animation cycle duration in seconds.",
+          "default": 1.4
+        },
+        "reduceMotion": {
+          "type": ["boolean", "string"],
+          "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+          "enum": [true, false, "auto"]
+        },
+        "classes": {
+          "type": "object",
+          "description": "CSS class overrides for sub-elements.",
+          "properties": {
+            "root": { "type": "string" },
+            "dot": { "type": "string" }
+          }
+        },
+        "unstyled": {
+          "type": "boolean",
+          "description": "Removes all default styling."
+        }
+      },
+      "required": []
+    },
+    {
+      "title": "PulseLoader",
+      "description": "A pulsing ripple loading indicator.",
+      "type": "object",
+      "properties": {
+        "variant": { "type": "string", "const": "pulse" },
+        "size": {
+          "type": "number",
+          "description": "Diameter of the circle in pixels.",
+          "default": 40
+        },
+        "speed": {
+          "type": "number",
+          "description": "Animation duration in seconds.",
+          "default": 1.5
+        },
+        "rings": {
+          "type": "number",
+          "description": "Number of ripple rings.",
+          "default": 2
+        },
+        "reduceMotion": {
+          "type": ["boolean", "string"],
+          "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
+          "enum": [true, false, "auto"]
+        },
+        "classes": {
+          "type": "object",
+          "description": "CSS class overrides for sub-elements.",
+          "properties": {
+            "root": { "type": "string" },
+            "core": { "type": "string" },
+            "ring": { "type": "string" }
+          }
+        },
+        "unstyled": {
+          "type": "boolean",
+          "description": "Removes all default styling."
+        }
+      },
+      "required": []
+    }
+  ]
+}

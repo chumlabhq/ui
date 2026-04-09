@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dropdown",
+  "description": "A single-select dropdown with keyboard navigation, async loading, custom triggers, and portal support.",
+  "type": "object",
+  "properties": {
+    "options": {
+      "type": "array",
+      "description": "List of selectable options.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "string", "description": "Option value." },
+          "label": { "type": "string", "description": "Display label." },
+          "content": { "type": "object", "description": "React.ReactNode - Custom content rendered in the option list." },
+          "selectedContent": { "type": "object", "description": "React.ReactNode - Content shown in the trigger when this option is selected." },
+          "disabled": { "type": "boolean", "description": "Whether the option is disabled." }
+        },
+        "required": ["value", "label"]
+      }
+    },
+    "value": {
+      "type": ["string", "null"],
+      "description": "Controlled selected value."
+    },
+    "defaultValue": {
+      "type": "string",
+      "description": "Initial selected value for uncontrolled usage."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(value: string | null, option: DropdownOption | null) => void - Fires when the selected value changes."
+    },
+    "open": {
+      "type": "boolean",
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "description": "Whether the dropdown is initially open (uncontrolled)."
+    },
+    "onOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void - Fires when the open state changes."
+    },
+    "id": {
+      "type": "string",
+      "description": "HTML id attribute for the trigger element."
+    },
+    "name": {
+      "type": "string",
+      "description": "Form field name for the hidden input."
+    },
+    "placeholder": {
+      "type": "object",
+      "description": "React.ReactNode - Content displayed when no option is selected."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Disables the dropdown."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays the dropdown in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Error message displayed below the dropdown."
+    },
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode - Label rendered above the dropdown."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode - Description text rendered below the label."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Displays the dropdown in a success state."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Success message displayed below the dropdown."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Marks the field as required."
+    },
+    "clearable": {
+      "type": "boolean",
+      "description": "Shows a clear button to deselect the current value."
+    },
+    "noResultsContent": {
+      "type": "object",
+      "description": "React.ReactNode - Content shown when no options are available."
+    },
+    "showChevron": {
+      "type": "boolean",
+      "description": "Whether to show the chevron icon in the trigger."
+    },
+    "showSelectedIcon": {
+      "type": "boolean",
+      "description": "Whether to show a check icon next to the selected option."
+    },
+    "selectedIcon": {
+      "type": "object",
+      "description": "React.ReactNode - Custom icon for the selected option indicator."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Makes the dropdown span the full width of its container."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows a loading/shimmer state."
+    },
+    "onLoadOptions": {
+      "type": "object",
+      "description": "() => Promise<DropdownOption[]> - Async function to load options."
+    },
+    "loadOnOpen": {
+      "type": "boolean",
+      "description": "When true, calls onLoadOptions each time the dropdown opens."
+    },
+    "onLoadError": {
+      "type": "object",
+      "description": "(error: unknown) => void - Called when async option loading fails."
+    },
+    "shimmerCount": {
+      "type": "number",
+      "description": "Number of shimmer placeholder items shown during loading."
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for dropdown sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "trigger": { "type": "string" },
+        "triggerText": { "type": "string" },
+        "content": { "type": "string" },
+        "optionList": { "type": "string" },
+        "option": { "type": "string" },
+        "optionSelected": { "type": "string" },
+        "optionFocused": { "type": "string" },
+        "optionDisabled": { "type": "string" },
+        "chevron": { "type": "string" },
+        "checkIcon": { "type": "string" },
+        "clearIcon": { "type": "string" },
+        "noResults": { "type": "string" },
+        "label": { "type": "string" },
+        "error": { "type": "string" },
+        "description": { "type": "string" },
+        "success": { "type": "string" },
+        "shimmer": { "type": "string" },
+        "shimmerItem": { "type": "string" }
+      }
+    },
+    "className": {
+      "type": "string",
+      "description": "Additional CSS class for the root element."
+    },
+    "style": {
+      "type": "object",
+      "description": "Inline styles for the root element."
+    },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keeps the dropdown DOM mounted when closed."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null - Portal target for the dropdown popup."
+    },
+    "lockScroll": {
+      "type": "boolean",
+      "description": "Locks body scroll while the dropdown is open.",
+      "default": false
+    },
+    "dropdownPosition": {
+      "type": "string",
+      "enum": ["top", "bottom"],
+      "description": "Vertical placement of the dropdown relative to the trigger."
+    },
+    "forceDropdownPosition": {
+      "type": "boolean",
+      "description": "Locks the dropdown to the specified position without auto-flipping."
+    },
+    "dropdownZIndex": {
+      "type": "number",
+      "description": "Z-index of the dropdown popup."
+    },
+    "dropdownGap": {
+      "type": "number",
+      "description": "Gap in pixels between trigger and dropdown popup."
+    },
+    "typeaheadTimeout": {
+      "type": "number",
+      "description": "Timeout in milliseconds for keyboard typeahead matching."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the dropdown."
+    },
+    "onBlur": {
+      "type": "object",
+      "description": "() => void - Fires when the dropdown loses focus."
+    },
+    "onFocus": {
+      "type": "object",
+      "description": "() => void - Fires when the dropdown receives focus."
+    },
+    "onKeyDown": {
+      "type": "object",
+      "description": "(event: React.KeyboardEvent) => void - Fires on keydown events."
+    },
+    "renderTrigger": {
+      "type": "object",
+      "description": "(props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element."
+    },
+    "ChevronIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component."
+    },
+    "CheckIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component."
+    },
+    "ClearIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component."
+    },
+    "loadingText": {
+      "type": "object",
+      "description": "React.ReactNode - Text shown during async loading."
+    }
+  },
+  "required": []
+}

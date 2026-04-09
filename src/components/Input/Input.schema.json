@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Input",
+  "description": "A text input field with label, prefix/suffix, icons, clearable, character count, loading state, and validation support.",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "object",
+      "description": "React.ReactNode - Label rendered above the input."
+    },
+    "description": {
+      "type": "object",
+      "description": "React.ReactNode - Helper text rendered below the label."
+    },
+    "error": {
+      "type": "boolean",
+      "description": "Displays the input in an error state."
+    },
+    "errorMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Error message displayed below the input."
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Green success state for validated fields."
+    },
+    "successMessage": {
+      "type": "object",
+      "description": "React.ReactNode - Success message displayed below the input."
+    },
+    "size": {
+      "type": "string",
+      "enum": ["sm", "md", "lg"],
+      "description": "Visual size variant. Emits data-size on the root container for CSS targeting."
+    },
+    "prefix": {
+      "type": "object",
+      "description": "React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://')."
+    },
+    "suffix": {
+      "type": "object",
+      "description": "React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com')."
+    },
+    "startIcon": {
+      "type": "object",
+      "description": "React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided."
+    },
+    "endIcon": {
+      "type": "object",
+      "description": "React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided."
+    },
+    "onStartIconClick": {
+      "type": "object",
+      "description": "() => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility."
+    },
+    "onEndIconClick": {
+      "type": "object",
+      "description": "() => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility."
+    },
+    "startIconLabel": {
+      "type": "string",
+      "description": "Accessible label for startIcon when it is clickable. Required with onStartIconClick."
+    },
+    "endIconLabel": {
+      "type": "string",
+      "description": "Accessible label for endIcon when it is clickable. Required with onEndIconClick."
+    },
+    "onValueChange": {
+      "type": "object",
+      "description": "(value: string) => void - Fires with the current string value when the value changes."
+    },
+    "clearable": {
+      "type": "boolean",
+      "description": "Show a built-in clear button when the input has a value."
+    },
+    "onClear": {
+      "type": "object",
+      "description": "() => void - Callback when the clear button is clicked."
+    },
+    "showCount": {
+      "type": "boolean",
+      "description": "Show character count (requires maxLength to be set)."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows a loading spinner inside the input."
+    },
+    "loader": {
+      "type": "object",
+      "description": "React.ReactNode - Custom loader element to replace the default spinner."
+    },
+    "loaderSize": {
+      "type": "number",
+      "description": "Size of the default CircularLoader in pixels. Ignored when a custom loader prop is provided."
+    },
+    "fullWidth": {
+      "type": "boolean",
+      "description": "Makes the input span the full width of its container."
+    },
+    "className": {
+      "type": "string",
+      "description": "CSS class for the root container element."
+    },
+    "classes": {
+      "type": "object",
+      "description": "Slot-based class overrides for internal elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "wrapper": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "input": { "type": "string" },
+        "prefix": { "type": "string" },
+        "suffix": { "type": "string" },
+        "error": { "type": "string" },
+        "success": { "type": "string" },
+        "count": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "When true, all default classes are removed so you can style from scratch."
+    }
+  },
+  "required": []
+}

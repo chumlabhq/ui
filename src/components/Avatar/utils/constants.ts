@@ -74,6 +74,21 @@ export const DEFAULT_BACKGROUND_COLORS = [
   "#e0f2fe",
 ];
 
+export const DEFAULT_DARK_BACKGROUND_COLORS = [
+  "#312e81",
+  "#3b0764",
+  "#164e63",
+  "#064e3b",
+  "#713f12",
+  "#7f1d1d",
+  "#831843",
+  "#312e81",
+  "#134e4a",
+  "#7c2d12",
+  "#365314",
+  "#0c4a6e",
+];
+
 export const DEFAULT_BORDER_COLORS = [
   "#a5b4fc",
   "#c4b5fd",
@@ -89,6 +104,21 @@ export const DEFAULT_BORDER_COLORS = [
   "#7dd3fc",
 ];
 
+export const DEFAULT_DARK_BORDER_COLORS = [
+  "#6366f1",
+  "#8b5cf6",
+  "#22d3ee",
+  "#34d399",
+  "#fbbf24",
+  "#f87171",
+  "#f472b6",
+  "#6366f1",
+  "#2dd4bf",
+  "#fb923c",
+  "#a3e635",
+  "#38bdf8",
+];
+
 export const DEFAULT_TEXT_COLORS = [
   "#4f46e5",
   "#7c3aed",
@@ -102,4 +132,19 @@ export const DEFAULT_TEXT_COLORS = [
   "#ea580c",
   "#65a30d",
   "#0284c7",
+];
+
+export const DEFAULT_DARK_TEXT_COLORS = [
+  "#a5b4fc",
+  "#c4b5fd",
+  "#67e8f9",
+  "#6ee7b7",
+  "#fcd34d",
+  "#fca5a5",
+  "#f9a8d4",
+  "#a5b4fc",
+  "#5eead4",
+  "#fdba74",
+  "#bef264",
+  "#7dd3fc",
 ];

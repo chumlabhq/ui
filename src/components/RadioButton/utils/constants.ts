@@ -24,8 +24,8 @@ export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
   checked: "border-blue-600 bg-blue-600",
   unchecked: "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800",
   icon: "",
-  error: "text-xs text-red-500 mt-1",
-  success: "text-xs text-emerald-600 mt-1",
+  error: "text-xs text-red-500 dark:text-red-400 mt-1",
+  success: "text-xs text-emerald-600 dark:text-emerald-400 mt-1",
 };
 
 export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> = {

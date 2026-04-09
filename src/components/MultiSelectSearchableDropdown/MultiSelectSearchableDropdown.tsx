@@ -30,8 +30,8 @@ function computeDropdownCoords(
 ): DropdownCoords {
   const rect = triggerEl.getBoundingClientRect();
   const dropdownHeight = dropdownEl.getBoundingClientRect().height;
-  const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-  const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+  const viewportHeight = isBrowser ? (window.visualViewport?.height ?? window.innerHeight) : 768;
+  const viewportWidth = isBrowser ? (window.visualViewport?.width ?? window.innerWidth) : 1024;
   let position = preferredPosition;
   if (!forcePosition) {
     if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
@@ -533,6 +533,8 @@ const MultiSelectSearchableDropdown = forwardRef<
 
     // Click outside to close (portal-aware)
     useEffect(() => {
+      if (!isOpen || !isBrowser) return;
+
       const handleClickOutside = (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
         if (triggerNode?.contains(target)) return;
@@ -541,10 +543,8 @@ const MultiSelectSearchableDropdown = forwardRef<
         handleClose();
       };
 
-      if (isOpen) {
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("touchstart", handleClickOutside);
-      }
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
 
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);

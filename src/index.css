@@ -3,6 +3,14 @@
 /* Use class-based dark mode (.dark on <html>) instead of OS prefers-color-scheme */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Avatar dark mode color overrides via CSS custom properties */
+.dark [data-has-image] { }
+.dark [style*="--avatar-dark-bg"] {
+  background-color: var(--avatar-dark-bg) !important;
+  color: var(--avatar-dark-text) !important;
+  border-color: var(--avatar-dark-border) !important;
+}
+
 /* ─── Home page animated background ──────────────────────────────────────── */
 
 @keyframes orbit-1 {

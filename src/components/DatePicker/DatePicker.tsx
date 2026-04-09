@@ -206,6 +206,7 @@ function useMarkerTooltip(
       ? createPortal(
           <div
             role="tooltip"
+            className="bg-gray-900 dark:bg-gray-100 text-slate-100 dark:text-slate-900"
             style={{
               position: "fixed",
               zIndex: 100,
@@ -215,8 +216,6 @@ function useMarkerTooltip(
               maxWidth: 240,
               padding: "8px 12px",
               borderRadius: 8,
-              backgroundColor: "rgba(15, 23, 42, 0.95)",
-              color: "#f1f5f9",
               fontSize: 12,
               lineHeight: 1.5,
               boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
@@ -230,10 +229,10 @@ function useMarkerTooltip(
               <span style={{ fontWeight: 600 }}>{marker.label}</span>
             </div>
             {marker.description && (
-              <div style={{ color: "#94a3b8", marginTop: 2 }}>{marker.description}</div>
+              <div className="text-slate-400 dark:text-slate-500" style={{ marginTop: 2 }}>{marker.description}</div>
             )}
             {marker.type && (
-              <div style={{ color: "#64748b", marginTop: 4, textTransform: "capitalize", fontSize: 11 }}>{marker.type}</div>
+              <div className="text-slate-500 dark:text-slate-400" style={{ marginTop: 4, textTransform: "capitalize", fontSize: 11 }}>{marker.type}</div>
             )}
           </div>,
           portalContainer ?? document.body,

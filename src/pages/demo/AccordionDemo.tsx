@@ -11,6 +11,7 @@ import {
   ChevronUpIcon,
 } from "../../components/Accordion";
 import type { AccordionRef } from "../../components/Accordion";
+import { useTheme } from "./ThemeContext";
 import {
   Section,
   DemoWrapper,
@@ -20,7 +21,6 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-import { useTheme } from "./ThemeContext";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 

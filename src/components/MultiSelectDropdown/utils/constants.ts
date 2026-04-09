@@ -20,12 +20,12 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
       "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-500 dark:text-gray-400",
     checkbox:
       "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-gray-300 dark:border-gray-500",
-    checkboxChecked: "bg-blue-600 border-blue-600 text-white",
+    checkboxChecked: "bg-blue-600 dark:bg-blue-500 border-blue-600 dark:border-blue-500 text-white",
     checkboxIcon: "w-full h-full",
     chip:
       "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-gray-200",
     chipRemove:
-      "w-3 h-3 shrink-0 cursor-pointer hover:text-blue-600 dark:hover:text-gray-300",
+      "w-4 h-4 p-0.5 shrink-0 cursor-pointer hover:text-blue-600 dark:hover:text-gray-300 appearance-none border-none bg-transparent",
     noResults:
       "px-3 py-4 text-sm text-center text-gray-500 dark:text-gray-400",
     clearIcon: "",

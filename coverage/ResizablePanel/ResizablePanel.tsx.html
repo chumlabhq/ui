@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.27% </span>
+                <span class="strong">96.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>155/161</span>
+                <span class='fraction'>156/162</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.03% </span>
+                <span class="strong">88.23% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>103/117</span>
+                <span class='fraction'>105/119</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">99.31% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>145/146</span>
+                <span class='fraction'>146/147</span>
             </div>
         
             
@@ -409,7 +409,23 @@
 <a name='L344'></a><a href='#L344'>344</a>
 <a name='L345'></a><a href='#L345'>345</a>
 <a name='L346'></a><a href='#L346'>346</a>
-<a name='L347'></a><a href='#L347'>347</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -613,13 +629,15 @@
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -777,6 +795,13 @@ import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import { isBrowser } from "../../utils/isBrowser";
 &nbsp;
+/**
+ * Component: ResizablePanel
+ *
+ * Purpose: Draggable resizable panel with constraints, keyboard resizing, and WAI-ARIA separator.
+ *
+ * Reference: RESIZABLEPANEL.ai.md (this directory), src/pages/demo/ResizablePanelDemo.tsx
+ */
 const ResizablePanel = forwardRef&lt;HTMLDivElement, ResizablePanelProps&gt;(
   (props, ref) =&gt; {
     const {
@@ -958,10 +983,12 @@ const ResizablePanel = forwardRef&lt;HTMLDivElement, ResizablePanelProps&gt;(
         startDirectionRef.current = resizeDirection;
         startPosRef.current = isVertical ? e.clientY : e.clientX;
         startSizeRef.current = sizeRef.current;
-        savedBodyCursorRef.current = document.body.style.cursor;
-        savedBodyUserSelectRef.current = document.body.style.userSelect;
-        document.body.style.cursor = isVertical ? "row-resize" : "col-resize";
-        document.body.style.userSelect = "none";
+        if (isBrowser) {
+          savedBodyCursorRef.current = document.body.style.cursor;
+          savedBodyUserSelectRef.current = document.body.style.userSelect;
+          document.body.style.cursor = isVertical ? "row-resize" : "col-resize";
+          document.body.style.userSelect = "none";
+        }
         captureTargetRef.current = e.currentTarget;
         pointerIdRef.current = e.pointerId;
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -1108,7 +1135,7 @@ export default ResizablePanel;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T11:43:37.836Z
+                at 2026-04-09T11:20:43.907Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -214,7 +214,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   countrySelectSearchIcon:
     "w-4 h-4 shrink-0 text-gray-400 dark:text-gray-500",
   countrySelectNoResults:
-    "px-3 py-4 text-sm text-center text-gray-500",
+    "px-3 py-4 text-sm text-center text-gray-500 dark:text-gray-400",
 };
 
 export const UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {

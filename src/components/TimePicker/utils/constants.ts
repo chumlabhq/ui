@@ -6,7 +6,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300",
   wrapper: "relative",
   trigger:
-    "flex items-center gap-2 w-56 px-3 py-2 border rounded-lg transition-colors cursor-text border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent",
+    "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent",
   input:
     "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 text-gray-900 dark:text-gray-100",
   endIcon:
@@ -27,7 +27,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   description: "text-xs mb-1 text-gray-500 dark:text-gray-400",
   success: "text-sm mt-1 text-green-600 dark:text-green-400",
   clockContainer:
-    "p-4 border rounded-xl shadow-lg bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700",
+    "p-3 sm:p-4 border rounded-xl shadow-lg bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700",
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
   clockDisplayHours:
     "px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700",
@@ -38,7 +38,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockDisplaySeparator:
     "text-2xl font-semibold text-gray-400 dark:text-gray-500",
   clockFace:
-    "relative w-52 h-52 mx-auto rounded-full bg-gray-100 dark:bg-gray-700",
+    "relative w-44 h-44 sm:w-52 sm:h-52 mx-auto rounded-full bg-gray-100 dark:bg-gray-700",
   clockHand: "absolute inset-0",
   clockHandLine: "stroke-indigo-500 dark:stroke-indigo-400",
   clockHandDot:
@@ -46,7 +46,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockNumber:
     "absolute text-sm font-medium cursor-pointer select-none transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white",
   clockNumberSelected:
-    "text-white font-bold bg-indigo-500 rounded-full w-8 h-8 flex items-center justify-center",
+    "text-white font-bold bg-indigo-500 dark:bg-indigo-600 rounded-full w-8 h-8 flex items-center justify-center",
   clockNumberInner: "text-xs text-gray-400 dark:text-gray-500",
   clockNumberDisabled:
     "opacity-30 cursor-not-allowed text-gray-300 dark:text-gray-600",
@@ -55,7 +55,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockCancelButton:
     "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700",
   clockOkButton:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
+    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 dark:bg-indigo-600 text-white hover:bg-indigo-600 dark:hover:bg-indigo-700",
   clockPeriodToggle: "flex flex-col gap-1 ml-3",
   clockPeriodButton:
     "px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",

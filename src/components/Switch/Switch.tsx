@@ -203,6 +203,8 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           {loading && (
             loader || (
               <svg
+                role="status"
+                aria-label="Loading"
                 className={cn("animate-spin", mergedClasses.loading) || undefined}
                 width={loaderSize}
                 height={loaderSize}

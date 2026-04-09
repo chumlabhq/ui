@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CountryFlag",
+  "description": "A country flag component displaying flag images by ISO country code with optional tooltip and loading states.",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code (e.g. 'US', 'GB')."
+    },
+    "size": {
+      "oneOf": [
+        { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl", "2xl"] },
+        { "type": "number" }
+      ],
+      "description": "Flag size as a preset or numeric pixel value."
+    },
+    "aspectRatio": {
+      "type": "number",
+      "description": "Aspect ratio for the flag image."
+    },
+    "alt": {
+      "type": "string",
+      "description": "Alt text for the flag image."
+    },
+    "fallback": {
+      "type": "object",
+      "description": "React.ReactNode — Custom fallback content when the flag image fails to load."
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "Shows a loading shimmer placeholder."
+    },
+    "tooltip": {
+      "oneOf": [
+        { "type": "object", "description": "React.ReactNode" },
+        {
+          "type": "object",
+          "description": "CountryFlagTooltipConfig",
+          "properties": {
+            "content": { "type": "object", "description": "React.ReactNode" },
+            "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
+            "align": { "type": "string", "enum": ["start", "center", "end"] },
+            "sideOffset": { "type": "number" },
+            "delayDuration": { "type": "number" },
+            "className": { "type": "string" },
+            "showArrow": { "type": "boolean" }
+          },
+          "required": ["content"]
+        }
+      ],
+      "description": "Tooltip shown on hover. Pass a ReactNode or a config object."
+    },
+    "basePath": {
+      "type": "string",
+      "description": "Base path for flag image assets."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for flag sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "image": { "type": "string" },
+        "fallback": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects OS setting."
+    },
+    "onLoad": {
+      "type": "object",
+      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads."
+    },
+    "onError": {
+      "type": "object",
+      "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load."
+    }
+  },
+  "required": ["code"]
+}

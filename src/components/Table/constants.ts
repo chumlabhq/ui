@@ -32,9 +32,9 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   pinnedPinIcon: "text-blue-600",
   pinnedPinIconHover: "",
   pinButton:
-    "ml-2 p-1 rounded transition-colors hover:bg-gray-200 dark:hover:bg-gray-700",
+    "ml-2 p-1.5 rounded transition-colors hover:bg-gray-200 dark:hover:bg-gray-700",
   pinnedPinButton:
-    "ml-2 p-1 rounded transition-colors hover:bg-blue-100",
+    "ml-2 p-1.5 rounded transition-colors hover:bg-blue-100",
   shimmer:
     "w-full border rounded-lg overflow-hidden border-gray-200 dark:border-white/[0.06]",
   shimmerRow: "border-b border-gray-100 dark:border-white/[0.04]",

@@ -124,7 +124,7 @@ export function PinIcon({ className = "" }: IconProps) {
       </g>
       <defs>
         <clipPath id="clip0_3995_33713">
-          <path fill="#fff" d="M0 0h18v18H0z" />
+          <path fill="currentColor" d="M0 0h18v18H0z" />
         </clipPath>
       </defs>
     </svg>

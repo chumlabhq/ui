@@ -399,9 +399,9 @@ describe("Input", () => {
       expect(wrapper).toHaveAttribute("aria-busy", "true");
     });
 
-    it("does not set aria-busy on input element", () => {
+    it("sets aria-busy on input element when loading", () => {
       render(<Input aria-label="test" loading />);
-      expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-busy");
+      expect(screen.getByRole("textbox")).toHaveAttribute("aria-busy", "true");
     });
 
     it("does not set aria-busy on wrapper when not loading", () => {

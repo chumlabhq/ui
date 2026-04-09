@@ -137,13 +137,13 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
         <span className={mergedClasses.loader || undefined}>{loaderElement}</span>
       )}
       {startIcon && (
-        <span className={cn(mergedClasses.startIcon, animationClasses.leading) || undefined}>
+        <span aria-hidden="true" className={cn(mergedClasses.startIcon, animationClasses.leading) || undefined}>
           {startIcon}
         </span>
       )}
       {displayContent}
       {endIcon && (
-        <span className={cn(mergedClasses.endIcon, animationClasses.trailing) || undefined}>
+        <span aria-hidden="true" className={cn(mergedClasses.endIcon, animationClasses.trailing) || undefined}>
           {endIcon}
         </span>
       )}

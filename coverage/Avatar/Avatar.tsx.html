@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.47% </span>
+                <span class="strong">74.79% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>91/119</span>
+                <span class='fraction'>92/123</span>
             </div>
         
             
@@ -334,7 +334,29 @@
 <a name='L269'></a><a href='#L269'>269</a>
 <a name='L270'></a><a href='#L270'>270</a>
 <a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -368,6 +390,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -646,6 +690,28 @@ const isStatusConfig = (status: unknown): status is AvatarStatusConfig =&gt; {
   );
 };
 &nbsp;
+/**
+ * Component: Avatar
+ *
+ * Purpose:
+ * Displays a user representation as an image, initials (from name), or custom
+ * fallback content. Auto-falls back through image → fallback → initials.
+ *
+ * AI Usage Guidelines:
+ * - Use `name` for initials and `src` for images — both can coexist (image wins, initials are fallback)
+ * - Use `autoColor` for deterministic colors from the name hash
+ * - Wrap in `&lt;AvatarGroup max={N}&gt;` for stacked groups with overflow counting
+ * - Use `&lt;AvatarBadge&gt;` as a sibling inside a relative container for notifications
+ *
+ * Behavior:
+ * - Image loads: shows image. Image fails: shows initials or fallback.
+ * - `loading={true}` shows shimmer in place of content.
+ * - AvatarGroup provides size/shape/bordered via context to all children.
+ *
+ * Reference:
+ * - AVATAR.ai.md (this directory) — full AI knowledge doc with props, styling guide, patterns
+ * - src/pages/demo/AvatarDemo.tsx — live demo with all features implemented
+ */
 export const Avatar = forwardRef&lt;HTMLDivElement, AvatarProps&gt;(
   (
     {
@@ -801,7 +867,7 @@ export const Avatar = forwardRef&lt;HTMLDivElement, AvatarProps&gt;(
             &lt;img
               ref={imgRef}
               src={src}
-              alt={alt || <span class="branch-1 cbranch-no" title="branch not covered" >""}</span>
+              alt={alt || <span class="branch-1 cbranch-no" title="branch not covered" >name || <span class="branch-2 cbranch-no" title="branch not covered" >"</span>"}</span>
               srcSet={imageConfig?.srcSet}
               sizes={imageConfig?.sizes}
               loading={imageConfig?.loading ?? "lazy"}
@@ -847,7 +913,7 @@ export const Avatar = forwardRef&lt;HTMLDivElement, AvatarProps&gt;(
                 statusSize,
               ),
             }}
-            aria-label={statusConfig.type}
+            aria-label={`${name || <span class="branch-1 cbranch-no" title="branch not covered" >alt || <span class="branch-2 cbranch-no" title="branch not covered" >"</span>User"}</span> is ${statusConfig.type}`}
           /&gt;
         )}
       &lt;/Comp&gt;
@@ -883,7 +949,7 @@ export default Avatar;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T11:43:37.836Z
+                at 2026-04-09T11:20:43.907Z
             </div>
         <script src="../prettify.js"></script>
         <script>

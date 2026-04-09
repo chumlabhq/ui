@@ -5,8 +5,11 @@ import {
   FONT_SIZE_MAP,
   STATUS_SIZE_MAP,
   DEFAULT_BACKGROUND_COLORS,
+  DEFAULT_DARK_BACKGROUND_COLORS,
   DEFAULT_BORDER_COLORS,
+  DEFAULT_DARK_BORDER_COLORS,
   DEFAULT_TEXT_COLORS,
+  DEFAULT_DARK_TEXT_COLORS,
   DEFAULT_STATUS_COLORS,
   SHAPE_RADIUS_MAP,
 } from "./constants";
@@ -66,12 +69,15 @@ const hashString = (str: string): number => {
 export const generateColors = (
   name: string | undefined,
   colors?: AvatarColors
-): { background: string; border: string; text: string } => {
+): { background: string; border: string; text: string; darkBackground: string; darkBorder: string; darkText: string } => {
   if (!name) {
     return {
       background: DEFAULT_BACKGROUND_COLORS[0],
       border: DEFAULT_BORDER_COLORS[0],
       text: DEFAULT_TEXT_COLORS[0],
+      darkBackground: DEFAULT_DARK_BACKGROUND_COLORS[0],
+      darkBorder: DEFAULT_DARK_BORDER_COLORS[0],
+      darkText: DEFAULT_DARK_TEXT_COLORS[0],
     };
   }
 
@@ -96,6 +102,9 @@ export const generateColors = (
     background: backgrounds[index % backgrounds.length],
     border: borders[index % borders.length],
     text: textColors[index % textColors.length],
+    darkBackground: DEFAULT_DARK_BACKGROUND_COLORS[index % DEFAULT_DARK_BACKGROUND_COLORS.length],
+    darkBorder: DEFAULT_DARK_BORDER_COLORS[index % DEFAULT_DARK_BORDER_COLORS.length],
+    darkText: DEFAULT_DARK_TEXT_COLORS[index % DEFAULT_DARK_TEXT_COLORS.length],
   };
 };
 

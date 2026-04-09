@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Breadcrumb",
+  "description": "A navigation breadcrumb component with collapsible items, custom separators, tooltips, and dropdown overflow.",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "description": "List of breadcrumb items to render.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Unique identifier for the breadcrumb item." },
+          "label": { "type": "string", "description": "Display text for the breadcrumb item." },
+          "href": { "type": "string", "description": "Navigation URL for the breadcrumb item." },
+          "onClick": { "type": "object", "description": "() => void — Click handler." },
+          "icon": { "type": "object", "description": "React.ReactNode — Icon rendered beside the label." },
+          "iconPosition": { "type": "string", "enum": ["left", "right"], "description": "Position of the icon relative to the label.", "default": "left" },
+          "disabled": { "type": "boolean", "description": "Disables the breadcrumb item." },
+          "content": { "type": "object", "description": "React.ReactNode — Custom content replacing the label." },
+          "tooltip": { "type": "object", "description": "React.ReactNode — Tooltip content." },
+          "tooltipProps": {
+            "type": "object",
+            "description": "Configuration for the item tooltip.",
+            "properties": {
+              "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
+              "align": { "type": "string", "enum": ["start", "center", "end"] },
+              "sideOffset": { "type": "number" },
+              "maxWidth": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
+              "delayDuration": { "type": "number" },
+              "showArrow": { "type": "boolean" },
+              "contentClassName": { "type": "string" },
+              "contentStyle": { "type": "object", "description": "CSSProperties" }
+            }
+          }
+        },
+        "required": ["id", "label"]
+      }
+    },
+    "maxVisibleItems": {
+      "type": "number",
+      "description": "Maximum visible items before collapsing into an ellipsis dropdown."
+    },
+    "separator": {
+      "type": "object",
+      "description": "React.ReactNode — Custom separator between breadcrumb items."
+    },
+    "onItemClick": {
+      "type": "object",
+      "description": "(item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked."
+    },
+    "aria-label": {
+      "type": "string",
+      "description": "Accessible label for the breadcrumb nav element."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for breadcrumb sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "list": { "type": "string" },
+        "item": { "type": "string" },
+        "itemActive": { "type": "string" },
+        "itemDisabled": { "type": "string" },
+        "link": { "type": "string" },
+        "separator": { "type": "string" },
+        "icon": { "type": "string" },
+        "ellipsis": { "type": "string" },
+        "ellipsisButton": { "type": "string" },
+        "dropdown": { "type": "string" },
+        "dropdownItem": { "type": "string" },
+        "dropdownItemDisabled": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "className": {
+      "type": "string",
+      "description": "CSS class for the root element."
+    },
+    "style": {
+      "type": "object",
+      "description": "CSSProperties — Inline styles for the root element."
+    },
+    "separatorIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component."
+    },
+    "ellipsisIcon": {
+      "type": "object",
+      "description": "React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component."
+    },
+    "iconSize": {
+      "oneOf": [
+        { "type": "number" },
+        { "type": "string" }
+      ],
+      "description": "Size of breadcrumb icons."
+    },
+    "showTooltips": {
+      "type": "boolean",
+      "description": "Enables tooltips on breadcrumb items."
+    },
+    "tooltipPosition": {
+      "type": "string",
+      "enum": ["top", "right", "bottom", "left"],
+      "description": "Default tooltip position for all items."
+    },
+    "tooltipOffset": {
+      "type": "number",
+      "description": "Default tooltip offset in pixels."
+    },
+    "defaultTooltipProps": {
+      "type": "object",
+      "description": "Default tooltip configuration for all items.",
+      "properties": {
+        "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
+        "align": { "type": "string", "enum": ["start", "center", "end"] },
+        "sideOffset": { "type": "number" },
+        "maxWidth": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
+        "delayDuration": { "type": "number" },
+        "showArrow": { "type": "boolean" },
+        "contentClassName": { "type": "string" },
+        "contentStyle": { "type": "object", "description": "CSSProperties" }
+      }
+    },
+    "ellipsisTooltip": {
+      "type": "object",
+      "description": "React.ReactNode — Tooltip content for the ellipsis button."
+    },
+    "ellipsisTooltipProps": {
+      "type": "object",
+      "description": "Tooltip configuration for the ellipsis button."
+    },
+    "dropdownPosition": {
+      "type": "string",
+      "enum": ["top", "bottom", "left", "right"],
+      "description": "Position of the overflow dropdown."
+    },
+    "dropdownZIndex": {
+      "type": "number",
+      "description": "Z-index of the overflow dropdown."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null — Portal container for the dropdown."
+    },
+    "ellipsisAriaLabel": {
+      "type": "string",
+      "description": "Accessible label for the ellipsis button."
+    },
+    "onDropdownOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void — Called when the dropdown open state changes."
+    }
+  },
+  "required": ["items"]
+}

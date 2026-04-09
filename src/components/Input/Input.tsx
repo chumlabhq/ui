@@ -223,6 +223,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
           aria-required={required || undefined}
+          aria-busy={loading || undefined}
           data-disabled={isDisabled || undefined}
           data-error={error || undefined}
           data-success={(!error && success) || undefined}

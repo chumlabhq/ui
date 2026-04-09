@@ -446,13 +446,13 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
     // Scroll focused option into view
     useEffect(() => {
-      if (!isOpen || focusedIndex < 0) return;
+      if (!isOpen || focusedIndex < 0 || !isBrowser) return;
       const optionEl = document.getElementById(`${dropdownId}-option-${focusedIndex}`);
       optionEl?.scrollIntoView({ block: "nearest" });
     }, [isOpen, focusedIndex, dropdownId]);
 
     useEffect(() => {
-      if (!isOpen) return;
+      if (!isOpen || !isBrowser) return;
 
       const handleClickOutside = (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
@@ -470,7 +470,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     }, [isOpen, handleClose]);
 
     useEffect(() => {
-      if (!lockScroll || !isOpen) return;
+      if (!lockScroll || !isOpen || !isBrowser) return;
 
       const preventScroll = (e: Event) => {
         if (dropdownContentRef.current?.contains(e.target as Node)) return;

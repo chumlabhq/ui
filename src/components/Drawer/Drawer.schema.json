@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Drawer",
+  "description": "A slide-out panel component supporting all four directions, swipe gestures, snap points, and focus trapping.",
+  "type": "object",
+  "properties": {
+    "open": {
+      "type": "boolean",
+      "description": "Controlled open state."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "description": "Initial open state for uncontrolled usage."
+    },
+    "onOpenChange": {
+      "type": "object",
+      "description": "(open: boolean) => void — Callback when the drawer's open state changes."
+    },
+    "zIndex": {
+      "type": "number",
+      "description": "Z-index of the drawer overlay and panel."
+    },
+    "children": {
+      "type": "object",
+      "description": "React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter)."
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["left", "right", "top", "bottom"],
+      "description": "Direction from which the drawer slides in."
+    },
+    "size": {
+      "type": "string",
+      "description": "CSS size value for the drawer panel (width for left/right, height for top/bottom)."
+    },
+    "overlayColor": {
+      "type": "string",
+      "description": "Background color of the overlay."
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "description": "Opacity of the overlay (0-1)."
+    },
+    "overlayBlur": {
+      "type": "number",
+      "description": "Backdrop blur in pixels for the overlay."
+    },
+    "duration": {
+      "type": "number",
+      "description": "Animation duration in milliseconds."
+    },
+    "lockScroll": {
+      "type": "boolean",
+      "description": "Locks body scroll when the drawer is open."
+    },
+    "closeOnOverlayClick": {
+      "type": "boolean",
+      "description": "Closes the drawer when the overlay is clicked."
+    },
+    "closeOnEscape": {
+      "type": "boolean",
+      "description": "Closes the drawer when the Escape key is pressed."
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for drawer sub-elements.",
+      "properties": {
+        "root": { "type": "string" },
+        "overlay": { "type": "string" },
+        "panel": { "type": "string" }
+      }
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Removes all default styling."
+    },
+    "reduceMotion": {
+      "oneOf": [
+        { "type": "boolean" },
+        { "type": "string", "const": "auto" }
+      ],
+      "description": "Controls motion preferences. 'auto' respects OS setting."
+    },
+    "trapFocus": {
+      "type": "boolean",
+      "description": "Traps keyboard focus within the drawer."
+    },
+    "restoreFocus": {
+      "type": "boolean",
+      "description": "Restores focus to the previously focused element when the drawer closes."
+    },
+    "portalContainer": {
+      "type": "object",
+      "description": "HTMLElement | null — Portal container for the drawer."
+    },
+    "initialFocus": {
+      "type": "object",
+      "description": "RefObject<HTMLElement> — Element to receive focus when the drawer opens."
+    },
+    "onTransitionEnd": {
+      "type": "object",
+      "description": "(open: boolean) => void — Called when the open/close transition completes."
+    },
+    "keepMounted": {
+      "type": "boolean",
+      "description": "Keep the drawer DOM mounted when closed."
+    },
+    "modal": {
+      "type": "boolean",
+      "description": "Whether the drawer behaves as a modal dialog."
+    },
+    "swipeable": {
+      "type": "boolean",
+      "description": "Enables swipe-to-close gesture."
+    },
+    "swipeThreshold": {
+      "type": "number",
+      "description": "Minimum swipe distance in pixels to trigger close."
+    },
+    "snapPoints": {
+      "type": "array",
+      "items": { "type": "number" },
+      "description": "Array of snap point positions (0-1) for the drawer panel."
+    },
+    "activeSnapPointIndex": {
+      "type": "number",
+      "description": "Controlled active snap point index."
+    },
+    "defaultSnapPointIndex": {
+      "type": "number",
+      "description": "Initial snap point index for uncontrolled usage."
+    },
+    "onSnapPointIndexChange": {
+      "type": "object",
+      "description": "(index: number) => void — Called when the active snap point changes."
+    }
+  },
+  "required": []
+}

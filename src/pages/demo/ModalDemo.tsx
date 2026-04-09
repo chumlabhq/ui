@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Modal, useModal } from "../../components/Modal";
+import { useTheme } from "./ThemeContext";
 import {
   Section,
   DemoWrapper,
@@ -9,7 +10,6 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-import { useTheme } from "./ThemeContext";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
