@@ -9,8 +9,8 @@
     "TimePicker", "Toast", "Tooltip"
   ],
   "pipeline": {
-    "currentStep": 13,
-    "stepName": "13-embeddings",
+    "currentStep": 14,
+    "stepName": "14-readme",
     "status": "COMPLETE",
     "allStepsComplete": true
   },

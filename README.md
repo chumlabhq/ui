@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/assets/images/logo-dark.png" alt="Chumlab UI, open-source React component library" height="60" />
+  <img src="src/assets/images/logo-dark.png" alt="Chumlab UI" height="60" />
 </p>
 
 <h1 align="center">Chumlab UI</h1>
@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@chumlab/ui"><img src="https://img.shields.io/npm/v/@chumlab/ui?color=blue&label=npm" alt="npm version" /></a>
   <a href="https://github.com/chumlabhq/ui/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License" /></a>
-  <img src="https://img.shields.io/badge/react-19-blue" alt="React 19" />
+  <img src="https://img.shields.io/badge/react-18%2B-blue" alt="React 18+" />
   <img src="https://img.shields.io/badge/tailwind-v4-blue" alt="Tailwind CSS v4" />
   <img src="https://img.shields.io/badge/typescript-strict-blue" alt="TypeScript" />
 </p>
@@ -27,30 +27,57 @@
 
 ## What is Chumlab UI?
 
-Chumlab UI is an open-source React component library that provides production-grade, accessible, and fully themeable UI components. It is built with TypeScript and Tailwind CSS v4, and designed for teams who need polished interfaces without sacrificing control over design or accessibility.
+An open-source React component library with **31 production-ready components** — accessible, fully responsive, and themeable. Built with TypeScript and Tailwind CSS v4. Ships with polished defaults, full dark mode, and zero vendor lock-in.
 
-**Package:** `@chumlab/ui` on [npm](https://www.npmjs.com/package/@chumlab/ui)
+---
+
+## 30-Second Example
+
+```tsx
+import { Button, Input, Modal } from "@chumlab/ui";
+import { useState } from "react";
+
+export default function App() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Input label="Email" placeholder="you@example.com" clearable />
+
+      <Button
+        className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg"
+        onClick={() => setOpen(true)}
+      >
+        Open Modal
+      </Button>
+
+      <Modal open={open} onOpenChange={setOpen} title="Welcome">
+        <p>You're using Chumlab UI.</p>
+      </Modal>
+    </>
+  );
+}
+```
+
+---
 
 ## Why Chumlab UI?
 
-- **Accessibility built in.** WCAG 2.1 AA, keyboard navigation, focus trapping, screen reader support, and `prefers-reduced-motion` out of the box. Not retrofitted, engineered from the start.
-- **Fully themeable.** Override any element via the `classes` prop. Go fully unstyled. Use your own design tokens. No vendor CSS to fight.
-- **Lightweight & tree-shakeable.** Only ship what you use. No runtime CSS-in-JS. Built on Tailwind CSS v4 for optimal bundle size.
-- **TypeScript-first.** Strict types, full IntelliSense, and exported prop types for every component.
-
-## How is Chumlab UI different from other React component libraries?
-
 | Feature | Chumlab UI | MUI / Ant Design | Radix / Headless UI |
 |---------|-----------|-------------------|---------------------|
-| Default styles | Yes, polished | Yes, opinionated | No (headless) |
-| Unstyled mode | Yes (`unstyled` prop) | No | Yes (by default) |
-| CSS class overrides | Yes (`classes` prop) | Theme overrides | BYO styles |
-| Runtime CSS-in-JS | None | Yes (Emotion/styled) | None |
-| Tailwind CSS native | v4 | No | Compatible |
+| Polished defaults | Yes | Yes (opinionated) | No (headless) |
+| Fully unstyled mode | Yes | No | Yes |
+| Per-element `classes` overrides | Yes | Theme overrides | BYO |
+| Runtime CSS-in-JS | None | Yes (Emotion) | None |
+| Dark mode | Built-in `dark:` variants | Theme provider | BYO |
+| Responsive (320px+) | Yes, mobile-first | Partial | BYO |
+| SSR-safe | Yes | Yes | Yes |
 | Accessibility | WCAG 2.1 AA | Partial | Strong |
-| Bundle approach | Tree-shakeable | Large bundle | Tree-shakeable |
+| Tree-shakeable | Yes | Large bundle | Yes |
 
-Chumlab UI sits in the sweet spot: **production-ready defaults** with **full escape hatches**. Ship fast with the defaults, then customize any element when your design system demands it.
+**The sweet spot:** production-ready defaults with full escape hatches. Ship fast, then customize any element when your design system demands it.
+
+---
 
 ## Installation
 
@@ -58,160 +85,156 @@ Chumlab UI sits in the sweet spot: **production-ready defaults** with **full esc
 npm install @chumlab/ui
 ```
 
-**Peer dependencies:** `react >= 18` &middot; `react-dom >= 18`
+Peer dependencies: `react >= 18` and `react-dom >= 18`.
 
-## Quick Start
-
-```tsx
-import { Button, Input, Modal } from "@chumlab/ui";
-
-function App() {
-  return (
-    <div>
-      <Input label="Email" placeholder="you@example.com" />
-      <Button>Submit</Button>
-    </div>
-  );
-}
-```
-
-Or import individual components for optimal tree-shaking:
-
-```tsx
-import { Button } from "@chumlab/ui/components/Button";
-import type { ButtonProps } from "@chumlab/ui/components/Button";
-```
+---
 
 ## Components
 
-### Form Inputs
+### Form
 
-| Component | Description |
+| Component | What it does |
 |-----------|-------------|
-| [`Input`](https://chumlab.com/input) | Text input with icons, prefix/suffix, clearable, character count |
-| [`TextArea`](https://chumlab.com/text-area) | Multi-line input with auto-resize |
-| [`Checkbox`](https://chumlab.com/checkbox) | Checkbox with indeterminate state |
-| [`Switch`](https://chumlab.com/switch) | Toggle switch with label and description |
-| [`RadioButton`](https://chumlab.com/radio-button) | Radio group with horizontal/vertical layouts |
-| [`OtpInput`](https://chumlab.com/otp-input) | OTP input with grouping and paste support |
-| [`Slider`](https://chumlab.com/slider) | Range slider with single and dual thumbs |
-| [`DatePicker`](https://chumlab.com/date-picker) | Calendar with single, range, and multi-date selection |
-| [`TimePicker`](https://chumlab.com/time-picker) | Time picker with analog clock face |
-| [`InternationalPhoneInput`](https://chumlab.com/international-phone-input) | Phone input with country code and validation |
+| [Button](https://chumlab.com/button) | Polymorphic (button/a/span/asChild), loading states, icon animations |
+| [Input](https://chumlab.com/input) | Prefix/suffix, icons, clearable, character count |
+| [TextArea](https://chumlab.com/text-area) | Auto-resize, character count |
+| [Checkbox](https://chumlab.com/checkbox) | Checked, unchecked, indeterminate |
+| [RadioButton](https://chumlab.com/radio-button) | Radio group, horizontal/vertical |
+| [Switch](https://chumlab.com/switch) | Toggle with icons and loading |
+| [Slider](https://chumlab.com/slider) | Single/dual thumbs, marks, tooltips |
+| [OtpInput](https://chumlab.com/otp-input) | Grouping, paste support, auto-advance |
+| [DatePicker](https://chumlab.com/date-picker) | Single, range, multi-date, presets, markers |
+| [TimePicker](https://chumlab.com/time-picker) | Dropdown list or analog clock face |
+| [InternationalPhoneInput](https://chumlab.com/international-phone-input) | Country selector, formatting, validation |
 
 ### Selection
 
-| Component | Description |
+| Component | What it does |
 |-----------|-------------|
-| [`Dropdown`](https://chumlab.com/dropdown) | Single-select dropdown with async loading |
-| [`SearchableDropdown`](https://chumlab.com/searchable-dropdown) | Filterable dropdown with search |
-| [`MultiSelectDropdown`](https://chumlab.com/multi-select-dropdown) | Multi-select with chips display |
-| [`MultiSelectSearchableDropdown`](https://chumlab.com/multi-select-searchable-dropdown) | Searchable multi-select |
-| [`CascadingDropdown`](https://chumlab.com/cascading-dropdown) | Hierarchical multi-level selection |
+| [Dropdown](https://chumlab.com/dropdown) | Single-select, async loading, portal |
+| [SearchableDropdown](https://chumlab.com/searchable-dropdown) | Search + single-select, async |
+| [MultiSelectDropdown](https://chumlab.com/multi-select-dropdown) | Chips, checkboxes, async |
+| [MultiSelectSearchableDropdown](https://chumlab.com/multi-select-searchable-dropdown) | Search + multi-select |
+| [CascadingDropdown](https://chumlab.com/cascading-dropdown) | Multi-level nested submenus |
 
-### Navigation
+### Layout & Navigation
 
-| Component | Description |
+| Component | What it does |
 |-----------|-------------|
-| [`Breadcrumb`](https://chumlab.com/breadcrumb) | Breadcrumb trail with truncation and overflow dropdown |
-| [`Pagination`](https://chumlab.com/pagination) | Page controls with rows-per-page selector |
-| [`TabPanel`](https://chumlab.com/tab-panel) | Tabs with keyboard support and RTL |
-| [`Stepper`](https://chumlab.com/stepper) | Step-by-step progress indicator |
+| [Accordion](https://chumlab.com/accordion) | Expandable sections, single/multiple modes |
+| [TabPanel](https://chumlab.com/tab-panel) | Tabbed content, horizontal/vertical |
+| [Table](https://chumlab.com/table) | Sorting, filtering, selection, pinning, inline editing, infinite scroll (TanStack v8) |
+| [ResizablePanel](https://chumlab.com/resizable-panel) | Draggable split panels |
+| [Breadcrumb](https://chumlab.com/breadcrumb) | Navigation trail with overflow dropdown |
+| [Pagination](https://chumlab.com/pagination) | Page controls, rows-per-page selector |
+| [Stepper](https://chumlab.com/stepper) | Multi-step progress (numbered/icon/dot) |
 
 ### Overlay
 
-| Component | Description |
+| Component | What it does |
 |-----------|-------------|
-| [`Modal`](https://chumlab.com/modal) | Dialog with focus trap, nesting, and compound children |
-| [`Drawer`](https://chumlab.com/drawer) | Side panel with swipe gestures and snap points |
-| [`Tooltip`](https://chumlab.com/tooltip) | Positioned tooltip with rich content and arrow |
-| [`Toast`](https://chumlab.com/toast) | Toast notifications with progress bar |
+| [Modal](https://chumlab.com/modal) | Focus trap, nesting, scroll lock |
+| [Drawer](https://chumlab.com/drawer) | Slide-out from any edge, swipe gestures, snap points |
+| [Tooltip](https://chumlab.com/tooltip) | Arrow, truncation detection, rich content |
+| [Toast](https://chumlab.com/toast) | Auto-dismiss, progress bar, action buttons |
 
 ### Display
 
-| Component | Description |
+| Component | What it does |
 |-----------|-------------|
-| [`Avatar`](https://chumlab.com/avatar) | User avatar with initials, badges, status, and groups |
-| [`CountryFlag`](https://chumlab.com/country-flag) | Country flag images with lazy loading |
-| [`Table`](https://chumlab.com/table) | Data table with sorting (TanStack Table) |
-| [`Accordion`](https://chumlab.com/accordion) | Expandable sections with animations |
-| [`Loader`](https://chumlab.com/loader) | Circular loading spinner |
+| [Avatar](https://chumlab.com/avatar) | Image/initials/fallback, status, badges, groups |
+| [CountryFlag](https://chumlab.com/country-flag) | SVG flags from ISO codes |
+| [Loader](https://chumlab.com/loader) | Circular, linear, dot, pulse variants |
 
-### Layout
+---
 
-| Component | Description |
-|-----------|-------------|
-| [`Button`](https://chumlab.com/button) | Polymorphic button (button/a/span/asChild) with icon animations |
-| [`ResizablePanel`](https://chumlab.com/resizable-panel) | Adjustable panel with drag handle |
+## Styling
 
-## Key Patterns
-
-### Controlled & Uncontrolled
-
-Every stateful component supports both patterns:
+### Override any element
 
 ```tsx
-// Uncontrolled: component manages its own state
-<Input defaultValue="hello" />
-
-// Controlled: you own the state
-<Input value={text} onValueChange={setText} />
-```
-
-### CSS Class Overrides
-
-Override any internal element with the `classes` prop:
-
-```tsx
-<Button
+<Dropdown
+  options={options}
   classes={{
-    root: "bg-blue-600 hover:bg-blue-700",
-    content: "font-semibold",
-    startIcon: "text-white/80",
+    trigger: "border-2 border-indigo-500 rounded-xl",
+    content: "shadow-2xl",
+    option: "px-4 py-3",
+    optionSelected: "bg-indigo-100 font-bold",
   }}
 />
 ```
 
-### Unstyled Mode
-
-Strip all default styles and build from scratch:
+### Go fully unstyled
 
 ```tsx
-<Input unstyled label="Custom" className="border-2 rounded px-3 py-2" />
+import { UNSTYLED_DROPDOWN_CLASSES } from "@chumlab/ui";
+
+<Dropdown options={options} classes={UNSTYLED_DROPDOWN_CLASSES} />
 ```
 
-### Data Attributes
-
-Components expose `data-*` attributes for CSS targeting:
+### Target states with CSS
 
 ```css
-[data-disabled] { opacity: 0.5; }
-[data-error] { border-color: red; }
-[data-slot="label"] { font-weight: 600; }
+[data-state="open"]  { /* dropdown is open */ }
+[data-selected]      { /* option is selected */ }
+[data-disabled]      { /* element is disabled */ }
+[data-error]         { /* validation error */ }
 ```
+
+---
+
+## Controlled & Uncontrolled
+
+Every stateful component supports both:
+
+```tsx
+// Uncontrolled — component manages state
+<Input defaultValue="hello" />
+
+// Controlled — you own the state
+<Input value={text} onValueChange={setText} />
+```
+
+---
+
+## Dark Mode
+
+Add `class="dark"` to `<html>` — every component adapts automatically:
+
+```html
+<html class="dark">
+```
+
+No theme provider, no configuration, no extra imports.
+
+---
+
+## Accessibility
+
+Every component ships with:
+
+- ARIA roles and states (WAI-ARIA 1.2)
+- Full keyboard navigation (arrows, Tab, Enter, Space, Escape, Home/End)
+- Focus trapping and restoration (Modal, Drawer)
+- Screen reader announcements (`aria-live`)
+- `prefers-reduced-motion` support
+- 44px+ touch targets
+
+---
 
 ## Utilities
 
 | Export | Description |
 |--------|-------------|
 | `cn` | Tailwind-aware class merging (clsx + tailwind-merge) |
-| `Slot` | Composition primitive for the `asChild` pattern |
-| `mergeRefs` | Combines multiple React refs |
-| `useControllableState` | Hook for dual controlled/uncontrolled state |
-| `useReducedMotion` | Respects `prefers-reduced-motion` media query |
-| `useIsomorphicLayoutEffect` | SSR-safe `useLayoutEffect` replacement |
-| `SR_ONLY_STYLE` | Screen-reader-only inline styles object |
+| `Slot` | Composition primitive for `asChild` pattern |
+| `mergeRefs` | Combine multiple React refs |
+| `useControllableState` | Dual controlled/uncontrolled state hook |
+| `useReducedMotion` | Respects `prefers-reduced-motion` |
+| `useIsomorphicLayoutEffect` | SSR-safe `useLayoutEffect` |
+| `SR_ONLY_STYLE` | Screen-reader-only inline styles |
 
-## Accessibility
-
-Every component ships with:
-
-- ARIA roles, states, and properties following WAI-ARIA 1.2
-- Full keyboard navigation (arrow keys, Home/End, Escape, Enter/Space)
-- Focus management and focus trapping (Modal, Drawer)
-- Screen reader announcements via `aria-live` regions
-- `prefers-reduced-motion` support
-- Dev-mode console warnings for missing accessible names
+---
 
 ## Browser Support
 
@@ -222,45 +245,41 @@ Every component ships with:
 | Safari | Latest 2 |
 | Mobile Chrome / Safari | Latest 2 |
 
+---
+
 ## Development
 
 ```bash
-git clone https://github.com/chumlabhq/ui.git
-cd ui
-npm install
-npm run dev          # Dev server at localhost:5173
+git clone https://github.com/chumlabhq/ui.git && cd ui && npm install
+npm run dev            # Dev server at localhost:5173
+npm run test:run       # Unit tests (Vitest, 1477 tests)
+npm run test:e2e       # E2E tests (Playwright)
+npm run build:lib      # Build library
 ```
 
-```bash
-npm run build        # Production build
-npm run lint         # ESLint (strict mode, zero warnings)
-npm run test         # Unit tests (Vitest)
-npm run test:e2e     # E2E tests (Playwright)
-npm run test:all     # All tests
-```
+---
 
 ## Contributing
 
-We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
 1. Fork the repo
-2. Create your branch (`git checkout -b feat/awesome-thing`)
-3. Commit your changes
+2. Create your branch (`git checkout -b feat/my-feature`)
+3. Make changes and run `npm run test:run && npx tsc --noEmit`
 4. Open a pull request
+
+---
 
 ## FAQ
 
-**Q: Is Chumlab UI free to use?**
-A: Yes. It is MIT licensed and free for personal and commercial use.
+**Does it work with Next.js?**
+Yes. Compatible with App Router and Pages Router. Use `"use client"` for interactive components.
 
-**Q: Does it work with Next.js?**
-A: Yes. All components are compatible with Next.js App Router and Pages Router. Use the `"use client"` directive for interactive components.
+**Can I use it without Tailwind CSS?**
+Yes. Use the `unstyled` prop or pass `UNSTYLED_*_CLASSES` constants and apply your own CSS.
 
-**Q: Can I use Chumlab UI without Tailwind CSS?**
-A: Yes. Use the `unstyled` prop on any component and apply your own CSS classes.
+**How do I report a bug?**
+Open an issue on [GitHub](https://github.com/chumlabhq/ui/issues).
 
-**Q: How do I report a bug?**
-A: Open an issue on [GitHub](https://github.com/chumlabhq/ui/issues).
+---
 
 ## License
 
@@ -269,6 +288,6 @@ A: Open an issue on [GitHub](https://github.com/chumlabhq/ui/issues).
 ---
 
 <p align="center">
-  Built with care by <a href="https://chumlab.com">Chumlab</a> &middot;
+  Built by <a href="https://chumlab.com">Chumlab</a> &middot;
   <a href="mailto:hello@chumlab.com">hello@chumlab.com</a>
 </p>
