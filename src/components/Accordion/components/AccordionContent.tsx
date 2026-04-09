@@ -186,8 +186,8 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       <Comp
         ref={combinedRef}
         id={item.contentId}
-        role="region"
-        aria-labelledby={item.triggerId}
+        role={item.isExpanded ? "region" : undefined}
+        aria-labelledby={item.isExpanded ? item.triggerId : undefined}
         aria-hidden={!item.isExpanded}
         data-state={item.isExpanded ? "open" : "closed"}
         data-disabled={item.disabled || undefined}

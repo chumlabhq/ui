@@ -89,7 +89,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       onClick={() => {
         if (!isDisabled) onSelect(option);
       }}
-      onMouseEnter={() => onHover(index)}
+      onMouseEnter={() => { if (!isDisabled) onHover(index); }}
     >
       <span>{option.content || option.label}</span>
       {isSelected &&

@@ -151,8 +151,10 @@ const Demo = () => {
     activeComponent?.description
   );
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const stored = localStorage.getItem("chumlab-ui-theme");
-    if (stored) return stored === "dark";
+    try {
+      const stored = typeof window !== "undefined" ? localStorage.getItem("chumlab-ui-theme") : null;
+      if (stored) return stored === "dark";
+    } catch { /* SSR or restricted storage */ }
     return true;
   });
 

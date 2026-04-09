@@ -353,7 +353,7 @@ export default function BlogListing() {
           {/* ── FILTERS ── */}
           <section className="max-w-6xl mx-auto px-6 sm:px-8 pb-8">
             {/* Category pills */}
-            <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="-mx-6 px-6 sm:mx-0 sm:px-0">
               <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
                 <button
                   onClick={() => setActiveCategory(null)}

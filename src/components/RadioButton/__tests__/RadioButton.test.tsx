@@ -230,8 +230,8 @@ describe("RadioButton", () => {
     });
   });
 
-  describe("aria-checked", () => {
-    it("sets aria-checked to true on the selected radio", () => {
+  describe("checked state", () => {
+    it("checks the selected radio", () => {
       render(
         <RadioGroup defaultValue="a">
           <RadioButton value="a" label="Option A" />
@@ -240,11 +240,11 @@ describe("RadioButton", () => {
       );
 
       const radios = screen.getAllByRole("radio");
-      expect(radios[0]).toHaveAttribute("aria-checked", "true");
-      expect(radios[1]).toHaveAttribute("aria-checked", "false");
+      expect(radios[0]).toBeChecked();
+      expect(radios[1]).not.toBeChecked();
     });
 
-    it("updates aria-checked when selection changes", async () => {
+    it("updates checked state when selection changes", async () => {
       const user = userEvent.setup();
 
       render(
@@ -255,12 +255,12 @@ describe("RadioButton", () => {
       );
 
       const radios = screen.getAllByRole("radio");
-      expect(radios[0]).toHaveAttribute("aria-checked", "true");
+      expect(radios[0]).toBeChecked();
 
       await user.click(radios[1]);
 
-      expect(radios[0]).toHaveAttribute("aria-checked", "false");
-      expect(radios[1]).toHaveAttribute("aria-checked", "true");
+      expect(radios[0]).not.toBeChecked();
+      expect(radios[1]).toBeChecked();
     });
   });
 

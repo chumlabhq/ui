@@ -175,7 +175,6 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
                 .filter(Boolean)
                 .join(" ") || undefined
             }
-            aria-disabled={disabled || undefined}
             aria-required={required || undefined}
             disabled={disabled}
             onClick={handleToggle}

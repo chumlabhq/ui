@@ -13,6 +13,7 @@ import {
   DEFAULT_SLIDER_CLASSES,
   UNSTYLED_SLIDER_CLASSES,
 } from "./utils/constants";
+import { isBrowser } from "../../utils/isBrowser";
 import { useControllableState } from "../../utils/useControllableState";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import { cn } from "../../utils/cn";
@@ -379,14 +380,17 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         e.preventDefault();
         e.stopPropagation();
         setActiveThumb(index);
-        document.body.style.cursor = "grabbing";
-        document.body.style.userSelect = "none";
+        if (isBrowser) {
+          document.body.style.cursor = "grabbing";
+          document.body.style.userSelect = "none";
+        }
       },
       [disabled],
     );
 
     useEffect(() => {
       if (activeThumb === null) return;
+      if (!isBrowser) return;
 
       const handleMove = (e: PointerEvent) => {
         const val = getValueFromPointer(e.clientX, e.clientY);
@@ -682,6 +686,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 formatTooltip={formatTooltip}
                 renderThumb={renderThumb}
                 sliderId={sliderId}
+                ariaLabel={ariaLabel}
                 ariaLabelledBy={label ? labelId : ariaLabelledBy}
                 ariaValueText={ariaValueText}
                 onPointerDown={handleThumbPointerDown}

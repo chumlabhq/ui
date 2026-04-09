@@ -102,7 +102,7 @@ describe("Avatar", () => {
     it("renders status indicator with simple status", () => {
       render(<Avatar name="John" status="online" />);
 
-      expect(screen.getByLabelText("online")).toBeInTheDocument();
+      expect(screen.getByLabelText("John is online")).toBeInTheDocument();
     });
 
     it("renders status indicator with config object", () => {
@@ -113,7 +113,7 @@ describe("Avatar", () => {
         />
       );
 
-      expect(screen.getByLabelText("busy")).toBeInTheDocument();
+      expect(screen.getByLabelText("John is busy")).toBeInTheDocument();
     });
 
     it("applies custom status color", () => {
@@ -124,7 +124,7 @@ describe("Avatar", () => {
         />
       );
 
-      const status = screen.getByLabelText("online");
+      const status = screen.getByLabelText("John is online");
       expect(status).toHaveStyle({ backgroundColor: "#ff0000" });
     });
   });
@@ -528,19 +528,19 @@ describe("AvatarGroupCount", () => {
     it("renders count with plus prefix by default", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("img")).toHaveTextContent("+5");
+      expect(screen.getByRole("status")).toHaveTextContent("+5");
     });
 
     it("renders without plus when showPlus=false", () => {
       render(<AvatarGroupCount count={5} showPlus={false} />);
 
-      expect(screen.getByRole("img")).toHaveTextContent("5");
+      expect(screen.getByRole("status")).toHaveTextContent("5");
     });
 
     it("shows max+ when count exceeds max", () => {
       render(<AvatarGroupCount count={150} max={99} />);
 
-      expect(screen.getByRole("img")).toHaveTextContent("+99+");
+      expect(screen.getByRole("status")).toHaveTextContent("+99+");
     });
 
     it("uses custom format function", () => {
@@ -548,7 +548,7 @@ describe("AvatarGroupCount", () => {
         <AvatarGroupCount count={5} format={(n) => `${n} users`} />
       );
 
-      expect(screen.getByRole("img")).toHaveTextContent("5 users");
+      expect(screen.getByRole("status")).toHaveTextContent("5 users");
     });
   });
 
@@ -559,7 +559,7 @@ describe("AvatarGroupCount", () => {
 
       render(<AvatarGroupCount count={5} onClick={onClick} />);
 
-      await user.click(screen.getByRole("img"));
+      await user.click(screen.getByRole("button"));
 
       expect(onClick).toHaveBeenCalledTimes(1);
     });
@@ -567,7 +567,7 @@ describe("AvatarGroupCount", () => {
     it("shows pointer cursor when onClick provided", () => {
       render(<AvatarGroupCount count={5} onClick={() => {}} />);
 
-      expect(screen.getByRole("img")).toHaveClass("cursor-pointer");
+      expect(screen.getByRole("button")).toHaveClass("cursor-pointer");
     });
   });
 
@@ -575,20 +575,20 @@ describe("AvatarGroupCount", () => {
     it("applies solid variant by default", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("img")).toHaveClass("bg-gray-200");
+      expect(screen.getByRole("status")).toHaveClass("bg-gray-200");
     });
 
     it("applies outline variant", () => {
       render(<AvatarGroupCount count={5} variant="outline" />);
 
-      expect(screen.getByRole("img")).toHaveClass("border-2");
+      expect(screen.getByRole("status")).toHaveClass("border-2");
     });
 
     it("applies ghost variant", () => {
       render(<AvatarGroupCount count={5} variant="ghost" />);
 
-      expect(screen.getByRole("img")).not.toHaveClass("bg-gray-200");
-      expect(screen.getByRole("img")).not.toHaveClass("border-2");
+      expect(screen.getByRole("status")).not.toHaveClass("bg-gray-200");
+      expect(screen.getByRole("status")).not.toHaveClass("border-2");
     });
   });
 
@@ -596,7 +596,7 @@ describe("AvatarGroupCount", () => {
     it("has correct aria-label", () => {
       render(<AvatarGroupCount count={5} />);
 
-      expect(screen.getByRole("img")).toHaveAttribute(
+      expect(screen.getByRole("status")).toHaveAttribute(
         "aria-label",
         "5 more members not shown"
       );
@@ -605,7 +605,7 @@ describe("AvatarGroupCount", () => {
     it("has singular aria-label for count of 1", () => {
       render(<AvatarGroupCount count={1} />);
 
-      expect(screen.getByRole("img")).toHaveAttribute(
+      expect(screen.getByRole("status")).toHaveAttribute(
         "aria-label",
         "1 more member not shown"
       );

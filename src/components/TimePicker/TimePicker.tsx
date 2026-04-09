@@ -36,6 +36,7 @@ function computeDropdownCoords(
   dropdownEl: HTMLElement,
   preferredPosition: "top" | "bottom",
   gap: number,
+  forcePosition = false,
 ): DropdownCoords {
   const rect = triggerEl.getBoundingClientRect();
   const dropdownHeight = dropdownEl.getBoundingClientRect().height;
@@ -43,13 +44,15 @@ function computeDropdownCoords(
   const viewportWidth = isBrowser ? (window.visualViewport?.width ?? window.innerWidth) : 1024;
 
   let position = preferredPosition;
-  if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
-    if (rect.top - gap - dropdownHeight > 0) {
-      position = "top";
-    }
-  } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
-    if (rect.bottom + gap + dropdownHeight <= viewportHeight) {
-      position = "bottom";
+  if (!forcePosition) {
+    if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
+      if (rect.top - gap - dropdownHeight > 0) {
+        position = "top";
+      }
+    } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
+      if (rect.bottom + gap + dropdownHeight <= viewportHeight) {
+        position = "bottom";
+      }
     }
   }
 
@@ -111,6 +114,7 @@ const TimeOption = memo(function TimeOption({
       id={`${dropdownId}-option-${index}`}
       role="option"
       aria-selected={isSelected}
+      aria-label={time}
       className={combinedClassName}
       data-selected={isSelected || undefined}
       data-focused={isFocused || undefined}
@@ -130,6 +134,28 @@ const TimeOption = memo(function TimeOption({
   );
 });
 
+/**
+ * Component: TimePicker
+ *
+ * Purpose:
+ * A time input with dropdown list or analog clock variant. Supports 12/24-hour formats,
+ * min/max constraints, smart parsing, clearable, portal-based positioning, and full keyboard navigation.
+ *
+ * AI Usage Guidelines:
+ * - Use `<TimePicker />` for any time selection need
+ * - Minimum: `value` + `onValueChange` for controlled, or no props for uncontrolled
+ * - Use `variant="clock"` for analog clock face; default is dropdown list
+ * - Use `forceDropdownPosition` to lock dropdown direction without auto-flipping
+ *
+ * Behavior:
+ * - Dropdown: filterable list with keyboard navigation (Arrow, Enter, Escape)
+ * - Clock: analog face with pointer/keyboard interaction, OK/Cancel to commit
+ * - Portal-rendered dropdown with auto-flip positioning
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/TimePickerDemo.tsx — live demo
+ */
 const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
   (
     {
@@ -167,6 +193,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       onOpenChange,
       lockScroll = false,
       dropdownPosition = "bottom",
+      forceDropdownPosition = false,
       dropdownZIndex = 50,
       dropdownGap = 4,
       keepMounted = false,
@@ -293,6 +320,15 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const clockPopupId = `${dropdownId}-clock`;
     const triggerId = `${dropdownId}-trigger`;
     const errorId = `${dropdownId}-error`;
+    const descriptionId = `${dropdownId}-description`;
+    const successId = `${dropdownId}-success`;
+
+    const describedByParts = [
+      description ? descriptionId : null,
+      error && errorMessage ? errorId : null,
+      success && successMessage && !error ? successId : null,
+    ].filter(Boolean);
+    const describedBy = describedByParts.length > 0 ? describedByParts.join(" ") : undefined;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const dropdownContentRef = useRef<HTMLDivElement | null>(null);
@@ -522,9 +558,9 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const updateDropdownPosition = useCallback(() => {
       if (!triggerElRef.current || !dropdownContentRef.current) return;
       setDropdownCoords(
-        computeDropdownCoords(triggerElRef.current, dropdownContentRef.current, dropdownPosition, dropdownGap),
+        computeDropdownCoords(triggerElRef.current, dropdownContentRef.current, dropdownPosition, dropdownGap, forceDropdownPosition),
       );
-    }, [dropdownPosition, dropdownGap]);
+    }, [dropdownPosition, dropdownGap, forceDropdownPosition]);
 
     // Update position on open (double-RAF to ensure portal is painted)
     useEffect(() => {
@@ -662,7 +698,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           </label>
         )}
         {description && (
-          <div className={mergedClasses.description || undefined}>{description}</div>
+          <div id={descriptionId} className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div
@@ -704,7 +740,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
               aria-autocomplete={variant === "dropdown" ? "list" : "none"}
               aria-label={!label ? restProps["aria-label"] : undefined}
               aria-invalid={error || undefined}
-              aria-describedby={error && errorMessage ? errorId : undefined}
+              aria-describedby={describedBy}
               aria-required={required || undefined}
               value={inputValue}
               onChange={(e) => handleInputChange(e.target.value)}
@@ -764,7 +800,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           </div>
         )}
         {success && successMessage && !error && (
-          <div className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div id={successId} className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

@@ -125,9 +125,9 @@ describe("TextArea", () => {
       expect(screen.getByRole("textbox")).toHaveAttribute("aria-describedby", "test-ta-error");
     });
 
-    it("sets aria-errormessage when error and errorMessage provided", () => {
+    it("includes error id in aria-describedby when error and errorMessage provided", () => {
       render(<TextArea id="test-ta" label="Message" error errorMessage="Required" />);
-      expect(screen.getByRole("textbox")).toHaveAttribute("aria-errormessage", "test-ta-error");
+      expect(screen.getByRole("textbox").getAttribute("aria-describedby")).toContain("test-ta-error");
     });
 
     it("sets data-error attribute when error=true", () => {

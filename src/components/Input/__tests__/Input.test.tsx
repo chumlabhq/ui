@@ -628,17 +628,18 @@ describe("Input", () => {
     });
   });
 
-  describe("aria-errormessage", () => {
-    it("sets aria-errormessage when error and errorMessage are provided", () => {
+  describe("error accessibility", () => {
+    it("includes error id in aria-describedby when error and errorMessage are provided", () => {
       render(<Input id="test-input" label="Email" error errorMessage="Required" />);
       const input = screen.getByRole("textbox");
-      expect(input).toHaveAttribute("aria-errormessage", "test-input-error");
+      expect(input.getAttribute("aria-describedby")).toContain("test-input-error");
     });
 
-    it("does not set aria-errormessage when no error", () => {
+    it("does not include error id in aria-describedby when no error", () => {
       render(<Input id="test-input" label="Email" errorMessage="Required" />);
       const input = screen.getByRole("textbox");
-      expect(input).not.toHaveAttribute("aria-errormessage");
+      const describedBy = input.getAttribute("aria-describedby") || "";
+      expect(describedBy).not.toContain("test-input-error");
     });
   });
 

@@ -148,7 +148,6 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
             ref={imgRef}
             src={src}
             alt=""
-            aria-hidden
             width={width}
             height={height}
             loading="lazy"

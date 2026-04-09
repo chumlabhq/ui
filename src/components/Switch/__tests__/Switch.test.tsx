@@ -118,9 +118,9 @@ describe("Switch Component", () => {
       expect(screen.getByRole("switch")).toBeDisabled();
     });
 
-    it("sets aria-disabled when disabled", () => {
+    it("is disabled via native disabled attribute when disabled", () => {
       render(<Switch disabled aria-label="Toggle" />);
-      expect(screen.getByRole("switch")).toHaveAttribute("aria-disabled", "true");
+      expect(screen.getByRole("switch")).toBeDisabled();
     });
 
     it("sets data-disabled attribute when disabled", () => {

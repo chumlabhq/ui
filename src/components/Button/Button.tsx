@@ -91,6 +91,26 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
     <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
   );
 
+  const loadingAnnouncement = loading ? (
+    <span
+      role="status"
+      aria-live="polite"
+      style={{
+        position: "absolute",
+        width: 1,
+        height: 1,
+        padding: 0,
+        margin: -1,
+        overflow: "hidden",
+        clip: "rect(0, 0, 0, 0)",
+        whiteSpace: "nowrap",
+        border: 0,
+      }}
+    >
+      Loading
+    </span>
+  ) : null;
+
   const displayContent = loading && loadingText ? loadingText : children;
 
   const effectiveAnimation = effectiveReduceMotion ? "none" : iconAnimation;
@@ -112,6 +132,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
 
   const content = (
     <span className={mergedClasses.content || undefined}>
+      {loadingAnnouncement}
       {loaderPosition === "left" && loading && (
         <span className={mergedClasses.loader || undefined}>{loaderElement}</span>
       )}

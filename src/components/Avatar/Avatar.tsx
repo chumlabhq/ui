@@ -262,7 +262,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
                 statusSize,
               ),
             }}
-            aria-label={statusConfig.type}
+            aria-label={`${name || alt || "User"} is ${statusConfig.type}`}
           />
         )}
       </Comp>

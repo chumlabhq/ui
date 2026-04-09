@@ -141,6 +141,8 @@ export interface TableProps<TData> {
   onCursorOverHeader?: (isOverHeader: boolean) => void;
   emptyContent?: ReactNode;
   ariaLabel?: string;
+  /** Accessible caption for the table, rendered as a visually hidden <caption> element. */
+  caption?: string;
   getRowId?: (row: TData) => string;
   selectedRowId?: string | null;
   onRowClick?: (rowData: TData) => void;

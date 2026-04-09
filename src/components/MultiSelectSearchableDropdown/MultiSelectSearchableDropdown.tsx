@@ -786,6 +786,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                   type="text"
                   placeholder={searchPlaceholder}
                   aria-label={searchInputAriaLabel}
+                  aria-controls={listboxId}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}

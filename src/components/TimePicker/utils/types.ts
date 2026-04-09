@@ -238,6 +238,8 @@ export interface TimePickerProps
   lockScroll?: boolean;
   /** Position of the dropdown relative to the trigger. Default: `"bottom"`. */
   dropdownPosition?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
+  forceDropdownPosition?: boolean;
   /** Z-index for the dropdown. Default: `50`. */
   dropdownZIndex?: number;
   /** Gap between trigger and dropdown in pixels. Default: `4`. */

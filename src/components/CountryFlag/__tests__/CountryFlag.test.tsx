@@ -184,11 +184,11 @@ describe("CountryFlag", () => {
       expect(screen.getByRole("img")).toHaveAttribute("aria-label", "Germany");
     });
 
-    it("marks the inner img as aria-hidden", () => {
+    it("does not mark the inner img as aria-hidden", () => {
       render(<CountryFlag code="us" />);
 
       const img = screen.getByRole("img").querySelector("img")!;
-      expect(img).toHaveAttribute("aria-hidden");
+      expect(img).not.toHaveAttribute("aria-hidden");
     });
   });
 

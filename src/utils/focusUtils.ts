@@ -21,5 +21,8 @@ function isVisible(el: HTMLElement): boolean {
 export function getFocusableElements(container: HTMLElement): HTMLElement[] {
   return Array.from(
     container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-  ).filter(isVisible);
+  ).filter((el) => {
+    if ((el as HTMLButtonElement | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).disabled) return false;
+    return isVisible(el);
+  });
 }

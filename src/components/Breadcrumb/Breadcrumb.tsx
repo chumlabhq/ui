@@ -363,10 +363,9 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     );
 
     useEffect(() => {
-      if (isDropdownOpen) {
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("touchstart", handleClickOutside);
-      }
+      if (!isDropdownOpen || !isBrowser) return;
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
         document.removeEventListener("touchstart", handleClickOutside);
@@ -383,7 +382,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
     // ─── Close on Escape (document level) ────────────────────────────
     useEffect(() => {
-      if (!isDropdownOpen) return;
+      if (!isDropdownOpen || !isBrowser) return;
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
           setIsDropdownOpen(false);

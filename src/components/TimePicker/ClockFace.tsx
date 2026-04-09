@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { isBrowser } from "../../utils/isBrowser";
 import type { TimeValue, ClockSelectionMode, ClockFaceProps } from "./utils/types";
 import { clampMinuteStep, getDefaultTimeValue, pad, timeValueToMinutes, isMinutesInRange } from "./utils";
 
@@ -385,12 +386,14 @@ export function ClockFace({
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
 
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
+      if (isBrowser) {
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     },
     [],
@@ -495,6 +498,7 @@ export function ClockFace({
             .filter(Boolean)
             .join(" ")}
           onClick={() => setSelectionMode("hours")}
+          aria-pressed={selectionMode === "hours"}
           data-active={selectionMode === "hours" || undefined}
           disabled={disabled}
         >
@@ -510,6 +514,7 @@ export function ClockFace({
             .filter(Boolean)
             .join(" ")}
           onClick={() => setSelectionMode("minutes")}
+          aria-pressed={selectionMode === "minutes"}
           data-active={selectionMode === "minutes" || undefined}
           disabled={disabled}
         >
@@ -527,6 +532,7 @@ export function ClockFace({
                 .filter(Boolean)
                 .join(" ")}
               onClick={() => togglePeriod("AM")}
+              aria-pressed={displayValue.period === "AM"}
               data-active={displayValue.period === "AM" || undefined}
               disabled={disabled}
             >
@@ -541,6 +547,7 @@ export function ClockFace({
                 .filter(Boolean)
                 .join(" ")}
               onClick={() => togglePeriod("PM")}
+              aria-pressed={displayValue.period === "PM"}
               data-active={displayValue.period === "PM" || undefined}
               disabled={disabled}
             >

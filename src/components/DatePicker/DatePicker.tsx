@@ -447,6 +447,13 @@ PresetsPanel.displayName = "PresetsPanel";
 
 // ─── DatePicker ──────────────────────────────────────────────────────────────
 
+/**
+ * DatePicker -- a full-featured date picker supporting single, range, and multiple
+ * date selection with calendar popover, presets, markers, locale support, keyboard
+ * navigation, week numbers, and fully customizable styling via the classes system.
+ *
+ * @see COMPONENT.ai.md for full usage guide, props, styling, and patterns.
+ */
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   (
     {

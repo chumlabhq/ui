@@ -445,7 +445,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     }, [isOpen]);
 
     useEffect(() => {
-      if (!isOpen) return;
+      if (!isOpen || !isBrowser) return;
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         if (containerRef.current?.contains(target)) return;
@@ -461,7 +461,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
     // Scroll lock when dropdown is open
     useEffect(() => {
-      if (!lockScroll || !isOpen) return;
+      if (!lockScroll || !isOpen || !isBrowser) return;
 
       const preventScroll = (e: Event) => {
         // Allow scroll inside the dropdown menu itself

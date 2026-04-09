@@ -115,15 +115,21 @@ describe("Button", () => {
         </Button>
       );
 
-      const content = screen.getByText("Loading").closest("span");
+      const button = screen.getByRole("button");
+      const content = button.querySelector("span");
       const loader = screen.getByTestId("loader");
 
       const children = Array.from(content?.childNodes || []);
       const loaderIndex = children.findIndex((n) =>
         n.contains(loader)
       );
+      // Find the visible text node, skipping the visually-hidden status
+      // announcement and the loader wrapper
       const textIndex = children.findIndex(
-        (n) => n.textContent === "Loading"
+        (n) =>
+          n.textContent === "Loading" &&
+          !n.contains(loader) &&
+          !(n instanceof HTMLElement && n.getAttribute("role") === "status"),
       );
 
       expect(loaderIndex).toBeLessThan(textIndex);

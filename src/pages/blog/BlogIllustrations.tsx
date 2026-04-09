@@ -686,7 +686,7 @@ export function DiagramDomTree() {
 
   return (
     <div className="rounded-xl border border-white/8 bg-white/3 p-4 sm:p-6 overflow-x-auto">
-      <svg viewBox="0 0 480 310" className="w-full max-w-[520px] mx-auto" style={{ minWidth: 360 }}>
+      <svg viewBox="0 0 480 310" className="w-full max-w-[520px] mx-auto" style={{ minWidth: "min(360px, 100%)" }}>
         {/* Edges */}
         {edges.map(([fi, ti]) => {
           const f = nodes[fi];

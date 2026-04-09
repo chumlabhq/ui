@@ -202,10 +202,15 @@ const StepItem = memo(function StepItem({
   };
 
   const needsAriaLabel = !showLabels || (variant === "dot" && !step.label);
+  const stepLabelText = typeof step.label === "string"
+    ? step.label
+    : `Step ${index + 1} of ${totalSteps}`;
+  const statusSuffix = status === "completed" ? ", completed"
+    : status === "error" ? ", error"
+    : status === "active" ? ", current"
+    : "";
   const stepAriaLabel = needsAriaLabel
-    ? typeof step.label === "string"
-      ? step.label
-      : `Step ${index + 1} of ${totalSteps}`
+    ? `${stepLabelText}${statusSuffix}`
     : undefined;
 
   const wrapWithTooltip = (content: ReactNode): ReactNode => {
@@ -311,9 +316,7 @@ const StepItem = memo(function StepItem({
   // ─── Shared interactive wrapper props ──────────────────────────────
   const sharedAriaLabel =
     stepAriaLabel ||
-    (isHorizontal && isLabelBottom && typeof step.label === "string"
-      ? step.label
-      : stepAriaLabel);
+    (showLabels ? (statusSuffix ? `${stepLabelText}${statusSuffix}` : undefined) : undefined);
 
   // ─── VERTICAL LAYOUT ─────────────────────────────────────────────
   if (!isHorizontal) {
@@ -406,6 +409,8 @@ const StepItem = memo(function StepItem({
 
   if (isLabelBottom) {
     // Button wraps only the indicator for clean connector alignment
+    const bottomAriaLabel = `${stepLabelText}${statusSuffix}`;
+
     const indicatorEl = isInteractive ? (
       <button
         ref={(el) => setStepRef(index, el)}
@@ -414,11 +419,7 @@ const StepItem = memo(function StepItem({
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         aria-current={status === "active" ? "step" : undefined}
-        aria-label={
-          typeof step.label === "string"
-            ? step.label
-            : `Step ${index + 1} of ${totalSteps}`
-        }
+        aria-label={bottomAriaLabel}
         className={classes.indicatorButton}
         data-status={status}
         data-clickable="true"
@@ -431,11 +432,7 @@ const StepItem = memo(function StepItem({
         role="group"
         aria-current={status === "active" ? "step" : undefined}
         aria-disabled={isDisabled || undefined}
-        aria-label={
-          typeof step.label === "string"
-            ? step.label
-            : `Step ${index + 1} of ${totalSteps}`
-        }
+        aria-label={bottomAriaLabel}
         className={isDisabled ? classes.stepDisabled : undefined}
         data-status={status}
         data-disabled={isDisabled || undefined}

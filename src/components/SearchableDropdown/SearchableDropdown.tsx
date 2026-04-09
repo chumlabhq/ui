@@ -282,6 +282,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
             className={classes.searchInputElement || undefined}
             aria-label={searchInputAriaLabel}
             aria-autocomplete="list"
+            aria-controls={listboxId}
           />
         </div>
       )}

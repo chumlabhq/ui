@@ -370,9 +370,15 @@ export const useCascadingDropdown = ({
             );
           } else if (focusedIndex >= 0 && menuOpts[focusedIndex]) {
             const option = menuOpts[focusedIndex];
-            if (option.children && option.children.length > 0) {
+            const dynamicChildren = loadedChildren[option.value] || [];
+            const staticChildren = option.children || [];
+            const hasSubmenu = dynamicChildren.length > 0 || staticChildren.length > 0 || option.hasChildren;
+            if (hasSubmenu) {
               setActiveSubmenu(option.value);
               setSubmenuFocusedIndex(0);
+              if (option.hasChildren && !loadedChildren[option.value]) {
+                loadChildrenForOption(option);
+              }
             } else {
               handleMenuItemClick(option);
             }
@@ -522,6 +528,8 @@ export const useCascadingDropdown = ({
       handleMenuItemClick,
       handleSubmenuItemClick,
       setIsOpen,
+      loadedChildren,
+      loadChildrenForOption,
     ]
   );
 

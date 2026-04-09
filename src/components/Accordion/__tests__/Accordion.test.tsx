@@ -771,11 +771,13 @@ describe("Accordion", () => {
         </Accordion>,
       );
 
-      const content = screen.getByRole("region", { hidden: true });
+      const content = screen.getByText("Content 1").closest("[aria-hidden]")!;
       expect(content).toHaveAttribute("aria-hidden", "true");
+      expect(content).not.toHaveAttribute("role", "region");
 
       await user.click(screen.getByRole("button", { name: "Item 1" }));
       expect(content).toHaveAttribute("aria-hidden", "false");
+      expect(content).toHaveAttribute("role", "region");
     });
   });
 

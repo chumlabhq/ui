@@ -4,7 +4,6 @@ import type { TimePickerClasses } from "../../components/TimePicker";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   DemoLabel,
   PropsTable,
@@ -28,7 +27,7 @@ const getClasses = (dark: boolean) => ({
     root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
     label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
     wrapper: "relative",
-    trigger: `flex items-center gap-2 w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
+    trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
       dark
         ? "border-gray-600 bg-gray-800 hover:border-gray-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent"
         : "border-gray-300 bg-white hover:border-gray-400 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent"
@@ -92,7 +91,7 @@ const darkTheme: TimePickerClasses = {
   root: "inline-flex flex-col gap-1 text-gray-200",
   label: "block text-sm font-medium mb-1 text-gray-300",
   wrapper: "relative",
-  trigger: "flex items-center gap-2 w-56 px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus-within:ring-2 focus-within:ring-gray-500 cursor-text",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus-within:ring-2 focus-within:ring-gray-500 cursor-text",
   input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-500 text-gray-100",
   endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
   dropdown: "border rounded-lg shadow-lg overflow-hidden bg-gray-800 border-gray-700",
@@ -107,7 +106,7 @@ const darkTheme: TimePickerClasses = {
 const warmTheme: TimePickerClasses = {
   root: "inline-flex flex-col gap-1 text-amber-900",
   wrapper: "relative",
-  trigger: "flex items-center gap-2 w-56 px-3 py-2 border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus-within:ring-2 focus-within:ring-amber-400 cursor-text",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus-within:ring-2 focus-within:ring-amber-400 cursor-text",
   input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-amber-400 text-amber-900",
   endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-amber-600",
   dropdown: "border rounded-lg shadow-lg overflow-hidden bg-amber-50 border-amber-200",
@@ -122,7 +121,7 @@ const warmTheme: TimePickerClasses = {
 const coolTheme: TimePickerClasses = {
   root: "inline-flex flex-col gap-1 text-cyan-900",
   wrapper: "relative",
-  trigger: "flex items-center gap-2 w-56 px-3 py-2 border border-cyan-300 rounded-lg bg-cyan-50 text-cyan-900 hover:bg-cyan-100 focus-within:ring-2 focus-within:ring-cyan-400 cursor-text",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cyan-300 rounded-lg bg-cyan-50 text-cyan-900 hover:bg-cyan-100 focus-within:ring-2 focus-within:ring-cyan-400 cursor-text",
   input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cyan-400 text-cyan-900",
   endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cyan-600",
   dropdown: "border rounded-lg shadow-lg overflow-hidden bg-cyan-50 border-cyan-200",
@@ -137,7 +136,7 @@ const coolTheme: TimePickerClasses = {
 const getMinimalTheme = (dark: boolean): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 ${dark ? "text-white" : "text-gray-800"}`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-56 px-3 py-2 border-b bg-transparent cursor-text ${
+  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text ${
     dark ? "border-gray-600 text-white hover:border-gray-400 focus-within:border-white" : "border-gray-300 text-gray-800 hover:border-gray-500 focus-within:border-gray-800"
   }`,
   input: `flex-1 min-w-0 bg-transparent outline-none text-sm ${dark ? "placeholder:text-gray-500 text-white" : "placeholder:text-gray-400 text-gray-800"}`,
@@ -156,7 +155,7 @@ const getMinimalTheme = (dark: boolean): TimePickerClasses => ({
 const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
+  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
     dark ? "border-emerald-700 bg-gray-800 hover:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500" : "border-emerald-300 bg-white hover:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-500"
   }`,
   input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
@@ -187,7 +186,7 @@ const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
 const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
+  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
     dark ? "border-rose-700 bg-gray-800 hover:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500" : "border-rose-300 bg-white hover:border-rose-400 focus-within:ring-2 focus-within:ring-rose-500"
   }`,
   input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
@@ -218,7 +217,7 @@ const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
 const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
+  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
     dark ? "border-violet-700 bg-gray-800 hover:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500" : "border-violet-300 bg-white hover:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500"
   }`,
   input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
@@ -312,6 +311,11 @@ const TimePickerDemo = () => {
   // Gap state
   const [gapLargeVal, setGapLargeVal] = useState<string | null>(null);
 
+  // Force position state
+  const [forceBotVal, setForceBotVal] = useState<string | null>(null);
+  const [forceTopVal, setForceTopVal] = useState<string | null>(null);
+  const [forceLockVal, setForceLockVal] = useState<string | null>(null);
+
   // Form integration state
   const [blurFocusVal, setBlurFocusVal] = useState<string | null>(null);
   const [focusMessage, setFocusMessage] = useState("");
@@ -367,12 +371,7 @@ const TimePickerDemo = () => {
             12/24-hour formats, min/max constraints, clearable, keyboard navigation,
             and full accessibility.
           </p>
-          <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { TimePicker } from "@chumlab/ui/time-picker";`}
-            />
-          </div>
+          <pre className={`mt-5 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`import { TimePicker } from "@chumlab/ui/time-picker";`}</pre>
         </div>
       </header>
 
@@ -559,13 +558,13 @@ const TimePickerDemo = () => {
             classes={c.timepicker}
           />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<TimePicker
+        <pre className={`mt-3 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`<TimePicker
   label="Meeting Time"
   description="Select a time during business hours"
   placeholder="Pick a time"
   minTime="09:00"
   maxTime="17:00"
-/>`} />
+/>`}</pre>
       </Section>
 
       {/* ─── Success State ─────────────────────────────────────────────────── */}
@@ -580,13 +579,13 @@ const TimePickerDemo = () => {
             classes={c.timepicker}
           />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<TimePicker
+        <pre className={`mt-3 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`<TimePicker
   label="Appointment Time"
   value={time}
   onValueChange={(t) => setTime(t)}
   success={!!time}
   successMessage="Time slot is available"
-/>`} />
+/>`}</pre>
       </Section>
 
       {/* ─── Loading State ─────────────────────────────────────────────────── */}
@@ -594,7 +593,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <TimePicker label="Checking slots..." loading placeholder="Pick a time" classes={c.timepicker} />
         </DemoWrapper>
-        <CodeBlock isDarkMode={dark} code={`<TimePicker label="Checking slots..." loading placeholder="Pick a time" />`} />
+        <pre className={`mt-3 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`<TimePicker label="Checking slots..." loading placeholder="Pick a time" />`}</pre>
       </Section>
 
       {/* ─── 7. Disabled ─────────────────────────────────────────────────── */}
@@ -1166,23 +1165,90 @@ const TimePickerDemo = () => {
 
       {/* ─── 26. Dropdown Placement, Z-Index, Keep Mounted ──────────────── */}
       <Section
-        title="Dropdown Position, Z-Index & keepMounted"
-        description="Control popover position, z-index, and whether the list stays mounted when closed (dropdown variant only)."
+        title="Dropdown Position"
+        description="Control whether the dropdown opens above or below the trigger. Auto-flips when there isn't enough space."
+        isDarkMode={dark}
+      >
+        <div className="space-y-4">
+          <div>
+            <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;bottom&quot; (default, auto-flips)</DemoLabel>
+            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <TimePicker
+                value={dropdownTopVal}
+                onValueChange={(v) => setDropdownTopVal(v)}
+                dropdownPosition="bottom"
+                placeholder="Opens below..."
+                classes={c.timepicker}
+              />
+            </DemoWrapper>
+          </div>
+          <div>
+            <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;top&quot; (auto-flips)</DemoLabel>
+            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <TimePicker
+                dropdownPosition="top"
+                placeholder="Opens above..."
+                classes={c.timepicker}
+              />
+            </DemoWrapper>
+          </div>
+          <div>
+            <DemoLabel isDarkMode={dark}>forceDropdownPosition (forced bottom, no auto-flip)</DemoLabel>
+            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <TimePicker
+                value={forceBotVal}
+                onValueChange={(v) => setForceBotVal(v)}
+                dropdownPosition="bottom"
+                forceDropdownPosition
+                placeholder="Always opens below..."
+                classes={c.timepicker}
+              />
+            </DemoWrapper>
+          </div>
+          <div>
+            <DemoLabel isDarkMode={dark}>forceDropdownPosition (forced top, no auto-flip)</DemoLabel>
+            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <TimePicker
+                value={forceTopVal}
+                onValueChange={(v) => setForceTopVal(v)}
+                dropdownPosition="top"
+                forceDropdownPosition
+                placeholder="Always opens above..."
+                classes={c.timepicker}
+              />
+            </DemoWrapper>
+          </div>
+          <p className={`text-xs ${c.text}`}>
+            When <code className="font-mono">forceDropdownPosition</code> is true, the dropdown will always open in the specified direction regardless of available viewport space.
+          </p>
+          <div>
+            <DemoLabel isDarkMode={dark}>forceDropdownPosition + lockScroll</DemoLabel>
+            <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
+              <TimePicker
+                value={forceLockVal}
+                onValueChange={(v) => setForceLockVal(v)}
+                dropdownPosition="bottom"
+                forceDropdownPosition
+                lockScroll
+                placeholder="Forced bottom + scroll locked"
+                classes={c.timepicker}
+              />
+            </DemoWrapper>
+          </div>
+          <p className={`text-xs ${c.text}`}>
+            Combining <code className="font-mono">forceDropdownPosition</code> with <code className="font-mono">lockScroll</code> prevents the page from scrolling while the dropdown is open, ensuring the menu stays anchored in place.
+          </p>
+        </div>
+      </Section>
+
+      {/* ─── 26b. Z-Index & keepMounted ────────────────────────────────── */}
+      <Section
+        title="Z-Index & keepMounted"
+        description="Control z-index and whether the list stays mounted when closed (dropdown variant only)."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col" className="overflow-visible">
           <div className="w-full space-y-6">
-            <div>
-              <DemoLabel isDarkMode={dark}>dropdownPosition=&quot;top&quot;</DemoLabel>
-              <TimePicker
-                value={dropdownTopVal}
-                onValueChange={(v) => setDropdownTopVal(v)}
-                dropdownPosition="top"
-                placeholder="Opens above"
-                classes={c.timepicker}
-              />
-              <span className={`text-xs mt-1 block ${c.text}`}>Selected: {dropdownTopVal ?? "none"}</span>
-            </div>
             <div>
               <DemoLabel isDarkMode={dark}>dropdownZIndex=100</DemoLabel>
               <TimePicker
@@ -1463,7 +1529,7 @@ const TimePickerDemo = () => {
               onValueChange={(v) => setClassesVal(v)}
               classes={{
                 ...c.timepicker,
-                trigger: `flex items-center gap-2 w-56 px-3 py-2 border-2 rounded-full transition-colors ${
+                trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-2 rounded-full transition-colors ${
                   dark
                     ? "border-emerald-500 bg-gray-800 text-gray-200"
                     : "border-emerald-400 bg-emerald-50 text-gray-900"
@@ -1610,6 +1676,7 @@ const TimePickerDemo = () => {
           <PropRow isDarkMode={dark} name="onOpenChange" type="(open: boolean) => void" description="Called when the open state changes." />
           <PropRow isDarkMode={dark} name="lockScroll" type="boolean" defaultVal="false" description="Lock body scroll when dropdown is open." />
           <PropRow isDarkMode={dark} name="dropdownPosition" type={'"top" | "bottom"'} defaultVal='"bottom"' description="Position of the dropdown relative to the trigger." />
+          <PropRow isDarkMode={dark} name="forceDropdownPosition" type="boolean" defaultVal="false" description="When true, locks the dropdown to the specified dropdownPosition without auto-flipping." />
           <PropRow isDarkMode={dark} name="dropdownZIndex" type="number" defaultVal="50" description="Z-index for the dropdown portal." />
           <PropRow isDarkMode={dark} name="dropdownGap" type="number" defaultVal="4" description="Gap between trigger and dropdown in pixels." />
           <PropRow isDarkMode={dark} name="keepMounted" type="boolean" defaultVal="false" description="Keep dropdown DOM mounted when closed." />

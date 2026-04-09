@@ -300,7 +300,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         {...rest}
       >
         <span
-          className={cn(mergedClasses.radio, stateClassName) || undefined}
+          className={cn(mergedClasses.radio, stateClassName, "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-blue-500") || undefined}
           style={{ ...sizeStyle, position: "relative" }}
           data-checked={isChecked || undefined}
           data-disabled={isDisabled || undefined}
