@@ -5,9 +5,9 @@ export const DEFAULT_ROW_OPTIONS = [5, 10, 25, 50, 100] as const;
 export const DEFAULT_VISIBLE_PAGE_COUNT = 3;
 
 export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
-  root: "flex items-center gap-2",
+  root: "flex flex-wrap items-center gap-2",
   nav: "flex items-center gap-2",
-  pageButtons: "flex items-center gap-2",
+  pageButtons: "flex flex-wrap items-center gap-2",
   pageButton:
     "px-3 py-1 rounded-lg border transition-colors cursor-pointer border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300",
   activePageButton:

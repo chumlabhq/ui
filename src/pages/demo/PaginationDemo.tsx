@@ -195,9 +195,9 @@ const JumpToPageEllipsis = ({
 
 const getClasses = (dark: boolean) => ({
   pagination: {
-    root: "flex items-center gap-2",
+    root: "flex flex-wrap items-center gap-2",
     nav: "flex items-center gap-2",
-    pageButtons: "flex items-center gap-2",
+    pageButtons: "flex flex-wrap items-center gap-2",
     pageButton: `px-3 py-1 rounded-lg border transition-colors cursor-pointer ${
       dark
         ? "border-gray-600 hover:bg-gray-700 text-gray-300"
@@ -313,7 +313,7 @@ const PaginationDemo = () => {
             class-driven styling via the classes prop.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Pagination } from "@chumlab/ui/pagination";`}</code>
             </pre>
           </div>
@@ -355,7 +355,7 @@ const PaginationDemo = () => {
             showRowsPerPage
             classes={{
               ...c.pagination,
-              root: "flex items-center justify-between gap-4",
+              root: "flex flex-wrap items-center justify-between gap-4",
             }}
           />
         </DemoWrapper>
@@ -441,7 +441,7 @@ const PaginationDemo = () => {
                   )}
                   classes={{
                     ...c.pagination,
-                    root: "flex items-center gap-1",
+                    root: "flex flex-wrap items-center gap-1",
                     navButton: `p-2 rounded-full border shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
                       dark
                         ? "bg-gray-700 border-gray-600 text-gray-300"
@@ -533,7 +533,7 @@ const PaginationDemo = () => {
             )}
             classes={{
               ...c.pagination,
-              root: "flex items-center justify-between gap-4 flex-wrap",
+              root: "flex flex-wrap items-center justify-between gap-4",
             }}
           />
         </DemoWrapper>
@@ -566,7 +566,7 @@ const PaginationDemo = () => {
             )}
             classes={{
               ...c.pagination,
-              root: "flex items-center justify-between gap-4",
+              root: "flex flex-wrap items-center justify-between gap-4",
             }}
           />
         </DemoWrapper>
@@ -649,7 +649,7 @@ const PaginationDemo = () => {
             )}
             classes={{
               ...c.pagination,
-              root: "flex items-center justify-between gap-4 flex-wrap",
+              root: "flex flex-wrap items-center justify-between gap-4",
             }}
           />
         </DemoWrapper>
@@ -682,7 +682,7 @@ const PaginationDemo = () => {
                 dropdownIcon={CaretDownIcon}
                 classes={{
                   ...c.pagination,
-                  root: "flex items-center justify-between gap-4",
+                  root: "flex flex-wrap items-center justify-between gap-4",
                   navButton: `p-2 rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
                     dark
                       ? "border-indigo-700 bg-indigo-900/30 hover:bg-indigo-800/50 text-indigo-300"
@@ -756,7 +756,7 @@ const PaginationDemo = () => {
             rowsPerPageLabel="items"
             classes={{
               ...c.pagination,
-              root: "flex items-center justify-between gap-4",
+              root: "flex flex-wrap items-center justify-between gap-4",
             }}
           />
         </DemoWrapper>
@@ -785,7 +785,7 @@ const PaginationDemo = () => {
                 dropdownPosition="top"
                 classes={{
                   ...c.pagination,
-                  root: "flex items-center justify-between gap-4",
+                  root: "flex flex-wrap items-center justify-between gap-4",
                 }}
               />
             </div>
@@ -807,7 +807,7 @@ const PaginationDemo = () => {
                   dropdownPosition="bottom"
                   classes={{
                     ...c.pagination,
-                    root: "flex items-center justify-between gap-4",
+                    root: "flex flex-wrap items-center justify-between gap-4",
                   }}
                 />
               </div>
@@ -841,7 +841,7 @@ const PaginationDemo = () => {
             showRowsPerPage
             classes={{
               ...c.pagination,
-              root: `flex items-center justify-between gap-6 p-4 rounded-xl ${dark ? "bg-gray-700/40" : "bg-gray-50"}`,
+              root: `flex flex-wrap items-center justify-between gap-4 sm:gap-6 p-4 rounded-xl ${dark ? "bg-gray-700/40" : "bg-gray-50"}`,
               nav: "flex items-center gap-1",
               navButton: `p-2 rounded-full border shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
                 dark
@@ -996,7 +996,7 @@ const PaginationDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="space-y-3">
               <DemoLabel isDarkMode={dark}>totalPages=0</DemoLabel>
               <Pagination
@@ -1100,7 +1100,7 @@ const PaginationDemo = () => {
             dropdownZIndex={100}
             classes={{
               ...c.pagination,
-              root: "flex items-center justify-between gap-4",
+              root: "flex flex-wrap items-center justify-between gap-4",
             }}
           />
         </DemoWrapper>
