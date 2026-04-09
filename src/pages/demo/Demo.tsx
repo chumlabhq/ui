@@ -153,7 +153,7 @@ const Demo = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const stored = localStorage.getItem("chumlab-ui-theme");
     if (stored) return stored === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return true;
   });
 
   useEffect(() => {
@@ -305,7 +305,7 @@ const Demo = () => {
 
         {/* ── Desktop sidebar ── */}
         <aside
-          className={`hidden lg:block w-[280px] xl:w-[300px] shrink-0 border-r p-5 overflow-y-auto
+          className={`hidden lg:block w-[300px] xl:w-[320px] shrink-0 border-r p-5 overflow-y-auto
           [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
           ${sidebarBg} ${borderColor}`}
         >

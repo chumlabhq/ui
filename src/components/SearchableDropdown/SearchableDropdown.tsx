@@ -291,6 +291,29 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   );
 });
 
+/**
+ * Component: SearchableDropdown
+ *
+ * Purpose:
+ * Single-select dropdown with built-in search input, async search/prefetch,
+ * portal rendering, and keyboard navigation.
+ *
+ * AI Usage Guidelines:
+ * - Use for selecting a single value with search/filter capability
+ * - Minimum: `<SearchableDropdown options={[...]} onValueChange={handler} />`
+ * - Use `onSearch` for async search, `onLoadInitialOptions` for prefetch
+ * - Pair `value` with `onValueChange` for controlled mode
+ *
+ * Behavior:
+ * - Built-in search input with local filtering or async search
+ * - Portal-rendered popup (never clipped by overflow ancestors)
+ * - Auto-flips position (disable with `forceDropdownPosition`)
+ * - Full keyboard navigation with type-ahead
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/SearchableDropdownDemo.tsx — live demo
+ */
 const SearchableDropdown = forwardRef<
   HTMLDivElement,
   SearchableDropdownProps
