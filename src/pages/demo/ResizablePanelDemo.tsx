@@ -57,54 +57,122 @@ const ResizablePanelDemo = () => {
 
   const sidebarContent = (width: number) => (
     <div className="h-full p-4 flex flex-col gap-3">
-      <div className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-blue-400" : "text-blue-600"}`}>Sidebar</div>
+      <div
+        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-blue-400" : "text-blue-600"}`}
+      >
+        Sidebar
+      </div>
       <div className="space-y-2">
         {["Dashboard", "Projects", "Team", "Settings"].map((item) => (
-          <div key={item} className={`px-3 py-1.5 rounded-md text-sm ${dark ? "text-gray-300 hover:bg-white/4" : "text-gray-600 hover:bg-gray-100"} cursor-pointer transition-colors`}>{item}</div>
+          <div
+            key={item}
+            className={`px-3 py-1.5 rounded-md text-sm ${dark ? "text-gray-300 hover:bg-white/4" : "text-gray-600 hover:bg-gray-100"} cursor-pointer transition-colors`}
+          >
+            {item}
+          </div>
         ))}
       </div>
-      <div className={`mt-auto text-[10px] font-mono ${dark ? "text-blue-500/60" : "text-blue-400/60"}`}>{Math.round(width)}px</div>
+      <div
+        className={`mt-auto text-[10px] font-mono ${dark ? "text-blue-500/60" : "text-blue-400/60"}`}
+      >
+        {Math.round(width)}px
+      </div>
     </div>
   );
 
   const editorContent = (height: number) => (
     <div className="h-full p-4 flex flex-col gap-2">
-      <div className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-green-400" : "text-green-600"}`}>Editor</div>
-      <div className={`flex-1 rounded-md p-3 font-mono text-xs leading-relaxed ${dark ? "bg-black/20 text-green-300/80" : "bg-white/60 text-green-700/80"}`}>
+      <div
+        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-green-400" : "text-green-600"}`}
+      >
+        Editor
+      </div>
+      <div
+        className={`flex-1 rounded-md p-3 font-mono text-xs leading-relaxed ${dark ? "bg-black/20 text-green-300/80" : "bg-white/60 text-green-700/80"}`}
+      >
         <div>{"const app = express();"}</div>
         <div>{"app.get('/', handler);"}</div>
         <div>{"app.listen(3000);"}</div>
       </div>
-      <div className={`text-[10px] font-mono ${dark ? "text-green-500/60" : "text-green-400/60"}`}>{Math.round(height)}px</div>
+      <div
+        className={`text-[10px] font-mono ${dark ? "text-green-500/60" : "text-green-400/60"}`}
+      >
+        {Math.round(height)}px
+      </div>
     </div>
   );
 
   const previewContent = (width: number) => (
     <div className="h-full p-4 flex flex-col gap-2">
-      <div className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-purple-400" : "text-purple-600"}`}>Preview</div>
-      <div className={`flex-1 rounded-md flex items-center justify-center ${dark ? "bg-purple-900/20" : "bg-purple-50/80"}`}>
+      <div
+        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-purple-400" : "text-purple-600"}`}
+      >
+        Preview
+      </div>
+      <div
+        className={`flex-1 rounded-md flex items-center justify-center ${dark ? "bg-purple-900/20" : "bg-purple-50/80"}`}
+      >
         <div className="text-center">
-          <div className={`text-2xl font-bold ${dark ? "text-purple-300" : "text-purple-700"}`}>Preview</div>
-          <div className={`text-xs mt-1 ${dark ? "text-purple-400/60" : "text-purple-400"}`}>Live output here</div>
+          <div
+            className={`text-2xl font-bold ${dark ? "text-purple-300" : "text-purple-700"}`}
+          >
+            Preview
+          </div>
+          <div
+            className={`text-xs mt-1 ${dark ? "text-purple-400/60" : "text-purple-400"}`}
+          >
+            Live output here
+          </div>
         </div>
       </div>
-      <div className={`text-[10px] font-mono ${dark ? "text-purple-500/60" : "text-purple-400/60"}`}>{Math.round(width)}px</div>
+      <div
+        className={`text-[10px] font-mono ${dark ? "text-purple-500/60" : "text-purple-400/60"}`}
+      >
+        {Math.round(width)}px
+      </div>
     </div>
   );
 
   const simpleContent = (color: string, label: string, size: number) => {
     const cl = {
-      blue: { text: dark ? "text-blue-400" : "text-blue-600", muted: dark ? "text-blue-500/60" : "text-blue-400/60" },
-      green: { text: dark ? "text-green-400" : "text-green-600", muted: dark ? "text-green-500/60" : "text-green-400/60" },
-      amber: { text: dark ? "text-amber-400" : "text-amber-600", muted: dark ? "text-amber-500/60" : "text-amber-400/60" },
-      indigo: { text: dark ? "text-indigo-400" : "text-indigo-600", muted: dark ? "text-indigo-500/60" : "text-indigo-400/60" },
-      teal: { text: dark ? "text-teal-400" : "text-teal-600", muted: dark ? "text-teal-500/60" : "text-teal-400/60" },
-      purple: { text: dark ? "text-purple-400" : "text-purple-600", muted: dark ? "text-purple-500/60" : "text-purple-400/60" },
-    }[color] ?? { text: dark ? "text-gray-400" : "text-gray-600", muted: dark ? "text-gray-500" : "text-gray-400" };
+      blue: {
+        text: dark ? "text-blue-400" : "text-blue-600",
+        muted: dark ? "text-blue-500/60" : "text-blue-400/60",
+      },
+      green: {
+        text: dark ? "text-green-400" : "text-green-600",
+        muted: dark ? "text-green-500/60" : "text-green-400/60",
+      },
+      amber: {
+        text: dark ? "text-amber-400" : "text-amber-600",
+        muted: dark ? "text-amber-500/60" : "text-amber-400/60",
+      },
+      indigo: {
+        text: dark ? "text-indigo-400" : "text-indigo-600",
+        muted: dark ? "text-indigo-500/60" : "text-indigo-400/60",
+      },
+      teal: {
+        text: dark ? "text-teal-400" : "text-teal-600",
+        muted: dark ? "text-teal-500/60" : "text-teal-400/60",
+      },
+      purple: {
+        text: dark ? "text-purple-400" : "text-purple-600",
+        muted: dark ? "text-purple-500/60" : "text-purple-400/60",
+      },
+    }[color] ?? {
+      text: dark ? "text-gray-400" : "text-gray-600",
+      muted: dark ? "text-gray-500" : "text-gray-400",
+    };
     return (
       <div className="h-full p-4 flex flex-col justify-between">
-        <div className={`text-xs font-semibold uppercase tracking-wider ${cl.text}`}>{label}</div>
-        <div className={`text-[10px] font-mono ${cl.muted}`}>{Math.round(size)}px</div>
+        <div
+          className={`text-xs font-semibold uppercase tracking-wider ${cl.text}`}
+        >
+          {label}
+        </div>
+        <div className={`text-[10px] font-mono ${cl.muted}`}>
+          {Math.round(size)}px
+        </div>
       </div>
     );
   };
@@ -174,7 +242,7 @@ const ResizablePanelDemo = () => {
           <h1
             className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
           >
-            ResizablePanel
+            Resizable Panel
           </h1>
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
@@ -187,7 +255,9 @@ const ResizablePanelDemo = () => {
             via WAI-ARIA separator semantics.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+            >
               <code>{`import { ResizablePanel } from "@chumlab/ui/resizable-panel";`}</code>
             </pre>
           </div>
@@ -202,13 +272,11 @@ const ResizablePanelDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           {/* Basic usage — drag the edge to resize */}
-          <ResizablePanel
-            defaultValue={300}
-            minValue={150}
-            maxValue={500}
-          >
+          <ResizablePanel defaultValue={300} minValue={150} maxValue={500}>
             <div className="h-full p-4">
-              <div className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
+              <div
+                className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}
+              >
                 Drag the edge to resize.
               </div>
             </div>

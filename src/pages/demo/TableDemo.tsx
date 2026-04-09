@@ -1643,7 +1643,7 @@ const TableDemo = () => {
       <Section title="Basic Usage" description="A simple table with columns and data." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           {/* Basic usage — works out-of-the-box with built-in styles */}
-          <Table columns={columns} data={sampleData.slice(0, 5)} />
+          <Table columns={columns} data={sampleData.slice(0, 5)} classes={s} />
         </DemoWrapper>
       </Section>
 

@@ -7,7 +7,7 @@ export {
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   container:
-    "w-full border rounded-lg overflow-hidden border-gray-200 dark:border-white/[0.06]",
+    "w-full border rounded-lg overflow-hidden bg-white dark:bg-gray-900 border-gray-200 dark:border-white/[0.06]",
   table: "w-full border-collapse",
   header: "",
   headerRow: "",

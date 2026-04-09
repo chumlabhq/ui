@@ -345,7 +345,7 @@ const TabPanelDemo = () => {
           <h1
             className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
           >
-            TabPanel
+            Tab Panel
           </h1>
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
@@ -357,7 +357,9 @@ const TabPanelDemo = () => {
             fallback, and both controlled and uncontrolled modes.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre
+              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
+            >
               <code>{`import { TabPanel } from "@chumlab/ui/tab-panel";`}</code>
             </pre>
           </div>
@@ -372,10 +374,7 @@ const TabPanelDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           {/* Basic usage — works out-of-the-box with built-in styles */}
-          <TabPanel
-            tabs={basicTabs}
-            defaultValue="home"
-          />
+          <TabPanel tabs={basicTabs} defaultValue="home" />
         </DemoWrapper>
       </Section>
 
@@ -395,10 +394,20 @@ const TabPanelDemo = () => {
             {underlinedTab === "home" && (
               <div className="space-y-3">
                 <p className={c.contentTitle}>Welcome back</p>
-                <p className={c.content}>Here's what's happening with your projects today. You have 3 tasks due and 2 messages waiting.</p>
+                <p className={c.content}>
+                  Here's what's happening with your projects today. You have 3
+                  tasks due and 2 messages waiting.
+                </p>
                 <div className="flex gap-4 mt-2">
-                  {[["12", "Active projects"], ["3", "Due today"], ["98%", "Uptime"]].map(([v, l]) => (
-                    <div key={l}><div className={c.stat}>{v}</div><div className={c.statLabel}>{l}</div></div>
+                  {[
+                    ["12", "Active projects"],
+                    ["3", "Due today"],
+                    ["98%", "Uptime"],
+                  ].map(([v, l]) => (
+                    <div key={l}>
+                      <div className={c.stat}>{v}</div>
+                      <div className={c.statLabel}>{l}</div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -406,13 +415,19 @@ const TabPanelDemo = () => {
             {underlinedTab === "profile" && (
               <div className="space-y-2">
                 <p className={c.contentTitle}>Profile settings</p>
-                <p className={c.content}>Manage your account details, notification preferences, and connected integrations.</p>
+                <p className={c.content}>
+                  Manage your account details, notification preferences, and
+                  connected integrations.
+                </p>
               </div>
             )}
             {underlinedTab === "settings" && (
               <div className="space-y-2">
                 <p className={c.contentTitle}>General settings</p>
-                <p className={c.content}>Configure language, timezone, theme, and default workspace options.</p>
+                <p className={c.content}>
+                  Configure language, timezone, theme, and default workspace
+                  options.
+                </p>
               </div>
             )}
           </TabPanel>
@@ -433,9 +448,12 @@ const TabPanelDemo = () => {
             classes={c.tabs.pill}
           >
             <div className={c.content}>
-              {pillTab === "home" && "Your dashboard overview with key metrics, recent activity, and quick actions."}
-              {pillTab === "profile" && "Edit your display name, avatar, bio, and social links."}
-              {pillTab === "settings" && "Theme preferences, notification channels, and API key management."}
+              {pillTab === "home" &&
+                "Your dashboard overview with key metrics, recent activity, and quick actions."}
+              {pillTab === "profile" &&
+                "Edit your display name, avatar, bio, and social links."}
+              {pillTab === "settings" &&
+                "Theme preferences, notification channels, and API key management."}
             </div>
           </TabPanel>
         </DemoWrapper>
@@ -467,9 +485,12 @@ const TabPanelDemo = () => {
             }}
           >
             <div className={c.content}>
-              {boxedTab === "home" && "Boxed tabs work well for document-style interfaces where the active panel needs a clear visual boundary."}
-              {boxedTab === "profile" && "User profile information, team membership, and activity history."}
-              {boxedTab === "settings" && "Workspace configuration, billing, and access control settings."}
+              {boxedTab === "home" &&
+                "Boxed tabs work well for document-style interfaces where the active panel needs a clear visual boundary."}
+              {boxedTab === "profile" &&
+                "User profile information, team membership, and activity history."}
+              {boxedTab === "settings" &&
+                "Workspace configuration, billing, and access control settings."}
             </div>
           </TabPanel>
         </DemoWrapper>
@@ -492,18 +513,34 @@ const TabPanelDemo = () => {
             {iconLeftTab === "home" && (
               <div className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {[["Revenue", "$24.5k", "+12%"], ["Users", "1,429", "+8%"], ["Orders", "892", "+23%"]].map(([label, value, change]) => (
+                  {[
+                    ["Revenue", "$24.5k", "+12%"],
+                    ["Users", "1,429", "+8%"],
+                    ["Orders", "892", "+23%"],
+                  ].map(([label, value, change]) => (
                     <div key={label} className={c.contentCard}>
                       <div className={c.statLabel}>{label}</div>
                       <div className={c.stat}>{value}</div>
-                      <div className={`text-xs font-medium ${dark ? "text-emerald-400" : "text-emerald-600"}`}>{change}</div>
+                      <div
+                        className={`text-xs font-medium ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                      >
+                        {change}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-            {iconLeftTab === "users" && <div className={c.content}>Team members, roles, and invitation management.</div>}
-            {iconLeftTab === "settings" && <div className={c.content}>Workspace preferences, integrations, and security.</div>}
+            {iconLeftTab === "users" && (
+              <div className={c.content}>
+                Team members, roles, and invitation management.
+              </div>
+            )}
+            {iconLeftTab === "settings" && (
+              <div className={c.content}>
+                Workspace preferences, integrations, and security.
+              </div>
+            )}
           </TabPanel>
         </DemoWrapper>
       </Section>
@@ -528,9 +565,12 @@ const TabPanelDemo = () => {
             }}
           >
             <div className={c.content}>
-              {iconRightTab === "home" && "Overview dashboard with key performance indicators and recent activity."}
-              {iconRightTab === "users" && "Active users, pending invitations, and role assignments."}
-              {iconRightTab === "settings" && "Application configuration, webhooks, and API tokens."}
+              {iconRightTab === "home" &&
+                "Overview dashboard with key performance indicators and recent activity."}
+              {iconRightTab === "users" &&
+                "Active users, pending invitations, and role assignments."}
+              {iconRightTab === "settings" &&
+                "Application configuration, webhooks, and API tokens."}
             </div>
           </TabPanel>
         </DemoWrapper>
@@ -572,8 +612,10 @@ const TabPanelDemo = () => {
             classes={c.tabs.icon}
           >
             <div className={c.content}>
-              {countTab === "inbox" && "12 unread messages — 3 flagged as urgent. Settings badge is hidden since its count is 0."}
-              {countTab === "users" && "5 team members online. Manage roles and permissions."}
+              {countTab === "inbox" &&
+                "12 unread messages — 3 flagged as urgent. Settings badge is hidden since its count is 0."}
+              {countTab === "users" &&
+                "5 team members online. Manage roles and permissions."}
               {countTab === "settings" && "No pending configuration changes."}
             </div>
           </TabPanel>
@@ -595,9 +637,12 @@ const TabPanelDemo = () => {
             classes={c.tabs.icon}
           >
             <div className={c.content}>
-              {zeroCountTab === "inbox" && "All messages displayed. Badge counts remain visible even at zero."}
-              {zeroCountTab === "users" && "Team member directory with activity status."}
-              {zeroCountTab === "settings" && "Zero pending changes — the 0 badge is visible to show the count explicitly."}
+              {zeroCountTab === "inbox" &&
+                "All messages displayed. Badge counts remain visible even at zero."}
+              {zeroCountTab === "users" &&
+                "Team member directory with activity status."}
+              {zeroCountTab === "settings" &&
+                "Zero pending changes — the 0 badge is visible to show the count explicitly."}
             </div>
           </TabPanel>
         </DemoWrapper>
@@ -1060,7 +1105,9 @@ const TabPanelDemo = () => {
               <div key={props.tab.id} className="relative">
                 {defaultElement}
                 {props.tab.count != null && props.tab.count > 0 && (
-                  <span className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-[10px] flex items-center justify-center ${dark ? "bg-red-400" : "bg-red-500"}`}>
+                  <span
+                    className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-[10px] flex items-center justify-center ${dark ? "bg-red-400" : "bg-red-500"}`}
+                  >
                     {props.tab.count}
                   </span>
                 )}
@@ -1624,7 +1671,7 @@ const TabPanelDemo = () => {
               "aria-controls and aria-labelledby link tabs to their panels",
               "aria-disabled on disabled tabs (preserving roving tabindex; not HTML disabled)",
               "When labels are hidden (alwaysShowLabels=false), inactive tabs receive aria-label for screen reader accessibility",
-              "Icons wrapped with aria-hidden=\"true\" as they are decorative",
+              'Icons wrapped with aria-hidden="true" as they are decorative',
               "Count badges have aria-label for screen reader announcement",
               "No focus stealing on mount -- focus managed only during keyboard interaction",
               "Automatic fallback to first tab when the active tab is removed from the tabs array",
@@ -1652,8 +1699,14 @@ const TabPanelDemo = () => {
           >
             {[
               ["Tab", "Move focus into/out of the tablist"],
-              ["\u2192 / \u2193", "Move to next tab (RTL-aware, orientation-aware)"],
-              ["\u2190 / \u2191", "Move to previous tab (RTL-aware, orientation-aware)"],
+              [
+                "\u2192 / \u2193",
+                "Move to next tab (RTL-aware, orientation-aware)",
+              ],
+              [
+                "\u2190 / \u2191",
+                "Move to previous tab (RTL-aware, orientation-aware)",
+              ],
               ["Home", "Move to first enabled tab"],
               ["End", "Move to last enabled tab"],
               ["Enter / Space", "Activate focused tab (manual mode only)"],
