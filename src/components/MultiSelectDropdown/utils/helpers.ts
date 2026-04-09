@@ -12,16 +12,19 @@ export function computeDropdownCoords(
   dropdownEl: HTMLElement,
   preferredPosition: "top" | "bottom",
   gap: number,
+  forcePosition = false,
 ): DropdownCoords {
   const rect = triggerEl.getBoundingClientRect();
   const dropdownHeight = dropdownEl.getBoundingClientRect().height;
   const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
   const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
   let position = preferredPosition;
-  if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
-    if (rect.top - gap - dropdownHeight > 0) position = "top";
-  } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
-    if (rect.bottom + gap + dropdownHeight <= viewportHeight) position = "bottom";
+  if (!forcePosition) {
+    if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
+      if (rect.top - gap - dropdownHeight > 0) position = "top";
+    } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
+      if (rect.bottom + gap + dropdownHeight <= viewportHeight) position = "bottom";
+    }
   }
   const top = position === "top" ? rect.top - dropdownHeight - gap : rect.bottom + gap;
   let left = rect.left;

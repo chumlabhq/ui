@@ -26,16 +26,19 @@ function computeDropdownCoords(
   dropdownEl: HTMLElement,
   preferredPosition: "top" | "bottom",
   gap: number,
+  forcePosition = false,
 ): DropdownCoords {
   const rect = triggerEl.getBoundingClientRect();
   const dropdownHeight = dropdownEl.getBoundingClientRect().height;
   const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
   const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
   let position = preferredPosition;
-  if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
-    if (rect.top - gap - dropdownHeight > 0) position = "top";
-  } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
-    if (rect.bottom + gap + dropdownHeight <= viewportHeight) position = "bottom";
+  if (!forcePosition) {
+    if (position === "bottom" && rect.bottom + gap + dropdownHeight > viewportHeight) {
+      if (rect.top - gap - dropdownHeight > 0) position = "top";
+    } else if (position === "top" && rect.top - gap - dropdownHeight < 0) {
+      if (rect.bottom + gap + dropdownHeight <= viewportHeight) position = "bottom";
+    }
   }
   const top = position === "top" ? rect.top - dropdownHeight - gap : rect.bottom + gap;
   let left = rect.left;
@@ -51,6 +54,7 @@ interface DropdownContentProps {
   isOpen: boolean;
   keepMounted: boolean;
   position: "top" | "bottom";
+  forcePosition: boolean;
   zIndex: number;
   gap: number;
   portalContainer?: HTMLElement | null;
@@ -68,6 +72,7 @@ function DropdownContent({
   isOpen,
   keepMounted,
   position: preferredPosition,
+  forcePosition,
   zIndex,
   gap,
   portalContainer,
@@ -86,8 +91,8 @@ function DropdownContent({
 
   const updatePosition = useCallback(() => {
     if (!triggerElement || !dropdownRef.current) return;
-    setCoords(computeDropdownCoords(triggerElement, dropdownRef.current, preferredPosition, gap));
-  }, [triggerElement, preferredPosition, gap]);
+    setCoords(computeDropdownCoords(triggerElement, dropdownRef.current, preferredPosition, gap, forcePosition));
+  }, [triggerElement, preferredPosition, gap, forcePosition]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -288,6 +293,29 @@ const SelectedChip = memo(function SelectedChip({
   );
 });
 
+/**
+ * Component: MultiSelectSearchableDropdown
+ *
+ * Purpose:
+ * Searchable multi-select dropdown with chip display, async search/prefetch,
+ * checkbox options, and portal-based positioning.
+ *
+ * AI Usage Guidelines:
+ * - Use for selecting multiple values with search/filter capability
+ * - Minimum: `<MultiSelectSearchableDropdown options={[...]} onValueChange={handler} />`
+ * - Use `onSearch` for async search, `onLoadInitialOptions` for prefetch
+ * - Pair `value` with `onValueChange` for controlled mode
+ *
+ * Behavior:
+ * - Built-in search input with local filtering or async search
+ * - Portal-rendered popup (never clipped by overflow ancestors)
+ * - Auto-flips position (disable with `forceDropdownPosition`)
+ * - Full keyboard navigation
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/MultiSelectSearchableDropdownDemo.tsx — live demo
+ */
 const MultiSelectSearchableDropdown = forwardRef<
   HTMLDivElement,
   MultiSelectSearchableDropdownProps
@@ -338,6 +366,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       "aria-label": ariaLabel,
       portalContainer,
       dropdownPosition = "bottom",
+      forceDropdownPosition = false,
       dropdownZIndex = 50,
       dropdownGap = 4,
       keepMounted = false,
@@ -738,6 +767,7 @@ const MultiSelectSearchableDropdown = forwardRef<
             isOpen={isOpen}
             keepMounted={keepMounted}
             position={dropdownPosition}
+            forcePosition={forceDropdownPosition}
             zIndex={dropdownZIndex}
             gap={dropdownGap}
             portalContainer={portalContainer}

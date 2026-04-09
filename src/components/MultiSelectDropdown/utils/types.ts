@@ -72,6 +72,8 @@ export interface MultiSelectDropdownProps {
   keepMounted?: boolean;
   portalContainer?: HTMLElement | null;
   dropdownPosition?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
+  forceDropdownPosition?: boolean;
   dropdownZIndex?: number;
   dropdownGap?: number;
   "aria-label"?: string;

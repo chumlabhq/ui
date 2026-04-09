@@ -25,6 +25,7 @@ interface MultiSelectDropdownContentProps {
   isOpen: boolean;
   keepMounted: boolean;
   position: "top" | "bottom";
+  forcePosition: boolean;
   zIndex: number;
   gap: number;
   portalContainer?: HTMLElement | null;
@@ -42,6 +43,7 @@ function MultiSelectDropdownContent({
   isOpen,
   keepMounted,
   position: preferredPosition,
+  forcePosition,
   zIndex,
   gap,
   portalContainer,
@@ -60,8 +62,8 @@ function MultiSelectDropdownContent({
 
   const updatePosition = useCallback(() => {
     if (!triggerElement || !dropdownRef.current) return;
-    setCoords(computeDropdownCoords(triggerElement, dropdownRef.current, preferredPosition, gap));
-  }, [triggerElement, preferredPosition, gap]);
+    setCoords(computeDropdownCoords(triggerElement, dropdownRef.current, preferredPosition, gap, forcePosition));
+  }, [triggerElement, preferredPosition, gap, forcePosition]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -175,6 +177,29 @@ function MultiSelectDropdownContent({
   );
 }
 
+/**
+ * Component: MultiSelectDropdown
+ *
+ * Purpose:
+ * Multi-select dropdown with chip display, checkbox options, async loading,
+ * and portal-based positioning.
+ *
+ * AI Usage Guidelines:
+ * - Use for selecting multiple values from a list
+ * - Minimum: `<MultiSelectDropdown options={[...]} onValueChange={handler} />`
+ * - Pair `value` with `onValueChange` for controlled mode
+ * - Use `loadOnOpen` + `onLoadOptions` for async data
+ *
+ * Behavior:
+ * - Portal-rendered popup (never clipped by overflow ancestors)
+ * - Auto-flips position when insufficient viewport space (disable with `forceDropdownPosition`)
+ * - Full keyboard navigation with arrow keys, Enter/Space to toggle
+ * - Chips display with optional count-only mode
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/MultiSelectDropdownDemo.tsx — live demo
+ */
 const MultiSelectDropdown = forwardRef<
   HTMLDivElement,
   MultiSelectDropdownProps
@@ -227,6 +252,7 @@ const MultiSelectDropdown = forwardRef<
       keepMounted = false,
       portalContainer,
       dropdownPosition = "bottom",
+      forceDropdownPosition = false,
       dropdownZIndex = 50,
       dropdownGap = 4,
     },
@@ -589,6 +615,7 @@ const MultiSelectDropdown = forwardRef<
             isOpen={isOpen}
             keepMounted={keepMounted}
             position={dropdownPosition}
+            forcePosition={forceDropdownPosition}
             zIndex={dropdownZIndex}
             gap={dropdownGap}
             portalContainer={portalContainer}

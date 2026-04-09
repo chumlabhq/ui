@@ -85,6 +85,8 @@ export interface MultiSelectSearchableDropdownProps {
   onOpenChange?: (open: boolean) => void;
   portalContainer?: HTMLElement | null;
   dropdownPosition?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
+  forceDropdownPosition?: boolean;
   dropdownZIndex?: number;
   dropdownGap?: number;
   keepMounted?: boolean;

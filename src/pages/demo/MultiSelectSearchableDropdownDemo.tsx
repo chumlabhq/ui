@@ -4,8 +4,8 @@ import type { MultiSelectOption } from "../../components/MultiSelectSearchableDr
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
+  DemoLabel,
   PropsTable,
   PropRow,
   DocControlledPattern,
@@ -147,6 +147,12 @@ const MultiSelectSearchableDropdownDemo = () => {
   // Scroll lock
   const [scrollLockValue, setScrollLockValue] = useState<string[]>([]);
   const [scrollUnlockedValue, setScrollUnlockedValue] = useState<string[]>([]);
+  // Dropdown position
+  const [posBotValue, setPosBotValue] = useState<string[]>([]);
+  const [posTopValue, setPosTopValue] = useState<string[]>([]);
+  const [forceBotValue, setForceBotValue] = useState<string[]>([]);
+  const [forceTopValue, setForceTopValue] = useState<string[]>([]);
+  const [forceLockValue, setForceLockValue] = useState<string[]>([]);
   // Style variants
   const [variantDefaultValue, setVariantDefaultValue] = useState<string[]>([]);
   const [variantBorderlessValue, setVariantBorderlessValue] = useState<
@@ -273,7 +279,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           <h1
             className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
           >
-            MultiSelectSearchableDropdown
+            Multi SelectSearchable Dropdown
           </h1>
           <p
             className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
@@ -283,10 +289,9 @@ const MultiSelectSearchableDropdownDemo = () => {
             classes prop.
           </p>
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -298,7 +303,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <MultiSelectSearchableDropdown
               options={staticOptions}
@@ -318,7 +323,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={countryOptions}
               value={countryValue}
@@ -339,7 +344,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-80">
+          <div className="w-full sm:max-w-80">
             <MultiSelectSearchableDropdown
               value={asyncValue}
               onValueChange={(values) => setAsyncValue(values)}
@@ -367,7 +372,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-80">
+          <div className="w-full sm:max-w-80">
             <MultiSelectSearchableDropdown
               value={asyncPrefetchValue}
               onValueChange={(values) => setAsyncPrefetchValue(values)}
@@ -397,7 +402,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               label="Favorite Fruits"
               required
@@ -419,7 +424,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={noChipsValue}
@@ -440,7 +445,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={disabledValue}
@@ -465,7 +470,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               label="Required Field"
               options={staticOptions}
@@ -492,7 +497,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               label="Favorite Fruits"
               description="Select one or more fruits from the list."
@@ -514,7 +519,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               label="Required Fruits"
               options={staticOptions}
@@ -540,7 +545,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={noSearchValue}
@@ -563,7 +568,7 @@ const MultiSelectSearchableDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-end gap-4">
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={controlledValue}
@@ -605,7 +610,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={scrollUnlockedValue}
@@ -616,7 +621,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               aria-label="Scroll unlocked dropdown"
             />
           </div>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={scrollLockValue}
@@ -631,6 +636,121 @@ const MultiSelectSearchableDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ─── Dropdown Position ───────────────────────────────────────────── */}
+      <Section
+        title="Dropdown Position"
+        description="Control whether the popup opens above or below the trigger. Auto-flips when there isn't enough space."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="flex-col">
+          <div className="w-full space-y-8">
+            <div>
+              <DemoLabel isDarkMode={dark}>
+                dropdownPosition=&quot;bottom&quot; (default)
+              </DemoLabel>
+              <div className="w-full sm:max-w-64">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={posBotValue}
+                  onValueChange={setPosBotValue}
+                  dropdownPosition="bottom"
+                  placeholder="Opens below..."
+                  classes={c.dropdown}
+                />
+              </div>
+            </div>
+            <div>
+              <DemoLabel isDarkMode={dark}>
+                dropdownPosition=&quot;top&quot;
+              </DemoLabel>
+              <div className="w-full sm:max-w-64">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={posTopValue}
+                  onValueChange={setPosTopValue}
+                  dropdownPosition="top"
+                  placeholder="Opens above..."
+                  classes={c.dropdown}
+                />
+              </div>
+            </div>
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          The dropdown renders via a React Portal into document.body (or a
+          custom container via portalContainer), so it is never clipped by
+          overflow: hidden ancestors. Position updates react to window resize,
+          scroll, container resize (via ResizeObserver), and iOS Safari virtual
+          keyboard changes (via visualViewport).
+        </div>
+        <DemoWrapper isDarkMode={dark} layout="flex-col">
+          <div className="w-full space-y-8">
+            <div>
+              <DemoLabel isDarkMode={dark}>
+                forceDropdownPosition (forced bottom)
+              </DemoLabel>
+              <div className="w-full sm:max-w-64">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={forceBotValue}
+                  onValueChange={setForceBotValue}
+                  dropdownPosition="bottom"
+                  forceDropdownPosition
+                  placeholder="Always opens below..."
+                  classes={c.dropdown}
+                />
+              </div>
+            </div>
+            <div>
+              <DemoLabel isDarkMode={dark}>
+                forceDropdownPosition (forced top)
+              </DemoLabel>
+              <div className="w-full sm:max-w-64">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={forceTopValue}
+                  onValueChange={setForceTopValue}
+                  dropdownPosition="top"
+                  forceDropdownPosition
+                  placeholder="Always opens above..."
+                  classes={c.dropdown}
+                />
+              </div>
+            </div>
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          When forceDropdownPosition is true, the dropdown will always open in
+          the specified direction regardless of available viewport space.
+        </div>
+        <DemoWrapper isDarkMode={dark} layout="flex-col">
+          <div className="w-full space-y-8">
+            <div>
+              <DemoLabel isDarkMode={dark}>
+                forceDropdownPosition + lockScroll
+              </DemoLabel>
+              <div className="w-full sm:max-w-64">
+                <MultiSelectSearchableDropdown
+                  options={staticOptions}
+                  value={forceLockValue}
+                  onValueChange={setForceLockValue}
+                  dropdownPosition="bottom"
+                  forceDropdownPosition
+                  lockScroll
+                  placeholder="Forced bottom + scroll locked"
+                  classes={c.dropdown}
+                />
+              </div>
+            </div>
+          </div>
+        </DemoWrapper>
+        <div className={c.note}>
+          Combining forceDropdownPosition with lockScroll prevents the page from
+          scrolling while the dropdown is open, ensuring the menu stays anchored
+          in place.
+        </div>
+      </Section>
+
       {/* ─── Style Variants ───────────────────────────────────────────────── */}
       <Section
         title="Style Variants"
@@ -640,7 +760,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div>
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantDefaultValue}
@@ -654,7 +774,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Borderless</p>
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantBorderlessValue}
@@ -677,7 +797,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Bottom border only</p>
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantBottomValue}
@@ -700,7 +820,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Ghost</p>
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantGhostValue}
@@ -723,7 +843,7 @@ const MultiSelectSearchableDropdownDemo = () => {
           </div>
           <div>
             <p className={`mb-2 ${c.label}`}>Pill</p>
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={variantPillValue}
@@ -754,7 +874,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={darkThemeValue}
@@ -800,7 +920,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={purpleThemeValue}
@@ -866,7 +986,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={greenCheckboxValue}
@@ -891,7 +1011,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={orangeCheckboxValue}
@@ -917,7 +1037,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={customIconValue}
@@ -952,7 +1072,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               defaultValue={["apple", "cherry"]}
@@ -979,7 +1099,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               label="Favorite Fruits"
               required
@@ -1032,7 +1152,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={keyDownValue}
@@ -1078,7 +1198,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={classNameValue}
@@ -1109,7 +1229,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={countryOptions}
               value={ariaLabelValue}
@@ -1134,7 +1254,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={keepMountedValue}
@@ -1161,7 +1281,7 @@ const MultiSelectSearchableDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-4">
-            <div className="w-72">
+            <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
                 value={portalValue}
@@ -1239,7 +1359,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-72">
+          <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={zIndexValue}
@@ -1265,7 +1385,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full max-w-md">
+          <div className="w-full sm:max-w-md">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={fullWidthValue}
@@ -1332,7 +1452,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-80">
+          <div className="w-full sm:max-w-80">
             <MultiSelectSearchableDropdown
               label="Select Countries"
               required
@@ -1636,6 +1756,13 @@ const MultiSelectSearchableDropdownDemo = () => {
               type='"top" | "bottom"'
               defaultVal='"bottom"'
               description="Preferred list position"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="forceDropdownPosition"
+              type="boolean"
+              defaultVal="false"
+              description="When true, locks the dropdown to the specified dropdownPosition without auto-flipping"
               isDarkMode={dark}
             />
             <PropRow

@@ -1,3 +1,4 @@
+// AI Knowledge: See COMPONENT.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as MultiSelectDropdown } from "./MultiSelectDropdown";
 export { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption";
 export { SelectedChip } from "./components/SelectedChip";
