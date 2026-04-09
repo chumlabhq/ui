@@ -143,7 +143,7 @@ const ModalDemo = () => {
             content.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Modal, useModal } from "@chumlab/ui/modal";`}</code>
             </pre>
           </div>
@@ -1207,10 +1207,10 @@ const ModalDemo = () => {
               <p className="text-lg font-medium opacity-90">Image Preview</p>
             </div>
           </div>
-          <div className="bg-gray-900 p-4 flex items-center justify-between">
-            <div className="text-white">
-              <p className="font-medium">Sunset at Malibu Beach</p>
-              <p className="text-sm text-gray-400">4032 × 3024 • 3.2 MB</p>
+          <div className="bg-gray-900 p-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="text-white min-w-0">
+              <p className="font-medium truncate">Sunset at Malibu Beach</p>
+              <p className="text-sm text-gray-400 truncate">4032 × 3024 • 3.2 MB</p>
             </div>
             <button className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
               <svg
@@ -1239,7 +1239,6 @@ const ModalDemo = () => {
         description="This modal has custom width and height constraints."
         maxWidth={700}
         maxHeight={400}
-        minWidth={500}
         classes={{
           content: "w-full m-4 rounded-xl shadow-2xl overflow-hidden",
           header: c.modalHeader,
@@ -1264,10 +1263,6 @@ const ModalDemo = () => {
               <span className="text-gray-500">maxHeight:</span>{" "}
               <span className="font-mono">400px</span>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <span className="text-gray-500">minWidth:</span>{" "}
-              <span className="font-mono">500px</span>
-            </div>
           </div>
         </div>
       </Modal>
@@ -1284,11 +1279,11 @@ const ModalDemo = () => {
         }}
       >
         <div className="h-full flex flex-col">
-          <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-4">
+          <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <button
                 onClick={() => setFullScreenOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
               >
                 <svg
                   className="w-5 h-5 text-gray-600"
@@ -1304,14 +1299,14 @@ const ModalDemo = () => {
                   />
                 </svg>
               </button>
-              <div>
-                <h1 className="font-semibold text-gray-900">
+              <div className="min-w-0">
+                <h1 className="font-semibold text-gray-900 truncate">
                   Document Preview
                 </h1>
-                <p className="text-sm text-gray-500">Annual Report 2024.pdf</p>
+                <p className="text-sm text-gray-500 truncate">Annual Report 2024.pdf</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-auto">
               <button className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2">
                 <svg
                   className="w-4 h-4"
@@ -1326,7 +1321,7 @@ const ModalDemo = () => {
                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                   />
                 </svg>
-                Download
+                <span className="hidden sm:inline">Download</span>
               </button>
               <button className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2">
                 <svg
@@ -1342,7 +1337,7 @@ const ModalDemo = () => {
                     d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
                   />
                 </svg>
-                Print
+                <span className="hidden sm:inline">Print</span>
               </button>
               <button className="px-3 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors flex items-center gap-2">
                 <svg
@@ -1358,7 +1353,7 @@ const ModalDemo = () => {
                     d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
                   />
                 </svg>
-                Share
+                <span className="hidden sm:inline">Share</span>
               </button>
             </div>
           </header>
@@ -1446,7 +1441,7 @@ const ModalDemo = () => {
             </div>
           </div>
 
-          <footer className="bg-white border-t border-gray-200 px-6 py-3 flex items-center justify-between shrink-0">
+          <footer className="bg-white border-t border-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-4">
               <button
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"

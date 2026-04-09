@@ -72,6 +72,8 @@ export interface SearchableDropdownProps {
   keepMounted?: boolean;
   portalContainer?: HTMLElement | null;
   dropdownPosition?: "top" | "bottom";
+  /** When true, locks the dropdown to the specified dropdownPosition without auto-flipping. */
+  forceDropdownPosition?: boolean;
   dropdownZIndex?: number;
   dropdownGap?: number;
   typeaheadTimeout?: number;

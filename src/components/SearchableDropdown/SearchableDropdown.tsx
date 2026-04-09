@@ -55,6 +55,7 @@ interface SearchableDropdownContentProps {
   isOpen: boolean;
   keepMounted: boolean;
   position: "top" | "bottom";
+  forcePosition: boolean;
   zIndex: number;
   gap: number;
   portalContainer?: HTMLElement | null;
@@ -82,6 +83,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
   isOpen,
   keepMounted,
   position: preferredPosition,
+  forcePosition,
   zIndex,
   gap,
   portalContainer,
@@ -116,9 +118,10 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
         dropdownRef.current,
         preferredPosition,
         gap,
+        forcePosition,
       ),
     );
-  }, [triggerElement, preferredPosition, gap]);
+  }, [triggerElement, preferredPosition, gap, forcePosition]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -337,6 +340,7 @@ const SearchableDropdown = forwardRef<
     portalContainer,
     lockScroll = false,
     dropdownPosition = "bottom",
+    forceDropdownPosition = false,
     dropdownZIndex = 50,
     dropdownGap = 4,
     typeaheadTimeout = 500,
@@ -674,6 +678,7 @@ const SearchableDropdown = forwardRef<
           isOpen={isOpen}
           keepMounted={keepMounted}
           position={dropdownPosition}
+          forcePosition={forceDropdownPosition}
           zIndex={dropdownZIndex}
           gap={dropdownGap}
           portalContainer={portalContainer}

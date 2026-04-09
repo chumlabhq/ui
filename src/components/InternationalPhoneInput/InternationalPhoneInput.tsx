@@ -72,6 +72,30 @@ function resolveInitialPhone(
   return "";
 }
 
+/**
+ * Component: InternationalPhoneInput
+ *
+ * Purpose:
+ * Phone number input with integrated country code selector, automatic formatting,
+ * paste detection, copy format control, and extensible validation.
+ *
+ * AI Usage Guidelines:
+ * - Use for any phone number entry requiring country selection
+ * - Minimum: `<InternationalPhoneInput label="Phone" onValueChange={handler} />`
+ * - Pair `value` with `onValueChange` for controlled mode
+ * - Set `enablePasteDetection` for international number paste handling
+ *
+ * Behavior:
+ * - Auto-formats numbers per country-specific patterns
+ * - Validates phone length on blur (configurable via `validateOnBlur`)
+ * - Country dropdown rendered via portal (never clipped by overflow)
+ * - Auto-flips dropdown position when insufficient viewport space (disable with `forceDropdownPosition`)
+ * - Copies in E.164, international, or national format
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/InternationalPhoneInputDemo.tsx — live demo
+ */
 const InternationalPhoneInput = forwardRef<
   HTMLInputElement,
   InternationalPhoneInputProps
@@ -118,6 +142,12 @@ const InternationalPhoneInput = forwardRef<
       style,
       classes: classesProp,
       unstyled = false,
+      dropdownPosition,
+      forceDropdownPosition,
+      dropdownZIndex,
+      dropdownGap,
+      portalContainer,
+      lockScroll,
       onFocus,
       onBlur,
       "aria-label": ariaLabel,
@@ -177,6 +207,7 @@ const InternationalPhoneInput = forwardRef<
     const generatedId = useId();
     const inputId = id || generatedId;
     const labelId = `${inputId}-label`;
+    const descriptionId = `${inputId}-description`;
     const errorId = `${inputId}-error`;
     const successId = `${inputId}-success`;
     const statusId = `${inputId}-status`;
@@ -485,6 +516,7 @@ const InternationalPhoneInput = forwardRef<
     const displaySuccessMessage = displaySuccess ? successMessage : undefined;
 
     const describedByParts: string[] = [];
+    if (description) describedByParts.push(descriptionId);
     if (displayError && displayErrorMessage) describedByParts.push(errorId);
     if (displaySuccess && displaySuccessMessage)
       describedByParts.push(successId);
@@ -527,7 +559,7 @@ const InternationalPhoneInput = forwardRef<
         )}
 
         {description && (
-          <div className={mergedClasses.description || undefined}>{description}</div>
+          <div id={descriptionId} className={mergedClasses.description || undefined}>{description}</div>
         )}
 
         <div
@@ -548,6 +580,12 @@ const InternationalPhoneInput = forwardRef<
             showChevron={true}
             selectedIcon={selectedIcon}
             aria-label={countryDropdownAriaLabel}
+            dropdownPosition={dropdownPosition}
+            forceDropdownPosition={forceDropdownPosition}
+            dropdownZIndex={dropdownZIndex}
+            dropdownGap={dropdownGap}
+            portalContainer={portalContainer}
+            lockScroll={lockScroll}
             classes={{
               root: mergedClasses.countrySelect,
               trigger: mergedClasses.countrySelectTrigger,

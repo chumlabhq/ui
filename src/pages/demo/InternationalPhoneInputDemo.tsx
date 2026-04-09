@@ -11,8 +11,8 @@ import { CountryFlag } from "../../components/CountryFlag";
 import { useTheme } from "./ThemeContext";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
+  DemoLabel,
   PropsTable,
   PropRow,
   DocControlledPattern,
@@ -147,6 +147,7 @@ const getClasses = (dark: boolean) => ({
   btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
   resultBox: `rounded-lg px-3 py-2 text-xs font-mono ${dark ? "bg-white/4 text-gray-400" : "bg-gray-50 text-gray-500"}`,
+  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
 });
 
 const EUROPEAN_COUNTRIES: CountryOption[] = [
@@ -214,6 +215,12 @@ const InternationalPhoneInputDemo = () => {
   const [combinedPaste, setCombinedPaste] = useState<PasteDetectedData | null>(null);
   const [descriptionValue, setDescriptionValue] = useState<PhoneNumberData | undefined>();
   const [loadingValue, setLoadingValue] = useState<PhoneNumberData | undefined>();
+  const [posBotValue, setPosBotValue] = useState<PhoneNumberData | undefined>();
+  const [posTopValue, setPosTopValue] = useState<PhoneNumberData | undefined>();
+  const [forceBottomValue, setForceBottomValue] = useState<PhoneNumberData | undefined>();
+  const [forceTopValue, setForceTopValue] = useState<PhoneNumberData | undefined>();
+  const [forceLockScrollValue, setForceLockScrollValue] = useState<PhoneNumberData | undefined>();
+  const [scrollLockValue, setScrollLockValue] = useState<PhoneNumberData | undefined>();
 
   const successOk = successValue?.isValid === true;
 
@@ -247,12 +254,15 @@ const InternationalPhoneInputDemo = () => {
             extensible validation, and complete styling control through the
             classes prop.
           </p>
-          <div className="pt-1">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";`}
-            />
-          </div>
+          <pre
+            className={`mt-3 p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${
+              dark
+                ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6"
+                : "bg-gray-50 text-gray-700 border border-gray-200"
+            }`}
+          >
+            <code>{`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";`}</code>
+          </pre>
         </div>
       </header>
 
@@ -263,7 +273,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               {/* Basic usage — works out-of-the-box with built-in styles */}
               <InternationalPhoneInput
                 aria-label="Phone number"
@@ -281,7 +291,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 defaultValue={{
@@ -300,7 +310,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 required
@@ -416,7 +426,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 validateOnBlur={false}
@@ -441,7 +451,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 value={customValue}
@@ -466,7 +476,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 value={copyPasteValue}
@@ -517,7 +527,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-6 w-full max-w-md">
+            <div className="space-y-6 w-full sm:max-w-md">
               <div>
                 <span className={c.sectionLabel}>E.164</span>
                 <div className="mt-2">
@@ -567,7 +577,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 disabled
@@ -587,7 +597,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 readOnly
@@ -607,7 +617,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number (UK, DE, FR first)"
                 preferredCountries={["gb", "de", "fr"]}
@@ -625,7 +635,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="European Numbers Only"
                 countries={EUROPEAN_COUNTRIES}
@@ -695,7 +705,7 @@ const InternationalPhoneInputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <form
-              className="w-full max-w-md space-y-4"
+              className="w-full sm:max-w-md space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
@@ -725,7 +735,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-4 w-full max-w-md">
+            <div className="space-y-4 w-full sm:max-w-md">
               <InternationalPhoneInput
                 ref={inputRef}
                 label="Phone Number"
@@ -764,7 +774,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md space-y-3">
+            <div className="w-full sm:max-w-md space-y-3">
               <InternationalPhoneInput
                 label="Phone Number"
                 value={focusBlurValue}
@@ -800,7 +810,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 aria-label="Phone with green highlight"
                 value={customSelectedValue}
@@ -825,7 +835,7 @@ const InternationalPhoneInputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <div className="flex flex-wrap gap-8">
-              <div className="w-full max-w-md">
+              <div className="w-full sm:max-w-md">
                 <span className={c.sectionLabel}>Star icon</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
@@ -840,7 +850,7 @@ const InternationalPhoneInputDemo = () => {
                   />
                 </div>
               </div>
-              <div className="w-full max-w-md">
+              <div className="w-full sm:max-w-md">
                 <span className={c.sectionLabel}>Circle check icon</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
@@ -855,7 +865,7 @@ const InternationalPhoneInputDemo = () => {
                   />
                 </div>
               </div>
-              <div className="w-full max-w-md">
+              <div className="w-full sm:max-w-md">
                 <span className={c.sectionLabel}>Dot indicator</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
@@ -883,7 +893,7 @@ const InternationalPhoneInputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <div className="flex flex-wrap gap-8">
-              <div className="w-full max-w-md">
+              <div className="w-full sm:max-w-md">
                 <span className={c.sectionLabel}>Purple theme</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
@@ -911,7 +921,7 @@ const InternationalPhoneInputDemo = () => {
                   />
                 </div>
               </div>
-              <div className="w-full max-w-md">
+              <div className="w-full sm:max-w-md">
                 <span className={c.sectionLabel}>Green theme</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
@@ -939,7 +949,7 @@ const InternationalPhoneInputDemo = () => {
                   />
                 </div>
               </div>
-              <div className="w-full max-w-md">
+              <div className="w-full sm:max-w-md">
                 <span className={c.sectionLabel}>Orange theme</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
@@ -977,7 +987,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 value={renderCustomValue}
@@ -1027,7 +1037,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Singapore (custom format: XXXX-XXXX)"
                 defaultCountry="sg"
@@ -1056,7 +1066,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md space-y-4">
+            <div className="w-full sm:max-w-md space-y-4">
               <InternationalPhoneInput
                 label="Phone Number"
                 value={controlledResetValue}
@@ -1116,7 +1126,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               {/* Truly unstyled — no classes, bare HTML structure */}
               <InternationalPhoneInput
                 label="Phone Number"
@@ -1133,7 +1143,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="space-y-6 w-full max-w-md">
+            <div className="space-y-6 w-full sm:max-w-md">
               <div>
                 <span className={c.sectionLabel}>aria-label</span>
                 <div className="mt-2">
@@ -1170,7 +1180,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 countryDropdownPlaceholder="Select region"
@@ -1190,7 +1200,7 @@ const InternationalPhoneInputDemo = () => {
         >
           <DemoWrapper isDarkMode={dark}>
             <form
-              className="w-full max-w-md space-y-4"
+              className="w-full sm:max-w-md space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
                 alert(
@@ -1254,7 +1264,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md space-y-3">
+            <div className="w-full sm:max-w-md space-y-3">
               <InternationalPhoneInput
                 label="Phone Number"
                 required
@@ -1298,7 +1308,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 description="We'll use this number for two-factor authentication."
@@ -1311,6 +1321,147 @@ const InternationalPhoneInputDemo = () => {
           </DemoWrapper>
         </Section>
 
+        {/* ─── Scroll Lock ────────────────────────────────────────── */}
+        <Section
+          title="Scroll Lock"
+          description="By default, the page remains scrollable when the country dropdown is open. Set lockScroll to lock body scroll while open."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="w-full sm:max-w-md">
+              <InternationalPhoneInput
+                aria-label="Default scrollable"
+                placeholder="Default (scrollable)"
+                classes={c.phone}
+              />
+            </div>
+            <div className="w-full sm:max-w-md">
+              <InternationalPhoneInput
+                aria-label="Scroll lock enabled"
+                value={scrollLockValue}
+                onValueChange={setScrollLockValue}
+                lockScroll
+                placeholder="lockScroll enabled"
+                classes={c.phone}
+              />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        {/* ─── Dropdown Position ──────────────────────────────────── */}
+        <Section
+          title="Dropdown Position"
+          description="Control whether the country dropdown opens above or below the trigger. Auto-flips when there isn't enough space."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark} layout="flex-col">
+            <div className="w-full space-y-8">
+              <div>
+                <DemoLabel isDarkMode={dark}>
+                  dropdownPosition=&quot;bottom&quot; (default)
+                </DemoLabel>
+                <div className="w-full sm:max-w-md">
+                  <InternationalPhoneInput
+                    aria-label="Position bottom"
+                    value={posBotValue}
+                    onValueChange={setPosBotValue}
+                    dropdownPosition="bottom"
+                    placeholder="Opens below..."
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <DemoLabel isDarkMode={dark}>
+                  dropdownPosition=&quot;top&quot;
+                </DemoLabel>
+                <div className="w-full sm:max-w-md">
+                  <InternationalPhoneInput
+                    aria-label="Position top"
+                    value={posTopValue}
+                    onValueChange={setPosTopValue}
+                    dropdownPosition="top"
+                    placeholder="Opens above..."
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+          <div className={c.note}>
+            The country dropdown renders via a React Portal into document.body (or a
+            custom container via portalContainer), so it is never clipped by
+            overflow: hidden ancestors. Position updates react to window resize,
+            scroll, and iOS Safari virtual keyboard changes (via visualViewport).
+          </div>
+          <DemoWrapper isDarkMode={dark} layout="flex-col">
+            <div className="w-full space-y-8">
+              <div>
+                <DemoLabel isDarkMode={dark}>
+                  forceDropdownPosition (forced bottom)
+                </DemoLabel>
+                <div className="w-full sm:max-w-md">
+                  <InternationalPhoneInput
+                    aria-label="Force bottom"
+                    value={forceBottomValue}
+                    onValueChange={setForceBottomValue}
+                    dropdownPosition="bottom"
+                    forceDropdownPosition
+                    placeholder="Always opens below..."
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+              <div>
+                <DemoLabel isDarkMode={dark}>
+                  forceDropdownPosition (forced top)
+                </DemoLabel>
+                <div className="w-full sm:max-w-md">
+                  <InternationalPhoneInput
+                    aria-label="Force top"
+                    value={forceTopValue}
+                    onValueChange={setForceTopValue}
+                    dropdownPosition="top"
+                    forceDropdownPosition
+                    placeholder="Always opens above..."
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+          <div className={c.note}>
+            When forceDropdownPosition is true, the country dropdown will always open in
+            the specified direction regardless of available viewport space.
+          </div>
+          <DemoWrapper isDarkMode={dark} layout="flex-col">
+            <div className="w-full space-y-8">
+              <div>
+                <DemoLabel isDarkMode={dark}>
+                  forceDropdownPosition + lockScroll
+                </DemoLabel>
+                <div className="w-full sm:max-w-md">
+                  <InternationalPhoneInput
+                    aria-label="Force bottom with scroll lock"
+                    value={forceLockScrollValue}
+                    onValueChange={setForceLockScrollValue}
+                    dropdownPosition="bottom"
+                    forceDropdownPosition
+                    lockScroll
+                    placeholder="Forced bottom + scroll locked"
+                    classes={c.phone}
+                  />
+                </div>
+              </div>
+            </div>
+          </DemoWrapper>
+          <div className={c.note}>
+            Combining forceDropdownPosition with lockScroll prevents the page from
+            scrolling while the country dropdown is open, ensuring the menu stays anchored
+            in place.
+          </div>
+        </Section>
+
         {/* ─── Loading State ────────────────────────────────────────── */}
         <Section
           title="Loading State"
@@ -1318,7 +1469,7 @@ const InternationalPhoneInputDemo = () => {
           isDarkMode={dark}
         >
           <DemoWrapper isDarkMode={dark}>
-            <div className="w-full max-w-md">
+            <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
                 label="Phone Number"
                 loading
@@ -1566,6 +1717,48 @@ const InternationalPhoneInputDemo = () => {
               type="boolean"
               defaultVal="false"
               description="Strip all default classes"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownPosition"
+              type='"top" | "bottom"'
+              defaultVal='"bottom"'
+              description="Vertical placement of the country dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="forceDropdownPosition"
+              type="boolean"
+              defaultVal="false"
+              description="Lock to dropdownPosition, no auto-flip"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownZIndex"
+              type="number"
+              defaultVal="50"
+              description="Z-index of the country dropdown popup"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="dropdownGap"
+              type="number"
+              defaultVal="4"
+              description="Gap (px) between trigger and dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="portalContainer"
+              type="HTMLElement | null"
+              defaultVal="document.body"
+              description="Portal target for the country dropdown"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="lockScroll"
+              type="boolean"
+              defaultVal="false"
+              description="Lock body scroll while country dropdown is open"
               isDarkMode={dark}
             />
           </PropsTable>
