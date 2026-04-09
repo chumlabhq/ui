@@ -76,9 +76,9 @@ const defaultIsStepClickable = (
 ): boolean => status === "completed" || status === "active";
 
 const INDICATOR_SIZE: Record<string, string> = {
-  dot: "w-3 h-3",
-  icon: "w-10 h-10",
-  numbered: "w-8 h-8 text-sm font-medium",
+  dot: "w-2.5 h-2.5 sm:w-3 sm:h-3",
+  icon: "w-8 h-8 sm:w-10 sm:h-10",
+  numbered: "w-7 h-7 text-xs sm:w-8 sm:h-8 sm:text-sm font-medium",
 };
 
 /** Default indicator pixel sizes per variant (used for connector alignment) */
@@ -90,8 +90,8 @@ const INDICATOR_PX: Record<string, number> = {
 
 const ICON_SIZE: Record<string, string> = {
   dot: "w-full h-full",
-  icon: "w-5 h-5",
-  numbered: "w-4 h-4",
+  icon: "w-4 h-4 sm:w-5 sm:h-5",
+  numbered: "w-3.5 h-3.5 sm:w-4 sm:h-4",
 };
 
 interface StepItemInternalProps {
@@ -849,7 +849,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         <ol
           className={cn(
             orientation === "horizontal"
-              ? `flex w-full ${labelPosition === "bottom" ? "items-start" : "items-center"}`
+              ? `flex w-full overflow-x-auto ${labelPosition === "bottom" ? "items-start" : "items-center"}`
               : "flex flex-col",
             mergedClasses.list,
           )}
@@ -932,7 +932,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
                   <li
                     role="presentation"
                     aria-hidden="true"
-                    className="flex-1 min-w-4 px-2"
+                    className="flex-1 min-w-2 px-1 sm:min-w-4 sm:px-2"
                   >
                     <div
                       className={cn(
