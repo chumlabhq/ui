@@ -83,6 +83,29 @@ function useViewportWidth(): number {
 const FALLBACK_COLUMNS: never[] = [];
 const FALLBACK_DATA: never[] = [];
 
+/**
+ * Component: Table
+ *
+ * Purpose:
+ * Feature-rich data table with sorting, filtering, selection, pinned columns,
+ * row expansion, drag-and-drop, inline editing, column resizing, infinite scroll,
+ * search, CSV export, and full style customization. Built on TanStack Table.
+ *
+ * AI Usage Guidelines:
+ * - Minimum: `<Table columns={[...]} data={[...]} />`
+ * - Use `sortable` for column sorting, `selectable` for row selection
+ * - Use `pinnedColumns` for fixed columns, `expandable` for row details
+ * - Pair with `<Pagination>` for paged data display
+ *
+ * Behavior:
+ * - Horizontal scroll via `overflow-x-auto` on unpinned container
+ * - Pinned columns stay fixed while scrollable columns scroll
+ * - Supports sticky header with `stickyHeader` + `maxHeight`
+ *
+ * Reference:
+ * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - src/pages/demo/TableDemo.tsx — live demo
+ */
 function TableInner<TData>(
   {
     columns: columnsProp,

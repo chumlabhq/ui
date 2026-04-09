@@ -12,7 +12,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { SortingState } from "../../components/Table";
 import {
   Section,
-  CodeBlock,
   DemoWrapper,
   PropsTable,
   PropRow,
@@ -1634,10 +1633,9 @@ const TableDemo = () => {
           </p>
 
           <div className="mt-5">
-            <CodeBlock
-              isDarkMode={dark}
-              code={`import { Table } from "@chumlab/ui/table";\nimport { Pagination } from "@chumlab/ui/pagination";`}
-            />
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+              <code>{`import { Table } from "@chumlab/ui/table";\nimport { Pagination } from "@chumlab/ui/pagination";`}</code>
+            </pre>
           </div>
         </div>
       </header>
@@ -3339,7 +3337,7 @@ const TableDemo = () => {
             onExpandedChange={setExpandedRowIds}
             renderExpandedRow={(row) => (
               <div className={`p-4 ${dark ? "bg-white/[0.03]" : "bg-gray-50"}`}>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <span
                       className={`text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`}
@@ -3511,7 +3509,7 @@ const TableDemo = () => {
                   <div
                     className={`px-6 py-4 ${dark ? "bg-emerald-500/5" : "bg-emerald-50/50"}`}
                   >
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       {[
                         { label: "Department", value: row.department },
                         { label: "Status", value: row.status },

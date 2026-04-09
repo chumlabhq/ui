@@ -357,7 +357,7 @@ const TabPanelDemo = () => {
             fallback, and both controlled and uncontrolled modes.
           </p>
           <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
+            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { TabPanel } from "@chumlab/ui/tab-panel";`}</code>
             </pre>
           </div>
@@ -491,7 +491,7 @@ const TabPanelDemo = () => {
           >
             {iconLeftTab === "home" && (
               <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[["Revenue", "$24.5k", "+12%"], ["Users", "1,429", "+8%"], ["Orders", "892", "+23%"]].map(([label, value, change]) => (
                     <div key={label} className={c.contentCard}>
                       <div className={c.statLabel}>{label}</div>

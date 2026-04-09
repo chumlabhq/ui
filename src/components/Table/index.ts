@@ -1,3 +1,4 @@
+// AI Knowledge: See COMPONENT.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as Table } from "./Table";
 export { default as TableShimmer } from "./TableShimmer";
 export type {

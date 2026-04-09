@@ -3,8 +3,8 @@ import type { TabPanelClasses } from "./types";
 export const DEFAULT_TABPANEL_CLASSES: Required<TabPanelClasses> = {
   root: "w-full",
   tabList:
-    "flex items-center gap-6 border-b border-gray-200 dark:border-gray-700",
-  tab: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
+    "flex items-center gap-4 sm:gap-6 overflow-x-auto border-b border-gray-200 dark:border-gray-700",
+  tab: "relative shrink-0 px-1 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
   tabActive: "text-blue-600 dark:text-blue-400",
   tabInactive:
     "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200",
