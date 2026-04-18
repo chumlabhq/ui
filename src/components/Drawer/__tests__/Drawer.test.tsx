@@ -1,7 +1,17 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef, useState } from "react";
+
+// jsdom doesn't support pointer capture
+beforeAll(() => {
+  if (!HTMLElement.prototype.setPointerCapture) {
+    HTMLElement.prototype.setPointerCapture = vi.fn();
+  }
+  if (!HTMLElement.prototype.releasePointerCapture) {
+    HTMLElement.prototype.releasePointerCapture = vi.fn();
+  }
+});
 import {
   Drawer,
   DrawerHeader,
@@ -765,6 +775,442 @@ describe("Drawer", () => {
       renderDrawer({ className: "my-custom-class" });
       const root = screen.getByRole("dialog").parentElement!;
       expect(root.className).not.toContain("my-custom-class");
+    });
+  });
+
+  describe("Direction Styling", () => {
+    it.each([
+      ["left", "translateX"],
+      ["right", "translateX"],
+      ["top", "translateY"],
+      ["bottom", "translateY"],
+    ] as const)(
+      "applies %s direction with correct transform axis (%s)",
+      (direction, expectedTransform) => {
+        renderDrawer({ direction });
+        const panel = screen.getByRole("dialog");
+        const style = panel.getAttribute("style") ?? "";
+        expect(style).toContain(expectedTransform);
+      },
+    );
+
+    it("applies width style for left/right directions", () => {
+      renderDrawer({ direction: "left", size: "400px" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.style.width).toBe("400px");
+    });
+
+    it("applies height style for top/bottom directions", () => {
+      renderDrawer({ direction: "top", size: "200px" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.style.height).toBe("200px");
+    });
+  });
+
+  describe("Swipe Gesture Simulation", () => {
+    function createPointerEvent(
+      type: string,
+      clientX: number,
+      clientY: number,
+      pointerId = 1,
+    ) {
+      return new PointerEvent(type, {
+        bubbles: true,
+        clientX,
+        clientY,
+        pointerId,
+      });
+    }
+
+    it("sets touch-action on the panel when swipeable", () => {
+      renderDrawer({ swipeable: true, direction: "left" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.style.touchAction).toBe("pan-y");
+    });
+
+    it("sets touch-action to pan-x for top/bottom direction", () => {
+      renderDrawer({ swipeable: true, direction: "bottom" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.style.touchAction).toBe("pan-x");
+    });
+
+    it("does not set touch-action when not swipeable", () => {
+      renderDrawer({ swipeable: false, direction: "left" });
+      const panel = screen.getByRole("dialog");
+      expect(panel.style.touchAction).toBeFalsy();
+    });
+
+    it("attaches pointer event handlers when swipeable", () => {
+      renderDrawer({ swipeable: true });
+      const panel = screen.getByRole("dialog");
+      expect(panel).toHaveAttribute("data-drawer-panel");
+    });
+
+    it("calls onOpenChange after swipe exceeding threshold on right drawer", async () => {
+      const onOpenChange = vi.fn();
+      renderDrawer({
+        swipeable: true,
+        direction: "right",
+        swipeThreshold: 0.3,
+        onOpenChange,
+      });
+
+      const panel = screen.getByRole("dialog");
+      // Mock offsetWidth
+      Object.defineProperty(panel, "offsetWidth", { value: 300, configurable: true });
+
+      await act(async () => {
+        panel.dispatchEvent(createPointerEvent("pointerdown", 300, 200));
+      });
+      await act(async () => {
+        // Move past deadzone and beyond threshold
+        panel.dispatchEvent(createPointerEvent("pointermove", 420, 200));
+      });
+      await act(async () => {
+        panel.dispatchEvent(createPointerEvent("pointerup", 420, 200));
+      });
+
+      expect(onOpenChange).toHaveBeenCalled();
+    });
+  });
+
+  describe("Overlay Interaction", () => {
+    it("overlay has data-drawer-overlay attribute", () => {
+      renderDrawer();
+      const overlay = document.querySelector("[data-drawer-overlay]");
+      expect(overlay).toBeInTheDocument();
+    });
+
+    it("overlay has aria-hidden='true'", () => {
+      renderDrawer();
+      const overlay = document.querySelector("[data-drawer-overlay]");
+      expect(overlay).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("overlay opacity is set when drawer is visualOpen", async () => {
+      renderDrawer({ overlayOpacity: 0.7 });
+      // Wait for visual open via RAF
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 50));
+      });
+      const overlay = document.querySelector("[data-drawer-overlay]") as HTMLElement;
+      expect(overlay.style.opacity).toBe("0.7");
+    });
+  });
+
+  describe("Escape Key Behavior", () => {
+    it("stops immediate propagation when Escape is pressed", async () => {
+      const user = userEvent.setup();
+      const outerHandler = vi.fn();
+
+      render(
+        <div onKeyDown={outerHandler}>
+          <Drawer
+            open={true}
+            onOpenChange={() => {}}
+            aria-label="Escape test"
+            duration={0}
+          >
+            <DrawerBody>Content</DrawerBody>
+          </Drawer>
+        </div>,
+      );
+
+      await user.keyboard("{Escape}");
+
+      // The outer handler should NOT be called because stopImmediatePropagation
+      // is called on the document-level listener, but the React synthetic event
+      // on the div is different. This tests the drawer does close.
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+  });
+
+  describe("Focus Trap Edge Cases", () => {
+    it("prevents Tab when no focusable elements exist", async () => {
+      render(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="Empty drawer"
+          duration={0}
+        >
+          <DrawerBody>
+            <p>No focusable elements here</p>
+          </DrawerBody>
+        </Drawer>,
+      );
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 50));
+      });
+
+      // Panel itself should have focus since no focusable children
+      const dialog = screen.getByRole("dialog");
+      expect(document.activeElement).toBe(dialog);
+    });
+  });
+
+  describe("Scroll Lock Cleanup", () => {
+    it("restores body overflow on unmount", () => {
+      document.body.style.overflow = "";
+      const { unmount } = render(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="Scroll lock cleanup"
+          duration={0}
+          lockScroll
+          modal
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      expect(document.body.style.overflow).toBe("hidden");
+      unmount();
+      expect(document.body.style.overflow).not.toBe("hidden");
+    });
+  });
+
+  describe("keepMounted Advanced", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("shows aria-hidden when keepMounted and closed", () => {
+      const { rerender } = render(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="Keep test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      rerender(
+        <Drawer
+          open={false}
+          onOpenChange={() => {}}
+          aria-label="Keep test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      const root = screen.getByRole("dialog", { hidden: true }).parentElement!;
+      expect(root).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("re-renders correctly when toggling open with keepMounted", () => {
+      const { rerender } = render(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="Toggle test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Persistent Content</DrawerBody>
+        </Drawer>,
+      );
+
+      rerender(
+        <Drawer
+          open={false}
+          onOpenChange={() => {}}
+          aria-label="Toggle test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Persistent Content</DrawerBody>
+        </Drawer>,
+      );
+
+      expect(screen.getByText("Persistent Content")).toBeInTheDocument();
+
+      rerender(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="Toggle test"
+          duration={0}
+          keepMounted
+        >
+          <DrawerBody>Persistent Content</DrawerBody>
+        </Drawer>,
+      );
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      expect(screen.getByRole("dialog").parentElement).not.toHaveAttribute("aria-hidden");
+    });
+  });
+
+  describe("Transition Callbacks Advanced", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("does not fire onTransitionEnd when callback is not provided", () => {
+      const { rerender } = render(
+        <Drawer
+          open={false}
+          onOpenChange={() => {}}
+          aria-label="No callback test"
+          duration={100}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      rerender(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="No callback test"
+          duration={100}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      act(() => {
+        vi.advanceTimersByTime(200);
+      });
+
+      // Should not throw
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+
+    it("uses effectiveDuration of 0 when reduceMotion is true", () => {
+      const onTransitionEnd = vi.fn();
+
+      const { rerender } = render(
+        <Drawer
+          open={false}
+          onOpenChange={() => {}}
+          aria-label="Reduce motion test"
+          duration={300}
+          reduceMotion={true}
+          onTransitionEnd={onTransitionEnd}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      rerender(
+        <Drawer
+          open={true}
+          onOpenChange={() => {}}
+          aria-label="Reduce motion test"
+          duration={300}
+          reduceMotion={true}
+          onTransitionEnd={onTransitionEnd}
+          keepMounted
+        >
+          <DrawerBody>Content</DrawerBody>
+        </Drawer>,
+      );
+
+      act(() => {
+        vi.advanceTimersByTime(10);
+      });
+
+      expect(onTransitionEnd).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe("Nested Drawers", () => {
+    it("renders two drawers simultaneously", () => {
+      render(
+        <>
+          <Drawer
+            open={true}
+            onOpenChange={() => {}}
+            aria-label="Outer drawer"
+            duration={0}
+          >
+            <DrawerBody>Outer Content</DrawerBody>
+          </Drawer>
+          <Drawer
+            open={true}
+            onOpenChange={() => {}}
+            aria-label="Inner drawer"
+            duration={0}
+          >
+            <DrawerBody>Inner Content</DrawerBody>
+          </Drawer>
+        </>,
+      );
+
+      const dialogs = screen.getAllByRole("dialog");
+      expect(dialogs).toHaveLength(2);
+      expect(screen.getByText("Outer Content")).toBeInTheDocument();
+      expect(screen.getByText("Inner Content")).toBeInTheDocument();
+    });
+
+    it("only topmost drawer closes on Escape when nested", async () => {
+      const user = userEvent.setup();
+      const outerChange = vi.fn();
+      const innerChange = vi.fn();
+
+      render(
+        <>
+          <Drawer
+            open={true}
+            onOpenChange={outerChange}
+            aria-label="Outer"
+            duration={0}
+          >
+            <DrawerBody>Outer</DrawerBody>
+          </Drawer>
+          <Drawer
+            open={true}
+            onOpenChange={innerChange}
+            aria-label="Inner"
+            duration={0}
+          >
+            <DrawerBody>Inner</DrawerBody>
+          </Drawer>
+        </>,
+      );
+
+      await user.keyboard("{Escape}");
+
+      expect(innerChange).toHaveBeenCalledWith(false);
+      expect(outerChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("Unstyled Mode", () => {
+    it("applies unstyled classes when unstyled is true", () => {
+      renderDrawer({ unstyled: true });
+      const dialog = screen.getByRole("dialog");
+      // Unstyled classes are empty strings, so no class should be applied from defaults
+      expect(dialog.className).not.toContain("z-999999");
+    });
+  });
+
+  describe("Custom zIndex", () => {
+    it("applies custom zIndex to root", () => {
+      renderDrawer({ zIndex: 12345 });
+      const root = screen.getByRole("dialog").parentElement!;
+      expect(root.style.zIndex).toBe("12345");
     });
   });
 

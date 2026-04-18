@@ -1636,6 +1636,10 @@ const TableDemo = () => {
             <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
               <code>{`import { Table } from "@chumlab/ui/table";\nimport { Pagination } from "@chumlab/ui/pagination";`}</code>
             </pre>
+            <p className={`mt-3 text-[13px] ${dark ? "text-amber-400/80" : "text-amber-700"}`}>
+              Requires <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-amber-50 border border-amber-200"}`}>@tanstack/react-table</code> as a peer dependency:{" "}
+              <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-gray-100 border border-gray-200"}`}>npm install @tanstack/react-table</code>
+            </p>
           </div>
         </div>
       </header>

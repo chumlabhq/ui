@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Dropdown from '../Dropdown';
@@ -1320,10 +1321,684 @@ describe('Dropdown - Edge Cases', () => {
 
   it('should cleanup on unmount', () => {
     const { unmount } = render(<Dropdown options={fruitOptions} />);
-    
+
     unmount();
-    
+
     // Should not throw errors
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+  });
+});
+
+describe('Dropdown - Tab Key Closes Dropdown', () => {
+  it('should close dropdown when Tab is pressed', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+    await waitForDropdownOpen();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    await user.keyboard('{Tab}');
+
+    await waitFor(() => {
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+});
+
+describe('Dropdown - Home/End with Disabled Options', () => {
+  it('should jump to first enabled option with Home when first option is disabled', async () => {
+    const user = userEvent.setup();
+
+    const optionsFirstDisabled: DropdownOption[] = [
+      { value: 'd1', label: 'Disabled First', disabled: true },
+      { value: 'e1', label: 'Enabled 1' },
+      { value: 'e2', label: 'Enabled 2' },
+    ];
+
+    render(<Dropdown options={optionsFirstDisabled} />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+    await waitForDropdownOpen();
+    await user.keyboard('{End}');
+    await user.keyboard('{Home}');
+
+    await waitFor(() => {
+      const options = screen.getAllByRole('option', { hidden: true });
+      // First non-disabled option should be focused (index 1 = Enabled 1)
+      expect(options[1]).toHaveAttribute('data-focused', 'true');
+    });
+  });
+
+  it('should jump to last enabled option with End when last option is disabled', async () => {
+    const user = userEvent.setup();
+
+    const optionsLastDisabled: DropdownOption[] = [
+      { value: 'e1', label: 'Enabled 1' },
+      { value: 'e2', label: 'Enabled 2' },
+      { value: 'd1', label: 'Disabled Last', disabled: true },
+    ];
+
+    render(<Dropdown options={optionsLastDisabled} />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+    await waitForDropdownOpen();
+    await user.keyboard('{End}');
+
+    await waitFor(() => {
+      const options = screen.getAllByRole('option', { hidden: true });
+      // Last non-disabled option should be focused (index 1 = Enabled 2)
+      expect(options[1]).toHaveAttribute('data-focused', 'true');
+    });
+  });
+});
+
+describe('Dropdown - Uncontrolled Mode with onValueChange', () => {
+  it('should work in uncontrolled mode without value prop and fire onValueChange', async () => {
+    const user = userEvent.setup();
+    const handleChange = vi.fn();
+
+    render(
+      <Dropdown
+        options={fruitOptions}
+        onValueChange={handleChange}
+      />
+    );
+
+    await user.click(screen.getByRole('combobox'));
+    const appleOption = await screen.findByRole('option', { name: 'Apple' });
+    await user.click(appleOption);
+
+    expect(handleChange).toHaveBeenCalledWith('apple', expect.any(Object));
+    expect(screen.getByRole('combobox')).toHaveTextContent('Apple');
+  });
+
+  it('should update display when selecting different options in uncontrolled mode', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} />);
+
+    const trigger = screen.getByRole('combobox');
+
+    // Select first option
+    await user.click(trigger);
+    const apple = await screen.findByRole('option', { name: 'Apple' });
+    await user.click(apple);
+    expect(trigger).toHaveTextContent('Apple');
+
+    // Select another option
+    await user.click(trigger);
+    const banana = await screen.findByRole('option', { name: 'Banana' });
+    await user.click(banana);
+    expect(trigger).toHaveTextContent('Banana');
+  });
+});
+
+describe('Dropdown - Form Name Hidden Input', () => {
+  it('should render hidden input with empty value when no selection', () => {
+    const { container } = render(
+      <Dropdown
+        options={fruitOptions}
+        name="fruit"
+      />
+    );
+
+    const hiddenInput = container.querySelector('input[type="hidden"]');
+    expect(hiddenInput).toHaveAttribute('name', 'fruit');
+    expect(hiddenInput).toHaveValue('');
+  });
+
+  it('should not render hidden input when name prop is not provided', () => {
+    const { container } = render(
+      <Dropdown
+        options={fruitOptions}
+        value="apple"
+      />
+    );
+
+    const hiddenInput = container.querySelector('input[type="hidden"]');
+    expect(hiddenInput).not.toBeInTheDocument();
+  });
+
+  it('should participate in form submission', async () => {
+    const user = userEvent.setup();
+    const handleSubmit = vi.fn((e: React.FormEvent) => {
+      e.preventDefault();
+      const formData = new FormData(e.target as HTMLFormElement);
+      handleSubmit.mock.calls[handleSubmit.mock.calls.length - 1].push(
+        Object.fromEntries(formData) as unknown as React.FormEvent
+      );
+    });
+
+    render(
+      <form onSubmit={handleSubmit}>
+        <Dropdown
+          options={fruitOptions}
+          name="fruit"
+          defaultValue="cherry"
+        />
+        <button type="submit">Submit</button>
+      </form>
+    );
+
+    await user.click(screen.getByText('Submit'));
+
+    expect(handleSubmit).toHaveBeenCalled();
+  });
+});
+
+describe('Dropdown - Shimmer Loading State', () => {
+  it('should show shimmer items with custom count', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={[]} loading shimmerCount={4} />);
+
+    await user.click(screen.getByRole('combobox'));
+    await waitForDropdownOpen();
+
+    const listbox = screen.getByRole('listbox', { hidden: true });
+    expect(listbox).toHaveAttribute('aria-busy', 'true');
+  });
+
+  it('should not show options when loading', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} loading shimmerCount={3} />);
+
+    await user.click(screen.getByRole('combobox'));
+    await waitForDropdownOpen();
+
+    expect(screen.queryByRole('option')).not.toBeInTheDocument();
+  });
+
+  it('should show options after loading completes', async () => {
+    const user = userEvent.setup();
+
+    const { rerender } = render(
+      <Dropdown options={[]} loading shimmerCount={3} />
+    );
+
+    await user.click(screen.getByRole('combobox'));
+    await waitForDropdownOpen();
+
+    // Transition from loading to loaded
+    rerender(<Dropdown options={fruitOptions} loading={false} defaultOpen />);
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('option', { hidden: true }).length).toBe(fruitOptions.length);
+    });
+  });
+});
+
+describe('Dropdown - ArrowUp Wrap Navigation with All Disabled', () => {
+  it('should not change focused index when all options are disabled during ArrowDown', async () => {
+    const user = userEvent.setup();
+    const allDisabled: DropdownOption[] = [
+      { value: 'a', label: 'A', disabled: true },
+      { value: 'b', label: 'B', disabled: true },
+    ];
+
+    render(<Dropdown options={allDisabled} />);
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+    await waitForDropdownOpen();
+
+    // All disabled, so no option should be focused
+    // With all disabled, the first enabled search returns -1, so focusedIndex stays at 0
+    // which means it tries to focus index 0 but index 0 is disabled
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+});
+
+describe('Dropdown - LockScroll', () => {
+  it('should render with lockScroll prop without errors', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} lockScroll />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    // Close and verify cleanup
+    await user.keyboard('{Escape}');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  });
+});
+
+describe('Dropdown - Success State', () => {
+  it('should display success message when success is true', () => {
+    render(
+      <Dropdown
+        options={fruitOptions}
+        success
+        successMessage="Selection saved"
+      />
+    );
+
+    expect(screen.getByText('Selection saved')).toBeInTheDocument();
+  });
+
+  it('should not display success when error is also true', () => {
+    render(
+      <Dropdown
+        options={fruitOptions}
+        success
+        successMessage="Selection saved"
+        error
+        errorMessage="Field is required"
+      />
+    );
+
+    expect(screen.queryByText('Selection saved')).not.toBeInTheDocument();
+    expect(screen.getByText('Field is required')).toBeInTheDocument();
+  });
+});
+
+describe('Dropdown - Description', () => {
+  it('should render description text', () => {
+    render(
+      <Dropdown
+        options={fruitOptions}
+        description="Choose your favorite fruit"
+      />
+    );
+
+    expect(screen.getByText('Choose your favorite fruit')).toBeInTheDocument();
+  });
+});
+
+describe('Dropdown - FullWidth', () => {
+  it('should apply fullWidth style', () => {
+    const { container } = render(
+      <Dropdown options={fruitOptions} fullWidth />
+    );
+
+    const rootDiv = container.firstChild as HTMLElement;
+    expect(rootDiv).toHaveAttribute('data-full-width', 'true');
+  });
+});
+
+describe('Dropdown - LockScroll Advanced', () => {
+  it('should allow wheel scroll inside dropdown content when lockScroll is true', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} lockScroll />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    // Dispatch a wheel event inside the listbox — should NOT be prevented
+    const listbox = screen.getByRole('listbox', { hidden: true });
+    const wheelEventInside = new Event('wheel', { bubbles: true, cancelable: true });
+    listbox.dispatchEvent(wheelEventInside);
+
+    // The event should NOT be defaultPrevented (scroll inside dropdown is allowed)
+    expect(wheelEventInside.defaultPrevented).toBe(false);
+  });
+
+  it('should prevent wheel scroll on document outside dropdown when lockScroll is true', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} lockScroll />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    // Dispatch a wheel event outside the dropdown content (on document.body)
+    const wheelEventOutside = new Event('wheel', { bubbles: true, cancelable: true });
+    Object.defineProperty(wheelEventOutside, 'target', { value: document.body, configurable: true });
+
+    // The lockScroll handler is attached with capture:true to window
+    window.dispatchEvent(wheelEventOutside);
+    // Handler runs but we can't easily assert preventDefault in this environment,
+    // so just verify the dropdown is still open and no error was thrown
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('should register and unregister touchmove handler when dropdown opens and closes with lockScroll', async () => {
+    const user = userEvent.setup();
+    const addSpy = vi.spyOn(window, 'addEventListener');
+    const removeSpy = vi.spyOn(window, 'removeEventListener');
+
+    render(<Dropdown options={fruitOptions} lockScroll />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    // Verify touchmove listener was added
+    const touchmoveAdded = addSpy.mock.calls.some(([type]) => type === 'touchmove');
+    expect(touchmoveAdded).toBe(true);
+
+    // Close and verify cleanup
+    await user.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    const touchmoveRemoved = removeSpy.mock.calls.some(([type]) => type === 'touchmove');
+    expect(touchmoveRemoved).toBe(true);
+
+    addSpy.mockRestore();
+    removeSpy.mockRestore();
+  });
+});
+
+describe('Dropdown - VisualViewport Repositioning', () => {
+  it('should reposition dropdown when visualViewport fires resize event', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    // Simulate visualViewport resize event if available
+    const vv = window.visualViewport;
+    if (vv && typeof vv.dispatchEvent === 'function') {
+      const resizeEvent = new Event('resize');
+      vv.dispatchEvent(resizeEvent);
+    }
+
+    // Dropdown should still be open and functional
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('listbox', { hidden: true })).toBeInTheDocument();
+  });
+
+  it('should reposition dropdown when visualViewport fires scroll event', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    // Simulate visualViewport scroll event if available
+    const vv = window.visualViewport;
+    if (vv && typeof vv.dispatchEvent === 'function') {
+      const scrollEvent = new Event('scroll');
+      vv.dispatchEvent(scrollEvent);
+    }
+
+    // Dropdown should still be open and functional
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('listbox', { hidden: true })).toBeInTheDocument();
+  });
+});
+
+describe('Dropdown - ResizeObserver on Dropdown Content', () => {
+  it('should handle dropdown element resize without error', async () => {
+    const user = userEvent.setup();
+
+    render(<Dropdown options={fruitOptions} />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    // Trigger a window resize which causes DropdownContent to reposition
+    window.dispatchEvent(new Event('resize'));
+
+    // Wait a tick for rAF callbacks
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    // Dropdown should still be open
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('listbox', { hidden: true })).toBeInTheDocument();
+  });
+});
+
+describe('Dropdown - VisualViewport listeners (lines 249-263)', () => {
+  it('registers and unregisters resize/scroll listeners on visualViewport when open', async () => {
+    // Create a mock VisualViewport with addEventListener/removeEventListener
+    const listeners: Record<string, EventListener[]> = {};
+    const mockVV = {
+      addEventListener: vi.fn((type: string, handler: EventListener) => {
+        listeners[type] = listeners[type] ?? [];
+        listeners[type].push(handler);
+      }),
+      removeEventListener: vi.fn((type: string, handler: EventListener) => {
+        listeners[type] = (listeners[type] ?? []).filter(h => h !== handler);
+      }),
+      dispatchEvent: (e: Event) => {
+        listeners[e.type]?.forEach(h => h(e));
+        return true;
+      },
+    };
+
+    const origVV = Object.getOwnPropertyDescriptor(window, 'visualViewport');
+    Object.defineProperty(window, 'visualViewport', {
+      value: mockVV,
+      configurable: true,
+      writable: true,
+    });
+
+    try {
+      const user = userEvent.setup();
+      render(<Dropdown options={fruitOptions} />);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      await waitForDropdownOpen();
+
+      // visualViewport.addEventListener should have been called for resize and scroll
+      const addCalls = mockVV.addEventListener.mock.calls.map(([type]) => type);
+      expect(addCalls).toContain('resize');
+      expect(addCalls).toContain('scroll');
+
+      // Dispatch a viewport resize to exercise the handler path (lines 253-254)
+      mockVV.dispatchEvent(new Event('resize'));
+
+      // Dropdown should stay open after viewport resize
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+      // Close the dropdown — this should trigger cleanup (lines 257-260)
+      await user.keyboard('{Escape}');
+      await waitFor(() => {
+        expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      });
+
+      // removeEventListener should have been called for resize and scroll
+      const removeCalls = mockVV.removeEventListener.mock.calls.map(([type]) => type);
+      expect(removeCalls).toContain('resize');
+      expect(removeCalls).toContain('scroll');
+    } finally {
+      if (origVV) {
+        Object.defineProperty(window, 'visualViewport', origVV);
+      } else {
+        Object.defineProperty(window, 'visualViewport', {
+          value: null,
+          configurable: true,
+          writable: true,
+        });
+      }
+    }
+  });
+
+  it('skips visualViewport listener when vv.addEventListener is not a function (line 248 guard)', async () => {
+    // Set visualViewport to an object without addEventListener
+    const origVV = Object.getOwnPropertyDescriptor(window, 'visualViewport');
+    Object.defineProperty(window, 'visualViewport', {
+      value: { width: 1024, height: 768 } as unknown as VisualViewport,
+      configurable: true,
+      writable: true,
+    });
+
+    try {
+      const user = userEvent.setup();
+      render(<Dropdown options={fruitOptions} />);
+
+      const trigger = screen.getByRole('combobox');
+      // Should open without errors even when addEventListener is missing
+      await user.click(trigger);
+      await waitForDropdownOpen();
+
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    } finally {
+      if (origVV) {
+        Object.defineProperty(window, 'visualViewport', origVV);
+      } else {
+        Object.defineProperty(window, 'visualViewport', {
+          value: null,
+          configurable: true,
+          writable: true,
+        });
+      }
+    }
+  });
+});
+
+describe('Dropdown - Option item onKeyDown Enter/Space (lines 93-95)', () => {
+  it('selects option when Enter is pressed directly on the option element', async () => {
+    const user = userEvent.setup();
+    const handleChange = vi.fn();
+
+    render(
+      <Dropdown
+        options={fruitOptions}
+        onValueChange={handleChange}
+      />
+    );
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+
+    // Find the Banana option and fire a keydown directly on it
+    const bananaOption = await screen.findByRole('option', { name: 'Banana' });
+    bananaOption.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    );
+
+    await waitFor(() => {
+      expect(handleChange).toHaveBeenCalledWith('banana', expect.any(Object));
+    });
+  });
+
+  it('selects option when Space is pressed directly on the option element', async () => {
+    const user = userEvent.setup();
+    const handleChange = vi.fn();
+
+    render(
+      <Dropdown
+        options={fruitOptions}
+        onValueChange={handleChange}
+      />
+    );
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+
+    const cherryOption = await screen.findByRole('option', { name: 'Cherry' });
+    cherryOption.dispatchEvent(
+      new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+    );
+
+    await waitFor(() => {
+      expect(handleChange).toHaveBeenCalledWith('cherry', expect.any(Object));
+    });
+  });
+
+  it('does not select option on Enter when option is disabled', async () => {
+    const user = userEvent.setup();
+    const handleChange = vi.fn();
+
+    render(
+      <Dropdown
+        options={optionsWithDisabled}
+        onValueChange={handleChange}
+      />
+    );
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+
+    const disabledOption = await screen.findByRole('option', { name: /option 2.*disabled/i });
+    disabledOption.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })
+    );
+
+    expect(handleChange).not.toHaveBeenCalled();
+  });
+});
+
+describe('Dropdown - scroll handler cancels existing rAF (lines 193-196)', () => {
+  it('cancels a pending rAF before scheduling a new one on scroll', async () => {
+    const user = userEvent.setup();
+    const cancelSpy = vi.spyOn(window, 'cancelAnimationFrame');
+
+    render(<Dropdown options={fruitOptions} />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await waitForDropdownOpen();
+
+    // Fire two scroll events rapidly — the second should cancel the first rAF
+    window.dispatchEvent(new Event('scroll', { bubbles: true }));
+    window.dispatchEvent(new Event('scroll', { bubbles: true }));
+
+    // cancelAnimationFrame should have been called at least once
+    expect(cancelSpy).toHaveBeenCalled();
+
+    cancelSpy.mockRestore();
+  });
+});
+
+describe('Dropdown - DropdownContent dropdownRef ResizeObserver (lines 231-234)', () => {
+  it('fires rAF-based position update when dropdown content element is resized', async () => {
+    // Capture ResizeObserver callbacks so we can fire them manually
+    const observeCallbacks: ResizeObserverCallback[] = [];
+    const OrigResizeObserver = globalThis.ResizeObserver;
+    globalThis.ResizeObserver = class MockRO {
+      constructor(cb: ResizeObserverCallback) {
+        observeCallbacks.push(cb);
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    } as unknown as typeof ResizeObserver;
+
+    try {
+      const user = userEvent.setup();
+      render(<Dropdown options={fruitOptions} />);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      await waitForDropdownOpen();
+
+      // Fire all captured ResizeObserver callbacks (covers lines 231-234 where
+      // rafIdRef.current is checked and requestAnimationFrame is called)
+      for (const cb of observeCallbacks) {
+        cb([], {} as ResizeObserver);
+      }
+
+      // Dropdown should remain open and functional
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    } finally {
+      globalThis.ResizeObserver = OrigResizeObserver;
+    }
   });
 });

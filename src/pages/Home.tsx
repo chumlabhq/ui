@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useCallback, useState } from "react";
-import { LogoMark } from "../components/BrandLogo/Logo";
+import { LogoMark } from "../brand/Logo";
 import { BLOG_POSTS } from "./blog/blogData";
 import {
   Accordion,
@@ -63,7 +63,7 @@ const HOME_FAQS = [
   {
     question: "Does it work with Next.js?",
     answer:
-      'Absolutely. All components are compatible with Next.js App Router and Pages Router. Use the "use client" directive for interactive components. Every component includes SSR-safe guards.',
+      'Absolutely. All components are compatible with Next.js App Router and Pages Router. Use the "use client" directive for interactive components. Every component includes SSR safe guards.',
   },
   {
     question: "How do I customize component styles?",
@@ -786,7 +786,7 @@ const Home = () => {
                   Everything you need to ship faster
                 </h2>
                 <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                  Accessible, themeable, SSR-safe components with full
+                  Accessible, themeable, SSR safe components with full
                   TypeScript support. Here are the ones teams reach for first.
                 </p>
               </div>
@@ -1177,7 +1177,8 @@ const Home = () => {
                 <span className="text-xs sm:text-sm text-left w-full sm:w-auto">
                   &copy; {new Date().getFullYear()} Chumlab &middot; MIT License
                   <br className="sm:hidden" />
-                  <span className="hidden sm:inline">&middot; </span>Built with {"☕"} and way too many tabs
+                  <span className="hidden sm:inline">&middot; </span>Built with{" "}
+                  {"☕"} and way too many tabs
                 </span>
                 <a
                   href="mailto:hello@chumlab.com"

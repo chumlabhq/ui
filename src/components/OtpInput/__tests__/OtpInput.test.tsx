@@ -847,6 +847,137 @@ describe("OtpInput", () => {
   });
 });
 
+describe("OtpInput - Multi-character Input Handling", () => {
+  it("handles multi-character value in onChange (auto-fill scenario)", async () => {
+    const onValueChange = vi.fn();
+
+    render(
+      <OtpInput
+        length={4}
+        onValueChange={onValueChange}
+        autoFocusFirst={false}
+      />
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+
+    // Simulate an onChange event with multiple characters (browser auto-fill)
+    const { fireEvent } = await import("@testing-library/react");
+    fireEvent.change(inputs[0], { target: { value: "1234" } });
+
+    expect(onValueChange).toHaveBeenCalledWith("1234");
+  });
+
+  it("calls onComplete when multi-char input fills all slots", async () => {
+    const onComplete = vi.fn();
+    const onValueChange = vi.fn();
+
+    render(
+      <OtpInput
+        length={4}
+        onValueChange={onValueChange}
+        onComplete={onComplete}
+        autoFocusFirst={false}
+      />
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+
+    const { fireEvent } = await import("@testing-library/react");
+    fireEvent.change(inputs[0], { target: { value: "1234" } });
+
+    expect(onComplete).toHaveBeenCalledWith("1234");
+  });
+
+  it("filters invalid chars in multi-char input when validate is provided", async () => {
+    const onValueChange = vi.fn();
+    const validate = (char: string) => /^\d$/.test(char);
+
+    render(
+      <OtpInput
+        length={4}
+        onValueChange={onValueChange}
+        validate={validate}
+        autoFocusFirst={false}
+      />
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+
+    const { fireEvent } = await import("@testing-library/react");
+    // "1a2b" — only digits pass, so "12" fills positions 0 and 1
+    fireEvent.change(inputs[0], { target: { value: "1a2b" } });
+
+    expect(onValueChange).toHaveBeenCalledWith("12  ".replace(/ /g, ""));
+  });
+
+  it("focuses last filled position after multi-char input", async () => {
+    const onValueChange = vi.fn();
+
+    render(
+      <OtpInput
+        length={6}
+        onValueChange={onValueChange}
+        autoFocusFirst={false}
+      />
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+
+    const { fireEvent } = await import("@testing-library/react");
+    // Type 3 chars into input[0] — should move focus to index 2
+    fireEvent.change(inputs[0], { target: { value: "abc" } });
+
+    expect(inputs[2]).toHaveFocus();
+  });
+});
+
+describe("OtpInput - Individual Input Paste Prevention", () => {
+  it("prevents paste on individual input when allowPaste=false", async () => {
+    const onValueChange = vi.fn();
+
+    render(
+      <OtpInput
+        onValueChange={onValueChange}
+        allowPaste={false}
+        autoFocusFirst={false}
+      />
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+
+    // Paste directly on an individual input (not the wrapper)
+    const clipboardData = { getData: () => "123456" };
+    const pasteEvent = new Event("paste", { bubbles: true, cancelable: true });
+    Object.defineProperty(pasteEvent, "clipboardData", { value: clipboardData });
+
+    inputs[0].dispatchEvent(pasteEvent);
+
+    // With allowPaste=false, individual input onPaste calls e.preventDefault()
+    expect(pasteEvent.defaultPrevented).toBe(true);
+    // onValueChange should NOT be called since paste is prevented
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
+
+  it("does not add per-input paste handler when allowPaste=true", () => {
+    render(
+      <OtpInput
+        allowPaste={true}
+        autoFocusFirst={false}
+      />
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+
+    // With allowPaste=true, individual inputs have onPaste=undefined.
+    // The React onPaste prop would not be set, so the attribute is not on the DOM element.
+    // We can verify there's no 'onpaste' attribute on the element.
+    expect(inputs[0]).not.toHaveAttribute("onpaste");
+    // All inputs should still exist and be interactable
+    expect(inputs).toHaveLength(6);
+  });
+});
+
 describe("OtpInputLabel", () => {
   it("renders label text", () => {
     render(<OtpInputLabel label="Verification Code" htmlFor="otp" />);

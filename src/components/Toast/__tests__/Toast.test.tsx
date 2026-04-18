@@ -859,3 +859,15 @@ describe("useToast Hook", () => {
     });
   });
 });
+
+// ─── getDefaultIcon ─────────────────────────────────────────────────────────
+
+import { getDefaultIcon } from "../utils/getDefaultIcon";
+
+describe("getDefaultIcon", () => {
+  it("returns InfoIcon for unknown type (default case)", () => {
+    const icon = getDefaultIcon("unknown" as never);
+    const { container } = render(<>{icon}</>);
+    expect(container.querySelector("svg")).toBeInTheDocument();
+  });
+});

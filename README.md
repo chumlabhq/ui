@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="src/assets/images/logo-dark.png" alt="Chumlab UI" height="60" />
-</p>
-
 <h1 align="center">Chumlab UI</h1>
 
 <p align="center">
@@ -27,7 +23,7 @@
 
 ## What is Chumlab UI?
 
-An open-source React component library with **31 production-ready components** — accessible, fully responsive, and themeable. Built with TypeScript and Tailwind CSS v4. Ships with polished defaults, full dark mode, and zero vendor lock-in.
+An open-source React component library with **30 production-ready components** — accessible, fully responsive, and themeable. Built with TypeScript and Tailwind CSS v4. Ships with polished defaults, full dark mode, and zero vendor lock-in.
 
 ---
 
@@ -35,6 +31,7 @@ An open-source React component library with **31 production-ready components** �
 
 ```tsx
 import { Button, Input, Modal } from "@chumlab/ui";
+import "@chumlab/ui/styles";
 import { useState } from "react";
 
 export default function App() {
@@ -63,17 +60,17 @@ export default function App() {
 
 ## Why Chumlab UI?
 
-| Feature | Chumlab UI | MUI / Ant Design | Radix / Headless UI |
-|---------|-----------|-------------------|---------------------|
-| Polished defaults | Yes | Yes (opinionated) | No (headless) |
-| Fully unstyled mode | Yes | No | Yes |
-| Per-element `classes` overrides | Yes | Theme overrides | BYO |
-| Runtime CSS-in-JS | None | Yes (Emotion) | None |
-| Dark mode | Built-in `dark:` variants | Theme provider | BYO |
-| Responsive (320px+) | Yes, mobile-first | Partial | BYO |
-| SSR-safe | Yes | Yes | Yes |
-| Accessibility | WCAG 2.1 AA | Partial | Strong |
-| Tree-shakeable | Yes | Large bundle | Yes |
+| Feature                         | Chumlab UI                | MUI / Ant Design  | Radix / Headless UI |
+| ------------------------------- | ------------------------- | ----------------- | ------------------- |
+| Polished defaults               | Yes                       | Yes (opinionated) | No (headless)       |
+| Fully unstyled mode             | Yes                       | No                | Yes                 |
+| Per-element `classes` overrides | Yes                       | Theme overrides   | BYO                 |
+| Runtime CSS-in-JS               | None                      | Yes (Emotion)     | None                |
+| Dark mode                       | Built-in `dark:` variants | Theme provider    | BYO                 |
+| Responsive (320px+)             | Yes, mobile-first         | Partial           | BYO                 |
+| SSR safe                        | Yes                       | Yes               | Yes                 |
+| Accessibility                   | WCAG 2.1 AA               | Partial           | Strong              |
+| Tree-shakeable                  | Yes                       | Large bundle      | Yes                 |
 
 **The sweet spot:** production-ready defaults with full escape hatches. Ship fast, then customize any element when your design system demands it.
 
@@ -85,7 +82,34 @@ export default function App() {
 npm install @chumlab/ui
 ```
 
-Peer dependencies: `react >= 18` and `react-dom >= 18`.
+Then import the styles once in your app entry:
+
+```tsx
+import "@chumlab/ui/styles";
+```
+
+### Peer dependencies
+
+| Package | Required | Notes |
+|---------|----------|-------|
+| `react` >= 18 | Yes | |
+| `react-dom` >= 18 | Yes | |
+| `@tanstack/react-table` ^8 | Only for Table | `npm install @tanstack/react-table` |
+| `date-fns` ^4 | Only for DatePicker | `npm install date-fns` |
+
+---
+
+## Import
+
+```tsx
+// Full library
+import { Button, Modal, Table } from "@chumlab/ui";
+
+// Per-component (recommended — only ships what you use)
+import { Button } from "@chumlab/ui/button";
+import { Modal } from "@chumlab/ui/modal";
+import { Table } from "@chumlab/ui/table";
+```
 
 ---
 
@@ -93,58 +117,58 @@ Peer dependencies: `react >= 18` and `react-dom >= 18`.
 
 ### Form
 
-| Component | What it does |
-|-----------|-------------|
-| [Button](https://chumlab.com/button) | Polymorphic (button/a/span/asChild), loading states, icon animations |
-| [Input](https://chumlab.com/input) | Prefix/suffix, icons, clearable, character count |
-| [TextArea](https://chumlab.com/text-area) | Auto-resize, character count |
-| [Checkbox](https://chumlab.com/checkbox) | Checked, unchecked, indeterminate |
-| [RadioButton](https://chumlab.com/radio-button) | Radio group, horizontal/vertical |
-| [Switch](https://chumlab.com/switch) | Toggle with icons and loading |
-| [Slider](https://chumlab.com/slider) | Single/dual thumbs, marks, tooltips |
-| [OtpInput](https://chumlab.com/otp-input) | Grouping, paste support, auto-advance |
-| [DatePicker](https://chumlab.com/date-picker) | Single, range, multi-date, presets, markers |
-| [TimePicker](https://chumlab.com/time-picker) | Dropdown list or analog clock face |
-| [InternationalPhoneInput](https://chumlab.com/international-phone-input) | Country selector, formatting, validation |
+| Component                                                                | What it does                                                         |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| [Button](https://chumlab.com/button)                                     | Polymorphic (button/a/span/asChild), loading states, icon animations |
+| [Input](https://chumlab.com/input)                                       | Prefix/suffix, icons, clearable, character count                     |
+| [TextArea](https://chumlab.com/text-area)                                | Auto-resize, character count                                         |
+| [Checkbox](https://chumlab.com/checkbox)                                 | Checked, unchecked, indeterminate                                    |
+| [RadioButton](https://chumlab.com/radio-button)                          | Radio group, horizontal/vertical                                     |
+| [Switch](https://chumlab.com/switch)                                     | Toggle with icons and loading                                        |
+| [Slider](https://chumlab.com/slider)                                     | Single/dual thumbs, marks, tooltips                                  |
+| [OtpInput](https://chumlab.com/otp-input)                                | Grouping, paste support, auto-advance                                |
+| [DatePicker](https://chumlab.com/date-picker)                            | Single, range, multi-date, presets, markers                          |
+| [TimePicker](https://chumlab.com/time-picker)                            | Dropdown list or analog clock face                                   |
+| [InternationalPhoneInput](https://chumlab.com/international-phone-input) | Country selector, formatting, validation                             |
 
 ### Selection
 
-| Component | What it does |
-|-----------|-------------|
-| [Dropdown](https://chumlab.com/dropdown) | Single-select, async loading, portal |
-| [SearchableDropdown](https://chumlab.com/searchable-dropdown) | Search + single-select, async |
-| [MultiSelectDropdown](https://chumlab.com/multi-select-dropdown) | Chips, checkboxes, async |
-| [MultiSelectSearchableDropdown](https://chumlab.com/multi-select-searchable-dropdown) | Search + multi-select |
-| [CascadingDropdown](https://chumlab.com/cascading-dropdown) | Multi-level nested submenus |
+| Component                                                                             | What it does                         |
+| ------------------------------------------------------------------------------------- | ------------------------------------ |
+| [Dropdown](https://chumlab.com/dropdown)                                              | Single-select, async loading, portal |
+| [SearchableDropdown](https://chumlab.com/searchable-dropdown)                         | Search + single-select, async        |
+| [MultiSelectDropdown](https://chumlab.com/multi-select-dropdown)                      | Chips, checkboxes, async             |
+| [MultiSelectSearchableDropdown](https://chumlab.com/multi-select-searchable-dropdown) | Search + multi-select                |
+| [CascadingDropdown](https://chumlab.com/cascading-dropdown)                           | Multi-level nested submenus          |
 
 ### Layout & Navigation
 
-| Component | What it does |
-|-----------|-------------|
-| [Accordion](https://chumlab.com/accordion) | Expandable sections, single/multiple modes |
-| [TabPanel](https://chumlab.com/tab-panel) | Tabbed content, horizontal/vertical |
-| [Table](https://chumlab.com/table) | Sorting, filtering, selection, pinning, inline editing, infinite scroll (TanStack v8) |
-| [ResizablePanel](https://chumlab.com/resizable-panel) | Draggable split panels |
-| [Breadcrumb](https://chumlab.com/breadcrumb) | Navigation trail with overflow dropdown |
-| [Pagination](https://chumlab.com/pagination) | Page controls, rows-per-page selector |
-| [Stepper](https://chumlab.com/stepper) | Multi-step progress (numbered/icon/dot) |
+| Component                                             | What it does                                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [Accordion](https://chumlab.com/accordion)            | Expandable sections, single/multiple modes                                            |
+| [TabPanel](https://chumlab.com/tab-panel)             | Tabbed content, horizontal/vertical                                                   |
+| [Table](https://chumlab.com/table)                    | Sorting, filtering, selection, pinning, inline editing, infinite scroll (TanStack v8) |
+| [ResizablePanel](https://chumlab.com/resizable-panel) | Draggable split panels                                                                |
+| [Breadcrumb](https://chumlab.com/breadcrumb)          | Navigation trail with overflow dropdown                                               |
+| [Pagination](https://chumlab.com/pagination)          | Page controls, rows-per-page selector                                                 |
+| [Stepper](https://chumlab.com/stepper)                | Multi-step progress (numbered/icon/dot)                                               |
 
 ### Overlay
 
-| Component | What it does |
-|-----------|-------------|
-| [Modal](https://chumlab.com/modal) | Focus trap, nesting, scroll lock |
-| [Drawer](https://chumlab.com/drawer) | Slide-out from any edge, swipe gestures, snap points |
-| [Tooltip](https://chumlab.com/tooltip) | Arrow, truncation detection, rich content |
-| [Toast](https://chumlab.com/toast) | Auto-dismiss, progress bar, action buttons |
+| Component                              | What it does                                         |
+| -------------------------------------- | ---------------------------------------------------- |
+| [Modal](https://chumlab.com/modal)     | Focus trap, nesting, scroll lock                     |
+| [Drawer](https://chumlab.com/drawer)   | Slide-out from any edge, swipe gestures, snap points |
+| [Tooltip](https://chumlab.com/tooltip) | Arrow, truncation detection, rich content            |
+| [Toast](https://chumlab.com/toast)     | Auto-dismiss, progress bar, action buttons           |
 
 ### Display
 
-| Component | What it does |
-|-----------|-------------|
-| [Avatar](https://chumlab.com/avatar) | Image/initials/fallback, status, badges, groups |
-| [CountryFlag](https://chumlab.com/country-flag) | SVG flags from ISO codes |
-| [Loader](https://chumlab.com/loader) | Circular, linear, dot, pulse variants |
+| Component                                       | What it does                                    |
+| ----------------------------------------------- | ----------------------------------------------- |
+| [Avatar](https://chumlab.com/avatar)            | Image/initials/fallback, status, badges, groups |
+| [CountryFlag](https://chumlab.com/country-flag) | SVG flags from ISO codes                        |
+| [Loader](https://chumlab.com/loader)            | Circular, linear, dot, pulse variants           |
 
 ---
 
@@ -169,16 +193,24 @@ Peer dependencies: `react >= 18` and `react-dom >= 18`.
 ```tsx
 import { UNSTYLED_DROPDOWN_CLASSES } from "@chumlab/ui";
 
-<Dropdown options={options} classes={UNSTYLED_DROPDOWN_CLASSES} />
+<Dropdown options={options} classes={UNSTYLED_DROPDOWN_CLASSES} />;
 ```
 
 ### Target states with CSS
 
 ```css
-[data-state="open"]  { /* dropdown is open */ }
-[data-selected]      { /* option is selected */ }
-[data-disabled]      { /* element is disabled */ }
-[data-error]         { /* validation error */ }
+[data-state="open"] {
+  /* dropdown is open */
+}
+[data-selected] {
+  /* option is selected */
+}
+[data-disabled] {
+  /* element is disabled */
+}
+[data-error] {
+  /* validation error */
+}
 ```
 
 ---
@@ -202,7 +234,7 @@ Every stateful component supports both:
 Add `class="dark"` to `<html>` — every component adapts automatically:
 
 ```html
-<html class="dark">
+<html class="dark"></html>
 ```
 
 No theme provider, no configuration, no extra imports.
@@ -224,25 +256,25 @@ Every component ships with:
 
 ## Utilities
 
-| Export | Description |
-|--------|-------------|
-| `cn` | Tailwind-aware class merging (clsx + tailwind-merge) |
-| `Slot` | Composition primitive for `asChild` pattern |
-| `mergeRefs` | Combine multiple React refs |
-| `useControllableState` | Dual controlled/uncontrolled state hook |
-| `useReducedMotion` | Respects `prefers-reduced-motion` |
-| `useIsomorphicLayoutEffect` | SSR-safe `useLayoutEffect` |
-| `SR_ONLY_STYLE` | Screen-reader-only inline styles |
+| Export                      | Description                                          |
+| --------------------------- | ---------------------------------------------------- |
+| `cn`                        | Tailwind-aware class merging (clsx + tailwind-merge) |
+| `Slot`                      | Composition primitive for `asChild` pattern          |
+| `mergeRefs`                 | Combine multiple React refs                          |
+| `useControllableState`      | Dual controlled/uncontrolled state hook              |
+| `useReducedMotion`          | Respects `prefers-reduced-motion`                    |
+| `useIsomorphicLayoutEffect` | SSR safe `useLayoutEffect`                           |
+| `SR_ONLY_STYLE`             | Screen-reader-only inline styles                     |
 
 ---
 
 ## Browser Support
 
-| Browser | Versions |
-|---------|----------|
-| Chrome / Edge | Latest 2 |
-| Firefox | Latest 2 |
-| Safari | Latest 2 |
+| Browser                | Versions |
+| ---------------------- | -------- |
+| Chrome / Edge          | Latest 2 |
+| Firefox                | Latest 2 |
+| Safari                 | Latest 2 |
 | Mobile Chrome / Safari | Latest 2 |
 
 ---
@@ -252,7 +284,7 @@ Every component ships with:
 ```bash
 git clone https://github.com/chumlabhq/ui.git && cd ui && npm install
 npm run dev            # Dev server at localhost:5173
-npm run test:run       # Unit tests (Vitest, 1477 tests)
+npm run test:run       # Unit tests (Vitest, 2992 tests)
 npm run test:e2e       # E2E tests (Playwright)
 npm run build:lib      # Build library
 ```

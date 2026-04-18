@@ -1,6 +1,6 @@
 {
   "components": [
-    "Accordion", "Avatar", "BrandLogo", "Breadcrumb", "Button",
+    "Accordion", "Avatar", "Breadcrumb", "Button",
     "CascadingDropdown", "Checkbox", "CountryFlag", "DatePicker", "Drawer",
     "Dropdown", "Input", "InternationalPhoneInput", "Loader", "Modal",
     "MultiSelectDropdown", "MultiSelectSearchableDropdown", "OtpInput",
@@ -9,10 +9,12 @@
     "TimePicker", "Toast", "Tooltip"
   ],
   "pipeline": {
-    "currentStep": 14,
-    "stepName": "14-readme",
+    "currentStep": 13,
+    "stepName": "13-embeddings",
     "status": "COMPLETE",
-    "allStepsComplete": true
+    "allStepsComplete": true,
+    "rerunDate": "2026-04-18",
+    "lastVerified": "2026-04-18"
   },
   "issues": {
     "blockers": [],
@@ -114,6 +116,40 @@
         "component": "Tooltip",
         "file": "src/components/Tooltip/Tooltip.tsx",
         "description": "Escape key does not stopPropagation - may close parent Modal instead of Tooltip"
+      },
+      {
+        "id": "SSR-CLOCK-002",
+        "type": "ssr",
+        "component": "TimePicker",
+        "file": "src/components/TimePicker/ClockFace.tsx",
+        "description": "window.addEventListener in useEffect without isBrowser guard (safe in practice - useEffect doesn't run on server)"
+      },
+      {
+        "id": "THEME-SHADOW-001",
+        "type": "theme",
+        "component": "Multiple",
+        "description": "Hardcoded rgba shadows in Tooltip constants and DatePicker marker tooltip - invisible in dark mode"
+      },
+      {
+        "id": "THEME-TABLE-STRIPE",
+        "type": "theme",
+        "component": "Table",
+        "file": "src/components/Table/Table.tsx",
+        "description": "Striped row dark mode uses white/[0.02] which is nearly invisible vs bg-gray-50 in light"
+      },
+      {
+        "id": "RESP-INTL-001",
+        "type": "responsive",
+        "component": "InternationalPhoneInput",
+        "file": "src/components/InternationalPhoneInput/constants.ts",
+        "description": "Country select trigger min-w-[130px] may cause overflow on 320px screens"
+      },
+      {
+        "id": "RESP-TABLE-FILTER",
+        "type": "responsive",
+        "component": "Table",
+        "file": "src/components/Table/Table.tsx",
+        "description": "Filter dropdown min-w-[180px] may overflow on 320px screens"
       }
     ]
   },
@@ -231,7 +267,7 @@
   },
   "validation": {
     "typescript": "PASS - 0 errors",
-    "tests": "PASS - 1477/1477 (30/30 files)",
+    "tests": "PASS - 2992/2992 (45 files)",
     "ssr": "PASS - all issues fixed",
     "accessibility": "PASS - all blockers and high issues fixed",
     "theme": "PASS - dark mode complete across all components",

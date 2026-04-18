@@ -1,4 +1,10 @@
-import type { HTMLAttributes, ReactNode, FocusEvent, CSSProperties, KeyboardEvent } from "react";
+import type {
+  HTMLAttributes,
+  ReactNode,
+  FocusEvent,
+  CSSProperties,
+  KeyboardEvent,
+} from "react";
 
 export type AccordionType = "single" | "multiple";
 export type Orientation = "vertical" | "horizontal";
@@ -6,7 +12,13 @@ export type Direction = "ltr" | "rtl";
 export type DataState = "open" | "closed";
 export type AccordionSize = "sm" | "md" | "lg";
 export type AccordionVariant = "default" | "bordered" | "separated" | "flush";
-export type AnimationEasing = "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out" | string;
+export type AnimationEasing =
+  | "linear"
+  | "ease"
+  | "ease-in"
+  | "ease-out"
+  | "ease-in-out"
+  | string;
 
 export interface AnimationCallbacks {
   onOpenStart?: () => void;
@@ -58,7 +70,10 @@ export interface StorageConfig {
   deserialize?: (stored: string) => string[];
 }
 
-interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange" | "dir" | "onKeyDown"> {
+interface AccordionBaseProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "defaultValue" | "onChange" | "dir" | "onKeyDown"
+> {
   orientation?: Orientation;
   dir?: Direction;
   disabled?: boolean;
@@ -77,7 +92,10 @@ interface AccordionBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "defau
   expandOnPrint?: boolean;
   storageKey?: string | StorageConfig;
   onExpandedChange?: (event: AccordionExpandEvent) => void;
-  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>, itemValue: string | null) => void;
+  onKeyDown?: (
+    event: KeyboardEvent<HTMLDivElement>,
+    itemValue: string | null,
+  ) => void;
   preventClose?: (value: string) => boolean | Promise<boolean>;
   preventCloseTimeout?: number;
   onFocusCapture?: (event: FocusEvent<HTMLDivElement>) => void;
@@ -105,7 +123,10 @@ export interface AccordionMultipleProps extends AccordionBaseProps {
 
 export type AccordionProps = AccordionSingleProps | AccordionMultipleProps;
 
-export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "onToggle"> {
+export interface AccordionItemProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "onToggle"
+> {
   value: string;
   disabled?: boolean;
   children: ReactNode;
@@ -120,7 +141,10 @@ export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>,
   "aria-describedby"?: string;
 }
 
-export interface AccordionTriggerProps extends Omit<HTMLAttributes<HTMLButtonElement>, "onClick"> {
+export interface AccordionTriggerProps extends Omit<
+  HTMLAttributes<HTMLButtonElement>,
+  "onClick"
+> {
   children: ReactNode;
   expandedIcon?: ReactNode;
   collapsedIcon?: ReactNode;
@@ -133,7 +157,8 @@ export interface AccordionTriggerProps extends Omit<HTMLAttributes<HTMLButtonEle
   "aria-describedby"?: string;
 }
 
-export interface AccordionContentProps extends HTMLAttributes<HTMLDivElement>, AnimationCallbacks {
+export interface AccordionContentProps
+  extends HTMLAttributes<HTMLDivElement>, AnimationCallbacks {
   children: ReactNode;
   forceMount?: boolean;
   animationDuration?: number;
@@ -201,7 +226,9 @@ export interface UseAccordionStateOptions {
   type: AccordionType;
   defaultValue?: string | string[];
   value?: string | string[];
-  onValueChange?: ((value: string | null) => void) | ((value: string[]) => void);
+  onValueChange?:
+    | ((value: string | null) => void)
+    | ((value: string[]) => void);
   collapsible?: boolean;
   maxExpanded?: number;
   storageKey?: string | StorageConfig;

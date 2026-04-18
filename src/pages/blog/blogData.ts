@@ -7152,7 +7152,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "code",
         language: "typescript",
-        content: "// Inside your blog post page component\nexport default async function BlogPost({ params }: { params: { slug: string } }) {\n  const post = await getPostBySlug(params.slug);\n\n  const jsonLd = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"Article\",\n    headline: post.title,\n    description: post.excerpt,\n    datePublished: post.date,\n    author: {\n      \"@type\": \"Person\",\n      name: \"Aditya Agarwal\",\n    },\n  };\n\n  return (\n    <>\n      <script\n        type=\"application/ld+json\"\n        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}\n      />\n      <article>\n        <h1>{post.title}</h1>\n        <div dangerouslySetInnerHTML={{ __html: post.content }} />\n      </article>\n    </>\n  );\n}",
+        content: "// Inside your blog post page component\nexport default async function BlogPost({ params }: { params: { slug: string } }) {\n  const post = await getPostBySlug(params.slug);\n\n  const jsonLd = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"Article\",\n    headline: post.title,\n    description: post.excerpt,\n    datePublished: post.date,\n    author: {\n      \"@type\": \"Person\",\n      name: \"Author Name\",\n    },\n  };\n\n  return (\n    <>\n      <script\n        type=\"application/ld+json\"\n        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}\n      />\n      <article>\n        <h1>{post.title}</h1>\n        <div dangerouslySetInnerHTML={{ __html: post.content }} />\n      </article>\n    </>\n  );\n}",
       },
       {
         type: "paragraph",

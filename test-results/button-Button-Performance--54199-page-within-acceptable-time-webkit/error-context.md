@@ -1,0 +1,205 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+    - generic:
+        - banner [ref=e5]:
+            - generic [ref=e7]:
+                - link "Chumlab" [ref=e8]:
+                    - /url: /
+                    - img "Chumlab" [ref=e9]
+                - generic [ref=e10]:
+                    - generic [ref=e11]:
+                        - link "Components" [ref=e12]:
+                            - /url: /accordion
+                        - link "Blog" [ref=e13]:
+                            - /url: /blog
+                        - link "FAQ" [ref=e14]:
+                            - /url: /faq
+                        - link "GitHub" [ref=e15]:
+                            - /url: https://github.com/chumlabhq/ui
+                            - img [ref=e16]
+                    - link "Get Started" [ref=e18]:
+                        - /url: /accordion
+        - main [ref=e19]:
+            - generic [ref=e21]:
+                - heading "Ship products in half the" [level=1] [ref=e25]:
+                    - text: Ship products
+                    - generic [ref=e26]: in half the
+                - paragraph [ref=e28]: The best teams don't waste engineering cycles on UI plumbing. Chumlab gives you the same production ready components that top startups use so your team can focus on the product, not the infrastructure.
+                - generic [ref=e29]:
+                    - link "Explore Components" [ref=e30]:
+                        - /url: /accordion
+                        - generic [ref=e34]: Explore Components
+                        - img [ref=e35]
+                    - generic [ref=e37]:
+                        - generic [ref=e38]: $
+                        - generic [ref=e39]: npm install @chumlab/ui
+                        - button "Copy" [ref=e40]:
+                            - img [ref=e41]
+            - generic [ref=e45]:
+                - generic [ref=e46]:
+                    - heading "Stop rebuilding UI from scratch" [level=2] [ref=e47]
+                    - paragraph [ref=e48]: Your team has built the same dropdown three times. The same modal twice. Chumlab gives you production-grade components so you can ship features, not infrastructure.
+                - generic [ref=e49]:
+                    - generic [ref=e50]:
+                        - img [ref=e52]
+                        - heading "Accessibility built in, not bolted on" [level=3] [ref=e54]
+                        - paragraph [ref=e55]: Full keyboard navigation, screen reader announcements, focus trapping, and WCAG 2.1 AA compliance across every component. Pass audits without a single retrofit.
+                    - generic [ref=e56]:
+                        - img [ref=e58]
+                        - heading "Fully themeable, zero lock in" [level=3] [ref=e60]
+                        - paragraph [ref=e61]: Override any element with className props. Go fully unstyled. Use CSS variables for theming. Your design system stays yours we just handle the hard parts.
+                    - generic [ref=e62]:
+                        - img [ref=e64]
+                        - heading "Battle tested for production" [level=3] [ref=e66]
+                        - paragraph [ref=e67]: Controlled and uncontrolled modes that actually work together. SSR safe rendering, proper ref forwarding, TypeScript strict types, and edge case handling so you ship with confidence.
+            - generic [ref=e69]:
+                - generic [ref=e70]:
+                    - heading "Everything you need to ship faster" [level=2] [ref=e71]
+                    - paragraph [ref=e72]: Accessible, themeable, SSR safe components with full TypeScript support. Here are the ones teams reach for first.
+                - generic [ref=e73]:
+                    - link "Table Sorting, pagination, row selection, column pinning, resizing, and infinite scroll. All in one." [ref=e74]:
+                        - /url: /table
+                        - generic [ref=e76]:
+                            - generic [ref=e77]:
+                                - img [ref=e79]
+                                - heading "Table" [level=3] [ref=e81]
+                            - paragraph [ref=e82]: Sorting, pagination, row selection, column pinning, resizing, and infinite scroll. All in one.
+                    - link "Modal Focus trapping, scroll lock, nested stacking, escape handling, and smooth enter/exit animations." [ref=e83]:
+                        - /url: /modal
+                        - generic [ref=e85]:
+                            - generic [ref=e86]:
+                                - img [ref=e88]
+                                - heading "Modal" [level=3] [ref=e90]
+                            - paragraph [ref=e91]: Focus trapping, scroll lock, nested stacking, escape handling, and smooth enter/exit animations.
+                    - link "DatePicker Single date, range, and multi select modes with calendar grid, presets, and keyboard navigation." [ref=e92]:
+                        - /url: /date-picker
+                        - generic [ref=e94]:
+                            - generic [ref=e95]:
+                                - img [ref=e97]
+                                - heading "DatePicker" [level=3] [ref=e99]
+                            - paragraph [ref=e100]: Single date, range, and multi select modes with calendar grid, presets, and keyboard navigation.
+                    - link "Dropdown Single select with search, keyboard nav, portal positioning, and shimmer loading states." [ref=e101]:
+                        - /url: /dropdown
+                        - generic [ref=e103]:
+                            - generic [ref=e104]:
+                                - img [ref=e106]
+                                - heading "Dropdown" [level=3] [ref=e108]
+                            - paragraph [ref=e109]: Single select with search, keyboard nav, portal positioning, and shimmer loading states.
+                    - link "Toast Auto dismiss notifications with stacking, pause on hover, progress bars, and position control." [ref=e110]:
+                        - /url: /toast
+                        - generic [ref=e112]:
+                            - generic [ref=e113]:
+                                - img [ref=e115]
+                                - heading "Toast" [level=3] [ref=e117]
+                            - paragraph [ref=e118]: Auto dismiss notifications with stacking, pause on hover, progress bars, and position control.
+                    - link "Input Text fields with validation, icons, prefix/suffix slots, clearable, character counts, and error states." [ref=e119]:
+                        - /url: /input
+                        - generic [ref=e121]:
+                            - generic [ref=e122]:
+                                - img [ref=e124]
+                                - heading "Input" [level=3] [ref=e126]
+                            - paragraph [ref=e127]: Text fields with validation, icons, prefix/suffix slots, clearable, character counts, and error states.
+                - link "View all components" [ref=e129]:
+                    - /url: /accordion
+                    - generic [ref=e133]: View all components
+                    - img [ref=e134]
+            - generic [ref=e137]:
+                - generic [ref=e138]:
+                    - heading "Got questions?" [level=2] [ref=e139]
+                    - paragraph [ref=e140]: Quick answers to the most common questions about Chumlab UI.
+                - generic [ref=e141]:
+                    - heading "Is Chumlab UI free to use?" [level=3] [ref=e143]:
+                        - button "Is Chumlab UI free to use?" [ref=e144]:
+                            - generic [ref=e145]: Is Chumlab UI free to use?
+                            - img [ref=e148]
+                    - heading "Does it work with Next.js?" [level=3] [ref=e151]:
+                        - button "Does it work with Next.js?" [ref=e152]:
+                            - generic [ref=e153]: Does it work with Next.js?
+                            - img [ref=e156]
+                    - heading "How do I customize component styles?" [level=3] [ref=e159]:
+                        - button "How do I customize component styles?" [ref=e160]:
+                            - generic [ref=e161]: How do I customize component styles?
+                            - img [ref=e164]
+                    - heading "Is Chumlab UI accessible?" [level=3] [ref=e167]:
+                        - button "Is Chumlab UI accessible?" [ref=e168]:
+                            - generic [ref=e169]: Is Chumlab UI accessible?
+                            - img [ref=e172]
+                    - heading "What components are included?" [level=3] [ref=e175]:
+                        - button "What components are included?" [ref=e176]:
+                            - generic [ref=e177]: What components are included?
+                            - img [ref=e180]
+                - link "View all FAQs" [ref=e183]:
+                    - /url: /faq
+                    - generic [ref=e187]: View all FAQs
+                    - img [ref=e188]
+            - generic [ref=e191]:
+                - generic [ref=e192]:
+                    - heading "Learn, build, ship" [level=2] [ref=e193]
+                    - paragraph [ref=e194]: Practical guides on React architecture, performance patterns, and frontend best practices from the team behind Chumlab.
+                - generic [ref=e195]:
+                    - 'link "JavaScript vs TypeScript: Which Should You Learn in 2026? JavaScript 13 min read JavaScript vs TypeScript: Which Should You Learn in 2026? JavaScript is the foundation of frontend development. TypeScript adds type safety on top. Most tutorials compare syntax. This guide tells you when each one actually matters. March 31, 2026 Read more" [ref=e196]':
+                        - /url: /blog/javascript-vs-typescript
+                        - 'img "JavaScript vs TypeScript: Which Should You Learn in 2026?" [ref=e198]'
+                        - generic [ref=e199]:
+                            - generic [ref=e200]:
+                                - generic [ref=e201]: JavaScript
+                                - generic [ref=e202]: 13 min read
+                            - 'heading "JavaScript vs TypeScript: Which Should You Learn in 2026?" [level=3] [ref=e203]'
+                            - paragraph [ref=e204]: JavaScript is the foundation of frontend development. TypeScript adds type safety on top. Most tutorials compare syntax. This guide tells you when each one actually matters.
+                            - generic [ref=e205]:
+                                - generic [ref=e206]: March 31, 2026
+                                - generic [ref=e207]:
+                                    - text: Read more
+                                    - img [ref=e208]
+                    - link "What is the DOM? How Browsers Render Pages Web Fundamentals 13 min read What is the DOM? How Browsers Render Pages You write HTML, CSS, and JavaScript. But what the browser actually uses internally is the DOM. If you understand it, everything in frontend starts to click. March 31, 2026 Read more" [ref=e210]:
+                        - /url: /blog/what-is-the-dom
+                        - img "What is the DOM? How Browsers Render Pages" [ref=e212]
+                        - generic [ref=e213]:
+                            - generic [ref=e214]:
+                                - generic [ref=e215]: Web Fundamentals
+                                - generic [ref=e216]: 13 min read
+                            - heading "What is the DOM? How Browsers Render Pages" [level=3] [ref=e217]
+                            - paragraph [ref=e218]: You write HTML, CSS, and JavaScript. But what the browser actually uses internally is the DOM. If you understand it, everything in frontend starts to click.
+                            - generic [ref=e219]:
+                                - generic [ref=e220]: March 31, 2026
+                                - generic [ref=e221]:
+                                    - text: Read more
+                                    - img [ref=e222]
+                    - link "What is Next.js? Complete Guide with Use Cases React 14 min read What is Next.js? Complete Guide with Use Cases React handles the UI, but not routing, SEO, performance, or backend logic. Next.js takes React and turns it into a complete framework for building production-ready apps. April 1, 2026 Read more" [ref=e224]:
+                        - /url: /blog/what-is-nextjs
+                        - img "What is Next.js? Complete Guide with Use Cases" [ref=e226]
+                        - generic [ref=e227]:
+                            - generic [ref=e228]:
+                                - generic [ref=e229]: React
+                                - generic [ref=e230]: 14 min read
+                            - heading "What is Next.js? Complete Guide with Use Cases" [level=3] [ref=e231]
+                            - paragraph [ref=e232]: React handles the UI, but not routing, SEO, performance, or backend logic. Next.js takes React and turns it into a complete framework for building production-ready apps.
+                            - generic [ref=e233]:
+                                - generic [ref=e234]: April 1, 2026
+                                - generic [ref=e235]:
+                                    - text: Read more
+                                    - img [ref=e236]
+                - link "Read all articles" [ref=e239]:
+                    - /url: /blog
+                    - generic [ref=e243]: Read all articles
+                    - img [ref=e244]
+            - generic [ref=e247]:
+                - generic [ref=e248]:
+                    - img "Chumlab" [ref=e249]
+                    - generic [ref=e250]:
+                        - link "Components" [ref=e251]:
+                            - /url: /accordion
+                        - link "Blog" [ref=e252]:
+                            - /url: /blog
+                        - link "FAQ" [ref=e253]:
+                            - /url: /faq
+                        - link "GitHub" [ref=e254]:
+                            - /url: https://github.com/chumlabhq/ui
+                            - img [ref=e255]
+                - generic [ref=e257]:
+                    - generic [ref=e258]: © 2026 Chumlab · MIT License · Built with ☕ and way too many tabs
+                    - link "💬 Got feedback? Ping us at hello@chumlab.com" [ref=e259]:
+                        - /url: mailto:hello@chumlab.com
+```

@@ -2,19 +2,38 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "path";
+import { readdirSync } from "fs";
+
+// Components excluded from the npm library (site-only)
+const EXCLUDED_COMPONENTS = new Set(["BrandLogo"]);
+
+// Build per-component entry map: { "components/Button/index": "src/components/Button/index.ts", ... }
+function getComponentEntries() {
+  const componentsDir = resolve(__dirname, "src/components");
+  const entries: Record<string, string> = {};
+  for (const name of readdirSync(componentsDir, { withFileTypes: true })) {
+    if (name.isDirectory() && !EXCLUDED_COMPONENTS.has(name.name)) {
+      entries[`components/${name.name}/index`] = resolve(componentsDir, name.name, "index.ts");
+    }
+  }
+  return entries;
+}
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   if (mode === "lib") {
+    const componentEntries = getComponentEntries();
     return {
       plugins: [react(), tailwindcss()],
+      publicDir: false,
       build: {
         sourcemap: false,
+        cssMinify: true,
         lib: {
-          entry: resolve(__dirname, "src/index.ts"),
-          name: "ChumlabUI",
-          formats: ["es", "cjs"],
-          fileName: "chumlab-ui",
+          entry: {
+            index: resolve(__dirname, "src/index.ts"),
+            ...componentEntries,
+          },
         },
         rollupOptions: {
           external: [
@@ -23,13 +42,22 @@ export default defineConfig(({ mode }) => {
             "react/jsx-runtime",
             "@tanstack/react-table",
             "date-fns",
+            "clsx",
+            "tailwind-merge",
           ],
-          output: {
-            globals: {
-              react: "React",
-              "react-dom": "ReactDOM",
+          output: [
+            {
+              format: "es",
+              chunkFileNames: "shared/[name]-[hash].js",
+              assetFileNames: "style[extname]",
             },
-          },
+            {
+              format: "cjs",
+              chunkFileNames: "shared/[name]-[hash].cjs",
+              entryFileNames: "[name].cjs",
+              assetFileNames: "style[extname]",
+            },
+          ],
         },
       },
     };

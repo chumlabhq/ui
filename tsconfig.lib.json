@@ -9,7 +9,8 @@
     "emitDeclarationOnly": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": ["vite/client"]
   },
   "include": ["src/index.ts", "src/components", "src/utils"],
   "exclude": [
@@ -17,6 +18,8 @@
     "src/**/*.test.*",
     "src/**/*.spec.*",
     "src/pages",
+    "src/brand",
+    "src/components/BrandLogo",
     "src/App.tsx",
     "src/main.tsx"
   ]

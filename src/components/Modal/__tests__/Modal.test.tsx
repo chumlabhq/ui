@@ -689,3 +689,66 @@ describe("Modal", () => {
     });
   });
 });
+
+// ─── useModal hook ────────────────────────────────────────────────────────────
+
+import { renderHook } from "@testing-library/react";
+import { useModal } from "../useModal";
+
+describe("useModal", () => {
+  it("throws when used outside Modal", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() => renderHook(() => useModal())).toThrow(
+      "useModal must be used within a Modal",
+    );
+    spy.mockRestore();
+  });
+
+  it("returns context when used inside Modal", () => {
+    let ctx: ReturnType<typeof useModal> | undefined;
+    function Inner() {
+      // eslint-disable-next-line react-hooks/globals
+      ctx = useModal();
+      return null;
+    }
+    render(
+      <Modal open onOpenChange={() => {}}>
+        <Inner />
+      </Modal>,
+    );
+    expect(ctx).toBeDefined();
+    expect(ctx!.close).toBeDefined();
+  });
+});
+
+// ─── Modal icons ──────────────────────────────────────────────────────────────
+
+import { CloseIcon, InfoIcon } from "../icons";
+
+describe("Modal Icons", () => {
+  it("renders CloseIcon with className", () => {
+    const { container } = render(<CloseIcon className="test-class" />);
+    const svg = container.querySelector("svg");
+    expect(svg).toBeInTheDocument();
+    expect(svg).toHaveClass("test-class");
+  });
+
+  it("renders InfoIcon with className", () => {
+    const { container } = render(<InfoIcon className="test-class" />);
+    const svg = container.querySelector("svg");
+    expect(svg).toBeInTheDocument();
+    expect(svg).toHaveClass("test-class");
+  });
+
+  it("renders CloseIcon with default empty className", () => {
+    const { container } = render(<CloseIcon />);
+    const svg = container.querySelector("svg");
+    expect(svg).toBeInTheDocument();
+  });
+
+  it("renders InfoIcon with default empty className", () => {
+    const { container } = render(<InfoIcon />);
+    const svg = container.querySelector("svg");
+    expect(svg).toBeInTheDocument();
+  });
+});

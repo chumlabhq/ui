@@ -1,8 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TabPanel } from "../index";
 import type { Tab } from "../index";
+import { useTabPanelContext } from "../utils/context";
 
 const tabs: Tab[] = [
   { id: "home", label: "Home" },
@@ -789,5 +791,13 @@ describe("TabPanel", () => {
         "vertical",
       );
     });
+  });
+});
+
+describe("useTabPanelContext", () => {
+  it("throws an error when used outside of a TabPanel", () => {
+    expect(() => renderHook(() => useTabPanelContext())).toThrow(
+      "TabPanel compound components must be used within a <TabPanel> component",
+    );
   });
 });

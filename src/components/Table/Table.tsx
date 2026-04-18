@@ -1718,6 +1718,7 @@ function TableInner<TData>(
       footerContent,
       footerClassName,
       enableColumnResizing,
+      caption,
     ],
   );
 

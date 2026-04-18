@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink, Outlet, useLocation, Link } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import logoDark from "../../assets/images/logo-dark.png";
-import logoLight from "../../assets/images/logo-light.png";
+import { LogoMark } from "../../brand/Logo";
 
 interface ComponentItem {
   path: string;
@@ -200,15 +199,14 @@ const Demo = () => {
       <div className="flex items-center mb-8">
         <Link to="/" className="flex items-center group">
           <div className="relative">
-            <img
-              src={isDarkMode ? logoLight : logoDark}
-              alt="Chumlab"
-              width={160}
-              height={160}
-              style={{ width: 160, height: "auto", objectFit: "contain" }}
-            />
+            <LogoMark size={160} variant={isDarkMode ? "light" : "dark"} />
           </div>
         </Link>
+      </div>
+
+      <div className={`mb-6 p-3 rounded-lg text-[12px] leading-relaxed ${isDarkMode ? "bg-white/4 text-gray-400 border border-white/6" : "bg-gray-50 text-gray-500 border border-gray-200"}`}>
+        <p className={`font-medium mb-1.5 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Setup</p>
+        <code className="block whitespace-pre-wrap break-all">{`npm install @chumlab/ui\nimport "@chumlab/ui/styles";`}</code>
       </div>
 
       <nav className="flex flex-col gap-0.5">
@@ -237,13 +235,7 @@ const Demo = () => {
           className={`lg:hidden flex items-center justify-between px-4 py-3 border-b shrink-0 ${sidebarBg} ${borderColor}`}
         >
           <Link to="/" className="flex items-center gap-2">
-            <img
-              src={isDarkMode ? logoLight : logoDark}
-              alt="Chumlab"
-              width={160}
-              height={160}
-              style={{ width: 160, height: "auto", objectFit: "contain" }}
-            />
+            <LogoMark size={160} variant={isDarkMode ? "light" : "dark"} />
           </Link>
           <div className="flex items-center gap-3">
             <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
@@ -274,13 +266,7 @@ const Demo = () => {
         >
           <div className="flex items-center justify-between mb-8">
             <Link to="/" className="flex items-center" onClick={() => setSidebarOpen(false)}>
-              <img
-                src={isDarkMode ? logoLight : logoDark}
-                alt="Chumlab"
-                width={160}
-                height={160}
-                style={{ width: 160, height: "auto", objectFit: "contain" }}
-              />
+              <LogoMark size={160} variant={isDarkMode ? "light" : "dark"} />
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

@@ -1,3 +1,6 @@
+// ─── Library CSS (Tailwind + component animations) ─────────────────────────
+import "./lib.css";
+
 // ─── Accordion ───────────────────────────────────────────────────────────────
 export { default as Accordion } from "./components/Accordion/Accordion";
 export { default as AccordionItem } from "./components/Accordion/components/AccordionItem";
@@ -384,9 +387,6 @@ export type {
   TooltipShadow,
   TooltipWordWrap,
 } from "./components/Tooltip/utils/types";
-
-// ─── Brand ──────────────────────────────────────────────────────────────────
-export { LogoMark, LogoWordmark, LogoFull } from "./components/BrandLogo";
 
 // ─── Utilities ───────────────────────────────────────────────────────────────
 export { cn } from "./utils/cn";

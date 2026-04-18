@@ -258,6 +258,10 @@ const DatePickerDemo = () => {
             >
               <code>{`import { DatePicker } from "@chumlab/ui/date-picker";`}</code>
             </pre>
+            <p className={`mt-3 text-[13px] ${dark ? "text-amber-400/80" : "text-amber-700"}`}>
+              Requires <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-amber-50 border border-amber-200"}`}>date-fns</code> as a peer dependency:{" "}
+              <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-gray-100 border border-gray-200"}`}>npm install date-fns</code>
+            </p>
           </div>
         </div>
       </header>

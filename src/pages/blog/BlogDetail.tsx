@@ -1,6 +1,6 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { LogoMark } from "../../components/BrandLogo/Logo";
+import { LogoMark } from "../../brand/Logo";
 import { getBlogById } from "./blogData";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import type { BlogSection } from "./blogData";

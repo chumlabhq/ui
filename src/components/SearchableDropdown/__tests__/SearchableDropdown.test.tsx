@@ -1085,6 +1085,84 @@ describe('SearchableDropdown - Position & Portal', () => {
   });
 });
 
+describe('SearchableDropdown - lockScroll', () => {
+  it('adds wheel and touchmove listeners when lockScroll=true and dropdown opens', async () => {
+    const addSpy = vi.spyOn(window, 'addEventListener');
+    const removeSpy = vi.spyOn(window, 'removeEventListener');
+    const user = userEvent.setup();
+
+    const { unmount } = render(
+      <SearchableDropdown options={fruitOptions} lockScroll />
+    );
+
+    await user.click(screen.getByRole('combobox'));
+
+    expect(addSpy).toHaveBeenCalledWith(
+      'wheel',
+      expect.any(Function),
+      expect.objectContaining({ capture: true })
+    );
+    expect(addSpy).toHaveBeenCalledWith(
+      'touchmove',
+      expect.any(Function),
+      expect.objectContaining({ capture: true })
+    );
+
+    unmount();
+
+    expect(removeSpy).toHaveBeenCalledWith(
+      'wheel',
+      expect.any(Function),
+      expect.objectContaining({ capture: true })
+    );
+    expect(removeSpy).toHaveBeenCalledWith(
+      'touchmove',
+      expect.any(Function),
+      expect.objectContaining({ capture: true })
+    );
+
+    addSpy.mockRestore();
+    removeSpy.mockRestore();
+  });
+});
+
+describe('SearchableDropdown - Search input Escape/Tab capture', () => {
+  it('closes dropdown when Tab is pressed in the search input', async () => {
+    const user = userEvent.setup();
+
+    render(<SearchableDropdown options={fruitOptions} />);
+
+    await user.click(screen.getByRole('combobox'));
+    await waitForDropdownOpen();
+
+    // Search input is focused automatically; Tab should close the dropdown
+    const searchInput = screen.getByLabelText('Search options');
+    searchInput.focus();
+    await user.keyboard('{Tab}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+
+  it('closes dropdown when Escape is pressed in the search input', async () => {
+    const user = userEvent.setup();
+
+    render(<SearchableDropdown options={fruitOptions} />);
+
+    await user.click(screen.getByRole('combobox'));
+    await waitForDropdownOpen();
+
+    const searchInput = screen.getByLabelText('Search options');
+    searchInput.focus();
+    await user.keyboard('{Escape}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+});
+
 describe('SearchableDropdown - Edge Cases', () => {
   it('should handle empty options array', () => {
     render(<SearchableDropdown options={[]} />);

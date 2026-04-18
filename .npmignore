@@ -1,0 +1,31 @@
+# Source
+src/
+ai/
+coverage/
+e2e/
+public/
+
+# Config
+tsconfig*.json
+vite.config.ts
+vitest.config.ts
+playwright.config.ts
+eslint.config.*
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# Dev files
+*.test.*
+*.spec.*
+__tests__/
+.github/
+.vscode/
+.idea/
+
+# Misc
+.DS_Store
+*.log
+.env*
+CONTRIBUTING.md
+CHANGELOG.md

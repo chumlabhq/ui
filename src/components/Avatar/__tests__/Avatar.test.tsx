@@ -455,6 +455,91 @@ describe("AvatarGroup", () => {
         expect.any(Object),
       );
     });
+
+    it("calls onAvatarClick via keyboard Enter key", async () => {
+      const user = userEvent.setup();
+      const onAvatarClick = vi.fn();
+
+      render(
+        <AvatarGroup onAvatarClick={onAvatarClick}>
+          <Avatar name="John Doe" />
+          <Avatar name="Jane Smith" />
+        </AvatarGroup>
+      );
+
+      const buttons = screen.getAllByRole("button");
+      buttons[0].focus();
+      await user.keyboard("{Enter}");
+
+      expect(onAvatarClick).toHaveBeenCalledWith(
+        { index: 0, name: "John Doe" },
+        expect.any(Object),
+      );
+    });
+
+    it("calls onAvatarClick via keyboard Space key", async () => {
+      const user = userEvent.setup();
+      const onAvatarClick = vi.fn();
+
+      render(
+        <AvatarGroup onAvatarClick={onAvatarClick}>
+          <Avatar name="Alice" />
+          <Avatar name="Bob" />
+        </AvatarGroup>
+      );
+
+      const buttons = screen.getAllByRole("button");
+      buttons[1].focus();
+      await user.keyboard(" ");
+
+      expect(onAvatarClick).toHaveBeenCalledWith(
+        { index: 1, name: "Bob" },
+        expect.any(Object),
+      );
+    });
+  });
+
+  describe("Tooltip Content", () => {
+    it("builds tooltip content from remaining children names", () => {
+      render(
+        <AvatarGroup max={2} showTooltip>
+          <Avatar name="John Doe" />
+          <Avatar name="Jane Smith" />
+          <Avatar name="Bob Lee" />
+          <Avatar name="Alice" />
+        </AvatarGroup>
+      );
+
+      // The surplus count element should be present; tooltip content is computed from remaining children
+      expect(screen.getByText("+2")).toBeInTheDocument();
+    });
+
+    it("builds tooltip content using alt when name not present", () => {
+      render(
+        <AvatarGroup max={1} showTooltip>
+          <Avatar name="John" />
+          <Avatar alt="Jane alt" />
+        </AvatarGroup>
+      );
+
+      expect(screen.getByText("+1")).toBeInTheDocument();
+    });
+
+    it("handles non-element children in remaining when showTooltip is true", () => {
+      // React.Children.toArray wraps strings; this exercises the non-ReactElement branch (line 84)
+      // We pass a fragment with a mix — the string child becomes a ReactElement via toArray
+      // but we can pass {false} or {null} which React.Children.toArray skips,
+      // and a valid React element with no name/alt to exercise the '' fallback on line 82
+      render(
+        <AvatarGroup max={1} showTooltip>
+          <Avatar name="John" />
+          <Avatar />
+        </AvatarGroup>
+      );
+
+      // Avatar with no name/alt still produces a remaining child; tooltip content filters empty strings
+      expect(screen.getByText("+1")).toBeInTheDocument();
+    });
   });
 
   describe("Props Inheritance", () => {

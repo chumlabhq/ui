@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { LogoMark } from "../../components/BrandLogo/Logo";
+import { LogoMark } from "../../brand/Logo";
 import { BLOG_POSTS } from "./blogData";
 import { Pagination } from "../../components/Pagination";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";

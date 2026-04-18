@@ -7,29 +7,216 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chumlab/ui"
+    "url": "https://github.com/chumlabhq/ui"
   },
   "bugs": {
-    "url": "https://github.com/chumlab/ui/issues"
+    "url": "https://github.com/chumlabhq/ui/issues"
   },
-  "homepage": "https://github.com/chumlab/ui#readme",
-  "main": "./dist/chumlab-ui.cjs",
-  "module": "./dist/chumlab-ui.js",
+  "homepage": "https://github.com/chumlabhq/ui#readme",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/chumlab-ui.js",
-      "require": "./dist/chumlab-ui.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
-    "./styles": "./dist/style.css"
+    "./styles": "./dist/style.css",
+    "./accordion": {
+      "types": "./dist/components/Accordion/index.d.ts",
+      "import": "./dist/components/Accordion/index.js",
+      "require": "./dist/components/Accordion/index.cjs"
+    },
+    "./avatar": {
+      "types": "./dist/components/Avatar/index.d.ts",
+      "import": "./dist/components/Avatar/index.js",
+      "require": "./dist/components/Avatar/index.cjs"
+    },
+    "./breadcrumb": {
+      "types": "./dist/components/Breadcrumb/index.d.ts",
+      "import": "./dist/components/Breadcrumb/index.js",
+      "require": "./dist/components/Breadcrumb/index.cjs"
+    },
+    "./button": {
+      "types": "./dist/components/Button/index.d.ts",
+      "import": "./dist/components/Button/index.js",
+      "require": "./dist/components/Button/index.cjs"
+    },
+    "./cascading-dropdown": {
+      "types": "./dist/components/CascadingDropdown/index.d.ts",
+      "import": "./dist/components/CascadingDropdown/index.js",
+      "require": "./dist/components/CascadingDropdown/index.cjs"
+    },
+    "./checkbox": {
+      "types": "./dist/components/Checkbox/index.d.ts",
+      "import": "./dist/components/Checkbox/index.js",
+      "require": "./dist/components/Checkbox/index.cjs"
+    },
+    "./country-flag": {
+      "types": "./dist/components/CountryFlag/index.d.ts",
+      "import": "./dist/components/CountryFlag/index.js",
+      "require": "./dist/components/CountryFlag/index.cjs"
+    },
+    "./date-picker": {
+      "types": "./dist/components/DatePicker/index.d.ts",
+      "import": "./dist/components/DatePicker/index.js",
+      "require": "./dist/components/DatePicker/index.cjs"
+    },
+    "./drawer": {
+      "types": "./dist/components/Drawer/index.d.ts",
+      "import": "./dist/components/Drawer/index.js",
+      "require": "./dist/components/Drawer/index.cjs"
+    },
+    "./dropdown": {
+      "types": "./dist/components/Dropdown/index.d.ts",
+      "import": "./dist/components/Dropdown/index.js",
+      "require": "./dist/components/Dropdown/index.cjs"
+    },
+    "./input": {
+      "types": "./dist/components/Input/index.d.ts",
+      "import": "./dist/components/Input/index.js",
+      "require": "./dist/components/Input/index.cjs"
+    },
+    "./international-phone-input": {
+      "types": "./dist/components/InternationalPhoneInput/index.d.ts",
+      "import": "./dist/components/InternationalPhoneInput/index.js",
+      "require": "./dist/components/InternationalPhoneInput/index.cjs"
+    },
+    "./loader": {
+      "types": "./dist/components/Loader/index.d.ts",
+      "import": "./dist/components/Loader/index.js",
+      "require": "./dist/components/Loader/index.cjs"
+    },
+    "./modal": {
+      "types": "./dist/components/Modal/index.d.ts",
+      "import": "./dist/components/Modal/index.js",
+      "require": "./dist/components/Modal/index.cjs"
+    },
+    "./multi-select-dropdown": {
+      "types": "./dist/components/MultiSelectDropdown/index.d.ts",
+      "import": "./dist/components/MultiSelectDropdown/index.js",
+      "require": "./dist/components/MultiSelectDropdown/index.cjs"
+    },
+    "./multi-select-searchable-dropdown": {
+      "types": "./dist/components/MultiSelectSearchableDropdown/index.d.ts",
+      "import": "./dist/components/MultiSelectSearchableDropdown/index.js",
+      "require": "./dist/components/MultiSelectSearchableDropdown/index.cjs"
+    },
+    "./otp-input": {
+      "types": "./dist/components/OtpInput/index.d.ts",
+      "import": "./dist/components/OtpInput/index.js",
+      "require": "./dist/components/OtpInput/index.cjs"
+    },
+    "./pagination": {
+      "types": "./dist/components/Pagination/index.d.ts",
+      "import": "./dist/components/Pagination/index.js",
+      "require": "./dist/components/Pagination/index.cjs"
+    },
+    "./radio-button": {
+      "types": "./dist/components/RadioButton/index.d.ts",
+      "import": "./dist/components/RadioButton/index.js",
+      "require": "./dist/components/RadioButton/index.cjs"
+    },
+    "./resizable-panel": {
+      "types": "./dist/components/ResizablePanel/index.d.ts",
+      "import": "./dist/components/ResizablePanel/index.js",
+      "require": "./dist/components/ResizablePanel/index.cjs"
+    },
+    "./searchable-dropdown": {
+      "types": "./dist/components/SearchableDropdown/index.d.ts",
+      "import": "./dist/components/SearchableDropdown/index.js",
+      "require": "./dist/components/SearchableDropdown/index.cjs"
+    },
+    "./slider": {
+      "types": "./dist/components/Slider/index.d.ts",
+      "import": "./dist/components/Slider/index.js",
+      "require": "./dist/components/Slider/index.cjs"
+    },
+    "./stepper": {
+      "types": "./dist/components/Stepper/index.d.ts",
+      "import": "./dist/components/Stepper/index.js",
+      "require": "./dist/components/Stepper/index.cjs"
+    },
+    "./switch": {
+      "types": "./dist/components/Switch/index.d.ts",
+      "import": "./dist/components/Switch/index.js",
+      "require": "./dist/components/Switch/index.cjs"
+    },
+    "./table": {
+      "types": "./dist/components/Table/index.d.ts",
+      "import": "./dist/components/Table/index.js",
+      "require": "./dist/components/Table/index.cjs"
+    },
+    "./tab-panel": {
+      "types": "./dist/components/TabPanel/index.d.ts",
+      "import": "./dist/components/TabPanel/index.js",
+      "require": "./dist/components/TabPanel/index.cjs"
+    },
+    "./textarea": {
+      "types": "./dist/components/TextArea/index.d.ts",
+      "import": "./dist/components/TextArea/index.js",
+      "require": "./dist/components/TextArea/index.cjs"
+    },
+    "./time-picker": {
+      "types": "./dist/components/TimePicker/index.d.ts",
+      "import": "./dist/components/TimePicker/index.js",
+      "require": "./dist/components/TimePicker/index.cjs"
+    },
+    "./toast": {
+      "types": "./dist/components/Toast/index.d.ts",
+      "import": "./dist/components/Toast/index.js",
+      "require": "./dist/components/Toast/index.cjs"
+    },
+    "./tooltip": {
+      "types": "./dist/components/Tooltip/index.d.ts",
+      "import": "./dist/components/Tooltip/index.js",
+      "require": "./dist/components/Tooltip/index.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "accordion": ["dist/components/Accordion/index.d.ts"],
+      "avatar": ["dist/components/Avatar/index.d.ts"],
+      "breadcrumb": ["dist/components/Breadcrumb/index.d.ts"],
+      "button": ["dist/components/Button/index.d.ts"],
+      "cascading-dropdown": ["dist/components/CascadingDropdown/index.d.ts"],
+      "checkbox": ["dist/components/Checkbox/index.d.ts"],
+      "country-flag": ["dist/components/CountryFlag/index.d.ts"],
+      "date-picker": ["dist/components/DatePicker/index.d.ts"],
+      "drawer": ["dist/components/Drawer/index.d.ts"],
+      "dropdown": ["dist/components/Dropdown/index.d.ts"],
+      "input": ["dist/components/Input/index.d.ts"],
+      "international-phone-input": ["dist/components/InternationalPhoneInput/index.d.ts"],
+      "loader": ["dist/components/Loader/index.d.ts"],
+      "modal": ["dist/components/Modal/index.d.ts"],
+      "multi-select-dropdown": ["dist/components/MultiSelectDropdown/index.d.ts"],
+      "multi-select-searchable-dropdown": ["dist/components/MultiSelectSearchableDropdown/index.d.ts"],
+      "otp-input": ["dist/components/OtpInput/index.d.ts"],
+      "pagination": ["dist/components/Pagination/index.d.ts"],
+      "radio-button": ["dist/components/RadioButton/index.d.ts"],
+      "resizable-panel": ["dist/components/ResizablePanel/index.d.ts"],
+      "searchable-dropdown": ["dist/components/SearchableDropdown/index.d.ts"],
+      "slider": ["dist/components/Slider/index.d.ts"],
+      "stepper": ["dist/components/Stepper/index.d.ts"],
+      "switch": ["dist/components/Switch/index.d.ts"],
+      "table": ["dist/components/Table/index.d.ts"],
+      "tab-panel": ["dist/components/TabPanel/index.d.ts"],
+      "textarea": ["dist/components/TextArea/index.d.ts"],
+      "time-picker": ["dist/components/TimePicker/index.d.ts"],
+      "toast": ["dist/components/Toast/index.d.ts"],
+      "tooltip": ["dist/components/Tooltip/index.d.ts"]
+    }
   },
   "files": [
     "dist",
+    "llms-full.txt",
     "README.md",
     "LICENSE"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -49,16 +236,26 @@
     "test:e2e:webkit": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project=webkit",
     "test:e2e:mobile": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test --project='Mobile Chrome' --project='Mobile Safari'",
     "test:all": "npm run test:run && npm run test:e2e",
-    "build:lib": "vite build --mode lib && tsc --project tsconfig.lib.json"
+    "clean": "rm -rf dist",
+    "build:lib": "npm run clean && vite build --mode lib && tsc --project tsconfig.lib.json",
+    "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "@tanstack/react-table": "^8.21.3",
+    "date-fns": "^4.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-table": {
+      "optional": true
+    },
+    "date-fns": {
+      "optional": true
+    }
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

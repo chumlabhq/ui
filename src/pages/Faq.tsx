@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { LogoMark } from "../components/BrandLogo/Logo";
+import { LogoMark } from "../brand/Logo";
 import {
   Accordion,
   AccordionItem,
