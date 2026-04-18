@@ -1,7 +1,7 @@
 import { cn } from "../../../utils/cn";
 
 interface SectionProps {
-  title: string;
+  title: React.ReactNode;
   description?: string;
   children: React.ReactNode;
   isDarkMode?: boolean;
