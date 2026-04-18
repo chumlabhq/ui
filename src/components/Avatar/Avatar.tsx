@@ -1,4 +1,4 @@
-import { forwardRef, useState, useCallback, useMemo } from "react";
+import { forwardRef, useState, useCallback, useMemo, useEffect } from "react";
 import type {
   AvatarProps,
   AvatarTooltipConfig,
@@ -27,7 +27,10 @@ import {
 import { useAvatarGroupContext } from "./utils/context";
 import { AvatarShimmer } from "./components/AvatarShimmer";
 import { cn } from "../../utils/cn";
+import { injectStyles } from "../../utils/injectStyles";
 import { isTooltipConfig } from "../../utils/isTooltipConfig";
+
+const AVATAR_DARK_CSS = `.dark [style*="--avatar-dark-bg"]{background-color:var(--avatar-dark-bg)!important;color:var(--avatar-dark-text)!important;border-color:var(--avatar-dark-border)!important}`;
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
@@ -91,6 +94,10 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     },
     ref,
   ) => {
+    useEffect(() => {
+      injectStyles("avatar-dark", AVATAR_DARK_CSS);
+    }, []);
+
     const groupCtx = useAvatarGroupContext();
     const effectiveSize = size ?? groupCtx?.size ?? DEFAULT_SIZE;
     const effectiveShape = shape ?? groupCtx?.shape ?? DEFAULT_SHAPE;

@@ -66,6 +66,7 @@ THEN proceed:
 11. 11-schema.md
 12. 12-ai-index.md
 13. 13-embeddings.md
+14. 14-readme.md
 
 ---
 

@@ -22,7 +22,6 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles": "./dist/style.css",
     "./accordion": {
       "types": "./dist/components/Accordion/index.d.ts",
       "import": "./dist/components/Accordion/index.js",

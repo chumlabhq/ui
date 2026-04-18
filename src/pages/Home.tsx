@@ -515,7 +515,7 @@ const Home = () => {
                   </a>
                 </div>
                 <Link
-                  to="/accordion"
+                  to="/getting-started"
                   className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 sm:ml-2"
                 >
                   Get Started

@@ -14,6 +14,7 @@
 
 <p align="center">
   <a href="https://chumlab.com">Website</a> &middot;
+  <a href="https://chumlab.com/getting-started">Getting Started</a> &middot;
   <a href="https://chumlab.com/accordion">Components</a> &middot;
   <a href="https://chumlab.com/blog">Blog</a> &middot;
   <a href="https://github.com/chumlabhq/ui">GitHub</a>
@@ -31,7 +32,6 @@ An open-source React component library with **30 production-ready components** â
 
 ```tsx
 import { Button, Input, Modal } from "@chumlab/ui";
-import "@chumlab/ui/styles";
 import { useState } from "react";
 
 export default function App() {
@@ -61,16 +61,16 @@ export default function App() {
 ## Why Chumlab UI?
 
 | Feature                         | Chumlab UI                | MUI / Ant Design  | Radix / Headless UI |
-| ------------------------------- | ------------------------- | ----------------- | ------------------- |
-| Polished defaults               | Yes                       | Yes (opinionated) | No (headless)       |
-| Fully unstyled mode             | Yes                       | No                | Yes                 |
-| Per-element `classes` overrides | Yes                       | Theme overrides   | BYO                 |
-| Runtime CSS-in-JS               | None                      | Yes (Emotion)     | None                |
-| Dark mode                       | Built-in `dark:` variants | Theme provider    | BYO                 |
-| Responsive (320px+)             | Yes, mobile-first         | Partial           | BYO                 |
-| SSR safe                        | Yes                       | Yes               | Yes                 |
-| Accessibility                   | WCAG 2.1 AA               | Partial           | Strong              |
-| Tree-shakeable                  | Yes                       | Large bundle      | Yes                 |
+| ------------------------------- | ------------------------- | ------------------ | ------------------- |
+| Polished defaults               | Yes                       | Yes (opinionated)  | No (headless)       |
+| Fully unstyled mode             | Yes                       | No                 | Yes                 |
+| Per-element `classes` overrides | Yes                       | Theme overrides    | BYO                 |
+| Runtime CSS-in-JS               | None                      | Yes (Emotion)      | None                |
+| Dark mode                       | Built-in `dark:` variants | Theme provider     | BYO                 |
+| Responsive (320px+)             | Yes, mobile-first         | Partial            | BYO                 |
+| SSR safe                        | Yes                       | Yes                | Yes                 |
+| Accessibility                   | WCAG 2.1 AA               | Partial            | Strong              |
+| Tree-shakeable                  | Yes                       | Large bundle       | Yes                 |
 
 **The sweet spot:** production-ready defaults with full escape hatches. Ship fast, then customize any element when your design system demands it.
 
@@ -78,15 +78,39 @@ export default function App() {
 
 ## Installation
 
+### Via NPM (recommended)
+
 ```bash
 npm install @chumlab/ui
 ```
 
-Then import the styles once in your app entry:
+Add the library to your Tailwind CSS content sources so its classes are included in your build:
 
-```tsx
-import "@chumlab/ui/styles";
+```css
+@import "tailwindcss";
+
+@source "../node_modules/@chumlab/ui/dist/**/*.js";
 ```
+
+Add the `@source` line right below your existing `@import "tailwindcss"` â€” typically in `app.css`, `globals.css`, or `index.css`.
+
+### Via CDN
+
+For quick prototyping, include the stylesheet and script directly:
+
+```html
+<link
+  href="https://cdn.jsdelivr.net/npm/@chumlab/ui@0.1.0/dist/style.css"
+  rel="stylesheet"
+/>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@chumlab/ui@0.1.0/dist/index.js"
+  type="module"
+></script>
+```
+
+> **Note:** For production, install via NPM to get tree-shaking, TypeScript types, and subpath imports.
 
 ### Peer dependencies
 

@@ -35,6 +35,7 @@ import TextAreaDemo from "./pages/demo/TextAreaDemo";
 import TimePickerDemo from "./pages/demo/TimePickerDemo";
 import ToastDemo from "./pages/demo/ToastDemo";
 import TooltipDemo from "./pages/demo/TooltipDemo";
+import GettingStartedDemo from "./pages/demo/GettingStartedDemo";
 
 const App = () => {
   useScrollToTop();
@@ -46,6 +47,7 @@ const App = () => {
       <Route path="/blog" element={<BlogListing />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route element={<Demo />}>
+        <Route path="getting-started" element={<GettingStartedDemo />} />
         <Route path="accordion" element={<AccordionDemo />} />
         <Route path="avatar" element={<AvatarDemo />} />
         <Route path="breadcrumb" element={<BreadcrumbDemo />} />

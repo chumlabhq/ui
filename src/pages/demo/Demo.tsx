@@ -204,12 +204,16 @@ const Demo = () => {
         </Link>
       </div>
 
-      <div className={`mb-6 p-3 rounded-lg text-[12px] leading-relaxed ${isDarkMode ? "bg-white/4 text-gray-400 border border-white/6" : "bg-gray-50 text-gray-500 border border-gray-200"}`}>
-        <p className={`font-medium mb-1.5 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Setup</p>
-        <code className="block whitespace-pre-wrap break-all">{`npm install @chumlab/ui\nimport "@chumlab/ui/styles";`}</code>
-      </div>
-
       <nav className="flex flex-col gap-0.5">
+        <NavLink
+          to="/getting-started"
+          className={({ isActive }) =>
+            `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
+          }
+        >
+          Getting Started
+        </NavLink>
+        <div className={`my-1.5 border-t ${borderColor}`} />
         {components.map(({ path, displayName }) => (
           <NavLink
             key={path}
@@ -277,6 +281,15 @@ const Demo = () => {
             </button>
           </div>
           <nav className="flex flex-col gap-0.5">
+            <NavLink
+              to="/getting-started"
+              className={({ isActive }) =>
+                `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
+              }
+            >
+              Getting Started
+            </NavLink>
+            <div className={`my-1.5 border-t ${borderColor}`} />
             {components.map(({ path, displayName }) => (
               <NavLink
                 key={path}

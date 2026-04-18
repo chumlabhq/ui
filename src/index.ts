@@ -1,6 +1,3 @@
-// ─── Library CSS (Tailwind + component animations) ─────────────────────────
-import "./lib.css";
-
 // ─── Accordion ───────────────────────────────────────────────────────────────
 export { default as Accordion } from "./components/Accordion/Accordion";
 export { default as AccordionItem } from "./components/Accordion/components/AccordionItem";

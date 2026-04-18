@@ -13,8 +13,8 @@
     "stepName": "13-embeddings",
     "status": "COMPLETE",
     "allStepsComplete": true,
-    "rerunDate": "2026-04-18",
-    "lastVerified": "2026-04-18"
+    "rerunDate": "2026-04-19",
+    "lastVerified": "2026-04-19"
   },
   "issues": {
     "blockers": [],
@@ -253,6 +253,21 @@
       "id": "FIX-KNOWLEDGE",
       "fixed": ["KNOWLEDGE-001"],
       "description": "Created 31 .schema.json files for all components"
+    },
+    {
+      "id": "FIX-SSR-AVATAR-INJECT",
+      "fixed": ["SSR-AVATAR-INJECT-001"],
+      "description": "Moved injectStyles() from render body to useEffect in Avatar for SSR safety"
+    },
+    {
+      "id": "FIX-A11Y-GETTING-STARTED",
+      "fixed": ["A11Y-GETTING-STARTED-001"],
+      "description": "Added role=tablist/tab/tabpanel and aria-selected/aria-label to GettingStartedDemo install method toggle"
+    },
+    {
+      "id": "FIX-STYLES-ELIMINATION",
+      "fixed": ["DX-STYLES-001"],
+      "description": "Eliminated lib.css and ./styles export; Avatar dark CSS injected via JS, consumers use @source directive instead"
     }
   ],
   "regressions": [],
