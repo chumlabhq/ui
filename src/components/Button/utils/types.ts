@@ -153,6 +153,11 @@ export interface ButtonAsChildProps extends ButtonSharedProps {
 /**
  * Polymorphic button props. Renders as `<button>`, `<a>`, `<span>`,
  * or merges into a child element via `asChild`.
+ *
+ * @example
+ * ```tsx
+ * <Button className="bg-blue-600 text-white" onClick={handleClick}>Save</Button>
+ * ```
  */
 export type ButtonProps =
   | ButtonAsButtonProps

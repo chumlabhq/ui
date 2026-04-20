@@ -1,0 +1,68 @@
+# @chumlab/ui — AI Quick Reference
+
+> Read this BEFORE writing any code. These conventions apply to ALL 30 components.
+> For full prop tables and examples, see llms-full.txt in this package.
+
+## Install
+npm install @chumlab/ui
+
+## Tailwind CSS (required)
+@import "tailwindcss";
+@source "../node_modules/@chumlab/ui/dist/**/*.js";
+
+## Import
+import { Button } from "@chumlab/ui/button";
+import { Modal } from "@chumlab/ui/modal";
+
+---
+
+## API Conventions (apply to EVERY component)
+
+### State: value + onValueChange
+Every controlled component uses `value` and `onValueChange`.
+There are no `onChange`, `onSelect`, `onCheckedChange`, `onPageChange`, `onTabChange`, or `onStepChange` props.
+
+- Checkbox: `checked` + `onValueChange` (boolean)
+- Switch: `checked` + `onValueChange` (boolean)
+- Everything else: `value` + `onValueChange`
+
+Uncontrolled: use `defaultValue` (or `defaultChecked` for Checkbox/Switch). Never combine with `value`.
+
+### Open state: open + onOpenChange
+Modal, Drawer, Dropdown, DatePicker, TimePicker — all use `open` + `onOpenChange`.
+There is no `onClose`, `onDismiss`, `onToggle`, or `setOpen` prop.
+
+### Validation: error + errorMessage (two separate props)
+`error` is always a boolean. The message is a separate `errorMessage` prop.
+Same pattern for success: `success` (boolean) + `successMessage`.
+Never pass a string to `error` — it is not `error="message"`.
+
+### Styling: className + classes
+- `className` goes on the root element
+- `classes` is an object for per-slot overrides: `classes={{ trigger: "...", content: "..." }}`
+- `unstyled` strips all default classes
+- Components have NO built-in colors — you provide them via className/classes
+
+### Naming patterns
+| Concept | Prop name | NOT these |
+|---------|-----------|-----------|
+| Current value | `value` | `selected`, `activeStep`, `currentPage`, `activeTab`, `activeItem` |
+| Value callback | `onValueChange` | `onChange`, `onSelect`, `onPageChange`, `onTabChange` |
+| Open state | `open` | `isOpen`, `visible`, `show` |
+| Open callback | `onOpenChange` | `onClose`, `onDismiss`, `onToggle` |
+| Error flag | `error` (boolean) | `error="message"`, `isError`, `hasError` |
+| Error text | `errorMessage` | `error="message"`, `helperText`, `errorText` |
+| Position | `side` (Tooltip) | `placement`, `position` |
+| Direction | `direction` (Drawer) | `side`, `placement`, `anchor` |
+| Character count | `showCount` | `showCharCount`, `showCounter` |
+| OTP grouping | `groupPattern` | `grouping`, `groups`, `chunks` |
+| Country code | `code` (CountryFlag) | `countryCode`, `country`, `iso` |
+| Range slider | `value={[min, max]}` | `range` prop doesn't exist |
+
+### Component categories
+- Form: Button, Input, TextArea, Checkbox, RadioButton, Switch, Slider, OtpInput, DatePicker, TimePicker, InternationalPhoneInput
+- Selection: Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown
+- Layout: Accordion, TabPanel, Table, ResizablePanel
+- Navigation: Breadcrumb, Pagination, Stepper
+- Overlay: Modal, Drawer, Tooltip, Toast
+- Display: Avatar, CountryFlag, Loader

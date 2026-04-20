@@ -20,11 +20,21 @@ export interface TextAreaClasses {
   count?: string;
 }
 
+/**
+ * Props for the TextArea component.
+ *
+ * @example
+ * ```tsx
+ * <TextArea value={text} onValueChange={setText} error errorMessage="Required" />
+ * ```
+ */
 export interface TextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: ReactNode;
   description?: ReactNode;
+  /** Error state boolean. Pass message via `errorMessage`. Do not pass a string here. */
   error?: boolean;
+  /** Error message displayed below the textarea. */
   errorMessage?: ReactNode;
   /** Green success state for validated fields. */
   success?: boolean;
@@ -59,7 +69,7 @@ export interface TextAreaProps
    * HTMLTextAreaElement (so `e.target.name`, `e.target.value` etc. work correctly).
    */
   onClear?: () => void;
-  /** Show character count (requires maxLength to be set). */
+  /** Show character count. Not `showCharCount`. Requires `maxLength`. */
   showCount?: boolean;
   /** Automatically resize height to fit content. When `true`, the textarea grows/shrinks as the user types. */
   autoResize?: boolean;

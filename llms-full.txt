@@ -9,8 +9,9 @@ GitHub: https://github.com/chumlabhq/ui
 ## Install
 npm install @chumlab/ui
 
-## Import styles (required)
-import "@chumlab/ui/styles";
+## Tailwind CSS setup (required)
+In your CSS file where you import Tailwind, add:
+@source "../node_modules/@chumlab/ui/dist/**/*.js";
 
 ## Import patterns
 import { Button } from "@chumlab/ui";           // full library

@@ -8,14 +8,26 @@ export interface DrawerClasses {
   panel?: string;
 }
 
+/**
+ * Props for the Drawer component.
+ *
+ * @example
+ * ```tsx
+ * <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">...</Drawer>
+ * ```
+ */
 export interface DrawerProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "onTransitionEnd"> {
+  /** Whether the drawer is visible (controlled). */
   open?: boolean;
+  /** Whether the drawer is initially open (uncontrolled). */
   defaultOpen?: boolean;
-  /** Callback when the drawer's open state changes. */
+  /** Callback when the drawer's open state changes. Not `onClose`. Receives boolean. */
   onOpenChange?: (open: boolean) => void;
+  /** CSS z-index for the drawer layer. */
   zIndex?: number;
   children?: ReactNode;
+  /** Slide-in direction. Not `side` or `placement`. */
   direction?: DrawerDirection;
   size?: string;
   overlayColor?: string;

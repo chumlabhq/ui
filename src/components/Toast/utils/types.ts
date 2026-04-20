@@ -53,8 +53,17 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
   providerUnstyled?: boolean;
 }
 
+/**
+ * Props for the ToastProvider component.
+ *
+ * @example
+ * ```tsx
+ * <ToastProvider position="top-right"><App /></ToastProvider>
+ * ```
+ */
 export interface ToastProviderProps {
   children: ReactNode;
+  /** Toast position on screen. Default: `"top-right"`. */
   position?: ToastPosition;
   maxToasts?: number;
   containerClassName?: string;

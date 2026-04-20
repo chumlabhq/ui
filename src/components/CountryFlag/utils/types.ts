@@ -24,8 +24,17 @@ export interface CountryFlagGroupClasses {
   count?: string;
 }
 
+/**
+ * Props for the CountryFlag component.
+ *
+ * @example
+ * ```tsx
+ * <CountryFlag code="US" size="md" />
+ * ```
+ */
 export interface CountryFlagProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "onLoad" | "onError"> {
+  /** ISO 3166-1 alpha-2 country code. Not `countryCode` or `country`. */
   code: string;
   size?: CountryFlagSize | number;
   aspectRatio?: number;

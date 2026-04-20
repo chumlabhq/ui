@@ -57,16 +57,29 @@ export interface SliderThumbRenderProps {
   isDisabled: boolean;
 }
 
+/**
+ * Props for the Slider component.
+ *
+ * @example Single value
+ * ```tsx
+ * <Slider value={50} onValueChange={setValue} />
+ * ```
+ *
+ * @example Range
+ * ```tsx
+ * <Slider value={[20, 80]} onValueChange={setRange} />
+ * ```
+ */
 export interface SliderProps
   extends Omit<
     ComponentPropsWithoutRef<"div">,
     "defaultValue" | "onChange" | "value"
   > {
-  /** Current value (number for single, [number, number] for range). */
+  /** Current value (number for single, [min, max] tuple for range). For range mode, pass a tuple. There is no separate `range` prop. Not `currentValue`. */
   value?: SliderValue;
   /** Default uncontrolled value. */
   defaultValue?: SliderValue;
-  /** Fires when the value changes. */
+  /** Fires when the value changes. Not `onChange`. */
   onValueChange?: (value: SliderValue) => void;
   /** Fires when drag starts. */
   onValueCommit?: (value: SliderValue) => void;
@@ -112,6 +125,7 @@ export interface SliderProps
   description?: ReactNode;
   disabled?: boolean;
   required?: boolean;
+  /** Error state flag. Pass message via `errorMessage`, not as a string here. */
   error?: boolean;
   errorMessage?: ReactNode;
   success?: boolean;

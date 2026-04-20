@@ -29,6 +29,14 @@ export interface SwitchClasses {
   loading?: string;
 }
 
+/**
+ * Props for the Switch component.
+ *
+ * @example
+ * ```tsx
+ * <Switch checked={on} onValueChange={setOn} />
+ * ```
+ */
 export interface SwitchProps
   extends Omit<
     ButtonHTMLAttributes<HTMLButtonElement>,

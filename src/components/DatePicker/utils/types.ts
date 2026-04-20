@@ -134,13 +134,27 @@ export interface DatePickerClasses {
   dropdownItemSelected?: string;
 }
 
-/** Shared props for all DatePicker modes. */
+/**
+ * Shared props for all DatePicker modes.
+ *
+ * @example Single date
+ * ```tsx
+ * <DatePicker value={date} onValueChange={setDate} />
+ * ```
+ *
+ * @example Range selection
+ * ```tsx
+ * <DatePicker mode="range" value={range} onValueChange={setRange} />
+ * ```
+ */
 interface BaseDatePickerProps
   extends Omit<
     HTMLAttributes<HTMLDivElement>,
     "children" | "defaultValue" | "onChange" | "value"
   > {
+  /** Fires when the clear button is clicked. */
   onClear?: () => void;
+  /** Fires when the displayed month changes via navigation. */
   onMonthChange?: (month: Date) => void;
 
   // ─── Controlled open state ────────────────────────────────────────
@@ -180,9 +194,13 @@ interface BaseDatePickerProps
   name?: string;
   placeholder?: string;
   disabled?: boolean;
+  /** Error state boolean. Pass message via `errorMessage`. Do not pass a string here. */
   error?: boolean;
+  /** Error message displayed below the trigger. */
   errorMessage?: ReactNode;
+  /** Label rendered above the trigger. */
   label?: ReactNode;
+  /** Helper text rendered below the label. */
   description?: ReactNode;
   success?: boolean;
   successMessage?: ReactNode;
@@ -237,7 +255,7 @@ interface SingleDatePickerProps extends BaseDatePickerProps {
   mode?: "single";
   /** Selected date. */
   value?: Date | null;
-  /** Fires when the selected date changes. */
+  /** Fires when the selected date changes. Not `onChange`. */
   onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
 }
 
@@ -246,7 +264,7 @@ interface RangeDatePickerProps extends BaseDatePickerProps {
   mode: "range";
   /** Selected date range. */
   value?: DateRange | null;
-  /** Fires when the selected range changes. */
+  /** Fires when the selected range changes. Not `onChange`. */
   onValueChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
 }
 
@@ -255,7 +273,7 @@ interface MultipleDatePickerProps extends BaseDatePickerProps {
   mode: "multiple";
   /** Selected dates. */
   value?: Date[] | null;
-  /** Fires when the selected dates change. */
+  /** Fires when the selected dates change. Not `onChange`. */
   onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
 }
 

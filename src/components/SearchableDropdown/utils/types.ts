@@ -29,10 +29,21 @@ export interface SearchableDropdownClasses {
   shimmerItem?: string;
 }
 
+/**
+ * Props for the SearchableDropdown component.
+ *
+ * @example
+ * ```tsx
+ * <SearchableDropdown options={opts} value={val} onValueChange={setVal} />
+ * ```
+ */
 export interface SearchableDropdownProps {
+  /** Array of `{ value: string, label: string }` objects. Not `items`. */
   options?: SearchableDropdownOption[];
+  /** Selected option value string, or null. Not `selected`. */
   value?: string | null;
   defaultValue?: string;
+  /** Fires with `(value, option)` when selection changes. Not `onChange` or `onSelect`. */
   onValueChange?: (value: string | null, option: SearchableDropdownOption | null) => void;
   open?: boolean;
   defaultOpen?: boolean;
@@ -41,7 +52,9 @@ export interface SearchableDropdownProps {
   name?: string;
   placeholder?: ReactNode;
   disabled?: boolean;
+  /** Whether the dropdown is in an error state. Pair with `errorMessage`. */
   error?: boolean;
+  /** Message shown below the dropdown when `error` is true. Not `helperText`. */
   errorMessage?: ReactNode;
   label?: ReactNode;
   description?: ReactNode;
@@ -59,6 +72,7 @@ export interface SearchableDropdownProps {
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
+  /** Async search callback. Fires with the search query string. Return filtered options. Not `onFilter`. */
   onSearch?: (query: string) => Promise<SearchableDropdownOption[]>;
   searchDebounceMs?: number;
   initialOptions?: SearchableDropdownOption[];

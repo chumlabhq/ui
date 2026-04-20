@@ -31,18 +31,30 @@ export interface MultiSelectDropdownClasses {
   moreCount?: string;
 }
 
+/**
+ * Props for the MultiSelectDropdown component.
+ *
+ * @example
+ * ```tsx
+ * <MultiSelectDropdown options={opts} value={selectedValues} onValueChange={setValues} />
+ * ```
+ */
 export interface MultiSelectDropdownProps {
+  /** Array of `{ value: string, label: string }` objects. Not `items`. */
   options?: MultiSelectOption[];
-  /** Selected values. Values not present in options are not shown or submitted; prune when options change. */
+  /** Array of selected value strings. Values not present in options are not shown or submitted; prune when options change. Not `selected`. */
   value?: string[];
   defaultValue?: string[];
+  /** Fires with `(values: string[], options)` when selection changes. Not `onChange`. */
   onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
   /** Placeholder when nothing selected. Simple text or inline content recommended. */
   placeholder?: ReactNode;
   disabled?: boolean;
+  /** Whether the dropdown is in an error state. Pair with `errorMessage`. */
   error?: boolean;
+  /** Message shown below the dropdown when `error` is true. Not `helperText`. */
   errorMessage?: ReactNode;
   label?: ReactNode;
   description?: ReactNode;

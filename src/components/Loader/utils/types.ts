@@ -42,6 +42,14 @@ export interface PulseLoaderClasses {
 
 // ─── Props types ────────────────────────────────────────────────────────────
 
+/**
+ * Props for the CircularLoader component.
+ *
+ * @example
+ * ```tsx
+ * <CircularLoader size={24} color="white" />
+ * ```
+ */
 export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Width and height in pixels. Default: 20 */
   size?: number;

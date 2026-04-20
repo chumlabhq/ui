@@ -158,13 +158,21 @@ export interface ClockFaceProps {
 // Props from HTMLAttributes that conflict with our explicit definitions
 type OmittedHTMLProps = "children" | "color" | "onBlur" | "defaultValue";
 
+/**
+ * Props for the TimePicker component.
+ *
+ * @example
+ * ```tsx
+ * <TimePicker value={time} onValueChange={setTime} />
+ * ```
+ */
 export interface TimePickerProps
   extends Omit<HTMLAttributes<HTMLDivElement>, OmittedHTMLProps> {
   /** Current time value (e.g. "14:30" or "2:30 PM"). */
   value?: string | null;
   /** Default time value for uncontrolled usage. */
   defaultValue?: string | null;
-  /** Called when the selected time changes. */
+  /** Called when the selected time changes. Not `onChange`. */
   onValueChange?: (time: string | null, timeValue: TimeValue | null) => void;
   /** Called when the input loses focus (no event argument, suitable for form libraries). */
   onBlur?: () => void;

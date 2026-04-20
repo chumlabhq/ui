@@ -41,19 +41,36 @@ export interface PaginationClasses {
   pageInfo?: string;
 }
 
+/**
+ * Props for the Pagination component.
+ *
+ * @example
+ * ```tsx
+ * <Pagination totalPages={10} value={page} onValueChange={setPage} />
+ * ```
+ */
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onChange"> {
+  /** Total number of pages. */
   totalPages: number;
+  /** Number of page buttons shown on each side of the current page. Default: 1. */
   siblingCount?: number;
+  /** Number of rows displayed per page (used by page-info display). */
   rowsPerPage?: number;
   rowOptions?: number[];
+  /** Disables all pagination controls. */
   disabled?: boolean;
+  /** Page change callback. Not `onChange` or `onPageChange`. */
   onValueChange?: (page: number) => void;
+  /** Current page number (1-based). Not `currentPage` or `page`. */
   value?: number;
   defaultValue?: number;
   label?: ReactNode;
+  /** Error state flag. Pass message via `errorMessage`, not as a string here. */
   error?: boolean;
   errorMessage?: ReactNode;
+  /** Callback when rows-per-page selection changes. Not `onRowsChange`. */
   onRowsPerPageChange?: (rows: number) => void;
+  /** Show the rows-per-page selector. Default: false. */
   showRowsPerPage?: boolean;
   rowsPerPageLabel?: string;
   showLabel?: string;

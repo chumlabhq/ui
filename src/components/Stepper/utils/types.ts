@@ -100,16 +100,29 @@ export interface StepRenderProps {
   nextStepStatus?: StepStatus;
 }
 
+/**
+ * Props for the Stepper component.
+ *
+ * @example
+ * ```tsx
+ * <Stepper steps={[{ id: 1, label: "Account" }]} value={1} onValueChange={setStep} />
+ * ```
+ */
 export interface StepperProps {
+  /** Array of step definitions. Each step must have a unique `id`. */
   steps: Step[];
+  /** Active step id. Not `activeStep` or `currentStep`. */
   value?: string | number;
   defaultValue?: string | number;
+  /** Step change callback. Not `onChange` or `onStepChange`. */
   onValueChange?: (stepId: string | number) => void;
   beforeStepChange?: (
     nextStepId: string | number,
     currentStepId: string | number,
   ) => boolean;
+  /** Layout direction. Default: "horizontal". */
   orientation?: "horizontal" | "vertical";
+  /** Visual style of step indicators. Default: "numbered". */
   variant?: "numbered" | "icon" | "dot";
   activationMode?: "automatic" | "manual";
   isStepClickable?: (stepId: string | number, status: StepStatus) => boolean;

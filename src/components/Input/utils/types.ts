@@ -22,11 +22,21 @@ export interface InputClasses {
   count?: string;
 }
 
+/**
+ * Props for the Input component.
+ *
+ * @example
+ * ```tsx
+ * <Input value={text} onValueChange={setText} error errorMessage="Required" />
+ * ```
+ */
 export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   label?: ReactNode;
   description?: ReactNode;
+  /** Error state boolean. Pass message via `errorMessage`. Do not pass a string here. */
   error?: boolean;
+  /** Error message displayed below the input. */
   errorMessage?: ReactNode;
   /** Green success state for validated fields. */
   success?: boolean;
@@ -71,7 +81,7 @@ export interface InputProps
    * HTMLInputElement (so `e.target.name`, `e.target.value` etc. work correctly).
    */
   onClear?: () => void;
-  /** Show character count (requires maxLength to be set). */
+  /** Show character count. Not `showCharCount`. Requires `maxLength`. */
   showCount?: boolean;
   loading?: boolean;
   loader?: ReactNode;

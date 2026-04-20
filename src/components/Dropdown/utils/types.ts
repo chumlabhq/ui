@@ -60,10 +60,21 @@ export interface DropdownTriggerRenderProps {
   placeholder: ReactNode;
 }
 
+/**
+ * Props for the Dropdown component.
+ *
+ * @example
+ * ```tsx
+ * <Dropdown options={[{ value: "a", label: "A" }]} value={val} onValueChange={setVal} />
+ * ```
+ */
 export interface DropdownProps {
+  /** Array of `{ value: string, label: string }` objects. Not `items`. */
   options?: DropdownOption[];
+  /** Selected option value string, or null. Not `selected`. */
   value?: string | null;
   defaultValue?: string;
+  /** Fires with `(value, option)` when selection changes. Not `onChange` or `onSelect`. */
   onValueChange?: (value: string | null, option: DropdownOption | null) => void;
   open?: boolean;
   defaultOpen?: boolean;
@@ -72,7 +83,9 @@ export interface DropdownProps {
   name?: string;
   placeholder?: ReactNode;
   disabled?: boolean;
+  /** Whether the dropdown is in an error state. Pair with `errorMessage`. */
   error?: boolean;
+  /** Message shown below the dropdown when `error` is true. Not `helperText`. */
   errorMessage?: ReactNode;
   label?: ReactNode;
   description?: ReactNode;

@@ -70,10 +70,21 @@ export interface CascadingDropdownClasses {
   optionDisabled?: string;
 }
 
+/**
+ * Props for the CascadingDropdown component.
+ *
+ * @example
+ * ```tsx
+ * <CascadingDropdown options={tree} value={val} onValueChange={setVal} />
+ * ```
+ */
 export interface CascadingDropdownProps {
+  /** Tree of cascading options with optional `children` arrays. */
   options: CascadingOption[];
+  /** `CascadingValue` object `{ parentValue: childValue }`. Not a flat string. Not `selected`. */
   value?: CascadingValue;
   defaultValue?: CascadingValue;
+  /** Fires with `(value, path)` when selection changes. Not `onChange`. */
   onValueChange?: (value: CascadingValue, path: CascadingOption[]) => void;
   onLoadChildren?: (parent: CascadingOption) => Promise<CascadingOption[]>;
   /** Called when async child loading fails. */
@@ -89,7 +100,9 @@ export interface CascadingDropdownProps {
   name?: string;
   placeholder?: ReactNode;
   disabled?: boolean;
+  /** Whether the dropdown is in an error state. Pair with `errorMessage`. */
   error?: boolean;
+  /** Message shown below the dropdown when `error` is true. Not `helperText`. */
   errorMessage?: ReactNode;
   label?: ReactNode;
   description?: ReactNode;

@@ -125,6 +125,14 @@ export interface TableClasses {
   searchInput?: string;
 }
 
+/**
+ * Props for the Table component.
+ *
+ * @example
+ * ```tsx
+ * <Table columns={cols} data={rows} sortable />
+ * ```
+ */
 export interface TableProps<TData> {
   columns?: ColumnDef<TData>[];
   data?: TData[];

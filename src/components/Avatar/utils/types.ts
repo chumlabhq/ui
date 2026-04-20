@@ -119,6 +119,14 @@ export interface AvatarImageConfig {
   className?: string;
 }
 
+/**
+ * Props for the Avatar component.
+ *
+ * @example
+ * ```tsx
+ * <Avatar name="John Doe" src="/avatar.jpg" size="lg" />
+ * ```
+ */
 export interface AvatarProps extends Omit<HTMLAttributes<HTMLDivElement>, "onLoad" | "onError"> {
   /** User's display name, used for initials and accessible labels. */
   name?: string;

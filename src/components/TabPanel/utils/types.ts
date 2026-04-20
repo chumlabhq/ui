@@ -42,13 +42,28 @@ export interface TabRenderProps {
   isDisabled: boolean;
 }
 
+/**
+ * Props for the TabPanel component.
+ *
+ * @example
+ * ```tsx
+ * <TabPanel tabs={[{ id: "home", label: "Home" }]} value="home" onValueChange={setTab}>
+ *   {(tab) => <div>{tab.label}</div>}
+ * </TabPanel>
+ * ```
+ */
 export interface TabPanelProps {
+  /** Array of tab definitions. Each tab must have a unique `id` and `label`. */
   tabs: Tab[];
   id?: string;
+  /** Active tab id. Not `activeTab` or `selectedTab`. */
   value?: string;
   defaultValue?: string;
+  /** Tab change callback. Not `onChange` or `onTabChange`. */
   onValueChange?: (tabId: string) => void;
+  /** Renders tab panel content. Pass a render function `(tab) => ReactNode` as children. Not a `renderContent` prop or `content` on tab objects. */
   children?: ReactNode | ((tab: Tab) => ReactNode);
+  /** Layout direction for the tab list. Default: "horizontal". */
   orientation?: Orientation;
   activationMode?: ActivationMode;
   loop?: boolean;

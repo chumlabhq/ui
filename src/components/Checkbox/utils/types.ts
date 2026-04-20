@@ -32,6 +32,14 @@ export interface CheckboxClasses {
   success?: string;
 }
 
+/**
+ * Props for the Checkbox component.
+ *
+ * @example
+ * ```tsx
+ * <Checkbox checked={val} onValueChange={setVal} label="Accept" />
+ * ```
+ */
 export interface CheckboxProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange" | "size" | "defaultChecked"> {
   /** Text label rendered beside the checkbox. */

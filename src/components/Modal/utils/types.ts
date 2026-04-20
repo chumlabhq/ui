@@ -26,10 +26,18 @@ export interface ModalClasses {
   body?: string;
 }
 
+/**
+ * Props for the Modal component.
+ *
+ * @example
+ * ```tsx
+ * <Modal open={isOpen} onOpenChange={setIsOpen} title="Confirm">...</Modal>
+ * ```
+ */
 export interface ModalProps {
   /** Whether the modal is visible (controlled). */
   open?: boolean;
-  /** Callback when the modal's open state changes (close button, overlay click, Escape key). */
+  /** Callback when the modal's open state changes. Not `onClose`. Receives boolean. */
   onOpenChange?: (open: boolean) => void;
   /** Whether the modal is initially open (uncontrolled). Default: `false`. */
   defaultOpen?: boolean;

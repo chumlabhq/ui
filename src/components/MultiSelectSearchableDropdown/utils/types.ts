@@ -40,16 +40,29 @@ export interface MultiSelectSearchableDropdownClasses {
   moreCount?: string;
 }
 
+/**
+ * Props for the MultiSelectSearchableDropdown component.
+ *
+ * @example
+ * ```tsx
+ * <MultiSelectSearchableDropdown options={opts} value={selectedValues} onValueChange={setValues} />
+ * ```
+ */
 export interface MultiSelectSearchableDropdownProps {
+  /** Array of `{ value: string, label: string }` objects. Not `items`. */
   options?: MultiSelectOption[];
+  /** Array of selected value strings. Not `selected`. */
   value?: string[];
   defaultValue?: string[];
+  /** Fires with `(values: string[], options)` when selection changes. Not `onChange`. */
   onValueChange?: (values: string[], options: MultiSelectOption[]) => void;
   id?: string;
   name?: string;
   placeholder?: ReactNode;
   disabled?: boolean;
+  /** Whether the dropdown is in an error state. Pair with `errorMessage`. */
   error?: boolean;
+  /** Message shown below the dropdown when `error` is true. Not `helperText`. */
   errorMessage?: ReactNode;
   label?: ReactNode;
   description?: ReactNode;
@@ -65,6 +78,7 @@ export interface MultiSelectSearchableDropdownProps {
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
+  /** Async search callback. Fires with the search query string. Return filtered options. Not `onFilter`. */
   onSearch?: (query: string) => Promise<MultiSelectOption[]>;
   searchDebounceMs?: number;
   initialOptions?: MultiSelectOption[];

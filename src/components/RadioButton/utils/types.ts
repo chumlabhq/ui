@@ -39,6 +39,16 @@ export interface RadioGroupClasses {
   success?: string;
 }
 
+/**
+ * Props for an individual RadioButton within a RadioGroup.
+ *
+ * @example
+ * ```tsx
+ * <RadioGroup value={sel} onValueChange={setSel}>
+ *   <RadioButton value="a" label="A" />
+ * </RadioGroup>
+ * ```
+ */
 export interface RadioButtonProps extends Omit<HTMLAttributes<HTMLLabelElement>, "onChange"> {
   /** Unique value for this radio option. */
   value: string;
@@ -58,12 +68,22 @@ export interface RadioButtonProps extends Omit<HTMLAttributes<HTMLLabelElement>,
   classes?: RadioButtonClasses;
 }
 
+/**
+ * Props for the RadioGroup container.
+ *
+ * @example
+ * ```tsx
+ * <RadioGroup value={sel} onValueChange={setSel}>
+ *   <RadioButton value="a" label="A" />
+ * </RadioGroup>
+ * ```
+ */
 export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
   /** Currently selected value. */
   value?: string;
   /** Initial selected value for uncontrolled usage. */
   defaultValue?: string;
-  /** Fires when the selected value changes. */
+  /** Fires when the selected value changes. Not `onChange`. */
   onValueChange?: (value: string) => void;
   /** Fires when a radio receives focus. */
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;

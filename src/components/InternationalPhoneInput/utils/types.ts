@@ -65,6 +65,18 @@ export interface InternationalPhoneInputClasses {
   description?: string;
 }
 
+/**
+ * Props for the InternationalPhoneInput component.
+ *
+ * @example
+ * ```tsx
+ * <InternationalPhoneInput
+ *   value={{ countryCode: "US", phoneNumber: "5551234567" }}
+ *   onValueChange={(data) => setPhone(data)}
+ *   defaultCountry="US"
+ * />
+ * ```
+ */
 export interface InternationalPhoneInputProps
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
@@ -81,7 +93,7 @@ export interface InternationalPhoneInputProps
   value?: PhoneNumberValue;
   /** Default phone value for uncontrolled usage. */
   defaultValue?: PhoneNumberValue;
-  /** Fires when the phone number changes, providing full validation data. */
+  /** Fires when the phone number changes, providing full validation data. Not `onChange`. */
   onValueChange?: (data: PhoneNumberData) => void;
   onCountryChange?: (country: CountryOption) => void;
   defaultCountry?: string;

@@ -105,22 +105,47 @@ interface AccordionBaseProps extends Omit<
   announceExpanded?: boolean;
 }
 
+/**
+ * Single-select accordion props.
+ *
+ * @example
+ * ```tsx
+ * <Accordion type="single" value={expanded} onValueChange={setExpanded} collapsible>...</Accordion>
+ * ```
+ */
 export interface AccordionSingleProps extends AccordionBaseProps {
   type: "single";
+  /** Allow collapsing the active item. */
   collapsible?: boolean;
+  /** Expanded item value. Not `activeItem` or `expandedItem`. */
   value?: string;
+  /** Initial expanded item value for uncontrolled usage. */
   defaultValue?: string;
+  /** Fires when the expanded item changes. Not `onChange`. */
   onValueChange?: (value: string | null) => void;
 }
 
+/**
+ * Multi-select accordion props.
+ *
+ * @example
+ * ```tsx
+ * <Accordion type="multiple" value={expandedItems} onValueChange={setExpandedItems}>...</Accordion>
+ * ```
+ */
 export interface AccordionMultipleProps extends AccordionBaseProps {
   type: "multiple";
+  /** Maximum number of simultaneously expanded items. */
   maxExpanded?: number;
+  /** Expanded item values. Not `activeItems` or `expandedItems`. */
   value?: string[];
+  /** Initial expanded item values for uncontrolled usage. */
   defaultValue?: string[];
+  /** Fires when the expanded items change. Not `onChange`. */
   onValueChange?: (value: string[]) => void;
 }
 
+/** Accordion props — discriminated by `type`. */
 export type AccordionProps = AccordionSingleProps | AccordionMultipleProps;
 
 export interface AccordionItemProps extends Omit<

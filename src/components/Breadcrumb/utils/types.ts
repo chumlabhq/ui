@@ -47,6 +47,14 @@ export interface BreadcrumbClasses {
 
 export type DropdownPosition = "top" | "bottom" | "left" | "right";
 
+/**
+ * Props for the Breadcrumb component.
+ *
+ * @example
+ * ```tsx
+ * <Breadcrumb items={[{ id: "home", label: "Home" }]} />
+ * ```
+ */
 export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "className" | "style" | "aria-label"> {
   items: BreadcrumbItem[];
   maxVisibleItems?: number;

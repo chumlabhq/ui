@@ -5,6 +5,7 @@
   "description": "A production-grade React 19 component library built with TypeScript and Tailwind CSS v4.",
   "keywords": ["react", "components", "ui", "design-system", "tailwindcss", "typescript", "accessible"],
   "license": "MIT",
+  "llms": "./llms-full.txt",
   "repository": {
     "type": "git",
     "url": "https://github.com/chumlabhq/ui"
@@ -209,6 +210,7 @@
   },
   "files": [
     "dist",
+    "llms.txt",
     "llms-full.txt",
     "README.md",
     "LICENSE"
