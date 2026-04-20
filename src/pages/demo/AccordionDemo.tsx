@@ -159,8 +159,6 @@ const AccordionDemo = () => {
   ]);
   const [nextId, setNextId] = useState(3);
 
-  // Shimmer loading
-  const [isLoading, setIsLoading] = useState(true);
 
   // Toggle log
   const [toggleLog, setToggleLog] = useState<string[]>([]);

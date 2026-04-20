@@ -455,7 +455,7 @@ import { Button, ButtonGroup } from "@chumlab/ui/button";
 | `as` | `"button" \| "a" \| "span"` | `"button"` | Rendered element type. |
 | `asChild` | `boolean` | `false` | Merge props onto child element via Slot. |
 | `className` | `string` | — | Visual styling classes (colors, shadows, borders). |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Emits data-size for CSS targeting. |
+| `size` | `"sm" \| "md" \| "lg"` | — | Emits data-size for CSS targeting. No built-in sizing. |
 | `disabled` | `boolean` | `false` | Disables interaction. |
 | `loading` | `boolean` | `false` | Shows loader, disables button. |
 | `loadingText` | `ReactNode` | — | Text shown during loading. |

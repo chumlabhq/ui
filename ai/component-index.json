@@ -51,7 +51,7 @@
       "name": "Button",
       "category": "form",
       "description": "Polymorphic button with loading states, icons, and tooltip support",
-      "props": ["as", "asChild", "loading", "loadingText", "startIcon", "endIcon", "iconAnimation", "tooltip", "disabled", "classes"],
+      "props": ["as", "asChild", "size", "disabled", "startIcon", "endIcon", "loading", "loadingText", "loaderPosition", "loaderSize", "loader", "fullWidth", "iconAnimation", "animateOnHover", "animateIcon", "reduceMotion", "tooltip", "tooltipProps", "classes", "unstyled", "className"],
       "states": ["idle", "loading", "disabled", "hover", "focus", "active"],
       "a11y": { "role": "button", "keyboard": ["Enter", "Space"] },
       "responsive": true,

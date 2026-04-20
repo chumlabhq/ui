@@ -108,7 +108,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `as` | `"button" \| "a" \| "span"` | `"button"` | Rendered element type. |
 | `asChild` | `boolean` | `false` | Merge props onto child element via Slot. |
 | `className` | `string` | — | Visual styling classes (colors, shadows, borders). |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Emits `data-size` for CSS targeting. |
+| `size` | `"sm" \| "md" \| "lg"` | — | Emits `data-size` for CSS targeting. No built-in sizing. |
 | `disabled` | `boolean` | `false` | Disables interaction. |
 | `loading` | `boolean` | `false` | Shows loader, disables button. |
 | `loadingText` | `ReactNode` | — | Text shown during loading (replaces children). |
@@ -327,6 +327,44 @@ const [saving, setSaving] = useState(false);
 | Animation runs continuously | `animateOnHover={false}` | Set `animateOnHover={true}` (default) for hover-only. |
 | Loading spinner not visible | Custom `className` hides it | Check `loader` slot classes. Default spinner is 16px white. |
 | `as="span"` not keyboard accessible | Missing aria-label | Add `aria-label` — dev warning should appear in console. |
+
+---
+
+## Anti-patterns
+
+```tsx
+// ❌ DON'T: Use as="a" without href
+<Button as="a" className="...">Link</Button>
+// ✅ DO: Always provide href with as="a"
+<Button as="a" href="/page" className="...">Link</Button>
+
+// ❌ DON'T: Nest interactive elements inside Button
+<Button><a href="/page">Link inside button</a></Button>
+// ✅ DO: Use as="a" for link-style buttons
+<Button as="a" href="/page">Link</Button>
+
+// ❌ DON'T: Use color alone for destructive actions
+<Button className="bg-red-500 text-white">Delete</Button>
+// ✅ DO: Include a warning icon or confirmation
+<Button className="bg-red-500 text-white" startIcon={<TrashIcon />}>Delete</Button>
+
+// ❌ DON'T: Use icon-only span button without aria-label
+<Button as="span" startIcon={<CloseIcon />} />
+// ✅ DO: Always provide aria-label for icon-only buttons
+<Button as="span" startIcon={<CloseIcon />} aria-label="Close" />
+```
+
+---
+
+## AI Instructions
+
+- **Always provide `className`** — Button has no built-in colors. Without it, you get a transparent, unstyled button.
+- **Use `as="a"` for navigation**, `as="button"` for actions. Never use `as="span"` unless the element must be non-focusable-by-default.
+- **Always add `aria-label`** to icon-only buttons.
+- **`size` doesn't change dimensions** — it only emits `data-size`. Use `className` for sizing or target `[data-size="sm"]` in CSS.
+- **Safe defaults:** `<Button className="bg-blue-600 text-white hover:bg-blue-700 ...">Label</Button>`.
+- **Use `loading` + `loadingText`** for async actions. The button auto-disables during loading.
+- **`disabled` vs `loading`:** both disable interaction, but `loading` shows a spinner and sets `aria-busy`.
 
 ---
 

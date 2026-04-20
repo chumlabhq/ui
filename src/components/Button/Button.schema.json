@@ -21,8 +21,7 @@
     "size": {
       "type": "string",
       "enum": ["sm", "md", "lg"],
-      "description": "Size variant.",
-      "default": "md"
+      "description": "Emits data-size attribute for CSS targeting. No built-in sizing."
     },
     "disabled": {
       "type": "boolean",
