@@ -423,6 +423,48 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 
 ---
 
+## Anti-patterns
+
+```tsx
+// ❌ DON'T: Combine value + defaultValue
+<Accordion type="single" value={val} defaultValue="item-1" />
+
+// ❌ DON'T: Use collapsible with type="multiple" (it's ignored)
+<Accordion type="multiple" collapsible />
+
+// ❌ DON'T: Use storageKey with controlled mode (value prop)
+<Accordion type="single" value={val} storageKey="my-key" />
+
+// ❌ DON'T: Override one class slot and expect others to remain
+// classes replaces the entire slot, it does NOT merge with defaults
+<Accordion classes={{ trigger: "my-trigger" }} />
+// ✅ DO: Include all needed classes in the override
+<Accordion classes={{ trigger: "flex w-full items-center px-4 py-4 my-trigger" }} />
+
+// ❌ DON'T: Use maxExpanded with type="single"
+<Accordion type="single" maxExpanded={3} />
+
+// ❌ DON'T: Forget onValueChange with controlled value
+<Accordion type="single" value={val} />
+// ✅ DO: Always pair value with onValueChange
+<Accordion type="single" value={val} onValueChange={setVal} />
+```
+
+---
+
+## AI Instructions
+
+- **Always set `type`** — it's required. Use `"single"` for FAQ/settings, `"multiple"` for checklists/filters.
+- **Always add `collapsible`** to `type="single"` unless you intentionally want one item always open.
+- **Use `defaultValue` for uncontrolled**, `value` + `onValueChange` for controlled. Never mix.
+- **Don't partially override `classes`** — each slot replaces the default entirely. If you override `trigger`, include layout classes too.
+- **Use `unstyled` for full custom styling** rather than fighting defaults.
+- **Provide meaningful `value` strings** on AccordionItem — they're used for storage, controlled state, and callbacks.
+- **Set `headingLevel`** appropriately for your page's heading hierarchy (default is `h3`).
+- **Safe defaults:** `type="single" collapsible defaultValue="first-item"` works for most use cases.
+
+---
+
 ## Demo Reference
 
 **File:** `src/pages/demo/AccordionDemo.tsx`
@@ -437,7 +479,7 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Visual variants | `title="Variants"` | default, bordered, separated, flush |
 | Size presets | `title="Sizes"` | sm, md, lg side by side |
 | Custom icons | `title="Custom Icons"` | `expandedIcon`, `collapsedIcon`, `iconPosition`, `iconAnimation` |
-| Trigger slots | `title="Left / Right Slots"` | `leftSlot`, `rightSlot`, `subtitle` |
+| Trigger slots | `title="Subtitles & Slots"` | `leftSlot`, `rightSlot`, `subtitle` |
 | Disabled states | `title="Disabled"` | Per-item and global disabled |
 | Imperative API | `title="Ref API"` | `expandAll`, `collapseAll`, `toggle`, `focusItem` |
 | Animation config | `title="Animation"` | Custom duration, easing, lifecycle callbacks |

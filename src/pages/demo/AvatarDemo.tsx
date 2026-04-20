@@ -55,7 +55,7 @@ const getClasses = (dark: boolean) => ({
   note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
   fallbackBg: dark ? "bg-gray-700" : "bg-gray-100",
   stateDisplay: `text-sm font-mono ${dark ? "text-gray-400" : "text-gray-600"}`,
-  darkBg: `p-4 rounded-lg ${dark ? "bg-gray-900" : "bg-gray-900"}`,
+  darkBg: `p-4 rounded-lg ${dark ? "bg-gray-900" : "bg-gray-800"}`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -204,6 +204,37 @@ const AvatarDemo = () => {
               colors={c.subtleColors}
             />
             <p className={`text-xs mt-2 ${c.label}`}>maxInitials=3</p>
+          </div>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Fallback Content ──────────────────────────────────────────── */}
+      <Section
+        title="Fallback Content"
+        description="Use the fallback prop to show custom content (icon, emoji, etc.) when no image or name is provided."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="inline">
+          <div className="text-center">
+            <Avatar fallback={<span>?</span>} />
+            <p className={`text-xs mt-2 ${c.label}`}>text fallback</p>
+          </div>
+          <div className="text-center">
+            <Avatar
+              fallback={
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              }
+            />
+            <p className={`text-xs mt-2 ${c.label}`}>icon fallback</p>
+          </div>
+          <div className="text-center">
+            <Avatar
+              src="data:image/gif;base64,invalid"
+              fallback={<span>!</span>}
+            />
+            <p className={`text-xs mt-2 ${c.label}`}>image error fallback</p>
           </div>
         </DemoWrapper>
       </Section>
@@ -863,70 +894,90 @@ const AvatarDemo = () => {
       {/* ─── Loading & Shimmer ──────────────────────────────────────────── */}
       <Section
         title="Loading & Shimmer"
-        description="Show shimmer placeholders while data loads. Toggle to see the transition."
+        description="Shimmer placeholders for avatars and groups. Use AvatarShimmer, AvatarGroupShimmer, or the loading prop directly on Avatar."
         isDarkMode={dark}
       >
-        <div className="mb-3">
-          <button className={c.btn} onClick={() => setIsLoading(!isLoading)}>
-            {isLoading ? "Show Content" : "Show Shimmer"}
-          </button>
-        </div>
-        <DemoWrapper isDarkMode={dark} layout="inline">
-          {isLoading ? (
-            <>
-              <AvatarShimmer size="sm" />
-              <AvatarShimmer />
-              <AvatarShimmer size="lg" />
-              <AvatarShimmer shape="rounded" />
-              <AvatarShimmer shape="square" />
-              <AvatarShimmer animate={false} />
-            </>
-          ) : (
-            <>
-              <Avatar
-                name="Alice"
-                size="sm"
-                autoColor
-                colors={c.subtleColors}
-              />
-              <Avatar name="Bob" autoColor colors={c.subtleColors} />
-              <Avatar
-                name="Charlie"
-                size="lg"
-                autoColor
-                colors={c.subtleColors}
-              />
-              <Avatar
-                name="Diana"
-                shape="rounded"
-                autoColor
-                colors={c.subtleColors}
-              />
-              <Avatar
-                name="Edward"
-                shape="square"
-                autoColor
-                colors={c.subtleColors}
-              />
-              <Avatar name="Fiona" autoColor colors={c.subtleColors} />
-            </>
-          )}
-        </DemoWrapper>
-        <div className="space-y-4 mt-4">
+        <div className="space-y-4">
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Group shimmer with count badge (showCount)
+              Toggle shimmer / content
             </p>
+            <div className="mb-3">
+              <button className={c.btn} onClick={() => setIsLoading(!isLoading)}>
+                {isLoading ? "Show Content" : "Show Shimmer"}
+              </button>
+            </div>
             <DemoWrapper isDarkMode={dark} layout="inline">
-              <AvatarGroupShimmer count={3} showCount />
-              <span className={`ml-3 text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>
-                3 avatars + 1 count placeholder
-              </span>
+              {isLoading ? (
+                <>
+                  <AvatarShimmer size="sm" />
+                  <AvatarShimmer />
+                  <AvatarShimmer size="lg" />
+                  <AvatarShimmer shape="rounded" />
+                  <AvatarShimmer shape="square" />
+                  <AvatarShimmer animate={false} />
+                </>
+              ) : (
+                <>
+                  <Avatar name="Alice" size="sm" autoColor colors={c.subtleColors} />
+                  <Avatar name="Bob" autoColor colors={c.subtleColors} />
+                  <Avatar name="Charlie" size="lg" autoColor colors={c.subtleColors} />
+                  <Avatar name="Diana" shape="rounded" autoColor colors={c.subtleColors} />
+                  <Avatar name="Edward" shape="square" autoColor colors={c.subtleColors} />
+                  <Avatar name="Fiona" autoColor colors={c.subtleColors} />
+                </>
+              )}
             </DemoWrapper>
           </div>
           <div>
             <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Ring color matching dark background
+              loading prop on Avatar
+            </p>
+            <DemoWrapper isDarkMode={dark} layout="inline">
+              <div className="text-center">
+                <Avatar loading />
+                <p className={`text-xs mt-2 ${c.label}`}>default</p>
+              </div>
+              <div className="text-center">
+                <Avatar loading size="lg" />
+                <p className={`text-xs mt-2 ${c.label}`}>large</p>
+              </div>
+              <div className="text-center">
+                <Avatar loading shape="rounded" />
+                <p className={`text-xs mt-2 ${c.label}`}>rounded</p>
+              </div>
+              <div className="text-center">
+                <Avatar loading shape="square" />
+                <p className={`text-xs mt-2 ${c.label}`}>square</p>
+              </div>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              AvatarGroupShimmer options
+            </p>
+            <DemoWrapper isDarkMode={dark} layout="inline">
+              <div className="text-center">
+                <AvatarGroupShimmer count={3} showCount />
+                <p className={`text-xs mt-2 ${c.label}`}>showCount</p>
+              </div>
+              <div className="text-center">
+                <AvatarGroupShimmer count={4} size="lg" shape="rounded" />
+                <p className={`text-xs mt-2 ${c.label}`}>large + rounded</p>
+              </div>
+              <div className="text-center">
+                <AvatarGroupShimmer count={3} spacing={-16} />
+                <p className={`text-xs mt-2 ${c.label}`}>custom spacing</p>
+              </div>
+              <div className="text-center">
+                <AvatarGroupShimmer count={3} animate={false} />
+                <p className={`text-xs mt-2 ${c.label}`}>no animation</p>
+              </div>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Ring color on dark background
             </p>
             <DemoWrapper isDarkMode={dark} layout="inline">
               <div className="flex items-center gap-6">
@@ -990,7 +1041,7 @@ const AvatarDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Avatar
-            src={imageError ? "" : "https://invalid-url.example/image.jpg"}
+            src={imageError ? "" : "data:image/gif;base64,invalid"}
             name="John Doe"
             autoColor
             colors={c.subtleColors}
@@ -1098,31 +1149,6 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Avatar loading prop ────────────────────────────────────────── */}
-      <Section
-        title="Loading Prop on Avatar"
-        description="Set loading={true} directly on Avatar to show a shimmer in its place."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="inline">
-          <div className="text-center">
-            <Avatar loading />
-            <p className={`text-xs mt-2 ${c.label}`}>loading=true</p>
-          </div>
-          <div className="text-center">
-            <Avatar loading size="lg" />
-            <p className={`text-xs mt-2 ${c.label}`}>large</p>
-          </div>
-          <div className="text-center">
-            <Avatar loading shape="rounded" />
-            <p className={`text-xs mt-2 ${c.label}`}>rounded</p>
-          </div>
-          <div className="text-center">
-            <Avatar loading shape="square" />
-            <p className={`text-xs mt-2 ${c.label}`}>square</p>
-          </div>
-        </DemoWrapper>
-      </Section>
 
       {/* ─── Group Size / Shape / Bordered ─────────────────────────────── */}
       <Section
@@ -1222,39 +1248,6 @@ const AvatarDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Group Shimmer Full Options ────────────────────────────────── */}
-      <Section
-        title="Group Shimmer Options"
-        description="AvatarGroupShimmer supports size, shape, spacing, animate, and count."
-        isDarkMode={dark}
-      >
-        <div className="space-y-4">
-          <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Large + rounded
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="inline">
-              <AvatarGroupShimmer count={4} size="lg" shape="rounded" />
-            </DemoWrapper>
-          </div>
-          <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              Custom spacing
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="inline">
-              <AvatarGroupShimmer count={3} spacing={-16} />
-            </DemoWrapper>
-          </div>
-          <div>
-            <p className={`text-xs font-medium mb-2 ${c.label}`}>
-              No animation
-            </p>
-            <DemoWrapper isDarkMode={dark} layout="inline">
-              <AvatarGroupShimmer count={3} animate={false} />
-            </DemoWrapper>
-          </div>
-        </div>
-      </Section>
 
       {/* ─── Reduce Motion ──────────────────────────────────────────────── */}
       <Section

@@ -87,7 +87,7 @@ This renders correctly with no additional props, classes, or setup. The last ite
 | `classes` | `BreadcrumbClasses` | — | Per-slot class overrides. |
 | `unstyled` | `boolean` | `false` | Strip all default classes. |
 | `iconSize` | `number \| string` | — | Size for separator and ellipsis icons. |
-| `showTooltips` | `boolean` | `false` | Enable tooltips globally. |
+| `showTooltips` | `boolean` | `true` | Enable tooltips globally. |
 | `tooltipPosition` | `TooltipSide` | — | Default tooltip side. |
 | `tooltipOffset` | `number` | — | Tooltip distance offset. |
 | `defaultTooltipProps` | `BreadcrumbTooltipProps` | — | Default tooltip config for all items. |

@@ -932,7 +932,7 @@ describe("Accordion", () => {
       );
 
       const trigger = screen.getByRole("button", { name: "Item 1" });
-      expect(trigger).toHaveClass("flex-row-reverse");
+      expect(trigger).toHaveClass("gap-2");
     });
   });
 

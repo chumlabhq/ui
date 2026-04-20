@@ -16,8 +16,8 @@ export const SelectedChip = memo(function SelectedChip({
       <span className="truncate">
         {option.selectedContent || option.content || option.label}
       </span>
-      <button
-        type="button"
+      <span
+        role="button"
         tabIndex={0}
         className={classes?.chipRemove || undefined}
         aria-label={`Remove ${option.label}`}
@@ -35,7 +35,7 @@ export const SelectedChip = memo(function SelectedChip({
         }}
       >
         <XIcon className="w-full h-full" />
-      </button>
+      </span>
     </span>
   );
 });

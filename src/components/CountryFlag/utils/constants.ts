@@ -1,6 +1,6 @@
 import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses } from "./types";
 
-export const DEFAULT_FLAG_BASE_PATH = "/flags";
+export const DEFAULT_FLAG_BASE_PATH = "https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags";
 export const DEFAULT_ASPECT_RATIO = 0.75;
 
 export const SIZE_MAP: Record<CountryFlagSize, number> = {

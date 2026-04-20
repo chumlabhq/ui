@@ -84,21 +84,18 @@ This renders correctly with no additional props, classes, or setup.
 The avatar resolves its display in this order:
 
 1. **Image** — if `src` is provided and loads successfully
-2. **Fallback** — if `fallback` ReactNode is provided
-3. **Initials** — derived from `name` (e.g., "John Doe" → "JD")
+2. **Initials** — derived from `name` (e.g., "John Doe" → "JD"), takes priority over fallback
+3. **Fallback** — if `fallback` ReactNode is provided and no `name` is set
 4. **Empty** — renders an empty circle
 
-If an image fails to load, it falls back to step 2/3 automatically.
+If an image fails to load, it falls back to step 2/3 automatically. Note: when both `name` and `fallback` are provided, initials win.
 
 ---
 
 ## Data Attributes (for CSS selectors and testing)
 
-- `data-avatar` — on Avatar root
-- `data-avatar-image="loaded|error|loading"` — image state
-- `data-avatar-group` — on AvatarGroup root
-- `data-avatar-badge` — on AvatarBadge root
-- `data-avatar-shimmer` — on shimmer elements
+- `data-has-image` — on Avatar root when image is loaded (boolean)
+- `data-shape="circle|rounded|square"` — on Avatar root
 
 **DOM nesting:** Avatar root `<div>` → inner `<div>` → (`<img>` | initials `<span>` | fallback `<span>`) + optional status `<span>`
 
@@ -148,7 +145,7 @@ If an image fails to load, it falls back to step 2/3 automatically.
 | `renderSurplus` | `(count: number) => ReactNode` | — | Custom surplus renderer. |
 | `onAvatarClick` | `(info, event) => void` | — | Click handler with `{ index, name }`. |
 | `dir` | `"ltr" \| "rtl"` | `"ltr"` | Text direction. |
-| `classes` | `AvatarGroupClasses` | — | Per-slot: `root`, `item`, `surplus`. |
+| `classes` | `AvatarGroupClasses` | — | Per-slot: `root`, `item`. |
 
 ### AvatarBadge
 
@@ -161,7 +158,7 @@ If an image fails to load, it falls back to step 2/3 automatically.
 | `position` | `CornerPosition` | `"top-right"` | Corner placement. |
 | `offset` | `BadgeOffset` | — | Pixel offset `{ x, y }`. |
 | `color` | `string` | — | Background color override. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"sm"` | Size preset. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"md"` | Size preset. |
 | `variant` | `"solid" \| "outline" \| "soft"` | `"solid"` | Visual style. |
 | `pulse` | `boolean` | `false` | Pulsing animation. |
 | `invisible` | `boolean` | `false` | Hide without unmounting. |
@@ -378,6 +375,39 @@ For grouped avatars, match `ringColor` to your background:
 | Badge hidden but space taken | `invisible={true}` preserves layout | Use conditional rendering (`{show && <AvatarBadge />}`) to fully remove |
 | Custom classes not applying | Passed `classes.root` but avatar still looks default | `classes` replaces per-slot, not additive. Include all needed classes. |
 | Group children not inheriting size | Children override group context | Remove explicit `size` from child Avatars to inherit from group |
+
+---
+
+## Anti-patterns
+
+```tsx
+// ❌ DON'T: Use autoColor without name — it needs name to hash
+<Avatar autoColor />
+// ✅ DO: Provide name for autoColor
+<Avatar name="John" autoColor />
+
+// ❌ DON'T: Expect fallback to show when name is also provided
+// Initials from name take priority over fallback
+<Avatar name="John" fallback={<UserIcon />} />
+// ✅ DO: Use fallback only when no name is available
+<Avatar fallback={<UserIcon />} />
+
+// ❌ DON'T: Set explicit size on children when group provides it
+<AvatarGroup size="lg">
+  <Avatar name="A" size="sm" /> {/* overrides group context */}
+</AvatarGroup>
+// ✅ DO: Let children inherit from group
+<AvatarGroup size="lg">
+  <Avatar name="A" />
+</AvatarGroup>
+
+// ❌ DON'T: Use white ringColor on dark backgrounds
+<div className="bg-gray-900">
+  <AvatarGroup>{/* white rings visible */}</AvatarGroup>
+</div>
+// ✅ DO: Match ringColor to background
+<AvatarGroup ringColor="#111827">{/* clean overlap */}</AvatarGroup>
+```
 
 ---
 

@@ -50,6 +50,8 @@ import {
   FilterIcon as DefaultFilterIcon,
 } from "./icons";
 
+const EMPTY_DATA: unknown[] = [];
+
 // Density padding map
 const densityPaddingMap = {
   compact: "px-2 py-1 text-xs",
@@ -674,9 +676,10 @@ function TableInner<TData>(
     !!filterableColumns;
 
   const table = useReactTable({
-    data: data ?? [],
+    data: data ?? (EMPTY_DATA as TData[]),
     columns: augmentedColumns,
     getCoreRowModel: getCoreRowModel(),
+    autoResetPageIndex: false,
     manualPagination,
     // Custom filter function for multi-value column filters
     filterFns: {

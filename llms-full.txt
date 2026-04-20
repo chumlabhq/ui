@@ -159,6 +159,25 @@ root
 - `data-value` — item's unique value string
 - `data-type="single|multiple"`, `data-size`, `data-variant` — on root
 
+### Ref API (Imperative)
+
+```tsx
+const ref = useRef<AccordionRef>(null);
+
+<Accordion ref={ref} type="multiple">...</Accordion>
+
+// Available methods:
+ref.current.expandAll();
+ref.current.collapseAll();
+ref.current.expand("item-1");
+ref.current.collapse("item-1");
+ref.current.toggle("item-1");
+ref.current.focusItem("item-1");
+ref.current.getExpandedValues();   // Set<string>
+ref.current.isExpanded("item-1");  // boolean
+ref.current.getItemCount();        // number
+```
+
 ### Advanced Pattern: Controlled accordion
 
 ```tsx
@@ -256,7 +275,7 @@ import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge, AvatarShimmer, Avat
 | `position` | `CornerPosition` | `"top-right"` | Corner placement. |
 | `offset` | `BadgeOffset` | — | Pixel offset { x, y }. |
 | `color` | `string` | — | Background color override. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"sm"` | Size preset. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"md"` | Size preset. |
 | `variant` | `"solid" \| "outline" \| "soft"` | `"solid"` | Visual style. |
 | `pulse` | `boolean` | `false` | Pulsing animation. |
 | `invisible` | `boolean` | `false` | Hide without unmounting. |
@@ -291,10 +310,8 @@ root (outer container, sets size/shape)
 
 ### Data Attributes
 
-- `data-avatar` — on Avatar root
-- `data-avatar-image="loaded|error|loading"` — image state
-- `data-avatar-group` — on AvatarGroup root
-- `data-avatar-badge` — on AvatarBadge root
+- `data-has-image` — on Avatar root when image is loaded (boolean)
+- `data-shape="circle|rounded|square"` — on Avatar root
 
 ### Advanced Pattern: Badge notification on avatar
 
@@ -343,7 +360,7 @@ import type { BreadcrumbItem } from "@chumlab/ui/breadcrumb";
 | `classes` | `BreadcrumbClasses` | — | Per-slot class overrides. |
 | `unstyled` | `boolean` | `false` | Strip all default classes. |
 | `iconSize` | `number \| string` | — | Size for separator and ellipsis icons. |
-| `showTooltips` | `boolean` | `false` | Enable tooltips globally. |
+| `showTooltips` | `boolean` | `true` | Enable tooltips globally. |
 | `tooltipPosition` | `TooltipSide` | — | Default tooltip side. |
 | `tooltipOffset` | `number` | — | Tooltip distance offset. |
 | `defaultTooltipProps` | `BreadcrumbTooltipProps` | — | Default tooltip config. |

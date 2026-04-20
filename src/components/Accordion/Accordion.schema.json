@@ -132,7 +132,7 @@
     "animationEasing": {
       "type": "string",
       "description": "CSS easing function for expand/collapse animation.",
-      "default": "ease"
+      "default": "ease-in-out"
     },
     "animationDuration": {
       "type": "number",

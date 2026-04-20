@@ -138,7 +138,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       className: cn(
         config.classes.trigger,
         className,
-        iconPosition === "left" && "flex-row-reverse justify-end"
+        iconPosition === "left" && "gap-2"
       ) || undefined,
       onClick: handleClick,
       onKeyDown: handleKeyDown,

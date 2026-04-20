@@ -278,17 +278,25 @@ const SelectedChip = memo(function SelectedChip({
       <span className="truncate">
         {option.selectedContent || option.content || option.label}
       </span>
-      <button
-        type="button"
+      <span
+        role="button"
+        tabIndex={0}
         onClick={(e) => {
           e.stopPropagation();
           onRemove(option.value);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+            onRemove(option.value);
+          }
         }}
         className={classes.chipRemove || undefined}
         aria-label={`Remove ${option.label}`}
       >
         <XIcon className="w-full h-full" />
-      </button>
+      </span>
     </span>
   );
 });

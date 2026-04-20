@@ -537,7 +537,15 @@ const AccordionDemo = () => {
                   type="single"
                   collapsible
                   size={size}
-                  classes={{ ...c.accordion }}
+                  classes={{
+                    root: c.accordion.root,
+                    item: c.accordion.item,
+                    triggerInner: c.accordion.triggerInner,
+                    contentWrapper: c.accordion.contentWrapper,
+                    iconWrapper: c.accordion.iconWrapper,
+                    subtitle: c.accordion.subtitle,
+                    heading: c.accordion.heading,
+                  }}
                 >
                   <AccordionItem value={`${size}-1`}>
                     <AccordionTrigger>First Item</AccordionTrigger>
@@ -1112,39 +1120,6 @@ const AccordionDemo = () => {
         )}
       </Section>
 
-      {/* ─── Shimmer / Loading ──────────────────────────────────────────── */}
-      <Section
-        title="Shimmer / Loading State"
-        description="Show a loading skeleton while data is being fetched."
-        isDarkMode={dark}
-      >
-        <div className={`mb-3 flex gap-2 ${dark ? "" : ""}`}>
-          <button className={c.btn} onClick={() => setIsLoading(!isLoading)}>
-            {isLoading ? "Show Content" : "Show Shimmer"}
-          </button>
-        </div>
-        <DemoWrapper isDarkMode={dark} layout="block">
-          {isLoading ? (
-            <AccordionShimmer count={3} size="md" />
-          ) : (
-            <Accordion type="single" collapsible classes={c.accordion}>
-              <AccordionItem value="loaded-1">
-                <AccordionTrigger>Loaded Item 1</AccordionTrigger>
-                <AccordionContent>Content loaded.</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="loaded-2">
-                <AccordionTrigger>Loaded Item 2</AccordionTrigger>
-                <AccordionContent>Content loaded.</AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="loaded-3">
-                <AccordionTrigger>Loaded Item 3</AccordionTrigger>
-                <AccordionContent>Content loaded.</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          )}
-        </DemoWrapper>
-      </Section>
-
       {/* ─── Dynamic Items ──────────────────────────────────────────────── */}
       <Section
         title="Dynamic Items"
@@ -1187,6 +1162,41 @@ const AccordionDemo = () => {
                 <AccordionContent>{item.content}</AccordionContent>
               </AccordionItem>
             ))}
+          </Accordion>
+        </DemoWrapper>
+      </Section>
+
+      {/* ─── Storage Persistence ──────────────────────────────────────── */}
+      <Section
+        title="Storage Persistence"
+        description="Use storageKey to persist expanded state across page reloads via localStorage."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <Accordion
+            type="multiple"
+            storageKey="accordion-demo-persist"
+            classes={c.accordion}
+          >
+            <AccordionItem value="persist-1">
+              <AccordionTrigger>Persistent Item 1</AccordionTrigger>
+              <AccordionContent>
+                Expand this item and refresh the page — it will remain open.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="persist-2">
+              <AccordionTrigger>Persistent Item 2</AccordionTrigger>
+              <AccordionContent>
+                State is saved to localStorage under the key
+                &quot;accordion-demo-persist&quot;.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="persist-3">
+              <AccordionTrigger>Persistent Item 3</AccordionTrigger>
+              <AccordionContent>
+                Clear localStorage to reset the state.
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
         </DemoWrapper>
       </Section>
@@ -1452,7 +1462,7 @@ const AccordionDemo = () => {
                   console.log("[onOpenStart] Animation starting")
                 }
                 onOpenEnd={() => console.log("[onOpenEnd] Animation complete")}
-                onCloseStart={() => console.log("[onCloseStart] Closing")}
+                onCloseStart={() => {}}
                 onCloseEnd={() => console.log("[onCloseEnd] Closed")}
               >
                 Open your browser console to see animation lifecycle events.
