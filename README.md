@@ -78,8 +78,6 @@ export default function App() {
 
 ## Installation
 
-### Via NPM (recommended)
-
 ```bash
 npm install @chumlab/ui
 ```
@@ -93,24 +91,6 @@ Add the library to your Tailwind CSS content sources so its classes are included
 ```
 
 Add the `@source` line right below your existing `@import "tailwindcss"` — typically in `app.css`, `globals.css`, or `index.css`.
-
-### Via CDN
-
-For quick prototyping, include the stylesheet and script directly:
-
-```html
-<link
-  href="https://cdn.jsdelivr.net/npm/@chumlab/ui@0.1.0/dist/style.css"
-  rel="stylesheet"
-/>
-
-<script
-  src="https://cdn.jsdelivr.net/npm/@chumlab/ui@0.1.0/dist/index.js"
-  type="module"
-></script>
-```
-
-> **Note:** For production, install via NPM to get tree-shaking, TypeScript types, and subpath imports.
 
 ### Peer dependencies
 

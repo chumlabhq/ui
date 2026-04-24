@@ -1,9 +1,61 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { LogoMark } from "../../brand/Logo";
 import { BLOG_POSTS } from "./blogData";
 import { Pagination } from "../../components/Pagination";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { useJsonLd, useCanonical } from "../../hooks/useJsonLd";
+import { SiteHeader } from "../../components/SiteHeader";
+import { SiteFooter } from "../../components/SiteFooter";
+
+// ─── Page metadata + schema ────────────────────────────────────────────────
+
+const LISTING_TITLE = "Blog — Guides & Articles";
+const LISTING_DESCRIPTION =
+  "Practical guides on React, Next.js, frontend architecture, accessibility, performance, and building modern web UIs with Chumlab UI. Updated regularly.";
+const LISTING_URL = "https://chumlab.com/blog";
+
+function buildBlogJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Chumlab Blog",
+    url: LISTING_URL,
+    description: LISTING_DESCRIPTION,
+    inLanguage: "en",
+    publisher: {
+      "@type": "Organization",
+      name: "Chumlab",
+      url: "https://chumlab.com",
+    },
+    blogPost: BLOG_POSTS.slice(0, 20).map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      url: `https://chumlab.com/blog/${p.id}`,
+      datePublished: p.date,
+      articleSection: p.category,
+      keywords: p.tags.join(", "),
+    })),
+  };
+}
+
+const LISTING_BREADCRUMB_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://chumlab.com/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Blog",
+      item: LISTING_URL,
+    },
+  ],
+};
 
 const POSTS_PER_PAGE = 6;
 
@@ -100,11 +152,14 @@ function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
 // ─── Blog Listing Page ──────────────────────────────────────────────────────
 
 export default function BlogListing() {
-  useDocumentTitle("Blog");
+  useDocumentTitle(LISTING_TITLE, LISTING_DESCRIPTION);
+  useCanonical(LISTING_URL);
+  const blogJsonLd = useMemo(() => buildBlogJsonLd(), []);
+  useJsonLd("blog-listing-jsonld", blogJsonLd);
+  useJsonLd("blog-listing-breadcrumb", LISTING_BREADCRUMB_JSON_LD);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Filter posts by search and category
@@ -181,143 +236,7 @@ export default function BlogListing() {
       </div>
 
       <div className="relative z-10">
-        {/* ── HEADER ── */}
-        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
-          <div className="w-full px-5 sm:px-8">
-            <div className="flex items-center justify-between py-3.5">
-              <Link to="/" className="flex items-center gap-3">
-                <LogoMark size={160} />
-              </Link>
-              <div className="flex items-center gap-1">
-                <div className="hidden sm:flex items-center gap-1">
-                  <Link
-                    to="/accordion"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    Components
-                  </Link>
-                  <Link
-                    to="/blog"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    FAQ
-                  </Link>
-                  <a
-                    href="https://github.com/chumlabhq/ui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
-                    aria-label="GitHub"
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                    </svg>
-                  </a>
-                </div>
-                <Link
-                  to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 sm:ml-2"
-                >
-                  Get Started
-                </Link>
-                <button
-                  onClick={() => setMenuOpen(true)}
-                  className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1"
-                  aria-label="Open menu"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Mobile menu overlay */}
-        {menuOpen && (
-          <div className="fixed inset-0 z-[60] sm:hidden">
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setMenuOpen(false)}
-            />
-            <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.06] p-6 flex flex-col gap-1">
-              <div className="flex justify-end mb-6">
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors"
-                  aria-label="Close menu"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              </div>
-              <Link
-                to="/accordion"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                Components
-              </Link>
-              <Link
-                to="/blog"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                Blog
-              </Link>
-              <Link
-                to="/faq"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                FAQ
-              </Link>
-              <a
-                href="https://github.com/chumlabhq/ui"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                GitHub
-              </a>
-            </div>
-          </div>
-        )}
+        <SiteHeader />
 
         <main>
           {/* ── HERO ── */}
@@ -468,45 +387,7 @@ export default function BlogListing() {
             </section>
           )}
 
-          {/* ── FOOTER ── */}
-          <footer className="w-full px-5 sm:px-8 pb-6">
-            <div className="border-t border-white/4 pt-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <LogoMark size={120} />
-                  <span className="text-xs text-gray-700 ml-2">
-                    MIT License
-                  </span>
-                </div>
-                <div className="flex items-center gap-5">
-                  <Link
-                    to="/button"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    Components
-                  </Link>
-                  <Link
-                    to="/blog"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    FAQ
-                  </Link>
-                  <a
-                    href="https://github.com"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    GitHub
-                  </a>
-                </div>
-              </div>
-            </div>
-          </footer>
+          <SiteFooter />
         </main>
       </div>
     </div>

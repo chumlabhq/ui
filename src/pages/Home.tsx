@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useCallback, useState } from "react";
-import { LogoMark } from "../brand/Logo";
 import { BLOG_POSTS } from "./blog/blogData";
 import {
   Accordion,
@@ -9,48 +8,10 @@ import {
   AccordionContent,
 } from "../components/Accordion";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-
-// ─── Custom accordion icons ─────────────────────────────────────────────────
-
-function FaqIconCollapsed() {
-  return (
-    <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/[0.1] flex items-center justify-center transition-all duration-300 group-hover:border-blue-500/30 group-hover:bg-blue-500/[0.08]">
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="text-white/50 transition-colors duration-300 group-hover:text-blue-400"
-      >
-        <path d="m6 9 6 6 6-6" />
-      </svg>
-    </div>
-  );
-}
-
-function FaqIconExpanded() {
-  return (
-    <div className="w-7 h-7 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center">
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="text-blue-400"
-      >
-        <path d="m18 15-6-6-6 6" />
-      </svg>
-    </div>
-  );
-}
+import AIPlaygroundSection from "./playground/AIPlaygroundSection";
+import { SiteHeader } from "../components/SiteHeader";
+import { SiteFooter } from "../components/SiteFooter";
+import { FaqLogoIcon } from "../components/FaqLogoIcon";
 
 // ─── FAQ preview data (subset for home page) ─────────────────────────────────
 
@@ -422,12 +383,23 @@ const Home = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useSpaceScene(canvasRef);
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const [randomBlogs] = useState(() => {
     const shuffled = [...BLOG_POSTS].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, 3);
   });
+
+  // Handle landing on the home page with an #ai-playground hash (e.g. from
+  // another page's nav). scrollIntoView needs the target to be mounted, so
+  // defer one tick past initial render.
+  useEffect(() => {
+    if (window.location.hash === "#ai-playground") {
+      window.setTimeout(() => {
+        document
+          .getElementById("ai-playground")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 250);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#04040a] text-white overflow-hidden selection:bg-indigo-500/30">
@@ -470,161 +442,13 @@ const Home = () => {
 
       {/* ═══ CONTENT ═══ */}
       <div className="relative z-10 pointer-events-none">
-        {/* ── HEADER ── */}
-        <header className="pointer-events-auto fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
-          <div className="w-full px-5 sm:px-8">
-            <div className="flex items-center justify-between py-3.5">
-              <Link to="/" className="flex items-center gap-3">
-                <LogoMark size={160} />
-              </Link>
-              <div className="flex items-center gap-1">
-                <div className="hidden sm:flex items-center gap-1">
-                  <Link
-                    to="/accordion"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    Components
-                  </Link>
-                  <Link
-                    to="/blog"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    FAQ
-                  </Link>
-                  <a
-                    href="https://github.com/chumlabhq/ui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
-                    aria-label="GitHub"
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                    </svg>
-                  </a>
-                </div>
-                <Link
-                  to="/getting-started"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 sm:ml-2"
-                >
-                  Get Started
-                </Link>
-
-                {/* Hamburger button — mobile only */}
-                <button
-                  className="sm:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-white/[0.08] transition-colors duration-300 ml-1"
-                  onClick={() => setMenuOpen(true)}
-                  aria-label="Open menu"
-                >
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-white/90"
-                  >
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* ── MOBILE MENU OVERLAY ── */}
-        {menuOpen && (
-          <div className="pointer-events-auto fixed inset-0 z-[60] sm:hidden">
-            {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setMenuOpen(false)}
-            />
-            {/* Drawer */}
-            <nav className="absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.08] shadow-2xl animate-slide-in-right flex flex-col py-6 px-5">
-              <button
-                className="self-end mb-6 flex items-center justify-center w-9 h-9 rounded-lg hover:bg-white/[0.08] transition-colors duration-300"
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-white/90"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-              <Link
-                to="/accordion"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
-              >
-                Components
-              </Link>
-              <Link
-                to="/blog"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
-              >
-                Blog
-              </Link>
-              <Link
-                to="/faq"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
-              >
-                FAQ
-              </Link>
-              <a
-                href="https://github.com/chumlabhq/ui"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300 flex items-center gap-2"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                </svg>
-                GitHub
-              </a>
-            </nav>
-          </div>
-        )}
+        <SiteHeader />
 
         <main className="pointer-events-auto">
           {/* ══════════════════════════════════════════════════════════════════
               SECTION 1 — HERO (full viewport, centered)
           ══════════════════════════════════════════════════════════════════ */}
-          <section className="h-screen flex items-center justify-center px-6 sm:px-10 pt-[56px]">
+          <section className="h-screen flex items-center justify-center px-6 sm:px-10 pt-[68px]">
             <div className="text-center max-w-5xl mx-auto">
               <div className="relative">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full border border-white/2 animate-float opacity-60" />
@@ -775,6 +599,11 @@ const Home = () => {
               </div>
             </div>
           </section>
+
+          {/* ══════════════════════════════════════════════════════════════════
+              SECTION 2.5 — AI PLAYGROUND
+          ══════════════════════════════════════════════════════════════════ */}
+          <AIPlaygroundSection />
 
           {/* ══════════════════════════════════════════════════════════════════
               SECTION 3 — COMPONENTS (top 6)
@@ -961,15 +790,18 @@ const Home = () => {
                 classes={{
                   root: "w-full rounded-2xl border border-white/[0.08] overflow-hidden bg-white/[0.02]",
                   item: "border-b border-white/[0.06] last:border-b-0",
+                  // `group` enables the iconWrapper below to read
+                  // `data-state` and drive the 360° spin.
                   trigger:
-                    "flex w-full items-center justify-between px-4 sm:px-6 py-4 sm:py-5 text-left text-[15px] font-medium text-white/90 transition-all duration-300 hover:bg-white/[0.04] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-inset",
+                    "group flex w-full items-center justify-between px-4 sm:px-6 py-4 sm:py-5 text-left text-[15px] font-medium text-white/90 transition-all duration-300 hover:bg-white/[0.04] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-inset",
                   triggerInner: "flex-1 text-left",
                   content:
                     "px-4 sm:px-6 py-4 sm:py-5 text-[15px] text-gray-400 leading-relaxed",
                   contentWrapper:
                     "overflow-hidden transition-[max-height,opacity,visibility]",
                   icon: "shrink-0 text-white/40",
-                  iconWrapper: "shrink-0",
+                  iconWrapper:
+                    "shrink-0 transition-transform duration-500 ease-out group-data-[state=open]:rotate-[360deg]",
                   subtitle: "",
                   triggerLeft: "",
                   triggerRight: "",
@@ -980,8 +812,7 @@ const Home = () => {
                 {HOME_FAQS.map((faq, i) => (
                   <AccordionItem key={i} value={`home-faq-${i}`}>
                     <AccordionTrigger
-                      expandedIcon={<FaqIconExpanded />}
-                      collapsedIcon={<FaqIconCollapsed />}
+                      expandedIcon={<FaqLogoIcon />}
                       iconAnimation="none"
                     >
                       {faq.question}
@@ -1128,70 +959,7 @@ const Home = () => {
             </div>
           </section>
 
-          {/* ── FOOTER ── */}
-          <footer className="w-full px-6 sm:px-10 pt-16 pb-8">
-            <div className="border-t border-white/[0.08] pt-8">
-              {/* Row: logo — nav links — social */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-8">
-                <LogoMark size={120} />
-                <div className="flex items-center gap-6">
-                  <Link
-                    to="/accordion"
-                    className="text-sm text-white transition-colors duration-300"
-                  >
-                    Components
-                  </Link>
-                  <Link
-                    to="/blog"
-                    className="text-sm text-white transition-colors duration-300"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="text-sm text-white transition-colors duration-300"
-                  >
-                    FAQ
-                  </Link>
-                  <a
-                    href="https://github.com/chumlabhq/ui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white transition-colors duration-300"
-                    aria-label="GitHub"
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-
-              {/* Bottom row */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 text-xs sm:text-sm text-white">
-                <span className="text-xs sm:text-sm text-left w-full sm:w-auto">
-                  &copy; {new Date().getFullYear()} Chumlab &middot; MIT License
-                  <br className="sm:hidden" />
-                  <span className="hidden sm:inline">&middot; </span>Built with{" "}
-                  {"☕"} and way too many tabs
-                </span>
-                <a
-                  href="mailto:hello@chumlab.com"
-                  className="text-xs sm:text-sm text-white transition-colors duration-300 text-left sm:text-right w-full sm:w-auto shrink-0"
-                >
-                  {"💬"} Got feedback? Ping us at{" "}
-                  <span className="underline underline-offset-2">
-                    hello@chumlab.com
-                  </span>
-                </a>
-              </div>
-            </div>
-          </footer>
+          <SiteFooter />
         </main>
       </div>
     </div>

@@ -1,10 +1,86 @@
 import { Link, useParams, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { LogoMark } from "../../brand/Logo";
+import { useEffect, useMemo } from "react";
 import { getBlogById } from "./blogData";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import type { BlogSection } from "./blogData";
+import {
+  useJsonLd,
+  useCanonical,
+  usePageMeta,
+} from "../../hooks/useJsonLd";
+import type { BlogSection, BlogPost } from "./blogData";
 import { BlogDiagram } from "./BlogIllustrations";
+import { SiteHeader } from "../../components/SiteHeader";
+import { SiteFooter } from "../../components/SiteFooter";
+
+// ─── Schema helpers ────────────────────────────────────────────────────────
+
+/** Convert the free-form post.date ("March 28, 2026") to an ISO string. */
+function toIsoDate(dateStr: string): string {
+  const parsed = new Date(dateStr);
+  return Number.isNaN(parsed.getTime())
+    ? dateStr
+    : parsed.toISOString().slice(0, 10);
+}
+
+function buildArticleJsonLd(post: BlogPost, url: string) {
+  const image = post.coverImage ?? "https://chumlab.com/og-image.png";
+  const iso = toIsoDate(post.date);
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    image,
+    url,
+    datePublished: iso,
+    dateModified: iso,
+    articleSection: post.category,
+    keywords: post.tags.join(", "),
+    inLanguage: "en",
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: {
+      "@type": "Organization",
+      name: "Chumlab",
+      url: "https://chumlab.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Chumlab",
+      url: "https://chumlab.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://chumlab.com/favicon-96x96.png",
+      },
+    },
+  };
+}
+
+function buildPostBreadcrumb(post: BlogPost, url: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://chumlab.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: "https://chumlab.com/blog",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: url,
+      },
+    ],
+  };
+}
 
 /** SVG delivered as an `<img>` src when a post has no `coverImage` (avoids CSS background on a div). */
 function gradientCoverSrc(colors: [string, string]): string {
@@ -208,8 +284,43 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
 export default function BlogDetail() {
   const { id } = useParams<{ id: string }>();
   const post = id ? getBlogById(id) : undefined;
-  useDocumentTitle(post?.title ?? "Blog");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const url = post
+    ? `https://chumlab.com/blog/${post.id}`
+    : "https://chumlab.com/blog";
+  const coverImage =
+    post?.coverImage ?? "https://chumlab.com/og-image.png";
+
+  useDocumentTitle(post?.title ?? "Blog", post?.excerpt);
+  useCanonical(url);
+
+  const articleJsonLd = useMemo(
+    () => (post ? buildArticleJsonLd(post, url) : null),
+    [post, url],
+  );
+  const breadcrumbJsonLd = useMemo(
+    () => (post ? buildPostBreadcrumb(post, url) : null),
+    [post, url],
+  );
+  useJsonLd("blog-article-jsonld", articleJsonLd);
+  useJsonLd("blog-article-breadcrumb", breadcrumbJsonLd);
+
+  const metaTags = useMemo(() => {
+    if (!post) return [];
+    return [
+      { property: "og:type", content: "article" },
+      { property: "og:title", content: post.title },
+      { property: "og:description", content: post.excerpt },
+      { property: "og:url", content: url },
+      { property: "og:image", content: coverImage },
+      { property: "article:section", content: post.category },
+      { property: "article:published_time", content: toIsoDate(post.date) },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: post.title },
+      { name: "twitter:description", content: post.excerpt },
+      { name: "twitter:image", content: coverImage },
+    ];
+  }, [post, url, coverImage]);
+  usePageMeta(metaTags);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -228,144 +339,9 @@ export default function BlogDetail() {
       </div>
 
       <div className="relative z-10">
-        {/* ── HEADER ── */}
-        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
-          <div className="w-full px-5 sm:px-8">
-            <div className="flex items-center justify-between py-3.5">
-              <Link to="/" className="flex items-center gap-3">
-                <LogoMark size={160} />
-              </Link>
-              <div className="flex items-center gap-1">
-                <div className="hidden sm:flex items-center gap-1">
-                  <Link
-                    to="/accordion"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    Components
-                  </Link>
-                  <Link
-                    to="/blog"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                  >
-                    FAQ
-                  </Link>
-                  <a
-                    href="https://github.com/chumlabhq/ui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
-                    aria-label="GitHub"
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                    </svg>
-                  </a>
-                </div>
-                <Link
-                  to="/accordion"
-                  className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 sm:ml-2"
-                >
-                  Get Started
-                </Link>
-                <button
-                  onClick={() => setMenuOpen(true)}
-                  className="sm:hidden p-2 rounded-lg text-white/80 hover:bg-white/[0.06] transition-colors ml-1"
-                  aria-label="Open menu"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
+        <SiteHeader />
 
-        {menuOpen && (
-          <div className="fixed inset-0 z-[60] sm:hidden">
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setMenuOpen(false)}
-            />
-            <div className="absolute top-0 right-0 h-full w-[280px] max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.06] p-6 flex flex-col gap-1">
-              <div className="flex justify-end mb-6">
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="p-2 rounded-lg text-white/60 hover:bg-white/[0.06] transition-colors"
-                  aria-label="Close menu"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              </div>
-              <Link
-                to="/accordion"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                Components
-              </Link>
-              <Link
-                to="/blog"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                Blog
-              </Link>
-              <Link
-                to="/faq"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                FAQ
-              </Link>
-              <a
-                href="https://github.com/chumlabhq/ui"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="text-[15px] font-medium text-white/90 hover:text-white px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-              >
-                GitHub
-              </a>
-            </div>
-          </div>
-        )}
-
-        <main className="pt-[65px]">
+        <main className="pt-[77px]">
           {/* ── BLOG ARTICLE WRAPPER ── */}
           <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 py-10">
             {/* Back link */}
@@ -470,45 +446,7 @@ export default function BlogDetail() {
             </div>
           </div>
 
-          {/* ── FOOTER ── */}
-          <footer className="w-full px-5 sm:px-8 pb-6">
-            <div className="border-t border-white/4 pt-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <LogoMark size={120} />
-                  <span className="text-xs text-gray-700 ml-2">
-                    MIT License
-                  </span>
-                </div>
-                <div className="flex items-center gap-5">
-                  <Link
-                    to="/button"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    Components
-                  </Link>
-                  <Link
-                    to="/blog"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    Blog
-                  </Link>
-                  <Link
-                    to="/faq"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    FAQ
-                  </Link>
-                  <a
-                    href="https://github.com"
-                    className="text-xs text-gray-600 hover:text-gray-300 transition-colors duration-300"
-                  >
-                    GitHub
-                  </a>
-                </div>
-              </div>
-            </div>
-          </footer>
+          <SiteFooter />
         </main>
       </div>
     </div>

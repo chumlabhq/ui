@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop";
+import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee";
 import Home from "./pages/Home";
 import Faq from "./pages/Faq";
 import BlogListing from "./pages/blog/BlogListing";
@@ -41,6 +42,7 @@ const App = () => {
   useScrollToTop();
 
   return (
+    <BuyMeCoffeeProvider>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/faq" element={<Faq />} />
@@ -93,6 +95,7 @@ const App = () => {
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </BuyMeCoffeeProvider>
   );
 };
 
