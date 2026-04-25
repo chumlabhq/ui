@@ -74,7 +74,23 @@ export default defineConfig(({ mode }) => {
         "X-Frame-Options": "DENY",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-        "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https:",
+        // Third-party allowlist:
+        //   * Razorpay Standard Checkout - script (checkout.razorpay.com),
+        //     XHR endpoints (api.razorpay.com, lumberjack-cx.razorpay.com),
+        //     and the iframe it opens (api.razorpay.com).
+        //   * Google OAuth - we use redirect-based flow so no script load,
+        //     but `connect-src https:` is left wide-open for now.
+        // X-Frame-Options: DENY above is overridden by frame-ancestors here
+        // (CSP wins over the legacy header on supporting browsers).
+        "Content-Security-Policy":
+          "default-src 'self'; " +
+          "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+          "font-src https://fonts.gstatic.com; " +
+          "img-src 'self' https: data:; " +
+          "connect-src 'self' https:; " +
+          "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +
+          "frame-ancestors 'none'",
         "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
       },
     },

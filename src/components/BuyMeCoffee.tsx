@@ -4,6 +4,80 @@ import {
   BuyMeCoffeeContext,
   type BuyMeCoffeeContextValue,
 } from "./useBuyMeCoffee";
+import { useCreateFeedbackMutation } from "../redux/api/feedbackApi";
+import {
+  useCreateOrderMutation,
+  useVerifyPaymentMutation,
+} from "../redux/api/paymentApi";
+import { useGetMeQuery } from "../redux/api/authApi";
+
+/**
+ * Razorpay's checkout.js attaches a global `window.Razorpay` constructor.
+ * We type it loosely - the SDK is small, untyped on npm, and the surface
+ * we touch is a thin slice of the public API.
+ */
+type RazorpayHandlerArgs = {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+};
+type RazorpayOptions = {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description?: string;
+  order_id: string;
+  prefill?: { name?: string; email?: string; contact?: string };
+  theme?: { color?: string };
+  handler: (args: RazorpayHandlerArgs) => void;
+  modal?: { ondismiss?: () => void };
+};
+type RazorpayInstance = {
+  open: () => void;
+  on: (event: "payment.failed", cb: (resp: { error?: { description?: string } }) => void) => void;
+};
+type RazorpayConstructor = new (options: RazorpayOptions) => RazorpayInstance;
+
+declare global {
+  interface Window {
+    Razorpay?: RazorpayConstructor;
+  }
+}
+
+const RAZORPAY_SCRIPT_SRC = "https://checkout.razorpay.com/v1/checkout.js";
+
+/**
+ * Resolve `window.Razorpay`. The script is preloaded in index.html with
+ * `defer`, so by the time any BuyMeCoffee click fires it's normally already
+ * attached. If for some reason it isn't (ad-blocker stripping the tag,
+ * intermittent network), poll briefly then fall back to an injected tag.
+ */
+function ensureRazorpay(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined") return resolve(false);
+    if (window.Razorpay) return resolve(true);
+
+    // Wait up to 1.5s for the deferred preload to finish. If still nothing,
+    // try one self-hosted insert before giving up.
+    let attempts = 0;
+    const tick = () => {
+      if (window.Razorpay) return resolve(true);
+      attempts += 1;
+      if (attempts >= 15) {
+        const fallback = document.createElement("script");
+        fallback.src = RAZORPAY_SCRIPT_SRC;
+        fallback.async = true;
+        fallback.onload = () => resolve(!!window.Razorpay);
+        fallback.onerror = () => resolve(false);
+        document.body.appendChild(fallback);
+        return;
+      }
+      window.setTimeout(tick, 100);
+    };
+    tick();
+  });
+}
 
 /**
  * "Buy us a coffee" support flow — a single provider owns the modal so the
@@ -47,8 +121,20 @@ function BuyMeCoffeeModal({
   const [custom, setCustom] = useState<string>("");
   const [rating, setRating] = useState<number>(0);
   const [feedback, setFeedback] = useState<string>("");
-  const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [paying, setPaying] = useState(false);
+
+  const [createOrder, { isLoading: creatingOrder }] = useCreateOrderMutation();
+  const [verifyPayment] = useVerifyPaymentMutation();
+  const [createFeedback] = useCreateFeedbackMutation();
+
+  // Pull the signed-in user (if any) so we can prefill Razorpay's contact
+  // form. The backend route is public so anonymous tipping still works.
+  const { data: meData, isError: meHasError } = useGetMeQuery();
+  const authedUser = meHasError ? undefined : meData?.user;
+
+  const submitting = creatingOrder || paying;
 
   // Effective amount — custom input wins when filled, otherwise the selected
   // chip. Parsed as a positive integer (cents are out of scope for the demo).
@@ -63,23 +149,130 @@ function BuyMeCoffeeModal({
     setRating(0);
     setFeedback("");
     setSent(false);
-    setSubmitting(false);
+    setSubmitError(null);
   }, []);
 
   const handleOpenChange = (next: boolean) => {
-    if (!next) reset();
-    onOpenChange(next);
+    if (!next) {
+      // Close the modal first; defer the form reset until the close animation
+      // has played out. Resetting synchronously flips `sent` back to false,
+      // which would briefly re-mount the PickAmountStep behind the closing
+      // modal and flash the wrong screen at the user.
+      onOpenChange(false);
+      window.setTimeout(reset, 250);
+    } else {
+      onOpenChange(true);
+    }
   };
 
   const handleSubmit = async () => {
     if (!amountValid) return;
-    setSubmitting(true);
-    // Simulated checkout hop — replace with a real Stripe/BuyMeACoffee
-    // redirect when the billing backend is live. `rating` + `feedback` ride
-    // along on the submission payload when wired up for real.
-    await new Promise((r) => setTimeout(r, 900));
-    setSubmitting(false);
-    setSent(true);
+    setSubmitError(null);
+
+    let orderResp;
+    try {
+      // Account has International Payments enabled, so we charge in USD to
+      // match the dollar symbol in the UI. Amount is sent in cents (smallest
+      // USD unit) - $5 -> 500.
+      orderResp = await createOrder({
+        amount: amount * 100,
+        currency: "USD",
+        receipt: `bmc_${Date.now()}`,
+        notes: {
+          source: "buy-me-coffee",
+          rating: String(rating),
+          feedback: feedback.slice(0, 200),
+        },
+        customer: authedUser
+          ? { name: authedUser.name, email: authedUser.email }
+          : undefined,
+      }).unwrap();
+    } catch (err) {
+      const msg =
+        (err as { data?: { message?: string } })?.data?.message ||
+        "Could not start payment. Please try again.";
+      setSubmitError(msg);
+      return;
+    }
+
+    setPaying(true);
+
+    const scriptLoaded = await ensureRazorpay();
+    if (!scriptLoaded || !window.Razorpay) {
+      setPaying(false);
+      setSubmitError(
+        "Couldn't load the payment widget. If you have an ad-blocker, try disabling it on this site.",
+      );
+      return;
+    }
+
+    const rzp = new window.Razorpay({
+      key: orderResp.key_id,
+      amount: orderResp.amount,
+      currency: orderResp.currency,
+      name: "Chumlab",
+      description: "Buy us a coffee",
+      order_id: orderResp.order_id,
+      prefill: authedUser
+        ? { name: authedUser.name, email: authedUser.email }
+        : undefined,
+      theme: { color: "#f59e0b" },
+      handler: async (response) => {
+        try {
+          await verifyPayment({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          }).unwrap();
+        } catch {
+          setPaying(false);
+          setSubmitError(
+            "Payment was captured but verification failed. Email hello@chumlab.com with your transaction id.",
+          );
+          return;
+        }
+
+        // Persist the rating + note alongside the captured payment so the
+        // tip + the message land together in MongoDB. Awaited so we know if
+        // it failed - the payment itself is final, but we want to surface
+        // a missing feedback write instead of silently dropping it.
+        try {
+          await createFeedback({
+            rating,
+            feedback,
+            amount,
+            currency: "USD",
+            selected,
+            source: "buy-me-coffee",
+            metadata: {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+            },
+          }).unwrap();
+        } catch (err) {
+          // Log but don't abort - payment succeeded, the user shouldn't see
+          // an error screen because their feedback row didn't insert.
+          console.error("[BuyMeCoffee] feedback save failed:", err);
+        }
+
+        setPaying(false);
+        setSent(true);
+      },
+      modal: {
+        ondismiss: () => {
+          setPaying(false);
+        },
+      },
+    });
+
+    rzp.on("payment.failed", (resp) => {
+      setPaying(false);
+      setSubmitError(
+        `Payment failed: ${resp.error?.description || "please try again"}`,
+      );
+    });
+
+    rzp.open();
   };
 
   return (
@@ -155,6 +348,7 @@ function BuyMeCoffeeModal({
             amount={amount}
             amountValid={amountValid}
             submitting={submitting}
+            submitError={submitError}
             onSubmit={handleSubmit}
           />
         )}
@@ -175,6 +369,7 @@ function PickAmountStep({
   amount,
   amountValid,
   submitting,
+  submitError,
   onSubmit,
 }: {
   selected: number;
@@ -188,6 +383,7 @@ function PickAmountStep({
   amount: number;
   amountValid: boolean;
   submitting: boolean;
+  submitError: string | null;
   onSubmit: () => void;
 }) {
   const customActive = custom.trim() !== "";
@@ -306,7 +502,7 @@ function PickAmountStep({
           {submitting ? (
             <>
               <Spinner />
-              Redirecting…
+              Opening checkout…
             </>
           ) : (
             <>
@@ -316,6 +512,15 @@ function PickAmountStep({
           )}
         </span>
       </button>
+
+      {submitError && (
+        <p
+          role="alert"
+          className="mt-2.5 text-[12px] text-rose-300/90 leading-relaxed text-center"
+        >
+          {submitError}
+        </p>
+      )}
 
       <div className="mt-3.5 flex items-center justify-center gap-4 text-[11.5px] text-white/45">
         <span className="inline-flex items-center gap-1.5">

@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop";
 import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee";
 import Home from "./pages/Home";
+import OauthRedirect from "./pages/oauth/OauthRedirect";
 import Faq from "./pages/Faq";
 import BlogListing from "./pages/blog/BlogListing";
 import BlogDetail from "./pages/blog/BlogDetail";
@@ -93,6 +94,7 @@ const App = () => {
         <Route path="toast" element={<ToastDemo />} />
         <Route path="tooltip" element={<TooltipDemo />} />
       </Route>
+      <Route path="oauth/google" element={<OauthRedirect />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </BuyMeCoffeeProvider>

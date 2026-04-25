@@ -56,6 +56,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://checkout.razorpay.com" />
+
+    <!-- Razorpay Standard Checkout. Loaded as `defer` so it doesn't block
+         render but is ready by DOMContentLoaded. The BuyMeCoffee flow will
+         still surface a clear error if it's missing (ad-blocker, etc.). -->
+    <script defer src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <!-- Structured Data: Organization -->
     <script type="application/ld+json">

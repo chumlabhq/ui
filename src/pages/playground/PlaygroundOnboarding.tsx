@@ -1,15 +1,20 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import Modal from "../../components/Modal/Modal";
 import InternationalPhoneInput from "../../components/InternationalPhoneInput/InternationalPhoneInput";
 import logoSmall from "../../assets/images/logo-small.png";
 import {
-  mockSignInWithGoogle,
-  mockSubmitOnboarding,
   type PlaygroundUser,
   type PlaygroundRole,
   type PlaygroundBudgetTier,
   type OnboardingResult,
-} from "./mockApi";
+} from "./types";
+import { useGetMeQuery } from "../../redux/api/authApi";
+import {
+  useSubmitPlaygroundOnboardingMutation,
+  useGetMyPlaygroundOnboardingQuery,
+} from "../../redux/api/playgroundApi";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 interface PlaygroundOnboardingProps {
   open: boolean;
@@ -76,15 +81,71 @@ export default function PlaygroundOnboarding({
 }: PlaygroundOnboardingProps) {
   const [step, setStep] = useState<Step>("auth");
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
-  const [isSubmitting, setSubmitting] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [result, setResult] = useState<OnboardingResult | null>(null);
+
+  // Hydrate the user from the auth cookie. If the cookie isn't present this
+  // 401s silently and `me` stays undefined — in which case we keep the user
+  // on the auth step. Skip when the modal is closed to avoid noisy 401s on
+  // page load for visitors who haven't opened the modal.
+  // (Treat error as "no user" — RTK Query keeps stale `data` after a 401
+  // from logout, so an explicit check is needed to flip back to guest mode.)
+  const { data: meData, isError: meHasError } = useGetMeQuery(undefined, {
+    skip: !open,
+  });
+  const authedUser = meHasError ? undefined : meData?.user;
+
+  // Lookup the user's existing onboarding (if any) so we can short-circuit
+  // straight to the success screen for returning waitlist members.
+  const { data: myOnboarding, isFetching: isLoadingMine } =
+    useGetMyPlaygroundOnboardingQuery(undefined, {
+      skip: !open || !authedUser,
+    });
+
+  const [submitOnboarding, { isLoading: isSubmitting }] =
+    useSubmitPlaygroundOnboardingMutation();
 
   const reset = useCallback(() => {
     setStep("auth");
     setForm(INITIAL_FORM);
-    setSubmitting(false);
+    setAuthError(null);
+    setSubmitError(null);
     setResult(null);
   }, []);
+
+  // Auto-advance past the auth step the moment we know the user is signed in.
+  // Wait for the onboarding lookup to settle so we can route straight to the
+  // success screen for returning members instead of forcing them through the
+  // role/context/budget steps a second time.
+  useEffect(() => {
+    if (!open || step !== "auth" || !authedUser || isLoadingMine) return;
+
+    setForm((prev) => ({
+      ...prev,
+      user: {
+        name: authedUser.name,
+        email: authedUser.email,
+        initials: authedUser.initials,
+      },
+    }));
+
+    if (
+      myOnboarding?.onboarding &&
+      myOnboarding.submittedAt &&
+      typeof myOnboarding.position === "number" &&
+      myOnboarding.estimatedWait
+    ) {
+      setResult({
+        submittedAt: myOnboarding.submittedAt,
+        position: myOnboarding.position,
+        estimatedWait: myOnboarding.estimatedWait,
+      });
+      setStep("success");
+    } else {
+      setStep("role");
+    }
+  }, [open, step, authedUser, isLoadingMine, myOnboarding]);
 
   const handleOpenChange = (next: boolean) => {
     if (!next) {
@@ -105,16 +166,21 @@ export default function PlaygroundOnboarding({
     [step, progressIndex],
   );
 
-  const handleGoogleSignIn = async () => {
-    setSubmitting(true);
-    try {
-      const user = await mockSignInWithGoogle();
-      setForm((prev) => ({ ...prev, user }));
-      trackOnboardingEvent("onboarding_signed_in", { email: user.email });
-      setStep("role");
-    } finally {
-      setSubmitting(false);
+  // Server-side OAuth: kick off a top-level redirect to the backend, which
+  // bounces through Google and lands the user back at /oauth/google with a
+  // session cookie set. The redirect page then sends them to /?openPlayground=1
+  // so this modal re-mounts and the effect above advances to the role step.
+  const handleGoogleSignIn = () => {
+    setAuthError(null);
+    if (!API_BASE_URL) {
+      setAuthError("API base URL is not configured.");
+      return;
     }
+    const fallbackUrl = `${window.location.origin}/oauth/google`;
+    const url = `${API_BASE_URL}/auth/google/login?fallbackUrl=${encodeURIComponent(
+      fallbackUrl,
+    )}&flow=playground-onboard`;
+    window.location.href = url;
   };
 
   const handleSelectRole = (role: PlaygroundRole) => {
@@ -162,20 +228,19 @@ export default function PlaygroundOnboarding({
       !form.budgetLabel
     )
       return;
-    setSubmitting(true);
+    setSubmitError(null);
+    const submission = {
+      role: form.role,
+      context: form.contextValue,
+      contextLabel: form.contextLabel,
+      budgetTier: form.budgetTier,
+      budgetLabel: form.budgetLabel,
+      organization: form.organization.trim() || undefined,
+      phone: form.phone.trim() || undefined,
+      requirements: form.requirements.trim() || undefined,
+    };
     try {
-      const submission = {
-        user: form.user,
-        role: form.role,
-        context: form.contextValue,
-        contextLabel: form.contextLabel,
-        budgetTier: form.budgetTier,
-        budgetLabel: form.budgetLabel,
-        organization: form.organization.trim() || undefined,
-        phone: form.phone.trim() || undefined,
-        requirements: form.requirements.trim() || undefined,
-      };
-      const res = await mockSubmitOnboarding(submission);
+      const res = await submitOnboarding(submission).unwrap();
       trackOnboardingEvent("onboarding_completed", {
         role: submission.role,
         context: submission.context,
@@ -184,11 +249,19 @@ export default function PlaygroundOnboarding({
         hasOrganization: !!submission.organization,
         hasPhone: !!submission.phone,
         hasRequirements: !!submission.requirements,
+        alreadyOnboarded: res.alreadyOnboarded,
       });
-      setResult(res);
+      setResult({
+        submittedAt: res.submittedAt,
+        position: res.position,
+        estimatedWait: res.estimatedWait,
+      });
       setStep("success");
-    } finally {
-      setSubmitting(false);
+    } catch (err) {
+      const msg =
+        (err as { data?: { message?: string } })?.data?.message ||
+        "Could not submit. Please try again.";
+      setSubmitError(msg);
     }
   };
 
@@ -240,9 +313,17 @@ export default function PlaygroundOnboarding({
       )}
 
       <div className="px-6 sm:px-8 py-7 sm:py-9">
-        {step === "auth" && (
-          <AuthStep onSignIn={handleGoogleSignIn} loading={isSubmitting} />
-        )}
+        {step === "auth" &&
+          (authedUser ? (
+            <div className="flex flex-col items-center text-center py-12">
+              <div className="w-10 h-10 border-2 border-blue-300/30 border-t-blue-400 rounded-full animate-spin mb-4" />
+              <p className="text-[13px] text-white/65">
+                Checking your account…
+              </p>
+            </div>
+          ) : (
+            <AuthStep onSignIn={handleGoogleSignIn} error={authError} />
+          ))}
 
         {step === "role" && (
           <RoleStep
@@ -282,6 +363,7 @@ export default function PlaygroundOnboarding({
             onBack={() => setStep("budget")}
             onSubmit={handleSubmitOnboarding}
             submitting={isSubmitting}
+            error={submitError}
           />
         )}
 
@@ -330,10 +412,10 @@ function GlassSheen() {
 
 function AuthStep({
   onSignIn,
-  loading,
+  error,
 }: {
   onSignIn: () => void;
-  loading: boolean;
+  error: string | null;
 }) {
   return (
     <div className="relative flex flex-col items-center text-center">
@@ -362,18 +444,20 @@ function AuthStep({
       <button
         type="button"
         onClick={onSignIn}
-        disabled={loading}
-        className="cursor-pointer relative group w-full overflow-hidden flex items-center justify-center gap-3 px-5 py-3 rounded-xl bg-white text-gray-900 font-semibold text-[14.5px] hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-[0_6px_20px_-6px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_26px_-6px_rgba(255,255,255,0.28)]"
+        className="cursor-pointer relative group w-full overflow-hidden flex items-center justify-center gap-3 px-5 py-3 rounded-xl bg-white text-gray-900 font-semibold text-[14.5px] hover:bg-gray-50 transition-all shadow-[0_6px_20px_-6px_rgba(255,255,255,0.2)] hover:shadow-[0_8px_26px_-6px_rgba(255,255,255,0.28)]"
       >
-        {loading ? (
-          <Spinner tone="dark" />
-        ) : (
-          <>
-            <GoogleGlyph />
-            Continue with Google
-          </>
-        )}
+        <GoogleGlyph />
+        Continue with Google
       </button>
+
+      {error && (
+        <p
+          role="alert"
+          className="mt-3 text-[12.5px] text-red-300/90 leading-relaxed"
+        >
+          {error}
+        </p>
+      )}
 
       <div className="mt-5 flex items-center gap-2.5 text-[11.5px] text-white/45">
         <span className="inline-flex items-center gap-1.5">
@@ -392,6 +476,29 @@ function AuthStep({
         </span>
       </div>
     </div>
+  );
+}
+
+function GoogleGlyph() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+      <path
+        fill="#FFC107"
+        d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.3-.4-3.5z"
+      />
+      <path
+        fill="#FF3D00"
+        d="M6.3 14.7l6.6 4.8C14.6 15.1 18.9 12 24 12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"
+      />
+      <path
+        fill="#4CAF50"
+        d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-1.9 1.3-4.4 2.4-7.2 2.4-5.1 0-9.5-3.2-11.2-7.8l-6.5 5C9.4 39.5 16.1 44 24 44z"
+      />
+      <path
+        fill="#1976D2"
+        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.1 4.2-3.8 5.6l6.2 5.2c3.9-3.6 6.3-9 6.3-15.3 0-1.2-.1-2.3-.4-3.5z"
+      />
+    </svg>
   );
 }
 
@@ -953,6 +1060,7 @@ function DetailsStep({
   onBack,
   onSubmit,
   submitting,
+  error,
 }: {
   role: PlaygroundRole;
   form: FormState;
@@ -960,6 +1068,7 @@ function DetailsStep({
   onBack: () => void;
   onSubmit: () => void;
   submitting: boolean;
+  error: string | null;
 }) {
   const orgConfig = ORG_BY_ROLE[role];
   const orgOk = !orgConfig.required || !!form.organization.trim();
@@ -1037,6 +1146,15 @@ function DetailsStep({
           />
         </div>
       </div>
+
+      {error && (
+        <p
+          role="alert"
+          className="mt-4 text-[12.5px] text-red-300/90 leading-relaxed"
+        >
+          {error}
+        </p>
+      )}
 
       <div className="mt-7">
         <StepFooter
@@ -1383,29 +1501,6 @@ function StepFooter({
 }
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
-
-function GoogleGlyph() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
-      <path
-        fill="#FFC107"
-        d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.3 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.3-.4-3.5z"
-      />
-      <path
-        fill="#FF3D00"
-        d="M6.3 14.7l6.6 4.8C14.6 15.1 18.9 12 24 12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"
-      />
-      <path
-        fill="#4CAF50"
-        d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-1.9 1.3-4.4 2.4-7.2 2.4-5.1 0-9.5-3.2-11.2-7.8l-6.5 5C9.4 39.5 16.1 44 24 44z"
-      />
-      <path
-        fill="#1976D2"
-        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.1 4.2-3.8 5.6l6.2 5.2c3.9-3.6 6.3-9 6.3-15.3 0-1.2-.1-2.3-.4-3.5z"
-      />
-    </svg>
-  );
-}
 
 function CheckIcon({ large }: { large?: boolean } = {}) {
   const size = large ? 28 : 12;

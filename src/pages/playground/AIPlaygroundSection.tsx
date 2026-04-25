@@ -1,9 +1,25 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import PlaygroundOnboarding from "./PlaygroundOnboarding";
 import ConversationDemo from "./ConversationDemo";
 
 export default function AIPlaygroundSection() {
-  const [open, setOpen] = useState(false);
+  // The modal is open when either the user clicked the trigger (`openInternal`)
+  // or the post-OAuth redirect landed us back here with `?openPlayground=1`.
+  // Closing the modal also strips that query so a subsequent refresh doesn't
+  // reopen it.
+  const [params, setParams] = useSearchParams();
+  const [openInternal, setOpenInternal] = useState(false);
+  const open = openInternal || params.get("openPlayground") === "1";
+
+  const setOpen = (next: boolean) => {
+    setOpenInternal(next);
+    if (!next && params.has("openPlayground")) {
+      const p = new URLSearchParams(params);
+      p.delete("openPlayground");
+      setParams(p, { replace: true });
+    }
+  };
 
   return (
     <>
