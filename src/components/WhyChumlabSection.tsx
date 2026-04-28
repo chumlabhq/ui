@@ -79,7 +79,7 @@ export function WhyChumlabSection() {
         {/* Header — H2 and lede stagger separately so the eye lands on the
             headline first, then the supporting line. */}
         <div className="mb-10 sm:mb-12 md:mb-16 max-w-[720px]">
-          <Reveal delay={50} translateY={12} duration={200}>
+          <Reveal delay={0} translateY={12} duration={200}>
             <h2
               id="why-chumlab-heading"
               className="font-sans text-[clamp(32px,6vw,72px)] font-medium tracking-[-0.04em] leading-[1.0] text-cl-text"
@@ -91,7 +91,7 @@ export function WhyChumlabSection() {
               UI.
             </h2>
           </Reveal>
-          <Reveal delay={100} translateY={8} duration={200}>
+          <Reveal delay={50} translateY={8} duration={200}>
             <p className="mt-5 sm:mt-6 font-sans text-base sm:text-lg leading-[1.55] text-cl-text-secondary max-w-[580px]">
               Every team builds the same dropdown, modal, and date picker
               over and over again. We built them once accessibly, with full
@@ -117,7 +117,7 @@ export function WhyChumlabSection() {
             <Reveal
               key={card.title}
               as="article"
-              delay={150 + i * 30}
+              delay={i * 20}
               translateY={16}
               duration={200}
               className="group bg-cl-bg hover:bg-cl-bg-elevated p-7 sm:p-8 md:p-9 flex flex-col gap-4 transition-colors"
