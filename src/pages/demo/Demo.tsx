@@ -1,16 +1,71 @@
-import { useState, useEffect, useRef } from "react";
-import { NavLink, Outlet, useLocation, Link } from "react-router-dom";
-import { ThemeContext } from "./ThemeContext";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import { LogoMark } from "../../brand/Logo";
+import { useCanonical, useJsonLd } from "../../hooks/useJsonLd";
+import { SiteHeader } from "../../components/SiteHeader";
 
-interface ComponentItem {
+interface NavItem {
   path: string;
   displayName: string;
   description?: string;
+  isNew?: boolean;
 }
 
-const components: ComponentItem[] = [
+interface NavSection {
+  id: string;
+  title: string;
+  items: NavItem[];
+}
+
+const OVERVIEW_ITEMS: NavItem[] = [
+  {
+    path: "introduction",
+    displayName: "Introduction",
+    description:
+      "What Chumlab UI is, what's inside, and who it's built for.",
+  },
+  {
+    path: "getting-started",
+    displayName: "Getting Started",
+    description:
+      "Install Chumlab UI, render your first component, wire up Tailwind.",
+  },
+  {
+    path: "accessibility",
+    displayName: "Accessibility",
+    description:
+      "How Chumlab UI handles WCAG, keyboard navigation, ARIA, and reduced motion.",
+  },
+];
+
+const GUIDE_ITEMS: NavItem[] = [
+  {
+    path: "guides/styling",
+    displayName: "Styling",
+    description:
+      "Override anything with className, CSS Modules, or plain CSS — without fighting our defaults.",
+  },
+  {
+    path: "guides/theming",
+    displayName: "Theming",
+    description:
+      "Theme tokens, dark/light surfaces, and custom palettes via CSS variables.",
+  },
+  {
+    path: "guides/animation",
+    displayName: "Animation",
+    description:
+      "Built-in transitions, prefers-reduced-motion, and where to plug in your own motion.",
+  },
+  {
+    path: "guides/ai-llm",
+    displayName: "AI & LLM",
+    description:
+      "Patterns for AI playgrounds, streaming UIs, and LLM-friendly component APIs.",
+  },
+];
+
+const COMPONENT_ITEMS: NavItem[] = [
   { path: "accordion", displayName: "Accordion", description: "Accessible, animated accordion component for React. Supports single and multiple expand modes, keyboard navigation, controlled state, and full Tailwind CSS customization." },
   { path: "avatar", displayName: "Avatar", description: "React avatar component with image, initials, and icon support. Includes avatar groups, status indicators, badges, auto-generated colors, and loading shimmer states." },
   { path: "breadcrumb", displayName: "Breadcrumb", description: "Accessible breadcrumb navigation for React. Features truncation with dropdown, custom separators, icons, tooltips, and per-item click handlers." },
@@ -22,19 +77,11 @@ const components: ComponentItem[] = [
   { path: "drawer", displayName: "Drawer", description: "Accessible slide-out drawer component for React. Supports all four directions, focus trapping, backdrop, and nested drawers." },
   { path: "dropdown", displayName: "Dropdown", description: "Accessible React dropdown select with keyboard navigation, search filtering, custom rendering, and portal-based positioning." },
   { path: "input", displayName: "Input", description: "Versatile React input component with validation states, prefix/suffix slots, clearable option, and full form integration." },
-  {
-    path: "international-phone-input",
-    displayName: "International Phone Input",
-    description: "International phone number input for React with country code selector, flag display, and phone number formatting.",
-  },
+  { path: "international-phone-input", displayName: "International Phone Input", description: "International phone number input for React with country code selector, flag display, and phone number formatting." },
   { path: "loader", displayName: "Loader", description: "Animated loading indicators for React. Multiple variants including spinner, dots, pulse, and skeleton shimmer." },
   { path: "modal", displayName: "Modal", description: "Accessible React modal dialog with focus trapping, keyboard dismiss, nested modals, and customizable overlay." },
   { path: "multi-select-dropdown", displayName: "Multi Select Dropdown", description: "Multi-select dropdown for React with chip display, select all, max selection limits, and keyboard navigation." },
-  {
-    path: "multi-select-searchable-dropdown",
-    displayName: "Multi Select Searchable Dropdown",
-    description: "Searchable multi-select dropdown for React with async search, debounce, chip display, and custom option rendering.",
-  },
+  { path: "multi-select-searchable-dropdown", displayName: "Multi Select Searchable Dropdown", description: "Searchable multi-select dropdown for React with async search, debounce, chip display, and custom option rendering." },
   { path: "otp-input", displayName: "OTP Input", description: "One-time password input for React with auto-focus advance, paste support, masked mode, and configurable length." },
   { path: "pagination", displayName: "Pagination", description: "Accessible React pagination with page size selector, jump-to-page, ellipsis truncation, and responsive layout." },
   { path: "radio-button", displayName: "Radio Button", description: "Accessible React radio button group with horizontal and vertical layouts, custom icons, and controlled state." },
@@ -51,123 +98,63 @@ const components: ComponentItem[] = [
   { path: "tooltip", displayName: "Tooltip", description: "Accessible React tooltip with configurable placement, delay, arrow, and rich content support." },
 ];
 
-const ThemeToggle = ({
-  isDarkMode,
-  toggle,
-}: {
-  isDarkMode: boolean;
-  toggle: () => void;
-}) => (
-  <button
-    onClick={toggle}
-    aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-    className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer group transition-colors duration-200 text-sm font-medium ${
-      isDarkMode
-        ? "hover:bg-white/8 active:bg-white/12 text-gray-300"
-        : "hover:bg-black/5 active:bg-black/10 text-gray-600"
-    }`}
-  >
-    {/* Sun icon */}
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      className={`transition-all duration-300 ease-out ${
-        isDarkMode
-          ? "text-amber-400 group-hover:text-amber-300"
-          : "hidden"
-      }`}
-    >
-      <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.06 1.06l1.06 1.06z" />
-    </svg>
-    {/* Moon icon */}
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      className={`transition-all duration-300 ease-out ${
-        isDarkMode
-          ? "hidden"
-          : "text-slate-500 group-hover:text-indigo-500"
-      }`}
-    >
-      <path
-        fillRule="evenodd"
-        d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z"
-        clipRule="evenodd"
-      />
-    </svg>
-    <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>
-  </button>
-);
+const NAV_SECTIONS: NavSection[] = [
+  { id: "overview", title: "Overview", items: OVERVIEW_ITEMS },
+  { id: "guides", title: "Guides", items: GUIDE_ITEMS },
+  { id: "components", title: "Components", items: COMPONENT_ITEMS },
+];
 
-const MenuIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="18" x2="21" y2="18" />
-  </svg>
-);
-
-const CloseMenuIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
+const ALL_ITEMS: NavItem[] = NAV_SECTIONS.flatMap((s) => s.items);
 
 const Demo = () => {
   const location = useLocation();
   const mainRef = useRef<HTMLElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
-  // SEO: Set document title based on the active component route
-  const activeComponent = components.find(
-    (c) => location.pathname === `/${c.path}`
+  const activeItem = ALL_ITEMS.find(
+    (c) => location.pathname === `/${c.path}`,
   );
   useDocumentTitle(
-    activeComponent ? `${activeComponent.displayName} Component` : "Components",
-    activeComponent?.description
+    activeItem ? `${activeItem.displayName} Component` : "Components",
+    activeItem?.description,
   );
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    try {
-      const stored = typeof window !== "undefined" ? localStorage.getItem("chumlab-ui-theme") : null;
-      if (stored) return stored === "dark";
-    } catch { /* SSR or restricted storage */ }
-    return true;
-  });
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("chumlab-ui-theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("chumlab-ui-theme", "light");
-    }
-  }, [isDarkMode]);
+  // Per-component-page SEO. Each route under the docs surface gets its
+  // own canonical and TechArticle JSON-LD so AI search engines and
+  // generic crawlers can index the page as a discrete article rather than
+  // treating every demo route as a duplicate of the docs root.
+  const canonicalUrl = activeItem
+    ? `https://chumlab.com/${activeItem.path}`
+    : "https://chumlab.com/";
+  useCanonical(canonicalUrl);
 
-  // Close sidebar on route change (render-time derived state)
+  const techArticleJsonLd = useMemo(() => {
+    if (!activeItem) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: `${activeItem.displayName} component — Chumlab UI`,
+      description:
+        activeItem.description ??
+        `${activeItem.displayName} is an accessible React component from Chumlab UI. Open source, MIT licensed.`,
+      url: canonicalUrl,
+      author: { "@id": "https://chumlab.com/#organization" },
+      publisher: { "@id": "https://chumlab.com/#organization" },
+      about: {
+        "@type": "Thing",
+        name: `${activeItem.displayName} React component`,
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+      },
+    };
+  }, [activeItem, canonicalUrl]);
+  useJsonLd("page-tech-article", techArticleJsonLd);
+
+  // Close mobile sidebar on route change.
   const [prevPathname, setPrevPathname] = useState(location.pathname);
   if (prevPathname !== location.pathname) {
     setPrevPathname(location.pathname);
@@ -176,160 +163,197 @@ const Demo = () => {
     }
   }
 
-  // Scroll to top on route change
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+  // `/` keyboard shortcut focuses the sidebar search; Esc clears + blurs it.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "/" && !isEditableTarget(e.target)) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+      } else if (e.key === "Escape" && document.activeElement === searchInputRef.current) {
+        setSearch("");
+        searchInputRef.current?.blur();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
-  // Colors matching home page blue palette
-  const bg = isDarkMode ? "bg-[#08080f]" : "bg-gray-50";
-  const sidebarBg = isDarkMode ? "bg-[#0a0a14]" : "bg-white";
-  const borderColor = isDarkMode ? "border-white/[0.06]" : "border-gray-200";
-  const activeLink = isDarkMode
-    ? "bg-blue-500/15 text-blue-400 font-medium"
-    : "bg-blue-50 text-blue-700 font-medium";
-  const inactiveLink = isDarkMode
-    ? "text-white/90 hover:bg-white/4 hover:text-white"
-    : "text-black/90 hover:bg-gray-50 hover:text-black";
+  const filteredSections = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return NAV_SECTIONS;
+    return NAV_SECTIONS.map((s) => ({
+      ...s,
+      items: s.items.filter((it) =>
+        it.displayName.toLowerCase().includes(q),
+      ),
+    })).filter((s) => s.items.length > 0);
+  }, [search]);
+
+  const totalFiltered = filteredSections.reduce(
+    (n, s) => n + s.items.length,
+    0,
+  );
 
   const sidebarContent = (
-    <>
-      <div className="flex items-center mb-8">
-        <Link to="/" className="flex items-center group">
-          <div className="relative">
-            <LogoMark size={160} variant={isDarkMode ? "light" : "dark"} />
-          </div>
-        </Link>
+    <div className="flex flex-col h-full">
+      {/* Search */}
+      <div className="p-4 border-b border-border-faint">
+        <div className="relative">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-fg-tertiary pointer-events-none"
+            aria-hidden
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            ref={searchInputRef}
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search"
+            aria-label="Search documentation"
+            className="w-full pl-9 pr-9 py-2.5 rounded-md bg-bg-elevated border border-border-faint text-fg placeholder:text-fg-tertiary font-sans text-[13px] focus:outline-none focus:border-accent/40"
+          />
+          <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-[10px] text-fg-tertiary px-1.5 py-0.5 rounded border border-border-faint bg-bg-base pointer-events-none">
+            /
+          </kbd>
+        </div>
       </div>
 
-      <nav className="flex flex-col gap-0.5">
-        <NavLink
-          to="/getting-started"
-          className={({ isActive }) =>
-            `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
-          }
-        >
-          Getting Started
-        </NavLink>
-        <div className={`my-1.5 border-t ${borderColor}`} />
-        {components.map(({ path, displayName }) => (
-          <NavLink
-            key={path}
-            to={`/${path}`}
-            className={({ isActive }) =>
-              `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
-            }
-          >
-            {displayName}
-          </NavLink>
-        ))}
+      {/* Sections. Section title and item rows share px-3 so the eyebrow
+          and link copy left-align on the same vertical guide. */}
+      <nav
+        className="flex-1 overflow-y-auto px-3 py-5 sidebar-scroll"
+        aria-label="Documentation navigation"
+      >
+        {totalFiltered === 0 ? (
+          <div className="px-3 py-6 text-center font-sans text-[13px] text-fg-tertiary">
+            No results for &ldquo;{search}&rdquo;
+          </div>
+        ) : (
+          filteredSections.map((section) => (
+            <div key={section.id} className="mb-7 last:mb-0">
+              <div className="px-3 mb-3 eyebrow text-fg-tertiary">
+                {section.title}
+              </div>
+              <ul className="space-y-0.5 list-none m-0 p-0">
+                {section.items.map((item) => (
+                  <li key={item.path}>
+                    <NavLink
+                      to={`/${item.path}`}
+                      className={({ isActive }) =>
+                        [
+                          "flex items-center gap-2 px-3 py-2 rounded-md font-sans text-[14px] leading-[1.4] transition-colors",
+                          isActive
+                            ? "bg-accent text-white font-medium"
+                            : "text-fg-secondary hover:text-fg hover:bg-fg/5",
+                        ].join(" ")
+                      }
+                      aria-current={
+                        location.pathname === `/${item.path}`
+                          ? "page"
+                          : undefined
+                      }
+                    >
+                      <span className="truncate">{item.displayName}</span>
+                      {item.isNew && (
+                        <span className="ml-auto font-mono text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20">
+                          New
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        )}
       </nav>
-    </>
+    </div>
   );
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
-      <div
-        className={`h-screen flex flex-col lg:flex-row overflow-hidden ${bg}`}
-      >
-        {/* ── Mobile top bar ── */}
-        <div
-          className={`lg:hidden flex items-center justify-between px-4 py-3 border-b shrink-0 ${sidebarBg} ${borderColor}`}
-        >
-          <Link to="/" className="flex items-center gap-2">
-            <LogoMark size={160} variant={isDarkMode ? "light" : "dark"} />
-          </Link>
-          <div className="flex items-center gap-3">
-            <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`p-1.5 rounded-lg transition-colors ${isDarkMode ? "text-gray-400 hover:bg-white/6" : "text-gray-600 hover:bg-gray-100"}`}
-              aria-label={sidebarOpen ? "Close menu" : "Open menu"}
-            >
-              {sidebarOpen ? <CloseMenuIcon /> : <MenuIcon />}
-            </button>
-          </div>
-        </div>
+    <div className="docs-surface min-h-screen flex flex-col bg-bg-base text-fg">
+      <SiteHeader />
 
-        {/* ── Mobile sidebar overlay ── */}
+      <div className="flex-1 flex pt-[60px] min-h-0">
+        {/* Mobile sidebar drawer */}
         {sidebarOpen && (
           <div
-            className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="lg:hidden fixed inset-0 z-40 bg-bg-base/80 backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           />
         )}
-
-        {/* ── Mobile sidebar drawer ── */}
         <aside
-          className={`lg:hidden fixed top-0 right-0 z-50 h-full w-[280px] max-w-[80vw] p-5 overflow-y-auto transition-transform duration-300 ease-out
-          [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
-          ${sidebarOpen ? "translate-x-0" : "translate-x-full"}
-          ${sidebarBg}`}
-        >
-          <div className="flex items-center justify-between mb-8">
-            <Link to="/" className="flex items-center" onClick={() => setSidebarOpen(false)}>
-              <LogoMark size={160} variant={isDarkMode ? "light" : "dark"} />
-            </Link>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className={`p-1.5 rounded-lg transition-colors ${isDarkMode ? "text-gray-400 hover:bg-white/6" : "text-gray-600 hover:bg-gray-100"}`}
-              aria-label="Close menu"
-            >
-              <CloseMenuIcon />
-            </button>
-          </div>
-          <nav className="flex flex-col gap-0.5">
-            <NavLink
-              to="/getting-started"
-              className={({ isActive }) =>
-                `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
-              }
-            >
-              Getting Started
-            </NavLink>
-            <div className={`my-1.5 border-t ${borderColor}`} />
-            {components.map(({ path, displayName }) => (
-              <NavLink
-                key={path}
-                to={`/${path}`}
-                className={({ isActive }) =>
-                  `text-left px-3 py-2 rounded-lg text-[13px] lg:text-[15px] transition-all duration-200 ${isActive ? activeLink : inactiveLink}`
-                }
-              >
-                {displayName}
-              </NavLink>
-            ))}
-          </nav>
-        </aside>
-
-        {/* ── Desktop sidebar ── */}
-        <aside
-          className={`hidden lg:block w-[300px] xl:w-[320px] shrink-0 border-r p-5 overflow-y-auto
-          [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
-          ${sidebarBg} ${borderColor}`}
+          className={`lg:hidden fixed top-[60px] bottom-0 left-0 z-50 w-[280px] max-w-[85vw] bg-bg-base border-r border-border-faint transition-transform duration-300 ease-out ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
           {sidebarContent}
         </aside>
 
-        {/* ── Main content ── */}
+        {/* Desktop sidebar */}
+        <aside
+          className="hidden lg:block sticky top-[60px] h-[calc(100vh-60px)] w-[260px] xl:w-[280px] shrink-0 border-r border-border-faint bg-bg-base"
+        >
+          {sidebarContent}
+        </aside>
+
+        {/* Mobile sidebar trigger — fixed bottom-left button */}
+        <button
+          type="button"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open documentation menu"
+          className="lg:hidden fixed bottom-5 left-5 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-fg text-bg-base font-medium text-[13px] shadow-lg border border-border-faint"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            aria-hidden
+          >
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="14" x2="20" y2="14" />
+            <line x1="4" y1="21" x2="20" y2="21" />
+          </svg>
+          Menu
+        </button>
+
+        {/* Main content */}
         <main
           ref={mainRef}
-          className={`flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto overscroll-y-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${bg}`}
+          className="flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-bg-base text-fg"
         >
-          {/* ── Top bar with theme toggle (desktop only — mobile has it in top bar) ── */}
-          <div className="hidden lg:flex justify-end px-4 sm:px-6 lg:px-8 py-3">
-            <ThemeToggle isDarkMode={isDarkMode} toggle={toggleDarkMode} />
-          </div>
-
-          <div className="p-4 sm:p-6 lg:p-8 pt-4 sm:pt-6 lg:pt-0 w-full max-w-none min-w-0 min-h-0">
-            <Outlet context={{ isDarkMode, toggleDarkMode }} />
+          <div className="p-5 sm:p-7 lg:p-10 w-full max-w-none min-w-0">
+            <Outlet />
           </div>
         </main>
       </div>
-    </ThemeContext.Provider>
+    </div>
   );
 };
+
+function isEditableTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+}
 
 export default Demo;

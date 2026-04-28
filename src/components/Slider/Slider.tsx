@@ -58,6 +58,7 @@ interface ThumbProps {
   orientation: "horizontal" | "vertical";
   inverted: boolean;
   isDragging: boolean;
+  transitionDuration: number;
   classes: Required<SliderClasses>;
   showTooltip: boolean;
   tooltipAlways: boolean;
@@ -80,6 +81,7 @@ function Thumb({
   orientation,
   inverted,
   isDragging,
+  transitionDuration,
   classes,
   showTooltip,
   tooltipAlways,
@@ -98,9 +100,10 @@ function Thumb({
   const isHorizontal = orientation === "horizontal";
   const thumbSize = 20;
 
-  const positionTransition = isDragging
-    ? "none"
-    : "left 0.15s ease, bottom 0.15s ease";
+  const positionTransition =
+    isDragging || transitionDuration <= 0
+      ? "none"
+      : `left ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`;
 
   const thumbStyle: CSSProperties = isHorizontal
     ? {
@@ -222,6 +225,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       renderThumb,
       renderMark,
       markDotSize = 6,
+      transitionDuration = 200,
       id,
       name,
       label,
@@ -265,6 +269,11 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
     // ─── Drag state ─────────────────────────────────────────────────────
     const [activeThumb, setActiveThumb] = useState<number | null>(null);
+    // Only true once an actual pointermove has fired after pointerdown.
+    // Lets a plain click on a mark/track animate smoothly to the new
+    // position; once the user starts dragging, transitions turn off so
+    // the thumb tracks the cursor 1:1.
+    const [isDragging, setIsDragging] = useState(false);
     const trackRef = useRef<HTMLDivElement>(null);
     const valuesRef = useRef(values);
     const commitRef = useRef(onValueCommit);
@@ -393,12 +402,17 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       if (!isBrowser) return;
 
       const handleMove = (e: PointerEvent) => {
+        // First real pointermove flips the slider into drag mode so
+        // CSS transitions disable for 1:1 cursor tracking. Click→release
+        // without a move stays in the animated path.
+        setIsDragging(true);
         const val = getValueFromPointer(e.clientX, e.clientY);
         updateValue(activeThumb, val);
       };
 
       const handleUp = () => {
         setActiveThumb(null);
+        setIsDragging(false);
         document.body.style.cursor = "";
         document.body.style.userSelect = "";
         commitRef.current?.(
@@ -484,7 +498,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             ? { right: `${rangeStart}%`, left: `${100 - rangeEnd}%` }
             : { left: `${rangeStart}%`, right: `${100 - rangeEnd}%` }),
           transition:
-            activeThumb !== null ? "none" : "left 0.15s ease, right 0.15s ease",
+            isDragging || transitionDuration <= 0
+              ? "none"
+              : `left ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1), right ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
         }
       : {
           position: "absolute",
@@ -494,7 +510,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             ? { top: `${rangeStart}%`, bottom: `${100 - rangeEnd}%` }
             : { bottom: `${rangeStart}%`, top: `${100 - rangeEnd}%` }),
           transition:
-            activeThumb !== null ? "none" : "top 0.15s ease, bottom 0.15s ease",
+            isDragging || transitionDuration <= 0
+              ? "none"
+              : `top ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${transitionDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
         };
 
     // Reserve space: thumb overhang, mark labels below, always-visible tooltips above
@@ -657,7 +675,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 disabled={disabled}
                 orientation={orientation}
                 inverted={inverted}
-                isDragging={activeThumb === 0}
+                isDragging={isDragging && activeThumb === 0}
+                transitionDuration={transitionDuration}
                 classes={mc}
                 showTooltip={showTooltip}
                 tooltipAlways={tooltipAlways}
@@ -679,7 +698,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 disabled={disabled}
                 orientation={orientation}
                 inverted={inverted}
-                isDragging={activeThumb === 1}
+                isDragging={isDragging && activeThumb === 1}
+                transitionDuration={transitionDuration}
                 classes={mc}
                 showTooltip={showTooltip}
                 tooltipAlways={tooltipAlways}
@@ -703,7 +723,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               disabled={disabled}
               orientation={orientation}
               inverted={inverted}
-              isDragging={activeThumb === 0}
+              isDragging={isDragging && activeThumb === 0}
+              transitionDuration={transitionDuration}
               classes={mc}
               showTooltip={showTooltip}
               tooltipAlways={tooltipAlways}

@@ -48,7 +48,7 @@ export const AvatarBadge = forwardRef<HTMLSpanElement, AvatarBadgeProps>(
     const shouldShow =
       !invisible && (dot || showZero || (count !== undefined && count > 0));
 
-    const { minWidth, height } = useMemo(
+    const { minWidth, height, fontSize, lineHeight } = useMemo(
       () => getBadgeSizeClasses(size, dot),
       [size, dot],
     );
@@ -96,6 +96,7 @@ export const AvatarBadge = forwardRef<HTMLSpanElement, AvatarBadgeProps>(
         style={{
           minWidth,
           height,
+          ...(fontSize ? { fontSize, lineHeight } : {}),
           ...positionStyle,
           ...colorStyle,
           ...style,

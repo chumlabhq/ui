@@ -13,6 +13,7 @@ import {
 import type { AccordionRef } from "../../components/Accordion";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -82,53 +83,45 @@ const getClasses = (dark: boolean) => ({
   accordion: {
     root: "w-full",
     item: dark
-      ? "border-b border-gray-700 last:border-b-0"
-      : "border-b border-gray-200 last:border-b-0",
-    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-      dark
-        ? "text-gray-100 hover:bg-gray-700 focus-visible:ring-blue-400 focus-visible:ring-offset-gray-800"
-        : "text-gray-900 hover:bg-gray-50 focus-visible:ring-blue-500"
-    }`,
+      ? "border-b border-cl-border last:border-b-0"
+      : "border-b border-cl-border last:border-b-0",
+    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent dark:text-cl-text dark:hover:bg-cl-bg-elevated dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
     triggerInner: "flex-1 text-left",
-    content: `px-4 py-4 text-sm ${dark ? "text-gray-300" : "text-gray-600"}`,
+    content: `px-4 py-4 text-sm text-cl-text-secondary`,
     contentWrapper:
       "overflow-hidden transition-[max-height,opacity,visibility]",
-    icon: `h-4 w-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
+    icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
     iconWrapper: "shrink-0",
-    subtitle: `font-normal mt-0.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
+    subtitle: `font-normal mt-0.5 text-cl-text-tertiary`,
     heading: "",
   },
   // Variant overrides
   accordionBordered: {
-    root: `w-full border rounded-lg overflow-hidden ${dark ? "border-gray-700" : "border-gray-200"}`,
+    root: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
     item: dark
-      ? "border-b border-gray-700 last:border-b-0"
-      : "border-b border-gray-200 last:border-b-0",
+      ? "border-b border-cl-border last:border-b-0"
+      : "border-b border-cl-border last:border-b-0",
   },
   accordionSeparated: {
     root: "w-full space-y-2",
-    item: `border rounded-lg overflow-hidden ${dark ? "border-gray-700" : "border-gray-200"}`,
+    item: `border rounded-cl-md overflow-hidden border-cl-border`,
   },
   accordionFlush: {
     root: "w-full",
     item: "",
-    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-      dark
-        ? "text-gray-100 hover:text-blue-400 focus-visible:ring-blue-400 focus-visible:ring-offset-gray-800"
-        : "text-gray-900 hover:text-blue-600 focus-visible:ring-blue-500"
-    }`,
+    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent dark:text-cl-text dark:hover:text-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
   },
   // Demo UI classes (matching InputDemo/TextAreaDemo pattern)
-  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-600" : "text-gray-300"}`,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  cardDense: `rounded-xl border p-4 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  code: `px-1.5 py-0.5 rounded-md text-[11px] font-mono font-medium ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wider ${dark ? "bg-indigo-500/10 text-indigo-400 ring-1 ring-inset ring-indigo-400/20" : "bg-indigo-50 text-indigo-600 ring-1 ring-inset ring-indigo-600/10"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-blue-500 text-white hover:bg-blue-600`,
-  stateDisplay: `text-sm font-mono ${dark ? "text-gray-400" : "text-gray-600"}`,
-  divider: `border-t ${dark ? "border-white/[0.06]" : "border-gray-100"}`,
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
+  code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  badge: `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-cl-md text-[11px] font-semibold uppercase tracking-wider bg-cl-accent/10 text-cl-accent ring-1 ring-inset ring-cl-accent/10 dark:bg-cl-accent/10 dark:text-cl-accent dark:ring-1 dark:ring-inset dark:ring-cl-accent/20`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90`,
+  stateDisplay: `text-sm font-mono text-cl-text-secondary`,
+  divider: `border-t border-cl-border`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -181,44 +174,11 @@ const AccordionDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Accordion
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A composable, accessible accordion component following WAI-ARIA
-            patterns. Supports keyboard navigation, single/multiple modes,
-            controlled/uncontrolled state, RTL support, and fully customizable
-            styling.
-          </p>
-
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@chumlab/ui/accordion";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Accordion"
+        description="A composable, accessible accordion component following WAI-ARIA patterns. Supports keyboard navigation, single/multiple modes, controlled/uncontrolled state, RTL support, and fully customizable styling."
+        code={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@chumlab/ui/accordion";`}
+      />
 
       {/* ─── Basic (Single Mode) ────────────────────────────────────────── */}
       <Section
@@ -383,7 +343,7 @@ const AccordionDemo = () => {
           {([2, 3, 4] as const).map((level) => (
             <div key={level}>
               <p
-                className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
               >
                 headingLevel={level}
               </p>
@@ -416,11 +376,11 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex flex-col sm:flex-row sm:items-center gap-3 bg-cl-bg-elevated`}
         >
           <div className="flex items-center gap-3 flex-wrap">
             <span
-              className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs font-medium text-cl-text-secondary`}
             >
               Current:
             </span>
@@ -469,11 +429,11 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex flex-col sm:flex-row sm:items-center gap-3 bg-cl-bg-elevated`}
         >
           <div className="flex items-center gap-3 flex-wrap">
             <span
-              className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs font-medium text-cl-text-secondary`}
             >
               Current:
             </span>
@@ -526,7 +486,7 @@ const AccordionDemo = () => {
           {(["sm", "md", "lg"] as const).map((size) => (
             <div key={size}>
               <p
-                className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
               >
                 size=&quot;{size}&quot;
               </p>
@@ -571,7 +531,7 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               default
             </p>
@@ -590,7 +550,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               bordered
             </p>
@@ -613,7 +573,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               separated
             </p>
@@ -638,7 +598,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               flush
             </p>
@@ -671,7 +631,7 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               Entire accordion disabled
             </p>
@@ -695,7 +655,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               Individual item disabled
             </p>
@@ -728,7 +688,7 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               Plus/Minus icons
             </p>
@@ -738,12 +698,12 @@ const AccordionDemo = () => {
                   <AccordionTrigger
                     expandedIcon={
                       <MinusIcon
-                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`w-4 h-4 text-cl-text-secondary`}
                       />
                     }
                     collapsedIcon={
                       <PlusIcon
-                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`w-4 h-4 text-cl-text-secondary`}
                       />
                     }
                   >
@@ -755,12 +715,12 @@ const AccordionDemo = () => {
                   <AccordionTrigger
                     expandedIcon={
                       <MinusIcon
-                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`w-4 h-4 text-cl-text-secondary`}
                       />
                     }
                     collapsedIcon={
                       <PlusIcon
-                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`w-4 h-4 text-cl-text-secondary`}
                       />
                     }
                   >
@@ -775,7 +735,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               Icon on left
             </p>
@@ -785,10 +745,10 @@ const AccordionDemo = () => {
                   <AccordionTrigger
                     iconPosition="left"
                     expandedIcon={
-                      <ChevronUpIcon className="w-4 h-4 text-blue-500" />
+                      <ChevronUpIcon className="w-4 h-4 text-cl-accent" />
                     }
                     collapsedIcon={
-                      <ChevronDownIcon className="w-4 h-4 text-blue-500" />
+                      <ChevronDownIcon className="w-4 h-4 text-cl-accent" />
                     }
                   >
                     Icon on the left
@@ -802,7 +762,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               No icon (iconPosition=&quot;none&quot;)
             </p>
@@ -831,7 +791,7 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               iconAnimation=&quot;rotate&quot; (default)
             </p>
@@ -850,7 +810,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               iconAnimation=&quot;switch&quot;
             </p>
@@ -861,12 +821,12 @@ const AccordionDemo = () => {
                     iconAnimation="switch"
                     expandedIcon={
                       <MinusIcon
-                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`w-4 h-4 text-cl-text-secondary`}
                       />
                     }
                     collapsedIcon={
                       <PlusIcon
-                        className={`w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`w-4 h-4 text-cl-text-secondary`}
                       />
                     }
                   >
@@ -881,7 +841,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               iconAnimation=&quot;none&quot;
             </p>
@@ -912,7 +872,7 @@ const AccordionDemo = () => {
                 subtitle="Learn about our performance features"
                 leftSlot={
                   <BoltIcon
-                    className={`w-4 h-4 ${dark ? "text-yellow-400" : "text-yellow-500"}`}
+                    className={`w-4 h-4 text-cl-warning`}
                   />
                 }
               >
@@ -927,12 +887,12 @@ const AccordionDemo = () => {
                 subtitle="Security features and compliance"
                 leftSlot={
                   <ShieldIcon
-                    className={`w-4 h-4 ${dark ? "text-green-400" : "text-green-500"}`}
+                    className={`w-4 h-4 text-cl-success dark:text-cl-success`}
                   />
                 }
                 rightSlot={
                   <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-green-500/10 text-green-400" : "bg-green-100 text-green-600"}`}
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/10 dark:text-cl-success`}
                   >
                     New
                   </span>
@@ -949,7 +909,7 @@ const AccordionDemo = () => {
                 subtitle="Customize to your needs"
                 leftSlot={
                   <SettingsIcon
-                    className={`w-4 h-4 ${dark ? "text-blue-400" : "text-blue-500"}`}
+                    className={`w-4 h-4 text-cl-accent`}
                   />
                 }
               >
@@ -992,7 +952,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-4 p-4 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-4 p-4 rounded-cl-md bg-cl-bg-elevated`}
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
             {[
@@ -1006,7 +966,7 @@ const AccordionDemo = () => {
               <div key={key} className="flex items-center gap-3 py-1">
                 <kbd className={c.kbd}>{key}</kbd>
                 <span
-                  className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-xs text-cl-text-secondary`}
                 >
                   {action}
                 </span>
@@ -1052,7 +1012,7 @@ const AccordionDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex flex-wrap gap-2 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex flex-wrap gap-2 bg-cl-bg-elevated`}
         >
           <button
             className={c.btnPrimary}
@@ -1109,7 +1069,7 @@ const AccordionDemo = () => {
         </DemoWrapper>
         {toggleLog.length > 0 && (
           <div
-            className={`mt-3 p-3 rounded-lg text-xs font-mono space-y-1 ${dark ? "bg-gray-800 text-gray-400" : "bg-gray-50 text-gray-500"}`}
+            className={`mt-3 p-3 rounded-cl-md text-xs font-mono space-y-1 bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated dark:text-cl-text-tertiary`}
           >
             {toggleLog.map((log, i) => (
               <div key={i}>{log}</div>
@@ -1138,7 +1098,7 @@ const AccordionDemo = () => {
                     <span
                       role="button"
                       tabIndex={0}
-                      className={`text-xs px-2 py-0.5 rounded cursor-pointer ${dark ? "text-red-400 hover:bg-red-500/10" : "text-red-500 hover:bg-red-50"}`}
+                      className={`text-xs px-2 py-0.5 rounded cursor-pointer text-cl-error hover:bg-cl-bg-elevated`}
                       onClick={(e) => {
                         e.stopPropagation();
                         removeItem(item.id);
@@ -1208,7 +1168,7 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               lazyLoad (renders only after first open)
             </p>
@@ -1225,7 +1185,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               unmountOnClose (removed from DOM when closed)
             </p>
@@ -1275,7 +1235,7 @@ const AccordionDemo = () => {
           ].map(({ label, duration, easing, reduceMotion }) => (
             <div key={label}>
               <p
-                className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
               >
                 {label}
               </p>
@@ -1297,43 +1257,6 @@ const AccordionDemo = () => {
             </div>
           ))}
         </div>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes, giving you a blank slate. Then apply your own styles via the classes prop."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <Accordion
-            type="single"
-            collapsible
-            defaultValue="unstyled-1"
-            unstyled
-            classes={{
-              root: "w-full divide-y divide-gray-200 dark:divide-gray-700",
-              item: "",
-              trigger: `w-full flex items-center justify-between py-3 px-4 text-left text-sm font-medium cursor-pointer transition-colors ${dark ? "text-gray-200 hover:bg-gray-800" : "text-gray-800 hover:bg-gray-50"}`,
-              content: `text-sm px-4 pb-3 ${dark ? "text-gray-400" : "text-gray-600"}`,
-              contentWrapper: "overflow-hidden",
-              icon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-500" : "text-gray-400"}`,
-            }}
-          >
-            <AccordionItem value="unstyled-1">
-              <AccordionTrigger>Custom styled item</AccordionTrigger>
-              <AccordionContent>
-                This accordion uses unstyled + classes to build a completely custom look.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="unstyled-2">
-              <AccordionTrigger>Another custom item</AccordionTrigger>
-              <AccordionContent>
-                Every slot is styled from scratch via the classes prop.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </DemoWrapper>
       </Section>
 
       {/* ─── Print Mode ─────────────────────────────────────────────────── */}
@@ -1513,7 +1436,7 @@ const AccordionDemo = () => {
         <div className="space-y-4">
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               With subtitle preview (showContent)
             </p>
@@ -1523,7 +1446,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               No animation
             </p>
@@ -1533,7 +1456,7 @@ const AccordionDemo = () => {
           </div>
           <div>
             <p
-              className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
               Small size
             </p>
@@ -1961,7 +1884,7 @@ const AccordionDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               "Triggers are native <button> elements inside heading elements (configurable level)",
@@ -1976,7 +1899,7 @@ const AccordionDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1987,12 +1910,12 @@ const AccordionDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Space / Enter", "Toggle the focused accordion item"],

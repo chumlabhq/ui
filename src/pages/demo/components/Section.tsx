@@ -4,26 +4,27 @@ interface SectionProps {
   title: React.ReactNode;
   description?: string;
   children: React.ReactNode;
+  /** Kept for API compatibility; deep-space tokens follow the parent .demo-light scope. */
   isDarkMode?: boolean;
 }
 
+/**
+ * Section heading inside a demo page. Spec: 20-22 px font-medium, NOT a
+ * clamp() — these are docs sub-headings, not marketing display type.
+ * 12 px top margin between sections so each section reads as its own block.
+ */
 export const Section: React.FC<SectionProps> = ({
   title,
   description,
   children,
-  isDarkMode = false,
 }) => (
-  <section className="space-y-3">
-    <div>
-      <h3
-        className={`text-[15px] font-semibold ${isDarkMode ? "text-white" : "text-gray-800"}`}
-      >
+  <section className="space-y-4 mt-12 first:mt-0">
+    <div className="mb-2">
+      <h2 className="font-sans font-medium text-cl-text text-[20px] sm:text-[22px] leading-[1.25] tracking-[-0.02em]">
         {title}
-      </h3>
+      </h2>
       {description && (
-        <p
-          className={`text-xs mt-0.5 ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
-        >
+        <p className="font-sans text-[14px] text-cl-text-secondary leading-[1.6] mt-2 max-w-[680px]">
           {description}
         </p>
       )}
@@ -32,24 +33,79 @@ export const Section: React.FC<SectionProps> = ({
   </section>
 );
 
+interface DocsHeroProps {
+  /** Eyebrow tag — uppercase, mono. Defaults to "Documentation". */
+  eyebrow?: string;
+  /** Main heading word(s). For component pages, just the component name. */
+  title: string;
+  /**
+   * Optional second word rendered in the serif-italic accent style. Used by
+   * narrative pages like "Getting *started.*". Component pages typically
+   * pass just `title` and skip this.
+   */
+  accent?: string;
+  /** Subtitle paragraph below the heading. */
+  description: string;
+  /** Optional import statement rendered as a code block under the subtitle. */
+  code?: string;
+}
+
+/**
+ * Hero block for every docs/demo page. Mirrors the Getting Started layout
+ * exactly — eyebrow + hairline rule + large display heading + subtitle +
+ * optional import code — so every component page reads as one family.
+ */
+export const DocsHero: React.FC<DocsHeroProps> = ({
+  eyebrow = "Components",
+  title,
+  accent,
+  description,
+  code,
+}) => (
+  <header className="mb-12">
+    <div className="eyebrow text-fg-tertiary mb-3">{eyebrow}</div>
+    <div className="rule rule-t mb-8" />
+    <h1
+      className="font-sans font-medium text-fg mb-5 leading-[1.05]"
+      style={{
+        fontSize: "clamp(36px, 6vw, 56px)",
+        letterSpacing: "-0.03em",
+      }}
+    >
+      {title}
+      {accent && (
+        <>
+          {" "}
+          <span className="serif-accent">{accent}</span>
+        </>
+      )}
+    </h1>
+    <p className="text-[15px] sm:text-[15.5px] text-fg-secondary leading-[1.6] max-w-2xl">
+      {description}
+    </p>
+    {code && (
+      <div className="mt-8">
+        <pre className="rounded-cl-lg border border-cl-border bg-cl-code-bg text-cl-code-text font-mono text-[12px] leading-[1.65] px-4 py-3 overflow-x-auto whitespace-pre-wrap break-all">
+          <code>{code}</code>
+        </pre>
+      </div>
+    )}
+  </header>
+);
+
 interface CodeBlockProps {
   code: string;
   isDarkMode?: boolean;
 }
 
-export const CodeBlock: React.FC<CodeBlockProps> = ({
-  code,
-  isDarkMode = false,
-}) => (
-  <pre
-    className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${
-      isDarkMode
-        ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6"
-        : "bg-gray-50 text-gray-700 border border-gray-200"
-    }`}
-  >
-    <code>{code}</code>
-  </pre>
+/**
+ * Compatibility alias — a thin wrapper that renders the spec-compliant
+ * CodeFenced primitive (header + copy button). Existing demo imports of
+ * `<CodeBlock>` keep working.
+ */
+import { CodeFenced } from "./primitives";
+export const CodeBlock: React.FC<CodeBlockProps> = ({ code }) => (
+  <CodeFenced code={code} />
 );
 
 interface DemoWrapperProps {
@@ -61,7 +117,6 @@ interface DemoWrapperProps {
 
 export const DemoWrapper: React.FC<DemoWrapperProps> = ({
   children,
-  isDarkMode = false,
   className = "",
   layout = "flex-row",
 }) => {
@@ -77,10 +132,7 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
   return (
     <div
       className={cn(
-        "relative border rounded-xl overflow-hidden",
-        isDarkMode
-          ? "border-white/6 bg-linear-to-br from-gray-800/80 via-gray-900/60 to-gray-800/80"
-          : "border-gray-200 bg-white",
+        "relative rounded-cl-lg border border-cl-border bg-cl-bg-elevated overflow-hidden",
         className,
       )}
     >
@@ -94,15 +146,8 @@ interface DemoLabelProps {
   isDarkMode?: boolean;
 }
 
-export const DemoLabel: React.FC<DemoLabelProps> = ({
-  children,
-  isDarkMode = false,
-}) => (
-  <p
-    className={`text-xs font-medium uppercase tracking-wider mb-3 ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
-  >
-    {children}
-  </p>
+export const DemoLabel: React.FC<DemoLabelProps> = ({ children }) => (
+  <p className="eyebrow text-fg-tertiary mb-3">{children}</p>
 );
 
 interface ComponentHeaderProps {
@@ -114,16 +159,19 @@ interface ComponentHeaderProps {
 export const ComponentHeader: React.FC<ComponentHeaderProps> = ({
   title,
   description,
-  isDarkMode = false,
 }) => (
-  <div className={`mb-8 pb-4 border-b ${isDarkMode ? "border-gray-700/50" : "border-gray-200"}`}>
+  <div className="mb-10 pb-6 rule rule-b">
     <h1
-      className={`text-3xl font-bold mb-2 ${isDarkMode ? "text-white" : "text-gray-900"}`}
+      className="font-sans font-medium text-fg mb-3 leading-[1.05]"
+      style={{
+        fontSize: "clamp(36px, 5vw, 48px)",
+        letterSpacing: "-0.03em",
+      }}
     >
       {title}
     </h1>
     {description && (
-      <p className={isDarkMode ? "text-gray-400" : "text-gray-600"}>
+      <p className="text-[15px] text-fg-secondary leading-[1.55] max-w-2xl">
         {description}
       </p>
     )}
@@ -143,29 +191,21 @@ export const PropRow: React.FC<PropRowProps> = ({
   type,
   defaultVal,
   description,
-  isDarkMode = false,
 }) => (
-  <tr
-    className={`border-t ${isDarkMode ? "border-gray-700/50" : "border-gray-100"}`}
-  >
+  <tr className="rule rule-t">
     <td
-      className={`px-4 py-2 font-mono text-[13px] break-words align-top ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+      className="px-4 py-2 font-mono text-[13px] break-words align-top"
+      style={{ color: "var(--accent)" }}
     >
       {name}
     </td>
-    <td
-      className={`px-4 py-2 font-mono text-xs break-words align-top ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
-    >
+    <td className="px-4 py-2 font-mono text-xs break-words align-top text-fg-secondary">
       {type}
     </td>
-    <td
-      className={`px-4 py-2 font-mono text-xs break-words align-top ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
-    >
+    <td className="px-4 py-2 font-mono text-xs break-words align-top text-fg-tertiary">
       {defaultVal ?? "-"}
     </td>
-    <td
-      className={`px-4 py-2 text-[13px] break-words align-top ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-    >
+    <td className="px-4 py-2 text-[13px] break-words align-top text-fg-secondary">
       {description ?? "-"}
     </td>
   </tr>
@@ -176,12 +216,9 @@ interface PropsTableProps {
   isDarkMode?: boolean;
 }
 
-export const PropsTable: React.FC<PropsTableProps> = ({
-  children,
-  isDarkMode = false,
-}) => (
+export const PropsTable: React.FC<PropsTableProps> = ({ children }) => (
   <div className="overflow-x-auto w-full min-w-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-    <table className={`w-full table-fixed text-left min-w-[600px]`}>
+    <table className="w-full table-fixed text-left min-w-[600px]">
       <colgroup>
         <col className="w-[22%]" />
         <col className="w-[25%]" />
@@ -189,21 +226,11 @@ export const PropsTable: React.FC<PropsTableProps> = ({
         <col className="w-[40%]" />
       </colgroup>
       <thead>
-        <tr
-          className={`${isDarkMode ? "text-gray-500 border-gray-700/50" : "text-gray-400 border-gray-100"} border-b`}
-        >
-          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
-            Prop
-          </th>
-          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
-            Type
-          </th>
-          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
-            Default
-          </th>
-          <th className="px-4 py-2 text-[11px] font-semibold uppercase tracking-wider">
-            Description
-          </th>
+        <tr className="text-fg-tertiary rule rule-b">
+          <th className="px-4 py-2 eyebrow">Prop</th>
+          <th className="px-4 py-2 eyebrow">Type</th>
+          <th className="px-4 py-2 eyebrow">Default</th>
+          <th className="px-4 py-2 eyebrow">Description</th>
         </tr>
       </thead>
       <tbody>{children}</tbody>

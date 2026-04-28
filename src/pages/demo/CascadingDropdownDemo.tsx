@@ -7,6 +7,7 @@ import type {
 } from "../../components/CascadingDropdown";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -100,10 +101,16 @@ const loadCountriesForRegion = async (
       label: country.name.common,
       content: (
         <span className="flex items-center gap-2">
+          {/* Build the flag URL from our own S3 bucket using the ISO
+              alpha-2 code. The REST Countries API's `flags.png` URL
+              points at Wikimedia, which serves the post-2021 Taliban
+              flag for Afghanistan and various other reskinned flags
+              for other politically-contested codes — using our bucket
+              keeps the flag set consistent with the rest of the UI. */}
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span className="truncate">{country.name.common}</span>
         </span>
@@ -376,10 +383,16 @@ const asyncSearchCountries = async (
       label: country.name.common,
       content: (
         <span className="flex items-center gap-2">
+          {/* Build the flag URL from our own S3 bucket using the ISO
+              alpha-2 code. The REST Countries API's `flags.png` URL
+              points at Wikimedia, which serves the post-2021 Taliban
+              flag for Afghanistan and various other reskinned flags
+              for other politically-contested codes — using our bucket
+              keeps the flag set consistent with the rest of the UI. */}
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span className="truncate">{country.name.common}</span>
         </span>
@@ -393,105 +406,70 @@ const getClasses = (dark: boolean) => ({
   cascading: {
     root: "",
     wrapper: "",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-      dark
-        ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-    }`,
-    menu: `rounded-lg shadow-lg overflow-visible ${
-      dark
-        ? "bg-gray-800 border border-gray-700"
-        : "bg-white border border-gray-200"
-    }`,
-    menuItem: `flex items-center justify-between px-3 py-2 cursor-pointer ${
-      dark
-        ? "text-gray-200 hover:bg-gray-700 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-        : "hover:bg-gray-50 data-[focused]:bg-gray-100 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-    }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
+ menu: `rounded-cl-md shadow-lg overflow-visible bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+    menuItem: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-black/5 data-[focused]:bg-black/5 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[focused]:bg-white/10 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
     menuItemSelected: "",
-    menuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
+    menuItemFocused: dark ? "bg-white/10" : "bg-black/5",
     menuItemDisabled: "opacity-50 cursor-not-allowed",
-    submenu: `min-w-[180px] rounded-lg shadow-lg ml-1 ${
-      dark
-        ? "bg-gray-800 border border-gray-700"
-        : "bg-white border border-gray-200"
-    }`,
+ submenu: `min-w-[180px] rounded-cl-md shadow-lg ml-1 bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     submenuContainer: "",
-    submenuItem: `flex items-center gap-2 px-3 py-2 cursor-pointer ${
-      dark
-        ? "text-gray-200 hover:bg-gray-700 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-        : "hover:bg-gray-50 data-[focused]:bg-gray-100 data-[selected]:bg-blue-50 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-    }`,
-    submenuItemSelected: dark ? "bg-gray-600" : "bg-blue-50",
-    submenuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
-    label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
-    error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
-    submenuChevron: `w-4 h-4 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
-    checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-blue-400" : "text-blue-600"}`,
-    checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${
-      dark ? "border-gray-500" : "border-gray-300"
-    }`,
+    submenuItem: `flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-black/5 data-[focused]:bg-black/5 data-[selected]:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed dark:text-cl-text dark:hover:bg-white/10 dark:data-[focused]:bg-white/10 dark:data-[selected]:bg-cl-accent/50 dark:data-[disabled]:opacity-50 dark:data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
+    submenuItemSelected: dark ? "bg-cl-accent/50 font-medium" : "bg-cl-accent/10 font-medium",
+    submenuItemFocused: dark ? "bg-white/10" : "bg-black/5",
+    label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
+    error: `text-sm mt-1 text-cl-error`,
+    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
+    submenuChevron: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
+    checkIcon: `w-4 h-4 shrink-0 text-cl-accent`,
+    checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input dark:border dark:border-cl-border`,
     checkboxChecked: dark
-      ? "bg-blue-500 border-blue-500 text-white"
-      : "bg-blue-600 border-blue-600 text-white",
-    noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
-    loading: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
+      ? "bg-cl-accent border-cl-border-input-focus text-white"
+      : "bg-cl-accent border-cl-border-input-focus text-white",
+    noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
+    loading: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
   } satisfies CascadingDropdownClasses,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  valueBox: `mt-3 p-3 rounded-lg w-full ${dark ? "bg-gray-800 border border-gray-700" : "bg-gray-50"}`,
-  valueLabel: `text-xs font-medium mb-1 ${dark ? "text-gray-400" : "text-gray-600"}`,
-  valuePre: `text-xs overflow-x-auto ${dark ? "text-gray-300" : "text-gray-800"}`,
-  statusText: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-  descText: `text-sm mt-2 w-full ${dark ? "text-gray-400" : "text-gray-500"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  valueBox: `mt-3 p-3 rounded-cl-md w-full bg-cl-bg-hover dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+  valueLabel: `text-xs font-medium mb-1 text-cl-text-secondary`,
+  valuePre: `text-xs overflow-x-auto text-cl-text dark:text-cl-text-secondary`,
+  statusText: `text-xs text-cl-text-secondary`,
+  descText: `text-sm mt-2 w-full text-cl-text-secondary`,
 });
 
-// ─── Purple Theme Variant ───────────────────────────────────────────────────
+// ─── Blue Theme Variant ─────────────────────────────────────────────────────
+//
+// Brand-blue cascade. Menu/submenu surfaces sit on bg-cl-bg-elevated so
+// they're fully opaque (the previous bg-cl-accent/10 was so transparent
+// the page underneath bled through). The accent shows up only on the
+// trigger pill, the focus ring, the chevrons, and the selected highlight.
 
-const getPurpleClasses = (dark: boolean): CascadingDropdownClasses => ({
-  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-    dark
-      ? "border-purple-700 bg-purple-950/60 text-purple-200 hover:border-purple-500"
-      : "border-purple-300 bg-purple-50 text-purple-900 hover:border-purple-400"
-  }`,
-  menu: `rounded-lg shadow-lg overflow-visible ${
-    dark
-      ? "bg-purple-950 border border-purple-800"
-      : "bg-purple-50 border border-purple-200"
-  }`,
-  menuItem: `flex items-center justify-between px-3 py-2 cursor-pointer ${
-    dark
-      ? "text-purple-200 hover:bg-purple-900/60 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-      : "text-purple-900 hover:bg-purple-100 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-  }`,
-  menuItemFocused: dark ? "bg-purple-900/60" : "bg-purple-100",
-  submenu: `min-w-[180px] rounded-lg shadow-lg ml-1 ${
-    dark
-      ? "bg-purple-950 border border-purple-800"
-      : "bg-purple-50 border border-purple-200"
-  }`,
-  submenuItem: `flex items-center gap-2 px-3 py-2 cursor-pointer ${
-    dark
-      ? "text-purple-200 hover:bg-purple-900/60 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-      : "text-purple-900 hover:bg-purple-100 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
-  }`,
-  submenuItemSelected: dark ? "bg-purple-900/80" : "bg-purple-200",
-  submenuItemFocused: dark ? "bg-purple-900/60" : "bg-purple-100",
-  chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-purple-400" : "text-purple-500"}`,
-  submenuChevron: `w-4 h-4 shrink-0 ${dark ? "text-purple-400" : "text-purple-500"}`,
-  checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-purple-300" : "text-purple-600"}`,
-  checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${
-    dark ? "border-purple-500" : "border-purple-400"
-  }`,
-  checkboxChecked: dark
-    ? "bg-purple-500 border-purple-500 text-white"
-    : "bg-purple-600 border-purple-600 text-white",
-  noResults: `px-3 py-4 text-sm text-center ${dark ? "text-purple-400" : "text-purple-500"}`,
+const getBlueClasses = (_dark: boolean): CascadingDropdownClasses => ({
+  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent border-cl-accent bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/15`,
+  menu: `rounded-cl-md shadow-cl-md bg-cl-bg-elevated border border-cl-accent`,
+  menuItem: `flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
+  menuItemSelected: `bg-cl-accent/15 text-cl-accent font-medium`,
+  menuItemFocused: `bg-cl-accent/10`,
+  submenu: `min-w-[180px] rounded-cl-md shadow-cl-md ml-1 max-h-[320px] overflow-y-auto bg-cl-bg-elevated border border-cl-accent`,
+  submenuItem: `flex items-center gap-2 px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-accent/10 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md`,
+  submenuItemSelected: `bg-cl-accent/15 text-cl-accent font-medium`,
+  submenuItemFocused: `bg-cl-accent/10`,
+  chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
+  submenuChevron: `w-4 h-4 shrink-0 text-cl-accent`,
+  checkIcon: `w-4 h-4 shrink-0 text-cl-on-accent`,
+  checkbox: `w-4 h-4 shrink-0 border rounded-cl-sm flex items-center justify-center border-cl-accent`,
+  checkboxChecked: `bg-cl-accent border-cl-accent text-cl-on-accent`,
+  noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
 });
+
+// Backwards-compat alias — the demo still references getPurpleClasses by name
+// in a few spots. Re-export under both names so we don't have to rewrite
+// every call site.
+const getPurpleClasses = getBlueClasses;
 
 // ─── Demo ───────────────────────────────────────────────────────────────────
 
@@ -638,61 +616,43 @@ const CascadingDropdownDemo = () => {
   );
 
   // ─── Dark-only theme variant for explicit dark demos ────────────────────
-  const darkOnlyClasses: CascadingDropdownClasses = {
+  // Renamed from "darkOnly" — the demo originally hard-coded text-white
+  // and dropped the bare `border` width keyword, which broke it in light
+  // mode (white text on cream paper, no visible card border). Switched
+  // to brand tokens so the override theme-tracks correctly. Surfaces use
+  // bg-cl-bg-elevated (off-white in light, near-black in dark) and the
+  // bordered container reads in both modes.
+  const themedSurfaceClasses: CascadingDropdownClasses = {
     trigger:
-      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500",
-    menu: "bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-visible",
+      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border rounded-cl-md bg-cl-bg-elevated text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent",
+    menu: "bg-cl-bg-elevated border border-cl-border rounded-cl-md shadow-cl-md overflow-visible",
     menuItem:
-      "flex items-center justify-between px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-    menuItemFocused: "bg-gray-700",
+      "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-bg-hover data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
+    menuItemFocused: "bg-cl-bg-hover",
     submenu:
-      "min-w-[180px] bg-gray-800 border border-gray-700 rounded-lg shadow-lg ml-1",
+      "min-w-[180px] bg-cl-bg-elevated border border-cl-border rounded-cl-md shadow-cl-md ml-1",
     submenuItem:
-      "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-    submenuItemSelected: "bg-gray-600",
-    submenuItemFocused: "bg-gray-700",
-    chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
-    submenuChevron: "w-4 h-4 shrink-0 text-gray-500",
-    checkIcon: "w-4 h-4 shrink-0 text-blue-400",
+      "flex items-center gap-2 px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-bg-hover data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
+    submenuItemSelected: "bg-cl-accent/15 text-cl-accent font-medium",
+    submenuItemFocused: "bg-cl-bg-hover",
+    chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+    submenuChevron: "w-4 h-4 shrink-0 text-cl-text-tertiary",
+    checkIcon: "w-4 h-4 shrink-0 text-cl-on-accent",
     checkbox:
-      "w-4 h-4 shrink-0 border border-gray-500 rounded flex items-center justify-center",
-    checkboxChecked: "bg-blue-500 border-blue-500 text-white",
-    noResults: "px-3 py-4 text-sm text-gray-400 text-center",
+      "w-4 h-4 shrink-0 border border-cl-border-input rounded-cl-sm flex items-center justify-center",
+    checkboxChecked: "bg-cl-accent border-cl-accent text-cl-on-accent",
+    noResults: "px-3 py-4 text-sm text-cl-text-tertiary text-center",
   };
+  // Back-compat: existing call sites use `darkOnlyClasses`.
+  const darkOnlyClasses = themedSurfaceClasses;
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Cascading Dropdown
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A nested dropdown component with support for submenus,
-            single/multi-select modes, async loading of children, custom icons,
-            and full keyboard navigation.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Cascading Dropdown"
+        description="A nested dropdown component with support for submenus, single/multi-select modes, async loading of children, custom icons, and full keyboard navigation."
+        code={`import { CascadingDropdown } from "@chumlab/ui/cascading-dropdown";`}
+      />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -705,8 +665,8 @@ const CascadingDropdownDemo = () => {
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <CascadingDropdown
               options={categoryOptions}
-              value={{}}
-              onValueChange={() => {}}
+              value={basicValue}
+              onValueChange={(val) => setBasicValue(val)}
               placeholder="Select a category..."
             />
           </div>
@@ -866,7 +826,7 @@ const CascadingDropdownDemo = () => {
                   e.stopPropagation();
                   resetLoadOnOpenDemo();
                 }}
-                className={`text-xs underline ${dark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}`}
+                className={`text-xs underline text-cl-accent hover:text-cl-text`}
               >
                 Reset
               </button>
@@ -1026,7 +986,7 @@ const CascadingDropdownDemo = () => {
                 ...c.cascading,
                 trigger: `${c.cascading.trigger} ${
                   Object.keys(successValue).length > 0
-                    ? "border-green-500 focus:ring-green-500"
+                    ? "border border-cl-success focus:ring-cl-success"
                     : ""
                 }`,
               }}
@@ -1060,7 +1020,7 @@ const CascadingDropdownDemo = () => {
                 ...c.cascading,
                 trigger: `${c.cascading.trigger} ${
                   Object.keys(errorValue).length === 0
-                    ? "border-red-500 focus:ring-red-500"
+                    ? "border border-cl-error focus:ring-cl-error"
                     : ""
                 }`,
               }}
@@ -1247,33 +1207,13 @@ const CascadingDropdownDemo = () => {
               )}
               classes={{
                 // Menu search: full-width border-bottom style
-                searchInput: `flex items-center gap-2 px-3 py-2.5 border-b-2 ${
-                  dark
-                    ? "border-teal-600 bg-gray-800/50"
-                    : "border-teal-200 bg-teal-50/30"
-                }`,
-                searchInputElement: `flex-1 bg-transparent text-sm focus:outline-none ${
-                  dark
-                    ? "text-white placeholder-teal-400/60"
-                    : "text-gray-900 placeholder-teal-500/50"
-                }`,
-                searchIcon: `w-5 h-5 shrink-0 ${
-                  dark ? "text-teal-400" : "text-teal-600"
-                }`,
+                searchInput: `flex items-center gap-2 px-3 py-2.5 border-b-2 border border-cl-border-input-focus bg-cl-accent/30 dark:border dark:border-cl-border-input-focus dark:bg-cl-bg-elevated/50`,
+                searchInputElement: `flex-1 bg-transparent text-sm focus:outline-none text-cl-text placeholder-teal-500/50 dark:text-white dark:placeholder-teal-400/60`,
+                searchIcon: `w-5 h-5 shrink-0 text-cl-accent dark:text-cl-accent`,
                 // Submenu search: compact pill style
-                submenuSearchInput: `flex items-center gap-1.5 mx-2 my-1.5 px-2.5 py-1 rounded-full ${
-                  dark
-                    ? "bg-teal-900/30 ring-1 ring-teal-500/20"
-                    : "bg-teal-50 ring-1 ring-teal-200"
-                }`,
-                submenuSearchInputElement: `flex-1 bg-transparent text-xs focus:outline-none ${
-                  dark
-                    ? "text-teal-100 placeholder-teal-400/50"
-                    : "text-teal-900 placeholder-teal-500/60"
-                }`,
-                submenuSearchIcon: `w-3 h-3 shrink-0 ${
-                  dark ? "text-teal-400/70" : "text-teal-500"
-                }`,
+                submenuSearchInput: `flex items-center gap-1.5 mx-2 my-1.5 px-2.5 py-1 rounded-full bg-cl-accent/10 ring-1 ring-cl-accent dark:bg-cl-accent/30 dark:ring-1 dark:ring-cl-accent/20`,
+                submenuSearchInputElement: `flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-teal-500/60 dark:text-cl-accent dark:placeholder-teal-400/50`,
+                submenuSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/70`,
               }}
             />
           </div>
@@ -1308,43 +1248,23 @@ const CascadingDropdownDemo = () => {
               )}
               classes={{
                 // Menu search: full-width purple background
-                searchInput: `flex items-center gap-2 px-3 py-2.5 ${
-                  dark
-                    ? "bg-purple-900/30 border-b border-purple-500/30"
-                    : "bg-purple-50 border-b border-purple-200"
-                }`,
-                searchInputElement: `flex-1 bg-transparent text-sm focus:outline-none ${
-                  dark
-                    ? "text-purple-100 placeholder-purple-400/60"
-                    : "text-purple-900 placeholder-purple-400"
-                }`,
-                searchIcon: `w-4 h-4 shrink-0 ${
-                  dark ? "text-purple-400" : "text-purple-500"
-                }`,
+                searchInput: `flex items-center gap-2 px-3 py-2.5 bg-cl-accent/10 border-b border-cl-border-input-focus dark:bg-cl-accent/30 dark:border-b dark:border dark:border-cl-border-input-focus/30`,
+                searchInputElement: `flex-1 bg-transparent text-sm focus:outline-none text-cl-accent placeholder-purple-400 dark:text-cl-accent dark:placeholder-purple-400/60`,
+                searchIcon: `w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent`,
                 // Submenu search: compact underline style with filter icon
-                submenuSearchInput: `flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b ${
-                  dark
-                    ? "border-purple-500/30"
-                    : "border-purple-200"
-                }`,
-                submenuSearchInputElement: `flex-1 bg-transparent text-xs focus:outline-none ${
-                  dark
-                    ? "text-purple-200 placeholder-purple-400/50"
-                    : "text-purple-800 placeholder-purple-400/70"
-                }`,
-                submenuSearchIcon: `w-3 h-3 shrink-0 ${
-                  dark ? "text-purple-400/60" : "text-purple-400"
-                }`,
+                submenuSearchInput: `flex items-center gap-1.5 mx-2 mt-1.5 mb-1 px-1 py-1 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30`,
+                submenuSearchInputElement: `flex-1 bg-transparent text-xs focus:outline-none text-cl-accent placeholder-purple-400/70 dark:text-cl-accent dark:placeholder-purple-400/50`,
+                submenuSearchIcon: `w-3 h-3 shrink-0 text-cl-accent dark:text-cl-accent/60`,
               }}
             />
           </div>
         </DemoWrapper>
       </Section>
 
-      {/* ─── Dark Theme (Single Select) ─────────────────────────────────── */}
+      {/* ─── Elevated Surface (Single Select) ───────────────────────────── */}
       <Section
-        title="Dark Theme (Single Select)"
-        description="Dark themed dropdown with custom background colors."
+        title="Elevated Surface (Single Select)"
+        description="Custom-styled dropdown sitting on the elevated surface token — adapts to both light and dark modes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1360,10 +1280,10 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Dark Theme (Multi Select) ──────────────────────────────────── */}
+      {/* ─── Elevated Surface (Multi Select) ────────────────────────────── */}
       <Section
-        title="Dark Theme (Multi Select)"
-        description="Dark themed multi-select with custom checkbox colors."
+        title="Elevated Surface (Multi Select)"
+        description="Custom-styled multi-select with brand-coloured checkboxes — adapts to both light and dark modes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1380,10 +1300,10 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Purple Theme (Single Select) ───────────────────────────────── */}
+      {/* ─── Blue Theme (Single Select) ───────────────────────────────── */}
       <Section
-        title="Purple Theme (Single Select)"
-        description="Purple themed dropdown with matching colors."
+        title="Blue Theme (Single Select)"
+        description="Blue-accent themed dropdown with matching colors."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1399,10 +1319,10 @@ const CascadingDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Purple Theme (Multi Select) ────────────────────────────────── */}
+      {/* ─── Blue Theme (Multi Select) ────────────────────────────────── */}
       <Section
-        title="Purple Theme (Multi Select)"
-        description="Purple themed multi-select with matching checkbox."
+        title="Blue Theme (Multi Select)"
+        description="Blue-accent themed multi-select with matching checkbox."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1435,11 +1355,11 @@ const CascadingDropdownDemo = () => {
               closeOnSelect={false}
               classes={{
                 ...c.cascading,
-                submenuItemSelected: "bg-emerald-50",
-                checkIcon: "w-4 h-4 shrink-0 text-emerald-600",
+                submenuItemSelected: "bg-cl-success/15",
+                checkIcon: "w-4 h-4 shrink-0 text-cl-success",
                 checkbox:
-                  "w-4 h-4 shrink-0 border border-gray-300 rounded-full flex items-center justify-center",
-                checkboxChecked: "bg-emerald-500 border-emerald-500 text-white",
+                  "w-4 h-4 shrink-0 border border-cl-border-input rounded-full flex items-center justify-center",
+                checkboxChecked: "bg-cl-success border-cl-success text-white",
               }}
             />
           </div>
@@ -1462,11 +1382,11 @@ const CascadingDropdownDemo = () => {
               closeOnSelect={false}
               classes={{
                 ...c.cascading,
-                submenuItemSelected: "bg-orange-50",
-                checkIcon: "w-4 h-4 shrink-0 text-orange-600",
+                submenuItemSelected: "bg-cl-warning/15",
+                checkIcon: "w-4 h-4 shrink-0 text-cl-warning",
                 checkbox:
-                  "w-5 h-5 shrink-0 border-2 border-orange-300 rounded-sm flex items-center justify-center",
-                checkboxChecked: "bg-orange-500 border-orange-500 text-white",
+                  "w-5 h-5 shrink-0 border-2 border-cl-warning rounded-cl-sm flex items-center justify-center",
+                checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
             />
           </div>
@@ -1498,10 +1418,10 @@ const CascadingDropdownDemo = () => {
               }
               classes={{
                 ...c.cascading,
-                submenuItemSelected: "bg-amber-50",
+                submenuItemSelected: "bg-cl-warning/15",
                 checkbox:
-                  "w-4 h-4 shrink-0 border border-amber-400 rounded flex items-center justify-center",
-                checkboxChecked: "bg-amber-500 border-amber-500 text-white",
+                  "w-4 h-4 shrink-0 border border-cl-warning rounded flex items-center justify-center",
+                checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
             />
           </div>
@@ -1523,7 +1443,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select category..."
               selectedIcon={
                 <svg
-                  className="w-4 h-4 text-rose-500"
+                  className="w-4 h-4 text-cl-accent"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -1536,7 +1456,7 @@ const CascadingDropdownDemo = () => {
               }
               classes={{
                 ...c.cascading,
-                submenuItemSelected: "bg-rose-50",
+                submenuItemSelected: "bg-cl-accent/10",
               }}
             />
           </div>
@@ -1550,11 +1470,13 @@ const CascadingDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="w-full sm:max-w-md">
+          {/* No max-width cap on the wrapper — the dropdown spans the full
+              width of the demo card. */}
+          <div className="w-full">
             <CascadingDropdown
               options={categoryOptions}
-              value={{}}
-              onValueChange={() => {}}
+              value={basicValue}
+              onValueChange={(val) => setBasicValue(val)}
               fullWidth
               placeholder="Select category..."
               classes={c.cascading}
@@ -1604,7 +1526,7 @@ const CascadingDropdownDemo = () => {
             placeholder="Loading example..."
             classes={{
               ...c.cascading,
-              loading: `px-4 py-8 text-center text-sm animate-pulse ${dark ? "text-gray-400" : "text-gray-500"}`,
+              loading: `px-4 py-8 text-center text-sm animate-pulse text-cl-text-secondary`,
             }}
           />
         </DemoWrapper>
@@ -1623,16 +1545,17 @@ const CascadingDropdownDemo = () => {
             onValueChange={() => {}}
             loading
             loadingText={
-              <div className="space-y-2 p-2">
+              <div className="space-y-3 p-3">
+                {/* Skeleton bars sit on top of the menu surface, so they need
+                    a contrasting tint — bg-cl-bg-elevated would be invisible
+                    against the menu's own bg-cl-bg-elevated background. */}
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="flex items-center gap-3">
                     <div
-                      className={`h-4 rounded animate-pulse ${dark ? "bg-gray-700" : "bg-gray-200"}`}
+                      className="h-4 rounded-cl-sm animate-pulse bg-cl-text/10"
                       style={{ width: `${50 + i * 12}%` }}
                     />
-                    <div
-                      className={`h-3 w-3 rounded-sm animate-pulse ${dark ? "bg-gray-700" : "bg-gray-200"}`}
-                    />
+                    <div className="h-3 w-3 rounded-cl-sm animate-pulse bg-cl-text/10 shrink-0" />
                   </div>
                 ))}
               </div>
@@ -1669,11 +1592,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-                  dark
-                    ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                }`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
               }}
             />
           </div>
@@ -1686,11 +1605,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer ${
-                  dark
-                    ? "border-gray-600 text-gray-200 hover:border-indigo-400"
-                    : "border-gray-200 text-gray-700 hover:border-indigo-500"
-                }`,
+                trigger: `flex items-center justify-between gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer border border-cl-border text-cl-text hover:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus`,
               }}
             />
           </div>
@@ -1703,11 +1618,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-                  dark
-                    ? "text-gray-300 hover:bg-white/60"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
               }}
             />
           </div>
@@ -1720,11 +1631,7 @@ const CascadingDropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.cascading,
-                trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer ${
-                  dark
-                    ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
-                    : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
-                }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full transition-colors cursor-pointer border border-cl-border bg-white text-cl-text hover:border-cl-border-input shadow-sm dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:border-cl-border`,
               }}
             />
           </div>
@@ -1745,16 +1652,16 @@ const CascadingDropdownDemo = () => {
             placeholder="Styled menus..."
             classes={{
               ...c.cascading,
-              menu: `rounded-xl shadow-2xl overflow-visible ${dark ? "bg-gray-900 border border-gray-700" : "bg-white border border-gray-100 shadow-gray-200/60"}`,
-              menuItem: `flex items-center justify-between px-4 py-2.5 cursor-pointer text-sm ${dark ? "text-gray-200 hover:bg-indigo-900/30" : "hover:bg-indigo-50"}`,
-              menuItemFocused: dark ? "bg-indigo-900/30" : "bg-indigo-50",
-              submenu: `rounded-xl shadow-2xl ml-1 ${dark ? "bg-gray-900 border border-gray-700" : "bg-white border border-gray-100 shadow-gray-200/60"}`,
-              submenuItem: `flex items-center gap-2 px-4 py-2 cursor-pointer text-sm ${dark ? "text-gray-300 hover:bg-indigo-900/20" : "hover:bg-indigo-50"}`,
-              submenuItemFocused: dark ? "bg-indigo-900/20" : "bg-indigo-50",
-              checkbox: `w-4 h-4 rounded-md border-2 flex items-center justify-center transition-colors ${dark ? "border-indigo-500" : "border-indigo-400"}`,
+              menu: `rounded-cl-lg shadow-2xl overflow-visible bg-white border border-cl-border shadow-black/60 dark:bg-cl-bg dark:border dark:border-cl-border`,
+              menuItem: `flex items-center justify-between px-4 py-2.5 cursor-pointer text-sm hover:bg-cl-accent/10 dark:text-cl-text dark:hover:bg-cl-accent/30 first:rounded-t-cl-lg last:rounded-b-cl-lg`,
+              menuItemFocused: dark ? "bg-cl-accent/30" : "bg-cl-accent/10",
+              submenu: `rounded-cl-lg shadow-2xl ml-1 bg-white border border-cl-border shadow-black/60 dark:bg-cl-bg dark:border dark:border-cl-border`,
+              submenuItem: `flex items-center gap-2 px-4 py-2 cursor-pointer text-sm hover:bg-cl-accent/10 dark:text-cl-text-secondary dark:hover:bg-cl-accent/20 first:rounded-t-cl-lg last:rounded-b-cl-lg`,
+              submenuItemFocused: dark ? "bg-cl-accent/20" : "bg-cl-accent/10",
+              checkbox: `w-4 h-4 rounded-cl-md border-2 flex items-center justify-center transition-colors border-cl-border-input-focus dark:border dark:border-cl-border-input-focus`,
               checkboxChecked: dark
-                ? "bg-indigo-500 border-indigo-500"
-                : "bg-indigo-600 border-indigo-600",
+                ? "bg-cl-accent border-cl-border-input-focus"
+                : "bg-cl-accent border-cl-border-input-focus",
             }}
           />
         </DemoWrapper>
@@ -1774,23 +1681,19 @@ const CascadingDropdownDemo = () => {
             placeholder="Compact..."
             classes={{
               ...c.cascading,
-              trigger: `flex items-center justify-between gap-1.5 w-full px-2.5 py-1.5 text-xs rounded-md border transition-colors cursor-pointer ${
-                dark
-                  ? "border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600"
-                  : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-              }`,
-              menu: `rounded-md shadow-lg overflow-visible ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-              menuItem: `flex items-center justify-between px-2.5 py-1.5 cursor-pointer text-xs ${dark ? "text-gray-300 hover:bg-gray-700" : "hover:bg-gray-50"}`,
-              menuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
-              submenu: `rounded-md shadow-lg ml-0.5 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-              submenuItem: `flex items-center gap-1.5 px-2.5 py-1.5 cursor-pointer text-xs ${dark ? "text-gray-300 hover:bg-gray-700" : "hover:bg-gray-50"}`,
-              submenuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
+ trigger: `flex items-center justify-between gap-1.5 w-full px-2.5 py-1.5 text-xs rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white text-cl-text hover:border-cl-border-input dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:hover:border-cl-border`,
+ menu: `rounded-cl-md shadow-lg overflow-visible bg-cl-bg-elevated border border-cl-border`,
+              menuItem: `flex items-center justify-between px-2.5 py-1.5 cursor-pointer text-xs hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md`,
+              menuItemFocused: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
+ submenu: `rounded-cl-md shadow-lg ml-0.5 bg-cl-bg-elevated border border-cl-border`,
+              submenuItem: `flex items-center gap-1.5 px-2.5 py-1.5 cursor-pointer text-xs hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md`,
+              submenuItemFocused: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
               chevron: "w-3 h-3",
               submenuChevron: "w-3 h-3",
-              checkbox: `w-3.5 h-3.5 rounded border flex items-center justify-center ${dark ? "border-gray-500" : "border-gray-300"}`,
+              checkbox: `w-3.5 h-3.5 rounded border flex items-center justify-center border-cl-border-input`,
               checkboxChecked: dark
-                ? "bg-blue-500 border-blue-500"
-                : "bg-blue-600 border-blue-600",
+                ? "bg-cl-accent border-cl-border-input-focus"
+                : "bg-cl-accent border-cl-border-input-focus",
             }}
           />
         </DemoWrapper>
@@ -1829,10 +1732,10 @@ const CascadingDropdownDemo = () => {
                 label: "Design",
                 content: (
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-purple-500" />
+                    <span className="w-2 h-2 rounded-full bg-cl-accent" />
                     <span>Design</span>
                     <span
-                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-purple-900/40 text-purple-300" : "bg-purple-100 text-purple-700"}`}
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`}
                     >
                       3 items
                     </span>
@@ -1850,10 +1753,10 @@ const CascadingDropdownDemo = () => {
                 label: "Engineering",
                 content: (
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-500" />
+                    <span className="w-2 h-2 rounded-full bg-cl-accent" />
                     <span>Engineering</span>
                     <span
-                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-blue-900/40 text-blue-300" : "bg-blue-100 text-blue-700"}`}
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`}
                     >
                       4 items
                     </span>
@@ -1872,10 +1775,10 @@ const CascadingDropdownDemo = () => {
                 label: "Marketing",
                 content: (
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="w-2 h-2 rounded-full bg-cl-success" />
                     <span>Marketing</span>
                     <span
-                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full ${dark ? "bg-emerald-900/40 text-emerald-300" : "bg-emerald-100 text-emerald-700"}`}
+                      className={`ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/40 dark:text-cl-success`}
                     >
                       2 items
                     </span>
@@ -1893,7 +1796,7 @@ const CascadingDropdownDemo = () => {
             placeholder="Select department..."
             classes={{
               ...c.cascading,
-              menuItem: `flex items-center justify-between px-3 py-2.5 cursor-pointer text-sm ${dark ? "text-gray-200 hover:bg-gray-700" : "hover:bg-gray-50"}`,
+              menuItem: `flex items-center justify-between px-3 py-2.5 cursor-pointer text-sm hover:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md`,
             }}
           />
         </DemoWrapper>
@@ -1989,24 +1892,12 @@ const CascadingDropdownDemo = () => {
             placeholder="Select technologies..."
             classes={{
               ...c.cascading,
-              menu: `rounded-lg shadow-lg overflow-visible w-full max-w-[260px] ${
-                dark
-                  ? "bg-gray-800 border border-gray-700"
-                  : "bg-white border border-gray-200"
-              }`,
-              menuItem: `flex items-center justify-between px-3 py-2.5 cursor-pointer text-sm leading-snug ${
-                dark ? "text-gray-200 hover:bg-gray-700" : "hover:bg-gray-50"
-              }`,
-              menuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
-              submenu: `rounded-lg shadow-lg ml-1 w-full max-w-[280px] max-h-[260px] overflow-y-auto ${
-                dark
-                  ? "bg-gray-800 border border-gray-700"
-                  : "bg-white border border-gray-200"
-              }`,
-              submenuItem: `flex items-center gap-2 px-3 py-2.5 cursor-pointer text-sm leading-snug ${
-                dark ? "text-gray-300 hover:bg-gray-700" : "hover:bg-gray-50"
-              }`,
-              submenuItemFocused: dark ? "bg-gray-700" : "bg-gray-100",
+ menu: `rounded-cl-md shadow-lg overflow-visible w-full max-w-[260px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+              menuItem: `flex items-center justify-between px-3 py-2.5 cursor-pointer text-sm leading-snug hover:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md`,
+              menuItemFocused: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
+ submenu: `rounded-cl-md shadow-lg ml-1 w-full max-w-[280px] max-h-[260px] overflow-y-auto bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+              submenuItem: `flex items-center gap-2 px-3 py-2.5 cursor-pointer text-sm leading-snug hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md`,
+              submenuItemFocused: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
             }}
           />
         </DemoWrapper>
@@ -2591,7 +2482,7 @@ const CascadingDropdownDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               "Uses combobox / listbox ARIA pattern with proper roles",
@@ -2607,7 +2498,7 @@ const CascadingDropdownDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -2618,12 +2509,12 @@ const CascadingDropdownDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["\u2191 / \u2193", "Navigate options"],

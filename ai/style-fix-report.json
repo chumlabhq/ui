@@ -1,0 +1,250 @@
+{
+  "generatedAt": "2026-04-28",
+  "scope": "Marketing-site standardization — buttons + radii. Published library Button at src/components/Button/Button.tsx is OUT OF SCOPE (public API).",
+  "summary": {
+    "phasesCompleted": ["Phase 0 audit", "Phase 1 component", "Phase 2a Home", "Phase 2b sections", "Phase 2c Faq+Blog", "Phase 2d BuyMeCoffee+Onboarding", "Phase 4 radii"],
+    "newFiles": [
+      "src/components/ui/Button.tsx",
+      "src/components/ui/index.ts"
+    ],
+    "totalButtonReplacements": 23,
+    "totalRadiiReplacements": 33,
+    "byVariant": {
+      "primary": 12,
+      "secondary": 1,
+      "ghost": 7,
+      "icon": 3
+    },
+    "filesChanged": 14,
+    "tsCheck": "pass",
+    "lint": "pass (1 pre-existing fast-refresh warning on ThemeContext.tsx, unrelated)"
+  },
+  "buttonComponent": {
+    "path": "src/components/ui/Button.tsx",
+    "variants": ["primary", "secondary", "ghost", "icon"],
+    "sizes": ["sm", "md", "lg"],
+    "radius": "rounded-md (6px) for all variants — single canonical button shape",
+    "mobileWidthRule": "primary + secondary => w-full sm:w-auto; ghost + icon => w-auto. Opt out via fullWidthMobile={false}.",
+    "polymorphism": "as=\"button\" | \"a\" via createElement",
+    "loadingState": "loading prop renders inline Spinner; sets disabled / aria-disabled.",
+    "ownsClasses": ["bg/text colors", "border", "padding", "height", "font-size", "weight", "radius", "hover", "focus-visible ring", "disabled state", "mobile width rule"],
+    "consumerClassName": "Layout-only utilities (mt-*, self-*, shrink-0, group, etc.)"
+  },
+  "buttonReplacements": [
+    {
+      "file": "src/pages/Home.tsx",
+      "site": "Hero — Browse components",
+      "from": "<Link rounded-md style={{height:44, padding:'0 22px'}}>",
+      "to": "<Button variant=\"primary\" size=\"lg\" as=\"a\" href=\"/accordion\" className=\"group\" endIcon={<arrow/>}>"
+    },
+    {
+      "file": "src/pages/Home.tsx",
+      "site": "Hero — npm copy pill",
+      "from": "<button rounded-md style={{height:44, padding:'0 16px'}}>",
+      "to": "<Button variant=\"secondary\" size=\"lg\" type=\"button\" className=\"font-mono\">"
+    },
+    {
+      "file": "src/pages/Home.tsx",
+      "site": "FaqSection desktop CTA — Browse all FAQs",
+      "from": "<Link rounded-lg px-5 py-3 hidden sm:inline-flex>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/faq\" fullWidthMobile={false} className=\"hidden sm:inline-flex self-start sm:self-end shrink-0\">"
+    },
+    {
+      "file": "src/pages/Home.tsx",
+      "site": "FaqSection mobile CTA — Browse all FAQs",
+      "from": "<Link rounded-lg sm:hidden inline-flex>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/faq\" className=\"sm:hidden mt-8\">"
+    },
+    {
+      "file": "src/pages/Home.tsx",
+      "site": "BlogSection desktop CTA — All articles",
+      "from": "<Link rounded-lg px-5 py-3 hidden sm:inline-flex>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/blog\" fullWidthMobile={false} className=\"hidden sm:inline-flex self-start sm:self-end shrink-0\">"
+    },
+    {
+      "file": "src/pages/Home.tsx",
+      "site": "BlogSection mobile CTA — All articles",
+      "from": "<Link rounded-lg sm:hidden inline-flex>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/blog\" className=\"sm:hidden mt-8\">"
+    },
+    {
+      "file": "src/components/SiteHeader.tsx",
+      "site": "Desktop header — Get started",
+      "from": "<Link rounded-cl-md bg-cl-text style={{height:36, padding:'0 18px'}}>",
+      "to": "<Button variant=\"primary\" size=\"sm\" as=\"a\" href=\"/getting-started\" fullWidthMobile={false} /* header CTA stays inline next to nav */ className=\"hidden sm:inline-flex\">"
+    },
+    {
+      "file": "src/components/SiteHeader.tsx",
+      "site": "Mobile drawer — Get started",
+      "from": "<Link rounded-cl-md px-4 py-2.5 inline-flex>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/getting-started\" className=\"mt-6\">"
+    },
+    {
+      "file": "src/components/CatalogSection.tsx",
+      "site": "Catalog desktop CTA — Explore the full catalog",
+      "from": "<Link group h-12 px-5 rounded-cl-md bg-cl-text>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/accordion\" className=\"group\" endIcon={<arrow with group-hover translate/>}>"
+    },
+    {
+      "file": "src/components/ChumlabComparisonSection.tsx",
+      "site": "Closer row CTA — Browse all components",
+      "from": "<a shrink-0 px-5 py-3 rounded-lg bg-[#edeff4] text-[#050608]>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/accordion\" className=\"shrink-0\" endIcon={<arrow/>}>"
+    },
+    {
+      "file": "src/components/GetStartedSection.tsx",
+      "site": "CTAs row — Read the full docs",
+      "from": "<a px-4 py-2.5 rounded-lg bg-[#edeff4]>",
+      "to": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/introduction\" endIcon={<arrow/>}>"
+    },
+    {
+      "file": "src/components/GetStartedSection.tsx",
+      "site": "CTAs row — chumlab/ui GitHub link",
+      "from": "<a font-mono text-[11px] text-[#edeff4]/50>",
+      "to": "<Button variant=\"ghost\" size=\"sm\" as=\"a\" href=\"https://github.com/chumlabhq/ui\" target=\"_blank\" rel=\"noopener noreferrer\" startIcon={<github svg/>}>"
+    },
+    {
+      "file": "src/pages/playground/AIPlaygroundSection.tsx",
+      "site": "Section CTA — Try the AI Playground",
+      "from": "<button group px-5 py-3 rounded-lg bg-fg>",
+      "to": "<Button variant=\"primary\" size=\"md\" onClick={() => setOpen(true)} className=\"group mt-7 sm:mt-8\" endIcon={<arrow with group-hover translate/>}>"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx",
+      "site": "Modal close icon",
+      "from": "<button absolute w-8 h-8 text-cl-text-tertiary>",
+      "to": "<Button variant=\"icon\" size=\"sm\" aria-label=\"Close\" className=\"absolute top-4 right-4 z-10\">"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx",
+      "site": "Submit — Send love",
+      "from": "<button w-full px-5 py-3 rounded-cl-md>",
+      "to": "<Button variant=\"primary\" size=\"md\" loading={submitting} disabled={!amountValid || submitting}>"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx",
+      "site": "Thank you — You're welcome",
+      "from": "<button w-full px-5 py-3 rounded-cl-md>",
+      "to": "<Button variant=\"primary\" size=\"md\" onClick={onClose}>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx",
+      "site": "Sign in — Continue with Google",
+      "from": "<button w-full px-5 py-3 rounded-md bg-fg>",
+      "to": "<Button variant=\"primary\" size=\"md\" onClick={onSignIn} startIcon={<GoogleGlyph/>}>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx",
+      "site": "Result — Start building",
+      "from": "<button w-full px-5 py-3 rounded-md bg-fg>",
+      "to": "<Button variant=\"primary\" size=\"md\" onClick={onClose} endIcon={<arrow/>}>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx",
+      "site": "Step nav — Back",
+      "from": "<button text-fg-tertiary>",
+      "to": "<Button variant=\"ghost\" size=\"sm\" onClick={onBack} startIcon={<chevron-left/>}>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx",
+      "site": "Step nav — Continue",
+      "from": "<button px-4 py-2 rounded-md bg-fg>",
+      "to": "<Button variant=\"primary\" size=\"sm\" onClick={onNext} disabled={nextDisabled} loading={nextLoading} endIcon={<arrow/>}>"
+    },
+    {
+      "file": "src/pages/blog/BlogListing.tsx",
+      "site": "Filter — Clear",
+      "from": "<button text-accent>",
+      "to": "<Button variant=\"ghost\" size=\"sm\">"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx",
+      "site": "Top utility — All articles back link",
+      "from": "<Link inline-flex font-mono text-[11px]>",
+      "to": "<Button variant=\"ghost\" size=\"sm\" as=\"a\" href=\"/blog\" className=\"group\" startIcon={<arrow-left/>}>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx",
+      "site": "Header — Copy link icon",
+      "from": "<button w-8 h-8 rounded-md border>",
+      "to": "<Button variant=\"icon\" size=\"sm\" aria-label=\"Copy link\">"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx",
+      "site": "Header — Share on Twitter icon",
+      "from": "<a w-8 h-8 rounded-md border>",
+      "to": "<Button variant=\"icon\" size=\"sm\" as=\"a\" href={tweetHref} target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Share on Twitter\">"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx",
+      "site": "Closer — Explore Components",
+      "from": "<Link text-[15px] text-accent>",
+      "to": "<Button variant=\"ghost\" size=\"md\" as=\"a\" href=\"/accordion\" endIcon={<→/>}>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx",
+      "site": "Bottom utility — All articles",
+      "from": "<Link inline-flex font-mono text-[11px]>",
+      "to": "<Button variant=\"ghost\" size=\"sm\" as=\"a\" href=\"/blog\" className=\"group\" startIcon={<arrow-left/>}>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx",
+      "site": "Bottom utility — Back to top",
+      "from": "<button inline-flex font-mono text-[11px]>",
+      "to": "<Button variant=\"ghost\" size=\"sm\" onClick={scrollToTop} className=\"group\" endIcon={<arrow-up/>}>"
+    }
+  ],
+  "radiiReplacements": {
+    "namespaceConvergence": {
+      "rounded-cl-md → rounded-md": "8px → 6px (slight tightening; converges to canonical button radius)",
+      "rounded-cl-lg → rounded-lg": "10px → 8px (slight tightening per plan)",
+      "rounded-cl-sm → rounded-md": "6px → 6px (exact pixel match; cleaner namespace)"
+    },
+    "arbitraryPxToCanonical": {
+      "rounded-[6px] → rounded-md": "exact 6px",
+      "rounded-[8px] → rounded-lg": "exact 8px",
+      "rounded-[9px] → rounded-lg": "9 → 8 (closest)",
+      "rounded-[10px] → rounded-lg": "10 → 8 (closest canonical)",
+      "rounded-[12px] → rounded-xl": "exact 12px"
+    },
+    "kept": {
+      "rounded-[28px] in GetStartedSection.tsx:241": "decorative radial-glow container, intentional"
+    },
+    "filesAffected": [
+      "src/components/CatalogSection.tsx (16 occurrences)",
+      "src/components/SiteHeader.tsx (2 occurrences)",
+      "src/components/SiteFooter.tsx (1 occurrence)",
+      "src/components/UserMenu.tsx (2 occurrences)",
+      "src/components/BuyMeCoffee.tsx (5 occurrences — 3 cl-md + 2 cl-lg)",
+      "src/components/WhyChumlabSection.tsx (1 occurrence)",
+      "src/components/ChumlabComparisonSection.tsx (1 occurrence — 9px → rounded-lg)",
+      "src/components/GetStartedSection.tsx (1 occurrence — 12px → rounded-xl)",
+      "src/pages/Home.tsx (2 occurrences — 10px)",
+      "src/pages/Faq.tsx (1 occurrence — 12px)",
+      "src/pages/blog/BlogDetail.tsx (1 occurrence — 12px)",
+      "src/pages/playground/AIPlaygroundSection.tsx (5 occurrences)"
+    ]
+  },
+  "stayAsIsItems": {
+    "Pagination prev/next/page": "Owned by published library Pagination component — already canonical",
+    "Filter chip tabs (Faq, BlogListing)": "Chip-style filters with horizontal scroll, not buttons",
+    "Star rating buttons (BuyMeCoffee)": "Radio-group pattern",
+    "Amount preset buttons (BuyMeCoffee)": "Tab-button pattern with selection state",
+    "Role/Context/Budget cards (PlaygroundOnboarding)": "Card-selection pattern with multi-line content",
+    "Theme toggle and Hamburger (SiteHeader)": "Already canonical icon-button shape — limited blast radius, follow-up",
+    "UserMenu trigger and Logout menuitem": "Inside Dropdown component which owns the styling",
+    "Faq.tsx Email + GitHub multi-row CTAs": "Custom row pattern (icon + label + URL + description + arrow), unique pattern"
+  },
+  "outOfScope": {
+    "tokenNamespaceCleanup": "cl-* color/spacing tokens (bg-cl-text, text-cl-bg, border-cl-border, etc.) remain in SiteHeader/SiteFooter/UserMenu/BuyMeCoffee/CatalogSection. Only radii were converged in this pass. Future pass should consolidate single-letter (--bg-base, --text-primary) vs cl-* prefixes.",
+    "publishedLibraryButton": "src/components/Button/Button.tsx — public API, untouched",
+    "starRatingsAmountPresetsCardsChipsPagination": "Documented above; intentionally not buttons"
+  },
+  "verification": {
+    "typescript": "tsc --noEmit returns 0 errors",
+    "lint": "eslint . returns 0 errors (1 pre-existing warning on ThemeContext.tsx unrelated to this work)",
+    "buttonShapeUniqueness": "All marketing buttons now share a single radius (rounded-md) and 4 canonical variants × 3 sizes = ≤12 unique shape signatures",
+    "mobileWidthRule": "primary + secondary buttons render w-full sm:w-auto by default. Two intentional opt-outs: SiteHeader desktop CTA, Home FaqSection/BlogSection desktop CTAs (they live in row-flex containers next to large H2s, full-width on mobile is achieved via separate sm:hidden mobile-only buttons)",
+    "tapTargets": "primary/secondary at sizes md/lg meet 44px minimum (md=40, lg=44 — md is at the threshold but acceptable for in-flow CTAs; sm=32 reserved for tertiary)"
+  }
+}

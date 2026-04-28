@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, ButtonGroup } from "../../components/Button";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -154,52 +155,20 @@ const ExternalLinkIcon = ({ className = "" }: { className?: string }) => (
 const base =
   "cursor-pointer text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none";
 
-const getClasses = (dark: boolean) => ({
-  primary: `${base} px-4 py-2.5 rounded-xl shadow-md ${
-    dark
-      ? "bg-indigo-500 text-white hover:bg-indigo-400 active:bg-indigo-600 shadow-indigo-500/20 hover:shadow-indigo-400/30 focus-visible:ring-indigo-400 focus-visible:ring-offset-gray-900"
-      : "bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-700 shadow-indigo-600/25 hover:shadow-lg hover:shadow-indigo-500/30 focus-visible:ring-indigo-500"
-  }`,
-  secondary: `${base} px-4 py-2.5 rounded-xl ${
-    dark
-      ? "bg-white/8 text-gray-200 hover:bg-white/[0.14] active:bg-white/6 ring-1 ring-inset ring-white/[0.1] focus-visible:ring-gray-400 focus-visible:ring-offset-gray-900"
-      : "bg-gray-50 text-gray-700 hover:bg-gray-100 active:bg-gray-150 ring-1 ring-inset ring-gray-200 shadow-sm shadow-gray-900/[0.04] hover:shadow focus-visible:ring-gray-400"
-  }`,
-  outline: `${base} px-4 py-2.5 rounded-xl ${
-    dark
-      ? "border border-white/15 text-gray-200 hover:bg-white/6 active:bg-white/4 focus-visible:ring-gray-400 focus-visible:ring-offset-gray-900"
-      : "border border-gray-200 text-gray-700 hover:bg-gray-50 active:bg-gray-100 shadow-sm shadow-gray-900/[0.03] hover:border-gray-300 focus-visible:ring-gray-400"
-  }`,
-  ghost: `${base} px-4 py-2.5 rounded-xl ${
-    dark
-      ? "text-gray-300 hover:bg-white/8 active:bg-white/4 focus-visible:ring-gray-400 focus-visible:ring-offset-gray-900"
-      : "text-gray-600 hover:bg-gray-100 active:bg-gray-50 focus-visible:ring-gray-400"
-  }`,
-  danger: `${base} px-4 py-2.5 rounded-xl shadow-md ${
-    dark
-      ? "bg-red-500 text-white hover:bg-red-400 active:bg-red-600 shadow-red-500/20 hover:shadow-red-400/30 focus-visible:ring-red-400 focus-visible:ring-offset-gray-900"
-      : "bg-red-500 text-white hover:bg-red-400 active:bg-red-600 shadow-red-500/20 hover:shadow-lg hover:shadow-red-400/25 focus-visible:ring-red-400"
-  }`,
-  success: `${base} px-4 py-2.5 rounded-xl shadow-md ${
-    dark
-      ? "bg-emerald-500 text-white hover:bg-emerald-400 active:bg-emerald-600 shadow-emerald-500/20 hover:shadow-emerald-400/30 focus-visible:ring-emerald-400 focus-visible:ring-offset-gray-900"
-      : "bg-emerald-500 text-white hover:bg-emerald-400 active:bg-emerald-600 shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-400/25 focus-visible:ring-emerald-400"
-  }`,
-  link: `cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 ${
-    dark
-      ? "text-indigo-400 hover:text-indigo-300 hover:underline focus-visible:ring-indigo-400 focus-visible:ring-offset-gray-900"
-      : "text-indigo-600 hover:text-indigo-500 hover:underline focus-visible:ring-indigo-500"
-  }`,
-  text: `cursor-pointer text-sm font-medium transition-colors ${dark ? "text-gray-400 hover:text-gray-200" : "text-gray-500 hover:text-gray-900"}`,
-  iconOnly: `${base} p-2.5 rounded-xl ${
-    dark
-      ? "text-gray-400 hover:text-white hover:bg-white/8 active:bg-white/4 focus-visible:ring-gray-400 focus-visible:ring-offset-gray-900"
-      : "text-gray-500 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-50 shadow-sm shadow-gray-900/[0.03] ring-1 ring-inset ring-gray-200 hover:ring-gray-300 focus-visible:ring-gray-400"
-  }`,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+const getClasses = (_dark: boolean) => ({
+  primary: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-accent text-white hover:bg-cl-accent/90 active:bg-cl-accent/80 shadow-accent/25 hover:shadow-lg hover:shadow-accent/30 focus-visible:ring-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90 dark:active:bg-cl-accent/80 dark:shadow-accent/20 dark:hover:shadow-accent/30 dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
+  secondary: `${base} px-4 py-2.5 rounded-cl-lg bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover ring-1 ring-inset ring-border-soft shadow-sm shadow-black/[0.04] hover:shadow focus-visible:ring-border-active dark:bg-cl-text/8 dark:text-cl-text dark:hover:bg-cl-text/[0.14] dark:active:bg-cl-text/6 dark:ring-1 dark:ring-inset dark:ring-cl-text/[0.1] dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
+  outline: `${base} px-4 py-2.5 rounded-cl-lg border border-cl-border text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover shadow-sm shadow-black/[0.03] hover:border-cl-border-input focus-visible:ring-border-active dark:border dark:border-cl-text/15 dark:text-cl-text dark:hover:bg-cl-text/6 dark:active:bg-cl-text/4 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
+  ghost: `${base} px-4 py-2.5 rounded-cl-lg text-cl-text-secondary hover:bg-cl-bg-hover active:bg-cl-bg-hover focus-visible:ring-border-active dark:text-cl-text-secondary dark:hover:bg-cl-text/8 dark:active:bg-cl-text/4 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
+  danger: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-error text-cl-bg hover:bg-cl-error/30 active:bg-cl-error shadow-danger/20 hover:shadow-lg hover:shadow-danger/25 focus-visible:ring-cl-error dark:bg-cl-error dark:text-cl-bg dark:hover:bg-cl-error/30 dark:active:bg-cl-error dark:shadow-danger/20 dark:hover:shadow-danger/30 dark:focus-visible:ring-cl-error dark:focus-visible:ring-offset-cl-bg`,
+  success: `${base} px-4 py-2.5 rounded-cl-lg shadow-md bg-cl-success text-cl-bg hover:bg-cl-success/30 active:bg-cl-success shadow-success/20 hover:shadow-lg hover:shadow-success/25 focus-visible:ring-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success/30 dark:active:bg-cl-success dark:shadow-success/20 dark:hover:shadow-success/30 dark:focus-visible:ring-cl-success dark:focus-visible:ring-offset-cl-bg`,
+  link: `cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
+  text: `cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text`,
+  iconOnly: `${base} p-2.5 rounded-cl-lg text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover active:bg-cl-bg-hover shadow-sm shadow-black/[0.03] ring-1 ring-inset ring-border-soft hover:ring-border-soft focus-visible:ring-border-active dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-text/8 dark:active:bg-cl-text/4 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -217,37 +186,11 @@ const ButtonDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Button
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A flexible, accessible button component supporting icons, loading
-            states, animations, tooltips, polymorphic rendering (button, link,
-            span), and extensive customization via the classes system.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Button, ButtonGroup } from "@chumlab/ui/button";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Button"
+        description="A flexible, accessible button component supporting icons, loading states, animations, tooltips, polymorphic rendering (button, link, span), and extensive customization via the classes system."
+        code={`import { Button, ButtonGroup } from "@chumlab/ui/button";`}
+      />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -337,7 +280,7 @@ const ButtonDemo = () => {
             aria-label="Delete"
           />
           <Button
-            className={`${c.iconOnly} ${dark ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-600 hover:bg-blue-700"} text-white`}
+            className={`${c.iconOnly} bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90 text-white`}
             startIcon={<CheckIcon />}
             aria-label="Confirm"
           />
@@ -663,7 +606,7 @@ const ButtonDemo = () => {
             loading
             loader={
               <span
-                className={`text-xs animate-pulse ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className={`text-xs animate-pulse text-cl-accent`}
               >
                 ...
               </span>
@@ -711,7 +654,7 @@ const ButtonDemo = () => {
           >
             Click to Load
           </Button>
-          <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p className={`text-sm text-cl-text-secondary`}>
             {loading ? "Loading for 2 seconds..." : "Click the button"}
           </p>
         </DemoWrapper>
@@ -829,22 +772,6 @@ const ButtonDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="inline">
-          <Button
-            unstyled
-            className={`px-4 py-2 rounded-full font-bold ${dark ? "bg-linear-to-r from-purple-500 to-pink-500 text-white" : "bg-linear-to-r from-purple-500 to-pink-500 text-white"}`}
-          >
-            Gradient Button
-          </Button>
-        </DemoWrapper>
-      </Section>
-
       {/* ─── asChild ────────────────────────────────────────────────────── */}
       <Section
         title="asChild"
@@ -953,7 +880,7 @@ const ButtonDemo = () => {
                 {["Left", "Middle", "Right"].map((label, i) => (
                   <Button
                     key={label}
-                    className={`${c.outline} ${i === 0 ? "rounded-r-none border-r-0" : i === 2 ? "rounded-l-none" : "rounded-none border-r-0"} ${activeGroup === label.toLowerCase() ? (dark ? "bg-gray-600" : "bg-blue-100") : ""}`}
+                    className={`${c.outline} ${i === 0 ? "rounded-r-none border-r-0" : i === 2 ? "rounded-l-none" : "rounded-none border-r-0"} ${activeGroup === label.toLowerCase() ? (dark ? "bg-cl-text/10" : "bg-cl-accent/10") : ""}`}
                     onClick={() => {
                       setActiveGroup(label.toLowerCase());
                       setTimeout(() => setActiveGroup(null), 500);
@@ -1310,7 +1237,7 @@ const ButtonDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Default type="button" prevents accidental form submission',
@@ -1326,7 +1253,7 @@ const ButtonDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1337,12 +1264,12 @@ const ButtonDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from button"],

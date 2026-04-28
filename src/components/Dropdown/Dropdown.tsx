@@ -327,7 +327,7 @@ const DropdownContent = memo(function DropdownContent({
  * - Async option loading with shimmer states
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - DROPDOWN.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/DropdownDemo.tsx — live demo
  */
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(

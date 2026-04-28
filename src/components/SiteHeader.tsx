@@ -1,26 +1,29 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LogoMark } from "../brand/Logo";
-import { CoffeeMiniIcon } from "./BuyMeCoffee";
 import { useBuyMeCoffee } from "./useBuyMeCoffee";
 import { UserMenu } from "./UserMenu";
+import { Button } from "./ui";
+import { useTheme } from "../contexts/ThemeContext";
+import logoLight from "../assets/images/logo-light.png";
+import logoDark from "../assets/images/logo-dark.png";
 
 /**
- * Shared top navigation used on every top-level page (Home, FAQ, Blog listing,
- * Blog post). Includes the fixed header bar, the mobile hamburger, and the
- * mobile slide-in drawer — all in one component so every page renders an
- * identical nav.
+ * Deep-space site header. Solid bg-base, hairline bottom rule, plain text
+ * nav links. The single CTA is an off-white pill that sends users to the
+ * getting-started page. The AI Playground promotion lives in the hero
+ * status pill, not the header.
  *
  * AI Playground link behaviour:
- *  • On the home page ("/"): preventDefault + smooth scroll to #ai-playground.
- *  • On any other page: navigate to /#ai-playground; Home's mount-time hash
- *    useEffect handles the scroll.
+ *   On the home page, prevent default and smooth-scroll to #ai-playground.
+ *   On any other page, navigate to /#ai-playground; Home reads the hash on
+ *   mount and scrolls.
  */
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { open: openBuyCoffee } = useBuyMeCoffee();
+  const { theme, toggleTheme } = useTheme();
 
   const goToAIPlayground = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -30,116 +33,153 @@ export function SiteHeader() {
         .getElementById("ai-playground")
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
-      // Give the drawer close animation a tick before routing away.
       window.setTimeout(() => navigate("/#ai-playground"), 150);
     }
   };
 
+  const navLink =
+    "text-[14px] font-normal text-cl-text hover:text-cl-text-secondary transition-colors duration-150";
+
   return (
     <>
-      <header className="pointer-events-auto fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#04040a]/60">
-        <div className="w-full px-5">
-          <div className="flex items-center justify-between py-5">
-            <Link to="/" className="flex items-center gap-3">
-              <LogoMark size={160} />
+      <header
+        className="header-mount-fade pointer-events-auto fixed top-0 left-0 right-0 z-50 bg-bg-base"
+        style={{ borderBottom: "0.5px solid var(--border-faint)" }}
+      >
+        <div className="w-full px-5 sm:px-6 md:px-8">
+          <div className="grid grid-cols-[auto_1fr_auto] items-center h-[64px] gap-4">
+            <Link
+              to="/"
+              className="flex items-center text-cl-text -ml-1"
+              aria-label="Chumlab home"
+            >
+              {/* The PNG already includes the wordmark — no separate text node.
+                  Logo flips with theme: light variant on dark surfaces, dark
+                  variant on light surfaces. */}
+              <img
+                src={theme === "dark" ? logoLight : logoDark}
+                alt="Chumlab"
+                style={{ height: 36, width: "auto", objectFit: "contain" }}
+              />
             </Link>
-            <div className="flex items-center gap-1">
-              <div className="hidden sm:flex items-center gap-1">
-                <Link
-                  to="/accordion"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  Components
-                </Link>
-                <Link
-                  to="/blog"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  Blog
-                </Link>
-                <Link
-                  to="/faq"
-                  className="text-[13px] font-medium text-white/90 hover:text-white transition-colors duration-300 px-3.5 py-1.5 rounded-lg hover:bg-white/6"
-                >
-                  FAQ
-                </Link>
-                {/* Support — amber-tinted pill that reads as a CTA rather
-                    than a nav link, so users with an impulse to back open
-                    source get a visible target instead of plain text. */}
-                <button
-                  type="button"
-                  onClick={openBuyCoffee}
-                  className="cursor-pointer group inline-flex items-center gap-1.5 text-[12.5px] font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-400/18 via-orange-400/18 to-rose-400/15 hover:from-amber-400/28 hover:via-orange-400/28 hover:to-rose-400/25 border border-amber-300/30 hover:border-amber-300/55 shadow-[0_0_14px_-6px_rgba(251,191,36,0.55)] hover:shadow-[0_0_20px_-4px_rgba(251,191,36,0.7)] transition-all duration-300"
-                >
-                  <CoffeeMiniIcon className="text-amber-200 transition-transform duration-300 group-hover:-rotate-6" />
-                  <span className="bg-gradient-to-r from-amber-100 via-orange-100 to-rose-100 bg-clip-text text-transparent">
-                    Support
-                  </span>
-                </button>
-              </div>
-              {/* AI Playground — primary CTA. Gradient pill + animated sparkle
-                  icon and soft glow make it the most prominent nav item, per
-                  the design direction to drive clicks toward the playground. */}
+
+            <nav className="hidden md:flex items-center justify-center gap-8">
+              <Link to="/accordion" className={navLink}>
+                Components
+              </Link>
               <a
                 href="/#ai-playground"
                 onClick={goToAIPlayground}
-                className="group hidden sm:inline-flex items-center gap-1.5 text-[12.5px] font-semibold px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-500/30 via-indigo-500/35 to-violet-500/30 hover:from-blue-500/40 hover:via-indigo-500/45 hover:to-violet-500/40 border border-indigo-400/50 hover:border-indigo-300/70 shadow-[0_0_22px_-5px_rgba(129,140,248,0.6)] hover:shadow-[0_0_28px_-4px_rgba(129,140,248,0.8)] transition-all duration-300 sm:ml-2"
+                className={navLink}
               >
-                <SparklesIcon />
-                <span className="bg-gradient-to-r from-blue-50 via-indigo-50 to-violet-50 bg-clip-text text-transparent">
-                  AI Playground
-                </span>
+                Playground
               </a>
-              <Link
-                to="/getting-started"
-                className="text-[12px] font-medium px-5 py-1.5 rounded-lg bg-white/[0.07] hover:bg-white/12 border border-white/8 hover:border-blue-500/25 transition-all duration-300 ml-1"
-              >
-                Get Started
+              <Link to="/blog" className={navLink}>
+                Blog
               </Link>
+              <Link to="/faq" className={navLink}>
+                FAQ
+              </Link>
+              <button
+                type="button"
+                onClick={openBuyCoffee}
+                className={`cursor-pointer ${navLink}`}
+              >
+                Support
+              </button>
+            </nav>
+
+            <div className="flex items-center gap-3 justify-self-end -mr-2">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={
+                  theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
+                }
+                className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-text/5 text-cl-text-secondary hover:text-cl-text transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg"
+              >
+                {theme === "dark" ? (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden
+                  >
+                    <path
+                      d="M7.5 0C7.77614 0 8 0.223858 8 0.5V2.5C8 2.77614 7.77614 3 7.5 3C7.22386 3 7 2.77614 7 2.5V0.5C7 0.223858 7.22386 0 7.5 0ZM2.1967 2.1967C2.39196 2.00144 2.70854 2.00144 2.90381 2.1967L4.31802 3.61091C4.51328 3.80617 4.51328 4.12276 4.31802 4.31802C4.12276 4.51328 3.80617 4.51328 3.61091 4.31802L2.1967 2.90381C2.00144 2.70854 2.00144 2.39196 2.1967 2.1967ZM0.5 7C0.223858 7 0 7.22386 0 7.5C0 7.77614 0.223858 8 0.5 8H2.5C2.77614 8 3 7.77614 3 7.5C3 7.22386 2.77614 7 2.5 7H0.5ZM2.1967 12.8033C2.00144 12.608 2.00144 12.2915 2.1967 12.0962L3.61091 10.682C3.80617 10.4867 4.12276 10.4867 4.31802 10.682C4.51328 10.8772 4.51328 11.1938 4.31802 11.3891L2.90381 12.8033C2.70854 12.9986 2.39196 12.9986 2.1967 12.8033ZM12.5 7C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H14.5C14.7761 8 15 7.77614 15 7.5C15 7.22386 14.7761 7 14.5 7H12.5ZM10.682 4.31802C10.4867 4.12276 10.4867 3.80617 10.682 3.61091L12.0962 2.1967C12.2915 2.00144 12.608 2.00144 12.8033 2.1967C12.9986 2.39196 12.9986 2.70854 12.8033 2.90381L11.3891 4.31802C11.1938 4.51328 10.8772 4.51328 10.682 4.31802ZM8 12.5C8 12.2239 7.77614 12 7.5 12C7.22386 12 7 12.2239 7 12.5V14.5C7 14.7761 7.22386 15 7.5 15C7.77614 15 8 14.7761 8 14.5V12.5ZM10.682 10.682C10.8772 10.4867 11.1938 10.4867 11.3891 10.682L12.8033 12.0962C12.9986 12.2915 12.9986 12.608 12.8033 12.8033C12.608 12.9986 12.2915 12.9986 12.0962 12.8033L10.682 11.3891C10.4867 11.1938 10.4867 10.8772 10.682 10.682ZM5.5 7.5C5.5 6.39543 6.39543 5.5 7.5 5.5C8.60457 5.5 9.5 6.39543 9.5 7.5C9.5 8.60457 8.60457 9.5 7.5 9.5C6.39543 9.5 5.5 8.60457 5.5 7.5ZM7.5 4.5C5.84315 4.5 4.5 5.84315 4.5 7.5C4.5 9.15685 5.84315 10.5 7.5 10.5C9.15685 10.5 10.5 9.15685 10.5 7.5C10.5 5.84315 9.15685 4.5 7.5 4.5Z"
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden
+                  >
+                    <path
+                      d="M2.89998 0.499976C2.89998 0.279062 2.72089 0.0999756 2.49998 0.0999756C2.27906 0.0999756 2.09998 0.279062 2.09998 0.499976V1.09998H1.49998C1.27906 1.09998 1.09998 1.27906 1.09998 1.49998C1.09998 1.72089 1.27906 1.89998 1.49998 1.89998H2.09998V2.49998C2.09998 2.72089 2.27906 2.89998 2.49998 2.89998C2.72089 2.89998 2.89998 2.72089 2.89998 2.49998V1.89998H3.49998C3.72089 1.89998 3.89998 1.72089 3.89998 1.49998C3.89998 1.27906 3.72089 1.09998 3.49998 1.09998H2.89998V0.499976ZM5.89998 3.49998C5.89998 3.27906 5.72089 3.09998 5.49998 3.09998C5.27906 3.09998 5.09998 3.27906 5.09998 3.49998V4.09998H4.49998C4.27906 4.09998 4.09998 4.27906 4.09998 4.49998C4.09998 4.72089 4.27906 4.89998 4.49998 4.89998H5.09998V5.49998C5.09998 5.72089 5.27906 5.89998 5.49998 5.89998C5.72089 5.89998 5.89998 5.72089 5.89998 5.49998V4.89998H6.49998C6.72089 4.89998 6.89998 4.72089 6.89998 4.49998C6.89998 4.27906 6.72089 4.09998 6.49998 4.09998H5.89998V3.49998ZM1.89998 6.49998C1.89998 6.27906 1.72089 6.09998 1.49998 6.09998C1.27906 6.09998 1.09998 6.27906 1.09998 6.49998V7.09998H0.499976C0.279062 7.09998 0.0999756 7.27906 0.0999756 7.49998C0.0999756 7.72089 0.279062 7.89998 0.499976 7.89998H1.09998V8.49998C1.09998 8.72089 1.27906 8.89997 1.49998 8.89997C1.72089 8.89997 1.89998 8.72089 1.89998 8.49998V7.89998H2.49998C2.72089 7.89998 2.89998 7.72089 2.89998 7.49998C2.89998 7.27906 2.72089 7.09998 2.49998 7.09998H1.89998V6.49998ZM8.54406 0.98184L8.24618 0.941586C8.03275 0.917676 7.90692 1.1655 8.02936 1.34194C8.17013 1.54479 8.29981 1.75592 8.41754 1.97445C8.91878 2.90485 9.20322 3.96932 9.20322 5.10022C9.20322 8.37201 6.82247 11.0878 3.69887 11.6097C3.45736 11.65 3.20988 11.6772 2.96008 11.6906C2.74563 11.702 2.62729 11.9535 2.77721 12.1072C2.84551 12.1773 2.91535 12.2458 2.98667 12.3128L3.05883 12.3795L3.31883 12.6045L3.50684 12.7532L3.62796 12.8433L3.81491 12.9742L3.99079 13.089C4.11175 13.1651 4.23536 13.2375 4.36157 13.3059L4.62496 13.4412L4.88553 13.5607L5.18837 13.6828L5.43169 13.7686C5.56564 13.8128 5.70149 13.8529 5.83857 13.8885C5.94262 13.9155 6.04767 13.9401 6.15405 13.9622C6.27993 13.9883 6.40713 14.0109 6.53544 14.0298L6.85241 14.0685L7.11934 14.0892C7.24637 14.0965 7.37436 14.1002 7.50322 14.1002C11.1483 14.1002 14.1032 11.1453 14.1032 7.50023C14.1032 7.25044 14.0893 7.00389 14.0623 6.76131L14.0255 6.48407C13.991 6.26083 13.9453 6.04129 13.8891 5.82642C13.8213 5.56709 13.7382 5.31398 13.6409 5.06881L13.5279 4.80132L13.4507 4.63542L13.3766 4.48666C13.2178 4.17773 13.0353 3.88295 12.8312 3.60423L12.6782 3.40352L12.4793 3.16432L12.3157 2.98361L12.1961 2.85951L12.0355 2.70246L11.8134 2.50184L11.4925 2.24191L11.2483 2.06498L10.9562 1.87446L10.6346 1.68894L10.3073 1.52378L10.1938 1.47176L9.95488 1.3706L9.67791 1.2669L9.42566 1.1846L9.10075 1.09489L8.83599 1.03486L8.54406 0.98184ZM10.4032 5.30023C10.4032 4.27588 10.2002 3.29829 9.83244 2.40604C11.7623 3.28995 13.1032 5.23862 13.1032 7.50023C13.1032 10.593 10.596 13.1002 7.50322 13.1002C6.63646 13.1002 5.81597 12.9036 5.08355 12.5522C6.5419 12.0941 7.81081 11.2082 8.74322 10.0416C8.87963 10.2284 9.10028 10.3497 9.34928 10.3497C9.76349 10.3497 10.0993 10.0139 10.0993 9.59971C10.0993 9.24256 9.84965 8.94373 9.51535 8.86816C9.57741 8.75165 9.63653 8.63334 9.6926 8.51332C9.88358 8.63163 10.1088 8.69993 10.35 8.69993C11.0403 8.69993 11.6 8.14028 11.6 7.44993C11.6 6.75976 11.0406 6.20024 10.3505 6.19993C10.3853 5.90487 10.4032 5.60464 10.4032 5.30023Z"
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
+              </button>
+
               <a
                 href="https://github.com/chumlabhq/ui"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center justify-center text-white/90 hover:text-white transition-colors duration-300 p-2 rounded-lg hover:bg-white/6"
+                className="hidden sm:inline-flex items-center justify-center text-cl-text hover:text-cl-text-secondary transition-colors duration-150 p-1.5"
                 aria-label="GitHub"
               >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+                  <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
                 </svg>
               </a>
 
-              {/* Account chip - renders only when signed in. Avatar+chevron
-                  on mobile, full name+email chip from md+ (handled inside the
-                  component's responsive classes). */}
-              <div className="ml-1">
-                <UserMenu />
-              </div>
+              <UserMenu />
 
-              {/* Hamburger button — mobile only */}
+              {/* fullWidthMobile={false}: header CTA stays inline next to the
+                  hamburger; never stretches at any width. */}
+              <Button
+                variant="primary"
+                size="sm"
+                as="a"
+                href="/getting-started"
+                fullWidthMobile={false}
+                className="hidden sm:inline-flex"
+              >
+                Get started
+              </Button>
+
+              {/* Hamburger — mobile only. Same 36×36 box as the theme
+                  toggle so the right-edge optical balance matches. */}
               <button
-                className="sm:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-white/[0.08] transition-colors duration-300 ml-1"
+                className="md:hidden flex items-center justify-center w-9 h-9 rounded-md border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-text/5 text-cl-text-secondary hover:text-cl-text transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg"
                 onClick={() => setMenuOpen(true)}
                 aria-label="Open menu"
               >
                 <svg
-                  width="22"
-                  height="22"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-white/90"
                 >
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <line x1="4" y1="14" x2="20" y2="14" />
                 </svg>
               </button>
             </div>
@@ -147,65 +187,61 @@ export function SiteHeader() {
         </div>
       </header>
 
-      {/* ── MOBILE MENU OVERLAY ── */}
+      {/* Mobile drawer */}
       {menuOpen && (
-        <div className="pointer-events-auto fixed inset-0 z-[60] sm:hidden">
+        <div className="pointer-events-auto fixed inset-0 z-[60] md:hidden">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-bg-base/80"
             onClick={() => setMenuOpen(false)}
           />
-          <nav className="absolute top-0 right-0 h-full w-64 max-w-[80vw] bg-[#0a0a14] border-l border-white/[0.08] shadow-2xl animate-slide-in-right flex flex-col py-6 px-5">
+          <nav className="absolute top-0 right-0 h-full w-72 max-w-[85vw] bg-bg-base rule rule-l animate-slide-in-right flex flex-col py-6 px-6">
             <button
-              className="self-end mb-6 flex items-center justify-center w-9 h-9 rounded-lg hover:bg-white/[0.08] transition-colors duration-300"
+              className="self-end mb-8 flex items-center justify-center w-9 h-9 text-cl-text hover:text-cl-text-secondary transition-colors"
               onClick={() => setMenuOpen(false)}
               aria-label="Close menu"
             >
               <svg
-                width="22"
-                height="22"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-white/90"
               >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            {/* AI Playground — promoted to the top of the mobile drawer with
-                gradient fill + sparkle + "New" badge so it matches the desktop
-                treatment and is the first thing users see when the menu opens. */}
-            <a
-              href="/#ai-playground"
-              onClick={goToAIPlayground}
-              className="group flex items-center gap-2 text-[15px] font-semibold px-3.5 py-3 rounded-xl mb-3 bg-gradient-to-r from-blue-500/32 via-indigo-500/38 to-violet-500/32 border border-indigo-400/55 shadow-[0_0_26px_-6px_rgba(129,140,248,0.7)]"
-            >
-              <SparklesIcon />
-              <span className="bg-gradient-to-r from-blue-100 via-indigo-100 to-violet-100 bg-clip-text text-transparent">
-                AI Playground
-              </span>
-            </a>
+
+            <div className="eyebrow mb-3">Menu</div>
+            <div className="rule rule-t" />
+
             <Link
               to="/accordion"
               onClick={() => setMenuOpen(false)}
-              className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
             >
               Components
             </Link>
+            <a
+              href="/#ai-playground"
+              onClick={goToAIPlayground}
+              className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
+            >
+              Playground
+            </a>
             <Link
               to="/blog"
               onClick={() => setMenuOpen(false)}
-              className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
             >
               Blog
             </Link>
             <Link
               to="/faq"
               onClick={() => setMenuOpen(false)}
-              className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
             >
               FAQ
             </Link>
@@ -215,56 +251,34 @@ export function SiteHeader() {
                 setMenuOpen(false);
                 openBuyCoffee();
               }}
-              className="cursor-pointer flex items-center gap-2 text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300"
+              className="cursor-pointer text-left text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
             >
-              <CoffeeMiniIcon className="text-amber-300" />
-              Support us
+              Support
             </button>
             <a
               href="https://github.com/chumlabhq/ui"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
-              className="text-[15px] font-medium text-white/90 hover:text-white py-3 border-b border-white/[0.06] transition-colors duration-300 flex items-center gap-2"
+              className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-              </svg>
               GitHub
             </a>
+
+            <Button
+              variant="primary"
+              size="md"
+              as="a"
+              href="/getting-started"
+              onClick={() => setMenuOpen(false)}
+              className="mt-6"
+            >
+              Get started
+            </Button>
           </nav>
         </div>
       )}
     </>
-  );
-}
-
-/**
- * Small Heroicons "sparkles" (solid) used on the AI Playground nav pill.
- * Given its own component so desktop and mobile stay visually identical and
- * a single tweak updates both. A subtle pulse on hover lifts the CTA.
- */
-function SparklesIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="text-indigo-100 shrink-0 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12"
-      aria-hidden
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576L1.044 12.72a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 006.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.194.777.802 1.384 1.578 1.579l1.036.258a.75.75 0 010 1.456l-1.036.258c-.777.195-1.384.802-1.579 1.578l-.258 1.036a.75.75 0 01-1.455 0l-.26-1.036a2.25 2.25 0 00-1.577-1.578l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.25 2.25 0 001.577-1.579l.26-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395a1.5 1.5 0 00-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395a1.5 1.5 0 00.948-.948l.395-1.183A.75.75 0 0116.5 15z"
-      />
-    </svg>
   );
 }
 

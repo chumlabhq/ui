@@ -7,6 +7,7 @@ import type {
 } from "../../components/Stepper";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -138,7 +139,7 @@ const tooltipConfigSteps: Step[] = [
       content: (
         <div className="space-y-1">
           <div className="font-semibold">Configure Settings</div>
-          <div className="text-gray-400 text-xs">
+          <div className="text-cl-text-tertiary text-xs">
             Customize your preferences here
           </div>
         </div>
@@ -165,30 +166,38 @@ const perStepIconSteps: Step[] = [
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  stepper: dark
-    ? {
-        stepInteractive:
-          "cursor-pointer rounded-lg px-2 py-1.5 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
-        indicatorPending: "bg-gray-700 text-gray-300",
-        labelActive: "text-blue-400",
-        labelCompleted: "text-green-400",
-        labelPending: "text-gray-400",
-        labelError: "text-red-400",
-        descriptionActive: "text-blue-300",
-        descriptionCompleted: "text-green-300",
-        descriptionPending: "text-gray-500",
-        descriptionError: "text-red-300",
-        connectorHorizontal: "w-full h-0.5 bg-gray-700",
-        connectorVertical: "w-0.5 h-6 bg-gray-700",
-      }
-    : {},
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
+const getClasses = (_dark: boolean) => ({
+  // Same overrides for light + dark — the underlying tokens (cl-accent,
+  // cl-success, cl-error, cl-bg-hover, cl-bg-elevated) are theme-aware,
+  // so a single object is correct for both modes. Previously light mode
+  // got `{}` here and fell through to raw green-500 / red-500 from the
+  // library defaults, which read as disconnected from the brand palette.
+  stepper: {
+    stepInteractive:
+      "cursor-pointer rounded-cl-md px-2 py-1.5 hover:bg-cl-bg-hover dark:hover:bg-cl-text/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    indicatorActive: "bg-cl-accent text-white",
+    indicatorCompleted: "bg-cl-accent text-white",
+    indicatorPending: "bg-black/[0.06] dark:bg-white/10 text-cl-text-secondary",
+    indicatorError: "bg-cl-error text-white",
+    labelActive: "text-cl-accent",
+    labelCompleted: "text-cl-text",
+    labelPending: "text-cl-text-tertiary",
+    labelError: "text-cl-error",
+    descriptionActive: "text-cl-accent",
+    descriptionCompleted: "text-cl-text-secondary",
+    descriptionPending: "text-cl-text-tertiary",
+    descriptionError: "text-cl-error",
+    connectorHorizontal: "w-full h-0.5 bg-black/[0.08] dark:bg-white/15",
+    connectorVertical: "w-0.5 h-6 bg-black/[0.08] dark:bg-white/15",
+    connectorActive: "bg-cl-accent/30",
+    connectorCompleted: "bg-cl-accent",
+  } as const,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -236,38 +245,11 @@ const StepperDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Stepper
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A navigation component that displays progress through a sequence of
-            steps. Uses semantic {"<ol>/<li>"} markup with proper ARIA
-            attributes, conditional role=&quot;button&quot; only on interactive
-            steps, and focus-visible ring for keyboard accessibility.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Stepper } from "@chumlab/ui/stepper";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Stepper"
+        description='A navigation component that displays progress through a sequence of steps. Uses semantic <ol>/<li> markup with proper ARIA attributes, conditional role="button" only on interactive steps, and focus-visible ring for keyboard accessibility.'
+        code={`import { Stepper } from "@chumlab/ui/stepper";`}
+      />
 
       {/* ─── Basic ────────────────────────────────────────────────────── */}
       <Section
@@ -449,7 +431,7 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               All steps are non-interactive when the stepper is globally
               disabled
@@ -474,7 +456,7 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               All steps are clickable regardless of status
             </p>
@@ -505,7 +487,7 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Click any step &mdash; cannot skip ahead more than one step at a
               time
@@ -531,7 +513,7 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Use <kbd className={c.kbd}>{"\u2190"}</kbd>{" "}
               <kbd className={c.kbd}>{"\u2192"}</kbd> to move focus,{" "}
@@ -561,7 +543,7 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Arrow keys move focus and activate the step in one action
             </p>
@@ -629,29 +611,19 @@ const StepperDemo = () => {
             isStepClickable={() => true}
             classes={{
               ...c.stepper,
-              step: `flex items-center gap-2 px-3 py-2 rounded-2xl border-2 border-transparent transition-all ${
-                dark ? "hover:border-purple-400/30" : "hover:border-purple-200"
-              }`,
+              step: `flex items-center gap-2 px-3 py-2 rounded-cl-lg border-2 border-transparent transition-all hover:border-cl-border-input-focus dark:hover:border-cl-border-input-focus/30`,
               stepInteractive:
-                "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2",
-              indicator: `shrink-0 rounded-xl flex items-center justify-center shadow-lg ${
-                dark
-                  ? "bg-purple-500 text-white shadow-purple-500/20"
-                  : "bg-purple-600 text-white shadow-purple-200"
-              }`,
+                "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2",
+              indicator: `shrink-0 rounded-cl-lg flex items-center justify-center shadow-lg bg-cl-accent text-white shadow-accent dark:bg-cl-accent dark:text-white dark:shadow-accent/20`,
               indicatorActive: "",
               indicatorCompleted: "",
               indicatorPending: "",
               indicatorIcon: "w-5 h-5",
-              label: `text-sm font-semibold ${
-                dark ? "text-purple-300" : "text-purple-700"
-              }`,
+              label: `text-sm font-semibold text-cl-accent dark:text-cl-accent`,
               labelActive: "",
               labelCompleted: "",
               labelPending: "",
-              connectorHorizontal: `w-full h-1 rounded-full ${
-                dark ? "bg-purple-400/30" : "bg-purple-200"
-              }`,
+              connectorHorizontal: `w-full h-1 rounded-full bg-cl-accent/10 dark:bg-cl-accent/30`,
             }}
           />
         </DemoWrapper>
@@ -690,11 +662,11 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Root element has{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 id=&quot;checkout-stepper&quot;
               </code>
@@ -746,11 +718,11 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               The navigation landmark has{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 aria-label=&quot;Checkout Progress&quot;
               </code>
@@ -777,7 +749,7 @@ const StepperDemo = () => {
               classes={c.stepper}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Hover over each step to see the tooltip
             </p>
@@ -801,59 +773,26 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={{
                 ...c.stepper,
-                indicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors ${
-                  dark
-                    ? "data-[status=active]:bg-purple-500 data-[status=active]:text-white data-[status=active]:border-purple-500 data-[status=completed]:bg-green-500 data-[status=completed]:text-white data-[status=completed]:border-green-500 data-[status=pending]:bg-gray-800 data-[status=pending]:text-gray-400 data-[status=pending]:border-gray-600"
-                    : "data-[status=active]:bg-purple-600 data-[status=active]:text-white data-[status=active]:border-purple-600 data-[status=completed]:bg-green-500 data-[status=completed]:text-white data-[status=completed]:border-green-500 data-[status=pending]:bg-white data-[status=pending]:text-gray-400 data-[status=pending]:border-gray-300"
-                }`,
+                indicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-tertiary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-tertiary dark:data-[status=pending]:border-white/15`,
                 indicatorActive: "",
                 indicatorCompleted: "",
                 indicatorPending: "",
                 indicatorIcon: "w-5 h-5",
-                connectorHorizontal: `w-full h-0.5 rounded-full ${
-                  dark ? "bg-gray-700" : "bg-gray-200"
-                }`,
+                connectorHorizontal: "w-full h-0.5 rounded-full bg-black/[0.08] dark:bg-white/15",
               }}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Uses{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 data-[status]
               </code>{" "}
               selectors for per-status styling
             </p>
           </div>
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── Unstyled Mode ─────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled to strip all default classes. Build from scratch using the classes prop."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark}>
-          <Stepper
-            steps={basicSteps}
-            value={2}
-            onValueChange={() => {}}
-            unstyled
-            classes={{
-              list: "flex items-center gap-4",
-              step: "flex items-center gap-2",
-              indicator: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 ${dark ? "border-gray-600 text-gray-400" : "border-gray-300 text-gray-500"}`,
-              indicatorActive: `${dark ? "border-violet-400 text-violet-400 bg-violet-900/30" : "border-violet-600 text-violet-600 bg-violet-50"}`,
-              indicatorCompleted: `${dark ? "border-emerald-400 bg-emerald-500 text-white" : "border-emerald-600 bg-emerald-600 text-white"}`,
-              label: `text-sm ${dark ? "text-gray-400" : "text-gray-600"}`,
-              labelActive: `font-semibold ${dark ? "text-white" : "text-gray-900"}`,
-              connector: `flex-1 h-0.5 ${dark ? "bg-gray-700" : "bg-gray-200"}`,
-              connectorCompleted: `${dark ? "bg-emerald-400" : "bg-emerald-500"}`,
-            }}
-          />
         </DemoWrapper>
       </Section>
 
@@ -879,25 +818,15 @@ const StepperDemo = () => {
                     data-status={props.status}
                   >
                     <div
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl ${
-                        dark
-                          ? "bg-indigo-500/20 border border-indigo-400/30"
-                          : "bg-indigo-50 border border-indigo-200"
-                      }`}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-cl-lg bg-cl-accent/10 border border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus/30`}
                     >
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                          dark
-                            ? "bg-indigo-500 text-white"
-                            : "bg-indigo-600 text-white"
-                        }`}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent text-white dark:bg-cl-accent dark:text-white`}
                       >
                         {props.index + 1}
                       </div>
                       <span
-                        className={`text-sm font-semibold ${
-                          dark ? "text-indigo-300" : "text-indigo-700"
-                        }`}
+                        className={`text-sm font-semibold text-cl-accent dark:text-cl-accent`}
                       >
                         {typeof props.step.label === "string"
                           ? props.step.label
@@ -1443,7 +1372,7 @@ const StepperDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Semantic <ol>/<li> list structure — screen readers announce "item 2 of 4"',
@@ -1462,7 +1391,7 @@ const StepperDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1473,12 +1402,12 @@ const StepperDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               [

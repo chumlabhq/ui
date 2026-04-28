@@ -348,6 +348,10 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent) => {
         if (event.key === "Escape" && isOpen) {
+          // stopPropagation prevents Escape from bubbling up and dismissing
+          // an enclosing Modal / Drawer / Dropdown when the user only meant
+          // to close this tooltip.
+          event.stopPropagation();
           event.preventDefault();
           setOpen(false);
         }
@@ -452,14 +456,22 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         aria-hidden="true"
         className={cn(mergedClasses.baseArrow, mergedClasses.arrow)}
         style={{
+          overflow: "visible",
           ...baseArrowStyle,
           ...getArrowPosition(),
           ...arrowStyle,
           ...(arrowColor ? { fill: arrowColor } : {}),
         }}
       >
+        {/* Path is intentionally unclosed: the two angled segments are
+            stroked (so the arrow has a visible outline matching the
+            tooltip border), while SVG's implicit fill rule still closes
+            the triangle for the fill. The bottom edge — which sits flush
+            against the tooltip card — has no stroke, so the outline
+            blends seamlessly into the card border. */}
         <path
-          d={`M0 ${svgHeight}L${svgHeight} 0L${svgWidth} ${svgHeight}H0Z`}
+          d={`M0 ${svgHeight}L${svgHeight} 0L${svgWidth} ${svgHeight}`}
+          vectorEffect="non-scaling-stroke"
         />
       </svg>
     ) : null;

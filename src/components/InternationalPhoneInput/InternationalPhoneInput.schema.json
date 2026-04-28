@@ -153,6 +153,11 @@
       "type": "object",
       "description": "React.ReactNode - Custom icon for the selected country indicator."
     },
+    "flagSize": {
+      "type": "number",
+      "default": 22,
+      "description": "Pixel width of the flag rendered in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. Defaults to 22."
+    },
     "renderCountryOption": {
       "type": "object",
       "description": "(props: CountryOptionRenderProps) => ReactNode - Custom render function for country options."

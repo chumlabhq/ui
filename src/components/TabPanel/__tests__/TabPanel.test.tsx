@@ -693,7 +693,7 @@ describe("TabPanel", () => {
       expect(container.firstElementChild).toHaveClass("fallback-root");
     });
 
-    it("prefers classes.root over className", () => {
+    it("merges classes.root with className on the root element", () => {
       const { container } = render(
         <TabPanel
           tabs={tabs}
@@ -705,7 +705,7 @@ describe("TabPanel", () => {
       );
 
       expect(container.firstElementChild).toHaveClass("primary");
-      expect(container.firstElementChild).not.toHaveClass("fallback");
+      expect(container.firstElementChild).toHaveClass("fallback");
     });
 
     it("applies style prop to root element", () => {

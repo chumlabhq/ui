@@ -1685,7 +1685,7 @@ describe("AccordionShimmer – extended", () => {
     const { container } = render(<AccordionShimmer variant="bordered" />);
     const root = container.firstChild as HTMLElement;
     expect(root).toHaveClass("border");
-    expect(root).toHaveClass("rounded-lg");
+    expect(root).toHaveClass("rounded-cl-md");
     expect(root).toHaveClass("overflow-hidden");
   });
 

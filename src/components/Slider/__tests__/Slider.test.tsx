@@ -647,7 +647,13 @@ describe("Slider", () => {
         pointerId: 1,
       });
 
-      // The thumb should now be active (data-dragging set)
+      // First pointermove flips the slider into drag mode (1:1 cursor tracking)
+      act(() => {
+        document.dispatchEvent(
+          new PointerEvent("pointermove", { clientX: 60, clientY: 10 }),
+        );
+      });
+
       expect(slider).toHaveAttribute("data-dragging");
     });
 
@@ -693,6 +699,12 @@ describe("Slider", () => {
         pointerId: 1,
       });
 
+      act(() => {
+        document.dispatchEvent(
+          new PointerEvent("pointermove", { clientX: 60, clientY: 10 }),
+        );
+      });
+
       expect(screen.getByRole("tooltip")).toBeInTheDocument();
     });
 
@@ -706,6 +718,12 @@ describe("Slider", () => {
         clientX: 50,
         clientY: 10,
         pointerId: 1,
+      });
+
+      act(() => {
+        document.dispatchEvent(
+          new PointerEvent("pointermove", { clientX: 60, clientY: 10 }),
+        );
       });
 
       expect(slider).toHaveAttribute("data-dragging");

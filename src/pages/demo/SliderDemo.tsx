@@ -3,6 +3,7 @@ import { Slider } from "../../components/Slider";
 import type { SliderValue, SliderMark } from "../../components/Slider";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -14,45 +15,45 @@ import {
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  text: `text-sm ${dark ? "text-gray-300" : "text-gray-600"}`,
-  textMuted: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-  badge: `inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums ${dark ? "bg-gray-800 text-gray-300 border border-white/10" : "bg-gray-100 text-gray-700 border border-gray-200"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+const getClasses = (_dark: boolean) => ({
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  text: `text-sm text-cl-text-secondary`,
+  textMuted: `text-xs text-cl-text-secondary`,
+  badge: `inline-flex px-2 py-0.5 rounded text-xs font-mono tabular-nums bg-cl-bg-hover text-cl-text border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-text/10`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   slider: {
     root: "flex flex-col gap-2 w-full",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-    description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
+    label: `text-sm font-medium text-cl-text`,
+    description: `text-xs text-cl-text-secondary`,
     wrapper: "relative select-none touch-none",
-    track: `rounded-full ${dark ? "bg-white/[0.12]" : "bg-gray-200"}`,
-    range: "rounded-full bg-indigo-500",
-    thumb: `absolute rounded-full bg-white border-2 border-indigo-500 shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 hover:shadow-lg cursor-grab ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-offset-white"}`,
-    thumbActive: "cursor-grabbing shadow-lg ring-2 ring-indigo-500 ring-offset-2",
+    track: `rounded-full bg-cl-bg-hover dark:bg-cl-text/[0.12]`,
+    range: "rounded-full bg-cl-accent",
+    thumb: `absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab focus-visible:ring-offset-white dark:focus-visible:ring-offset-cl-bg`,
+    thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-accent ring-offset-2",
     thumbDisabled: "opacity-50 cursor-not-allowed",
-    tooltip: "absolute px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md shadow-sm whitespace-nowrap pointer-events-none",
+    tooltip: "absolute px-2 py-1 text-xs font-medium text-white bg-cl-bg rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
     mark: "absolute",
-    markDot: `rounded-full bg-white ${dark ? "border-2 border-gray-600" : "border-2 border-gray-300"}`,
-    markDotActive: `${dark ? "border-indigo-400" : "border-indigo-500"} bg-white`,
-    markLabel: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-    error: "text-sm text-red-500 mt-1",
+    markDot: `rounded-full bg-white border-2 border-cl-border-input dark:border-2 dark:border-cl-border`,
+    markDotActive: `border border-cl-border-input-focus dark:border dark:border-cl-border-input-focus bg-white`,
+    markLabel: `text-xs text-cl-text-secondary`,
+    error: "text-sm text-cl-error mt-1",
   },
 });
 
 // ─── Custom thumb icons ──────────────────────────────────────────────────────
 
 const HeartIcon = () => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-rose-500">
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-cl-accent">
     <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
   </svg>
 );
 
 const StarIcon = () => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-amber-500">
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 text-cl-warning">
     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
   </svg>
 );
@@ -78,6 +79,10 @@ const SliderDemo = () => {
   const [price, setPrice] = useState<SliderValue>([200, 800]);
   const [temp, setTemp] = useState(22);
   const [opacity, setOpacity] = useState(80);
+  const [animFast, setAnimFast] = useState(3);
+  const [animDefault, setAnimDefault] = useState(3);
+  const [animSlow, setAnimSlow] = useState(3);
+  const [animOff, setAnimOff] = useState(3);
   const [custom1, setCustom1] = useState(50);
   const [custom2, setCustom2] = useState(3);
   const [vertical, setVertical] = useState(40);
@@ -105,27 +110,11 @@ const SliderDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ── Header ───────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`} />
-        <div className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`} />
-        <div className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`} />
-        <div className="relative">
-          <h1 className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}>Slider</h1>
-          <p className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}>
-            A range input component supporting single and range values, discrete
-            steps, marks with labels, value tooltips, custom thumb rendering,
-            vertical orientation, and full keyboard navigation. Includes form
-            integration with hidden inputs, label, error states, and the
-            standard classes/unstyled system.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Slider } from "@chumlab/ui/slider";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Slider"
+        description="A range input component supporting single and range values, discrete steps, marks with labels, value tooltips, custom thumb rendering, vertical orientation, and full keyboard navigation. Includes form integration with hidden inputs, label, error states, and the standard classes/unstyled system."
+        code={`import { Slider } from "@chumlab/ui/slider";`}
+      />
 
       {/* ── Basic ────────────────────────────────────────────────────── */}
       <Section title="Basic Usage" description="Works out-of-the-box with built-in styles, dark mode, and keyboard navigation (arrow keys). No custom classes needed." isDarkMode={dark}>
@@ -262,8 +251,8 @@ const SliderDemo = () => {
                 markDotSize={10}
                 classes={{
                   ...c.slider,
-                  markDot: `rounded-full ${dark ? "bg-gray-600" : "bg-gray-300"}`,
-                  markDotActive: dark ? "bg-indigo-400" : "bg-indigo-500",
+                  markDot: `rounded-full bg-cl-bg-hover dark:bg-cl-text/10`,
+                  markDotActive: dark ? "bg-cl-accent/90" : "bg-cl-accent",
                 }}
               />
             </div>
@@ -320,6 +309,69 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
+      {/* ── Click-to-jump animation ──────────────────────────────────── */}
+      <Section
+        title="Click-to-Jump Animation"
+        description="Use transitionDuration (ms) to control how fast the thumb glides when the user clicks a mark or any point on the track. Set to 0 to disable. The animation is automatically suppressed during an active drag so dragging stays responsive."
+        isDarkMode={dark}
+      >
+        <DemoWrapper isDarkMode={dark} layout="block">
+          <div className="flex flex-col gap-6 w-full sm:max-w-sm">
+            <div className="space-y-1">
+              <span className={c.label}>transitionDuration={"{100}"} (snappy)</span>
+              <Slider
+                value={animFast}
+                onValueChange={(v) => setAnimFast(v as number)}
+                transitionDuration={100}
+                marks={ratingMarks}
+                min={1}
+                max={5}
+                step={1}
+                classes={c.slider}
+              />
+            </div>
+            <div className="space-y-1">
+              <span className={c.label}>transitionDuration={"{200}"} (default)</span>
+              <Slider
+                value={animDefault}
+                onValueChange={(v) => setAnimDefault(v as number)}
+                marks={ratingMarks}
+                min={1}
+                max={5}
+                step={1}
+                classes={c.slider}
+              />
+            </div>
+            <div className="space-y-1">
+              <span className={c.label}>transitionDuration={"{600}"} (relaxed)</span>
+              <Slider
+                value={animSlow}
+                onValueChange={(v) => setAnimSlow(v as number)}
+                transitionDuration={600}
+                marks={ratingMarks}
+                min={1}
+                max={5}
+                step={1}
+                classes={c.slider}
+              />
+            </div>
+            <div className="space-y-1">
+              <span className={c.label}>transitionDuration={"{0}"} (instant)</span>
+              <Slider
+                value={animOff}
+                onValueChange={(v) => setAnimOff(v as number)}
+                transitionDuration={0}
+                marks={ratingMarks}
+                min={1}
+                max={5}
+                step={1}
+                classes={c.slider}
+              />
+            </div>
+          </div>
+        </DemoWrapper>
+      </Section>
+
       {/* ── Tooltip ──────────────────────────────────────────────────── */}
       <Section title="Tooltip" description="Show a value tooltip on hover/drag, or always. Use formatTooltip for custom display." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
@@ -363,9 +415,9 @@ const SliderDemo = () => {
                 )}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-full bg-white border-2 border-rose-400 shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2 hover:shadow-lg cursor-grab ${dark ? "focus-visible:ring-offset-gray-900" : ""}`,
-                  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-rose-400 ring-offset-2",
-                  range: "rounded-full bg-rose-400",
+                  thumb: `absolute rounded-full bg-white border-2 border-cl-border-input-focus shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
+                  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-accent ring-offset-2",
+                  range: "rounded-full bg-cl-accent/90",
                 }}
                 showTooltip
               />
@@ -383,9 +435,9 @@ const SliderDemo = () => {
                 )}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-full bg-white border-2 border-amber-400 shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 hover:shadow-lg cursor-grab ${dark ? "focus-visible:ring-offset-gray-900" : ""}`,
-                  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-amber-400 ring-offset-2",
-                  range: "rounded-full bg-amber-400",
+                  thumb: `absolute rounded-full bg-white border-2 border-cl-warning shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-warning focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
+                  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-warning ring-offset-2",
+                  range: "rounded-full bg-cl-warning/30",
                 }}
                 showTooltip
                 formatTooltip={(v) => `${v} star${v !== 1 ? "s" : ""}`}
@@ -397,7 +449,7 @@ const SliderDemo = () => {
                 value={volume}
                 onValueChange={(v) => setVolume(v as number)}
                 renderThumb={() => (
-                  <div className={`flex items-center justify-center w-full h-full ${dark ? "text-indigo-300" : "text-indigo-600"}`}>
+                  <div className={`flex items-center justify-center w-full h-full text-cl-accent`}>
                     <VolumeIcon />
                   </div>
                 )}
@@ -418,7 +470,7 @@ const SliderDemo = () => {
                 )}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-full bg-white border border-gray-300 shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 hover:shadow-lg cursor-grab ${dark ? "focus-visible:ring-offset-gray-900 border-gray-600" : ""}`,
+                  thumb: `absolute rounded-full bg-white border border-cl-border-input shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg dark:border dark:border-cl-border`,
                 }}
                 showTooltip
               />
@@ -563,10 +615,10 @@ const SliderDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-6 w-full sm:max-w-sm">
             {[
-              { range: "bg-emerald-500", border: "border-emerald-500", ring: "ring-emerald-500", name: "Emerald", val: 65 },
-              { range: "bg-rose-500", border: "border-rose-500", ring: "ring-rose-500", name: "Rose", val: 45 },
-              { range: "bg-amber-500", border: "border-amber-500", ring: "ring-amber-500", name: "Amber", val: 80 },
-              { range: "bg-cyan-500", border: "border-cyan-500", ring: "ring-cyan-500", name: "Cyan", val: 30 },
+              { range: "bg-cl-success", border: "border-cl-success", ring: "ring-cl-success", name: "Emerald", val: 65 },
+              { range: "bg-cl-accent", border: "border-cl-border-input-focus", ring: "ring-cl-accent", name: "Rose", val: 45 },
+              { range: "bg-cl-warning", border: "border-cl-warning", ring: "ring-cl-warning", name: "Amber", val: 80 },
+              { range: "bg-cl-accent", border: "border-cl-border-input-focus", ring: "ring-cl-accent", name: "Cyan", val: 30 },
             ].map(({ range: rangeCls, border, ring, name, val }) => (
               <div key={name} className="space-y-1">
                 <span className={c.label}>{name}</span>
@@ -575,7 +627,7 @@ const SliderDemo = () => {
                   classes={{
                     ...c.slider,
                     range: `rounded-full ${rangeCls}`,
-                    thumb: `absolute rounded-full bg-white ${border} shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:${ring} focus-visible:ring-offset-2 hover:shadow-lg cursor-grab ${dark ? "focus-visible:ring-offset-gray-900" : ""}`,
+                    thumb: `absolute rounded-full bg-white ${border} shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:${ring} focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
                     thumbActive: `cursor-grabbing shadow-lg ${ring} ring-2 ring-offset-2`,
                   }}
                 />
@@ -596,7 +648,7 @@ const SliderDemo = () => {
                 defaultValue={60}
                 classes={{
                   ...c.slider,
-                  thumb: `absolute rounded-md bg-indigo-500 shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 hover:shadow-lg cursor-grab ${dark ? "focus-visible:ring-offset-gray-900" : ""}`,
+                  thumb: `absolute rounded-cl-md bg-cl-accent shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
                   thumbActive: "cursor-grabbing shadow-lg",
                 }}
               />
@@ -608,33 +660,12 @@ const SliderDemo = () => {
                 defaultValue={45}
                 classes={{
                   ...c.slider,
-                  track: `rounded-full h-3 ${dark ? "bg-white/[0.08]" : "bg-gray-100"}`,
-                  range: "rounded-full bg-gradient-to-r from-indigo-500 to-purple-500",
+                  track: `rounded-full h-3 bg-cl-bg-hover dark:bg-cl-bg-hover`,
+                  range: "rounded-full bg-gradient-to-r from-cl-accent/150 to-cl-accent",
                   wrapper: "relative select-none touch-none py-1",
                 }}
               />
             </div>
-          </div>
-        </DemoWrapper>
-      </Section>
-
-      {/* ── Unstyled ─────────────────────────────────────────────────── */}
-      <Section title="Unstyled" description="Set unstyled to remove all default classes. Provide your own styling via the classes prop." isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-sm">
-            <Slider
-              label="Custom slider"
-              defaultValue={50}
-              unstyled
-              classes={{
-                root: "flex flex-col gap-2",
-                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-                wrapper: "relative h-6 select-none touch-none",
-                track: `absolute top-1/2 -translate-y-1/2 w-full h-2 rounded-full ${dark ? "bg-gray-700" : "bg-gray-200"}`,
-                range: `absolute h-2 rounded-full top-1/2 -translate-y-1/2 ${dark ? "bg-emerald-400" : "bg-emerald-500"}`,
-                thumb: `absolute w-5 h-5 rounded-full border-2 shadow-md cursor-grab ${dark ? "bg-gray-200 border-emerald-400" : "bg-white border-emerald-500"} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500`,
-              }}
-            />
           </div>
         </DemoWrapper>
       </Section>
@@ -709,6 +740,7 @@ const SliderDemo = () => {
             <PropRow name="marks" type="SliderMark[]" description="Array of { value, label? } for tick marks" isDarkMode={dark} />
             <PropRow name="showMarkLabels" type="boolean" defaultVal="true" description="Show mark label text" isDarkMode={dark} />
             <PropRow name="markDotSize" type="number" defaultVal="6" description="Diameter of mark dots in pixels" isDarkMode={dark} />
+            <PropRow name="transitionDuration" type="number" defaultVal="200" description="Duration in ms of the click-to-jump animation when the user clicks a mark or any point on the track. Set to 0 to disable. Automatically suppressed during an active drag." isDarkMode={dark} />
             <PropRow name="renderMark" type="(props) => ReactNode" description="Custom mark dot renderer. Receives { value, label, isActive, isDisabled, percent }" isDarkMode={dark} />
             <PropRow name="renderThumb" type="(props) => ReactNode" description="Custom thumb content renderer. Receives { value, index, isDragging, isDisabled }" isDarkMode={dark} />
             <PropRow name="label" type="ReactNode" description="Label above the slider" isDarkMode={dark} />
@@ -767,7 +799,7 @@ const SliderDemo = () => {
       {/* ── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               'Each thumb renders role="slider" with aria-valuenow, aria-valuemin, and aria-valuemax',
               "aria-label per thumb provides an accessible name for screen readers",
@@ -779,17 +811,17 @@ const SliderDemo = () => {
               "Range sliders render two separate slider roles — one per thumb",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>
+          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>
             Keyboard Reference
           </p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               ["Arrow Left / Down", "Decrease value by one step"],
               ["Arrow Right / Up", "Increase value by one step"],

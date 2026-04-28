@@ -128,6 +128,7 @@ export interface InternationalPhoneInputProps
   countrySearchPlaceholder?: string;
   countryDropdownAriaLabel?: string;
   selectedIcon?: ReactNode;
+  flagSize?: number;
   renderCountryOption?: (props: CountryOptionRenderProps) => ReactNode;
   renderSelectedCountry?: (country: CountryOption) => ReactNode;
   formatPatterns?: Record<string, PhoneFormatPattern>;

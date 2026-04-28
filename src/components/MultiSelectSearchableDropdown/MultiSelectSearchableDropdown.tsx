@@ -321,7 +321,7 @@ const SelectedChip = memo(function SelectedChip({
  * - Full keyboard navigation
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - MULTISELECTSEARCHABLEDROPDOWN.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/MultiSelectSearchableDropdownDemo.tsx — live demo
  */
 const MultiSelectSearchableDropdown = forwardRef<

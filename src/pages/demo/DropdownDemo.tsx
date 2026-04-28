@@ -3,6 +3,7 @@ import { Dropdown } from "../../components/Dropdown";
 import type { DropdownOption } from "../../components/Dropdown";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   DemoLabel,
@@ -60,13 +61,13 @@ const statusOptions: DropdownOption[] = [
     label: "Active",
     content: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-success" />
         <span>Active</span>
       </span>
     ),
     selectedContent: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-success" />
         <span>Active</span>
       </span>
     ),
@@ -76,13 +77,13 @@ const statusOptions: DropdownOption[] = [
     label: "Pending",
     content: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-yellow-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-warning" />
         <span>Pending</span>
       </span>
     ),
     selectedContent: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-yellow-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-warning" />
         <span>Pending</span>
       </span>
     ),
@@ -92,13 +93,13 @@ const statusOptions: DropdownOption[] = [
     label: "Inactive",
     content: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-gray-400" />
+        <span className="w-2 h-2 rounded-full bg-cl-text/10" />
         <span>Inactive</span>
       </span>
     ),
     selectedContent: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-gray-400" />
+        <span className="w-2 h-2 rounded-full bg-cl-text/10" />
         <span>Inactive</span>
       </span>
     ),
@@ -145,42 +146,30 @@ const getClasses = (dark: boolean) => ({
   dropdown: {
     root: "w-full",
     wrapper: "relative w-full",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-      dark
-        ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-    }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
     triggerText: "flex-1 text-left truncate",
-    content: `rounded-lg shadow-lg overflow-hidden ${
-      dark
-        ? "bg-gray-800 border border-gray-700"
-        : "bg-white border border-gray-200"
-    }`,
+ content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     optionList: "max-h-60 overflow-y-auto",
-    option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors ${
-      dark
-        ? "text-gray-200 hover:bg-gray-700"
-        : "text-gray-700 hover:bg-gray-50"
-    }`,
+    option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
     optionSelected: dark
-      ? "bg-blue-900/50 font-medium"
-      : "bg-blue-50 font-medium",
-    optionFocused: dark ? "bg-gray-700" : "bg-gray-100",
+      ? "bg-cl-accent/50 font-medium"
+      : "bg-cl-accent/10 font-medium",
+    optionFocused: dark ? "bg-white/10" : "bg-black/5",
     optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
-    checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-blue-400" : "text-blue-600"}`,
-    clearIcon: `absolute right-8 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer ${dark ? "text-gray-400" : "text-gray-500"}`,
-    noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
-    label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
-    error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    shimmerItem: `mx-2 my-1.5 h-4 rounded ${dark ? "bg-gray-700 animate-pulse" : "bg-gray-200 animate-pulse"}`,
+    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
+    checkIcon: `w-4 h-4 shrink-0 text-cl-accent`,
+    clearIcon: `absolute right-8 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated cursor-pointer text-cl-text-secondary`,
+    noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
+    label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
+    error: `text-sm mt-1 text-cl-error`,
+    shimmerItem: `mx-2 my-1.5 h-4 rounded bg-cl-text/10 animate-pulse`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Extra theme variants for the theme demos ───────────────────────────────
@@ -188,78 +177,70 @@ const getClasses = (dark: boolean) => ({
 const darkTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
-    "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
+    "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
   optionList: "max-h-60 overflow-y-auto",
   option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors",
-  optionSelected: "bg-gray-600",
-  optionFocused: "bg-gray-700",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-white hover:bg-white/[0.08] transition-colors",
+  optionSelected: "bg-white/[0.12] font-medium",
+  optionFocused: "bg-white/[0.08]",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
-  checkIcon: "w-4 h-4 shrink-0 text-blue-400",
-  noResults: "px-3 py-4 text-sm text-gray-400 text-center",
+  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-white/60",
+  checkIcon: "w-4 h-4 shrink-0 text-cl-accent",
+  noResults: "px-3 py-4 text-sm text-white/60 text-center",
 };
 
 const warmTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-warning hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
   content:
-    "rounded-lg shadow-lg overflow-hidden bg-amber-50 border border-amber-200",
+    "rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border border-cl-warning",
   optionList: "max-h-60 overflow-y-auto",
   option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-amber-900 hover:bg-amber-100 transition-colors",
-  optionSelected: "bg-amber-200",
-  optionFocused: "bg-amber-100",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-warning hover:bg-cl-warning/25 transition-colors",
+  optionSelected: "bg-cl-warning/30",
+  optionFocused: "bg-cl-warning/25",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-amber-600",
-  checkIcon: "w-4 h-4 shrink-0 text-amber-700",
-  noResults: "px-3 py-4 text-sm text-amber-600 text-center",
+  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-warning",
+  checkIcon: "w-4 h-4 shrink-0 text-cl-warning",
+  noResults: "px-3 py-4 text-sm text-cl-warning text-center",
 };
 
 const coolTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cyan-300 rounded-lg bg-cyan-50 text-cyan-900 hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-400",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
-    "rounded-lg shadow-lg overflow-hidden bg-cyan-50 border border-cyan-200",
+    "rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border border-cl-border-input-focus",
   optionList: "max-h-60 overflow-y-auto",
   option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-cyan-900 hover:bg-cyan-100 transition-colors",
-  optionSelected: "bg-cyan-200",
-  optionFocused: "bg-cyan-100",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-accent hover:bg-cl-accent/20 transition-colors",
+  optionSelected: "bg-cl-accent/25",
+  optionFocused: "bg-cl-accent/20",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-cyan-600",
-  checkIcon: "w-4 h-4 shrink-0 text-cyan-700",
-  noResults: "px-3 py-4 text-sm text-cyan-600 text-center",
+  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent",
+  checkIcon: "w-4 h-4 shrink-0 text-cl-accent",
+  noResults: "px-3 py-4 text-sm text-cl-accent text-center",
 };
 
 const getMinimalTheme = (dark: boolean) => ({
   wrapper: "relative",
-  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none ${
-    dark
-      ? "border-gray-600 text-white hover:border-gray-400 focus:border-white"
-      : "border-gray-300 text-gray-800 hover:border-gray-500 focus:border-gray-800"
-  }`,
+  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border focus:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus:border-cl-text`,
   triggerText: "flex-1 truncate",
-  content: `rounded shadow-sm overflow-hidden border ${
-    dark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"
-  }`,
+  content: `rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
   optionList: "max-h-60 overflow-y-auto",
-  option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors ${
-    dark ? "text-gray-200 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-50"
-  }`,
+  option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
   optionSelected: "font-medium",
-  optionFocused: dark ? "bg-gray-700" : "bg-gray-50",
+  optionFocused: dark ? "bg-white/10" : "bg-black/5",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-400"}`,
-  checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-300" : "text-gray-600"}`,
-  noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-400"}`,
+  chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary`,
+  checkIcon: `w-4 h-4 shrink-0 text-cl-text-secondary`,
+  noResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
 
 // ─── Demo ───────────────────────────────────────────────────────────────────
@@ -372,14 +353,14 @@ const DropdownDemo = () => {
       content: (
         <span className="flex items-center gap-2">
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span className="flex flex-col">
             <span className="text-sm">{country.name.common}</span>
             <span
-              className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs text-cl-text-secondary`}
             >
               {country.capital?.[0] || country.region}
             </span>
@@ -389,15 +370,15 @@ const DropdownDemo = () => {
       selectedContent: (
         <span className="flex items-center gap-2">
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span>{country.name.common}</span>
         </span>
       ),
     }),
-    [dark],
+    [],
   );
 
   const handleLoadCountries = useCallback(async (): Promise<
@@ -417,39 +398,11 @@ const DropdownDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Dropdown
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A fully accessible select dropdown component for choosing from a
-            list of options. Supports controlled and uncontrolled modes, portal
-            rendering, keyboard navigation with type-ahead search, async option
-            loading, clearable selection, custom trigger rendering, and complete
-            style customization via a classes object.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Dropdown } from "@chumlab/ui/dropdown";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Dropdown"
+        description="A fully accessible select dropdown component for choosing from a list of options. Supports controlled and uncontrolled modes, portal rendering, keyboard navigation with type-ahead search, async option loading, clearable selection, custom trigger rendering, and complete style customization via a classes object."
+        code={`import { Dropdown } from "@chumlab/ui/dropdown";`}
+      />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -465,6 +418,7 @@ const DropdownDemo = () => {
               value={basicValue}
               onValueChange={(v) => setBasicValue(v)}
               placeholder="Select a fruit..."
+              classes={c.dropdown}
             />
           </div>
         </DemoWrapper>
@@ -517,11 +471,7 @@ const DropdownDemo = () => {
                 errorMessage="This field is required"
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-                    dark
-                      ? "border-red-500 bg-gray-800 text-white hover:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500"
-                      : "border-red-500 bg-white text-gray-900 hover:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-white text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error dark:border dark:border-cl-error dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-error dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-error`,
                 }}
               />
             </div>
@@ -629,7 +579,7 @@ const DropdownDemo = () => {
         </DemoWrapper>
         {clearableValue && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             Selected: {clearableValue}
           </p>
@@ -661,14 +611,14 @@ const DropdownDemo = () => {
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...rest}
                   type="button"
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-xl border-2 transition-all ${
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${
                     isOpen
                       ? dark
-                        ? "border-blue-500 bg-gray-800 text-white shadow-lg shadow-blue-500/20"
-                        : "border-blue-500 bg-white text-gray-900 shadow-lg shadow-blue-500/20"
+                        ? "border-cl-border-input-focus bg-cl-bg-elevated text-white shadow-lg shadow-accent/20"
+                        : "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20"
                       : dark
-                        ? "border-gray-700 bg-gray-800 text-white hover:border-gray-500"
-                        : "border-gray-300 bg-white text-gray-900 hover:border-gray-400"
+                        ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border"
+                        : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"
                   }`}
                 >
                   <span
@@ -683,11 +633,11 @@ const DropdownDemo = () => {
                     className={`text-xs px-2 py-0.5 rounded-full ${
                       isOpen
                         ? dark
-                          ? "bg-blue-900 text-blue-300"
-                          : "bg-blue-100 text-blue-700"
+                          ? "bg-cl-accent/20 text-cl-accent"
+                          : "bg-cl-accent/10 text-cl-accent"
                         : dark
-                          ? "bg-gray-700 text-gray-400"
-                          : "bg-gray-100 text-gray-500"
+                          ? "bg-cl-bg-elevated text-cl-text-tertiary"
+                          : "bg-cl-bg-hover text-cl-text-tertiary"
                     }`}
                   >
                     {isOpen ? "Open" : "Closed"}
@@ -749,7 +699,7 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <p
-          className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`text-sm mt-2 text-cl-text-secondary`}
         >
           Options are fetched from the REST Countries API when the dropdown
           opens.
@@ -795,9 +745,9 @@ const DropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
                   optionSelected: dark
-                    ? "bg-emerald-900/40 border-l-[3px] border-emerald-400 pl-3"
-                    : "bg-emerald-50 border-l-[3px] border-emerald-500 pl-3",
-                  checkIcon: dark ? "text-emerald-400" : "text-emerald-600",
+                    ? "bg-cl-success/40 border-l-[3px] border-cl-success pl-3"
+                    : "bg-cl-success/15 border-l-[3px] border-cl-success pl-3",
+                  checkIcon: dark ? "text-cl-success" : "text-cl-success",
                 }}
               />
             </div>
@@ -816,7 +766,7 @@ const DropdownDemo = () => {
                   <svg
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    className={`w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`}
+                    className={`w-4 h-4 shrink-0 text-cl-warning`}
                     aria-hidden="true"
                   >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -834,7 +784,7 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 selectedIcon={
                   <span
-                    className={`w-2 h-2 rounded-full shrink-0 ${dark ? "bg-indigo-400" : "bg-indigo-600"}`}
+                    className={`w-2 h-2 rounded-full shrink-0 bg-cl-accent dark:bg-cl-accent/90`}
                   />
                 }
                 classes={c.dropdown}
@@ -855,8 +805,8 @@ const DropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
                   optionSelected: dark
-                    ? "bg-indigo-900/40 font-semibold text-indigo-300"
-                    : "bg-indigo-50 font-semibold text-indigo-700",
+                    ? "bg-cl-accent/40 font-semibold text-cl-accent"
+                    : "bg-cl-accent/10 font-semibold text-cl-accent",
                 }}
               />
             </div>
@@ -881,14 +831,10 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-                    dark
-                      ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  }`,
-                  optionFocused: dark ? "bg-purple-900/50" : "bg-purple-100",
-                  optionSelected: dark ? "bg-purple-900/40" : "bg-purple-50",
-                  checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-purple-400" : "text-purple-600"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
+                  optionFocused: dark ? "bg-cl-accent/50" : "bg-cl-accent/10",
+                  optionSelected: dark ? "bg-cl-accent/40" : "bg-cl-accent/10",
+                  checkIcon: `w-4 h-4 shrink-0 text-cl-accent`,
                 }}
               />
             </div>
@@ -901,14 +847,10 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-                    dark
-                      ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-                      : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  }`,
-                  optionFocused: dark ? "bg-green-900/50" : "bg-green-100",
-                  optionSelected: dark ? "bg-green-900/40" : "bg-green-50",
-                  checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-green-400" : "text-green-600"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-success focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-success`,
+                  optionFocused: dark ? "bg-cl-success/50" : "bg-cl-success/15",
+                  optionSelected: dark ? "bg-cl-success/40" : "bg-cl-success/15",
+                  checkIcon: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
               />
             </div>
@@ -1093,11 +1035,7 @@ const DropdownDemo = () => {
               placeholder="Select a fruit..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-                  dark
-                    ? "border-red-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                    : "border-red-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"
-                }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-white text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error dark:border dark:border-cl-error dark:bg-cl-bg-elevated dark:text-white dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-error`,
               }}
             />
           </div>
@@ -1185,7 +1123,7 @@ const DropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-md">
+          <div className="w-full">
             <Dropdown
               options={fruitOptions}
               value={fullWidthValue}
@@ -1245,11 +1183,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-                  dark
-                    ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                }`,
+                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
                 triggerText: "flex-1 text-left truncate",
               }}
             />
@@ -1261,11 +1195,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer ${
-                  dark
-                    ? "border-gray-600 text-gray-200 hover:border-indigo-400 focus-within:border-indigo-400"
-                    : "border-gray-200 text-gray-700 hover:border-indigo-500 focus-within:border-indigo-500"
-                }`,
+                trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer border border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
                 triggerText: "flex-1 text-left truncate",
               }}
             />
@@ -1277,11 +1207,7 @@ const DropdownDemo = () => {
               placeholder="Select..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer ${
-                  dark
-                    ? "text-gray-300 hover:bg-white/60"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`,
+                trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
                 triggerText: "flex-1 text-left truncate",
               }}
             />
@@ -1294,11 +1220,7 @@ const DropdownDemo = () => {
               fullWidth
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer ${
-                  dark
-                    ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
-                    : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
-                }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full transition-colors cursor-pointer border border-cl-border bg-white text-cl-text hover:border-cl-border-input shadow-sm dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:border-cl-border`,
                 triggerText: "flex-1 text-left truncate",
               }}
             />
@@ -1638,7 +1560,7 @@ const DropdownDemo = () => {
                   fill="currentColor"
                   className={
                     className ||
-                    `w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`
+                    `w-4 h-4 shrink-0 text-cl-warning`
                   }
                   aria-hidden="true"
                 >
@@ -1647,7 +1569,7 @@ const DropdownDemo = () => {
               )}
               classes={{
                 ...c.dropdown,
-                checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`,
+                checkIcon: `w-4 h-4 shrink-0 text-cl-warning`,
               }}
             />
           </div>
@@ -1675,7 +1597,7 @@ const DropdownDemo = () => {
         </DemoWrapper>
         {focusMessage && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             {focusMessage}
           </p>
@@ -1714,7 +1636,7 @@ const DropdownDemo = () => {
         </DemoWrapper>
         {keyDownMessage && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`}
+            className={`text-sm mt-2 text-cl-success`}
           >
             {keyDownMessage}
           </p>
@@ -1735,7 +1657,7 @@ const DropdownDemo = () => {
                 <Dropdown
                   options={fruitOptions}
                   placeholder="Select a fruit..."
-                  className={`${dark ? "opacity-90" : "opacity-95"}`}
+                  className={`opacity-90`}
                   classes={c.dropdown}
                 />
               </div>
@@ -1824,12 +1746,12 @@ const DropdownDemo = () => {
                 noResultsContent={
                   <span className="flex flex-col items-center gap-1 py-2">
                     <span
-                      className={`text-lg ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-lg text-cl-text-tertiary`}
                     >
                       🔍
                     </span>
                     <span
-                      className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`text-sm text-cl-text-secondary`}
                     >
                       Nothing here yet
                     </span>
@@ -2388,7 +2310,7 @@ const DropdownDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Trigger uses role="combobox" with aria-expanded, aria-haspopup="listbox", and aria-controls',
@@ -2411,7 +2333,7 @@ const DropdownDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -2422,12 +2344,12 @@ const DropdownDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from the trigger button"],

@@ -6,6 +6,7 @@ import {
 } from "../../components/DatePicker";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -29,56 +30,70 @@ import { fr, de } from "date-fns/locale";
 const getClasses = (dark: boolean) => ({
   datepicker: {
     root: "",
-    trigger: `flex items-center gap-2 w-full px-3.5 py-2.5 rounded-xl border text-sm transition-all cursor-pointer ${
-      dark
-        ? "bg-white/4 border-white/10 text-gray-200 hover:border-white/20 focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
-        : "bg-white border-gray-200 text-gray-900 shadow-sm shadow-gray-900/[0.04] hover:border-gray-300 focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
-    }`,
+    trigger: `flex items-center gap-2 w-full px-3.5 py-2.5 rounded-cl-lg border text-sm transition-all cursor-pointer bg-white border-cl-border text-cl-text shadow-sm shadow-black/[0.04] hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-cl-text dark:hover:border-cl-text/20 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
     input: "flex-1 text-left truncate",
-    calendarIcon: `w-5 h-5 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
-    clearButton: `p-1 rounded-full transition-colors shrink-0 ${dark ? "text-gray-500 hover:text-gray-300 hover:bg-white/10" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`,
-    label: `block text-[13px] font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`,
-    error: `text-xs mt-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
-    calendar: `rounded-xl shadow-xl p-4 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
+    calendarIcon: `w-5 h-5 shrink-0 text-cl-text-tertiary`,
+    clearButton: `p-1 rounded-full transition-colors shrink-0 text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary dark:hover:bg-cl-text/10`,
+    label: `block text-[13px] font-medium mb-1.5 text-cl-text-secondary`,
+    error: `text-xs mt-1.5 text-cl-error`,
+ calendar: `rounded-cl-lg shadow-xl p-4 bg-cl-bg-elevated border border-cl-border`,
     header: "flex items-center justify-between mb-4",
     monthNav: "flex items-center gap-1",
-    navButton: `p-1.5 rounded-lg transition-colors ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`,
+    navButton: `p-1.5 rounded-cl-md transition-colors text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-text/10`,
     navButtonDisabled: "opacity-30 cursor-not-allowed hover:bg-transparent",
     monthGrid: "flex gap-8",
     grid: "",
     weekdayHeader: "grid grid-cols-7 mb-2",
-    weekday: `text-xs font-semibold text-center py-2 uppercase tracking-wide ${dark ? "text-gray-500" : "text-gray-400"}`,
-    day: `relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 ${dark ? "hover:bg-white/10 text-gray-200" : "hover:bg-gray-100 text-gray-900"}`,
-    daySelected: `${dark ? "bg-indigo-500 text-white hover:bg-indigo-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-    dayToday: `ring-2 ring-inset font-semibold ${dark ? "ring-indigo-400" : "ring-indigo-500"}`,
-    dayDisabled: `cursor-not-allowed hover:bg-transparent ${dark ? "text-gray-600" : "text-gray-300"}`,
-    dayOutside: dark ? "text-gray-600" : "text-gray-300",
-    dayRangeStart: `${dark ? "bg-indigo-500 text-white" : "bg-indigo-600 text-white"} rounded-r-none`,
-    dayRangeEnd: `${dark ? "bg-indigo-500 text-white" : "bg-indigo-600 text-white"} rounded-l-none`,
-    dayRangeMiddle: `${dark ? "bg-indigo-500/20" : "bg-indigo-100"} rounded-none`,
+    weekday: `text-xs font-semibold text-center py-2 uppercase tracking-wide text-cl-text-tertiary`,
+    day: `relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
+    // Selected day uses the brand accent so it reads in both modes —
+    // bg-cl-text would be off-white in dark mode (the giant-white-circle
+    // bug) and turning to literal `bg-cl-text` flips the day's foreground
+    // to the surface tone, making the day number invisible inside the
+    // selected pill.
+    daySelected: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent`,
+    dayToday: `ring-2 ring-inset font-semibold ring-cl-accent dark:ring-cl-accent`,
+    // Disabled days: 40 % opacity is enough to read as "not allowed"
+    // without dropping into illegibility. The `!` important overrides
+    // the base `text-cl-text` that would otherwise win source-order
+    // cascade and keep disabled days looking the same colour as enabled.
+    dayDisabled: `cursor-not-allowed hover:bg-transparent !text-cl-text-disabled opacity-40`,
+    dayOutside: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
+    // Range start/end: solid accent pill, but DON'T strip the half-radius
+    // the base day class provides. The base is `rounded-full` (40 px); start
+    // keeps its left corners full, square right; end keeps its right corners
+    // full, square left. `hover:bg-cl-accent` (no opacity change) keeps the
+    // hover state from washing the selected pill out into the lighter
+    // hover overlay.
+    dayRangeStart: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent rounded-r-none`,
+    dayRangeEnd: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent rounded-l-none`,
+    // Middle range tint: 18 % in light mode (was 10 % — invisible against
+    // cream paper), 22 % in dark mode. Hover deepens to 25/30 % so middle
+    // days have an interactive feedback in the range strip.
+    dayRangeMiddle: `bg-cl-accent/[0.18] hover:bg-cl-accent/25 dark:bg-cl-accent/25 dark:hover:bg-cl-accent/30 text-cl-text rounded-none`,
     dayHover: "",
-    dayFocused: "ring-2 ring-indigo-400",
+    dayFocused: "ring-2 ring-cl-accent",
     dayMarked: "",
-    weekNumber: `text-xs flex items-center justify-center ${dark ? "text-gray-600" : "text-gray-400"}`,
-    presets: `flex flex-wrap gap-2 pb-4 mb-4 border-b ${dark ? "border-gray-700" : "border-gray-100"}`,
-    presetButton: `px-3 py-1.5 text-xs font-semibold rounded-full transition-all ${dark ? "bg-white/6 text-gray-300 hover:bg-white/[0.12]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-    presetActive: `${dark ? "bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-400/30" : "bg-indigo-100 text-indigo-700 ring-1 ring-indigo-300"}`,
-    footer: `flex justify-center pt-4 mt-4 border-t ${dark ? "border-gray-700" : "border-gray-100"}`,
-    todayButton: `flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all ${dark ? "text-indigo-400 hover:bg-indigo-500/10" : "text-indigo-600 hover:bg-indigo-50"}`,
-    markerIndicator: `w-1 h-1 rounded-full absolute bottom-1 left-1/2 -translate-x-1/2 ${dark ? "bg-indigo-400" : "bg-indigo-500"}`,
-    markerTooltip: `absolute z-50 px-3 py-2 text-xs rounded-lg shadow-lg max-w-[200px] ${dark ? "bg-gray-700 text-gray-200" : "bg-gray-900 text-white"}`,
-    monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-none cursor-pointer rounded-lg transition-colors ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-    yearSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border-none cursor-pointer rounded-lg transition-colors ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
+    weekNumber: `text-xs flex items-center justify-center text-cl-text-disabled`,
+    presets: `flex flex-wrap gap-2 pb-4 mb-4 border-b border-cl-border`,
+    presetButton: `px-3 py-1.5 text-xs font-semibold rounded-full transition-all bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-text/6 dark:text-cl-text-secondary dark:hover:bg-cl-text/[0.12]`,
+    presetActive: `bg-cl-accent/10 text-cl-accent ring-1 ring-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent dark:ring-1 dark:ring-cl-accent/30`,
+    footer: `flex justify-center pt-4 mt-4 border-t border-cl-border`,
+    todayButton: `flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-cl-md transition-all text-cl-accent hover:bg-cl-bg-elevated`,
+    markerIndicator: `w-1 h-1 rounded-full absolute bottom-1 left-1/2 -translate-x-1/2 bg-cl-accent dark:bg-cl-accent/90`,
+    markerTooltip: `absolute z-50 px-3 py-2 text-xs rounded-cl-md shadow-lg max-w-[200px] bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-cl-text`,
+    monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
+    yearSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-semibold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
     monthDropdown: "",
     yearDropdown: "",
-    dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-lg shadow-lg py-1 min-w-[140px] ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-    dropdownItem: `flex items-center justify-between w-full px-3 py-2 text-sm text-left cursor-pointer ${dark ? "text-gray-300 hover:bg-white/6" : "text-gray-700 hover:bg-gray-50"}`,
-    dropdownItemSelected: `font-medium ${dark ? "bg-indigo-500/10 text-indigo-300" : "bg-indigo-50 text-indigo-600"}`,
+ dropdownMenu: `absolute z-[60] mt-1 max-h-60 overflow-auto rounded-cl-md shadow-lg py-1 min-w-[140px] bg-cl-bg-elevated border border-cl-border`,
+    dropdownItem: `flex items-center justify-between w-full px-3 py-2 text-sm text-left cursor-pointer text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/6`,
+    dropdownItemSelected: `font-medium bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/10 dark:text-cl-accent`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -91,6 +106,12 @@ const DatePickerDemo = () => {
   const [singleDate, setSingleDate] = useState<Date | null>(null);
   // Range mode
   const [rangeValue, setRangeValue] = useState<DateRange | null>(null);
+  // Independent state for each "Range Selection — Custom Colors" example
+  // so picking dates in one variant doesn't propagate into the others.
+  const [rangeEmerald, setRangeEmerald] = useState<DateRange | null>(null);
+  const [rangeAmber, setRangeAmber] = useState<DateRange | null>(null);
+  const [rangeRose, setRangeRose] = useState<DateRange | null>(null);
+  const [rangeGradient, setRangeGradient] = useState<DateRange | null>(null);
   // Multiple mode
   const [multipleDates, setMultipleDates] = useState<Date[] | null>(null);
   // Controlled
@@ -227,44 +248,13 @@ const DatePickerDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Date Picker
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A full-featured date picker supporting single, range, and multiple
-            date selection. Includes presets, markers, locale support, keyboard
-            navigation, week numbers, and fully customizable styling via the
-            classes system.
-          </p>
-          <div className="mt-5">
-            <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
-            >
-              <code>{`import { DatePicker } from "@chumlab/ui/date-picker";`}</code>
-            </pre>
-            <p className={`mt-3 text-[13px] ${dark ? "text-amber-400/80" : "text-amber-700"}`}>
-              Requires <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-amber-50 border border-amber-200"}`}>date-fns</code> as a peer dependency:{" "}
-              <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-gray-100 border border-gray-200"}`}>npm install date-fns</code>
-            </p>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Date Picker"
+        description="A full-featured date picker supporting single, range, and multiple date selection. Includes presets, markers, locale support, keyboard navigation, week numbers, and fully customizable styling via the classes system. Requires date-fns as a peer dependency — install it alongside @chumlab/ui."
+        code={`npm install @chumlab/ui date-fns
+
+import { DatePicker } from "@chumlab/ui/date-picker";`}
+      />
 
       {/* ─── Single Date ────────────────────────────────────────────────── */}
       <Section
@@ -313,7 +303,7 @@ const DatePickerDemo = () => {
           </div>
           {rangeValue?.start && rangeValue?.end && (
             <p
-              className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mt-3 text-xs font-mono text-cl-text-secondary`}
             >
               Range: {rangeValue.start.toLocaleDateString()} –{" "}
               {rangeValue.end.toLocaleDateString()}
@@ -341,18 +331,18 @@ const DatePickerDemo = () => {
               <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
-                  value={rangeValue}
-                  onValueChange={(range) => setRangeValue(range)}
+                  value={rangeEmerald}
+                  onValueChange={(range) => setRangeEmerald(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
                     ...c.datepicker,
-                    trigger: `${c.datepicker.trigger} ${dark ? "border-emerald-500/30 focus-within:ring-emerald-500/30 focus-within:border-emerald-400/50" : "border-emerald-300 focus-within:ring-emerald-500/15 focus-within:border-emerald-400"}`,
-                    daySelected: `${dark ? "bg-emerald-500 text-white hover:bg-emerald-400" : "bg-emerald-600 text-white hover:bg-emerald-700"}`,
-                    dayRangeStart: `${dark ? "bg-emerald-500 text-white" : "bg-emerald-600 text-white"} rounded-r-none`,
-                    dayRangeEnd: `${dark ? "bg-emerald-500 text-white" : "bg-emerald-600 text-white"} rounded-l-none`,
-                    dayRangeMiddle: `${dark ? "bg-emerald-500/20" : "bg-emerald-100"} rounded-none`,
-                    dayToday: `ring-2 ring-inset font-semibold ${dark ? "ring-emerald-400" : "ring-emerald-500"}`,
+                    trigger: `${c.datepicker.trigger} border border-cl-success focus-within:ring-cl-success/15 focus-within:border-cl-success dark:border dark:border-cl-success/30 dark:focus-within:ring-cl-success/30 dark:focus-within:border-cl-success/50`,
+                    daySelected: `bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success/30`,
+                    dayRangeStart: `bg-cl-success text-cl-bg dark:bg-cl-success dark:text-cl-bg rounded-r-none`,
+                    dayRangeEnd: `bg-cl-success text-cl-bg dark:bg-cl-success dark:text-cl-bg rounded-l-none`,
+                    dayRangeMiddle: `bg-cl-success/15 dark:bg-cl-success/20 rounded-none`,
+                    dayToday: `ring-2 ring-inset font-semibold ring-cl-success dark:ring-cl-success`,
                   }}
                 />
               </div>
@@ -370,18 +360,18 @@ const DatePickerDemo = () => {
               <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
-                  value={rangeValue}
-                  onValueChange={(range) => setRangeValue(range)}
+                  value={rangeAmber}
+                  onValueChange={(range) => setRangeAmber(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
                     ...c.datepicker,
-                    trigger: `${c.datepicker.trigger} ${dark ? "border-amber-500/30 focus-within:ring-amber-500/30 focus-within:border-amber-400/50" : "border-amber-300 focus-within:ring-amber-500/15 focus-within:border-amber-400"}`,
-                    daySelected: `${dark ? "bg-amber-500 text-white hover:bg-amber-400" : "bg-amber-500 text-white hover:bg-amber-600"}`,
-                    dayRangeStart: `${dark ? "bg-amber-500 text-white" : "bg-amber-500 text-white"} rounded-r-none`,
-                    dayRangeEnd: `${dark ? "bg-amber-500 text-white" : "bg-amber-500 text-white"} rounded-l-none`,
-                    dayRangeMiddle: `${dark ? "bg-amber-500/15" : "bg-amber-100"} rounded-none`,
-                    dayToday: `ring-2 ring-inset font-semibold ${dark ? "ring-amber-400" : "ring-amber-500"}`,
+                    trigger: `${c.datepicker.trigger} border border-cl-warning focus-within:ring-cl-warning/15 focus-within:border-cl-warning dark:border dark:border-cl-warning/30 dark:focus-within:ring-cl-warning/30 dark:focus-within:border-cl-warning/50`,
+                    daySelected: `bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning/30`,
+                    dayRangeStart: `bg-cl-warning text-cl-bg dark:bg-cl-warning dark:text-cl-bg rounded-r-none`,
+                    dayRangeEnd: `bg-cl-warning text-cl-bg dark:bg-cl-warning dark:text-cl-bg rounded-l-none`,
+                    dayRangeMiddle: `bg-cl-warning/15 dark:bg-cl-warning/15 rounded-none`,
+                    dayToday: `ring-2 ring-inset font-semibold ring-cl-warning dark:ring-cl-warning`,
                   }}
                 />
               </div>
@@ -399,24 +389,24 @@ const DatePickerDemo = () => {
               <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
-                  value={rangeValue}
-                  onValueChange={(range) => setRangeValue(range)}
+                  value={rangeRose}
+                  onValueChange={(range) => setRangeRose(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
                     ...c.datepicker,
-                    trigger: `${c.datepicker.trigger} ${dark ? "border-rose-500/30 focus-within:ring-rose-500/30 focus-within:border-rose-400/50" : "border-rose-300 focus-within:ring-rose-500/15 focus-within:border-rose-400"}`,
+                    trigger: `${c.datepicker.trigger} border border-cl-border-input-focus focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
                     day: `${c.datepicker.day} font-semibold`,
-                    daySelected: `${dark ? "bg-rose-500 text-white hover:bg-rose-400" : "bg-rose-500 text-white hover:bg-rose-600"} font-bold`,
-                    dayRangeStart: `${dark ? "bg-rose-500 text-white" : "bg-rose-500 text-white"} rounded-r-none font-bold`,
-                    dayRangeEnd: `${dark ? "bg-rose-500 text-white" : "bg-rose-500 text-white"} rounded-l-none font-bold`,
-                    dayRangeMiddle: `${dark ? "bg-rose-500/15 text-rose-300" : "bg-rose-50 text-rose-700"} rounded-none font-semibold`,
-                    dayToday: `ring-2 ring-inset font-bold ${dark ? "ring-rose-400" : "ring-rose-500"}`,
-                    weekday: `text-xs font-bold text-center py-2 uppercase tracking-wider ${dark ? "text-rose-400/60" : "text-rose-400"}`,
+                    daySelected: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90 font-bold`,
+                    dayRangeStart: `bg-cl-accent text-white dark:bg-cl-accent dark:text-white rounded-r-none font-bold`,
+                    dayRangeEnd: `bg-cl-accent text-white dark:bg-cl-accent dark:text-white rounded-l-none font-bold`,
+                    dayRangeMiddle: `bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent rounded-none font-semibold`,
+                    dayToday: `ring-2 ring-inset font-bold ring-cl-accent dark:ring-cl-accent`,
+                    weekday: `text-xs font-bold text-center py-2 uppercase tracking-wider text-cl-accent dark:text-cl-accent/60`,
                     header: "flex items-center justify-between mb-4",
-                    monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-bold bg-transparent border-none cursor-pointer rounded-lg transition-colors ${dark ? "text-rose-300 hover:bg-rose-500/10" : "text-rose-700 hover:bg-rose-50"}`,
-                    yearSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-bold bg-transparent border-none cursor-pointer rounded-lg transition-colors ${dark ? "text-rose-300 hover:bg-rose-500/10" : "text-rose-700 hover:bg-rose-50"}`,
-                    navButton: `p-1.5 rounded-lg transition-colors ${dark ? "text-rose-400 hover:bg-rose-500/10" : "text-rose-500 hover:bg-rose-50"}`,
+                    monthSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-bold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-accent hover:bg-cl-bg-elevated`,
+                    yearSelect: `flex items-center gap-1 px-2 py-1.5 text-sm font-bold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-accent hover:bg-cl-bg-elevated`,
+                    navButton: `p-1.5 rounded-cl-md transition-colors text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/10`,
                   }}
                 />
               </div>
@@ -434,17 +424,17 @@ const DatePickerDemo = () => {
               <div className="w-full sm:max-w-xs">
                 <DatePicker
                   mode="range"
-                  value={rangeValue}
-                  onValueChange={(range) => setRangeValue(range)}
+                  value={rangeGradient}
+                  onValueChange={(range) => setRangeGradient(range)}
                   placeholder="Pick a range..."
                   showClearButton
                   classes={{
                     ...c.datepicker,
-                    daySelected: `${dark ? "bg-violet-500 text-white hover:bg-violet-400" : "bg-violet-600 text-white hover:bg-violet-700"}`,
-                    dayRangeStart: `${dark ? "bg-violet-500 text-white" : "bg-violet-600 text-white"} rounded-l-full rounded-r-none`,
-                    dayRangeEnd: `${dark ? "bg-violet-500 text-white" : "bg-violet-600 text-white"} rounded-r-full rounded-l-none`,
-                    dayRangeMiddle: `${dark ? "bg-violet-500/20" : "bg-violet-100"} rounded-none`,
-                    dayToday: `ring-2 ring-inset font-semibold ${dark ? "ring-violet-400" : "ring-violet-500"}`,
+                    daySelected: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90`,
+                    dayRangeStart: `bg-cl-accent text-white dark:bg-cl-accent dark:text-white rounded-l-full rounded-r-none`,
+                    dayRangeEnd: `bg-cl-accent text-white dark:bg-cl-accent dark:text-white rounded-r-full rounded-l-none`,
+                    dayRangeMiddle: `bg-cl-accent/10 dark:bg-cl-accent/20 rounded-none`,
+                    dayToday: `ring-2 ring-inset font-semibold ring-cl-accent dark:ring-cl-accent`,
                   }}
                 />
               </div>
@@ -477,7 +467,7 @@ const DatePickerDemo = () => {
           </div>
           {multipleDates && multipleDates.length > 0 && (
             <p
-              className={`mt-3 text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mt-3 text-xs font-mono text-cl-text-secondary`}
             >
               Selected: {multipleDates.length} date
               {multipleDates.length !== 1 ? "s" : ""}
@@ -947,26 +937,26 @@ const DatePickerDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 flex-wrap ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex items-center gap-3 flex-wrap bg-cl-bg-elevated`}
         >
           <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-medium text-cl-text-secondary`}
           >
             Value:
           </span>
           <span
-            className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-sm font-mono text-cl-text-secondary`}
           >
             {controlledDate?.toLocaleDateString() ?? "null"}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
             onClick={() => setControlledDate(null)}
           >
             Clear
           </button>
           <button
-            className={`px-3 py-1 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600`}
+            className={`px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-accent text-white hover:bg-cl-accent/90`}
             onClick={() => setControlledDate(new Date())}
           >
             Set Today
@@ -1003,7 +993,7 @@ const DatePickerDemo = () => {
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <button
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 shrink-0`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-white hover:bg-cl-accent/90 shrink-0`}
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setCalendarOpen((o) => !o)}
             >
@@ -1020,7 +1010,7 @@ const DatePickerDemo = () => {
               />
             </div>
             <span
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Open: {String(calendarOpen)} | Selected:{" "}
               {openControlDate?.toLocaleDateString() ?? "none"}
@@ -1076,10 +1066,10 @@ const DatePickerDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md bg-cl-bg-elevated`}
         >
           <p
-            className={`text-xs font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-xs font-medium mb-2 text-cl-text-secondary`}
           >
             Legend
           </p>
@@ -1100,7 +1090,7 @@ const DatePickerDemo = () => {
                   }}
                 />
                 <span
-                  className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-xs text-cl-text-secondary`}
                 >
                   {lbl}
                 </span>
@@ -1131,25 +1121,25 @@ const DatePickerDemo = () => {
         <div className={c.note}>
           Each marker has{" "}
           <code
-            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`px-1 py-0.5 rounded text-[11px] font-mono bg-cl-bg-elevated text-cl-text-secondary`}
           >
             type
           </code>
           ,{" "}
           <code
-            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`px-1 py-0.5 rounded text-[11px] font-mono bg-cl-bg-elevated text-cl-text-secondary`}
           >
             color
           </code>
           ,{" "}
           <code
-            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`px-1 py-0.5 rounded text-[11px] font-mono bg-cl-bg-elevated text-cl-text-secondary`}
           >
             label
           </code>
           , and optional{" "}
           <code
-            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`px-1 py-0.5 rounded text-[11px] font-mono bg-cl-bg-elevated text-cl-text-secondary`}
           >
             description
           </code>
@@ -1446,7 +1436,7 @@ const DatePickerDemo = () => {
           </div>
           {eventLog.length > 0 && (
             <div
-              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mt-3 text-xs font-mono space-y-1 text-cl-text-secondary`}
             >
               {eventLog.map((entry, i) => (
                 <div key={i}>{entry}</div>
@@ -1477,9 +1467,9 @@ const DatePickerDemo = () => {
                   placeholder="Pink theme"
                   classes={{
                     ...c.datepicker,
-                    trigger: `${c.datepicker.trigger} ${dark ? "border-pink-500/30 focus-within:ring-pink-500/30 focus-within:border-pink-400/50" : "border-pink-300 focus-within:ring-pink-500/15 focus-within:border-pink-400"}`,
-                    daySelected: `${dark ? "bg-pink-500 text-white hover:bg-pink-400" : "bg-pink-600 text-white hover:bg-pink-700"}`,
-                    dayToday: `ring-2 ring-inset font-semibold ${dark ? "ring-pink-400" : "ring-pink-500"}`,
+                    trigger: `${c.datepicker.trigger} border border-cl-border-input-focus focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+                    daySelected: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90`,
+                    dayToday: `ring-2 ring-inset font-semibold ring-cl-accent dark:ring-cl-accent`,
                   }}
                   showTodayIndicator
                   showClearButton
@@ -1502,16 +1492,16 @@ const DatePickerDemo = () => {
                   classes={{
                     ...c.datepicker,
                     calendar: `${c.datepicker.calendar} p-6`,
-                    weekday: `text-sm font-bold text-center py-3 uppercase tracking-wider ${dark ? "text-gray-400" : "text-gray-500"}`,
-                    day: `relative w-12 h-12 flex items-center justify-center text-base font-semibold rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 ${dark ? "hover:bg-white/10 text-gray-200" : "hover:bg-gray-100 text-gray-900"}`,
+                    weekday: `text-sm font-bold text-center py-3 uppercase tracking-wider text-cl-text-secondary`,
+                    day: `relative w-12 h-12 flex items-center justify-center text-base font-semibold rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
                     daySelected: c.datepicker.daySelected,
                     dayToday: c.datepicker.dayToday,
                     dayDisabled: c.datepicker.dayDisabled,
                     dayOutside: c.datepicker.dayOutside,
                     header: "flex items-center justify-between mb-6",
-                    monthSelect: `flex items-center gap-1 px-3 py-2 text-base font-bold bg-transparent border-none cursor-pointer rounded-lg transition-colors ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-                    yearSelect: `flex items-center gap-1 px-3 py-2 text-base font-bold bg-transparent border-none cursor-pointer rounded-lg transition-colors ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-                    label: `block text-base font-semibold mb-2 ${dark ? "text-gray-200" : "text-gray-800"}`,
+                    monthSelect: `flex items-center gap-1 px-3 py-2 text-base font-bold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
+                    yearSelect: `flex items-center gap-1 px-3 py-2 text-base font-bold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
+                    label: `block text-base font-semibold mb-2 text-cl-text`,
                   }}
                   label="Large Calendar"
                   showTodayIndicator
@@ -1533,21 +1523,21 @@ const DatePickerDemo = () => {
                   placeholder="Compact"
                   classes={{
                     ...c.datepicker,
-                    trigger: `flex items-center gap-1.5 w-full px-2.5 py-1.5 rounded-lg border text-xs transition-all cursor-pointer ${dark ? "bg-white/4 border-white/10 text-gray-200" : "bg-white border-gray-200 text-gray-900 shadow-sm"}`,
-                    calendar: `rounded-lg shadow-lg p-2.5 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-                    calendarIcon: `w-3.5 h-3.5 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
+                    trigger: `flex items-center gap-1.5 w-full px-2.5 py-1.5 rounded-cl-md border text-xs transition-all cursor-pointer bg-white border-cl-border text-cl-text shadow-sm dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-cl-text`,
+ calendar: `rounded-cl-md shadow-lg p-2.5 bg-cl-bg-elevated border border-cl-border`,
+                    calendarIcon: `w-3.5 h-3.5 shrink-0 text-cl-text-tertiary`,
                     header: "flex items-center justify-between mb-2",
-                    weekday: `text-[10px] font-semibold text-center py-1 uppercase ${dark ? "text-gray-500" : "text-gray-400"}`,
-                    day: `relative w-7 h-7 flex items-center justify-center text-[11px] font-medium rounded-full cursor-pointer transition-all focus:outline-none ${dark ? "hover:bg-white/10 text-gray-300" : "hover:bg-gray-100 text-gray-700"}`,
+                    weekday: `text-[10px] font-semibold text-center py-1 uppercase text-cl-text-tertiary`,
+                    day: `relative w-7 h-7 flex items-center justify-center text-[11px] font-medium rounded-full cursor-pointer transition-all focus:outline-none hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text-secondary`,
                     daySelected: c.datepicker.daySelected,
                     dayToday: c.datepicker.dayToday,
                     dayDisabled: c.datepicker.dayDisabled,
                     dayOutside: c.datepicker.dayOutside,
-                    monthSelect: `flex items-center gap-0.5 px-1.5 py-1 text-xs font-semibold bg-transparent border-none cursor-pointer rounded transition-colors ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-                    yearSelect: `flex items-center gap-0.5 px-1.5 py-1 text-xs font-semibold bg-transparent border-none cursor-pointer rounded transition-colors ${dark ? "text-gray-200 hover:bg-white/10" : "text-gray-900 hover:bg-gray-100"}`,
-                    navButton: `p-1 rounded transition-colors ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-white/10" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"}`,
-                    footer: `flex justify-center pt-2 mt-2 border-t ${dark ? "border-gray-700" : "border-gray-100"}`,
-                    todayButton: `flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded transition-all ${dark ? "text-indigo-400 hover:bg-indigo-500/10" : "text-indigo-600 hover:bg-indigo-50"}`,
+                    monthSelect: `flex items-center gap-0.5 px-1.5 py-1 text-xs font-semibold bg-transparent border border-none cursor-pointer rounded transition-colors text-cl-text hover:bg-cl-bg-elevated`,
+                    yearSelect: `flex items-center gap-0.5 px-1.5 py-1 text-xs font-semibold bg-transparent border border-none cursor-pointer rounded transition-colors text-cl-text hover:bg-cl-bg-elevated`,
+                    navButton: `p-1 rounded transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-elevated`,
+                    footer: `flex justify-center pt-2 mt-2 border-t border-cl-border`,
+                    todayButton: `flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded transition-all text-cl-accent hover:bg-cl-bg-elevated`,
                   }}
                   showTodayIndicator
                   showTodayButton
@@ -1569,10 +1559,10 @@ const DatePickerDemo = () => {
                   placeholder="Custom nav"
                   classes={{
                     ...c.datepicker,
-                    trigger: `${c.datepicker.trigger} rounded-2xl ${dark ? "border-emerald-500/30" : "border-emerald-300"}`,
-                    navButton: `p-2 rounded-xl transition-colors ${dark ? "text-emerald-400 hover:bg-emerald-500/10" : "text-emerald-600 hover:bg-emerald-50"}`,
-                    daySelected: `${dark ? "bg-emerald-500 text-white hover:bg-emerald-400" : "bg-emerald-600 text-white hover:bg-emerald-700"}`,
-                    dayToday: `ring-2 ring-inset font-semibold ${dark ? "ring-emerald-400" : "ring-emerald-500"}`,
+                    trigger: `${c.datepicker.trigger} rounded-cl-lg border border-cl-success dark:border dark:border-cl-success/30`,
+                    navButton: `p-2 rounded-cl-lg transition-colors text-cl-success hover:bg-cl-success/15 dark:text-cl-success dark:hover:bg-cl-success/10`,
+                    daySelected: `bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success/30`,
+                    dayToday: `ring-2 ring-inset font-semibold ring-cl-success dark:ring-cl-success`,
                   }}
                   showTodayIndicator
                   showClearButton
@@ -1599,8 +1589,8 @@ const DatePickerDemo = () => {
                   showClearButton
                   classes={{
                     ...c.datepicker,
-                    presetButton: `px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${dark ? "bg-gray-700 text-gray-300 hover:bg-gray-600" : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"}`,
-                    presetActive: `${dark ? "bg-indigo-500/20 text-indigo-300 border-indigo-400/30" : "bg-indigo-50 text-indigo-700 border-indigo-300"}`,
+ presetButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-all bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:hover:bg-cl-text/10`,
+                    presetActive: `bg-cl-accent/10 text-cl-accent border border-cl-border-input-focus dark:bg-cl-accent/20 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/30`,
                   }}
                 />
               </div>
@@ -1772,24 +1762,6 @@ const DatePickerDemo = () => {
               showClearButton
               classes={c.datepicker}
             />
-          </div>
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper
-          isDarkMode={dark}
-          layout="block"
-          className="overflow-visible"
-        >
-          <div className="w-full sm:max-w-xs">
-            {/* Truly unstyled — no classes, bare HTML structure */}
-            <DatePicker unstyled placeholder="Unstyled date picker" />
           </div>
         </DemoWrapper>
       </Section>
@@ -2199,7 +2171,7 @@ const DatePickerDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Calendar grid uses role="grid" with accessible row and cell structure',
@@ -2218,7 +2190,7 @@ const DatePickerDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -2229,12 +2201,12 @@ const DatePickerDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from the trigger"],

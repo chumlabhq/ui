@@ -9,25 +9,25 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   nav: "flex items-center gap-2",
   pageButtons: "flex flex-wrap items-center gap-2",
   pageButton:
-    "px-3 py-1 rounded-lg border transition-colors cursor-pointer border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300",
+    "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border dark:border-cl-border hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated text-cl-text dark:text-cl-text-secondary",
   activePageButton:
-    "px-3 py-1 rounded-lg bg-blue-600 text-white border border-blue-600",
+    "px-3 py-1 rounded-cl-md bg-cl-accent text-white border border-cl-border-input-focus",
   navButton:
-    "p-2 rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300",
-  ellipsis: "px-2 select-none text-gray-400 dark:text-gray-500",
+    "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border dark:border-cl-border hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated text-cl-text-secondary dark:text-cl-text-secondary",
+  ellipsis: "px-2 select-none text-cl-text-tertiary dark:text-cl-text-tertiary",
   selector: "flex items-center gap-2",
   selectorButton:
-    "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors cursor-pointer border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200",
+    "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border dark:border-cl-border bg-white dark:bg-cl-bg-elevated hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 text-cl-text dark:text-cl-text",
   selectorDropdown:
-    "rounded-lg shadow-lg py-1 border min-w-[64px] bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600",
+    "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-white dark:bg-cl-bg-elevated border-cl-border dark:border-cl-border",
   selectorDropdownWrapper: "",
   selectorOption:
-    "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-600 data-[selected]:bg-blue-50 dark:data-[selected]:bg-blue-900/60 data-[selected]:text-blue-700 dark:data-[selected]:text-blue-300 data-[highlighted]:bg-gray-100 dark:data-[highlighted]:bg-gray-600 text-gray-700 dark:text-gray-200",
-  label: "text-sm text-gray-600 dark:text-gray-400",
+    "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 data-[selected]:bg-cl-accent/15 dark:data-[selected]:bg-cl-accent/60 data-[selected]:text-cl-accent dark:data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:data-[highlighted]:bg-cl-text/10 text-cl-text dark:text-cl-text",
+  label: "text-sm text-cl-text-secondary dark:text-cl-text-tertiary",
   dropdownIcon:
-    "w-4 h-4 transition-transform text-gray-500 dark:text-gray-400",
-  prevIcon: "w-5 h-5 text-gray-600 dark:text-gray-400",
-  nextIcon: "w-5 h-5 text-gray-600 dark:text-gray-400",
+    "w-4 h-4 transition-transform text-cl-text-tertiary dark:text-cl-text-tertiary",
+  prevIcon: "w-5 h-5 text-cl-text-secondary dark:text-cl-text-tertiary",
+  nextIcon: "w-5 h-5 text-cl-text-secondary dark:text-cl-text-tertiary",
   pageInfo: "flex items-center",
 };
 

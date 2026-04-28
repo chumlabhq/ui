@@ -134,14 +134,29 @@ export const CountryFlagGroupCount = forwardRef<HTMLDivElement, CountryFlagGroup
       return { content: tooltip };
     }, [tooltip]);
 
+    // The chip's outer bounding box matches the flag tile's bounding box
+    // (height = flag height) so it visually sits in the stack as just
+    // another flag-shaped element. Width grows with content via the
+    // tabular-num + paddingInline.
+    // The chip's outer bounding box matches the flag tile's bounding box
+    // (height = flag height) so it visually sits in the stack as just
+    // another flag-shaped element. Width grows with content via the
+    // tabular-num + paddingInline.
+    //
+    // marginLeft: 8 — breaks the chip out of the parent's -space-x-1.5
+    // overlap so the bordered chip sits cleanly next to the last flag
+    // instead of overlapping it (which made the previous flag bleed
+    // through the chip's left edge). Inline style wins specificity over
+    // the parent's space-x cascade rule.
     const countElement = (
       <div
         ref={ref}
-        className={cn("shrink-0 flex items-center justify-center", className) || undefined}
+        className={cn("shrink-0 inline-flex items-center justify-center", className) || undefined}
         style={{
           minWidth: height,
           height,
-          paddingInline: Math.round(height * 0.3),
+          paddingInline: Math.max(4, Math.round(height * 0.25)),
+          marginLeft: 8,
           ...style,
         }}
         role="img"

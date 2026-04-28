@@ -3,6 +3,7 @@ import { SearchableDropdown } from "../../components/SearchableDropdown";
 import type { SearchableDropdownOption } from "../../components/SearchableDropdown";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   DemoLabel,
@@ -63,13 +64,13 @@ const statusOptions: SearchableDropdownOption[] = [
     label: "Active",
     content: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-success" />
         <span>Active</span>
       </span>
     ),
     selectedContent: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-success" />
         <span>Active</span>
       </span>
     ),
@@ -79,13 +80,13 @@ const statusOptions: SearchableDropdownOption[] = [
     label: "Pending",
     content: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-yellow-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-warning" />
         <span>Pending</span>
       </span>
     ),
     selectedContent: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-yellow-500" />
+        <span className="w-2 h-2 rounded-full bg-cl-warning" />
         <span>Pending</span>
       </span>
     ),
@@ -95,13 +96,13 @@ const statusOptions: SearchableDropdownOption[] = [
     label: "Inactive",
     content: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-gray-400" />
+        <span className="w-2 h-2 rounded-full bg-cl-text/10" />
         <span>Inactive</span>
       </span>
     ),
     selectedContent: (
       <span className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-gray-400" />
+        <span className="w-2 h-2 rounded-full bg-cl-text/10" />
         <span>Inactive</span>
       </span>
     ),
@@ -160,50 +161,32 @@ const CustomChevronIcon = ({
 const getClasses = (dark: boolean) => ({
   dropdown: {
     wrapper: "relative",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${
-      dark
-        ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-    }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
     triggerText: "flex-1 truncate",
-    content: `rounded-lg shadow-lg overflow-hidden ${
-      dark
-        ? "bg-gray-800 border border-gray-700"
-        : "bg-white border border-gray-200"
-    }`,
-    searchInput: `flex items-center gap-2 px-3 py-2 border-b ${
-      dark ? "border-gray-700 bg-gray-900" : "border-gray-200 bg-gray-50"
-    }`,
-    searchInputElement: `flex-1 bg-transparent focus:outline-none ${
-      dark
-        ? "text-white placeholder:text-gray-400"
-        : "text-gray-900 placeholder:text-gray-400"
-    }`,
-    searchIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-400" : "text-gray-400"}`,
+ content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+    searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg`,
+    searchInputElement: `flex-1 bg-transparent focus:outline-none text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary`,
+    searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
     optionList: "max-h-60 overflow-y-auto",
-    option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors ${
-      dark
-        ? "text-gray-200 hover:bg-gray-700"
-        : "text-gray-700 hover:bg-gray-50"
-    }`,
+    option: `flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
     optionSelected: dark
-      ? "bg-blue-900/50 font-medium"
-      : "bg-blue-50 font-medium",
-    optionFocused: dark ? "bg-gray-700" : "bg-gray-100",
+      ? "bg-cl-accent/50 font-medium"
+      : "bg-cl-accent/10 font-medium",
+    optionFocused: dark ? "bg-white/10" : "bg-black/5",
     optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
-    checkIcon: `w-4 h-4 shrink-0 ${dark ? "text-blue-400" : "text-blue-600"}`,
-    clearIcon: `absolute right-8 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer ${dark ? "text-gray-400" : "text-gray-500"}`,
-    noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
-    label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
-    error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    shimmerItem: `mx-2 my-1.5 h-4 rounded ${dark ? "bg-gray-700 animate-pulse" : "bg-gray-200 animate-pulse"}`,
+    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
+    checkIcon: `w-4 h-4 shrink-0 text-cl-accent`,
+    clearIcon: `absolute right-8 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated cursor-pointer text-cl-text-secondary`,
+    noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
+    label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
+    error: `text-sm mt-1 text-cl-error`,
+    shimmerItem: `mx-2 my-1.5 h-4 rounded bg-cl-text/10 animate-pulse`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Extra theme variants for the theme demos ───────────────────────────────
@@ -211,47 +194,47 @@ const getClasses = (dark: boolean) => ({
 const darkTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
-    "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
+    "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
   searchInput:
-    "flex items-center gap-2 px-3 py-2 border-b border-gray-600 bg-gray-900",
+    "flex items-center gap-2 px-3 py-2 border-b border-[#2a2f3a] bg-[#0a0d12]",
   searchInputElement:
-    "flex-1 bg-transparent text-white placeholder:text-gray-400 focus:outline-none",
-  searchIcon: "w-4 h-4 shrink-0 text-gray-400",
+    "flex-1 bg-transparent text-white placeholder:text-white/50 focus:outline-none",
+  searchIcon: "w-4 h-4 shrink-0 text-white/60",
   optionList: "max-h-60 overflow-y-auto",
   option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors",
-  optionSelected: "bg-gray-600",
-  optionFocused: "bg-gray-700",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-white hover:bg-white/[0.08] transition-colors",
+  optionSelected: "bg-white/[0.12] font-medium",
+  optionFocused: "bg-white/[0.08]",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
-  checkIcon: "w-4 h-4 shrink-0 text-blue-400",
-  noResults: "px-3 py-4 text-sm text-gray-400 text-center",
+  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-white/60",
+  checkIcon: "w-4 h-4 shrink-0 text-cl-accent",
+  noResults: "px-3 py-4 text-sm text-white/60 text-center",
 };
 
 const warmTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-400",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-warning hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
   content:
-    "rounded-lg shadow-lg overflow-hidden bg-amber-50 border border-amber-200",
+    "rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border border-cl-warning",
   searchInput:
-    "flex items-center gap-2 px-3 py-2 border-b border-amber-200 bg-amber-100",
+    "flex items-center gap-2 px-3 py-2 border-b border-cl-warning bg-cl-warning/15",
   searchInputElement:
-    "flex-1 bg-transparent text-amber-900 placeholder:text-amber-600 focus:outline-none",
-  searchIcon: "w-4 h-4 shrink-0 text-amber-600",
+    "flex-1 bg-transparent text-cl-warning placeholder:text-cl-warning focus:outline-none",
+  searchIcon: "w-4 h-4 shrink-0 text-cl-warning",
   optionList: "max-h-60 overflow-y-auto",
   option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer text-amber-900 hover:bg-amber-100 transition-colors",
-  optionSelected: "bg-amber-200",
-  optionFocused: "bg-amber-100",
+    "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-warning hover:bg-cl-warning/15 transition-colors",
+  optionSelected: "bg-cl-warning/15",
+  optionFocused: "bg-cl-warning/15",
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-amber-600",
-  checkIcon: "w-4 h-4 shrink-0 text-amber-700",
-  noResults: "px-3 py-4 text-sm text-amber-600 text-center",
+  chevron: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-warning",
+  checkIcon: "w-4 h-4 shrink-0 text-cl-warning",
+  noResults: "px-3 py-4 text-sm text-cl-warning text-center",
 };
 
 // ─── Demo ───────────────────────────────────────────────────────────────────
@@ -334,14 +317,14 @@ const SearchableDropdownDemo = () => {
       content: (
         <span className="flex items-center gap-2">
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span className="flex flex-col">
             <span className="text-sm">{country.name.common}</span>
             <span
-              className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs text-cl-text-secondary`}
             >
               {country.capital?.[0] || country.region}
             </span>
@@ -351,15 +334,15 @@ const SearchableDropdownDemo = () => {
       selectedContent: (
         <span className="flex items-center gap-2">
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span>{country.name.common}</span>
         </span>
       ),
     }),
-    [dark],
+    [],
   );
 
   const handleAsyncSearch = useCallback(
@@ -395,41 +378,11 @@ const SearchableDropdownDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Searchable Dropdown
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A fully accessible searchable select component with real-time
-            filtering. Supports synchronous static options and asynchronous
-            search with debouncing. Built on the same architecture as Dropdown
-            with portal rendering, keyboard navigation, and complete
-            customization.
-          </p>
-          <div className="mt-5">
-            <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
-            >
-              <code>{`import { SearchableDropdown } from "@chumlab/ui/searchable-dropdown";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Searchable Dropdown"
+        description="A fully accessible searchable select component with real-time filtering. Supports synchronous static options and asynchronous search with debouncing. Built on the same architecture as Dropdown with portal rendering, keyboard navigation, and complete customization."
+        code={`import { SearchableDropdown } from "@chumlab/ui/searchable-dropdown";`}
+      />
 
       {/* ─── Basic Usage ─────────────────────────────────────────────────── */}
       <Section
@@ -497,7 +450,7 @@ const SearchableDropdownDemo = () => {
                 errorMessage="This field is required"
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${dark ? "border-red-500 bg-gray-800 text-white hover:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500" : "border-red-500 bg-white text-gray-900 hover:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-white text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error dark:border dark:border-cl-error dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-error dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-error`,
                 }}
               />
             </div>
@@ -603,7 +556,7 @@ const SearchableDropdownDemo = () => {
         </DemoWrapper>
         {clearableValue && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             Selected: {clearableValue}
           </p>
@@ -634,7 +587,7 @@ const SearchableDropdownDemo = () => {
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...rest}
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-xl border-2 transition-all ${isOpen ? (dark ? "border-blue-500 bg-gray-800 text-white shadow-lg shadow-blue-500/20" : "border-blue-500 bg-white text-gray-900 shadow-lg shadow-blue-500/20") : dark ? "border-gray-700 bg-gray-800 text-white hover:border-gray-500" : "border-gray-300 bg-white text-gray-900 hover:border-gray-400"}`}
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? (dark ? "border-cl-border-input-focus bg-cl-bg-elevated text-white shadow-lg shadow-accent/20" : "border-cl-border-input-focus bg-white text-cl-text shadow-lg shadow-accent/20") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input"}`}
                 >
                   <span
                     className={`text-xl ${selectedOption ? "" : "opacity-50"}`}
@@ -645,7 +598,7 @@ const SearchableDropdownDemo = () => {
                     {selectedOption?.label ?? ph}
                   </span>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? (dark ? "bg-blue-900 text-blue-300" : "bg-blue-100 text-blue-700") : dark ? "bg-gray-700 text-gray-400" : "bg-gray-100 text-gray-500"}`}
+                    className={`text-xs px-2 py-0.5 rounded-full ${isOpen ? (dark ? "bg-cl-accent/20 text-cl-accent" : "bg-cl-accent/10 text-cl-accent") : dark ? "bg-cl-bg-elevated text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
                   >
                     {isOpen ? "Open" : "Closed"}
                   </span>
@@ -705,7 +658,7 @@ const SearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <p
-          className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`text-sm mt-2 text-cl-text-secondary`}
         >
           Type to search countries using REST Countries API. Results are
           debounced (300ms).
@@ -733,7 +686,7 @@ const SearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <p
-          className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`text-sm mt-2 text-cl-text-secondary`}
         >
           Shows static initial options, then switches to async search when user
           types.
@@ -763,7 +716,7 @@ const SearchableDropdownDemo = () => {
           </div>
         </DemoWrapper>
         <p
-          className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`text-sm mt-2 text-cl-text-secondary`}
         >
           Fetches popular countries on first open. Shows shimmer while loading.
         </p>
@@ -805,7 +758,7 @@ const SearchableDropdownDemo = () => {
                 placeholder="Search with star..."
                 selectedIcon={
                   <StarIcon
-                    className={`w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-yellow-500"}`}
+                    className={`w-4 h-4 shrink-0 text-cl-warning`}
                   />
                 }
                 classes={c.dropdown}
@@ -822,8 +775,8 @@ const SearchableDropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
                   optionSelected: dark
-                    ? "bg-blue-900/50 font-medium"
-                    : "bg-blue-100 font-medium",
+                    ? "bg-cl-accent/50 font-medium"
+                    : "bg-cl-accent/10 font-medium",
                 }}
               />
             </div>
@@ -1009,7 +962,7 @@ const SearchableDropdownDemo = () => {
               placeholder="Search fruits..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${dark ? "border-red-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500" : "border-red-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-white text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error dark:border dark:border-cl-error dark:bg-cl-bg-elevated dark:text-white dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-error`,
               }}
             />
           </div>
@@ -1055,7 +1008,7 @@ const SearchableDropdownDemo = () => {
               placeholder="Search fruits..."
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors ${successValue ? (dark ? "border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500" : "border-green-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500") : dark ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors ${successValue ? (dark ? "border border-cl-success bg-cl-bg-elevated text-white focus:outline-none focus:ring-2 focus:ring-cl-success" : "border-cl-success bg-white text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : dark ? "border-cl-border bg-cl-bg-elevated text-white hover:border-cl-border focus:outline-none focus:ring-2 focus:ring-cl-accent" : "border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`,
               }}
             />
           </div>
@@ -1103,7 +1056,7 @@ const SearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-md">
+          <div className="w-full">
             <SearchableDropdown
               options={fruitOptions}
               value={fullWidthValue}
@@ -1473,7 +1426,7 @@ const SearchableDropdownDemo = () => {
         </DemoWrapper>
         {focusMessage && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             {focusMessage}
           </p>
@@ -1512,7 +1465,7 @@ const SearchableDropdownDemo = () => {
         </DemoWrapper>
         {keyDownMessage && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`}
+            className={`text-sm mt-2 text-cl-success`}
           >
             {keyDownMessage}
           </p>
@@ -1535,7 +1488,7 @@ const SearchableDropdownDemo = () => {
                 <SearchableDropdown
                   options={fruitOptions}
                   placeholder="Search fruits..."
-                  className={`${dark ? "opacity-90" : "opacity-95"}`}
+                  className={`opacity-90`}
                   classes={c.dropdown}
                 />
               </div>
@@ -1628,12 +1581,12 @@ const SearchableDropdownDemo = () => {
                 noResultsContent={
                   <span className="flex flex-col items-center gap-1 py-2">
                     <span
-                      className={`text-lg ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-lg text-cl-text-tertiary`}
                     >
                       🔍
                     </span>
                     <span
-                      className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`text-sm text-cl-text-secondary`}
                     >
                       Nothing here yet
                     </span>
@@ -2266,7 +2219,7 @@ const SearchableDropdownDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Trigger uses role="combobox" with aria-expanded, aria-haspopup="listbox", and aria-controls',
@@ -2290,7 +2243,7 @@ const SearchableDropdownDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -2301,12 +2254,12 @@ const SearchableDropdownDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from the trigger button"],

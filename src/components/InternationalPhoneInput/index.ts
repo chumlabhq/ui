@@ -1,4 +1,4 @@
-// AI Knowledge: See COMPONENT.ai.md in this directory for full usage guide, props, styling, and patterns.
+// AI Knowledge: See INTERNATIONALPHONEINPUT.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as InternationalPhoneInput } from "./InternationalPhoneInput";
 export type {
   InternationalPhoneInputProps,

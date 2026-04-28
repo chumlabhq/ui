@@ -151,7 +151,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       aria-live={toastRole === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
       className={cn(
-        !isUnstyled && "relative overflow-hidden rounded-lg border shadow-lg",
+        !isUnstyled && "relative overflow-hidden rounded-cl-md border shadow-lg",
         !isUnstyled && (defaultContainerStyles[type] ?? defaultContainerStyles.default),
         mergedClasses.container,
       )}

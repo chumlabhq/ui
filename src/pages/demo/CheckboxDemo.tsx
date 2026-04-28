@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Checkbox } from "../../components/Checkbox";
-import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -10,6 +10,7 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
+import { useTheme } from "./ThemeContext";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -48,23 +49,23 @@ const EmptyHeartIcon = ({ className }: { className?: string }) => (
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
+const getClasses = (_dark: boolean) => ({
   checkbox: {
     root: "",
     labelContainer: "flex flex-col",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-    description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-    checkbox: `inline-flex items-center justify-center border-2 transition-colors cursor-pointer ${dark ? "focus-within:ring-2 focus-within:ring-indigo-400 focus-within:ring-offset-gray-900" : "focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2"}`,
-    checked: `${dark ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600"} text-white`,
-    unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
-    indeterminate: `${dark ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600"} text-white`,
+    label: `text-sm font-medium text-cl-text`,
+    description: `text-xs text-cl-text-secondary`,
+    checkbox: `inline-flex items-center justify-center border-2 transition-colors cursor-pointer focus-within:ring-2 focus-within:ring-cl-accent focus-within:ring-offset-cl-bg`,
+    checked: `bg-cl-accent border border-cl-border-input-focus text-white`,
+    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
+    indeterminate: `bg-cl-accent border border-cl-border-input-focus text-white`,
     icon: "",
-    error: `text-xs mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
+    error: `text-xs mt-1 text-cl-error`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -99,37 +100,11 @@ const CheckboxDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Checkbox
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A customizable checkbox component with support for labels,
-            descriptions, custom icons, indeterminate state, sizes, shapes,
-            error handling, and fully accessible via native input.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Checkbox } from "@chumlab/ui/checkbox";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Checkbox"
+        description="A customizable checkbox component with support for labels, descriptions, custom icons, indeterminate state, sizes, shapes, error handling, and fully accessible via native input."
+        code={`import { Checkbox } from "@chumlab/ui/checkbox";`}
+      />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -309,12 +284,12 @@ const CheckboxDemo = () => {
             checked={customHeart}
             onValueChange={setCustomHeart}
             checkedIcon={<HeartIcon className="w-3 h-3 text-white" />}
-            uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-gray-400" />}
+            uncheckedIcon={<EmptyHeartIcon className="w-3 h-3 text-cl-text-tertiary" />}
             size="md"
             shape="rounded"
             classes={{
               ...c.checkbox,
-              checked: `${dark ? "bg-red-500 border-red-500" : "bg-red-500 border-red-500"} text-white`,
+              checked: `bg-cl-error border border-cl-error dark:bg-cl-error dark:border dark:border-cl-error text-cl-bg`,
             }}
           />
           <Checkbox
@@ -326,7 +301,7 @@ const CheckboxDemo = () => {
             shape="rounded"
             classes={{
               ...c.checkbox,
-              checked: `${dark ? "bg-amber-500 border-amber-500" : "bg-amber-500 border-amber-500"} text-white`,
+              checked: `bg-cl-warning border border-cl-warning dark:bg-cl-warning dark:border dark:border-cl-warning text-cl-bg`,
             }}
           />
         </DemoWrapper>
@@ -382,9 +357,9 @@ const CheckboxDemo = () => {
             shape="rounded"
             classes={{
               ...c.checkbox,
-              checkbox: `${c.checkbox.checkbox} ${!errorDemo ? (dark ? "border-red-400" : "border-red-500") : ""}`,
+              checkbox: `${c.checkbox.checkbox} ${!errorDemo ? (dark ? "border border-cl-error" : "border-cl-error") : ""}`,
               label: !errorDemo
-                ? `text-sm font-medium ${dark ? "text-red-400" : "text-red-600"}`
+                ? `text-sm font-medium text-cl-error`
                 : c.checkbox.label,
             }}
           />
@@ -455,7 +430,7 @@ const CheckboxDemo = () => {
               classes={c.checkbox}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-600"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Checked: {String(onValueChangeDemo)}
             </p>
@@ -470,20 +445,20 @@ const CheckboxDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex items-center gap-3 bg-cl-bg-elevated`}
         >
           <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-medium text-cl-text-secondary`}
           >
             State:
           </span>
           <span
-            className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-sm font-mono text-cl-text-secondary`}
           >
             {String(controlled)}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
             onClick={() => setControlled(!controlled)}
           >
             Toggle Externally
@@ -509,7 +484,7 @@ const CheckboxDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex flex-col gap-3">
-            <p className={`text-xs mb-1 ${dark ? "text-gray-500" : "text-gray-400"}`}>
+            <p className={`text-xs mb-1 text-cl-text-tertiary`}>
               Try: Tab into the checkboxes below, then press Space to toggle them.
             </p>
             <Checkbox
@@ -538,13 +513,13 @@ const CheckboxDemo = () => {
       >
         <div className={`mb-3 flex gap-2`}>
           <button
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
             onClick={() => checkboxRef.current?.focus()}
           >
             Focus Checkbox
           </button>
           <button
-            className={`px-3 py-1.5 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
             onClick={() => checkboxRef.current?.click()}
           >
             Toggle via ref.click()
@@ -582,53 +557,13 @@ const CheckboxDemo = () => {
           />
           {focusLog.length > 0 && (
             <div
-              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mt-3 text-xs font-mono space-y-1 text-cl-text-secondary`}
             >
               {focusLog.map((log, i) => (
                 <div key={i}>{log}</div>
               ))}
             </div>
           )}
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Provide your own styling via the classes prop."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="flex flex-col gap-3">
-            <Checkbox
-              label="Custom styled checkbox"
-              unstyled
-              checked={basic}
-              onValueChange={setBasic}
-              classes={{
-                checkbox: `inline-flex items-center justify-center border-2 rounded cursor-pointer ${dark ? "border-gray-500" : "border-gray-400"}`,
-                checked: `${dark ? "bg-violet-500 border-violet-500" : "bg-violet-600 border-violet-600"} text-white`,
-                unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
-                label: `text-sm ${dark ? "text-gray-200" : "text-gray-700"}`,
-                description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-              }}
-            />
-            <Checkbox
-              label="Another unstyled variant"
-              description="With description text"
-              unstyled
-              defaultChecked
-              classes={{
-                checkbox: `inline-flex items-center justify-center border rounded-full cursor-pointer ${dark ? "border-gray-500" : "border-gray-400"}`,
-                checked: `${dark ? "bg-teal-500 border-teal-500" : "bg-teal-600 border-teal-600"} text-white`,
-                unchecked: `${dark ? "bg-gray-800" : "bg-white"}`,
-                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-                description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-                labelContainer: "flex flex-col",
-              }}
-              shape="circle"
-            />
-          </div>
         </DemoWrapper>
       </Section>
 
@@ -644,8 +579,8 @@ const CheckboxDemo = () => {
             checked
             classes={{
               ...c.checkbox,
-              checked: `${dark ? "bg-emerald-500 border-emerald-500" : "bg-emerald-600 border-emerald-600"} text-white`,
-              label: `text-sm font-medium ${dark ? "text-emerald-300" : "text-emerald-700"}`,
+              checked: `bg-cl-success border border-cl-success dark:bg-cl-success dark:border dark:border-cl-success text-cl-bg`,
+              label: `text-sm font-medium text-cl-success`,
             }}
             size="md"
             shape="rounded"
@@ -655,8 +590,8 @@ const CheckboxDemo = () => {
             checked
             classes={{
               ...c.checkbox,
-              checked: `${dark ? "bg-pink-500 border-pink-500" : "bg-pink-600 border-pink-600"} text-white`,
-              label: `text-sm font-medium ${dark ? "text-pink-300" : "text-pink-700"}`,
+              checked: `bg-cl-accent border border-cl-border-input-focus dark:bg-cl-accent dark:border dark:border-cl-border-input-focus text-white`,
+              label: `text-sm font-medium text-cl-accent dark:text-cl-accent`,
             }}
             size="md"
             shape="circle"
@@ -928,7 +863,7 @@ const CheckboxDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Native <input type="checkbox"> for full browser and screen reader support',
@@ -944,7 +879,7 @@ const CheckboxDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -955,12 +890,12 @@ const CheckboxDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from checkbox"],

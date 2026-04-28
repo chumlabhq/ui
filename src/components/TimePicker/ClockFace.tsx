@@ -128,11 +128,13 @@ export function ClockFace({
   // ── Numbers to render ────────────────────────────────────────────────
   const outerNumbers = useMemo(() => {
     if (selectionMode === "minutes") {
-      const nums: number[] = [];
-      for (let i = 0; i < 60; i += safeStep) {
-        nums.push(i);
-      }
-      return nums;
+      // Always show 12 cardinal markers (0, 5, 10, …, 55) regardless of
+      // step. With a small step like 1 or 2, rendering every step value
+      // crams 30–60 labels around the face and they overlap into
+      // unreadable mush. Snap behavior is controlled by safeStep
+      // separately in the pointer handler — the visible labels are just
+      // a guide.
+      return [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
     }
 
     if (format === "24h") {
@@ -140,7 +142,7 @@ export function ClockFace({
     }
 
     return [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  }, [selectionMode, format, safeStep]);
+  }, [selectionMode, format]);
 
   const innerNumbers = useMemo(() => {
     if (selectionMode === "minutes" || format === "12h") {
@@ -274,6 +276,7 @@ export function ClockFace({
   );
 
   useEffect(() => {
+    if (!isBrowser) return;
     const onWindowPointerUp = () => {
       if (isDragging) endDrag();
     };

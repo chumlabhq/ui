@@ -76,7 +76,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       fullScreen = false,
       centered = true,
       overlayColor = "black",
-      overlayOpacity = 0.5,
+      overlayOpacity = 0.32,
       animationDuration = 200,
       disableAnimation = false,
       reduceMotion = "auto",
@@ -212,7 +212,9 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     // Focus management
     useEffect(() => {
       if (isOpen) {
-        previousActiveElement.current = document.activeElement as HTMLElement;
+        const active = document.activeElement;
+        previousActiveElement.current =
+          active instanceof HTMLElement ? active : null;
         const timer = setTimeout(() => {
           if (initialFocus?.current) {
             initialFocus.current.focus();
@@ -356,9 +358,16 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
               aria-describedby={hasDescription ? descriptionId : ariaDescribedBy}
               tabIndex={-1}
               className={unstyled ? [mergedClasses.content, className].filter(Boolean).join(" ") : [
-                "relative outline-none bg-white",
+                // Full-screen anchors the panel to the viewport directly
+                // (position: fixed inset-0 with !important) so it bypasses
+                // the container's flex/centered layout. Otherwise the
+                // container's `relative` declaration wins over `fixed` in
+                // Tailwind's cascade order and the panel ends up sized to
+                // its own content — covering only the area its content
+                // happens to occupy instead of the whole viewport.
+                fullScreen ? "!fixed !inset-0 outline-none max-w-none m-0 rounded-none" : "relative outline-none",
+                "bg-white dark:bg-gray-900",
                 shouldAnimate && "transition-all transform",
-                fullScreen && "w-full h-full",
                 shouldAnimate && (isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"),
                 mergedClasses.content,
                 className,

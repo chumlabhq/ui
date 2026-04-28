@@ -122,12 +122,17 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
             const childName = React.isValidElement(child)
               ? ((child.props as Record<string, unknown>).name as string | undefined)
               : undefined;
+            // Prefer the child's own React key. Fall back to a content-aware
+            // composite (name + index) so reordering preserves identity better
+            // than a bare index, then to index alone if no name is present.
+            const fallbackKey = childName ? `${childName}-${index}` : index;
+            const itemKey = React.isValidElement(child)
+              ? (child.key ?? fallbackKey)
+              : fallbackKey;
 
             return (
               <div
-                key={
-                  React.isValidElement(child) ? (child.key ?? index) : index
-                }
+                key={itemKey}
                 className={itemClassName || undefined}
                 role={onAvatarClick ? "button" : undefined}
                 tabIndex={onAvatarClick ? 0 : undefined}
@@ -145,10 +150,13 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 }
                 onKeyDown={
                   onAvatarClick
-                    ? (e: React.KeyboardEvent) => {
+                    ? (e: React.KeyboardEvent<HTMLDivElement>) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          onAvatarClick({ index, name: childName }, e as unknown as React.MouseEvent);
+                          // Trigger the native click so the existing onClick
+                          // handler fires with a real React.MouseEvent.
+                          // Avoids casting a KeyboardEvent into a MouseEvent.
+                          e.currentTarget.click();
                         }
                       }
                     : undefined

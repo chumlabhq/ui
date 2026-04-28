@@ -216,7 +216,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         const el = triggerRef.current as HTMLElement;
         triggerRef.current = null;
         if (typeof el.focus === "function") {
-          el.focus();
+          el.focus({ preventScroll: true });
         }
       }
     }, [isOpen, restoreFocus, modal]);
@@ -228,24 +228,24 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
         const timer = requestAnimationFrame(() => {
           if (initialFocus?.current) {
-            initialFocus.current.focus();
+            initialFocus.current.focus({ preventScroll: true });
             return;
           }
 
           const autoFocusEl =
             panel.querySelector<HTMLElement>("[data-autofocus]");
           if (autoFocusEl) {
-            autoFocusEl.focus();
+            autoFocusEl.focus({ preventScroll: true });
             return;
           }
 
           const focusable = getFocusableElements(panel);
           if (focusable.length > 0) {
-            focusable[0].focus();
+            focusable[0].focus({ preventScroll: true });
             return;
           }
 
-          panel.focus();
+          panel.focus({ preventScroll: true });
         });
 
         return () => cancelAnimationFrame(timer);
@@ -283,10 +283,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 
           if (event.shiftKey && document.activeElement === first) {
             event.preventDefault();
-            last.focus();
+            last.focus({ preventScroll: true });
           } else if (!event.shiftKey && document.activeElement === last) {
             event.preventDefault();
-            first.focus();
+            first.focus({ preventScroll: true });
           }
         }
       },

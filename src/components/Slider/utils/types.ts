@@ -118,6 +118,14 @@ export interface SliderProps
   /** Size of mark dots in pixels. Default: 6 */
   markDotSize?: number;
 
+  /**
+   * Duration in ms of the click-to-jump animation when the user clicks a
+   * mark or any point on the track. Set to 0 to disable animation. The
+   * animation is automatically suppressed during an active drag so the
+   * thumb tracks the cursor 1:1. Default: 200
+   */
+  transitionDuration?: number;
+
   // ─── Form ───────────────────────────────────────────────────────────
   id?: string;
   name?: string;

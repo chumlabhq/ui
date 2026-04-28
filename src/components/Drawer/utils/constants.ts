@@ -3,7 +3,10 @@ import type { DrawerClasses, DrawerDirection } from "./types";
 export const DEFAULT_DIRECTION: DrawerDirection = "left";
 export const DEFAULT_SIZE = "300px";
 export const DEFAULT_OVERLAY_COLOR = "black";
-export const DEFAULT_OVERLAY_OPACITY = 0.5;
+// Subtle scrim — keeps the page chrome (sidebar, toolbar) visible behind
+// the drawer instead of blanking it out. Was 0.5 which read as a heavy
+// blackout on small screens.
+export const DEFAULT_OVERLAY_OPACITY = 0.32;
 export const DEFAULT_OVERLAY_BLUR = 0;
 export const DEFAULT_DURATION = 300;
 export const DEFAULT_SWIPE_THRESHOLD = 0.4;

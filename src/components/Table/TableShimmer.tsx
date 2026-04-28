@@ -2,7 +2,7 @@ import { memo } from "react";
 import type { TableShimmerProps } from "./utils/types";
 
 const defaultContainerClass =
-  "w-full border border-gray-200 rounded-lg overflow-hidden";
+  "w-full border border-gray-200 rounded-cl-md overflow-hidden";
 const defaultRowClass = "border-b border-gray-200";
 const defaultCellClass = "px-3 py-2 h-[52px]";
 const defaultShimmerClass =

@@ -40,7 +40,7 @@ interface UseDropdownReturn {
   handleToggle: () => void;
   handleOpen: () => void;
   handleClose: () => void;
-  handleClear: (event: React.MouseEvent) => void;
+  handleClear: (event: React.SyntheticEvent) => void;
   handleOptionSelect: (option: SearchableDropdownOption) => void;
   handleKeyDown: (event: React.KeyboardEvent) => void;
 }
@@ -298,8 +298,11 @@ export function useDropdown({
     });
   }, [disabled, setIsOpen]);
 
+  // SyntheticEvent so this can be invoked from both the trigger's onClick
+  // (MouseEvent) and the keyboard Delete/Backspace path (KeyboardEvent)
+  // without unsafe casts.
   const handleClear = useCallback(
-    (event: React.MouseEvent) => {
+    (event: React.SyntheticEvent) => {
       event.stopPropagation();
       setCurrentValue(null);
     },
@@ -461,7 +464,7 @@ export function useDropdown({
         case "Backspace":
           if (clearable && currentValue && !isOpen) {
             event.preventDefault();
-            handleClear(event as unknown as React.MouseEvent);
+            handleClear(event);
           }
           break;
         default:

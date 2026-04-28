@@ -105,7 +105,7 @@ const FALLBACK_DATA: never[] = [];
  * - Supports sticky header with `stickyHeader` + `maxHeight`
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - TABLE.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/TableDemo.tsx — live demo
  */
 function TableInner<TData>(
@@ -708,7 +708,10 @@ function TableInner<TData>(
     state: {
       ...(sortable ? { sorting } : {}),
       ...(needsFiltering ? { globalFilter, columnFilters } : {}),
-      ...(expandable ? { expanded } : {}),
+      // Grouping also renders expandable group rows; without `expanded`
+      // in state, clicking a group's toggle does nothing because tanstack
+      // can't track which groups are open.
+      ...(expandable || grouping.length > 0 ? { expanded } : {}),
       columnVisibility,
       ...(selectionMode !== "none" ? { rowSelection } : {}),
       ...(enableColumnResizing ? { columnSizing } : {}),
@@ -739,8 +742,9 @@ function TableInner<TData>(
         }
       : {}),
 
-    // Expansion
-    ...(expandable
+    // Expansion (also required by grouping — group rows are expandable
+    // and their sub-rows only render when `getExpandedRowModel` is set).
+    ...(expandable || grouping.length > 0
       ? {
           getExpandedRowModel: getExpandedRowModel(),
           onExpandedChange: (updater) => {
@@ -845,13 +849,24 @@ function TableInner<TData>(
       WebkitOverflowScrolling?: string;
     } = {};
 
+    // When sticky-thead OR sticky-tfoot is in play, all overflow + size
+    // constraints move to the inner flex/grid wrapper so the sticky
+    // element has a real scroll ancestor. Any overflow-* on the outer
+    // would create a closer scroll context and intercept the stick (CSS
+    // spec computes the other axis to `auto` if one is non-visible).
+    const hoistScroll =
+      !!maxHeight &&
+      (stickyHeader ||
+        (showFooter && /\bsticky\b/.test(footerClassName ?? "")));
     if (maxWidth) {
       style.maxWidth =
         typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
-      style.overflowX = "auto";
+      if (!hoistScroll) {
+        style.overflowX = "auto";
+      }
     }
 
-    if (maxHeight) {
+    if (maxHeight && !hoistScroll) {
       style.maxHeight =
         typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
       style.overflowY = "auto";
@@ -879,6 +894,9 @@ function TableInner<TData>(
     minHeight,
     hideVerticalScrollbar,
     hideHorizontalScrollbar,
+    stickyHeader,
+    showFooter,
+    footerClassName,
   ]);
 
   const scrollbarHideClass = useMemo(() => {
@@ -895,6 +913,15 @@ function TableInner<TData>(
   }, [hideVerticalScrollbar, hideHorizontalScrollbar]);
 
   const stickyHeaderClass = stickyHeader ? "sticky top-0 z-20" : "";
+
+  // Detect "sticky footer" via the user-supplied footer class. The same
+  // scroll-hoisting we do for stickyHeader is needed for sticky tfoot:
+  // without it, the inner overflow-x-auto creates a closer scroll
+  // ancestor and the footer never sticks to the visible viewport bottom.
+  const hasStickyFooter =
+    showFooter && /\bsticky\b/.test(footerClassName ?? "");
+  const needsHoistedScroll =
+    !!maxHeight && (stickyHeader || hasStickyFooter);
 
   // ── Responsive breakpoint ─────────────────────────────────────────────
   const viewportWidth = useViewportWidth();
@@ -1178,7 +1205,7 @@ function TableInner<TData>(
                     e.stopPropagation();
                     header.column.toggleSorting();
                   }}
-                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors hover:bg-black/5 dark:hover:bg-white/60 ${sortIconClassName}`}
+                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 dark:hover:bg-white/10 ${sortIconClassName}`}
                   aria-label={`Sort by ${columnId}`}
                   title={
                     sortDir === "asc"
@@ -1523,7 +1550,7 @@ function TableInner<TData>(
       return (
         <React.Fragment key={row.id}>
           <tr
-            className={`${selected ? selectedRowClassName : rowClassName} ${isStriped ? stripedClassNameProp || "bg-gray-50 dark:bg-white/[0.02]" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
+            className={`${selected ? selectedRowClassName : rowClassName} ${isStriped ? stripedClassNameProp || "bg-gray-50 dark:bg-white/[0.04]" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
             onClick={(e) => handleRowClick(row, e)}
             onMouseEnter={(e) =>
               handleRowHover(rowIndex, { current: e.currentTarget })
@@ -1911,23 +1938,46 @@ function TableInner<TData>(
   const allColumnsPinned =
     hasPinnedColumns && !hasUnpinnedColumns && !hasPinnedRightColumns;
 
+  // When the inner flex/grid wrapper is the scroll container (sticky
+  // thead or sticky tfoot mode), horizontal scrolling is delegated up to
+  // it. Keeping overflow-x-auto here would create an inner scroll
+  // context that intercepts position: sticky, breaking the stick.
   const defaultUnpinnedContainerClass =
     hasPinnedColumns || hasPinnedRightColumns
-      ? stickyHeader
-        ? "min-w-0 flex-1 overflow-x-auto"
+      ? needsHoistedScroll
+        ? "min-w-0 flex-1"
         : "min-w-0 flex-1 overflow-x-auto"
-      : "w-full min-w-0 overflow-x-auto";
+      : needsHoistedScroll
+        ? "w-full min-w-0"
+        : "w-full min-w-0 overflow-x-auto";
+
+  // User-supplied container classes may include overflow-* utilities for the
+  // non-sticky case. In hoisted-scroll mode they would re-introduce the inner
+  // scroll context we just removed, so strip them here.
+  const stripOverflow = (cls: string) =>
+    needsHoistedScroll
+      ? cls
+          .replace(
+            /\b(overflow|overflow-x|overflow-y)-(auto|scroll|hidden|clip)\b/g,
+            "",
+          )
+          .replace(/\s+/g, " ")
+          .trim()
+      : cls;
 
   const finalPinnedContainerClass = allColumnsPinned
     ? "w-full"
-    : pinnedContainerClassName || "shrink-0 sticky left-0 z-20 bg-inherit";
+    : stripOverflow(
+        pinnedContainerClassName || "shrink-0 sticky left-0 z-20 bg-inherit",
+      );
 
   const finalPinnedTableClass = allColumnsPinned
     ? `w-full ${pinnedTableClassName || tableClassName}`
     : pinnedTableClassName || tableClassName;
 
-  const finalPinnedRightContainerClass =
-    pinnedRightContainerClassName || "shrink-0 sticky right-0 z-20 bg-inherit";
+  const finalPinnedRightContainerClass = stripOverflow(
+    pinnedRightContainerClassName || "shrink-0 sticky right-0 z-20 bg-inherit",
+  );
 
   const finalPinnedRightTableClass =
     pinnedRightTableClassName || tableClassName;
@@ -1960,19 +2010,21 @@ function TableInner<TData>(
           const showIcon = iconPos !== "none";
           const iconLeft = iconPos === "left";
           const IconComponent = CustomSearchIcon || SearchIcon;
-          const inputPl = showIcon && iconLeft ? "pl-8" : "pl-3";
+          const inputPl = showIcon && iconLeft ? "pl-9" : "pl-3";
           const inputPr = globalFilter
-            ? "pr-8"
+            ? showIcon && !iconLeft
+              ? "pr-16"
+              : "pr-9"
             : showIcon && !iconLeft
-              ? "pr-8"
+              ? "pr-9"
               : "pr-3";
 
           return (
-            <div className={`mb-2 ${searchBarClassName}`} data-table-search>
+            <div className={`mb-3 ${searchBarClassName}`} data-table-search>
               <div className="relative">
                 {showIcon && (
                   <IconComponent
-                    className={`w-4 h-4 absolute top-1/2 -translate-y-1/2 text-gray-400 ${iconLeft ? "left-2.5" : "right-2.5"}`}
+                    className={`w-4 h-4 absolute top-1/2 -translate-y-1/2 text-cl-text-tertiary pointer-events-none ${iconLeft ? "left-3" : "right-3"}`}
                   />
                 )}
                 <input
@@ -1980,7 +2032,7 @@ function TableInner<TData>(
                   value={globalFilter ?? ""}
                   onChange={handleSearchChange}
                   placeholder={searchPlaceholder}
-                  className={`w-full ${inputPl} ${inputPr} py-2 border rounded bg-inherit text-inherit border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 ${searchInputClassName}`}
+                  className={`w-full ${inputPl} ${inputPr} py-2 text-sm rounded-cl-md border bg-cl-bg-elevated text-cl-text border-cl-border placeholder:text-cl-text-tertiary focus:outline-none focus:ring-2 focus:ring-cl-accent/30 focus:border-cl-border-input-focus ${searchInputClassName}`}
                   aria-label="Search table"
                 />
                 {globalFilter && (
@@ -1992,7 +2044,7 @@ function TableInner<TData>(
                       table.setGlobalFilter("");
                       onSearchClear?.();
                     }}
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 ${showIcon && !iconLeft ? "right-8" : "right-2.5"}`}
+                    className={`absolute top-1/2 -translate-y-1/2 p-0.5 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer ${showIcon && !iconLeft ? "right-9" : "right-2.5"}`}
                     aria-label="Clear search"
                   >
                     <svg
@@ -2012,7 +2064,60 @@ function TableInner<TData>(
       {children}
 
       <div
-        className={`flex w-full min-w-0 overflow-hidden ${floatingActions ? "relative" : ""}`}
+        // Layout decisions:
+        // - GRID whenever pinned columns are present so all sections
+        //   (pinned / unpinned / right-pinned) stretch to the same
+        //   row-track height. Without this, multi-line cells in the
+        //   unpinned table make those rows taller than the corresponding
+        //   pinned rows, so the pinned column drifts out of vertical
+        //   alignment with the rest.
+        // - OVERFLOW: AUTO + maxHeight on this wrapper when sticky-thead
+        //   or sticky-tfoot is in play, so the sticky element has a real
+        //   scroll ancestor.
+        // - overflow-clip (non-sticky path) clips visually without
+        //   creating a scroll context.
+        className={`${
+          hasPinnedColumns || hasPinnedRightColumns
+            ? "grid"
+            : "flex"
+        } w-full min-w-0 ${needsHoistedScroll ? "" : "overflow-clip"} ${floatingActions ? "relative" : ""}`}
+        style={
+          hasPinnedColumns || hasPinnedRightColumns
+            ? {
+                gridTemplateColumns: [
+                  hasPinnedColumns ? "auto" : null,
+                  hasUnpinnedColumns ? "minmax(0,1fr)" : null,
+                  hasPinnedRightColumns ? "auto" : null,
+                ]
+                  .filter(Boolean)
+                  .join(" "),
+                ...(needsHoistedScroll
+                  ? {
+                      maxHeight:
+                        typeof maxHeight === "number"
+                          ? `${maxHeight}px`
+                          : maxHeight,
+                      overflow: "auto",
+                      // `none` (not `contain`) is needed here: `contain`
+                      // only blocks scroll chaining, but the inner
+                      // container can still rubber-band on macOS
+                      // Chrome, which visibly displaces the sticky
+                      // <thead> at the end of scroll.
+                      overscrollBehavior: "none",
+                    }
+                  : {}),
+              }
+            : needsHoistedScroll
+              ? {
+                  maxHeight:
+                    typeof maxHeight === "number"
+                      ? `${maxHeight}px`
+                      : maxHeight,
+                  overflow: "auto",
+                  overscrollBehavior: "none",
+                }
+              : undefined
+        }
         data-testid="table-container"
         onMouseMove={onCursorPosition ? handleMouseMove : undefined}
         onMouseLeave={onCursorPosition ? handleMouseLeave : undefined}
@@ -2035,7 +2140,9 @@ function TableInner<TData>(
                   !pinnedRightColumnIds.has(columnId)
               : undefined,
             unpinnedTableClassName || tableClassName,
-            unpinnedContainerClassName || defaultUnpinnedContainerClass,
+            stripOverflow(
+              unpinnedContainerClassName || defaultUnpinnedContainerClass,
+            ),
             hasPinnedColumns || hasPinnedRightColumns
               ? `${ariaLabel} - Scrollable columns`
               : ariaLabel,
@@ -2094,7 +2201,7 @@ function TableInner<TData>(
           <div
             ref={filterDropdownRef}
             data-table-filter-content
-            className={`fixed rounded-lg border shadow-xl overflow-hidden min-w-[180px] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-white dark:bg-gray-900 border-gray-200 dark:border-white/[0.08]"}`}
+            className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${filterDropdownClassName || "bg-white dark:bg-gray-900 border-gray-200 dark:border-white/[0.08]"}`}
             style={{
               top: filterDropdownState.top,
               left: filterDropdownState.left,

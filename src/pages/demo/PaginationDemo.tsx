@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Pagination } from "../../components/Pagination";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   DemoLabel,
@@ -92,7 +93,7 @@ const DoubleArrowRightIcon = ({ className }: { className?: string }) => (
 
 const JumpToPageEllipsis = ({
   onPageChange,
-  dark,
+  dark: _dark,
   variant = "default",
 }: {
   onPageChange: (page: number) => void;
@@ -119,39 +120,15 @@ const JumpToPageEllipsis = ({
   };
 
   const buttonStyles = {
-    default: `px-2.5 py-1 rounded-lg text-sm cursor-pointer transition-colors ${
-      dark
-        ? "text-gray-400 hover:bg-gray-700 hover:text-gray-200"
-        : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-    }`,
-    pill: `w-9 h-9 rounded-full flex items-center justify-center text-sm cursor-pointer transition-all ${
-      dark
-        ? "text-gray-400 border border-gray-600 hover:bg-gray-700 hover:text-gray-200 hover:border-gray-500"
-        : "text-gray-400 border border-gray-200 hover:bg-gray-100 hover:text-gray-600 hover:border-gray-300"
-    }`,
-    ghost: `px-2 py-1 rounded-md text-sm cursor-pointer transition-colors ${
-      dark
-        ? "text-gray-500 hover:text-gray-300"
-        : "text-gray-400 hover:text-gray-600"
-    }`,
+    default: `px-2.5 py-1 rounded-cl-md text-sm cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover hover:text-cl-text-secondary dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+ pill: `w-9 h-9 rounded-full flex items-center justify-center text-sm cursor-pointer transition-all text-cl-text-tertiary border border-cl-border hover:bg-cl-bg-hover hover:text-cl-text-secondary hover:border-cl-border-input dark:text-cl-text-tertiary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:hover:border-cl-border`,
+    ghost: `px-2 py-1 rounded-cl-md text-sm cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text-secondary dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary`,
   };
 
   const inputStyles = {
-    default: `w-12 px-1 py-1 text-sm text-center rounded-lg border outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-      dark
-        ? "bg-gray-700 border-gray-500 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/40"
-        : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30"
-    }`,
-    pill: `w-9 h-9 text-sm text-center rounded-full border outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-      dark
-        ? "bg-gray-700 border-blue-500 text-white placeholder-gray-500 ring-1 ring-blue-500/40"
-        : "bg-white border-blue-500 text-gray-900 placeholder-gray-400 ring-1 ring-blue-500/30"
-    }`,
-    ghost: `w-10 px-1 py-1 text-sm text-center rounded-md border-b-2 border-t-0 border-x-0 outline-none transition-colors bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-      dark
-        ? "border-blue-500 text-white placeholder-gray-500"
-        : "border-blue-500 text-gray-900 placeholder-gray-400"
-    }`,
+ default: `w-12 px-1 py-1 text-sm text-center rounded-cl-md outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-white border border-cl-border-input text-cl-text placeholder-gray-400 focus:border-cl-border-input-focus focus:ring-1 focus:ring-cl-accent/30 dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-white dark:placeholder-gray-500 dark:focus:border-cl-border-input-focus dark:focus:ring-1 dark:focus:ring-cl-accent/40`,
+ pill: `w-9 h-9 text-sm text-center rounded-full outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-white border border-cl-border-input-focus text-cl-text placeholder-gray-400 ring-1 ring-cl-accent/30 dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus dark:text-white dark:placeholder-gray-500 dark:ring-1 dark:ring-cl-accent/40`,
+    ghost: `w-10 px-1 py-1 text-sm text-center rounded-cl-md border-b-2 border-t-0 border-x-0 outline-none transition-colors bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none border border-cl-border-input-focus text-cl-text placeholder-gray-400 dark:border dark:border-cl-border-input-focus dark:text-white dark:placeholder-gray-500`,
   };
 
   if (!isEditing) {
@@ -193,51 +170,33 @@ const JumpToPageEllipsis = ({
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
+const getClasses = (_dark: boolean) => ({
   pagination: {
     root: "flex flex-wrap items-center gap-2",
     nav: "flex items-center gap-2",
     pageButtons: "flex flex-wrap items-center gap-2",
-    pageButton: `px-3 py-1 rounded-lg border transition-colors cursor-pointer ${
-      dark
-        ? "border-gray-600 hover:bg-gray-700 text-gray-300"
-        : "border-gray-200 hover:bg-gray-50 text-gray-700"
-    }`,
+ pageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
     activePageButton:
-      "px-3 py-1 rounded-lg bg-blue-600 text-white border border-blue-600",
-    navButton: `p-2 rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-      dark
-        ? "border-gray-600 hover:bg-gray-700 text-gray-300"
-        : "border-gray-200 hover:bg-gray-50 text-gray-600"
-    }`,
-    ellipsis: `px-2 select-none ${dark ? "text-gray-500" : "text-gray-400"}`,
+      "px-3 py-1 rounded-cl-md bg-cl-accent text-white border border-cl-border-input-focus",
+ navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border border-cl-border hover:bg-cl-bg-hover text-cl-text-secondary dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
+    ellipsis: `px-2 select-none text-cl-text-tertiary`,
     selector: "flex items-center gap-2",
-    selectorButton: `flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-      dark
-        ? "border-gray-600 bg-gray-700 text-gray-200 hover:bg-gray-600"
-        : "border-gray-200 bg-white hover:bg-gray-50"
-    }`,
-    selectorDropdown: `rounded-lg shadow-lg py-1 border min-w-[64px] ${
-      dark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
-    }`,
+ selectorButton: `flex items-center gap-2 px-3 py-1.5 rounded-cl-md transition-colors cursor-pointer border border-cl-border bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10`,
+ selectorDropdown: `rounded-cl-md shadow-lg py-1 min-w-[64px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     selectorDropdownWrapper: "",
-    selectorOption: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors ${
-      dark
-        ? "text-gray-200 hover:bg-gray-600 data-[selected]:bg-blue-900/60 data-[selected]:text-blue-300 data-[highlighted]:bg-gray-600"
-        : "hover:bg-gray-50 data-[selected]:bg-blue-50 data-[selected]:text-blue-700 data-[highlighted]:bg-gray-100"
-    }`,
-    label: `text-sm ${dark ? "text-gray-400" : "text-gray-600"}`,
-    dropdownIcon: `w-4 h-4 transition-transform ${dark ? "text-gray-400" : "text-gray-500"}`,
-    prevIcon: `w-5 h-5 ${dark ? "text-gray-400" : "text-gray-600"}`,
-    nextIcon: `w-5 h-5 ${dark ? "text-gray-400" : "text-gray-600"}`,
+    selectorOption: `px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-text/10 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-text/10`,
+    label: `text-sm text-cl-text-secondary`,
+    dropdownIcon: `w-4 h-4 transition-transform text-cl-text-secondary`,
+    prevIcon: `w-5 h-5 text-cl-text-secondary`,
+    nextIcon: `w-5 h-5 text-cl-text-secondary`,
     pageInfo: "flex items-center",
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -287,38 +246,11 @@ const PaginationDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Pagination
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A flexible, accessible pagination component with optional
-            rows-per-page selector, custom ellipsis rendering, page info
-            display, section reordering, i18n support, and extensive
-            class-driven styling via the classes prop.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Pagination } from "@chumlab/ui/pagination";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Pagination"
+        description="A flexible, accessible pagination component with optional rows-per-page selector, custom ellipsis rendering, page info display, section reordering, i18n support, and extensive class-driven styling via the classes prop."
+        code={`import { Pagination } from "@chumlab/ui/pagination";`}
+      />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -380,7 +312,7 @@ const PaginationDemo = () => {
               />
             </div>
             <div
-              className={`border-t pt-8 ${dark ? "border-gray-700" : "border-gray-200"}`}
+              className="border-t pt-8 border-cl-border"
             >
               <div className="space-y-3">
                 <DemoLabel isDarkMode={dark}>siblingCount=2</DemoLabel>
@@ -422,7 +354,7 @@ const PaginationDemo = () => {
               />
             </div>
             <div
-              className={`border-t pt-8 ${dark ? "border-gray-700" : "border-gray-200"}`}
+              className="border-t pt-8 border-cl-border"
             >
               <div className="space-y-3">
                 <DemoLabel isDarkMode={dark}>
@@ -442,27 +374,19 @@ const PaginationDemo = () => {
                   classes={{
                     ...c.pagination,
                     root: "flex flex-wrap items-center gap-1",
-                    navButton: `p-2 rounded-full border shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-                      dark
-                        ? "bg-gray-700 border-gray-600 text-gray-300"
-                        : "bg-white border-gray-200"
-                    }`,
-                    pageButton: `w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer ${
-                      dark
-                        ? "bg-gray-700 border-gray-600 text-gray-200"
-                        : "bg-white border-gray-200"
-                    }`,
+ navButton: `p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary`,
+ pageButton: `w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
                     activePageButton:
-                      "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-blue-600 text-white",
+                      "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-cl-accent text-white",
                     pageButtons: "flex items-center gap-1",
-                    prevIcon: `w-4 h-4 ${dark ? "text-gray-400" : "text-gray-600"}`,
-                    nextIcon: `w-4 h-4 ${dark ? "text-gray-400" : "text-gray-600"}`,
+                    prevIcon: `w-4 h-4 text-cl-text-secondary`,
+                    nextIcon: `w-4 h-4 text-cl-text-secondary`,
                   }}
                 />
               </div>
             </div>
             <div
-              className={`border-t pt-8 ${dark ? "border-gray-700" : "border-gray-200"}`}
+              className="border-t pt-8 border-cl-border"
             >
               <div className="space-y-3">
                 <DemoLabel isDarkMode={dark}>
@@ -482,19 +406,9 @@ const PaginationDemo = () => {
                   classes={{
                     ...c.pagination,
                     root: "flex items-center",
-                    navButton: `p-1.5 rounded-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer ${
-                      dark
-                        ? "hover:bg-gray-700 text-gray-400"
-                        : "hover:bg-gray-100 text-gray-500"
-                    }`,
-                    pageButton: `min-w-[36px] h-9 rounded-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer ${
-                      dark
-                        ? "text-gray-400 hover:bg-gray-700 hover:text-white"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                    }`,
-                    activePageButton: `min-w-[36px] h-9 rounded-md flex items-center justify-center text-sm font-medium ${
-                      dark ? "bg-gray-700 text-white" : "bg-gray-900 text-white"
-                    }`,
+                    navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+                    pageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+                    activePageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-white`,
                     pageButtons: "flex items-center gap-0.5",
                     prevIcon: "w-4 h-4",
                     nextIcon: "w-4 h-4",
@@ -525,7 +439,7 @@ const PaginationDemo = () => {
             showRowsPerPage
             renderPageInfo={({ currentPage, totalPages, rowsPerPage: rpp }) => (
               <span
-                className={`text-sm tabular-nums ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm tabular-nums text-cl-text-secondary`}
               >
                 Page {currentPage} of {totalPages}
                 {rpp ? ` (${rpp} per page)` : ""}
@@ -559,7 +473,7 @@ const PaginationDemo = () => {
             sectionOrder={["nav", "pageInfo", "selector"]}
             renderPageInfo={({ currentPage, totalPages }) => (
               <span
-                className={`text-sm tabular-nums ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm tabular-nums text-cl-text-secondary`}
               >
                 {currentPage} / {totalPages}
               </span>
@@ -582,7 +496,7 @@ const PaginationDemo = () => {
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
               <span
-                className={`text-sm font-medium ${dark ? "text-gray-300" : "text-gray-700"}`}
+                className={`text-sm font-medium text-cl-text-secondary`}
               >
                 Items per page:
               </span>
@@ -594,12 +508,12 @@ const PaginationDemo = () => {
                     setExternalRows(r);
                     setExternalPage(1);
                   }}
-                  className={`px-3 py-1.5 text-sm rounded-lg border cursor-pointer transition-all ${
+                  className={`px-3 py-1.5 text-sm rounded-cl-md border cursor-pointer transition-all ${
                     externalRows === r
-                      ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                      ? "bg-cl-accent text-white border-cl-border-input-focus shadow-sm"
                       : dark
-                        ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                        : "border-gray-200 text-gray-700 hover:bg-gray-50"
+                        ? "border-cl-border text-cl-text-secondary hover:bg-cl-bg-elevated"
+                        : "border-cl-border text-cl-text hover:bg-cl-bg-hover"
                   }`}
                 >
                   {r}
@@ -642,7 +556,7 @@ const PaginationDemo = () => {
             pageAriaLabel={(page) => `Page ${page}`}
             renderPageInfo={({ currentPage, totalPages }) => (
               <span
-                className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm text-cl-text-secondary`}
               >
                 Page {currentPage} sur {totalPages}
               </span>
@@ -683,20 +597,16 @@ const PaginationDemo = () => {
                 classes={{
                   ...c.pagination,
                   root: "flex flex-wrap items-center justify-between gap-4",
-                  navButton: `p-2 rounded-lg border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-                    dark
-                      ? "border-indigo-700 bg-indigo-900/30 hover:bg-indigo-800/50 text-indigo-300"
-                      : "border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-600"
-                  }`,
+                  navButton: `p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border-input-focus bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/30 dark:hover:bg-cl-accent/50 dark:text-cl-accent`,
                   activePageButton:
-                    "px-3 py-1 rounded-lg border border-indigo-600 bg-indigo-600 text-white",
-                  prevIcon: `w-5 h-5 ${dark ? "text-indigo-300" : "text-indigo-600"}`,
-                  nextIcon: `w-5 h-5 ${dark ? "text-indigo-300" : "text-indigo-600"}`,
+                    "px-3 py-1 rounded-cl-md border border-cl-border-input-focus bg-cl-accent text-white",
+                  prevIcon: `w-5 h-5 text-cl-accent`,
+                  nextIcon: `w-5 h-5 text-cl-accent`,
                 }}
               />
             </div>
             <div
-              className={`border-t pt-8 ${dark ? "border-gray-700" : "border-gray-200"}`}
+              className="border-t pt-8 border-cl-border"
             >
               <div className="space-y-3">
                 <DemoLabel isDarkMode={dark}>
@@ -709,23 +619,19 @@ const PaginationDemo = () => {
                     onValueChange={setDoubleArrowPage}
                     prevIcon={
                       <DoubleArrowLeftIcon
-                        className={`w-5 h-5 ${dark ? "text-emerald-300" : "text-emerald-600"}`}
+                        className={`w-5 h-5 text-cl-success dark:text-cl-success`}
                       />
                     }
                     nextIcon={
                       <DoubleArrowRightIcon
-                        className={`w-5 h-5 ${dark ? "text-emerald-300" : "text-emerald-600"}`}
+                        className={`w-5 h-5 text-cl-success dark:text-cl-success`}
                       />
                     }
                     classes={{
                       ...c.pagination,
-                      navButton: `p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-                        dark
-                          ? "border-emerald-700 bg-emerald-900/30 hover:bg-emerald-800/50"
-                          : "border-emerald-200 bg-emerald-50 hover:bg-emerald-100"
-                      }`,
+                      navButton: `p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:border dark:border-cl-success dark:bg-cl-success/30 dark:hover:bg-cl-success/50`,
                       activePageButton:
-                        "px-3 py-1 rounded-lg border border-emerald-600 bg-emerald-600 text-white",
+                        "px-3 py-1 rounded-cl-md border border-cl-success bg-cl-success text-white",
                     }}
                   />
                 </div>
@@ -762,16 +668,16 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Dropdown Direction ───────────────────────────────────────── */}
+      {/* ─── Dropdown Position ────────────────────────────────────────── */}
       <Section
-        title="Dropdown Direction"
-        description="Control whether the rows-per-page dropdown opens upward (default) or downward with dropdownDirection."
+        title="Dropdown Position"
+        description="Control whether the rows-per-page dropdown opens upward (default) or downward with the dropdownPosition prop."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-8">
             <div className="space-y-3">
-              <DemoLabel isDarkMode={dark}>direction="up" (default)</DemoLabel>
+              <DemoLabel isDarkMode={dark}>dropdownPosition="top" (default)</DemoLabel>
               <Pagination
                 value={dropdownUpPage}
                 totalPages={Math.ceil(100 / dropdownUpRowsPerPage)}
@@ -790,10 +696,10 @@ const PaginationDemo = () => {
               />
             </div>
             <div
-              className={`border-t pt-8 ${dark ? "border-gray-700" : "border-gray-200"}`}
+              className="border-t pt-8 border-cl-border"
             >
               <div className="space-y-3">
-                <DemoLabel isDarkMode={dark}>direction="down"</DemoLabel>
+                <DemoLabel isDarkMode={dark}>dropdownPosition="bottom"</DemoLabel>
                 <Pagination
                   value={dropdownDownPage}
                   totalPages={Math.ceil(100 / dropdownDownRowsPerPage)}
@@ -841,41 +747,21 @@ const PaginationDemo = () => {
             showRowsPerPage
             classes={{
               ...c.pagination,
-              root: `flex flex-wrap items-center justify-between gap-4 sm:gap-6 p-4 rounded-xl ${dark ? "bg-gray-700/40" : "bg-gray-50"}`,
+              root: `flex flex-wrap items-center justify-between gap-4 sm:gap-6 p-4 rounded-cl-lg bg-cl-bg-hover dark:bg-cl-bg-elevated/40`,
               nav: "flex items-center gap-1",
-              navButton: `p-2 rounded-full border shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-                dark
-                  ? "bg-gray-700 border-gray-600 text-gray-300"
-                  : "bg-white border-gray-200"
-              }`,
-              pageButton: `w-10 h-10 rounded-full border shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer ${
-                dark
-                  ? "bg-gray-700 border-gray-600 text-gray-200"
-                  : "bg-white border-gray-200"
-              }`,
+ navButton: `p-2 rounded-full shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary`,
+ pageButton: `w-10 h-10 rounded-full shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
               activePageButton:
-                "w-10 h-10 rounded-full shadow-md flex items-center justify-center bg-purple-600 text-white",
+                "w-10 h-10 rounded-full shadow-md flex items-center justify-center bg-cl-accent text-white",
               pageButtons: "flex items-center gap-1",
-              selectorButton: `flex items-center gap-2 px-4 py-2 rounded-full border shadow-sm hover:shadow transition-shadow cursor-pointer ${
-                dark
-                  ? "bg-gray-700 border-gray-600 text-gray-200"
-                  : "bg-white border-gray-200"
-              }`,
-              selectorDropdown: `rounded-xl shadow-lg py-2 min-w-[80px] border ${
-                dark
-                  ? "bg-gray-700 border-gray-600"
-                  : "bg-white border-gray-200"
-              }`,
-              selectorOption: `px-4 py-2 w-full text-left cursor-pointer transition-colors ${
-                dark
-                  ? "text-gray-200 hover:bg-purple-900/40 data-[selected]:bg-purple-900/60 data-[selected]:text-purple-300 data-[highlighted]:bg-purple-900/40"
-                  : "hover:bg-purple-50 data-[selected]:bg-purple-100 data-[selected]:text-purple-700 data-[highlighted]:bg-purple-50"
-              }`,
-              label: `text-sm font-medium ${dark ? "text-gray-300" : "text-gray-700"}`,
-              ellipsis: `px-2 ${dark ? "text-gray-500" : "text-gray-400"}`,
-              prevIcon: `w-5 h-5 ${dark ? "text-gray-400" : "text-gray-600"}`,
-              nextIcon: `w-5 h-5 ${dark ? "text-gray-400" : "text-gray-600"}`,
-              dropdownIcon: `w-4 h-4 ${dark ? "text-gray-400" : "text-gray-500"}`,
+ selectorButton: `flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
+ selectorDropdown: `rounded-cl-lg shadow-lg py-2 min-w-[80px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+              selectorOption: `px-4 py-2 w-full text-left cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent/10 data-[selected]:text-cl-accent data-[highlighted]:bg-cl-accent/10 dark:text-cl-text dark:hover:bg-cl-accent/40 dark:data-[selected]:bg-cl-accent/60 dark:data-[selected]:text-cl-accent dark:data-[highlighted]:bg-cl-accent/40`,
+              label: `text-sm font-medium text-cl-text-secondary`,
+              ellipsis: `px-2 text-cl-text-tertiary`,
+              prevIcon: `w-5 h-5 text-cl-text-secondary`,
+              nextIcon: `w-5 h-5 text-cl-text-secondary`,
+              dropdownIcon: `w-4 h-4 text-cl-text-secondary`,
             }}
           />
         </DemoWrapper>
@@ -894,21 +780,9 @@ const PaginationDemo = () => {
             onValueChange={setDataAttrPage}
             classes={{
               ...c.pagination,
-              navButton: `p-2 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-                dark
-                  ? "hover:bg-gray-700 text-gray-400"
-                  : "hover:bg-gray-100 text-gray-500"
-              }`,
-              pageButton: `px-3 py-1 rounded-lg transition-colors cursor-pointer ${
-                dark
-                  ? "text-gray-400 hover:bg-gray-700 hover:text-gray-200 data-[active]:bg-blue-600 data-[active]:text-white data-[active]:hover:bg-blue-700"
-                  : "text-gray-600 hover:bg-gray-100 data-[active]:bg-blue-600 data-[active]:text-white data-[active]:hover:bg-blue-700"
-              }`,
-              activePageButton: `px-3 py-1 rounded-lg transition-colors cursor-pointer ${
-                dark
-                  ? "text-gray-400 hover:bg-gray-700 hover:text-gray-200 data-[active]:bg-blue-600 data-[active]:text-white data-[active]:hover:bg-blue-700"
-                  : "text-gray-600 hover:bg-gray-100 data-[active]:bg-blue-600 data-[active]:text-white data-[active]:hover:bg-blue-700"
-              }`,
+              navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+              pageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
+              activePageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
             }}
           />
         </DemoWrapper>
@@ -929,20 +803,10 @@ const PaginationDemo = () => {
               classes={{
                 ...c.pagination,
                 root: "flex items-center",
-                navButton: `p-1.5 rounded-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer ${
-                  dark
-                    ? "hover:bg-gray-700 text-gray-400"
-                    : "hover:bg-gray-100 text-gray-500"
-                }`,
-                pageButton: `min-w-[36px] h-9 rounded-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer ${
-                  dark
-                    ? "text-gray-400 hover:bg-gray-700 hover:text-white"
-                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`,
-                activePageButton: `min-w-[36px] h-9 rounded-md flex items-center justify-center text-sm font-medium ${
-                  dark ? "bg-gray-700 text-white" : "bg-gray-900 text-white"
-                }`,
-                ellipsis: `px-1 ${dark ? "text-gray-600" : "text-gray-300"}`,
+                navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+                pageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+                activePageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-white`,
+                ellipsis: `px-1 text-cl-text-disabled`,
                 pageButtons: "flex items-center gap-0.5",
                 prevIcon: "w-4 h-4",
                 nextIcon: "w-4 h-4",
@@ -967,20 +831,12 @@ const PaginationDemo = () => {
               classes={{
                 ...c.pagination,
                 root: "flex items-center gap-0.5",
-                navButton: `p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-                  dark
-                    ? "hover:bg-gray-700 text-gray-400"
-                    : "hover:bg-gray-100 text-gray-500"
-                }`,
-                pageButton: `px-2 py-0.5 text-sm rounded transition-colors cursor-pointer ${
-                  dark
-                    ? "hover:bg-gray-700 text-gray-300"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`,
+                navButton: `p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+                pageButton: `px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
                 activePageButton:
-                  "px-2 py-0.5 text-sm rounded bg-blue-600 text-white",
+                  "px-2 py-0.5 text-sm rounded bg-cl-accent text-white",
                 pageButtons: "flex items-center gap-0.5",
-                ellipsis: `px-1 text-sm ${dark ? "text-gray-500" : "text-gray-400"}`,
+                ellipsis: `px-1 text-sm text-cl-text-tertiary`,
                 prevIcon: "w-3.5 h-3.5",
                 nextIcon: "w-3.5 h-3.5",
               }}
@@ -1053,7 +909,7 @@ const PaginationDemo = () => {
             onClick={() => {
               const el = document.getElementById("ref-demo-pagination");
               if (el) {
-                el.style.outline = "2px solid #3b82f6";
+                el.style.outline = "2px solid var(--cl-accent)";
                 el.style.outlineOffset = "2px";
                 el.style.borderRadius = "8px";
                 setTimeout(() => {
@@ -1074,7 +930,7 @@ const PaginationDemo = () => {
             value={refPage}
             totalPages={5}
             onValueChange={setRefPage}
-            className={`p-3 rounded-lg transition-all ${dark ? "focus:bg-gray-700/50" : "focus:bg-blue-50"}`}
+            className={`p-3 rounded-cl-md transition-all focus:bg-cl-accent/10 dark:focus:bg-cl-bg-elevated/50`}
             classes={c.pagination}
           />
         </DemoWrapper>
@@ -1223,10 +1079,10 @@ const PaginationDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="dropdownDirection"
-              type={'"up" | "down"'}
-              defaultVal='"up"'
-              description="Direction the rows-per-page dropdown opens"
+              name="dropdownPosition"
+              type={'"top" | "bottom"'}
+              defaultVal='"top"'
+              description="Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom)"
               isDarkMode={dark}
             />
             <PropRow
@@ -1481,7 +1337,7 @@ const PaginationDemo = () => {
             <PropRow
               name="data-direction"
               type="dropdown portal"
-              description='"up" or "down" based on dropdownDirection'
+              description='"up" or "down" based on dropdownPosition'
               isDarkMode={dark}
             />
             <PropRow
@@ -1508,7 +1364,7 @@ const PaginationDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Rendered as <nav aria-label="Pagination"> landmark (overridable via paginationAriaLabel)',
@@ -1523,7 +1379,7 @@ const PaginationDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1534,12 +1390,12 @@ const PaginationDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus between pagination controls"],

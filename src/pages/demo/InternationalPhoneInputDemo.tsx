@@ -10,6 +10,7 @@ import {
 import { CountryFlag } from "../../components/CountryFlag";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   DemoLabel,
@@ -63,91 +64,45 @@ const CheckSmallIcon = ({ className = "" }: { className?: string }) => (
 const getClasses = (dark: boolean) => ({
   phone: {
     root: "flex flex-col gap-1",
-    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
+    label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     wrapper: "flex gap-2 items-stretch",
-    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
-      dark
-        ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400/50 [color-scheme:dark]"
-        : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-    }`,
-    error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
-    success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
-    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] ${
-      dark
-        ? "border-white/10 bg-white/4 hover:bg-white/6 text-gray-300"
-        : "border-gray-300 bg-white hover:bg-gray-50 text-gray-700"
-    }`,
-    countrySelectDropdown: `w-72 border rounded-lg shadow-lg overflow-hidden ${
-      dark
-        ? "bg-gray-800 border-white/10"
-        : "bg-white border-gray-200"
-    }`,
-    countrySelectSearchInput: `flex items-center gap-2 px-3 py-2 border-b ${
-      dark ? "border-white/10" : "border-gray-200"
-    }`,
-    countrySelectSearchInputElement: `flex-1 bg-transparent focus:outline-none text-sm ${
-      dark
-        ? "text-white placeholder:text-gray-400"
-        : "text-gray-900 placeholder:text-gray-400"
-    }`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50 dark:[color-scheme:dark]`,
+    error: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-error`,
+    success: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-success`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-border-input bg-white hover:bg-cl-bg-hover text-cl-text dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:hover:bg-cl-text/6 dark:text-cl-text-secondary`,
+ countrySelectDropdown: `w-72 rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-text/10`,
+    countrySelectSearchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-text/10`,
+    countrySelectSearchInputElement: `flex-1 bg-transparent focus:outline-none text-sm text-cl-text placeholder:text-cl-text-tertiary dark:text-white dark:placeholder:text-cl-text-tertiary`,
     countrySelectOptionList: "max-h-60 overflow-y-auto",
-    countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
-      dark
-        ? "hover:bg-white/6 data-[focused]:bg-white/10 text-gray-300"
-        : "hover:bg-gray-50 data-[focused]:bg-gray-100 text-gray-700"
-    }`,
-    countrySelectOptionSelected: dark ? "bg-indigo-500/10" : "bg-blue-50",
+    countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-bg-hover data-[focused]:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/6 dark:data-[focused]:bg-cl-text/10 dark:text-cl-text-secondary`,
+    countrySelectOptionSelected: dark ? "bg-cl-accent/10" : "bg-cl-accent/10",
     countrySelectChevron:
       "w-4 h-4 shrink-0 transition-transform duration-200",
-    countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-indigo-400" : "text-blue-600"}`,
-    countrySelectSearchIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
-    countrySelectNoResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-500" : "text-gray-500"}`,
+    countrySelectCheckIcon: `w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent`,
+    countrySelectSearchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
+    countrySelectNoResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
   },
   phoneError: {
-    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
-      dark
-        ? "text-white placeholder:text-gray-500 border-red-400/40 bg-red-500/[0.06] focus:ring-2 focus:ring-red-500/25"
-        : "text-gray-900 placeholder:text-gray-400 border-red-500 bg-white focus:ring-2 focus:ring-red-500"
-    }`,
-    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] ${
-      dark
-        ? "border-red-400/40 bg-red-500/[0.06] hover:bg-red-500/10 text-gray-300"
-        : "border-red-500 bg-white hover:bg-red-50 text-gray-700"
-    }`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-error/[0.04] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-error focus:ring-2 focus:ring-cl-error/30 dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:focus:ring-2 dark:focus:ring-cl-error/30`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-error bg-cl-error/[0.04] hover:bg-cl-error/[0.08] text-cl-text dark:border dark:border-cl-error/50 dark:bg-cl-error/[0.08] dark:hover:bg-cl-error/[0.14] dark:text-cl-text-secondary`,
   },
   phoneSuccess: {
-    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
-      dark
-        ? "text-white placeholder:text-gray-500 border-emerald-400/40 bg-emerald-500/[0.06] focus:ring-2 focus:ring-emerald-500/25"
-        : "text-gray-900 placeholder:text-gray-400 border-emerald-300 bg-emerald-50/40 focus:ring-2 focus:ring-emerald-500/15"
-    }`,
-    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] ${
-      dark
-        ? "border-emerald-400/40 bg-emerald-500/[0.06] text-gray-300"
-        : "border-emerald-300 bg-emerald-50/40 text-gray-700"
-    }`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-cl-success/[0.06] outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-success focus:ring-2 focus:ring-cl-success/30 dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10] dark:focus:ring-2 dark:focus:ring-cl-success/30`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] border-cl-success bg-cl-success/[0.06] text-cl-text dark:border dark:border-cl-success/50 dark:bg-cl-success/[0.10] dark:text-cl-text-secondary`,
   },
   phoneDisabled: {
-    input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm opacity-50 cursor-not-allowed ${
-      dark
-        ? "text-gray-500 placeholder:text-gray-600 border-white/5 bg-white/[0.02]"
-        : "text-gray-400 placeholder:text-gray-300 border-gray-200 bg-gray-50"
-    }`,
-    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-lg border transition-all duration-150 outline-none min-w-[130px] opacity-50 cursor-not-allowed ${
-      dark
-        ? "border-white/5 bg-white/[0.02] text-gray-500"
-        : "border-gray-200 bg-gray-50 text-gray-400"
-    }`,
-    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-500" : "text-gray-400"}`,
+    input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm opacity-50 cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-secondary border-cl-border bg-cl-bg-hover dark:text-cl-text-tertiary dark:placeholder:text-cl-text-secondary dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover text-cl-text-tertiary dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02] dark:text-cl-text-tertiary`,
+    label: `text-[13px] font-medium mb-1.5 block text-cl-text-tertiary`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  code: `px-1.5 py-0.5 rounded-md text-[11px] font-mono font-medium ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`,
-  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-600" : "text-gray-300"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-  resultBox: `rounded-lg px-3 py-2 text-xs font-mono ${dark ? "bg-white/4 text-gray-400" : "bg-gray-50 text-gray-500"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
+  resultBox: `rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 const EUROPEAN_COUNTRIES: CountryOption[] = [
@@ -226,45 +181,11 @@ const InternationalPhoneInputDemo = () => {
 
   return (
     <div className="space-y-10">
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative space-y-3">
-          <h1
-            className={`text-3xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            International Phone Input
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-500"}`}
-          >
-            A phone number input with country code selection, automatic
-            formatting, paste detection, copy formats, custom rendering,
-            extensible validation, and complete styling control through the
-            classes prop.
-          </p>
-          <pre
-            className={`mt-3 p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${
-              dark
-                ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6"
-                : "bg-gray-50 text-gray-700 border border-gray-200"
-            }`}
-          >
-            <code>{`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";`}</code>
-          </pre>
-        </div>
-      </header>
+      <DocsHero
+        title="International Phone Input"
+        description="A phone number input with country code selection, automatic formatting, paste detection, copy formats, custom rendering, extensible validation, and complete styling control through the classes prop."
+        code={`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";`}
+      />
 
       <div className="space-y-8">
         <Section
@@ -489,14 +410,14 @@ const InternationalPhoneInputDemo = () => {
               />
               <div className="mt-3 space-y-2">
                 <p
-                  className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-sm text-cl-text-secondary`}
                 >
                   <strong>Paste:</strong> Try{" "}
                   <code className={c.code}>+44 20 7123 4567</code> or{" "}
                   <code className={c.code}>+1 555 123 4567</code>
                 </p>
                 <p
-                  className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-sm text-cl-text-secondary`}
                 >
                   <strong>Copy:</strong> Select and Ctrl+C — copies in E.164
                   format.
@@ -819,9 +740,9 @@ const InternationalPhoneInputDemo = () => {
                 classes={{
                   ...c.phone,
                   countrySelectOptionSelected: dark
-                    ? "!bg-green-900/30 border-l-4 border-green-400"
-                    : "!bg-green-100 border-l-4 border-green-500",
-                  countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-green-400" : "text-green-600"}`,
+                    ? "!bg-cl-success/30 border-l-4 border-cl-success"
+                    : "!bg-cl-success/15 border-l-4 border-cl-success",
+                  countrySelectCheckIcon: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
               />
             </div>
@@ -844,7 +765,7 @@ const InternationalPhoneInputDemo = () => {
                     onValueChange={setCustomIconValue}
                     placeholder="Enter phone number"
                     selectedIcon={
-                      <StarIcon className="w-4 h-4 shrink-0 text-yellow-500" />
+                      <StarIcon className="w-4 h-4 shrink-0 text-cl-warning" />
                     }
                     classes={c.phone}
                   />
@@ -859,7 +780,7 @@ const InternationalPhoneInputDemo = () => {
                     onValueChange={setCustomIconValue}
                     placeholder="Enter phone number"
                     selectedIcon={
-                      <CircleCheckIcon className="w-4 h-4 shrink-0 text-green-600" />
+                      <CircleCheckIcon className="w-4 h-4 shrink-0 text-cl-success" />
                     }
                     classes={c.phone}
                   />
@@ -875,7 +796,7 @@ const InternationalPhoneInputDemo = () => {
                     placeholder="Enter phone number"
                     selectedIcon={
                       <DotIcon
-                        className={dark ? "text-indigo-400" : "text-blue-600"}
+                        className={dark ? "text-cl-accent" : "text-cl-accent"}
                       />
                     }
                     classes={c.phone}
@@ -903,20 +824,12 @@ const InternationalPhoneInputDemo = () => {
                     placeholder="Enter phone number"
                     classes={{
                       ...c.phone,
-                      input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
-                        dark
-                          ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-purple-500/30 focus:border-purple-400/50"
-                          : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                      }`,
-                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
-                        dark
-                          ? "hover:bg-purple-500/10 data-[focused]:bg-purple-500/15 text-gray-300"
-                          : "hover:bg-purple-50 data-[focused]:bg-purple-100 text-gray-700"
-                      }`,
+                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50`,
+                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-accent/10 data-[focused]:bg-cl-accent/10 text-cl-text dark:hover:bg-cl-accent/10 dark:data-[focused]:bg-cl-accent/15 dark:text-cl-text-secondary`,
                       countrySelectOptionSelected: dark
-                        ? "bg-purple-500/10"
-                        : "bg-purple-50",
-                      countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-purple-400" : "text-purple-600"}`,
+                        ? "bg-cl-accent/10"
+                        : "bg-cl-accent/10",
+                      countrySelectCheckIcon: `w-4 h-4 shrink-0 text-cl-accent`,
                     }}
                   />
                 </div>
@@ -931,20 +844,12 @@ const InternationalPhoneInputDemo = () => {
                     placeholder="Enter phone number"
                     classes={{
                       ...c.phone,
-                      input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
-                        dark
-                          ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-green-500/30 focus:border-green-400/50"
-                          : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                      }`,
-                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
-                        dark
-                          ? "hover:bg-green-500/10 data-[focused]:bg-green-500/15 text-gray-300"
-                          : "hover:bg-green-50 data-[focused]:bg-green-100 text-gray-700"
-                      }`,
+                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-success focus:border-cl-success dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-success/30 dark:focus:border-cl-success/50`,
+                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-success/15 data-[focused]:bg-cl-success/15 text-cl-text dark:hover:bg-cl-success/10 dark:data-[focused]:bg-cl-success/15 dark:text-cl-text-secondary`,
                       countrySelectOptionSelected: dark
-                        ? "bg-green-500/10"
-                        : "bg-green-50",
-                      countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-green-400" : "text-green-600"}`,
+                        ? "bg-cl-success/10"
+                        : "bg-cl-success/15",
+                      countrySelectCheckIcon: `w-4 h-4 shrink-0 text-cl-success`,
                     }}
                   />
                 </div>
@@ -959,20 +864,12 @@ const InternationalPhoneInputDemo = () => {
                     placeholder="Enter phone number"
                     classes={{
                       ...c.phone,
-                      input: `flex-1 h-10 px-3 rounded-lg border bg-transparent outline-none text-sm transition-all duration-150 ${
-                        dark
-                          ? "text-white placeholder:text-gray-500 border-white/10 bg-white/4 focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400/50"
-                          : "text-gray-900 placeholder:text-gray-400 border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                      }`,
-                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer ${
-                        dark
-                          ? "hover:bg-orange-500/10 data-[focused]:bg-orange-500/15 text-gray-300"
-                          : "hover:bg-orange-50 data-[focused]:bg-orange-100 text-gray-700"
-                      }`,
+                      input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-white focus:ring-2 focus:ring-cl-warning focus:border-cl-warning dark:text-white dark:placeholder:text-cl-text-tertiary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus:ring-2 dark:focus:ring-cl-warning/30 dark:focus:border-cl-warning/50`,
+                      countrySelectOption: `flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-cl-warning/15 data-[focused]:bg-cl-warning/15 text-cl-text dark:hover:bg-cl-warning/10 dark:data-[focused]:bg-cl-warning/15 dark:text-cl-text-secondary`,
                       countrySelectOptionSelected: dark
-                        ? "bg-orange-500/10"
-                        : "bg-orange-50",
-                      countrySelectCheckIcon: `w-4 h-4 shrink-0 ${dark ? "text-orange-400" : "text-orange-600"}`,
+                        ? "bg-cl-warning/10"
+                        : "bg-cl-warning/15",
+                      countrySelectCheckIcon: `w-4 h-4 shrink-0 text-cl-warning dark:text-cl-warning`,
                     }}
                   />
                 </div>
@@ -998,14 +895,14 @@ const InternationalPhoneInputDemo = () => {
                     <CountryFlag
                       code={country.flag}
                       size={22}
-                      className="shrink-0 rounded-sm"
+                      className="shrink-0 rounded-cl-sm"
                       style={{ height: 17 }}
                     />
                     <div className="min-w-0 flex-1">
-                      <div className={`text-sm font-medium ${isSelected ? (dark ? "text-indigo-300" : "text-indigo-700") : ""}`}>
+                      <div className={`text-sm font-medium ${isSelected ? (dark ? "text-cl-accent" : "text-cl-accent") : ""}`}>
                         {country.name}
                       </div>
-                      <div className={`text-[11px] ${dark ? "text-gray-500" : "text-gray-400"}`}>
+                      <div className={`text-[11px] text-cl-text-tertiary`}>
                         {country.value} · {country.dialCode}
                       </div>
                     </div>
@@ -1016,17 +913,54 @@ const InternationalPhoneInputDemo = () => {
                     <CountryFlag
                       code={country.flag}
                       size={22}
-                      className="rounded-sm"
+                      className="rounded-cl-sm"
                       style={{ height: 17 }}
                     />
                     <span className="text-xs font-medium">{country.value}</span>
-                    <span className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
+                    <span className={`text-xs text-cl-text-tertiary`}>
                       {country.dialCode}
                     </span>
                   </div>
                 )}
                 classes={c.phone}
               />
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Flag Size"
+          description="Use the flagSize prop to control the flag width (in pixels). Height auto-scales at the standard 22:17 aspect ratio. Defaults to 22."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Small (16px)</span>
+                <InternationalPhoneInput
+                  aria-label="Small flag"
+                  placeholder="Enter phone number"
+                  flagSize={16}
+                  classes={c.phone}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Default (22px)</span>
+                <InternationalPhoneInput
+                  aria-label="Default flag"
+                  placeholder="Enter phone number"
+                  classes={c.phone}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <span className={c.sectionLabel}>Large (32px)</span>
+                <InternationalPhoneInput
+                  aria-label="Large flag"
+                  placeholder="Enter phone number"
+                  flagSize={32}
+                  classes={c.phone}
+                />
+              </div>
             </div>
           </DemoWrapper>
         </Section>
@@ -1121,23 +1055,6 @@ const InternationalPhoneInputDemo = () => {
         </Section>
 
         <Section
-          title="Unstyled Mode"
-          description="Use unstyled to strip all default classes and start from scratch."
-          isDarkMode={dark}
-        >
-          <DemoWrapper isDarkMode={dark}>
-            <div className="w-full sm:max-w-md">
-              {/* Truly unstyled — no classes, bare HTML structure */}
-              <InternationalPhoneInput
-                label="Phone Number"
-                unstyled
-                placeholder="Unstyled input"
-              />
-            </div>
-          </DemoWrapper>
-        </Section>
-
-        <Section
           title="aria-label & aria-labelledby"
           description="Use aria-label or aria-labelledby when a visible label is not provided."
           isDarkMode={dark}
@@ -1159,7 +1076,7 @@ const InternationalPhoneInputDemo = () => {
                 <div className="mt-2">
                   <p
                     id="custom-label-id"
-                    className={`text-sm mb-2 font-medium ${dark ? "text-gray-300" : "text-gray-700"}`}
+                    className={`text-sm mb-2 font-medium text-cl-text-secondary`}
                   >
                     External label element
                   </p>
@@ -1211,7 +1128,7 @@ const InternationalPhoneInputDemo = () => {
               <div>
                 <label
                   htmlFor="checkout-name"
-                  className={`text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  className={`text-[13px] font-medium mb-1.5 block text-cl-text-secondary`}
                 >
                   Full Name
                 </label>
@@ -1228,7 +1145,7 @@ const InternationalPhoneInputDemo = () => {
               <div>
                 <label
                   htmlFor="checkout-email"
-                  className={`text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  className={`text-[13px] font-medium mb-1.5 block text-cl-text-secondary`}
                 >
                   Email
                 </label>
@@ -1671,6 +1588,13 @@ const InternationalPhoneInputDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
+              name="flagSize"
+              type="number"
+              defaultVal="22"
+              description="Pixel width of the flag in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio."
+              isDarkMode={dark}
+            />
+            <PropRow
               name="renderCountryOption"
               type="(props: CountryOptionRenderProps) => ReactNode"
               description="Custom renderer for country options in dropdown"
@@ -2021,7 +1945,7 @@ const InternationalPhoneInputDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               "Label auto-associated via htmlFor",
@@ -2044,7 +1968,7 @@ const InternationalPhoneInputDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -2055,12 +1979,12 @@ const InternationalPhoneInputDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus between country dropdown and phone input"],

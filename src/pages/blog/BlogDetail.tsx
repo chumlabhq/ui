@@ -1,4 +1,4 @@
-import { Link, useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { getBlogById } from "./blogData";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
@@ -11,10 +11,9 @@ import type { BlogSection, BlogPost } from "./blogData";
 import { BlogDiagram } from "./BlogIllustrations";
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
+import Reveal from "../../components/Reveal/Reveal";
+import { Button } from "../../components/ui";
 
-// ─── Schema helpers ────────────────────────────────────────────────────────
-
-/** Convert the free-form post.date ("March 28, 2026") to an ISO string. */
 function toIsoDate(dateStr: string): string {
   const parsed = new Date(dateStr);
   return Number.isNaN(parsed.getTime())
@@ -60,42 +59,18 @@ function buildPostBreadcrumb(post: BlogPost, url: string) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://chumlab.com/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Blog",
-        item: "https://chumlab.com/blog",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: url,
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://chumlab.com/" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://chumlab.com/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: url },
     ],
   };
 }
-
-/** SVG delivered as an `<img>` src when a post has no `coverImage` (avoids CSS background on a div). */
-function gradientCoverSrc(colors: [string, string]): string {
-  const [c0, c1] = colors;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c0}"/><stop offset="100%" stop-color="${c1}"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>`;
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
-}
-
-// ─── Markdown-lite bold rendering ───────────────────────────────────────────
 
 function renderBold(text: string) {
   const parts = text.split(/\*\*(.*?)\*\*/g);
   return parts.map((part, i) =>
     i % 2 === 1 ? (
-      <strong key={i} className="text-white font-semibold">
+      <strong key={i} className="text-fg font-medium">
         {part}
       </strong>
     ) : (
@@ -104,62 +79,53 @@ function renderBold(text: string) {
   );
 }
 
-// ─── Section renderer ───────────────────────────────────────────────────────
-
 function BlogSectionRenderer({ section }: { section: BlogSection }) {
   switch (section.type) {
     case "heading":
       return (
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mt-14 mb-5 tracking-tight leading-tight">
+        <h2
+          className="font-sans font-medium text-fg mt-10 mb-4 leading-[1.2]"
+          style={{
+            fontSize: "clamp(24px, 3vw, 32px)",
+            letterSpacing: "-0.025em",
+          }}
+        >
           {section.content}
         </h2>
       );
 
     case "subheading":
       return (
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-200 mt-8 mb-3">
+        <h3
+          className="font-sans font-medium text-fg mt-8 mb-3 leading-[1.3]"
+          style={{
+            fontSize: "clamp(20px, 2.4vw, 24px)",
+            letterSpacing: "-0.02em",
+          }}
+        >
           {section.content}
         </h3>
       );
 
     case "paragraph":
       return (
-        <p className="text-base sm:text-[17px] text-gray-300 leading-[1.85] mb-5">
+        <p className="text-[16px] sm:text-[17px] text-fg-secondary leading-[1.75] mb-5">
           {section.content ? renderBold(section.content) : null}
         </p>
       );
 
     case "list":
       return (
-        <ul className="space-y-3 mb-6 ml-1">
+        <ul className="space-y-3 mb-6">
           {section.items?.map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-3 text-base sm:text-[17px] text-gray-300 leading-relaxed"
+              className="flex items-start gap-3 text-[16px] sm:text-[17px] text-fg-secondary leading-relaxed"
             >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="mt-0.5 shrink-0 text-blue-400"
-              >
-                <path
-                  d="M9 12l2 2 4-4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  opacity="0.3"
-                />
-              </svg>
+              <span
+                className="mt-[7px] shrink-0 w-1.5 h-1.5 rounded-full"
+                style={{ background: "var(--accent)" }}
+              />
               <span>{renderBold(item)}</span>
             </li>
           ))}
@@ -168,32 +134,30 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
 
     case "quote":
       return (
-        <blockquote className="relative my-10 pl-5 sm:pl-7 py-5 border-l-[3px] border-blue-500/50 bg-blue-500/[0.04] rounded-r-xl">
-          <p className="text-base sm:text-lg lg:text-xl text-gray-200 italic leading-relaxed font-medium">
-            "{section.content ? renderBold(section.content) : null}"
+        <blockquote
+          className="my-10 pl-6 py-2"
+          style={{ borderLeft: "2px solid var(--accent)" }}
+        >
+          <p className="font-serif italic text-[20px] sm:text-[24px] text-fg leading-[1.4]">
+            {section.content ? renderBold(section.content) : null}
           </p>
         </blockquote>
       );
 
     case "callout":
       return (
-        <div className="my-7 px-4 sm:px-6 py-4 sm:py-5 rounded-xl border border-blue-500/20 bg-blue-500/[0.06]">
-          <p className="text-[16px] text-blue-200 leading-relaxed flex items-start gap-3">
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="mt-0.5 shrink-0 text-blue-400"
+        <div
+          className="my-7 px-5 py-4 bg-bg-elevated"
+          style={{ borderLeft: "2px solid var(--accent)" }}
+        >
+          <p className="text-[15.5px] text-fg leading-[1.6] flex items-start gap-3">
+            <span
+              aria-hidden
+              className="font-medium shrink-0"
+              style={{ color: "var(--accent)" }}
             >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 16v-4" />
-              <path d="M12 8h.01" />
-            </svg>
+              Note
+            </span>
             <span>{section.content ? renderBold(section.content) : null}</span>
           </p>
         </div>
@@ -201,30 +165,17 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
 
     case "code":
       return (
-        <div className="my-6 rounded-xl border border-white/[0.08] bg-[#0d0d1a] overflow-hidden">
+        <div
+          className="my-6 rounded-md overflow-hidden bg-bg-elevated"
+          style={{ border: "0.5px solid var(--border-faint)" }}
+        >
           {section.language && (
-            <div className="flex items-center gap-2 px-5 py-2.5 border-b border-white/[0.06] bg-white/[0.02]">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-gray-500"
-              >
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {section.language}
-              </span>
+            <div className="px-5 py-2.5 eyebrow text-fg-tertiary rule rule-b">
+              {section.language}
             </div>
           )}
-          <pre className="px-5 py-4 overflow-x-auto text-xs sm:text-sm">
-            <code className="text-sm leading-relaxed text-gray-300 font-mono">
+          <pre className="px-5 py-4 overflow-x-auto text-[13.5px] sm:text-[14px]">
+            <code className="leading-relaxed font-mono text-fg">
               {section.content}
             </code>
           </pre>
@@ -232,43 +183,13 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
       );
 
     case "divider":
-      return (
-        <div className="my-10 flex items-center gap-4">
-          <div className="flex-1 h-px bg-white/[0.06]" />
-          <div className="flex gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-white/[0.12]" />
-            <div className="w-1.5 h-1.5 rounded-full bg-white/[0.08]" />
-            <div className="w-1.5 h-1.5 rounded-full bg-white/[0.05]" />
-          </div>
-          <div className="flex-1 h-px bg-white/[0.06]" />
-        </div>
-      );
+      return <div className="my-12 rule rule-t" />;
 
     case "diagram":
       return (
         <div className="my-10">
           {section.label && (
-            <div className="flex items-center gap-2.5 mb-5">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-gray-500"
-              >
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-              </svg>
-              <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                {section.label}
-              </span>
-            </div>
+            <div className="eyebrow text-fg-tertiary mb-5">{section.label}</div>
           )}
           {section.content && <BlogDiagram type={section.content} />}
         </div>
@@ -279,16 +200,13 @@ function BlogSectionRenderer({ section }: { section: BlogSection }) {
   }
 }
 
-// ─── Blog Detail Page ───────────────────────────────────────────────────────
-
 export default function BlogDetail() {
   const { id } = useParams<{ id: string }>();
   const post = id ? getBlogById(id) : undefined;
   const url = post
     ? `https://chumlab.com/blog/${post.id}`
     : "https://chumlab.com/blog";
-  const coverImage =
-    post?.coverImage ?? "https://chumlab.com/og-image.png";
+  const coverImage = post?.coverImage ?? "https://chumlab.com/og-image.png";
 
   useDocumentTitle(post?.title ?? "Blog", post?.excerpt);
   useCanonical(url);
@@ -326,129 +244,286 @@ export default function BlogDetail() {
     window.scrollTo(0, 0);
   }, [id]);
 
+  // (Hero entry animations now flow through the shared <Reveal> component
+  // below — eyebrow / H1 / subtitle / meta / cover each stagger to the
+  // global rhythm.)
+
   if (!post) {
     return <Navigate to="/blog" replace />;
   }
 
+  // Stable per-article cover variant — same article always picks the same
+  // colour combo. Hash → 3 buckets matching the homepage / listing covers.
+  const coverHash = (() => {
+    let h = 0;
+    for (let i = 0; i < post.id.length; i++)
+      h = (h * 31 + post.id.charCodeAt(i)) | 0;
+    return Math.abs(h) % 3;
+  })();
+  const coverStyle =
+    coverHash === 2
+      ? { bg: "bg-accent", title: "text-bg-base" }
+      : coverHash === 1
+        ? { bg: "bg-bg-elevated", title: "text-accent" }
+        : { bg: "bg-bg-elevated", title: "text-fg" };
+
+  const encodedTitle = encodeURIComponent(post.title);
+  const encodedUrl = encodeURIComponent(url);
+  const tweetHref = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+
+  const handleCopy = () => {
+    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    void navigator.clipboard.writeText(url);
+  };
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className="relative min-h-screen bg-[#04040a] text-white selection:bg-blue-600/30 overflow-x-hidden">
-      {/* Ambient glow */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-15%] left-[15%] w-[60vw] h-[60vw] rounded-full bg-blue-600/[0.04] blur-[120px]" />
-        <div className="absolute bottom-[-15%] right-[10%] w-[45vw] h-[45vw] rounded-full bg-violet-600/[0.03] blur-[100px]" />
-      </div>
+    <div className="relative min-h-screen bg-bg-base text-fg">
+      {/* Skip-to-content link for keyboard users. */}
+      <a
+        href="#article-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-accent focus:text-bg-base focus:px-3 focus:py-2 focus:rounded focus:font-medium focus:text-[13px]"
+      >
+        Skip to article
+      </a>
 
-      <div className="relative z-10">
-        <SiteHeader />
+      <SiteHeader />
 
-        <main className="pt-[77px]">
-          {/* ── BLOG ARTICLE WRAPPER ── */}
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 py-10">
-            {/* Back link */}
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors duration-300 mb-6 group"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="group-hover:-translate-x-1 transition-transform duration-300"
+      <main className="pt-[60px]">
+        <article className="relative">
+          {/* Top utility — back link */}
+          <div className="max-w-[920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-12 sm:pt-14 lg:pt-16">
+            <Reveal delay={0} translateY={8} duration={200}>
+              {/* tightest possible — already at the duration floor */}
+              <Button
+                variant="ghost"
+                size="sm"
+                as="a"
+                href="/blog"
+                className="group"
+                startIcon={
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform"
+                    aria-hidden
+                  >
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                  </svg>
+                }
               >
-                <path d="M19 12H5" />
-                <path d="m12 19-7-7 7-7" />
-              </svg>
-              All articles
-            </Link>
+                All articles
+              </Button>
+            </Reveal>
+          </div>
 
-            {/* Bordered article card */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
-              {/* ── COVER IMAGE ── */}
-              <img
-                src={post.coverImage ?? gradientCoverSrc(post.coverGradient)}
-                alt={post.coverImage ? post.title : ""}
-                className="block w-full object-cover max-h-[250px] sm:max-h-none"
-                decoding="async"
-              />
-
-              {/* ── ARTICLE HEADER ── */}
-              <div className="px-5 sm:px-8 lg:px-10 pt-8 pb-2">
-                {/* Meta */}
-                <div className="flex flex-wrap items-center gap-3 mb-5">
-                  <span className="text-sm text-gray-500">{post.date}</span>
-                  <span className="text-gray-700">|</span>
-                  <span className="text-sm text-gray-500">{post.readTime}</span>
-                </div>
-
-                {/* Title */}
-                <h1 className="text-2xl sm:text-3xl lg:text-[44px] font-bold tracking-tight leading-[1.15] mb-5 text-white">
-                  {post.title}
-                </h1>
-                <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-                  {post.subtitle}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mt-6 mb-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-gray-400 font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+          {/* Hero — category, H1, subtitle, meta + share */}
+          <header className="max-w-[920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-10 sm:pt-12 lg:pt-14 pb-12 sm:pb-14 lg:pb-16">
+            <Reveal delay={40} translateY={8} duration={200}>
+              <div className="inline-flex items-center gap-2 mb-5 sm:mb-6">
+                <span aria-hidden className="w-1 h-1 rounded-full bg-accent" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-accent">
+                  {post.category}
+                </span>
               </div>
+            </Reveal>
 
-              {/* ── ARTICLE CONTENT ── */}
-              <article className="px-5 sm:px-8 lg:px-10 pb-10 pt-6">
-                {post.sections.map((section, i) => (
-                  <BlogSectionRenderer key={i} section={section} />
-                ))}
+            <Reveal delay={80} translateY={12} duration={200}>
+              <h1 className="font-sans text-[clamp(34px,5vw,60px)] font-medium tracking-[-0.035em] leading-[1.05] text-fg max-w-[860px]">
+                {post.title}
+              </h1>
+            </Reveal>
 
-                {/* End CTA */}
-                <div className="mt-16 pt-10 border-t border-white/[0.06]">
-                  <div className="rounded-2xl border border-white/[0.08] bg-gradient-to-br from-blue-500/[0.06] to-violet-500/[0.04] p-6 sm:p-10 text-center">
-                    <h3 className="text-xl font-bold text-white mb-3">
-                      Building a modern frontend?
-                    </h3>
-                    <p className="text-base text-gray-400 mb-6">
-                      Skip the boilerplate. Use production-ready components.
-                    </p>
-                    <Link
-                      to="/accordion"
-                      className="inline-flex items-center gap-2 text-sm font-semibold px-7 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30"
-                    >
-                      Explore Components
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </div>
-                </div>
-              </article>
+            <Reveal delay={150} translateY={12} duration={200}>
+              <p className="font-serif italic font-normal text-[clamp(18px,2.2vw,24px)] text-fg-secondary leading-[1.4] mt-5 sm:mt-6 max-w-[680px]">
+                {post.subtitle}
+              </p>
+            </Reveal>
+
+            <Reveal
+              delay={200}
+              translateY={8}
+              duration={200}
+              className="flex flex-col sm:flex-row sm:items-center gap-4 mt-8 sm:mt-10 pt-5 border-t border-border-faint"
+            >
+              <div className="flex items-center gap-3 font-mono text-[11px] text-fg-secondary">
+                <span>{post.date}</span>
+                <span aria-hidden className="text-fg-muted">
+                  ·
+                </span>
+                <span>{post.readTime}</span>
+              </div>
+              <div className="sm:ml-auto flex items-center gap-1.5">
+                <Button
+                  variant="icon"
+                  size="sm"
+                  onClick={handleCopy}
+                  aria-label="Copy link"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5"
+                    aria-hidden
+                  >
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                  </svg>
+                </Button>
+                <Button
+                  variant="icon"
+                  size="sm"
+                  as="a"
+                  href={tweetHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Share on Twitter"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-3.5 h-3.5"
+                    aria-hidden
+                  >
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </Button>
+              </div>
+            </Reveal>
+          </header>
+
+          {/* Decorative cover — same width as the hero block above so the
+              left edge aligns with the back link, eyebrow, H1, subtitle,
+              and meta row. Mirrors the listing-page cover system (3
+              colour variants, hashed by id). Large visual element scales
+              into place rather than translating. */}
+          <Reveal
+            delay={250}
+            translateY={0}
+            duration={300}
+            scale={0.97}
+            className="max-w-[920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mb-14 sm:mb-16 lg:mb-20"
+          >
+            <div
+              className={`relative aspect-[16/7] sm:aspect-[16/6] lg:aspect-[16/5] rounded-xl overflow-hidden border border-border-faint flex items-center justify-center px-6 sm:px-10 lg:px-14 ${coverStyle.bg}`}
+            >
+              <p
+                className={`font-serif italic font-normal text-center leading-[1.05] tracking-[-0.025em] text-[clamp(28px,4vw,56px)] max-w-[800px] ${coverStyle.title}`}
+              >
+                {post.title}
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Article body — renders plain. The original implementation
+              wrapped this in a single Reveal at delay=1000, but at that
+              delay the prose stayed invisible long after a fast scroller
+              had already reached it. Plain rendering ensures the article
+              is always immediately readable. */}
+          <div
+            id="article-content"
+            className="max-w-[920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pb-16 sm:pb-20 lg:pb-24"
+          >
+            {post.sections.map((section, i) => (
+              <BlogSectionRenderer key={i} section={section} />
+            ))}
+
+            <div className="mt-16 pt-10 border-t border-border-faint">
+              <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-fg-tertiary mb-3">
+                Keep going
+              </div>
+              <h3
+                className="font-sans font-medium text-fg mb-4"
+                style={{
+                  fontSize: "clamp(24px, 3vw, 32px)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.025em",
+                }}
+              >
+                Building a modern frontend?{" "}
+                <em className="font-serif italic font-normal text-accent">
+                  Skip the boilerplate.
+                </em>
+              </h3>
+              <Button
+                variant="ghost"
+                size="md"
+                as="a"
+                href="/accordion"
+                endIcon={<span aria-hidden>→</span>}
+              >
+                Explore Components
+              </Button>
             </div>
           </div>
 
-          <SiteFooter />
-        </main>
-      </div>
+          {/* Bottom utility — back link + back to top */}
+          <div className="max-w-[920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pb-16 sm:pb-20 lg:pb-24">
+            <div className="pt-8 border-t border-border-faint flex items-center justify-between gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                as="a"
+                href="/blog"
+                className="group"
+                startIcon={
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform"
+                    aria-hidden
+                  >
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                  </svg>
+                }
+              >
+                All articles
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={scrollToTop}
+                className="group"
+                endIcon={
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform"
+                    aria-hidden
+                  >
+                    <line x1="12" y1="19" x2="12" y2="5" />
+                    <polyline points="5 12 12 5 19 12" />
+                  </svg>
+                }
+              >
+                Back to top
+              </Button>
+            </div>
+          </div>
+        </article>
+
+        <SiteFooter />
+      </main>
     </div>
   );
 }

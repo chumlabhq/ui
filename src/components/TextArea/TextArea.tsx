@@ -160,7 +160,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
       setCurrentValue("");
 
-      // Construct a proper event with the real textarea element as target
+      // Construct a synthetic-shaped Event whose target/currentTarget are
+      // the real textarea element and forward it to onChange. See the
+      // matching comment in Input/Input.tsx — the native dispatch path is
+      // unreliable for controlled fields in jsdom because React's
+      // internal `_valueTracker` reconciles textarea.value back to the
+      // controlled prop value before our onChange listener observes it.
       const event = new Event("change", { bubbles: true });
       Object.defineProperty(event, "target", {
         writable: false,
@@ -170,7 +175,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         writable: false,
         value: textarea,
       });
-
       onChange?.(event as unknown as ChangeEvent<HTMLTextAreaElement>);
     }, [onClear, onChange, setCurrentValue]);
 

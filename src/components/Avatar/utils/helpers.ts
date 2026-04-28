@@ -163,7 +163,7 @@ export const getBadgePosition = (
 export const getBadgeSizeClasses = (
   size: BadgeSize | undefined,
   dot: boolean
-): { minWidth: string; height: string } => {
+): { minWidth: string; height: string; fontSize?: string; lineHeight?: number } => {
   if (dot) {
     const dotSizes: Record<BadgeSize, { size: string }> = {
       xs: { size: "6px" },
@@ -175,13 +175,20 @@ export const getBadgeSizeClasses = (
     return { minWidth: s.size, height: s.size };
   }
 
-  const countSizes: Record<BadgeSize, { minWidth: string; height: string }> = {
-    xs: { minWidth: "14px", height: "14px" },
-    sm: { minWidth: "18px", height: "18px" },
-    md: { minWidth: "20px", height: "20px" },
-    lg: { minWidth: "24px", height: "24px" },
+  // Badge dimensions plus an explicit fontSize so the count inside the
+  // bubble doesn't inherit the parent Avatar's larger initial font size.
+  // The font scales roughly to 0.55 × badge height.
+  const countSizes: Record<
+    BadgeSize,
+    { minWidth: string; height: string; fontSize: string }
+  > = {
+    xs: { minWidth: "14px", height: "14px", fontSize: "8px" },
+    sm: { minWidth: "18px", height: "18px", fontSize: "10px" },
+    md: { minWidth: "20px", height: "20px", fontSize: "11px" },
+    lg: { minWidth: "24px", height: "24px", fontSize: "12px" },
   };
-  return countSizes[size || "md"];
+  const s = countSizes[size || "md"];
+  return { minWidth: s.minWidth, height: s.height, fontSize: s.fontSize, lineHeight: 1 };
 };
 
 export const parseBorder = (

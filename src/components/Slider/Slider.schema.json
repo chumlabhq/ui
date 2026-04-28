@@ -100,6 +100,11 @@
       "description": "Size of mark dots in pixels.",
       "default": 6
     },
+    "transitionDuration": {
+      "type": "number",
+      "description": "Duration in ms of the click-to-jump animation when the user clicks a mark or any point on the track. Set to 0 to disable. The animation is automatically suppressed during an active drag so the thumb tracks the cursor 1:1.",
+      "default": 200
+    },
     "id": {
       "type": "string",
       "description": "HTML id attribute."

@@ -9,6 +9,7 @@ import {
 } from "../../components/Avatar";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -47,15 +48,15 @@ const getClasses = (dark: boolean) => ({
     backgrounds: ["#1e40af", "#7c3aed", "#0e7490", "#b91c1c"],
     text: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"],
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-blue-500 text-white hover:bg-blue-600",
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  fallbackBg: dark ? "bg-gray-700" : "bg-gray-100",
-  stateDisplay: `text-sm font-mono ${dark ? "text-gray-400" : "text-gray-600"}`,
-  darkBg: `p-4 rounded-lg ${dark ? "bg-gray-900" : "bg-gray-800"}`,
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  fallbackBg: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
+  stateDisplay: `text-sm font-mono text-cl-text-secondary`,
+  darkBg: `p-4 rounded-cl-md bg-cl-bg-elevated dark:bg-cl-bg`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -69,42 +70,11 @@ const AvatarDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Avatar
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A flexible avatar component for displaying user images, initials, or
-            fallback content. Supports status indicators, badges, tooltips,
-            auto-generated colors, grouping, and fully customizable styling via
-            the classes system.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge } from "@chumlab/ui/avatar";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Avatar"
+        description="A flexible avatar component for displaying user images, initials, or fallback content. Supports status indicators, badges, tooltips, auto-generated colors, grouping, and fully customizable styling via the classes system."
+        code={`import { Avatar, AvatarGroup, AvatarGroupCount, AvatarBadge } from "@chumlab/ui/avatar";`}
+      />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -753,7 +723,7 @@ const AvatarDemo = () => {
                 max={2}
                 renderSurplus={(count) => (
                   <span
-                    className={`ml-2 text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    className={`ml-2 text-xs font-medium text-cl-text-secondary`}
                   >
                     and {count} more...
                   </span>
@@ -824,7 +794,7 @@ const AvatarDemo = () => {
           </AvatarGroup>
           {clickLog.length > 0 && (
             <div
-              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mt-3 text-xs font-mono space-y-1 text-cl-text-secondary`}
             >
               {clickLog.map((log, i) => (
                 <div key={i}>{log}</div>
@@ -1101,9 +1071,9 @@ const AvatarDemo = () => {
                 name="Custom"
                 unstyled
                 classes={{
-                  root: "inline-flex items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-pink-500 text-white font-bold",
+                  root: "inline-flex items-center justify-center rounded-cl-lg bg-linear-to-br from-cl-accent to-cl-accent text-white font-bold",
                   inner:
-                    "absolute inset-0 overflow-hidden flex items-center justify-center rounded-xl",
+                    "absolute inset-0 overflow-hidden flex items-center justify-center rounded-cl-lg",
                 }}
                 size="lg"
               />
@@ -1121,7 +1091,7 @@ const AvatarDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <button
             onClick={() => alert("Avatar clicked!")}
-            className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:ring-offset-2 rounded-full"
+            className="cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-2 rounded-full"
           >
             <Avatar
               name="Click"
@@ -1132,7 +1102,7 @@ const AvatarDemo = () => {
           </button>
           <button
             onClick={() => alert("Profile opened!")}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300 ${dark ? "hover:bg-gray-700/50" : "hover:bg-gray-50"}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-cl-md transition-colors focus:outline-none focus:ring-2 focus:ring-cl-accent hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated/50`}
           >
             <Avatar
               name="Jane Doe"
@@ -1141,7 +1111,7 @@ const AvatarDemo = () => {
               status="online"
             />
             <span
-              className={`text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`}
+              className={`text-sm font-medium text-cl-text`}
             >
               Jane Doe
             </span>
@@ -1755,7 +1725,7 @@ const AvatarDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Avatar uses role="img" with aria-label when showing initials or fallback',
@@ -1771,7 +1741,7 @@ const AvatarDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>

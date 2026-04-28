@@ -1,4 +1,4 @@
-// AI Knowledge: See COMPONENT.ai.md in this directory for full usage guide, props, styling, and patterns.
+// AI Knowledge: See DATEPICKER.ai.md in this directory for full usage guide, props, styling, and patterns.
 export { default as DatePicker } from "./DatePicker";
 
 export type {

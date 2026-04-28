@@ -38,6 +38,12 @@ import TimePickerDemo from "./pages/demo/TimePickerDemo";
 import ToastDemo from "./pages/demo/ToastDemo";
 import TooltipDemo from "./pages/demo/TooltipDemo";
 import GettingStartedDemo from "./pages/demo/GettingStartedDemo";
+import IntroductionDemo from "./pages/demo/IntroductionDemo";
+import AccessibilityDemo from "./pages/demo/AccessibilityDemo";
+import StylingDemo from "./pages/demo/StylingDemo";
+import ThemingDemo from "./pages/demo/ThemingDemo";
+import AnimationDemo from "./pages/demo/AnimationDemo";
+import AiLlmDemo from "./pages/demo/AiLlmDemo";
 
 const App = () => {
   useScrollToTop();
@@ -50,7 +56,13 @@ const App = () => {
       <Route path="/blog" element={<BlogListing />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route element={<Demo />}>
+        <Route path="introduction" element={<IntroductionDemo />} />
         <Route path="getting-started" element={<GettingStartedDemo />} />
+        <Route path="accessibility" element={<AccessibilityDemo />} />
+        <Route path="guides/styling" element={<StylingDemo />} />
+        <Route path="guides/theming" element={<ThemingDemo />} />
+        <Route path="guides/animation" element={<AnimationDemo />} />
+        <Route path="guides/ai-llm" element={<AiLlmDemo />} />
         <Route path="accordion" element={<AccordionDemo />} />
         <Route path="avatar" element={<AvatarDemo />} />
         <Route path="breadcrumb" element={<BreadcrumbDemo />} />

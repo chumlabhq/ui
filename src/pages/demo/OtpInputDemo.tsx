@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { OtpInput } from "../../components/OtpInput";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -13,27 +14,23 @@ import {
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
+const getClasses = (_dark: boolean) => ({
   otp: {
     wrapper: "flex items-center gap-2",
     group: "flex items-center gap-2",
-    input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${
-      dark
-        ? "bg-gray-800 border-gray-600 text-gray-100 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
-        : "bg-white border-gray-300 text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-    }`,
-    label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
-    error: `text-xs mt-2 ${dark ? "text-red-400" : "text-red-500"}`,
-    success: `text-sm mt-2 ${dark ? "text-green-400" : "text-green-600"}`,
-    separator: `text-lg select-none ${dark ? "text-gray-600" : "text-gray-300"}`,
+    input: `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20 dark:disabled:opacity-50 dark:disabled:cursor-not-allowed`,
+    label: `block text-sm font-medium mb-2 text-cl-text-secondary`,
+    error: `text-xs mt-2 text-cl-error`,
+    success: `text-sm mt-2 text-cl-success`,
+    separator: `text-lg select-none text-cl-text-disabled`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -52,37 +49,11 @@ const OtpInputDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            OTP Input
-          </h1>
-          <p
-            className={`text-sm leading-relaxed w-full sm:max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A one-time password input with per-character fields, keyboard
-            navigation, paste support, grouping, validation, and fully
-            customizable styling.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { OtpInput } from "@chumlab/ui/otp-input";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="OTP Input"
+        description="A one-time password input with per-character fields, keyboard navigation, paste support, grouping, validation, and fully customizable styling."
+        code={`import { OtpInput } from "@chumlab/ui/otp-input";`}
+      />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -218,7 +189,7 @@ const OtpInputDemo = () => {
           <OtpInput onComplete={(val) => setCompleted(val)} classes={c.otp} />
           {completed && (
             <div
-              className={`mt-3 px-3 py-2 rounded-lg text-sm font-mono ${dark ? "bg-emerald-900/30 text-emerald-300 border border-emerald-800" : "bg-emerald-50 text-emerald-700 border border-emerald-200"}`}
+              className={`mt-3 px-3 py-2 rounded-cl-md text-sm font-mono bg-cl-success/15 text-cl-success border border-cl-success dark:bg-cl-success/30 dark:text-cl-success dark:border dark:border-cl-success`}
             >
               Completed: {completed}
             </div>
@@ -233,15 +204,15 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex flex-wrap items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex flex-wrap items-center gap-3 bg-cl-bg-elevated`}
         >
           <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-medium text-cl-text-secondary`}
           >
             Value:
           </span>
           <span
-            className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-sm font-mono text-cl-text-secondary`}
           >
             &quot;{controlled}&quot;
           </span>
@@ -286,7 +257,7 @@ const OtpInputDemo = () => {
             }
             classes={{
               ...c.otp,
-              input: `${c.otp.input} ${errorVal.length > 0 && errorVal.length < 6 ? (dark ? "border-red-400 focus:border-red-400 focus:ring-red-400/20" : "border-red-500 focus:border-red-500 focus:ring-red-500/20") : ""}`,
+              input: `${c.otp.input} ${errorVal.length > 0 && errorVal.length < 6 ? (dark ? "border border-cl-error focus:border-cl-error focus:ring-cl-error/20" : "border-cl-error focus:border-cl-error focus:ring-cl-error/20") : ""}`,
             }}
           />
         </DemoWrapper>
@@ -426,15 +397,15 @@ const OtpInputDemo = () => {
             renderInput={({ inputProps, filled }) => (
               <input
                 {...inputProps}
-                className={`w-14 h-14 text-center text-xl font-bold rounded-2xl border-2 transition-all focus:outline-none ${
+                className={`w-14 h-14 text-center text-xl font-bold rounded-cl-lg border-2 transition-all focus:outline-none ${
                   filled
                     ? dark
-                      ? "border-indigo-400 bg-indigo-500/10 text-indigo-300"
-                      : "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      ? "border-cl-border-input-focus bg-cl-accent/10 text-cl-accent"
+                      : "border-cl-border-input-focus bg-cl-accent/10 text-cl-accent"
                     : dark
-                      ? "border-gray-600 bg-gray-800 text-gray-200"
-                      : "border-gray-300 bg-white text-gray-900"
-                } ${dark ? "focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`}
+                      ? "border-cl-border bg-cl-bg-elevated text-cl-text"
+                      : "border-cl-border-input bg-white text-cl-text"
+                } focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`}
               />
             )}
             classes={{ wrapper: "flex items-center gap-3" }}
@@ -458,7 +429,7 @@ const OtpInputDemo = () => {
                 length={4}
                 classes={{
                   ...c.otp,
-                  input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none ${dark ? "bg-gray-800 border-gray-600 text-gray-100 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "bg-white border-gray-300 text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`,
+                  input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none bg-white border-cl-border-input text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`,
                 }}
               />
             </DemoWrapper>
@@ -471,7 +442,7 @@ const OtpInputDemo = () => {
                 classes={{
                   ...c.otp,
                   wrapper: "flex items-center gap-1.5",
-                  input: `w-9 h-9 text-center text-sm font-semibold rounded-lg border transition-all focus:outline-none ${dark ? "bg-gray-800 border-gray-600 text-gray-100 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "bg-white border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`,
+ input: `w-9 h-9 text-center text-sm font-semibold rounded-cl-md transition-all focus:outline-none bg-white border border-cl-border text-cl-text focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`,
                 }}
               />
             </DemoWrapper>
@@ -486,44 +457,12 @@ const OtpInputDemo = () => {
                 classes={{
                   ...c.otp,
                   wrapper: "flex items-center gap-3",
-                  input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none ${dark ? "border-gray-600 text-gray-100 focus:border-indigo-400" : "border-gray-300 text-gray-900 focus:border-indigo-500"}`,
+                  input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none border-cl-border-input text-cl-text focus:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:focus:border-cl-border-input-focus`,
                 }}
               />
             </DemoWrapper>
           </div>
         </div>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="unstyled=true strips all defaults. Provide your own styling via the classes prop."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="flex flex-col gap-6">
-            <OtpInput
-              unstyled
-              label="Rounded pill style"
-              length={4}
-              classes={{
-                wrapper: "flex items-center gap-3",
-                input: `w-14 h-14 text-center text-xl font-bold rounded-full border-2 transition-all focus:outline-none ${dark ? "bg-gray-800 border-violet-500 text-white focus:ring-2 focus:ring-violet-400/30" : "bg-white border-violet-500 text-gray-900 focus:ring-2 focus:ring-violet-500/20"}`,
-                label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
-              }}
-            />
-            <OtpInput
-              unstyled
-              label="Underline minimal"
-              length={6}
-              classes={{
-                wrapper: "flex items-center gap-2",
-                input: `w-10 h-12 text-center text-lg font-semibold border-0 border-b-2 rounded-none bg-transparent transition-all focus:outline-none ${dark ? "border-gray-600 text-gray-100 focus:border-teal-400" : "border-gray-300 text-gray-900 focus:border-teal-600"}`,
-                label: `block text-sm font-medium mb-2 ${dark ? "text-gray-300" : "text-gray-700"}`,
-              }}
-            />
-          </div>
-        </DemoWrapper>
       </Section>
 
       {/* ─── Form Integration ───────────────────────────────────────────── */}
@@ -549,7 +488,7 @@ const OtpInputDemo = () => {
         <div className={c.note}>
           A hidden{" "}
           <code
-            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`px-1 py-0.5 rounded text-[11px] font-mono bg-cl-bg-elevated text-cl-text-secondary`}
           >
             &lt;input type=&quot;hidden&quot;&gt;
           </code>{" "}
@@ -578,10 +517,10 @@ const OtpInputDemo = () => {
           <OtpInput
             length={4}
             inputClassNames={[
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-red-400 text-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-400/20" : "bg-white border-red-400 text-red-600 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"}`,
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-amber-400 text-amber-300 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20" : "bg-white border-amber-400 text-amber-600 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"}`,
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-emerald-400 text-emerald-300 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20" : "bg-white border-emerald-400 text-emerald-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"}`,
-              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-xl transition-all focus:outline-none ${dark ? "bg-gray-800 border-indigo-400 text-indigo-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20" : "bg-white border-indigo-400 text-indigo-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"}`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-error text-cl-error focus:border-cl-error focus:ring-2 focus:ring-cl-error/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-error dark:text-cl-error dark:focus:border-cl-error dark:focus:ring-2 dark:focus:ring-cl-error/20`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-warning text-cl-warning focus:border-cl-warning focus:ring-2 focus:ring-cl-warning/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-warning dark:text-cl-warning dark:focus:border-cl-warning dark:focus:ring-2 dark:focus:ring-cl-warning/20`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-success text-cl-success focus:border-cl-success focus:ring-2 focus:ring-cl-success/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-success dark:text-cl-success dark:focus:border-cl-success dark:focus:ring-2 dark:focus:ring-cl-success/20`,
+              `w-12 h-12 text-center text-lg font-semibold border-2 rounded-cl-lg transition-all focus:outline-none bg-white border-cl-border-input-focus text-cl-accent focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/20 dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus dark:text-cl-accent dark:focus:border-cl-border-input-focus dark:focus:ring-2 dark:focus:ring-cl-accent/20`,
             ]}
             classes={{ wrapper: "flex items-center gap-2" }}
           />
@@ -848,7 +787,7 @@ const OtpInputDemo = () => {
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Each input has aria-label: "Digit N of M"',
@@ -862,7 +801,7 @@ const OtpInputDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -873,12 +812,12 @@ const OtpInputDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["0-9 / A-Z", "Type character, auto-advance"],

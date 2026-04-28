@@ -8,6 +8,7 @@ import {
 } from "../../components/Drawer";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -36,19 +37,28 @@ const CloseIcon = () => (
 );
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  panel: `flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"}`,
-  header: `flex items-center justify-between px-5 py-4 border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
-  body: `flex-1 overflow-y-auto px-5 py-4`,
-  footer: `flex items-center justify-end gap-3 px-5 py-4 border-t ${dark ? "border-gray-700" : "border-gray-200"}`,
-  title: `text-lg font-semibold ${dark ? "text-white" : "text-gray-900"}`,
-  closeBtn: `p-2 rounded-lg transition-colors ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-white/10" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"}`,
-  text: dark ? "text-gray-300" : "text-gray-600",
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+const getClasses = (_dark: boolean) => ({
+  // Drawer panel surface. bg-cl-bg uses the page background colour so the
+  // panel reads as an extension of the page, not a separate elevated card
+  // (drawers slide in from screen edges — they ARE the page). Border on
+  // the inner edge keeps the seam between drawer and page legible.
+  panel: `flex flex-col h-full bg-cl-bg text-cl-text`,
+  header: `flex items-center justify-between px-6 py-4 border-b border-cl-border`,
+  body: `flex-1 overflow-y-auto px-6 py-5`,
+  footer: `flex items-center justify-end gap-3 px-6 py-4 border-t border-cl-border bg-cl-bg-elevated`,
+  title: `text-[17px] font-semibold text-cl-text leading-tight tracking-[-0.01em]`,
+  // Close button: ghost style, square, no chrome until hover.
+  closeBtn: `inline-flex items-center justify-center w-9 h-9 rounded-cl-md transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg`,
+  text: "text-cl-text-secondary leading-relaxed",
+  // Button system follows the docs spec: primary = filled accent pill,
+  // secondary = elevated surface with hairline border. Same h-10 px-5
+  // sizing across the demos so every button reads at the same visual
+  // weight.
+  btn: `inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer`,
+  btnPrimary: `inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer`,
+  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+  kbd: `px-2 py-1 rounded-cl-sm text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
 });
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -93,7 +103,6 @@ const DrawerDemo = () => {
   const transitionCb = useDrawerState();
   const [transitionLog, setTransitionLog] = useState<string[]>([]);
   const classesDemo = useDrawerState();
-  const unstyledDemo = useDrawerState();
   const reduceMotionDemo = useDrawerState();
   const formDrawer = useDrawerState();
   const [snapIndex, setSnapIndex] = useState(1);
@@ -129,37 +138,11 @@ const DrawerDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Drawer
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A sliding panel overlay with focus trapping, scroll lock,
-            swipe-to-close, snap points, stacked drawer support, and fully
-            accessible keyboard navigation.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerCloseButton } from "@chumlab/ui/drawer";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Drawer"
+        description="A sliding panel overlay with focus trapping, scroll lock, swipe-to-close, snap points, stacked drawer support, and fully accessible keyboard navigation."
+        code={`import { Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerCloseButton } from "@chumlab/ui/drawer";`}
+      />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -235,7 +218,7 @@ const DrawerDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <button className={c.btn} onClick={overlay.onOpen}>
-            Custom Opacity (0.7)
+            Custom Opacity (0.45)
           </button>
           <button className={c.btn} onClick={blurOverlay.onOpen}>
             Blur Overlay
@@ -244,9 +227,9 @@ const DrawerDemo = () => {
         <Drawer
           open={overlay.open}
           onOpenChange={overlay.onOpenChange}
-          overlayOpacity={0.7}
+          overlayOpacity={0.45}
         >
-          {renderDrawerContent("Dark Overlay", overlay.onClose)}
+          {renderDrawerContent("Heavier Overlay", overlay.onClose)}
         </Drawer>
         <Drawer
           open={blurOverlay.open}
@@ -395,7 +378,7 @@ const DrawerDemo = () => {
               Open Bottom Sheet
             </button>
             <span
-              className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs font-mono text-cl-text-secondary`}
             >
               snap: {Math.round([0.3, 0.6, 1][snapIndex] * 100)}%
             </span>
@@ -413,20 +396,20 @@ const DrawerDemo = () => {
           defaultSnapPointIndex={1}
         >
           <div
-            className={`flex flex-col h-full ${dark ? "bg-gray-900 text-gray-200" : "bg-white text-gray-900"} rounded-t-2xl`}
+            className={`flex flex-col h-full bg-cl-bg text-cl-text rounded-t-cl-lg`}
           >
             {/* Drag handle */}
             <div className="flex justify-center py-3">
               <div
-                className={`w-10 h-1.5 rounded-full ${dark ? "bg-gray-600" : "bg-gray-300"}`}
+                className={`w-10 h-1.5 rounded-full bg-cl-bg-hover dark:bg-cl-text/10`}
               />
             </div>
             <DrawerHeader
-              className={`px-5 pb-3 border-b ${dark ? "border-gray-700" : "border-gray-200"}`}
+              className={`px-5 pb-3 border-b border-cl-border`}
             >
               <h2 className={c.title}>Bottom Sheet</h2>
               <p
-                className={`text-xs mt-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-xs mt-1 text-cl-text-secondary`}
               >
                 Snap points: 30%, 60%, 100%
               </p>
@@ -446,7 +429,7 @@ const DrawerDemo = () => {
               {Array.from({ length: 20 }).map((_, i) => (
                 <p
                   key={i}
-                  className={`text-sm py-2 border-b ${dark ? "border-gray-800 text-gray-400" : "border-gray-100 text-gray-500"}`}
+                  className={`text-sm py-2 border-b border-cl-border text-cl-text-tertiary dark:border dark:border-cl-border dark:text-cl-text-tertiary`}
                 >
                   Item {i + 1} — scroll to see more content
                 </p>
@@ -523,7 +506,7 @@ const DrawerDemo = () => {
                 ref={initialFocusRef}
                 type="text"
                 placeholder="This gets focus on open"
-                className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+ className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
               />
             </DrawerBody>
           </div>
@@ -542,7 +525,7 @@ const DrawerDemo = () => {
           </button>
           {transitionLog.length > 0 && (
             <div
-              className={`mt-3 text-xs font-mono space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mt-3 text-xs font-mono space-y-1 text-cl-text-secondary`}
             >
               {transitionLog.map((log, i) => (
                 <div key={i}>{log}</div>
@@ -581,83 +564,34 @@ const DrawerDemo = () => {
           direction="right"
           size="360px"
           classes={{
-            overlay: `fixed inset-0 transition-opacity ${dark ? "bg-indigo-950/60" : "bg-indigo-900/30"}`,
-            panel: `fixed z-999999 ${dark ? "shadow-2xl shadow-indigo-500/10" : "shadow-2xl shadow-indigo-500/20"}`,
+            overlay: `fixed inset-0 transition-opacity bg-cl-accent/30 dark:bg-cl-accent/60`,
+            panel: `fixed z-999999 shadow-2xl shadow-accent/20 dark:shadow-2xl dark:shadow-accent/10`,
           }}
         >
           <div
-            className={`flex flex-col h-full ${dark ? "bg-gray-900" : "bg-white"} border-l ${dark ? "border-indigo-500/20" : "border-indigo-200"}`}
+            className={`flex flex-col h-full bg-cl-bg border-l border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`}
           >
             <DrawerHeader
-              className={`flex items-center justify-between px-5 py-4 border-b ${dark ? "border-indigo-500/20" : "border-indigo-100"}`}
+              className={`flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/20`}
             >
               <h2
-                className={`text-lg font-semibold ${dark ? "text-indigo-300" : "text-indigo-700"}`}
+                className={`text-lg font-semibold text-cl-accent dark:text-cl-accent`}
               >
                 Custom Classes
               </h2>
               <DrawerCloseButton
-                className={`p-2 rounded-lg ${dark ? "text-indigo-400 hover:bg-indigo-500/10" : "text-indigo-500 hover:bg-indigo-50"}`}
+                className={`p-2 rounded-cl-md text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/10`}
               >
                 <CloseIcon />
               </DrawerCloseButton>
             </DrawerHeader>
             <DrawerBody
-              className={`flex-1 px-5 py-4 ${dark ? "text-gray-300" : "text-gray-600"}`}
+              className={`flex-1 px-5 py-4 text-cl-text-secondary`}
             >
               <p className="text-sm">
                 Indigo-themed overlay and panel shadow via the classes prop.
               </p>
             </DrawerBody>
-          </div>
-        </Drawer>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={unstyledDemo.onOpen}>
-            Open Unstyled
-          </button>
-        </DemoWrapper>
-        <Drawer
-          open={unstyledDemo.open}
-          onOpenChange={unstyledDemo.onOpenChange}
-          unstyled
-          direction="right"
-          size="360px"
-          classes={{
-            root: "z-[9999]",
-            overlay: `fixed inset-0 transition-opacity ${dark ? "bg-black/60" : "bg-black/40"} backdrop-blur-sm`,
-            panel: `fixed z-[9999] shadow-2xl ${dark ? "bg-gray-900 border-l border-gray-700" : "bg-white border-l border-gray-200"}`,
-          }}
-        >
-          <div className="flex flex-col h-full">
-            <div className={`flex items-center justify-between px-5 py-4 border-b ${dark ? "border-gray-700" : "border-gray-200"}`}>
-              <h2 className={`text-lg font-bold ${dark ? "text-white" : "text-gray-900"}`}>Custom Drawer</h2>
-              <button
-                onClick={unstyledDemo.onClose}
-                className={`p-1.5 rounded-lg transition-colors ${dark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`}
-                aria-label="Close"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-              </button>
-            </div>
-            <div className={`flex-1 px-5 py-4 text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
-              <p>This drawer uses <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}>unstyled</code> + <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}>classes</code> to build a completely custom look.</p>
-            </div>
-            <div className={`px-5 py-4 border-t ${dark ? "border-gray-700" : "border-gray-200"}`}>
-              <button
-                onClick={unstyledDemo.onClose}
-                className={`w-full px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
-              >
-                Done
-              </button>
-            </div>
           </div>
         </Drawer>
       </Section>
@@ -720,7 +654,7 @@ const DrawerDemo = () => {
               >
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                    className={`block text-sm font-medium mb-1 text-cl-text-secondary`}
                   >
                     Name
                   </label>
@@ -728,29 +662,29 @@ const DrawerDemo = () => {
                     data-autofocus
                     type="text"
                     placeholder="Item name"
-                    className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+ className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
                   />
                 </div>
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                    className={`block text-sm font-medium mb-1 text-cl-text-secondary`}
                   >
                     Description
                   </label>
                   <textarea
                     rows={3}
                     placeholder="Optional description"
-                    className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+ className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
                   />
                 </div>
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                    className={`block text-sm font-medium mb-1 text-cl-text-secondary`}
                   >
                     Category
                   </label>
                   <select
-                    className={`w-full px-3 py-2 rounded-lg border text-sm ${dark ? "bg-gray-800 border-gray-700 text-gray-200" : "bg-white border-gray-300 text-gray-900"}`}
+ className={`w-full px-3 py-2 rounded-cl-md text-sm bg-cl-bg-elevated border border-cl-border text-cl-text`}
                   >
                     <option>General</option>
                     <option>Design</option>
@@ -971,7 +905,7 @@ const DrawerDemo = () => {
       <Section title="Sub-Component Props" isDarkMode={dark}>
         <div className={c.card}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             DrawerHeader, DrawerBody, DrawerFooter
           </p>
@@ -990,7 +924,7 @@ const DrawerDemo = () => {
             />
           </PropsTable>
           <p
-            className={`text-xs font-semibold mt-5 mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mt-5 mb-3 text-cl-text-secondary`}
           >
             DrawerCloseButton
           </p>
@@ -1083,7 +1017,7 @@ const DrawerDemo = () => {
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'role="dialog" with aria-modal on the panel',
@@ -1102,7 +1036,7 @@ const DrawerDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1113,12 +1047,12 @@ const DrawerDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Escape", "Close the drawer (topmost in stack)"],
@@ -1176,7 +1110,7 @@ const DrawerDemo = () => {
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               "role=\"dialog\" applied to the drawer panel",
               "aria-modal=\"true\" when rendered as a modal overlay",
@@ -1188,15 +1122,15 @@ const DrawerDemo = () => {
               "Swipeable dismiss on touch devices",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               ["Escape", "Close the drawer"],
               ["Tab", "Move focus to the next focusable element (trapped)"],

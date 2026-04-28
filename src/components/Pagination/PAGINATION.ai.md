@@ -85,7 +85,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `rowsPerPageLabel` | `string` | `"rows"` | Label after selector |
 | `showLabel` | `string` | `"Show"` | Label before selector |
 | `dropdownAriaLabel` | `string` | `"Rows per page"` | Dropdown ARIA label |
-| `dropdownPosition` | `"top" \| "bottom"` | `"top"` | Dropdown direction |
+| `dropdownPosition` | `"top" \| "bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom) |
 | `dropdownZIndex` | `number` | `50` | Dropdown z-index |
 | `dropdownGap` | `number` | — | Gap between trigger and dropdown |
 | `prevIcon` | `ComponentType \| ReactNode` | Chevron | Previous button icon |

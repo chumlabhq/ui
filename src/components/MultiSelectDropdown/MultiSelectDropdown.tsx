@@ -1,4 +1,4 @@
-import { useRef, useEffect, useId, forwardRef, useCallback, useState, useMemo } from "react";
+import { useRef, useEffect, useId, forwardRef, useCallback, useState, useMemo, memo } from "react";
 import { createPortal } from "react-dom";
 import type { CSSProperties, ReactNode } from "react";
 import type { MultiSelectDropdownProps, MultiSelectDropdownClasses } from "./utils/types";
@@ -38,7 +38,7 @@ interface MultiSelectDropdownContentProps {
   children: ReactNode;
 }
 
-function MultiSelectDropdownContent({
+const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
   triggerElement,
   isOpen,
   keepMounted,
@@ -175,7 +175,7 @@ function MultiSelectDropdownContent({
     </div>,
     portalContainer ?? document.body,
   );
-}
+});
 
 /**
  * Component: MultiSelectDropdown
@@ -197,7 +197,7 @@ function MultiSelectDropdownContent({
  * - Chips display with optional count-only mode
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - MULTISELECTDROPDOWN.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/MultiSelectDropdownDemo.tsx — live demo
  */
 const MultiSelectDropdown = forwardRef<

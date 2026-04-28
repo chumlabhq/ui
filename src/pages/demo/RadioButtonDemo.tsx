@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RadioGroup, RadioButton } from "../../components/RadioButton";
-import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -10,6 +10,7 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
+import { useTheme } from "./ThemeContext";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -45,33 +46,33 @@ const ThumbsUpIcon = ({ className }: { className?: string }) => (
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
+const getClasses = (_dark: boolean) => ({
   group: {
     root: "",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-    description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-    error: `text-xs mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    success: `text-xs mt-1 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
+    label: `text-sm font-medium text-cl-text`,
+    description: `text-xs text-cl-text-secondary`,
+    error: `text-xs mt-1 text-cl-error`,
+    success: `text-xs mt-1 text-cl-success`,
   },
   radio: {
     root: "flex items-center gap-2",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-    description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-    radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors ${dark ? "focus-within:ring-2 focus-within:ring-indigo-400 focus-within:ring-offset-gray-900" : "focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2"}`,
-    checked: `${dark ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600"}`,
-    unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
+    label: `text-sm font-medium text-cl-text`,
+    description: `text-xs text-cl-text-secondary`,
+    radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors focus-within:ring-2 focus-within:ring-cl-accent focus-within:ring-offset-cl-bg`,
+    checked: `bg-cl-accent border border-cl-border-input-focus`,
+    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
     icon: "",
-    error: `text-xs mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    success: `text-xs mt-1 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
+    error: `text-xs mt-1 text-cl-error`,
+    success: `text-xs mt-1 text-cl-success`,
   },
   // Outlined variant — border only, no fill
   radioOutlined: {
     root: "flex items-center gap-2",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-    description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-    radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors ${dark ? "focus-within:ring-2 focus-within:ring-indigo-400 focus-within:ring-offset-gray-900" : "focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2"}`,
-    checked: `${dark ? "border-indigo-500 bg-transparent" : "border-indigo-600 bg-transparent"}`,
-    unchecked: `${dark ? "bg-transparent border-gray-500" : "bg-transparent border-gray-300"}`,
+    label: `text-sm font-medium text-cl-text`,
+    description: `text-xs text-cl-text-secondary`,
+    radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors focus-within:ring-2 focus-within:ring-cl-accent focus-within:ring-offset-cl-bg`,
+    checked: `border border-cl-border-input-focus bg-transparent dark:border dark:border-cl-border-input-focus dark:bg-transparent`,
+    unchecked: `bg-transparent border border-cl-border-input dark:bg-transparent dark:border dark:border-cl-border`,
     icon: "",
     error: "",
     success: "",
@@ -79,53 +80,53 @@ const getClasses = (dark: boolean) => ({
   // Color variants
   radioGreen: {
     root: "flex items-center gap-2",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+    label: `text-sm font-medium text-cl-text`,
     description: "",
     radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors`,
-    checked: `${dark ? "bg-emerald-500 border-emerald-500" : "bg-emerald-600 border-emerald-600"}`,
-    unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
+    checked: `bg-cl-success border border-cl-success dark:bg-cl-success dark:border dark:border-cl-success`,
+    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
     icon: "",
     error: "",
     success: "",
   },
   radioAmber: {
     root: "flex items-center gap-2",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+    label: `text-sm font-medium text-cl-text`,
     description: "",
     radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors`,
-    checked: `${dark ? "bg-amber-500 border-amber-500" : "bg-amber-500 border-amber-500"}`,
-    unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
+    checked: `bg-cl-warning border border-cl-warning dark:bg-cl-warning dark:border dark:border-cl-warning`,
+    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
     icon: "",
     error: "",
     success: "",
   },
   radioRose: {
     root: "flex items-center gap-2",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+    label: `text-sm font-medium text-cl-text`,
     description: "",
     radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors`,
-    checked: `${dark ? "bg-rose-500 border-rose-500" : "bg-rose-500 border-rose-500"}`,
-    unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
+    checked: `bg-cl-accent border border-cl-border-input-focus dark:bg-cl-accent dark:border dark:border-cl-border-input-focus`,
+    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
     icon: "",
     error: "",
     success: "",
   },
   radioPurple: {
     root: "flex items-center gap-2",
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
+    label: `text-sm font-medium text-cl-text`,
     description: "",
     radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors`,
-    checked: `${dark ? "bg-purple-500 border-purple-500" : "bg-purple-600 border-purple-600"}`,
-    unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
+    checked: `bg-cl-accent border border-cl-border-input-focus dark:bg-cl-accent dark:border dark:border-cl-border-input-focus`,
+    unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
     icon: "",
     error: "",
     success: "",
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  sectionLabel: `text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  sectionLabel: `text-xs font-medium text-cl-text-secondary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -138,38 +139,11 @@ const RadioButtonDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Radio Button
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A customizable radio button group component with support for labels,
-            descriptions, custom icons, sizes, color variants, orientations,
-            error and success states, loading, and fully accessible via native
-            radio inputs.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Radio Button"
+        description="A customizable radio button group component with support for labels, descriptions, custom icons, sizes, color variants, orientations, error and success states, loading, and fully accessible via native radio inputs."
+        code={`import { RadioGroup, RadioButton } from "@chumlab/ui/radio-button";`}
+      />
 
       {/* ─── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -340,7 +314,7 @@ const RadioButtonDemo = () => {
                   checkedIcon={
                     <span
                       style={{ width: 10, height: 10, borderRadius: "50%", display: "block" }}
-                      className={dark ? "bg-indigo-500" : "bg-indigo-600"}
+                      className={dark ? "bg-cl-accent" : "bg-cl-accent"}
                     />
                   }
                 />
@@ -351,7 +325,7 @@ const RadioButtonDemo = () => {
                   checkedIcon={
                     <span
                       style={{ width: 10, height: 10, borderRadius: "50%", display: "block" }}
-                      className={dark ? "bg-indigo-500" : "bg-indigo-600"}
+                      className={dark ? "bg-cl-accent" : "bg-cl-accent"}
                     />
                   }
                 />
@@ -416,14 +390,14 @@ const RadioButtonDemo = () => {
                   value="a"
                   label="Selected with checkmark"
                   checkedIcon={<CheckCircleIcon className="w-3.5 h-3.5 text-white" />}
-                  uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-gray-400" />}
+                  uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-cl-text-tertiary" />}
                   classes={c.radio}
                 />
                 <RadioButton
                   value="b"
                   label="Another option"
                   checkedIcon={<CheckCircleIcon className="w-3.5 h-3.5 text-white" />}
-                  uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-gray-400" />}
+                  uncheckedIcon={<EmptyCircleIcon className="w-3.5 h-3.5 text-cl-text-tertiary" />}
                   classes={c.radio}
                 />
               </RadioGroup>
@@ -531,16 +505,12 @@ const RadioButtonDemo = () => {
                     label={opt.label}
                     description={opt.desc}
                     classes={{
-                      root: `flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-colors ${
-                        dark
-                          ? "border-gray-700 hover:border-gray-600"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`,
-                      label: `text-sm font-semibold ${dark ? "text-gray-100" : "text-gray-900"}`,
-                      description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
+                      root: `flex items-center gap-3 px-4 py-3 rounded-cl-lg border-2 transition-colors border-cl-border hover:border-cl-border-input dark:border dark:border-cl-border dark:hover:border-cl-border`,
+                      label: `text-sm font-semibold text-cl-text`,
+                      description: `text-xs text-cl-text-secondary`,
                       radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors`,
-                      checked: `${dark ? "bg-indigo-500 border-indigo-500" : "bg-indigo-600 border-indigo-600"}`,
-                      unchecked: `${dark ? "bg-gray-700 border-gray-500" : "bg-white border-gray-300"}`,
+                      checked: `bg-cl-accent border border-cl-border-input-focus`,
+                      unchecked: `bg-cl-bg-elevated border border-cl-border-input`,
                       icon: "",
                       error: "",
                       success: "",
@@ -563,12 +533,12 @@ const RadioButtonDemo = () => {
                     value={t.toLowerCase()}
                     label={t}
                     classes={{
-                      root: `flex items-center gap-2 pb-2 border-b ${dark ? "border-gray-800" : "border-gray-100"}`,
-                      label: `text-sm ${dark ? "text-gray-300" : "text-gray-600"}`,
+                      root: `flex items-center gap-2 pb-2 border-b border-cl-border dark:border dark:border-cl-border`,
+                      label: `text-sm text-cl-text-secondary`,
                       description: "",
                       radio: `inline-flex items-center justify-center rounded-full border-2 transition-colors`,
-                      checked: `${dark ? "bg-blue-500 border-blue-500" : "bg-blue-600 border-blue-600"}`,
-                      unchecked: `${dark ? "bg-transparent border-gray-600" : "bg-transparent border-gray-300"}`,
+                      checked: `bg-cl-accent border border-cl-border-input-focus dark:bg-cl-accent dark:border dark:border-cl-border-input-focus`,
+                      unchecked: `bg-transparent border border-cl-border-input dark:bg-transparent dark:border dark:border-cl-border`,
                       icon: "",
                       error: "",
                       success: "",
@@ -590,7 +560,7 @@ const RadioButtonDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="space-y-4">
             <div>
-              <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-400" : "text-gray-500"}`}>
+              <p className={`text-xs font-medium mb-2 text-cl-text-secondary`}>
                 Group disabled
               </p>
               <RadioGroup
@@ -619,7 +589,7 @@ const RadioButtonDemo = () => {
               </RadioGroup>
             </div>
             <div>
-              <p className={`text-xs font-medium mb-2 ${dark ? "text-gray-400" : "text-gray-500"}`}>
+              <p className={`text-xs font-medium mb-2 text-cl-text-secondary`}>
                 Individual disabled
               </p>
               <RadioGroup
@@ -720,20 +690,20 @@ const RadioButtonDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex items-center gap-3 bg-cl-bg-elevated`}
         >
           <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-medium text-cl-text-secondary`}
           >
             Selected:
           </span>
           <span
-            className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-sm font-mono text-cl-text-secondary`}
           >
             {controlled}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-lg ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
             onClick={() =>
               setControlled((prev) =>
                 prev === "option-a"
@@ -758,49 +728,6 @@ const RadioButtonDemo = () => {
             <RadioButton value="option-a" label="Option A" classes={c.radio} />
             <RadioButton value="option-b" label="Option B" classes={c.radio} />
             <RadioButton value="option-c" label="Option C" classes={c.radio} />
-          </RadioGroup>
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <RadioGroup
-            name="unstyled"
-            defaultValue="custom-a"
-            unstyled
-            classes={{
-              root: "flex flex-col gap-3",
-            }}
-          >
-            <RadioButton
-              value="custom-a"
-              label="Card option A"
-              description="First custom styled option"
-              classes={{
-                root: `flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-colors ${dark ? "border-gray-700 hover:border-violet-500" : "border-gray-200 hover:border-violet-400"}`,
-                radio: `w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${dark ? "border-gray-600" : "border-gray-300"}`,
-                checked: `${dark ? "border-violet-400 bg-violet-500" : "border-violet-600 bg-violet-600"}`,
-                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`,
-                description: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-              }}
-            />
-            <RadioButton
-              value="custom-b"
-              label="Card option B"
-              description="Second custom styled option"
-              classes={{
-                root: `flex items-center gap-3 px-4 py-3 rounded-xl border-2 cursor-pointer transition-colors ${dark ? "border-gray-700 hover:border-violet-500" : "border-gray-200 hover:border-violet-400"}`,
-                radio: `w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${dark ? "border-gray-600" : "border-gray-300"}`,
-                checked: `${dark ? "border-violet-400 bg-violet-500" : "border-violet-600 bg-violet-600"}`,
-                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`,
-                description: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-              }}
-            />
           </RadioGroup>
         </DemoWrapper>
       </Section>

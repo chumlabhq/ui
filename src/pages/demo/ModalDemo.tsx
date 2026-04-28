@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Modal, useModal } from "../../components/Modal";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -13,30 +14,41 @@ import {
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
+// Buttons follow the home-page CTA system: primary = the inverse-fg pill
+// (the "Browse components" treatment), secondary = an elevated-surface
+// pill with a hairline border (the npm-install pill). Status variants
+// (danger/success/warning) keep their semantic hue and use text-cl-bg
+// so the inverted text stays legible against the colored fill in either
+// theme. Sizes match the Drawer demo so every demo button reads at the
+// same visual weight.
+const baseBtn =
+  "inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
+
 const getClasses = (dark: boolean) => ({
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
-  btnDanger:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-rose-500 text-white hover:bg-rose-600",
-  btnSuccess:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-emerald-500 text-white hover:bg-emerald-600",
-  btnWarning:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-amber-500 text-white hover:bg-amber-600",
-  btnGradient:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-linear-to-r from-violet-600 to-purple-600 text-white hover:from-violet-700 hover:to-purple-700",
-  text: dark ? "text-gray-300" : "text-gray-600",
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+  btn: `${baseBtn} bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input hover:bg-cl-bg-elevated`,
+  btnPrimary: `${baseBtn} bg-cl-text text-cl-bg hover:opacity-90`,
+  btnAccent: `${baseBtn} bg-cl-accent text-white hover:bg-cl-accent/90`,
+  btnDanger: `${baseBtn} bg-cl-error text-cl-bg hover:bg-cl-error/90`,
+  btnSuccess: `${baseBtn} bg-cl-success text-cl-bg hover:bg-cl-success/90`,
+  btnWarning: `${baseBtn} bg-cl-warning text-cl-bg hover:bg-cl-warning/90`,
+  btnGhost: `${baseBtn} text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover`,
+  text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
+  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
   // Modal-specific
-  modalContent: "w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden",
+  modalContent: "w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border",
   modalHeader: "flex items-start gap-3 p-6 pb-4",
-  modalTitle: "font-semibold text-lg text-gray-900",
-  modalDescription: "mt-1 text-sm text-gray-600",
-  modalCloseBtn: "shrink-0 p-1 rounded-md hover:bg-gray-100 transition-colors ml-auto",
-  modalCloseIcon: "w-5 h-5 text-gray-500",
+  modalTitle: "font-semibold text-lg text-cl-text",
+  modalDescription: "mt-1 text-sm text-cl-text-secondary",
+  modalCloseBtn: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto",
+  modalCloseIcon: "w-5 h-5 text-cl-text-tertiary",
   modalBody: "px-6 pb-6",
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  // Form input: tokenized so it auto-themes. Uses bg-cl-bg (page base) so
+  // it contrasts against the modal's bg-cl-bg-elevated surface — otherwise
+  // the field blends invisibly into the modal in both modes.
+  input:
+    "w-full px-3 py-2.5 rounded-cl-md bg-cl-bg border border-cl-border text-cl-text placeholder:text-cl-text-tertiary outline-none transition-colors focus:border-cl-border-input-focus focus:ring-2 focus:ring-cl-accent/15 dark:[color-scheme:dark]",
 });
 
 // ─── useModal Child Demo ────────────────────────────────────────────────────
@@ -45,15 +57,15 @@ const ModalChildWithHook = () => {
   const { close, nestingLevel } = useModal();
   return (
     <div className="space-y-3">
-      <p className="text-gray-600">
-        This component uses the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">useModal()</code> hook.
+      <p className="text-cl-text-secondary">
+        This component uses the <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">useModal()</code> hook.
       </p>
-      <div className="p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
+      <div className="p-3 bg-cl-accent/10 rounded-cl-md text-sm text-cl-accent">
         Current nesting level: <span className="font-bold">{nestingLevel}</span>
       </div>
       <button
         onClick={close}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        className="px-4 py-2 bg-cl-accent text-white rounded-cl-md hover:bg-cl-accent/90 transition-colors"
       >
         Close via useModal().close()
       </button>
@@ -68,7 +80,7 @@ const KeepMountedLogger = ({ onLog }: { onLog: (msg: string) => void }) => {
     onLog("Mounted");
     return () => onLog("Unmounted");
   }, [onLog]);
-  return <p className="text-gray-600">This content logs mount/unmount events.</p>;
+  return <p className="text-cl-text-secondary">This content logs mount/unmount events.</p>;
 };
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -83,7 +95,6 @@ const ModalDemo = () => {
   const [noHeaderOpen, setNoHeaderOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [customSizeOpen, setCustomSizeOpen] = useState(false);
@@ -119,36 +130,11 @@ const ModalDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Modal
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            Accessible dialog overlays for focused interactions and important
-            content.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Modal, useModal } from "@chumlab/ui/modal";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Modal"
+        description="Accessible dialog overlays for focused interactions and important content."
+        code={`import { Modal, useModal } from "@chumlab/ui/modal";`}
+      />
 
       {/* ─── Basic ───────────────────────────────────────────────────────── */}
       <Section
@@ -178,10 +164,7 @@ const ModalDemo = () => {
             <button className={c.btnSuccess} onClick={() => setSuccessOpen(true)}>
               Success State
             </button>
-            <button className={c.btnPrimary} onClick={() => setFormOpen(true)}>
-              Form Modal
-            </button>
-            <button className={c.btnGradient} onClick={() => setUpgradeOpen(true)}>
+            <button className={c.btnAccent} onClick={() => setUpgradeOpen(true)}>
               Upgrade Plan
             </button>
             <button className={c.btn} onClick={() => setImagePreviewOpen(true)}>
@@ -253,19 +236,6 @@ const ModalDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Unstyled ────────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all defaults. Provide your own styling via the classes prop."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <button className={c.btnPrimary} onClick={() => setUnstyledOpen(true)}>
-            Unstyled Modal
-          </button>
-        </DemoWrapper>
-      </Section>
-
       {/* ─── Reduce Motion ───────────────────────────────────────────────── */}
       <Section
         title="Reduce Motion"
@@ -327,7 +297,7 @@ const ModalDemo = () => {
               Keep Mounted Modal
             </button>
             {keepMountedLog.length > 0 && (
-              <div className={`text-xs font-mono p-3 rounded-lg max-h-32 overflow-auto ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}>
+              <div className={`text-xs font-mono p-3 rounded-cl-md max-h-32 overflow-auto bg-cl-bg-elevated text-cl-text-secondary`}>
                 {keepMountedLog.map((log, i) => (
                   <div key={i}>{log}</div>
                 ))}
@@ -418,15 +388,15 @@ const ModalDemo = () => {
         classes={{
           root: "custom-root",
           overlay: "backdrop-blur-sm",
-          content: `w-full max-w-lg m-4 rounded-xl shadow-2xl overflow-hidden ${dark ? "bg-gray-900" : "bg-white"}`,
-          header: "flex items-start gap-3 p-6 pb-4 border-b border-blue-200",
-          title: "font-semibold text-lg text-blue-700",
-          closeButton: "shrink-0 p-1 rounded-md hover:bg-blue-100 transition-colors ml-auto",
+          content: `w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg`,
+          header: "flex items-start gap-3 p-6 pb-4 border-b border-cl-border-input-focus",
+          title: "font-semibold text-lg text-cl-accent",
+          closeButton: "shrink-0 p-1 rounded-cl-md hover:bg-cl-accent/10 transition-colors ml-auto",
           body: "px-6 pb-6 pt-4",
         }}
       >
         <p className={c.text}>
-          The <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">classes</code> prop
+          The <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">classes</code> prop
           accepts an object with keys for each slot: root, overlay, container, content, header, title,
           description, icon, closeButton, closeIcon, and body.
         </p>
@@ -444,22 +414,22 @@ const ModalDemo = () => {
         unstyled
         classes={{
           root: "fixed inset-0 z-50 flex items-center justify-center",
-          overlay: `fixed inset-0 transition-opacity ${dark ? "bg-black/70" : "bg-black/40"} backdrop-blur-sm`,
+          overlay: `fixed inset-0 transition-opacity bg-cl-bg/40 dark:bg-cl-bg/70 backdrop-blur-sm`,
           container: "relative z-10 flex items-center justify-center p-4",
-          content: `w-full max-w-md rounded-2xl shadow-2xl overflow-hidden ${dark ? "bg-gray-900 border border-gray-700" : "bg-white border border-gray-200"}`,
+          content: `w-full max-w-md rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border dark:border dark:border-cl-border`,
           header: "flex items-start gap-3 p-5 pb-3",
-          title: `font-bold text-lg ${dark ? "text-white" : "text-gray-900"}`,
-          closeButton: `shrink-0 p-1.5 rounded-lg ml-auto transition-colors ${dark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`,
+          title: `font-bold text-lg text-cl-text`,
+          closeButton: `shrink-0 p-1.5 rounded-cl-md ml-auto transition-colors hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
           closeIcon: "w-5 h-5",
           body: "px-5 pb-5",
         }}
       >
-        <p className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
-          This modal uses <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800" : "bg-gray-100"}`}>unstyled</code> + <code className={`text-xs px-1 py-0.5 rounded ${dark ? "bg-gray-800" : "bg-gray-100"}`}>classes</code> for a fully custom look.
+        <p className={`text-sm text-cl-text-secondary`}>
+          This modal uses <code className={`text-xs px-1 py-0.5 rounded bg-cl-bg-elevated`}>unstyled</code> + <code className={`text-xs px-1 py-0.5 rounded bg-cl-bg-elevated`}>classes</code> for a fully custom look.
         </p>
         <div className="flex justify-end gap-3 mt-5">
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-teal-500 text-white hover:bg-teal-400" : "bg-teal-600 text-white hover:bg-teal-700"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90`}
             onClick={() => setUnstyledOpen(false)}
           >
             Got it
@@ -483,8 +453,8 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
-          With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">reduceMotion=true</code>,
+        <p className="text-cl-text-secondary">
+          With <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">reduceMotion=true</code>,
           all open/close animations are suppressed regardless of user preference.
         </p>
       </Modal>
@@ -505,9 +475,9 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
-          With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">reduceMotion="auto"</code>,
-          animations are disabled only when the OS/browser <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">prefers-reduced-motion</code> media
+        <p className="text-cl-text-secondary">
+          With <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">reduceMotion="auto"</code>,
+          animations are disabled only when the OS/browser <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">prefers-reduced-motion</code> media
           query matches.
         </p>
       </Modal>
@@ -529,16 +499,16 @@ const ModalDemo = () => {
         }}
       >
         <div className="space-y-3">
-          <p className="text-gray-600">Try pressing Tab - focus stays within the modal.</p>
+          <p className="text-cl-text-secondary">Try pressing Tab - focus stays within the modal.</p>
           <input
             type="text"
             placeholder="First input"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-cl-border rounded-cl-md outline-none focus:ring-2 focus:ring-cl-accent"
           />
           <input
             type="text"
             placeholder="Second input"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-cl-border rounded-cl-md outline-none focus:ring-2 focus:ring-cl-accent"
           />
           <div className="flex justify-end gap-3">
             <button className={c.btn} onClick={() => setFocusTrapOpen(false)}>
@@ -568,14 +538,14 @@ const ModalDemo = () => {
         }}
       >
         <div className="space-y-3">
-          <p className="text-gray-600">
-            With <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">trapFocus=false</code>,
+          <p className="text-cl-text-secondary">
+            With <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">trapFocus=false</code>,
             pressing Tab can move focus to elements behind the modal.
           </p>
           <input
             type="text"
             placeholder="Input field"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-cl-border rounded-cl-md outline-none focus:ring-2 focus:ring-cl-accent"
           />
           <div className="flex justify-end">
             <button className={c.btnPrimary} onClick={() => setNoFocusTrapOpen(false)}>
@@ -603,20 +573,20 @@ const ModalDemo = () => {
       >
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <label className="block text-sm font-medium text-cl-text mb-1">Name</label>
             <input
               type="text"
               placeholder="Your name"
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-cl-border rounded-cl-md outline-none focus:ring-2 focus:ring-cl-accent"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email (auto-focused)</label>
+            <label className="block text-sm font-medium text-cl-text mb-1">Email (auto-focused)</label>
             <input
               ref={initialFocusRef}
               type="email"
               placeholder="you@example.com"
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-cl-border rounded-cl-md outline-none focus:ring-2 focus:ring-cl-accent"
             />
           </div>
           <div className="flex justify-end">
@@ -651,8 +621,7 @@ const ModalDemo = () => {
         </div>
       </Modal>
 
-      <Modal
-        open={customCloseIconOpen}
+      <Modal open={customCloseIconOpen}
         onOpenChange={setCustomCloseIconOpen}
         title="Custom Close Icon"
         description="This modal uses a custom close icon."
@@ -663,7 +632,7 @@ const ModalDemo = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={2.5}
-          >
+      >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -681,8 +650,8 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
-          Pass any ReactNode to the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">closeIcon</code> prop
+        <p className="text-cl-text-secondary">
+          Pass any ReactNode to the <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">closeIcon</code> prop
           to replace the default close icon.
         </p>
       </Modal>
@@ -703,8 +672,8 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
-          The <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">disableAnimation</code> prop
+        <p className="text-cl-text-secondary">
+          The <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">disableAnimation</code> prop
           completely removes open/close transitions.
         </p>
       </Modal>
@@ -725,8 +694,8 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
-          Use the <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">zIndex</code> prop
+        <p className="text-cl-text-secondary">
+          Use the <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">zIndex</code> prop
           to control stacking order when integrating with other overlays.
         </p>
       </Modal>
@@ -763,9 +732,9 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
+        <p className="text-cl-text-secondary">
           The parent holds a ref to this modal. Use it for imperative actions
-          like <code className="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono">ref.current?.focus()</code>.
+          like <code className="px-1.5 py-0.5 bg-cl-bg-hover rounded text-sm font-mono">ref.current?.focus()</code>.
         </p>
         <div className="flex justify-end mt-4">
           <button className={c.btnPrimary} onClick={() => setRefForwardOpen(false)}>
@@ -774,24 +743,24 @@ const ModalDemo = () => {
         </div>
       </Modal>
 
-      <Modal
-        open={basicOpen}
+      <Modal open={basicOpen}
         onOpenChange={setBasicOpen}
         title="Welcome Back"
         description="Your session has been restored. You can continue where you left off."
+        classes={{ content: c.modalContent }}
       >
-        <p className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}>
+        <p className={`text-sm text-cl-text-secondary`}>
           This modal uses only built-in default styles. It includes a title, description, close button, overlay with blur, focus trapping, and Escape key support — all out-of-the-box.
         </p>
         <div className="flex justify-end gap-3 mt-6">
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`}
             onClick={() => setBasicOpen(false)}
           >
             Cancel
           </button>
           <button
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-400" : "bg-indigo-600 text-white hover:bg-indigo-700"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`}
             onClick={() => setBasicOpen(false)}
           >
             Continue
@@ -814,7 +783,7 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
+        <p className="text-cl-text-secondary">
           Both title and description support ReactNode, allowing custom HTML or
           JSX.
         </p>
@@ -828,16 +797,16 @@ const ModalDemo = () => {
         </div>
       </Modal>
 
-      <Modal
-        open={withIconOpen}
+      <Modal open={withIconOpen}
         onOpenChange={setWithIconOpen}
         title="New Feature Available"
         description="We've added some exciting new features to improve your workflow."
         showIcon
         icon={
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cl-accent/10"
+      >
             <svg
-              className="h-5 w-5 text-blue-600"
+              className="h-5 w-5 text-cl-accent"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -862,10 +831,10 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <ul className="space-y-2 text-gray-600">
+        <ul className="space-y-2 text-cl-text-secondary">
           <li className="flex items-center gap-2">
             <svg
-              className="h-4 w-4 text-emerald-500"
+              className="h-4 w-4 text-cl-success"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -881,7 +850,7 @@ const ModalDemo = () => {
           </li>
           <li className="flex items-center gap-2">
             <svg
-              className="h-4 w-4 text-emerald-500"
+              className="h-4 w-4 text-cl-success"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -897,7 +866,7 @@ const ModalDemo = () => {
           </li>
           <li className="flex items-center gap-2">
             <svg
-              className="h-4 w-4 text-emerald-500"
+              className="h-4 w-4 text-cl-success"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -932,9 +901,9 @@ const ModalDemo = () => {
         }}
       >
         <div className="text-center py-4">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-cl-accent/10">
             <svg
-              className="h-8 w-8 text-blue-600"
+              className="h-8 w-8 text-cl-accent"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -947,10 +916,10 @@ const ModalDemo = () => {
               />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <h3 className="text-xl font-semibold text-cl-text mb-2">
             Start a Conversation
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="text-cl-text-tertiary mb-6">
             No header modal - perfect for custom layouts and centered content.
           </p>
           <button
@@ -972,27 +941,27 @@ const ModalDemo = () => {
       >
         <div className="flex flex-col items-center">
           {/* Animated danger icon */}
-          <div className={`relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl ${dark ? "bg-red-500/10" : "bg-red-50"}`}>
-            <div className={`absolute inset-0 rounded-2xl ${dark ? "bg-red-500/5" : "bg-red-100/50"} animate-pulse`} />
-            <svg className={`relative h-8 w-8 ${dark ? "text-red-400" : "text-red-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className={`relative mb-5 flex h-16 w-16 items-center justify-center rounded-cl-lg bg-cl-error/15 dark:bg-cl-error/10`}>
+            <div className={`absolute inset-0 rounded-cl-lg bg-cl-error/50 dark:bg-cl-error/5 animate-pulse`} />
+            <svg className={`relative h-8 w-8 text-cl-error`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
             </svg>
           </div>
 
-          <h3 className={`text-lg font-bold mb-1 ${dark ? "text-white" : "text-gray-900"}`}>Delete this project?</h3>
-          <p className={`text-sm text-center mb-5 max-w-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>
-            This will permanently remove <span className={`font-semibold ${dark ? "text-red-400" : "text-red-600"}`}>"Marketing Website"</span> and all its data. This cannot be undone.
+          <h3 className={`text-lg font-bold mb-1 text-cl-text`}>Delete this project?</h3>
+          <p className={`text-sm text-center mb-5 max-w-xs text-cl-text-secondary`}>
+            This will permanently remove <span className={`font-semibold text-cl-error`}>"Marketing Website"</span> and all its data. This cannot be undone.
           </p>
 
           {/* Danger zone card */}
-          <div className={`w-full rounded-xl p-4 mb-6 border ${dark ? "bg-red-950/20 border-red-900/40" : "bg-red-50 border-red-100"}`}>
+          <div className={`w-full rounded-cl-lg p-4 mb-6 border bg-cl-error/15 border-cl-error dark:bg-cl-error/20 dark:border dark:border-cl-error/40`}>
             <div className="flex items-start gap-3">
-              <svg className={`h-5 w-5 mt-0.5 shrink-0 ${dark ? "text-red-400" : "text-red-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className={`h-5 w-5 mt-0.5 shrink-0 text-cl-error`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <p className={`text-sm font-medium ${dark ? "text-red-300" : "text-red-800"}`}>What will be deleted:</p>
-                <ul className={`text-xs mt-1.5 space-y-1 ${dark ? "text-red-400/80" : "text-red-600/80"}`}>
+                <p className={`text-sm font-medium text-cl-error dark:text-cl-error`}>What will be deleted:</p>
+                <ul className={`text-xs mt-1.5 space-y-1 text-cl-error/80 dark:text-cl-error/80`}>
                   <li>12 pages and all content</li>
                   <li>3 team members will lose access</li>
                   <li>Connected analytics data</li>
@@ -1004,7 +973,7 @@ const ModalDemo = () => {
           <div className="flex w-full gap-3">
             <button className={`flex-1 ${c.btn}`} onClick={() => setConfirmDeleteOpen(false)}>Keep Project</button>
             <button
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-white ${dark ? "bg-red-500 hover:bg-red-400" : "bg-red-600 hover:bg-red-700"}`}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-error hover:bg-cl-error dark:bg-cl-error dark:hover:bg-cl-error/30`}
               onClick={() => setConfirmDeleteOpen(false)}
             >
               Yes, Delete
@@ -1022,37 +991,37 @@ const ModalDemo = () => {
         <div className="flex flex-col items-center">
           {/* Animated success icon */}
           <div className="relative mb-5">
-            <div className={`absolute -inset-3 rounded-full blur-xl ${dark ? "bg-emerald-500/20" : "bg-emerald-400/25"}`} />
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/25">
+            <div className={`absolute -inset-3 rounded-full blur-xl bg-cl-success/25 dark:bg-cl-success/20`} />
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-cl-success/30 to-cl-success shadow-lg shadow-success/25">
               <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
             </div>
           </div>
 
-          <h3 className={`text-xl font-bold mb-1 ${dark ? "text-white" : "text-gray-900"}`}>Payment Successful!</h3>
-          <p className={`text-sm mb-5 ${dark ? "text-gray-400" : "text-gray-500"}`}>Your order has been confirmed and is being processed.</p>
+          <h3 className={`text-xl font-bold mb-1 text-cl-text`}>Payment Successful!</h3>
+          <p className={`text-sm mb-5 text-cl-text-secondary`}>Your order has been confirmed and is being processed.</p>
 
           {/* Order details card */}
-          <div className={`w-full rounded-xl border divide-y mb-6 ${dark ? "border-gray-700 divide-gray-700 bg-gray-800/50" : "border-gray-100 divide-gray-100 bg-gray-50"}`}>
+ <div className={`w-full rounded-cl-lg divide-y mb-6 border border-cl-border divide-border-faint bg-cl-bg-hover dark:border dark:border-cl-border dark:divide-border-faint dark:bg-cl-bg-elevated/50`}>
             <div className="flex items-center justify-between px-4 py-3">
-              <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Order</span>
-              <span className={`text-sm font-mono font-medium ${dark ? "text-gray-200" : "text-gray-900"}`}>#ORD-2024-8847</span>
+              <span className={`text-sm text-cl-text-secondary`}>Order</span>
+              <span className={`text-sm font-mono font-medium text-cl-text`}>#ORD-2024-8847</span>
             </div>
             <div className="flex items-center justify-between px-4 py-3">
-              <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Amount</span>
-              <span className={`text-sm font-bold ${dark ? "text-emerald-400" : "text-emerald-600"}`}>$149.00</span>
+              <span className={`text-sm text-cl-text-secondary`}>Amount</span>
+              <span className={`text-sm font-bold text-cl-success`}>$149.00</span>
             </div>
             <div className="flex items-center justify-between px-4 py-3">
-              <span className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Confirmation</span>
-              <span className={`text-sm ${dark ? "text-gray-300" : "text-gray-700"}`}>john.doe@example.com</span>
+              <span className={`text-sm text-cl-text-secondary`}>Confirmation</span>
+              <span className={`text-sm text-cl-text-secondary`}>john.doe@example.com</span>
             </div>
           </div>
 
           <div className="flex w-full gap-3">
             <button className={`flex-1 ${c.btn}`} onClick={() => setSuccessOpen(false)}>View Order</button>
             <button
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-white ${dark ? "bg-emerald-500 hover:bg-emerald-400" : "bg-emerald-600 hover:bg-emerald-700"}`}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-cl-lg transition-all text-cl-bg bg-cl-success hover:bg-cl-success dark:bg-cl-success dark:hover:bg-cl-success/30`}
               onClick={() => setSuccessOpen(false)}
             >
               Continue Shopping
@@ -1062,56 +1031,13 @@ const ModalDemo = () => {
       </Modal>
 
       <Modal
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        title="Create New Project"
-        description="Fill in the details below to get started."
-      >
-        <form
-          className="space-y-4"
-          onSubmit={(e) => { e.preventDefault(); setFormOpen(false); }}
-        >
-          <div>
-            <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Project Name</label>
-            <input type="text" placeholder="e.g., Marketing Campaign" className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${dark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-200 text-gray-900"}`} />
-          </div>
-          <div>
-            <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Description</label>
-            <textarea rows={3} placeholder="Describe your project..." className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none ${dark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-200 text-gray-900"}`} />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Category</label>
-              <select className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${dark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-200 text-gray-900"}`}>
-                <option>Design</option>
-                <option>Development</option>
-                <option>Marketing</option>
-              </select>
-            </div>
-            <div>
-              <label className={`block text-sm font-medium mb-1.5 ${dark ? "text-gray-300" : "text-gray-700"}`}>Priority</label>
-              <select className={`w-full px-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${dark ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-200 text-gray-900"}`}>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-              </select>
-            </div>
-          </div>
-          <div className={`flex justify-end gap-3 pt-4 border-t mt-6 ${dark ? "border-gray-700" : "border-gray-100"}`}>
-            <button type="button" className={c.btn} onClick={() => setFormOpen(false)}>Cancel</button>
-            <button type="submit" className={c.btnPrimary}>Create Project</button>
-          </div>
-        </form>
-      </Modal>
-
-      <Modal
         open={upgradeOpen}
         onOpenChange={setUpgradeOpen}
         showHeader={false}
         classes={{ body: "p-0" }}
       >
-        <div className="bg-linear-to-br from-violet-600 via-purple-600 to-indigo-700 p-8 text-center text-white">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+        <div className="bg-cl-accent p-8 text-center text-white">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cl-text/20 backdrop-blur-sm">
             <svg
               className="h-7 w-7"
               fill="none"
@@ -1127,7 +1053,7 @@ const ModalDemo = () => {
             </svg>
           </div>
           <h3 className="text-2xl font-bold mb-2">Upgrade to Pro</h3>
-          <p className="text-violet-200">
+          <p className="text-white/85">
             Unlock all features and boost your productivity.
           </p>
         </div>
@@ -1135,28 +1061,28 @@ const ModalDemo = () => {
           <ul className="space-y-3 mb-6">
             {["Unlimited projects", "Advanced analytics", "Priority support", "API access"].map((feature, i) => (
               <li key={i} className="flex items-center gap-3">
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${dark ? "bg-violet-900/40" : "bg-violet-100"}`}>
-                  <svg className={`h-3 w-3 ${dark ? "text-violet-400" : "text-violet-600"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className={`flex h-5 w-5 items-center justify-center rounded-full bg-cl-accent/10 dark:bg-cl-accent/40`}>
+                  <svg className={`h-3 w-3 text-cl-accent dark:text-cl-accent`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className={dark ? "text-gray-300" : "text-gray-700"}>{feature}</span>
+                <span className="text-cl-text-secondary">{feature}</span>
               </li>
             ))}
           </ul>
           <div className="flex items-baseline gap-1 justify-center mb-6">
-            <span className={`text-3xl font-bold ${dark ? "text-white" : "text-gray-900"}`}>$29</span>
-            <span className={dark ? "text-gray-400" : "text-gray-500"}>/month</span>
+            <span className={`text-3xl font-bold text-cl-text`}>$29</span>
+            <span className="text-cl-text-tertiary">/month</span>
           </div>
           <button
             onClick={() => setUpgradeOpen(false)}
-            className="w-full py-3 bg-linear-to-r from-violet-600 to-purple-600 text-white rounded-lg hover:from-violet-700 hover:to-purple-700 transition-all font-semibold"
+            className="w-full py-3 bg-cl-text text-cl-bg rounded-cl-md hover:opacity-90 transition-all font-semibold"
           >
             Upgrade Now
           </button>
           <button
             onClick={() => setUpgradeOpen(false)}
-            className={`w-full mt-3 text-sm ${dark ? "text-gray-400 hover:text-gray-200" : "text-gray-500 hover:text-gray-700"}`}
+            className={`w-full mt-3 text-sm text-cl-text-tertiary hover:text-cl-text dark:text-cl-text-tertiary dark:hover:text-cl-text`}
           >
             Maybe later
           </button>
@@ -1168,12 +1094,12 @@ const ModalDemo = () => {
         onOpenChange={setImagePreviewOpen}
         showHeader={false}
         overlayOpacity={0.85}
-        classes={{ content: `${dark ? "bg-gray-900" : "bg-gray-900"}`, body: "p-0" }}
+        classes={{ content: "bg-cl-bg", body: "p-0" }}
       >
         <div className="relative">
           <button
             onClick={() => setImagePreviewOpen(false)}
-            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+            className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors"
           >
             <svg
               className="h-5 w-5"
@@ -1189,7 +1115,7 @@ const ModalDemo = () => {
               />
             </svg>
           </button>
-          <div className="aspect-video bg-linear-to-br from-amber-400 via-orange-500 to-red-500 flex items-center justify-center">
+          <div className="aspect-video bg-linear-to-br from-cl-accent/40 via-cl-accent/30 to-cl-accent/60 flex items-center justify-center">
             <div className="text-center text-white">
               <svg
                 className="h-16 w-16 mx-auto mb-4 opacity-80"
@@ -1207,12 +1133,12 @@ const ModalDemo = () => {
               <p className="text-lg font-medium opacity-90">Image Preview</p>
             </div>
           </div>
-          <div className="bg-gray-900 p-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="text-white min-w-0">
+          <div className="bg-cl-bg p-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="text-cl-text min-w-0">
               <p className="font-medium truncate">Sunset at Malibu Beach</p>
-              <p className="text-sm text-gray-400 truncate">4032 × 3024 • 3.2 MB</p>
+              <p className="text-sm text-cl-text-tertiary truncate">4032 × 3024 • 3.2 MB</p>
             </div>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated rounded-cl-md transition-colors">
               <svg
                 className="h-4 w-4"
                 fill="none"
@@ -1240,7 +1166,7 @@ const ModalDemo = () => {
         maxWidth={700}
         maxHeight={400}
         classes={{
-          content: "w-full m-4 rounded-xl shadow-2xl overflow-hidden",
+          content: "w-full m-4 rounded-cl-lg shadow-2xl overflow-hidden",
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
@@ -1250,17 +1176,17 @@ const ModalDemo = () => {
         }}
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-cl-text-secondary">
             Use maxWidth, maxHeight, minWidth, and minHeight props to control
             modal dimensions.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <span className="text-gray-500">maxWidth:</span>{" "}
+            <div className="p-3 bg-cl-bg-hover rounded-cl-md">
+              <span className="text-cl-text-tertiary">maxWidth:</span>{" "}
               <span className="font-mono">700px</span>
             </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <span className="text-gray-500">maxHeight:</span>{" "}
+            <div className="p-3 bg-cl-bg-hover rounded-cl-md">
+              <span className="text-cl-text-tertiary">maxHeight:</span>{" "}
               <span className="font-mono">400px</span>
             </div>
           </div>
@@ -1274,19 +1200,22 @@ const ModalDemo = () => {
         fullScreen
         centered={false}
         classes={{
-          content: "bg-gray-50",
+          // bg-cl-bg-elevated for a consistent surface across the panel —
+          // matches the header/footer so there's no visual seam between
+          // the chrome strips and the body region.
+          content: "bg-cl-bg-elevated",
           body: "p-0 h-full",
         }}
       >
         <div className="h-full flex flex-col">
-          <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
+          <header className="bg-cl-bg-elevated border-b border-cl-border px-4 sm:px-6 py-4 flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
             <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <button
                 onClick={() => setFullScreenOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors shrink-0"
               >
                 <svg
-                  className="w-5 h-5 text-gray-600"
+                  className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1300,14 +1229,14 @@ const ModalDemo = () => {
                 </svg>
               </button>
               <div className="min-w-0">
-                <h1 className="font-semibold text-gray-900 truncate">
+                <h1 className="font-semibold text-cl-text truncate">
                   Document Preview
                 </h1>
-                <p className="text-sm text-gray-500 truncate">Annual Report 2024.pdf</p>
+                <p className="text-sm text-cl-text-tertiary truncate">Annual Report 2024.pdf</p>
               </div>
             </div>
             <div className="flex items-center gap-2 ml-auto">
-              <button className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1323,7 +1252,7 @@ const ModalDemo = () => {
                 </svg>
                 <span className="hidden sm:inline">Download</span>
               </button>
-              <button className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1339,7 +1268,7 @@ const ModalDemo = () => {
                 </svg>
                 <span className="hidden sm:inline">Print</span>
               </button>
-              <button className="px-3 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors flex items-center gap-2">
+              <button className="px-3 py-2 text-sm bg-cl-accent text-white hover:bg-cl-accent/90 rounded-cl-md transition-colors flex items-center gap-2">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -1359,11 +1288,11 @@ const ModalDemo = () => {
           </header>
 
           <div className="flex-1 overflow-auto p-8">
-            <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-12">
+            <div className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12">
               <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-cl-accent/10 rounded-full mb-4">
                   <svg
-                    className="w-8 h-8 text-blue-600"
+                    className="w-8 h-8 text-cl-accent"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -1376,20 +1305,20 @@ const ModalDemo = () => {
                     />
                   </svg>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                <h2 className="text-3xl font-bold text-cl-text mb-2">
                   Annual Report 2024
                 </h2>
-                <p className="text-gray-500">
+                <p className="text-cl-text-tertiary">
                   Acme Corporation • Q4 Financial Summary
                 </p>
               </div>
 
               <div className="space-y-8">
                 <section>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  <h3 className="text-xl font-semibold text-cl-text mb-4">
                     Executive Summary
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-cl-text-secondary leading-relaxed">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                     do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -1398,39 +1327,39 @@ const ModalDemo = () => {
                 </section>
 
                 <section>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  <h3 className="text-xl font-semibold text-cl-text mb-4">
                     Key Metrics
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
-                      <p className="text-sm text-emerald-600 font-medium">
+                    <div className="p-4 bg-cl-success/15 rounded-cl-md border border-cl-success">
+                      <p className="text-sm text-cl-success font-medium">
                         Revenue
                       </p>
-                      <p className="text-2xl font-bold text-emerald-700">
+                      <p className="text-2xl font-bold text-cl-success">
                         $12.4M
                       </p>
-                      <p className="text-sm text-emerald-600">+24% YoY</p>
+                      <p className="text-sm text-cl-success">+24% YoY</p>
                     </div>
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                      <p className="text-sm text-blue-600 font-medium">Users</p>
-                      <p className="text-2xl font-bold text-blue-700">847K</p>
-                      <p className="text-sm text-blue-600">+18% YoY</p>
+                    <div className="p-4 bg-cl-accent/10 rounded-cl-md border border-cl-border-input-focus">
+                      <p className="text-sm text-cl-accent font-medium">Users</p>
+                      <p className="text-2xl font-bold text-cl-accent">847K</p>
+                      <p className="text-sm text-cl-accent">+18% YoY</p>
                     </div>
-                    <div className="p-4 bg-violet-50 rounded-lg border border-violet-100">
-                      <p className="text-sm text-violet-600 font-medium">
+                    <div className="p-4 bg-cl-accent/10 rounded-cl-md border border-cl-border-input-focus">
+                      <p className="text-sm text-cl-accent font-medium">
                         NPS Score
                       </p>
-                      <p className="text-2xl font-bold text-violet-700">72</p>
-                      <p className="text-sm text-violet-600">+8 points</p>
+                      <p className="text-2xl font-bold text-cl-accent">72</p>
+                      <p className="text-sm text-cl-accent">+8 points</p>
                     </div>
                   </div>
                 </section>
 
                 <section>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  <h3 className="text-xl font-semibold text-cl-text mb-4">
                     Looking Ahead
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-cl-text-secondary leading-relaxed">
                     Duis aute irure dolor in reprehenderit in voluptate velit
                     esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
                     occaecat cupidatat non proident, sunt in culpa qui officia
@@ -1441,14 +1370,14 @@ const ModalDemo = () => {
             </div>
           </div>
 
-          <footer className="bg-white border-t border-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
+          <footer className="bg-cl-bg-elevated border-t border-cl-border px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-4">
               <button
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors disabled:opacity-50"
                 disabled
               >
                 <svg
-                  className="w-5 h-5 text-gray-400"
+                  className="w-5 h-5 text-cl-text-tertiary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1461,10 +1390,10 @@ const ModalDemo = () => {
                   />
                 </svg>
               </button>
-              <span className="text-sm text-gray-600">Page 1 of 12</span>
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <span className="text-sm text-cl-text-secondary">Page 1 of 12</span>
+              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors">
                 <svg
-                  className="w-5 h-5 text-gray-600"
+                  className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1479,9 +1408,9 @@ const ModalDemo = () => {
               </button>
             </div>
             <div className="flex items-center gap-2">
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors">
                 <svg
-                  className="w-5 h-5 text-gray-600"
+                  className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1494,9 +1423,9 @@ const ModalDemo = () => {
                   />
                 </svg>
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <button className="p-2 hover:bg-cl-bg-hover rounded-cl-md transition-colors">
                 <svg
-                  className="w-5 h-5 text-gray-600"
+                  className="w-5 h-5 text-cl-text-secondary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1509,7 +1438,7 @@ const ModalDemo = () => {
                   />
                 </svg>
               </button>
-              <span className="text-sm text-gray-500 ml-2">100%</span>
+              <span className="text-sm text-cl-text-tertiary ml-2">100%</span>
             </div>
           </footer>
         </div>
@@ -1519,9 +1448,9 @@ const ModalDemo = () => {
         open={customOverlayOpen}
         onOpenChange={setCustomOverlayOpen}
         title="Custom Overlay"
-        description="This modal has a purple overlay with higher opacity."
-        overlayColor="#4c1d95"
-        overlayOpacity={0.7}
+        description="This modal has a brand-blue overlay with higher opacity."
+        overlayColor="#5b9bff"
+        overlayOpacity={0.4}
         classes={{
           content: c.modalContent,
           header: c.modalHeader,
@@ -1532,13 +1461,12 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
+        <p className="text-cl-text-secondary">
           Customize the overlay with overlayColor and overlayOpacity props.
         </p>
       </Modal>
 
-      <Modal
-        open={preventCloseOpen}
+      <Modal open={preventCloseOpen}
         onOpenChange={setPreventCloseOpen}
         title="Important Action Required"
         description="You must complete this action before continuing."
@@ -1547,9 +1475,10 @@ const ModalDemo = () => {
         showCloseButton={false}
         showIcon
         icon={
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cl-warning/15"
+      >
             <svg
-              className="h-5 w-5 text-amber-600"
+              className="h-5 w-5 text-cl-warning"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -1572,7 +1501,7 @@ const ModalDemo = () => {
           body: c.modalBody,
         }}
       >
-        <p className="text-gray-600">
+        <p className="text-cl-text-secondary">
           This modal cannot be dismissed by clicking outside or pressing Escape.
           Use the buttons below.
         </p>
@@ -1592,41 +1521,41 @@ const ModalDemo = () => {
         </div>
       </Modal>
 
-      <Modal
-        open={nestedLevel1Open}
+      <Modal open={nestedLevel1Open}
         onOpenChange={setNestedLevel1Open}
         title="Project Settings"
         description="Configure your project preferences and team access."
+        classes={{ content: c.modalContent }}
       >
         <div className="space-y-4">
-          <div className={`p-4 rounded-lg border ${dark ? "bg-blue-900/20 border-blue-800/40" : "bg-blue-50 border-blue-200"}`}>
+          <div className={`p-4 rounded-cl-md border bg-cl-accent/10 border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus/40`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className={`font-medium ${dark ? "text-blue-300" : "text-blue-900"}`}>Team Members</p>
-                <p className={`text-sm ${dark ? "text-blue-400" : "text-blue-600"}`}>5 members with access</p>
+                <p className={`font-medium text-cl-accent dark:text-cl-accent`}>Team Members</p>
+                <p className={`text-sm text-cl-accent`}>5 members with access</p>
               </div>
               <button
-                className={`px-3 py-1.5 text-white text-sm rounded-lg transition-colors ${dark ? "bg-blue-500 hover:bg-blue-400" : "bg-blue-600 hover:bg-blue-700"}`}
+                className={`px-3 py-1.5 text-white text-sm rounded-cl-md transition-colors bg-cl-accent hover:bg-cl-accent/90 dark:bg-cl-accent dark:hover:bg-cl-accent/90`}
                 onClick={() => setNestedLevel2Open(true)}
               >
                 Manage
               </button>
             </div>
           </div>
-          <div className={`flex items-center justify-between p-4 border rounded-lg ${dark ? "border-gray-700" : "border-gray-200"}`}>
+          <div className={`flex items-center justify-between p-4 border rounded-cl-md border-cl-border`}>
             <div>
-              <p className={`font-medium ${dark ? "text-gray-200" : "text-gray-900"}`}>Notifications</p>
-              <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>Email & push notifications</p>
+              <p className={`font-medium text-cl-text`}>Notifications</p>
+              <p className={`text-sm text-cl-text-secondary`}>Email & push notifications</p>
             </div>
             <button
               type="button"
-              className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 transition-colors"
+              className="relative inline-flex h-6 w-11 items-center rounded-full bg-cl-accent transition-colors"
             >
-              <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6 transition-transform" />
+              <span className="inline-block h-4 w-4 transform rounded-full bg-cl-bg-elevated translate-x-6 transition-transform" />
             </button>
           </div>
         </div>
-        <div className={`flex justify-end gap-3 mt-6 pt-4 border-t ${dark ? "border-gray-700" : "border-gray-100"}`}>
+        <div className={`flex justify-end gap-3 mt-6 pt-4 border-t border-cl-border`}>
           <button
             className={c.btn}
             onClick={() => setNestedLevel1Open(false)}
@@ -1641,13 +1570,12 @@ const ModalDemo = () => {
           </button>
         </div>
 
-        <Modal
-          open={nestedLevel2Open}
+        <Modal open={nestedLevel2Open}
           onOpenChange={setNestedLevel2Open}
           title="Team Members"
           description="Manage project access and roles."
           nestingLevel={1}
-        >
+      >
           <div className="space-y-3">
             {[
               { name: "Sarah Chen", role: "Owner", initials: "SC" },
@@ -1656,21 +1584,21 @@ const ModalDemo = () => {
             ].map((member, i) => (
               <div
                 key={i}
-                className={`flex items-center justify-between p-3 rounded-lg ${dark ? "bg-gray-700/50" : "bg-gray-50"}`}
+                className={`flex items-center justify-between p-3 rounded-cl-md bg-cl-bg-hover dark:bg-cl-bg-elevated/50`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-blue-400 to-blue-600 text-white text-sm font-medium">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-cl-accent/40 to-cl-accent text-white text-sm font-medium">
                     {member.initials}
                   </div>
                   <div>
-                    <p className={`font-medium ${dark ? "text-gray-200" : "text-gray-900"}`}>{member.name}</p>
-                    <p className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>{member.role}</p>
+                    <p className={`font-medium text-cl-text`}>{member.name}</p>
+                    <p className={`text-sm text-cl-text-secondary`}>{member.role}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-lg transition-colors ${dark ? "border-gray-600 text-gray-400 hover:border-blue-400 hover:text-blue-400" : "border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-600"}`}>
+          <button className={`w-full mt-4 flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-cl-md transition-colors border-cl-border text-cl-text-tertiary hover:border-cl-border-input-focus hover:text-cl-accent dark:border dark:border-cl-border dark:text-cl-text-tertiary dark:hover:border-cl-border-input-focus dark:hover:text-cl-accent`}>
             <svg
               className="h-5 w-5"
               fill="none"
@@ -1686,7 +1614,7 @@ const ModalDemo = () => {
             </svg>
             Invite Member
           </button>
-          <div className={`flex justify-end mt-6 pt-4 border-t ${dark ? "border-gray-700" : "border-gray-100"}`}>
+          <div className={`flex justify-end mt-6 pt-4 border-t border-cl-border`}>
             <button
               className={c.btnPrimary}
               onClick={() => setNestedLevel2Open(false)}
@@ -1823,7 +1751,7 @@ const ModalDemo = () => {
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               "role=\"dialog\" applied to the modal content",
               "aria-modal=\"true\" to indicate a modal dialog",
@@ -1835,15 +1763,15 @@ const ModalDemo = () => {
               "preventOutsideClick option to require explicit close action",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               ["Escape", "Close the modal"],
               ["Tab", "Move focus to the next focusable element (trapped)"],

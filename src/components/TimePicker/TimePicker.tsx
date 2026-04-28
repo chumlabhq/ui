@@ -153,7 +153,7 @@ const TimeOption = memo(function TimeOption({
  * - Portal-rendered dropdown with auto-flip positioning
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - TIMEPICKER.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/TimePickerDemo.tsx — live demo
  */
 const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(

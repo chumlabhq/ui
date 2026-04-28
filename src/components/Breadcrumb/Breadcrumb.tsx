@@ -310,7 +310,10 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const ellipsisButtonRef = useRef<HTMLButtonElement>(null);
     const menuItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
-    const dropdownGap = 4;
+    // Tight gap so the dropdown reads as anchored to the ellipsis trigger
+    // rather than floating away from it. 4 px felt visually closer to 20 px
+    // once the dropdown's own py-1 padding stacked on top.
+    const dropdownGap = 0;
     const mountedRef = useRef(false);
 
     // ─── Notify on dropdown state change (skip initial mount) ────────

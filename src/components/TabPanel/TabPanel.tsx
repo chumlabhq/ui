@@ -222,6 +222,8 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     const baseClasses = unstyled ? UNSTYLED_TABPANEL_CLASSES : DEFAULT_TABPANEL_CLASSES;
     const resolvedClasses: ResolvedClasses = useMemo(
       () => ({
+        root: classesProp?.root ?? baseClasses.root,
+        tabList: classesProp?.tabList ?? baseClasses.tabList,
         tab: classesProp?.tab ?? baseClasses.tab,
         tabActive: classesProp?.tabActive ?? baseClasses.tabActive,
         tabInactive: classesProp?.tabInactive ?? baseClasses.tabInactive,
@@ -237,6 +239,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
         countActive: classesProp?.countActive ?? baseClasses.countActive,
         countInactive: classesProp?.countInactive ?? baseClasses.countInactive,
         indicator: classesProp?.indicator ?? baseClasses.indicator,
+        panel: classesProp?.panel ?? baseClasses.panel,
       }),
       [classesProp, baseClasses],
     );
@@ -272,7 +275,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       <TabPanelContext.Provider value={contextValue}>
         <div
           ref={ref}
-          className={classesProp?.root ?? className}
+          className={[resolvedClasses.root, className].filter(Boolean).join(" ") || undefined}
           style={style}
           data-disabled={disabled || undefined}
           data-orientation={orientation}
@@ -283,7 +286,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-orientation={orientation}
-            className={classesProp?.tabList || undefined}
+            className={resolvedClasses.tabList || undefined}
           >
             {tabs.map((tab, index) => {
               const isActive = resolvedValue === tab.id;
@@ -347,7 +350,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
                 id={`${tabListId}-panel-${tab.id}`}
                 aria-labelledby={`${tabListId}-tab-${tab.id}`}
                 tabIndex={isActive ? 0 : -1}
-                className={classesProp?.panel || undefined}
+                className={resolvedClasses.panel || undefined}
                 data-state={isActive ? "active" : "inactive"}
                 data-orientation={orientation}
                 hidden={!isActive || undefined}

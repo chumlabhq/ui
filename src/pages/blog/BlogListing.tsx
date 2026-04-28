@@ -6,12 +6,13 @@ import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { useJsonLd, useCanonical } from "../../hooks/useJsonLd";
 import { SiteHeader } from "../../components/SiteHeader";
 import { SiteFooter } from "../../components/SiteFooter";
+import { TypographicCover } from "../../components/TypographicCover";
+import Reveal from "../../components/Reveal/Reveal";
+import { Button } from "../../components/ui";
 
-// ─── Page metadata + schema ────────────────────────────────────────────────
-
-const LISTING_TITLE = "Blog — Guides & Articles";
+const LISTING_TITLE = "Blog. Guides and articles";
 const LISTING_DESCRIPTION =
-  "Practical guides on React, Next.js, frontend architecture, accessibility, performance, and building modern web UIs with Chumlab UI. Updated regularly.";
+  "Practical guides on React, Next.js, frontend architecture, accessibility, performance, and building modern web UIs with Chumlab. Updated regularly.";
 const LISTING_URL = "https://chumlab.com/blog";
 
 function buildBlogJsonLd() {
@@ -42,27 +43,13 @@ const LISTING_BREADCRUMB_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: "https://chumlab.com/",
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Blog",
-      item: LISTING_URL,
-    },
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://chumlab.com/" },
+    { "@type": "ListItem", position: 2, name: "Blog", item: LISTING_URL },
   ],
 };
 
 const POSTS_PER_PAGE = 6;
-
-// Extract unique categories from blog data
 const ALL_CATEGORIES = Array.from(new Set(BLOG_POSTS.map((p) => p.category)));
-
-// ─── Search Icon ────────────────────────────────────────────────────────────
 
 function SearchIcon() {
   return (
@@ -72,9 +59,8 @@ function SearchIcon() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.25"
       strokeLinecap="round"
-      strokeLinejoin="round"
       aria-hidden
     >
       <circle cx="11" cy="11" r="8" />
@@ -83,73 +69,40 @@ function SearchIcon() {
   );
 }
 
-// ─── Blog Card ──────────────────────────────────────────────────────────────
-
 function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
   return (
-    <Link
-      to={`/blog/${post.id}`}
-      className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden transition-all duration-500 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-1"
-    >
-      <div className="relative h-36 sm:h-44 overflow-hidden">
-        {post.coverImage ? (
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center"
-            style={{
-              background: `linear-gradient(135deg, ${post.coverGradient[0]}18, ${post.coverGradient[1]}14)`,
-            }}
-          />
-        )}
+    <Link to={`/blog/${post.id}`} className="group block">
+      <div className="aspect-[4/3] overflow-hidden">
+        <TypographicCover
+          title={post.title}
+          seed={post.id}
+          eyebrow={post.category}
+        />
       </div>
-
-      <div className="p-4 sm:p-5">
-        <div className="flex items-center gap-2.5 mb-3">
-          <span className="text-[11px] font-medium text-gray-500 bg-white/[0.05] px-2 py-0.5 rounded-full">
-            {post.category}
-          </span>
-          <span className="text-xs text-gray-600">{post.readTime}</span>
-        </div>
-
-        <h3 className="text-base font-bold text-white leading-snug mb-2 group-hover:text-blue-100 transition-colors line-clamp-2">
+      <div className="pt-5">
+        <span className="inline-flex items-center gap-2 eyebrow text-fg-secondary">
+          <span
+            aria-hidden
+            className="inline-block w-1.5 h-1.5 rounded-full"
+            style={{ background: "var(--accent)" }}
+          />
+          {post.category}
+        </span>
+        <h3 className="mt-3 font-sans text-[19px] font-medium leading-[1.3] text-fg group-hover:text-accent transition-colors">
           {post.title}
         </h3>
-
-        <p className="text-sm text-gray-400 leading-relaxed line-clamp-2 mb-4">
+        <p className="mt-2 text-[14px] text-fg-secondary leading-[1.55] line-clamp-2">
           {post.excerpt}
         </p>
-
-        <div className="flex items-center justify-between pt-3 border-t border-white/[0.06]">
-          <span className="text-xs text-gray-500">{post.date}</span>
-          <span className="text-xs font-medium text-blue-400 group-hover:text-blue-300 transition-colors flex items-center gap-1.5">
-            Read more
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="group-hover:translate-x-0.5 transition-transform"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </span>
+        <div className="mt-3 flex items-center gap-3 text-[12px] text-fg-tertiary">
+          <span>{post.date}</span>
+          <span>·</span>
+          <span>{post.readTime}</span>
         </div>
       </div>
     </Link>
   );
 }
-
-// ─── Blog Listing Page ──────────────────────────────────────────────────────
 
 export default function BlogListing() {
   useDocumentTitle(LISTING_TITLE, LISTING_DESCRIPTION);
@@ -162,14 +115,11 @@ export default function BlogListing() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // Filter posts by search and category
   const filteredPosts = useMemo(() => {
     let posts = BLOG_POSTS;
-
     if (activeCategory) {
       posts = posts.filter((p) => p.category === activeCategory);
     }
-
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       posts = posts.filter(
@@ -180,7 +130,6 @@ export default function BlogListing() {
           p.excerpt.toLowerCase().includes(q),
       );
     }
-
     return posts;
   }, [searchQuery, activeCategory]);
 
@@ -191,7 +140,6 @@ export default function BlogListing() {
     return filteredPosts.slice(start, start + POSTS_PER_PAGE);
   }, [currentPage, filteredPosts]);
 
-  // Reset to page 1 when filters change
   const [prevFilters, setPrevFilters] = useState({
     searchQuery,
     activeCategory,
@@ -204,7 +152,6 @@ export default function BlogListing() {
     setCurrentPage(1);
   }
 
-  // Smooth scroll to grid on page change (not on initial load)
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
@@ -218,7 +165,6 @@ export default function BlogListing() {
     }
   }, [currentPage]);
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -228,168 +174,178 @@ export default function BlogListing() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#04040a] text-white selection:bg-blue-600/30 overflow-x-hidden">
-      {/* Ambient glow */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-15%] left-[15%] w-[60vw] h-[60vw] rounded-full bg-blue-600/[0.04] blur-[120px]" />
-        <div className="absolute bottom-[-15%] right-[10%] w-[45vw] h-[45vw] rounded-full bg-violet-600/[0.03] blur-[100px]" />
-      </div>
+    <div className="relative min-h-screen bg-bg-base text-fg">
+      <SiteHeader />
 
-      <div className="relative z-10">
-        <SiteHeader />
+      <main className="pt-[60px]">
+        <section className="max-w-[1280px] mx-auto px-5 sm:px-8 pt-20 sm:pt-28 pb-10">
+          <Reveal delay={0} translateY={12} duration={200}>
+            <h1
+              className="font-sans font-medium text-fg mb-6"
+              style={{
+                fontSize: "clamp(48px, 9vw, 96px)",
+                lineHeight: 0.98,
+                letterSpacing: "-0.045em",
+              }}
+            >
+              <span className="serif-accent">Field</span> notes.
+            </h1>
+          </Reveal>
+          <Reveal delay={80} translateY={8} duration={200}>
+            <p className="text-[17px] text-fg-secondary leading-[1.55] max-w-[640px] mb-10">
+              Practical articles on frontend development, component design, and
+              building modern web experiences.
+            </p>
+          </Reveal>
 
-        <main>
-          {/* ── HERO ── */}
-          <section className="px-4 sm:px-6 lg:px-10 pt-28 sm:pt-32 pb-10 sm:pb-16">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
-                Insights &{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-                  Guides
-                </span>
-              </h1>
-
-              <p className="text-base sm:text-lg text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Practical articles on frontend development, component design,
-                and building modern web experiences.
-              </p>
-
-              <div className="relative max-w-xl mx-auto">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">
-                  <SearchIcon />
-                </span>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search articles..."
-                  className="w-full h-12 pl-11 pr-4 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder:text-white/25 text-[15px] outline-none focus:border-blue-500/30 focus:bg-white/[0.06] transition-all duration-300"
-                />
-              </div>
+          <Reveal delay={150} translateY={8} duration={200}>
+            <div className="relative max-w-xl group">
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 text-fg-tertiary pointer-events-none transition-colors group-focus-within:text-accent">
+                <SearchIcon />
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search articles"
+                aria-label="Search articles"
+                className="w-full pl-7 pr-4 py-3 bg-transparent text-[16px] text-fg placeholder:text-fg-muted outline-none border-b-[0.5px] border-border-soft focus:border-accent/50 transition-colors"
+              />
             </div>
-          </section>
+          </Reveal>
+        </section>
 
-          {/* ── FILTERS ── */}
-          <section className="max-w-6xl mx-auto px-6 sm:px-8 pb-8">
-            {/* Category pills */}
-            <div className="-mx-6 px-6 sm:mx-0 sm:px-0">
-              <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
+        <section className="max-w-[1280px] mx-auto px-5 sm:px-8 pb-8">
+          <Reveal delay={200} translateY={8} duration={200}>
+          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
+            <button
+              onClick={() => setActiveCategory(null)}
+              className="eyebrow px-3 py-1.5 transition-colors cursor-pointer"
+              style={{
+                background:
+                  activeCategory === null ? "var(--text-primary)" : "transparent",
+                color:
+                  activeCategory === null ? "var(--bg-base)" : "var(--text-secondary)",
+                border: "0.5px solid var(--border-faint)",
+              }}
+            >
+              All
+            </button>
+            {ALL_CATEGORIES.map((cat) => {
+              const count = BLOG_POSTS.filter((p) => p.category === cat).length;
+              const isActive = activeCategory === cat;
+              return (
                 <button
-                  onClick={() => setActiveCategory(null)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                    activeCategory === null
-                      ? "bg-blue-600 text-white cursor-pointer"
-                      : "bg-white/[0.05] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06] cursor-pointer"
-                  }`}
+                  key={cat}
+                  onClick={() => handleCategoryClick(cat)}
+                  className="eyebrow px-3 py-1.5 transition-colors cursor-pointer"
+                  style={{
+                    background: isActive ? "var(--text-primary)" : "transparent",
+                    color: isActive ? "var(--bg-base)" : "var(--text-secondary)",
+                    border: "0.5px solid var(--border-faint)",
+                  }}
                 >
-                  All
+                  {cat}
+                  <span className="ml-1.5 opacity-70">{count}</span>
                 </button>
-                {ALL_CATEGORIES.map((cat) => {
-                  const count = BLOG_POSTS.filter(
-                    (p) => p.category === cat,
-                  ).length;
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => handleCategoryClick(cat)}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
-                        activeCategory === cat
-                          ? "bg-blue-600 text-white"
-                          : "bg-white/[0.05] text-gray-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]"
-                      }`}
-                    >
-                      {cat}
-                      <span className="ml-1.5 text-xs opacity-60">{count}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              );
+            })}
+          </div>
+
+          </Reveal>
+
+          {(searchQuery || activeCategory) && (
+            <div className="mt-4 flex items-center gap-3 text-[13px] text-fg-tertiary">
+              <span>
+                {filteredPosts.length}{" "}
+                {filteredPosts.length === 1 ? "article" : "articles"} found
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSearchQuery("");
+                  setActiveCategory(null);
+                }}
+              >
+                Clear
+              </Button>
             </div>
+          )}
+        </section>
 
-            {/* Active filter info */}
-            {(searchQuery || activeCategory) && (
-              <div className="mt-4 flex items-center gap-3 text-sm text-gray-500">
-                <span>
-                  {filteredPosts.length}{" "}
-                  {filteredPosts.length === 1 ? "article" : "articles"} found
-                </span>
-                {(searchQuery || activeCategory) && (
-                  <button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setActiveCategory(null);
-                    }}
-                    className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+        <section ref={gridRef} className="max-w-[1280px] mx-auto px-5 sm:px-8 pb-8">
+          {paginatedPosts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
+              {paginatedPosts.map((post, i) => {
+                // Top row (i = 0, 1, 2) staggers 60ms apart from 200ms.
+                // Cards 3+ render plain — at the original 1150ms delay
+                // they would have stayed invisible past the point a fast
+                // scroller has already reached the second row.
+                if (i >= 3) return <BlogCard key={post.id} post={post} />;
+                return (
+                  <Reveal
+                    key={post.id}
+                    delay={250 + i * 30}
+                    translateY={16}
+                    duration={200}
                   >
-                    Clear filters
-                  </button>
-                )}
-              </div>
-            )}
-          </section>
-
-          {/* ── BLOG GRID ── */}
-          <section
-            ref={gridRef}
-            className="max-w-6xl mx-auto px-6 sm:px-8 pb-8"
-          >
-            {paginatedPosts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {paginatedPosts.map((post) => (
-                  <BlogCard key={post.id} post={post} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 sm:py-20 px-4 sm:px-0">
-                <div className="text-gray-600 text-sm sm:text-lg mb-2">
-                  No articles found
-                </div>
-                <p className="text-gray-600 text-sm">
-                  Try adjusting your search or category filter.
+                    <BlogCard post={post} />
+                  </Reveal>
+                );
+              })}
+            </div>
+          ) : (
+            <Reveal delay={150} translateY={12} duration={200}>
+              <div className="py-16 text-center">
+                <p className="font-serif italic text-[28px] text-fg mb-3">
+                  Nothing here yet.
+                </p>
+                <p className="text-[15px] text-fg-tertiary">
+                  Try different keywords or clear the filter.
                 </p>
               </div>
-            )}
-          </section>
-
-          {/* ── PAGINATION ── */}
-          {totalPages > 1 && (
-            <section className="max-w-6xl mx-auto px-6 sm:px-8 pb-16">
-              <div className="flex justify-center">
-                <Pagination
-                  value={currentPage}
-                  totalPages={totalPages}
-                  onValueChange={setCurrentPage}
-                  classes={{
-                    root: "",
-                    nav: "flex items-center gap-2",
-                    pageButtons: "flex items-center gap-1",
-                    pageButton:
-                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
-                    activePageButton:
-                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-sm font-medium bg-blue-600 text-white flex items-center justify-center cursor-pointer",
-                    navButton:
-                      "w-10 h-10 sm:w-9 sm:h-9 rounded-lg text-gray-400 hover:text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center cursor-pointer",
-                    ellipsis:
-                      "w-10 h-10 sm:w-9 sm:h-9 flex items-center justify-center text-gray-600",
-                    selector: "",
-                    selectorButton: "",
-                    selectorDropdown: "",
-                    selectorDropdownWrapper: "",
-                    selectorOption: "",
-                    label: "",
-                    dropdownIcon: "",
-                    prevIcon: "",
-                    nextIcon: "",
-                    pageInfo: "",
-                  }}
-                />
-              </div>
-            </section>
+            </Reveal>
           )}
+        </section>
 
-          <SiteFooter />
-        </main>
-      </div>
+        {totalPages > 1 && (
+          <section className="max-w-[1280px] mx-auto px-5 sm:px-8 pb-16">
+            <div className="flex justify-center">
+              <Pagination
+                value={currentPage}
+                totalPages={totalPages}
+                onValueChange={setCurrentPage}
+                classes={{
+                  root: "",
+                  nav: "flex items-center gap-2",
+                  pageButtons: "flex items-center gap-1",
+                  pageButton:
+                    "w-9 h-9 text-sm font-medium text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
+                  activePageButton:
+                    "w-9 h-9 text-sm font-medium bg-fg text-bg-base flex items-center justify-center cursor-pointer rounded-md",
+                  navButton:
+                    "w-9 h-9 text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
+                  ellipsis:
+                    "w-9 h-9 flex items-center justify-center text-fg-muted",
+                  selector: "",
+                  selectorButton: "",
+                  selectorDropdown: "",
+                  selectorDropdownWrapper: "",
+                  selectorOption: "",
+                  label: "",
+                  dropdownIcon: "",
+                  prevIcon: "",
+                  nextIcon: "",
+                  pageInfo: "",
+                }}
+              />
+            </div>
+          </section>
+        )}
+
+        <SiteFooter />
+      </main>
     </div>
   );
 }

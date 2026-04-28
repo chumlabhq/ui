@@ -3,6 +3,7 @@ import { Breadcrumb } from "../../components/Breadcrumb";
 import type { BreadcrumbItem } from "../../components/Breadcrumb";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -136,45 +137,45 @@ const itemsWithDisabled: BreadcrumbItem[] = [
 const getClasses = (dark: boolean) => ({
   breadcrumb: {
     list: "flex flex-wrap items-center gap-1",
-    item: `flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border-none rounded ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
-    itemActive: `flex items-center gap-1 px-2 py-1 text-sm font-medium bg-transparent border-none cursor-default ${dark ? "text-white" : "text-gray-900"}`,
+    item: `flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border border-none rounded text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-bg-elevated`,
+    itemActive: `flex items-center gap-1 px-2 py-1 text-sm font-medium bg-transparent border border-none cursor-default text-cl-text`,
     itemDisabled: dark
-      ? "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-gray-400"
-      : "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-gray-500",
-    separator: dark ? "text-gray-600" : "text-gray-400",
+      ? "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-cl-text-tertiary"
+      : "opacity-40 cursor-not-allowed hover:bg-transparent hover:text-cl-text-tertiary",
+    separator: dark ? "text-cl-text-secondary" : "text-cl-text-tertiary",
     icon: "shrink-0",
-    link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors ${dark ? "text-blue-400 hover:text-blue-300 hover:underline" : "text-blue-600 hover:text-blue-800 hover:underline"}`,
-    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-md transition-colors cursor-pointer ${dark ? "bg-gray-800 hover:bg-gray-700 text-gray-400" : "bg-gray-100 hover:bg-gray-200 text-gray-600"}`,
-    dropdown: `min-w-40 rounded-lg shadow-lg py-1 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border-none ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-50"}`,
+    link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline`,
+    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+ dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border`,
+    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
     dropdownItemDisabled: dark
       ? "opacity-50 cursor-not-allowed"
       : "opacity-50 cursor-not-allowed",
   },
   pill: {
     list: "flex flex-wrap items-center gap-2",
-    item: `flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all border cursor-pointer bg-transparent ${dark ? "text-gray-400 hover:text-gray-200 bg-gray-800 hover:bg-gray-700 border-gray-700" : "text-gray-600 hover:text-gray-900 bg-white hover:bg-gray-50 border-gray-200 hover:shadow-sm"}`,
-    itemActive: `flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full border-none cursor-default shadow-md ${dark ? "text-white bg-linear-to-r from-indigo-600 to-purple-600" : "text-white bg-linear-to-r from-indigo-500 to-purple-500"}`,
-    separator: dark ? "text-gray-600" : "text-gray-300",
-    ellipsisButton: `flex items-center justify-center w-10 h-10 rounded-full border transition-all cursor-pointer ${dark ? "bg-gray-800 hover:bg-gray-700 text-gray-400 border-gray-700" : "bg-white hover:bg-gray-50 text-gray-500 border-gray-200 hover:shadow-sm"}`,
-    dropdown: `min-w-40 rounded-xl shadow-lg py-2 ${dark ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"}`,
-    dropdownItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent border-none ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-50"}`,
+ item: `flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all cursor-pointer bg-transparent text-cl-text-secondary hover:text-cl-text bg-white hover:bg-cl-bg-hover border border-cl-border hover:shadow-sm dark:text-cl-text-tertiary dark:hover:text-cl-text dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+    itemActive: `flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full border border-none cursor-default shadow-md bg-cl-text text-cl-bg dark:bg-cl-text dark:text-cl-bg`,
+    separator: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
+ ellipsisButton: `flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-white hover:bg-cl-bg-hover text-cl-text-tertiary border border-cl-border hover:shadow-sm dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary dark:border dark:border-cl-border`,
+ dropdown: `flex flex-col min-w-40 rounded-cl-lg shadow-lg py-2 bg-cl-bg-elevated border border-cl-border`,
+    dropdownItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
   },
   colored: {
-    root: `p-4 rounded-lg ${dark ? "bg-blue-950" : "bg-blue-50"}`,
+    root: `p-4 rounded-cl-md bg-cl-accent/10 dark:bg-cl-accent/20`,
     list: "flex flex-wrap items-center gap-1",
-    item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border-none ${dark ? "text-blue-300 hover:text-blue-200 hover:bg-blue-900" : "text-blue-600 hover:text-blue-800 hover:bg-blue-100"}`,
-    itemActive: `flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full border-none cursor-default ${dark ? "text-white bg-blue-600" : "text-white bg-blue-600"}`,
-    separator: dark ? "text-blue-700" : "text-blue-300",
+    item: `flex items-center gap-1 px-3 py-1.5 text-sm rounded-full transition-colors cursor-pointer bg-transparent border border-none text-cl-accent hover:text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:text-cl-accent dark:hover:bg-cl-accent/20`,
+    itemActive: `flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-full border border-none cursor-default text-white bg-cl-accent dark:text-white dark:bg-cl-accent`,
+    separator: dark ? "text-cl-accent" : "text-cl-accent",
     icon: "shrink-0",
-    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer ${dark ? "bg-blue-900 hover:bg-blue-800 text-blue-300" : "bg-blue-100 hover:bg-blue-200 text-blue-600"}`,
-    dropdown: `min-w-40 rounded-lg shadow-lg py-1 ${dark ? "bg-gray-800 border border-blue-800" : "bg-white border border-blue-200"}`,
-    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border-none ${dark ? "text-blue-300 hover:bg-blue-900" : "text-blue-700 hover:bg-blue-50"}`,
+    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:hover:bg-cl-accent/20 dark:text-cl-accent`,
+ dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-white border border-cl-border-input-focus dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus`,
+    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/20`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -191,42 +192,11 @@ const BreadcrumbDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Breadcrumb
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A navigation component that shows the user&apos;s current location
-            in a hierarchical structure. Supports truncation with an accessible
-            ellipsis dropdown, icons, tooltips, links, disabled items, custom
-            separators, and full keyboard navigation.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Breadcrumb"
+        description="A navigation component that shows the user&apos;s current location in a hierarchical structure. Supports truncation with an accessible ellipsis dropdown, icons, tooltips, links, disabled items, custom separators, and full keyboard navigation."
+        code={`import { Breadcrumb } from "@chumlab/ui/breadcrumb";`}
+      />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -376,7 +346,7 @@ const BreadcrumbDemo = () => {
                   <span className="flex items-center gap-1.5">
                     Status{" "}
                     <span
-                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ${dark ? "bg-green-900 text-green-300" : "bg-green-100 text-green-700"}`}
+                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-success/15 text-cl-success dark:bg-cl-success/20 dark:text-cl-success`}
                     >
                       Active
                     </span>
@@ -390,7 +360,7 @@ const BreadcrumbDemo = () => {
                   <span className="flex items-center gap-1.5">
                     Details{" "}
                     <span
-                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ${dark ? "bg-blue-900 text-blue-300" : "bg-blue-100 text-blue-700"}`}
+                      className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent`}
                     >
                       New
                     </span>
@@ -448,7 +418,7 @@ const BreadcrumbDemo = () => {
         </DemoWrapper>
         {clickedItem && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             Clicked: {clickedItem}
           </p>
@@ -597,7 +567,7 @@ const BreadcrumbDemo = () => {
               <Breadcrumb
                 items={basicItems}
                 separator={
-                  <span className={dark ? "text-gray-600" : "text-gray-400"}>
+                  <span className={dark ? "text-cl-text-secondary" : "text-cl-text-tertiary"}>
                     /
                   </span>
                 }
@@ -748,27 +718,6 @@ const BreadcrumbDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build your own styles from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <Breadcrumb
-            items={basicItems}
-            unstyled
-            onItemClick={handleItemClick}
-            classes={{
-              list: "flex flex-wrap items-center gap-1",
-              item: `px-2 py-1 text-sm rounded cursor-pointer transition-colors ${dark ? "text-gray-300 hover:text-white hover:bg-gray-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`,
-              itemActive: `px-2 py-1 text-sm font-semibold ${dark ? "text-white" : "text-gray-900"}`,
-              separator: `mx-1 ${dark ? "text-gray-600" : "text-gray-300"}`,
-            }}
-          />
-        </DemoWrapper>
-      </Section>
-
       {/* ─── Dropdown Open Change ───────────────────────────────────────── */}
       <Section
         title="onDropdownOpenChange"
@@ -794,7 +743,7 @@ const BreadcrumbDemo = () => {
         </DemoWrapper>
         {clickedItem && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             {clickedItem}
           </p>
@@ -1173,7 +1122,7 @@ const BreadcrumbDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               "Semantic <nav> element with aria-label for landmark navigation",
@@ -1190,7 +1139,7 @@ const BreadcrumbDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1201,12 +1150,12 @@ const BreadcrumbDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Navigate between items and ellipsis button"],

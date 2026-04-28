@@ -3,15 +3,15 @@ import { isBrowser } from "../../../utils/isBrowser";
 
 export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",
-  item: "border-b border-gray-200 dark:border-gray-700 last:border-b-0",
+  item: "border-b border-cl-border dark:border-cl-border last:border-b-0",
   trigger:
-    "flex w-full items-center justify-between text-left font-medium transition-colors text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800 disabled:cursor-not-allowed disabled:opacity-50",
+    "flex w-full items-center justify-between text-left font-medium transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg disabled:cursor-not-allowed disabled:opacity-50",
   triggerInner: "flex-1 text-left",
-  content: "text-gray-600 dark:text-gray-300",
+  content: "text-cl-text-secondary dark:text-cl-text-secondary",
   contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
-  icon: "shrink-0 text-gray-500 dark:text-gray-400 transition-transform duration-200",
+  icon: "shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary transition-transform duration-200",
   iconWrapper: "shrink-0",
-  subtitle: "text-gray-500 dark:text-gray-400 font-normal mt-0.5",
+  subtitle: "text-cl-text-tertiary dark:text-cl-text-tertiary font-normal mt-0.5",
   triggerLeft: "mr-2 shrink-0",
   triggerRight: "ml-2 shrink-0",
   contentInner: "",
@@ -69,23 +69,23 @@ export const SIZE_CLASSES: Record<AccordionSize, { trigger: string; content: str
 export const VARIANT_CLASSES: Record<AccordionVariant, { root: string; item: string; trigger: string }> = {
   default: {
     root: "",
-    item: "border-b border-gray-200 dark:border-gray-700 last:border-b-0",
-    trigger: "hover:bg-gray-50 dark:hover:bg-gray-700",
+    item: "border-b border-cl-border dark:border-cl-border last:border-b-0",
+    trigger: "hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   },
   bordered: {
-    root: "border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden",
-    item: "border-b border-gray-200 dark:border-gray-700 last:border-b-0",
-    trigger: "hover:bg-gray-50 dark:hover:bg-gray-700",
+    root: "border border-cl-border dark:border-cl-border rounded-cl-md overflow-hidden",
+    item: "border-b border-cl-border dark:border-cl-border last:border-b-0",
+    trigger: "hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   },
   separated: {
     root: "space-y-2",
-    item: "border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden",
-    trigger: "hover:bg-gray-50 dark:hover:bg-gray-700",
+    item: "border border-cl-border dark:border-cl-border rounded-cl-md overflow-hidden",
+    trigger: "hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   },
   flush: {
     root: "",
     item: "",
-    trigger: "hover:bg-transparent hover:text-blue-600 dark:hover:text-blue-400",
+    trigger: "hover:bg-transparent hover:text-cl-accent dark:hover:text-cl-accent",
   },
 };
 

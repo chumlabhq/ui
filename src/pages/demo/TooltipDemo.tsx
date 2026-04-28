@@ -3,6 +3,7 @@ import { Tooltip } from "../../components/Tooltip";
 import { Button } from "../../components/Button";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -14,18 +15,14 @@ import {
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  trigger: `cursor-pointer px-4 py-2 rounded-lg font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 ${
-    dark
-      ? "bg-gray-700 text-gray-200 hover:bg-gray-600 focus-visible:ring-gray-400 focus-visible:ring-offset-gray-900"
-      : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200 focus-visible:ring-gray-500"
-  }`,
+const getClasses = (_dark: boolean) => ({
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+ trigger: `cursor-pointer px-4 py-2 rounded-cl-md font-medium text-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover border border-cl-border focus-visible:ring-border-active dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:bg-cl-text/10 dark:focus-visible:ring-border-active dark:focus-visible:ring-offset-cl-bg`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -36,11 +33,11 @@ const TooltipDemo = () => {
 
   const [controlled, setControlled] = useState(false);
 
-  const contentClassNameDark = "rounded-lg bg-gray-900 shadow-xl px-3 py-2 text-sm text-white";
-  const contentClassNameSuccess = "rounded-lg bg-green-600 shadow-lg px-3 py-2 text-sm text-white font-medium";
-  const contentClassNameWarning = "rounded-lg bg-amber-500 shadow-lg px-3 py-2 text-sm text-white font-medium";
-  const contentClassNameError = "rounded-lg bg-red-600 shadow-lg px-3 py-2 text-sm text-white font-medium";
-  const contentClassNameGradient = "rounded-lg shadow-xl px-4 py-2.5 text-sm text-white font-medium";
+  const contentClassNameDark = "rounded-cl-md bg-cl-bg shadow-xl px-3 py-2 text-sm text-white";
+  const contentClassNameSuccess = "rounded-cl-md bg-cl-success shadow-lg px-3 py-2 text-sm text-white font-medium";
+  const contentClassNameWarning = "rounded-cl-md bg-cl-warning shadow-lg px-3 py-2 text-sm text-white font-medium";
+  const contentClassNameError = "rounded-cl-md bg-cl-error shadow-lg px-3 py-2 text-sm text-white font-medium";
+  const contentClassNameGradient = "rounded-cl-md shadow-xl px-4 py-2.5 text-sm text-white font-medium";
 
   const gradientPurple = { background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" };
   const gradientGreen = { background: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)" };
@@ -54,10 +51,10 @@ const TooltipDemo = () => {
 
   const richContentProTip = (
     <div className="space-y-2">
-      <div className={`font-semibold ${dark ? "text-white" : "text-gray-900"}`}>Pro Tip</div>
-      <p className={dark ? "text-gray-300" : "text-gray-600"}>
+      <div className={`font-semibold text-cl-text`}>Pro Tip</div>
+      <p className={dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}>
         Tooltips can contain <strong>rich HTML</strong> content including{" "}
-        <span className={dark ? "text-blue-400" : "text-blue-600"}>colored text</span>,{" "}
+        <span className={dark ? "text-cl-accent" : "text-cl-accent"}>colored text</span>,{" "}
         <em>italics</em>, and more.
       </p>
     </div>
@@ -66,46 +63,20 @@ const TooltipDemo = () => {
   const richContentStatus = (
     <div className="space-y-1">
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-500"></span>
+        <span className="w-2 h-2 rounded-full bg-cl-success"></span>
         <span className="font-medium">Online</span>
       </div>
-      <p className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}>Last seen just now</p>
+      <p className={`text-xs text-cl-text-secondary`}>Last seen just now</p>
     </div>
   );
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Tooltip
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A flexible, accessible tooltip component that supports positioning,
-            custom styling, rich HTML content, and auto-truncation with tooltip
-            on overflow.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Tooltip } from "@chumlab/ui/tooltip";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Tooltip"
+        description="A flexible, accessible tooltip component that supports positioning, custom styling, rich HTML content, and auto-truncation with tooltip on overflow."
+        code={`import { Tooltip } from "@chumlab/ui/tooltip";`}
+      />
 
       {/* ─── Basic Tooltip ────────────────────────────────────────────── */}
       <Section
@@ -296,15 +267,15 @@ const TooltipDemo = () => {
         isDarkMode={dark}
       >
         <div
-          className={`mb-3 p-3 rounded-lg flex items-center gap-3 ${dark ? "bg-gray-800" : "bg-gray-50"}`}
+          className={`mb-3 p-3 rounded-cl-md flex items-center gap-3 bg-cl-bg-elevated`}
         >
           <span
-            className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-medium text-cl-text-secondary`}
           >
             State:
           </span>
           <span
-            className={`text-sm font-mono ${dark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-sm font-mono text-cl-text-secondary`}
           >
             {controlled ? "Open" : "Closed"}
           </span>
@@ -404,25 +375,25 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Tooltip
             content="Dark theme tooltip"
-            classes={{ content: contentClassNameDark, arrow: "fill-gray-900" }}
+            classes={{ content: contentClassNameDark, arrow: "fill-fg" }}
           >
             <button className={c.trigger}>Dark</button>
           </Tooltip>
           <Tooltip
             content="Success styled tooltip"
-            classes={{ content: contentClassNameSuccess, arrow: "fill-green-600" }}
+            classes={{ content: contentClassNameSuccess, arrow: "fill-cl-success" }}
           >
             <button className={c.trigger}>Success</button>
           </Tooltip>
           <Tooltip
             content="Warning styled tooltip"
-            classes={{ content: contentClassNameWarning, arrow: "fill-amber-500" }}
+            classes={{ content: contentClassNameWarning, arrow: "fill-cl-warning" }}
           >
             <button className={c.trigger}>Warning</button>
           </Tooltip>
           <Tooltip
             content="Error styled tooltip"
-            classes={{ content: contentClassNameError, arrow: "fill-red-600" }}
+            classes={{ content: contentClassNameError, arrow: "fill-cl-error" }}
           >
             <button className={c.trigger}>Error</button>
           </Tooltip>
@@ -531,28 +502,21 @@ const TooltipDemo = () => {
           <Tooltip
             content="Indigo arrow"
             arrowColor={dark ? "#818cf8" : "#4f46e5"}
-            classes={{ content: `rounded-lg px-3 py-2 text-sm text-white ${dark ? "bg-indigo-500" : "bg-indigo-600"}` }}
+            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-white bg-cl-accent dark:bg-cl-accent` }}
           >
             <button className={c.trigger}>Indigo</button>
           </Tooltip>
           <Tooltip
             content="Emerald arrow"
             arrowColor={dark ? "#34d399" : "#059669"}
-            classes={{ content: `rounded-lg px-3 py-2 text-sm text-white ${dark ? "bg-emerald-500" : "bg-emerald-600"}` }}
+            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-cl-bg bg-cl-success dark:bg-cl-success` }}
           >
             <button className={c.trigger}>Emerald</button>
           </Tooltip>
           <Tooltip
-            content="Amber arrow"
-            arrowColor={dark ? "#fbbf24" : "#d97706"}
-            classes={{ content: `rounded-lg px-3 py-2 text-sm ${dark ? "bg-amber-500 text-amber-950" : "bg-amber-500 text-amber-950"}` }}
-          >
-            <button className={c.trigger}>Amber</button>
-          </Tooltip>
-          <Tooltip
             content="Rose arrow"
             arrowColor={dark ? "#fb7185" : "#e11d48"}
-            classes={{ content: `rounded-lg px-3 py-2 text-sm text-white ${dark ? "bg-rose-500" : "bg-rose-600"}` }}
+            classes={{ content: `rounded-cl-md px-3 py-2 text-sm text-white bg-cl-accent dark:bg-cl-accent` }}
           >
             <button className={c.trigger}>Rose</button>
           </Tooltip>
@@ -592,29 +556,29 @@ const TooltipDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-4 w-full">
-            <div className={`p-4 rounded-xl border ${dark ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-              <p className={`text-sm mb-3 ${dark ? "text-gray-400" : "text-gray-500"}`}>
+ <div className={`p-4 rounded-cl-lg bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`}>
+              <p className={`text-sm mb-3 text-cl-text-secondary`}>
                 Tooltip only appears when text is truncated:
               </p>
-              <div className={`w-full max-w-[220px] p-3 rounded-lg shadow-sm border ${dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
+ <div className={`w-full max-w-[220px] p-3 rounded-cl-md shadow-sm bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`}>
                 <Tooltip
                   truncate
                   truncateWidth={196}
-                  classes={{ trigger: `text-sm font-medium ${dark ? "text-white" : "text-gray-900"}` }}
+                  classes={{ trigger: `text-sm font-medium text-cl-text` }}
                 >
                   This is a very long text that will be truncated and show tooltip on hover
                 </Tooltip>
               </div>
             </div>
-            <div className={`p-4 rounded-xl border ${dark ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
-              <p className={`text-sm mb-3 ${dark ? "text-gray-400" : "text-gray-500"}`}>
+ <div className={`p-4 rounded-cl-lg bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`}>
+              <p className={`text-sm mb-3 text-cl-text-secondary`}>
                 Short text - no tooltip needed:
               </p>
-              <div className={`w-full max-w-[220px] p-3 rounded-lg shadow-sm border ${dark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"}`}>
+ <div className={`w-full max-w-[220px] p-3 rounded-cl-md shadow-sm bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`}>
                 <Tooltip
                   truncate
                   truncateWidth={196}
-                  classes={{ trigger: `text-sm font-medium ${dark ? "text-white" : "text-gray-900"}` }}
+                  classes={{ trigger: `text-sm font-medium text-cl-text` }}
                 >
                   Short text
                 </Tooltip>
@@ -631,71 +595,71 @@ const TooltipDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className={`w-full rounded-xl border overflow-hidden ${dark ? "border-gray-600" : "border-gray-200"}`}>
-            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
-              <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${dark ? "bg-gray-700 text-gray-400" : "bg-gray-50 text-gray-500"}`}>
+          <div className={`w-full rounded-cl-lg border overflow-hidden border-cl-border dark:border dark:border-cl-border`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px bg-cl-bg-elevated`}>
+              <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider bg-cl-bg-elevated text-cl-text-tertiary`}>
                 Title
               </div>
-              <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${dark ? "bg-gray-700 text-gray-400" : "bg-gray-50 text-gray-500"}`}>
+              <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider bg-cl-bg-elevated text-cl-text-tertiary`}>
                 Description
               </div>
-              <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${dark ? "bg-gray-700 text-gray-400" : "bg-gray-50 text-gray-500"}`}>
+              <div className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider bg-cl-bg-elevated text-cl-text-tertiary`}>
                 Author
               </div>
             </div>
-            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
-              <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px bg-cl-bg-elevated`}>
+              <div className={`px-4 py-3 bg-cl-bg-elevated`}>
                 <Tooltip
                   truncate
                   truncateWidth={150}
-                  classes={{ trigger: `text-sm font-medium cursor-pointer hover:underline ${dark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}` }}
+                  classes={{ trigger: `text-sm font-medium cursor-pointer hover:underline text-cl-accent hover:text-cl-text` }}
                 >
                   Short Title
                 </Tooltip>
               </div>
-              <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
+              <div className={`px-4 py-3 bg-cl-bg-elevated`}>
                 <Tooltip
                   truncate
                   truncateWidth={150}
-                  classes={{ trigger: `text-sm ${dark ? "text-gray-300" : "text-gray-600"}` }}
+                  classes={{ trigger: `text-sm text-cl-text-secondary` }}
                 >
                   Brief description
                 </Tooltip>
               </div>
-              <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
+              <div className={`px-4 py-3 bg-cl-bg-elevated`}>
                 <Tooltip
                   truncate
                   truncateWidth={150}
-                  classes={{ trigger: `text-sm ${dark ? "text-gray-300" : "text-gray-600"}` }}
+                  classes={{ trigger: `text-sm text-cl-text-secondary` }}
                 >
                   John Doe
                 </Tooltip>
               </div>
             </div>
-            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px ${dark ? "bg-gray-600" : "bg-gray-200"}`}>
-              <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-px bg-cl-bg-elevated`}>
+              <div className={`px-4 py-3 bg-cl-bg-elevated`}>
                 <Tooltip
                   truncate
                   truncateWidth={150}
-                  classes={{ trigger: `text-sm font-medium cursor-pointer hover:underline ${dark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"}` }}
+                  classes={{ trigger: `text-sm font-medium cursor-pointer hover:underline text-cl-accent hover:text-cl-text` }}
                 >
                   This is a very long title that should truncate nicely
                 </Tooltip>
               </div>
-              <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
+              <div className={`px-4 py-3 bg-cl-bg-elevated`}>
                 <Tooltip
                   truncate
                   truncateWidth={150}
-                  classes={{ trigger: `text-sm ${dark ? "text-gray-300" : "text-gray-600"}` }}
+                  classes={{ trigger: `text-sm text-cl-text-secondary` }}
                 >
                   A much longer description that definitely won't fit in the cell
                 </Tooltip>
               </div>
-              <div className={`px-4 py-3 ${dark ? "bg-gray-800" : "bg-white"}`}>
+              <div className={`px-4 py-3 bg-cl-bg-elevated`}>
                 <Tooltip
                   truncate
                   truncateWidth={150}
-                  classes={{ trigger: `text-sm ${dark ? "text-gray-300" : "text-gray-600"}` }}
+                  classes={{ trigger: `text-sm text-cl-text-secondary` }}
                 >
                   Alexander Christopher Williams III
                 </Tooltip>
@@ -731,11 +695,11 @@ const TooltipDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="space-y-4">
             <Tooltip content="This trigger is display: block" triggerDisplay="block">
-              <div className={`w-full px-4 py-3 rounded text-sm text-center ${dark ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"}`}>
+              <div className={`w-full px-4 py-3 rounded text-sm text-center bg-cl-bg-hover text-cl-text dark:bg-cl-bg-elevated dark:text-cl-bg`}>
                 Block display — stretches full width
               </div>
             </Tooltip>
-            <p className={`text-sm ${dark ? "text-gray-300" : "text-gray-700"}`}>
+            <p className={`text-sm text-cl-text-secondary`}>
               Hover over this{" "}
               <Tooltip content="Inline tooltip" triggerDisplay="inline">
                 <span className="underline decoration-dotted cursor-help font-medium">inline text</span>
@@ -1038,7 +1002,7 @@ const TooltipDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Tooltip has role="tooltip" for proper semantics',
@@ -1054,7 +1018,7 @@ const TooltipDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1065,12 +1029,12 @@ const TooltipDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Focus trigger element to show tooltip"],
@@ -1124,7 +1088,7 @@ const TooltipDemo = () => {
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               "aria-describedby on the trigger references the tooltip content",
               "role=\"tooltip\" on the tooltip element",
@@ -1134,15 +1098,15 @@ const TooltipDemo = () => {
               "disableHoverableContent prevents tooltip from staying open on content hover",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               ["Tab", "Trigger tooltip via focus"],
               ["Escape", "Dismiss the tooltip"],

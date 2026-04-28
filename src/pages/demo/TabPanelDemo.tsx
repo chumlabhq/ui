@@ -3,6 +3,7 @@ import { TabPanel } from "../../components/TabPanel";
 import type { Tab } from "../../components/TabPanel";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -211,66 +212,69 @@ const getClasses = (dark: boolean) => ({
   tabs: {
     underline: {
       root: "w-full",
-      tabList: `flex items-center gap-6 border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
+      tabList: `flex items-center gap-6 border-b border-cl-border`,
       tab: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-      tabActive: dark ? "text-blue-400" : "text-blue-600",
+      tabActive: dark ? "text-cl-accent" : "text-cl-accent",
       tabInactive: dark
-        ? "text-gray-400 hover:text-gray-200"
-        : "text-gray-500 hover:text-gray-700",
-      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
-      indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${dark ? "bg-blue-400" : "bg-blue-600"}`,
+        ? "text-cl-text-tertiary hover:text-cl-text"
+        : "text-cl-text-tertiary hover:text-cl-text",
+      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
+      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
       panel: "p-4",
     },
     pill: {
       root: "w-full",
-      tabList: `inline-flex items-center gap-1 p-1 rounded-lg ${dark ? "bg-gray-800" : "bg-gray-100"}`,
-      tab: "px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
+      // Track uses a subtle wash (instead of bg-cl-bg-elevated) so the
+      // active pill — which now uses bg-cl-bg-elevated in dark — has a
+      // distinct surface to stand out against.
+      tabList: `inline-flex items-center gap-1 p-1 rounded-cl-md bg-black/[0.04] dark:bg-white/[0.06]`,
+      tab: "px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
       tabActive: dark
-        ? "bg-gray-700 text-white shadow-sm"
-        : "bg-white text-gray-900 shadow-sm",
+        ? "bg-cl-bg-elevated text-white shadow-sm"
+        : "bg-white text-cl-text shadow-sm",
       tabInactive: dark
-        ? "text-gray-400 hover:text-gray-200"
-        : "text-gray-600 hover:text-gray-900",
-      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
+        ? "text-cl-text-tertiary hover:text-cl-text"
+        : "text-cl-text-secondary hover:text-cl-text",
+      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
       panel: "p-4 mt-2",
     },
     icon: {
       root: "w-full",
-      tabList: `flex items-center gap-1 border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
+      tabList: `flex items-center gap-1 border-b border-cl-border`,
       tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-      tabActive: dark ? "text-blue-400" : "text-blue-600",
+      tabActive: dark ? "text-cl-accent" : "text-cl-accent",
       tabInactive: dark
-        ? "text-gray-400 hover:text-gray-200"
-        : "text-gray-500 hover:text-gray-700",
+        ? "text-cl-text-tertiary hover:text-cl-text"
+        : "text-cl-text-tertiary hover:text-cl-text",
       tabDisabled: dark
-        ? "opacity-40 cursor-not-allowed hover:text-gray-400"
-        : "opacity-40 cursor-not-allowed hover:text-gray-500",
-      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 ${dark ? "focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
-      iconActive: dark ? "text-blue-400" : "text-blue-600",
-      iconInactive: dark ? "text-gray-500" : "text-gray-400",
+        ? "opacity-40 cursor-not-allowed hover:text-cl-text-tertiary"
+        : "opacity-40 cursor-not-allowed hover:text-cl-text-tertiary",
+      tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
+      iconActive: dark ? "text-cl-accent" : "text-cl-accent",
+      iconInactive: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
       count: "px-2 py-0.5 text-xs font-semibold rounded-full",
       countActive: dark
-        ? "bg-blue-900 text-blue-300"
-        : "bg-blue-100 text-blue-600",
+        ? "bg-cl-accent/20 text-cl-accent"
+        : "bg-cl-accent/10 text-cl-accent",
       countInactive: dark
-        ? "bg-gray-700 text-gray-400"
-        : "bg-gray-100 text-gray-500",
-      indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${dark ? "bg-blue-400" : "bg-blue-600"}`,
+        ? "bg-cl-bg-elevated text-cl-text-tertiary"
+        : "bg-cl-bg-hover text-cl-text-tertiary",
+      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
       panel: "p-4",
     },
   },
-  content: `text-sm leading-relaxed ${dark ? "text-gray-400" : "text-gray-500"}`,
-  contentStrong: `font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-  contentTitle: `text-base font-semibold mb-1 ${dark ? "text-white" : "text-gray-900"}`,
-  contentCard: `rounded-lg p-4 ${dark ? "bg-white/[0.02] border border-white/[0.04]" : "bg-gray-50 border border-gray-100"}`,
-  stat: `text-2xl font-bold ${dark ? "text-white" : "text-gray-900"}`,
-  statLabel: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
+  content: `text-sm leading-relaxed text-cl-text-secondary`,
+  contentStrong: `font-medium text-cl-text`,
+  contentTitle: `text-base font-semibold mb-1 text-cl-text`,
+  contentCard: `rounded-cl-md p-4 bg-cl-bg-hover border border-cl-border dark:bg-cl-text/[0.02] dark:border dark:border-cl-text/[0.04]`,
+  stat: `text-2xl font-bold text-cl-text`,
+  statLabel: `text-xs text-cl-text-tertiary`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -330,41 +334,11 @@ const TabPanelDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Tab Panel
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A tabbed interface component with full keyboard navigation, RTL
-            support, accessibility, roving tabindex, and extensive styling
-            customization. Supports icons as ReactNode, count badges, tooltips,
-            vertical orientation, manual activation, dynamic tabs with automatic
-            fallback, and both controlled and uncontrolled modes.
-          </p>
-          <div className="mt-5">
-            <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
-            >
-              <code>{`import { TabPanel } from "@chumlab/ui/tab-panel";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Tab Panel"
+        description="A tabbed interface component with full keyboard navigation, RTL support, accessibility, roving tabindex, and extensive styling customization. Supports icons as ReactNode, count badges, tooltips, vertical orientation, manual activation, dynamic tabs with automatic fallback, and both controlled and uncontrolled modes."
+        code={`import { TabPanel } from "@chumlab/ui/tab-panel";`}
+      />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -472,16 +446,16 @@ const TabPanelDemo = () => {
             onValueChange={setBoxedTab}
             classes={{
               root: "w-full",
-              tabList: `flex items-center border-b ${dark ? "border-gray-700" : "border-gray-200"}`,
+              tabList: `flex items-center border-b border-cl-border`,
               tab: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
               tabActive: dark
-                ? "bg-gray-800 text-blue-400 border-gray-700 border-b-gray-800 rounded-t-lg"
-                : "bg-white text-blue-600 border-gray-200 border-b-white rounded-t-lg",
+                ? "bg-cl-bg-elevated text-cl-accent border-cl-border border-b-gray-800 rounded-t-lg"
+                : "bg-white text-cl-accent border-cl-border border-b-white rounded-t-lg",
               tabInactive: dark
-                ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+                ? "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-elevated"
+                : "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover",
               tabFocus: c.tabs.underline.tabFocus,
-              panel: `p-4 border border-t-0 rounded-b-lg ${dark ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"}`,
+ panel: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-white dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
             }}
           >
             <div className={c.content}>
@@ -522,7 +496,7 @@ const TabPanelDemo = () => {
                       <div className={c.statLabel}>{label}</div>
                       <div className={c.stat}>{value}</div>
                       <div
-                        className={`text-xs font-medium ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                        className={`text-xs font-medium text-cl-success`}
                       >
                         {change}
                       </div>
@@ -559,7 +533,7 @@ const TabPanelDemo = () => {
             iconPosition="right"
             classes={{
               ...c.tabs.pill,
-              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
+              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
               iconActive: c.tabs.icon.iconActive,
               iconInactive: c.tabs.icon.iconInactive,
             }}
@@ -733,7 +707,7 @@ const TabPanelDemo = () => {
             <div className={c.content}>
               All tabs are disabled via the top-level{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 disabled
               </code>{" "}
@@ -755,19 +729,19 @@ const TabPanelDemo = () => {
             value={gradientTab}
             onValueChange={setGradientTab}
             classes={{
-              root: `w-full rounded-xl p-3 ${dark ? "bg-linear-to-r from-purple-950 to-pink-950" : "bg-linear-to-r from-purple-50 to-pink-50"}`,
-              tabList: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-xl ${dark ? "bg-gray-800/60" : "bg-white/60"}`,
-              tab: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-lg",
-              tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-purple-500 ${dark ? "focus-visible:ring-offset-gray-900" : ""}`,
+              root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20`,
+              tabList: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
+              tab: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
               tabActive: dark
-                ? "bg-gray-800 text-purple-300 shadow-md"
-                : "bg-white text-purple-600 shadow-md",
+                ? "bg-cl-bg-elevated text-cl-accent shadow-md"
+                : "bg-white text-cl-accent shadow-md",
               tabInactive: dark
-                ? "text-gray-400 hover:text-purple-300 hover:bg-gray-800/50"
-                : "text-gray-500 hover:text-purple-500 hover:bg-white/50",
-              iconActive: dark ? "text-purple-300" : "text-purple-600",
-              iconInactive: dark ? "text-gray-500" : "text-gray-400",
-              panel: `p-4 mt-3 rounded-xl shadow-sm ${dark ? "bg-gray-800" : "bg-white"}`,
+                ? "text-cl-text-tertiary hover:text-cl-accent hover:bg-cl-bg-elevated/50"
+                : "text-cl-text-tertiary hover:text-cl-accent hover:bg-cl-text/50",
+              iconActive: dark ? "text-cl-accent" : "text-cl-accent",
+              iconInactive: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+              panel: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
             }}
           >
             <div className={c.content}>
@@ -796,10 +770,10 @@ const TabPanelDemo = () => {
                 onValueChange={setCustomFocusTab}
                 classes={{
                   ...c.tabs.icon,
-                  tabActive: dark ? "text-green-400" : "text-green-600",
-                  tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 focus-visible:ring-dashed ${dark ? "focus-visible:ring-offset-gray-800" : ""}`,
-                  iconActive: dark ? "text-green-400" : "text-green-600",
-                  indicator: `absolute bottom-0 left-0 right-0 h-0.5 ${dark ? "bg-green-400" : "bg-green-600"}`,
+                  tabActive: dark ? "text-cl-success" : "text-cl-success",
+                  tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-success focus-visible:ring-offset-2 focus-visible:ring-dashed dark:focus-visible:ring-offset-cl-bg-elevated`,
+                  iconActive: dark ? "text-cl-success" : "text-cl-success",
+                  indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-success dark:bg-cl-success/30`,
                 }}
               >
                 <div className={c.content}>Custom green dashed focus ring</div>
@@ -861,11 +835,11 @@ const TabPanelDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div dir="rtl" className="w-full">
             <div
-              className={`mb-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`mb-3 text-sm text-cl-text-secondary`}
             >
               This section has{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 dir=&quot;rtl&quot;
               </code>{" "}
@@ -908,7 +882,7 @@ const TabPanelDemo = () => {
                 </span>
               </button>
               <span
-                className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm text-cl-text-secondary`}
               >
                 {dynamicTabs.length} tab{dynamicTabs.length !== 1 && "s"}
               </span>
@@ -929,7 +903,7 @@ const TabPanelDemo = () => {
                     <button
                       type="button"
                       onClick={() => removeDynamicTab(tab.id)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${dark ? "bg-red-900/50 hover:bg-red-800/60 text-red-300" : "bg-red-50 hover:bg-red-100 text-red-600"}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors bg-cl-error/15 hover:bg-cl-error/25 text-cl-error border border-cl-error/30 cursor-pointer"
                     >
                       <TrashIcon className="w-4 h-4" />
                       Remove this tab
@@ -939,7 +913,7 @@ const TabPanelDemo = () => {
               </TabPanel>
             ) : (
               <div
-                className={`p-8 text-center rounded-lg border-2 border-dashed ${dark ? "border-gray-700 text-gray-500" : "border-gray-200 text-gray-400"}`}
+                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-tertiary dark:border dark:border-cl-border dark:text-cl-text-tertiary`}
               >
                 No tabs. Click &quot;Add Tab&quot; to create one.
               </div>
@@ -985,14 +959,14 @@ const TabPanelDemo = () => {
             orientation="vertical"
             classes={{
               root: "flex gap-0 w-full",
-              tabList: `flex flex-col gap-1 pr-0 min-w-[160px] border-r ${dark ? "border-gray-700" : "border-gray-200"}`,
+              tabList: `flex flex-col gap-1 pr-0 min-w-[160px] border-r border-cl-border`,
               tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
               tabActive: dark
-                ? "text-blue-400 bg-blue-900/30"
-                : "text-blue-600 bg-blue-50",
+                ? "text-cl-accent bg-cl-accent/30"
+                : "text-cl-accent bg-cl-accent/10",
               tabInactive: dark
-                ? "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+                ? "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-elevated"
+                : "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover",
               tabFocus: c.tabs.underline.tabFocus,
               iconActive: c.tabs.icon.iconActive,
               iconInactive: c.tabs.icon.iconInactive,
@@ -1064,8 +1038,8 @@ const TabPanelDemo = () => {
             onValueChange={setRenderFnTab}
             classes={{
               ...c.tabs.pill,
-              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
-              iconActive: dark ? "text-white" : "text-gray-900",
+              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              iconActive: dark ? "text-cl-text" : "text-cl-text",
               iconInactive: c.tabs.icon.iconInactive,
             }}
           >
@@ -1074,7 +1048,7 @@ const TabPanelDemo = () => {
                 <strong className={c.contentStrong}>{tab.label}</strong> &mdash;
                 rendered via{" "}
                 <code
-                  className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                  className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
                 >
                   children(tab)
                 </code>
@@ -1097,8 +1071,8 @@ const TabPanelDemo = () => {
             onValueChange={setRenderTabTab}
             classes={{
               ...c.tabs.pill,
-              tab: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-md",
-              iconActive: dark ? "text-white" : "text-gray-900",
+              tab: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              iconActive: dark ? "text-cl-text" : "text-cl-text",
               iconInactive: c.tabs.icon.iconInactive,
             }}
             renderTab={(props, defaultElement) => (
@@ -1106,7 +1080,7 @@ const TabPanelDemo = () => {
                 {defaultElement}
                 {props.tab.count != null && props.tab.count > 0 && (
                   <span
-                    className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-[10px] flex items-center justify-center ${dark ? "bg-red-400" : "bg-red-500"}`}
+                    className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error dark:bg-cl-error/30`}
                   >
                     {props.tab.count}
                   </span>
@@ -1161,13 +1135,13 @@ const TabPanelDemo = () => {
             <div className={c.content}>
               Tab IDs are{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 my-tabs-tab-home
               </code>
               ,{" "}
               <code
-                className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
               >
                 my-tabs-panel-home
               </code>
@@ -1178,13 +1152,13 @@ const TabPanelDemo = () => {
         <div className={c.note}>
           <strong>Note:</strong> The ID is auto-generated via{" "}
           <code
-            className={`px-1 py-0.5 border rounded text-xs font-mono ${dark ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}
+            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border dark:text-cl-text-secondary`}
           >
             useId()
           </code>{" "}
           if not provided. Use the{" "}
           <code
-            className={`px-1 py-0.5 border rounded text-xs font-mono ${dark ? "bg-gray-800/80 border-gray-600 text-gray-300" : "bg-white border-gray-300 text-gray-700"}`}
+            className={`px-1 py-0.5 border rounded text-xs font-mono bg-white border-cl-border-input text-cl-text dark:bg-cl-bg-elevated/80 dark:border dark:border-cl-border dark:text-cl-text-secondary`}
           >
             id
           </code>{" "}
@@ -1209,7 +1183,7 @@ const TabPanelDemo = () => {
               <div className={c.content}>
                 The tablist has{" "}
                 <code
-                  className={`px-1 rounded text-xs font-mono ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                  className={`px-1 rounded text-xs font-mono bg-cl-bg-elevated text-cl-text-secondary`}
                 >
                   aria-label=&quot;Main navigation tabs&quot;
                 </code>{" "}
@@ -1660,7 +1634,7 @@ const TabPanelDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Implements WAI-ARIA role="tablist", role="tab", and role="tabpanel" semantics',
@@ -1679,7 +1653,7 @@ const TabPanelDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1690,12 +1664,12 @@ const TabPanelDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus into/out of the tablist"],

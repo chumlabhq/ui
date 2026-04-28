@@ -3,6 +3,7 @@ import { TimePicker } from "../../components/TimePicker";
 import type { TimePickerClasses } from "../../components/TimePicker";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   DemoLabel,
@@ -16,233 +17,203 @@ import {
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
 const getClasses = (dark: boolean) => ({
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary:
-    "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
-  text: dark ? "text-gray-300" : "text-gray-600",
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
+  text: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
   timepicker: {
-    root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
-    label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
+    root: `inline-flex flex-col gap-1 text-cl-text`,
+    label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
     wrapper: "relative",
-    trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
-      dark
-        ? "border-gray-600 bg-gray-800 hover:border-gray-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent"
-        : "border-gray-300 bg-white hover:border-gray-400 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent"
-    }`,
-    input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
-    endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-400"}`,
-    clearIcon: `shrink-0 cursor-pointer ${dark ? "text-gray-400 hover:text-gray-200" : "text-gray-400 hover:text-gray-600"}`,
-    dropdown: `border rounded-lg shadow-lg overflow-hidden ${
-      dark
-        ? "bg-gray-800 border-gray-700"
-        : "bg-white border-gray-200"
-    }`,
+ trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input bg-white hover:border-cl-border-input focus-within:ring-2 focus-within:ring-cl-accent focus-within:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:hover:border-cl-border dark:focus-within:ring-2 dark:focus-within:ring-cl-accent dark:focus-within:border-transparent`,
+    input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text`,
+    endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary`,
+    clearIcon: `shrink-0 w-4 h-4 cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary dark:text-cl-text-tertiary dark:hover:text-cl-text`,
+    dropdown: `border rounded-cl-md shadow-lg overflow-hidden bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     optionList: "max-h-60 overflow-y-auto",
-    option: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm ${
-      dark ? "text-gray-200 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-50"
-    }`,
-    optionSelected: dark ? "bg-blue-900/40 font-medium" : "bg-blue-50 font-medium",
-    optionFocused: dark ? "bg-gray-700" : "bg-gray-100",
-    selectedIcon: `w-4 h-4 shrink-0 ${dark ? "text-blue-400" : "text-blue-600"}`,
-    noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-500" : "text-gray-400"}`,
-    error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    clockContainer: `p-4 border rounded-xl shadow-lg ${
-      dark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-    }`,
+    option: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
+    optionSelected: dark ? "bg-cl-accent/50 font-medium" : "bg-cl-accent/10 font-medium",
+    optionFocused: dark ? "bg-white/10" : "bg-black/5",
+    selectedIcon: `w-4 h-4 shrink-0 text-cl-accent`,
+    noResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
+    error: `text-sm mt-1 text-cl-error`,
+ clockContainer: `p-4 rounded-cl-lg shadow-lg bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     clockDisplay: "flex items-center justify-center gap-1 mb-4",
-    clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${
-      dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
-    }`,
-    clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${
-      dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
-    }`,
-    clockDisplayActive: dark ? "bg-indigo-600 text-white hover:bg-indigo-600" : "bg-indigo-500 text-white hover:bg-indigo-500",
-    clockDisplaySeparator: `text-2xl font-semibold ${dark ? "text-gray-500" : "text-gray-400"}`,
-    clockFace: `relative w-52 h-52 mx-auto rounded-full ${dark ? "bg-gray-700" : "bg-gray-100"}`,
+    clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
+    clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
+    clockDisplayActive: dark ? "bg-cl-accent text-white hover:bg-cl-accent/90" : "bg-cl-accent text-white hover:bg-cl-accent/90",
+    clockDisplaySeparator: `text-2xl font-semibold text-cl-text-tertiary`,
+    clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated`,
     clockHand: "absolute inset-0",
-    clockHandLine: dark ? "stroke-indigo-400" : "stroke-indigo-500",
-    clockHandDot: `w-3 h-3 rounded-full ${dark ? "bg-indigo-400" : "bg-indigo-500"}`,
-    clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors ${
-      dark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"
-    }`,
-    clockNumberSelected: dark ? "text-white font-bold bg-indigo-500 rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-indigo-500 rounded-full w-8 h-8 flex items-center justify-center",
-    clockNumberInner: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-    clockNumberDisabled: `opacity-30 cursor-not-allowed ${dark ? "text-gray-600" : "text-gray-300"}`,
-    clockCenter: dark ? "fill-indigo-400" : "fill-indigo-500",
+    clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
+    clockHandDot: `w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/90`,
+    clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text dark:text-cl-text-secondary dark:hover:text-white`,
+    clockNumberSelected: dark ? "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
+    clockNumberInner: `text-xs text-cl-text-tertiary`,
+    clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
+    clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
     clockActions: "flex items-center justify-end gap-2 mt-4",
-    clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
-      dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
-    }`,
-    clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-indigo-500 text-white hover:bg-indigo-600",
+    clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
+    clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
     clockPeriodToggle: "flex flex-col gap-1 ml-3",
-    clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors ${
-      dark ? "text-gray-400 hover:bg-gray-700" : "text-gray-500 hover:bg-gray-100"
-    }`,
-    clockPeriodActive: dark ? "bg-indigo-600 text-white" : "bg-indigo-500 text-white",
+    clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-black/5 dark:text-cl-text-tertiary dark:hover:bg-white/10`,
+    clockPeriodActive: dark ? "bg-cl-accent text-white" : "bg-cl-accent text-white",
   } satisfies TimePickerClasses,
 });
 
 // ─── Theme variants (dropdown) ──────────────────────────────────────────────
 
 const darkTheme: TimePickerClasses = {
-  root: "inline-flex flex-col gap-1 text-gray-200",
-  label: "block text-sm font-medium mb-1 text-gray-300",
+  root: "inline-flex flex-col gap-1 text-cl-text",
+  label: "block text-sm font-medium mb-1 text-cl-text-secondary",
   wrapper: "relative",
-  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus-within:ring-2 focus-within:ring-gray-500 cursor-text",
-  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-500 text-gray-100",
-  endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
-  dropdown: "border rounded-lg shadow-lg overflow-hidden bg-gray-800 border-gray-700",
+ trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-cl-border rounded-cl-md bg-cl-bg-elevated text-white hover:bg-cl-bg-elevated focus-within:ring-2 focus-within:ring-border-active cursor-text",
+  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text",
+  endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
+  dropdown: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-elevated border-cl-border",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-gray-200 hover:bg-gray-700 transition-colors",
-  optionSelected: "bg-gray-600 font-medium",
-  optionFocused: "bg-gray-700",
-  selectedIcon: "w-4 h-4 shrink-0 text-blue-400",
-  noResults: "px-3 py-4 text-sm text-gray-400 text-center",
+  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-cl-bg-elevated transition-colors",
+  optionSelected: "bg-cl-text/10 font-medium",
+  optionFocused: "bg-cl-bg-elevated",
+  selectedIcon: "w-4 h-4 shrink-0 text-cl-accent",
+  noResults: "px-3 py-4 text-sm text-cl-text-tertiary text-center",
 };
 
 const warmTheme: TimePickerClasses = {
-  root: "inline-flex flex-col gap-1 text-amber-900",
+  root: "inline-flex flex-col gap-1 text-cl-warning",
   wrapper: "relative",
-  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-amber-300 rounded-lg bg-amber-50 text-amber-900 hover:bg-amber-100 focus-within:ring-2 focus-within:ring-amber-400 cursor-text",
-  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-amber-400 text-amber-900",
-  endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-amber-600",
-  dropdown: "border rounded-lg shadow-lg overflow-hidden bg-amber-50 border-amber-200",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-warning hover:bg-cl-warning/15 focus-within:ring-2 focus-within:ring-cl-warning cursor-text",
+  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-warning text-cl-warning",
+  endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-warning",
+  dropdown: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border-cl-warning",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-amber-900 hover:bg-amber-100 transition-colors",
-  optionSelected: "bg-amber-200 font-medium",
-  optionFocused: "bg-amber-100",
-  selectedIcon: "w-4 h-4 shrink-0 text-amber-700",
-  noResults: "px-3 py-4 text-sm text-amber-600 text-center",
+  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-warning hover:bg-cl-warning/15 transition-colors",
+  optionSelected: "bg-cl-warning/15 font-medium",
+  optionFocused: "bg-cl-warning/15",
+  selectedIcon: "w-4 h-4 shrink-0 text-cl-warning",
+  noResults: "px-3 py-4 text-sm text-cl-warning text-center",
 };
 
 const coolTheme: TimePickerClasses = {
-  root: "inline-flex flex-col gap-1 text-cyan-900",
+  root: "inline-flex flex-col gap-1 text-cl-accent",
   wrapper: "relative",
-  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cyan-300 rounded-lg bg-cyan-50 text-cyan-900 hover:bg-cyan-100 focus-within:ring-2 focus-within:ring-cyan-400 cursor-text",
-  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cyan-400 text-cyan-900",
-  endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cyan-600",
-  dropdown: "border rounded-lg shadow-lg overflow-hidden bg-cyan-50 border-cyan-200",
+  trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 focus-within:ring-2 focus-within:ring-cl-accent cursor-text",
+  input: "flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-accent text-cl-accent",
+  endIcon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent",
+  dropdown: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border-cl-border-input-focus",
   optionList: "max-h-60 overflow-y-auto",
-  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cyan-900 hover:bg-cyan-100 transition-colors",
-  optionSelected: "bg-cyan-200 font-medium",
-  optionFocused: "bg-cyan-100",
-  selectedIcon: "w-4 h-4 shrink-0 text-cyan-700",
-  noResults: "px-3 py-4 text-sm text-cyan-600 text-center",
+  option: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-accent hover:bg-cl-accent/10 transition-colors",
+  optionSelected: "bg-cl-accent/10 font-medium",
+  optionFocused: "bg-cl-accent/10",
+  selectedIcon: "w-4 h-4 shrink-0 text-cl-accent",
+  noResults: "px-3 py-4 text-sm text-cl-accent text-center",
 };
 
 const getMinimalTheme = (dark: boolean): TimePickerClasses => ({
-  root: `inline-flex flex-col gap-1 ${dark ? "text-white" : "text-gray-800"}`,
+  root: `inline-flex flex-col gap-1 text-cl-text`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text ${
-    dark ? "border-gray-600 text-white hover:border-gray-400 focus-within:border-white" : "border-gray-300 text-gray-800 hover:border-gray-500 focus-within:border-gray-800"
-  }`,
-  input: `flex-1 min-w-0 bg-transparent outline-none text-sm ${dark ? "placeholder:text-gray-500 text-white" : "placeholder:text-gray-400 text-gray-800"}`,
-  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-400"}`,
-  dropdown: `rounded shadow-sm overflow-hidden border ${dark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-100"}`,
+  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text border border-cl-border-input text-cl-text hover:border-cl-border focus-within:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus-within:border-cl-text`,
+  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text dark:placeholder:text-cl-text-tertiary dark:text-white`,
+  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary`,
+  dropdown: `rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
   optionList: "max-h-60 overflow-y-auto",
-  option: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm transition-colors ${dark ? "text-gray-200 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-50"}`,
+  option: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm transition-colors text-cl-text hover:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-elevated`,
   optionSelected: "font-medium",
-  optionFocused: dark ? "bg-gray-700" : "bg-gray-50",
-  selectedIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-300" : "text-gray-600"}`,
-  noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-400"}`,
+  optionFocused: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
+  selectedIcon: `w-4 h-4 shrink-0 text-cl-text-secondary`,
+  noResults: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
 
 // ─── Clock theme variants ───────────────────────────────────────────────────
 
 const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
-  root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
+  root: `inline-flex flex-col gap-1 text-cl-text`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
-    dark ? "border-emerald-700 bg-gray-800 hover:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500" : "border-emerald-300 bg-white hover:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-500"
-  }`,
-  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
-  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-emerald-400" : "text-emerald-500"}`,
-  clockContainer: `p-4 border rounded-xl shadow-lg ${dark ? "bg-gray-800 border-emerald-700" : "bg-white border-emerald-200"}`,
+ trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-success bg-white hover:border-cl-success focus-within:ring-2 focus-within:ring-cl-success dark:border dark:border-cl-success dark:bg-cl-bg-elevated dark:hover:border-cl-success dark:focus-within:ring-2 dark:focus-within:ring-cl-success`,
+  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text`,
+  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-success dark:text-cl-success`,
+ clockContainer: `p-4 rounded-cl-lg shadow-lg bg-white border border-cl-success dark:bg-cl-bg-elevated dark:border dark:border-cl-success`,
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
-  clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockDisplayActive: dark ? "bg-emerald-600 text-white hover:bg-emerald-600" : "bg-emerald-500 text-white hover:bg-emerald-500",
-  clockDisplaySeparator: `text-2xl font-semibold ${dark ? "text-gray-500" : "text-gray-400"}`,
-  clockFace: `relative w-52 h-52 mx-auto rounded-full ${dark ? "bg-emerald-900/30" : "bg-emerald-50"}`,
+  clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockDisplayActive: dark ? "bg-cl-success text-white hover:bg-cl-success" : "bg-cl-success text-white hover:bg-cl-success",
+  clockDisplaySeparator: `text-2xl font-semibold text-cl-text-tertiary`,
+  clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-success/15 dark:bg-cl-success/30`,
   clockHand: "absolute inset-0",
-  clockHandLine: dark ? "stroke-emerald-400" : "stroke-emerald-500",
-  clockHandDot: `w-3 h-3 rounded-full ${dark ? "bg-emerald-400" : "bg-emerald-500"}`,
-  clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors ${dark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"}`,
-  clockNumberSelected: dark ? "text-white font-bold bg-emerald-500 rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-emerald-500 rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberInner: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-  clockNumberDisabled: `opacity-30 cursor-not-allowed ${dark ? "text-gray-600" : "text-gray-300"}`,
-  clockCenter: dark ? "fill-emerald-400" : "fill-emerald-500",
+  clockHandLine: dark ? "stroke-cl-success" : "stroke-cl-success",
+  clockHandDot: `w-3 h-3 rounded-full bg-cl-success/30`,
+  clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text`,
+  clockNumberSelected: dark ? "text-white font-bold bg-cl-success rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-success rounded-full w-8 h-8 flex items-center justify-center",
+  clockNumberInner: `text-xs text-cl-text-tertiary`,
+  clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
+  clockCenter: dark ? "fill-cl-success" : "fill-cl-success",
   clockActions: "flex items-center justify-end gap-2 mt-4",
-  clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-emerald-500 text-white hover:bg-emerald-600",
+  clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success text-white hover:bg-cl-success",
   clockPeriodToggle: "flex flex-col gap-1 ml-3",
-  clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors ${dark ? "text-gray-400 hover:bg-gray-700" : "text-gray-500 hover:bg-gray-100"}`,
-  clockPeriodActive: dark ? "bg-emerald-600 text-white" : "bg-emerald-500 text-white",
+  clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
+  clockPeriodActive: dark ? "bg-cl-success text-white" : "bg-cl-success text-white",
 });
 
 const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
-  root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
+  root: `inline-flex flex-col gap-1 text-cl-text`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
-    dark ? "border-rose-700 bg-gray-800 hover:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500" : "border-rose-300 bg-white hover:border-rose-400 focus-within:ring-2 focus-within:ring-rose-500"
-  }`,
-  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
-  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-rose-400" : "text-rose-500"}`,
-  clockContainer: `p-4 border rounded-xl shadow-lg ${dark ? "bg-gray-800 border-rose-700" : "bg-white border-rose-200"}`,
+ trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input-focus bg-white hover:border-cl-border-input-focus focus-within:ring-2 focus-within:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-bg-elevated dark:hover:border-cl-border-input-focus dark:focus-within:ring-2 dark:focus-within:ring-cl-accent`,
+  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text`,
+  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent dark:text-cl-accent`,
+ clockContainer: `p-4 rounded-cl-lg shadow-lg bg-white border border-cl-border-input-focus dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus`,
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
-  clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockDisplayActive: dark ? "bg-rose-600 text-white hover:bg-rose-600" : "bg-rose-500 text-white hover:bg-rose-500",
-  clockDisplaySeparator: `text-2xl font-semibold ${dark ? "text-gray-500" : "text-gray-400"}`,
-  clockFace: `relative w-52 h-52 mx-auto rounded-full ${dark ? "bg-rose-900/30" : "bg-rose-50"}`,
+  clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockDisplayActive: dark ? "bg-cl-accent text-white hover:bg-cl-accent" : "bg-cl-accent text-white hover:bg-cl-accent",
+  clockDisplaySeparator: `text-2xl font-semibold text-cl-text-tertiary`,
+  clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-accent/10 dark:bg-cl-accent/30`,
   clockHand: "absolute inset-0",
-  clockHandLine: dark ? "stroke-rose-400" : "stroke-rose-500",
-  clockHandDot: `w-3 h-3 rounded-full ${dark ? "bg-rose-400" : "bg-rose-500"}`,
-  clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors ${dark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"}`,
-  clockNumberSelected: dark ? "text-white font-bold bg-rose-500 rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-rose-500 rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberInner: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-  clockNumberDisabled: `opacity-30 cursor-not-allowed ${dark ? "text-gray-600" : "text-gray-300"}`,
-  clockCenter: dark ? "fill-rose-400" : "fill-rose-500",
+  clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
+  clockHandDot: `w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/90`,
+  clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text`,
+  clockNumberSelected: dark ? "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
+  clockNumberInner: `text-xs text-cl-text-tertiary`,
+  clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
+  clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
   clockActions: "flex items-center justify-end gap-2 mt-4",
-  clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-rose-500 text-white hover:bg-rose-600",
+  clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent",
   clockPeriodToggle: "flex flex-col gap-1 ml-3",
-  clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors ${dark ? "text-gray-400 hover:bg-gray-700" : "text-gray-500 hover:bg-gray-100"}`,
-  clockPeriodActive: dark ? "bg-rose-600 text-white" : "bg-rose-500 text-white",
+  clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
+  clockPeriodActive: dark ? "bg-cl-accent text-white" : "bg-cl-accent text-white",
 });
 
 const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
-  root: `inline-flex flex-col gap-1 ${dark ? "text-gray-200" : "text-gray-900"}`,
+  root: `inline-flex flex-col gap-1 text-cl-text`,
   wrapper: "relative",
-  trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border rounded-lg transition-colors cursor-text ${
-    dark ? "border-violet-700 bg-gray-800 hover:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500" : "border-violet-300 bg-white hover:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500"
-  }`,
-  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-gray-400 ${dark ? "text-gray-100" : "text-gray-900"}`,
-  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-violet-400" : "text-violet-500"}`,
-  clockContainer: `p-4 border rounded-xl shadow-lg ${dark ? "bg-gray-800 border-violet-700" : "bg-white border-violet-200"}`,
+ trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 rounded-cl-md transition-colors cursor-text border border-cl-border-input-focus bg-white hover:border-cl-border-input-focus focus-within:ring-2 focus-within:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-bg-elevated dark:hover:border-cl-border-input-focus dark:focus-within:ring-2 dark:focus-within:ring-cl-accent`,
+  input: `flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-cl-text-tertiary text-cl-text`,
+  endIcon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent dark:text-cl-accent`,
+ clockContainer: `p-4 rounded-cl-lg shadow-lg bg-white border border-cl-border-input-focus dark:bg-cl-bg-elevated dark:border dark:border-cl-border-input-focus`,
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
-  clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockDisplayActive: dark ? "bg-violet-600 text-white hover:bg-violet-600" : "bg-violet-500 text-white hover:bg-violet-500",
-  clockDisplaySeparator: `text-2xl font-semibold ${dark ? "text-gray-500" : "text-gray-400"}`,
-  clockFace: `relative w-52 h-52 mx-auto rounded-full ${dark ? "bg-violet-900/30" : "bg-violet-50"}`,
+  clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockDisplayActive: dark ? "bg-cl-accent text-white hover:bg-cl-accent" : "bg-cl-accent text-white hover:bg-cl-accent",
+  clockDisplaySeparator: `text-2xl font-semibold text-cl-text-tertiary`,
+  clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-accent/10 dark:bg-cl-accent/30`,
   clockHand: "absolute inset-0",
-  clockHandLine: dark ? "stroke-violet-400" : "stroke-violet-500",
-  clockHandDot: `w-3 h-3 rounded-full ${dark ? "bg-violet-400" : "bg-violet-500"}`,
-  clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors ${dark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"}`,
-  clockNumberSelected: dark ? "text-white font-bold bg-violet-500 rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-violet-500 rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberInner: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
-  clockNumberDisabled: `opacity-30 cursor-not-allowed ${dark ? "text-gray-600" : "text-gray-300"}`,
-  clockCenter: dark ? "fill-violet-400" : "fill-violet-500",
+  clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
+  clockHandDot: `w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/90`,
+  clockNumber: `absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text`,
+  clockNumberSelected: dark ? "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
+  clockNumberInner: `text-xs text-cl-text-tertiary`,
+  clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
+  clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
   clockActions: "flex items-center justify-end gap-2 mt-4",
-  clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "text-gray-300 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"}`,
-  clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-violet-500 text-white hover:bg-violet-600",
+  clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
+  clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent",
   clockPeriodToggle: "flex flex-col gap-1 ml-3",
-  clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors ${dark ? "text-gray-400 hover:bg-gray-700" : "text-gray-500 hover:bg-gray-100"}`,
-  clockPeriodActive: dark ? "bg-violet-600 text-white" : "bg-violet-500 text-white",
+  clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
+  clockPeriodActive: dark ? "bg-cl-accent text-white" : "bg-cl-accent text-white",
 });
 
 // ─── Custom icon components ──────────────────────────────────────────────────
@@ -286,7 +257,6 @@ const TimePickerDemo = () => {
   const [scrollLockEnabled, setScrollLockEnabled] = useState<string | null>(null);
   const [reduceMotionVal, setReduceMotionVal] = useState<string | null>(null);
   const [customRender, setCustomRender] = useState<string | null>(null);
-  const [unstyledVal, setUnstyledVal] = useState<string | null>(null);
   const [classesVal, setClassesVal] = useState<string | null>(null);
   const [smartParse, setSmartParse] = useState<string | null>(null);
   const [dropdownTopVal, setDropdownTopVal] = useState<string | null>(null);
@@ -324,7 +294,6 @@ const TimePickerDemo = () => {
   const [styleVal, setStyleVal] = useState<string | null>(null);
 
   // defaultOpen
-  const [defaultOpenVal, setDefaultOpenVal] = useState<string | null>(null);
 
   // Clearable
   const [clearableVal, setClearableVal] = useState<string | null>("14:30");
@@ -347,33 +316,10 @@ const TimePickerDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            TimePicker
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A time input with dropdown or clock variant, smart time parsing,
-            12/24-hour formats, min/max constraints, clearable, keyboard navigation,
-            and full accessibility.
-          </p>
-          <pre className={`mt-5 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`import { TimePicker } from "@chumlab/ui/time-picker";`}</pre>
-        </div>
-      </header>
+      <DocsHero
+        title="TimePicker"
+        description="A time input with dropdown or clock variant, smart time parsing, 12/24-hour formats, min/max constraints, clearable, keyboard navigation, and full accessibility."
+      />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       {/* DROPDOWN VARIANT                                                  */}
@@ -558,13 +504,6 @@ const TimePickerDemo = () => {
             classes={c.timepicker}
           />
         </DemoWrapper>
-        <pre className={`mt-3 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`<TimePicker
-  label="Meeting Time"
-  description="Select a time during business hours"
-  placeholder="Pick a time"
-  minTime="09:00"
-  maxTime="17:00"
-/>`}</pre>
       </Section>
 
       {/* ─── Success State ─────────────────────────────────────────────────── */}
@@ -579,13 +518,6 @@ const TimePickerDemo = () => {
             classes={c.timepicker}
           />
         </DemoWrapper>
-        <pre className={`mt-3 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`<TimePicker
-  label="Appointment Time"
-  value={time}
-  onValueChange={(t) => setTime(t)}
-  success={!!time}
-  successMessage="Time slot is available"
-/>`}</pre>
       </Section>
 
       {/* ─── Loading State ─────────────────────────────────────────────────── */}
@@ -593,7 +525,6 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <TimePicker label="Checking slots..." loading placeholder="Pick a time" classes={c.timepicker} />
         </DemoWrapper>
-        <pre className={`mt-3 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-gray-800 text-gray-300" : "bg-gray-50 text-gray-700"}`}>{`<TimePicker label="Checking slots..." loading placeholder="Pick a time" />`}</pre>
       </Section>
 
       {/* ─── 7. Disabled ─────────────────────────────────────────────────── */}
@@ -688,28 +619,7 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 11. defaultOpen ──────────────────────────────────────────────── */}
-      <Section
-        title="Default Open"
-        description="Start with the dropdown open using defaultOpen."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-          <div className="flex items-center gap-4">
-            <TimePicker
-              value={defaultOpenVal}
-              onValueChange={(v) => setDefaultOpenVal(v)}
-              defaultOpen
-              classes={c.timepicker}
-            />
-            <span className={`text-sm ${c.text}`}>
-              Selected: {defaultOpenVal ?? "none"}
-            </span>
-          </div>
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── 12. Custom End Icon & No End Icon ──────────────────────────── */}
+      {/* ─── Custom End Icon & No End Icon ──────────────────────────── */}
       <Section
         title="Custom End Icon & No End Icon"
         description="Replace the default chevron icon or hide it entirely."
@@ -722,7 +632,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={customEndIconVal}
                 onValueChange={(v) => setCustomEndIconVal(v)}
-                endIcon={<ClockEndIcon className={`w-4 h-4 ${dark ? "text-indigo-400" : "text-indigo-500"}`} />}
+                endIcon={<ClockEndIcon className={`w-4 h-4 text-cl-accent`} />}
                 classes={c.timepicker}
               />
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {customEndIconVal ?? "none"}</span>
@@ -754,10 +664,10 @@ const TimePickerDemo = () => {
               <TimePicker
                 value={customCheckVal}
                 onValueChange={(v) => setCustomCheckVal(v)}
-                selectedIcon={<StarCheckIcon className={`w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`} />}
+                selectedIcon={<StarCheckIcon className={`w-4 h-4 shrink-0 text-cl-warning`} />}
                 classes={{
                   ...c.timepicker,
-                  selectedIcon: `w-4 h-4 shrink-0 ${dark ? "text-yellow-400" : "text-amber-500"}`,
+                  selectedIcon: `w-4 h-4 shrink-0 text-cl-warning`,
                 }}
               />
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {customCheckVal ?? "none"}</span>
@@ -1068,32 +978,30 @@ const TimePickerDemo = () => {
               unstyled
               classes={{
                 root: "inline-flex flex-col gap-1",
-                trigger: `flex items-center gap-2 px-3 py-2 border-2 border-dashed rounded-xl ${
-                  dark ? "border-indigo-500 bg-gray-900 text-gray-200" : "border-indigo-400 bg-indigo-50 text-gray-900"
-                }`,
+                trigger: `flex items-center gap-2 px-3 py-2 border-2 border-dashed rounded-cl-lg border-cl-border-input-focus bg-cl-accent/10 text-cl-text dark:border dark:border-cl-border-input-focus dark:bg-cl-bg dark:text-cl-text`,
                 input: "bg-transparent outline-none text-sm flex-1",
-                endIcon: `w-4 h-4 ${dark ? "text-indigo-400" : "text-indigo-500"}`,
-                clockContainer: `p-4 border-2 border-dashed rounded-xl ${dark ? "border-indigo-500 bg-gray-900" : "border-indigo-400 bg-indigo-50"}`,
+                endIcon: `w-4 h-4 text-cl-accent`,
+                clockContainer: `p-4 border-2 border-dashed rounded-cl-lg border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-bg`,
                 clockDisplay: "flex items-center justify-center gap-1 mb-4",
-                clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer ${dark ? "text-gray-300" : "text-gray-600"}`,
-                clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-lg cursor-pointer ${dark ? "text-gray-300" : "text-gray-600"}`,
-                clockDisplayActive: "bg-indigo-500 text-white",
-                clockDisplaySeparator: `text-2xl font-semibold ${dark ? "text-gray-500" : "text-gray-400"}`,
-                clockFace: `relative w-52 h-52 mx-auto rounded-full ${dark ? "bg-gray-700" : "bg-gray-100"}`,
+                clockDisplayHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer text-cl-text-secondary`,
+                clockDisplayMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer text-cl-text-secondary`,
+                clockDisplayActive: "bg-cl-accent text-white",
+                clockDisplaySeparator: `text-2xl font-semibold text-cl-text-tertiary`,
+                clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated`,
                 clockHand: "absolute inset-0",
-                clockHandLine: "stroke-indigo-500",
-                clockHandDot: "w-3 h-3 rounded-full bg-indigo-500",
-                clockNumber: `absolute text-sm font-medium cursor-pointer select-none ${dark ? "text-gray-300" : "text-gray-600"}`,
-                clockNumberSelected: "text-white font-bold bg-indigo-500 rounded-full w-8 h-8 flex items-center justify-center",
-                clockNumberInner: `text-xs ${dark ? "text-gray-500" : "text-gray-400"}`,
+                clockHandLine: "stroke-cl-accent",
+                clockHandDot: "w-3 h-3 rounded-full bg-cl-accent",
+                clockNumber: `absolute text-sm font-medium cursor-pointer select-none text-cl-text-secondary`,
+                clockNumberSelected: "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
+                clockNumberInner: `text-xs text-cl-text-tertiary`,
                 clockNumberDisabled: "opacity-30 cursor-not-allowed",
-                clockCenter: "fill-indigo-500",
+                clockCenter: "fill-cl-accent",
                 clockActions: "flex items-center justify-end gap-2 mt-4",
-                clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-lg ${dark ? "text-gray-300" : "text-gray-600"}`,
-                clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-500 text-white",
+                clockCancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary`,
+                clockOkButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-white",
                 clockPeriodToggle: "flex flex-col gap-1 ml-3",
-                clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-md cursor-pointer ${dark ? "text-gray-400" : "text-gray-500"}`,
-                clockPeriodActive: "bg-indigo-500 text-white",
+                clockPeriodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary`,
+                clockPeriodActive: "bg-cl-accent text-white",
               }}
             />
             <span className={`text-sm ${c.text}`}>
@@ -1387,7 +1295,7 @@ const TimePickerDemo = () => {
             </span>
           </div>
           {focusMessage && (
-            <p className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}>
+            <p className={`text-sm mt-2 text-cl-accent`}>
               {focusMessage}
             </p>
           )}
@@ -1407,7 +1315,7 @@ const TimePickerDemo = () => {
               <TimePicker
                 defaultValue={null}
                 placeholder="Select a time..."
-                className={`${dark ? "opacity-90" : "opacity-95"}`}
+                className={`opacity-90`}
                 classes={c.timepicker}
               />
             </div>
@@ -1473,7 +1381,7 @@ const TimePickerDemo = () => {
               renderOptionContent={(time, isSelected) => (
                 <span className="flex items-center gap-2">
                   <span
-                    className={`w-2 h-2 rounded-full ${isSelected ? "bg-indigo-500" : dark ? "bg-gray-600" : "bg-gray-300"}`}
+                    className={`w-2 h-2 rounded-full ${isSelected ? "bg-cl-accent" : dark ? "bg-cl-text/10" : "bg-cl-bg-hover"}`}
                   />
                   <span className={isSelected ? "font-semibold" : ""}>{time}</span>
                   {(() => {
@@ -1484,7 +1392,7 @@ const TimePickerDemo = () => {
                     const mins = h24 * 60 + m;
                     const business = mins >= 9 * 60 && mins < 17 * 60;
                     return business ? (
-                      <span className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}>
+                      <span className={`text-xs text-cl-text-tertiary`}>
                         business
                       </span>
                     ) : null;
@@ -1497,22 +1405,6 @@ const TimePickerDemo = () => {
               Selected: {customRender ?? "none"}
             </span>
           </div>
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── 33. Unstyled (Dropdown) ────────────────────────────────────── */}
-      <Section
-        title="Unstyled (Dropdown)"
-        description="Strip all default styles and apply your own via classes."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
-          {/* Truly unstyled — no classes, bare HTML structure */}
-          <TimePicker
-            value={unstyledVal}
-            onValueChange={(v) => setUnstyledVal(v)}
-            unstyled
-          />
         </DemoWrapper>
       </Section>
 
@@ -1529,12 +1421,8 @@ const TimePickerDemo = () => {
               onValueChange={(v) => setClassesVal(v)}
               classes={{
                 ...c.timepicker,
-                trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-2 rounded-full transition-colors ${
-                  dark
-                    ? "border-emerald-500 bg-gray-800 text-gray-200"
-                    : "border-emerald-400 bg-emerald-50 text-gray-900"
-                }`,
-                optionSelected: dark ? "bg-emerald-900/40 font-medium" : "bg-emerald-50 font-medium",
+                trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-2 rounded-full transition-colors border-cl-success bg-cl-success/15 text-cl-text dark:border dark:border-cl-success dark:bg-cl-bg-elevated dark:text-cl-text`,
+                optionSelected: dark ? "bg-cl-success/40 font-medium" : "bg-cl-success/15 font-medium",
               }}
             />
             <span className={`text-sm ${c.text}`}>
@@ -1596,7 +1484,7 @@ const TimePickerDemo = () => {
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Listbox pattern for time options with role="listbox" and role="option" on each time slot',
@@ -1612,7 +1500,7 @@ const TimePickerDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1623,12 +1511,12 @@ const TimePickerDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from the time picker"],

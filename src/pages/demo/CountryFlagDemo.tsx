@@ -5,8 +5,8 @@ import {
   CountryFlagShimmer,
   CountryFlagGroupShimmer,
 } from "../../components/CountryFlag";
-import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -15,30 +15,31 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
+import { useTheme } from "./ThemeContext";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
+const getClasses = (_dark: boolean) => ({
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   // Flag styling
   flag: "rounded-[3px]",
   flagLg: "rounded",
   flagGroup: {
     root: "flex items-center -space-x-1.5",
-    item: `rounded-[3px] ${dark ? "outline outline-[1.5px] outline-gray-900" : "outline outline-[1.5px] outline-white"}`,
-    count: `shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none ${dark ? "bg-gray-700/90 text-gray-300 outline outline-[1.5px] outline-gray-900" : "bg-gray-100 text-gray-500 outline outline-[1.5px] outline-white"}`,
+    item: `rounded-[3px] outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base`,
+    count: `shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-hover text-cl-text-tertiary outline outline-[1.5px] outline-white dark:bg-cl-bg-elevated/90 dark:text-cl-text-secondary dark:outline dark:outline-[1.5px] dark:outline-bg-base`,
   },
   flagGroupDark: {
     root: "flex items-center -space-x-1.5",
     item: "rounded-[3px] outline outline-[1.5px] outline-gray-800",
     count:
-      "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-gray-700 text-gray-300 outline outline-[1.5px] outline-gray-800",
+      "shrink-0 flex items-center justify-center rounded-[3px] text-[11px] font-semibold select-none bg-cl-bg-elevated text-cl-text-secondary outline outline-[1.5px] outline-gray-800",
   },
-  fallback: `inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide ${dark ? "bg-gray-700 text-gray-500" : "bg-gray-100 text-gray-400"}`,
+  fallback: `inline-flex items-center justify-center rounded-[3px] text-[10px] font-bold tracking-wide bg-cl-bg-hover text-cl-text-tertiary dark:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -50,39 +51,11 @@ const CountryFlagDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Country Flag
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A lightweight component for rendering country flags from SVG files.
-            Supports sizes, aspect ratios, tooltips, grouping with overflow,
-            loading shimmer, error fallback, and fully customizable styling.
-          </p>
-          <div className="mt-5">
-            <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
-            >
-              <code>{`import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Country Flag"
+        description="A lightweight component for rendering country flags from SVG files. Supports sizes, aspect ratios, tooltips, grouping with overflow, loading shimmer, error fallback, and fully customizable styling."
+        code={`import { CountryFlag, CountryFlagGroup } from "@chumlab/ui/country-flag";`}
+      />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -364,7 +337,7 @@ const CountryFlagDemo = () => {
               On dark background
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
-              <div className="p-4 rounded-lg bg-gray-800">
+              <div className="p-4 rounded-cl-md bg-cl-bg-elevated">
                 <CountryFlagGroup size={48} classes={c.flagGroupDark}>
                   <CountryFlag code="us" className="rounded-[3px]" />
                   <CountryFlag code="gb" className="rounded-[3px]" />
@@ -385,7 +358,7 @@ const CountryFlagDemo = () => {
                 classes={c.flagGroup}
                 renderSurplus={(count) => (
                   <span
-                    className={`ml-2 text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    className={`ml-2 text-xs font-medium text-cl-text-secondary`}
                   >
                     and {count} more
                   </span>
@@ -407,7 +380,7 @@ const CountryFlagDemo = () => {
                 size={56}
                 classes={{
                   ...c.flagGroup,
-                  item: `rounded ${dark ? "outline outline-[1.5px] outline-gray-900" : "outline outline-[1.5px] outline-white"}`,
+                  item: `rounded outline outline-[1.5px] outline-white dark:outline dark:outline-[1.5px] dark:outline-bg-base`,
                   count: `${c.flagGroup.count} text-xs rounded`,
                 }}
               >
@@ -447,7 +420,7 @@ const CountryFlagDemo = () => {
             code="us"
             size={48}
             classes={{
-              root: "inline-flex items-center justify-center shrink-0 overflow-hidden rounded-xl shadow-lg ring-2 ring-indigo-400",
+              root: "inline-flex items-center justify-center shrink-0 overflow-hidden rounded-cl-lg shadow-lg ring-2 ring-cl-accent",
             }}
           />
           <CountryFlag
@@ -464,28 +437,6 @@ const CountryFlagDemo = () => {
               root: "inline-flex items-center justify-center shrink-0 overflow-hidden rounded-none",
             }}
           />
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default classes. Build from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="inline">
-          {["us", "gb", "jp", "de"].map((code) => (
-            <CountryFlag
-              key={code}
-              code={code}
-              size={48}
-              unstyled
-              classes={{
-                root: `inline-flex items-center justify-center overflow-hidden rounded-lg border-2 shadow-sm ${dark ? "border-gray-600" : "border-gray-200"}`,
-                image: "w-full h-full object-cover",
-              }}
-            />
-          ))}
         </DemoWrapper>
       </Section>
 
@@ -545,7 +496,7 @@ const CountryFlagDemo = () => {
         <div className={c.note}>
           Default path is{" "}
           <code
-            className={`px-1 py-0.5 rounded text-[11px] font-mono ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`px-1 py-0.5 rounded text-[11px] font-mono bg-cl-bg-elevated text-cl-text-secondary`}
           >
             /flags
           </code>
@@ -738,7 +689,7 @@ const CountryFlagDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Flags use role="img" with auto-generated aria-label from code',
@@ -752,7 +703,7 @@ const CountryFlagDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>

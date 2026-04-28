@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import { ToastProvider, useToast } from "../../components/Toast";
 import type { ToastPosition } from "../../components/Toast/utils/types";
-import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -11,20 +11,21 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
+import { useTheme } from "./ThemeContext";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-emerald-500 text-white hover:bg-emerald-600"}`,
-  btnWarning: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-amber-600 text-white hover:bg-amber-700" : "bg-amber-500 text-white hover:bg-amber-600"}`,
-  btnError: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-rose-600 text-white hover:bg-rose-700" : "bg-rose-500 text-white hover:bg-rose-600"}`,
-  btnInfo: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-500 text-white hover:bg-blue-600"}`,
+const getClasses = (_dark: boolean) => ({
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-text text-cl-bg hover:opacity-90`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  btnSuccess: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-success text-cl-bg hover:bg-cl-success dark:bg-cl-success dark:text-cl-bg dark:hover:bg-cl-success`,
+  btnWarning: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-warning text-cl-bg hover:bg-cl-warning dark:bg-cl-warning dark:text-cl-bg dark:hover:bg-cl-warning`,
+  btnError: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-error text-white hover:bg-cl-error/90`,
+  btnInfo: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-accent text-white hover:bg-cl-accent/90 dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90`,
 });
 
 // ─── Toast Demo Content ──────────────────────────────────────────────────────
@@ -43,37 +44,11 @@ const ToastDemoContent = ({
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Toast
-          </h1>
-          <p
-            className={`text-sm leading-relaxed w-full sm:max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A flexible, accessible notification system for displaying brief
-            messages to users. Supports multiple variants, customizable durations,
-            progress indicators, custom content, and extensive styling options.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Toast"
+        description="A flexible, accessible notification system for displaying brief messages to users. Supports multiple variants, customizable durations, progress indicators, custom content, and extensive styling options."
+        code={`import { ToastProvider, useToast } from "@chumlab/ui/toast";`}
+      />
 
       {/* ─── Basic Variants ───────────────────────────────────────────── */}
       <Section
@@ -270,7 +245,7 @@ const ToastDemoContent = ({
                 description: "Using classes.progress prop",
                 classes: {
                   progress:
-                    "bg-linear-to-r from-pink-400 via-purple-400 to-indigo-400",
+                    "bg-linear-to-r from-cl-accent/30 via-cl-accent/30 to-cl-accent/40",
                 },
               })
             }
@@ -477,7 +452,7 @@ const ToastDemoContent = ({
                 message: "Styled icon",
                 description: "Icon with custom background",
                 icon: <span className="text-lg">✨</span>,
-                classes: { icon: "bg-white/20 p-1.5 rounded-full" },
+                classes: { icon: "bg-cl-text/20 p-1.5 rounded-full" },
               })
             }
           >
@@ -522,10 +497,10 @@ const ToastDemoContent = ({
                           Version 2.0 is now available.
                         </p>
                         <div className="flex gap-2 mt-1">
-                          <button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-white/90">
+                          <button className="px-3 py-1 bg-white text-[#213f70] text-xs font-medium rounded hover:bg-cl-text/90">
                             Update Now
                           </button>
-                          <button className="px-3 py-1 bg-white/20 text-white text-xs rounded hover:bg-white/30">
+                          <button className="px-3 py-1 bg-cl-text/20 text-white text-xs rounded hover:bg-cl-text/30">
                             Later
                           </button>
                         </div>
@@ -544,7 +519,7 @@ const ToastDemoContent = ({
                     type: "success",
                     content: (
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-cl-text/20 flex items-center justify-center">
                           <span className="text-lg">🏆</span>
                         </div>
                         <div>
@@ -569,7 +544,7 @@ const ToastDemoContent = ({
                     content: (
                       <div>
                         <p className="font-medium">Download Progress</p>
-                        <div className="mt-2 h-2 bg-white/20 rounded-full overflow-hidden">
+                        <div className="mt-2 h-2 bg-cl-text/20 rounded-full overflow-hidden">
                           <div className="h-full bg-white w-3/4 animate-pulse" />
                         </div>
                         <p className="text-xs mt-1 opacity-70">
@@ -610,9 +585,14 @@ const ToastDemoContent = ({
                 message: "Light themed toast",
                 description: "Using classes.container to override styles",
                 classes: {
-                  container: "bg-white border-gray-200 text-gray-800",
-                  icon: "text-blue-500",
-                  closeButton: "hover:bg-gray-100",
+                  // bg is hardcoded white, so the text needs to be
+                  // hardcoded dark too — text-cl-text would invert to
+                  // near-white in dark mode and disappear on the white
+                  // surface. Using the light-mode --cl-text hex value.
+                  container: "bg-white border border-[#e5e7eb] text-[#0f1218]",
+                  description: "text-[#0f1218]/70",
+                  icon: "text-cl-accent",
+                  closeButton: "text-[#0f1218]/60 hover:text-[#0f1218] hover:bg-black/5",
                 },
               })
             }
@@ -642,8 +622,8 @@ const ToastDemoContent = ({
                 message: "Custom message style",
                 description: "Description with custom styling",
                 classes: {
-                  message: "text-lg font-bold text-yellow-300",
-                  description: "text-xs italic text-blue-200",
+                  message: "text-lg font-bold text-cl-warning",
+                  description: "text-xs italic text-cl-accent",
                 },
               })
             }
@@ -658,7 +638,7 @@ const ToastDemoContent = ({
                 message: "Custom content wrapper",
                 description: "Using classes.content for padding",
                 classes: {
-                  content: "p-6 bg-white/10 rounded-lg",
+                  content: "p-6 bg-cl-text/10 rounded-cl-md",
                 },
               })
             }
@@ -826,7 +806,7 @@ const ToastDemoContent = ({
               </button>
             </div>
             <p
-              className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs text-cl-text-secondary`}
             >
               The <code className="font-mono">toast()</code> methods return a
               unique ID that can be used with{" "}
@@ -905,10 +885,10 @@ const ToastDemoContent = ({
               ))}
             </div>
             <p
-              className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-xs text-cl-text-secondary`}
             >
               Current position:{" "}
-              <strong className={dark ? "text-white" : "text-gray-900"}>
+              <strong className={dark ? "text-cl-text" : "text-cl-text"}>
                 {position}
               </strong>
             </p>
@@ -997,7 +977,7 @@ const ToastDemoContent = ({
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <p
-            className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs text-cl-text-secondary`}
           >
             This page uses the default 200ms animation. To customize, set
             animationDuration on the ToastProvider.
@@ -1013,60 +993,12 @@ const ToastDemoContent = ({
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <p
-            className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs text-cl-text-secondary`}
           >
             The toast container has{" "}
             <code className="font-mono">role=&quot;region&quot;</code> with an{" "}
             <code className="font-mono">aria-label</code> for screen readers.
           </p>
-        </DemoWrapper>
-      </Section>
-
-      {/* ─── Unstyled Mode ────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Set unstyled=true to strip all default styles and build from scratch using the classes prop."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="inline">
-          <button
-            className={c.btn}
-            onClick={() =>
-              toast.toast({
-                type: "success",
-                message: "Custom styled toast",
-                description: "Built from scratch using unstyled + classes prop.",
-                unstyled: true,
-                classes: {
-                  container: `flex items-start gap-3 px-4 py-3 rounded-xl border shadow-lg backdrop-blur-sm ${dark ? "bg-emerald-950/90 border-emerald-800/50 text-emerald-200" : "bg-emerald-50 border-emerald-200 text-emerald-900"}`,
-                  message: "text-sm font-semibold",
-                  description: `text-xs mt-0.5 ${dark ? "text-emerald-400" : "text-emerald-700"}`,
-                  closeButton: `shrink-0 p-0.5 rounded transition-colors ${dark ? "hover:bg-emerald-800 text-emerald-400" : "hover:bg-emerald-200 text-emerald-600"}`,
-                },
-              })
-            }
-          >
-            Custom Styled
-          </button>
-          <button
-            className={c.btn}
-            onClick={() =>
-              toast.toast({
-                type: "error",
-                message: "Minimal unstyled toast",
-                description: "With a completely different visual style.",
-                unstyled: true,
-                classes: {
-                  container: `flex items-start gap-3 px-4 py-3 rounded-lg border-l-4 shadow-md ${dark ? "bg-gray-800 border-red-500 text-gray-200" : "bg-white border-red-500 text-gray-900"}`,
-                  message: "text-sm font-bold",
-                  description: `text-xs mt-0.5 ${dark ? "text-gray-400" : "text-gray-500"}`,
-                  closeButton: `shrink-0 p-0.5 rounded transition-colors ${dark ? "hover:bg-gray-700 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`,
-                },
-              })
-            }
-          >
-            Left Border Style
-          </button>
         </DemoWrapper>
       </Section>
 
@@ -1384,7 +1316,7 @@ const ToastDemoContent = ({
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Toast container uses role="alert" for screen reader announcements',
@@ -1398,7 +1330,7 @@ const ToastDemoContent = ({
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1409,12 +1341,12 @@ const ToastDemoContent = ({
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Navigate to close button within toast"],
@@ -1469,7 +1401,7 @@ const ToastDemoContent = ({
       {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               "role=\"alert\" or role=\"status\" based on toast type",
               "aria-live regions for dynamic announcements",
@@ -1477,15 +1409,15 @@ const ToastDemoContent = ({
               "Auto-dismiss with pauseOnHover to avoid dismissing while reading",
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
-                <span className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}>&#10003;</span>
+                <span className={`mt-0.5 shrink-0 text-cl-success`}>&#10003;</span>
                 <span>{text}</span>
               </p>
             ))}
           </div>
         </div>
         <div className={`${c.card} mt-3`}>
-          <p className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}>Keyboard Reference</p>
-          <div className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}>
+          <p className={`text-xs font-semibold mb-3 text-cl-text-secondary`}>Keyboard Reference</p>
+          <div className={`space-y-2 text-sm text-cl-text-secondary`}>
             {[
               ["Escape", "Dismiss all toasts (via provider)"],
             ].map(([key, desc]) => (

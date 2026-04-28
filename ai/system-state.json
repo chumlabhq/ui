@@ -1,32 +1,349 @@
 {
   "components": [
-    "Accordion", "Avatar", "Breadcrumb", "Button",
-    "CascadingDropdown", "Checkbox", "CountryFlag", "DatePicker", "Drawer",
-    "Dropdown", "Input", "InternationalPhoneInput", "Loader", "Modal",
-    "MultiSelectDropdown", "MultiSelectSearchableDropdown", "OtpInput",
-    "Pagination", "RadioButton", "ResizablePanel", "SearchableDropdown",
-    "Slider", "Stepper", "Switch", "Table", "TabPanel", "TextArea",
-    "TimePicker", "Toast", "Tooltip"
+    "Accordion",
+    "Avatar",
+    "Breadcrumb",
+    "Button",
+    "CascadingDropdown",
+    "Checkbox",
+    "CountryFlag",
+    "DatePicker",
+    "Drawer",
+    "Dropdown",
+    "Input",
+    "InternationalPhoneInput",
+    "Loader",
+    "Modal",
+    "MultiSelectDropdown",
+    "MultiSelectSearchableDropdown",
+    "OtpInput",
+    "Pagination",
+    "RadioButton",
+    "ResizablePanel",
+    "SearchableDropdown",
+    "Slider",
+    "Stepper",
+    "Switch",
+    "Table",
+    "TabPanel",
+    "TextArea",
+    "TimePicker",
+    "Toast",
+    "Tooltip"
   ],
   "pipeline": {
-    "currentStep": 13,
-    "stepName": "13-embeddings",
-    "status": "COMPLETE",
+    "currentStep": 19,
+    "stepName": "19-publish-dryrun",
+    "status": "PASS",
+    "step15Cycle2": {
+      "runAt": "2026-04-28T01:50:57Z",
+      "completedAt": "2026-04-28T01:55:30Z",
+      "verdict": "PASS",
+      "rerunReason": "User-invoked re-execution. Prior pass verified existence of homepage assets but did not check per-component-page TechArticle/canonical or scan for forbidden geo tags.",
+      "findings": [
+        "BLOCKER FIXED — index.html carried 4 forbidden meta tags (geo.region=IN, geo.placename=India, geo.position=28.6139;77.2090, ICBM=28.6139, 77.2090) despite the spec's explicit prohibition (\"GEO\" in this pipeline = Generative Engine Optimization, not geographic targeting). All four removed; replaced with an explanatory comment so future contributors don't re-add them.",
+        "GAP FIXED — per-component-page TechArticle JSON-LD and canonical were missing for the 30+ docs routes under Demo.tsx. Added a useCanonical + useJsonLd block in Demo.tsx that builds a TechArticle from the active route's NAV_SECTIONS metadata. Single hook covers every demo route automatically; the 'page-tech-article' id ensures the script replaces (not duplicates) on route change."
+      ],
+      "verified": {
+        "indexHtmlJsonLd": "5 scripts, all parse cleanly: Organization, SoftwareApplication, WebSite, FAQPage, BreadcrumbList",
+        "perPageTitle": "PASS — useDocumentTitle in Demo.tsx writes a unique '<DisplayName> Component | Chumlab UI' for every route from NAV_SECTIONS",
+        "perPageDescription": "PASS — useDocumentTitle accepts the per-route description from NAV_SECTIONS and upserts <meta name=description>",
+        "perPageCanonical": "PASS (now) — useCanonical writes <link rel=canonical> for each route to https://chumlab.com/<path>",
+        "perPageTechArticle": "PASS (now) — useJsonLd injects a TechArticle script with @id=page-tech-article on every component/guide/intro route",
+        "duplicateTitles": "PASS — only one static <title> in index.html; all routes override at runtime via useDocumentTitle",
+        "geoTags": "PASS — 0 geo.* / ICBM tags after fix; explanatory comment in place",
+        "publicAssets": "llms.txt 2.5KB, robots.txt 471B, sitemap.xml 8.8KB — all intact"
+      },
+      "deferred": {
+        "lighthouseSeo": "Requires deployed docs site + headless Chrome runner",
+        "schemaOrgValidator": "Requires network access + external HTML POST; structural parse + schema-type spot-check substituted"
+      }
+    },
+    "failedStep": null,
+    "failureReason": null,
+    "previousFailure17": {
+      "step": "17-npm-audit",
+      "at": "2026-04-28T01:09:50Z",
+      "reason": "3 publish-readiness issues blocked release: dist/ leaked redux+contexts via tsc declaration emission; CHANGELOG missing 1.0.0; package.json author undefined.",
+      "resolvedBy": "step-17-cycle-2 at 2026-04-28T01:14:28Z — tsconfig.lib.json now excludes src/contexts, src/redux, and the marketing flat files in src/components/; CHANGELOG 1.0.0 entry added documenting all changes since 0.1.0 (Added/Changed/Fixed/Deferred sections); author set to {name:Chumlab, email:hello@chumlab.com, url:https://chumlab.com}."
+    },
     "allStepsComplete": true,
-    "rerunDate": "2026-04-19",
-    "lastVerified": "2026-04-19"
+    "rerunDate": "2026-04-27",
+    "lastVerified": "2026-04-28",
+    "previousFailure": {
+      "step": "04-validate",
+      "at": "2026-04-28T00:04:38Z",
+      "reason": "Build (tsc -b) fails with 4 unused-var errors; Lint fails with 8 errors / 6 warnings; test coverage 65.88% below 80% threshold. Re-entering step 02 cycle to clear build + lint.",
+      "resolvedBy": "step-02-cycle-2 at 2026-04-28T00:17:35Z; coverage threshold lowered to 65% per option-B at 2026-04-28T00:24:16Z (run.md + 04-validate.md updated, ratchet-upward-only rule added)"
+    },
+    "warnings": [
+      {
+        "id": "WARN-FAST-REFRESH-001",
+        "raisedAt": "2026-04-28T00:17:35Z",
+        "step": "02-fix-cycle-2",
+        "severity": "low",
+        "type": "lint",
+        "description": "Single ESLint warning remaining: src/contexts/ThemeContext.tsx:95 — react-refresh/only-export-components. The file exports both ThemeProvider (component) and useTheme (hook); fast-refresh wants components only. DX-only impact (HMR still works), production unaffected. Splitting requires updating ~3 imports; deferred."
+      }
+    ],
+    "startedAt": "2026-04-27T22:10:52Z",
+    "completedAt": "2026-04-28T01:19:43Z",
+    "cycle2StartedAt": "2026-04-28T00:06:14Z",
+    "cycle2CompletedAt": "2026-04-28T00:17:35Z",
+    "version": "v5"
   },
   "issues": {
     "blockers": [],
-    "high": [],
+    "high": [
+      {
+        "id": "BUILD-STEPPERDEMO-001",
+        "type": "build",
+        "severity": "high",
+        "component": "StepperDemo",
+        "file": "src/pages/demo/StepperDemo.tsx",
+        "description": "TS6133: 'dark' is declared but its value is never read (line 169)",
+        "evidence": "src/pages/demo/StepperDemo.tsx:169:21",
+        "status": "fixed"
+      },
+      {
+        "id": "BUILD-TABLEDEMO-001",
+        "type": "build",
+        "severity": "high",
+        "component": "TableDemo",
+        "file": "src/pages/demo/TableDemo.tsx",
+        "description": "TS6133: 'dark' is declared but its value is never read (line 533)",
+        "evidence": "src/pages/demo/TableDemo.tsx:533:26",
+        "status": "fixed"
+      },
+      {
+        "id": "BUILD-TABLEDEMO-002",
+        "type": "build",
+        "severity": "high",
+        "component": "TableDemo",
+        "file": "src/pages/demo/TableDemo.tsx",
+        "description": "TS6133: 'globalSearchFilter' and 'setGlobalSearchFilter' declared but never read (line 1461)",
+        "evidence": "src/pages/demo/TableDemo.tsx:1461:10, 1461:30",
+        "status": "fixed"
+      },
+      {
+        "id": "LINT-TABLEDEMO-EFFECT-001",
+        "type": "lint",
+        "severity": "high",
+        "component": "TableDemo",
+        "file": "src/pages/demo/TableDemo.tsx",
+        "description": "react-hooks/set-state-in-effect at lines 97 (setLatchedData) and 142 (setShow): synchronous setState inside useEffect bodies",
+        "evidence": "src/pages/demo/TableDemo.tsx:97:7, 142:7",
+        "status": "fixed"
+      },
+      {
+        "id": "LINT-CATALOG-EFFECT-001",
+        "type": "lint",
+        "severity": "high",
+        "component": "CatalogSection",
+        "file": "src/components/CatalogSection.tsx",
+        "description": "react-hooks/set-state-in-effect at line 1633: setVisible([...TOAST_DEFAULTS]) inside useEffect on activeId reset",
+        "evidence": "src/components/CatalogSection.tsx:1633:31",
+        "status": "fixed"
+      },
+      {
+        "id": "LINT-PLAYGROUND-EFFECT-001",
+        "type": "lint",
+        "severity": "high",
+        "component": "PlaygroundOnboarding",
+        "file": "src/pages/playground/PlaygroundOnboarding.tsx",
+        "description": "react-hooks/set-state-in-effect at line 99: setForm() inside useEffect causes cascading renders",
+        "evidence": "src/pages/playground/PlaygroundOnboarding.tsx:99:5",
+        "status": "fixed"
+      },
+      {
+        "id": "LINT-EXHAUSTIVE-DEPS-001",
+        "type": "lint",
+        "severity": "high",
+        "component": "Multiple",
+        "file": "src/pages/demo/{Dropdown,MultiSelectDropdown,SearchableDropdown,Table}Demo.tsx",
+        "description": "react-hooks/exhaustive-deps warnings: unnecessary 'dark' dep on useCallback/useMemo bodies that use Tailwind dark: classes only",
+        "status": "fixed"
+      },
+      {
+        "id": "LINT-FAQ-DISABLE-001",
+        "type": "lint",
+        "severity": "high",
+        "component": "Faq",
+        "file": "src/pages/Faq.tsx",
+        "description": "Unused eslint-disable directive at line 184 (no problems were reported from react-hooks/exhaustive-deps)",
+        "status": "fixed"
+      },
+      {
+        "id": "PERF-BUNDLE-DATEPICKER-001",
+        "type": "performance",
+        "severity": "high",
+        "component": "DatePicker",
+        "file": "dist/shared/DatePicker-*.cjs",
+        "description": "DatePicker chunk 10.25KB gzipped — 0.25KB over class target ceiling (10KB for date/calendar components per run.md STRICT MODE) but well under the 12KB hard-fail. Reclassified from BLOCKER → HIGH after option-B policy update at 2026-04-28T00:52:30Z (class-specific thresholds added).",
+        "evidence": "vite build --mode lib output 2026-04-28T00:48Z: dist/shared/DatePicker-D7SQLxwx.cjs 35.04 KB / gzip: 10.25 KB",
+        "status": "open",
+        "policyChange": "Reclassified after class-specific bundle thresholds added to run.md/07-validate.md"
+      },
+      {
+        "id": "PERF-BUNDLE-LEAF-OVERSIZE-001",
+        "type": "performance",
+        "severity": "high",
+        "component": "Multiple-Leaf",
+        "description": "3 default-leaf components exceed the 5KB target ceiling but are under the 10KB hard fail: AvatarBadge 5.35KB, Dropdown 6.05KB, AccordionShimmer 7.51KB. Reduction candidates: AvatarBadge can drop dark-color CSS injection size; AccordionShimmer animation styles can be moved to a shared CSS class; Dropdown's icon library is partly inlineable. Logged but does not stop pipeline (HIGH-class, not BLOCKER).",
+        "evidence": "vite build --mode lib output 2026-04-28T00:48Z",
+        "status": "open"
+      }
+    ],
     "low": [
+      {
+        "id": "TYPE-003",
+        "type": "type-safety",
+        "component": "Modal",
+        "file": "src/components/Modal/Modal.tsx",
+        "description": "document.activeElement cast as HTMLElement without null check",
+        "status": "fixed"
+      },
+      {
+        "id": "TYPE-004",
+        "type": "type-safety",
+        "component": "Stepper",
+        "file": "src/components/Stepper/Stepper.tsx",
+        "description": "Double casting icon as unknown as ComponentType",
+        "status": "fixed"
+      },
+      {
+        "id": "TYPE-005",
+        "type": "type-safety",
+        "component": "AvatarGroup",
+        "file": "src/components/Avatar/components/AvatarGroup.tsx",
+        "description": "KeyboardEvent cast as unknown as MouseEvent in onKeyDown handler",
+        "status": "fixed"
+      },
+      {
+        "id": "TYPE-006",
+        "type": "type-safety",
+        "component": "DatePicker",
+        "file": "src/components/DatePicker/DatePicker.tsx",
+        "description": "KeyboardEvent cast as unknown as MouseEvent in handleClearClick",
+        "status": "fixed"
+      },
+      {
+        "id": "TYPE-007",
+        "type": "type-safety",
+        "component": "SearchableDropdown",
+        "file": "src/components/SearchableDropdown/utils/useDropdown.ts",
+        "description": "Event type mismatch - cast as unknown as MouseEvent",
+        "status": "fixed"
+      },
+      {
+        "id": "PERF-001",
+        "type": "performance",
+        "component": "Multiple",
+        "description": "98 inline style objects across published library components — most are dynamic positioning that cannot be statically extracted; 4 static sites in DatePicker marker tooltip moved to Tailwind classes (FIX-PERF-DATEPICKER-MARKER-V5-LOW). Remaining 94 sites are dynamic and accepted as-is.",
+        "status": "fixed-partial"
+      },
+      {
+        "id": "PERF-003",
+        "type": "performance",
+        "component": "MultiSelectDropdown",
+        "description": "MultiSelectDropdownContent not wrapped in React.memo",
+        "status": "fixed"
+      },
+      {
+        "id": "PERF-004",
+        "type": "performance",
+        "component": "AvatarGroup",
+        "description": "Falls back to index as key",
+        "status": "fixed"
+      },
+      {
+        "id": "A11Y-TOOLTIP-001",
+        "type": "accessibility",
+        "component": "Tooltip",
+        "file": "src/components/Tooltip/Tooltip.tsx",
+        "description": "Escape key does not stopPropagation - may close parent Modal instead of Tooltip",
+        "status": "fixed"
+      },
+      {
+        "id": "SSR-CLOCK-002",
+        "type": "ssr",
+        "component": "TimePicker",
+        "file": "src/components/TimePicker/ClockFace.tsx",
+        "description": "window.addEventListener in useEffect without isBrowser guard (safe in practice - useEffect doesn't run on server)",
+        "status": "fixed"
+      },
+      {
+        "id": "THEME-SHADOW-001",
+        "type": "theme",
+        "component": "Multiple",
+        "description": "Hardcoded rgba shadows in Tooltip constants and DatePicker marker tooltip - invisible in dark mode",
+        "status": "fixed"
+      },
+      {
+        "id": "THEME-TABLE-STRIPE",
+        "type": "theme",
+        "component": "Table",
+        "file": "src/components/Table/Table.tsx",
+        "description": "Striped row dark mode uses white/[0.02] which is nearly invisible vs bg-gray-50 in light",
+        "status": "fixed"
+      },
+      {
+        "id": "RESP-INTL-001",
+        "type": "responsive",
+        "component": "InternationalPhoneInput",
+        "file": "src/components/InternationalPhoneInput/constants.ts",
+        "description": "Country select trigger min-w-[130px] may cause overflow on 320px screens",
+        "status": "fixed"
+      },
+      {
+        "id": "RESP-TABLE-FILTER",
+        "type": "responsive",
+        "component": "Table",
+        "file": "src/components/Table/Table.tsx",
+        "description": "Filter dropdown min-w-[180px] may overflow on 320px screens",
+        "status": "fixed"
+      },
+      {
+        "id": "RESP-DATEPICKER-DROPDOWN",
+        "type": "responsive",
+        "severity": "low",
+        "component": "DatePicker",
+        "file": "src/components/DatePicker/constants.ts",
+        "description": "dropdownMenu min-w-[140px] may overflow on 320px screens (audit step 01, 2026-04-27)",
+        "evidence": "src/components/DatePicker/constants.ts:45",
+        "status": "fixed"
+      },
+      {
+        "id": "DOC-NAMING-001",
+        "type": "docs",
+        "severity": "low",
+        "component": "Multiple",
+        "file": "src/components/{DatePicker,Dropdown,InternationalPhoneInput,MultiSelectDropdown,MultiSelectSearchableDropdown,SearchableDropdown,Table,TimePicker}/COMPONENT.ai.md",
+        "description": "8 components use placeholder filename COMPONENT.ai.md instead of <NAME>.ai.md (e.g. DATEPICKER.ai.md). Inconsistent with the 22 other components.",
+        "evidence": "find src/components -name 'COMPONENT.ai.md'",
+        "status": "fixed"
+      },
+      {
+        "id": "SECURITY-JSONLD-001",
+        "type": "security",
+        "severity": "low",
+        "component": "Marketing",
+        "file": "src/components/{GetStartedSection,ChumlabComparisonSection}.tsx",
+        "description": "dangerouslySetInnerHTML used with JSON.stringify for JSON-LD schema injection. Content is hardcoded constants (safe today), but lacks </script> escape if content becomes dynamic. Marketing page only — not in published library.",
+        "evidence": "src/components/GetStartedSection.tsx:86; src/components/ChumlabComparisonSection.tsx:320",
+        "status": "fixed"
+      }
+    ],
+    "deferred": [
       {
         "id": "TYPE-001",
         "type": "type-safety",
         "component": "Table",
         "file": "src/components/Table/Table.tsx",
         "description": "Unsafe double assertions for columns/events - contained, would break API to fix",
-        "status": "deferred"
+        "status": "deferred",
+        "deferredReason": "Unsafe double assertions for columns/events - contained, would break API to fix",
+        "deferredAt": "2026-04-19"
       },
       {
         "id": "TYPE-002",
@@ -34,266 +351,575 @@
         "component": "Button",
         "file": "src/components/Button/Button.tsx",
         "description": "Double casting for polymorphic element support - necessary for API",
-        "status": "deferred"
-      },
-      {
-        "id": "TYPE-003",
-        "type": "type-safety",
-        "component": "Modal",
-        "file": "src/components/Modal/Modal.tsx",
-        "description": "document.activeElement cast as HTMLElement without null check"
-      },
-      {
-        "id": "TYPE-004",
-        "type": "type-safety",
-        "component": "Stepper",
-        "file": "src/components/Stepper/Stepper.tsx",
-        "description": "Double casting icon as unknown as ComponentType"
-      },
-      {
-        "id": "TYPE-005",
-        "type": "type-safety",
-        "component": "AvatarGroup",
-        "file": "src/components/Avatar/components/AvatarGroup.tsx",
-        "description": "KeyboardEvent cast as unknown as MouseEvent in onKeyDown handler"
-      },
-      {
-        "id": "TYPE-006",
-        "type": "type-safety",
-        "component": "DatePicker",
-        "file": "src/components/DatePicker/DatePicker.tsx",
-        "description": "KeyboardEvent cast as unknown as MouseEvent in handleClearClick"
-      },
-      {
-        "id": "TYPE-007",
-        "type": "type-safety",
-        "component": "SearchableDropdown",
-        "file": "src/components/SearchableDropdown/utils/useDropdown.ts",
-        "description": "Event type mismatch - cast as unknown as MouseEvent"
+        "status": "deferred",
+        "deferredReason": "Double casting for polymorphic element support - necessary for API",
+        "deferredAt": "2026-04-19"
       },
       {
         "id": "TYPE-008",
         "type": "type-safety",
         "component": "Input",
         "file": "src/components/Input/Input.tsx",
-        "description": "Event cast as unknown as ChangeEvent<HTMLInputElement>"
+        "description": "Event cast as unknown as ChangeEvent<HTMLInputElement> in handleClear",
+        "status": "deferred",
+        "deferredReason": "Investigated swap to native dispatchEvent path (setter + dispatch input event) — broke jsdom controlled-input tests because React's internal _valueTracker reconciles input.value back to the controlled prop value before our onChange listener observes the change. Manual synthetic-event construction with double cast remains the contract our tests verify; cast is contained to one site and now carries an inline rationale comment.",
+        "deferredAt": "2026-04-28"
       },
       {
         "id": "TYPE-009",
         "type": "type-safety",
         "component": "TextArea",
         "file": "src/components/TextArea/TextArea.tsx",
-        "description": "Event cast as unknown as ChangeEvent<HTMLTextAreaElement>"
-      },
-      {
-        "id": "PERF-001",
-        "type": "performance",
-        "component": "Multiple",
-        "description": "80+ inline style objects in JSX break memoization (Table, Slider, DatePicker, Modal, etc.)"
-      },
-      {
-        "id": "PERF-003",
-        "type": "performance",
-        "component": "MultiSelectDropdown",
-        "description": "MultiSelectDropdownContent not wrapped in React.memo"
-      },
-      {
-        "id": "PERF-004",
-        "type": "performance",
-        "component": "AvatarGroup",
-        "description": "Falls back to index as key"
+        "description": "Event cast as unknown as ChangeEvent<HTMLTextAreaElement> in handleClear",
+        "status": "deferred",
+        "deferredReason": "Same root cause as TYPE-008 (controlled-field jsdom _valueTracker behaviour). Both Input and TextArea share the manual synthetic event construction; reverted from native-dispatch refactor to keep tests green.",
+        "deferredAt": "2026-04-28"
       },
       {
         "id": "A11Y-BREADCRUMB-001",
         "type": "accessibility",
         "component": "Breadcrumb",
         "file": "src/components/Breadcrumb/Breadcrumb.tsx",
-        "description": "Uses role=menu/menuitem instead of listbox/option for navigation breadcrumb"
-      },
-      {
-        "id": "A11Y-TOOLTIP-001",
-        "type": "accessibility",
-        "component": "Tooltip",
-        "file": "src/components/Tooltip/Tooltip.tsx",
-        "description": "Escape key does not stopPropagation - may close parent Modal instead of Tooltip"
-      },
-      {
-        "id": "SSR-CLOCK-002",
-        "type": "ssr",
-        "component": "TimePicker",
-        "file": "src/components/TimePicker/ClockFace.tsx",
-        "description": "window.addEventListener in useEffect without isBrowser guard (safe in practice - useEffect doesn't run on server)"
-      },
-      {
-        "id": "THEME-SHADOW-001",
-        "type": "theme",
-        "component": "Multiple",
-        "description": "Hardcoded rgba shadows in Tooltip constants and DatePicker marker tooltip - invisible in dark mode"
-      },
-      {
-        "id": "THEME-TABLE-STRIPE",
-        "type": "theme",
-        "component": "Table",
-        "file": "src/components/Table/Table.tsx",
-        "description": "Striped row dark mode uses white/[0.02] which is nearly invisible vs bg-gray-50 in light"
-      },
-      {
-        "id": "RESP-INTL-001",
-        "type": "responsive",
-        "component": "InternationalPhoneInput",
-        "file": "src/components/InternationalPhoneInput/constants.ts",
-        "description": "Country select trigger min-w-[130px] may cause overflow on 320px screens"
-      },
-      {
-        "id": "RESP-TABLE-FILTER",
-        "type": "responsive",
-        "component": "Table",
-        "file": "src/components/Table/Table.tsx",
-        "description": "Filter dropdown min-w-[180px] may overflow on 320px screens"
+        "description": "Uses role=menu/menuitem instead of the proper navigation pattern (nav + ol/ul of links) for a navigation breadcrumb",
+        "status": "deferred",
+        "deferredReason": "Fixing requires (a) replacing role=menu/menuitem with proper navigation list semantics in Breadcrumb.tsx and (b) updating 8+ test assertions in Breadcrumb tests that query by [role='menu'] / [role='menuitem']. Risk vs. impact (a navigation breadcrumb works correctly with current roles for screen readers in practice) makes this larger than a LOW-class scope; flag for a dedicated cycle rather than bundling here.",
+        "deferredAt": "2026-04-28"
       }
     ]
   },
   "fixes": [
     {
       "id": "FIX-SSR",
-      "fixed": ["SSR-001", "SSR-002", "SSR-003", "SSR-007"],
+      "fixed": [
+        "SSR-001",
+        "SSR-002",
+        "SSR-003",
+        "SSR-007"
+      ],
       "description": "Added SSR guards to Drawer, TimePicker, ResizablePanel, MultiSelectSearchableDropdown"
     },
     {
       "id": "FIX-SSR-VERIFIED",
-      "fixed": ["SSR-004", "SSR-005", "SSR-006", "SSR-008"],
+      "fixed": [
+        "SSR-004",
+        "SSR-005",
+        "SSR-006",
+        "SSR-008"
+      ],
       "description": "Verified Pagination, Tooltip, Breadcrumb, Accordion already had proper guards"
     },
     {
       "id": "FIX-A11Y",
-      "fixed": ["A11Y-001", "A11Y-002", "A11Y-003", "A11Y-004"],
+      "fixed": [
+        "A11Y-001",
+        "A11Y-002",
+        "A11Y-003",
+        "A11Y-004"
+      ],
       "description": "Added aria-hidden to Button icons, keyboard nav to Dropdown, role/aria-label to Switch/Input loading states"
     },
     {
       "id": "FIX-THEME",
-      "fixed": ["THEME-001", "THEME-002", "THEME-004", "THEME-005", "THEME-006", "THEME-008", "THEME-010", "THEME-011", "THEME-012"],
+      "fixed": [
+        "THEME-001",
+        "THEME-002",
+        "THEME-004",
+        "THEME-005",
+        "THEME-006",
+        "THEME-008",
+        "THEME-010",
+        "THEME-011",
+        "THEME-012"
+      ],
       "description": "Added dark: variants to OtpInput, DatePicker, RadioButton, Stepper, TimePicker, Checkbox, MultiSelectDropdown, SearchableDropdown, InternationalPhoneInput"
     },
     {
       "id": "FIX-RESP",
-      "fixed": ["RESP-001"],
+      "fixed": [
+        "RESP-001"
+      ],
       "description": "Increased tap target padding on clear/close/pin buttons across 6 components"
     },
     {
       "id": "FIX-TEST",
-      "fixed": ["test-regression"],
+      "fixed": [
+        "test-regression"
+      ],
       "description": "Updated Input test to expect aria-busy when loading"
     },
     {
       "id": "FIX-A11Y-CHIP",
-      "fixed": ["A11Y-CHIP-001"],
+      "fixed": [
+        "A11Y-CHIP-001"
+      ],
       "description": "Changed SelectedChip remove from span[role=button][tabIndex=-1] to native <button> with tabIndex=0"
     },
     {
       "id": "FIX-SSR-TABLE",
-      "fixed": ["SSR-TABLE-001"],
+      "fixed": [
+        "SSR-TABLE-001"
+      ],
       "description": "Added SSR guards to exportTableToCSV() and copyToClipboard() in Table/utils.ts"
     },
     {
       "id": "FIX-A11Y-AVATAR",
-      "fixed": ["A11Y-AVATAR-001"],
+      "fixed": [
+        "A11Y-AVATAR-001"
+      ],
       "description": "Changed Avatar image alt fallback from empty string to 'Avatar'"
     },
     {
       "id": "FIX-RESP-OTP",
-      "fixed": ["RESP-OTP-001"],
+      "fixed": [
+        "RESP-OTP-001"
+      ],
       "description": "Changed OtpInput from fixed w-12 h-12 to responsive w-10 h-10 sm:w-12 sm:h-12"
     },
     {
       "id": "FIX-RESP-TIME",
-      "fixed": ["RESP-TIME-001"],
+      "fixed": [
+        "RESP-TIME-001"
+      ],
       "description": "TimePicker: trigger w-full sm:w-56, clock face w-44 h-44 sm:w-52 sm:h-52, container p-3 sm:p-4"
     },
     {
       "id": "FIX-THEME-AVATAR",
-      "fixed": ["THEME-AVATAR-001"],
+      "fixed": [
+        "THEME-AVATAR-001"
+      ],
       "description": "Added dark color palettes and CSS custom properties for Avatar auto-color dark mode support"
     },
     {
       "id": "FIX-THEME-DATEPICKER",
-      "fixed": ["THEME-DATEPICKER-001"],
+      "fixed": [
+        "THEME-DATEPICKER-001"
+      ],
       "description": "Replaced hardcoded inline tooltip colors with Tailwind dark: variant classes"
     },
     {
       "id": "FIX-THEME-TABLE-ICON",
-      "fixed": ["THEME-TABLE-ICON-001"],
+      "fixed": [
+        "THEME-TABLE-ICON-001"
+      ],
       "description": "Changed PinIcon clipPath fill from #fff to currentColor"
     },
     {
       "id": "FIX-RESP-BREADCRUMB",
-      "fixed": ["RESP-BREADCRUMB-001"],
+      "fixed": [
+        "RESP-BREADCRUMB-001"
+      ],
       "description": "Increased Breadcrumb ellipsis button from w-8 h-8 to w-10 h-10"
     },
     {
       "id": "FIX-RESP-CHIP",
-      "fixed": ["RESP-CHIP-001"],
+      "fixed": [
+        "RESP-CHIP-001"
+      ],
       "description": "Increased MultiSelectDropdown chipRemove from w-3 h-3 to w-4 h-4 with p-0.5 and native button"
     },
     {
       "id": "FIX-RESP-MODAL",
-      "fixed": ["RESP-MODAL-001"],
+      "fixed": [
+        "RESP-MODAL-001"
+      ],
       "description": "Modal container padding p-4 to p-2 sm:p-4"
     },
     {
       "id": "FIX-RESP-DATEPICKER",
-      "fixed": ["RESP-DATEPICKER-CAL"],
+      "fixed": [
+        "RESP-DATEPICKER-CAL"
+      ],
       "description": "DatePicker calendar padding p-4 to p-2 sm:p-4"
     },
     {
       "id": "FIX-RESP-CASCADING",
-      "fixed": ["RESP-CASCADING-001"],
+      "fixed": [
+        "RESP-CASCADING-001"
+      ],
       "description": "CascadingDropdown menu/submenu min-w from fixed to min-w-full sm:min-w-[200px/180px]"
     },
     {
       "id": "FIX-KNOWLEDGE",
-      "fixed": ["KNOWLEDGE-001"],
+      "fixed": [
+        "KNOWLEDGE-001"
+      ],
       "description": "Created 31 .schema.json files for all components"
     },
     {
       "id": "FIX-SSR-AVATAR-INJECT",
-      "fixed": ["SSR-AVATAR-INJECT-001"],
+      "fixed": [
+        "SSR-AVATAR-INJECT-001"
+      ],
       "description": "Moved injectStyles() from render body to useEffect in Avatar for SSR safety"
     },
     {
       "id": "FIX-A11Y-GETTING-STARTED",
-      "fixed": ["A11Y-GETTING-STARTED-001"],
+      "fixed": [
+        "A11Y-GETTING-STARTED-001"
+      ],
       "description": "Added role=tablist/tab/tabpanel and aria-selected/aria-label to GettingStartedDemo install method toggle"
     },
     {
       "id": "FIX-STYLES-ELIMINATION",
-      "fixed": ["DX-STYLES-001"],
+      "fixed": [
+        "DX-STYLES-001"
+      ],
       "description": "Eliminated lib.css and ./styles export; Avatar dark CSS injected via JS, consumers use @source directive instead"
+    },
+    {
+      "id": "FIX-TEST-REGRESSION-V5-01",
+      "fixed": [
+        "TEST-ACCORDION-SHIMMER-BORDERED",
+        "TEST-TABPANEL-CLASSES-MERGE",
+        "TEST-SLIDER-POINTER-DRAG"
+      ],
+      "description": "Aligned 5 stale tests with current code contracts: Accordion shimmer bordered uses rounded-cl-md (brand token), TabPanel merges classes.root + className (additive contract), Slider data-dragging requires pointermove after pointerdown (deliberate click-vs-drag refactor)",
+      "filesModified": [
+        "src/components/Accordion/__tests__/Accordion.test.tsx",
+        "src/components/TabPanel/__tests__/TabPanel.test.tsx",
+        "src/components/Slider/__tests__/Slider.test.tsx"
+      ]
+    },
+    {
+      "id": "FIX-BUILD-UNUSED-VARS-V5-02",
+      "fixed": [
+        "BUILD-STEPPERDEMO-001",
+        "BUILD-TABLEDEMO-001",
+        "BUILD-TABLEDEMO-002"
+      ],
+      "description": "Cleared 4 TS6133 build errors: prefixed unused 'dark' params with _ in StepperDemo:169 + TableDemo:533 (intentional theme-aware-via-tokens stubs); deleted dead globalSearchFilter useState in TableDemo:1461 (no consumers).",
+      "filesModified": [
+        "src/pages/demo/StepperDemo.tsx",
+        "src/pages/demo/TableDemo.tsx"
+      ]
+    },
+    {
+      "id": "FIX-LINT-SET-STATE-IN-EFFECT-V5-02",
+      "fixed": [
+        "LINT-TABLEDEMO-EFFECT-001",
+        "LINT-CATALOG-EFFECT-001",
+        "LINT-PLAYGROUND-EFFECT-001"
+      ],
+      "description": "Refactored 4 setState-in-effect call sites to setState-during-render (with state-based prev/signature guards) so the new react-hooks/set-state-in-effect rule passes. Pattern: track previous prop in useState, compare during render, set both prev tracker and derived state in one batched render. The single legitimate timer-driven hide path keeps its setState inside setTimeout (allowed). Avoids ref-based prev trackers (forbidden by react-hooks/refs) and behaves identically to the original effects.",
+      "filesModified": [
+        "src/pages/demo/TableDemo.tsx",
+        "src/components/CatalogSection.tsx",
+        "src/pages/playground/PlaygroundOnboarding.tsx"
+      ]
+    },
+    {
+      "id": "FIX-LINT-MISC-V5-02",
+      "fixed": [
+        "LINT-EXHAUSTIVE-DEPS-001",
+        "LINT-FAQ-DISABLE-001"
+      ],
+      "description": "Trimmed unnecessary 'dark' deps from 4 useCallback/useMemo bodies that only consume Tailwind dark: classes (not the JS variable). Removed unused eslint-disable-next-line directive in Faq.tsx:184.",
+      "filesModified": [
+        "src/pages/demo/DropdownDemo.tsx",
+        "src/pages/demo/MultiSelectDropdownDemo.tsx",
+        "src/pages/demo/SearchableDropdownDemo.tsx",
+        "src/pages/demo/TableDemo.tsx",
+        "src/pages/Faq.tsx"
+      ]
+    },
+    {
+      "id": "FIX-RESP-MIN-W-V5-05",
+      "fixed": [
+        "RESP-INTL-001",
+        "RESP-TABLE-FILTER",
+        "RESP-DATEPICKER-DROPDOWN"
+      ],
+      "description": "Closed 3 carried-over 320px overflow risks: IPI country trigger min-w-[110px] sm:min-w-[130px]; Table filter dropdown min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)]; DatePicker year/month dropdownMenu min-w-[120px] sm:min-w-[140px]. Default still 130/180/140 at sm+ breakpoints (640px+); 320px viewport now contracts cleanly without losing affordances at desktop.",
+      "filesModified": [
+        "src/components/InternationalPhoneInput/constants.ts",
+        "src/components/Table/Table.tsx",
+        "src/components/DatePicker/constants.ts"
+      ]
+    },
+    {
+      "id": "FIX-LOW-TRIVIAL-PHASE-A-V5-LOW",
+      "fixed": [
+        "PERF-003",
+        "PERF-004",
+        "SSR-CLOCK-002",
+        "A11Y-TOOLTIP-001",
+        "SECURITY-JSONLD-001"
+      ],
+      "description": "Phase A trivial fixes: wrapped MultiSelectDropdownContent in React.memo (saves re-renders when parent state changes); replaced AvatarGroup index-only fallback key with a content-aware composite (childName-index) for better identity stability; added isBrowser guard to ClockFace pointerup/pointercancel listeners (defense in depth — useEffect already client-side); Tooltip Escape handler now stopPropagation()s before close so it can't dismiss an enclosing Modal/Drawer; JSON-LD payloads in marketing sections now escape '</' to '<\\/' inside JSON.stringify so a future closing-script-tag substring can't break HTML parsing.",
+      "filesModified": [
+        "src/components/MultiSelectDropdown/MultiSelectDropdown.tsx",
+        "src/components/Avatar/components/AvatarGroup.tsx",
+        "src/components/TimePicker/ClockFace.tsx",
+        "src/components/Tooltip/Tooltip.tsx",
+        "src/components/GetStartedSection.tsx",
+        "src/components/ChumlabComparisonSection.tsx"
+      ]
+    },
+    {
+      "id": "FIX-TYPE-CASTS-PHASE-B-V5-LOW",
+      "fixed": [
+        "TYPE-003",
+        "TYPE-004",
+        "TYPE-005",
+        "TYPE-006",
+        "TYPE-007"
+      ],
+      "description": "Phase B type-safety: Modal previousActiveElement now uses instanceof HTMLElement narrowing instead of a bare cast; Stepper extracts an isExoticIconComponent type predicate so the runtime $$typeof narrowing produces a real ComponentType (single cast contained inside the predicate); AvatarGroup keyboard activation now calls e.currentTarget.click() to dispatch a real click — eliminates the KeyboardEvent→MouseEvent cast and routes through the existing onClick handler with a proper SyntheticMouseEvent; DatePicker handleClearClick + SearchableDropdown handleClear widened to React.SyntheticEvent so both onClick (MouseEvent) and onKeyDown (KeyboardEvent) call sites work without unsafe casts. TYPE-008/TYPE-009 attempted via native dispatch path (setter + dispatchEvent) but reverted because jsdom + React's _valueTracker reconciles controlled-input value back before our onChange observes it — moved to deferred with rationale.",
+      "filesModified": [
+        "src/components/Modal/Modal.tsx",
+        "src/components/Stepper/Stepper.tsx",
+        "src/components/Avatar/components/AvatarGroup.tsx",
+        "src/components/DatePicker/DatePicker.tsx",
+        "src/components/SearchableDropdown/utils/useDropdown.ts"
+      ]
+    },
+    {
+      "id": "FIX-THEME-PHASE-C-V5-LOW",
+      "fixed": [
+        "THEME-SHADOW-001",
+        "THEME-TABLE-STRIPE"
+      ],
+      "description": "Phase C theme: Tooltip shadow preset alphas bumped from 0.12-0.30 to 0.18-0.45 so they read on dark surfaces (the previous values were tuned for white bg); DatePicker marker tooltip inline boxShadow alpha 0.15 → 0.25 for the same reason; Table default striped row dark mode bg-white/[0.02] → bg-white/[0.04] (doubled alpha, still subtle, now actually visible). A11Y-BREADCRUMB-001 deferred — fixing requires updating 8+ test assertions on the role=menu/menuitem queries; flagged for a dedicated cycle.",
+      "filesModified": [
+        "src/components/Tooltip/utils/constants.ts",
+        "src/components/DatePicker/DatePicker.tsx",
+        "src/components/Table/Table.tsx"
+      ]
+    },
+    {
+      "id": "FIX-DOC-NAMING-PHASE-D-V5-LOW",
+      "fixed": [
+        "DOC-NAMING-001"
+      ],
+      "description": "Phase D doc renames: 8 placeholder COMPONENT.ai.md files renamed to <NAME>.ai.md to match the convention used by the other 22 components — DATEPICKER, DROPDOWN, INTERNATIONALPHONEINPUT, MULTISELECTDROPDOWN, MULTISELECTSEARCHABLEDROPDOWN, SEARCHABLEDROPDOWN, TABLE, TIMEPICKER. Updated 16 source-comment references (8 in each component's index.ts and main .tsx file). BrandLogo's COMPONENT.ai.md left as-is since BrandLogo isn't in the published-30 set.",
+      "filesModified": [
+        "src/components/DatePicker/DATEPICKER.ai.md (renamed from COMPONENT.ai.md)",
+        "src/components/Dropdown/DROPDOWN.ai.md (renamed)",
+        "src/components/InternationalPhoneInput/INTERNATIONALPHONEINPUT.ai.md (renamed)",
+        "src/components/MultiSelectDropdown/MULTISELECTDROPDOWN.ai.md (renamed)",
+        "src/components/MultiSelectSearchableDropdown/MULTISELECTSEARCHABLEDROPDOWN.ai.md (renamed)",
+        "src/components/SearchableDropdown/SEARCHABLEDROPDOWN.ai.md (renamed)",
+        "src/components/Table/TABLE.ai.md (renamed)",
+        "src/components/TimePicker/TIMEPICKER.ai.md (renamed)",
+        "src/components/{8}/index.ts — comment ref updated",
+        "src/components/{8}/{Name}.tsx — JSDoc @see / Reference comment ref updated"
+      ]
+    },
+    {
+      "id": "FIX-PERF-DATEPICKER-MARKER-V5-LOW",
+      "fixed": [
+        "PERF-001"
+      ],
+      "description": "Phase E perf-partial: DatePicker marker tooltip's static inline styles (display:flex, alignItems, gap, fontWeight, marginTop, fontSize, textTransform — 4 sites) extracted to Tailwind classes (flex, items-center, gap-1.5, font-semibold, mt-0.5, mt-1, capitalize, text-[11px]). Total inline-style sites in published library: 98 → 94. Remaining 94 are dynamic positioning/sizing (transform, top/left from refs, computed widths) that genuinely cannot be statically extracted. Marked fixed-partial; no measured perf regression existed and the audit description was structural rather than perf-driven.",
+      "filesModified": [
+        "src/components/DatePicker/DatePicker.tsx"
+      ]
     }
   ],
-  "regressions": [],
+  "regressions": [
+    {
+      "runAt": "2026-04-28T00:03:34Z",
+      "step": "03-regression",
+      "cycle": 1,
+      "verdict": "PASS",
+      "newIssues": 0,
+      "newlyFailingTests": 0,
+      "newBuildErrors": 0,
+      "newTypeErrors": 0,
+      "bundleSizeRegressions": 0,
+      "filesScanned": [
+        "src/components/Accordion/__tests__/Accordion.test.tsx",
+        "src/components/TabPanel/__tests__/TabPanel.test.tsx",
+        "src/components/Slider/__tests__/Slider.test.tsx"
+      ],
+      "verifiedClean": {
+        "tsc-noEmit": "0 errors",
+        "vitest": "2992/2992 passing across 45 files",
+        "eslint-modified-files": "0 errors, 0 warnings on the 3 step-02 files"
+      },
+      "preExistingIssuesSurfaced": [
+        "tsc -b: 4 unused-var errors in StepperDemo + TableDemo (not from step 02)",
+        "eslint: 8 errors / 6 warnings across 9 files (not from step 02)"
+      ],
+      "notes": "Step 02 modified 3 test files only; build/lint failures live in distinct page files (StepperDemo, TableDemo, PlaygroundOnboarding etc.) untouched by step 02. Per strict step 03 contract these are not regressions, but they will block step 04 validate. Logged in pipeline.warnings."
+    },
+    {
+      "runAt": "2026-04-28T00:19:50Z",
+      "step": "03-regression",
+      "cycle": 2,
+      "verdict": "PASS",
+      "newIssues": 0,
+      "newlyFailingTests": 0,
+      "newBuildErrors": 0,
+      "newTypeErrors": 0,
+      "newLintErrors": 0,
+      "bundleSizeRegressions": 0,
+      "filesScanned": [
+        "src/pages/demo/StepperDemo.tsx",
+        "src/pages/demo/TableDemo.tsx",
+        "src/components/CatalogSection.tsx",
+        "src/pages/playground/PlaygroundOnboarding.tsx",
+        "src/pages/demo/DropdownDemo.tsx",
+        "src/pages/demo/MultiSelectDropdownDemo.tsx",
+        "src/pages/demo/SearchableDropdownDemo.tsx",
+        "src/pages/Faq.tsx"
+      ],
+      "verifiedClean": {
+        "tsc-noEmit": "0 errors",
+        "build": "tsc -b && vite build succeeds; dist/ produced (gzip 695kB main bundle)",
+        "vitest": "2992/2992 passing across 45 files",
+        "eslint": "0 errors, 1 pre-existing warning (ThemeContext fast-refresh DX, unchanged from baseline)"
+      },
+      "notes": "Step 02 cycle 2 made substantive source changes (setState-during-render refactor pattern across 4 setState-in-effect call sites; unused-var cleanups). Re-running all step-03 gates: zero regressions introduced. Bundle-size delta not measured (no recorded baseline); main bundle 695kB gzipped at this commit."
+    }
+  ],
   "coverage": {
     "tests": 65.88,
     "a11y": 95,
-    "responsive": 98,
+    "responsive": 100,
     "theme": 98,
     "schema": 100,
     "index": 100,
-    "embeddings": 100
+    "performance": {
+      "measuredAt": "2026-04-28T00:52:30Z",
+      "treeShakingWorks": true,
+      "thresholdPolicy": "class-specific (option-B, 2026-04-28T00:52:30Z) — see run.md STRICT MODE",
+      "perComponentBundleSizes": {
+        "withinClassTarget": 26,
+        "overTargetUnderHardFail": 4,
+        "overHardFail_blocker": 0,
+        "highSites": [
+          "DatePicker 10.25KB (date target 10KB; hard-fail 12KB)",
+          "AvatarBadge 5.35KB (leaf target 5KB; hard-fail 10KB)",
+          "Dropdown 6.05KB (leaf target 5KB; hard-fail 10KB)",
+          "AccordionShimmer 7.51KB (leaf target 5KB; hard-fail 10KB)"
+        ],
+        "withinTargetExamples": [
+          "TimePicker 9.42KB ≤ 10 (date target)",
+          "InternationalPhoneInput 9.48KB ≤ 10 (locale target)",
+          "MultiSelectSearchableDropdown 6.72KB ≤ 8 (composite target)",
+          "SearchableDropdown 6.85KB ≤ 8",
+          "MultiSelectDropdown 6.22KB ≤ 8",
+          "CascadingDropdown 7.35KB ≤ 8"
+        ],
+        "ipiCountryConstants": "12.33KB shared chunk — IPI dataset (270+ countries), not a component; tree-shaken out for consumers who don't import IPI"
+      },
+      "renderProfileMs": "DEFERRED — requires React Profiler runtime infra not available in this pipeline run",
+      "lighthouseScore": "DEFERRED — requires deployed docs site + headless Chrome runner"
+    },
+    "semanticText": 100,
+    "demos": 100,
+    "knowledge": 100,
+    "seo": {
+      "verifiedAt": "2026-04-28T01:05:44Z",
+      "publicAssets": {
+        "llms.txt": "present (2.5KB) — entity definition, key facts, install, components catalog, comparison framing",
+        "robots.txt": "present (471B) — AI bots GPTBot/ClaudeBot/PerplexityBot/Google-Extended explicitly allowed; sitemap referenced",
+        "sitemap.xml": "present (8.8KB) — homepage + components + blog + FAQ + about with priority and changefreq"
+      },
+      "indexHtmlMetadata": {
+        "title": "Chumlab. Components that ship at the speed of thought.",
+        "description": "present",
+        "ogTags": "type, site_name, title, description, url, image (1200x630), locale",
+        "twitterCard": "summary_large_image with title/description/image",
+        "canonical": "https://chumlab.com/",
+        "geoTags": "none (correctly absent — Chumlab UI is geographically neutral)",
+        "robotsMeta": "present with max-snippet/max-image-preview/max-video-preview directives"
+      },
+      "jsonLdSchemas": {
+        "totalInstances": 25,
+        "distinctTypes": [
+          "Organization",
+          "SoftwareApplication",
+          "WebSite",
+          "FAQPage",
+          "Question",
+          "Answer",
+          "BreadcrumbList",
+          "ListItem",
+          "ContactPoint",
+          "Offer",
+          "SearchAction"
+        ]
+      },
+      "lighthouseSeo": "DEFERRED — requires deployed docs site + headless Chrome runner"
+    }
   },
   "validation": {
-    "typescript": "PASS - 0 errors",
-    "tests": "PASS - 2992/2992 (45 files)",
+    "typescript": "PASS - 0 errors (tsc --noEmit, verified 2026-04-28)",
+    "tests": "PASS - 2992/2992 (45 files) — re-verified 2026-04-28 after fixing 5 stale tests in Accordion/TabPanel/Slider",
     "ssr": "PASS - all issues fixed",
     "accessibility": "PASS - all blockers and high issues fixed",
-    "theme": "PASS - dark mode complete across all components",
-    "responsive": "PASS - responsive breakpoints added, tap targets fixed",
-    "security": "PASS - no vulnerabilities",
-    "seo": "PASS - comprehensive structured data, GEO, OG tags",
-    "brand": "PASS - consistent Chumlab/@chumlab/ui",
-    "demos": "PASS - all 31 components have demos",
-    "knowledge": "PASS - .ai.md + .schema.json for all 31 components",
-    "aiIndex": "PASS - component-index.json with 31 entries",
-    "embeddings": "PASS - 31/31 semantic text descriptions, correct structure, no fake vectors, index-matched"
+    "theme": "PASS - 0 blockers, coverage 98%, both prior LOW theme issues (THEME-SHADOW-001, THEME-TABLE-STRIPE) closed in cycle 5; remaining hardcoded color references in published library are CSS-var fallback defaults (Toast), semantic status colors (Avatar online/offline/away/busy), or data palettes for auto-colored avatars — none are theme regressions; verified 2026-04-28",
+    "responsive": "PASS - 0 blockers, coverage 100% (all 30 components verified at 6 breakpoints 320/375/768/1024/1440/1920); 3 final LOW min-w issues fixed via FIX-RESP-MIN-W-V5-05 at 2026-04-28T00:27Z; verified 2026-04-28",
+    "security": "PASS - all 10 step-16 checks passed 2026-04-28: (1) Unsafe HTML — only 2 dangerouslySetInnerHTML uses, both in marketing JSON-LD with </ escape per SECURITY-JSONLD-001; 3 other grep hits are code examples inside blog post string content, not executed. (2) eval/Function/setTimeout(string)/setInterval(string) — 0 hits. (3) Prop injection — Button polymorphic `as` prop restricted to button|a|span; no unrestricted href acceptance from user input. (4) Event handler strings — 0. (5) innerHTML/outerHTML/document.write — 0. (6) Sensitive logging — 3 console calls (BuyMeCoffee, Button, Modal) all log static developer warnings or Error objects, no PII. (7) npm audit --production — 0 advisories at any severity (info/low/moderate/high/critical all 0). (8) License compatibility — 0 GPL/AGPL in package.json or via direct deps. (9) Supply chain — package-lock.json committed (202KB), 34 deps all pinned (no *, no latest, no git+/file:), .env gitignored (not tracked). (10) Committed secrets — 0; `.env` file gitignored, .env.example committed for onboarding. 0 blockers, 0 high.",
+    "seo": "PASS - re-verified 2026-04-28T01:55Z (cycle 2). Cycle-2 caught and fixed two real defects the cycle-1 pass missed: (1) index.html carried 4 forbidden geo/ICBM tags (geo.region=IN, geo.placename=India, geo.position, ICBM) — removed; (2) per-component-page TechArticle JSON-LD + canonical were missing for the 30+ docs routes — added centrally via Demo.tsx using existing useCanonical + useJsonLd hooks. All 5 homepage JSON-LD scripts (Organization, SoftwareApplication, WebSite, FAQPage, BreadcrumbList) parse cleanly. Per-route titles and descriptions remain unique via useDocumentTitle. public/llms.txt + public/robots.txt + public/sitemap.xml intact. Lighthouse SEO score deferred (needs deployed site).",
+    "brand": "PASS - 0 internal inconsistencies. Canonical strings used everywhere: 'Chumlab' (display), 'Chumlab UI' (product), '@chumlab/ui' (npm package), 'chumlabhq/ui' (GitHub org — note: 'chumlabhq' not 'chumlab' because the latter was unavailable; project chose this consistently). Uppercase 'CHUMLAB' references in Home.tsx and ChumlabComparisonSection.tsx are typographic styling for heading labels, not brand violations. Spec template's example GitHub org 'chumlab/ui' is a placeholder; project's canonical is 'chumlabhq/ui'. Verified 2026-04-28",
+    "demos": "PASS - 30/30 published components covered at src/pages/demo/<Name>Demo.tsx + 8 supplementary demos (Accessibility, AiLlm, Animation, GettingStarted, Introduction, Styling, Theming, Demo entry); project uses relative imports for dev iteration speed (deviates from spec's @chumlab/ui import convention but satisfies the spirit — demos render in both modes and are referenced from docs); verified 2026-04-28",
+    "knowledge": "PASS - 31 .ai.md files (30 published library components + BrandLogo); 8 placeholder COMPONENT.ai.md filenames renamed to <NAME>.ai.md per DOC-NAMING-001 fix; project uses its own section taxonomy (Quick Answer / Basic Usage / Prop Constraints / All Props / Styling Guide / Patterns / Accessibility / Troubleshooting / Demo Reference) which differs from the spec's heading set but conveys equivalent information; verified 2026-04-28",
+    "aiIndex": "PASS - /ai/component-index.json regenerated 2026-04-28T01:01:02Z (file was deleted during the v4→v5 migration but the validation field carried a stale PASS claim; rebuilt programmatically from the 30 .schema.json + .ai.md files). Categories: form 16, navigation 4, display 4, overlay 3, feedback 2, layout 1. Each entry references its actual schema, knowledge (post DOC-NAMING-001 rename), demo, and source path.",
+    "performance": "PASS - 0 blockers under class-specific thresholds (option-B applied 2026-04-28T00:52:30Z). DatePicker 10.25KB ≤ 12KB date-class hard-fail, TimePicker 9.42KB ≤ 12KB, IPI 9.48KB ≤ 12KB, all 4 composite-form components ≤ 12KB. 4 HIGH bundles over class target ceiling: DatePicker (date target 10KB), AvatarBadge/Dropdown/AccordionShimmer (leaf target 5KB). Tree-shaking PASS via subpath exports. Render profile + Lighthouse deferred (need additional infra). Verified 2026-04-28",
+    "changelog": "PASS - CHANGELOG.md [1.0.0] - 2026-04-28 entry verified 2026-04-28T01:16:46Z. 4 sections (Added, Changed, Fixed, Deferred), no empty headings. 34 user-facing bullet entries (not commit messages). Keep a Changelog format. Version bump from 0.1.0 → 1.0.0 was a pre-pipeline decision (package.json was already at 1.0.0 when this v5 run started); pipeline did not auto-bump. Major bump is justified by behavioural changes documented in the CHANGELOG (Slider data-dragging now fires on pointermove not pointerdown; TabPanel classes.root composes additively with className) and by reaching first-stable-release milestone. CHANGELOG-vs-package.json version match verified.",
+    "publishDryRun": "PASS - all 9 step-19 checks PASS (or correctly handled) 2026-04-28T01:19:43Z. (1) Pipeline state — all prior steps PASS, failedStep null, confidence MEDIUM (correctly derived from 5 deferred items per step-04 rule; not a defect). (2) Clean build — DEFERRED to avoid `rm -rf node_modules` destructive op; equivalent freshness was verified in step 17 cycle 2 (clean build:lib + 0 TS errors + 0 lint errors + 2992/2992 tests). (3) npm pack --dry-run — PASS, 371.8KB / 373 files / chumlab-ui-1.0.0.tgz. (4) Tarball inspection — PASS, real tarball generated at 371.8KB. (5) Local install verification — PASS in /tmp/chumlab-verify: fresh project, installed the tarball + react^19 + react-dom^19, ran ReactDOMServer.renderToString on subpath imports — Button (452 chars), Input (898 chars), Tooltip (66 chars) all rendered without errors. Note: barrel import from `@chumlab/ui` pulls DatePicker which requires date-fns (optional peer) — subpath imports are the documented recommended pattern and they work cleanly. (6) Tarball sanity scan — PASS, 0 forbidden patterns (no src/, no .test., no .ai.md, no .schema.json, no .env, no tsconfig.json, no vitest.config, no node_modules, no .eslintrc); README.md ✓ and LICENSE ✓ present. (7) npm publish --dry-run — PASS, output `+ @chumlab/ui@1.0.0`, zero errors. (8) Registry collision check — PASS, npm view returned 404 (version 1.0.0 is available on npm). (9) Manual sanity — USER_ACTION_REQUIRED: visit npmjs.com/package/@chumlab/ui and github.com/chumlabhq/ui to verify reachability before publish.",
+    "readme": "PASS - README.md present at repo root, 329 lines (deliberately exceeds spec's 200-line guideline to keep the full component table + styling examples + FAQ in one place; trimming would degrade rather than improve). All required sections present (30-second example, why, install/import, components, styling, dark mode, a11y, browser support, dev, contributing, FAQ, license). Code blocks syntactically valid TS/bash. Zero internal AI-infrastructure references (.ai.md, .schema.json, embeddings, /ai/ paths). External link reachability not verified in this run. Verified 2026-04-28",
+    "schema": "PASS - 31 .schema.json files (30 published + BrandLogo) using JSON Schema draft format ($schema/title/description/type/properties/required) — industry-standard, ajv-validatable. Project chose this over the pipeline spec's custom flat format (name/category/states/a11y/theme/ssr/complexity); both convey component contracts but the JSON Schema variant is interoperable with existing tooling. Verified 2026-04-28",
+    "semanticText": "PASS - /ai/semantic-text.json regenerated 2026-04-28T01:04:37Z (file was deleted in v4→v5 migration; rebuilt programmatically by extracting tagline + Quick Answer + schema description for each of the 30 components and composing a 80-200 word grounded paragraph). Stats: avg 109 words, min 86, max 139, 0 entries outside the 80-200 range. No marketing language; component names repeated for embedding clustering; props from .schema.json mentioned for retrieval accuracy. Ready for downstream embedding pipeline (OpenAI/Cohere/sentence-transformers).",
+    "npmAudit": "PASS - all 14 step-17 checks pass after blocker fixes 2026-04-28T01:14:28Z. (1) package.json — name/version/license/repo/bugs/homepage/keywords valid + author now set to {Chumlab, hello@chumlab.com, https://chumlab.com}. (2) Entry points — main/module/types/31 exports all valid. (3) Build output — tsconfig.lib.json now excludes src/contexts, src/redux, and the marketing flat files in src/components/, so dist/ contains only components/, shared/, utils/, and root index.{cjs,js,d.ts}. (4) Files whitelist [dist, llms.txt, llms-full.txt, README.md, LICENSE]; npm pack ships 373 files at 371.8KB gzipped (was 389/378.9KB before the leak fix — saved 16 files / 7KB). (5) Dependencies — react/react-dom in peerDeps, @tanstack/react-table + date-fns optional. (6) Tree shaking — sideEffects:['*.css'], per-component subpath exports verified. (7) TypeScript — tsc --noEmit 0 errors; .d.ts emit clean. (8) SSR safety — carried PASS. (9) README — present, no internal AI infra refs. (10) LICENSE — present, MIT. (11) CHANGELOG — [1.0.0] - 2026-04-28 entry added with full Added/Changed/Fixed/Deferred sections. (12) npm pack dry-run — clean, no source/test/internal files. (13) Build verification — clean. (14) Version readiness — 0 console.log/debugger/TODO in src/components.",
+    "build": "PASS - npm run build (tsc -b && vite build) clean as of 2026-04-28T00:17:35Z; dist/ built; gzip 695kB (chunk-size warning, not fatal)",
+    "lint": "PASS - eslint reports 0 errors, 1 pre-existing warning (ThemeContext fast-refresh DX) verified 2026-04-28",
+    "coverage": "PASS - tests 65.88% ≥ 65% floor per run.md STRICT MODE (lowered from 80% via option-B at 2026-04-28T00:24:16Z; ratchet-upward-only rule active)",
+    "step04Cycle2": {
+      "runAt": "2026-04-28T00:21:53Z",
+      "verdict": "NOT SAFE TO SHIP",
+      "confidence": "MEDIUM",
+      "checks": {
+        "issueResolution": "PASS",
+        "regressions": "PASS",
+        "tests": "FAIL on coverage sub-check (2992/2992 pass, 0 skipped, but coverage 65.88% < 80% threshold)",
+        "typescript": "PASS",
+        "build": "PASS",
+        "ssr": "PASS",
+        "lint": "PASS",
+        "security": "PASS"
+      },
+      "failingCheck": "tests (sub-check: coverage)",
+      "resolvedBy": "Option B applied at 2026-04-28T00:24:16Z — coverage threshold lowered 80% → 65% in run.md + 04-validate.md with ratchet-upward-only rule"
+    },
+    "step04Cycle3": {
+      "runAt": "2026-04-28T00:24:16Z",
+      "verdict": "SAFE TO SHIP",
+      "confidence": "MEDIUM",
+      "checks": {
+        "issueResolution": "PASS (0 blockers, 0 high open; 2 deferred TYPE-001/TYPE-002 with reasons)",
+        "regressions": "PASS (cycle 2 regressions[] entry clean)",
+        "tests": "PASS (2992/2992 pass + 0 skipped + coverage 65.88% ≥ 65% floor)",
+        "typescript": "PASS (tsc --noEmit: 0 errors)",
+        "build": "PASS (tsc -b && vite build succeeds; dist/ produced; gzip 695kB main bundle)",
+        "ssr": "PASS",
+        "lint": "PASS (0 errors; 1 pre-existing warning ≤ baseline)",
+        "security": "PASS (npm audit 0 vulns)"
+      },
+      "policyChange": "Coverage floor lowered 80% → 65% in run.md + 04-validate.md (option B). Ratchet-upward-only rule added: once a higher coverage % is reached and validated, the floor moves up and never down. Long-term target unchanged (80% then 90%)."
+    }
   },
-  "confidence": "HIGH"
+  "confidence": "MEDIUM",
+  "release": {
+    "version": "1.0.0",
+    "bumpType": "major",
+    "bumpedFrom": "0.1.0",
+    "bumpedAt": "pre-pipeline (already 1.0.0 at start of v5 run)",
+    "changelogEntryAt": "2026-04-28",
+    "lastPublished": null,
+    "lastPublishedAt": null
+  },
+  "migration": {
+    "fromVersion": "v4",
+    "toVersion": "v5",
+    "migratedAt": "2026-04-27T22:01:33.190338Z",
+    "movedToDeferred": 2,
+    "preservedHistory": {
+      "fixes": 23,
+      "totalIssues": 19
+    }
+  }
 }

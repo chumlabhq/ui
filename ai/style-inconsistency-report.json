@@ -1,0 +1,386 @@
+{
+  "generatedAt": "2026-04-28",
+  "scope": "marketing site only — published library Button at src/components/Button/Button.tsx is intentionally out of scope",
+  "tokens": {
+    "fontFamilies": {
+      "sans": "Geist (loaded via Google Fonts CSS)",
+      "serif": "Instrument Serif (italic) — used for accent emphases",
+      "mono": "JetBrains Mono — used for eyebrows, code, labels"
+    },
+    "colorTokensInUse": {
+      "singleLetterNamespace": [
+        "--bg-base", "--bg-elevated", "--bg-overlay",
+        "--text-primary", "--text-secondary", "--text-tertiary", "--text-muted",
+        "--accent", "--accent-glow",
+        "--border-faint", "--border-soft", "--border-active"
+      ],
+      "clPrefixedNamespace": [
+        "--cl-bg", "--cl-bg-elevated", "--cl-bg-hover", "--cl-bg-input",
+        "--cl-text", "--cl-text-secondary", "--cl-text-tertiary", "--cl-text-disabled",
+        "--cl-border", "--cl-border-strong", "--cl-border-input", "--cl-border-input-hover", "--cl-border-input-focus",
+        "--cl-accent", "--cl-accent-hover", "--cl-accent-bg", "--cl-accent-bg-hover", "--cl-on-accent",
+        "--cl-success", "--cl-warning", "--cl-error",
+        "--cl-radius-sm (6px)", "--cl-radius-md (8px)", "--cl-radius-lg (10px)"
+      ],
+      "namespaceMismatchNote": "Two parallel token namespaces coexist. The single-letter namespace (--bg-base / --text-primary / --accent etc.) is intended for the marketing site. The cl-prefixed namespace is the published library's design tokens. SiteHeader, SiteFooter, UserMenu, and BuyMeCoffee leak cl-prefixed tokens into marketing usage — flagged for follow-up; not consolidated in this pass."
+    },
+    "borderRadiiCanonical": [
+      { "class": "rounded", "px": 4, "use": "small chips, tags" },
+      { "class": "rounded-md", "px": 6, "use": "buttons, inputs, small cards (canonical for buttons)" },
+      { "class": "rounded-lg", "px": 8, "use": "large cards, modals" },
+      { "class": "rounded-xl", "px": 12, "use": "section containers, panels" },
+      { "class": "rounded-2xl", "px": 16, "use": "hero cards, large surfaces" },
+      { "class": "rounded-full", "px": 9999, "use": "true circles (avatars, dot indicators)" }
+    ]
+  },
+  "buttons": {
+    "totalInstances": 30,
+    "uniqueStyleSignatures": 11,
+    "instances": [
+      {
+        "file": "src/pages/Home.tsx", "line": 255, "label": "Browse components",
+        "padding": "0 22px (inline)", "height": "44px (inline)", "fontSize": "15px",
+        "borderRadius": "rounded-md", "background": "bg-fg (#edeff4)", "color": "text-bg-base (#050608)",
+        "namespace": "single-letter", "intent": "primary CTA", "signature": "h44-px22-text15-md-fg-bgbase"
+      },
+      {
+        "file": "src/pages/Home.tsx", "line": 269, "label": "npm i @chumlab/ui",
+        "padding": "0 16px (inline)", "height": "44px (inline)", "fontSize": "13px",
+        "borderRadius": "rounded-md", "background": "var(--bg-elevated) + 0.5px border-faint", "color": "text-fg",
+        "namespace": "single-letter", "intent": "secondary CTA", "signature": "h44-px16-text13-md-elevated"
+      },
+      {
+        "file": "src/pages/Home.tsx", "line": 476, "label": "Browse all FAQs (desktop)",
+        "padding": "px-5 py-3", "height": "auto (≈40px)", "fontSize": "14px",
+        "borderRadius": "rounded-lg", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA", "signature": "px5-py3-text14-lg-fg-bgbase"
+      },
+      {
+        "file": "src/pages/Home.tsx", "line": 522, "label": "Browse all FAQs (mobile)",
+        "padding": "px-5 py-3", "fontSize": "14px",
+        "borderRadius": "rounded-lg", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA",
+        "mobileBehavior": "inline-flex (should be full-width)",
+        "signature": "px5-py3-text14-lg-fg-bgbase"
+      },
+      {
+        "file": "src/pages/Home.tsx", "line": 702, "label": "All articles (desktop)",
+        "padding": "px-5 py-3", "fontSize": "14px",
+        "borderRadius": "rounded-lg", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA",
+        "signature": "px5-py3-text14-lg-fg-bgbase"
+      },
+      {
+        "file": "src/pages/Home.tsx", "line": 736, "label": "All articles (mobile)",
+        "padding": "px-5 py-3", "fontSize": "14px",
+        "borderRadius": "rounded-lg", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA",
+        "mobileBehavior": "inline-flex (should be full-width)",
+        "signature": "px5-py3-text14-lg-fg-bgbase"
+      },
+      {
+        "file": "src/components/SiteHeader.tsx", "line": 151, "label": "Get started (desktop)",
+        "padding": "0 18px (inline)", "height": "36px (inline)", "fontSize": "14px",
+        "borderRadius": "rounded-cl-md", "background": "bg-cl-text", "color": "text-cl-bg",
+        "namespace": "cl-prefixed", "intent": "primary CTA",
+        "signature": "h36-px18-text14-clmd-cltext-clbg"
+      },
+      {
+        "file": "src/components/SiteHeader.tsx", "line": 262, "label": "Get started (mobile drawer)",
+        "padding": "px-4 py-2.5", "fontSize": "14px",
+        "borderRadius": "rounded-cl-md", "background": "bg-cl-text", "color": "text-cl-bg",
+        "namespace": "cl-prefixed", "intent": "primary CTA",
+        "mobileBehavior": "inline-flex (should be full-width inside drawer)",
+        "signature": "px4-py25-text14-clmd-cltext-clbg"
+      },
+      {
+        "file": "src/components/SiteHeader.tsx", "line": 92, "label": "Theme toggle",
+        "padding": "implicit (w-9 h-9)", "height": "36px",
+        "borderRadius": "rounded-cl-md", "intent": "icon",
+        "signature": "icon-w9-h9-clmd"
+      },
+      {
+        "file": "src/components/SiteHeader.tsx", "line": 161, "label": "Hamburger",
+        "padding": "implicit (w-9 h-9)", "height": "36px",
+        "borderRadius": "rounded-cl-md", "intent": "icon",
+        "signature": "icon-w9-h9-clmd"
+      },
+      {
+        "file": "src/components/CatalogSection.tsx", "line": 227, "label": "Explore the full catalog",
+        "padding": "h-12 px-5", "height": "48px", "fontSize": "14px",
+        "borderRadius": "rounded-cl-md", "background": "bg-cl-text", "color": "text-cl-bg",
+        "namespace": "cl-prefixed", "intent": "primary CTA",
+        "signature": "h12-px5-text14-clmd-cltext-clbg"
+      },
+      {
+        "file": "src/components/ChumlabComparisonSection.tsx", "line": 443, "label": "Browse all components",
+        "padding": "px-5 py-3", "fontSize": "14px",
+        "borderRadius": "rounded-lg", "background": "bg-[#edeff4] (hardcoded)", "color": "text-[#050608] (hardcoded)",
+        "namespace": "hex-literal", "intent": "primary CTA",
+        "signature": "px5-py3-text14-lg-hexedeff4-hex050608"
+      },
+      {
+        "file": "src/components/GetStartedSection.tsx", "line": 198, "label": "Read the full docs",
+        "padding": "px-4 py-2.5", "fontSize": "13px",
+        "borderRadius": "rounded-lg", "background": "bg-[#edeff4] (hardcoded)", "color": "text-[#050608] (hardcoded)",
+        "namespace": "hex-literal", "intent": "primary CTA",
+        "signature": "px4-py25-text13-lg-hexedeff4-hex050608"
+      },
+      {
+        "file": "src/components/GetStartedSection.tsx", "line": 217, "label": "github.com/chumlab/ui",
+        "padding": "implicit", "fontSize": "11px",
+        "borderRadius": "rounded (focus ring only)", "background": "transparent", "color": "text-[#edeff4]/50",
+        "intent": "ghost",
+        "signature": "ghost-text11-mono"
+      },
+      {
+        "file": "src/pages/playground/AIPlaygroundSection.tsx", "line": 1683, "label": "Try the AI Playground",
+        "padding": "px-5 py-3", "fontSize": "14px",
+        "borderRadius": "rounded-lg", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA",
+        "signature": "px5-py3-text14-lg-fg-bgbase"
+      },
+      {
+        "file": "src/components/BuyMeCoffee.tsx", "line": 462, "label": "Submit (Buy me a coffee)",
+        "padding": "px-5 py-3", "fontSize": "15px",
+        "borderRadius": "rounded-cl-md", "background": "bg-cl-text", "color": "text-cl-bg",
+        "namespace": "cl-prefixed", "intent": "primary CTA",
+        "mobileBehavior": "w-full always (correct)",
+        "signature": "px5-py3-text15-clmd-cltext-clbg"
+      },
+      {
+        "file": "src/components/BuyMeCoffee.tsx", "line": 518, "label": "Done (thank you)",
+        "padding": "px-5 py-3", "fontSize": "15px",
+        "borderRadius": "rounded-cl-md", "background": "bg-cl-text", "color": "text-cl-bg",
+        "namespace": "cl-prefixed", "intent": "primary CTA",
+        "signature": "px5-py3-text15-clmd-cltext-clbg"
+      },
+      {
+        "file": "src/components/BuyMeCoffee.tsx", "line": 271, "label": "Modal close",
+        "padding": "implicit (w-8 h-8)", "borderRadius": "none",
+        "intent": "icon",
+        "signature": "icon-w8-h8-bare"
+      },
+      {
+        "file": "src/components/UserMenu.tsx", "line": 51, "label": "Account dropdown trigger",
+        "padding": "pl-1 pr-2 py-1", "borderRadius": "rounded-cl-md",
+        "background": "transparent hover:bg-cl-bg-elevated",
+        "namespace": "cl-prefixed", "intent": "ghost-trigger (avatar)",
+        "signature": "ghost-pl1-pr2-py1-clmd"
+      },
+      {
+        "file": "src/components/UserMenu.tsx", "line": 98, "label": "Log out",
+        "padding": "px-3 py-2", "fontSize": "13px",
+        "borderRadius": "rounded (no token)", "intent": "menuitem",
+        "signature": "menuitem-px3-py2-text13"
+      },
+      {
+        "file": "src/pages/Faq.tsx", "line": 494, "label": "Email row",
+        "padding": "py-4 sm:py-5 -mx-2 px-2", "fontSize": "16-17px",
+        "borderRadius": "none (full-width row)",
+        "intent": "secondary CTA row",
+        "signature": "secondary-row-py4-py5-text16"
+      },
+      {
+        "file": "src/pages/Faq.tsx", "line": 526, "label": "GitHub issues row",
+        "padding": "py-4 sm:py-5 -mx-2 px-2", "fontSize": "16-17px",
+        "borderRadius": "none (full-width row)",
+        "intent": "secondary CTA row",
+        "signature": "secondary-row-py4-py5-text16"
+      },
+      {
+        "file": "src/pages/blog/BlogListing.tsx", "line": 262, "label": "Clear filter",
+        "padding": "implicit (inline)", "fontSize": "13px",
+        "borderRadius": "none", "background": "transparent", "color": "text-accent",
+        "namespace": "single-letter", "intent": "ghost",
+        "signature": "ghost-text13-accent"
+      },
+      {
+        "file": "src/pages/blog/BlogDetail.tsx", "line": 312, "label": "← All articles (top)",
+        "padding": "implicit", "fontSize": "11px",
+        "borderRadius": "rounded (focus only)", "background": "transparent", "color": "text-fg-secondary",
+        "namespace": "single-letter", "intent": "ghost",
+        "signature": "ghost-text11-mono"
+      },
+      {
+        "file": "src/pages/blog/BlogDetail.tsx", "line": 358, "label": "Copy link",
+        "padding": "implicit (w-8 h-8)", "borderRadius": "rounded-md",
+        "border": "border-border-soft", "intent": "icon",
+        "namespace": "single-letter",
+        "signature": "icon-w8-h8-md-bordered"
+      },
+      {
+        "file": "src/pages/blog/BlogDetail.tsx", "line": 379, "label": "Share on Twitter",
+        "padding": "implicit (w-8 h-8)", "borderRadius": "rounded-md",
+        "border": "border-border-soft", "intent": "icon",
+        "namespace": "single-letter",
+        "signature": "icon-w8-h8-md-bordered"
+      },
+      {
+        "file": "src/pages/blog/BlogDetail.tsx", "line": 482, "label": "Back to top",
+        "padding": "implicit", "fontSize": "11px",
+        "borderRadius": "rounded (focus only)",
+        "intent": "ghost",
+        "signature": "ghost-text11-mono"
+      },
+      {
+        "file": "src/pages/blog/BlogDetail.tsx", "line": 442, "label": "Explore Components",
+        "padding": "implicit", "fontSize": "15px",
+        "borderRadius": "none", "background": "transparent", "color": "text-accent",
+        "intent": "ghost-link",
+        "signature": "ghost-text15-accent"
+      },
+      {
+        "file": "src/pages/playground/PlaygroundOnboarding.tsx", "line": 411, "label": "Continue with Google",
+        "padding": "px-5 py-3", "fontSize": "14.5px",
+        "borderRadius": "rounded-md", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA",
+        "mobileBehavior": "inline (should be full-width)",
+        "signature": "px5-py3-text145-md-fg-bgbase"
+      },
+      {
+        "file": "src/pages/playground/PlaygroundOnboarding.tsx", "line": 1208, "label": "Continue (step nav)",
+        "padding": "px-4 py-2", "fontSize": "13px",
+        "borderRadius": "rounded-md", "background": "bg-fg", "color": "text-bg-base",
+        "namespace": "single-letter", "intent": "primary CTA",
+        "mobileBehavior": "inline (should be full-width)",
+        "signature": "px4-py2-text13-md-fg-bgbase"
+      }
+    ],
+    "groupedBySignature": {
+      "px5-py3-text14-lg-fg-bgbase": [
+        "Home.tsx:476", "Home.tsx:522", "Home.tsx:702", "Home.tsx:736",
+        "AIPlaygroundSection.tsx:1683"
+      ],
+      "h44-px22-text15-md-fg-bgbase": ["Home.tsx:255 — Hero primary"],
+      "h44-px16-text13-md-elevated": ["Home.tsx:269 — Hero secondary"],
+      "h36-px18-text14-clmd-cltext-clbg": ["SiteHeader.tsx:151 — desktop CTA"],
+      "px4-py25-text14-clmd-cltext-clbg": ["SiteHeader.tsx:262 — mobile drawer CTA"],
+      "h12-px5-text14-clmd-cltext-clbg": ["CatalogSection.tsx:227 — Explore catalog"],
+      "px5-py3-text14-lg-hexedeff4-hex050608": ["ChumlabComparisonSection.tsx:443 — Browse all components"],
+      "px4-py25-text13-lg-hexedeff4-hex050608": ["GetStartedSection.tsx:198 — Read the full docs"],
+      "px5-py3-text15-clmd-cltext-clbg": ["BuyMeCoffee.tsx:462", "BuyMeCoffee.tsx:518"],
+      "px5-py3-text145-md-fg-bgbase": ["PlaygroundOnboarding.tsx:411"],
+      "px4-py2-text13-md-fg-bgbase": ["PlaygroundOnboarding.tsx:1208"]
+    },
+    "diagnosis": "Eleven distinct primary-CTA signatures for what should be one canonical 'primary' button. Five different paddings, four different font sizes (13/14/14.5/15), three different border-radii (rounded-md / rounded-lg / rounded-cl-md), three different color-token namespaces (single-letter / cl-prefixed / hardcoded hex). Every section author made independent decisions."
+  },
+  "headings": {
+    "scaleInUse": [
+      {
+        "level": "h1-hero",
+        "fontSize": "clamp(40px, 9vw, 104px)",
+        "weight": "mixed (600 / 300 across spans)",
+        "letterSpacing": "-0.045em",
+        "lineHeight": "0.98",
+        "files": ["src/pages/Home.tsx:215"]
+      },
+      {
+        "level": "h1-page",
+        "fontSize": "clamp(48px, 9vw, 96px)",
+        "weight": 500,
+        "letterSpacing": "-0.045em",
+        "lineHeight": "0.98",
+        "files": [
+          "src/pages/Faq.tsx:270",
+          "src/pages/blog/BlogListing.tsx:180"
+        ]
+      },
+      {
+        "level": "h1-blog-detail",
+        "fontSize": "clamp(34px, 5vw, 60px)",
+        "weight": 500,
+        "letterSpacing": "-0.035em",
+        "lineHeight": "1.05"
+      },
+      {
+        "level": "h2-section",
+        "fontSize": "clamp(32px, 6vw, 72px)",
+        "weight": 500,
+        "letterSpacing": "-0.04em",
+        "lineHeight": "1.0",
+        "files": [
+          "AIPlaygroundSection.tsx:1303",
+          "WhyChumlabSection.tsx:144",
+          "GetStartedSection.tsx:97",
+          "CatalogSection.tsx:163",
+          "ChumlabComparisonSection.tsx:331"
+        ]
+      },
+      {
+        "level": "h2-faq+blog",
+        "fontSize": "clamp(40px, 5.5vw, 72px)",
+        "weight": 500,
+        "letterSpacing": "-0.04em",
+        "lineHeight": "1.0",
+        "files": ["Home.tsx:480 (FaqSection)", "Home.tsx:701 (BlogSection)"]
+      },
+      {
+        "level": "h2-card",
+        "fontSize": "clamp(28px, 3.6vw, 40px)",
+        "weight": 500,
+        "letterSpacing": "-0.03em",
+        "lineHeight": "1.05",
+        "files": ["Faq.tsx:455 (Pick your favorite channel)"]
+      },
+      {
+        "level": "h3-step",
+        "fontSize": "18-22px",
+        "weight": 500,
+        "letterSpacing": "-0.025em",
+        "lineHeight": "1.3",
+        "files": ["GetStartedSection.tsx:130, 152, 173 (timeline steps)"]
+      }
+    ],
+    "diagnosis": "Type scale is largely consistent already — the H2 section + page H1 + h1-blog-detail tiers are well-behaved. Two minor variants: page-H1 vs hero-H1 use slightly different clamp ranges (intentional — hero is bigger), and FaqSection/BlogSection on Home.tsx use a slightly smaller H2 clamp (40-72 vs 32-72) for an in-page card-section feel. Both intentional, document and keep."
+  },
+  "borderRadiiInUse": {
+    "rounded": 2,
+    "rounded-sm": 3,
+    "rounded-md": 17,
+    "rounded-lg": 85,
+    "rounded-xl": 106,
+    "rounded-2xl": 8,
+    "rounded-full": 84,
+    "rounded-none": 1,
+    "rounded-[6px]": 1,
+    "rounded-[8px]": 3,
+    "rounded-[9px]": 1,
+    "rounded-[10px]": 2,
+    "rounded-[12px]": 4,
+    "rounded-[28px]": 1,
+    "rounded-cl-sm": "few",
+    "rounded-cl-md": "many — used by SiteHeader, BuyMeCoffee, CatalogSection, UserMenu",
+    "rounded-cl-lg": "few",
+    "diagnosis": "12 distinct values. The rounded-[Npx] arbitrary values are non-canonical and should be migrated to nearest canonical. rounded-cl-* are equivalent to canonical rounded-md / rounded-sm / rounded-lg but use a separate namespace; consolidate to canonical for marketing files (the published library keeps cl-* internally)."
+  },
+  "formControlsInUse": [
+    {
+      "file": "src/pages/Faq.tsx", "line": 296,
+      "type": "search input",
+      "padding": "pl-7 pr-4 py-3", "fontSize": "16px",
+      "borderRadius": "none", "border": "border-b-[0.5px] border-border-soft focus:border-accent/50",
+      "namespace": "single-letter"
+    },
+    {
+      "file": "src/pages/blog/BlogListing.tsx", "line": 200,
+      "type": "search input",
+      "padding": "pl-7 pr-4 py-3", "fontSize": "16px",
+      "borderRadius": "none", "border": "border-b-[0.5px] border-border-soft focus:border-accent/50",
+      "namespace": "single-letter"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx", "line": 453,
+      "type": "textarea (message)",
+      "padding": "px-3 py-2.5", "fontSize": "14px",
+      "borderRadius": "rounded-cl-md", "background": "bg-cl-bg-elevated",
+      "namespace": "cl-prefixed"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx",
+      "type": "form fields (multiple)",
+      "padding": "px-3 py-2 / px-4 py-3 (varied)",
+      "namespace": "single-letter + CSS variables"
+    }
+  ]
+}

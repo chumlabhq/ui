@@ -5,13 +5,16 @@ import { Provider as ReduxProvider } from "react-redux";
 import "./index.css";
 import App from "./App.tsx";
 import { store } from "./redux/store/store";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ReduxProvider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </ReduxProvider>
   </StrictMode>,
 );

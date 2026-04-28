@@ -1,47 +1,48 @@
 import type { FC } from "react";
 import { Section } from "./Section";
 
-const cardClass = (isDarkMode: boolean) =>
-  `rounded-2xl border p-5 ${isDarkMode ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`;
+/**
+ * Documentation cards rendered inside every demo (Controlled, Edge cases,
+ * Do/Don't). All surfaces and text use brand tokens so they auto-theme
+ * with the rest of the docs and read clean in both modes — the previous
+ * `text-gray-600` body type rendered too washed out on the cream paper
+ * surface in light mode.
+ */
+const cardClass = "rounded-2xl border border-border-faint bg-bg-elevated p-5";
+const bodyClass = "text-sm leading-relaxed text-fg-secondary";
+const eyebrowDoClass =
+  "text-xs font-semibold uppercase tracking-wider mb-3 text-success";
+const eyebrowDontClass =
+  "text-xs font-semibold uppercase tracking-wider mb-3 text-danger";
 
 interface DocControlledPatternProps {
-  isDarkMode: boolean;
+  /** Kept for API compatibility — tokens auto-theme so this is unused. */
+  isDarkMode?: boolean;
   summary: string;
 }
 
 export const DocControlledPattern: FC<DocControlledPatternProps> = ({
-  isDarkMode,
   summary,
 }) => (
-  <Section title="Controlled vs uncontrolled" isDarkMode={isDarkMode}>
-    <div className={cardClass(isDarkMode)}>
-      <p
-        className={`text-sm leading-relaxed ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-      >
-        {summary}
-      </p>
+  <Section title="Controlled vs uncontrolled">
+    <div className={cardClass}>
+      <p className={bodyClass}>{summary}</p>
     </div>
   </Section>
 );
 
 interface DocEdgeCasesProps {
-  isDarkMode: boolean;
+  isDarkMode?: boolean;
   items: string[];
 }
 
-export const DocEdgeCases: FC<DocEdgeCasesProps> = ({
-  isDarkMode,
-  items,
-}) => (
+export const DocEdgeCases: FC<DocEdgeCasesProps> = ({ items }) => (
   <Section
     title="Edge cases"
     description="Situations that need explicit handling in product code."
-    isDarkMode={isDarkMode}
   >
-    <div className={cardClass(isDarkMode)}>
-      <ul
-        className={`list-disc pl-5 space-y-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-      >
+    <div className={cardClass}>
+      <ul className={`list-disc pl-5 space-y-2 ${bodyClass}`}>
         {items.map((item) => (
           <li key={item}>{item}</li>
         ))}
@@ -51,46 +52,29 @@ export const DocEdgeCases: FC<DocEdgeCasesProps> = ({
 );
 
 interface DocDoDontProps {
-  isDarkMode: boolean;
+  isDarkMode?: boolean;
   dos: string[];
   donts: string[];
 }
 
-export const DocDoDont: FC<DocDoDontProps> = ({
-  isDarkMode,
-  dos,
-  donts,
-}) => (
+export const DocDoDont: FC<DocDoDontProps> = ({ dos, donts }) => (
   <Section
     title="Do and don't"
     description="Practical guidance for production usage."
-    isDarkMode={isDarkMode}
   >
-    <div className={cardClass(isDarkMode)}>
+    <div className={cardClass}>
       <div className="grid gap-8 md:grid-cols-2">
         <div>
-          <p
-            className={`text-xs font-semibold uppercase tracking-wider mb-3 ${isDarkMode ? "text-emerald-400" : "text-emerald-700"}`}
-          >
-            Do
-          </p>
-          <ul
-            className={`list-disc pl-5 space-y-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-          >
+          <p className={eyebrowDoClass}>Do</p>
+          <ul className={`list-disc pl-5 space-y-2 ${bodyClass}`}>
             {dos.map((t) => (
               <li key={t}>{t}</li>
             ))}
           </ul>
         </div>
         <div>
-          <p
-            className={`text-xs font-semibold uppercase tracking-wider mb-3 ${isDarkMode ? "text-rose-400" : "text-rose-700"}`}
-          >
-            Don&apos;t
-          </p>
-          <ul
-            className={`list-disc pl-5 space-y-2 text-sm ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
-          >
+          <p className={eyebrowDontClass}>Don&apos;t</p>
+          <ul className={`list-disc pl-5 space-y-2 ${bodyClass}`}>
             {donts.map((t) => (
               <li key={t}>{t}</li>
             ))}

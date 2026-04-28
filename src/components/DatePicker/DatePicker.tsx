@@ -183,16 +183,30 @@ function useMarkerTooltip(
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
 
+  const [placement, setPlacement] = useState<"top" | "bottom">("bottom");
+
   const handleMouseEnter = useCallback((e: React.MouseEvent) => {
     if (!marker || !showTooltip) return;
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const gap = 6;
-    let top = rect.bottom + gap;
+    // Default to placing the tooltip below the cell. If that would
+    // overflow the viewport bottom, anchor to the cell's TOP instead and
+    // let translateY(-100%) pull the tooltip up by its actual rendered
+    // height — much tighter than the previous fixed 80 px estimate that
+    // left a 30-50 px gap above the cell when the tooltip was shorter.
+    let top: number;
+    let nextPlacement: "top" | "bottom" = "bottom";
+    if (rect.bottom + gap + 100 > window.innerHeight) {
+      top = rect.top - gap;
+      nextPlacement = "top";
+    } else {
+      top = rect.bottom + gap;
+    }
     let left = rect.left + rect.width / 2;
-    if (top + 80 > window.innerHeight) top = rect.top - 80 - gap;
     if (left + 100 > window.innerWidth) left = window.innerWidth - 110;
     if (left < 10) left = 10;
     setPosition({ top, left });
+    setPlacement(nextPlacement);
     setIsVisible(true);
   }, [marker, showTooltip]);
 
@@ -206,33 +220,44 @@ function useMarkerTooltip(
       ? createPortal(
           <div
             role="tooltip"
-            className="bg-gray-900 dark:bg-gray-100 text-slate-100 dark:text-slate-900"
+            className="bg-cl-bg-elevated text-cl-text border border-cl-border"
             style={{
               position: "fixed",
               zIndex: 100,
               top: position.top,
               left: position.left,
-              transform: "translateX(-50%)",
+              // When anchored to the cell's top edge (placement="top"),
+              // pull the tooltip up by its full height so the gap is
+              // exactly `gap` regardless of the tooltip's content height.
+              // For bottom placement, the tooltip sits below — only X is
+              // centered.
+              transform:
+                placement === "top"
+                  ? "translate(-50%, -100%)"
+                  : "translateX(-50%)",
               maxWidth: 240,
               padding: "8px 12px",
               borderRadius: 8,
               fontSize: 12,
               lineHeight: 1.5,
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
               pointerEvents: "none",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div className="flex items-center gap-1.5">
               {marker.color && (
-                <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: marker.color, flexShrink: 0 }} />
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ backgroundColor: marker.color }}
+                />
               )}
-              <span style={{ fontWeight: 600 }}>{marker.label}</span>
+              <span className="font-semibold">{marker.label}</span>
             </div>
             {marker.description && (
-              <div className="text-slate-400 dark:text-slate-500" style={{ marginTop: 2 }}>{marker.description}</div>
+              <div className="text-cl-text-secondary mt-0.5">{marker.description}</div>
             )}
             {marker.type && (
-              <div className="text-slate-500 dark:text-slate-400" style={{ marginTop: 4, textTransform: "capitalize", fontSize: 11 }}>{marker.type}</div>
+              <div className="text-cl-text-tertiary mt-1 capitalize text-[11px]">{marker.type}</div>
             )}
           </div>,
           portalContainer ?? document.body,
@@ -451,7 +476,7 @@ PresetsPanel.displayName = "PresetsPanel";
  * date selection with calendar popover, presets, markers, locale support, keyboard
  * navigation, week numbers, and fully customizable styling via the classes system.
  *
- * @see COMPONENT.ai.md for full usage guide, props, styling, and patterns.
+ * @see DATEPICKER.ai.md for full usage guide, props, styling, and patterns.
  */
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   (
@@ -769,8 +794,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const hasValue = displayValue !== "";
 
     // ─── Callbacks ─────────────────────────────────────────────────────
+    // SyntheticEvent so this can be invoked from both onClick (MouseEvent)
+    // and the keyboard activation path (KeyboardEvent) without unsafe casts.
     const handleClearClick = useCallback(
-      (e: React.MouseEvent) => {
+      (e: React.SyntheticEvent) => {
         e.stopPropagation();
         handleClear();
         onClear?.();
@@ -909,7 +936,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      handleClearClick(e as unknown as React.MouseEvent);
+                      handleClearClick(e);
                     }
                   }}
                 >

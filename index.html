@@ -5,18 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO: Primary Meta Tags -->
-    <title>Chumlab UI | Production-Grade React Component Library</title>
-    <meta name="description" content="Accessible, themeable React components built with TypeScript and Tailwind CSS v4. Keyboard navigation, WCAG 2.1 AA, unstyled mode, and zero lock-in. Ship polished interfaces faster." />
-    <meta name="keywords" content="react components, ui library, tailwind css, typescript, accessible components, design system, react 19, headless ui, unstyled components, component library" />
+    <title>Chumlab. Components that ship at the speed of thought.</title>
+    <meta
+      name="description"
+      content="An open-source React component library built for real world usage — handling states, edge cases, and everything beyond the happy path. 30 accessible, themeable React components for Next.js. MIT licensed."
+    />
+    <meta
+      name="keywords"
+      content="react components, ui library, tailwind css, typescript, accessible components, design system, react 19, headless ui, unstyled components, component library"
+    />
     <meta name="author" content="Chumlab" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://chumlab.com/" />
 
     <!-- SEO: Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Chumlab UI" />
-    <meta property="og:title" content="Chumlab UI | Production-Grade React Component Library" />
-    <meta property="og:description" content="Accessible, themeable React components built with TypeScript and Tailwind CSS v4. Ship polished interfaces faster." />
+    <meta property="og:site_name" content="Chumlab" />
+    <meta
+      property="og:title"
+      content="Chumlab. Components that ship at the speed of thought."
+    />
+    <meta
+      property="og:description"
+      content="The React component library for builders who care about craft."
+    />
     <meta property="og:url" content="https://chumlab.com/" />
     <meta property="og:image" content="https://chumlab.com/og-image.png" />
     <meta property="og:image:width" content="1200" />
@@ -25,15 +37,22 @@
 
     <!-- SEO: Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Chumlab UI | Production-Grade React Component Library" />
-    <meta name="twitter:description" content="Accessible, themeable React components built with TypeScript and Tailwind CSS v4. Ship polished interfaces faster." />
+    <meta
+      name="twitter:title"
+      content="Chumlab. Components that ship at the speed of thought."
+    />
+    <meta
+      name="twitter:description"
+      content="The React component library for builders who care about craft."
+    />
     <meta name="twitter:image" content="https://chumlab.com/og-image.png" />
 
-    <!-- GEO Tags -->
-    <meta name="geo.region" content="IN" />
-    <meta name="geo.placename" content="India" />
-    <meta name="geo.position" content="28.6139;77.2090" />
-    <meta name="ICBM" content="28.6139, 77.2090" />
+    <!-- "GEO" in this project's SEO step means Generative Engine
+         Optimization (LLM citation), not geographic targeting. Geographic
+         meta tags (geo.region / geo.position / geo.placename / ICBM) are
+         deliberately NOT included — Chumlab UI is an open-source library
+         with no regional market. Generic non-geographic crawler hints
+         remain. -->
     <meta name="language" content="English" />
     <meta name="distribution" content="global" />
     <meta name="rating" content="general" />
@@ -44,8 +63,9 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Chumlab" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#04040a" />
+    <meta name="theme-color" content="#050608" />
 
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -55,7 +75,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://checkout.razorpay.com" />
 
     <!-- Razorpay Standard Checkout. Loaded as `defer` so it doesn't block
@@ -65,168 +88,187 @@
 
     <!-- Structured Data: Organization -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Chumlab",
-      "url": "https://chumlab.com",
-      "logo": "https://chumlab.com/favicon-96x96.png",
-      "sameAs": [
-        "https://github.com/chumlabhq/ui",
-        "https://www.npmjs.com/package/@chumlab/ui"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "hello@chumlab.com",
-        "contactType": "customer support"
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Chumlab",
+        "url": "https://chumlab.com",
+        "logo": "https://chumlab.com/favicon-96x96.png",
+        "sameAs": [
+          "https://github.com/chumlabhq/ui",
+          "https://www.npmjs.com/package/@chumlab/ui"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "hello@chumlab.com",
+          "contactType": "customer support"
+        }
       }
-    }
     </script>
 
     <!-- Structured Data: SoftwareApplication -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Chumlab UI",
-      "description": "A production-grade React component library with accessible, themeable components built with TypeScript and Tailwind CSS v4.",
-      "url": "https://chumlab.com",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "Chumlab"
-      },
-      "license": "https://opensource.org/licenses/MIT",
-      "programmingLanguage": ["TypeScript", "React", "CSS"],
-      "softwareVersion": "0.1.3"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Chumlab UI",
+        "description": "A production-grade React component library with accessible, themeable components built with TypeScript and Tailwind CSS v4.",
+        "url": "https://chumlab.com",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Chumlab"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "programmingLanguage": ["TypeScript", "React", "CSS"],
+        "softwareVersion": "0.1.3"
+      }
     </script>
 
     <!-- Structured Data: WebSite (for sitelinks search box) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Chumlab UI",
-      "url": "https://chumlab.com",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://chumlab.com/blog?q={search_term_string}",
-        "query-input": "required name=search_term_string"
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Chumlab UI",
+        "url": "https://chumlab.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://chumlab.com/blog?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
       }
-    }
     </script>
 
     <!-- Structured Data: FAQ (AI discoverability) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is Chumlab UI?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Chumlab UI is an open-source React component library with production-grade, accessible, and fully themeable UI components. Built with TypeScript and Tailwind CSS v4, it provides keyboard navigation, WCAG 2.1 AA compliance, unstyled mode, and zero vendor lock-in."
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Chumlab UI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Chumlab UI is an open-source React component library with production-grade, accessible, and fully themeable UI components. Built with TypeScript and Tailwind CSS v4, it provides keyboard navigation, WCAG 2.1 AA compliance, unstyled mode, and zero vendor lock-in."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I install Chumlab UI?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Install via npm: npm install @chumlab/ui. Chumlab UI requires React 18+ and React DOM 18+ as peer dependencies. Then import components like: import { Button, Input } from '@chumlab/ui'."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Chumlab UI accessible?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every component ships with ARIA roles and states (WAI-ARIA 1.2), full keyboard navigation, focus management and trapping for modals and drawers, screen reader announcements via aria-live regions, and prefers-reduced-motion support. All components target WCAG 2.1 AA compliance."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is Chumlab UI different from other React component libraries?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Chumlab UI combines production-ready defaults with full customizability. Unlike headless libraries, it ships with polished styles. Unlike opinionated libraries, every component supports an unstyled mode, surgical CSS class overrides via the classes prop, and data-* attributes for CSS targeting. It uses zero runtime CSS-in-JS and is built on Tailwind CSS v4 for optimal performance."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What components does Chumlab UI include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Chumlab UI includes a growing collection of components: Button, Input, TextArea, Checkbox, Switch, RadioButton, Slider, DatePicker, TimePicker, OtpInput, InternationalPhoneInput, Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, Modal, Drawer, Tooltip, Toast, Table, Accordion, Avatar, Breadcrumb, Pagination, TabPanel, Stepper, Loader, CountryFlag, and ResizablePanel."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the Chumlab AI Playground?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Chumlab AI Playground is an in-product assistant that turns a plain-English prompt or an uploaded screenshot into production-ready React and Next.js code built with the Chumlab UI components you already ship with. It breaks the requirement into a task plan, generates typed, accessible JSX, and shows a live preview of the rendered component."
+            }
           }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I install Chumlab UI?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Install via npm: npm install @chumlab/ui. Chumlab UI requires React 18+ and React DOM 18+ as peer dependencies. Then import components like: import { Button, Input } from '@chumlab/ui'."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is Chumlab UI accessible?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Every component ships with ARIA roles and states (WAI-ARIA 1.2), full keyboard navigation, focus management and trapping for modals and drawers, screen reader announcements via aria-live regions, and prefers-reduced-motion support. All components target WCAG 2.1 AA compliance."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is Chumlab UI different from other React component libraries?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Chumlab UI combines production-ready defaults with full customizability. Unlike headless libraries, it ships with polished styles. Unlike opinionated libraries, every component supports an unstyled mode, surgical CSS class overrides via the classes prop, and data-* attributes for CSS targeting. It uses zero runtime CSS-in-JS and is built on Tailwind CSS v4 for optimal performance."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What components does Chumlab UI include?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Chumlab UI includes a growing collection of components: Button, Input, TextArea, Checkbox, Switch, RadioButton, Slider, DatePicker, TimePicker, OtpInput, InternationalPhoneInput, Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, Modal, Drawer, Tooltip, Toast, Table, Accordion, Avatar, Breadcrumb, Pagination, TabPanel, Stepper, Loader, CountryFlag, and ResizablePanel."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the Chumlab AI Playground?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The Chumlab AI Playground is an in-product assistant that turns a plain-English prompt or an uploaded screenshot into production-ready React and Next.js code built with the Chumlab UI components you already ship with. It breaks the requirement into a task plan, generates typed, accessible JSX, and shows a live preview of the rendered component."
-          }
-        }
-      ]
-    }
+        ]
+      }
     </script>
 
     <!-- Structured Data: BreadcrumbList -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://chumlab.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Components",
-          "item": "https://chumlab.com/accordion"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FAQ",
-          "item": "https://chumlab.com/faq"
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
-          "name": "Blog",
-          "item": "https://chumlab.com/blog"
-        }
-      ]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://chumlab.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Components",
+            "item": "https://chumlab.com/accordion"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "FAQ",
+            "item": "https://chumlab.com/faq"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Blog",
+            "item": "https://chumlab.com/blog"
+          }
+        ]
+      }
     </script>
   </head>
   <body>
     <div id="root"></div>
     <noscript>
       <h1>Chumlab UI | Production-Grade React Component Library</h1>
-      <p>Chumlab UI is an open-source React component library with accessible, themeable components built with TypeScript and Tailwind CSS v4.</p>
+      <p>
+        Chumlab UI is an open-source React component library with accessible,
+        themeable components built with TypeScript and Tailwind CSS v4.
+      </p>
       <h2>What is Chumlab UI?</h2>
-      <p>Chumlab UI provides production-ready UI components for React applications. Every component includes WCAG 2.1 AA accessibility, full keyboard navigation, CSS class overrides, and an unstyled mode for complete design freedom.</p>
+      <p>
+        Chumlab UI provides production-ready UI components for React
+        applications. Every component includes WCAG 2.1 AA accessibility, full
+        keyboard navigation, CSS class overrides, and an unstyled mode for
+        complete design freedom.
+      </p>
       <h2>Components</h2>
-      <p>Button, Input, TextArea, Checkbox, Switch, RadioButton, Slider, DatePicker, TimePicker, OtpInput, InternationalPhoneInput, Dropdown, SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown, CascadingDropdown, Modal, Drawer, Tooltip, Toast, Table, Accordion, Avatar, Breadcrumb, Pagination, TabPanel, Stepper, Loader, CountryFlag, ResizablePanel.</p>
+      <p>
+        Button, Input, TextArea, Checkbox, Switch, RadioButton, Slider,
+        DatePicker, TimePicker, OtpInput, InternationalPhoneInput, Dropdown,
+        SearchableDropdown, MultiSelectDropdown, MultiSelectSearchableDropdown,
+        CascadingDropdown, Modal, Drawer, Tooltip, Toast, Table, Accordion,
+        Avatar, Breadcrumb, Pagination, TabPanel, Stepper, Loader, CountryFlag,
+        ResizablePanel.
+      </p>
       <h2>Installation</h2>
       <p>npm install @chumlab/ui. Requires React 18+ as a peer dependency.</p>
-      <p>Visit <a href="https://github.com/chumlab/ui">Chumlab UI on GitHub</a> to get started.</p>
+      <p>
+        Visit
+        <a href="https://github.com/chumlab/ui">Chumlab UI on GitHub</a> to get
+        started.
+      </p>
     </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>

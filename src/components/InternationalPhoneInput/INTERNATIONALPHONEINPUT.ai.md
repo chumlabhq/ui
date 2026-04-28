@@ -117,6 +117,7 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `formatPatterns` | `Record<string, PhoneFormatPattern>` | — | Custom formatting patterns |
 | `lengthRules` | `Record<string, PhoneLengthRule>` | — | Custom length validation rules |
 | `selectedIcon` | `ReactNode` | — | Custom check icon in country dropdown |
+| `flagSize` | `number` | `22` | Pixel width of the flag in trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. |
 | `renderCountryOption` | `(props: CountryOptionRenderProps) => ReactNode` | — | Custom country option renderer |
 | `renderSelectedCountry` | `(country: CountryOption) => ReactNode` | — | Custom selected country renderer |
 | `countryDropdownPlaceholder` | `string` | `"Country"` | Country dropdown trigger placeholder |

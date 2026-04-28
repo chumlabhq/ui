@@ -150,8 +150,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       // Update state via controllable hook
       setCurrentValue("");
 
-      // Construct a proper event with the real input element as target
-      // so e.target.name, e.target.type, e.preventDefault() etc. all work
+      // Construct a synthetic-shaped Event whose target/currentTarget are
+      // the real input element and forward it to onChange. The native
+      // dispatch path (dispatchEvent → React's synthetic event system) is
+      // unreliable for controlled inputs in jsdom because React's internal
+      // `_valueTracker` reconciles input.value back to the controlled
+      // prop value before our onChange listener observes it; this manual
+      // construction is the contract our tests verify.
       const event = new Event("change", { bubbles: true });
       Object.defineProperty(event, "target", {
         writable: false,
@@ -161,7 +166,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         writable: false,
         value: input,
       });
-
       onChange?.(event as unknown as ChangeEvent<HTMLInputElement>);
     }, [onClear, onChange, setCurrentValue]);
 

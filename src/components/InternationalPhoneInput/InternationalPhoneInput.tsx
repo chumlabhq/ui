@@ -93,7 +93,7 @@ function resolveInitialPhone(
  * - Copies in E.164, international, or national format
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - INTERNATIONALPHONEINPUT.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/InternationalPhoneInputDemo.tsx — live demo
  */
 const InternationalPhoneInput = forwardRef<
@@ -134,6 +134,7 @@ const InternationalPhoneInput = forwardRef<
       countrySearchPlaceholder = "Search countries...",
       countryDropdownAriaLabel = "Select country",
       selectedIcon,
+      flagSize = 22,
       renderCountryOption,
       renderSelectedCountry,
       formatPatterns,
@@ -285,9 +286,9 @@ const InternationalPhoneInput = forwardRef<
             <div className="flex items-center gap-2 min-w-0">
               <CountryFlag
                 code={country.flag}
-                size={22}
-                className="shrink-0 rounded-[2px]"
-                style={{ height: 17 }}
+                size={flagSize}
+                className="shrink-0 rounded-cl-sm"
+                style={{ height: Math.round((flagSize * 17) / 22) }}
               />
               <span className="text-sm wrap-break-word min-w-0">
                 {country.name} ({country.dialCode})
@@ -300,9 +301,9 @@ const InternationalPhoneInput = forwardRef<
             <div className="flex items-center gap-2">
               <CountryFlag
                 code={country.flag}
-                size={22}
-                className="rounded-[2px]"
-                style={{ height: 17 }}
+                size={flagSize}
+                className="rounded-cl-sm"
+                style={{ height: Math.round((flagSize * 17) / 22) }}
               />
               <span className="text-sm">{country.dialCode}</span>
             </div>
@@ -313,6 +314,7 @@ const InternationalPhoneInput = forwardRef<
         renderCountryOption,
         renderSelectedCountry,
         selectedCountryCode,
+        flagSize,
       ],
     );
 

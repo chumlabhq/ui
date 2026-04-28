@@ -3,6 +3,7 @@ import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearc
 import type { MultiSelectOption } from "../../components/MultiSelectSearchableDropdown";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   DemoLabel,
@@ -58,48 +59,34 @@ const getClasses = (dark: boolean) => ({
   dropdown: {
     root: "",
     wrapper: "relative",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors min-h-[42px] ${
-      dark
-        ? "border-gray-700 bg-gray-800 text-white hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-    }`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
     triggerText: "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
-    content: `rounded-lg shadow-lg overflow-hidden ${
-      dark
-        ? "bg-gray-800 border border-gray-700"
-        : "bg-white border border-gray-200"
-    }`,
-    searchInput: `flex items-center gap-2 px-3 py-2 border-b ${
-      dark ? "border-gray-700 bg-gray-800" : "border-gray-200"
-    }`,
-    searchInputElement: dark ? "text-gray-200 placeholder:text-gray-500" : "",
-    searchIcon: `w-4 h-4 shrink-0 ${dark ? "text-gray-500" : "text-gray-400"}`,
+ content: `rounded-cl-md shadow-lg overflow-hidden bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
+    searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
+    searchInputElement: dark ? "text-cl-text placeholder:text-cl-text-tertiary" : "",
+    searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
     optionList: "max-h-60 overflow-y-auto",
-    option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed ${
-      dark
-        ? "text-gray-200 hover:bg-gray-700"
-        : "text-gray-700 hover:bg-gray-50"
-    }`,
-    optionSelected: dark ? "bg-blue-900/50" : "bg-blue-50",
-    optionFocused: dark ? "bg-gray-600" : "bg-gray-100",
+    option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
+    optionSelected: dark ? "bg-cl-accent/50 font-medium" : "bg-cl-accent/10 font-medium",
+    optionFocused: dark ? "bg-white/10" : "bg-black/5",
     optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
-    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-gray-400" : "text-gray-500"}`,
-    checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-gray-500" : "border-gray-300"}`,
-    checkboxChecked: "bg-blue-600 border-blue-600 text-white",
+    chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
+    checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input`,
+    checkboxChecked: "bg-cl-accent border-cl-border-input-focus text-white",
     checkboxIcon: "w-full h-full",
-    noResults: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
-    loading: `px-3 py-4 text-sm text-center ${dark ? "text-gray-400" : "text-gray-500"}`,
-    label: `block text-sm font-medium mb-1 ${dark ? "text-gray-300" : "text-gray-700"}`,
-    error: `text-sm mt-1 ${dark ? "text-red-400" : "text-red-500"}`,
-    chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${dark ? "bg-gray-600 text-gray-200" : "bg-blue-100 text-blue-800"}`,
-    chipRemove: `w-3 h-3 shrink-0 cursor-pointer ${dark ? "hover:text-gray-300" : "hover:text-blue-600"}`,
-    moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-md shrink-0 ${dark ? "bg-gray-600 text-gray-300" : "bg-gray-100 text-gray-600"}`,
+    noResults: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
+    loading: `px-3 py-4 text-sm text-center text-cl-text-secondary`,
+    label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
+    error: `text-sm mt-1 text-cl-error`,
+    chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-text/10 dark:text-cl-text`,
+    chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-text-secondary`,
+    moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-text/10 dark:text-cl-text-secondary`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 // ─── Demo ───────────────────────────────────────────────────────────────────
@@ -193,13 +180,13 @@ const MultiSelectSearchableDropdownDemo = () => {
       content: (
         <div className="flex items-center gap-2">
           <img
-            src={country.flags.png}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
             alt={`${country.name.common} flag`}
-            className="w-5 h-4 object-cover rounded-sm"
+            className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <div className="flex flex-col">
             <span className="text-sm">{country.name.common}</span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-cl-text-tertiary">
               {country.capital?.[0] || country.region}
             </span>
           </div>
@@ -264,37 +251,11 @@ const MultiSelectSearchableDropdownDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Multi SelectSearchable Dropdown
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A multi-select dropdown with built-in search, async loading,
-            debounced queries, chips display, and full customization via the
-            classes prop.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Multi Select Searchable Dropdown"
+        description="A multi-select dropdown with built-in search, async loading, debounced queries, chips display, and full customization via the classes prop."
+        code={`import { MultiSelectSearchableDropdown } from "@chumlab/ui/multi-select-searchable-dropdown";`}
+      />
 
       {/* ─── Basic Usage ──────────────────────────────────────────────────── */}
       <Section
@@ -483,7 +444,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                trigger: `${c.dropdown.trigger} border-red-500 focus:ring-red-500`,
+                trigger: `${c.dropdown.trigger} border border-cl-error focus:ring-cl-error`,
               }}
             />
           </div>
@@ -531,7 +492,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               successMessage="Selection saved successfully"
               classes={{
                 ...c.dropdown,
-                trigger: `${c.dropdown.trigger}${successValue.length > 0 ? " border-green-500 focus:ring-green-500" : ""}`,
+                trigger: `${c.dropdown.trigger}${successValue.length > 0 ? " border border-cl-success focus:ring-cl-success" : ""}`,
               }}
             />
           </div>
@@ -783,11 +744,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer min-h-[42px] ${
-                    dark
-                      ? "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08]"
-                      : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                  }`,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
                   triggerText:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
@@ -806,11 +763,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] ${
-                    dark
-                      ? "border-gray-600 text-gray-200 hover:border-indigo-400 focus-within:border-indigo-400"
-                      : "border-gray-200 text-gray-700 hover:border-indigo-500 focus-within:border-indigo-500"
-                  }`,
+                  trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
                   triggerText:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
@@ -829,11 +782,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer min-h-[42px] ${
-                    dark
-                      ? "text-gray-300 hover:bg-white/60"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`,
+                  trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
                   triggerText:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
@@ -852,11 +801,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 maxDisplayedChips={2}
                 classes={{
                   ...c.dropdown,
-                  trigger: `flex items-center gap-2 px-4 py-2 text-sm rounded-full border transition-colors cursor-pointer min-h-[42px] ${
-                    dark
-                      ? "border-gray-600 bg-gray-800 text-gray-200 hover:border-gray-500"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 shadow-sm"
-                  }`,
+ trigger: `flex items-center gap-2 px-4 py-2 text-sm rounded-full transition-colors cursor-pointer min-h-[42px] border border-cl-border bg-white text-cl-text hover:border-cl-border-input shadow-sm dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:border-cl-border`,
                   triggerText:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
@@ -884,28 +829,28 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger:
-                  "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-gray-700 rounded-lg bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 min-h-[42px]",
+                  "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px]",
                 content:
-                  "rounded-lg shadow-lg overflow-hidden bg-gray-800 border border-gray-700",
+                  "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
                 searchInput:
-                  "flex items-center gap-2 px-3 py-2 border-b border-gray-700 bg-gray-800",
-                searchInputElement: "text-gray-200 placeholder:text-gray-500",
+                  "flex items-center gap-2 px-3 py-2 border-b border-[#2a2f3a] bg-[#0a0d12]",
+                searchInputElement: "text-white placeholder:text-white/50",
                 option:
-                  "flex items-center gap-2 px-3 py-2 cursor-pointer text-gray-200 hover:bg-gray-700 transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-                optionSelected: "bg-gray-700",
-                optionFocused: "bg-gray-600",
+                  "flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/[0.08] transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
+                optionSelected: "bg-white/[0.12] font-medium",
+                optionFocused: "bg-white/[0.08]",
                 chevron:
-                  "w-4 h-4 shrink-0 transition-transform duration-200 text-gray-400",
+                  "w-4 h-4 shrink-0 transition-transform duration-200 text-white/60",
                 checkbox:
-                  "w-4 h-4 shrink-0 border border-gray-500 rounded flex items-center justify-center",
-                checkboxChecked: "bg-blue-500 border-blue-500 text-white",
-                searchIcon: "w-4 h-4 shrink-0 text-gray-500",
-                chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-gray-600 text-gray-200 rounded-md shrink-0 max-w-[100px]",
+                  "w-4 h-4 shrink-0 border border-white/30 rounded flex items-center justify-center",
+                checkboxChecked: "bg-cl-accent border-cl-accent text-white",
+                searchIcon: "w-4 h-4 shrink-0 text-white/60",
+                chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-white/[0.10] text-white rounded-cl-md shrink-0 max-w-[100px]",
                 chipRemove:
-                  "w-3 h-3 shrink-0 cursor-pointer hover:text-gray-300",
+                  "w-3 h-3 shrink-0 cursor-pointer text-white/70 hover:text-white",
                 moreCount:
-                  "inline-flex items-center px-2 py-0.5 text-xs bg-gray-600 text-gray-300 rounded-md shrink-0",
-                noResults: "px-3 py-4 text-sm text-gray-400 text-center",
+                  "inline-flex items-center px-2 py-0.5 text-xs bg-white/[0.10] text-white/80 rounded-cl-md shrink-0",
+                noResults: "px-3 py-4 text-sm text-white/60 text-center",
               }}
               aria-label="Dark theme fruits"
             />
@@ -913,10 +858,10 @@ const MultiSelectSearchableDropdownDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Purple Theme ─────────────────────────────────────────────────── */}
+      {/* ─── Blue Theme ───────────────────────────────────────────────────── */}
       <Section
-        title="Purple Theme"
-        description="Custom color scheme example."
+        title="Blue Theme"
+        description="Custom color scheme example using the brand accent."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -929,51 +874,27 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 min-h-[42px] ${
-                  dark
-                    ? "border-purple-700 bg-purple-950/60 text-purple-200 hover:border-purple-500"
-                    : "border-purple-300 bg-purple-50 text-purple-900 hover:border-purple-400"
-                }`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-accent hover:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/60 dark:text-cl-accent dark:hover:border-cl-border-input-focus`,
                 triggerText:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
-                content: `rounded-lg shadow-lg overflow-hidden ${
-                  dark
-                    ? "bg-purple-950 border border-purple-800"
-                    : "bg-purple-50 border border-purple-200"
-                }`,
-                searchInput: `flex items-center gap-2 px-3 py-2 border-b ${
-                  dark
-                    ? "border-purple-800 bg-purple-950"
-                    : "border-purple-200 bg-purple-50"
-                }`,
-                option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed ${
-                  dark
-                    ? "text-purple-200 hover:bg-purple-900/60"
-                    : "text-purple-900 hover:bg-purple-100"
-                }`,
-                optionSelected: dark ? "bg-purple-900/80" : "bg-purple-200",
-                optionFocused: dark ? "bg-purple-900/60" : "bg-purple-100",
-                chevron: `w-4 h-4 shrink-0 transition-transform duration-200 ${dark ? "text-purple-400" : "text-purple-600"}`,
-                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-purple-500" : "border-purple-400"}`,
+                content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus`,
+                searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/20`,
+                option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/60`,
+                optionSelected: dark ? "bg-cl-accent/80" : "bg-cl-accent/10",
+                optionFocused: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",
+                chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
+                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input-focus dark:border dark:border-cl-border-input-focus`,
                 checkboxChecked: dark
-                  ? "bg-purple-500 border-purple-500 text-white"
-                  : "bg-purple-600 border-purple-600 text-white",
-                searchIcon: `w-4 h-4 shrink-0 ${dark ? "text-purple-400" : "text-purple-500"}`,
-                chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${
-                  dark
-                    ? "bg-purple-900/60 text-purple-200"
-                    : "bg-purple-200 text-purple-800"
-                }`,
-                chipRemove: `w-3 h-3 shrink-0 cursor-pointer ${dark ? "hover:text-purple-300" : "hover:text-purple-600"}`,
-                moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-md shrink-0 ${
-                  dark
-                    ? "bg-purple-900/40 text-purple-300"
-                    : "bg-purple-100 text-purple-700"
-                }`,
-                label: `block text-sm font-medium mb-1 ${dark ? "text-purple-300" : "text-purple-900"}`,
-                error: `text-sm mt-1 ${dark ? "text-purple-400" : "text-purple-600"}`,
+                  ? "bg-cl-accent border-cl-border-input-focus text-white"
+                  : "bg-cl-accent border-cl-border-input-focus text-white",
+                searchIcon: `w-4 h-4 shrink-0 text-cl-accent`,
+                chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/60 dark:text-cl-accent`,
+                chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-accent`,
+                moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`,
+                label: `block text-sm font-medium mb-1 text-cl-accent`,
+                error: `text-sm mt-1 text-cl-accent`,
               }}
-              aria-label="Purple theme fruits"
+              aria-label="Blue theme fruits"
             />
           </div>
         </DemoWrapper>
@@ -995,8 +916,8 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                checkbox: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center ${dark ? "border-gray-500" : "border-gray-300"}`,
-                checkboxChecked: "bg-emerald-500 border-emerald-500 text-white",
+                checkbox: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
+                checkboxChecked: "bg-cl-success border-cl-success text-white",
               }}
               aria-label="Green checkbox fruits"
             />
@@ -1021,8 +942,8 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 checkbox:
-                  "w-5 h-5 shrink-0 border-2 border-orange-300 rounded-sm flex items-center justify-center",
-                checkboxChecked: "bg-orange-500 border-orange-500 text-white",
+                  "w-5 h-5 shrink-0 border-2 border-cl-warning rounded-cl-sm flex items-center justify-center",
+                checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
               aria-label="Orange checkbox fruits"
             />
@@ -1056,8 +977,8 @@ const MultiSelectSearchableDropdownDemo = () => {
               }
               classes={{
                 ...c.dropdown,
-                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center ${dark ? "border-amber-500" : "border-amber-400"}`,
-                checkboxChecked: "bg-amber-500 border-amber-500 text-white",
+                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-warning dark:border dark:border-cl-warning`,
+                checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
               aria-label="Custom icon fruits"
             />
@@ -1129,7 +1050,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             {formEvents.map((event, i) => (
               <p
                 key={i}
-                className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-xs font-mono text-cl-text-secondary`}
               >
                 {event}
               </p>
@@ -1175,7 +1096,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             {keyDownLog.map((entry, i) => (
               <p
                 key={i}
-                className={`text-xs font-mono ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-xs font-mono text-cl-text-secondary`}
               >
                 {entry}
               </p>
@@ -1207,7 +1128,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxDisplayedChips={2}
               className="my-custom-dropdown"
               style={{
-                border: `2px dashed ${dark ? "#6366f1" : "#818cf8"}`,
+                border: `2px dashed #818cf8 dark:#6366f1`,
                 borderRadius: 12,
                 padding: 4,
               }}
@@ -1295,14 +1216,10 @@ const MultiSelectSearchableDropdownDemo = () => {
             </div>
             <div
               ref={setPortalEl}
-              className={`relative min-h-[60px] rounded-lg border-2 border-dashed p-3 ${
-                dark
-                  ? "border-gray-600 bg-gray-800/50"
-                  : "border-gray-300 bg-gray-50"
-              }`}
+              className={`relative min-h-[60px] rounded-cl-md border-2 border-dashed p-3 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg-elevated/50`}
             >
               <p
-                className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs text-cl-text-tertiary`}
               >
                 Portal target container -- the dropdown renders here
               </p>
@@ -1385,7 +1302,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
-          <div className="w-full sm:max-w-md">
+          <div className="w-full">
             <MultiSelectSearchableDropdown
               options={staticOptions}
               value={fullWidthValue}
@@ -1429,7 +1346,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                     <div className="flex flex-col items-center gap-1 py-2">
                       <span className="text-lg">🍎</span>
                       <span
-                        className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`text-xs text-cl-text-secondary`}
                       >
                         No fruits available right now
                       </span>
@@ -1477,33 +1394,21 @@ const MultiSelectSearchableDropdownDemo = () => {
               onKeyDown={(e) => console.log("Combined keydown:", e.key)}
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-lg transition-colors min-h-[42px] ${
-                  dark
-                    ? "border-indigo-700 bg-indigo-950/40 text-indigo-200 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    : "border-indigo-300 bg-indigo-50 text-indigo-900 hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                }`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-accent hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/40 dark:text-cl-accent dark:hover:border-cl-border-input-focus dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
                 triggerText:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
-                content: `rounded-lg shadow-lg overflow-hidden ${
-                  dark
-                    ? "bg-indigo-950 border border-indigo-800"
-                    : "bg-indigo-50 border border-indigo-200"
-                }`,
-                optionSelected: dark ? "bg-indigo-900/60" : "bg-indigo-100",
-                optionFocused: dark ? "bg-indigo-900/40" : "bg-indigo-50",
-                checkboxChecked: "bg-indigo-600 border-indigo-600 text-white",
-                chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-md shrink-0 max-w-[100px] ${
-                  dark
-                    ? "bg-indigo-900/60 text-indigo-200"
-                    : "bg-indigo-200 text-indigo-800"
-                }`,
+                content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus`,
+                optionSelected: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",
+                optionFocused: dark ? "bg-cl-accent/40" : "bg-cl-accent/10",
+                checkboxChecked: "bg-cl-accent border-cl-border-input-focus text-white",
+                chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/60 dark:text-cl-accent`,
               }}
             />
           </div>
         </DemoWrapper>
         {combinedValue.length > 0 && (
           <p
-            className={`text-sm mt-2 ${dark ? "text-indigo-400" : "text-indigo-600"}`}
+            className={`text-sm mt-2 text-cl-accent`}
           >
             Selected: {combinedValue.join(", ")}
           </p>
@@ -2056,7 +1961,7 @@ const MultiSelectSearchableDropdownDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Trigger uses role="combobox" with aria-expanded, aria-haspopup="listbox", aria-controls, and aria-activedescendant',
@@ -2074,7 +1979,7 @@ const MultiSelectSearchableDropdownDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -2085,12 +1990,12 @@ const MultiSelectSearchableDropdownDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from the trigger button"],

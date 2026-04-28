@@ -1243,6 +1243,7 @@ const [phone, setPhone] = useState<PhoneNumberData | undefined>();
 | `onPasteDetected` | `(data: PasteDetectedData) => void` | — | Paste detection callback. |
 | `formatPatterns` | `Record<string, PhoneFormatPattern>` | — | Custom formatting patterns. |
 | `lengthRules` | `Record<string, PhoneLengthRule>` | — | Custom length validation rules. |
+| `flagSize` | `number` | `22` | Pixel width of the flag in trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. |
 | `renderCountryOption` | `(props) => ReactNode` | — | Custom country option renderer. |
 | `renderSelectedCountry` | `(country) => ReactNode` | — | Custom selected country renderer. |
 | `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Country dropdown placement. |
@@ -1735,7 +1736,7 @@ const [page, setPage] = useState(1);
 | `rowsPerPageLabel` | `string` | `"rows"` | Label after selector. |
 | `showLabel` | `string` | `"Show"` | Label before selector. |
 | `dropdownAriaLabel` | `string` | `"Rows per page"` | Dropdown ARIA label. |
-| `dropdownPosition` | `"top" \| "bottom"` | `"top"` | Dropdown direction. |
+| `dropdownPosition` | `"top" \| "bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | `number` | `50` | Dropdown z-index. |
 | `prevIcon` | `ComponentType \| ReactNode` | Chevron | Previous icon. |
 | `nextIcon` | `ComponentType \| ReactNode` | Chevron | Next icon. |
@@ -2046,6 +2047,7 @@ const [value, setValue] = useState(50);
 | `max` | `number` | `100` | Maximum value. |
 | `step` | `number` | `1` | Step size. |
 | `marks` | `{ value: number; label?: string }[]` | — | Dots on track. |
+| `transitionDuration` | `number` | `200` | Duration in ms of the click-to-jump animation when the user clicks a mark/track. Set to `0` to disable. Suppressed automatically during an active drag. |
 | `showTooltip` | `"always" \| "hover" \| false` | — | Value tooltip above thumb. |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction. |
 | `disabled` | `boolean` | `false` | Disabled. |

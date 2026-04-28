@@ -312,7 +312,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
  * - Full keyboard navigation with type-ahead
  *
  * Reference:
- * - COMPONENT.ai.md (this directory) — full AI knowledge doc
+ * - SEARCHABLEDROPDOWN.ai.md (this directory) — full AI knowledge doc
  * - src/pages/demo/SearchableDropdownDemo.tsx — live demo
  */
 const SearchableDropdown = forwardRef<

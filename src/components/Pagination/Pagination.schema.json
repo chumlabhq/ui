@@ -72,7 +72,8 @@
     "dropdownPosition": {
       "type": "string",
       "enum": ["top", "bottom"],
-      "description": "Vertical placement of the rows-per-page dropdown."
+      "default": "top",
+      "description": "Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom)."
     },
     "dropdownZIndex": {
       "type": "number",

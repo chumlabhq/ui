@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Switch } from "../../components/Switch";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -13,34 +14,30 @@ import {
 
 const getClasses = (dark: boolean) => ({
   switch: {
-    label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"} cursor-pointer`,
-    disabledLabel: `${dark ? "text-gray-500" : "text-gray-400"} cursor-not-allowed`,
-    description: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-    tracker: `relative inline-flex items-center h-5 w-9 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer ${
-      dark
-        ? "focus-visible:ring-indigo-400 focus-visible:ring-offset-gray-900"
-        : "focus-visible:ring-indigo-500"
-    }`,
+    label: `text-sm font-medium text-cl-text cursor-pointer`,
+    disabledLabel: `text-cl-text-tertiary cursor-not-allowed`,
+    description: `text-xs text-cl-text-secondary`,
+    tracker: `relative inline-flex items-center h-5 w-9 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
     disabledTracker: "opacity-50 cursor-not-allowed",
     thumb:
       "inline-flex items-center justify-center transform h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
-    checkedTracker: dark ? "bg-indigo-500" : "bg-indigo-600",
-    uncheckedTracker: dark ? "bg-gray-600" : "bg-gray-300",
+    checkedTracker: dark ? "bg-cl-accent" : "bg-cl-accent",
+    uncheckedTracker: dark ? "bg-cl-text/10" : "bg-cl-bg-hover",
     checkedThumb: "translate-x-4.5",
     uncheckedThumb: "translate-x-0.5",
-    error: `text-sm mt-2 ${dark ? "text-red-400" : "text-red-500"}`,
+    error: `text-sm mt-2 text-cl-error`,
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
 });
 
 const CheckIcon = () => (
   <svg
-    className="w-2.5 h-2.5 text-blue-600"
+    className="w-2.5 h-2.5 text-cl-accent"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -52,7 +49,7 @@ const CheckIcon = () => (
 
 const CrossIcon = () => (
   <svg
-    className="w-2.5 h-2.5 text-gray-400"
+    className="w-2.5 h-2.5 text-cl-text-tertiary"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -68,7 +65,7 @@ const CrossIcon = () => (
 
 const SunIcon = () => (
   <svg
-    className="w-2.5 h-2.5 text-amber-500"
+    className="w-2.5 h-2.5 text-cl-warning"
     fill="currentColor"
     viewBox="0 0 24 24"
   >
@@ -78,7 +75,7 @@ const SunIcon = () => (
 
 const MoonIcon = () => (
   <svg
-    className="w-2.5 h-2.5 text-indigo-400"
+    className="w-2.5 h-2.5 text-cl-accent"
     fill="currentColor"
     viewBox="0 0 24 24"
   >
@@ -112,41 +109,14 @@ const SwitchDemo = () => {
   const [refSwitch, setRefSwitch] = useState(false);
   const [successSwitch, setSuccessSwitch] = useState(true);
   const [callbackSwitch, setCallbackSwitch] = useState(false);
-  const [unstyledSwitch, setUnstyledSwitch] = useState(false);
 
   return (
     <div className="space-y-10">
-      {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-blue-500/10" : "bg-blue-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-24 -left-24 w-64 h-64 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Switch
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A toggle switch for binary on/off states. Fully accessible with
-            WAI-ARIA support, keyboard navigation, form semantics, and
-            customizable via the classes slot system.
-          </p>
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Switch } from "@chumlab/ui/switch";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Switch"
+        description="A toggle switch for binary on/off states. Fully accessible with WAI-ARIA support, keyboard navigation, form semantics, and customizable via the classes slot system."
+        code={`import { Switch } from "@chumlab/ui/switch";`}
+      />
 
       {/* ── Basic ──────────────────────────────────────────────────────── */}
       <Section
@@ -266,8 +236,8 @@ const SwitchDemo = () => {
               uncheckedIcon={<SunIcon />}
               classes={{
                 ...c.switch,
-                checkedTracker: dark ? "bg-indigo-500" : "bg-indigo-600",
-                uncheckedTracker: dark ? "bg-amber-500" : "bg-amber-400",
+                checkedTracker: dark ? "bg-cl-accent" : "bg-cl-accent",
+                uncheckedTracker: dark ? "bg-cl-warning" : "bg-cl-warning/30",
               }}
             />
           </div>
@@ -313,8 +283,8 @@ const SwitchDemo = () => {
               errorMessage="You must accept the terms to continue"
               classes={{
                 ...c.switch,
-                label: `text-sm font-medium ${dark ? "text-red-400" : "text-red-700"} cursor-pointer`,
-                uncheckedTracker: dark ? "bg-red-800" : "bg-red-200",
+                label: `text-sm font-medium text-cl-error dark:text-cl-error cursor-pointer`,
+                uncheckedTracker: dark ? "bg-cl-error/20" : "bg-cl-error/15",
               }}
             />
             <Switch
@@ -369,7 +339,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-2">
             <Switch label="Using onValueChange" onValueChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
-            <p className={`text-sm ${dark ? 'text-gray-400' : 'text-gray-600'}`}>Value: {String(callbackSwitch)}</p>
+            <p className={`text-sm text-cl-text-secondary dark:text-cl-text-tertiary`}>Value: {String(callbackSwitch)}</p>
           </div>
         </DemoWrapper>
       </Section>
@@ -388,9 +358,9 @@ const SwitchDemo = () => {
               onValueChange={setColorSwitch}
               classes={{
                 ...c.switch,
-                label: `text-sm font-medium ${dark ? "text-purple-300" : "text-purple-700"} cursor-pointer`,
-                checkedTracker: dark ? "bg-purple-500" : "bg-purple-600",
-                uncheckedTracker: dark ? "bg-purple-800" : "bg-purple-200",
+                label: `text-sm font-medium text-cl-accent cursor-pointer`,
+                checkedTracker: dark ? "bg-cl-accent" : "bg-cl-accent",
+                uncheckedTracker: dark ? "bg-cl-accent/20" : "bg-cl-accent/10",
               }}
             />
             <Switch
@@ -399,9 +369,9 @@ const SwitchDemo = () => {
               onValueChange={(checked) => setColorSwitch(!checked)}
               classes={{
                 ...c.switch,
-                label: `text-sm font-medium ${dark ? "text-green-300" : "text-green-700"} cursor-pointer`,
-                checkedTracker: dark ? "bg-green-500" : "bg-green-600",
-                uncheckedTracker: dark ? "bg-green-800" : "bg-green-200",
+                label: `text-sm font-medium text-cl-success cursor-pointer`,
+                checkedTracker: dark ? "bg-cl-success" : "bg-cl-success",
+                uncheckedTracker: dark ? "bg-cl-success/20" : "bg-cl-success/15",
               }}
             />
           </div>
@@ -422,8 +392,8 @@ const SwitchDemo = () => {
               onValueChange={setSizeSwitch}
               classes={{
                 ...c.switch,
-                label: `text-xs font-medium ${dark ? "text-gray-200" : "text-gray-700"} cursor-pointer`,
-                tracker: `relative inline-flex items-center h-4 w-7 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer ${dark ? "focus-visible:ring-blue-400 focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
+                label: `text-xs font-medium text-cl-text cursor-pointer`,
+                tracker: `relative inline-flex items-center h-4 w-7 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
                 thumb:
                   "inline-flex items-center justify-center transform h-3 w-3 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
                 checkedThumb: "translate-x-3.5",
@@ -442,8 +412,8 @@ const SwitchDemo = () => {
               onValueChange={setSizeSwitch}
               classes={{
                 ...c.switch,
-                label: `text-base font-medium ${dark ? "text-gray-200" : "text-gray-700"} cursor-pointer`,
-                tracker: `relative inline-flex items-center h-7 w-12 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer ${dark ? "focus-visible:ring-blue-400 focus-visible:ring-offset-gray-900" : "focus-visible:ring-blue-500"}`,
+                label: `text-base font-medium text-cl-text cursor-pointer`,
+                tracker: `relative inline-flex items-center h-7 w-12 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
                 thumb:
                   "inline-flex items-center justify-center transform h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
                 checkedThumb: "translate-x-6",
@@ -475,7 +445,7 @@ const SwitchDemo = () => {
                 onValueChange={setCssVarSwitch}
                 classes={{
                   ...c.switch,
-                  label: `text-sm font-medium ${dark ? "text-purple-300" : "text-purple-700"} cursor-pointer`,
+                  label: `text-sm font-medium text-cl-accent cursor-pointer`,
                   checkedTracker: undefined,
                   uncheckedTracker: undefined,
                 }}
@@ -494,7 +464,7 @@ const SwitchDemo = () => {
                 onValueChange={(checked) => setCssVarSwitch(!checked)}
                 classes={{
                   ...c.switch,
-                  label: `text-sm font-medium ${dark ? "text-green-300" : "text-green-700"} cursor-pointer`,
+                  label: `text-sm font-medium text-cl-success cursor-pointer`,
                   checkedTracker: undefined,
                   uncheckedTracker: undefined,
                 }}
@@ -545,14 +515,14 @@ const SwitchDemo = () => {
             aria-label="Toggle feature status"
             renderLabel={({ checked }) => (
               <span
-                className={`font-bold ${checked ? (dark ? "text-green-400" : "text-green-600") : dark ? "text-red-400" : "text-red-600"}`}
+                className={`font-bold ${checked ? (dark ? "text-cl-success" : "text-cl-success") : dark ? "text-cl-error" : "text-cl-error"}`}
               >
                 {checked ? "Active" : "Inactive"}
               </span>
             )}
             renderDescription={({ checked }) => (
               <span
-                className={`text-xs italic ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-xs italic text-cl-text-secondary`}
               >
                 Status: {checked ? "Feature is enabled" : "Feature is disabled"}
               </span>
@@ -589,15 +559,15 @@ const SwitchDemo = () => {
               classes={c.switch}
             />
             <div
-              className={`p-3 rounded-lg text-sm font-mono ${dark ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-700"}`}
+              className={`p-3 rounded-cl-md text-sm font-mono bg-cl-bg-hover text-cl-text dark:bg-cl-bg dark:text-cl-text-secondary`}
             >
               <p
-                className={`text-xs mb-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-xs mb-2 text-cl-text-secondary`}
               >
                 Event Log:
               </p>
               {focusLog.length === 0 ? (
-                <span className={dark ? "text-gray-500" : "text-gray-400"}>
+                <span className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}>
                   Focus or blur the switch to see events...
                 </span>
               ) : (
@@ -671,45 +641,6 @@ const SwitchDemo = () => {
                 Toggle Switch
               </button>
             </div>
-          </div>
-        </DemoWrapper>
-      </Section>
-
-      {/* ── Unstyled ───────────────────────────────────────────────────── */}
-      <Section
-        title="Unstyled Mode"
-        description="Use unstyled to strip all default classes and start from scratch."
-        isDarkMode={dark}
-      >
-        <DemoWrapper isDarkMode={dark} layout="block">
-          <div className="flex flex-col gap-4">
-            <Switch
-              label="Pill toggle"
-              checked={unstyledSwitch}
-              onValueChange={setUnstyledSwitch}
-              unstyled
-              classes={{
-                root: "flex items-center gap-3",
-                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-                tracker: `relative inline-flex items-center w-11 h-6 rounded-full cursor-pointer transition-colors ${dark ? "bg-gray-700" : "bg-gray-300"}`,
-                checkedTracker: `${dark ? "bg-teal-500" : "bg-teal-600"}`,
-                thumb: "absolute w-5 h-5 rounded-full bg-white shadow-sm transition-transform translate-x-0.5",
-                checkedThumb: "translate-x-[22px]",
-              }}
-            />
-            <Switch
-              label="Square toggle"
-              defaultChecked
-              unstyled
-              classes={{
-                root: "flex items-center gap-3",
-                label: `text-sm font-medium ${dark ? "text-gray-200" : "text-gray-700"}`,
-                tracker: `relative inline-flex items-center w-12 h-7 rounded-md cursor-pointer transition-colors ${dark ? "bg-gray-700" : "bg-gray-300"}`,
-                checkedTracker: `${dark ? "bg-indigo-500" : "bg-indigo-600"}`,
-                thumb: "absolute w-5 h-5 rounded-sm bg-white shadow-sm transition-transform translate-x-1",
-                checkedThumb: "translate-x-[22px]",
-              }}
-            />
           </div>
         </DemoWrapper>
       </Section>
@@ -990,7 +921,7 @@ const SwitchDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Uses native role="switch" for proper screen reader announcement',
@@ -1006,7 +937,7 @@ const SwitchDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1017,12 +948,12 @@ const SwitchDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Move focus to/from switch"],

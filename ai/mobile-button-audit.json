@@ -1,0 +1,194 @@
+{
+  "generatedAt": "2026-04-28",
+  "scope": "marketing-site buttons; published library Button at src/components/Button/Button.tsx is out of scope",
+  "totalButtons": 30,
+  "byVariant": {
+    "primary": 12,
+    "secondary": 4,
+    "ghost": 9,
+    "icon": 5
+  },
+  "currentMobileBehavior": {
+    "fullWidth": 4,
+    "inline": 22,
+    "unspecified": 4,
+    "inconsistent": 0
+  },
+  "needsOptOut": [
+    {
+      "file": "src/components/ChumlabComparisonSection.tsx",
+      "line": 441,
+      "label": "Browse all components",
+      "reason": "Closer-row button sits next to a long two-line statement on the desktop layout. On mobile the layout stacks vertically (flex-col -> flex-row at lg+). Going full-width on mobile is intentional and matches the spec's default; this DOES NOT need opt-out. (Pre-noting: no opt-outs identified for primary/secondary in marketing buttons.)"
+    }
+  ],
+  "needsMigration": [
+    {
+      "file": "src/pages/Home.tsx", "line": 255,
+      "currentMarkup": "<Link className=\"... rounded-md ...\" style={{ height: 44, padding: '0 22px' }}>Browse components</Link>",
+      "target": "<Button variant=\"primary\" size=\"lg\" as=\"a\" href=\"/accordion\">Browse components</Button>"
+    },
+    {
+      "file": "src/pages/Home.tsx", "line": 269,
+      "currentMarkup": "<button className=\"... rounded-md ...\" style={{ height: 44, padding: '0 16px' }}>npm i @chumlab/ui</button>",
+      "target": "<Button variant=\"secondary\" size=\"lg\" startIcon=\"$\" endIcon=\"<CopyIcon />\">npm i @chumlab/ui</Button>"
+    },
+    {
+      "file": "src/pages/Home.tsx", "line": 476,
+      "currentMarkup": "<Link className=\"hidden sm:inline-flex ... rounded-lg ... px-5 py-3\">Browse all FAQs</Link>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/faq\" className=\"hidden sm:inline-flex\">Browse all FAQs</Button>"
+    },
+    {
+      "file": "src/pages/Home.tsx", "line": 522,
+      "currentMarkup": "<Link className=\"sm:hidden inline-flex ... rounded-lg ... px-5 py-3\">Browse all FAQs</Link>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/faq\" className=\"sm:hidden mt-8\">Browse all FAQs</Button>"
+    },
+    {
+      "file": "src/pages/Home.tsx", "line": 702,
+      "currentMarkup": "<Link className=\"hidden sm:inline-flex ... rounded-lg ... px-5 py-3\">All articles</Link>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/blog\" className=\"hidden sm:inline-flex\">All articles</Button>"
+    },
+    {
+      "file": "src/pages/Home.tsx", "line": 736,
+      "currentMarkup": "<Link className=\"sm:hidden inline-flex ... rounded-lg ... px-5 py-3\">All articles</Link>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/blog\" className=\"sm:hidden mt-8\">All articles</Button>"
+    },
+    {
+      "file": "src/components/SiteHeader.tsx", "line": 151,
+      "currentMarkup": "<Link className=\"... rounded-cl-md bg-cl-text text-cl-bg ...\" style={{ height: 36, padding: '0 18px' }}>Get started</Link>",
+      "target": "<Button variant=\"primary\" size=\"sm\" as=\"a\" href=\"/?openPlayground=1\" fullWidthMobile={false} /* header CTA stays inline next to nav */>Get started</Button>"
+    },
+    {
+      "file": "src/components/SiteHeader.tsx", "line": 262,
+      "currentMarkup": "<Link className=\"inline-flex ... rounded-cl-md ...\">Get started</Link>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/?openPlayground=1\" className=\"mt-6\">Get started</Button>"
+    },
+    {
+      "file": "src/components/CatalogSection.tsx", "line": 227,
+      "currentMarkup": "<Link className=\"group inline-flex ... h-12 px-5 rounded-cl-md bg-cl-text text-cl-bg ...\">Explore the full catalog</Link>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/accordion\">Explore the full catalog</Button>"
+    },
+    {
+      "file": "src/components/ChumlabComparisonSection.tsx", "line": 441,
+      "currentMarkup": "<a className=\"shrink-0 inline-flex ... px-5 py-3 rounded-lg bg-[#edeff4] text-[#050608]\">Browse all components</a>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/accordion\" className=\"shrink-0\">Browse all components</Button>"
+    },
+    {
+      "file": "src/components/GetStartedSection.tsx", "line": 198,
+      "currentMarkup": "<a className=\"... px-4 py-2.5 rounded-lg bg-[#edeff4] text-[#050608]\">Read the full docs</a>",
+      "target": "<Button variant=\"primary\" size=\"md\" as=\"a\" href=\"/introduction\">Read the full docs</Button>"
+    },
+    {
+      "file": "src/components/GetStartedSection.tsx", "line": 217,
+      "currentMarkup": "<a className=\"inline-flex items-center gap-2 font-mono text-[11px] text-[#edeff4]/50 ...\">github.com/chumlab/ui</a>",
+      "target": "<Button variant=\"ghost\" size=\"sm\" as=\"a\" href=\"https://github.com/chumlabhq/ui\">chumlab/ui</Button>"
+    },
+    {
+      "file": "src/pages/playground/AIPlaygroundSection.tsx", "line": 1683,
+      "currentMarkup": "<button className=\"group inline-flex ... px-5 py-3 rounded-lg bg-fg text-bg-base ...\">Try the AI Playground</button>",
+      "target": "<Button variant=\"primary\" size=\"md\" onClick={() => setOpen(true)}>Try the AI Playground</Button>"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx", "line": 462,
+      "currentMarkup": "<button className=\"cursor-pointer w-full inline-flex ... px-5 py-3 rounded-cl-md ... bg-cl-text text-cl-bg ...\">{submitLabel}</button>",
+      "target": "<Button variant=\"primary\" size=\"md\" type=\"submit\" loading={loading} disabled={!amount}>{submitLabel}</Button>"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx", "line": 518,
+      "currentMarkup": "<button className=\"cursor-pointer w-full inline-flex ... px-5 py-3 rounded-cl-md ... bg-cl-text text-cl-bg ...\">Done</button>",
+      "target": "<Button variant=\"primary\" size=\"md\" onClick={onClose}>Done</Button>"
+    },
+    {
+      "file": "src/components/BuyMeCoffee.tsx", "line": 271,
+      "currentMarkup": "<button className=\"absolute top-3 right-3 w-8 h-8 ... text-cl-text-tertiary hover:text-cl-text\" aria-label=\"Close\">{closeIcon}</button>",
+      "target": "<Button variant=\"icon\" size=\"sm\" onClick={onClose} aria-label=\"Close\" className=\"absolute top-3 right-3\">{closeIcon}</Button>"
+    },
+    {
+      "file": "src/components/UserMenu.tsx", "line": 51,
+      "currentMarkup": "<button className=\"... pl-1 pr-2 py-1 rounded-cl-md hover:bg-cl-bg-elevated ...\">avatar+name</button>",
+      "decision": "KEEP AS-IS — this is a Dropdown trigger with custom layout (avatar + name + chevron). Migrating to <Button> would require restructuring. Document as intentional non-Button."
+    },
+    {
+      "file": "src/components/UserMenu.tsx", "line": 98,
+      "currentMarkup": "<button className=\"... px-3 py-2 rounded text-[13px] hover:bg-cl-bg-elevated\">Log out</button>",
+      "decision": "KEEP AS-IS — this is a menuitem inside a dropdown, not a marketing button. The Dropdown component owns its menuitem styling."
+    },
+    {
+      "file": "src/pages/Faq.tsx", "line": 494,
+      "currentMarkup": "<Reveal as=\"a\" ... className=\"group flex ... py-4 sm:py-5 border-t border-b ...\">Email row</Reveal>",
+      "decision": "KEEP AS-IS — this is a custom multi-row CTA list pattern with the Reveal animation wrapper. Wrapping with <Button> would lose the row layout. The visual treatment is intentional and unique to this section."
+    },
+    {
+      "file": "src/pages/Faq.tsx", "line": 526,
+      "currentMarkup": "<Reveal as=\"a\" ... className=\"group flex ... py-4 sm:py-5 ...\">GitHub row</Reveal>",
+      "decision": "KEEP AS-IS — same as above, sibling row in the same multi-row CTA pattern."
+    },
+    {
+      "file": "src/pages/blog/BlogListing.tsx", "line": 262,
+      "currentMarkup": "<button className=\"text-accent hover:text-fg transition-colors cursor-pointer\">Clear</button>",
+      "target": "<Button variant=\"ghost\" size=\"sm\" onClick={() => { setSearchQuery(''); setActiveCategory(null); }}>Clear</Button>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx", "line": 312,
+      "currentMarkup": "<Link className=\"inline-flex ... font-mono text-[11px] uppercase ... text-fg-secondary hover:text-fg ...\">All articles</Link>",
+      "target": "<Button variant=\"ghost\" size=\"sm\" as=\"a\" href=\"/blog\" startIcon={backArrowIcon}>All articles</Button>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx", "line": 358,
+      "currentMarkup": "<button className=\"w-8 h-8 rounded-md border border-border-soft hover:border-border-active hover:bg-fg/[0.03] ...\" aria-label=\"Copy link\">{copyIcon}</button>",
+      "target": "<Button variant=\"icon\" size=\"sm\" onClick={handleCopy} aria-label=\"Copy link\">{copyIcon}</Button>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx", "line": 379,
+      "currentMarkup": "<a href={tweetHref} className=\"w-8 h-8 rounded-md border ... \" aria-label=\"Share on Twitter\">{twitterIcon}</a>",
+      "target": "<Button variant=\"icon\" size=\"sm\" as=\"a\" href={tweetHref} target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Share on Twitter\">{twitterIcon}</Button>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx", "line": 482,
+      "currentMarkup": "<button className=\"inline-flex ... font-mono text-[11px] uppercase ... text-fg-secondary hover:text-fg ...\">Back to top</button>",
+      "target": "<Button variant=\"ghost\" size=\"sm\" onClick={scrollToTop} endIcon={upArrowIcon}>Back to top</Button>"
+    },
+    {
+      "file": "src/pages/blog/BlogDetail.tsx", "line": 442,
+      "currentMarkup": "<Link to=\"/accordion\" className=\"inline-flex items-center gap-2 text-[15px] text-accent hover:text-fg transition-colors\">Explore Components &rarr;</Link>",
+      "target": "<Button variant=\"ghost\" size=\"md\" as=\"a\" href=\"/accordion\">Explore Components →</Button>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx", "line": 411,
+      "currentMarkup": "<button className=\"... px-5 py-3 rounded-md bg-fg text-bg-base ...\">Continue with Google</button>",
+      "target": "<Button variant=\"primary\" size=\"md\" onClick={handleGoogleSignIn} startIcon={googleIcon}>Continue with Google</Button>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx", "line": 1187,
+      "currentMarkup": "<button className=\"... text-fg-tertiary hover:text-fg ...\">Back</button>",
+      "target": "<Button variant=\"ghost\" size=\"sm\" onClick={onBack}>Back</Button>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx", "line": 1208,
+      "currentMarkup": "<button className=\"... px-4 py-2 rounded-md bg-fg text-bg-base disabled:opacity-40 ...\">Continue</button>",
+      "target": "<Button variant=\"primary\" size=\"md\" onClick={onNext} disabled={!canContinue}>Continue</Button>"
+    },
+    {
+      "file": "src/pages/playground/PlaygroundOnboarding.tsx", "line": 1111,
+      "currentMarkup": "<button className=\"... px-5 py-3 rounded-md bg-fg text-bg-base ...\">Start building</button>",
+      "target": "<Button variant=\"primary\" size=\"md\" onClick={onClose}>Start building</Button>"
+    }
+  ],
+  "stayAsIsRationale": {
+    "Pagination prev/next/page (Faq.tsx, BlogListing.tsx)": "Owned by the published <Pagination> component, not raw markup. Already canonical. fullWidthMobile=false is the intent (toolbar pattern); the Pagination component owns this internally.",
+    "Filter chip tabs (Faq.tsx, BlogListing.tsx)": "These are CHIP-style filters with horizontal scroll on mobile, not buttons. Different visual category — kept distinct.",
+    "Star rating buttons (BuyMeCoffee.tsx)": "Radio-group pattern, not a button.",
+    "Amount preset buttons (BuyMeCoffee.tsx:373)": "Tab-button pattern (4 amount choices, exclusive selection). Closer to a radio-group than a button. Migrating to <Button> would lose the visual selection treatment.",
+    "Role/Context/Budget cards (PlaygroundOnboarding.tsx)": "Card-selection pattern, not buttons. Each card has multi-line content (label + description). <Button> isn't appropriate.",
+    "Theme toggle and Hamburger (SiteHeader.tsx)": "Already canonical icon-button shape (w-9 h-9 rounded-cl-md). Migrating to <Button variant=\"icon\"> would just rename the class set; the visual is identical. Keeping as-is to limit blast radius; can be migrated in a follow-up.",
+    "UserMenu trigger and Logout menuitem (UserMenu.tsx)": "Inside a Dropdown. The Dropdown component owns its trigger and menuitem styling.",
+    "Faq.tsx Email + GitHub multi-row CTAs": "Custom row pattern (icon + label + URL + description + arrow). Not a single-line button. The pattern is intentional and unique to this section."
+  },
+  "summary": {
+    "totalNeedsMigration": 23,
+    "totalKeepAsIs": 7,
+    "currentlyFullWidthOnMobile": "Only Hero CTAs (correct). FaqSection mobile CTA, BlogSection mobile CTA, SiteHeader drawer CTA, Onboarding step nav: all currently inline on mobile, will become full-width via the new Button component's variant default.",
+    "newButtonComponentOwnsMobileWidthRule": true,
+    "rule": "Primary + secondary variants render w-full sm:w-auto by default. fullWidthMobile={false} opts out. Ghost + icon stay w-auto always. Comments required when opting out."
+  }
+}

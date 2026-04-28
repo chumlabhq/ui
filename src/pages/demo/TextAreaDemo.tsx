@@ -3,6 +3,7 @@ import { TextArea, TextAreaLabel } from "../../components/TextArea";
 import type { TextAreaClasses } from "../../components/TextArea";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -139,51 +140,39 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 const getClasses = (dark: boolean) => ({
   // ── TextAreaClasses object for the `classes` prop ──
   textarea: {
-    wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${
-      dark
-        ? "text-gray-300 border-white/10 bg-white/4 focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-400/50"
-        : "text-gray-700 border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04] focus-within:ring-2 focus-within:ring-indigo-500/15 focus-within:border-indigo-400"
-    }`,
-    textarea: `w-full bg-transparent outline-none text-sm resize-y ${dark ? "text-white placeholder:text-gray-500" : "text-gray-900 placeholder:text-gray-400"}`,
-    label: `text-[13px] font-medium mb-1.5 block ${dark ? "text-gray-300" : "text-gray-700"}`,
-    description: `text-xs mt-1 mb-1.5 ${dark ? "text-gray-500" : "text-gray-400"}`,
-    error: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-red-400" : "text-red-500"}`,
-    success: `text-xs mt-1.5 flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`,
-    count: `text-[11px] mt-1 text-right tabular-nums ${dark ? "text-gray-500" : "text-gray-400"}`,
+    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+    textarea: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-disabled`,
+    label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
+    description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
+    error: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-error`,
+    success: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-success`,
+    count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
   } satisfies TextAreaClasses,
 
   // ── Wrapper variants for validation states ──
-  wrapperError: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${
-    dark
-      ? "text-gray-300 border-red-400/40 bg-red-500/[0.06] focus-within:ring-2 focus-within:ring-red-500/25"
-      : "text-gray-700 border-red-300 bg-red-50/40 shadow-sm shadow-red-900/[0.04] focus-within:ring-2 focus-within:ring-red-500/15"
-  }`,
-  wrapperSuccess: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${
-    dark
-      ? "text-gray-300 border-emerald-400/40 bg-emerald-500/[0.06] focus-within:ring-2 focus-within:ring-emerald-500/25"
-      : "text-gray-700 border-emerald-300 bg-emerald-50/40 shadow-sm shadow-emerald-900/[0.04] focus-within:ring-2 focus-within:ring-emerald-500/15"
-  }`,
-  wrapperDisabled: `px-3.5 py-2.5 rounded-xl border gap-2.5 opacity-50 cursor-not-allowed ${dark ? "border-white/5 bg-white/[0.02]" : "border-gray-200 bg-gray-50"}`,
-  disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed ${dark ? "text-gray-500 placeholder:text-gray-600" : "text-gray-400 placeholder:text-gray-300"}`,
+  wrapperError: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-error bg-cl-error/40 shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15 dark:text-cl-text-secondary dark:border dark:border-cl-error/40 dark:bg-cl-error/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-error/25`,
+  wrapperSuccess: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-success bg-cl-success/40 shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15 dark:text-cl-text-secondary dark:border dark:border-cl-success/40 dark:bg-cl-success/0.06 dark:focus-within:ring-2 dark:focus-within:ring-cl-success/25`,
+  wrapperDisabled: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
+  disabledTextarea: `w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-disabled`,
 
   // ── Misc UI helpers ──
   container: "flex flex-col",
-  icon: dark ? "text-gray-500" : "text-gray-400",
+  icon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
   iconHover: dark
-    ? "text-gray-400 hover:text-gray-300"
-    : "text-gray-400 hover:text-gray-600",
-  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-600" : "text-gray-300"}`,
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  cardDense: `rounded-xl border p-4 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  propName: `font-mono text-xs ${dark ? "text-indigo-400" : "text-indigo-600"}`,
-  propType: `font-mono text-[11px] ${dark ? "text-gray-500" : "text-gray-400"}`,
-  propDefault: `font-mono text-[11px] ${dark ? "text-gray-600" : "text-gray-350"}`,
-  propDesc: `text-xs ${dark ? "text-gray-400" : "text-gray-500"}`,
-  code: `px-1.5 py-0.5 rounded-md text-[11px] font-mono font-medium ${dark ? "bg-white/6 text-gray-300" : "bg-gray-100 text-gray-600"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  tableHead: `text-left py-3 px-4 text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`,
+    ? "text-cl-text-tertiary hover:text-cl-text-secondary"
+    : "text-cl-text-tertiary hover:text-cl-text-secondary",
+  sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-disabled`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ cardDense: `rounded-cl-lg p-4 bg-cl-bg-elevated`,
+  propName: `font-mono text-xs text-cl-accent`,
+  propType: `font-mono text-[11px] text-cl-text-tertiary`,
+  propDefault: `font-mono text-[11px] text-cl-text-disabled`,
+  propDesc: `text-xs text-cl-text-secondary`,
+  code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  tableHead: `text-left py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
   tableCell: "py-2.5 px-4",
-  divider: `border-t ${dark ? "border-white/[0.06]" : "border-gray-100"}`,
+  divider: `border-t border-cl-border`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -206,44 +195,11 @@ const TextAreaDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative space-y-3">
-          <h1
-            className={`text-3xl font-bold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Text Area
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-500"}`}
-          >
-            A production-grade, multi-line text input. Supports icons,
-            validation states, character counts, clearable, loading states,
-            description text, and complete styling control through the{" "}
-            <code>classes</code> prop.
-          </p>
-          <div className="pt-1">
-            <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
-            >
-              <code>{`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Text Area"
+        description="A production-grade, multi-line text input. Supports icons, validation states, character counts, clearable, loading states, description text, and complete styling control through the classes prop."
+        code={`import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";`}
+      />
 
       {/* ─── Examples ───────────────────────────────────────────────── */}
       <div className="space-y-8">
@@ -641,7 +597,7 @@ const TextAreaDemo = () => {
                 className={c.container}
               />
               <div
-                className={`rounded-lg px-3 py-2 text-xs font-mono ${dark ? "bg-white/4 text-gray-400" : "bg-gray-50 text-gray-500"}`}
+                className={`rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary`}
               >
                 value: {JSON.stringify(feedback)}
               </div>
@@ -674,7 +630,7 @@ const TextAreaDemo = () => {
                   loading
                   loader={
                     <span
-                      className={`text-[11px] font-medium animate-pulse ${dark ? "text-indigo-400" : "text-indigo-500"}`}
+                      className={`text-[11px] font-medium animate-pulse text-cl-accent`}
                     >
                       Saving...
                     </span>
@@ -712,7 +668,7 @@ const TextAreaDemo = () => {
                 disabled
                 startIcon={
                   <LockIcon
-                    className={dark ? "text-gray-600" : "text-gray-300"}
+                    className={dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}
                   />
                 }
                 classes={{
@@ -833,11 +789,7 @@ const TextAreaDemo = () => {
                       } else if (lbl === "Get Value")
                         alert(`"${textAreaRef.current?.value}"`);
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium rounded-lg transition-colors ${
-                      dark
-                        ? "bg-white/4 text-gray-400 hover:bg-white/8 ring-1 ring-inset ring-white/6"
-                        : "bg-gray-50 text-gray-500 hover:bg-gray-100 ring-1 ring-inset ring-gray-200"
-                    }`}
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-cl-md transition-colors bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover ring-1 ring-inset ring-border-soft dark:bg-cl-text/4 dark:text-cl-text-tertiary dark:hover:bg-cl-text/8 dark:ring-1 dark:ring-inset dark:ring-cl-text/6`}
                   >
                     {lbl}
                   </button>
@@ -865,11 +817,7 @@ const TextAreaDemo = () => {
                   id="custom-ta"
                   placeholder="Native textarea with TextAreaLabel"
                   rows={3}
-                  className={`w-full px-3.5 py-2.5 rounded-xl border outline-none text-sm resize-y transition-all duration-150 ${
-                    dark
-                      ? "bg-white/4 border-white/10 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400/50"
-                      : "bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 shadow-sm focus:ring-2 focus:ring-indigo-500/15 focus:border-indigo-400"
-                  }`}
+                  className={`w-full px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm resize-y transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 focus:border-cl-border-input-focus dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/50`}
                 />
               </div>
               <div>
@@ -880,7 +828,7 @@ const TextAreaDemo = () => {
                   className={c.textarea.label}
                 />
                 <p
-                  className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`text-xs text-cl-text-tertiary`}
                 >
                   Required indicator (*) is automatically added
                 </p>
@@ -905,23 +853,19 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    wrapper: `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 ${dark ? "border-white/10 focus-within:border-indigo-400" : "border-gray-200 focus-within:border-indigo-500"}`,
+                    wrapper: `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 border border-cl-border focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
                   }}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Purple accent</span>
+                <span className={c.sectionLabel}>Blue accent</span>
                 <TextArea
-                  aria-label="Purple theme"
-                  placeholder="Purple theme..."
+                  aria-label="Blue accent theme"
+                  placeholder="Blue accent theme..."
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    wrapper: `px-3.5 py-2.5 rounded-xl border gap-2.5 transition-all duration-150 ${
-                      dark
-                        ? "border-blue-400/30 bg-blue-500/[0.06] focus-within:ring-2 focus-within:ring-blue-500/25"
-                        : "border-blue-200 bg-blue-50/30 shadow-sm focus-within:ring-2 focus-within:ring-blue-500/15"
-                    }`,
+                    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/[0.10] dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
                   }}
                 />
               </div>
@@ -945,12 +889,12 @@ const TextAreaDemo = () => {
             >
               <div className="text-center space-y-1 mb-6">
                 <h3
-                  className={`text-xl font-semibold tracking-tight ${dark ? "text-white" : "text-gray-900"}`}
+                  className={`text-xl font-semibold tracking-tight text-cl-text`}
                 >
                   Get in touch
                 </h3>
                 <p
-                  className={`text-sm ${dark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`text-sm text-cl-text-tertiary`}
                 >
                   We'd love to hear from you
                 </p>
@@ -964,11 +908,7 @@ const TextAreaDemo = () => {
                     id="contact-name"
                     placeholder="John Doe"
                     required
-                    className={`px-3.5 py-2.5 rounded-xl border outline-none text-sm transition-all duration-150 ${
-                      dark
-                        ? "bg-white/4 border-white/10 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500/30"
-                        : "bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 shadow-sm focus:ring-2 focus:ring-indigo-500/15"
-                    }`}
+                    className={`px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30`}
                   />
                 </div>
                 <div className={c.container}>
@@ -980,11 +920,7 @@ const TextAreaDemo = () => {
                     type="email"
                     placeholder="you@example.com"
                     required
-                    className={`px-3.5 py-2.5 rounded-xl border outline-none text-sm transition-all duration-150 ${
-                      dark
-                        ? "bg-white/4 border-white/10 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500/30"
-                        : "bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 shadow-sm focus:ring-2 focus:ring-indigo-500/15"
-                    }`}
+                    className={`px-3.5 py-2.5 rounded-cl-lg border outline-none text-sm transition-all duration-150 bg-white border-cl-border text-cl-text placeholder:text-cl-text-tertiary shadow-sm focus:ring-2 focus:ring-cl-accent/15 dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-white dark:placeholder:text-cl-text-tertiary dark:focus:ring-2 dark:focus:ring-cl-accent/30`}
                   />
                 </div>
               </div>
@@ -1005,7 +941,7 @@ const TextAreaDemo = () => {
               />
               <button
                 type="submit"
-                className={`w-full py-2.5 rounded-xl font-medium text-sm text-white transition-all ${dark ? "bg-indigo-500 hover:bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-500"} shadow-lg shadow-indigo-500/20`}
+                className={`w-full py-2.5 rounded-cl-lg font-medium text-sm text-cl-bg transition-all bg-cl-text text-cl-bg hover:opacity-90 shadow-lg shadow-accent/20`}
               >
                 Send Message
               </button>
@@ -1327,7 +1263,7 @@ const TextAreaDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               "Label auto-associated via htmlFor",
@@ -1344,7 +1280,7 @@ const TextAreaDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1355,12 +1291,12 @@ const TextAreaDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               [

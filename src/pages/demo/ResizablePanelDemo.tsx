@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ResizablePanel } from "../../components/ResizablePanel";
-import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -10,20 +10,21 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
+import { useTheme } from "./ThemeContext";
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
+const getClasses = (_dark: boolean) => ({
   panel: {
     root: "",
     handle: "",
   },
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
-  note: `mt-3 p-3 rounded-lg text-xs ${dark ? "bg-blue-900/20 border border-blue-800/50 text-blue-300" : "bg-blue-50 border border-blue-200 text-blue-700"}`,
-  btn: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`,
-  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-indigo-500 text-white hover:bg-indigo-600" : "bg-indigo-600 text-white hover:bg-indigo-700"}`,
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
+ note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
+  btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
+  btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
 });
 
 // ─── Demo ────────────────────────────────────────────────────────────────────
@@ -55,10 +56,10 @@ const ResizablePanelDemo = () => {
     });
   };
 
-  const sidebarContent = (width: number) => (
+  const sidebarContent = () => (
     <div className="h-full p-4 flex flex-col gap-3">
       <div
-        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-blue-400" : "text-blue-600"}`}
+        className={`text-xs font-semibold uppercase tracking-wider text-cl-accent`}
       >
         Sidebar
       </div>
@@ -66,37 +67,26 @@ const ResizablePanelDemo = () => {
         {["Dashboard", "Projects", "Team", "Settings"].map((item) => (
           <div
             key={item}
-            className={`px-3 py-1.5 rounded-md text-sm ${dark ? "text-gray-300 hover:bg-white/4" : "text-gray-600 hover:bg-gray-100"} cursor-pointer transition-colors`}
+            className={`px-3 py-1.5 rounded-cl-md text-sm text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/4 cursor-pointer transition-colors`}
           >
             {item}
           </div>
         ))}
-      </div>
-      <div
-        className={`mt-auto text-[10px] font-mono ${dark ? "text-blue-500/60" : "text-blue-400/60"}`}
-      >
-        {Math.round(width)}px
       </div>
     </div>
   );
 
   const editorContent = (height: number) => (
     <div className="h-full p-4 flex flex-col gap-2">
-      <div
-        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-green-400" : "text-green-600"}`}
-      >
+      <div className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary">
         Editor
       </div>
-      <div
-        className={`flex-1 rounded-md p-3 font-mono text-xs leading-relaxed ${dark ? "bg-black/20 text-green-300/80" : "bg-white/60 text-green-700/80"}`}
-      >
-        <div>{"const app = express();"}</div>
-        <div>{"app.get('/', handler);"}</div>
-        <div>{"app.listen(3000);"}</div>
+      <div className="flex-1 rounded-cl-md p-3 font-mono text-xs leading-relaxed bg-cl-bg border border-cl-border text-cl-text-secondary">
+        <div><span className="text-cl-text-tertiary">const</span> app = <span className="text-cl-text-tertiary">express</span>();</div>
+        <div>app.<span className="text-cl-text-tertiary">get</span>(<span className="text-cl-accent">'/'</span>, handler);</div>
+        <div>app.<span className="text-cl-text-tertiary">listen</span>(<span className="text-cl-accent">3000</span>);</div>
       </div>
-      <div
-        className={`text-[10px] font-mono ${dark ? "text-green-500/60" : "text-green-400/60"}`}
-      >
+      <div className="text-[10px] font-mono text-cl-text-tertiary tabular-nums">
         {Math.round(height)}px
       </div>
     </div>
@@ -104,30 +94,16 @@ const ResizablePanelDemo = () => {
 
   const previewContent = (width: number) => (
     <div className="h-full p-4 flex flex-col gap-2">
-      <div
-        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-purple-400" : "text-purple-600"}`}
-      >
+      <div className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary">
         Preview
       </div>
-      <div
-        className={`flex-1 rounded-md flex items-center justify-center ${dark ? "bg-purple-900/20" : "bg-purple-50/80"}`}
-      >
+      <div className="flex-1 rounded-cl-md flex items-center justify-center bg-cl-bg border border-cl-border">
         <div className="text-center">
-          <div
-            className={`text-2xl font-bold ${dark ? "text-purple-300" : "text-purple-700"}`}
-          >
-            Preview
-          </div>
-          <div
-            className={`text-xs mt-1 ${dark ? "text-purple-400/60" : "text-purple-400"}`}
-          >
-            Live output here
-          </div>
+          <div className="text-sm font-medium text-cl-text">Preview</div>
+          <div className="text-[11px] mt-1 text-cl-text-tertiary">Live output here</div>
         </div>
       </div>
-      <div
-        className={`text-[10px] font-mono ${dark ? "text-purple-500/60" : "text-purple-400/60"}`}
-      >
+      <div className="text-[10px] font-mono text-cl-text-tertiary tabular-nums">
         {Math.round(width)}px
       </div>
     </div>
@@ -136,32 +112,32 @@ const ResizablePanelDemo = () => {
   const simpleContent = (color: string, label: string, size: number) => {
     const cl = {
       blue: {
-        text: dark ? "text-blue-400" : "text-blue-600",
-        muted: dark ? "text-blue-500/60" : "text-blue-400/60",
+        text: dark ? "text-cl-accent" : "text-cl-accent",
+        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
       },
       green: {
-        text: dark ? "text-green-400" : "text-green-600",
-        muted: dark ? "text-green-500/60" : "text-green-400/60",
+        text: dark ? "text-cl-success" : "text-cl-success",
+        muted: dark ? "text-cl-success/60" : "text-cl-success/60",
       },
       amber: {
-        text: dark ? "text-amber-400" : "text-amber-600",
-        muted: dark ? "text-amber-500/60" : "text-amber-400/60",
+        text: dark ? "text-cl-warning" : "text-cl-warning",
+        muted: dark ? "text-cl-warning/60" : "text-cl-warning/60",
       },
       indigo: {
-        text: dark ? "text-indigo-400" : "text-indigo-600",
-        muted: dark ? "text-indigo-500/60" : "text-indigo-400/60",
+        text: dark ? "text-cl-accent" : "text-cl-accent",
+        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
       },
       teal: {
-        text: dark ? "text-teal-400" : "text-teal-600",
-        muted: dark ? "text-teal-500/60" : "text-teal-400/60",
+        text: dark ? "text-cl-accent" : "text-cl-accent",
+        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
       },
       purple: {
-        text: dark ? "text-purple-400" : "text-purple-600",
-        muted: dark ? "text-purple-500/60" : "text-purple-400/60",
+        text: dark ? "text-cl-accent" : "text-cl-accent",
+        muted: dark ? "text-cl-accent/60" : "text-cl-accent/60",
       },
     }[color] ?? {
-      text: dark ? "text-gray-400" : "text-gray-600",
-      muted: dark ? "text-gray-500" : "text-gray-400",
+      text: dark ? "text-cl-text-tertiary" : "text-cl-text-secondary",
+      muted: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
     };
     return (
       <div className="h-full p-4 flex flex-col justify-between">
@@ -177,92 +153,34 @@ const ResizablePanelDemo = () => {
     );
   };
 
-  const handleClass = (color: string) => {
-    const map: Record<string, string> = {
-      blue: dark
-        ? "bg-blue-600 hover:bg-blue-500 transition-colors motion-reduce:transition-none"
-        : "bg-blue-300 hover:bg-blue-500 transition-colors motion-reduce:transition-none",
-      green: dark
-        ? "bg-green-600 hover:bg-green-500 transition-colors motion-reduce:transition-none"
-        : "bg-green-300 hover:bg-green-500 transition-colors motion-reduce:transition-none",
-      purple: dark
-        ? "bg-purple-600 hover:bg-purple-500 transition-colors motion-reduce:transition-none"
-        : "bg-purple-300 hover:bg-purple-500 transition-colors motion-reduce:transition-none",
-      indigo: dark
-        ? "bg-indigo-600 hover:bg-indigo-500 transition-colors motion-reduce:transition-none"
-        : "bg-indigo-300 hover:bg-indigo-500 transition-colors motion-reduce:transition-none",
-      teal: dark
-        ? "bg-teal-600 hover:bg-teal-500 transition-colors motion-reduce:transition-none"
-        : "bg-teal-300 hover:bg-teal-500 transition-colors motion-reduce:transition-none",
-      amber: dark
-        ? "bg-amber-600 hover:bg-amber-500 transition-colors motion-reduce:transition-none"
-        : "bg-amber-300 hover:bg-amber-500 transition-colors motion-reduce:transition-none",
-    };
-    return map[color] ?? map.blue;
+  // Neutral handle at rest, subtle text-color tint on hover/drag. The
+  // color cue ties the handle visually to its panel via the eyebrow
+  // label inside, without flooding the surface.
+  const handleClass = (_color: string) => {
+    void _color;
+    return "bg-cl-border hover:bg-cl-text/20 transition-colors motion-reduce:transition-none";
   };
 
   const panelRootClass = (color: string) => {
+    const base = "bg-cl-bg-elevated border border-cl-border";
     const map: Record<string, string> = {
-      blue: dark
-        ? "h-40 bg-blue-950/40 rounded-lg border border-blue-800"
-        : "h-40 bg-blue-50 rounded-lg border border-blue-200",
-      green: dark
-        ? "h-40 bg-green-950/40 rounded-lg border border-green-800"
-        : "h-40 bg-green-50 rounded-lg border border-green-200",
-      purple: dark
-        ? "bg-purple-950/40 border border-purple-800 rounded-l-lg"
-        : "bg-purple-50 border border-purple-200 rounded-l-lg",
-      indigo: dark
-        ? "bg-indigo-950/40 border border-indigo-800 rounded-l-lg"
-        : "bg-indigo-50 border border-indigo-200 rounded-l-lg",
-      teal: dark
-        ? "bg-teal-950/40 border border-teal-800 rounded-r-lg"
-        : "bg-teal-50 border border-teal-200 rounded-r-lg",
-      amber: dark
-        ? "h-40 bg-amber-950/40 rounded-lg border border-amber-800"
-        : "h-40 bg-amber-50 rounded-lg border border-amber-200",
+      blue: `h-40 ${base} rounded-cl-md`,
+      green: `h-40 ${base} rounded-cl-md`,
+      purple: `${base} rounded-l-lg`,
+      indigo: `${base} rounded-l-lg`,
+      teal: `${base} rounded-r-lg`,
+      amber: `h-40 ${base} rounded-cl-md`,
     };
     return map[color] ?? map.blue;
   };
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${dark ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50" : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"}`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Resizable Panel
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A panel component with a draggable separator handle for resizing.
-            Supports horizontal and vertical orientations, keyboard navigation,
-            pointer events for mouse and touch, controlled and uncontrolled
-            modes, custom constraints, resize callbacks, Escape to cancel,
-            handle content slots, CSS custom properties, and full accessibility
-            via WAI-ARIA separator semantics.
-          </p>
-          <div className="mt-5">
-            <pre
-              className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}
-            >
-              <code>{`import { ResizablePanel } from "@chumlab/ui/resizable-panel";`}</code>
-            </pre>
-          </div>
-        </div>
-      </header>
+      <DocsHero
+        title="Resizable Panel"
+        description="A panel component with a draggable separator handle for resizing. Supports horizontal and vertical orientations, keyboard navigation, pointer events for mouse and touch, controlled and uncontrolled modes, custom constraints, resize callbacks, Escape to cancel, handle content slots, CSS custom properties, and full accessibility via WAI-ARIA separator semantics."
+        code={`import { ResizablePanel } from "@chumlab/ui/resizable-panel";`}
+      />
 
       {/* ─── Basic Usage ────────────────────────────────────────────────── */}
       <Section
@@ -275,7 +193,7 @@ const ResizablePanelDemo = () => {
           <ResizablePanel defaultValue={300} minValue={150} maxValue={500}>
             <div className="h-full p-4">
               <div
-                className={`text-sm ${dark ? "text-gray-300" : "text-gray-600"}`}
+                className={`text-sm text-cl-text-secondary`}
               >
                 Drag the edge to resize.
               </div>
@@ -297,11 +215,13 @@ const ResizablePanelDemo = () => {
             maxValue={500}
             onValueChange={setRightWidth}
             classes={{
-              root: panelRootClass("blue"),
+              // Override h-40 from panelRootClass — the sidebar content
+              // (eyebrow + 4 nav items + width footer) needs ~240px.
+              root: `${panelRootClass("blue").replace("h-40", "h-60")}`,
               handle: handleClass("blue"),
             }}
           >
-            {sidebarContent(rightWidth)}
+            {sidebarContent()}
           </ResizablePanel>
         </DemoWrapper>
       </Section>
@@ -345,9 +265,7 @@ const ResizablePanelDemo = () => {
             resizeDirection="bottom"
             onValueChange={setBottomHeight}
             classes={{
-              root: dark
-                ? "w-full bg-blue-950/40 rounded-lg border border-blue-800"
-                : "w-full bg-blue-50 rounded-lg border border-blue-200",
+              root: "w-full bg-cl-bg-elevated rounded-cl-md border border-cl-border",
               handle: handleClass("blue"),
             }}
           >
@@ -371,9 +289,7 @@ const ResizablePanelDemo = () => {
               resizeDirection="top"
               onValueChange={setTopHeight}
               classes={{
-                root: dark
-                  ? "w-full bg-green-950/40 rounded-lg border border-green-800"
-                  : "w-full bg-green-50 rounded-lg border border-green-200",
+                root: "w-full bg-cl-bg-elevated rounded-cl-md border border-cl-border",
                 handle: handleClass("green"),
               }}
             >
@@ -401,12 +317,12 @@ const ResizablePanelDemo = () => {
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
+                className="font-medium text-cl-text"
               >
                 Uncontrolled Panel
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 Started at 280px (no external state)
               </p>
@@ -425,7 +341,7 @@ const ResizablePanelDemo = () => {
           <div className="w-full space-y-4">
             <div className="flex items-center gap-4">
               <label
-                className={`text-sm font-medium whitespace-nowrap ${dark ? "text-gray-300" : "text-gray-700"}`}
+                className={`text-sm font-medium whitespace-nowrap text-cl-text-secondary`}
               >
                 Width: {controlledWidth}px
               </label>
@@ -527,8 +443,8 @@ const ResizablePanelDemo = () => {
                 onClick={() => setDisabledToggle((p) => !p)}
                 className={
                   disabledToggle
-                    ? `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-red-600 hover:bg-red-500 text-white" : "bg-red-600 hover:bg-red-700 text-white"}`
-                    : `px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${dark ? "bg-green-600 hover:bg-green-500 text-white" : "bg-green-600 hover:bg-green-700 text-white"}`
+                    ? `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-error hover:bg-cl-error text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error dark:text-cl-bg`
+                    : `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success hover:bg-cl-success text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success dark:text-cl-bg`
                 }
               >
                 {disabledToggle ? "Disabled" : "Enabled"} — Click to toggle
@@ -538,27 +454,17 @@ const ResizablePanelDemo = () => {
               defaultValue={280}
               disabled={disabledToggle}
               classes={{
-                root: `h-40 rounded-lg border transition-opacity ${
-                  disabledToggle
-                    ? dark
-                      ? "bg-gray-700/50 border-gray-600 opacity-60"
-                      : "bg-gray-100 border-gray-300 opacity-60"
-                    : dark
-                      ? "bg-blue-950/40 border-blue-800"
-                      : "bg-blue-50 border-blue-200"
+                root: `h-40 rounded-cl-md bg-cl-bg-elevated border border-cl-border transition-opacity ${
+                  disabledToggle ? "opacity-60" : ""
                 }`,
                 handle: disabledToggle ? "" : handleClass("blue"),
               }}
             >
               <div className="p-4">
-                <p
-                  className={`font-medium ${disabledToggle ? (dark ? "text-gray-400" : "text-gray-500") : dark ? "text-blue-300" : "text-blue-800"}`}
-                >
+                <p className={`font-medium ${disabledToggle ? "text-cl-text-tertiary" : "text-cl-text"}`}>
                   {disabledToggle ? "Disabled Panel" : "Enabled Panel"}
                 </p>
-                <p
-                  className={`text-sm mt-2 ${disabledToggle ? (dark ? "text-gray-500" : "text-gray-400") : dark ? "text-blue-400" : "text-blue-600"}`}
-                >
+                <p className="text-sm mt-2 text-cl-text-tertiary">
                   {disabledToggle ? "Cannot be resized" : "Drag to resize"}
                 </p>
               </div>
@@ -586,12 +492,12 @@ const ResizablePanelDemo = () => {
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
+                className="font-medium text-cl-text"
               >
                 Tab to the handle, then use arrow keys
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 Step: 10px | Shift+Arrow: 50px | Escape: cancel drag
               </p>
@@ -618,12 +524,12 @@ const ResizablePanelDemo = () => {
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
+                className="font-medium text-cl-text"
               >
                 Start dragging, then press Escape
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 Size snaps back to where it was before the drag
               </p>
@@ -670,10 +576,10 @@ const ResizablePanelDemo = () => {
             </ResizablePanel>
             <div
               ref={logRef}
-              className={`h-28 overflow-y-auto rounded-lg border p-3 font-mono text-xs ${dark ? "bg-gray-900 border-gray-700 text-gray-300" : "bg-gray-50 border-gray-200 text-gray-600"}`}
+              className={`h-28 overflow-y-auto rounded-cl-md border p-3 font-mono text-xs bg-cl-bg-hover border-cl-border text-cl-text-secondary dark:bg-cl-bg dark:border dark:border-cl-border dark:text-cl-text-secondary`}
             >
               {callbackLog.length === 0 ? (
-                <span className={dark ? "text-gray-500" : "text-gray-400"}>
+                <span className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}>
                   Drag the handle to see resize events...
                 </span>
               ) : (
@@ -697,18 +603,18 @@ const ResizablePanelDemo = () => {
             maxValue={500}
             onValueChange={setStyledWidth}
             classes={{
-              root: `h-32 rounded-lg border ${dark ? "bg-linear-to-r from-purple-950/60 to-pink-950/60 border-purple-800" : "bg-linear-to-r from-purple-50 to-pink-50 border-purple-200"}`,
-              handle: `rounded-full ${dark ? "bg-linear-to-b from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400" : "bg-linear-to-b from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500"} transition-colors`,
+              root: `h-32 rounded-cl-md border bg-linear-to-r from-cl-accent/10 to-cl-accent/10 border-cl-border-input-focus dark:bg-linear-to-r dark:from-cl-accent/60 dark:to-cl-accent/60 dark:border dark:border-cl-border-input-focus`,
+              handle: `rounded-full bg-linear-to-b from-cl-accent/30 to-cl-accent/30 hover:from-cl-accent hover:to-cl-accent dark:bg-linear-to-b dark:from-cl-accent dark:to-cl-accent dark:hover:from-cl-accent/30 dark:hover:to-cl-accent/30 transition-colors`,
             }}
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-purple-300" : "text-purple-800"}`}
+                className="font-medium text-cl-text"
               >
                 Gradient Styling
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-purple-400" : "text-purple-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 Custom handle and root styles via classes
               </p>
@@ -738,7 +644,7 @@ const ResizablePanelDemo = () => {
                 height="16"
                 viewBox="0 0 4 16"
                 fill="currentColor"
-                className={dark ? "text-blue-200" : "text-blue-700"}
+                className={dark ? "text-cl-accent" : "text-cl-accent"}
                 aria-hidden="true"
               >
                 <circle cx="2" cy="2" r="1.5" />
@@ -749,12 +655,12 @@ const ResizablePanelDemo = () => {
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
+                className="font-medium text-cl-text"
               >
                 Panel with Grip Handle
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 Three-dot grip icon rendered inside the handle
               </p>
@@ -774,25 +680,18 @@ const ResizablePanelDemo = () => {
             defaultValue={280}
             minValue={150}
             maxValue={450}
-            className="h-32 rounded-lg"
+            className="h-32 rounded-cl-md"
             classes={{
-              root: dark
-                ? "bg-blue-950/40 border border-blue-800"
-                : "bg-blue-50 border border-blue-200",
+              root: "bg-cl-bg-elevated border border-cl-border",
               handle: handleClass("blue"),
             }}
           >
             <div className="p-4">
-              <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
-              >
+              <p className="font-medium text-cl-text">
                 Both className and classes.root
               </p>
-              <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
-              >
-                className=&quot;h-32 rounded-lg&quot; +
-                classes.root=&quot;bg-blue-50 ...&quot;
+              <p className="text-sm mt-2 text-cl-text-tertiary">
+                className=&quot;h-32 rounded-cl-md&quot; + classes.root=&quot;bg-cl-bg-elevated ...&quot;
               </p>
             </div>
           </ResizablePanel>
@@ -820,21 +719,21 @@ const ResizablePanelDemo = () => {
             >
               <div className="p-4">
                 <p
-                  className={`font-medium ${dark ? "text-purple-300" : "text-purple-800"}`}
+                  className="font-medium text-cl-text"
                 >
                   Sidebar
                 </p>
                 <p
-                  className={`text-sm mt-2 ${dark ? "text-purple-400" : "text-purple-600"}`}
+                  className="text-sm mt-2 text-cl-text-tertiary"
                 >
                   Width: {Math.round(sidebarWidth)}px
                 </p>
-                <ul className="mt-4 space-y-2 text-sm">
+                <ul className="mt-4 space-y-1 text-sm">
                   {["Navigation 1", "Navigation 2", "Navigation 3"].map(
                     (item) => (
                       <li
                         key={item}
-                        className={`px-2 py-1 rounded ${dark ? "bg-purple-900/50 text-purple-300" : "bg-purple-100 text-purple-700"}`}
+                        className="px-2 py-1.5 rounded-cl-md text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text transition-colors cursor-pointer"
                       >
                         {item}
                       </li>
@@ -844,15 +743,15 @@ const ResizablePanelDemo = () => {
               </div>
             </ResizablePanel>
             <div
-              className={`flex-1 p-4 border rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+ className={`flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`}
             >
               <p
-                className={`font-medium ${dark ? "text-white" : "text-gray-800"}`}
+                className={`font-medium text-cl-text`}
               >
                 Main Content
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm mt-2 text-cl-text-secondary`}
               >
                 This area expands as the sidebar shrinks.
               </p>
@@ -882,12 +781,12 @@ const ResizablePanelDemo = () => {
             >
               <div className="p-4 h-full flex flex-col">
                 <p
-                  className={`font-medium ${dark ? "text-indigo-300" : "text-indigo-800"}`}
+                  className={`font-medium text-cl-accent dark:text-cl-accent`}
                 >
                   Left Panel
                 </p>
                 <p
-                  className={`text-sm mt-2 ${dark ? "text-indigo-400" : "text-indigo-600"}`}
+                  className="text-sm mt-2 text-cl-text-tertiary"
                 >
                   Width: {Math.round(leftPanelWidth)}px
                 </p>
@@ -899,7 +798,7 @@ const ResizablePanelDemo = () => {
                   ].map((item) => (
                     <div
                       key={item}
-                      className={`px-3 py-2 rounded text-sm ${dark ? "bg-indigo-900/50 text-indigo-300" : "bg-indigo-100 text-indigo-700"}`}
+                      className="px-3 py-2 rounded-cl-md text-sm text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text transition-colors cursor-pointer"
                     >
                       {item}
                     </div>
@@ -909,23 +808,23 @@ const ResizablePanelDemo = () => {
             </ResizablePanel>
 
             <div
-              className={`flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y ${dark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+              className={`flex-1 p-4 flex flex-col border sm:border-x-0 sm:border-y bg-cl-bg-hover border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`}
             >
               <p
-                className={`font-medium ${dark ? "text-white" : "text-gray-800"}`}
+                className={`font-medium text-cl-text`}
               >
                 Center Panel
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm mt-2 text-cl-text-secondary`}
               >
                 Flexible width &mdash; expands to fill available space
               </p>
               <div
-                className={`mt-4 flex-1 rounded border p-4 ${dark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"}`}
+                className={`mt-4 flex-1 rounded border p-4 bg-white border-cl-border dark:bg-cl-bg dark:border dark:border-cl-border`}
               >
                 <p
-                  className={`text-sm ${dark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`text-sm text-cl-text-tertiary`}
                 >
                   Main content area
                 </p>
@@ -946,12 +845,12 @@ const ResizablePanelDemo = () => {
             >
               <div className="p-4 h-full flex flex-col">
                 <p
-                  className={`font-medium ${dark ? "text-teal-300" : "text-teal-800"}`}
+                  className={`font-medium text-cl-accent dark:text-cl-accent`}
                 >
                   Right Panel
                 </p>
                 <p
-                  className={`text-sm mt-2 ${dark ? "text-teal-400" : "text-teal-600"}`}
+                  className={`text-sm mt-2 text-cl-accent dark:text-cl-accent`}
                 >
                   Width: {Math.round(rightPanelWidth)}px
                 </p>
@@ -959,7 +858,7 @@ const ResizablePanelDemo = () => {
                   {["Details Section", "Properties", "Actions"].map((item) => (
                     <div
                       key={item}
-                      className={`px-3 py-2 rounded text-sm ${dark ? "bg-teal-900/50 text-teal-300" : "bg-teal-100 text-teal-700"}`}
+                      className="px-3 py-2 rounded-cl-md text-sm text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text transition-colors cursor-pointer"
                     >
                       {item}
                     </div>
@@ -990,12 +889,12 @@ const ResizablePanelDemo = () => {
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
+                className="font-medium text-cl-text"
               >
                 Custom ID Panel
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 id=&quot;my-resizable&quot;
               </p>
@@ -1023,12 +922,12 @@ const ResizablePanelDemo = () => {
           >
             <div className="p-4">
               <p
-                className={`font-medium ${dark ? "text-blue-300" : "text-blue-800"}`}
+                className="font-medium text-cl-text"
               >
                 Custom Aria Label
               </p>
               <p
-                className={`text-sm mt-2 ${dark ? "text-blue-400" : "text-blue-600"}`}
+                className="text-sm mt-2 text-cl-text-tertiary"
               >
                 aria-label=&quot;Resize sidebar navigation&quot;
               </p>
@@ -1257,7 +1156,7 @@ const ResizablePanelDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Handle has role="separator" with aria-orientation set per the WAI-ARIA window splitter pattern',
@@ -1283,7 +1182,7 @@ const ResizablePanelDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -1294,12 +1193,12 @@ const ResizablePanelDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Tab", "Focus the resize handle"],

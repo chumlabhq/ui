@@ -91,6 +91,8 @@ export interface TabPanelProps {
 }
 
 export interface ResolvedClasses {
+  root: string;
+  tabList: string;
   tab: string;
   tabActive: string;
   tabInactive: string;
@@ -106,6 +108,7 @@ export interface ResolvedClasses {
   countActive: string;
   countInactive: string;
   indicator: string;
+  panel: string;
 }
 
 export interface TabPanelContextValue {

@@ -3,28 +3,28 @@ import type { TabPanelClasses } from "./types";
 export const DEFAULT_TABPANEL_CLASSES: Required<TabPanelClasses> = {
   root: "w-full",
   tabList:
-    "flex items-center gap-4 sm:gap-6 overflow-x-auto border-b border-gray-200 dark:border-gray-700",
+    "flex items-center gap-6 sm:gap-8 overflow-x-auto border-b border-cl-border dark:border-cl-border",
   tab: "relative shrink-0 px-1 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
-  tabActive: "text-blue-600 dark:text-blue-400",
+  tabActive: "text-cl-accent dark:text-cl-accent",
   tabInactive:
-    "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200",
+    "text-cl-text-tertiary dark:text-cl-text-tertiary hover:text-cl-text dark:hover:text-cl-text",
   tabDisabled:
-    "opacity-40 cursor-not-allowed hover:text-gray-500 dark:hover:text-gray-400",
+    "opacity-40 cursor-not-allowed hover:text-cl-text-tertiary dark:hover:text-cl-text-tertiary",
   tabFocus:
-    "outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-400 dark:focus-visible:ring-offset-gray-900",
+    "outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg",
   label: "",
   labelActive: "",
   labelInactive: "",
   icon: "",
-  iconActive: "text-blue-600 dark:text-blue-400",
-  iconInactive: "text-gray-400 dark:text-gray-500",
+  iconActive: "text-cl-accent dark:text-cl-accent",
+  iconInactive: "text-cl-text-tertiary dark:text-cl-text-tertiary",
   count: "px-2 py-0.5 text-xs font-semibold rounded-full",
   countActive:
-    "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300",
+    "bg-cl-accent/15 dark:bg-cl-accent/20 text-cl-accent dark:text-cl-accent",
   countInactive:
-    "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400",
+    "bg-cl-bg-hover dark:bg-cl-bg-elevated text-cl-text-tertiary dark:text-cl-text-tertiary",
   indicator:
-    "absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400",
+    "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/30",
   panel: "p-4",
 };
 

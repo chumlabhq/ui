@@ -1,9 +1,6 @@
 {
-  "name": "Chumlab UI | React Component Library",
-  "short_name": "Chumlab UI",
-  "description": "Production-grade, accessible React components built with TypeScript and Tailwind CSS v4.",
-  "start_url": "/",
-  "scope": "/",
+  "name": "Chumlab",
+  "short_name": "Chumlab",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -18,8 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#04040a",
-  "background_color": "#04040a",
-  "display": "standalone",
-  "categories": ["developer tools", "utilities"]
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
 }

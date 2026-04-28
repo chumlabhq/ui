@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useRef,
   useEffect,
+  useLayoutEffect,
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
@@ -12,6 +13,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { SortingState } from "../../components/Table";
 import { useTheme } from "./ThemeContext";
 import {
+  DocsHero,
   Section,
   DemoWrapper,
   PropsTable,
@@ -23,10 +25,10 @@ import {
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
-const getClasses = (dark: boolean) => ({
-  card: `rounded-2xl border p-5 ${dark ? "border-white/[0.06] bg-linear-to-br from-white/[0.03] to-white/[0.01]" : "border-gray-200 bg-white shadow-sm shadow-gray-900/[0.04]"}`,
-  kbd: `px-2 py-1 rounded-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium ${dark ? "bg-gray-900 border border-white/10 text-gray-300 shadow-sm" : "bg-white border border-gray-200 text-gray-600 shadow-sm"}`,
-  label: `text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`,
+const getClasses = (_dark: boolean) => ({
+ card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
+ kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border-cl-border text-cl-text-secondary`,
+  label: `text-xs font-medium text-cl-text-tertiary`,
 });
 
 // Basic User interface
@@ -70,87 +72,157 @@ function FloatingActions<T>({
   onHover,
   isVisible,
   getName,
-  dark = false,
+  dark: _dark = false,
   className: classNameProp,
   renderContent,
 }: FloatingActionsProps<T>) {
-  // Combined display state to avoid cascading renders
-  const [displayState, setDisplayState] = useState<{
-    show: boolean;
-    top: number;
-    data: T;
-  } | null>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Architecture: we deliberately keep `top` OUT of React state — every
+  // hover transition between rows would otherwise require a parent
+  // setState → child re-render → useEffect → child setState → child
+  // re-render cycle (≥2 frames of latency, plus visible jitter). Instead
+  // we write `top` directly to the DOM via a ref in a useLayoutEffect,
+  // synchronously after each render, before the browser paints. The only
+  // thing in React state is the latched data + show flag (so the FAB can
+  // hold its content during the 150ms hide-out window).
+  const fabRef = useRef<HTMLDivElement | null>(null);
+  const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Update position and data when row changes (and we're visible)
-  useEffect(() => {
-    if (rowRef?.current && rowData !== undefined && isVisible) {
-      const rowElement = rowRef.current;
-      const rowRect = rowElement.getBoundingClientRect();
-      const tableContainer = rowElement.closest("[data-table-container]");
-      const containerRect = tableContainer?.getBoundingClientRect();
+  // Latch the row data the moment we have a visible row — keeps the FAB
+  // rendering during the fade-out delay even after the parent clears its
+  // hover state. setState-during-render (with a reference-equality guard)
+  // is the React-recommended pattern for syncing derived state from props
+  // and avoids both react-hooks/set-state-in-effect and react-hooks/refs.
+  const [latchedData, setLatchedData] = useState<T | undefined>(undefined);
+  if (isVisible && rowData !== undefined && rowData !== latchedData) {
+    setLatchedData(rowData);
+  }
 
-      if (containerRect) {
-        const top = rowRect.top - containerRect.top + rowRect.height / 2;
-        setDisplayState({
-          show: true,
-          top,
-          data: rowData,
-        });
-      }
+  // Direct DOM position write via `transform` (GPU compositor), not via
+  // `top` (CPU layout). Animating `top` would trigger a layout reflow on
+  // every frame and stutter under load; animating `transform` runs on
+  // its own compositor layer so the FAB glides at the display refresh
+  // rate even when other parts of the page are rendering.
+  // Runs synchronously on every commit (useLayoutEffect, not useEffect)
+  // so the FAB tracks `rowRef` 1:1 with the parent's render.
+  useLayoutEffect(() => {
+    const fab = fabRef.current;
+    const row = rowRef?.current;
+    if (!fab || !row || !isVisible) return;
+    const rowRect = row.getBoundingClientRect();
+    // The FAB is rendered inside the inner flex/grid wrapper (the
+    // [data-testid="table-container"] element), which becomes the actual
+    // scroll container when stickyHeader+maxHeight is on. We position the
+    // FAB against that wrapper so its containing-block math is correct,
+    // and we add scrollTop because the overlay holding the FAB is INSIDE
+    // the scrolling content — without it the FAB drifts off the hovered
+    // row by exactly the scroll distance.
+    const scrollContainer = (row.closest('[data-testid="table-container"]') ??
+      row.closest("[data-table-container]")) as HTMLElement | null;
+    if (!scrollContainer) return;
+    const scrollContainerRect = scrollContainer.getBoundingClientRect();
+    const top =
+      rowRect.top -
+      scrollContainerRect.top +
+      scrollContainer.scrollTop +
+      rowRect.height / 2;
+    // translate3d forces a GPU layer; the calc() bakes in the -50%
+    // self-centering offset that used to be a static transform.
+    fab.style.transform = `translate3d(-50%, calc(${top}px - 50%), 0)`;
+  });
+
+  // Show immediately while isVisible is true; hide with 150ms grace so
+  // the user can reach the toolbar from a row hover or move between rows
+  // without a flash gap. State transitions are detected via `prevIsVisible`
+  // state (not a ref) so we satisfy both react-hooks/refs and
+  // react-hooks/set-state-in-effect: the guard fires only on transitions,
+  // and the timer-driven clear runs inside setTimeout (not the effect body).
+  const [graceActive, setGraceActive] = useState(false);
+  const [prevIsVisible, setPrevIsVisible] = useState(isVisible);
+  if (prevIsVisible !== isVisible) {
+    setPrevIsVisible(isVisible);
+    if (isVisible) {
+      setGraceActive(false);
+    } else {
+      setGraceActive(true);
     }
-  }, [rowRef, rowData, isVisible]);
+  }
 
-  // Handle visibility changes (show immediately, hide with delay)
   useEffect(() => {
     if (isVisible) {
-      // Clear any pending hide timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
       }
-    } else {
-      // Clear existing timeout before setting new one
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      // Delay hiding to allow moving between rows or to floating actions
-      timeoutRef.current = setTimeout(() => {
-        setDisplayState(null);
-      }, 150);
+      return;
     }
-
+    hideTimeoutRef.current = setTimeout(() => {
+      setGraceActive(false);
+      hideTimeoutRef.current = null;
+    }, 150);
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
       }
     };
   }, [isVisible]);
 
-  if (!displayState?.show) return null;
+  const show = isVisible || graceActive;
+  if (!show || latchedData === undefined) return null;
 
-  const name = getName(displayState.data);
+  const name = getName(latchedData);
 
-  const defaultClassName = `z-30 flex items-center gap-0.5 backdrop-blur-sm border rounded shadow-sm px-1 py-0.5 ${dark ? "bg-gray-900/95 border-white/[0.06]" : "bg-white/95 border-gray-200"}`;
+  // Theme-aware surface: white card in light mode, elevated dark in dark
+  // mode. Icons use brand-tokenized colors so they're readable on both.
+  // z-10 keeps the FAB above tbody (z-auto) but BELOW the sticky thead
+  // (z-20) and the pinned column (z-30). When a hovered row scrolls
+  // partially under the sticky header, the FAB now slips behind the
+  // header instead of painting over it.
+  const defaultClassName = "z-10 flex items-center gap-0.5 border rounded-cl-md shadow-md px-1 py-0.5 bg-white border-cl-border dark:bg-cl-bg-elevated dark:border-cl-text/10";
+  const buttonClassName = "p-1.5 rounded-cl-sm transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-black/[0.06] dark:hover:bg-white/10";
 
   return (
     <div
+      ref={fabRef}
       className={classNameProp ?? defaultClassName}
       style={{
-        top: displayState.top,
-        transform: "translate(-50%, -50%)",
+        // `transform` is set imperatively in useLayoutEffect (above) so
+        // position updates skip React's render cycle entirely.
+        // `translate3d` + `will-change: transform` keep the FAB on its
+        // own GPU compositor layer for buttery 60 fps motion.
         position: "absolute",
+        top: 0,
         left: "clamp(1rem, 30%, calc(100% - 6rem))",
+        transition: "transform 220ms cubic-bezier(0.32, 0.72, 0, 1)",
+        willChange: "transform",
       }}
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
     >
       {renderContent ? (
-        renderContent(name, displayState.data)
+        renderContent(name, latchedData)
       ) : (
         <>
           <button
-            className={`p-1 rounded transition-colors cursor-pointer ${dark ? "text-gray-400 hover:text-blue-400 hover:bg-blue-500/10" : "text-gray-400 hover:text-blue-600 hover:bg-blue-50"}`}
+            className={buttonClassName}
+            title="View"
+            onClick={() => alert(`View: ${name}`)}
+          >
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              viewBox="0 0 24 24"
+            >
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+          <button
+            className={buttonClassName}
             title="Edit"
             onClick={() => alert(`Edit: ${name}`)}
           >
@@ -158,27 +230,34 @@ function FloatingActions<T>({
               className="w-3.5 h-3.5"
               fill="none"
               stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z" />
             </svg>
           </button>
           <button
-            className={`p-1 rounded transition-colors cursor-pointer ${dark ? "text-gray-400 hover:text-gray-200 hover:bg-white/[0.06]" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}
-            title="More options"
-            onClick={() => alert(`More options: ${name}`)}
+            className={`${buttonClassName} hover:!text-cl-error hover:!bg-cl-error/15`}
+            title="Delete"
+            onClick={() => alert(`Delete: ${name}`)}
           >
             <svg
               className="w-3.5 h-3.5"
-              fill="currentColor"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
               viewBox="0 0 24 24"
             >
-              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+              <path d="M3 6h18" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <path d="M10 11v6" />
+              <path d="M14 11v6" />
             </svg>
           </button>
         </>
@@ -470,66 +549,73 @@ const extendedSampleData: ExtendedUser[] = [
   },
 ];
 
-function getTableClasses(dark: boolean) {
+function getTableClasses(_dark: boolean) {
   return {
-    container: `w-full border rounded-lg overflow-hidden ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+    container: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: `px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b ${dark ? "text-gray-400 bg-[#111118] border-white/[0.06]" : "text-gray-600 bg-gray-50 border-gray-200"}`,
+    headerCell: `px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary bg-cl-bg-elevated border-cl-border dark:text-cl-text-tertiary dark:bg-cl-bg-elevated dark:border-cl-text/[0.06]`,
     body: "",
-    row: `border-b transition-colors data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] hover:bg-white/[0.06]" : "border-gray-100 hover:bg-gray-100"}`,
-    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] bg-blue-500/10 hover:bg-blue-500/15" : "border-gray-100 bg-blue-50 hover:bg-blue-100"}`,
-    cell: `px-4 py-3 text-sm whitespace-nowrap ${dark ? "text-gray-100" : "text-gray-900"}`,
-    empty: `flex items-center justify-center py-12 ${dark ? "text-gray-400" : "text-gray-500"}`,
-    pinnedContainer: `shrink-0 sticky left-0 z-20 border-r-2 ${dark ? "border-blue-500/30 bg-gray-900" : "border-blue-200 bg-white"}`,
+    row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover`,
+    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15`,
+    cell: `px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text`,
+    empty: `flex items-center justify-center py-12 text-cl-text-secondary`,
+    pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
     unpinnedTable: "w-full border-collapse",
-    headerCellHover: dark ? "bg-white/[0.06]" : "bg-gray-100",
-    pinButton: `ml-2 p-1 rounded transition-colors ${dark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`,
-    pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-blue-100",
-    pinIcon: "text-gray-400",
-    pinnedPinIcon: "text-blue-600",
-    shimmer: `w-full border rounded-lg overflow-hidden ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
-    shimmerRow: `border-b ${dark ? "border-white/[0.04]" : "border-gray-100"}`,
+    // Layer the hover tint via inset box-shadow so the opaque
+    // `bg-cl-bg-elevated` underneath stays in place. A bare
+    // `bg-cl-bg-hover` would REPLACE the base bg on hover, dropping it
+    // to 4% opacity and letting rows behind the sticky header show
+    // through. Inset box-shadow paints on top of the bg without
+    // touching it.
+    headerCellHover:
+      "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
+    pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated`,
+    pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
+    pinIcon: "text-cl-text-tertiary",
+    pinnedPinIcon: "text-cl-accent",
+    shimmer: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
+    shimmerRow: `border-b border-cl-border dark:border-cl-text/[0.04]`,
     shimmerCell: "px-4 py-2 h-14",
-    shimmerBar: `h-full w-full bg-linear-to-r rounded animate-pulse ${dark ? "from-gray-700 via-gray-600 to-gray-700" : "from-gray-200 via-gray-300 to-gray-200"}`,
+    shimmerBar: `h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.04] via-gray-300 to-fg/[0.04] dark:from-bg-elevated dark:via-gray-600 dark:to-bg-elevated`,
   };
 }
 
-function getPaginationClasses(dark: boolean) {
+function getPaginationClasses(_dark: boolean) {
   return {
     root: "flex items-center justify-between mt-4 px-2",
     selector: "flex items-center gap-2",
-    selectorButton: `flex items-center gap-1 px-2 py-1 border rounded ${dark ? "border-gray-700 bg-gray-900 hover:bg-gray-800" : "border-gray-300 bg-white hover:bg-gray-50"}`,
-    selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] ${dark ? "bg-gray-900 border-white/[0.06]" : "bg-white border-gray-200"}`,
-    selectorOption: `w-full px-2 py-1 text-left text-sm ${dark ? "hover:bg-white/[0.06] data-[selected]:bg-blue-500/10 data-[selected]:font-medium" : "hover:bg-gray-100 data-[selected]:bg-blue-50 data-[selected]:font-medium"}`,
-    pageButton: `px-2 py-1 text-sm ${dark ? "text-gray-400 hover:text-gray-100" : "text-gray-600 hover:text-gray-900"}`,
-    activePageButton: `px-2 py-1 text-sm font-medium rounded ${dark ? "text-blue-400 bg-blue-500/10 border border-blue-500/30" : "text-blue-600 bg-blue-50 border border-blue-200"}`,
-    navButton: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed ${dark ? "text-gray-400 hover:text-gray-100" : "text-gray-600 hover:text-gray-900"}`,
-    ellipsis: "px-2 text-gray-400",
-    label: `text-sm ${dark ? "text-gray-400" : "text-gray-600"}`,
+    selectorButton: `flex items-center gap-1 px-2 py-1 border rounded border-cl-border-input bg-white hover:bg-cl-bg-hover dark:border dark:border-cl-border dark:bg-cl-bg dark:hover:bg-cl-bg-elevated`,
+    selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] bg-white border-cl-border dark:bg-cl-bg dark:border-cl-text/[0.06]`,
+    selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium dark:hover:bg-cl-bg-hover dark:data-[selected]:bg-cl-accent/10 dark:data-[selected]:font-medium`,
+    pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text`,
+    activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-accent bg-cl-accent/10 border-cl-border-input-focus dark:text-cl-accent dark:bg-cl-accent/10 dark:border dark:border-cl-border-input-focus/30`,
+    navButton: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
+    ellipsis: "px-2 text-cl-text-tertiary",
+    label: `text-sm text-cl-text-secondary`,
   };
 }
 
 // Dark/Modern pagination styles
 const darkPaginationContainerStyle =
-  "flex items-center justify-between mt-4 px-4 py-3 bg-gray-900 rounded-lg";
+  "flex items-center justify-between mt-4 px-4 py-3 bg-cl-bg rounded-cl-md";
 const darkPaginationRowSelectorStyle = "flex items-center gap-3";
 const darkPaginationButtonStyle =
-  "flex items-center gap-2 px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-md text-gray-200 hover:bg-gray-700 transition-colors";
+ "flex items-center gap-2 px-3 py-1.5 bg-cl-bg-elevated border-cl-border rounded-cl-md text-cl-text hover:bg-cl-bg-elevated transition-colors";
 const darkPaginationDropdownStyle =
-  "absolute bottom-full mb-1 left-0 z-50 bg-gray-800 border border-gray-700 rounded-md shadow-xl min-w-[70px] overflow-hidden";
+ "absolute bottom-full mb-1 left-0 z-50 bg-cl-bg-elevated border-cl-border rounded-cl-md shadow-xl min-w-[70px] overflow-hidden";
 const darkPaginationOptionStyle =
-  "w-full px-3 py-2 text-left text-sm text-gray-300 hover:bg-gray-700 data-[selected]:bg-indigo-600 data-[selected]:text-white transition-colors";
+  "w-full px-3 py-2 text-left text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-white transition-colors";
 const darkPaginationPageStyle =
-  "w-8 h-8 flex items-center justify-center text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-md transition-colors";
+  "w-8 h-8 flex items-center justify-center text-sm text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors";
 const darkPaginationActivePageStyle =
-  "w-8 h-8 flex items-center justify-center text-sm font-semibold text-white bg-indigo-600 rounded-md";
+  "w-8 h-8 flex items-center justify-center text-sm font-semibold text-white bg-cl-accent rounded-cl-md";
 const darkPaginationNavStyle =
-  "p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-md transition-colors data-[disabled]:opacity-30 data-[disabled]:cursor-not-allowed data-[disabled]:hover:bg-transparent";
-const darkPaginationEllipsisStyle = "px-1 text-gray-500";
-const darkPaginationLabelStyle = "text-sm text-gray-400";
+  "p-2 text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors data-[disabled]:opacity-30 data-[disabled]:cursor-not-allowed data-[disabled]:hover:bg-transparent";
+const darkPaginationEllipsisStyle = "px-1 text-cl-text-tertiary";
+const darkPaginationLabelStyle = "text-sm text-cl-text-tertiary";
 const darkPaginationNavContainerStyle = "flex items-center gap-1";
 const darkPaginationPageContainerStyle = "flex items-center gap-1";
 
@@ -542,14 +628,14 @@ const StatusBadge = ({
 }) => {
   const styles = dark
     ? {
-        active: "bg-green-500/15 text-green-400",
-        inactive: "bg-gray-500/15 text-gray-400",
-        pending: "bg-yellow-500/15 text-yellow-400",
+        active: "bg-cl-success/15 text-cl-success",
+        inactive: "bg-cl-text/15 text-cl-text-tertiary",
+        pending: "bg-cl-warning/15 text-cl-warning",
       }
     : {
-        active: "bg-green-100 text-green-800",
-        inactive: "bg-gray-100 text-gray-800",
-        pending: "bg-yellow-100 text-yellow-800",
+        active: "bg-cl-success/15 text-cl-success",
+        inactive: "bg-cl-bg-hover text-cl-text",
+        pending: "bg-cl-warning/15 text-cl-warning",
       };
 
   return (
@@ -570,16 +656,16 @@ const PerformanceBadge = ({
 }) => {
   const styles = dark
     ? {
-        excellent: "bg-emerald-500/15 text-emerald-400",
-        good: "bg-blue-500/15 text-blue-400",
-        average: "bg-amber-500/15 text-amber-400",
-        poor: "bg-red-500/15 text-red-400",
+        excellent: "bg-cl-success/15 text-cl-success",
+        good: "bg-cl-accent/15 text-cl-accent",
+        average: "bg-cl-warning/15 text-cl-warning",
+        poor: "bg-cl-error/15 text-cl-error",
       }
     : {
-        excellent: "bg-emerald-100 text-emerald-800",
-        good: "bg-blue-100 text-blue-800",
-        average: "bg-amber-100 text-amber-800",
-        poor: "bg-red-100 text-red-800",
+        excellent: "bg-cl-success/15 text-cl-success",
+        good: "bg-cl-accent/10 text-cl-accent",
+        average: "bg-cl-warning/15 text-cl-warning",
+        poor: "bg-cl-error/15 text-cl-error",
       };
 
   return (
@@ -760,7 +846,7 @@ function ServerApiDemo({
         header: () => <span>Image</span>,
         cell: ({ row }) => (
           <div
-            className={`w-11 h-11 rounded-xl overflow-hidden ${dark ? "bg-white/[0.05] ring-1 ring-white/[0.08]" : "bg-gray-100 ring-1 ring-gray-200"}`}
+            className={`w-8 h-8 rounded-cl-md overflow-hidden bg-cl-bg-hover ring-1 ring-border-soft dark:bg-cl-bg-hover dark:ring-1 dark:ring-cl-text/[0.08]`}
           >
             <img
               src={row.original.thumbnail}
@@ -777,12 +863,12 @@ function ServerApiDemo({
         cell: ({ row }) => (
           <div className="min-w-[180px]">
             <p
-              className={`text-sm font-medium ${dark ? "text-gray-100" : "text-gray-900"}`}
+              className={`text-sm font-medium text-cl-text`}
             >
               {row.original.title}
             </p>
             <p
-              className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+              className={`text-xs text-cl-text-tertiary`}
             >
               {row.original.brand || "No brand"}
             </p>
@@ -794,7 +880,7 @@ function ServerApiDemo({
         header: () => <span>Category</span>,
         cell: ({ row }) => (
           <span
-            className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${dark ? "bg-white/[0.05] text-gray-300" : "bg-gray-100 text-gray-600"}`}
+            className={`text-xs px-2 py-1 rounded-full whitespace-nowrap bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-hover dark:text-cl-text-secondary`}
           >
             {row.original.category}
           </span>
@@ -805,7 +891,7 @@ function ServerApiDemo({
         header: () => <span>Price</span>,
         cell: ({ row }) => (
           <span
-            className={`font-medium whitespace-nowrap ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+            className={`font-medium whitespace-nowrap text-cl-success`}
           >
             ${(row.original.price ?? 0).toFixed(2)}
           </span>
@@ -818,7 +904,7 @@ function ServerApiDemo({
           const disc = row.original.discountPercentage ?? 0;
           return (
             <span
-              className={`text-sm whitespace-nowrap ${disc > 10 ? (dark ? "text-amber-400" : "text-amber-600") : dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm whitespace-nowrap ${disc > 10 ? (dark ? "text-cl-warning" : "text-cl-warning") : dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}`}
             >
               {disc.toFixed(1)}%
             </span>
@@ -840,7 +926,7 @@ function ServerApiDemo({
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
             <span
-              className={`text-sm ${dark ? "text-gray-300" : "text-gray-700"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               {(row.original.rating ?? 0).toFixed(1)}
             </span>
@@ -854,7 +940,7 @@ function ServerApiDemo({
           const stock = row.original.stock;
           return (
             <span
-              className={`text-sm whitespace-nowrap ${stock < 10 ? (dark ? "text-red-400" : "text-red-600") : dark ? "text-gray-300" : "text-gray-700"}`}
+              className={`text-sm whitespace-nowrap ${stock < 10 ? (dark ? "text-cl-error" : "text-cl-error") : dark ? "text-cl-text-secondary" : "text-cl-text"}`}
             >
               {stock} {stock < 10 && <span className="text-xs">(low)</span>}
             </span>
@@ -866,7 +952,7 @@ function ServerApiDemo({
         header: () => <span>SKU</span>,
         cell: ({ row }) => (
           <span
-            className={`text-xs font-mono whitespace-nowrap ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-mono whitespace-nowrap text-cl-text-secondary`}
           >
             {row.original.sku || "\u2014"}
           </span>
@@ -878,7 +964,7 @@ function ServerApiDemo({
         header: () => <span>Weight</span>,
         cell: ({ row }) => (
           <span
-            className={`text-sm whitespace-nowrap ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-sm whitespace-nowrap text-cl-text-secondary`}
           >
             {row.original.weight ?? 0}kg
           </span>
@@ -889,7 +975,7 @@ function ServerApiDemo({
         header: () => <span>Warranty</span>,
         cell: ({ row }) => (
           <span
-            className={`text-xs whitespace-nowrap ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs whitespace-nowrap text-cl-text-secondary`}
           >
             {row.original.warrantyInformation || "\u2014"}
           </span>
@@ -901,7 +987,7 @@ function ServerApiDemo({
         header: () => <span>Shipping</span>,
         cell: ({ row }) => (
           <span
-            className={`text-xs whitespace-nowrap ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs whitespace-nowrap text-cl-text-secondary`}
           >
             {row.original.shippingInformation || "\u2014"}
           </span>
@@ -920,15 +1006,15 @@ function ServerApiDemo({
               className={`text-xs px-2 py-1 rounded-full whitespace-nowrap font-medium ${
                 isOut
                   ? dark
-                    ? "bg-red-500/15 text-red-400"
-                    : "bg-red-50 text-red-600"
+                    ? "bg-cl-error/15 text-cl-error"
+                    : "bg-cl-error/15 text-cl-error"
                   : isLow
                     ? dark
-                      ? "bg-amber-500/15 text-amber-400"
-                      : "bg-amber-50 text-amber-600"
+                      ? "bg-cl-warning/15 text-cl-warning"
+                      : "bg-cl-warning/15 text-cl-warning"
                     : dark
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-emerald-50 text-emerald-600"
+                      ? "bg-cl-success/15 text-cl-success"
+                      : "bg-cl-success/15 text-cl-success"
               }`}
             >
               {status}
@@ -946,7 +1032,7 @@ function ServerApiDemo({
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-sm">
           <div
-            className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none ${dark ? "text-gray-500" : "text-gray-400"}`}
+            className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
           >
             <svg
               width="15"
@@ -967,13 +1053,13 @@ function ServerApiDemo({
             defaultValue={search}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder="Search products..."
-            className={`w-full h-[38px] pl-9 pr-3 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-blue-500/40 focus:border-blue-500/50" : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"}`}
+ className={`w-full h-[38px] pl-9 pr-3 text-sm rounded-cl-md focus:outline-none focus:ring-2 bg-cl-bg-elevated border-cl-border text-cl-text placeholder-fg-muted focus:ring-cl-accent/40 focus:border-cl-border-input-focus/50`}
           />
         </div>
         {(selectedCategory || selectedStatuses.length > 0) && (
           <div className="flex items-center gap-2 flex-wrap">
             {selectedCategory && (
-              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full ${dark ? "bg-blue-500/15 text-blue-400" : "bg-blue-50 text-blue-700"}`}>
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent`}>
                 {selectedCategory}
                 <button onClick={() => { setSelectedCategory(""); setPage(1); setColumnFilters((prev) => prev.filter((f) => f.id !== "category")); }} className="cursor-pointer hover:opacity-70">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
@@ -981,7 +1067,7 @@ function ServerApiDemo({
               </span>
             )}
             {selectedStatuses.map((st) => (
-              <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full ${dark ? "bg-emerald-500/15 text-emerald-400" : "bg-emerald-50 text-emerald-700"}`}>
+              <span key={st} className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full bg-cl-success/15 text-cl-success dark:bg-cl-success/15 dark:text-cl-success`}>
                 {st}
                 <button onClick={() => {
                   const remaining = selectedStatuses.filter((s2) => s2 !== st);
@@ -996,7 +1082,7 @@ function ServerApiDemo({
         )}
       </div>
       <div
-        className={`flex items-center justify-between text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+        className={`flex items-center justify-between text-xs text-cl-text-tertiary`}
       >
         <span>
           {loading ? "Loading..." : `${filteredProducts.length}${selectedStatuses.length > 0 ? ` of ${total}` : ` `} products found`}
@@ -1035,11 +1121,17 @@ function ServerApiDemo({
         getRowId={(row) => String(row.id)}
         classes={{
           ...s,
+          // Tall enough for the Product cell's title + brand subtitle so
+          // both pinned (image-only) and unpinned cells render at exactly
+          // the same height row-for-row. Without this the pinned image
+          // stays vertically centered while unpinned rows drift slightly
+          // taller, accumulating a misalignment by a few rows in.
+          cell: `px-4 py-3 h-[64px] text-sm whitespace-nowrap text-cl-text align-middle`,
           shimmer: "w-full overflow-hidden",
-          shimmerRow: `border-b ${dark ? "border-white/[0.03]" : "border-gray-100/50"}`,
-          shimmerCell: "px-4 py-3.5 h-14",
-          shimmerBar: `h-3 w-full rounded-md ${dark ? "bg-white/[0.04]" : "bg-gray-100"} bg-[length:200%_100%] animate-[shimmer_2s_ease-in-out_infinite]`,
-          filterDropdown: `${dark ? "bg-gray-900 border-white/[0.08]" : "bg-white border-gray-200"}`,
+          shimmerRow: "border-b border-cl-border/50 dark:border-cl-text/[0.03]",
+          shimmerCell: "px-4 py-3.5 h-16",
+          shimmerBar: `h-3 w-full rounded-cl-md bg-cl-bg-elevated bg-[length:200%_100%] animate-[shimmer_2s_ease-in-out_infinite]`,
+          filterDropdown: `bg-cl-bg border-cl-border`,
         }}
       />
       {totalPages > 1 && !loading && (
@@ -1047,7 +1139,7 @@ function ServerApiDemo({
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className={`px-3 py-1.5 text-sm rounded-lg cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${dark ? "bg-white/[0.05] text-gray-300 hover:bg-white/[0.08]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`px-3 py-1.5 text-sm rounded-cl-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated`}
           >
             Previous
           </button>
@@ -1061,7 +1153,7 @@ function ServerApiDemo({
               <button
                 key={pageNum}
                 onClick={() => setPage(pageNum)}
-                className={`w-8 h-8 text-sm rounded-lg cursor-pointer transition-colors ${page === pageNum ? "bg-blue-600 text-white" : dark ? "text-gray-400 hover:bg-white/[0.06]" : "text-gray-600 hover:bg-gray-100"}`}
+                className={`w-8 h-8 text-sm rounded-cl-md cursor-pointer transition-colors ${page === pageNum ? "bg-cl-accent text-white" : dark ? "text-cl-text-tertiary hover:bg-cl-bg-hover" : "text-cl-text-secondary hover:bg-cl-bg-hover"}`}
               >
                 {pageNum}
               </button>
@@ -1070,7 +1162,7 @@ function ServerApiDemo({
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className={`px-3 py-1.5 text-sm rounded-lg cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${dark ? "bg-white/[0.05] text-gray-300 hover:bg-white/[0.08]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            className={`px-3 py-1.5 text-sm rounded-cl-md cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated`}
           >
             Next
           </button>
@@ -1316,11 +1408,46 @@ const TableDemo = () => {
   const floatingActionsData =
     hoveredRowIndex !== null ? sampleData[hoveredRowIndex] : undefined;
 
+  // While the user is actively scrolling the comp table, skip hover
+  // state updates. Without this, every row that passes under the cursor
+  // during scroll fires `mouseenter` -> setState -> full re-render ->
+  // FAB getBoundingClientRect (layout flush) -> 220ms transform
+  // transition. That cascade per row makes scroll feel laggy.
+  const compIsScrollingRef = useRef(false);
+  const compScrollEndTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const onScroll = (e: Event) => {
+      const target = e.target as HTMLElement;
+      // Only react to scrolls inside a table-container (the inner
+      // flex/grid wrapper that actually scrolls in stickyHeader mode).
+      if (!target.closest?.('[data-testid="table-container"]')) return;
+      compIsScrollingRef.current = true;
+      if (compScrollEndTimeoutRef.current)
+        clearTimeout(compScrollEndTimeoutRef.current);
+      compScrollEndTimeoutRef.current = setTimeout(() => {
+        compIsScrollingRef.current = false;
+      }, 120);
+    };
+    document.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
+    return () => {
+      document.removeEventListener("scroll", onScroll, { capture: true });
+      if (compScrollEndTimeoutRef.current)
+        clearTimeout(compScrollEndTimeoutRef.current);
+    };
+  }, []);
+
   // Comprehensive demo handlers - state is set directly, FloatingActions handles delay internally
   const handleCompRowHover = (
     rowIndex: number | null,
     rowRef?: React.RefObject<HTMLTableRowElement>,
   ) => {
+    if (compIsScrollingRef.current) return;
     setCompHoveredRowIndex(rowIndex);
     setCompHoveredRowRef(rowRef ?? null);
   };
@@ -1348,9 +1475,6 @@ const TableDemo = () => {
 
   // Multi-Row Selection
   const [multiSelectedIds, setMultiSelectedIds] = useState<string[]>([]);
-
-  // Global Search
-  const [globalSearchFilter, setGlobalSearchFilter] = useState("");
 
   // Row Expansion
   const [expandedRowIds, setExpandedRowIds] = useState<string[]>([]);
@@ -1568,7 +1692,7 @@ const TableDemo = () => {
         header: "Actions",
         cell: () => (
           <button
-            className={`px-2 py-1 text-xs rounded ${dark ? "bg-blue-500/20 text-blue-400 hover:bg-blue-500/30" : "bg-blue-50 text-blue-600 hover:bg-blue-100"}`}
+            className={`px-2 py-1 text-xs rounded bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30`}
             onClick={() => alert("Action clicked")}
           >
             Edit
@@ -1576,7 +1700,7 @@ const TableDemo = () => {
         ),
       },
     ],
-    [dark],
+    [],
   );
 
   // Columns for footer demo
@@ -1603,46 +1727,16 @@ const TableDemo = () => {
 
   return (
     <div className="space-y-10">
-      {/* ─── Header ─────────────────────────────────────────────────────── */}
-      <header className="relative overflow-hidden rounded-2xl p-6 sm:p-8">
-        <div
-          className={`absolute inset-0 ${
-            dark
-              ? "bg-linear-to-br from-indigo-950/80 via-gray-900/60 to-blue-950/50"
-              : "bg-linear-to-br from-indigo-50 via-white to-blue-50/80"
-          }`}
-        />
-        <div
-          className={`absolute -top-24 -right-24 w-72 h-72 rounded-full blur-3xl ${dark ? "bg-indigo-500/10" : "bg-indigo-200/40"}`}
-        />
-        <div
-          className={`absolute -bottom-20 -left-20 w-56 h-56 rounded-full blur-3xl ${dark ? "bg-blue-500/8" : "bg-blue-200/30"}`}
-        />
+      <DocsHero
+        title="Table"
+        description={
+          'A flexible data table with sorting, pagination, row selection, and pinned columns. Requires @tanstack/react-table as a peer dependency — install it alongside @chumlab/ui.'
+        }
+        code={`npm install @chumlab/ui @tanstack/react-table
 
-        <div className="relative">
-          <h1
-            className={`text-3xl font-bold mb-3 ${dark ? "text-white" : "text-gray-900"}`}
-          >
-            Table
-          </h1>
-          <p
-            className={`text-sm leading-relaxed max-w-2xl ${dark ? "text-gray-400" : "text-gray-600"}`}
-          >
-            A flexible data table with sorting, pagination, row selection, and
-            pinned columns.
-          </p>
-
-          <div className="mt-5">
-            <pre className={`p-3.5 rounded-xl text-[13px] leading-relaxed overflow-x-auto whitespace-pre-wrap break-all ${dark ? "bg-linear-to-br from-gray-800 to-gray-900 text-gray-300 border border-white/6" : "bg-gray-50 text-gray-700 border border-gray-200"}`}>
-              <code>{`import { Table } from "@chumlab/ui/table";\nimport { Pagination } from "@chumlab/ui/pagination";`}</code>
-            </pre>
-            <p className={`mt-3 text-[13px] ${dark ? "text-amber-400/80" : "text-amber-700"}`}>
-              Requires <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-amber-50 border border-amber-200"}`}>@tanstack/react-table</code> as a peer dependency:{" "}
-              <code className={`px-1.5 py-0.5 rounded text-xs ${dark ? "bg-white/6" : "bg-gray-100 border border-gray-200"}`}>npm install @tanstack/react-table</code>
-            </p>
-          </div>
-        </div>
-      </header>
+import { Table } from "@chumlab/ui/table";
+import { Pagination } from "@chumlab/ui/pagination";`}
+      />
 
       <Section title="Basic Usage" description="A simple table with columns and data." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
@@ -1662,11 +1756,11 @@ const TableDemo = () => {
         />
         {selectedRowId && (
           <p
-            className={`mt-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-2 text-sm text-cl-text-secondary`}
           >
             Selected:{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               {selectedRowId}
             </code>
@@ -1693,7 +1787,7 @@ const TableDemo = () => {
           classes={s}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Hover over any row to see floating action buttons (View, Edit,
           Delete). The actions stay at the right edge of the table.
@@ -1767,7 +1861,7 @@ const TableDemo = () => {
                   cell: ({ row }) => (
                     <div className="flex items-center gap-1">
                       <button
-                        className={`p-1.5 rounded-lg transition-colors cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+                        className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
                         title="Edit"
                         onClick={() => alert(`Edit: ${row.original.name}`)}
                       >
@@ -1785,7 +1879,7 @@ const TableDemo = () => {
                         </svg>
                       </button>
                       <button
-                        className={`p-1.5 rounded-lg transition-colors cursor-pointer ${dark ? "text-red-400 hover:bg-red-500/10" : "text-red-500 hover:bg-red-50"}`}
+                        className={`p-1.5 rounded-cl-md transition-colors cursor-pointer text-cl-error hover:bg-cl-bg-elevated`}
                         title="Delete"
                         onClick={() => alert(`Delete: ${row.original.name}`)}
                       >
@@ -1837,7 +1931,7 @@ const TableDemo = () => {
                       dark={dark}
                       renderContent={(_name, rowData) => (
                         <button
-                          className={`p-1.5 rounded transition-colors cursor-pointer ${dark ? "text-gray-400 hover:text-white hover:bg-white/[0.08]" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"}`}
+                          className={`p-1.5 rounded transition-colors cursor-pointer text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text dark:hover:bg-cl-bg-hover`}
                           title="More actions"
                           onClick={(e) => {
                             const rowId = (rowData as User)?.id ?? null;
@@ -1873,7 +1967,7 @@ const TableDemo = () => {
                   createPortal(
                     <div
                       ref={dotMenuRef}
-                      className={`fixed rounded-lg border shadow-xl overflow-hidden min-w-[160px] z-[9999] ${dark ? "bg-gray-900 border-white/[0.08]" : "bg-white border-gray-200"}`}
+                      className={`fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] z-[9999] bg-cl-bg border-cl-border`}
                       style={{ top: dotMenuState.top, left: dotMenuState.left }}
                     >
                       {[
@@ -1897,7 +1991,7 @@ const TableDemo = () => {
                       ].map((item) => (
                         <button
                           key={item.label}
-                          className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-colors cursor-pointer ${(item as { danger?: boolean }).danger ? (dark ? "text-red-400 hover:bg-red-500/10" : "text-red-600 hover:bg-red-50") : dark ? "text-gray-300 hover:bg-white/[0.06]" : "text-gray-700 hover:bg-gray-50"}`}
+                          className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm transition-colors cursor-pointer ${(item as { danger?: boolean }).danger ? (dark ? "text-cl-error hover:bg-cl-error/10" : "text-cl-error hover:bg-cl-error/15") : dark ? "text-cl-text-secondary hover:bg-cl-bg-hover" : "text-cl-text hover:bg-cl-bg-hover"}`}
                           onClick={() => {
                             alert(
                               `${item.label}: ${sampleData.find((u) => u.id === dotMenuState.rowId)?.name}`,
@@ -1928,7 +2022,7 @@ const TableDemo = () => {
           return <DotMenuDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
           <p>
             Combines an inline <strong>Actions column</strong> (Edit, Delete)
@@ -1938,7 +2032,7 @@ const TableDemo = () => {
           <p>
             Uses{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               isPopupOpen
             </code>{" "}
@@ -1978,11 +2072,11 @@ const TableDemo = () => {
                     isVisible={pillHoverIdx !== null || pillFloatingHovered}
                     getName={(data) => data.name}
                     dark={dark}
-                    className={`z-30 flex items-center gap-1 backdrop-blur-sm border rounded-full shadow-lg px-1.5 py-1 ${dark ? "bg-gray-900/95 border-white/[0.08]" : "bg-white/95 border-gray-200"}`}
+                    className={`z-30 flex items-center gap-1 backdrop-blur-sm border rounded-full shadow-lg px-1.5 py-1 bg-cl-text/95 border-cl-border dark:bg-cl-bg/95 dark:border dark:border-cl-text/[0.08]`}
                     renderContent={(name) => (
                       <>
                         <button
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/15" : "text-blue-500 hover:bg-blue-50"}`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/15`}
                           title="Quick edit"
                           onClick={() => alert(`Editing ${name}`)}
                         >
@@ -2000,7 +2094,7 @@ const TableDemo = () => {
                           </svg>
                         </button>
                         <button
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer ${dark ? "text-emerald-400 hover:bg-emerald-500/15" : "text-emerald-500 hover:bg-emerald-50"}`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-success hover:bg-cl-success/15 dark:text-cl-success dark:hover:bg-cl-success/15`}
                           title="Bookmark"
                           onClick={() => alert(`Bookmarked ${name}`)}
                         >
@@ -2017,7 +2111,7 @@ const TableDemo = () => {
                           </svg>
                         </button>
                         <button
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer ${dark ? "text-amber-400 hover:bg-amber-500/15" : "text-amber-500 hover:bg-amber-50"}`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-warning hover:bg-cl-warning/15 dark:text-cl-warning dark:hover:bg-cl-warning/15`}
                           title="Share"
                           onClick={() => alert(`Share link copied for ${name}`)}
                         >
@@ -2038,10 +2132,10 @@ const TableDemo = () => {
                           </svg>
                         </button>
                         <div
-                          className={`w-px h-5 mx-0.5 ${dark ? "bg-white/[0.08]" : "bg-gray-200"}`}
+                          className={`w-px h-5 mx-0.5 bg-cl-bg-elevated`}
                         />
                         <button
-                          className={`p-1.5 rounded-full transition-colors cursor-pointer ${dark ? "text-red-400 hover:bg-red-500/15" : "text-red-400 hover:bg-red-50"}`}
+                          className={`p-1.5 rounded-full transition-colors cursor-pointer text-cl-error hover:bg-cl-error/15 dark:text-cl-error dark:hover:bg-cl-error/15`}
                           title="Delete"
                           onClick={() => alert(`Deleted ${name}`)}
                         >
@@ -2068,20 +2162,20 @@ const TableDemo = () => {
           return <PillToolbarDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
           <p>
             A pill-shaped floating toolbar with{" "}
             <strong>custom action triggers</strong> (Edit, Bookmark, Share,
             Delete). The{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               floatingActions
             </code>{" "}
             prop accepts any ReactNode via{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               renderContent
             </code>
@@ -2106,7 +2200,7 @@ const TableDemo = () => {
           />
         </div>
         <div
-          className={`mt-2 text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-2 text-sm space-y-1 text-cl-text-secondary`}
         >
           <p>
             Hover over any column header to see the pin icon. Click to pin/unpin
@@ -2157,24 +2251,24 @@ const TableDemo = () => {
             classes={{
               ...s,
               container: `${s.container} overflow-x-auto`,
-              pinIcon: dark ? "text-gray-500" : "text-gray-400",
-              pinnedPinIcon: dark ? "text-yellow-400" : "text-yellow-500",
+              pinIcon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+              pinnedPinIcon: dark ? "text-cl-warning" : "text-cl-warning",
             }}
           />
         </DemoWrapper>
         <div
-          className={`mt-2 text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-2 text-sm space-y-1 text-cl-text-secondary`}
         >
           <p>
             Uses a custom{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               PinIcon
             </code>{" "}
             (outline star) and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               PinnedIcon
             </code>{" "}
@@ -2196,28 +2290,28 @@ const TableDemo = () => {
               ...s,
               ...s,
               container: `${s.container} overflow-x-auto`,
-              pinnedContainer: `shrink-0 sticky left-0 z-20 border-r-4 ${dark ? "border-emerald-500/50 bg-gray-900" : "border-emerald-400 bg-white"}`,
-              pinButton: `ml-2 p-1 rounded transition-colors ${dark ? "hover:bg-emerald-500/20" : "hover:bg-emerald-100"}`,
-              pinnedPinButton: `ml-2 p-1 rounded transition-colors ${dark ? "hover:bg-emerald-500/20" : "hover:bg-emerald-100"}`,
-              pinIcon: "text-gray-400",
-              pinnedPinIcon: dark ? "text-emerald-400" : "text-emerald-600",
+              pinnedContainer: "shrink-0 sticky left-0 z-30 bg-white dark:bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
+              pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
+              pinnedPinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
+              pinIcon: "text-cl-text-tertiary",
+              pinnedPinIcon: dark ? "text-cl-success" : "text-cl-success",
             }}
           />
         </DemoWrapper>
         <div
-          className={`mt-2 text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-2 text-sm space-y-1 text-cl-text-secondary`}
         >
           <p>
             The pinned separator line uses a thicker green border (
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              border-r-4 border-emerald-400
+              border-r-4 border-cl-success
             </code>
             ) instead of the default blue. The pin icon color, hover background,
             and button styles are all customized via{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               classes
             </code>{" "}
@@ -2226,31 +2320,31 @@ const TableDemo = () => {
           <p className="mt-1">
             <span className="font-medium">Customizable via:</span>{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               pinnedContainerClassName
             </code>
             ,{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               pinButtonClassName
             </code>
             ,{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               pinnedPinButtonClassName
             </code>
             ,{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               pinIconClassName
             </code>
             ,{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               pinnedPinIconClassName
             </code>
@@ -2318,7 +2412,7 @@ const TableDemo = () => {
           />
         </div>
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Alternative dark theme pagination with custom row options: 3, 6, 9, 12
         </p>
@@ -2332,16 +2426,16 @@ const TableDemo = () => {
           classes={{
             ...s,
             ...s,
-            container: `border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+            container: `border rounded-cl-md border-cl-border`,
             table: "w-max border-collapse",
           }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Table with 14 columns and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             maxWidth={"{900}"}
           </code>{" "}
@@ -2357,15 +2451,15 @@ const TableDemo = () => {
           classes={{
             ...s,
             ...s,
-            container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+            container: `w-full border rounded-cl-md border-cl-border`,
           }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Table with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             maxHeight={"{300}"}
           </code>{" "}
@@ -2382,15 +2476,15 @@ const TableDemo = () => {
           classes={{
             ...s,
             ...s,
-            container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+            container: `w-full border rounded-cl-md border-cl-border`,
           }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Table with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             stickyHeader
           </code>{" "}
@@ -2411,22 +2505,22 @@ const TableDemo = () => {
           classes={{
             ...s,
             ...s,
-            container: `border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+            container: `border rounded-cl-md border-cl-border`,
             table: "w-max border-collapse",
           }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Table with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             maxWidth={"{900}"}
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             maxHeight={"{350}"}
           </code>{" "}
@@ -2443,21 +2537,21 @@ const TableDemo = () => {
           classes={{
             ...s,
             ...s,
-            container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+            container: `w-full border rounded-cl-md border-cl-border`,
           }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Table with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             maxHeight={"{250}"}
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             hideVerticalScrollbar
           </code>{" "}
@@ -2477,22 +2571,22 @@ const TableDemo = () => {
           classes={{
             ...s,
             ...s,
-            container: `border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+            container: `border rounded-cl-md border-cl-border`,
             table: "w-max border-collapse",
           }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Table with both{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             hideVerticalScrollbar
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             hideHorizontalScrollbar
           </code>{" "}
@@ -2506,7 +2600,7 @@ const TableDemo = () => {
           <div className="flex items-center gap-4 flex-wrap">
             <button
               onClick={() => setCompIsLoading(true)}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${dark ? "text-white bg-blue-500 hover:bg-blue-400" : "text-white bg-blue-600 hover:bg-blue-700"}`}
+              className={`px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors cursor-pointer bg-cl-text text-cl-bg hover:opacity-90`}
             >
               Simulate Loading
             </button>
@@ -2515,12 +2609,12 @@ const TableDemo = () => {
                 setCompIsLoading(true);
                 setTimeout(() => setCompIsLoading(false), 2000);
               }}
-              className={`px-3 py-1.5 text-sm font-medium border rounded-md transition-colors cursor-pointer ${dark ? "text-gray-200 bg-gray-900 border-gray-700 hover:bg-gray-800" : "text-gray-700 bg-white border-gray-300 hover:bg-gray-50"}`}
+ className={`px-3 py-1.5 text-sm font-medium rounded-cl-md transition-colors cursor-pointer text-cl-text bg-white border-cl-border-input hover:bg-cl-bg-hover dark:text-cl-text dark:bg-cl-bg dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated`}
             >
               Reload Data (2s)
             </button>
             <span
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Pinned:{" "}
               {compPinnedCols.length > 0
@@ -2555,17 +2649,17 @@ const TableDemo = () => {
             }
             classes={{
               ...s,
-              container: `border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+              container: `border rounded-cl-md border-cl-border`,
               table: "w-max border-collapse",
               unpinnedTable: "w-max border-collapse",
-              pinnedContainer: `shrink-0 sticky left-0 z-20 border-r-2 ${dark ? "border-blue-500/30 bg-gray-900" : "border-blue-200 bg-white"}`,
+              pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
               unpinnedContainer: "",
               shimmer: "w-max min-w-[1600px]",
             }}
           />
 
           <div
-            className={`text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-sm space-y-1 text-cl-text-secondary`}
           >
             <p>
               <strong>Features demonstrated:</strong>
@@ -2603,14 +2697,14 @@ const TableDemo = () => {
           data={[]}
           emptyContent={
             <div
-              className={`flex flex-col items-center justify-center py-16 px-4 bg-linear-to-b border rounded-lg ${dark ? "from-white/[0.03] to-gray-900 border-white/[0.06]" : "from-gray-50 to-white border-gray-200"}`}
+              className={`flex flex-col items-center justify-center py-16 px-4 bg-linear-to-b border rounded-cl-md from-fg/[0.04] to-white border-cl-border dark:from-fg/[0.03] dark:to-bg-elevated dark:border-cl-text/[0.06]`}
             >
               {/* Custom Icon */}
               <div
-                className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 ${dark ? "bg-blue-500/10" : "bg-blue-50"}`}
+                className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 bg-cl-accent/10 dark:bg-cl-accent/10`}
               >
                 <svg
-                  className={`w-10 h-10 ${dark ? "text-blue-400" : "text-blue-500"}`}
+                  className={`w-10 h-10 text-cl-accent`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -2626,14 +2720,14 @@ const TableDemo = () => {
 
               {/* Title */}
               <h3
-                className={`text-lg font-semibold mb-2 ${dark ? "text-gray-100" : "text-gray-900"}`}
+                className={`text-lg font-semibold mb-2 text-cl-text`}
               >
                 No users found
               </h3>
 
               {/* Description */}
               <p
-                className={`text-sm text-center max-w-sm mb-6 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm text-center max-w-sm mb-6 text-cl-text-secondary`}
               >
                 Get started by adding your first team member. You can invite
                 users via email or create accounts manually.
@@ -2641,7 +2735,7 @@ const TableDemo = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-3">
-                <button className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${dark ? "text-white bg-blue-500 hover:bg-blue-400" : "text-white bg-blue-600 hover:bg-blue-700"}`}>
+                <button className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors flex items-center gap-2 bg-cl-text text-cl-bg hover:opacity-90`}>
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -2658,7 +2752,7 @@ const TableDemo = () => {
                   Add User
                 </button>
                 <button
-                  className={`px-4 py-2 text-sm font-medium border rounded-lg transition-colors ${dark ? "text-gray-200 bg-gray-900 border-gray-700 hover:bg-gray-800" : "text-gray-700 bg-white border-gray-300 hover:bg-gray-50"}`}
+ className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors text-cl-text bg-white border-cl-border-input hover:bg-cl-bg-hover dark:text-cl-text dark:bg-cl-bg dark:border dark:border-cl-border dark:hover:bg-cl-bg-elevated`}
                 >
                   Import CSV
                 </button>
@@ -2668,11 +2762,11 @@ const TableDemo = () => {
           classes={s}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           The{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             emptyContent
           </code>{" "}
@@ -2695,11 +2789,11 @@ const TableDemo = () => {
             classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Click any column header to sort. Current sorting state:{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               {sortingState.length > 0
                 ? `${sortingState[0].id} (${sortingState[0].desc ? "desc" : "asc"})`
@@ -2714,7 +2808,7 @@ const TableDemo = () => {
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <span
-                className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm text-cl-text-secondary`}
               >
                 Selected: {multiSelectedIds.length} row(s)
               </span>
@@ -2724,7 +2818,7 @@ const TableDemo = () => {
                     alert(`Deleting rows: ${multiSelectedIds.join(", ")}`);
                     setMultiSelectedIds([]);
                   }}
-                  className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${dark ? "text-white bg-red-500 hover:bg-red-400" : "text-white bg-red-600 hover:bg-red-700"}`}
+                  className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-bg bg-cl-error hover:bg-cl-error dark:text-cl-bg dark:bg-cl-error dark:hover:bg-cl-error/30`}
                 >
                   Delete Selected
                 </button>
@@ -2742,11 +2836,11 @@ const TableDemo = () => {
             />
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Use{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               selectionMode="multiple"
             </code>{" "}
@@ -2773,14 +2867,14 @@ const TableDemo = () => {
               className?: string;
             }) => (
               <div
-                className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all cursor-pointer ${
+                className={`w-5 h-5 rounded-cl-md border-2 flex items-center justify-center transition-all cursor-pointer ${
                   checked || indeterminate
                     ? dark
-                      ? "bg-emerald-500 border-emerald-500"
-                      : "bg-emerald-600 border-emerald-600"
+                      ? "bg-cl-success border-cl-success"
+                      : "bg-cl-success border-cl-success"
                     : dark
-                      ? "border-gray-600 hover:border-emerald-400"
-                      : "border-gray-300 hover:border-emerald-500"
+                      ? "border-cl-border hover:border-cl-success"
+                      : "border-cl-border-input hover:border-cl-success"
                 } ${className ?? ""}`}
               >
                 {indeterminate ? (
@@ -2814,14 +2908,14 @@ const TableDemo = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <span
-                    className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    className={`text-sm text-cl-text-secondary`}
                   >
                     Selected: {customSelectedIds.length} row(s)
                   </span>
                   {customSelectedIds.length > 0 && (
                     <button
                       onClick={() => setCustomSelectedIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${dark ? "text-emerald-300 bg-emerald-500/15 hover:bg-emerald-500/25" : "text-emerald-700 bg-emerald-50 hover:bg-emerald-100"}`}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:text-cl-success dark:bg-cl-success/15 dark:hover:bg-cl-success/25`}
                     >
                       Clear Selection
                     </button>
@@ -2838,7 +2932,7 @@ const TableDemo = () => {
                   classes={{
                     ...s,
                     ...s,
-                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] bg-emerald-500/10 hover:bg-emerald-500/15" : "border-gray-100 bg-emerald-50 hover:bg-emerald-100"}`,
+                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-success/15 hover:bg-cl-success/15 dark:border-cl-text/[0.04] dark:bg-cl-success/10 dark:hover:bg-cl-success/15`,
                   }}
                 />
               </div>
@@ -2847,30 +2941,30 @@ const TableDemo = () => {
           return <CustomCheckboxDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
           <p>
             Custom checkbox using the{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               CheckboxIcon
             </code>{" "}
             prop. The component receives{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               checked
             </code>
             ,{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               indeterminate
             </code>
             , and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               className
             </code>{" "}
@@ -2880,7 +2974,7 @@ const TableDemo = () => {
           <p>
             The{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               selectedRowClassName
             </code>{" "}
@@ -2907,7 +3001,7 @@ const TableDemo = () => {
                 className="cursor-pointer p-0.5 transition-transform hover:scale-110"
               >
                 <svg
-                  className={`w-5 h-5 transition-colors ${checked ? "text-amber-400 fill-amber-400" : dark ? "text-gray-600 fill-none hover:text-amber-400/50" : "text-gray-300 fill-none hover:text-amber-400/50"}`}
+                  className={`w-5 h-5 transition-colors ${checked ? "text-cl-warning fill-cl-warning" : dark ? "text-cl-text-secondary fill-none hover:text-cl-warning/50" : "text-cl-text-secondary fill-none hover:text-cl-warning/50"}`}
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   strokeWidth={1.5}
@@ -2923,7 +3017,7 @@ const TableDemo = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <span
-                    className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    className={`text-sm text-cl-text-secondary`}
                   >
                     {starredIds.length > 0
                       ? `${starredIds.length} starred`
@@ -2932,7 +3026,7 @@ const TableDemo = () => {
                   {starredIds.length > 0 && (
                     <button
                       onClick={() => setStarredIds([])}
-                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${dark ? "text-amber-300 bg-amber-500/15 hover:bg-amber-500/25" : "text-amber-700 bg-amber-50 hover:bg-amber-100"}`}
+                      className={`px-3 py-1 text-xs font-medium rounded transition-colors cursor-pointer text-cl-warning bg-cl-warning/15 hover:bg-cl-warning/15 dark:text-cl-warning dark:bg-cl-warning/15 dark:hover:bg-cl-warning/25`}
                     >
                       Clear All Stars
                     </button>
@@ -2949,7 +3043,7 @@ const TableDemo = () => {
                   classes={{
                     ...s,
                     ...s,
-                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] bg-amber-500/5 hover:bg-amber-500/10" : "border-gray-100 bg-amber-50/50 hover:bg-amber-50"}`,
+                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-warning/50 hover:bg-cl-warning/15 dark:border-cl-text/[0.04] dark:bg-cl-warning/5 dark:hover:bg-cl-warning/10`,
                   }}
                 />
               </div>
@@ -2958,12 +3052,12 @@ const TableDemo = () => {
           return <StarSelectDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
           <p>
             Stars instead of checkboxes using{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               CheckboxIcon
             </code>
@@ -2991,11 +3085,11 @@ const TableDemo = () => {
                 className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all cursor-pointer ${
                   checked || indeterminate
                     ? dark
-                      ? "bg-violet-500 border-violet-500"
-                      : "bg-violet-600 border-violet-600"
+                      ? "bg-cl-accent border-cl-border-input-focus"
+                      : "bg-cl-accent border-cl-border-input-focus"
                     : dark
-                      ? "border-gray-600 hover:border-violet-400"
-                      : "border-gray-300 hover:border-violet-500"
+                      ? "border-cl-border hover:border-cl-border-input-focus"
+                      : "border-cl-border-input hover:border-cl-border-input-focus"
                 }`}
               >
                 {indeterminate ? (
@@ -3026,7 +3120,7 @@ const TableDemo = () => {
             return (
               <div className="space-y-3">
                 <span
-                  className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-sm text-cl-text-secondary`}
                 >
                   {selected.length > 0
                     ? `${selected.length} selected`
@@ -3043,7 +3137,7 @@ const TableDemo = () => {
                   classes={{
                     ...s,
                     ...s,
-                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] bg-violet-500/10 hover:bg-violet-500/15" : "border-gray-100 bg-violet-50 hover:bg-violet-100"}`,
+                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15`,
                   }}
                 />
               </div>
@@ -3052,7 +3146,7 @@ const TableDemo = () => {
           return <StarInsideCheckboxDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
           <p>
             A square checkbox that shows a <strong>star icon inside</strong>{" "}
@@ -3060,7 +3154,7 @@ const TableDemo = () => {
             The indeterminate state shows a dash. Demonstrates full control over
             the checked icon via{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               CheckboxIcon
             </code>
@@ -3071,72 +3165,83 @@ const TableDemo = () => {
 
       <Section title="Global Search (Basic)" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <div className="space-y-3">
-            <div className="relative w-full max-w-sm">
-              <div
-                className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none ${dark ? "text-gray-500" : "text-gray-400"}`}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <input
-                type="text"
-                value={globalSearchFilter}
-                onChange={(e) => setGlobalSearchFilter(e.target.value)}
-                placeholder="Search by name, email, role..."
-                className={`w-full pl-9 pr-8 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-blue-500/40 focus:border-blue-500/50" : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"}`}
-              />
-              {globalSearchFilter && (
-                <button
-                  onClick={() => setGlobalSearchFilter("")}
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded cursor-pointer transition-colors ${dark ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  >
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
-            <Table
-              columns={columns}
-              data={sampleData}
-              globalFilter={globalSearchFilter}
-              onGlobalFilterChange={setGlobalSearchFilter}
-              getRowId={(row) => row.id}
-              classes={s}
-            />
-          </div>
+          {(() => {
+            // Local state so keystrokes don't re-render the whole TableDemo
+            // (which contains 30+ Table sections — that's the source of the
+            // typing latency the user reported).
+            const BasicSearchDemo = () => {
+              const [filter, setFilter] = React.useState("");
+              return (
+                <div className="space-y-3">
+                  <div className="relative w-full max-w-sm">
+                    <div
+                      className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      value={filter}
+                      onChange={(e) => setFilter(e.target.value)}
+                      placeholder="Search by name, email, role..."
+                      className={`w-full pl-9 pr-8 py-2 text-sm rounded-cl-md focus:outline-none focus:ring-2 bg-cl-bg-elevated border-cl-border text-cl-text placeholder-fg-muted focus:ring-cl-accent/40 focus:border-cl-border-input-focus/50`}
+                    />
+                    {filter && (
+                      <button
+                        onClick={() => setFilter("")}
+                        className={`absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text`}
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        >
+                          <path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                  <Table
+                    columns={columns}
+                    data={sampleData}
+                    globalFilter={filter}
+                    onGlobalFilterChange={setFilter}
+                    getRowId={(row) => row.id}
+                    classes={s}
+                  />
+                </div>
+              );
+            };
+            return <BasicSearchDemo />;
+          })()}
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             External search input with left icon and clear button. Uses{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               globalFilter
             </code>{" "}
             and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               onGlobalFilterChange
             </code>{" "}
@@ -3157,10 +3262,10 @@ const TableDemo = () => {
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                     placeholder="Search with emerald focus..."
-                    className={`w-full px-4 py-2.5 text-sm border-2 rounded-xl focus:outline-none transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:border-emerald-500 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-emerald-500 focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)]"}`}
+                    className={`w-full px-4 py-2.5 text-sm border-2 rounded-cl-lg focus:outline-none bg-white border-cl-border text-cl-text placeholder-gray-400 focus:border-cl-success focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)] dark:bg-cl-bg dark:border dark:border-cl-border dark:text-cl-text dark:placeholder-gray-500 dark:focus:border-cl-success dark:focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)]`}
                   />
                   <div
-                    className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none ${filter ? (dark ? "text-emerald-400" : "text-emerald-600") : dark ? "text-gray-600" : "text-gray-300"}`}
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none ${filter ? (dark ? "text-cl-success" : "text-cl-success") : dark ? "text-cl-text-secondary" : "text-cl-text-secondary"}`}
                   >
                     <svg
                       width="18"
@@ -3191,15 +3296,15 @@ const TableDemo = () => {
           return <ColorSearchDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Search icon on the <strong>right side</strong>, thicker border (
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             border-2
           </code>
-          ), rounded-xl shape, and emerald focus ring with shadow glow. Icon
+          ), rounded-cl-lg shape, and emerald focus ring with shadow glow. Icon
           changes color when input has value.
         </p>
       </Section>
@@ -3215,7 +3320,7 @@ const TableDemo = () => {
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   placeholder="Type to filter..."
-                  className={`w-full max-w-xs px-3 py-2 text-sm border-b-2 border-t-0 border-l-0 border-r-0 rounded-none focus:outline-none transition-all ${dark ? "bg-transparent border-gray-700 text-gray-100 placeholder-gray-600 focus:border-blue-400" : "bg-transparent border-gray-200 text-gray-900 placeholder-gray-400 focus:border-blue-600"}`}
+                  className={`w-full max-w-xs px-3 py-2 text-sm border-b-2 border-t-0 border-l-0 border-r-0 rounded-none focus:outline-none bg-transparent border-cl-border text-cl-text placeholder-gray-400 focus:border-cl-border-input-focus dark:bg-transparent dark:border dark:border-cl-border dark:text-cl-text dark:placeholder-gray-600 dark:focus:border-cl-border-input-focus`}
                 />
                 <Table
                   columns={columns}
@@ -3231,7 +3336,7 @@ const TableDemo = () => {
           return <MinimalSearchDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Minimal underline-style input with no icon, no border radius, and no
           background. Just a bottom border that changes color on focus. Clean
@@ -3255,7 +3360,7 @@ const TableDemo = () => {
                 <div className="flex items-center gap-3">
                   <div className="relative flex-1 max-w-md">
                     <div
-                      className={`absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
                     >
                       <svg
                         width="15"
@@ -3276,12 +3381,12 @@ const TableDemo = () => {
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                       placeholder="Filter table data..."
-                      className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 transition-all ${dark ? "bg-white/[0.05] border border-white/[0.08] text-gray-100 placeholder-gray-500 focus:ring-indigo-500/30 focus:border-indigo-500/40" : "bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-indigo-500/20 focus:border-indigo-400"}`}
+                      className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 bg-cl-bg-hover border-cl-border text-cl-text placeholder-gray-400 focus:ring-cl-accent/20 focus:border-cl-border-input-focus dark:bg-cl-bg-hover dark:border dark:border-cl-text/[0.08] dark:text-cl-text dark:placeholder-gray-500 dark:focus:ring-cl-accent/30 dark:focus:border-cl-border-input-focus/40`}
                     />
                     {filter && (
                       <button
                         onClick={() => setFilter("")}
-                        className={`absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full cursor-pointer transition-colors ${dark ? "text-gray-500 hover:text-gray-300 hover:bg-white/[0.06]" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}
+                        className={`absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary dark:hover:bg-cl-bg-hover`}
                       >
                         <svg
                           width="14"
@@ -3298,7 +3403,7 @@ const TableDemo = () => {
                     )}
                   </div>
                   <span
-                    className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${filter ? (dark ? "bg-indigo-500/15 text-indigo-300" : "bg-indigo-50 text-indigo-600") : dark ? "bg-white/[0.05] text-gray-500" : "bg-gray-100 text-gray-500"}`}
+                    className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${filter ? (dark ? "bg-cl-accent/15 text-cl-accent" : "bg-cl-accent/10 text-cl-accent") : dark ? "bg-cl-bg-hover text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-tertiary"}`}
                   >
                     {matchCount} {matchCount === 1 ? "result" : "results"}
                   </span>
@@ -3317,11 +3422,11 @@ const TableDemo = () => {
           return <PillSearchDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Pill-shaped search (
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             rounded-full
           </code>
@@ -3340,52 +3445,54 @@ const TableDemo = () => {
             expandedRowIds={expandedRowIds}
             onExpandedChange={setExpandedRowIds}
             renderExpandedRow={(row) => (
-              <div className={`p-4 ${dark ? "bg-white/[0.03]" : "bg-gray-50"}`}>
+              <div
+                className={`p-4 bg-cl-bg-hover dark:bg-cl-text/[0.03] animate-row-expand`}
+              >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <span
-                      className={`text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-xs font-medium text-cl-text-tertiary`}
                     >
                       Name
                     </span>
                     <p
-                      className={`text-sm ${dark ? "text-gray-200" : "text-gray-800"}`}
+                      className={`text-sm text-cl-text`}
                     >
                       {row.name}
                     </p>
                   </div>
                   <div>
                     <span
-                      className={`text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-xs font-medium text-cl-text-tertiary`}
                     >
                       Email
                     </span>
                     <p
-                      className={`text-sm ${dark ? "text-gray-200" : "text-gray-800"}`}
+                      className={`text-sm text-cl-text`}
                     >
                       {row.email}
                     </p>
                   </div>
                   <div>
                     <span
-                      className={`text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-xs font-medium text-cl-text-tertiary`}
                     >
                       Department
                     </span>
                     <p
-                      className={`text-sm ${dark ? "text-gray-200" : "text-gray-800"}`}
+                      className={`text-sm text-cl-text`}
                     >
                       {row.department}
                     </p>
                   </div>
                   <div>
                     <span
-                      className={`text-xs font-medium ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-xs font-medium text-cl-text-tertiary`}
                     >
                       Join Date
                     </span>
                     <p
-                      className={`text-sm ${dark ? "text-gray-200" : "text-gray-800"}`}
+                      className={`text-sm text-cl-text`}
                     >
                       {row.joinDate}
                     </p>
@@ -3397,11 +3504,11 @@ const TableDemo = () => {
             classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Click the expand icon to reveal row details. Expanded rows:{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               {expandedRowIds.length > 0 ? expandedRowIds.join(", ") : "none"}
             </code>
@@ -3442,10 +3549,10 @@ const TableDemo = () => {
                 ExpandIcon={ChevronIcon}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 ${dark ? "bg-blue-500/5 border-l-2 border-blue-500/30" : "bg-blue-50/50 border-l-2 border-blue-300"}`}
+                    className="px-6 py-4 bg-cl-accent/50 border-l-2 border-cl-border-input-focus dark:bg-cl-accent/5 dark:border-l-2 dark:border-cl-border-input-focus/30"
                   >
                     <p
-                      className={`text-sm ${dark ? "text-gray-300" : "text-gray-700"}`}
+                      className={`text-sm text-cl-text-secondary`}
                     >
                       <strong>{row.name}</strong> works in {row.department} as a{" "}
                       {row.role}. Contact: {row.email}
@@ -3455,7 +3562,7 @@ const TableDemo = () => {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandIcon: dark ? "text-blue-400" : "text-blue-600",
+                  expandIcon: dark ? "text-cl-accent" : "text-cl-accent",
                 }}
               />
             );
@@ -3463,12 +3570,12 @@ const TableDemo = () => {
           return <ChevronExpandDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom chevron icon that <strong>rotates 90 degrees</strong> on expand
           via CSS transition. Uses{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             ExpandIcon
           </code>{" "}
@@ -3491,11 +3598,11 @@ const TableDemo = () => {
                 className={`w-5 h-5 rounded border flex items-center justify-center text-xs font-bold transition-colors ${className} ${
                   expanded
                     ? dark
-                      ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-400"
-                      : "bg-emerald-100 border-emerald-300 text-emerald-700"
+                      ? "bg-cl-success/20 border-cl-success/40 text-cl-success"
+                      : "bg-cl-success/15 border-cl-success text-cl-success"
                     : dark
-                      ? "bg-white/[0.05] border-gray-600 text-gray-400"
-                      : "bg-gray-100 border-gray-300 text-gray-500"
+                      ? "bg-cl-bg-hover border-cl-border text-cl-text-tertiary"
+                      : "bg-cl-bg-hover border-cl-border-input text-cl-text-tertiary"
                 }`}
               >
                 {expanded ? "−" : "+"}
@@ -3511,7 +3618,7 @@ const TableDemo = () => {
                 ExpandIcon={PlusMinusIcon}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 ${dark ? "bg-emerald-500/5" : "bg-emerald-50/50"}`}
+                    className={`px-6 py-4 bg-cl-success/50 dark:bg-cl-success/5`}
                   >
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       {[
@@ -3521,12 +3628,12 @@ const TableDemo = () => {
                       ].map((item) => (
                         <div key={item.label}>
                           <span
-                            className={`text-xs font-medium uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`}
+                            className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
                           >
                             {item.label}
                           </span>
                           <p
-                            className={`text-sm mt-0.5 ${dark ? "text-gray-200" : "text-gray-800"}`}
+                            className={`text-sm mt-0.5 text-cl-text`}
                           >
                             {item.value}
                           </p>
@@ -3543,7 +3650,7 @@ const TableDemo = () => {
           return <PlusMinusDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Square plus/minus icons with color change on expand. The expanded
           state uses a green theme. Common in tree-view and accordion-style
@@ -3587,11 +3694,11 @@ const TableDemo = () => {
                 ExpandIcon={ArrowIcon}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 ${dark ? "bg-violet-500/5 border-r-2 border-violet-500/30" : "bg-violet-50/50 border-r-2 border-violet-300"}`}
+                    className={`px-6 py-4 bg-cl-accent/50 border-r-2 border-cl-border-input-focus dark:bg-cl-accent/5 dark:border-r-2 dark:border dark:border-cl-border-input-focus/30`}
                   >
                     <div className="flex items-start gap-4">
                       <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${dark ? "bg-violet-500/20 text-violet-300" : "bg-violet-100 text-violet-700"}`}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent`}
                       >
                         {row.name
                           .split(" ")
@@ -3600,17 +3707,17 @@ const TableDemo = () => {
                       </div>
                       <div>
                         <p
-                          className={`text-sm font-medium ${dark ? "text-gray-200" : "text-gray-800"}`}
+                          className={`text-sm font-medium text-cl-text`}
                         >
                           {row.name}
                         </p>
                         <p
-                          className={`text-xs mt-0.5 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                          className={`text-xs mt-0.5 text-cl-text-secondary`}
                         >
                           {row.role} in {row.department}
                         </p>
                         <p
-                          className={`text-xs mt-0.5 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                          className={`text-xs mt-0.5 text-cl-text-tertiary`}
                         >
                           {row.email}
                         </p>
@@ -3621,7 +3728,7 @@ const TableDemo = () => {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandIcon: dark ? "text-violet-400" : "text-violet-600",
+                  expandIcon: dark ? "text-cl-accent" : "text-cl-accent",
                 }}
               />
             );
@@ -3629,12 +3736,12 @@ const TableDemo = () => {
           return <RightExpandDemo />;
         })()}
         <p
-          className={`mt-3 text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
           <span className="block">
             Expand column placed on the <strong>right side</strong> using{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               expandColumnPosition="right"
             </code>
@@ -3660,23 +3767,23 @@ const TableDemo = () => {
                 onExpandedChange={setIds}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-5 ${dark ? "bg-gradient-to-r from-indigo-500/5 to-transparent" : "bg-gradient-to-r from-indigo-50 to-transparent"}`}
+                    className={`px-6 py-5 bg-gradient-to-r from-cl-accent/10 to-transparent dark:bg-gradient-to-r dark:from-cl-accent/[0.06] dark:to-transparent`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold ${dark ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-700"}`}
+                          className={`w-12 h-12 rounded-cl-lg flex items-center justify-center text-lg font-bold bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/20 dark:text-cl-accent`}
                         >
                           {row.name[0]}
                         </div>
                         <div>
                           <p
-                            className={`text-sm font-semibold ${dark ? "text-gray-100" : "text-gray-900"}`}
+                            className={`text-sm font-semibold text-cl-text`}
                           >
                             {row.name}
                           </p>
                           <p
-                            className={`text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                            className={`text-xs text-cl-text-secondary`}
                           >
                             {row.email}
                           </p>
@@ -3684,13 +3791,13 @@ const TableDemo = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          className={`px-3 py-1.5 text-xs font-medium rounded-lg cursor-pointer transition-colors ${dark ? "bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25" : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"}`}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
                           onClick={() => alert(`View profile: ${row.name}`)}
                         >
                           View Profile
                         </button>
                         <button
-                          className={`px-3 py-1.5 text-xs font-medium rounded-lg cursor-pointer transition-colors ${dark ? "bg-white/[0.05] text-gray-300 hover:bg-white/[0.08]" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated`}
                           onClick={() => alert(`Send email to: ${row.email}`)}
                         >
                           Send Email
@@ -3703,11 +3810,11 @@ const TableDemo = () => {
                 classes={{
                   ...s,
                   expandIcon: dark
-                    ? "text-indigo-400 hover:text-indigo-300"
-                    : "text-indigo-600 hover:text-indigo-800",
+                    ? "text-cl-accent hover:text-cl-accent"
+                    : "text-cl-accent hover:text-cl-accent",
                   expandedRow: dark
-                    ? "border-t border-white/[0.04]"
-                    : "border-t border-gray-100",
+                    ? "border-t border-cl-text/[0.04]"
+                    : "border-t border-cl-border",
                 }}
               />
             );
@@ -3715,18 +3822,18 @@ const TableDemo = () => {
           return <StyledExpandDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Rich expanded row content with gradient background, avatar, action
           buttons, and custom expand icon colors via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.expandIcon
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.expandedRow
           </code>
@@ -3770,7 +3877,7 @@ const TableDemo = () => {
                 ExpandIcon={SmallChevron}
                 renderExpandedRow={(row) => (
                   <div
-                    className={`px-6 py-4 ${dark ? "bg-white/[0.02]" : "bg-gray-50/80"}`}
+                    className={`px-6 py-4 bg-cl-text/80 dark:bg-cl-text/[0.02]`}
                   >
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       {[
@@ -3781,12 +3888,12 @@ const TableDemo = () => {
                       ].map((item) => (
                         <div key={item.label}>
                           <span
-                            className={`text-[11px] font-semibold uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`}
+                            className={`text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`}
                           >
                             {item.label}
                           </span>
                           <p
-                            className={`text-sm mt-0.5 ${dark ? "text-gray-200" : "text-gray-800"}`}
+                            className={`text-sm mt-0.5 text-cl-text`}
                           >
                             {item.value}
                           </p>
@@ -3800,7 +3907,7 @@ const TableDemo = () => {
                   ...s,
                   ...s,
                   row: `${s.row} select-none`,
-                  expandIcon: dark ? "text-gray-500" : "text-gray-400",
+                  expandIcon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
                 }}
               />
             );
@@ -3808,12 +3915,12 @@ const TableDemo = () => {
           return <RowClickExpandDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
           <p>
             The entire row is clickable for expansion using{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               expandOnRowClick
             </code>
@@ -3823,13 +3930,13 @@ const TableDemo = () => {
           <p>
             When{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               expandOnRowClick
             </code>{" "}
             is true, it takes priority over{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               onRowClick
             </code>
@@ -3853,7 +3960,7 @@ const TableDemo = () => {
               ].map((col) => (
                 <label
                   key={col}
-                  className={`flex items-center gap-1.5 text-sm cursor-pointer ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  className={`flex items-center gap-1.5 text-sm cursor-pointer text-cl-text-secondary`}
                 >
                   <input
                     type="checkbox"
@@ -3880,7 +3987,7 @@ const TableDemo = () => {
             />
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Basic column visibility toggle using checkboxes. Hidden columns are
             removed from the DOM entirely.
@@ -3916,7 +4023,7 @@ const TableDemo = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className={`text-xs font-medium uppercase tracking-wider mr-1 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    className={`text-xs font-medium uppercase tracking-wider mr-1 text-cl-text-tertiary`}
                   >
                     Columns:
                   </span>
@@ -3929,18 +4036,18 @@ const TableDemo = () => {
                       className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all cursor-pointer ${
                         vis[col]
                           ? dark
-                            ? "bg-blue-500/15 text-blue-300 border border-blue-500/30"
-                            : "bg-blue-50 text-blue-700 border border-blue-200"
+                            ? "bg-cl-accent/15 text-cl-accent border-cl-border-input-focus/30"
+                            : "bg-cl-accent/10 text-cl-accent border-cl-border-input-focus"
                           : dark
-                            ? "bg-white/[0.03] text-gray-600 border border-white/[0.06] line-through"
-                            : "bg-gray-50 text-gray-400 border border-gray-200 line-through"
+                            ? "bg-cl-text/[0.03] text-cl-text-secondary border border-cl-text/[0.06] line-through"
+                            : "bg-cl-bg-hover text-cl-text-tertiary border-cl-border line-through"
                       }`}
                     >
                       {labels[col]}
                     </button>
                   ))}
                   <span
-                    className={`text-xs ml-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    className={`text-xs ml-2 text-cl-text-tertiary`}
                   >
                     {visibleCount}/{allCols.length} visible
                   </span>
@@ -3959,7 +4066,7 @@ const TableDemo = () => {
           return <PillToggleDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Pill-shaped toggle buttons for each column. Active columns are
           highlighted in blue, hidden columns show with strikethrough text.
@@ -4013,7 +4120,7 @@ const TableDemo = () => {
                   <div className="relative" ref={menuRef}>
                     <button
                       onClick={() => setOpen(!open)}
-                      className={`flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${dark ? "bg-white/[0.05] text-gray-300 border border-white/[0.08] hover:bg-white/[0.08]" : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"}`}
+                      className={`flex items-center gap-2 px-3.5 py-2 text-sm font-medium rounded-cl-md transition-colors cursor-pointer bg-white text-cl-text border-cl-border-input hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text-secondary dark:border dark:border-cl-text/[0.08] dark:hover:bg-cl-bg-hover`}
                     >
                       <svg
                         width="16"
@@ -4024,7 +4131,7 @@ const TableDemo = () => {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className={dark ? "text-gray-400" : "text-gray-500"}
+                        className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
                       >
                         <rect x="3" y="3" width="7" height="7" />
                         <rect x="14" y="3" width="7" height="7" />
@@ -4033,21 +4140,21 @@ const TableDemo = () => {
                       </svg>
                       Columns
                       <span
-                        className={`text-xs px-1.5 py-0.5 rounded-full ${dark ? "bg-blue-500/15 text-blue-300" : "bg-blue-50 text-blue-600"}`}
+                        className={`text-xs px-1.5 py-0.5 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent`}
                       >
                         {visibleCount}
                       </span>
                     </button>
                     {open && (
                       <div
-                        className={`absolute top-full left-0 mt-1 rounded-lg border shadow-xl overflow-hidden min-w-[180px] z-50 ${dark ? "bg-gray-900 border-white/[0.08]" : "bg-white border-gray-200"}`}
+                        className={`absolute top-full left-0 mt-1 rounded-cl-md border shadow-xl overflow-hidden min-w-[180px] z-50 bg-cl-bg border-cl-border`}
                       >
                         <div
-                          className={`px-3 py-2 border-b ${dark ? "border-white/[0.06]" : "border-gray-100"}`}
+                          className={`px-3 py-2 border-b border-cl-border`}
                         >
                           <div className="flex items-center justify-between">
                             <span
-                              className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+                              className={`text-xs font-medium text-cl-text-secondary`}
                             >
                               Toggle columns
                             </span>
@@ -4059,7 +4166,7 @@ const TableDemo = () => {
                                   ),
                                 )
                               }
-                              className={`text-xs cursor-pointer ${dark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"}`}
+                              className={`text-xs cursor-pointer text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent`}
                             >
                               Show all
                             </button>
@@ -4071,10 +4178,10 @@ const TableDemo = () => {
                             onClick={() =>
                               setVis((prev) => ({ ...prev, [col]: !prev[col] }))
                             }
-                            className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors cursor-pointer ${dark ? "hover:bg-white/[0.04]" : "hover:bg-gray-50"}`}
+                            className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors cursor-pointer hover:bg-cl-bg-hover dark:hover:bg-cl-bg-hover`}
                           >
                             <div
-                              className={`w-4 h-4 rounded border flex items-center justify-center ${vis[col] ? (dark ? "bg-blue-500 border-blue-500" : "bg-blue-600 border-blue-600") : dark ? "border-gray-600" : "border-gray-300"}`}
+                              className={`w-4 h-4 rounded border flex items-center justify-center ${vis[col] ? (dark ? "bg-cl-accent border-cl-border-input-focus" : "bg-cl-accent border-cl-border-input-focus") : dark ? "border-cl-border" : "border-cl-border-input"}`}
                             >
                               {vis[col] && (
                                 <svg
@@ -4095,11 +4202,11 @@ const TableDemo = () => {
                               className={
                                 vis[col]
                                   ? dark
-                                    ? "text-gray-200"
-                                    : "text-gray-800"
+                                    ? "text-cl-text"
+                                    : "text-cl-text"
                                   : dark
-                                    ? "text-gray-500"
-                                    : "text-gray-400"
+                                    ? "text-cl-text-tertiary"
+                                    : "text-cl-text-tertiary"
                               }
                             >
                               {labels[col]}
@@ -4113,7 +4220,7 @@ const TableDemo = () => {
                     onClick={() =>
                       setVis(Object.fromEntries(allCols.map((c) => [c, true])))
                     }
-                    className={`text-xs cursor-pointer ${dark ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
+                    className={`text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text`}
                   >
                     Reset
                   </button>
@@ -4132,7 +4239,7 @@ const TableDemo = () => {
           return <DropdownToggleDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           A dropdown menu button with custom checkboxes, column count badge,
           "Show all" link, and external "Reset" button. Common SaaS pattern for
@@ -4166,11 +4273,11 @@ const TableDemo = () => {
             return (
               <div className="space-y-3">
                 <div
-                  className={`rounded-xl border p-4 ${dark ? "border-white/[0.06] bg-white/[0.02]" : "border-gray-200 bg-gray-50"}`}
+ className={`rounded-cl-lg p-4 border-cl-border bg-cl-bg-elevated`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span
-                      className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`text-xs font-semibold uppercase tracking-wider text-cl-text-secondary`}
                     >
                       Visible Columns
                     </span>
@@ -4181,7 +4288,7 @@ const TableDemo = () => {
                             Object.fromEntries(allCols.map((c) => [c, true])),
                           )
                         }
-                        className={`text-xs cursor-pointer px-2 py-1 rounded ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+                        className={`text-xs cursor-pointer px-2 py-1 rounded text-cl-accent hover:bg-cl-bg-elevated`}
                       >
                         All on
                       </button>
@@ -4193,7 +4300,7 @@ const TableDemo = () => {
                             ),
                           )
                         }
-                        className={`text-xs cursor-pointer px-2 py-1 rounded ${dark ? "text-gray-400 hover:bg-white/[0.04]" : "text-gray-500 hover:bg-gray-100"}`}
+                        className={`text-xs cursor-pointer px-2 py-1 rounded text-cl-text-tertiary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:bg-cl-bg-hover`}
                       >
                         Minimal
                       </button>
@@ -4206,19 +4313,19 @@ const TableDemo = () => {
                         onClick={() =>
                           setVis((prev) => ({ ...prev, [col]: !prev[col] }))
                         }
-                        className={`flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm transition-all cursor-pointer ${
+                        className={`flex items-center justify-between gap-2 px-3 py-2 rounded-cl-md text-sm transition-all cursor-pointer ${
                           vis[col]
                             ? dark
-                              ? "bg-blue-500/10 text-blue-300"
-                              : "bg-blue-50 text-blue-700"
+                              ? "bg-cl-accent/10 text-cl-accent"
+                              : "bg-cl-accent/10 text-cl-accent"
                             : dark
-                              ? "bg-white/[0.02] text-gray-500"
-                              : "bg-white text-gray-400"
+                              ? "bg-cl-text/[0.02] text-cl-text-tertiary"
+                              : "bg-white text-cl-text-tertiary"
                         }`}
                       >
                         <span>{labels[col]}</span>
                         <div
-                          className={`w-8 h-4.5 rounded-full relative transition-colors ${vis[col] ? (dark ? "bg-blue-500" : "bg-blue-600") : dark ? "bg-gray-700" : "bg-gray-300"}`}
+                          className={`w-8 h-4.5 rounded-full relative transition-colors ${vis[col] ? (dark ? "bg-cl-accent" : "bg-cl-accent") : dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover"}`}
                         >
                           <div
                             className={`absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow transition-transform ${vis[col] ? "translate-x-4" : "translate-x-0.5"}`}
@@ -4242,7 +4349,7 @@ const TableDemo = () => {
           return <SwitchToggleDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Switch-style toggles in a card panel with "All on" and "Minimal"
           presets. Each column has a mini toggle switch that visually indicates
@@ -4256,15 +4363,16 @@ const TableDemo = () => {
             columns={columns}
             data={sampleData.slice(0, 6)}
             striped
+            stripedClassName="bg-cl-bg-elevated dark:bg-cl-text/[0.03]"
             getRowId={(row) => row.id}
             classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Default striped rows with{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               striped
             </code>{" "}
@@ -4276,27 +4384,15 @@ const TableDemo = () => {
 
       <Section title="Striped Rows (Custom Colors)" isDarkMode={dark}>
         {(() => {
+          // Use bracketed arbitrary opacity values (Tailwind requires
+          // /[0.06] for non-preset alphas — `/0.06` is silently dropped).
+          // Same alpha for both modes: a tint that reads on light and dark.
           const colors = [
-            {
-              label: "Blue",
-              className: dark ? "bg-blue-500/[0.06]" : "bg-blue-50/70",
-            },
-            {
-              label: "Emerald",
-              className: dark ? "bg-emerald-500/[0.06]" : "bg-emerald-50/70",
-            },
-            {
-              label: "Amber",
-              className: dark ? "bg-amber-500/[0.06]" : "bg-amber-50/70",
-            },
-            {
-              label: "Rose",
-              className: dark ? "bg-rose-500/[0.06]" : "bg-rose-50/70",
-            },
-            {
-              label: "Violet",
-              className: dark ? "bg-violet-500/[0.06]" : "bg-violet-50/70",
-            },
+            { label: "Blue", className: "bg-cl-accent/[0.10] dark:bg-cl-accent/[0.10]" },
+            { label: "Emerald", className: "bg-cl-success/[0.12] dark:bg-cl-success/[0.10]" },
+            { label: "Amber", className: "bg-cl-warning/[0.12] dark:bg-cl-warning/[0.10]" },
+            { label: "Rose", className: "bg-cl-error/[0.10] dark:bg-cl-error/[0.10]" },
+            { label: "Violet", className: "bg-violet-500/[0.10] dark:bg-violet-500/[0.10]" },
           ];
           const CustomColorStripedDemo = () => {
             const [activeColor, setActiveColor] = React.useState(0);
@@ -4304,7 +4400,7 @@ const TableDemo = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <span
-                    className={`text-xs font-medium uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
                   >
                     Stripe color:
                   </span>
@@ -4312,14 +4408,10 @@ const TableDemo = () => {
                     <button
                       key={c.label}
                       onClick={() => setActiveColor(i)}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer border ${
                         activeColor === i
-                          ? dark
-                            ? "bg-white/[0.1] text-white border border-white/[0.15]"
-                            : "bg-gray-900 text-white"
-                          : dark
-                            ? "bg-white/[0.03] text-gray-400 border border-white/[0.06] hover:bg-white/[0.06]"
-                            : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                          ? "bg-cl-accent text-white border-cl-accent"
+                          : "bg-cl-bg-elevated text-cl-text-secondary border-cl-border hover:bg-cl-bg-hover dark:bg-cl-text/[0.03] dark:text-cl-text-tertiary dark:border-cl-text/[0.06]"
                       }`}
                     >
                       {c.label}
@@ -4340,11 +4432,11 @@ const TableDemo = () => {
           return <CustomColorStripedDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Use{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             stripedClassName
           </code>{" "}
@@ -4364,27 +4456,27 @@ const TableDemo = () => {
             striped
             stripedClassName={
               dark
-                ? "bg-indigo-500/10 border-l-2 border-l-indigo-500/40"
-                : "bg-indigo-50 border-l-2 border-l-indigo-400"
+                ? "bg-cl-accent/10 border-l-2 border-l-accent/40"
+                : "bg-cl-accent/10 border-l-2 border-l-accent"
             }
             getRowId={(row) => row.id}
             classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Striped rows with a <strong>left border accent</strong> and stronger
             background tint. Combines{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              bg-indigo-50
+              bg-cl-accent/10
             </code>{" "}
             with{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              border-l-2 border-l-indigo-400
+              border-l-2 border-l-accent
             </code>{" "}
             for visual emphasis.
           </p>
@@ -4397,17 +4489,17 @@ const TableDemo = () => {
             columns={columns}
             data={sampleData.slice(0, 6)}
             striped
-            stripedClassName={dark ? "bg-white/[0.03]" : "bg-gray-50"}
+            stripedClassName={dark ? "bg-cl-text/[0.03]" : "bg-cl-bg-hover"}
             getRowId={(row) => row.id}
             classes={{
               ...s,
               ...s,
-              row: `border-b transition-colors data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] hover:bg-blue-500/10" : "border-gray-100 hover:bg-blue-50"}`,
+              row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/10`,
             }}
             onRowClick={(row) => alert(`Clicked: ${(row as User).name}`)}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Striped rows combined with a <strong>blue hover effect</strong>.
             Both striped and non-striped rows highlight on hover, but the
@@ -4431,28 +4523,28 @@ const TableDemo = () => {
             classes={{
               ...s,
               ...s,
-              row: `border-b transition-colors ${dark ? "border-white/[0.04] hover:bg-white/[0.06] [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cyan-500/[0.04] [&[data-striped]]:to-transparent" : "border-gray-100 hover:bg-gray-100 [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cyan-50 [&[data-striped]]:to-transparent"}`,
+              row: `border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover dark:[&[data-striped]]:bg-gradient-to-r dark:[&[data-striped]]:from-cl-accent/0.04 dark:[&[data-striped]]:to-transparent`,
             }}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             No{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               stripedClassName
             </code>{" "}
             needed. Instead, uses the{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               data-striped
             </code>{" "}
             attribute on rows to apply a <strong>gradient stripe</strong> via
             CSS selectors in{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               rowClassName
             </code>
@@ -4469,12 +4561,12 @@ const TableDemo = () => {
                 <button
                   key={d}
                   onClick={() => setDensity(d)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors cursor-pointer ${
                     density === d
-                      ? "bg-blue-600 text-white"
+                      ? "bg-cl-accent text-white"
                       : dark
-                        ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ? "bg-cl-bg-elevated text-cl-text-secondary hover:bg-cl-bg-elevated"
+                        : "bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover"
                   }`}
                 >
                   {d.charAt(0).toUpperCase() + d.slice(1)}
@@ -4490,11 +4582,11 @@ const TableDemo = () => {
             />
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Current density:{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               {density}
             </code>
@@ -4515,17 +4607,17 @@ const TableDemo = () => {
             classes={{
               ...s,
               ...s,
-              container: `border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+              container: `border rounded-cl-md border-cl-border`,
               table: "w-max border-collapse",
-              pinnedRightContainer: `shrink-0 sticky right-0 z-20 border-l-2 ${dark ? "border-blue-500/30 bg-gray-900" : "border-blue-200 bg-white"}`,
+              pinnedRightContainer: `shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated`,
             }}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             The "Actions" column is pinned to the right using{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               pinnedRightColumns={'{["actions"]}'}
             </code>
@@ -4537,7 +4629,7 @@ const TableDemo = () => {
       <Section title="Column Resizing (Basic)" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div
-            className={`overflow-x-auto rounded-lg border ${dark ? "border-white/[0.06]" : "border-gray-200"}`}
+            className={`overflow-x-auto rounded-cl-md border-cl-border`}
           >
             <Table
               columns={columns}
@@ -4553,7 +4645,7 @@ const TableDemo = () => {
             />
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Drag the right edge of any column header to resize. Hover over the
             column border to see the resize handle appear. The table scrolls
@@ -4566,7 +4658,7 @@ const TableDemo = () => {
         {(() => {
           const CustomHandleDemo = () => (
             <div
-              className={`overflow-x-auto rounded-lg border ${dark ? "border-white/[0.06]" : "border-gray-200"}`}
+              className={`overflow-x-auto rounded-cl-md border-cl-border`}
             >
               <Table
                 columns={columns}
@@ -4579,7 +4671,7 @@ const TableDemo = () => {
                   container: "",
                   cell: `${s.cell} overflow-hidden text-ellipsis`,
                   resizeHandle:
-                    "[&>div]:bg-emerald-500 [&>div]:opacity-100 [&>div]:w-1 [&>div]:h-full [&>div]:rounded-none",
+                    "[&>div]:bg-cl-success [&>div]:opacity-100 [&>div]:w-1 [&>div]:h-full [&>div]:rounded-none",
                 }}
               />
             </div>
@@ -4587,11 +4679,11 @@ const TableDemo = () => {
           return <CustomHandleDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom resize handle styled via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.resizeHandle
           </code>
@@ -4623,7 +4715,7 @@ const TableDemo = () => {
                   {colNames.map((col) => (
                     <span
                       key={col}
-                      className={`text-xs px-2 py-1 rounded-md font-mono ${dark ? "bg-white/[0.05] text-gray-400" : "bg-gray-100 text-gray-600"}`}
+                      className={`text-xs px-2 py-1 rounded-cl-md font-mono bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-hover dark:text-cl-text-tertiary`}
                     >
                       {col}:{" "}
                       {sizing[col] ? `${Math.round(sizing[col])}px` : "auto"}
@@ -4632,14 +4724,14 @@ const TableDemo = () => {
                   {Object.keys(sizing).length > 0 && (
                     <button
                       onClick={() => setSizing({})}
-                      className={`text-xs px-2 py-1 rounded-md cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+                      className={`text-xs px-2 py-1 rounded-cl-md cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
                     >
                       Reset
                     </button>
                   )}
                 </div>
                 <div
-                  className={`overflow-x-auto rounded-lg border ${dark ? "border-white/[0.06]" : "border-gray-200"}`}
+                  className={`overflow-x-auto rounded-cl-md border-cl-border`}
                 >
                   <Table
                     columns={columns}
@@ -4662,17 +4754,17 @@ const TableDemo = () => {
           return <ControlledResizeDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Controlled column sizing via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             columnSizing
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             onColumnSizingChange
           </code>
@@ -4731,7 +4823,7 @@ const TableDemo = () => {
 
             return (
               <div
-                className={`overflow-x-auto rounded-lg border ${dark ? "border-white/[0.06]" : "border-gray-200"}`}
+                className={`overflow-x-auto rounded-cl-md border-cl-border`}
               >
                 <Table
                   columns={sized}
@@ -4751,30 +4843,30 @@ const TableDemo = () => {
           return <InitialSizeDemo />;
         })()}
         <div
-          className={`mt-3 text-sm space-y-1 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
           <p>
             Columns with preset{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               size
             </code>
             ,{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               minSize
             </code>
             , and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               maxSize
             </code>{" "}
             via TanStack ColumnDef. The "Status" column has{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               enableResizing: false
             </code>{" "}
@@ -4806,7 +4898,7 @@ const TableDemo = () => {
             />
             {editedCells.length > 0 && (
               <div
-                className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-sm text-cl-text-secondary`}
               >
                 <p className="font-medium">Edited cells:</p>
                 <ul className="list-disc list-inside ml-2">
@@ -4820,7 +4912,7 @@ const TableDemo = () => {
             )}
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Double-click a cell in the Name, Email, or Role columns to edit
             inline. Press Enter to save, Escape to cancel.
@@ -4835,7 +4927,7 @@ const TableDemo = () => {
               onClick={() =>
                 exportTableToCSV(sampleData, columns, "users-export")
               }
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${dark ? "text-white bg-green-500 hover:bg-green-400" : "text-white bg-green-600 hover:bg-green-700"}`}
+              className={`px-4 py-2 text-sm font-medium rounded-cl-md transition-colors cursor-pointer text-cl-bg bg-cl-success hover:bg-cl-success dark:text-cl-bg dark:bg-cl-success dark:hover:bg-cl-success/30`}
             >
               Export to CSV
             </button>
@@ -4847,11 +4939,11 @@ const TableDemo = () => {
             />
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Click "Export to CSV" to download the table data. Uses the{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               exportTableToCSV
             </code>{" "}
@@ -4878,7 +4970,7 @@ const TableDemo = () => {
             classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Drag rows using the grip handle on the left to reorder. Current
             order: {dragDropData.map((d) => d.name).join(", ")}
@@ -4903,7 +4995,7 @@ const TableDemo = () => {
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className={dark ? "text-gray-500" : "text-gray-400"}
+                  className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
                 >
                   <path d="M12 5l-5 5h10z" />
                 </svg>
@@ -4916,7 +5008,7 @@ const TableDemo = () => {
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className={dark ? "text-gray-500" : "text-gray-400"}
+                  className={dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary"}
                 >
                   <path d="M12 19l5-5H7z" />
                 </svg>
@@ -4941,18 +5033,18 @@ const TableDemo = () => {
                   classes={{
                     ...s,
                     dragHandle: dark
-                      ? "text-gray-500 hover:text-gray-300"
-                      : "text-gray-400 hover:text-gray-600",
+                      ? "text-cl-text-tertiary hover:text-cl-text-secondary"
+                      : "text-cl-text-tertiary hover:text-cl-text-secondary",
                   }}
                 />
                 <div
-                  className={`flex items-center gap-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`flex items-center gap-2 text-xs text-cl-text-tertiary`}
                 >
                   <span className="font-medium">Order:</span>
                   {data.map((d, i) => (
                     <span
                       key={d.id}
-                      className={`px-2 py-0.5 rounded ${dark ? "bg-white/[0.05]" : "bg-gray-100"}`}
+                      className={`px-2 py-0.5 rounded bg-cl-bg-hover dark:bg-cl-bg-hover`}
                     >
                       {i + 1}. {d.name}
                     </span>
@@ -4964,17 +5056,17 @@ const TableDemo = () => {
           return <ArrowDragDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom up/down arrow icons via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             DragHandleIcon
           </code>{" "}
           prop. Styled via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.dragHandle
           </code>{" "}
@@ -4993,7 +5085,7 @@ const TableDemo = () => {
             const NumberHandle = ({ className }: { className?: string }) => {
               return (
                 <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${className} ${dark ? "bg-violet-500/20 text-violet-300 border border-violet-500/30" : "bg-violet-100 text-violet-700 border border-violet-200"}`}
+                  className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${className} bg-cl-accent/10 text-cl-accent border-cl-border-input-focus dark:bg-cl-accent/20 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/30`}
                 >
                   ≡
                 </div>
@@ -5024,17 +5116,17 @@ const TableDemo = () => {
                 />
                 {history.length > 0 && (
                   <div
-                    className={`rounded-lg border p-3 ${dark ? "border-white/[0.06] bg-white/[0.02]" : "border-gray-200 bg-gray-50"}`}
+ className={`rounded-cl-md p-3 border-cl-border bg-cl-bg-elevated`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span
-                        className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`text-xs font-semibold uppercase tracking-wider text-cl-text-secondary`}
                       >
                         Reorder History
                       </span>
                       <button
                         onClick={() => setHistory([])}
-                        className={`text-xs cursor-pointer ${dark ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
+                        className={`text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text`}
                       >
                         Clear
                       </button>
@@ -5043,7 +5135,7 @@ const TableDemo = () => {
                       {history.map((h, i) => (
                         <span
                           key={i}
-                          className={`text-xs px-2 py-1 rounded-md ${dark ? "bg-violet-500/10 text-violet-300" : "bg-violet-50 text-violet-700"}`}
+                          className={`text-xs px-2 py-1 rounded-cl-md bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/10 dark:text-cl-accent`}
                         >
                           {h}
                         </span>
@@ -5057,7 +5149,7 @@ const TableDemo = () => {
           return <NumberDragDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom round handle icon with a reorder history log showing every
           move. Useful for undo/audit trail patterns.
@@ -5084,8 +5176,8 @@ const TableDemo = () => {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  row: `border-b transition-all data-[clickable]:cursor-pointer ${dark ? "border-white/[0.04] hover:bg-white/[0.06]" : "border-gray-100 hover:bg-gray-100"} [&[draggable]]:cursor-grab [&[draggable]]:active:cursor-grabbing`,
-                  dragHandle: `${dark ? "text-blue-400 hover:text-blue-300" : "text-blue-500 hover:text-blue-700"} transition-colors`,
+                  row: `border-b transition-all data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover [&[draggable]]:cursor-grab [&[draggable]]:active:cursor-grabbing`,
+                  dragHandle: `text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent transition-colors`,
                 }}
               />
             );
@@ -5093,18 +5185,18 @@ const TableDemo = () => {
           return <StyledDragDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom drag handle color (blue theme) and grab/grabbing cursor states
           on draggable rows via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             rowClassName
           </code>{" "}
           selectors. Uses{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             [&[draggable]]:cursor-grab
           </code>{" "}
@@ -5123,7 +5215,7 @@ const TableDemo = () => {
                   header: () => <span>#</span>,
                   cell: ({ row }) => (
                     <span
-                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${dark ? "bg-amber-500/15 text-amber-300" : "bg-amber-100 text-amber-700"}`}
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold bg-cl-warning/15 text-cl-warning dark:bg-cl-warning/15 dark:text-cl-warning`}
                     >
                       {row.index + 1}
                     </span>
@@ -5158,7 +5250,7 @@ const TableDemo = () => {
           return <NumberedDragDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Drag handle + a rank number column that updates automatically as rows
           are reordered. The numbers reflect the current visual order, not the
@@ -5188,8 +5280,8 @@ const TableDemo = () => {
                 classes={{
                   ...s,
                   dragHandle: dark
-                    ? "text-gray-500 hover:text-gray-300"
-                    : "text-gray-400 hover:text-gray-600",
+                    ? "text-cl-text-tertiary hover:text-cl-text-secondary"
+                    : "text-cl-text-tertiary hover:text-cl-text-secondary",
                 }}
               />
             );
@@ -5197,11 +5289,11 @@ const TableDemo = () => {
           return <RightDragDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Drag handle placed on the <strong>right side</strong> using{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             dragColumnPosition="right"
           </code>
@@ -5218,11 +5310,11 @@ const TableDemo = () => {
             showFooter
             footerContent={
               <tr
-                className={`border-t-2 ${dark ? "border-white/[0.1] bg-white/[0.03]" : "border-gray-300 bg-gray-50"}`}
+                className={`border-t-2 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-text/[0.1] dark:bg-cl-text/[0.03]`}
               >
                 <td
                   colSpan={100}
-                  className={`px-4 py-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+                  className={`px-4 py-3 text-cl-text-secondary`}
                 >
                   <div className="flex items-center gap-6 text-sm">
                     <span className="font-semibold">
@@ -5259,17 +5351,17 @@ const TableDemo = () => {
             classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Set{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               showFooter
             </code>{" "}
             and provide{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               footerContent
             </code>{" "}
@@ -5289,60 +5381,60 @@ const TableDemo = () => {
               footerContent={
                 <>
                   <tr
-                    className={`border-t-2 ${dark ? "border-white/[0.1] bg-white/[0.03]" : "border-gray-300 bg-gray-50"}`}
+                    className={`border-t-2 border-cl-border-input bg-cl-bg-hover dark:border dark:border-cl-text/[0.1] dark:bg-cl-text/[0.03]`}
                   >
                     <td
-                      className={`px-4 py-2.5 text-sm font-semibold ${dark ? "text-gray-200" : "text-gray-800"}`}
+                      className={`px-4 py-2.5 text-sm font-semibold text-cl-text`}
                     >
                       Totals
                     </td>
                     <td
-                      className={`px-4 py-2.5 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
                     >
                       {data.length} rows
                     </td>
                     <td
-                      className={`px-4 py-2.5 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
                     >
                       {new Set(data.map((d) => d.role)).size} roles
                     </td>
                     <td
-                      className={`px-4 py-2.5 text-sm font-semibold ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                      className={`px-4 py-2.5 text-sm font-semibold text-cl-success`}
                     >
                       {data.filter((d) => d.status === "active").length} active
                     </td>
                     <td
-                      className={`px-4 py-2.5 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
                     >
                       {new Set(data.map((d) => d.department)).size} depts
                     </td>
                     <td
-                      className={`px-4 py-2.5 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`px-4 py-2.5 text-sm text-cl-text-secondary`}
                     ></td>
                   </tr>
-                  <tr className={dark ? "bg-white/[0.02]" : "bg-gray-50/50"}>
+                  <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-text/50"}>
                     <td
-                      className={`px-4 py-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
                     >
                       Summary
                     </td>
                     <td
-                      className={`px-4 py-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
                     ></td>
                     <td
-                      className={`px-4 py-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
                     ></td>
                     <td
-                      className={`px-4 py-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
                     >
                       {data.filter((d) => d.status === "inactive").length}{" "}
                       inactive
                     </td>
                     <td
-                      className={`px-4 py-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
                     ></td>
                     <td
-                      className={`px-4 py-2 text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`px-4 py-2 text-xs text-cl-text-tertiary`}
                     ></td>
                   </tr>
                 </>
@@ -5353,12 +5445,12 @@ const TableDemo = () => {
           );
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Footer with <strong>column-aligned totals and averages</strong> in two
           rows. Each{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             &lt;td&gt;
           </code>{" "}
@@ -5375,32 +5467,32 @@ const TableDemo = () => {
             <tr>
               <td colSpan={100} className="p-0">
                 <div
-                  className={`px-5 py-4 flex items-center justify-between ${dark ? "bg-gradient-to-r from-blue-500/[0.06] to-violet-500/[0.04] border-t-2 border-blue-500/20" : "bg-gradient-to-r from-blue-50 to-violet-50 border-t-2 border-blue-200"}`}
+                  className={`px-5 py-4 flex items-center justify-between bg-gradient-to-r from-cl-accent/15 to-cl-accent/10 border-t-2 border-cl-border-input-focus dark:bg-gradient-to-r dark:from-cl-accent/150/[0.06] dark:to-cl-accent/0.04 dark:border-t-2 dark:border dark:border-cl-border-input-focus/20`}
                 >
                   <div className="flex items-center gap-6">
                     <div>
                       <p
-                        className={`text-xs font-medium uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`}
+                        className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
                       >
                         Total Rows
                       </p>
                       <p
-                        className={`text-xl font-bold ${dark ? "text-white" : "text-gray-900"}`}
+                        className={`text-xl font-bold text-cl-text`}
                       >
                         {sampleData.slice(0, 6).length}
                       </p>
                     </div>
                     <div
-                      className={`w-px h-10 ${dark ? "bg-white/[0.08]" : "bg-gray-200"}`}
+                      className={`w-px h-10 bg-cl-bg-elevated`}
                     />
                     <div>
                       <p
-                        className={`text-xs font-medium uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`}
+                        className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
                       >
                         Active
                       </p>
                       <p
-                        className={`text-xl font-bold ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                        className={`text-xl font-bold text-cl-success`}
                       >
                         {
                           sampleData
@@ -5410,16 +5502,16 @@ const TableDemo = () => {
                       </p>
                     </div>
                     <div
-                      className={`w-px h-10 ${dark ? "bg-white/[0.08]" : "bg-gray-200"}`}
+                      className={`w-px h-10 bg-cl-bg-elevated`}
                     />
                     <div>
                       <p
-                        className={`text-xs font-medium uppercase tracking-wider ${dark ? "text-gray-500" : "text-gray-400"}`}
+                        className={`text-xs font-medium uppercase tracking-wider text-cl-text-tertiary`}
                       >
                         Departments
                       </p>
                       <p
-                        className={`text-xl font-bold ${dark ? "text-blue-400" : "text-blue-600"}`}
+                        className={`text-xl font-bold text-cl-accent`}
                       >
                         {
                           new Set(
@@ -5430,7 +5522,7 @@ const TableDemo = () => {
                     </div>
                   </div>
                   <button
-                    className={`px-4 py-2 text-sm font-medium rounded-lg cursor-pointer transition-colors ${dark ? "bg-blue-500/15 text-blue-300 hover:bg-blue-500/25" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+                    className={`px-4 py-2 text-sm font-medium rounded-cl-md cursor-pointer transition-colors bg-cl-accent text-white hover:bg-cl-accent/90 dark:bg-cl-accent/15 dark:text-cl-accent dark:hover:bg-cl-accent/25`}
                     onClick={() => alert("Export triggered")}
                   >
                     Export Report
@@ -5443,12 +5535,12 @@ const TableDemo = () => {
           classes={s}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           A dashboard-style summary card as footer with large metric numbers,
           dividers, gradient background, and an action button. Uses{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             colSpan={"{100}"}
           </code>{" "}
@@ -5464,16 +5556,16 @@ const TableDemo = () => {
           showFooter
           footerContent={
             <tr
-              className={`${dark ? "bg-[#111118] border-t-2 border-white/[0.1]" : "bg-gray-50 border-t-2 border-gray-300"}`}
+              className={`bg-cl-bg-hover border-t-2 border-cl-border-input dark:bg-cl-bg-elevated dark:border-t-2 dark:border dark:border-cl-text/[0.1]`}
             >
               <td
                 colSpan={100}
-                className={`px-4 py-3 text-sm font-medium ${dark ? "text-gray-300" : "text-gray-700"}`}
+                className={`px-4 py-3 text-sm font-medium text-cl-text-secondary`}
               >
                 <div className="flex items-center justify-between">
                   <span>Showing {sampleData.length} rows total</span>
                   <span
-                    className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    className={`text-xs text-cl-text-tertiary`}
                   >
                     Scroll to see all data
                   </span>
@@ -5485,24 +5577,24 @@ const TableDemo = () => {
           classes={{ ...s, footer: "sticky bottom-0 z-10" }}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Footer stays <strong>sticky at the bottom</strong> while the table
           scrolls vertically, using{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.footer
           </code>{" "}
           with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             sticky bottom-0
           </code>
           . Needs{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             maxHeight
           </code>{" "}
@@ -5520,19 +5612,19 @@ const TableDemo = () => {
               <tr
                 className={
                   dark
-                    ? "border-t border-white/[0.06]"
-                    : "border-t border-gray-200"
+                    ? "border-t border-cl-text/[0.06]"
+                    : "border-t border-cl-border"
                 }
               >
                 <td
                   colSpan={100}
-                  className={`px-4 py-2.5 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`px-4 py-2.5 text-cl-text-secondary`}
                 >
                   <div className="flex items-center gap-4 text-xs">
                     <span
-                      className={`flex items-center gap-1.5 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                      className={`flex items-center gap-1.5 text-cl-success`}
                     >
-                      <span className={`w-2 h-2 rounded-full ${dark ? "bg-emerald-400" : "bg-emerald-500"}`} />
+                      <span className={`w-2 h-2 rounded-full bg-cl-success/30`} />
                       {
                         sampleData
                           .slice(0, 5)
@@ -5541,10 +5633,10 @@ const TableDemo = () => {
                       Active
                     </span>
                     <span
-                      className={`flex items-center gap-1.5 ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`flex items-center gap-1.5 text-cl-text-secondary`}
                     >
                       <span
-                        className={`w-2 h-2 rounded-full ${dark ? "bg-gray-600" : "bg-gray-400"}`}
+                        className={`w-2 h-2 rounded-full bg-cl-text/10 dark:bg-cl-text/10`}
                       />
                       {
                         sampleData
@@ -5554,9 +5646,9 @@ const TableDemo = () => {
                       Inactive
                     </span>
                     <span
-                      className={`flex items-center gap-1.5 ${dark ? "text-amber-400" : "text-amber-600"}`}
+                      className={`flex items-center gap-1.5 text-cl-warning dark:text-cl-warning`}
                     >
-                      <span className={`w-2 h-2 rounded-full ${dark ? "bg-amber-400" : "bg-amber-500"}`} />
+                      <span className={`w-2 h-2 rounded-full bg-cl-warning dark:bg-cl-warning/30`} />
                       {
                         sampleData
                           .slice(0, 5)
@@ -5567,10 +5659,10 @@ const TableDemo = () => {
                   </div>
                 </td>
               </tr>
-              <tr className={dark ? "bg-white/[0.02]" : "bg-gray-50"}>
+              <tr className={dark ? "bg-cl-text/[0.02]" : "bg-cl-bg-hover"}>
                 <td
                   colSpan={100}
-                  className={`px-4 py-2 text-[11px] ${dark ? "text-gray-600" : "text-gray-400"}`}
+                  className={`px-4 py-2 text-[11px] text-cl-text-disabled`}
                 >
                   Last updated:{" "}
                   {new Date().toLocaleDateString("en-US", {
@@ -5588,18 +5680,18 @@ const TableDemo = () => {
           classes={s}
         />
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Two-row footer: first row shows status breakdown with colored dots,
           second row shows a timestamp. Pass multiple{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             &lt;tr&gt;
           </code>{" "}
           elements wrapped in a{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             &lt;&gt;...&lt;/&gt;
           </code>{" "}
@@ -5622,12 +5714,12 @@ const TableDemo = () => {
             />
             {contextMenuInfo && (
               <div
-                className={`p-3 rounded-md text-sm ${dark ? "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20" : "bg-yellow-50 text-yellow-800 border border-yellow-200"}`}
+                className={`p-3 rounded-cl-md text-sm bg-cl-warning/15 text-cl-warning border border-cl-warning dark:bg-cl-warning/10 dark:text-cl-warning dark:border dark:border-cl-warning/20`}
               >
                 {contextMenuInfo}
                 <button
                   onClick={() => setContextMenuInfo(null)}
-                  className={`ml-3 underline text-xs ${dark ? "text-yellow-500" : "text-yellow-600"}`}
+                  className={`ml-3 underline text-xs text-cl-warning dark:text-cl-warning`}
                 >
                   Dismiss
                 </button>
@@ -5635,11 +5727,11 @@ const TableDemo = () => {
             )}
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Right-click any row to trigger the{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               onContextMenu
             </code>{" "}
@@ -5666,24 +5758,24 @@ const TableDemo = () => {
             />
             {lastCopied && (
               <div
-                className={`p-3 rounded-md text-sm ${dark ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-green-50 text-green-800 border border-green-200"}`}
+                className={`p-3 rounded-cl-md text-sm bg-cl-success/15 text-cl-success border border-cl-success dark:bg-cl-success/10 dark:text-cl-success dark:border dark:border-cl-success/20`}
               >
                 Copied: {lastCopied}
               </div>
             )}
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Click any cell to copy its value to clipboard. Uses{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               enableCopyOnClick
             </code>{" "}
             and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               onCellCopy
             </code>{" "}
@@ -5706,7 +5798,7 @@ const TableDemo = () => {
             getRowId={(row) => row.id}
             loadingMoreContent={
               <span
-                className={`flex items-center gap-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                className={`flex items-center gap-2 text-sm text-cl-text-secondary`}
               >
                 <svg
                   className="animate-spin h-4 w-4"
@@ -5732,7 +5824,7 @@ const TableDemo = () => {
             }
             infiniteEndContent={
               <span
-                className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs text-cl-text-tertiary`}
               >
                 All {allInfiniteData.length} rows loaded
               </span>
@@ -5740,17 +5832,17 @@ const TableDemo = () => {
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+              container: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
-            className={`mt-3 flex items-center justify-between ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 flex items-center justify-between text-cl-text-secondary`}
           >
             <span className="text-sm">
               Loaded {infiniteData.length} of {allInfiniteData.length} rows.{" "}
               {!infiniteHasMore && (
                 <span
-                  className={dark ? "text-emerald-400" : "text-emerald-600"}
+                  className={dark ? "text-cl-success" : "text-cl-success"}
                 >
                   All data loaded.
                 </span>
@@ -5766,7 +5858,7 @@ const TableDemo = () => {
                   infiniteScrollTableRef.current.scrollTop = 0;
                 }
               }}
-              className={`text-xs px-3 py-1 rounded cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+              className={`text-xs px-3 py-1 rounded cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
             >
               Reset
             </button>
@@ -5794,19 +5886,19 @@ const TableDemo = () => {
                     className={`flex items-center gap-4 ${i > 1 ? "opacity-60" : ""}`}
                   >
                     <div
-                      className={`h-3 rounded-full animate-pulse ${dark ? "bg-white/[0.06]" : "bg-gray-200"}`}
+                      className={`h-3 rounded-full animate-pulse bg-cl-bg-hover dark:bg-cl-bg-hover`}
                       style={{ width: "25%" }}
                     />
                     <div
-                      className={`h-3 rounded-full animate-pulse ${dark ? "bg-white/[0.04]" : "bg-gray-150"}`}
+                      className={`h-3 rounded-full animate-pulse bg-cl-bg-hover dark:bg-cl-bg-hover`}
                       style={{ width: "35%" }}
                     />
                     <div
-                      className={`h-3 rounded-full animate-pulse ${dark ? "bg-white/[0.05]" : "bg-gray-200"}`}
+                      className={`h-3 rounded-full animate-pulse bg-cl-bg-hover dark:bg-cl-bg-hover`}
                       style={{ width: "15%" }}
                     />
                     <div
-                      className={`h-3 rounded-full animate-pulse ${dark ? "bg-white/[0.03]" : "bg-gray-100"}`}
+                      className={`h-3 rounded-full animate-pulse bg-cl-bg-hover dark:bg-cl-text/[0.03]`}
                       style={{ width: "20%" }}
                     />
                   </div>
@@ -5815,7 +5907,7 @@ const TableDemo = () => {
             }
             infiniteEndContent={
               <div
-                className={`flex items-center gap-2 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                className={`flex items-center gap-2 text-cl-success`}
               >
                 <svg
                   width="16"
@@ -5838,11 +5930,11 @@ const TableDemo = () => {
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+              container: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
-            className={`mt-3 flex items-center justify-between ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 flex items-center justify-between text-cl-text-secondary`}
           >
             <span className="text-sm">
               Loaded {inf2Data.length} of {allInfiniteData.length}
@@ -5854,25 +5946,25 @@ const TableDemo = () => {
                 setInf2Loading(false);
                 if (inf2Ref.current) inf2Ref.current.scrollTop = 0;
               }}
-              className={`text-xs px-3 py-1 rounded cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+              className={`text-xs px-3 py-1 rounded cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
             >
               Reset
             </button>
           </div>
         </DemoWrapper>
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Skeleton row placeholders as loading indicator via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             loadingMoreContent
           </code>
           . Shows 3 shimmer rows with fading opacity. End state shows a
           checkmark icon with "All rows loaded" via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             infiniteEndContent
           </code>
@@ -5895,10 +5987,10 @@ const TableDemo = () => {
             loadingMoreContent={
               <div className="w-full px-4 py-4 space-y-2">
                 <div
-                  className={`w-full h-1 rounded-full overflow-hidden ${dark ? "bg-white/[0.06]" : "bg-gray-200"}`}
+                  className={`w-full h-1 rounded-full overflow-hidden bg-cl-bg-hover dark:bg-cl-bg-hover`}
                 >
                   <div
-                    className={`h-full rounded-full animate-pulse ${dark ? "bg-blue-500" : "bg-blue-600"}`}
+                    className={`h-full rounded-full animate-pulse bg-cl-accent dark:bg-cl-accent`}
                     style={{
                       width: "60%",
                       animation: "pulse 1s ease-in-out infinite",
@@ -5906,7 +5998,7 @@ const TableDemo = () => {
                   />
                 </div>
                 <p
-                  className={`text-xs text-center ${dark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`text-xs text-center text-cl-text-tertiary`}
                 >
                   Loading rows {inf3Data.length + 1} to{" "}
                   {Math.min(inf3Data.length + 10, allInfiniteData.length)}...
@@ -5915,7 +6007,7 @@ const TableDemo = () => {
             }
             infiniteEndContent={
               <span
-                className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs text-cl-text-tertiary`}
               >
                 You've reached the end ({allInfiniteData.length} rows)
               </span>
@@ -5923,11 +6015,11 @@ const TableDemo = () => {
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+              container: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
-            className={`mt-3 flex items-center justify-between ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 flex items-center justify-between text-cl-text-secondary`}
           >
             <span className="text-sm">
               Loaded {inf3Data.length} of {allInfiniteData.length}
@@ -5939,14 +6031,14 @@ const TableDemo = () => {
                 setInf3Loading(false);
                 if (inf3Ref.current) inf3Ref.current.scrollTop = 0;
               }}
-              className={`text-xs px-3 py-1 rounded cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+              className={`text-xs px-3 py-1 rounded cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
             >
               Reset
             </button>
           </div>
         </DemoWrapper>
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Progress bar with contextual text showing which rows are loading. End
           state shows a simple "reached the end" message.
@@ -5971,11 +6063,11 @@ const TableDemo = () => {
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-lg ${dark ? "border-white/[0.06]" : "border-gray-200"}`,
+              container: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
-            className={`mt-3 flex items-center justify-between ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 flex items-center justify-between text-cl-text-secondary`}
           >
             <span className="text-sm">
               {inf4HasMore
@@ -5989,24 +6081,24 @@ const TableDemo = () => {
                 setInf4Loading(false);
                 if (inf4Ref.current) inf4Ref.current.scrollTop = 0;
               }}
-              className={`text-xs px-3 py-1 rounded cursor-pointer ${dark ? "text-blue-400 hover:bg-blue-500/10" : "text-blue-600 hover:bg-blue-50"}`}
+              className={`text-xs px-3 py-1 rounded cursor-pointer text-cl-accent hover:bg-cl-bg-elevated`}
             >
               Reset
             </button>
           </div>
         </DemoWrapper>
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           No{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             loadingMoreContent
           </code>{" "}
           or{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             infiniteEndContent
           </code>{" "}
@@ -6027,31 +6119,27 @@ const TableDemo = () => {
             onGlobalFilterChange={setBuiltInSearchFilter}
             onSearchClear={() => setBuiltInSearchFilter("")}
             getRowId={(row) => row.id}
-            classes={{
-              ...s,
-              searchBar: "mb-3",
-              searchInput: `w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-blue-500/40 focus:border-blue-500/50" : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"}`,
-            }}
+            classes={s}
           />
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             Set{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               showSearch
             </code>{" "}
             to render a built-in search bar above the table. Customize styling
             via{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               classes.searchBar
             </code>{" "}
             and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               classes.searchInput
             </code>
@@ -6076,8 +6164,8 @@ const TableDemo = () => {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  searchBar: "mb-3",
-                  searchInput: `w-full px-4 py-2.5 text-sm border-2 rounded-xl focus:outline-none transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:border-rose-500 focus:shadow-[0_0_0_3px_rgba(244,63,94,0.15)]" : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-rose-500 focus:shadow-[0_0_0_3px_rgba(244,63,94,0.1)]"}`,
+                  searchInput:
+                    "rounded-cl-lg focus:!ring-rose-500/25 focus:!border-rose-500/60",
                 }}
                 SearchIcon={({ className }) => (
                   <svg
@@ -6101,11 +6189,11 @@ const TableDemo = () => {
           return <RoseSearchDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Rose/pink themed search with custom{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             SearchIcon
           </code>
@@ -6128,22 +6216,18 @@ const TableDemo = () => {
                 onGlobalFilterChange={setFilter}
                 onSearchClear={() => setFilter("")}
                 getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  searchBar: "mb-3",
-                  searchInput: `w-full text-sm border rounded-lg focus:outline-none focus:ring-2 transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-blue-500/40 focus:border-blue-500/50" : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500/30 focus:border-blue-500"}`,
-                }}
+                classes={s}
               />
             );
           };
           return <RightIconDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Search icon on the <strong>right side</strong> via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             searchIconPosition="right"
           </code>
@@ -6168,8 +6252,8 @@ const TableDemo = () => {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  searchBar: "mb-3",
-                  searchInput: `w-full text-sm rounded-full focus:outline-none focus:ring-2 transition-all ${dark ? "bg-white/[0.05] border border-white/[0.08] text-gray-100 placeholder-gray-500 focus:ring-amber-500/30 focus:border-amber-500/40" : "bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-amber-500/20 focus:border-amber-400"}`,
+                  searchInput:
+                    "!rounded-full focus:!ring-cl-warning/30 focus:!border-cl-warning/60",
                 }}
               />
             );
@@ -6177,11 +6261,11 @@ const TableDemo = () => {
           return <NoIconDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           No icon using{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             searchIconPosition="none"
           </code>
@@ -6209,8 +6293,8 @@ const TableDemo = () => {
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  searchBar: "mb-3",
-                  searchInput: `w-full text-sm border-0 border-b-2 rounded-none bg-transparent focus:outline-none transition-all ${dark ? "border-gray-700 text-gray-100 placeholder-gray-600 focus:border-emerald-400" : "border-gray-200 text-gray-900 placeholder-gray-400 focus:border-emerald-600"}`,
+                  searchInput:
+                    "!rounded-none !border-0 !border-b-2 !bg-transparent !border-cl-border focus:!ring-0 focus:!border-cl-success",
                 }}
               />
             );
@@ -6218,7 +6302,7 @@ const TableDemo = () => {
           return <UnderlineDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Underline-only input with no background, no border-radius, and emerald
           focus color. Minimalist style that blends into the page.
@@ -6258,8 +6342,8 @@ const TableDemo = () => {
                 )}
                 classes={{
                   ...s,
-                  searchBar: "mb-3",
-                  searchInput: `w-full text-sm border-2 rounded-xl focus:outline-none transition-all ${dark ? "bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500 focus:border-violet-500 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.15)]" : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-violet-500 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.1)]"}`,
+                  searchInput:
+                    "rounded-cl-lg focus:!ring-violet-500/25 focus:!border-violet-500/60",
                 }}
               />
             );
@@ -6267,17 +6351,17 @@ const TableDemo = () => {
           return <FilterIconDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           A funnel/filter icon on the right via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             SearchIcon
           </code>{" "}
           +{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             searchIconPosition="right"
           </code>
@@ -6329,14 +6413,14 @@ const TableDemo = () => {
                 {filters.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap">
                     <span
-                      className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-xs text-cl-text-tertiary`}
                     >
                       Active filters:
                     </span>
                     {filters.map((f) => (
                       <span
                         key={f.id}
-                        className={`text-xs px-2 py-1 rounded-full ${dark ? "bg-blue-500/15 text-blue-300" : "bg-blue-50 text-blue-700"}`}
+                        className={`text-xs px-2 py-1 rounded-full bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/15 dark:text-cl-accent`}
                       >
                         {f.id}:{" "}
                         {Array.isArray(f.value)
@@ -6346,7 +6430,7 @@ const TableDemo = () => {
                     ))}
                     <button
                       onClick={() => setFilters([])}
-                      className={`text-xs cursor-pointer ${dark ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"}`}
+                      className={`text-xs cursor-pointer text-cl-text-tertiary hover:text-cl-text`}
                     >
                       Clear all
                     </button>
@@ -6358,12 +6442,12 @@ const TableDemo = () => {
           return <HeaderFilterDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Click the filter icon in Role, Status, or Department headers to open a
           multi-select dropdown. Active filters show a filled icon. Uses{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             filterableColumns
           </code>{" "}
@@ -6424,7 +6508,7 @@ const TableDemo = () => {
                 }}
                 classes={{
                   ...s,
-                  filterIcon: dark ? "text-violet-400" : "text-violet-600",
+                  filterIcon: dark ? "text-cl-accent" : "text-cl-accent",
                 }}
               />
             );
@@ -6432,17 +6516,17 @@ const TableDemo = () => {
           return <CustomFilterIconDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom chevron-down filter icon via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             FilterIcon
           </code>{" "}
           prop. Styled in violet via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.filterIcon
           </code>
@@ -6479,7 +6563,7 @@ const TableDemo = () => {
                 renderColumnFilter={(columnId, currentValues, setValues) => (
                   <div className="p-3 space-y-2">
                     <p
-                      className={`text-xs font-semibold uppercase tracking-wider ${dark ? "text-gray-400" : "text-gray-500"}`}
+                      className={`text-xs font-semibold uppercase tracking-wider text-cl-text-secondary`}
                     >
                       Filter by {columnId}
                     </p>
@@ -6489,22 +6573,22 @@ const TableDemo = () => {
                           label: "Active",
                           value: "active",
                           color: dark
-                            ? "text-emerald-400 bg-emerald-500/10"
-                            : "text-emerald-700 bg-emerald-50",
+                            ? "text-cl-success bg-cl-success/10"
+                            : "text-cl-success bg-cl-success/15",
                         },
                         {
                           label: "Inactive",
                           value: "inactive",
                           color: dark
-                            ? "text-gray-400 bg-gray-500/10"
-                            : "text-gray-600 bg-gray-100",
+                            ? "text-cl-text-tertiary bg-cl-text/10"
+                            : "text-cl-text-secondary bg-cl-bg-hover",
                         },
                         {
                           label: "Pending",
                           value: "pending",
                           color: dark
-                            ? "text-amber-400 bg-amber-500/10"
-                            : "text-amber-700 bg-amber-50",
+                            ? "text-cl-warning bg-cl-warning/10"
+                            : "text-cl-warning bg-cl-warning/15",
                         },
                       ].map((opt) => {
                         const selected = currentValues.includes(opt.value);
@@ -6518,10 +6602,10 @@ const TableDemo = () => {
                                   : [...currentValues, opt.value],
                               )
                             }
-                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm cursor-pointer transition-all ${selected ? opt.color + " font-medium" : dark ? "text-gray-400 hover:bg-white/[0.04]" : "text-gray-600 hover:bg-gray-50"}`}
+                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-cl-md text-sm cursor-pointer transition-all ${selected ? opt.color + " font-medium" : dark ? "text-cl-text-tertiary hover:bg-cl-bg-hover" : "text-cl-text-secondary hover:bg-cl-bg-hover"}`}
                           >
                             <span
-                              className={`w-2 h-2 rounded-full ${opt.value === "active" ? "bg-emerald-500" : opt.value === "pending" ? "bg-amber-500" : dark ? "bg-gray-600" : "bg-gray-400"}`}
+                              className={`w-2 h-2 rounded-full ${opt.value === "active" ? "bg-cl-success" : opt.value === "pending" ? "bg-cl-warning" : dark ? "bg-cl-text/10" : "bg-cl-text/10"}`}
                             />
                             {opt.label}
                             {selected && (
@@ -6544,7 +6628,7 @@ const TableDemo = () => {
                     {currentValues.length > 0 && (
                       <button
                         onClick={() => setValues([])}
-                        className={`w-full text-center text-xs py-1.5 rounded cursor-pointer ${dark ? "text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]" : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"}`}
+                        className={`w-full text-center text-xs py-1.5 rounded cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary dark:hover:bg-cl-bg-hover`}
                       >
                         Clear filter
                       </button>
@@ -6554,8 +6638,8 @@ const TableDemo = () => {
                 classes={{
                   ...s,
                   filterDropdown: dark
-                    ? "bg-gray-900 border-white/[0.08]"
-                    : "bg-white border-gray-200",
+                    ? "bg-cl-bg border-cl-text/[0.08]"
+                    : "bg-white border-cl-border",
                 }}
               />
             );
@@ -6563,29 +6647,29 @@ const TableDemo = () => {
           return <CustomDropdownDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Fully custom dropdown content via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             renderColumnFilter
           </code>
           . Receives{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             columnId
           </code>
           ,{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             currentValues
           </code>
           , and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             setValues
           </code>
@@ -6637,7 +6721,7 @@ const TableDemo = () => {
                   classes={s}
                 />
                 <p
-                  className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+                  className={`text-sm text-cl-text-secondary`}
                 >
                   Click a header name to sort, click the filter icon to filter.
                   Both work together: filter narrows the data, sort reorders the
@@ -6682,19 +6766,19 @@ const TableDemo = () => {
                   },
                 }}
                 renderColumnFilter={(columnId, currentValues, setValues) => (
-                  <div className={`p-2 ${dark ? "bg-gray-950" : "bg-white"}`}>
+                  <div className={`p-2 bg-white dark:bg-cl-bg`}>
                     <div
                       className={`px-2 py-1.5 mb-1 flex items-center justify-between`}
                     >
                       <span
-                        className={`text-[11px] font-bold uppercase tracking-widest ${dark ? "text-indigo-400" : "text-indigo-600"}`}
+                        className={`text-[11px] font-bold uppercase tracking-widest text-cl-accent`}
                       >
                         {columnId}
                       </span>
                       {currentValues.length > 0 && (
                         <button
                           onClick={() => setValues([])}
-                          className={`text-[10px] px-1.5 py-0.5 rounded cursor-pointer ${dark ? "text-gray-500 hover:text-gray-300 hover:bg-white/[0.05]" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}
+                          className={`text-[10px] px-1.5 py-0.5 rounded cursor-pointer text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary dark:hover:bg-cl-bg-hover`}
                         >
                           Reset
                         </button>
@@ -6705,35 +6789,35 @@ const TableDemo = () => {
                           {
                             label: "Active",
                             value: "active",
-                            dot: "bg-emerald-500",
+                            dot: "bg-cl-success",
                           },
                           {
                             label: "Inactive",
                             value: "inactive",
-                            dot: dark ? "bg-gray-600" : "bg-gray-400",
+                            dot: dark ? "bg-cl-text/10" : "bg-cl-text/10",
                           },
                           {
                             label: "Pending",
                             value: "pending",
-                            dot: "bg-amber-500",
+                            dot: "bg-cl-warning",
                           },
                         ]
                       : [
-                          { label: "Admin", value: "Admin", dot: "bg-red-500" },
+                          { label: "Admin", value: "Admin", dot: "bg-cl-error" },
                           {
                             label: "Manager",
                             value: "Manager",
-                            dot: "bg-blue-500",
+                            dot: "bg-cl-accent",
                           },
                           {
                             label: "Developer",
                             value: "Developer",
-                            dot: "bg-emerald-500",
+                            dot: "bg-cl-success",
                           },
                           {
                             label: "Designer",
                             value: "Designer",
-                            dot: "bg-violet-500",
+                            dot: "bg-cl-accent",
                           },
                         ]
                     ).map((opt) => {
@@ -6748,14 +6832,14 @@ const TableDemo = () => {
                                 : [...currentValues, opt.value],
                             )
                           }
-                          className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm cursor-pointer transition-all mb-0.5 ${
+                          className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-cl-md text-sm cursor-pointer transition-all mb-0.5 ${
                             selected
                               ? dark
-                                ? "bg-indigo-500/15 text-indigo-300"
-                                : "bg-indigo-50 text-indigo-700"
+                                ? "bg-cl-accent/15 text-cl-accent"
+                                : "bg-cl-accent/10 text-cl-accent"
                               : dark
-                                ? "text-gray-300 hover:bg-white/[0.04]"
-                                : "text-gray-700 hover:bg-gray-50"
+                                ? "text-cl-text-secondary hover:bg-cl-bg-hover"
+                                : "text-cl-text hover:bg-cl-bg-hover"
                           }`}
                         >
                           <span
@@ -6773,7 +6857,7 @@ const TableDemo = () => {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               className={
-                                dark ? "text-indigo-400" : "text-indigo-600"
+                                dark ? "text-cl-accent" : "text-cl-accent"
                               }
                             >
                               <path d="M5 13l4 4L19 7" />
@@ -6784,7 +6868,7 @@ const TableDemo = () => {
                     })}
                     {currentValues.length > 0 && (
                       <div
-                        className={`mt-1 px-2 py-1 text-[11px] ${dark ? "text-gray-600" : "text-gray-400"}`}
+                        className={`mt-1 px-2 py-1 text-[11px] text-cl-text-disabled`}
                       >
                         {currentValues.length} selected
                       </div>
@@ -6793,8 +6877,8 @@ const TableDemo = () => {
                 )}
                 classes={{
                   ...s,
-                  filterIcon: dark ? "text-indigo-400" : "text-indigo-600",
-                  filterDropdown: `rounded-xl border shadow-2xl ${dark ? "bg-gray-950 border-indigo-500/20" : "bg-white border-indigo-200"}`,
+                  filterIcon: dark ? "text-cl-accent" : "text-cl-accent",
+                  filterDropdown: `rounded-cl-lg border shadow-2xl bg-white border-cl-border-input-focus dark:bg-cl-bg dark:border dark:border-cl-border-input-focus/20`,
                 }}
               />
             );
@@ -6802,18 +6886,18 @@ const TableDemo = () => {
           return <StyledFilterDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Custom styled dropdown with color-coded dots per option, indigo theme,
           rounded items, selection count, and styled via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.filterDropdown
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             renderColumnFilter
           </code>
@@ -6872,10 +6956,10 @@ const TableDemo = () => {
                           ];
                     return (
                       <div
-                        className={`p-3 ${dark ? "bg-gray-900" : "bg-white"}`}
+                        className={`p-3 bg-cl-bg`}
                       >
                         <p
-                          className={`text-xs font-medium mb-2 ${dark ? "text-gray-500" : "text-gray-400"}`}
+                          className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
                         >
                           Select {columnId}
                         </p>
@@ -6897,11 +6981,11 @@ const TableDemo = () => {
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-all ${
                                   selected
                                     ? dark
-                                      ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
-                                      : "bg-cyan-50 text-cyan-700 border border-cyan-300"
+                                      ? "bg-cl-accent/20 text-cl-accent border-cl-border-input-focus/40"
+                                      : "bg-cl-accent/10 text-cl-accent border-cl-border-input-focus"
                                     : dark
-                                      ? "bg-white/[0.04] text-gray-400 border border-white/[0.08] hover:border-cyan-500/30"
-                                      : "bg-gray-50 text-gray-600 border border-gray-200 hover:border-cyan-400"
+                                      ? "bg-cl-bg-hover text-cl-text-tertiary border border-cl-text/[0.08] hover:border-cl-border-input-focus/30"
+                                      : "bg-cl-bg-hover text-cl-text-secondary border-cl-border hover:border-cl-border-input-focus"
                                 }`}
                               >
                                 {opt.label}
@@ -6912,7 +6996,7 @@ const TableDemo = () => {
                         {currentValues.length > 0 && (
                           <button
                             onClick={() => setValues([])}
-                            className={`mt-2 text-xs cursor-pointer ${dark ? "text-gray-600 hover:text-gray-400" : "text-gray-400 hover:text-gray-600"}`}
+                            className={`mt-2 text-xs cursor-pointer text-cl-text-disabled hover:text-cl-text-secondary`}
                           >
                             Clear
                           </button>
@@ -6938,20 +7022,20 @@ const TableDemo = () => {
                   )}
                   classes={{
                     ...s,
-                    filterDropdown: `rounded-xl border shadow-2xl ${dark ? "bg-gray-900 border-cyan-500/20" : "bg-white border-cyan-200"}`,
+                    filterDropdown: `rounded-cl-lg border shadow-2xl bg-white border-cl-border-input-focus dark:bg-cl-bg dark:border dark:border-cl-border-input-focus/20`,
                   }}
                 />
                 {filters.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap">
                     <span
-                      className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                      className={`text-xs text-cl-text-tertiary`}
                     >
                       Filtered by:
                     </span>
                     {filters.map((f) => (
                       <span
                         key={f.id}
-                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full ${dark ? "bg-cyan-500/10 text-cyan-300 border border-cyan-500/20" : "bg-cyan-50 text-cyan-700 border border-cyan-200"}`}
+                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-cl-accent/10 text-cl-accent border-cl-border-input-focus dark:bg-cl-accent/10 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/20`}
                       >
                         {f.id}:{" "}
                         {Array.isArray(f.value)
@@ -6981,7 +7065,7 @@ const TableDemo = () => {
                     ))}
                     <button
                       onClick={() => setFilters([])}
-                      className={`text-xs cursor-pointer ${dark ? "text-gray-600 hover:text-gray-400" : "text-gray-400 hover:text-gray-600"}`}
+                      className={`text-xs cursor-pointer text-cl-text-disabled hover:text-cl-text-secondary`}
                     >
                       Clear all
                     </button>
@@ -6993,13 +7077,13 @@ const TableDemo = () => {
           return <ChipFilterDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Chip/tag-style filter selection instead of checkboxes. Cyan theme with
           a search icon as filter trigger. Active filters shown as removable
           chips below the table. Uses{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.filterDropdown
           </code>{" "}
@@ -7023,11 +7107,11 @@ const TableDemo = () => {
               classes={s}
             />
             <p
-              className={`text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+              className={`text-sm text-cl-text-secondary`}
             >
               Sorting:{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 {serverSorting.length > 0
                   ? `${serverSorting[0].id} (${serverSorting[0].desc ? "desc" : "asc"})`
@@ -7037,11 +7121,11 @@ const TableDemo = () => {
             </p>
           </div>
           <p
-            className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`mt-3 text-sm text-cl-text-secondary`}
           >
             With{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               manualSorting={"{true}"}
             </code>
@@ -7049,13 +7133,13 @@ const TableDemo = () => {
             changes trigger a server request (simulated with 800ms delay). Also
             supports{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               manualPagination
             </code>{" "}
             and{" "}
             <code
-              className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+              className={`px-1 rounded bg-cl-bg-elevated`}
             >
               manualFiltering
             </code>
@@ -7067,7 +7151,7 @@ const TableDemo = () => {
       <Section title="Server-Side (Real API: dummyjson.com)" isDarkMode={dark}>
         <ServerApiDemo dark={dark} s={s} />
         <div
-          className={`mt-3 text-sm space-y-2 ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm space-y-2 text-cl-text-secondary`}
         >
           <p>
             A complete server-side table using the{" "}
@@ -7078,13 +7162,13 @@ const TableDemo = () => {
             <li>
               <strong>Server-side pagination</strong>:{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 ?limit=10&amp;skip=10
               </code>{" "}
               with{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 manualPagination
               </code>
@@ -7092,13 +7176,13 @@ const TableDemo = () => {
             <li>
               <strong>Server-side sorting</strong>:{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 ?sortBy=title&amp;order=asc
               </code>{" "}
               with{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 manualSorting
               </code>
@@ -7106,7 +7190,7 @@ const TableDemo = () => {
             <li>
               <strong>Server-side search</strong>:{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 /products/search?q=phone
               </code>{" "}
@@ -7115,19 +7199,19 @@ const TableDemo = () => {
             <li>
               <strong>Server-side category filter</strong>:{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 /products/category/smartphones
               </code>{" "}
               via{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 renderColumnFilter
               </code>{" "}
               with{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 MultiSelectSearchableDropdown
               </code>
@@ -7135,7 +7219,7 @@ const TableDemo = () => {
             <li>
               Categories loaded from{" "}
               <code
-                className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+                className={`px-1 rounded bg-cl-bg-elevated`}
               >
                 /products/category-list
               </code>
@@ -7161,7 +7245,7 @@ const TableDemo = () => {
                   {colOrder.map((col, i) => (
                     <div
                       key={col}
-                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium ${dark ? "bg-white/[0.06] text-gray-300" : "bg-gray-100 text-gray-700"}`}
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-cl-md text-xs font-medium bg-cl-bg-hover text-cl-text dark:bg-cl-bg-hover dark:text-cl-text-secondary`}
                     >
                       <span>{i + 1}.</span>
                       <span className="capitalize">{col}</span>
@@ -7172,7 +7256,7 @@ const TableDemo = () => {
                             [next[i - 1], next[i]] = [next[i], next[i - 1]];
                             setColOrder(next);
                           }}
-                          className={`p-0.5 rounded cursor-pointer ${dark ? "hover:bg-white/10 text-gray-500 hover:text-gray-300" : "hover:bg-gray-200 text-gray-400 hover:text-gray-600"}`}
+                          className={`p-0.5 rounded cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary dark:hover:bg-cl-text/10 dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary`}
                           title="Move left"
                         >
                           <svg
@@ -7196,7 +7280,7 @@ const TableDemo = () => {
                             [next[i], next[i + 1]] = [next[i + 1], next[i]];
                             setColOrder(next);
                           }}
-                          className={`p-0.5 rounded cursor-pointer ${dark ? "hover:bg-white/10 text-gray-500 hover:text-gray-300" : "hover:bg-gray-200 text-gray-400 hover:text-gray-600"}`}
+                          className={`p-0.5 rounded cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary dark:hover:bg-cl-text/10 dark:text-cl-text-tertiary dark:hover:text-cl-text-secondary`}
                           title="Move right"
                         >
                           <svg
@@ -7236,7 +7320,7 @@ const TableDemo = () => {
                       "joinDate",
                     ])
                   }
-                  className={`text-xs cursor-pointer ${dark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"}`}
+                  className={`text-xs cursor-pointer text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent`}
                 >
                   Reset order
                 </button>
@@ -7246,23 +7330,23 @@ const TableDemo = () => {
           return <ColumnReorderDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Reorder columns via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             columnOrder
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             onColumnOrderChange
           </code>
           . Enable with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             enableColumnReordering
           </code>
@@ -7286,7 +7370,7 @@ const TableDemo = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <span
-                    className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                    className={`text-xs text-cl-text-tertiary`}
                   >
                     Group by:
                   </span>
@@ -7294,7 +7378,7 @@ const TableDemo = () => {
                     <button
                       key={col}
                       onClick={() => toggleGroup(col)}
-                      className={`px-2.5 py-1 rounded-lg text-xs cursor-pointer transition-colors ${groupCols.includes(col) ? (dark ? "bg-blue-500/20 text-blue-400" : "bg-blue-50 text-blue-700") : dark ? "bg-white/[0.06] text-gray-400 hover:bg-white/[0.08]" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                      className={`px-2.5 py-1 rounded-cl-md text-xs cursor-pointer transition-colors ${groupCols.includes(col) ? (dark ? "bg-cl-accent/20 text-cl-accent" : "bg-cl-accent/10 text-cl-accent") : dark ? "bg-cl-bg-hover text-cl-text-tertiary hover:bg-cl-bg-hover" : "bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover"}`}
                     >
                       <span className="capitalize">{col}</span>
                     </button>
@@ -7309,8 +7393,8 @@ const TableDemo = () => {
                     ...s,
                     ...s,
                     groupHeader: dark
-                      ? "bg-white/[0.04] font-semibold text-gray-300"
-                      : "bg-gray-50 font-semibold text-gray-700",
+                      ? "bg-cl-bg-hover font-semibold text-cl-text-secondary"
+                      : "bg-cl-bg-hover font-semibold text-cl-text",
                   }}
                 />
               </div>
@@ -7319,17 +7403,17 @@ const TableDemo = () => {
           return <GroupByDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Group rows by column values via{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             groupBy
           </code>
           . Style grouped headers with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             classes.groupHeader
           </code>
@@ -7342,13 +7426,13 @@ const TableDemo = () => {
           const MobileCardDemo = () => (
             <div className="space-y-3">
               <p
-                className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                className={`text-xs text-cl-text-tertiary`}
               >
                 Resize below 768px to see cards, or view the forced preview
                 below.
               </p>
               <div
-                className="max-w-[360px] border rounded-xl overflow-hidden mx-auto"
+                className="max-w-[360px] border-cl-border rounded-cl-lg overflow-hidden mx-auto"
                 style={{
                   borderColor: dark ? "rgba(255,255,255,0.06)" : "#e5e7eb",
                 }}
@@ -7360,22 +7444,22 @@ const TableDemo = () => {
                   responsiveBreakpoint={9999}
                   renderMobileCard={(row) => (
                     <div
-                      className={`p-4 border-b last:border-b-0 ${dark ? "border-white/[0.06]" : "border-gray-100"}`}
+                      className={`p-4 border-b last:border-b-0 border-cl-border`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span
-                          className={`font-semibold text-sm ${dark ? "text-gray-100" : "text-gray-900"}`}
+                          className={`font-semibold text-sm text-cl-text`}
                         >
                           {row.name}
                         </span>
                         <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${row.status === "active" ? (dark ? "bg-emerald-500/15 text-emerald-400" : "bg-emerald-50 text-emerald-700") : row.status === "pending" ? (dark ? "bg-amber-500/15 text-amber-400" : "bg-amber-50 text-amber-700") : dark ? "bg-gray-500/15 text-gray-400" : "bg-gray-100 text-gray-600"}`}
+                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${row.status === "active" ? (dark ? "bg-cl-success/15 text-cl-success" : "bg-cl-success/15 text-cl-success") : row.status === "pending" ? (dark ? "bg-cl-warning/15 text-cl-warning" : "bg-cl-warning/15 text-cl-warning") : dark ? "bg-cl-text/15 text-cl-text-tertiary" : "bg-cl-bg-hover text-cl-text-secondary"}`}
                         >
                           {row.status}
                         </span>
                       </div>
                       <div
-                        className={`space-y-1 text-xs ${dark ? "text-gray-400" : "text-gray-500"}`}
+                        className={`space-y-1 text-xs text-cl-text-secondary`}
                       >
                         <p>{row.email}</p>
                         <p>
@@ -7387,7 +7471,7 @@ const TableDemo = () => {
                   classes={{
                     ...s,
                     ...s,
-                    mobileCard: dark ? "bg-gray-900" : "bg-white",
+                    mobileCard: dark ? "bg-cl-bg" : "bg-white",
                   }}
                 />
               </div>
@@ -7396,49 +7480,21 @@ const TableDemo = () => {
           return <MobileCardDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Set{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             responsiveBreakpoint
           </code>{" "}
           and{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             renderMobileCard
           </code>{" "}
           to switch to card layout below a viewport width.
-        </p>
-      </Section>
-
-      <Section title="Unstyled Mode" isDarkMode={dark}>
-        <DemoWrapper isDarkMode={dark}>
-          <Table
-            columns={columns}
-            data={sampleData.slice(0, 3)}
-            unstyled
-            getRowId={(row) => row.id}
-          />
-        </DemoWrapper>
-        <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
-        >
-          Pass{" "}
-          <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
-          >
-            unstyled
-          </code>{" "}
-          to strip all default classes. Combine with{" "}
-          <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
-          >
-            classes
-          </code>{" "}
-          to apply your own design system.
         </p>
       </Section>
 
@@ -7453,7 +7509,7 @@ const TableDemo = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <p
-                    className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    className={`text-xs font-medium text-cl-text-secondary`}
                   >
                     selectAllMode=&quot;page&quot; (default) —{" "}
                     {selectedPage.length} selected
@@ -7472,7 +7528,7 @@ const TableDemo = () => {
                 </div>
                 <div className="space-y-2">
                   <p
-                    className={`text-xs font-medium ${dark ? "text-gray-400" : "text-gray-500"}`}
+                    className={`text-xs font-medium text-cl-text-secondary`}
                   >
                     selectAllMode=&quot;all&quot; — {selectedAll.length}{" "}
                     selected
@@ -7495,11 +7551,11 @@ const TableDemo = () => {
           return <SelectAllDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Control what the header checkbox selects with{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             selectAllMode
           </code>
@@ -7541,7 +7597,7 @@ const TableDemo = () => {
                         },
                       ])
                     }
-                    className={`px-3 py-1.5 text-xs rounded-lg cursor-pointer transition-colors ${dark ? "bg-blue-500/20 text-blue-400 hover:bg-blue-500/30" : "bg-blue-50 text-blue-700 hover:bg-blue-100"}`}
+                    className={`px-3 py-1.5 text-xs rounded-cl-md cursor-pointer transition-colors bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 dark:bg-cl-accent/20 dark:text-cl-accent dark:hover:bg-cl-accent/30`}
                   >
                     Save current view
                   </button>
@@ -7564,7 +7620,7 @@ const TableDemo = () => {
                           },
                         );
                       }}
-                      className={`px-2.5 py-1 text-xs rounded-lg cursor-pointer ${dark ? "bg-white/[0.06] text-gray-300 hover:bg-white/[0.08]" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                      className={`px-2.5 py-1 text-xs rounded-cl-md cursor-pointer bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-bg-hover`}
                     >
                       {sv.name}
                     </button>
@@ -7591,7 +7647,7 @@ const TableDemo = () => {
                   classes={s}
                 />
                 <p
-                  className={`text-xs ${dark ? "text-gray-500" : "text-gray-400"}`}
+                  className={`text-xs text-cl-text-tertiary`}
                 >
                   {savedViews.length === 0
                     ? 'Sort or hide columns, then click "Save current view".'
@@ -7603,17 +7659,17 @@ const TableDemo = () => {
           return <SaveViewDemo />;
         })()}
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Use{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             onSaveView
           </code>{" "}
           to capture the current table state as a{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             TableView
           </code>{" "}
@@ -8569,18 +8625,18 @@ const TableDemo = () => {
           />
         </PropsTable>
         <p
-          className={`mt-3 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+          className={`mt-3 text-sm text-cl-text-secondary`}
         >
           Note: When using Table component, pass these props with the "shimmer"
           prefix (e.g.,{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             shimmerClassName
           </code>
           ,{" "}
           <code
-            className={`px-1 rounded ${dark ? "bg-white/[0.06]" : "bg-gray-100"}`}
+            className={`px-1 rounded bg-cl-bg-elevated`}
           >
             shimmerRowClassName
           </code>
@@ -8736,7 +8792,7 @@ const TableDemo = () => {
       >
         <div className={c.card}>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               'Table uses role="grid" with role="row", role="gridcell", and role="columnheader" for proper structure',
@@ -8749,7 +8805,7 @@ const TableDemo = () => {
             ].map((text) => (
               <p key={text} className="flex items-start gap-2">
                 <span
-                  className={`mt-0.5 shrink-0 ${dark ? "text-emerald-400" : "text-emerald-600"}`}
+                  className={`mt-0.5 shrink-0 text-cl-success`}
                 >
                   &#10003;
                 </span>
@@ -8760,12 +8816,12 @@ const TableDemo = () => {
         </div>
         <div className={`${c.card} mt-3`}>
           <p
-            className={`text-xs font-semibold mb-3 ${dark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-xs font-semibold mb-3 text-cl-text-secondary`}
           >
             Keyboard Reference
           </p>
           <div
-            className={`space-y-2 text-sm ${dark ? "text-gray-400" : "text-gray-500"}`}
+            className={`space-y-2 text-sm text-cl-text-secondary`}
           >
             {[
               ["Arrow keys", "Navigate between cells in the grid"],

@@ -39,6 +39,20 @@ const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
 const REACT_MEMO_TYPE = Symbol.for("react.memo");
 const REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
 
+// Type guard isolates the unsafe assertion to a single, named, documented
+// place. React's exotic component types (memo, forwardRef) carry $$typeof
+// at runtime but aren't structurally assignable to ComponentType from
+// ReactNode — so the guard does the runtime check, and the cast is the
+// minimum needed once the check has narrowed the value.
+function isExoticIconComponent(
+  value: unknown,
+): value is ComponentType<IconProps> {
+  if (typeof value !== "object" || value === null) return false;
+  if (!("$$typeof" in value)) return false;
+  const sym = (value as { $$typeof: symbol }).$$typeof;
+  return sym === REACT_MEMO_TYPE || sym === REACT_FORWARD_REF_TYPE;
+}
+
 const renderIcon = (
   icon: ComponentType<IconProps> | ReactNode | undefined,
   className: string,
@@ -49,12 +63,9 @@ const renderIcon = (
     return <IconComp className={className} />;
   }
   if (isValidElement(icon)) return icon;
-  if (typeof icon === "object" && icon !== null && "$$typeof" in icon) {
-    const sym = (icon as { $$typeof: symbol }).$$typeof;
-    if (sym === REACT_MEMO_TYPE || sym === REACT_FORWARD_REF_TYPE) {
-      const IconComp = icon as unknown as ComponentType<IconProps>;
-      return <IconComp className={className} />;
-    }
+  if (isExoticIconComponent(icon)) {
+    const IconComp = icon;
+    return <IconComp className={className} />;
   }
   return null;
 };
