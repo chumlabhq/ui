@@ -76,8 +76,8 @@ export function SiteHeader() {
                   <path d="M7.5 0L8.85 5.65L14.5 7L8.85 8.35L7.5 14L6.15 8.35L0.5 7L6.15 5.65L7.5 0Z" />
                 </svg>
                 <p className="text-[12px] font-semibold tracking-[-0.01em] leading-snug">
-                  We're in stealth mode. Our GitHub repo and npm package
-                  aren't public yet.
+                  You found us early. We're in stealth mode. Our GitHub repo
+                  and npm package aren't public yet.
                 </p>
               </div>
             </div>

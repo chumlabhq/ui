@@ -152,7 +152,7 @@
   :root,
   :root[data-theme="dark"],
   :root[data-theme="light"] {
-    --header-height: 152px;
+    --header-height: 172px;
   }
 }
 
