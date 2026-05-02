@@ -42,12 +42,55 @@ export function SiteHeader() {
 
   return (
     <>
-      <header
-        className="header-mount-fade pointer-events-auto fixed top-0 left-0 right-0 z-50 bg-bg-base"
-        style={{ borderBottom: "0.5px solid var(--border-faint)" }}
-      >
-        <div className="w-full px-5 sm:px-6 md:px-8">
-          <div className="grid grid-cols-[auto_1fr_auto] items-center h-[64px] gap-4">
+      <div className="header-mount-fade pointer-events-auto fixed top-0 left-0 right-0 z-50">
+        {/* Pre-launch announcement strip. Sits above the header at all times
+            and is included in the --header-height CSS var so hero/page
+            offsets stay aligned. Colors are hard-coded against theme so the
+            contrast stays identical across light and dark surfaces. */}
+        <div
+          className="text-[#050608] bg-gradient-to-r from-[#7eb1ff] via-[#5b9bff] to-[#7eb1ff]"
+          role="status"
+          aria-label="Pre-launch announcement"
+        >
+          <div className="w-full px-4 sm:px-6 md:px-8">
+            <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 h-12 text-[13px] sm:text-[14px] md:text-[15px] font-semibold tracking-[-0.01em] whitespace-nowrap overflow-hidden">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 15 15"
+                fill="currentColor"
+                className="shrink-0 announcement-sparkle"
+                aria-hidden
+              >
+                <path d="M7.5 0L8.85 5.65L14.5 7L8.85 8.35L7.5 14L6.15 8.35L0.5 7L6.15 5.65L7.5 0Z" />
+              </svg>
+
+              <span className="hidden lg:inline">You found us early.</span>
+              <span className="hidden lg:inline opacity-50" aria-hidden>·</span>
+              <span className="hidden sm:inline">We're still in stealth mode.</span>
+              <span className="hidden sm:inline opacity-50" aria-hidden>·</span>
+              <span className="hidden sm:inline">
+                Our GitHub repo and npm package aren't public yet.
+              </span>
+              <span className="sm:hidden">In stealth. GitHub and npm coming soon.</span>
+
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#050608] text-[#7eb1ff] px-2.5 py-1 text-[10px] sm:text-[11px] font-bold tracking-[0.12em] uppercase shrink-0">
+                <span className="relative flex h-1.5 w-1.5" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7eb1ff] opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#7eb1ff]" />
+                </span>
+                Live soon
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <header
+          className="bg-bg-base"
+          style={{ borderBottom: "0.5px solid var(--border-faint)" }}
+        >
+          <div className="w-full px-5 sm:px-6 md:px-8">
+            <div className="grid grid-cols-[auto_1fr_auto] items-center h-[64px] gap-4">
             <Link
               to="/"
               className="flex items-center text-cl-text -ml-1"
@@ -186,6 +229,7 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
+    </div>
 
       {/* Mobile drawer */}
       {menuOpen && (

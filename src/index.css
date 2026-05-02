@@ -50,7 +50,7 @@
 
 :root,
 :root[data-theme="dark"] {
-  --header-height: 64px;
+  --header-height: 112px; /* 48px pre-launch strip + 64px header bar */
   --bg-base: #050608;
   --bg-elevated: #0a0d12;
   --bg-overlay: #0f1218;
@@ -773,6 +773,17 @@ body {
   animation: headerMountFade 200ms cubic-bezier(0.32, 0.72, 0.24, 1) 100ms both;
 }
 
+/* Pre-launch announcement sparkle — slow twinkle so the eye catches the
+   strip without it feeling busy. Pauses for reduced-motion users below. */
+@keyframes announcementSparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50%      { transform: scale(1.18) rotate(20deg); opacity: 0.85; }
+}
+.announcement-sparkle {
+  animation: announcementSparkle 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  transform-origin: center;
+}
+
 /* Hero — visible on page mount, so the stagger uses CSS animation-delay
    rather than scroll-triggered Reveal. Two keyframes (8px and 12px) match
    the global translateY scale. */
@@ -810,7 +821,8 @@ body {
   .hero-h1-line1,
   .hero-h1-line2,
   .hero-descriptor,
-  .hero-ctas {
+  .hero-ctas,
+  .announcement-sparkle {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
