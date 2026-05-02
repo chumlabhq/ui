@@ -50,7 +50,7 @@
 
 :root,
 :root[data-theme="dark"] {
-  --header-height: 112px; /* 48px pre-launch strip + 64px header bar */
+  --header-height: 112px; /* sm+: 48px pre-launch strip + 64px header bar */
   --bg-base: #050608;
   --bg-elevated: #0a0d12;
   --bg-overlay: #0f1218;
@@ -143,6 +143,17 @@
   /* Shadows */
   --cl-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --cl-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Mobile override — the pre-launch announcement strip stacks vertically
+   below sm (640px), so the header gets taller. The hero section reads
+   --header-height for its top padding and adjusts automatically. */
+@media (max-width: 639px) {
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"] {
+    --header-height: 152px;
+  }
 }
 
 /* Light theme — applied when `<html data-theme="light">` is set by the
