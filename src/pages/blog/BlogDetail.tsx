@@ -303,6 +303,9 @@ export default function BlogDetail() {
                 as="a"
                 href="/blog"
                 className="group"
+                data-track-event="nav_click"
+                data-track-location="blog_detail_top"
+                data-track-target="all_articles"
                 startIcon={
                   <svg
                     viewBox="0 0 24 24"
@@ -366,6 +369,9 @@ export default function BlogDetail() {
                   size="sm"
                   onClick={handleCopy}
                   aria-label="Copy link"
+                  data-track-event="blog_share"
+                  data-track-method="copy_link"
+                  data-track-post-id={post.id}
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -389,6 +395,9 @@ export default function BlogDetail() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Share on Twitter"
+                  data-track-event="blog_share"
+                  data-track-method="twitter"
+                  data-track-post-id={post.id}
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -462,6 +471,9 @@ export default function BlogDetail() {
                 as="a"
                 href="/accordion"
                 endIcon={<span aria-hidden>→</span>}
+                data-track-event="cta_click"
+                data-track-location="blog_detail_inline"
+                data-track-target="explore_components"
               >
                 Explore Components
               </Button>
@@ -477,6 +489,9 @@ export default function BlogDetail() {
                 as="a"
                 href="/blog"
                 className="group"
+                data-track-event="nav_click"
+                data-track-location="blog_detail_bottom"
+                data-track-target="all_articles"
                 startIcon={
                   <svg
                     viewBox="0 0 24 24"
@@ -500,6 +515,8 @@ export default function BlogDetail() {
                 size="sm"
                 onClick={scrollToTop}
                 className="group"
+                data-track-event="blog_back_to_top"
+                data-track-post-id={post.id}
                 endIcon={
                   <svg
                     viewBox="0 0 24 24"

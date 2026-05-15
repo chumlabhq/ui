@@ -165,6 +165,9 @@ const Home = () => {
           <Link
             to="/?openPlayground=1#ai-playground"
             className="hero-pill group inline-flex items-center transition-colors max-w-full"
+            data-track-event="cta_click"
+            data-track-location="home_hero_pill"
+            data-track-target="ai_playground"
             style={{
               gap: 10,
               padding: "4px 16px 4px 4px",
@@ -264,6 +267,9 @@ const Home = () => {
               as="a"
               href="/accordion"
               className="group"
+              data-track-event="cta_click"
+              data-track-location="home_hero"
+              data-track-target="browse_components"
               endIcon={
                 <span
                   aria-hidden
@@ -283,6 +289,9 @@ const Home = () => {
               onClick={copyInstall}
               aria-label="Copy npm install command"
               className="font-mono"
+              data-track-event="cta_click"
+              data-track-location="home_hero"
+              data-track-target="copy_npm_install"
             >
               {copied ? (
                 <span className="inline-flex items-center gap-2 text-[13px]">
@@ -475,6 +484,9 @@ function FaqSection() {
                on sm+ and is hidden on mobile (the mobile equivalent
                renders below the accordion). Inline width is correct. */
             className="hidden sm:inline-flex self-start sm:self-end shrink-0"
+            data-track-event="cta_click"
+            data-track-location="home_faq_section"
+            data-track-target="browse_all_faqs_desktop"
           >
             Browse all FAQs
             <span
@@ -523,6 +535,9 @@ function FaqSection() {
           as="a"
           href="/faq"
           className="sm:hidden mt-8"
+          data-track-event="cta_click"
+          data-track-location="home_faq_section"
+          data-track-target="browse_all_faqs_mobile"
         >
           Browse all FAQs
           <span
@@ -572,6 +587,10 @@ const FaqItem = forwardRef<HTMLButtonElement, FaqItemProps>(
           onClick={onToggle}
           onKeyDown={onKeyNav}
           className="w-full flex items-start justify-between gap-3 sm:gap-6 py-5 sm:py-6 text-left transition-colors duration-200 hover:bg-fg/[0.015] focus-visible:outline-none focus-visible:bg-accent/[0.04] -mx-4 sm:-mx-5 px-4 sm:px-5 rounded-md cursor-pointer"
+          data-track-event="faq_question_toggle"
+          data-track-location="home"
+          data-track-question={question}
+          data-track-index={String(index)}
         >
           <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
             <span
@@ -709,6 +728,9 @@ function BlogSection({
             /* Desktop-only header CTA: hidden on mobile (mobile equivalent
                renders below the cards). Inline width is correct. */
             className="hidden sm:inline-flex self-start sm:self-end shrink-0"
+            data-track-event="cta_click"
+            data-track-location="home_blog_section"
+            data-track-target="all_articles_desktop"
           >
             All articles
             <span
@@ -746,6 +768,9 @@ function BlogSection({
             as="a"
             href="/blog"
             className="sm:hidden mt-8"
+            data-track-event="cta_click"
+            data-track-location="home_blog_section"
+            data-track-target="all_articles_mobile"
           >
             All articles
             <span
@@ -781,6 +806,9 @@ function BlogCard({
     <Link
       to={`/blog/${post.id}`}
       className="group flex flex-col gap-4 sm:gap-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-4 focus-visible:ring-offset-bg-base rounded-lg"
+      data-track-event="blog_card_click"
+      data-track-location="home"
+      data-track-target={post.id}
     >
       {/* Cover — solid colored block + centered serif italic title. */}
       <div

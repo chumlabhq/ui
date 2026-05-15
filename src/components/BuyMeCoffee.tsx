@@ -5,6 +5,7 @@ import {
   type BuyMeCoffeeContextValue,
 } from "./useBuyMeCoffee";
 import { Button } from "./ui";
+import { trackEvent } from "../lib/analytics";
 import { useCreateFeedbackMutation } from "../redux/api/feedbackApi";
 import {
   useCreateOrderMutation,
@@ -148,6 +149,13 @@ function BuyMeCoffeeModal({
     if (!amountValid) return;
     setSubmitError(null);
 
+    trackEvent("coffee_submit_attempt", {
+      amount,
+      rating,
+      has_feedback: feedback.trim().length > 0,
+      signed_in: !!authedUser,
+    });
+
     let orderResp;
     try {
       orderResp = await createOrder({
@@ -168,6 +176,7 @@ function BuyMeCoffeeModal({
         (err as { data?: { message?: string } })?.data?.message ||
         "Could not start payment. Please try again.";
       setSubmitError(msg);
+      trackEvent("coffee_submit_error", { stage: "create_order" });
       return;
     }
 
@@ -205,6 +214,7 @@ function BuyMeCoffeeModal({
           setSubmitError(
             "Payment was captured but verification failed. Email hello@chumlab.com with your transaction id.",
           );
+          trackEvent("coffee_submit_error", { stage: "verify_payment" });
           return;
         }
 
@@ -227,10 +237,12 @@ function BuyMeCoffeeModal({
 
         setPaying(false);
         setSent(true);
+        trackEvent("coffee_submit_success", { amount, rating });
       },
       modal: {
         ondismiss: () => {
           setPaying(false);
+          trackEvent("coffee_submit_dismissed", { amount });
         },
       },
     });
@@ -240,6 +252,10 @@ function BuyMeCoffeeModal({
       setSubmitError(
         `Payment failed: ${resp.error?.description || "please try again"}`,
       );
+      trackEvent("coffee_submit_error", {
+        stage: "razorpay_failed",
+        reason: resp.error?.code ?? "unknown",
+      });
     });
 
     rzp.open();
@@ -382,6 +398,8 @@ function PickAmountStep({
                 color: active ? "var(--bg-base)" : "var(--text-primary)",
                 border: `0.5px solid ${active ? "transparent" : "var(--border-faint)"}`,
               }}
+              data-track-event="coffee_amount_preset"
+              data-track-amount={String(value)}
             >
               <div className="text-[24px] font-medium leading-none">${value}</div>
               <div
@@ -548,6 +566,8 @@ function StarRating({
             aria-checked={value === n}
             aria-label={`${n} star${n === 1 ? "" : "s"}`}
             className="cursor-pointer p-0.5 focus:outline-none"
+            data-track-event="coffee_rating_select"
+            data-track-rating={String(n)}
           >
             <StarIcon filled={filled} />
           </button>

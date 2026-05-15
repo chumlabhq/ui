@@ -19,6 +19,7 @@ import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { Pagination } from "../components/Pagination";
 import Reveal from "../components/Reveal/Reveal";
+import { trackEvent } from "../lib/analytics";
 
 const PAGE_TITLE = "Frequently Asked Questions";
 const PAGE_DESCRIPTION =
@@ -257,6 +258,9 @@ const Faq = () => {
               <a
                 href="mailto:hello@chumlab.com?subject=Question%20about%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
                 className="text-fg hover:text-accent transition-colors underline-offset-4 hover:underline"
+                data-track-event="email_click"
+                data-track-location="faq_intro"
+                data-track-target="hello"
               >
                 hello@chumlab.com
               </a>{" "}
@@ -275,6 +279,10 @@ const Faq = () => {
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setCurrentPage(1);
+                }}
+                onBlur={(e) => {
+                  const q = e.target.value.trim();
+                  if (q) trackEvent("faq_search", { query: q });
                 }}
                 placeholder="Search questions"
                 aria-label="Search FAQs"
@@ -306,6 +314,8 @@ const Faq = () => {
                     : "var(--text-secondary)",
                 border: "0.5px solid var(--border-faint)",
               }}
+              data-track-event="faq_category_filter"
+              data-track-category="all"
             >
               All
               <span className="ml-1.5 opacity-70 tabular-nums">
@@ -325,6 +335,8 @@ const Faq = () => {
                     setCurrentPage(1);
                   }}
                   className="eyebrow px-3 py-1.5 transition-colors cursor-pointer"
+                  data-track-event="faq_category_filter"
+                  data-track-category={cat}
                   style={{
                     background: isActive
                       ? "var(--text-primary)"
@@ -367,6 +379,9 @@ const Faq = () => {
                   <a
                     href="mailto:hello@chumlab.com?subject=Question%20about%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
                     className="text-fg hover:text-accent transition-colors underline-offset-4 hover:underline"
+                    data-track-event="email_click"
+                    data-track-location="faq_empty_state"
+                    data-track-target="hello"
                   >
                     hello@chumlab.com
                   </a>
@@ -497,6 +512,9 @@ const Faq = () => {
                   duration={200}
                   href="mailto:hello@chumlab.com?subject=Question%20about%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
                   className="group flex items-center gap-4 sm:gap-5 py-4 sm:py-5 border-t border-b border-border-faint -mx-2 px-2 hover:bg-fg/[0.02] focus-visible:outline-none focus-visible:bg-accent/[0.04] transition-colors duration-200"
+                  data-track-event="email_click"
+                  data-track-location="faq_channels"
+                  data-track-target="hello"
                 >
                   <span className="font-mono text-[10px] sm:text-[11px] text-fg-muted group-hover:text-accent/70 transition-colors w-6 shrink-0 tabular-nums">
                     01
@@ -532,6 +550,10 @@ const Faq = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center gap-4 sm:gap-5 py-4 sm:py-5 -mx-2 px-2 hover:bg-fg/[0.02] focus-visible:outline-none focus-visible:bg-accent/[0.04] transition-colors duration-200"
+                  data-track-event="external_link_click"
+                  data-track-location="faq_channels"
+                  data-track-target="github_issues"
+                  data-track-url="https://github.com/chumlabhq/ui/issues"
                 >
                   <span className="font-mono text-[10px] sm:text-[11px] text-fg-muted group-hover:text-accent/70 transition-colors w-6 shrink-0 tabular-nums">
                     02
@@ -597,6 +619,10 @@ const FaqRow = forwardRef<HTMLButtonElement, FaqRowProps>(function FaqRow(
         onClick={onToggle}
         onKeyDown={onKeyNav}
         className="w-full flex items-start justify-between gap-3 sm:gap-6 py-5 sm:py-6 text-left transition-colors duration-200 hover:bg-fg/[0.015] focus-visible:outline-none focus-visible:bg-accent/[0.04] -mx-4 sm:-mx-5 px-4 sm:px-5 rounded-md cursor-pointer"
+        data-track-event="faq_question_toggle"
+        data-track-location="faq_page"
+        data-track-question={question}
+        data-track-index={String(index)}
       >
         <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
           <span

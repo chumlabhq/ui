@@ -88,6 +88,9 @@ export function SiteFooter() {
             to="/"
             aria-label="Chumlab home"
             className="inline-flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-4 focus-visible:ring-offset-cl-bg rounded-md"
+            data-track-event="nav_click"
+            data-track-location="footer"
+            data-track-target="logo"
           >
             <img
               src={theme === "dark" ? logoLight : logoDark}
@@ -102,7 +105,13 @@ export function SiteFooter() {
           {/* Product */}
           <FooterColumn title="Product">
             <FooterLink>
-              <Link to="/accordion" className={LINK_CLASS}>
+              <Link
+                to="/accordion"
+                className={LINK_CLASS}
+                data-track-event="nav_click"
+                data-track-location="footer"
+                data-track-target="components"
+              >
                 Components
               </Link>
             </FooterLink>
@@ -111,12 +120,21 @@ export function SiteFooter() {
                 href="/#ai-playground"
                 onClick={goToAIPlayground}
                 className={`${LINK_CLASS} inline-flex items-center gap-2`}
+                data-track-event="nav_click"
+                data-track-location="footer"
+                data-track-target="playground"
               >
                 AI Playground
               </a>
             </FooterLink>
             <FooterLink>
-              <Link to="/getting-started" className={LINK_CLASS}>
+              <Link
+                to="/getting-started"
+                className={LINK_CLASS}
+                data-track-event="nav_click"
+                data-track-location="footer"
+                data-track-target="docs"
+              >
                 Docs
               </Link>
             </FooterLink>
@@ -125,12 +143,24 @@ export function SiteFooter() {
           {/* Resources */}
           <FooterColumn title="Resources">
             <FooterLink>
-              <Link to="/blog" className={LINK_CLASS}>
+              <Link
+                to="/blog"
+                className={LINK_CLASS}
+                data-track-event="nav_click"
+                data-track-location="footer"
+                data-track-target="blog"
+              >
                 Blog
               </Link>
             </FooterLink>
             <FooterLink>
-              <Link to="/faq" className={LINK_CLASS}>
+              <Link
+                to="/faq"
+                className={LINK_CLASS}
+                data-track-event="nav_click"
+                data-track-location="footer"
+                data-track-target="faq"
+              >
                 FAQ
               </Link>
             </FooterLink>
@@ -143,6 +173,9 @@ export function SiteFooter() {
                 type="button"
                 onClick={openBuyCoffee}
                 className={`cursor-pointer text-left ${LINK_CLASS}`}
+                data-track-event="nav_click"
+                data-track-location="footer"
+                data-track-target="support"
               >
                 Support
               </button>
@@ -153,6 +186,10 @@ export function SiteFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={LINK_CLASS}
+                data-track-event="external_link_click"
+                data-track-location="footer"
+                data-track-target="license"
+                data-track-url="https://github.com/chumlabhq/ui/blob/main/LICENSE"
               >
                 License (MIT)
               </a>
@@ -167,6 +204,10 @@ export function SiteFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${LINK_CLASS} inline-flex items-center gap-2`}
+                data-track-event="external_link_click"
+                data-track-location="footer"
+                data-track-target="github"
+                data-track-url="https://github.com/chumlabhq/ui"
               >
                 <svg
                   viewBox="0 0 16 16"
@@ -183,6 +224,9 @@ export function SiteFooter() {
               <a
                 href="mailto:hello@chumlab.com?subject=Question%20about%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
                 className={`${LINK_CLASS} inline-flex items-center gap-2`}
+                data-track-event="email_click"
+                data-track-location="footer"
+                data-track-target="hello"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -219,6 +263,9 @@ export function SiteFooter() {
               <a
                 href="mailto:hello@chumlab.com?subject=Feedback%20on%20Chumlab&body=Hi%20Chumlab%20team%2C%0A%0A"
                 className="text-cl-text hover:text-cl-accent transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent/40 focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg rounded"
+                data-track-event="email_click"
+                data-track-location="footer"
+                data-track-target="feedback"
               >
                 hello@chumlab.com
               </a>

@@ -9,6 +9,7 @@ import { SiteFooter } from "../../components/SiteFooter";
 import { TypographicCover } from "../../components/TypographicCover";
 import Reveal from "../../components/Reveal/Reveal";
 import { Button } from "../../components/ui";
+import { trackEvent } from "../../lib/analytics";
 
 const LISTING_TITLE = "Blog. Guides and articles";
 const LISTING_DESCRIPTION =
@@ -71,7 +72,14 @@ function SearchIcon() {
 
 function BlogCard({ post }: { post: (typeof BLOG_POSTS)[0] }) {
   return (
-    <Link to={`/blog/${post.id}`} className="group block">
+    <Link
+      to={`/blog/${post.id}`}
+      className="group block"
+      data-track-event="blog_card_click"
+      data-track-location="blog_listing"
+      data-track-target={post.id}
+      data-track-category={post.category}
+    >
       <div className="aspect-[4/3] overflow-hidden">
         <TypographicCover
           title={post.title}
@@ -207,6 +215,12 @@ export default function BlogListing() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onBlur={(e) => {
+                  // Track only when the user commits the search — every
+                  // keystroke fire would flood GA4 with low-signal events.
+                  const q = e.target.value.trim();
+                  if (q) trackEvent("blog_search", { query: q });
+                }}
                 placeholder="Search articles"
                 aria-label="Search articles"
                 className="w-full pl-7 pr-4 py-3 bg-transparent text-[16px] text-fg placeholder:text-fg-muted outline-none border-b-[0.5px] border-border-soft focus:border-accent/50 transition-colors"
@@ -228,6 +242,8 @@ export default function BlogListing() {
                   activeCategory === null ? "var(--bg-base)" : "var(--text-secondary)",
                 border: "0.5px solid var(--border-faint)",
               }}
+              data-track-event="blog_category_filter"
+              data-track-category="all"
             >
               All
             </button>
@@ -244,6 +260,8 @@ export default function BlogListing() {
                     color: isActive ? "var(--bg-base)" : "var(--text-secondary)",
                     border: "0.5px solid var(--border-faint)",
                   }}
+                  data-track-event="blog_category_filter"
+                  data-track-category={cat}
                 >
                   {cat}
                   <span className="ml-1.5 opacity-70">{count}</span>
@@ -267,6 +285,7 @@ export default function BlogListing() {
                   setSearchQuery("");
                   setActiveCategory(null);
                 }}
+                data-track-event="blog_filters_clear"
               >
                 Clear
               </Button>

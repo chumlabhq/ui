@@ -50,17 +50,24 @@ const INITIAL_FORM: FormState = {
 
 const NUMBERED_STEPS: Step[] = ["role", "context", "budget", "details"];
 
+import { trackEvent } from "../../lib/analytics";
+
+// Onboarding events route through the shared analytics helper so they
+// also reach Microsoft Clarity (not just gtag). Coerce the loose
+// payload shape down to GA4's primitive-only param contract.
 function trackOnboardingEvent(
   event: string,
   payload: Record<string, unknown>,
 ) {
-  type AnalyticsWindow = Window & {
-    dataLayer?: Array<Record<string, unknown>>;
-    gtag?: (...args: unknown[]) => void;
-  };
-  const w = window as AnalyticsWindow;
-  if (Array.isArray(w.dataLayer)) w.dataLayer.push({ event, ...payload });
-  if (typeof w.gtag === "function") w.gtag("event", event, payload);
+  const params: Record<string, string | number | boolean | null | undefined> = {};
+  for (const [k, v] of Object.entries(payload)) {
+    if (v == null || typeof v === "string" || typeof v === "number" || typeof v === "boolean") {
+      params[k] = v as string | number | boolean | null | undefined;
+    } else {
+      params[k] = JSON.stringify(v);
+    }
+  }
+  trackEvent(event, params);
 }
 
 export default function PlaygroundOnboarding({

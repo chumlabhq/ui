@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop";
+import { useAnalytics } from "./hooks/useAnalytics";
 import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee";
 import Home from "./pages/Home";
 import OauthRedirect from "./pages/oauth/OauthRedirect";
@@ -47,6 +48,7 @@ import AiLlmDemo from "./pages/demo/AiLlmDemo";
 
 const App = () => {
   useScrollToTop();
+  useAnalytics();
 
   return (
     <BuyMeCoffeeProvider>

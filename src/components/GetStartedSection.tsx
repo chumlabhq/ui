@@ -200,6 +200,9 @@ export function GetStartedSection() {
                 as="a"
                 href="/introduction"
                 endIcon={<span aria-hidden="true">→</span>}
+                data-track-event="cta_click"
+                data-track-location="home_get_started"
+                data-track-target="read_docs"
               >
                 Read the full docs
               </Button>
@@ -210,6 +213,10 @@ export function GetStartedSection() {
                 href="https://github.com/chumlabhq/ui"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track-event="external_link_click"
+                data-track-location="home_get_started"
+                data-track-target="github_repo"
+                data-track-url="https://github.com/chumlabhq/ui"
                 startIcon={
                   <svg
                     width="13"

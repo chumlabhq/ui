@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { useCanonical, useJsonLd } from "../../hooks/useJsonLd";
 import { SiteHeader } from "../../components/SiteHeader";
+import { trackEvent } from "../../lib/analytics";
 
 interface NavItem {
   path: string;
@@ -222,6 +223,10 @@ const Demo = () => {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onBlur={(e) => {
+              const q = e.target.value.trim();
+              if (q) trackEvent("docs_search", { query: q });
+            }}
             placeholder="Search"
             aria-label="Search documentation"
             className="w-full pl-9 pr-9 py-2.5 rounded-md bg-bg-elevated border border-border-faint text-fg placeholder:text-fg-tertiary font-sans text-[13px] focus:outline-none focus:border-accent/40"
@@ -266,6 +271,8 @@ const Demo = () => {
                           ? "page"
                           : undefined
                       }
+                      data-track-event="docs_nav_click"
+                      data-track-target={item.path}
                     >
                       <span className="truncate">{item.displayName}</span>
                       {item.isNew && (
@@ -317,6 +324,7 @@ const Demo = () => {
           onClick={() => setSidebarOpen(true)}
           aria-label="Open documentation menu"
           className="lg:hidden fixed bottom-5 left-5 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-fg text-bg-base font-medium text-[13px] shadow-lg border border-border-faint"
+          data-track-event="docs_mobile_menu_open"
         >
           <svg
             width="14"

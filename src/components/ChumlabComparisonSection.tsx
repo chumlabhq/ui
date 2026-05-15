@@ -446,6 +446,9 @@ export function ChumlabComparisonSection() {
             href="/accordion"
             className="shrink-0"
             endIcon={<span aria-hidden="true">→</span>}
+            data-track-event="cta_click"
+            data-track-location="home_comparison"
+            data-track-target="browse_all_components"
           >
             Browse all components
           </Button>

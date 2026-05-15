@@ -175,6 +175,9 @@ export function CatalogSection() {
                         onMouseEnter={() => setActive(c.id)}
                         onFocus={() => setActive(c.id)}
                         className="component-row group w-full grid grid-cols-[20px_1fr_20px] sm:grid-cols-[24px_1fr_24px] gap-3 sm:gap-4 items-center px-4 sm:px-5 py-4 sm:py-3.5 rounded-md border-b border-cl-border text-left transition-colors duration-150 hover:bg-cl-text/[0.02] data-[active=true]:bg-cl-accent/[0.04] cursor-pointer min-h-[60px] sm:min-h-[56px]"
+                        data-track-event="catalog_row_click"
+                        data-track-location="home_catalog"
+                        data-track-target={c.id}
                       >
                         <span className="text-cl-text-tertiary group-data-[active=true]:text-cl-accent transition-colors flex items-center justify-center">
                           <c.Icon />
@@ -206,6 +209,9 @@ export function CatalogSection() {
                   as="a"
                   href="/accordion"
                   className="group"
+                  data-track-event="cta_click"
+                  data-track-location="home_catalog"
+                  data-track-target="explore_full_catalog"
                   endIcon={
                     <span
                       aria-hidden
@@ -431,6 +437,9 @@ function PreviewCard({
                   ? "border-[#4ade80]/40 text-[#4ade80] cursor-pointer"
                   : "border-cl-border text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover cursor-pointer"
             }`}
+            data-track-event={isActive ? "catalog_copy_import" : undefined}
+            data-track-location="home_catalog_specimen"
+            data-track-target={entry.id}
           >
             {isActive && copyState === "copied" ? (
               <svg
@@ -470,6 +479,9 @@ function PreviewCard({
                 ? "text-cl-text-secondary hover:text-cl-text hover:border-cl-border-input-hover"
                 : "text-cl-text-disabled pointer-events-none"
             }`}
+            data-track-event={isActive ? "catalog_open_docs" : undefined}
+            data-track-location="home_catalog_specimen"
+            data-track-target={entry.id}
           >
             <svg
               width="10"
