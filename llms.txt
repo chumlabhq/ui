@@ -66,3 +66,20 @@ Never pass a string to `error` — it is not `error="message"`.
 - Navigation: Breadcrumb, Pagination, Stepper
 - Overlay: Modal, Drawer, Tooltip, Toast
 - Display: Avatar, CountryFlag, Loader
+
+### Selection picker rubric
+- Single value, short static list (≤20): `Dropdown`. Short list always visible: `RadioButton`.
+- Single value, long list or async: `SearchableDropdown`.
+- Multiple values, short static list: `MultiSelectDropdown`. Multiple values, long/async: `MultiSelectSearchableDropdown`.
+- Hierarchical (Category → Subcategory): `CascadingDropdown`. Value is a `Record<parent, string | string[]>` map, NOT a string.
+
+### Common mistakes (AVOID)
+- ✗ `error="message"` — `error` is boolean. Use `error errorMessage="message"`.
+- ✗ Mixing `value` + `defaultValue` — pick one. Same for `open` + `defaultOpen`.
+- ✗ `onChange` / `onSelect` / `onPageChange` / `onTabChange` / `onStepChange` / `onCheckedChange` — always `onValueChange`. Open state always `onOpenChange`.
+- ✗ Tooltip `placement` — use `side`. Drawer `side` — use `direction`.
+- ✗ Slider `range` prop — pass `value={[min, max]}`.
+- ✗ CascadingDropdown value as string — it's a map keyed by parent value (use `"root"` for no-children selections).
+- ✗ Stepper `activeStep`/`currentStep` — use `value` (zero-based index).
+
+For full prop tables, advanced usage, and per-component examples, see llms-full.txt.
