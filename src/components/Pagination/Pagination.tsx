@@ -35,13 +35,24 @@ function computeDropdownCoords(
 ): DropdownCoords {
   const rect = buttonEl.getBoundingClientRect();
   const dropdownRect = dropdownEl.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const MARGIN = 8;
+
+  let top =
+    direction === "up"
+      ? rect.top - dropdownRect.height - gap
+      : rect.bottom + gap;
+  let left = rect.left;
+
+  // Keep the dropdown inside the viewport when the page-size selector sits
+  // near a viewport edge (common for right-aligned pagination on narrow widths).
+  left = Math.max(MARGIN, Math.min(left, vw - dropdownRect.width - MARGIN));
+  top = Math.max(MARGIN, Math.min(top, vh - dropdownRect.height - MARGIN));
 
   return {
-    top:
-      direction === "up"
-        ? rect.top - dropdownRect.height - gap
-        : rect.bottom + gap,
-    left: rect.left,
+    top,
+    left,
     minWidth: rect.width,
   };
 }

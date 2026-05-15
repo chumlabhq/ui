@@ -37,17 +37,37 @@ function computeDropdownCoords(
 ): DropdownCoords {
   const rect = buttonEl.getBoundingClientRect();
   const dropdownRect = dropdownEl.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const MARGIN = 8;
 
+  let top: number;
+  let left: number;
   switch (position) {
     case "top":
-      return { top: rect.top - dropdownRect.height - gap, left: rect.left };
+      top = rect.top - dropdownRect.height - gap;
+      left = rect.left;
+      break;
     case "bottom":
-      return { top: rect.bottom + gap, left: rect.left };
+      top = rect.bottom + gap;
+      left = rect.left;
+      break;
     case "left":
-      return { top: rect.top, left: rect.left - dropdownRect.width - gap };
+      top = rect.top;
+      left = rect.left - dropdownRect.width - gap;
+      break;
     case "right":
-      return { top: rect.top, left: rect.right + gap };
+      top = rect.top;
+      left = rect.right + gap;
+      break;
   }
+
+  // Clamp to viewport so the dropdown never bleeds past an edge when the
+  // trigger sits near a boundary (e.g. last breadcrumb on a narrow window).
+  left = Math.max(MARGIN, Math.min(left, vw - dropdownRect.width - MARGIN));
+  top = Math.max(MARGIN, Math.min(top, vh - dropdownRect.height - MARGIN));
+
+  return { top, left };
 }
 
 // ─── Dropdown Item ─────────────────────────────────────────────────────────

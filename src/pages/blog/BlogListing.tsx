@@ -177,7 +177,7 @@ export default function BlogListing() {
     <div className="relative min-h-screen bg-bg-base text-fg">
       <SiteHeader />
 
-      <main className="pt-[60px]">
+      <main className="pt-[var(--header-height)]">
         <section className="max-w-[1280px] mx-auto px-5 sm:px-8 pt-20 sm:pt-28 pb-10">
           <Reveal delay={0} translateY={12} duration={200}>
             <h1

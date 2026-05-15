@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { Table, exportTableToCSV } from "../../components/Table";
+import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
 import { Pagination } from "../../components/Pagination";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { SortingState } from "../../components/Table";
@@ -1181,6 +1182,8 @@ const TableDemo = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [pinnedCols, setPinnedCols] = useState<string[]>([]);
+  const [starPinnedCols, setStarPinnedCols] = useState<string[]>(["name"]);
+  const [sepPinnedCols, setSepPinnedCols] = useState<string[]>(["name", "email"]);
 
   // State for dark/modern pagination
   const [darkCurrentPage, setDarkCurrentPage] = useState(1);
@@ -1384,12 +1387,30 @@ const TableDemo = () => {
     setDarkCurrentPage(1);
   };
 
+  const togglePinnedCol = (
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    columnId: string,
+    isPinned: boolean,
+  ) => {
+    setter((prev) => {
+      if (isPinned) {
+        // Dedupe — the Table fires isPinned=true on every click of an
+        // unpinned column, so without this guard a hardcoded-pinned
+        // demo (where prev never updates) would accumulate duplicates.
+        return prev.includes(columnId) ? prev : [...prev, columnId];
+      }
+      return prev.filter((id) => id !== columnId);
+    });
+  };
+
   const handlePinColumn = (columnId: string, isPinned: boolean) => {
-    if (isPinned) {
-      setPinnedCols((prev) => [...prev, columnId]);
-    } else {
-      setPinnedCols((prev) => prev.filter((id) => id !== columnId));
-    }
+    togglePinnedCol(setPinnedCols, columnId, isPinned);
+  };
+  const handleStarPinColumn = (columnId: string, isPinned: boolean) => {
+    togglePinnedCol(setStarPinnedCols, columnId, isPinned);
+  };
+  const handleSepPinColumn = (columnId: string, isPinned: boolean) => {
+    togglePinnedCol(setSepPinnedCols, columnId, isPinned);
   };
 
   // Floating actions handlers - state is set directly, FloatingActions handles delay internally
@@ -1836,6 +1857,16 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               }
             }, [dotHoverIdx, dotMenuState]);
 
+            // Lock body scroll while the popup is open — the menu is
+            // portal-rendered at a fixed top/left captured from the trigger
+            // rect, so scrolling the page after open would leave the menu
+            // floating away from its anchor row.
+            React.useEffect(() => {
+              if (!dotMenuState) return;
+              acquireScrollLock();
+              return () => releaseScrollLock();
+            }, [dotMenuState]);
+
             const actionsColumns: ColumnDef<User>[] = useMemo(
               () => [
                 {
@@ -2221,8 +2252,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <Table
             columns={columns}
             data={sampleData.slice(0, 5)}
-            pinnedColumns={["name"]}
-            onPinColumn={handlePinColumn}
+            pinnedColumns={starPinnedCols}
+            onPinColumn={handleStarPinColumn}
             maxPinnedColumns={3}
             PinIcon={({ className }) => (
               <svg
@@ -2283,8 +2314,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <Table
             columns={columns}
             data={sampleData.slice(0, 5)}
-            pinnedColumns={["name", "email"]}
-            onPinColumn={handlePinColumn}
+            pinnedColumns={sepPinnedCols}
+            onPinColumn={handleSepPinColumn}
             maxPinnedColumns={3}
             classes={{
               ...s,

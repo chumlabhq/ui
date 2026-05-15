@@ -288,7 +288,7 @@ const Demo = () => {
     <div className="docs-surface min-h-screen flex flex-col bg-bg-base text-fg">
       <SiteHeader />
 
-      <div className="flex-1 flex pt-[60px] min-h-0">
+      <div className="flex-1 flex pt-[var(--header-height)] min-h-0">
         {/* Mobile sidebar drawer */}
         {sidebarOpen && (
           <div
@@ -297,7 +297,7 @@ const Demo = () => {
           />
         )}
         <aside
-          className={`lg:hidden fixed top-[60px] bottom-0 left-0 z-50 w-[280px] max-w-[85vw] bg-bg-base border-r border-border-faint transition-transform duration-300 ease-out ${
+          className={`lg:hidden fixed top-[var(--header-height)] bottom-0 left-0 z-50 w-[280px] max-w-[85vw] bg-bg-base border-r border-border-faint transition-transform duration-300 ease-out ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -306,7 +306,7 @@ const Demo = () => {
 
         {/* Desktop sidebar */}
         <aside
-          className="hidden lg:block sticky top-[60px] h-[calc(100vh-60px)] w-[260px] xl:w-[280px] shrink-0 border-r border-border-faint bg-bg-base"
+          className="hidden lg:block sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] w-[260px] xl:w-[280px] shrink-0 border-r border-border-faint bg-bg-base"
         >
           {sidebarContent}
         </aside>

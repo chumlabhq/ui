@@ -291,7 +291,7 @@ export default function BlogDetail() {
 
       <SiteHeader />
 
-      <main className="pt-[60px]">
+      <main className="pt-[var(--header-height)]">
         <article className="relative">
           {/* Top utility — back link */}
           <div className="max-w-[920px] mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-12 sm:pt-14 lg:pt-16">

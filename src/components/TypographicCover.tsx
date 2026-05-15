@@ -37,21 +37,25 @@ export function TypographicCover({
   return (
     <div
       className={`relative w-full h-full flex flex-col justify-end p-5 sm:p-7 overflow-hidden ${className}`}
-      style={{ background: bg, color: fg }}
+      style={{
+        background: bg,
+        color: fg,
+        containerType: "inline-size",
+      }}
     >
       {eyebrow && (
         <div
-          className="absolute top-5 left-5 sm:top-7 sm:left-7 text-[10.5px] tracking-[0.14em] uppercase font-sans"
+          className="absolute top-5 left-5 sm:top-7 sm:left-7 text-[10.5px] tracking-[0.14em] uppercase font-sans z-10"
           style={{ color: fg, opacity: 0.7 }}
         >
           {eyebrow}
         </div>
       )}
       <div
-        className="font-serif italic leading-[0.95] tracking-[-0.02em]"
+        className="font-serif italic leading-[1.15] tracking-[-0.02em]"
         style={{
           color: fg,
-          fontSize: "clamp(28px, 5vw, 44px)",
+          fontSize: "clamp(22px, 11cqi, 42px)",
           textWrap: "balance" as React.CSSProperties["textWrap"],
         }}
       >

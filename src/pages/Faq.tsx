@@ -233,7 +233,7 @@ const Faq = () => {
     <div className="relative min-h-screen bg-bg-base text-fg">
       <SiteHeader />
 
-      <main className="pt-[60px]">
+      <main className="pt-[var(--header-height)]">
         {/* Hero — H1 + subtitle + search. Single-element max-width +
             padding so the left edge aligns with the category and list
             sections below. */}

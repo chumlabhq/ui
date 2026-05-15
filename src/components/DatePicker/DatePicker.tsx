@@ -697,12 +697,29 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           }
         }
 
-        setCalendarPos({
-          top: position === "top"
+        const calendarWidth = calendarRef.current?.offsetWidth ?? 0;
+        const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+        const MARGIN = 8;
+
+        let top =
+          position === "top"
             ? rect.top - calendarHeight - dropdownGap
-            : rect.bottom + dropdownGap,
-          left: rect.left,
-        });
+            : rect.bottom + dropdownGap;
+        let left = rect.left;
+
+        // Clamp the calendar inside the viewport so it never bleeds past
+        // an edge when the trigger sits near a boundary (right-aligned
+        // form, last cell of a wide table, narrow mobile width, etc.).
+        left = Math.max(
+          MARGIN,
+          Math.min(left, viewportWidth - calendarWidth - MARGIN),
+        );
+        top = Math.max(
+          MARGIN,
+          Math.min(top, viewportHeight - calendarHeight - MARGIN),
+        );
+
+        setCalendarPos({ top, left });
       };
 
       updatePos();

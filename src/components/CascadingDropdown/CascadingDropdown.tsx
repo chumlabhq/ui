@@ -485,11 +485,55 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       if (!triggerRef.current) return;
       const rect = triggerRef.current.getBoundingClientRect();
       const menuHeight = menuRef.current?.offsetHeight ?? 0;
-      setMenuCoords({
-        top: dropdownPosition === "top"
+      const viewportHeight = window.innerHeight;
+      const SAFE_MARGIN = 8;
+
+      const spaceBelow = viewportHeight - rect.bottom - dropdownGap;
+      const spaceAbove = rect.top - dropdownGap;
+
+      // Honour the requested side, but flip when the preferred side can't
+      // hold the menu and the opposite side has more room — keeps the menu
+      // within the viewport instead of running off the top or bottom edge.
+      let effectivePosition = dropdownPosition;
+      if (
+        dropdownPosition === "bottom" &&
+        spaceBelow < menuHeight &&
+        spaceAbove > spaceBelow
+      ) {
+        effectivePosition = "top";
+      } else if (
+        dropdownPosition === "top" &&
+        spaceAbove < menuHeight &&
+        spaceBelow > spaceAbove
+      ) {
+        effectivePosition = "bottom";
+      }
+
+      let top =
+        effectivePosition === "top"
           ? rect.top - menuHeight - dropdownGap
-          : rect.bottom + dropdownGap,
-        left: rect.left,
+          : rect.bottom + dropdownGap;
+
+      // Final clamp: never let the menu extend past either viewport edge.
+      const maxTop = Math.max(
+        SAFE_MARGIN,
+        viewportHeight - menuHeight - SAFE_MARGIN,
+      );
+      top = Math.max(SAFE_MARGIN, Math.min(top, maxTop));
+
+      // Horizontal clamp — same idea for the left edge so a trigger near
+      // the right viewport edge doesn't push the menu off-screen.
+      const viewportWidth = window.innerWidth;
+      const menuWidth = menuRef.current?.offsetWidth ?? rect.width;
+      let left = rect.left;
+      left = Math.max(
+        SAFE_MARGIN,
+        Math.min(left, viewportWidth - menuWidth - SAFE_MARGIN),
+      );
+
+      setMenuCoords({
+        top,
+        left,
         width: rect.width,
       });
     }, [dropdownPosition, dropdownGap]);
