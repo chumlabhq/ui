@@ -37,7 +37,7 @@ type RazorpayInstance = {
   open: () => void;
   on: (
     event: "payment.failed",
-    cb: (resp: { error?: { description?: string } }) => void,
+    cb: (resp: { error?: { description?: string; code?: string } }) => void,
   ) => void;
 };
 type RazorpayConstructor = new (options: RazorpayOptions) => RazorpayInstance;
