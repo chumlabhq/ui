@@ -1075,7 +1075,7 @@ function SuccessStep({
       </div>
 
       <h2
-        className="font-serif italic text-fg leading-[0.95] mb-4"
+        className="font-serif italic text-fg leading-[1.15] mb-4"
         style={{ fontSize: 48, letterSpacing: "-0.025em" }}
       >
         Welcome in, {firstName}.
