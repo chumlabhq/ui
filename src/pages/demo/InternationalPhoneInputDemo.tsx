@@ -147,6 +147,7 @@ const InternationalPhoneInputDemo = () => {
 
   const [customSelectedValue, setCustomSelectedValue] = useState<PhoneNumberData | undefined>();
   const [customIconValue, setCustomIconValue] = useState<PhoneNumberData | undefined>();
+  const [circleCheckIconValue, setCircleCheckIconValue] = useState<PhoneNumberData | undefined>();
   const [noIconValue, setNoIconValue] = useState<PhoneNumberData | undefined>();
   const [purpleFocusValue, setPurpleFocusValue] = useState<PhoneNumberData | undefined>();
   const [greenFocusValue, setGreenFocusValue] = useState<PhoneNumberData | undefined>();
@@ -776,8 +777,8 @@ const InternationalPhoneInputDemo = () => {
                 <div className="mt-2">
                   <InternationalPhoneInput
                     aria-label="Circle check demo"
-                    value={customIconValue}
-                    onValueChange={setCustomIconValue}
+                    value={circleCheckIconValue}
+                    onValueChange={setCircleCheckIconValue}
                     placeholder="Enter phone number"
                     selectedIcon={
                       <CircleCheckIcon className="w-4 h-4 shrink-0 text-cl-success" />

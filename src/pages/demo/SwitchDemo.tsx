@@ -99,8 +99,11 @@ const SwitchDemo = () => {
   const [themeSwitch, setThemeSwitch] = useState(false);
   const [colorSwitch, setColorSwitch] = useState(false);
   const [sizeSwitch, setSizeSwitch] = useState(false);
+  const [sizeSwitchSmall, setSizeSwitchSmall] = useState(false);
+  const [sizeSwitchLarge, setSizeSwitchLarge] = useState(false);
   const [cssVarSwitch, setCssVarSwitch] = useState(false);
   const [animationSwitch, setAnimationSwitch] = useState(false);
+  const [animationSwitchBouncy, setAnimationSwitchBouncy] = useState(false);
   const [renderPropsSwitch, setRenderPropsSwitch] = useState(false);
   const [focusBlurSwitch, setFocusBlurSwitch] = useState(false);
   const [focusLog, setFocusLog] = useState<string[]>([]);
@@ -388,8 +391,8 @@ const SwitchDemo = () => {
           <div className="space-y-4">
             <Switch
               label="Small switch"
-              checked={sizeSwitch}
-              onValueChange={setSizeSwitch}
+              checked={sizeSwitchSmall}
+              onValueChange={setSizeSwitchSmall}
               classes={{
                 ...c.switch,
                 label: `text-xs font-medium text-cl-text cursor-pointer`,
@@ -408,8 +411,8 @@ const SwitchDemo = () => {
             />
             <Switch
               label="Large switch"
-              checked={sizeSwitch}
-              onValueChange={setSizeSwitch}
+              checked={sizeSwitchLarge}
+              onValueChange={setSizeSwitchLarge}
               classes={{
                 ...c.switch,
                 label: `text-base font-medium text-cl-text cursor-pointer`,
@@ -492,8 +495,8 @@ const SwitchDemo = () => {
             />
             <Switch
               label="Bouncy transition"
-              checked={animationSwitch}
-              onValueChange={setAnimationSwitch}
+              checked={animationSwitchBouncy}
+              onValueChange={setAnimationSwitchBouncy}
               transitionDuration={300}
               transitionTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
               classes={c.switch}
