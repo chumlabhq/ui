@@ -119,6 +119,16 @@ export interface GenerationEventPayload {
   message?: string;
 }
 
+// Payload of the verify-stage SSE events (gate results and fix rounds).
+export interface VerifyEventPayload {
+  round?: number;
+  pass?: boolean;
+  fixing?: boolean;
+  exhausted?: boolean;
+  typecheckUnavailable?: boolean;
+  errors?: VerifyError[];
+}
+
 export type PlaygroundOnboardingStatus =
   | "waiting"
   | "invited"

@@ -18,6 +18,7 @@ import type {
   PipelineEvent,
   PlaygroundGateInfo,
   VerifyError,
+  VerifyEventPayload,
 } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -80,6 +81,53 @@ function SignInCard() {
 
 const messageKey = (role: string, content: string) => `${role}\u0000${content}`;
 
+type VerifyUIState =
+  | { phase: "checking"; round: number }
+  | { phase: "fixing"; round: number; errors: VerifyError[] }
+  | { phase: "passed"; afterFix: boolean; typecheckUnavailable?: boolean }
+  | { phase: "warnings"; errors: VerifyError[] };
+
+function VerifyStrip({ state }: { state: VerifyUIState }) {
+  if (state.phase === "checking") {
+    return (
+      <p className="text-xs text-fg-tertiary">
+        Verifying · lint + types{state.round > 0 ? ` · fix round ${state.round}/2` : ""}...
+      </p>
+    );
+  }
+  if (state.phase === "fixing") {
+    return (
+      <p className="text-xs text-accent">
+        Fixing {state.errors.length} issue{state.errors.length === 1 ? "" : "s"}
+        {state.round > 0 ? ` · round ${state.round}/2` : ""}...
+      </p>
+    );
+  }
+  if (state.phase === "passed") {
+    return (
+      <p className="text-xs text-fg-tertiary">
+        Checks passed{state.afterFix ? " after auto-fix" : ""}
+        {state.typecheckUnavailable ? " · types unavailable, skipped" : ""}
+      </p>
+    );
+  }
+  return (
+    <div className="text-xs text-fg-secondary">
+      <p>
+        Delivered with {state.errors.length} unresolved issue
+        {state.errors.length === 1 ? "" : "s"} after 2 fix rounds:
+      </p>
+      <ul className="mt-1 space-y-0.5 text-fg-tertiary">
+        {state.errors.slice(0, 3).map((error, i) => (
+          <li key={i} className="truncate">
+            [{error.kind}] {error.loc ? `${error.loc} ` : ""}{error.message}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function Playground() {
   const { theme } = useTheme();
   const dispatch = useAppDispatch();
@@ -93,19 +141,60 @@ export default function Playground() {
   const [streamText, setStreamText] = useState("");
   const [streamError, setStreamError] = useState<string | null>(null);
   const [renderError, setRenderError] = useState<string | null>(null);
+  const [verifyState, setVerifyState] = useState<VerifyUIState | null>(null);
   const streamRef = useRef("");
+  const runIdRef = useRef<string | null>(null);
+  // The just-delivered code may trigger one client-initiated render fix;
+  // the server's per-run round budget is the real bound.
+  const fixableRef = useRef(false);
+  const fixModeRef = useRef(false);
 
   const onEvent = useCallback((event: PipelineEvent) => {
-    const payload = (event.payload ?? {}) as GenerationEventPayload;
-    if (event.status === "start" && payload.chatId) {
-      setActiveChatId((current) => current ?? payload.chatId ?? null);
+    runIdRef.current = event.runId;
+
+    if (event.stage === "develop") {
+      const payload = (event.payload ?? {}) as GenerationEventPayload;
+      if (event.status === "start") {
+        // Each fix round streams a full replacement file.
+        streamRef.current = "";
+        setStreamText("");
+        if (payload.chatId) {
+          setActiveChatId((current) => current ?? payload.chatId ?? null);
+        }
+      }
+      if (event.status === "delta" && payload.text) {
+        streamRef.current += payload.text;
+        setStreamText(streamRef.current);
+      }
+      if (event.status === "error") {
+        setStreamError(payload.message || "Generation failed");
+      }
+      return;
     }
-    if (event.status === "delta" && payload.text) {
-      streamRef.current += payload.text;
-      setStreamText(streamRef.current);
-    }
-    if (event.status === "error") {
-      setStreamError(payload.message || "Generation failed");
+
+    if (event.stage === "verify") {
+      const payload = (event.payload ?? {}) as VerifyEventPayload;
+      if (event.status === "start") {
+        setVerifyState({ phase: "checking", round: payload.round ?? 0 });
+      }
+      if (event.status === "error" && payload.fixing) {
+        setVerifyState({
+          phase: "fixing",
+          round: payload.round ?? 1,
+          errors: payload.errors ?? [],
+        });
+      }
+      if (event.status === "done") {
+        setVerifyState(
+          payload.pass
+            ? {
+                phase: "passed",
+                afterFix: (payload.round ?? 0) > 0,
+                typecheckUnavailable: payload.typecheckUnavailable,
+              }
+            : { phase: "warnings", errors: payload.errors ?? [] }
+        );
+      }
     }
   }, []);
 
@@ -114,12 +203,28 @@ export default function Playground() {
     streamRef.current = "";
     setStreamText("");
     if (text) {
-      setPending((prev) => [
-        ...prev,
-        { id: `assistant-${Date.now()}`, role: "assistant", content: text },
-      ]);
+      if (fixModeRef.current) {
+        // The fix replaces the failing assistant turn, mirroring the backend.
+        setPending((prev) => {
+          const next = [...prev];
+          for (let i = next.length - 1; i >= 0; i--) {
+            if (next[i].role === "assistant") {
+              next[i] = { id: `assistant-${Date.now()}`, role: "assistant", content: text };
+              return next;
+            }
+          }
+          return [...next, { id: `assistant-${Date.now()}`, role: "assistant", content: text }];
+        });
+      } else {
+        setPending((prev) => [
+          ...prev,
+          { id: `assistant-${Date.now()}`, role: "assistant", content: text },
+        ]);
+      }
       setRenderError(null);
+      fixableRef.current = true;
     }
+    fixModeRef.current = false;
     dispatch(playgroundApi.util.invalidateTags(["Chat"]));
   }, [dispatch]);
 
@@ -159,8 +264,11 @@ export default function Playground() {
   const handleSubmit = (prompt: string) => {
     setPending((prev) => [...prev, { id: `user-${Date.now()}`, role: "user", content: prompt }]);
     streamRef.current = "";
+    fixableRef.current = false;
+    fixModeRef.current = false;
     setStreamText("");
     setStreamError(null);
+    setVerifyState(null);
     void connect(`${API_BASE_URL}/playground/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -168,25 +276,48 @@ export default function Playground() {
     });
   };
 
+  const handleRenderError = (err: VerifyError) => {
+    setRenderError(err.message);
+    const runId = runIdRef.current;
+    // Auto-fix only the run that just delivered, and never re-enter a run
+    // the server already delivered with warnings.
+    if (!fixableRef.current || !runId || streaming) return;
+    if (verifyState?.phase === "warnings") return;
+    fixableRef.current = false;
+    fixModeRef.current = true;
+    setVerifyState({ phase: "fixing", round: 0, errors: [err] });
+    void connect(`${API_BASE_URL}/playground/generate/fix`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ runId, error: err }),
+    });
+  };
+
   const startNewChat = () => {
     disconnect();
     streamRef.current = "";
+    fixableRef.current = false;
+    fixModeRef.current = false;
     setActiveChatId(null);
     setPending([]);
     setStreamText("");
     setStreamError(null);
     setRenderError(null);
+    setVerifyState(null);
   };
 
   const selectChat = (chatId: string) => {
     if (chatId === activeChatId) return;
     disconnect();
     streamRef.current = "";
+    fixableRef.current = false;
+    fixModeRef.current = false;
     setActiveChatId(chatId);
     setPending([]);
     setStreamText("");
     setStreamError(null);
     setRenderError(null);
+    setVerifyState(null);
   };
 
   if (!meLoading && !authedUser) {
@@ -237,9 +368,14 @@ export default function Playground() {
             notice={
               gate ? (
                 <GateNotice gate={gate} />
-              ) : errorText ? (
-                <p className="text-sm text-fg-secondary">Generation failed · {errorText}</p>
-              ) : null
+              ) : (
+                <>
+                  {verifyState && <VerifyStrip state={verifyState} />}
+                  {errorText && (
+                    <p className="text-sm text-fg-secondary">Generation failed · {errorText}</p>
+                  )}
+                </>
+              )
             }
           />
 
@@ -248,7 +384,7 @@ export default function Playground() {
               code={previewCode}
               theme={theme}
               onRendered={() => setRenderError(null)}
-              onRenderError={(err: VerifyError) => setRenderError(err.message)}
+              onRenderError={handleRenderError}
               className="rule min-h-0 w-full flex-1 rounded-lg"
             />
             <p className="text-xs text-fg-tertiary">

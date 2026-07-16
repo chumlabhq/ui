@@ -57,7 +57,10 @@ export function useGenerationStream({
               message?: string;
               details?: PlaygroundGateInfo;
             };
-            if (body.details?.code) setGate(body.details);
+            const code = body.details?.code;
+            if (code === "not_invited" || code === "over_quota") {
+              setGate(body.details ?? null);
+            }
             if (body.message) message = body.message;
           } catch {
             // Non-JSON error body; keep the status-based message.
