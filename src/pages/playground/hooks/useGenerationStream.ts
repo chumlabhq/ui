@@ -10,12 +10,14 @@ export type GenerationStreamStatus =
 
 interface UseGenerationStreamOptions {
   onEvent?: (event: PipelineEvent) => void;
+  onDone?: () => void;
 }
 
 // The generation stream is raw fetch + reader by design: RTK Query buffers
 // whole responses and cannot surface SSE deltas as they arrive.
 export function useGenerationStream({
   onEvent,
+  onDone,
 }: UseGenerationStreamOptions = {}) {
   const [status, setStatus] = useState<GenerationStreamStatus>("idle");
   const [events, setEvents] = useState<PipelineEvent[]>([]);
@@ -23,7 +25,9 @@ export function useGenerationStream({
   const [gate, setGate] = useState<PlaygroundGateInfo | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const onEventRef = useRef(onEvent);
+  const onDoneRef = useRef(onDone);
   onEventRef.current = onEvent;
+  onDoneRef.current = onDone;
 
   const disconnect = useCallback(() => {
     abortRef.current?.abort();
@@ -89,6 +93,7 @@ export function useGenerationStream({
             onEventRef.current?.(event);
           }
         }
+        onDoneRef.current?.();
         setStatus("done");
       } catch (err) {
         if (controller.signal.aborted) {

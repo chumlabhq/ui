@@ -112,6 +112,13 @@ export interface VerifyError {
   loc?: string;
 }
 
+// Payload of the develop-stage SSE events.
+export interface GenerationEventPayload {
+  text?: string;
+  chatId?: string;
+  message?: string;
+}
+
 export type PlaygroundOnboardingStatus =
   | "waiting"
   | "invited"

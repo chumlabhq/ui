@@ -28,7 +28,9 @@ export default function OauthRedirect() {
       try {
         await getMe().unwrap();
         const flow = params.get("flow") || "";
-        if (flow === "playground-onboard") {
+        if (flow === "playground") {
+          navigate("/playground", { replace: true });
+        } else if (flow === "playground-onboard") {
           navigate("/?openPlayground=1", { replace: true });
         } else {
           navigate("/", { replace: true });
