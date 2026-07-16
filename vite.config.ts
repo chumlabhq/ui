@@ -80,6 +80,8 @@ export default defineConfig(({ mode }) => {
         //     and the iframe it opens (api.razorpay.com).
         //   * Google OAuth - we use redirect-based flow so no script load,
         //     but `connect-src https:` is left wide-open for now.
+        //   * Local chumlab-be (http://localhost:5000) - dev-server-only
+        //     headers, so this never reaches production responses.
         // X-Frame-Options: DENY above is overridden by frame-ancestors here
         // (CSP wins over the legacy header on supporting browsers).
         "Content-Security-Policy":
@@ -88,7 +90,7 @@ export default defineConfig(({ mode }) => {
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
           "font-src https://fonts.gstatic.com; " +
           "img-src 'self' https: data:; " +
-          "connect-src 'self' https:; " +
+          "connect-src 'self' https: http://localhost:5000; " +
           "frame-src https://api.razorpay.com https://checkout.razorpay.com; " +
           "frame-ancestors 'none'",
         "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
