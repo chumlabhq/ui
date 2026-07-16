@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import type { PipelineEvent } from "../types";
+import type { PipelineEvent, PlaygroundGateInfo } from "../types";
 
 export type GenerationStreamStatus =
   | "idle"
@@ -20,6 +20,7 @@ export function useGenerationStream({
   const [status, setStatus] = useState<GenerationStreamStatus>("idle");
   const [events, setEvents] = useState<PipelineEvent[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [gate, setGate] = useState<PlaygroundGateInfo | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const onEventRef = useRef(onEvent);
   onEventRef.current = onEvent;
@@ -36,6 +37,7 @@ export function useGenerationStream({
       abortRef.current = controller;
       setEvents([]);
       setError(null);
+      setGate(null);
       setStatus("connecting");
 
       try {
@@ -45,7 +47,18 @@ export function useGenerationStream({
           signal: controller.signal,
         });
         if (!res.ok || !res.body) {
-          throw new Error(`Stream request failed (${res.status})`);
+          let message = `Stream request failed (${res.status})`;
+          try {
+            const body = (await res.json()) as {
+              message?: string;
+              details?: PlaygroundGateInfo;
+            };
+            if (body.details?.code) setGate(body.details);
+            if (body.message) message = body.message;
+          } catch {
+            // Non-JSON error body; keep the status-based message.
+          }
+          throw new Error(message);
         }
 
         setStatus("streaming");
@@ -89,5 +102,5 @@ export function useGenerationStream({
     [disconnect]
   );
 
-  return { status, events, error, connect, disconnect };
+  return { status, events, error, gate, connect, disconnect };
 }

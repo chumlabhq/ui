@@ -112,6 +112,37 @@ export interface VerifyError {
   loc?: string;
 }
 
+export type PlaygroundOnboardingStatus =
+  | "waiting"
+  | "invited"
+  | "onboarded"
+  | "rejected";
+
+// `details` payload of the 403/429 gate responses (requirePlaygroundAccess,
+// perUserQuota) - what Playground.tsx renders when access is denied.
+export interface PlaygroundGateInfo {
+  code: "not_invited" | "over_quota";
+  position?: number | null;
+  estimatedWait?: string | null;
+  limit?: number;
+  used?: number;
+  resetsAt?: string;
+}
+
+export interface PlaygroundOnboardingRecord {
+  _id: string;
+  user: { name: string; email: string; initials?: string; picture?: string };
+  role: PlaygroundRole;
+  contextLabel: string;
+  budgetLabel: string;
+  organization: string;
+  position: number;
+  status: PlaygroundOnboardingStatus;
+  invitedAt: string | null;
+  onboardedAt?: string | null;
+  createdAt: string;
+}
+
 export interface AssetUploadResponse {
   success: boolean;
   url: string;
