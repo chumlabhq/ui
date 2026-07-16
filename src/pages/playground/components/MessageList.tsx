@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import CodeCard from "./CodeCard";
 import { parseAssistantText } from "./assistantText";
 
@@ -22,7 +22,12 @@ function AssistantMessage({ message }: { message: ChatDisplayMessage }) {
   );
 }
 
-export default function MessageList({ messages }: { messages: ChatDisplayMessage[] }) {
+interface MessageListProps {
+  messages: ChatDisplayMessage[];
+  footer?: ReactNode;
+}
+
+export default function MessageList({ messages, footer }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   // Direct scrollTop instead of scrollTo({behavior:"smooth"}) - the smooth
@@ -30,7 +35,7 @@ export default function MessageList({ messages }: { messages: ChatDisplayMessage
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages]);
+  }, [messages, footer]);
 
   return (
     <div ref={scrollRef} className="flex-1 space-y-6 overflow-y-auto pr-1">
@@ -50,6 +55,7 @@ export default function MessageList({ messages }: { messages: ChatDisplayMessage
           <AssistantMessage key={message.id} message={message} />
         )
       )}
+      {footer}
     </div>
   );
 }

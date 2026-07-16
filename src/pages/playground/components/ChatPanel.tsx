@@ -7,6 +7,7 @@ interface ChatPanelProps {
   onSubmit: (prompt: string) => void;
   disabled?: boolean;
   notice?: ReactNode;
+  verifyIndicator?: ReactNode;
 }
 
 export default function ChatPanel({
@@ -14,10 +15,11 @@ export default function ChatPanel({
   onSubmit,
   disabled = false,
   notice,
+  verifyIndicator,
 }: ChatPanelProps) {
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col gap-4">
-      <MessageList messages={messages} />
+      <MessageList messages={messages} footer={verifyIndicator} />
       {notice}
       <PromptInput onSubmit={onSubmit} disabled={disabled} />
     </div>

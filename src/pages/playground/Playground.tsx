@@ -10,6 +10,10 @@ import {
 } from "../../redux/api/playgroundApi";
 import ChatPanel from "./components/ChatPanel";
 import PreviewFrame from "./components/PreviewFrame";
+import VerifyIndicator, {
+  type RenderGateStatus,
+  type VerifyUIState,
+} from "./components/VerifyIndicator";
 import { parseAssistantText } from "./components/assistantText";
 import type { ChatDisplayMessage } from "./components/MessageList";
 import { useGenerationStream } from "./hooks/useGenerationStream";
@@ -81,53 +85,6 @@ function SignInCard() {
 
 const messageKey = (role: string, content: string) => `${role}\u0000${content}`;
 
-type VerifyUIState =
-  | { phase: "checking"; round: number }
-  | { phase: "fixing"; round: number; errors: VerifyError[] }
-  | { phase: "passed"; afterFix: boolean; typecheckUnavailable?: boolean }
-  | { phase: "warnings"; errors: VerifyError[] };
-
-function VerifyStrip({ state }: { state: VerifyUIState }) {
-  if (state.phase === "checking") {
-    return (
-      <p className="text-xs text-fg-tertiary">
-        Verifying · lint + types{state.round > 0 ? ` · fix round ${state.round}/2` : ""}...
-      </p>
-    );
-  }
-  if (state.phase === "fixing") {
-    return (
-      <p className="text-xs text-accent">
-        Fixing {state.errors.length} issue{state.errors.length === 1 ? "" : "s"}
-        {state.round > 0 ? ` · round ${state.round}/2` : ""}...
-      </p>
-    );
-  }
-  if (state.phase === "passed") {
-    return (
-      <p className="text-xs text-fg-tertiary">
-        Checks passed{state.afterFix ? " after auto-fix" : ""}
-        {state.typecheckUnavailable ? " · types unavailable, skipped" : ""}
-      </p>
-    );
-  }
-  return (
-    <div className="text-xs text-fg-secondary">
-      <p>
-        Delivered with {state.errors.length} unresolved issue
-        {state.errors.length === 1 ? "" : "s"} after 2 fix rounds:
-      </p>
-      <ul className="mt-1 space-y-0.5 text-fg-tertiary">
-        {state.errors.slice(0, 3).map((error, i) => (
-          <li key={i} className="truncate">
-            [{error.kind}] {error.loc ? `${error.loc} ` : ""}{error.message}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 export default function Playground() {
   const { theme } = useTheme();
   const dispatch = useAppDispatch();
@@ -142,6 +99,7 @@ export default function Playground() {
   const [streamError, setStreamError] = useState<string | null>(null);
   const [renderError, setRenderError] = useState<string | null>(null);
   const [verifyState, setVerifyState] = useState<VerifyUIState | null>(null);
+  const [renderGate, setRenderGate] = useState<RenderGateStatus>("idle");
   const streamRef = useRef("");
   const runIdRef = useRef<string | null>(null);
   // The just-delivered code may trigger one client-initiated render fix;
@@ -189,7 +147,7 @@ export default function Playground() {
           payload.pass
             ? {
                 phase: "passed",
-                afterFix: (payload.round ?? 0) > 0,
+                rounds: payload.round ?? 0,
                 typecheckUnavailable: payload.typecheckUnavailable,
               }
             : { phase: "warnings", errors: payload.errors ?? [] }
@@ -223,6 +181,7 @@ export default function Playground() {
       }
       setRenderError(null);
       fixableRef.current = true;
+      setRenderGate(parseAssistantText(text).code ? "running" : "idle");
     }
     fixModeRef.current = false;
     dispatch(playgroundApi.util.invalidateTags(["Chat"]));
@@ -269,6 +228,7 @@ export default function Playground() {
     setStreamText("");
     setStreamError(null);
     setVerifyState(null);
+    setRenderGate("idle");
     void connect(`${API_BASE_URL}/playground/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -278,6 +238,7 @@ export default function Playground() {
 
   const handleRenderError = (err: VerifyError) => {
     setRenderError(err.message);
+    setRenderGate("failed");
     const runId = runIdRef.current;
     // Auto-fix only the run that just delivered, and never re-enter a run
     // the server already delivered with warnings.
@@ -304,6 +265,7 @@ export default function Playground() {
     setStreamError(null);
     setRenderError(null);
     setVerifyState(null);
+    setRenderGate("idle");
   };
 
   const selectChat = (chatId: string) => {
@@ -318,6 +280,7 @@ export default function Playground() {
     setStreamError(null);
     setRenderError(null);
     setVerifyState(null);
+    setRenderGate("idle");
   };
 
   if (!meLoading && !authedUser) {
@@ -365,17 +328,15 @@ export default function Playground() {
             messages={messages}
             onSubmit={handleSubmit}
             disabled={streaming || !!gate}
+            verifyIndicator={
+              verifyState ? <VerifyIndicator state={verifyState} renderGate={renderGate} /> : null
+            }
             notice={
               gate ? (
                 <GateNotice gate={gate} />
-              ) : (
-                <>
-                  {verifyState && <VerifyStrip state={verifyState} />}
-                  {errorText && (
-                    <p className="text-sm text-fg-secondary">Generation failed · {errorText}</p>
-                  )}
-                </>
-              )
+              ) : errorText ? (
+                <p className="text-sm text-fg-secondary">Generation failed · {errorText}</p>
+              ) : null
             }
           />
 
@@ -383,7 +344,10 @@ export default function Playground() {
             <PreviewFrame
               code={previewCode}
               theme={theme}
-              onRendered={() => setRenderError(null)}
+              onRendered={() => {
+                setRenderError(null);
+                setRenderGate((current) => (current === "idle" ? current : "passed"));
+              }}
               onRenderError={handleRenderError}
               className="rule min-h-0 w-full flex-1 rounded-lg"
             />
