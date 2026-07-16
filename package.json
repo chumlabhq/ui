@@ -313,6 +313,7 @@
     "clean": "rm -rf dist",
     "build:lib": "npm run clean && vite build --mode lib && tsc --project tsconfig.lib.json",
     "build:preview": "node scripts/build-preview-vendor.mjs",
+    "build:llms": "node ai/build-llms-full.mjs",
     "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {

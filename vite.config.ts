@@ -95,7 +95,7 @@ export default defineConfig(({ mode }) => {
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
           "font-src https://fonts.gstatic.com; " +
           "img-src 'self' https: data:; " +
-          "connect-src 'self' https: http://localhost:5000; " +
+          "connect-src 'self' https: http://localhost:5050; " +
           "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com; " +
           "frame-ancestors 'self'",
         "Strict-Transport-Security": "max-age=31536000; includeSubDomains",

@@ -16,7 +16,7 @@ export default function ChatPanel({
   notice,
 }: ChatPanelProps) {
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
+    <div className="flex h-full min-h-0 min-w-0 flex-col gap-4">
       <MessageList messages={messages} />
       {notice}
       <PromptInput onSubmit={onSubmit} disabled={disabled} />
