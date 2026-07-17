@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import MessageList, { type ChatDisplayMessage } from "./MessageList";
 import PromptInput from "./PromptInput";
+import type { AttachedImage } from "../types";
 
 interface ChatPanelProps {
   messages: ChatDisplayMessage[];
-  onSubmit: (prompt: string) => void;
+  onSubmit: (prompt: string, image: AttachedImage | null) => void;
   disabled?: boolean;
   notice?: ReactNode;
   verifyIndicator?: ReactNode;

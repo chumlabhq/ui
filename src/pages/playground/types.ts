@@ -92,6 +92,7 @@ export interface PlaygroundChatMessage {
   chatId: string;
   role: PlaygroundChatMessageRole;
   content: string;
+  image?: { mediaType: string; data: string } | null;
   createdAt: string;
 }
 
@@ -129,6 +130,15 @@ export interface RouterEventPayload {
 export interface ClarifyQuestion {
   question: string;
   options: string[];
+}
+
+// A screenshot attached to a generation. `data` is base64 (no data-URL
+// prefix) sent to the backend; `previewUrl` is a local data URL for the
+// thumbnail.
+export interface AttachedImage {
+  mediaType: string;
+  data: string;
+  previewUrl: string;
 }
 
 export interface QaFinding {

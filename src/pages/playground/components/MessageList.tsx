@@ -12,6 +12,8 @@ export interface ChatDisplayMessage {
   // Routed plans render as a TaskPlanCard instead of a chat bubble.
   kind?: "plan";
   tier?: PipelineTier | null;
+  // A local preview URL for a screenshot attached to a user turn.
+  imageUrl?: string;
 }
 
 function AssistantMessage({ message }: { message: ChatDisplayMessage }) {
@@ -51,10 +53,19 @@ export default function MessageList({ messages, footer }: MessageListProps) {
       )}
       {messages.map((message) =>
         message.role === "user" ? (
-          <div key={message.id} className="flex justify-end">
-            <p className="max-w-[85%] rounded-lg bg-bg-elevated px-4 py-2.5 text-sm text-fg">
-              {message.content}
-            </p>
+          <div key={message.id} className="flex flex-col items-end gap-1.5">
+            {message.imageUrl && (
+              <img
+                src={message.imageUrl}
+                alt="Attached screenshot"
+                className="rule max-h-48 max-w-[85%] rounded-lg object-contain"
+              />
+            )}
+            {message.content && (
+              <p className="max-w-[85%] rounded-lg bg-bg-elevated px-4 py-2.5 text-sm text-fg">
+                {message.content}
+              </p>
+            )}
           </div>
         ) : message.kind === "plan" ? (
           <TaskPlanCard

@@ -20,6 +20,7 @@ import { parseAssistantText } from "./components/assistantText";
 import type { ChatDisplayMessage } from "./components/MessageList";
 import { useGenerationStream } from "./hooks/useGenerationStream";
 import type {
+  AttachedImage,
   ClarifyEventPayload,
   ClarifyQuestion,
   GenerationEventPayload,
@@ -33,6 +34,10 @@ import type {
 } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// Must match the backend's image-only fallback so the local echo dedupes
+// against the persisted message (generation.controller.js effectivePrompt).
+const SCREENSHOT_ONLY_PROMPT = "Rebuild the attached screenshot as Chumlab components.";
 
 function GateNotice({ gate }: { gate: PlaygroundGateInfo }) {
   if (gate.code === "not_invited") {
@@ -268,6 +273,7 @@ export default function Playground() {
       id: m._id,
       role: m.role,
       content: m.content,
+      imageUrl: m.image ? `data:${m.image.mediaType};base64,${m.image.data}` : undefined,
     }));
     const seen = new Set(server.map((m) => messageKey(m.role, m.content)));
     const extras = pending.filter((m) => !seen.has(messageKey(m.role, m.content)));
@@ -299,8 +305,12 @@ export default function Playground() {
     return null;
   }, [messages]);
 
-  const handleSubmit = (prompt: string) => {
-    setPending((prev) => [...prev, { id: `user-${Date.now()}`, role: "user", content: prompt }]);
+  const handleSubmit = (prompt: string, image: AttachedImage | null) => {
+    const displayContent = prompt || (image ? SCREENSHOT_ONLY_PROMPT : "");
+    setPending((prev) => [
+      ...prev,
+      { id: `user-${Date.now()}`, role: "user", content: displayContent, imageUrl: image?.previewUrl },
+    ]);
     streamRef.current = "";
     fixableRef.current = false;
     fixModeRef.current = false;
@@ -318,7 +328,11 @@ export default function Playground() {
     void connect(`${API_BASE_URL}/playground/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, chatId: activeChatId ?? undefined }),
+      body: JSON.stringify({
+        prompt,
+        chatId: activeChatId ?? undefined,
+        image: image ? { mediaType: image.mediaType, data: image.data } : undefined,
+      }),
     });
   };
 
