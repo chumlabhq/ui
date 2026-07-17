@@ -11,6 +11,7 @@ import {
 import ChatPanel from "./components/ChatPanel";
 import ClarifyPicker from "./components/ClarifyPicker";
 import PreviewFrame from "./components/PreviewFrame";
+import QaIndicator, { type QaUIState } from "./components/QaIndicator";
 import VerifyIndicator, {
   type RenderGateStatus,
   type VerifyUIState,
@@ -25,6 +26,7 @@ import type {
   PipelineEvent,
   PipelineTier,
   PlaygroundGateInfo,
+  QaEventPayload,
   RouterEventPayload,
   VerifyError,
   VerifyEventPayload,
@@ -109,6 +111,7 @@ export default function Playground() {
   const [planText, setPlanText] = useState("");
   const [planStreaming, setPlanStreaming] = useState(false);
   const [clarifyQuestions, setClarifyQuestions] = useState<ClarifyQuestion[] | null>(null);
+  const [qaState, setQaState] = useState<QaUIState | null>(null);
   const streamRef = useRef("");
   const planRef = useRef("");
   const runIdRef = useRef<string | null>(null);
@@ -134,6 +137,22 @@ export default function Playground() {
       if (event.status === "needs_input") {
         const payload = (event.payload ?? {}) as ClarifyEventPayload;
         setClarifyQuestions(payload.questions ?? []);
+      }
+      return;
+    }
+
+    if (event.stage === "qa") {
+      const payload = (event.payload ?? {}) as QaEventPayload;
+      if (event.status === "start") setQaState({ phase: "reviewing" });
+      if (event.status === "error" && payload.fixing) {
+        setQaState({ phase: "fixing", findings: payload.findings ?? [] });
+      }
+      if (event.status === "done") {
+        setQaState(
+          payload.pass
+            ? { phase: "passed", fixed: payload.fixed ?? false }
+            : { phase: "warnings", findings: payload.findings ?? [] }
+        );
       }
       return;
     }
@@ -295,6 +314,7 @@ export default function Playground() {
     setPlanText("");
     setPlanStreaming(false);
     setClarifyQuestions(null);
+    setQaState(null);
     void connect(`${API_BASE_URL}/playground/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -321,6 +341,7 @@ export default function Playground() {
       },
     ]);
     setClarifyQuestions(null);
+    setQaState(null);
     streamRef.current = "";
     failedRef.current = false;
     setStreamText("");
@@ -367,6 +388,7 @@ export default function Playground() {
     setPlanText("");
     setPlanStreaming(false);
     setClarifyQuestions(null);
+    setQaState(null);
   };
 
   const selectChat = (chatId: string) => {
@@ -387,6 +409,7 @@ export default function Playground() {
     setPlanText("");
     setPlanStreaming(false);
     setClarifyQuestions(null);
+    setQaState(null);
   };
 
   if (!meLoading && !authedUser) {
@@ -441,12 +464,13 @@ export default function Playground() {
                   onSubmit={handleClarifyResume}
                   onSkip={() => handleClarifyResume(clarifyQuestions.map(() => undefined))}
                 />
-              ) : verifyState || tier ? (
+              ) : verifyState || tier || qaState ? (
                 <>
                   {(tier === "trivial" || tier === "single") && (
                     <p className="text-xs text-fg-tertiary">Quick build · skipped planning</p>
                   )}
                   {verifyState && <VerifyIndicator state={verifyState} renderGate={renderGate} />}
+                  {qaState && <QaIndicator state={qaState} />}
                 </>
               ) : null
             }

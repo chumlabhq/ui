@@ -131,6 +131,22 @@ export interface ClarifyQuestion {
   options: string[];
 }
 
+export interface QaFinding {
+  severity: "high" | "medium" | "low";
+  description: string;
+  location?: string;
+}
+
+// Payload of the qa-stage SSE events.
+export interface QaEventPayload {
+  pass?: boolean;
+  fixed?: boolean;
+  fixing?: boolean;
+  exhausted?: boolean;
+  round?: number;
+  findings?: QaFinding[];
+}
+
 // Payload of the clarify-stage needs_input event.
 export interface ClarifyEventPayload {
   questions?: ClarifyQuestion[];
