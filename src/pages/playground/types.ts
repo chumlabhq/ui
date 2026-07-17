@@ -126,6 +126,17 @@ export interface RouterEventPayload {
   tier?: PipelineTier;
 }
 
+export interface ClarifyQuestion {
+  question: string;
+  options: string[];
+}
+
+// Payload of the clarify-stage needs_input event.
+export interface ClarifyEventPayload {
+  questions?: ClarifyQuestion[];
+  assumptions?: string;
+}
+
 // Payload of the verify-stage SSE events (gate results and fix rounds).
 export interface VerifyEventPayload {
   round?: number;

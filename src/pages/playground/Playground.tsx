@@ -9,6 +9,7 @@ import {
   useListMyChatsQuery,
 } from "../../redux/api/playgroundApi";
 import ChatPanel from "./components/ChatPanel";
+import ClarifyPicker from "./components/ClarifyPicker";
 import PreviewFrame from "./components/PreviewFrame";
 import VerifyIndicator, {
   type RenderGateStatus,
@@ -18,6 +19,8 @@ import { parseAssistantText } from "./components/assistantText";
 import type { ChatDisplayMessage } from "./components/MessageList";
 import { useGenerationStream } from "./hooks/useGenerationStream";
 import type {
+  ClarifyEventPayload,
+  ClarifyQuestion,
   GenerationEventPayload,
   PipelineEvent,
   PipelineTier,
@@ -105,6 +108,7 @@ export default function Playground() {
   const [tier, setTier] = useState<PipelineTier | null>(null);
   const [planText, setPlanText] = useState("");
   const [planStreaming, setPlanStreaming] = useState(false);
+  const [clarifyQuestions, setClarifyQuestions] = useState<ClarifyQuestion[] | null>(null);
   const streamRef = useRef("");
   const planRef = useRef("");
   const runIdRef = useRef<string | null>(null);
@@ -122,6 +126,14 @@ export default function Playground() {
     if (event.stage === "router") {
       if (event.status === "done") {
         setTier(((event.payload ?? {}) as RouterEventPayload).tier ?? null);
+      }
+      return;
+    }
+
+    if (event.stage === "clarify") {
+      if (event.status === "needs_input") {
+        const payload = (event.payload ?? {}) as ClarifyEventPayload;
+        setClarifyQuestions(payload.questions ?? []);
       }
       return;
     }
@@ -282,10 +294,40 @@ export default function Playground() {
     planRef.current = "";
     setPlanText("");
     setPlanStreaming(false);
+    setClarifyQuestions(null);
     void connect(`${API_BASE_URL}/playground/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt, chatId: activeChatId ?? undefined }),
+    });
+  };
+
+  // Resume a clarify-paused run. Empty answers = skip (build with defaults);
+  // the server never hangs on it.
+  const handleClarifyResume = (answers: (string | undefined)[]) => {
+    const runId = runIdRef.current;
+    if (!runId) return;
+    const answered = clarifyQuestions?.map((q, i) => `${q.question} ${answers[i]}`).filter(
+      (_, i) => answers[i]
+    );
+    setPending((prev) => [
+      ...prev,
+      {
+        id: `clarify-${Date.now()}`,
+        role: "user",
+        content: answered?.length
+          ? `Clarifications — ${answered.join(" · ")}`
+          : "Skipped clarifications — building with sensible defaults.",
+      },
+    ]);
+    setClarifyQuestions(null);
+    streamRef.current = "";
+    failedRef.current = false;
+    setStreamText("");
+    void connect(`${API_BASE_URL}/playground/generate/resume`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ runId, answers: answers.map((a) => a ?? null) }),
     });
   };
 
@@ -324,6 +366,7 @@ export default function Playground() {
     planRef.current = "";
     setPlanText("");
     setPlanStreaming(false);
+    setClarifyQuestions(null);
   };
 
   const selectChat = (chatId: string) => {
@@ -343,6 +386,7 @@ export default function Playground() {
     planRef.current = "";
     setPlanText("");
     setPlanStreaming(false);
+    setClarifyQuestions(null);
   };
 
   if (!meLoading && !authedUser) {
@@ -389,9 +433,15 @@ export default function Playground() {
           <ChatPanel
             messages={messages}
             onSubmit={handleSubmit}
-            disabled={streaming || !!gate}
+            disabled={streaming || !!gate || !!clarifyQuestions}
             verifyIndicator={
-              verifyState || tier ? (
+              clarifyQuestions ? (
+                <ClarifyPicker
+                  questions={clarifyQuestions}
+                  onSubmit={handleClarifyResume}
+                  onSkip={() => handleClarifyResume(clarifyQuestions.map(() => undefined))}
+                />
+              ) : verifyState || tier ? (
                 <>
                   {(tier === "trivial" || tier === "single") && (
                     <p className="text-xs text-fg-tertiary">Quick build · skipped planning</p>
