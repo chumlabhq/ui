@@ -20,7 +20,9 @@ import { useGenerationStream } from "./hooks/useGenerationStream";
 import type {
   GenerationEventPayload,
   PipelineEvent,
+  PipelineTier,
   PlaygroundGateInfo,
+  RouterEventPayload,
   VerifyError,
   VerifyEventPayload,
 } from "./types";
@@ -100,15 +102,44 @@ export default function Playground() {
   const [renderError, setRenderError] = useState<string | null>(null);
   const [verifyState, setVerifyState] = useState<VerifyUIState | null>(null);
   const [renderGate, setRenderGate] = useState<RenderGateStatus>("idle");
+  const [tier, setTier] = useState<PipelineTier | null>(null);
+  const [planText, setPlanText] = useState("");
+  const [planStreaming, setPlanStreaming] = useState(false);
   const streamRef = useRef("");
+  const planRef = useRef("");
   const runIdRef = useRef<string | null>(null);
   // The just-delivered code may trigger one client-initiated render fix;
   // the server's per-run round budget is the real bound.
   const fixableRef = useRef(false);
   const fixModeRef = useRef(false);
+  // A develop-stage error means the streamed text is not a deliverable (e.g.
+  // truncated output) - onDone must not commit it as a message.
+  const failedRef = useRef(false);
 
   const onEvent = useCallback((event: PipelineEvent) => {
     runIdRef.current = event.runId;
+
+    if (event.stage === "router") {
+      if (event.status === "done") {
+        setTier(((event.payload ?? {}) as RouterEventPayload).tier ?? null);
+      }
+      return;
+    }
+
+    if (event.stage === "plan") {
+      const payload = (event.payload ?? {}) as GenerationEventPayload;
+      if (event.status === "start") {
+        planRef.current = "";
+        setPlanText("");
+        setPlanStreaming(true);
+      }
+      if (event.status === "delta" && payload.text) {
+        planRef.current += payload.text;
+        setPlanText(planRef.current);
+      }
+      if (event.status === "done") setPlanStreaming(false);
+      return;
+    }
 
     if (event.stage === "develop") {
       const payload = (event.payload ?? {}) as GenerationEventPayload;
@@ -125,6 +156,7 @@ export default function Playground() {
         setStreamText(streamRef.current);
       }
       if (event.status === "error") {
+        failedRef.current = true;
         setStreamError(payload.message || "Generation failed");
       }
       return;
@@ -160,6 +192,11 @@ export default function Playground() {
     const text = streamRef.current;
     streamRef.current = "";
     setStreamText("");
+    if (failedRef.current) {
+      fixModeRef.current = false;
+      dispatch(playgroundApi.util.invalidateTags(["Chat"]));
+      return;
+    }
     if (text) {
       if (fixModeRef.current) {
         // The fix replaces the failing assistant turn, mirroring the backend.
@@ -204,11 +241,22 @@ export default function Playground() {
     const seen = new Set(server.map((m) => messageKey(m.role, m.content)));
     const extras = pending.filter((m) => !seen.has(messageKey(m.role, m.content)));
     const base = [...server, ...extras];
-    if (streaming) {
+    if (planText) {
+      base.push({
+        id: "plan",
+        role: "assistant",
+        kind: "plan",
+        content: planText,
+        streaming: planStreaming,
+        tier,
+      });
+    }
+    // While the plan streams, develop hasn't started - hold the empty tail.
+    if (streaming && (streamText || !planStreaming)) {
       base.push({ id: "streaming", role: "assistant", content: streamText, streaming: true });
     }
     return base;
-  }, [chatMessagesData, pending, streaming, streamText]);
+  }, [chatMessagesData, pending, streaming, streamText, planText, planStreaming, tier]);
 
   const previewCode = useMemo(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
@@ -225,10 +273,15 @@ export default function Playground() {
     streamRef.current = "";
     fixableRef.current = false;
     fixModeRef.current = false;
+    failedRef.current = false;
     setStreamText("");
     setStreamError(null);
     setVerifyState(null);
     setRenderGate("idle");
+    setTier(null);
+    planRef.current = "";
+    setPlanText("");
+    setPlanStreaming(false);
     void connect(`${API_BASE_URL}/playground/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -246,6 +299,7 @@ export default function Playground() {
     if (verifyState?.phase === "warnings") return;
     fixableRef.current = false;
     fixModeRef.current = true;
+    failedRef.current = false;
     setVerifyState({ phase: "fixing", round: 0, errors: [err] });
     void connect(`${API_BASE_URL}/playground/generate/fix`, {
       method: "POST",
@@ -266,6 +320,10 @@ export default function Playground() {
     setRenderError(null);
     setVerifyState(null);
     setRenderGate("idle");
+    setTier(null);
+    planRef.current = "";
+    setPlanText("");
+    setPlanStreaming(false);
   };
 
   const selectChat = (chatId: string) => {
@@ -281,6 +339,10 @@ export default function Playground() {
     setRenderError(null);
     setVerifyState(null);
     setRenderGate("idle");
+    setTier(null);
+    planRef.current = "";
+    setPlanText("");
+    setPlanStreaming(false);
   };
 
   if (!meLoading && !authedUser) {
@@ -329,7 +391,14 @@ export default function Playground() {
             onSubmit={handleSubmit}
             disabled={streaming || !!gate}
             verifyIndicator={
-              verifyState ? <VerifyIndicator state={verifyState} renderGate={renderGate} /> : null
+              verifyState || tier ? (
+                <>
+                  {(tier === "trivial" || tier === "single") && (
+                    <p className="text-xs text-fg-tertiary">Quick build · skipped planning</p>
+                  )}
+                  {verifyState && <VerifyIndicator state={verifyState} renderGate={renderGate} />}
+                </>
+              ) : null
             }
             notice={
               gate ? (

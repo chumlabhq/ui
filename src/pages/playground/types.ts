@@ -112,11 +112,18 @@ export interface VerifyError {
   loc?: string;
 }
 
-// Payload of the develop-stage SSE events.
+// Payload of the develop- and plan-stage SSE events.
 export interface GenerationEventPayload {
   text?: string;
   chatId?: string;
   message?: string;
+}
+
+export type PipelineTier = "trivial" | "single" | "multi" | "full";
+
+// Payload of the router-stage done event.
+export interface RouterEventPayload {
+  tier?: PipelineTier;
 }
 
 // Payload of the verify-stage SSE events (gate results and fix rounds).

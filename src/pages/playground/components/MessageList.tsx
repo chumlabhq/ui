@@ -1,12 +1,17 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import CodeCard from "./CodeCard";
+import TaskPlanCard from "./TaskPlanCard";
 import { parseAssistantText } from "./assistantText";
+import type { PipelineTier } from "../types";
 
 export interface ChatDisplayMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
   streaming?: boolean;
+  // Routed plans render as a TaskPlanCard instead of a chat bubble.
+  kind?: "plan";
+  tier?: PipelineTier | null;
 }
 
 function AssistantMessage({ message }: { message: ChatDisplayMessage }) {
@@ -51,6 +56,13 @@ export default function MessageList({ messages, footer }: MessageListProps) {
               {message.content}
             </p>
           </div>
+        ) : message.kind === "plan" ? (
+          <TaskPlanCard
+            key={message.id}
+            plan={message.content}
+            streaming={message.streaming}
+            tier={message.tier}
+          />
         ) : (
           <AssistantMessage key={message.id} message={message} />
         )
