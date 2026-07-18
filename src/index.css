@@ -949,8 +949,28 @@ body {
 }
 .pg-rise { animation: pg-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
+/* Loading skeleton — a subtle highlight sweeping over an elevated block. Used
+   while a re-opened chat + its preview are being fetched, in place of the idle
+   fallbacks so the switch reads as loading, not empty. */
+@keyframes pg-skeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.pg-skeleton {
+  background-color: var(--bg-elevated);
+  background-image: linear-gradient(
+    90deg,
+    transparent 20%,
+    color-mix(in srgb, var(--fg) 7%, transparent) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: pg-skeleton 1.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pg-pulse, .pg-settle, .pg-rise { animation: none !important; }
+  .pg-pulse, .pg-settle, .pg-rise, .pg-skeleton { animation: none !important; }
   .pg-shimmer-text {
     animation: none;
     -webkit-text-fill-color: var(--text-secondary);

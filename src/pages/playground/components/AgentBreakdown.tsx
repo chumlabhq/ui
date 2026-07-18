@@ -95,7 +95,7 @@ export default function AgentBreakdown({ state, elapsedLabel }: AgentBreakdownPr
   const visibleAgents = running ? agents : agents.filter((a) => activated.includes(a.id));
 
   return (
-    <div className="rule mt-3 overflow-hidden rounded-[10px] border-border-soft bg-bg-elevated">
+    <div className="rule mt-3 shrink-0 overflow-hidden rounded-[10px] border-border-soft bg-bg-elevated">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}

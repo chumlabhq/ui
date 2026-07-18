@@ -15,7 +15,7 @@ export default function AppShell({ sidebar, children }: AppShellProps) {
       <TopBar />
       <div className="flex min-h-0 flex-1">
         {sidebar}
-        <main className="min-h-0 min-w-0 flex-1">{children}</main>
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col">{children}</main>
       </div>
     </div>
   );

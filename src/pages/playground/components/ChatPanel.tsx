@@ -11,6 +11,7 @@ interface ChatPanelProps {
   notice?: ReactNode;
   verifyIndicator?: ReactNode;
   emptyState?: ReactNode;
+  loading?: boolean;
 }
 
 // A flat conversation column (v7): the thread scrolls, the composer sits at the
@@ -23,10 +24,11 @@ export default function ChatPanel({
   notice,
   verifyIndicator,
   emptyState,
+  loading = false,
 }: ChatPanelProps) {
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <MessageList messages={messages} footer={verifyIndicator} emptyState={emptyState} />
+      <MessageList messages={messages} footer={verifyIndicator} emptyState={emptyState} loading={loading} />
       {notice && <div className="px-[18px]">{notice}</div>}
       <PromptInput onSubmit={onSubmit} disabled={disabled} busy={busy} />
     </div>

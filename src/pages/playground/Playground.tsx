@@ -264,9 +264,10 @@ export default function Playground() {
   const { data: chatsData } = useListMyChatsQuery({ limit: 30 }, { skip: !authedUser });
   // currentData (not data): data for the CURRENT chatId only, so switching to a
   // new/empty chat doesn't briefly keep the previous chat's messages/run.
-  const { currentData: chatMessagesData } = useGetChatMessagesQuery(activeChatId ?? "", {
-    skip: !authedUser || !activeChatId,
-  });
+  const { currentData: chatMessagesData, isFetching: messagesFetching } = useGetChatMessagesQuery(
+    activeChatId ?? "",
+    { skip: !authedUser || !activeChatId }
+  );
   const { currentData: runsData } = useListChatRunsQuery(activeChatId ?? "", {
     skip: !authedUser || !activeChatId,
   });
@@ -515,8 +516,12 @@ export default function Playground() {
 
   const showPersona = !personaDismissed && chats.length === 0 && !liveActive;
 
+  // Re-opening a recent chat: its history/run are being fetched (currentData is
+  // still empty for this id). Show skeletons instead of the empty-state hero.
+  const chatLoading = !!activeChatId && !liveActive && messagesFetching && !chatMessagesData;
+
   const chatColumn = (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       <div className="rule-b flex h-12 shrink-0 items-center gap-2.5 border-border-faint bg-bg-base px-[18px]">
         <span className="truncate font-display text-sm font-semibold tracking-tight">{activeTitle}</span>
         {lastUserPrompt && (
@@ -546,6 +551,7 @@ export default function Playground() {
             onSubmit={handleSubmit}
             disabled={streaming || !!gate || !!clarifyQuestions}
             busy={streaming}
+            loading={chatLoading}
             verifyIndicator={threadFooter}
             emptyState={
               <EmptyState
@@ -570,6 +576,7 @@ export default function Playground() {
       onDeviceChange={setDeviceOverride}
       onRendered={handleRendered}
       onRenderError={handleRenderError}
+      loading={chatLoading}
       statusText={
         renderError
           ? `Render error — ${renderError}`
@@ -583,8 +590,8 @@ export default function Playground() {
   // Fixed 50/50 chat | preview: never reflows across idle/building/result. The
   // divider (desktop) is the resizable one; mobile stacks the two panels.
   const buildView = (
-    <div className="h-full min-h-0">
-      <div className="hidden h-full min-h-0 lg:flex">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="hidden min-h-0 flex-1 lg:flex">
         <ResizablePanel
           value={splitWidth}
           onValueChange={(v) => {
@@ -594,7 +601,7 @@ export default function Playground() {
           minValue={420}
           maxValue={980}
           resizeDirection="right"
-          className="h-full min-h-0"
+          className="flex h-full min-h-0 flex-col"
           classes={{
             handle:
               "bg-transparent before:pointer-events-none before:absolute before:inset-y-0 before:left-1/2 before:w-px before:-translate-x-1/2 before:bg-border-faint before:transition-colors hover:before:bg-accent/60",
@@ -604,9 +611,9 @@ export default function Playground() {
         </ResizablePanel>
         <div className="min-h-0 min-w-0 flex-1">{stagePane}</div>
       </div>
-      <div className="flex h-full min-h-0 flex-col lg:hidden">
+      <div className="flex min-h-0 flex-1 flex-col lg:hidden">
         <div className="h-[42%] min-h-0 shrink-0">{stagePane}</div>
-        <div className="rule-t min-h-0 flex-1 border-border-faint">{chatColumn}</div>
+        <div className="rule-t flex min-h-0 flex-1 flex-col border-border-faint">{chatColumn}</div>
       </div>
     </div>
   );

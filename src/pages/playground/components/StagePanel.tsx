@@ -16,6 +16,8 @@ interface StagePanelProps {
   onRendered?: () => void;
   onRenderError?: (error: VerifyError) => void;
   statusText: string;
+  // A re-opened chat's run is being fetched — show a skeleton, not the idle state.
+  loading?: boolean;
   initialTab?: Tab;
   onClose?: () => void;
 }
@@ -116,6 +118,22 @@ const WARNING_ICON = (
     <path d="M12 9v4M12 17h.01" />
   </svg>
 );
+
+// Skeleton shown in the preview frame while a re-opened chat's run loads.
+function PreviewSkeleton() {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-3 bg-bg-base p-5" aria-hidden>
+      <div className="pg-skeleton h-8 w-1/2 rounded-lg" />
+      <div className="pg-skeleton h-24 w-full rounded-lg" />
+      <div className="flex gap-3">
+        <div className="pg-skeleton h-16 flex-1 rounded-lg" />
+        <div className="pg-skeleton h-16 flex-1 rounded-lg" />
+      </div>
+      <div className="pg-skeleton h-9 w-2/3 rounded-lg" />
+      <div className="pg-skeleton min-h-0 flex-1 rounded-lg" />
+    </div>
+  );
+}
 
 // The preview panel's placeholder — a premium idle state (and building / error
 // variants) instead of a lone line of text.
@@ -226,6 +244,7 @@ export default function StagePanel({
   onRendered,
   onRenderError,
   statusText,
+  loading = false,
   initialTab = "preview",
   onClose,
 }: StagePanelProps) {
@@ -301,7 +320,7 @@ export default function StagePanel({
 
         <span className="flex-1" />
 
-        {/* device sizes + fullscreen — one segmented control, centered */}
+        {/* device sizes — one segmented control, centered */}
         <div className="hidden sm:block">
           <Segmented>
             {(Object.keys(DEVICE) as PreviewDevice[]).map((d) => (
@@ -314,29 +333,6 @@ export default function StagePanel({
                 {DEVICE_ICONS[d]}
               </IconToggle>
             ))}
-            <span className="mx-0.5 my-1 w-px self-stretch bg-border-faint" aria-hidden />
-            <Tooltip content={fullscreen ? "Exit fullscreen (Esc)" : "Fullscreen preview"} side="bottom" asChild>
-              <button
-                type="button"
-                onClick={() => setFullscreen((f) => !f)}
-                aria-label={fullscreen ? "Exit fullscreen" : "Fullscreen preview"}
-                className={`grid place-items-center rounded-[6px] px-2 py-1.5 transition-colors [&_svg]:h-[15px] [&_svg]:w-[15px] ${
-                  fullscreen
-                    ? "bg-bg-overlay text-accent shadow-[inset_0_0_0_0.5px_var(--border-soft)]"
-                    : "text-fg-tertiary hover:text-fg-secondary"
-                }`}
-              >
-                {fullscreen ? (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
-                    <path d="M8 3v3a2 2 0 0 1-2 2H3M16 3v3a2 2 0 0 0 2 2h3M21 16h-3a2 2 0 0 0-2 2v3M3 16h3a2 2 0 0 1 2 2v3" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3" />
-                  </svg>
-                )}
-              </button>
-            </Tooltip>
           </Segmented>
         </div>
 
@@ -435,6 +431,8 @@ export default function StagePanel({
                   />
                 )}
               </div>
+            ) : loading ? (
+              <PreviewSkeleton />
             ) : (
               <Placeholder statusText={statusText} />
             )}

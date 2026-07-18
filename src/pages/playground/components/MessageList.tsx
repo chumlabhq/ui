@@ -72,22 +72,50 @@ interface MessageListProps {
   messages: ChatDisplayMessage[];
   footer?: ReactNode;
   emptyState?: ReactNode;
+  // A re-opened chat is being fetched — show skeletons, not the empty hero.
+  loading?: boolean;
 }
 
-export default function MessageList({ messages, footer, emptyState }: MessageListProps) {
+// Placeholder bubbles shown while a re-opened chat's history loads.
+function ChatSkeleton() {
+  return (
+    <div className="flex flex-col gap-4" aria-hidden>
+      <div className="flex justify-end">
+        <div className="pg-skeleton h-[52px] w-[62%] rounded-2xl rounded-br-md" />
+      </div>
+      <div className="pg-skeleton h-[168px] w-full rounded-2xl rounded-tl-md" />
+      <div className="flex justify-end">
+        <div className="pg-skeleton h-9 w-[38%] rounded-2xl rounded-br-md" />
+      </div>
+    </div>
+  );
+}
+
+export default function MessageList({ messages, footer, emptyState, loading }: MessageListProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  // Jump to the newest turn only when a message is actually added (or on first
+  // mount) — deliberately NOT keyed on `footer`. `footer` (the live agent/verify
+  // card) is a fresh element on every render, so auto-scrolling on it re-snapped
+  // the thread to the bottom on every unrelated re-render and made it impossible
+  // to scroll while a build was on screen. The card streams inside the thread;
+  // it does not need to drag the scroll position with it.
+  const prevCountRef = useRef(-1);
 
   useEffect(() => {
     const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, footer]);
+    if (el && messages.length !== prevCountRef.current) {
+      prevCountRef.current = messages.length;
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <div
       ref={scrollRef}
       className="pg-no-scrollbar flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-[18px] pb-2 pt-5"
     >
-      {messages.length === 0 &&
+      {loading && <ChatSkeleton />}
+      {!loading && messages.length === 0 &&
         (emptyState ? (
           <div className="m-auto w-full">{emptyState}</div>
         ) : (
