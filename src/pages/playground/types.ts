@@ -54,7 +54,10 @@ export type PipelineEventStatus =
   | "delta"
   | "done"
   | "error"
-  | "needs_input";
+  | "needs_input"
+  // Phase 10: a streamed sub-line inside a stage (verify edge-case checks,
+  // develop compose lines). Additive — old readers ignore what they don't know.
+  | "substep";
 
 export interface PipelineEvent {
   runId: string;
@@ -78,11 +81,51 @@ export interface PipelineRunSummary {
   updatedAt: string;
 }
 
+// Component classification (Phase 10) — drives the history row glyph.
+export type ComponentType = "otp" | "card" | "form" | "table" | "other";
+
+// Persona-folded agent timeline persisted on a run (C3), used to rehydrate a
+// re-opened build with no re-run.
+export interface TimelineEntry {
+  agent: string;
+  durationMs: number;
+  steps: string[];
+}
+
 export interface PlaygroundChat {
   _id: string;
   title: string;
   createdAt: string;
   updatedAt: string;
+  // Enriched from the chat's latest run (Phase 10, chat-centric history).
+  componentType?: ComponentType | null;
+  gatesPassed?: boolean | null;
+  sizeKb?: number | null;
+  status?: PipelineRunStatus | null;
+}
+
+// Full run document for re-opening a past build (C3).
+export interface PlaygroundRunDetail {
+  _id: string;
+  chatId: string;
+  status: PipelineRunStatus;
+  fixRounds?: number;
+  timeline?: TimelineEntry[] | null;
+  deliver?: (DeliverEventPayload & { gatesPassed?: boolean; componentType?: ComponentType }) | null;
+  componentType?: ComponentType | null;
+  sizeKb?: number | null;
+  a11y?: string | null;
+  gatesPassed?: boolean | null;
+  title?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Appearance settings (C4).
+export type PreviewDevice = "mobile" | "tablet" | "fill";
+export interface PlaygroundSettings {
+  previewTheme: "light" | "dark" | "system";
+  previewDevice: PreviewDevice;
 }
 
 export type PlaygroundChatMessageRole = "user" | "assistant";
@@ -161,6 +204,32 @@ export interface QaEventPayload {
 export interface ClarifyEventPayload {
   questions?: ClarifyQuestion[];
   assumptions?: string;
+}
+
+// Phase 10 · human-readable label carried on every stage `start` event.
+export interface StageStartPayload {
+  label?: string;
+  chatId?: string;
+  round?: number;
+}
+
+// Phase 10 · a streamed sub-step line inside a stage.
+export interface SubstepEventPayload {
+  text: string;
+  ok?: boolean;
+}
+
+// Phase 10 · per-gate booleans + cluster metadata carried on `deliver.done`.
+export interface DeliverGates {
+  lint: boolean;
+  types: boolean;
+  render: boolean;
+  qa: boolean;
+}
+export interface DeliverEventPayload {
+  sizeKb?: number;
+  a11y?: string | null;
+  gates?: DeliverGates;
 }
 
 // Payload of the verify-stage SSE events (gate results and fix rounds).

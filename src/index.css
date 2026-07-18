@@ -851,6 +851,81 @@ body {
   --bg-base: #070c10;
   --bg-elevated: #0c141b;
   --bg-overlay: #111c25;
+  /* Second accent (violet) for the AI gradient — pairs with the blue --accent. */
+  --pg-accent-2: #8b7bff;
+  /* Subtle hairlines matching the header rule — separators define sections
+     without reading as heavy dark bands. */
+  --border-faint: rgba(237, 239, 244, 0.06);
+  --border-soft: rgba(237, 239, 244, 0.09);
+  --border-active: rgba(237, 239, 244, 0.16);
+}
+
+/* Clickables get a pointer cursor throughout the playground (Tailwind v4's
+   preflight no longer sets it). :where() keeps specificity at 0 so explicit
+   cursor utilities still win; disabled controls read as not-allowed. */
+:where(.pg-surface) button,
+:where(.pg-surface) a[href],
+:where(.pg-surface) [role="button"],
+:where(.pg-surface) label[for],
+:where(.pg-surface) summary {
+  cursor: pointer;
+}
+:where(.pg-surface) button:disabled,
+:where(.pg-surface) [aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Scroll without a visible scrollbar (used by the sidebar recents). */
+.pg-no-scrollbar {
+  scrollbar-width: none;
+}
+.pg-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The composer — a restrained input on the page background with a subtle,
+   slightly-bright single-hue gradient border (accent-tinted, no wash), and a
+   quiet accent moment on focus (brighter border + soft ring). */
+.pg-composer {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
+    linear-gradient(
+        140deg,
+        color-mix(in srgb, var(--accent) 26%, var(--border-active)),
+        var(--border-soft) 58%
+      )
+      border-box;
+  transition: box-shadow 0.18s ease, background 0.18s ease;
+}
+.pg-composer:focus-within,
+.pg-composer[data-drag="true"] {
+  background:
+    linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
+    linear-gradient(
+        140deg,
+        color-mix(in srgb, var(--accent) 65%, transparent),
+        color-mix(in srgb, var(--accent) 32%, var(--border-active)) 75%
+      )
+      border-box;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Premium "thinking" shimmer for the live build label. */
+@keyframes pg-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.pg-shimmer-text {
+  background: linear-gradient(90deg, var(--text-tertiary), var(--text-primary), var(--text-tertiary));
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: pg-shimmer 1.8s linear infinite;
 }
 
 /* The instrument cluster's live glow + relay pulse. */
@@ -876,4 +951,9 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .pg-pulse, .pg-settle, .pg-rise { animation: none !important; }
+  .pg-shimmer-text {
+    animation: none;
+    -webkit-text-fill-color: var(--text-secondary);
+    color: var(--text-secondary);
+  }
 }

@@ -39,7 +39,7 @@ const NPM_SPECIFIERS = [
   "react/jsx-runtime",
   "react-dom",
   "react-dom/client",
-  "@phosphor-icons/react",
+  "@iconify/react",
   "recharts",
   "clsx",
   "tailwind-merge",
