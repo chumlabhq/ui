@@ -20,7 +20,10 @@ export default function ChatPanel({
 }: ChatPanelProps) {
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col gap-4">
-      <MessageList messages={messages} footer={verifyIndicator} />
+      {/* the conversation, its own surface */}
+      <div className="rule flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border-border-soft bg-bg-elevated px-4 py-3">
+        <MessageList messages={messages} footer={verifyIndicator} />
+      </div>
       {notice}
       <PromptInput onSubmit={onSubmit} disabled={disabled} />
     </div>

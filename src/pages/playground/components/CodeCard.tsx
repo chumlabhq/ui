@@ -17,10 +17,14 @@ export default function CodeCard({ code, streaming = false }: CodeCardProps) {
 
   return (
     <div className="rule overflow-hidden rounded-lg bg-bg-elevated">
-      <div className="rule-b flex items-center justify-between px-4 py-2">
-        <span className="font-mono text-xs text-fg-tertiary">Generated.tsx</span>
+      <div className="rule-b flex items-center justify-between px-4 py-2.5">
+        <span className="font-mono text-[11px] uppercase tracking-wide text-fg-tertiary">
+          Generated.tsx
+        </span>
         {streaming ? (
-          <span className="text-xs text-accent">streaming</span>
+          <span className="font-mono text-[11px] uppercase tracking-wide text-accent">
+            streaming
+          </span>
         ) : (
           <button
             type="button"

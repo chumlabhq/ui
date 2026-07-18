@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "../../../components/ui";
+import PgButton from "./PgButton";
 import type { ClarifyQuestion } from "../types";
 
 interface ClarifyPickerProps {
@@ -57,12 +57,12 @@ export default function ClarifyPicker({ questions, onSubmit, onSkip }: ClarifyPi
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <Button variant="primary" size="sm" onClick={() => onSubmit(answers)}>
+        <PgButton variant="primary" size="sm" onClick={() => onSubmit(answers)}>
           Build with these
-        </Button>
-        <Button variant="ghost" size="sm" onClick={onSkip}>
+        </PgButton>
+        <PgButton variant="ghost" size="sm" onClick={onSkip}>
           Skip
-        </Button>
+        </PgButton>
       </div>
     </div>
   );

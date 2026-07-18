@@ -62,7 +62,7 @@ export default function MessageList({ messages, footer }: MessageListProps) {
               />
             )}
             {message.content && (
-              <p className="max-w-[85%] rounded-lg bg-bg-elevated px-4 py-2.5 text-sm text-fg">
+              <p className="rule max-w-[85%] rounded-[12px_12px_4px_12px] border-border-faint bg-bg-elevated px-4 py-2.5 text-sm text-fg">
                 {message.content}
               </p>
             )}

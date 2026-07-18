@@ -38,11 +38,11 @@ export default function TaskPlanCard({ plan, streaming = false, tier }: TaskPlan
   const { intro, sections } = parseSections(plan);
 
   return (
-    <div className="rule rounded-lg bg-bg-elevated px-4 py-3">
+    <div className="rule rounded-lg border-border-faint bg-bg-elevated px-4 py-3.5">
       <div className="flex items-center justify-between">
-        <span className="eyebrow">Build plan</span>
-        <span className="text-xs text-fg-tertiary">
-          {streaming ? "planning..." : (tier ?? "")}
+        <span className="text-[13px] font-medium tracking-[-0.01em]">Build plan</span>
+        <span className="font-mono text-[11px] uppercase tracking-wide text-fg-tertiary">
+          {streaming ? "planning" : (tier ?? "")}
         </span>
       </div>
       {intro && <p className="mt-2 whitespace-pre-wrap text-sm text-fg-secondary">{intro}</p>}

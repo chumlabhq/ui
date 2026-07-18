@@ -5,7 +5,7 @@ import {
   type DragEvent,
   type KeyboardEvent,
 } from "react";
-import { Button } from "../../../components/ui";
+import PgButton from "./PgButton";
 import { ACCEPTED_IMAGE_TYPES, fileToAttachedImage } from "../lib/image";
 import type { AttachedImage } from "../types";
 
@@ -70,7 +70,7 @@ export default function PromptInput({ onSubmit, disabled = false }: PromptInputP
         setDragOver(true);
       }}
       onDragLeave={() => setDragOver(false)}
-      className={`rule rounded-lg bg-bg-elevated p-3 transition-colors ${
+      className={`rule shrink-0 rounded-xl border-border-soft bg-bg-elevated p-4 shadow-[0_8px_30px_rgba(0,0,0,0.35)] transition-colors ${
         dragOver ? "border-accent" : ""
       }`}
     >
@@ -123,23 +123,23 @@ export default function PromptInput({ onSubmit, disabled = false }: PromptInputP
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          rows={2}
+          rows={3}
           placeholder={
             image
-              ? "Describe changes, or just Generate to rebuild the screenshot..."
-              : "Describe a component, or drop / paste a screenshot..."
+              ? "Describe changes, or just Generate to rebuild the screenshot…"
+              : "Describe a component to build, or drop / paste a screenshot…"
           }
           disabled={disabled}
-          className="min-h-[3rem] flex-1 resize-none bg-transparent text-sm text-fg outline-none placeholder:text-fg-muted disabled:opacity-50"
+          className="min-h-[4.5rem] flex-1 resize-none bg-transparent text-[15px] leading-relaxed text-fg outline-none placeholder:text-fg-muted disabled:opacity-50"
         />
-        <Button
+        <PgButton
           variant="primary"
           size="sm"
           onClick={submit}
           disabled={disabled || (!value.trim() && !image)}
         >
           Generate
-        </Button>
+        </PgButton>
       </div>
     </div>
   );
