@@ -4,6 +4,8 @@ import { useAnalytics } from "./hooks/useAnalytics";
 import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee";
 import Home from "./pages/Home";
 import OauthRedirect from "./pages/oauth/OauthRedirect";
+import Playground from "./pages/playground/Playground";
+import PlaygroundAdmin from "./pages/playground/PlaygroundAdmin";
 import Faq from "./pages/Faq";
 import BlogListing from "./pages/blog/BlogListing";
 import BlogDetail from "./pages/blog/BlogDetail";
@@ -108,6 +110,11 @@ const App = () => {
         <Route path="toast" element={<ToastDemo />} />
         <Route path="tooltip" element={<TooltipDemo />} />
       </Route>
+      <Route path="playground" element={<Playground />} />
+      <Route path="playground/admin" element={<PlaygroundAdmin />} />
+      {/* Route-based chat: the open chat lives in the URL so a refresh restores
+          it (static /admin still wins by route ranking). */}
+      <Route path="playground/:chatId" element={<Playground />} />
       <Route path="oauth/google" element={<OauthRedirect />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

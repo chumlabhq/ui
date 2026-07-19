@@ -4,26 +4,26 @@ IMPORTANT: You MUST NOT read source code files (*.py, *.ts, *.js, etc.) or use t
 
 **Before reading ANY source file, you MUST do these steps IN ORDER:**
 
-1. Run `cd /Users/adityaagarwal/Documents/Brain/kern-ui && graphify query "your question"` to query the knowledge graph.
-2. Read `/Users/adityaagarwal/Documents/Brain/kern-ui/wiki/index.md` to find relevant wiki pages.
-3. Read the relevant wiki pages from `/Users/adityaagarwal/Documents/Brain/kern-ui/wiki/`.
+1. Run `cd /Users/adityaagarwal/Documents/Brain/chumlab-fe && graphify query "your question"` to query the knowledge graph.
+2. Read `/Users/adityaagarwal/Documents/Brain/chumlab-fe/wiki/index.md` to find relevant wiki pages.
+3. Read the relevant wiki pages from `/Users/adityaagarwal/Documents/Brain/chumlab-fe/wiki/`.
 4. ONLY if the wiki does not have the answer, THEN read source code files.
 
-The wiki at `/Users/adityaagarwal/Documents/Brain/kern-ui` contains exhaustive documentation of the entire codebase — architecture, services, models, routes, flows, and integrations. Reading source files directly when this information already exists in the wiki is wasteful.
+The wiki at `/Users/adityaagarwal/Documents/Brain/chumlab-fe` contains exhaustive documentation of the entire codebase — architecture, services, models, routes, flows, and integrations. Reading source files directly when this information already exists in the wiki is wasteful.
 
-If `/Users/adityaagarwal/Documents/Brain/kern-ui/graphify-out/wiki/index.md` exists, use it as an additional navigation index.
+If `/Users/adityaagarwal/Documents/Brain/chumlab-fe/graphify-out/wiki/index.md` exists, use it as an additional navigation index.
 
-Only read raw files in `/Users/adityaagarwal/Documents/Brain/kern-ui/raw/` if the user explicitly says "read the raw file".
+Only read raw files in `/Users/adityaagarwal/Documents/Brain/chumlab-fe/raw/` if the user explicitly says "read the raw file".
 
 ## Wiki-Brain Session Rules
 
-**Ingesting sources.** When the user drops a file into `/Users/adityaagarwal/Documents/Brain/kern-ui/raw/`
+**Ingesting sources.** When the user drops a file into `/Users/adityaagarwal/Documents/Brain/chumlab-fe/raw/`
 and asks you to ingest it, follow `/wiki-brain ingest` — read the source,
 summarize, create/update wiki pages, cross-link aggressively, update
 `wiki/index.md`, append to `log.md`.
 
 **Every session must end with a log entry.** Before ending a session, append
-one line to `/Users/adityaagarwal/Documents/Brain/kern-ui/log.md` in this exact format:
+one line to `/Users/adityaagarwal/Documents/Brain/chumlab-fe/log.md` in this exact format:
 
 ```
 ## [YYYY-MM-DD HH:MM] session | <3-8 word session title>

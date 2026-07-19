@@ -28,8 +28,10 @@ export default function OauthRedirect() {
       try {
         await getMe().unwrap();
         const flow = params.get("flow") || "";
-        if (flow === "playground-onboard") {
-          navigate("/?openPlayground=1", { replace: true });
+        // Track C: both playground flows land in the guarded app now — the
+        // legacy onboard flow no longer reopens a waitlist.
+        if (flow === "playground" || flow === "playground-onboard") {
+          navigate("/playground", { replace: true });
         } else {
           navigate("/", { replace: true });
         }

@@ -50,7 +50,7 @@
 
 :root,
 :root[data-theme="dark"] {
-  --header-height: 112px; /* sm+: 48px pre-launch strip + 64px header bar */
+  --header-height: 64px; /* header bar only — pre-launch strip disabled (was 112px: 48px strip + 64px bar) */
   --bg-base: #050608;
   --bg-elevated: #0a0d12;
   --bg-overlay: #0f1218;
@@ -145,14 +145,14 @@
   --cl-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
-/* Mobile override — the pre-launch announcement strip stacks vertically
-   below sm (640px), so the header gets taller. The hero section reads
-   --header-height for its top padding and adjusts automatically. */
+/* Mobile override — restore this to 172px when the pre-launch strip is
+   re-enabled (it stacks vertically below sm, making the header taller). With
+   the strip disabled the header is the 64px bar at every breakpoint. */
 @media (max-width: 639px) {
   :root,
   :root[data-theme="dark"],
   :root[data-theme="light"] {
-    --header-height: 172px;
+    --header-height: 64px;
   }
 }
 
@@ -341,6 +341,9 @@
   --font-sans:
     "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     system-ui, sans-serif;
+  /* Display headers reuse the Chumlab brand-mark face (BrandLogo wordmark). */
+  --font-display:
+    "Space Grotesk", "Geist", system-ui, sans-serif;
   --font-serif:
     "Instrument Serif", "Times New Roman", Georgia, serif;
   --font-mono:
@@ -837,5 +840,140 @@ body {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* ─── AI Playground (Phase 9) ────────────────────────────────────────────
+   Petrol-biased dark ground, scoped to the playground surface only so the
+   marketing site keeps its #050608. Accent stays Chumlab blue; every
+   @chumlab/ui component inside inherits the re-pointed neutrals for free. */
+.pg-surface {
+  --bg-base: #070c10;
+  --bg-elevated: #0c141b;
+  --bg-overlay: #111c25;
+  /* Second accent (violet) for the AI gradient — pairs with the blue --accent. */
+  --pg-accent-2: #8b7bff;
+  /* Subtle hairlines matching the header rule — separators define sections
+     without reading as heavy dark bands. */
+  --border-faint: rgba(237, 239, 244, 0.06);
+  --border-soft: rgba(237, 239, 244, 0.09);
+  --border-active: rgba(237, 239, 244, 0.16);
+}
+
+/* Clickables get a pointer cursor throughout the playground (Tailwind v4's
+   preflight no longer sets it). :where() keeps specificity at 0 so explicit
+   cursor utilities still win; disabled controls read as not-allowed. */
+:where(.pg-surface) button,
+:where(.pg-surface) a[href],
+:where(.pg-surface) [role="button"],
+:where(.pg-surface) label[for],
+:where(.pg-surface) summary {
+  cursor: pointer;
+}
+:where(.pg-surface) button:disabled,
+:where(.pg-surface) [aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Scroll without a visible scrollbar (used by the sidebar recents). */
+.pg-no-scrollbar {
+  scrollbar-width: none;
+}
+.pg-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The composer — a restrained input on the page background with a subtle,
+   slightly-bright single-hue gradient border (accent-tinted, no wash), and a
+   quiet accent moment on focus (brighter border + soft ring). */
+.pg-composer {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
+    linear-gradient(
+        140deg,
+        color-mix(in srgb, var(--accent) 26%, var(--border-active)),
+        var(--border-soft) 58%
+      )
+      border-box;
+  transition: box-shadow 0.18s ease, background 0.18s ease;
+}
+.pg-composer:focus-within,
+.pg-composer[data-drag="true"] {
+  background:
+    linear-gradient(var(--bg-base), var(--bg-base)) padding-box,
+    linear-gradient(
+        140deg,
+        color-mix(in srgb, var(--accent) 65%, transparent),
+        color-mix(in srgb, var(--accent) 32%, var(--border-active)) 75%
+      )
+      border-box;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Premium "thinking" shimmer for the live build label. */
+@keyframes pg-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.pg-shimmer-text {
+  background: linear-gradient(90deg, var(--text-tertiary), var(--text-primary), var(--text-tertiary));
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: pg-shimmer 1.8s linear infinite;
+}
+
+/* Live glow + relay pulse for the agent breakdown's running node. */
+@keyframes pg-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+.pg-pulse { animation: pg-pulse 1.4s ease-in-out infinite; }
+
+/* Preview settles onto the stage with a brief accent bloom. */
+@keyframes pg-settle {
+  from { opacity: 0; transform: translateY(6px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+.pg-settle { animation: pg-settle 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* One orchestrated entrance: rail → conversation → stage. */
+@keyframes pg-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.pg-rise { animation: pg-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Loading skeleton — a subtle highlight sweeping over an elevated block. Used
+   while a re-opened chat + its preview are being fetched, in place of the idle
+   fallbacks so the switch reads as loading, not empty. */
+@keyframes pg-skeleton {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.pg-skeleton {
+  background-color: var(--bg-elevated);
+  background-image: linear-gradient(
+    90deg,
+    transparent 20%,
+    color-mix(in srgb, var(--fg) 7%, transparent) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: pg-skeleton 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pg-pulse, .pg-settle, .pg-rise, .pg-skeleton { animation: none !important; }
+  .pg-shimmer-text {
+    animation: none;
+    -webkit-text-fill-color: var(--text-secondary);
+    color: var(--text-secondary);
   }
 }

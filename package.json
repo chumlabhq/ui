@@ -312,6 +312,8 @@
     "test:all": "npm run test:run && npm run test:e2e",
     "clean": "rm -rf dist",
     "build:lib": "npm run clean && vite build --mode lib && tsc --project tsconfig.lib.json",
+    "build:preview": "node scripts/build-preview-vendor.mjs",
+    "build:llms": "node ai/build-llms-full.mjs",
     "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {
@@ -329,14 +331,20 @@
     }
   },
   "dependencies": {
+    "@iconify/react": "6.0.2",
     "clsx": "^2.1.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@babel/standalone": "^8.0.4",
     "@eslint/js": "^9.39.1",
     "@playwright/test": "^1.58.0",
     "@reduxjs/toolkit": "^2.11.2",
+    "@tailwindcss/browser": "^4.3.3",
     "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-table": "^8.21.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -348,6 +356,8 @@
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
     "axe-playwright": "^2.2.2",
+    "date-fns": "^4.4.0",
+    "esbuild": "^0.28.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
@@ -358,6 +368,7 @@
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",
+    "recharts": "^3.9.2",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
