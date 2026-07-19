@@ -293,6 +293,7 @@
   ],
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run build:lib && npm run build:preview",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
