@@ -4,12 +4,15 @@ import type { ClarifyQuestion } from "../types";
 
 interface ClarifyPickerProps {
   questions: ClarifyQuestion[];
+  // "page_scope" (Phase 11) renders the scope-guard capability message + a
+  // tap-to-build component picker instead of the ordinary questions form.
+  reason?: string;
   // answers[i] is the chosen option for questions[i], or undefined if unanswered.
   onSubmit: (answers: (string | undefined)[]) => void;
   onSkip: () => void;
 }
 
-export default function ClarifyPicker({ questions, onSubmit, onSkip }: ClarifyPickerProps) {
+export default function ClarifyPicker({ questions, reason, onSubmit, onSkip }: ClarifyPickerProps) {
   const [answers, setAnswers] = useState<(string | undefined)[]>(() =>
     questions.map(() => undefined)
   );
@@ -21,6 +24,39 @@ export default function ClarifyPicker({ questions, onSubmit, onSkip }: ClarifyPi
       return next;
     });
   };
+
+  // Page-scope guard: the message is a capability explanation and each option is
+  // a component to build — tapping one starts the build immediately (no Skip;
+  // "Build the main section anyway" is one of the options).
+  // Any Router-driven outcome (page / multi_component / vague / ambiguous_term /
+  // forking_decision / no_target_edit / non_ui) renders one message + tap-to-
+  // build options. No Skip — the "build anyway" escape is one of the options.
+  if (reason) {
+    const q = questions[0];
+    const isScope = reason === "page" || reason === "page_scope" || reason === "multi_component";
+    return (
+      <div className="rule rounded-lg bg-bg-elevated p-4">
+        <p className="eyebrow">
+          {isScope ? "Let's start with one component" : "One quick question"}
+        </p>
+        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-fg-secondary">
+          {q?.question}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {q?.options.map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => onSubmit([option])}
+              className="rounded-lg border border-border-soft px-3 py-1.5 text-sm text-fg-secondary transition-colors hover:border-accent hover:bg-accent/10 hover:text-accent"
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rule rounded-lg bg-bg-elevated p-4">

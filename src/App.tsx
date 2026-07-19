@@ -112,6 +112,9 @@ const App = () => {
       </Route>
       <Route path="playground" element={<Playground />} />
       <Route path="playground/admin" element={<PlaygroundAdmin />} />
+      {/* Route-based chat: the open chat lives in the URL so a refresh restores
+          it (static /admin still wins by route ranking). */}
+      <Route path="playground/:chatId" element={<Playground />} />
       <Route path="oauth/google" element={<OauthRedirect />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

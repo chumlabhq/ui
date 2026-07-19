@@ -85,6 +85,14 @@ window.addEventListener("message", (event) => {
   const data = event.data || {};
   if (data.type === "render") render(String(data.code || ""));
   if (data.type === "setTheme") applyTheme(data.theme);
+  // Responsive gate (render layer): the parent sizes this iframe to a viewport
+  // width, then asks for the document's overflow. Reading documentElement means
+  // media queries reflect the real viewport, so a correctly-responsive
+  // component is never a false positive.
+  if (data.type === "measure") {
+    const el = document.documentElement;
+    post({ type: "measured", scrollWidth: el.scrollWidth, clientWidth: el.clientWidth });
+  }
 });
 
 applyTheme(document.documentElement.dataset.theme);

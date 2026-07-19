@@ -135,6 +135,57 @@ function PreviewSkeleton() {
   );
 }
 
+// Code-tab skeleton while a build streams (before the source is extracted) —
+// numbered, indented shimmer lines that read as a code editor loading.
+const CODE_ROWS: Array<[indent: number, width: number]> = [
+  [0, 46], [0, 62], [1, 38], [1, 54], [2, 30], [2, 48], [1, 40], [0, 24],
+  [0, 58], [1, 44], [2, 34], [2, 52], [1, 36], [0, 60], [0, 28], [1, 50],
+];
+function CodeSkeleton() {
+  return (
+    <div className="pg-no-scrollbar min-h-0 flex-1 overflow-hidden bg-bg-base p-5">
+      <div className="flex flex-col gap-2.5" aria-hidden>
+        {CODE_ROWS.map(([indent, width], i) => (
+          <div key={i} className="flex items-center gap-3">
+            <span className="w-4 shrink-0 text-right font-mono text-[11px] text-fg-muted opacity-40">
+              {i + 1}
+            </span>
+            <span
+              className="pg-skeleton h-2.5 rounded"
+              style={{ width: `${width}%`, marginLeft: indent * 18 }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Code-tab idle empty state — mirrors the preview Placeholder so both panels
+// read as one considered surface, not a bare line of text.
+function CodeEmpty() {
+  return (
+    <div className="relative grid min-h-0 flex-1 place-items-center bg-bg-base px-8 text-center">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-[60%] rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%)",
+        }}
+      />
+      <div className="relative flex max-w-[260px] flex-col items-center">
+        <span className="grid h-14 w-14 place-items-center rounded-2xl border border-border-faint bg-bg-elevated text-fg-tertiary shadow-[0_12px_40px_-16px_var(--accent-glow)] [&_svg]:h-6 [&_svg]:w-6">
+          {CODE_ICON}
+        </span>
+        <p className="mt-4 font-display text-[15px] font-semibold text-fg">Code will appear here</p>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-fg-tertiary">
+          The generated source shows up here once your component is built.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // The preview panel's placeholder — a premium idle state (and building / error
 // variants) instead of a lone line of text.
 function Placeholder({ statusText }: { statusText: string }) {
@@ -370,13 +421,15 @@ export default function StagePanel({
       </div>
 
       {tab === "code" ? (
-        <div className="pg-no-scrollbar min-h-0 flex-1 overflow-auto bg-bg-base p-4">
-          {code ? (
+        code ? (
+          <div className="pg-no-scrollbar min-h-0 flex-1 overflow-auto bg-bg-base p-4">
             <pre className="w-full font-mono text-[12px] leading-relaxed text-fg-secondary">{code}</pre>
-          ) : (
-            <p className="pt-10 text-center text-sm text-fg-tertiary">No code yet.</p>
-          )}
-        </div>
+          </div>
+        ) : loading || statusText.toLowerCase().startsWith("building") ? (
+          <CodeSkeleton />
+        ) : (
+          <CodeEmpty />
+        )
       ) : (
         <div className="relative flex min-h-0 flex-1 justify-center overflow-hidden p-5">
           <div

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ResizablePanel } from "../../components/ResizablePanel";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useAppDispatch } from "../../redux/hooks";
@@ -16,6 +17,7 @@ import AppShell from "./components/shell/AppShell";
 import Sidebar, { type PlaygroundView } from "./components/shell/Sidebar";
 import ChatPanel from "./components/ChatPanel";
 import ClarifyPicker from "./components/ClarifyPicker";
+import ResponsiveProbe from "./components/ResponsiveProbe";
 import AgentBreakdown from "./components/AgentBreakdown";
 import PersonaCard from "./components/PersonaCard";
 import EmptyState from "./components/EmptyState";
@@ -91,7 +93,19 @@ export default function Playground() {
   const authedUser = meError ? undefined : meData?.user;
 
   const [view, setView] = useState<PlaygroundView>("build");
-  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  // The open chat is route-based (/playground/:chatId) so a refresh restores it.
+  // `activeChatId` stays the working source of truth; the two effects below keep
+  // it and the URL in sync (guarded by equality, so no ping-pong).
+  const navigate = useNavigate();
+  const { chatId: routeChatId } = useParams<{ chatId?: string }>();
+  const [activeChatId, setActiveChatId] = useState<string | null>(() => routeChatId ?? null);
+  // URL → state, adjusted during render (React's alternative to a sync effect):
+  // a direct visit / back-forward to a chat URL selects that chat.
+  const [prevRouteChatId, setPrevRouteChatId] = useState(routeChatId);
+  if (routeChatId !== prevRouteChatId) {
+    setPrevRouteChatId(routeChatId);
+    setActiveChatId(routeChatId ?? null);
+  }
   const [pending, setPending] = useState<ChatDisplayMessage[]>([]);
   const [streamText, setStreamText] = useState("");
   const [streamError, setStreamError] = useState<string | null>(null);
@@ -104,6 +118,7 @@ export default function Playground() {
   const [planText, setPlanText] = useState("");
   const [planStreaming, setPlanStreaming] = useState(false);
   const [clarifyQuestions, setClarifyQuestions] = useState<ClarifyQuestion[] | null>(null);
+  const [clarifyReason, setClarifyReason] = useState<string | null>(null);
   const [, setQaState] = useState<QaUIState | null>(null);
   // The stage's device + theme derive from saved settings, with a transient
   // override the toolbar sets for the current session (device is a view control,
@@ -132,17 +147,44 @@ export default function Playground() {
   const failedRef = useRef(false);
   const runStartRef = useRef<number | null>(null);
 
+  // State → URL: reflect the open chat in the address bar (replace, so switching
+  // chats doesn't pile up history). Runs only when they diverge.
+  useEffect(() => {
+    if ((routeChatId ?? null) === activeChatId) return;
+    navigate(activeChatId ? `/playground/${activeChatId}` : "/playground", { replace: true });
+  }, [activeChatId, routeChatId, navigate]);
+
   const onEvent = useCallback((event: PipelineEvent) => {
     runIdRef.current = event.runId;
 
     if (event.stage === "router") {
-      if (event.status === "done") setTier(((event.payload ?? {}) as RouterEventPayload).tier ?? null);
+      const payload = (event.payload ?? {}) as RouterEventPayload;
+      if (event.status === "done") {
+        setTier(payload.tier ?? null);
+        // Decline (Phase 12): the Router refused. Show the refusal as an
+        // assistant turn and stop — no build, no breakdown.
+        if (payload.outcome === "decline" && payload.message) {
+          setPending((prev) => [
+            ...prev,
+            {
+              id: `decline-${Date.now()}`,
+              role: "assistant",
+              content: payload.message ?? "",
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+          setLiveActive(false);
+        }
+      }
       return;
     }
 
     if (event.stage === "clarify") {
       const payload = (event.payload ?? {}) as ClarifyEventPayload;
-      if (event.status === "needs_input") setClarifyQuestions(payload.questions ?? []);
+      if (event.status === "needs_input") {
+        setClarifyQuestions(payload.questions ?? []);
+        setClarifyReason(payload.reason ?? null);
+      }
       return;
     }
 
@@ -277,7 +319,7 @@ export default function Playground() {
     skip: !authedUser,
   });
 
-  const settings: PlaygroundSettings = settingsData?.settings ?? { previewTheme: "light", previewDevice: "mobile" };
+  const settings: PlaygroundSettings = settingsData?.settings ?? { previewTheme: "light", previewDevice: "fill" };
   const allowed =
     !!onboardingData?.onboarding &&
     ["invited", "onboarded"].includes(onboardingData.onboarding.status ?? "");
@@ -362,6 +404,7 @@ export default function Playground() {
     setPlanText("");
     setPlanStreaming(false);
     setClarifyQuestions(null);
+    setClarifyReason(null);
     setQaState(null);
     setElapsedLabel(null);
     setDeliverMeta({ sizeKb: null, a11y: null, gates: null });
@@ -396,19 +439,26 @@ export default function Playground() {
   const handleClarifyResume = (answers: (string | undefined)[]) => {
     const runId = runIdRef.current;
     if (!runId) return;
+    // Page-scope pick: the chosen component IS the request, echoed as-is. An
+    // ordinary clarify echoes the answered questions.
     const answered = clarifyQuestions?.map((q, i) => `${q.question} ${answers[i]}`).filter((_, i) => answers[i]);
+    const content = clarifyReason
+      ? // Router-driven pick: echo the chosen option (or the "build anyway" escape).
+        (answers.find((a) => a) ?? "Build your best guess anyway")
+      : answered?.length
+        ? `Clarifications — ${answered.join(" · ")}`
+        : "Skipped clarifications — building with sensible defaults.";
     setPending((prev) => [
       ...prev,
       {
         id: `clarify-${Date.now()}`,
         role: "user",
-        content: answered?.length
-          ? `Clarifications — ${answered.join(" · ")}`
-          : "Skipped clarifications — building with sensible defaults.",
+        content,
         createdAt: new Date().toISOString(),
       },
     ]);
     setClarifyQuestions(null);
+    setClarifyReason(null);
     setQaState(null);
     streamRef.current = "";
     failedRef.current = false;
@@ -497,6 +547,7 @@ export default function Playground() {
   const clarifyNotice = clarifyQuestions ? (
     <ClarifyPicker
       questions={clarifyQuestions}
+      reason={clarifyReason ?? undefined}
       onSubmit={handleClarifyResume}
       onSkip={() => handleClarifyResume(clarifyQuestions.map(() => undefined))}
     />
@@ -631,6 +682,11 @@ export default function Playground() {
       }
     >
       {view === "build" && buildView}
+      {/* Render layer of the responsive gate — measures a fresh build offscreen
+          at 360/1024 and routes overflow through the render-fix loop. */}
+      {view === "build" && !streaming && previewCode && (
+        <ResponsiveProbe code={previewCode} onFail={handleRenderError} />
+      )}
       {view === "settings" && (
         <SettingsView settings={settings} onChange={changeSettings} saving={savingSettings} />
       )}

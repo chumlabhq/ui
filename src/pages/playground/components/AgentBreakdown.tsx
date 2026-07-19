@@ -94,6 +94,12 @@ export default function AgentBreakdown({ state, elapsedLabel }: AgentBreakdownPr
   // it must not linger as a stuck "queued" row (its gate still reads pass).
   const visibleAgents = running ? agents : agents.filter((a) => activated.includes(a.id));
 
+  // "Settled" = actually finished. Before the first event a fresh live run is
+  // { running: false, activated: [] } — that's *starting*, not done, so it must
+  // read as building (else the header flashes "Done" for a beat before the first
+  // agent kicks off).
+  const settled = !running && activated.length > 0;
+
   return (
     <div className="rule mt-3 shrink-0 overflow-hidden rounded-[10px] border-border-soft bg-bg-elevated">
       <button
@@ -102,7 +108,13 @@ export default function AgentBreakdown({ state, elapsedLabel }: AgentBreakdownPr
         aria-expanded={open}
         className="flex w-full items-center gap-2.5 px-3.5 py-3 text-left"
       >
-        {running ? (
+        {settled ? (
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-success/15" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3 w-3 text-success">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </span>
+        ) : (
           <span className="grid h-5 w-5 place-items-center rounded-full bg-accent/12" aria-hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.6" className="h-3 w-3">
               <path d="M12 3a9 9 0 1 0 9 9" strokeLinecap="round">
@@ -110,21 +122,15 @@ export default function AgentBreakdown({ state, elapsedLabel }: AgentBreakdownPr
               </path>
             </svg>
           </span>
-        ) : (
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-success/15" aria-hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3 w-3 text-success">
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
-          </span>
         )}
         <span
           className={`min-w-0 flex-1 truncate text-[12.5px] font-medium ${
-            running ? "pg-shimmer-text" : "text-fg-secondary"
+            settled ? "text-fg-secondary" : "pg-shimmer-text"
           }`}
           aria-live="polite"
         >
-          {running ? label || "Building your component…" : label || "Done"}
-          {!running && elapsedLabel ? ` · ${elapsedLabel}` : ""}
+          {settled ? label || "Done" : label || "Building your component…"}
+          {settled && elapsedLabel ? ` · ${elapsedLabel}` : ""}
         </span>
         <svg
           viewBox="0 0 24 24"

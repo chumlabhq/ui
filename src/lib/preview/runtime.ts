@@ -9,14 +9,16 @@ export type PreviewTheme = "dark" | "light";
 
 export type PreviewInMessage =
   | { type: "render"; code: string }
-  | { type: "setTheme"; theme: PreviewTheme };
+  | { type: "setTheme"; theme: PreviewTheme }
+  | { type: "measure" };
 
 export type PreviewOutMessage =
   | { type: "ready" }
   | { type: "rendered" }
-  | { type: "error"; error: VerifyError };
+  | { type: "error"; error: VerifyError }
+  | { type: "measured"; scrollWidth: number; clientWidth: number };
 
-const OUT_TYPES = new Set(["ready", "rendered", "error"]);
+const OUT_TYPES = new Set(["ready", "rendered", "error", "measured"]);
 
 export function postToPreview(
   frame: HTMLIFrameElement,

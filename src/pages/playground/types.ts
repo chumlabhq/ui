@@ -165,9 +165,12 @@ export interface GenerationEventPayload {
 
 export type PipelineTier = "trivial" | "single" | "multi" | "full";
 
-// Payload of the router-stage done event.
+// Payload of the router-stage done event. `outcome: "decline"` + `message`
+// carries a policy refusal (Phase 12) — an assistant turn, no build.
 export interface RouterEventPayload {
   tier?: PipelineTier;
+  outcome?: "build" | "clarify" | "redirect" | "decline";
+  message?: string;
 }
 
 export interface ClarifyQuestion {
@@ -200,10 +203,13 @@ export interface QaEventPayload {
   findings?: QaFinding[];
 }
 
-// Payload of the clarify-stage needs_input event.
+// Payload of the clarify-stage needs_input event. `reason` is "page_scope" when
+// the pause is the scope-guard capability clarify (Phase 11) rather than an
+// ordinary ambiguity triage.
 export interface ClarifyEventPayload {
   questions?: ClarifyQuestion[];
   assumptions?: string;
+  reason?: string;
 }
 
 // Phase 10 · human-readable label carried on every stage `start` event.
