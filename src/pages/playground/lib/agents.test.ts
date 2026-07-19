@@ -54,7 +54,7 @@ const OTP_EVENTS: PipelineEvent[] = [
   ev("deliver", "done", {
     sizeKb: 4.1,
     a11y: "AA",
-    gates: { lint: true, types: true, render: true, qa: true },
+    gates: { lint: true, types: true, render: true, responsive: true, safety: true, qa: true },
   }),
 ];
 
@@ -76,7 +76,7 @@ describe("reduceAgentRun over the OTP golden", () => {
 
   it("lights the cluster from the deliver metadata", () => {
     expect(final.running).toBe(false);
-    expect(final.gates).toEqual({ lint: true, types: true, render: true, qa: true });
+    expect(final.gates).toEqual({ lint: true, types: true, render: true, responsive: true, safety: true, qa: true });
     expect(final.sizeKb).toBe(4.1);
     expect(final.a11y).toBe("AA");
     expect(final.label).toMatch(/Built by 4 agents · all gates passed/);
@@ -114,7 +114,7 @@ describe("single-tier run (no clarify/plan/qa)", () => {
       ev("verify", "start", { label: "Testing", round: 0 }),
       ev("verify", "substep", { text: "lint ok", ok: true }),
       ev("verify", "done", { pass: true }),
-      ev("deliver", "done", { sizeKb: 1.2, a11y: "AA", gates: { lint: true, types: true, render: true, qa: true } }),
+      ev("deliver", "done", { sizeKb: 1.2, a11y: "AA", gates: { lint: true, types: true, render: true, responsive: true, safety: true, qa: true } }),
     ];
     const final = agentRunFromEvents(events);
     expect(final.activated).toEqual(["router", "developer", "verifier"]);
@@ -134,7 +134,7 @@ describe("agentRunFromTimeline (re-open a past build)", () => {
     ];
     const state = agentRunFromTimeline(
       timeline,
-      { lint: true, types: true, render: true, qa: true },
+      { lint: true, types: true, render: true, responsive: true, safety: true, qa: true },
       4.1,
       "AA"
     );

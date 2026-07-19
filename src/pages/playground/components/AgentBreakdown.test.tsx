@@ -25,7 +25,7 @@ const OTP_EVENTS: PipelineEvent[] = [
   ev("deliver", "done", {
     sizeKb: 4.1,
     a11y: "AA",
-    gates: { lint: true, types: true, render: true, qa: true },
+    gates: { lint: true, types: true, render: true, responsive: true, safety: true, qa: true },
   }),
 ];
 
@@ -37,7 +37,7 @@ const SINGLE_TIER_EVENTS: PipelineEvent[] = [
   ev("verify", "start", { label: "Testing", round: 0 }),
   ev("verify", "substep", { text: "lint ok", ok: true }),
   ev("verify", "done", { pass: true }),
-  ev("deliver", "done", { sizeKb: 1.2, a11y: "AA", gates: { lint: true, types: true, render: true, qa: true } }),
+  ev("deliver", "done", { sizeKb: 1.2, a11y: "AA", gates: { lint: true, types: true, render: true, responsive: true, safety: true, qa: true } }),
 ];
 
 describe("AgentBreakdown", () => {

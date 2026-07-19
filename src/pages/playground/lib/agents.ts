@@ -177,7 +177,8 @@ export function reduceAgentRun(state: AgentRunState, event: PipelineEvent): Agen
 function summaryLabel(activated: AgentId[], gates: DeliverGates | null): string {
   const n = activated.length || AGENT_ORDER.length;
   if (!gates) return `Built by ${n} agent${n === 1 ? "" : "s"}`;
-  const allPassed = gates.lint && gates.types && gates.render && gates.qa;
+  const allPassed =
+    gates.lint && gates.types && gates.render && gates.responsive && gates.safety && gates.qa;
   return `Built by ${n} agent${n === 1 ? "" : "s"} · ${allPassed ? "all gates passed" : "delivered with warnings"}`;
 }
 

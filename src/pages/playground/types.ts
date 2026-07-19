@@ -19,24 +19,6 @@ export interface PlaygroundUser {
   initials: string;
 }
 
-export interface PlaygroundOnboardingSubmission {
-  user: PlaygroundUser;
-  role: PlaygroundRole;
-  context: string;
-  contextLabel: string;
-  budgetTier: PlaygroundBudgetTier;
-  budgetLabel: string;
-  organization?: string;
-  phone?: string;
-  requirements?: string;
-}
-
-export interface OnboardingResult {
-  submittedAt: string;
-  position: number;
-  estimatedWait: string;
-}
-
 // Pipeline contract, frozen in Phase 0. Mirrors chumlab-be/src/ai/sse.js and the
 // run/chat API shapes; this module is the single source of truth on the client.
 
@@ -203,9 +185,9 @@ export interface QaEventPayload {
   findings?: QaFinding[];
 }
 
-// Payload of the clarify-stage needs_input event. `reason` is "page_scope" when
-// the pause is the scope-guard capability clarify (Phase 11) rather than an
-// ordinary ambiguity triage.
+// Payload of a Router-driven needs_input pause (emitted on stage "clarify").
+// `reason` is the Router outcome/reason — "page", "ambiguous_term", "vague",
+// "multi_component", etc. — which drives how ClarifyPicker renders it.
 export interface ClarifyEventPayload {
   questions?: ClarifyQuestion[];
   assumptions?: string;
@@ -230,6 +212,8 @@ export interface DeliverGates {
   lint: boolean;
   types: boolean;
   render: boolean;
+  responsive: boolean;
+  safety: boolean;
   qa: boolean;
 }
 export interface DeliverEventPayload {

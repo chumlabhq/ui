@@ -928,7 +928,7 @@ body {
   animation: pg-shimmer 1.8s linear infinite;
 }
 
-/* The instrument cluster's live glow + relay pulse. */
+/* Live glow + relay pulse for the agent breakdown's running node. */
 @keyframes pg-pulse {
   0%, 100% { opacity: 0.5; transform: scale(0.85); }
   50% { opacity: 1; transform: scale(1.15); }
