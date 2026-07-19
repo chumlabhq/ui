@@ -241,9 +241,12 @@ export type PlaygroundOnboardingStatus =
   | "rejected";
 
 // `details` payload of the 403/429 gate responses (requirePlaygroundAccess,
-// perUserQuota) - what Playground.tsx renders when access is denied.
+// the generation quota) - what Playground.tsx renders when access is denied.
+// `scope` distinguishes an over_quota cause: the per-user daily cap, the
+// all-users capacity cap, or a short-term burst throttle.
 export interface PlaygroundGateInfo {
   code: "not_invited" | "over_quota";
+  scope?: "user" | "global" | "burst";
   position?: number | null;
   estimatedWait?: string | null;
   limit?: number;

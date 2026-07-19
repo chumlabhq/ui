@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import AnnouncementBanner from "../../../../components/AnnouncementBanner";
+// Stealth-mode announcement strip temporarily disabled — see SiteHeader.tsx.
+// import AnnouncementBanner from "../../../../components/AnnouncementBanner";
 import UserMenu from "../../../../components/UserMenu";
 import logoLight from "../../../../assets/images/logo-light.png";
 
@@ -10,7 +11,7 @@ import logoLight from "../../../../assets/images/logo-light.png";
 export default function TopBar() {
   return (
     <>
-      <AnnouncementBanner />
+      {/* <AnnouncementBanner /> — stealth-mode strip temporarily disabled */}
       <header className="bg-bg-base" style={{ borderBottom: "0.5px solid var(--border-faint)" }}>
         <div className="w-full px-5 sm:px-6 md:px-8">
           <div className="flex h-[64px] items-center gap-4">

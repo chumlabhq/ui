@@ -4,6 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { useEnterPlayground } from "./lib/enterPlayground";
 import Reveal from "../../components/Reveal/Reveal";
 import { Button } from "../../components/ui";
+import GateCluster from "./components/GateCluster";
+import type { GateLamps, LampState } from "./lib/gates";
 import logoSmall from "../../assets/images/logo-small.png";
 
 // Register the few icons this section renders so they paint instantly and never
@@ -848,6 +850,7 @@ type Phase =
   | "task4"
   | "codeStream"
   | "rendering"
+  | "qa"
   | "rest"
   | "cleanup";
 
@@ -862,6 +865,7 @@ const PHASE_ORDER: readonly Phase[] = [
   "task4",
   "codeStream",
   "rendering",
+  "qa",
   "rest",
   "cleanup",
 ];
@@ -882,46 +886,14 @@ const PHASE_DURATIONS: Record<
   task2: 900,
   task3: 900,
   task4: 900,
-  rendering: 1000,
+  rendering: 1100,
+  qa: 900,
   rest: 3000,
   cleanup: 1000,
 };
 
 const PROMPT_MS = 35; // per character, user prompt typing
 const CODE_MS = 22; // per character, code streaming
-
-const TASK_PHASES: readonly Phase[] = ["task1", "task2", "task3", "task4"];
-
-function taskState(
-  taskIndex: number,
-  phase: Phase,
-): "pending" | "active" | "done" {
-  if (
-    phase === "inputTyping" ||
-    phase === "sendBeat" ||
-    phase === "thinking" ||
-    phase === "aiIntro"
-  )
-    return "pending";
-  const idx = TASK_PHASES.indexOf(phase);
-  if (idx === -1) return "done"; // past planning
-  if (taskIndex < idx) return "done";
-  if (taskIndex === idx) return "active";
-  return "pending";
-}
-
-function completedTaskCount(phase: Phase, total: number): number {
-  if (
-    phase === "inputTyping" ||
-    phase === "sendBeat" ||
-    phase === "thinking" ||
-    phase === "aiIntro"
-  )
-    return 0;
-  const idx = TASK_PHASES.indexOf(phase);
-  if (idx === -1) return total;
-  return idx;
-}
 
 interface LoopState {
   cycleIdx: number;
@@ -1094,6 +1066,534 @@ function usePlaygroundLoop({
   return { cycleIdx, phase, promptChars, codeChars };
 }
 
+// ─── Agent breakdown (mirrors the real playground's AgentBreakdown) ─────────
+// The demo animates the same 4-agent relay the product shows: Router plans,
+// Developer writes, Verifier runs the deterministic gates, QA reviews — then a
+// deliver seal. Agent state is derived from the loop `phase`; no extra timers.
+
+type MockAgentStatus = "queued" | "running" | "done";
+interface MockAgent {
+  id: string;
+  name: string;
+  role: string;
+  status: MockAgentStatus;
+  substeps: { text: string; ok: boolean }[];
+}
+
+// Which agent (0=Router … 3=QA) is active in each phase.
+const AGENT_STAGE: Partial<Record<Phase, number>> = {
+  thinking: 0,
+  aiIntro: 0,
+  task1: 0,
+  task2: 0,
+  task3: 0,
+  task4: 0,
+  codeStream: 1,
+  rendering: 2,
+  qa: 3,
+};
+
+// The Verifier's lines are the real blocking gates, verbatim from the product.
+const GATE_LINES = [
+  "No banned APIs, imports, or inline styles",
+  "Type-checks against @chumlab/ui",
+  "Mobile-responsive (no fixed pixel widths)",
+  "Content policy",
+];
+
+function phaseHeadline(phase: Phase): string {
+  if (phase === "codeStream") return "Writing the component";
+  if (phase === "rendering") return "Testing edge cases";
+  if (phase === "qa") return "Running the gates";
+  return "Planning the build";
+}
+
+function mockAgents(phase: Phase, cycle: Cycle): { agents: MockAgent[]; settled: boolean } {
+  const settled = phase === "rest" || phase === "cleanup";
+  const stage = settled ? 4 : AGENT_STAGE[phase] ?? -1;
+
+  const statusAt = (i: number): MockAgentStatus => {
+    if (settled) return "done";
+    if (stage < 0 || i > stage) return "queued";
+    return i === stage ? "running" : "done";
+  };
+
+  // Router reveals its two plan lines as it works; everything is ✓ once done.
+  const routerCount =
+    phase === "thinking" ? 0 : phase === "aiIntro" || phase === "task1" ? 1 : 2;
+  const routerSubs = [
+    { text: "Understood the request", ok: true },
+    { text: `Planned ${cycle.tasks.length} build steps`, ok: true },
+  ].slice(0, settled ? 2 : routerCount);
+
+  const devSubs =
+    stage >= 1 ? [{ text: "Composing with @chumlab/ui primitives", ok: true }] : [];
+  const verifierSubs = stage >= 2 ? GATE_LINES.map((text) => ({ text, ok: true })) : [];
+  const qaSubs = stage >= 3 ? [{ text: "No blocking issues · accessibility AA", ok: true }] : [];
+
+  return {
+    settled,
+    agents: [
+      { id: "router", name: "Router", role: "plans the build", status: statusAt(0), substeps: routerSubs },
+      { id: "developer", name: "Developer", role: "writes the code", status: statusAt(1), substeps: devSubs },
+      { id: "verifier", name: "Verifier", role: "tests edge cases", status: statusAt(2), substeps: verifierSubs },
+      { id: "qa", name: "QA", role: "runs the gates", status: statusAt(3), substeps: qaSubs },
+    ],
+  };
+}
+
+const AGENT_CHECK = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+function MockAgentRow({ agent, last }: { agent: MockAgent; last: boolean }) {
+  const running = agent.status === "running";
+  const done = agent.status === "done";
+  return (
+    <div className="relative py-2 pl-[42px] pr-3.5">
+      {!last && (
+        <span
+          aria-hidden
+          className={`absolute left-[22px] top-6 bottom-[-2px] w-[1.5px] ${
+            done ? "bg-accent" : "bg-border-soft"
+          }`}
+        />
+      )}
+      <span
+        aria-hidden
+        className={`absolute left-3.5 top-2.5 grid h-[17px] w-[17px] place-items-center rounded-full border-[1.5px] transition ${
+          done
+            ? "border-accent bg-accent"
+            : running
+              ? "border-accent bg-bg-elevated shadow-[0_0_0_4px_var(--accent-bg,rgba(91,155,255,0.12)),0_0_10px_var(--accent-glow)] pg-pulse"
+              : "border-border-active bg-bg-elevated"
+        }`}
+      >
+        <span className={`h-[9px] w-[9px] text-bg-base ${done ? "opacity-100" : "opacity-0"}`}>
+          {AGENT_CHECK}
+        </span>
+      </span>
+
+      <div className="flex items-baseline gap-1.5">
+        <span className="font-display text-[12.5px] font-semibold text-fg">{agent.name}</span>
+        <span className="truncate text-[11px] text-fg-tertiary">· {agent.role}</span>
+        <span
+          className={`ml-auto font-mono text-[9px] uppercase tracking-[0.05em] ${
+            running ? "text-accent" : done ? "text-fg-tertiary" : "text-fg-muted"
+          }`}
+        >
+          {agent.status}
+        </span>
+      </div>
+
+      {agent.substeps.length > 0 && (
+        <div className="mt-1.5 flex flex-col gap-1">
+          {agent.substeps.map((s, i) => (
+            <div
+              key={s.text}
+              className="flex items-center gap-1.5 text-[11.5px] text-fg-secondary pg-settle"
+              style={{ animationDelay: `${i * 90}ms` }}
+            >
+              <span className="h-3 w-3 shrink-0 text-success">{AGENT_CHECK}</span>
+              {s.text}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MockAgentBreakdown({ phase, cycle }: { phase: Phase; cycle: Cycle }) {
+  const { agents, settled } = mockAgents(phase, cycle);
+  const headline = settled ? "Built by 4 agents · all gates passed" : phaseHeadline(phase);
+  return (
+    <div className="inline-block w-full max-w-[92%] min-w-[280px] overflow-hidden rounded-2xl rounded-tl-sm border border-border-active bg-bg-overlay sm:min-w-[320px]">
+      <div className="flex items-center gap-2.5 border-b border-border-faint px-3.5 py-2.5">
+        {settled ? (
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-success/15" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3 w-3 text-success">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </span>
+        ) : (
+          <span className="grid h-5 w-5 place-items-center rounded-full bg-accent/10" aria-hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.6" className="h-3 w-3">
+              <path d="M12 3a9 9 0 1 0 9 9" strokeLinecap="round">
+                <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite" />
+              </path>
+            </svg>
+          </span>
+        )}
+        <span
+          className={`min-w-0 flex-1 truncate text-[12.5px] font-medium ${
+            settled ? "text-fg-secondary" : "pg-shimmer-text"
+          }`}
+        >
+          {headline}
+        </span>
+      </div>
+      <div className="py-1.5">
+        {agents.map((agent, i) => (
+          <MockAgentRow key={agent.id} agent={agent} last={i === agents.length - 1} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Mock playground shell (mirrors the real /playground 3-pane app) ────────
+
+const SIDEBAR_CHATS = [
+  "A 6-digit OTP input",
+  "A login form with email",
+  "A pricing table",
+  "A settings page",
+  "A data table for team",
+  "A sortable data table",
+];
+
+const EMPTY_CHIPS = [
+  "A 6-digit OTP input with paste",
+  "A login form with email & password",
+  "A pricing table with three tiers",
+  "A settings page with toggle rows",
+];
+
+const ICON = {
+  plus: <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />,
+  gear: <path fillRule="evenodd" d="M11.078 2.25a1.875 1.875 0 0 0-1.85 1.567l-.178 1.072c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.6 7.6 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071a1.875 1.875 0 0 0 1.85 1.567h1.844a1.875 1.875 0 0 0 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.6 7.6 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692a1.875 1.875 0 0 0 .433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clipRule="evenodd" />,
+};
+
+const CHAT_GLYPH = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-3.5 w-3.5 shrink-0" aria-hidden>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
+  </svg>
+);
+
+function MockSidebar({ cycleIdx }: { cycleIdx: number }) {
+  return (
+    <div className="hidden shrink-0 flex-col border-r border-border-faint bg-bg-base lg:flex" style={{ width: 188 }}>
+      <div className="flex h-11 items-center px-2.5 pt-1">
+        <div className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-[12.5px] text-fg-secondary">
+          <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]" aria-hidden>{ICON.plus}</svg>
+          New
+        </div>
+      </div>
+      <div className="px-4 pb-1.5 pt-2 text-[11px] font-medium uppercase tracking-[0.08em] text-fg-tertiary">Recents</div>
+      <div className="flex flex-col gap-0.5 px-2">
+        {SIDEBAR_CHATS.map((c, i) => (
+          <div
+            key={c}
+            className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-[12.5px] ${
+              i === cycleIdx ? "bg-fg/[0.06] text-fg" : "text-fg-secondary"
+            }`}
+          >
+            {CHAT_GLYPH}
+            <span className="truncate">{c}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex-1" />
+      <div className="border-t border-border-faint px-2 py-2">
+        <div className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[12.5px] text-fg-secondary">
+          <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]" aria-hidden>{ICON.gear}</svg>
+          Settings
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MockEmptyState() {
+  return (
+    <div className="m-auto flex max-w-md flex-col items-center px-6 text-center">
+      <span
+        className="grid h-11 w-11 place-items-center rounded-2xl border border-border-faint bg-bg-elevated shadow-[0_8px_30px_-12px_var(--accent-glow)]"
+        aria-hidden
+      >
+        <img src={logoSmall} alt="" className="h-6 w-6 object-contain" />
+      </span>
+      <h4 className="mt-4 font-display text-[20px] font-semibold tracking-tight text-fg">What will you build?</h4>
+      <p className="mt-2 text-[12.5px] leading-relaxed text-fg-tertiary">
+        Describe a component and the Chumlab team builds it, typed, accessible, and verified against the
+        real library.
+      </p>
+      <div className="mt-5 flex flex-wrap justify-center gap-2">
+        {EMPTY_CHIPS.map((c) => (
+          <span
+            key={c}
+            className="rounded-full border border-border-faint bg-bg-elevated px-3 py-1.5 text-[11.5px] text-fg-secondary"
+          >
+            {c}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Exact toolbar icons from the real StagePanel, so the preview toolbar matches.
+const PV_EYE = (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+    <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
+  </svg>
+);
+const PV_CODE = (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path fillRule="evenodd" d="M14.447 3.026a.75.75 0 0 1 .527.921l-4.5 16.5a.75.75 0 0 1-1.448-.394l4.5-16.5a.75.75 0 0 1 .921-.527ZM16.72 6.22a.75.75 0 0 1 1.06 0l5.25 5.25a.75.75 0 0 1 0 1.06l-5.25 5.25a.75.75 0 1 1-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 0 1 0-1.06Zm-9.44 0a.75.75 0 0 1 0 1.06L2.56 12l4.72 4.72a.75.75 0 0 1-1.06 1.06L.97 12.53a.75.75 0 0 1 0-1.06l5.25-5.25a.75.75 0 0 1 1.06 0Z" clipRule="evenodd" />
+  </svg>
+);
+const PV_MOBILE = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+    <rect x="7" y="3" width="10" height="18" rx="2" />
+    <path d="M11 18h2" />
+  </svg>
+);
+const PV_TABLET = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <path d="M11 17h2" />
+  </svg>
+);
+const PV_DESKTOP = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+    <rect x="3" y="4" width="18" height="12" rx="2" />
+    <path d="M8 20h8M12 16v4" />
+  </svg>
+);
+const PV_COPY = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+    <rect x="9" y="9" width="11" height="11" rx="2" />
+    <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+  </svg>
+);
+const PV_SUN = (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+  </svg>
+);
+const PV_MOON = (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clipRule="evenodd" />
+  </svg>
+);
+
+const PV_SEG = "flex shrink-0 gap-0.5 rounded-lg border border-border-faint bg-bg-elevated p-[3px]";
+const pvTog = (active: boolean) =>
+  `grid place-items-center rounded-[6px] px-2 py-1.5 [&_svg]:h-[15px] [&_svg]:w-[15px] ${
+    active ? "bg-bg-overlay text-accent shadow-[inset_0_0_0_0.5px_var(--border-soft)]" : "text-fg-tertiary"
+  }`;
+
+function mockGateLamps(phase: Phase): GateLamps {
+  const verifyDone = phase === "rendering" || phase === "qa" || phase === "rest" || phase === "cleanup";
+  const qaDone = phase === "qa" || phase === "rest" || phase === "cleanup";
+  const warming = phase === "codeStream";
+  const g = (done: boolean): LampState => (done ? "passed" : warming ? "running" : "pending");
+  return {
+    lint: g(verifyDone),
+    types: g(verifyDone),
+    render: g(verifyDone),
+    responsive: g(verifyDone),
+    safety: g(verifyDone),
+    qa: qaDone ? "passed" : verifyDone ? "running" : g(false),
+  };
+}
+
+function MockPreviewPane({ phase, cycle, codeChars }: { phase: Phase; cycle: Cycle; codeChars: number }) {
+  const Preview = cycle.Preview;
+  const showComponent = phase === "rendering" || phase === "qa" || phase === "rest" || phase === "cleanup";
+  const streaming = phase === "codeStream";
+  const codeView = streaming;
+  return (
+    <div className="hidden min-w-0 flex-1 flex-col bg-bg-base md:flex">
+      <div className="rule-b flex h-12 shrink-0 items-center gap-2 border-border-faint px-3">
+        <div className={PV_SEG}>
+          <span className={pvTog(!codeView)} aria-hidden>{PV_EYE}</span>
+          <span className={pvTog(codeView)} aria-hidden>{PV_CODE}</span>
+        </div>
+        <span className="flex-1" />
+        <div className={PV_SEG}>
+          <span className={pvTog(false)} aria-hidden>{PV_MOBILE}</span>
+          <span className={pvTog(false)} aria-hidden>{PV_TABLET}</span>
+          <span className={pvTog(true)} aria-hidden>{PV_DESKTOP}</span>
+        </div>
+        <span className="flex-1" />
+        <span className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border-faint px-2.5 py-1.5 text-[11.5px] text-fg-secondary [&_svg]:h-3.5 [&_svg]:w-3.5" aria-hidden>
+          {PV_COPY}
+          <span className="hidden md:inline">Copy</span>
+        </span>
+        <div className={PV_SEG}>
+          <span className={pvTog(true)} aria-hidden>{PV_SUN}</span>
+          <span className={pvTog(false)} aria-hidden>{PV_MOON}</span>
+        </div>
+      </div>
+
+      <div className="relative flex min-h-0 flex-1 items-center justify-center p-4">
+        <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-border-soft bg-bg-elevated">
+          <div className="flex h-7 shrink-0 items-center gap-1.5 border-b border-border-faint bg-bg-overlay px-3" aria-hidden>
+            <i className="h-2 w-2 rounded-full bg-border-active" />
+            <i className="h-2 w-2 rounded-full bg-border-active" />
+            <i className="h-2 w-2 rounded-full bg-border-active" />
+          </div>
+          <div className="pg-no-scrollbar relative flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-bg-base">
+            {showComponent ? (
+              <div className="preview-anim flex w-full items-center justify-center p-4 [&>*]:scale-[0.82]">
+                <Preview />
+              </div>
+            ) : codeView ? (
+              <div className="pg-no-scrollbar h-full w-full overflow-hidden p-4 font-mono text-[11px] leading-[1.6]">
+                {renderCode(cycle.code, codeChars)}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-2 px-6 text-center">
+                <span className="grid h-11 w-11 place-items-center rounded-xl border border-border-faint bg-bg-elevated text-fg-tertiary" aria-hidden>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-5 w-5"><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 8h18" /></svg>
+                </span>
+                <span className="font-display text-[14px] font-semibold text-fg">Live preview</span>
+                <span className="text-[12px] leading-relaxed text-fg-tertiary">Describe a component in the chat, it renders here, live.</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <GateCluster lamps={mockGateLamps(phase)} />
+    </div>
+  );
+}
+
+interface MockShellProps {
+  phase: Phase;
+  cycle: Cycle;
+  cycleIdx: number;
+  promptChars: number;
+  codeChars: number;
+  showInputTyping: boolean;
+  showUserBubble: boolean;
+  showAIIntro: boolean;
+  showBreakdown: boolean;
+  sendState: "idle" | "working";
+  chatRef: React.RefObject<HTMLDivElement | null>;
+  fadeContentClass: string;
+}
+
+function MockPlaygroundShell({
+  phase,
+  cycle,
+  cycleIdx,
+  promptChars,
+  codeChars,
+  showInputTyping,
+  showUserBubble,
+  showAIIntro,
+  showBreakdown,
+  sendState,
+  chatRef,
+  fadeContentClass,
+}: MockShellProps) {
+  const Skeleton = cycle.Skeleton;
+  return (
+    <div className="flex h-[540px] flex-col bg-bg-base md:h-[600px]">
+      {/* top bar */}
+      <div className="flex h-11 shrink-0 items-center gap-2.5 border-b border-border-faint px-4">
+        <img src={logoSmall} alt="" className="h-5 w-5 object-contain" aria-hidden />
+        <span className="font-display text-[14px] font-semibold text-fg">Chumlab</span>
+        <span className="h-4 w-px bg-border-faint" aria-hidden />
+        <span className="font-display text-[14px] font-semibold text-fg-secondary">Playground</span>
+        <span className="flex-1" />
+      </div>
+
+      {/* 3-pane body */}
+      <div className="flex min-h-0 flex-1">
+        <MockSidebar cycleIdx={cycleIdx} />
+
+        {/* chat pane */}
+        <div className="flex min-w-0 flex-1 flex-col border-r border-border-faint">
+          <div className="flex h-11 shrink-0 items-center gap-3 border-b border-border-faint px-4">
+            <span className="min-w-0 flex-1 truncate font-display text-[13.5px] font-semibold text-fg">
+              {showUserBubble ? cycle.userPrompt : "New build"}
+            </span>
+            {showUserBubble && (
+              <span className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border-faint px-2.5 py-1.5 text-[11.5px] text-fg-secondary" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-3.5 w-3.5"><path d="M21 12a9 9 0 1 1-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg>
+                Regenerate
+              </span>
+            )}
+          </div>
+
+          <div ref={chatRef} className="scrollbox flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 py-5">
+            {showInputTyping ? (
+              <MockEmptyState />
+            ) : (
+              <div key={cycle.id} className={`flex flex-col gap-4 transition-[opacity,filter] duration-700 ${fadeContentClass}`}>
+                {showUserBubble && (
+                  <UserMessage>
+                    {cycle.type === "screenshot" && Skeleton ? (
+                      <div className="rounded-2xl rounded-tr-sm border border-accent/30 bg-accent/[0.12] p-2.5">
+                        <Skeleton />
+                        <p className="px-1.5 pb-1 pt-1.5 font-sans text-[13px] leading-[1.5] text-fg">{cycle.userPrompt}</p>
+                      </div>
+                    ) : (
+                      <div className="rounded-2xl rounded-tr-sm border border-accent/30 bg-accent/[0.12] px-4 py-2.5">
+                        <p className="font-sans text-[14px] leading-[1.5] text-fg">{cycle.userPrompt}</p>
+                      </div>
+                    )}
+                  </UserMessage>
+                )}
+
+                {showAIIntro && (
+                  <AIMessage>
+                    <div className="inline-block max-w-[88%] rounded-2xl rounded-tl-sm border border-border-active bg-bg-overlay px-4 py-2.5">
+                      <p className="font-sans text-[14px] leading-[1.5] text-fg">{cycle.aiIntro}</p>
+                    </div>
+                  </AIMessage>
+                )}
+
+                {showBreakdown && (
+                  <AIMessage>
+                    <MockAgentBreakdown phase={phase} cycle={cycle} />
+                  </AIMessage>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* input */}
+          <div className="flex items-center gap-2 border-t border-border-faint px-4 py-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-border-faint bg-bg-base px-3 py-2">
+              {showInputTyping ? (
+                <span className="truncate font-sans text-[13px] text-fg">
+                  {cycle.userPrompt.slice(0, promptChars)}
+                  <span aria-hidden className="ml-0.5 inline-block h-[14px] w-[2px] animate-cursor bg-accent align-text-bottom" />
+                </span>
+              ) : (
+                <span className="truncate font-sans text-[13px] text-fg-tertiary">Describe a component, or drop a screenshot…</span>
+              )}
+            </div>
+            <button
+              type="button"
+              tabIndex={-1}
+              aria-label="Send"
+              data-state={sendState}
+              className="ai-send-btn flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent transition-colors hover:bg-[#7eb1ff]"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="ai-send-icon h-5 w-5 text-bg-base" aria-hidden>
+                <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <MockPreviewPane phase={phase} cycle={cycle} codeChars={codeChars} />
+      </div>
+    </div>
+  );
+}
+
 // ─── Section ──────────────────────────────────────────────────────────────
 
 export default function AIPlaygroundSection() {
@@ -1178,8 +1678,6 @@ export default function AIPlaygroundSection() {
   });
 
   const cycle = CYCLES[cycleIdx];
-  const PreviewComponent = cycle.Preview;
-  const Skeleton = cycle.Skeleton;
 
   // Status label + send-button state derived directly from phase. Both
   // stay in lock-step with the loop without any extra timers. While the
@@ -1198,7 +1696,7 @@ export default function AIPlaygroundSection() {
       )
         return "Planning";
       if (phase === "codeStream") return "Coding";
-      if (phase === "rendering") return "Rendering";
+      if (phase === "rendering" || phase === "qa") return "Rendering";
       return "Ready"; // rest, cleanup
     }, [phase]);
 
@@ -1211,7 +1709,10 @@ export default function AIPlaygroundSection() {
   // user has "sent" the prompt. It stays through the rest of the cycle and
   // fades out only during `cleanup`.
   const showUserBubble = phase !== "inputTyping";
-  const showThinking = phase === "thinking";
+  // The agent relay replaces the old "thinking dots" and task-plan card: it
+  // appears the moment the prompt is sent (Router running) and stays through
+  // the build, ending on the deliver seal.
+  const showBreakdown = phase !== "inputTyping" && phase !== "sendBeat";
   const showAIIntro =
     phase === "aiIntro" ||
     phase === "task1" ||
@@ -1220,24 +1721,9 @@ export default function AIPlaygroundSection() {
     phase === "task4" ||
     phase === "codeStream" ||
     phase === "rendering" ||
+    phase === "qa" ||
     phase === "rest" ||
     phase === "cleanup";
-  const showPlan =
-    phase === "task1" ||
-    phase === "task2" ||
-    phase === "task3" ||
-    phase === "task4" ||
-    phase === "codeStream" ||
-    phase === "rendering" ||
-    phase === "rest" ||
-    phase === "cleanup";
-  const showCode =
-    phase === "codeStream" ||
-    phase === "rendering" ||
-    phase === "rest" ||
-    phase === "cleanup";
-  const showPreview =
-    phase === "rendering" || phase === "rest" || phase === "cleanup";
   const fadingOut = phase === "cleanup";
   const fadeContentClass = fadingOut
     ? "opacity-30 blur-[1px]"
@@ -1328,329 +1814,21 @@ export default function AIPlaygroundSection() {
                 </div>
               </div>
 
-              {/* Chat header */}
-              <div className="flex items-center justify-center gap-2.5 py-3 border-b border-border-faint">
-                <div className="relative shrink-0">
-                  <div className="w-7 h-7 rounded-full bg-bg-base border border-border-soft flex items-center justify-center overflow-hidden">
-                    <img
-                      src={logoSmall}
-                      alt="Chumlab AI"
-                      className="w-5 h-5 object-contain"
-                    />
-                  </div>
-                  <span
-                    aria-hidden
-                    className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#4ade80] border-2 border-[#0a0d12]"
-                  />
-                </div>
-                <span className="font-sans text-[14px] font-medium text-fg">
-                  Chumlab AI
-                </span>
-                <span aria-hidden className="text-fg-muted">
-                  ·
-                </span>
-                <span
-                  className={`font-mono text-[11px] ${
-                    statusLabel === "Ready"
-                      ? "text-[#4ade80]"
-                      : "text-accent"
-                  }`}
-                >
-                  {statusLabel}
-                </span>
-              </div>
+              <MockPlaygroundShell
+                phase={phase}
+                cycle={cycle}
+                cycleIdx={cycleIdx}
+                promptChars={promptChars}
+                codeChars={codeChars}
+                showInputTyping={showInputTyping}
+                showUserBubble={showUserBubble}
+                showAIIntro={showAIIntro}
+                showBreakdown={showBreakdown}
+                sendState={sendState}
+                chatRef={chatRef}
+                fadeContentClass={fadeContentClass}
+              />
 
-              {/* Chat conversation */}
-              <div
-                ref={chatRef}
-                className="scrollbox px-5 sm:px-7 py-6 sm:py-7 min-h-[460px] md:min-h-[540px] max-h-[640px] overflow-y-auto flex flex-col gap-4"
-              >
-                {/* Persistent AI greeting — never cleared. */}
-                <AIMessage>
-                  <div className="inline-block max-w-[88%] bg-bg-base border border-border-faint rounded-2xl rounded-tl-sm px-4 py-3">
-                    <p className="font-sans text-[14px] text-fg leading-[1.55]">
-                      Hey, I&rsquo;m{" "}
-                      <span className="text-accent font-medium">
-                        Chumlab AI
-                      </span>
-                      . Describe a component or drop a screenshot, and
-                      I&rsquo;ll write production ready React using Chumlab
-                      primitives.
-                    </p>
-                  </div>
-                </AIMessage>
-
-                {/* Cycle-scoped messages — keyed by cycle.id so the whole
-                    block fades out then remounts fresh on each cycle. */}
-                <div
-                  key={cycle.id}
-                  className={`flex flex-col gap-4 transition-[opacity,filter] duration-700 ${fadeContentClass}`}
-                >
-                  {/* User message — mounts at `sendBeat` (after the prompt
-                      finishes typing into the input field). Avatar on the
-                      right, bubble flush against it. */}
-                  {showUserBubble && (
-                    <UserMessage>
-                      {cycle.type === "screenshot" && Skeleton ? (
-                        <div className="bg-accent/[0.12] border border-accent/25 rounded-2xl rounded-tr-sm p-2.5">
-                          <Skeleton />
-                          <p className="font-sans text-[13px] text-fg leading-[1.5] px-1.5 pt-1.5 pb-1">
-                            {cycle.userPrompt}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="bg-accent/[0.12] border border-accent/25 rounded-2xl rounded-tr-sm px-4 py-2.5">
-                          <p className="font-sans text-[14px] text-fg leading-[1.5]">
-                            {cycle.userPrompt}
-                          </p>
-                        </div>
-                      )}
-                    </UserMessage>
-                  )}
-
-                  {/* Thinking indicator */}
-                  {showThinking && (
-                    <AIMessage>
-                      <div className="bg-bg-base border border-border-faint rounded-2xl rounded-tl-sm px-4 py-2.5">
-                        <div className="flex items-center gap-1">
-                          <span
-                            aria-hidden
-                            className="w-1.5 h-1.5 rounded-full bg-fg/40 motion-safe:animate-bounce"
-                            style={{ animationDelay: "0s" }}
-                          />
-                          <span
-                            aria-hidden
-                            className="w-1.5 h-1.5 rounded-full bg-fg/40 motion-safe:animate-bounce"
-                            style={{ animationDelay: "0.15s" }}
-                          />
-                          <span
-                            aria-hidden
-                            className="w-1.5 h-1.5 rounded-full bg-fg/40 motion-safe:animate-bounce"
-                            style={{ animationDelay: "0.3s" }}
-                          />
-                        </div>
-                      </div>
-                    </AIMessage>
-                  )}
-
-                  {/* AI intro — short customised text response per cycle.
-                      Mounts at `aiIntro` phase and stays visible through
-                      the rest of the cycle. */}
-                  {showAIIntro && (
-                    <AIMessage>
-                      <div className="inline-block max-w-[88%] bg-bg-base border border-border-faint rounded-2xl rounded-tl-sm px-4 py-2.5">
-                        <p className="font-sans text-[14px] text-fg leading-[1.5]">
-                          {cycle.aiIntro}
-                        </p>
-                      </div>
-                    </AIMessage>
-                  )}
-
-                  {/* Plan card */}
-                  {showPlan && (
-                    <AIMessage>
-                      <div className="inline-block max-w-[92%] min-w-[280px] sm:min-w-[320px] bg-bg-base border border-border-faint rounded-2xl rounded-tl-sm overflow-hidden">
-                        <div className="px-3.5 py-2 border-b border-border-faint flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              className="w-3.5 h-3.5 text-accent"
-                              aria-hidden
-                            >
-                              <path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z" />
-                            </svg>
-                            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-fg-secondary">
-                              Task plan
-                            </span>
-                          </div>
-                          <span className="font-mono text-[10px] text-fg-tertiary">
-                            {completedTaskCount(phase, cycle.tasks.length)} /{" "}
-                            {cycle.tasks.length}
-                          </span>
-                        </div>
-                        <ul className="m-0 p-0 list-none">
-                          {cycle.tasks.map((task, i) => {
-                            const state = taskState(i, phase);
-                            return (
-                              <li
-                                key={task.label}
-                                className="flex items-center justify-between px-3.5 py-2 border-b border-border-faint last:border-b-0 gap-2"
-                              >
-                                <div className="flex items-center gap-2.5 min-w-0">
-                                  <span
-                                    aria-hidden
-                                    className={`w-3.5 h-3.5 rounded-full shrink-0 flex items-center justify-center ${
-                                      state === "pending"
-                                        ? "border border-border-active"
-                                        : state === "active"
-                                          ? "border border-accent bg-accent/30 motion-safe:animate-pulse"
-                                          : "bg-[#4ade80]"
-                                    }`}
-                                  >
-                                    {state === "done" && (
-                                      <svg
-                                        viewBox="0 0 24 24"
-                                        fill="var(--bg-base)"
-                                        className="w-2 h-2"
-                                        aria-hidden
-                                      >
-                                        <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41Z" />
-                                      </svg>
-                                    )}
-                                  </span>
-                                  <span
-                                    className={`font-sans text-[13px] truncate ${
-                                      state === "pending"
-                                        ? "text-fg-secondary"
-                                        : state === "active"
-                                          ? "text-fg"
-                                          : "text-fg-tertiary line-through"
-                                    }`}
-                                  >
-                                    {task.label}
-                                  </span>
-                                </div>
-                                <span className="font-mono text-[10px] text-fg-tertiary px-1.5 py-0.5 rounded border border-border-faint bg-bg-elevated shrink-0">
-                                  {task.tag}
-                                </span>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </AIMessage>
-                  )}
-
-                  {/* Code card */}
-                  {showCode && (
-                    <AIMessage>
-                      <div className="inline-block max-w-full w-full bg-bg-base border border-border-faint rounded-2xl rounded-tl-sm overflow-hidden">
-                        <div className="px-3.5 py-2 border-b border-border-faint flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              className="w-3.5 h-3.5 text-accent shrink-0"
-                              aria-hidden
-                            >
-                              <path d="M9.4 16.6 4.8 12l4.6-4.6a1 1 0 1 0-1.4-1.4l-5.3 5.3a1 1 0 0 0 0 1.4l5.3 5.3a1 1 0 1 0 1.4-1.4Zm5.2 0 4.6-4.6-4.6-4.6a1 1 0 1 1 1.4-1.4l5.3 5.3a1 1 0 0 1 0 1.4l-5.3 5.3a1 1 0 1 1-1.4-1.4Z" />
-                            </svg>
-                            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-fg-secondary shrink-0">
-                              {phase === "codeStream" ? "Streaming" : "Code"}
-                            </span>
-                            <span aria-hidden className="text-fg-muted">
-                              ·
-                            </span>
-                            <span className="font-mono text-[10px] text-fg-secondary truncate">
-                              {cycle.filename}
-                            </span>
-                          </div>
-                          <span
-                            aria-hidden
-                            className="text-fg-tertiary shrink-0"
-                          >
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              className="w-3.5 h-3.5"
-                              aria-hidden
-                            >
-                              <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1Zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H8V7h11v14Z" />
-                            </svg>
-                          </span>
-                        </div>
-                        <div className="px-3.5 py-3 font-mono text-[11px] md:text-[12px] leading-[1.65] overflow-x-auto">
-                          {renderCode(cycle.code, codeChars)}
-                        </div>
-                      </div>
-                    </AIMessage>
-                  )}
-
-                  {/* Preview card */}
-                  {showPreview && (
-                    <AIMessage>
-                      <div className="preview-anim inline-block max-w-full w-full bg-bg-base border border-border-faint rounded-2xl rounded-tl-sm overflow-hidden">
-                        <div className="px-3.5 py-2 border-b border-border-faint flex items-center gap-2">
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-3.5 h-3.5 text-[#4ade80]"
-                            aria-hidden
-                          >
-                            <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm4.768 8.64-5.5 5.5a1 1 0 0 1-1.414 0l-2.5-2.5a1 1 0 1 1 1.414-1.414l1.793 1.793 4.793-4.793a1 1 0 0 1 1.414 1.414Z" />
-                          </svg>
-                          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-fg-secondary">
-                            Preview
-                          </span>
-                          <span aria-hidden className="text-fg-muted">
-                            ·
-                          </span>
-                          <span className="font-mono text-[10px] text-[#4ade80]">
-                            live
-                          </span>
-                        </div>
-                        <div className="px-5 py-6 sm:px-6 sm:py-7 flex items-center justify-center min-h-[200px] bg-[radial-gradient(ellipse_at_center,rgba(91,155,255,0.04),transparent_70%)]">
-                          <PreviewComponent />
-                        </div>
-                      </div>
-                    </AIMessage>
-                  )}
-                </div>
-              </div>
-
-              {/* Input area — the prompt for the active cycle types into
-                  this field char-by-char during the `inputTyping` phase,
-                  then the field clears (placeholder reappears) when the
-                  user-message bubble mounts above. */}
-              <div className="px-4 sm:px-5 py-3 border-t border-border-faint flex items-center gap-2">
-                <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-bg-base border border-border-faint">
-                  {showInputTyping ? (
-                    <span className="font-sans text-[13px] text-fg truncate">
-                      {cycle.userPrompt.slice(0, promptChars)}
-                      <span
-                        aria-hidden
-                        className="inline-block w-[2px] h-[14px] bg-accent align-text-bottom animate-cursor ml-0.5"
-                      />
-                    </span>
-                  ) : (
-                    <span className="font-sans text-[13px] text-fg-tertiary truncate">
-                      Describe a component or drop a screenshot...
-                    </span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  aria-label="Upload attachment"
-                  className="w-9 h-9 rounded-lg bg-fg/[0.06] hover:bg-fg/[0.10] border border-border-soft hover:border-border-active flex items-center justify-center transition-colors shrink-0"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-[18px] h-[18px] text-fg-secondary"
-                    aria-hidden
-                  >
-                    <path d="M16.5 6.5v10.25a4.75 4.75 0 0 1-9.5 0V5.5a3.25 3.25 0 0 1 6.5 0v10.5a1.75 1.75 0 0 1-3.5 0V6.5a.75.75 0 0 0-1.5 0v9.5a3.25 3.25 0 0 0 6.5 0V5.5a4.75 4.75 0 0 0-9.5 0v11.25a6.25 6.25 0 0 0 12.5 0V6.5a.75.75 0 0 0-1.5 0Z" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  aria-label="Send"
-                  data-state={sendState}
-                  className="ai-send-btn w-9 h-9 rounded-lg bg-accent hover:bg-[#7eb1ff] flex items-center justify-center transition-colors shrink-0"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="ai-send-icon w-[20px] h-[20px] text-bg-base"
-                    aria-hidden
-                  >
-                    <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z M19 14L19.6 16.4L22 17L19.6 17.6L19 20L18.4 17.6L16 17L18.4 16.4L19 14Z" />
-                  </svg>
-                </button>
-              </div>
             </div>
 
             {/* Subtle radial glow under the window — desktop only */}
@@ -1704,44 +1882,19 @@ export default function AIPlaygroundSection() {
 
 // ─── Shared message wrappers ──────────────────────────────────────────────
 
+// The real MessageList has no avatars next to bubbles — AI left, user right.
 function AIMessage({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-2.5 msg">
-      <div className="relative shrink-0 mt-1">
-        <div className="w-7 h-7 rounded-full bg-bg-base border border-border-soft flex items-center justify-center overflow-hidden">
-          <img
-            src={logoSmall}
-            alt=""
-            aria-hidden
-            className="w-5 h-5 object-contain"
-          />
-        </div>
-      </div>
-      <div className="flex-1 min-w-0">{children}</div>
+    <div className="flex justify-start msg">
+      <div className="min-w-0 max-w-full">{children}</div>
     </div>
   );
 }
 
-// Mirror of `AIMessage` for user messages — bubble pinned to the right,
-// filled person avatar to its right.
 function UserMessage({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-end gap-2.5 msg">
-      <div className="min-w-0 max-w-[calc(100%-2.625rem)] sm:max-w-[80%] flex justify-end">
-        {children}
-      </div>
-      <div className="relative shrink-0 mt-1">
-        <div className="w-7 h-7 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
-          <svg
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-4 h-4"
-            aria-hidden
-          >
-            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5Z" />
-          </svg>
-        </div>
-      </div>
+    <div className="flex justify-end msg">
+      <div className="flex min-w-0 max-w-[85%] justify-end">{children}</div>
     </div>
   );
 }

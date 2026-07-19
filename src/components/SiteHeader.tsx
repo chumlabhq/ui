@@ -3,9 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBuyMeCoffee } from "./useBuyMeCoffee";
 import { UserMenu } from "./UserMenu";
 import { Button } from "./ui";
+import { useEnterPlayground } from "../pages/playground/lib/enterPlayground";
 import { useTheme } from "../contexts/ThemeContext";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
+
+// Pre-launch "stealth mode" announcement strip — temporarily turned off. Flip
+// back to true to restore it, and restore --header-height in index.css
+// (64px → 112px sm+ / 172px mobile) so page offsets account for the strip again.
+const SHOW_ANNOUNCEMENT = false;
 
 /**
  * Deep-space site header. Solid bg-base, hairline bottom rule, plain text
@@ -24,6 +30,8 @@ export function SiteHeader() {
   const location = useLocation();
   const { open: openBuyCoffee } = useBuyMeCoffee();
   const { theme, toggleTheme } = useTheme();
+  // Authenticated → /playground; otherwise start Google sign-in and return here.
+  const enterPlayground = useEnterPlayground();
 
   const goToAIPlayground = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -43,10 +51,10 @@ export function SiteHeader() {
   return (
     <>
       <div className="header-mount-fade pointer-events-auto fixed top-0 left-0 right-0 z-50">
-        {/* Pre-launch announcement strip. Sits above the header at all times
-            and is included in the --header-height CSS var so hero/page
-            offsets stay aligned. Colors are hard-coded against theme so the
-            contrast stays identical across light and dark surfaces. */}
+        {/* Pre-launch announcement strip — TEMPORARILY DISABLED (stealth
+            banner off). Gated on SHOW_ANNOUNCEMENT; --header-height in
+            index.css is dropped to the bar-only 64px while it's off. */}
+        {SHOW_ANNOUNCEMENT && (
         <div
           className="text-[#050608] bg-gradient-to-r from-[#7eb1ff] via-[#5b9bff] to-[#7eb1ff]"
           role="status"
@@ -111,16 +119,19 @@ export function SiteHeader() {
             </div>
           </div>
         </div>
+        )}
 
         <header
           className="bg-bg-base"
           style={{ borderBottom: "0.5px solid var(--border-faint)" }}
         >
           <div className="w-full px-5 sm:px-6 md:px-8">
-            <div className="grid grid-cols-[auto_1fr_auto] items-center h-[64px] gap-4">
+            {/* Equal 1fr side columns keep the nav (middle auto column) centred
+                on the page regardless of the logo/actions widths. */}
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center h-[64px] gap-4">
             <Link
               to="/"
-              className="flex items-center text-cl-text -ml-1"
+              className="flex items-center text-cl-text -ml-1 justify-self-start"
               aria-label="Chumlab home"
               data-track-event="nav_click"
               data-track-location="header"
@@ -253,8 +264,21 @@ export function SiteHeader() {
 
               <UserMenu />
 
-              {/* fullWidthMobile={false}: header CTA stays inline next to the
-                  hamburger; never stretches at any width. */}
+              {/* fullWidthMobile={false}: header CTAs stay inline next to the
+                  hamburger; never stretch at any width. */}
+              <Button
+                variant="primary"
+                size="sm"
+                fullWidthMobile={false}
+                className="hidden sm:inline-flex border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:-translate-y-px hover:shadow-[0_10px_28px_-5px_var(--accent-glow)] hover:brightness-110 active:translate-y-0 active:brightness-95"
+                onClick={enterPlayground}
+                data-track-event="cta_click"
+                data-track-location="header"
+                data-track-target="playground"
+              >
+                Playground
+              </Button>
+
               <Button
                 variant="primary"
                 size="sm"
@@ -396,10 +420,25 @@ export function SiteHeader() {
             <Button
               variant="primary"
               size="md"
+              onClick={() => {
+                setMenuOpen(false);
+                enterPlayground();
+              }}
+              className="mt-6 border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:brightness-110 active:brightness-95"
+              data-track-event="cta_click"
+              data-track-location="mobile_menu"
+              data-track-target="playground"
+            >
+              Playground
+            </Button>
+
+            <Button
+              variant="primary"
+              size="md"
               as="a"
               href="/getting-started"
               onClick={() => setMenuOpen(false)}
-              className="mt-6"
+              className="mt-3"
               data-track-event="cta_click"
               data-track-location="mobile_menu"
               data-track-target="get_started"

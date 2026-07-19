@@ -10,6 +10,8 @@ import type {
 interface MyOnboardingResponse {
   success: boolean;
   onboarding: { _id: string; status?: PlaygroundOnboardingStatus } | null;
+  // Server-computed gate: true for everyone unless invite-only mode is on.
+  access?: boolean;
   submittedAt?: string;
   position?: number;
   estimatedWait?: string;

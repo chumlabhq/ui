@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Tooltip } from "../../../components/Tooltip";
 import PreviewFrame from "./PreviewFrame";
+import GateCluster from "./GateCluster";
 import logoSmall from "../../../assets/images/logo-small.png";
 import type { PreviewTheme } from "../../../lib/preview/runtime";
 import type { PreviewDevice, VerifyError } from "../types";
+import type { GateLamps } from "../lib/gates";
 
 type Tab = "preview" | "code";
 
@@ -20,6 +22,8 @@ interface StagePanelProps {
   loading?: boolean;
   initialTab?: Tab;
   onClose?: () => void;
+  // Six-lamp gate state; null while there's no build to report on.
+  gates?: GateLamps | null;
 }
 
 const DEVICE: Record<PreviewDevice, { width: string; label: string; tip: string }> = {
@@ -27,6 +31,10 @@ const DEVICE: Record<PreviewDevice, { width: string; label: string; tip: string 
   tablet: { width: "620px", label: "620px · tablet", tip: "Tablet · 620px" },
   fill: { width: "100%", label: "fill · responsive", tip: "Desktop · fill" },
 };
+
+// Fill preview: render into a slightly wider virtual viewport and scale it down
+// so the component fills the pane edge-to-edge while reading a touch smaller.
+const FILL_SCALE = 0.5;
 
 const DEVICE_ICONS: Record<PreviewDevice, ReactNode> = {
   mobile: (
@@ -298,29 +306,11 @@ export default function StagePanel({
   loading = false,
   initialTab = "preview",
   onClose,
+  gates = null,
 }: StagePanelProps) {
   const [tab, setTab] = useState<Tab>(initialTab);
   const [copied, setCopied] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-
-  // Desktop ("fill") renders the real desktop layout at 1280px and scales it
-  // down to fit the pane — so the sidebar/nav show just like in fullscreen,
-  // instead of collapsing to the page's mobile breakpoint at ~pane width.
-  const DESKTOP_W = 1280;
-  const frameBodyRef = useRef<HTMLDivElement | null>(null);
-  const [bodySize, setBodySize] = useState({ w: 0, h: 0 });
-  useEffect(() => {
-    const el = frameBodyRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      const r = entries[0].contentRect;
-      setBodySize({ w: Math.round(r.width), h: Math.round(r.height) });
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [tab, code, fullscreen, device]);
-  const desktopScale =
-    device === "fill" && bodySize.w > 0 ? Math.min(1, bodySize.w / DESKTOP_W) : 1;
 
   // Esc exits fullscreen.
   useEffect(() => {
@@ -453,16 +443,16 @@ export default function StagePanel({
               </span>
             </div>
             {code ? (
-              <div
-                ref={frameBodyRef}
-                className="pg-no-scrollbar relative min-h-0 flex-1 overflow-hidden bg-bg-base"
-              >
+              // Mobile/tablet render 1:1 at their fixed width; fill renders at a
+              // slightly wider viewport scaled to FILL_SCALE so a full-width
+              // component reads at a comfortable size, not edge-to-edge.
+              <div className="pg-no-scrollbar relative min-h-0 flex-1 overflow-hidden bg-bg-base">
                 {device === "fill" ? (
                   <div
                     style={{
-                      width: DESKTOP_W,
-                      height: bodySize.h > 0 ? bodySize.h / desktopScale : "100%",
-                      transform: `scale(${desktopScale})`,
+                      width: `${100 / FILL_SCALE}%`,
+                      height: `${100 / FILL_SCALE}%`,
+                      transform: `scale(${FILL_SCALE})`,
                       transformOrigin: "top left",
                     }}
                   >
@@ -492,6 +482,11 @@ export default function StagePanel({
           </div>
         </div>
       )}
+
+      {/* Sticky gate strip pinned to the bottom of the preview pane. As a
+          flex-column sibling it takes its own height, so the framed preview
+          above it is never covered. */}
+      {gates && <GateCluster lamps={gates} />}
     </section>
   );
 }

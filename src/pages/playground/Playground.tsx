@@ -33,6 +33,7 @@ import {
   agentRunFromTimeline,
   initialAgentRun,
 } from "./lib/agents";
+import { resolveGateLamps } from "./lib/gates";
 import { friendlyError } from "./lib/friendlyError";
 import { startAuth } from "./lib/enterPlayground";
 import type { PreviewTheme } from "../../lib/preview/runtime";
@@ -113,7 +114,7 @@ export default function Playground() {
   const [verifyState, setVerifyState] = useState<VerifyUIState | null>(null);
   // Render-gate status drives the auto-fix flow; the value itself is no longer
   // displayed (the stage cluster was removed), so only the setter is kept.
-  const [, setRenderGate] = useState<RenderGateStatus>("idle");
+  const [renderGate, setRenderGate] = useState<RenderGateStatus>("idle");
   const [tier, setTier] = useState<PipelineTier | null>(null);
   const [planText, setPlanText] = useState("");
   const [planStreaming, setPlanStreaming] = useState(false);
@@ -126,7 +127,7 @@ export default function Playground() {
   const [themeOverride, setThemeOverride] = useState<PreviewTheme | null>(null);
   const [deviceOverride, setDeviceOverride] = useState<PreviewDevice | null>(null);
   const [liveActive, setLiveActive] = useState(false);
-  const [, setDeliverMeta] = useState<{
+  const [deliverMeta, setDeliverMeta] = useState<{
     sizeKb: number | null;
     a11y: string | null;
     gates: DeliverGates | null;
@@ -335,18 +336,30 @@ export default function Playground() {
   });
 
   const settings: PlaygroundSettings = settingsData?.settings ?? { previewTheme: "light", previewDevice: "fill" };
+  // The server owns the gate (open by default; invite-only via env). Fall back to
+  // the onboarding status only for an older server that doesn't send `access`.
   const allowed =
-    !!onboardingData?.onboarding &&
-    ["invited", "onboarded"].includes(onboardingData.onboarding.status ?? "");
+    onboardingData?.access ??
+    (!!onboardingData?.onboarding &&
+      ["invited", "onboarded"].includes(onboardingData.onboarding.status ?? ""));
 
   const settingsTheme: PreviewTheme = settings.previewTheme === "system" ? theme : settings.previewTheme;
   const previewTheme = themeOverride ?? settingsTheme;
   const device = deviceOverride ?? settings.previewDevice;
 
-  // Kick off auth on a direct, unauthenticated visit (Track C guard).
+  // Auth guard: a direct, never-authenticated visit kicks off sign-in and comes
+  // back here; but logging out while on the playground (was authed, now isn't)
+  // sends the user home rather than straight back into the sign-in flow.
+  const wasAuthedRef = useRef(false);
   useEffect(() => {
-    if (!meLoading && !authedUser) startAuth("/playground");
-  }, [meLoading, authedUser]);
+    if (authedUser) {
+      wasAuthedRef.current = true;
+      return;
+    }
+    if (meLoading) return;
+    if (wasAuthedRef.current) navigate("/");
+    else startAuth("/playground");
+  }, [meLoading, authedUser, navigate]);
 
   const messages = useMemo<ChatDisplayMessage[]>(() => {
     const server: ChatDisplayMessage[] = (chatMessagesData?.messages ?? []).map((m) => ({
@@ -397,6 +410,15 @@ export default function Playground() {
   );
   const agentRun = liveActive ? liveAgentRun : rehydratedAgentRun ?? initialAgentRun();
   const showBreakdown = liveActive || !!rehydratedAgentRun;
+
+  // Six-lamp gate state for the preview strip. The live SSE stream + client
+  // renderGate drive it during a build; on a re-opened/completed run the stored
+  // deliver.gates backfills the lamps so they show final states, not pending.
+  const gateLamps = useMemo(() => {
+    const deliverGates = liveActive ? deliverMeta.gates : latestRun?.deliver?.gates ?? null;
+    if (!liveActive && !previewCode && !deliverGates) return null;
+    return resolveGateLamps(events, renderGate, deliverGates);
+  }, [liveActive, deliverMeta.gates, latestRun, previewCode, events, renderGate]);
 
   const rehydratedElapsed = useMemo(() => {
     if (liveActive || !latestRun?.timeline) return null;
@@ -557,7 +579,14 @@ export default function Playground() {
     (messages.find((m) => m.role === "user")?.content ?? "New build");
   const lastUserPrompt = [...messages].reverse().find((m) => m.role === "user")?.content ?? null;
 
-  const friendly = friendlyError(streamError ?? (gate ? gate.code === "over_quota" ? "You've used today's generations." : null : error));
+  const friendly =
+    gate?.code === "over_quota"
+      ? gate.scope === "global"
+        ? "The playground is at capacity for today. It resets at midnight UTC."
+        : gate.scope === "burst"
+          ? "You're sending builds too fast. Wait a moment and try again."
+          : "You've reached today's generation limit. It resets at midnight UTC."
+      : friendlyError(streamError ?? error);
 
   const clarifyNotice = clarifyQuestions ? (
     <ClarifyPicker
@@ -642,6 +671,7 @@ export default function Playground() {
       onDeviceChange={setDeviceOverride}
       onRendered={handleRendered}
       onRenderError={handleRenderError}
+      gates={gateLamps}
       loading={chatLoading}
       statusText={
         renderError
