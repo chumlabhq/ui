@@ -19,7 +19,6 @@ import ChatPanel from "./components/ChatPanel";
 import ClarifyPicker from "./components/ClarifyPicker";
 import ResponsiveProbe from "./components/ResponsiveProbe";
 import AgentBreakdown from "./components/AgentBreakdown";
-import PersonaCard from "./components/PersonaCard";
 import EmptyState from "./components/EmptyState";
 import StagePanel from "./components/StagePanel";
 import SettingsView from "./views/SettingsView";
@@ -56,7 +55,6 @@ import type {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const SCREENSHOT_ONLY_PROMPT = "Rebuild the attached screenshot as Chumlab components.";
-const PERSONA_KEY = "pg_persona_seen";
 const SPLIT_KEY = "pg_split";
 
 function AuthSplash({ message }: { message: string }) {
@@ -133,9 +131,6 @@ export default function Playground() {
     gates: DeliverGates | null;
   }>({ sizeKb: null, a11y: null, gates: null });
   const [elapsedLabel, setElapsedLabel] = useState<string | null>(null);
-  const [personaDismissed, setPersonaDismissed] = useState(
-    () => typeof localStorage !== "undefined" && localStorage.getItem(PERSONA_KEY) === "1"
-  );
   // Fixed 50/50 chat|preview split — the divider persists across reloads. The
   // preview panel is always present; it goes idle → building → result in place.
   const [splitWidth, setSplitWidth] = useState(() => Number(localStorage.getItem(SPLIT_KEY)) || 620);
@@ -550,17 +545,6 @@ export default function Playground() {
     setView("build");
   };
 
-  const seedPersona = (patch: Partial<PlaygroundSettings>) => {
-    if (patch.previewDevice) setDeviceOverride(patch.previewDevice);
-    if (patch.previewTheme) setThemeOverride(patch.previewTheme === "system" ? theme : patch.previewTheme);
-    if (Object.keys(patch).length) void patchSettings(patch);
-  };
-
-  const dismissPersona = () => {
-    setPersonaDismissed(true);
-    localStorage.setItem(PERSONA_KEY, "1");
-  };
-
   const changeSettings = (patch: Partial<PlaygroundSettings>) => {
     if (patch.previewDevice) setDeviceOverride(patch.previewDevice);
     if (patch.previewTheme) setThemeOverride(patch.previewTheme === "system" ? theme : patch.previewTheme);
@@ -609,8 +593,6 @@ export default function Playground() {
     </>
   );
 
-  const showPersona = !personaDismissed && chats.length === 0 && !liveActive;
-
   // Re-opening a recent chat: its history/run are being fetched (currentData is
   // still empty for this id). Show skeletons instead of the empty-state hero.
   const chatLoading = !!activeChatId && !liveActive && messagesFetching && !chatMessagesData;
@@ -635,11 +617,6 @@ export default function Playground() {
         )}
       </div>
       <div className="flex min-h-0 flex-1 flex-col">
-        {showPersona && (
-          <div className="shrink-0 px-[18px] pt-4">
-            <PersonaCard onSeed={seedPersona} onDismiss={dismissPersona} />
-          </div>
-        )}
         <div className="min-h-0 flex-1">
           <ChatPanel
             messages={messages}
