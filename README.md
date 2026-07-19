@@ -288,7 +288,7 @@ Every component ships with:
 ```bash
 git clone https://github.com/chumlabhq/ui.git && cd ui && npm install
 npm run dev            # Dev server at localhost:5173
-npm run test:run       # Unit tests (Vitest, 2992 tests)
+npm run test:run       # Unit tests (Vitest, 3,000+ tests)
 npm run test:e2e       # E2E tests (Playwright)
 npm run build:lib      # Build library
 ```
