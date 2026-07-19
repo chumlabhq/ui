@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 // (react-markdown builds React nodes, not innerHTML), so it's XSS-safe.
 export default function Markdown({ children }: { children: string }) {
   return (
-    <div className="text-[13.5px] leading-relaxed text-fg-secondary [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+    <div className="text-[13.5px] leading-relaxed text-fg [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -38,7 +38,7 @@ export default function Markdown({ children }: { children: string }) {
           h2: ({ children }) => <h3 className="mb-1.5 mt-3 font-display text-[14px] font-semibold text-fg">{children}</h3>,
           h3: ({ children }) => <h4 className="mb-1 mt-2.5 font-display text-[13px] font-semibold text-fg">{children}</h4>,
           blockquote: ({ children }) => (
-            <blockquote className="my-2 border-l-2 border-border-soft pl-3 text-fg-tertiary">{children}</blockquote>
+            <blockquote className="my-2 border-l-2 border-border-soft pl-3 text-fg-secondary">{children}</blockquote>
           ),
           hr: () => <hr className="my-3 border-border-faint" />,
         }}

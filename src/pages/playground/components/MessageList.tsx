@@ -60,7 +60,7 @@ function AssistantMessage({ message }: { message: ChatDisplayMessage }) {
   if (!prose) return null;
   return (
     <div className="group flex flex-col items-start gap-1">
-      <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-border-soft bg-bg-elevated px-4 py-2.5 shadow-[0_4px_18px_-12px_rgba(0,0,0,0.6)]">
+      <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-border-active bg-bg-overlay px-4 py-2.5 shadow-[0_4px_18px_-12px_rgba(0,0,0,0.6)]">
         <Markdown>{prose}</Markdown>
       </div>
       <Stamp iso={message.createdAt} align="left" />
