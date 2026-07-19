@@ -175,6 +175,21 @@ export default function Playground() {
           ]);
           setLiveActive(false);
         }
+        // Refine no-op / question (feature/refine-intent): the follow-up needed
+        // no rebuild — the intent guard answered in-chat. Same terminal
+        // assistant turn as decline, no build, no breakdown.
+        if (payload.outcome === "answer" && payload.message) {
+          setPending((prev) => [
+            ...prev,
+            {
+              id: `answer-${Date.now()}`,
+              role: "assistant",
+              content: payload.message ?? "",
+              createdAt: new Date().toISOString(),
+            },
+          ]);
+          setLiveActive(false);
+        }
       }
       return;
     }

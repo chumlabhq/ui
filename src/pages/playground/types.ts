@@ -149,9 +149,11 @@ export type PipelineTier = "trivial" | "single" | "multi" | "full";
 
 // Payload of the router-stage done event. `outcome: "decline"` + `message`
 // carries a policy refusal (Phase 12) — an assistant turn, no build.
+// `outcome: "answer"` + `message` is the refine-path intent guard answering a
+// no-op/question follow-up in-chat — also an assistant turn, no build.
 export interface RouterEventPayload {
   tier?: PipelineTier;
-  outcome?: "build" | "clarify" | "redirect" | "decline";
+  outcome?: "build" | "clarify" | "redirect" | "decline" | "answer";
   message?: string;
 }
 
