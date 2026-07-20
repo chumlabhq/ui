@@ -33,6 +33,12 @@ export default defineConfig(({ mode }) => {
           entry: {
             index: resolve(__dirname, "src/index.ts"),
             ...componentEntries,
+            // Opt-in phone validators — kept out of the default component entry so
+            // libphonenumber-js only loads when @chumlab/ui/phone-validators is imported.
+            "components/InternationalPhoneInput/validators/index": resolve(
+              __dirname,
+              "src/components/InternationalPhoneInput/validators/index.ts",
+            ),
           },
         },
         rollupOptions: {

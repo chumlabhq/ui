@@ -13,6 +13,7 @@ import type {
   InternationalPhoneInputClasses,
   CountryOption,
   PhoneNumberValue,
+  PhoneNumberData,
 } from "./utils/types";
 import {
   DEFAULT_COUNTRIES,
@@ -127,6 +128,7 @@ const InternationalPhoneInput = forwardRef<
       fullWidth = false,
       validateOnBlur = true,
       validationMessage,
+      validate,
       enablePasteDetection = false,
       copyFormat = "e164",
       onPasteDetected,
@@ -248,6 +250,9 @@ const InternationalPhoneInput = forwardRef<
     });
 
     const [hasValidationError, setHasValidationError] = useState(false);
+    const [validationErrorMessage, setValidationErrorMessage] = useState<
+      string | undefined
+    >(undefined);
 
     const internalInputRef = useRef<HTMLInputElement>(null);
     const pendingCursorRef = useRef<number | null>(null);
@@ -318,6 +323,19 @@ const InternationalPhoneInput = forwardRef<
       ],
     );
 
+    // Apply the authoritative custom validator (if any) on top of the built-in
+    // result, returning the final validity + optional message.
+    const runValidate = useCallback(
+      (data: PhoneNumberData): { isValid: boolean; message?: string } => {
+        if (!validate) return { isValid: data.isValid };
+        const result = validate(data);
+        return typeof result === "boolean"
+          ? { isValid: result }
+          : { isValid: result.valid, message: result.message };
+      },
+      [validate],
+    );
+
     const emitChange = useCallback(
       (digits: string, country: CountryOption | null) => {
         if (!onValueChange) return;
@@ -327,9 +345,10 @@ const InternationalPhoneInput = forwardRef<
           lengthRules,
           formatPatterns,
         );
-        onValueChange(phoneData);
+        const { isValid } = runValidate(phoneData);
+        onValueChange({ ...phoneData, isValid });
       },
-      [onValueChange, lengthRules, formatPatterns],
+      [onValueChange, lengthRules, formatPatterns, runValidate],
     );
 
     const handleCountrySelect = useCallback(
@@ -401,8 +420,10 @@ const InternationalPhoneInput = forwardRef<
           lengthRules,
           formatPatterns,
         );
-        if (!phoneData.isValid) {
+        const { isValid, message } = runValidate(phoneData);
+        if (!isValid) {
           setHasValidationError(true);
+          setValidationErrorMessage(message);
         }
       },
       [
@@ -412,6 +433,7 @@ const InternationalPhoneInput = forwardRef<
         onBlur,
         lengthRules,
         formatPatterns,
+        runValidate,
       ],
     );
 
@@ -511,7 +533,9 @@ const InternationalPhoneInput = forwardRef<
 
     const displayError = error || hasValidationError;
     const internalErrorMessage = hasValidationError
-      ? (validationMessage ?? "Please enter a valid phone number")
+      ? (validationErrorMessage ??
+        validationMessage ??
+        "Please enter a valid phone number")
       : undefined;
     const displayErrorMessage = errorMessage || internalErrorMessage;
     const displaySuccess = success && !displayError;
@@ -608,6 +632,10 @@ const InternationalPhoneInput = forwardRef<
             ref={mergedInputRef}
             id={inputId}
             type="tel"
+            // Default off: browser autofill of a full international number would
+            // corrupt this national-number field (and the country/number split).
+            // Overridable via `...rest` (e.g. autoComplete="tel-national").
+            autoComplete="off"
             value={phoneInput}
             onChange={handlePhoneInputChange}
             onFocus={onFocus}

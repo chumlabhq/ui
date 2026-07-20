@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { InternationalPhoneInput } from "../index";
+import type { PhoneNumberData } from "../utils/types";
 
 describe("InternationalPhoneInput", () => {
   describe("Rendering", () => {
@@ -123,6 +124,19 @@ describe("InternationalPhoneInput", () => {
       render(<InternationalPhoneInput />);
       const input = screen.getByPlaceholderText("Enter phone number");
       expect(input).toHaveAttribute("type", "tel");
+    });
+
+    it("disables browser autofill by default (overridable)", () => {
+      const { rerender } = render(<InternationalPhoneInput />);
+      expect(screen.getByPlaceholderText("Enter phone number")).toHaveAttribute(
+        "autocomplete",
+        "off",
+      );
+      rerender(<InternationalPhoneInput autoComplete="tel-national" />);
+      expect(screen.getByPlaceholderText("Enter phone number")).toHaveAttribute(
+        "autocomplete",
+        "tel-national",
+      );
     });
   });
 
@@ -675,6 +689,172 @@ describe("InternationalPhoneInput", () => {
       // National format does not include the dial code prefix
       expect(clipboardData["text/plain"]).not.toContain("+1");
       expect(clipboardData["text/plain"]).toBeTruthy();
+    });
+  });
+
+  describe("validate prop (precedence)", () => {
+    it("absent → built-in length validation is unchanged", async () => {
+      const user = userEvent.setup();
+      render(<InternationalPhoneInput validateOnBlur />);
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234"); // 10 digits, valid US
+      await user.tab();
+      expect(
+        screen.queryByText("Please enter a valid phone number"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("returns boolean false → overrides isValid; error uses validationMessage", async () => {
+      const user = userEvent.setup();
+      render(
+        <InternationalPhoneInput
+          validateOnBlur
+          validationMessage="Nope"
+          validate={() => false}
+        />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234"); // built-in valid, but validate forces invalid
+      await user.tab();
+      expect(screen.getByText("Nope")).toBeInTheDocument();
+    });
+
+    it("returns boolean true → overrides a built-in-invalid number to valid", async () => {
+      const user = userEvent.setup();
+      render(<InternationalPhoneInput validateOnBlur validate={() => true} />);
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "123"); // built-in invalid
+      await user.tab();
+      expect(
+        screen.queryByText("Please enter a valid phone number"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("returns { valid:false, message } → overrides both isValid and message", async () => {
+      const user = userEvent.setup();
+      render(
+        <InternationalPhoneInput
+          validateOnBlur
+          validationMessage="Nope"
+          validate={() => ({ valid: false, message: "Bad MX" })}
+        />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234");
+      await user.tab();
+      expect(screen.getByText("Bad MX")).toBeInTheDocument();
+      expect(screen.queryByText("Nope")).not.toBeInTheDocument();
+    });
+
+    it("receives the full PhoneNumberData", async () => {
+      const user = userEvent.setup();
+      const validate = vi.fn((_data: PhoneNumberData) => true);
+      render(
+        <InternationalPhoneInput validate={validate} onValueChange={() => {}} />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234");
+      const arg = validate.mock.calls[validate.mock.calls.length - 1][0];
+      expect(arg).toHaveProperty("countryCode");
+      expect(arg).toHaveProperty("phoneNumber");
+      expect(arg).toHaveProperty("fullNumber");
+      expect(arg).toHaveProperty("isValid");
+    });
+
+    it("composes with the built-in via data.isValid && myCheck(data)", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(
+        <InternationalPhoneInput
+          onValueChange={onValueChange}
+          validate={(d) => d.isValid && d.phoneNumber.startsWith("2")}
+        />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234"); // valid length AND starts with 2
+      let last =
+        onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(true);
+
+      await user.clear(input);
+      await user.type(input, "1025551234"); // valid length but starts with 1
+      last = onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(false);
+    });
+  });
+
+  describe("validate prop (emitted-value consistency)", () => {
+    it("onValueChange reflects the post-validate isValid", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(
+        <InternationalPhoneInput
+          onValueChange={onValueChange}
+          validate={() => false}
+        />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234"); // built-in valid, validate forces false
+      const last =
+        onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(false);
+    });
+
+    it("emitted isValid and blur error agree (both invalid)", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(
+        <InternationalPhoneInput
+          validateOnBlur
+          onValueChange={onValueChange}
+          validate={() => false}
+        />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234");
+      await user.tab();
+      const last =
+        onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(false);
+      expect(
+        screen.getByText("Please enter a valid phone number"),
+      ).toBeInTheDocument();
+    });
+
+    it("emitted isValid and blur error agree (both valid)", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(
+        <InternationalPhoneInput
+          validateOnBlur
+          onValueChange={onValueChange}
+          validate={() => true}
+        />,
+      );
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "123"); // built-in invalid, validate forces true
+      await user.tab();
+      const last =
+        onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(true);
+      expect(
+        screen.queryByText("Please enter a valid phone number"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("without validate, emitted isValid equals the built-in result", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(<InternationalPhoneInput onValueChange={onValueChange} />);
+      const input = screen.getByPlaceholderText("Enter phone number");
+      await user.type(input, "2025551234");
+      let last =
+        onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(true);
+      await user.clear(input);
+      await user.type(input, "12345");
+      last = onValueChange.mock.calls[onValueChange.mock.calls.length - 1][0];
+      expect(last.isValid).toBe(false);
     });
   });
 });
