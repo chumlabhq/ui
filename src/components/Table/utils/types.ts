@@ -92,7 +92,6 @@ export interface TableClasses {
   /** Sort direction indicator icon. */
   sortIcon?: string;
   /** Filter input field for column filters. */
-  filterInput?: string;
   /** Filter icon button in header. */
   filterIcon?: string;
   /** Filter dropdown container. */
@@ -255,10 +254,6 @@ export interface TableProps<TData> {
   /** Column IDs to pin to the right side of the table. */
   pinnedRightColumns?: string[];
 
-  // ── Export ────────────────────────────────────────────────────────────
-  /** Callback triggered when export is requested. */
-  onExport?: (format: "csv") => void;
-
   // ── Inline Cell Editing ──────────────────────────────────────────────
   /** Enable inline cell editing on double-click. */
   editable?: boolean;
@@ -282,8 +277,6 @@ export interface TableProps<TData> {
   manualFiltering?: boolean;
 
   // ── Column Reordering ────────────────────────────────────────────────
-  /** Enable column reordering. */
-  enableColumnReordering?: boolean;
   /** Controlled column order (array of column IDs). */
   columnOrder?: string[];
   /** Callback when column order changes. */
@@ -336,10 +329,6 @@ export interface TableProps<TData> {
   groupBy?: string[];
   /** Callback when group-by columns change. */
   onGroupByChange?: (groupBy: string[]) => void;
-
-  // ── Saved Views / Presets ────────────────────────────────────────────
-  /** Callback to save the current table view (sorting, filters, visibility, order). */
-  onSaveView?: (view: TableView) => void;
 
   // ── Global Search Component ──────────────────────────────────────────
   /** Show a built-in search bar above the table. */

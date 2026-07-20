@@ -33,6 +33,44 @@ const data: Person[] = [
 const getRowId = (row: Person) => row.id;
 
 describe("Table", () => {
+  describe("Default classes", () => {
+    it("applies default slot styles with no classes prop", () => {
+      const { container } = render(<Table columns={columns} data={data} />);
+      const th = container.querySelector("th");
+      // A bare Table must render styled, not naked density-only markup.
+      expect(th?.className).toContain("bg-cl-bg-elevated");
+      expect(th?.className).toContain("border-cl-border");
+    });
+
+    it("replaces only the overridden slot, keeping other defaults", () => {
+      const { container } = render(
+        <Table columns={columns} data={data} classes={{ headerCell: "MINE" }} />,
+      );
+      expect(container.querySelector("th")?.className).toContain("MINE");
+      expect(container.querySelector("th")?.className).not.toContain("bg-cl-bg-elevated");
+      // An unspecified slot still gets its default.
+      expect(container.querySelector("tbody td")?.className).toContain("text-cl-text");
+    });
+
+    it("clears slot styles when unstyled", () => {
+      const { container } = render(<Table columns={columns} data={data} unstyled />);
+      expect(container.querySelector("th")?.className).not.toContain("bg-cl-bg-elevated");
+    });
+  });
+
+  describe("Grid keyboard navigation", () => {
+    it("exposes a roving tab stop before any cell is focused", () => {
+      const { container } = render(<Table columns={columns} data={data} />);
+      const stops = [...container.querySelectorAll('td[role="gridcell"][tabindex="0"]')];
+      expect(stops).toHaveLength(1);
+    });
+
+    it("does not report focus as selection on cells", () => {
+      const { container } = render(<Table columns={columns} data={data} />);
+      expect(container.querySelector('td[aria-selected]')).toBeNull();
+    });
+  });
+
   describe("Rendering", () => {
     it("renders a table with columns and data", () => {
       render(<Table columns={columns} data={data} />);

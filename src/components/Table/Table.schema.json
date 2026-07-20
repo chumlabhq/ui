@@ -34,7 +34,9 @@
     },
     "pinnedColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs to pin to the left side."
     },
     "onPinColumn": {
@@ -43,7 +45,9 @@
     },
     "pinnableColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs that are allowed to be pinned."
     },
     "maxPinnedColumns": {
@@ -75,7 +79,10 @@
       "description": "(row: TData) => string — Function to derive a unique row ID."
     },
     "selectedRowId": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "ID of the currently selected row (single selection)."
     },
     "onRowClick": {
@@ -99,15 +106,24 @@
       "description": "Whether a popup triggered from the table is currently open."
     },
     "maxWidth": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Maximum width of the table container."
     },
     "maxHeight": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Maximum height of the table container."
     },
     "minHeight": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Minimum height of the table container."
     },
     "hideVerticalScrollbar": {
@@ -126,51 +142,141 @@
       "type": "object",
       "description": "CSS class overrides for table sub-elements.",
       "properties": {
-        "container": { "type": "string" },
-        "table": { "type": "string" },
-        "header": { "type": "string" },
-        "headerRow": { "type": "string" },
-        "headerCell": { "type": "string" },
-        "headerCellHover": { "type": "string" },
-        "headerCellContent": { "type": "string" },
-        "body": { "type": "string" },
-        "row": { "type": "string" },
-        "cell": { "type": "string" },
-        "selectedRow": { "type": "string" },
-        "pinnedContainer": { "type": "string" },
-        "pinnedTable": { "type": "string" },
-        "unpinnedContainer": { "type": "string" },
-        "unpinnedTable": { "type": "string" },
-        "empty": { "type": "string" },
-        "pinIcon": { "type": "string" },
-        "pinIconHover": { "type": "string" },
-        "pinnedPinIcon": { "type": "string" },
-        "pinnedPinIconHover": { "type": "string" },
-        "pinButton": { "type": "string" },
-        "pinnedPinButton": { "type": "string" },
-        "shimmer": { "type": "string" },
-        "shimmerRow": { "type": "string" },
-        "shimmerCell": { "type": "string" },
-        "shimmerBar": { "type": "string" },
-        "checkbox": { "type": "string" },
-        "checkboxCell": { "type": "string" },
-        "sortIcon": { "type": "string" },
-        "filterInput": { "type": "string" },
-        "filterIcon": { "type": "string" },
-        "filterDropdown": { "type": "string" },
-        "expandIcon": { "type": "string" },
-        "expandedRow": { "type": "string" },
-        "pinnedRightContainer": { "type": "string" },
-        "pinnedRightTable": { "type": "string" },
-        "editInput": { "type": "string" },
-        "dragHandle": { "type": "string" },
-        "footer": { "type": "string" },
-        "searchBar": { "type": "string" },
-        "mobileCard": { "type": "string" },
-        "groupHeader": { "type": "string" },
-        "resizeHandle": { "type": "string" },
-        "loadingMore": { "type": "string" },
-        "searchInput": { "type": "string" }
+        "container": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "headerRow": {
+          "type": "string"
+        },
+        "headerCell": {
+          "type": "string"
+        },
+        "headerCellHover": {
+          "type": "string"
+        },
+        "headerCellContent": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "row": {
+          "type": "string"
+        },
+        "cell": {
+          "type": "string"
+        },
+        "selectedRow": {
+          "type": "string"
+        },
+        "pinnedContainer": {
+          "type": "string"
+        },
+        "pinnedTable": {
+          "type": "string"
+        },
+        "unpinnedContainer": {
+          "type": "string"
+        },
+        "unpinnedTable": {
+          "type": "string"
+        },
+        "empty": {
+          "type": "string"
+        },
+        "pinIcon": {
+          "type": "string"
+        },
+        "pinIconHover": {
+          "type": "string"
+        },
+        "pinnedPinIcon": {
+          "type": "string"
+        },
+        "pinnedPinIconHover": {
+          "type": "string"
+        },
+        "pinButton": {
+          "type": "string"
+        },
+        "pinnedPinButton": {
+          "type": "string"
+        },
+        "shimmer": {
+          "type": "string"
+        },
+        "shimmerRow": {
+          "type": "string"
+        },
+        "shimmerCell": {
+          "type": "string"
+        },
+        "shimmerBar": {
+          "type": "string"
+        },
+        "checkbox": {
+          "type": "string"
+        },
+        "checkboxCell": {
+          "type": "string"
+        },
+        "sortIcon": {
+          "type": "string"
+        },
+        "filterInput": {
+          "type": "string"
+        },
+        "filterIcon": {
+          "type": "string"
+        },
+        "filterDropdown": {
+          "type": "string"
+        },
+        "expandIcon": {
+          "type": "string"
+        },
+        "expandedRow": {
+          "type": "string"
+        },
+        "pinnedRightContainer": {
+          "type": "string"
+        },
+        "pinnedRightTable": {
+          "type": "string"
+        },
+        "editInput": {
+          "type": "string"
+        },
+        "dragHandle": {
+          "type": "string"
+        },
+        "footer": {
+          "type": "string"
+        },
+        "searchBar": {
+          "type": "string"
+        },
+        "mobileCard": {
+          "type": "string"
+        },
+        "groupHeader": {
+          "type": "string"
+        },
+        "resizeHandle": {
+          "type": "string"
+        },
+        "loadingMore": {
+          "type": "string"
+        },
+        "searchInput": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
@@ -219,13 +325,19 @@
     },
     "selectionMode": {
       "type": "string",
-      "enum": ["single", "multiple", "none"],
+      "enum": [
+        "single",
+        "multiple",
+        "none"
+      ],
       "description": "Row selection mode.",
       "default": "none"
     },
     "selectedRowIds": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Array of selected row IDs (controlled)."
     },
     "onSelectionChange": {
@@ -234,7 +346,10 @@
     },
     "selectAllMode": {
       "type": "string",
-      "enum": ["page", "all"],
+      "enum": [
+        "page",
+        "all"
+      ],
       "description": "Whether select-all selects current page or all rows.",
       "default": "page"
     },
@@ -276,7 +391,9 @@
     },
     "expandedRowIds": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Array of expanded row IDs (controlled)."
     },
     "onExpandedChange": {
@@ -293,7 +410,10 @@
     },
     "expandColumnPosition": {
       "type": "string",
-      "enum": ["left", "right"],
+      "enum": [
+        "left",
+        "right"
+      ],
       "description": "Position of the expand column."
     },
     "expandOnRowClick": {
@@ -318,18 +438,20 @@
     },
     "density": {
       "type": "string",
-      "enum": ["compact", "comfortable", "spacious"],
+      "enum": [
+        "compact",
+        "comfortable",
+        "spacious"
+      ],
       "description": "Controls cell padding density.",
       "default": "comfortable"
     },
     "pinnedRightColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs to pin to the right side."
-    },
-    "onExport": {
-      "type": "object",
-      "description": "(format: 'csv') => void — Callback triggered when export is requested."
     },
     "editable": {
       "type": "boolean",
@@ -337,7 +459,9 @@
     },
     "editableColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs that are editable."
     },
     "onCellEdit": {
@@ -364,13 +488,11 @@
       "type": "boolean",
       "description": "When true, filtering is handled server-side."
     },
-    "enableColumnReordering": {
-      "type": "boolean",
-      "description": "Enable column reordering."
-    },
     "columnOrder": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Controlled column order (array of column IDs)."
     },
     "onColumnOrderChange": {
@@ -387,7 +509,10 @@
     },
     "dragColumnPosition": {
       "type": "string",
-      "enum": ["left", "right"],
+      "enum": [
+        "left",
+        "right"
+      ],
       "description": "Position of the drag handle column."
     },
     "showFooter": {
@@ -440,16 +565,14 @@
     },
     "groupBy": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs to group rows by."
     },
     "onGroupByChange": {
       "type": "object",
       "description": "(groupBy: string[]) => void — Callback when group-by columns change."
-    },
-    "onSaveView": {
-      "type": "object",
-      "description": "(view: TableView) => void — Callback to save the current table view."
     },
     "showSearch": {
       "type": "boolean",
@@ -461,7 +584,11 @@
     },
     "searchIconPosition": {
       "type": "string",
-      "enum": ["left", "right", "none"],
+      "enum": [
+        "left",
+        "right",
+        "none"
+      ],
       "description": "Position of the search icon."
     },
     "CheckboxIcon": {
