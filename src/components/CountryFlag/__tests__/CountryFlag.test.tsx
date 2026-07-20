@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import {
   CountryFlag,
   CountryFlagGroup,
@@ -14,24 +14,41 @@ import {
 
 describe("CountryFlag", () => {
   describe("Rendering", () => {
-    it("renders an img with the correct CDN src for a given country code", () => {
-      render(<CountryFlag code="us" />);
+    it("builds the src from basePath when one is supplied", () => {
+      render(<CountryFlag code="us" basePath="https://cdn.example.com/flags" />);
 
       const img = screen.getByRole("img").querySelector("img");
-      expect(img).toHaveAttribute(
-        "src",
-        expect.stringContaining("/us.svg"),
-      );
+      expect(img).toHaveAttribute("src", "https://cdn.example.com/flags/us.svg");
     });
 
     it("normalises uppercase codes to lowercase in the src URL", () => {
-      render(<CountryFlag code="GB" />);
+      render(<CountryFlag code="GB" basePath="/flags" />);
 
       const img = screen.getByRole("img").querySelector("img");
-      expect(img).toHaveAttribute(
-        "src",
-        expect.stringContaining("/gb.svg"),
-      );
+      expect(img).toHaveAttribute("src", "/flags/gb.svg");
+    });
+
+    it("resolves the packaged flag without any network request by default", async () => {
+      render(<CountryFlag code="us" />);
+
+      const img = screen.getByRole("img").querySelector("img")!;
+      // No src at all until the chunk lands - never a URL.
+      expect(img.getAttribute("src")).toBeNull();
+
+      await waitFor(() => {
+        expect(img.getAttribute("src")).toMatch(/^data:image\/svg\+xml,/);
+      });
+      expect(img.getAttribute("src")).not.toMatch(/^https?:/);
+    });
+
+    it("resolves an unknown code to a src that fails, so the fallback path runs", async () => {
+      render(<CountryFlag code="zz" fallback={<span>none</span>} />);
+
+      const img = screen.getByRole("img").querySelector("img")!;
+      await waitFor(() => expect(img.getAttribute("src")).toBe("data:,"));
+
+      fireEvent.error(img);
+      expect(screen.getByText("none")).toBeInTheDocument();
     });
 
     it("applies custom pixel size via number prop", () => {
@@ -146,18 +163,18 @@ describe("CountryFlag", () => {
     });
 
     it("resets error state when code prop changes", () => {
-      const { rerender } = render(<CountryFlag code="xx" />);
+      const { rerender } = render(<CountryFlag code="xx" basePath="/flags" />);
 
       // Trigger error for the first code
       const img1 = screen.getByRole("img").querySelector("img")!;
       fireEvent.error(img1);
 
       // Change code — should show a new image, not fallback
-      rerender(<CountryFlag code="us" />);
+      rerender(<CountryFlag code="us" basePath="/flags" />);
 
       const img2 = screen.getByRole("img").querySelector("img");
       expect(img2).toBeInTheDocument();
-      expect(img2).toHaveAttribute("src", expect.stringContaining("/us.svg"));
+      expect(img2).toHaveAttribute("src", "/flags/us.svg");
     });
   });
 

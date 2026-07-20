@@ -253,8 +253,10 @@ interface BaseDatePickerProps
 /** Single date selection mode. */
 interface SingleDatePickerProps extends BaseDatePickerProps {
   mode?: "single";
-  /** Selected date. */
+  /** Selected date. Omit for an uncontrolled picker. */
   value?: Date | null;
+  /** Initial date when uncontrolled. Ignored if `value` is set. */
+  defaultValue?: Date | null;
   /** Fires when the selected date changes. Not `onChange`. */
   onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
 }
@@ -262,8 +264,10 @@ interface SingleDatePickerProps extends BaseDatePickerProps {
 /** Date range selection mode. */
 interface RangeDatePickerProps extends BaseDatePickerProps {
   mode: "range";
-  /** Selected date range. */
+  /** Selected date range. Omit for an uncontrolled picker. */
   value?: DateRange | null;
+  /** Initial range when uncontrolled. Ignored if `value` is set. */
+  defaultValue?: DateRange | null;
   /** Fires when the selected range changes. Not `onChange`. */
   onValueChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
 }
@@ -271,8 +275,10 @@ interface RangeDatePickerProps extends BaseDatePickerProps {
 /** Multiple date selection mode. */
 interface MultipleDatePickerProps extends BaseDatePickerProps {
   mode: "multiple";
-  /** Selected dates. */
+  /** Selected dates. Omit for an uncontrolled picker. */
   value?: Date[] | null;
+  /** Initial dates when uncontrolled. Ignored if `value` is set. */
+  defaultValue?: Date[] | null;
   /** Fires when the selected dates change. Not `onChange`. */
   onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
 }
@@ -304,18 +310,21 @@ interface BaseUseDatePickerProps {
 interface SingleUseDatePickerProps extends BaseUseDatePickerProps {
   mode: "single";
   value?: Date | null;
+  defaultValue?: Date | null;
   onValueChange?: (date: Date | null, dateValue: DateValue | null) => void;
 }
 
 interface RangeUseDatePickerProps extends BaseUseDatePickerProps {
   mode: "range";
   value?: DateRange | null;
+  defaultValue?: DateRange | null;
   onValueChange?: (range: DateRange | null, rangeValue: DateRangeValue | null) => void;
 }
 
 interface MultipleUseDatePickerProps extends BaseUseDatePickerProps {
   mode: "multiple";
   value?: Date[] | null;
+  defaultValue?: Date[] | null;
   onValueChange?: (dates: Date[] | null, dateValues: DateValue[] | null) => void;
 }
 

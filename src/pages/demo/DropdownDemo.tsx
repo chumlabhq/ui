@@ -13,17 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-interface RestCountryResponse {
-  name: { common: string; official: string };
-  cca2: string;
-  flag: string;
-  flags: { png: string; svg: string };
-  capital?: string[];
-  region: string;
-}
+import { fetchCountries, type Country } from "./lib/countries";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 
@@ -197,8 +187,11 @@ const warmTheme = {
   trigger:
     "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-warning hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
+  // The menu floats over page content, so its background has to be opaque -
+  // a translucent tint lets the text underneath bleed through. color-mix keeps
+  // the warm wash while compositing it onto the elevated surface.
   content:
-    "rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border border-cl-warning",
+    "rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-warning)_15%,var(--color-cl-bg-elevated))] border border-cl-warning",
   optionList: "max-h-60 overflow-y-auto",
   option:
     "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-warning hover:bg-cl-warning/25 transition-colors",
@@ -216,7 +209,7 @@ const coolTheme = {
     "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-accent hover:bg-cl-accent/10 focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
-    "rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border border-cl-border-input-focus",
+    "rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus",
   optionList: "max-h-60 overflow-y-auto",
   option:
     "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-accent hover:bg-cl-accent/20 transition-colors",
@@ -347,22 +340,22 @@ const DropdownDemo = () => {
   );
 
   const mapCountryToOption = useCallback(
-    (country: RestCountryResponse): DropdownOption => ({
-      value: country.cca2,
-      label: country.name.common,
+    (country: Country): DropdownOption => ({
+      value: country.code,
+      label: country.name,
       content: (
         <span className="flex items-center gap-2">
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span className="flex flex-col">
-            <span className="text-sm">{country.name.common}</span>
+            <span className="text-sm">{country.name}</span>
             <span
               className={`text-xs text-cl-text-secondary`}
             >
-              {country.capital?.[0] || country.region}
+              {country.capital || country.region}
             </span>
           </span>
         </span>
@@ -370,11 +363,11 @@ const DropdownDemo = () => {
       selectedContent: (
         <span className="flex items-center gap-2">
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
-          <span>{country.name.common}</span>
+          <span>{country.name}</span>
         </span>
       ),
     }),
@@ -384,15 +377,11 @@ const DropdownDemo = () => {
   const handleLoadCountries = useCallback(async (): Promise<
     DropdownOption[]
   > => {
-    const response = await fetch(
-      "https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region",
-    );
-    if (!response.ok) throw new Error("Failed to fetch countries");
-    const data: RestCountryResponse[] = await response.json();
+    const data = await fetchCountries();
     const codes = ["US", "GB", "DE", "FR", "JP", "CA", "AU", "IN", "BR", "IT"];
     return codes
-      .map((code) => data.find((ct) => ct.cca2 === code))
-      .filter((ct): ct is RestCountryResponse => ct !== undefined)
+      .map((code) => data.find((ct) => ct.code === code))
+      .filter((ct): ct is Country => ct !== undefined)
       .map(mapCountryToOption);
   }, [mapCountryToOption]);
 
@@ -1366,10 +1355,10 @@ const DropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Type-ahead Search ───────────────────────────────────────────── */}
+      {/* ─── Type-ahead Navigation ──────────────────────────────────────── */}
       <Section
-        title="Type-ahead Search"
-        description="Type a character while the dropdown is open (or closed) to jump to the first matching option. Supports multi-character buffering within 500ms."
+        title="Type-ahead Navigation"
+        description="Type while the dropdown is focused to jump to the first matching option, exactly like a native select. Multi-character input is buffered for 500ms."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -1382,8 +1371,10 @@ const DropdownDemo = () => {
           </div>
         </DemoWrapper>
         <div className={c.note}>
-          Focus the trigger and start typing. Printable characters trigger
-          type-ahead navigation through options matching the typed string.
+          This is keyboard navigation, not a search field — there is no text
+          input and the typed characters are not displayed, matching native
+          select behaviour. Focus moves to the match instead. For a dropdown
+          with a visible search box, see Searchable Dropdown.
         </div>
       </Section>
 

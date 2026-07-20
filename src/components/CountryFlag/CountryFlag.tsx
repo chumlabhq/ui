@@ -2,12 +2,12 @@ import { forwardRef, useState, useCallback, useMemo } from "react";
 import type { SyntheticEvent } from "react";
 import type { CountryFlagProps, CountryFlagClasses, CountryFlagTooltipConfig } from "./utils/types";
 import {
-  DEFAULT_FLAG_BASE_PATH,
   DEFAULT_ASPECT_RATIO,
   DEFAULT_COUNTRYFLAG_CLASSES,
   UNSTYLED_COUNTRYFLAG_CLASSES,
 } from "./utils/constants";
 import { getPixelSize, isTooltipConfig } from "./utils/helpers";
+import { usePackagedFlag } from "./utils/packagedFlags";
 import { useCountryFlagGroupContext } from "./utils/context";
 import { CountryFlagShimmer } from "./components/CountryFlagShimmer";
 import { Tooltip } from "../Tooltip";
@@ -41,7 +41,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
       fallback,
       loading = false,
       tooltip,
-      basePath = DEFAULT_FLAG_BASE_PATH,
+      basePath,
       classes: classesProp,
       unstyled = false,
       reduceMotion = "auto",
@@ -71,8 +71,14 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const pixelSize = getPixelSize(effectiveSize);
     const width = pixelSize;
     const height = Math.round(pixelSize * aspectRatio);
-    const src = `${basePath}/${normalizedCode}.svg`;
     const altText = alt || `${normalizedCode.toUpperCase()} flag`;
+
+    // Default: the SVG ships in the package and is lazily imported per code, so
+    // no request leaves the app. Supplying basePath opts back into fetching
+    // `${basePath}/${code}.svg` from a CDN or self-hosted directory.
+    const usePackaged = basePath === undefined;
+    const packagedSrc = usePackagedFlag(usePackaged && normalizedCode ? normalizedCode : null);
+    const src = usePackaged ? packagedSrc : `${basePath}/${normalizedCode}.svg`;
 
     // ─── Merged classes ─────────────────────────────────────────────────
     const baseClasses = unstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
@@ -146,7 +152,9 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
         ) : (
           <img
             ref={imgRef}
-            src={src}
+            // Omitted (not empty) while a packaged chunk is in flight: an empty
+            // src would fire a spurious error before the flag even resolves.
+            src={src ?? undefined}
             alt=""
             width={width}
             height={height}

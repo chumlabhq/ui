@@ -10,8 +10,20 @@
     },
     "size": {
       "oneOf": [
-        { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl", "2xl"] },
-        { "type": "number" }
+        {
+          "type": "string",
+          "enum": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ]
+        },
+        {
+          "type": "number"
+        }
       ],
       "description": "Flag size as a preset or numeric pixel value."
     },
@@ -33,35 +45,72 @@
     },
     "tooltip": {
       "oneOf": [
-        { "type": "object", "description": "React.ReactNode" },
+        {
+          "type": "object",
+          "description": "React.ReactNode"
+        },
         {
           "type": "object",
           "description": "CountryFlagTooltipConfig",
           "properties": {
-            "content": { "type": "object", "description": "React.ReactNode" },
-            "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
-            "align": { "type": "string", "enum": ["start", "center", "end"] },
-            "sideOffset": { "type": "number" },
-            "delayDuration": { "type": "number" },
-            "className": { "type": "string" },
-            "showArrow": { "type": "boolean" }
+            "content": {
+              "type": "object",
+              "description": "React.ReactNode"
+            },
+            "side": {
+              "type": "string",
+              "enum": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ]
+            },
+            "align": {
+              "type": "string",
+              "enum": [
+                "start",
+                "center",
+                "end"
+              ]
+            },
+            "sideOffset": {
+              "type": "number"
+            },
+            "delayDuration": {
+              "type": "number"
+            },
+            "className": {
+              "type": "string"
+            },
+            "showArrow": {
+              "type": "boolean"
+            }
           },
-          "required": ["content"]
+          "required": [
+            "content"
+          ]
         }
       ],
       "description": "Tooltip shown on hover. Pass a ReactNode or a config object."
     },
     "basePath": {
       "type": "string",
-      "description": "Base path for flag image assets."
+      "description": "Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead."
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for flag sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "image": { "type": "string" },
-        "fallback": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "fallback": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
@@ -70,8 +119,13 @@
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
       "description": "Controls motion preferences. 'auto' respects OS setting."
     },
@@ -84,5 +138,7 @@
       "description": "(event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load."
     }
   },
-  "required": ["code"]
+  "required": [
+    "code"
+  ]
 }

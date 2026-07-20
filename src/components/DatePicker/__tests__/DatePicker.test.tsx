@@ -211,6 +211,98 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("Uncontrolled Mode", () => {
+    it("displays the selected date when no value prop is supplied", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(<DatePicker placeholder="Pick a date" />);
+
+      await openCalendar(user);
+
+      const day15 = screen
+        .getAllByRole("gridcell")
+        .find(
+          (cell) =>
+            cell.textContent?.trim() === "15" && !cell.getAttribute("data-outside"),
+        );
+      await user.click(day15!);
+
+      expect(screen.queryByText("Pick a date")).not.toBeInTheDocument();
+      expect(screen.getByText(/\b15,/)).toBeInTheDocument();
+    });
+
+    it("seeds the initial selection from defaultValue", () => {
+      render(<DatePicker defaultValue={new Date(2025, 2, 9)} />);
+      expect(screen.getByText("Mar 9, 2025")).toBeInTheDocument();
+    });
+
+    it("lets a controlled value override defaultValue", () => {
+      render(
+        <DatePicker defaultValue={new Date(2025, 2, 9)} value={new Date(2025, 4, 1)} />,
+      );
+      expect(screen.getByText("May 1, 2025")).toBeInTheDocument();
+      expect(screen.queryByText("Mar 9, 2025")).not.toBeInTheDocument();
+    });
+
+    it("applies a preset to its own selection when uncontrolled", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(<DatePicker showPresets placeholder="Pick a date" />);
+
+      await openCalendar(user);
+      await user.click(screen.getByRole("button", { name: "Today" }));
+
+      expect(screen.queryByText("Pick a date")).not.toBeInTheDocument();
+      expect(screen.getByText(String(new Date().getFullYear()), { exact: false }))
+        .toBeInTheDocument();
+    });
+
+    it("applies a range preset when uncontrolled", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(<DatePicker mode="range" showPresets placeholder="Pick a range" />);
+
+      await openCalendar(user);
+      await user.click(screen.getByRole("button", { name: "Last 7 Days" }));
+
+      expect(screen.queryByText("Pick a range")).not.toBeInTheDocument();
+      // formatDateRange joins the two dates, so a separator proves both landed.
+      expect(screen.getByText(/\d.*[–-].*\d/)).toBeInTheDocument();
+    });
+
+    it("leaves a preset click to the consumer when controlled", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onValueChange = vi.fn();
+      render(
+        <DatePicker
+          value={null}
+          onValueChange={onValueChange}
+          showPresets
+          placeholder="Stays empty"
+        />,
+      );
+
+      await openCalendar(user);
+      await user.click(screen.getByRole("button", { name: "Today" }));
+
+      expect(onValueChange).toHaveBeenCalledTimes(1);
+      expect(screen.getByText("Stays empty")).toBeInTheDocument();
+    });
+
+    it("does not update its own display when controlled by value", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(<DatePicker value={null} placeholder="Stays empty" />);
+
+      await openCalendar(user);
+      const day15 = screen
+        .getAllByRole("gridcell")
+        .find(
+          (cell) =>
+            cell.textContent?.trim() === "15" && !cell.getAttribute("data-outside"),
+        );
+      await user.click(day15!);
+
+      expect(screen.getByText("Stays empty")).toBeInTheDocument();
+    });
+  });
+
   describe("Disabled State", () => {
     it("disables the trigger button when disabled", () => {
       render(<DatePicker disabled />);

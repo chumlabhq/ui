@@ -328,6 +328,7 @@ const [value, setValue] = useState<string | null>(null);
 | Clear button not visible | `clearable` not set | Add `clearable` prop |
 | Form doesn't submit value | Missing `name` prop | Add `name` to render hidden input |
 | Typeahead not working | Dropdown not focused | Click or Tab to the trigger first |
+| Typed characters not visible | Not a bug — typeahead is navigation, not a search field | Focus jumps to the match; nothing is rendered, as with a native select. Use SearchableDropdown for a visible search input |
 
 ---
 

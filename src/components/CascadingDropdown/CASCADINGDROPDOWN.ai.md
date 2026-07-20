@@ -299,9 +299,9 @@ const options: CascadingOption[] = [
 
 ```tsx
 const searchCountries = async (query: string) => {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
-  const data = await res.json();
-  return data.map((c: any) => ({ value: c.cca2, label: c.name.common }));
+  const res = await fetch(`/api/countries/search?q=${encodeURIComponent(query)}`);
+  const { countries } = await res.json();
+  return countries.map((c) => ({ value: c.code, label: c.name }));
 };
 
 <CascadingDropdown

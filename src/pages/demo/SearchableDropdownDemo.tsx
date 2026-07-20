@@ -13,17 +13,11 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-interface RestCountryResponse {
-  name: { common: string; official: string };
-  cca2: string;
-  flag: string;
-  flags: { png: string; svg: string };
-  capital?: string[];
-  region: string;
-}
+import {
+  fetchCountries,
+  searchCountries,
+  type Country,
+} from "./lib/countries";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 
@@ -311,22 +305,22 @@ const SearchableDropdownDemo = () => {
   const [keyDownMessage, setKeyDownMessage] = useState<string>("");
 
   const mapCountryToOption = useCallback(
-    (country: RestCountryResponse): SearchableDropdownOption => ({
-      value: country.cca2,
-      label: country.name.common,
+    (country: Country): SearchableDropdownOption => ({
+      value: country.code,
+      label: country.name,
       content: (
         <span className="flex items-center gap-2">
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <span className="flex flex-col">
-            <span className="text-sm">{country.name.common}</span>
+            <span className="text-sm">{country.name}</span>
             <span
               className={`text-xs text-cl-text-secondary`}
             >
-              {country.capital?.[0] || country.region}
+              {country.capital || country.region}
             </span>
           </span>
         </span>
@@ -334,11 +328,11 @@ const SearchableDropdownDemo = () => {
       selectedContent: (
         <span className="flex items-center gap-2">
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
-          <span>{country.name.common}</span>
+          <span>{country.name}</span>
         </span>
       ),
     }),
@@ -347,15 +341,7 @@ const SearchableDropdownDemo = () => {
 
   const handleAsyncSearch = useCallback(
     async (query: string): Promise<SearchableDropdownOption[]> => {
-      if (!query.trim()) return [];
-      const response = await fetch(
-        `https://restcountries.com/v3.1/name/${encodeURIComponent(query)}`,
-      );
-      if (!response.ok) {
-        if (response.status === 404) return [];
-        throw new Error("Failed to fetch countries");
-      }
-      const data: RestCountryResponse[] = await response.json();
+      const data = await searchCountries(query);
       return data.slice(0, 10).map(mapCountryToOption);
     },
     [mapCountryToOption],
@@ -364,15 +350,11 @@ const SearchableDropdownDemo = () => {
   const handleLoadInitialOptions = useCallback(async (): Promise<
     SearchableDropdownOption[]
   > => {
-    const response = await fetch(
-      "https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region",
-    );
-    if (!response.ok) throw new Error("Failed to fetch countries");
-    const data: RestCountryResponse[] = await response.json();
+    const data = await fetchCountries();
     const codes = ["US", "GB", "DE", "FR", "JP", "CA", "AU", "IN", "BR", "IT"];
     return codes
-      .map((code) => data.find((c) => c.cca2 === code))
-      .filter((c): c is RestCountryResponse => c !== undefined)
+      .map((code) => data.find((c) => c.code === code))
+      .filter((c): c is Country => c !== undefined)
       .map(mapCountryToOption);
   }, [mapCountryToOption]);
 

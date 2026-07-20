@@ -483,6 +483,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     {
       mode = "single",
       value,
+      defaultValue,
       onValueChange,
       onClear,
       minDate,
@@ -621,6 +622,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     // ─── Hook ──────────────────────────────────────────────────────────
     const {
       isOpen,
+      currentValue,
+      setCurrentValue,
       calendarMonths,
       focusedDate,
       handleClose,
@@ -639,6 +642,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     } = useDatePicker({
       mode,
       value,
+      defaultValue,
       onValueChange,
       minDate,
       maxDate,
@@ -660,9 +664,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const isCalendarPositionStable = useStablePositionAfterOpen(isOpen);
 
     // Internal typed accessors for the unified value
-    const singleValue = mode === "single" ? (value as Date | null | undefined) : undefined;
-    const rangeValue = mode === "range" ? (value as DateRange | null | undefined) : undefined;
-    const multipleValue = mode === "multiple" ? (value as Date[] | null | undefined) : undefined;
+    // Read the hook's resolved selection, not the raw prop - an uncontrolled
+    // picker keeps its selection internally and the prop stays undefined.
+    const singleValue = mode === "single" ? (currentValue as Date | null | undefined) : undefined;
+    const rangeValue = mode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
+    const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
 
     const emitSingle = mode === "single"
       ? (onValueChange as ((date: Date | null, dateValue: DateValue | null) => void) | undefined)
@@ -714,10 +720,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           MARGIN,
           Math.min(left, viewportWidth - calendarWidth - MARGIN),
         );
-        top = Math.max(
-          MARGIN,
-          Math.min(top, viewportHeight - calendarHeight - MARGIN),
-        );
+
+        // Only pull the calendar back into view when its trigger is actually
+        // on screen. Clamping an off-screen trigger would detach the calendar
+        // and float it over unrelated content — an open picker further down
+        // the page would otherwise appear pinned near the top of the viewport.
+        const triggerInView = rect.bottom > 0 && rect.top < viewportHeight;
+        if (triggerInView) {
+          top = Math.max(
+            MARGIN,
+            Math.min(top, viewportHeight - calendarHeight - MARGIN),
+          );
+        }
 
         setCalendarPos({ top, left });
       };
@@ -831,6 +845,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             date: presetValue,
             dateString: presetValue.toISOString().split("T")[0],
           };
+          setCurrentValue(presetValue);
           emitSingle?.(presetValue, dateValue);
           handleClose();
         } else if (
@@ -839,6 +854,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           "start" in presetValue
         ) {
           const range = presetValue as DateRange;
+          setCurrentValue(range);
           emitRange?.(range, {
             start: range.start
               ? {
@@ -860,10 +876,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             date: d,
             dateString: d.toISOString().split("T")[0],
           }));
+          setCurrentValue(dates);
           emitMultiple?.(dates, dateValues);
         }
       },
-      [mode, emitSingle, emitRange, emitMultiple, handleClose],
+      [mode, emitSingle, emitRange, emitMultiple, setCurrentValue, handleClose],
     );
 
     // ─── Derived ───────────────────────────────────────────────────────
