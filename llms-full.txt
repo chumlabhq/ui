@@ -3443,7 +3443,6 @@ export default function Example() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | `number` | `24` (Circular), `4` (Linear height), varies | Size in pixels |
-| `color` | `string` | `"currentColor"` | Stroke/fill color |
 | `speed` | `number` | `1` | Animation speed multiplier |
 | `className` | `string` | — | Additional CSS classes |
 | `classes` | `*LoaderClasses` | — | Per-slot class overrides |
@@ -4193,10 +4192,49 @@ export default function Example() {
 | Prop | Constraint |
 |------|-----------|
 | `length` | Defaults to 6. Controls number of input fields. |
-| `type` | `"numeric"` (default) or `"alphanumeric"`. Restricts allowed characters. |
-| `groupPattern` | Array like `[3,3]` to visually group inputs with separators. Sum must equal `length`. |
-| `validate` | Custom function `(char) => boolean`. Overrides `type` filtering. |
-| `masked` | Shows dots instead of characters (like password fields). |
+| `inputPattern` | Regex string restricting allowed characters, e.g. `"\\d*"` for digits only. Also drives `inputMode`. |
+| `inputType` | `"text"` (default), `"tel"`, or `"password"`. Use `"password"` to mask characters. |
+| `groups` | Array like `[3, 3]` to visually group inputs with separators. Sum must equal `length`. |
+| `validate` | Custom function `(char) => boolean`. Overrides `inputPattern` filtering. |
+
+---
+
+### All Props
+
+<!-- generated from OtpInput.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `length` | number | — | Number of OTP input fields. |
+| `value` | string | — | Controlled OTP value. |
+| `defaultValue` | string | — | Initial OTP value for uncontrolled usage. |
+| `onValueChange` | object | — | (value: string) => void - Fires when the OTP value changes. |
+| `onComplete` | object | — | (value: string) => void - Fires when all fields are filled. |
+| `label` | object | — | React.ReactNode - Label rendered above the input. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `required` | boolean | — | Marks the field as required. |
+| `description` | object | — | React.ReactNode - Helper text rendered below the label. |
+| `error` | boolean | — | Displays the input in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
+| `success` | boolean | — | Displays the input in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
+| `loading` | boolean | — | Shows a loading state. |
+| `disabled` | boolean | — | Disables all input fields. |
+| `groups` | array | — | Defines grouping of input fields (e.g. [3, 3] for two groups of 3). |
+| `separator` | object | — | React.ReactNode - Content rendered between groups. |
+| `allowPaste` | boolean | — | Enables pasting OTP values. |
+| `autoFocusFirst` | boolean | — | Automatically focuses the first input on mount. |
+| `inputType` | `"text"` \| `"password"` \| `"tel"` | — | HTML input type for each field. |
+| `inputPattern` | string | — | HTML pattern attribute for input validation. |
+| `inputClassNames` | array | — | Per-input CSS class overrides. |
+| `fullWidth` | boolean | — | Makes the input span the full width of its container. |
+| `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
+| `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
+| `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
+| `groupAriaLabel` | string | — | Accessible label for the input group. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
 
 ---
 
@@ -5336,10 +5374,10 @@ const [sorting, setSorting] = useState<SortingState>([]);
 
 ## TabPanel
 
-> Accessible tab panel with icons, badges, tooltips, closable tabs, vertical orientation, lazy loading, and roving tabindex.
+> Accessible tab panel with icons, badges, tooltips, vertical orientation, keep-mounted panels, and roving tabindex.
 
 **Category:** Navigation
-**Keywords:** tabs, tab panel, tabbed interface, navigation tabs, tab list, tab content, closable, vertical tabs, lazy loading
+**Keywords:** tabs, tab panel, tabbed interface, navigation tabs, tab list, tab content, vertical tabs, keep mounted
 
 ### Import
 
@@ -5363,11 +5401,9 @@ const tabs = [
 
 export default function Example() {
   return (
-    <TabPanel
-      tabs={tabs}
-      defaultValue="home"
-      renderContent={(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
-    />
+    <TabPanel tabs={tabs} defaultValue="home">
+      {(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
+    </TabPanel>
   );
 }
 ```
@@ -5383,10 +5419,8 @@ export default function Example() {
 | `defaultValue` | Uncontrolled mode — do not combine with `value`. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
 | `activationMode` | `"automatic"` (default) or `"manual"` (Enter/Space to activate). |
-| `closable` | When true, tabs show close button. Must handle `onClose`. |
-| `renderContent` | Function `(tab) => ReactNode`. Required for content rendering. |
+| `children` | Render function `(tab) => ReactNode`. This is how panel content is rendered — not a `renderContent` prop or `content` on tab objects. |
 | `renderTab` | Custom tab renderer. Receives `(props, defaultElement)`. |
-| `lazyMount` | Only mount panels on first activation. |
 | `keepMounted` | Keep panels in DOM after switching away. |
 | `forceMount` | Mount all panels regardless of active state. |
 | `unstyled` | Strips all defaults. Must provide styling via `classes`. |
@@ -5405,33 +5439,36 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 
 ### All Props
 
+<!-- generated from TabPanel.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tabs` | `Tab[]` | — | **Required.** Tab definitions |
-| `value` | `string` | — | Active tab (controlled) |
-| `defaultValue` | `string` | — | Initial tab (uncontrolled) |
-| `onValueChange` | `(tabId) => void` | — | Tab change callback |
-| `renderContent` | `(tab) => ReactNode` | — | Content renderer |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `activationMode` | `"automatic" \| "manual"` | `"automatic"` | Keyboard activation mode |
-| `closable` | `boolean` | `false` | Show close buttons |
-| `onClose` | `(tabId) => void` | — | Close tab callback |
-| `showTooltips` | `boolean` | `false` | Enable tooltips |
-| `tooltipDefaults` | `TooltipDefaults` | — | Default tooltip config |
-| `lazyMount` | `boolean` | `false` | Lazy-mount panels |
-| `keepMounted` | `boolean` | `false` | Keep inactive panels |
-| `forceMount` | `boolean` | `false` | Mount all panels |
-| `loop` | `boolean` | `true` | Loop keyboard navigation |
-| `disabled` | `boolean` | `false` | Disable all tabs |
-| `renderTab` | `(props, defaultEl) => ReactNode` | — | Custom tab renderer |
-| `classes` | `TabPanelClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `className` | `string` | — | Root class |
-| `aria-label` | `string` | `"Tabs"` | Tablist ARIA label |
-| `aria-labelledby` | `string` | — | External labelling element |
-| `id` | `string` | — | Root ID |
-
----
+| `tabs` **(required)** | array | — | Array of tab definitions. |
+| `id` | string | — | HTML id attribute. |
+| `value` | string | — | Controlled active tab ID. |
+| `defaultValue` | string | — | Default uncontrolled active tab ID. |
+| `onValueChange` | object | — | (tabId: string) => void — Callback fired when the active tab changes. |
+| `children` | object | — | React.ReactNode \| ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function. |
+| `orientation` | `"horizontal"` \| `"vertical"` | — | Layout orientation of the tab list. |
+| `activationMode` | `"automatic"` \| `"manual"` | — | Whether tabs activate automatically on focus or require manual activation. |
+| `loop` | boolean | — | Whether keyboard navigation loops from last tab to first. |
+| `iconPosition` | `"left"` \| `"right"` | — | Position of tab icons relative to the label. |
+| `showZeroCount` | boolean | — | Whether to show a count badge when the count is zero. |
+| `alwaysShowLabels` | boolean | — | Whether to always show tab labels (even when icons are present). |
+| `showTooltips` | boolean | — | Whether to show tooltips on tabs. |
+| `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | — | Position of tab tooltips. |
+| `tooltipOffset` | number | — | Offset distance for tab tooltips in pixels. |
+| `disabled` | boolean | — | Whether the entire tab panel is disabled. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `unstyled` | boolean | — | When true, removes all default styling. |
+| `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
+| `aria-label` | string | — | Accessible label for the tab list. |
+| `aria-labelledby` | string | — | ID of the element that labels the tab list. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `forceMount` | boolean | — | Force mount all tab panels regardless of active state. |
+| `keepMounted` | boolean | — | Keep previously mounted tab panels in the DOM. |
 
 ### Styling Guide
 
@@ -5481,7 +5518,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive} renderContent={...} />
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(tab) => ...}</TabPanel>
 ```
 
 #### With icons and badges
@@ -5493,10 +5530,10 @@ const tabs = [
 ];
 ```
 
-#### Closable tabs
+#### Keep panels mounted
 
 ```tsx
-<TabPanel tabs={tabs} closable onClose={(id) => setTabs(tabs.filter(t => t.id !== id))} />
+<TabPanel tabs={tabs} keepMounted>{(tab) => <Panel id={tab.id} />}</TabPanel>
 ```
 
 #### Vertical orientation

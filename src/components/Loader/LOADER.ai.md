@@ -38,7 +38,6 @@ export default function Example() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | `number` | `24` (Circular), `4` (Linear height), varies | Size in pixels |
-| `color` | `string` | `"currentColor"` | Stroke/fill color |
 | `speed` | `number` | `1` | Animation speed multiplier |
 | `className` | `string` | — | Additional CSS classes |
 | `classes` | `*LoaderClasses` | — | Per-slot class overrides |

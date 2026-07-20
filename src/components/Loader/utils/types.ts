@@ -47,7 +47,7 @@ export interface PulseLoaderClasses {
  *
  * @example
  * ```tsx
- * <CircularLoader size={24} color="white" />
+ * <CircularLoader size={24} className="text-cl-accent" />
  * ```
  */
 export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -59,8 +59,6 @@ export interface CircularLoaderProps extends HTMLAttributes<HTMLDivElement> {
   speed?: number;
   /** Background track color. Default: currentColor at 20% opacity */
   trackColor?: string;
-  /** Spinner color (applied via currentColor / className) */
-  color?: string;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
   /** CSS class overrides for sub-elements. */
