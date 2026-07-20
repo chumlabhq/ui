@@ -6,7 +6,8 @@
   "properties": {
     "length": {
       "type": "number",
-      "description": "Number of OTP input fields."
+      "description": "Number of OTP input fields.",
+      "default": 6
     },
     "value": {
       "type": "string",
@@ -38,7 +39,8 @@
     },
     "required": {
       "type": "boolean",
-      "description": "Marks the field as required."
+      "description": "Marks the field as required.",
+      "default": false
     },
     "description": {
       "type": "object",
@@ -46,7 +48,8 @@
     },
     "error": {
       "type": "boolean",
-      "description": "Displays the input in an error state."
+      "description": "Displays the input in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -54,7 +57,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Displays the input in a success state."
+      "description": "Displays the input in a success state.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -62,16 +66,20 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "Shows a loading state."
+      "description": "Shows a loading state.",
+      "default": false
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables all input fields."
+      "description": "Disables all input fields.",
+      "default": false
     },
     "groups": {
       "type": "array",
       "description": "Defines grouping of input fields (e.g. [3, 3] for two groups of 3).",
-      "items": { "type": "number" }
+      "items": {
+        "type": "number"
+      }
     },
     "separator": {
       "type": "object",
@@ -79,29 +87,40 @@
     },
     "allowPaste": {
       "type": "boolean",
-      "description": "Enables pasting OTP values."
+      "description": "Enables pasting OTP values.",
+      "default": true
     },
     "autoFocusFirst": {
       "type": "boolean",
-      "description": "Automatically focuses the first input on mount."
+      "description": "Automatically focuses the first input on mount.",
+      "default": false
     },
     "inputType": {
       "type": "string",
-      "enum": ["text", "password", "tel"],
-      "description": "HTML input type for each field."
+      "enum": [
+        "text",
+        "password",
+        "tel"
+      ],
+      "description": "HTML input type for each field.",
+      "default": "text"
     },
     "inputPattern": {
       "type": "string",
-      "description": "HTML pattern attribute for input validation."
+      "description": "HTML pattern attribute for input validation.",
+      "default": "\\\\d*"
     },
     "inputClassNames": {
       "type": "array",
       "description": "Per-input CSS class overrides.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Makes the input span the full width of its container."
+      "description": "Makes the input span the full width of its container.",
+      "default": false
     },
     "renderInput": {
       "type": "object",
@@ -117,27 +136,49 @@
     },
     "groupAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the input group."
+      "description": "Accessible label for the input group.",
+      "default": "One-time password input"
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "group": { "type": "string" },
-        "input": { "type": "string" },
-        "inputFocused": { "type": "string" },
-        "label": { "type": "string" },
-        "error": { "type": "string" },
-        "separator": { "type": "string" },
-        "description": { "type": "string" },
-        "success": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "input": {
+          "type": "string"
+        },
+        "inputFocused": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "separator": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     }
   },
   "required": []

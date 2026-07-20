@@ -10,24 +10,46 @@
       "items": {
         "type": "object",
         "properties": {
-          "value": { "type": "string", "description": "Option value." },
-          "label": { "type": "string", "description": "Display label." },
-          "content": { "type": "object", "description": "React.ReactNode - Custom content rendered in the option list." },
-          "selectedContent": { "type": "object", "description": "React.ReactNode - Content shown when this option is selected." },
-          "disabled": { "type": "boolean", "description": "Whether the option is disabled." }
+          "value": {
+            "type": "string",
+            "description": "Option value."
+          },
+          "label": {
+            "type": "string",
+            "description": "Display label."
+          },
+          "content": {
+            "type": "object",
+            "description": "React.ReactNode - Custom content rendered in the option list."
+          },
+          "selectedContent": {
+            "type": "object",
+            "description": "React.ReactNode - Content shown when this option is selected."
+          },
+          "disabled": {
+            "type": "boolean",
+            "description": "Whether the option is disabled."
+          }
         },
-        "required": ["value", "label"]
+        "required": [
+          "value",
+          "label"
+        ]
       }
     },
     "value": {
       "type": "array",
       "description": "Controlled selected values.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "defaultValue": {
       "type": "array",
       "description": "Initial selected values for uncontrolled usage.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "onValueChange": {
       "type": "object",
@@ -43,15 +65,18 @@
     },
     "placeholder": {
       "type": "object",
-      "description": "React.ReactNode - Placeholder when nothing is selected."
+      "description": "React.ReactNode - Placeholder when nothing is selected.",
+      "default": "Select options..."
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables the dropdown."
+      "description": "Disables the dropdown.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Displays the dropdown in an error state."
+      "description": "Displays the dropdown in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -67,7 +92,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Displays the dropdown in a success state."
+      "description": "Displays the dropdown in a success state.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -75,39 +101,48 @@
     },
     "required": {
       "type": "boolean",
-      "description": "Marks the field as required."
+      "description": "Marks the field as required.",
+      "default": false
     },
     "showSearch": {
       "type": "boolean",
-      "description": "Whether to show the search input in the dropdown."
+      "description": "Whether to show the search input in the dropdown.",
+      "default": true
     },
     "searchPlaceholder": {
       "type": "string",
-      "description": "Placeholder text for the search input."
+      "description": "Placeholder text for the search input.",
+      "default": "Search..."
     },
     "noResultsContent": {
       "type": "object",
-      "description": "React.ReactNode - Content shown when no options match the search."
+      "description": "React.ReactNode - Content shown when no options match the search.",
+      "default": "No options found"
     },
     "loadingText": {
       "type": "object",
-      "description": "React.ReactNode - Text shown during async loading."
+      "description": "React.ReactNode - Text shown during async loading.",
+      "default": "Loading..."
     },
     "shimmerCount": {
       "type": "number",
-      "description": "Number of shimmer placeholder items shown during loading."
+      "description": "Number of shimmer placeholder items shown during loading.",
+      "default": 5
     },
     "clearable": {
       "type": "boolean",
-      "description": "Shows a clear button to deselect all values."
+      "description": "Shows a clear button to deselect all values.",
+      "default": false
     },
     "showChevron": {
       "type": "boolean",
-      "description": "Whether to show the chevron icon in the trigger."
+      "description": "Whether to show the chevron icon in the trigger.",
+      "default": true
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Makes the dropdown span the full width of its container."
+      "description": "Makes the dropdown span the full width of its container.",
+      "default": false
     },
     "loading": {
       "type": "boolean",
@@ -119,7 +154,8 @@
     },
     "searchDebounceMs": {
       "type": "number",
-      "description": "Debounce delay in milliseconds for the search callback."
+      "description": "Debounce delay in milliseconds for the search callback.",
+      "default": 300
     },
     "initialOptions": {
       "type": "array",
@@ -127,8 +163,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "value": { "type": "string" },
-          "label": { "type": "string" }
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
         }
       }
     },
@@ -138,7 +178,8 @@
     },
     "loadInitialOnOpen": {
       "type": "boolean",
-      "description": "When true, calls onLoadInitialOptions each time the dropdown opens."
+      "description": "When true, calls onLoadInitialOptions each time the dropdown opens.",
+      "default": false
     },
     "onLoadError": {
       "type": "object",
@@ -146,11 +187,13 @@
     },
     "maxDisplayedChips": {
       "type": "number",
-      "description": "Maximum number of selected chips displayed before showing a count."
+      "description": "Maximum number of selected chips displayed before showing a count.",
+      "default": 3
     },
     "showSelectedChips": {
       "type": "boolean",
-      "description": "Whether to show selected values as chips in the trigger."
+      "description": "Whether to show selected values as chips in the trigger.",
+      "default": true
     },
     "checkboxIcon": {
       "type": "object",
@@ -158,45 +201,105 @@
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "lockScroll": {
       "type": "boolean",
-      "description": "Locks body scroll while the dropdown is open."
+      "description": "Locks body scroll while the dropdown is open.",
+      "default": false
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for dropdown sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "trigger": { "type": "string" },
-        "triggerText": { "type": "string" },
-        "content": { "type": "string" },
-        "optionList": { "type": "string" },
-        "option": { "type": "string" },
-        "optionSelected": { "type": "string" },
-        "optionFocused": { "type": "string" },
-        "optionDisabled": { "type": "string" },
-        "chevron": { "type": "string" },
-        "checkbox": { "type": "string" },
-        "checkboxChecked": { "type": "string" },
-        "checkboxIcon": { "type": "string" },
-        "chip": { "type": "string" },
-        "chipRemove": { "type": "string" },
-        "noResults": { "type": "string" },
-        "clearIcon": { "type": "string" },
-        "loading": { "type": "string" },
-        "shimmer": { "type": "string" },
-        "shimmerItem": { "type": "string" },
-        "label": { "type": "string" },
-        "error": { "type": "string" },
-        "description": { "type": "string" },
-        "success": { "type": "string" },
-        "searchInput": { "type": "string" },
-        "searchInputElement": { "type": "string" },
-        "searchIcon": { "type": "string" },
-        "moreCount": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "triggerText": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "optionList": {
+          "type": "string"
+        },
+        "option": {
+          "type": "string"
+        },
+        "optionSelected": {
+          "type": "string"
+        },
+        "optionFocused": {
+          "type": "string"
+        },
+        "optionDisabled": {
+          "type": "string"
+        },
+        "chevron": {
+          "type": "string"
+        },
+        "checkbox": {
+          "type": "string"
+        },
+        "checkboxChecked": {
+          "type": "string"
+        },
+        "checkboxIcon": {
+          "type": "string"
+        },
+        "chip": {
+          "type": "string"
+        },
+        "chipRemove": {
+          "type": "string"
+        },
+        "noResults": {
+          "type": "string"
+        },
+        "clearIcon": {
+          "type": "string"
+        },
+        "loading": {
+          "type": "string"
+        },
+        "shimmer": {
+          "type": "string"
+        },
+        "shimmerItem": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "searchInput": {
+          "type": "string"
+        },
+        "searchInputElement": {
+          "type": "string"
+        },
+        "searchIcon": {
+          "type": "string"
+        },
+        "moreCount": {
+          "type": "string"
+        }
       }
     },
     "className": {
@@ -213,7 +316,8 @@
     },
     "defaultOpen": {
       "type": "boolean",
-      "description": "Whether the dropdown is initially open (uncontrolled)."
+      "description": "Whether the dropdown is initially open (uncontrolled).",
+      "default": false
     },
     "onOpenChange": {
       "type": "object",
@@ -225,24 +329,32 @@
     },
     "dropdownPosition": {
       "type": "string",
-      "enum": ["top", "bottom"],
-      "description": "Vertical placement of the dropdown relative to the trigger."
+      "enum": [
+        "top",
+        "bottom"
+      ],
+      "description": "Vertical placement of the dropdown relative to the trigger.",
+      "default": "bottom"
     },
     "forceDropdownPosition": {
       "type": "boolean",
-      "description": "Locks the dropdown to the specified position without auto-flipping."
+      "description": "Locks the dropdown to the specified position without auto-flipping.",
+      "default": false
     },
     "dropdownZIndex": {
       "type": "number",
-      "description": "Z-index of the dropdown popup."
+      "description": "Z-index of the dropdown popup.",
+      "default": 50
     },
     "dropdownGap": {
       "type": "number",
-      "description": "Gap in pixels between trigger and dropdown popup."
+      "description": "Gap in pixels between trigger and dropdown popup.",
+      "default": 4
     },
     "keepMounted": {
       "type": "boolean",
-      "description": "Keeps the dropdown DOM mounted when closed."
+      "description": "Keeps the dropdown DOM mounted when closed.",
+      "default": false
     },
     "aria-label": {
       "type": "string",
@@ -270,7 +382,8 @@
     },
     "searchInputAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the search input."
+      "description": "Accessible label for the search input.",
+      "default": "Search options"
     }
   },
   "required": []

@@ -71,40 +71,40 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 
 ## All Props
 
+<!-- generated from Pagination.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | — | Current page (1-indexed, controlled) |
-| `defaultValue` | `number` | `1` | Initial page (uncontrolled) |
-| `totalPages` | `number` | — | **Required.** Total pages |
-| `onValueChange` | `(page) => void` | — | Page change callback |
-| `siblingCount` | `number` | `1` | Pages around current page |
-| `showRowsPerPage` | `boolean` | `false` | Show rows-per-page selector |
-| `rowsPerPage` | `number` | — | Current rows per page |
-| `onRowsPerPageChange` | `(rows) => void` | — | Rows change callback |
-| `rowOptions` | `number[]` | `[5,10,25,50,100]` | Dropdown options |
-| `rowsPerPageLabel` | `string` | `"rows"` | Label after selector |
-| `showLabel` | `string` | `"Show"` | Label before selector |
-| `dropdownAriaLabel` | `string` | `"Rows per page"` | Dropdown ARIA label |
-| `dropdownPosition` | `"top" \| "bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom) |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | — | Gap between trigger and dropdown |
-| `prevIcon` | `ComponentType \| ReactNode` | Chevron | Previous button icon |
-| `nextIcon` | `ComponentType \| ReactNode` | Chevron | Next button icon |
-| `dropdownIcon` | `ComponentType \| ReactNode` | Chevron | Dropdown icon |
-| `renderEllipsis` | `(props) => ReactNode` | — | Custom ellipsis renderer |
-| `renderPageInfo` | `(props) => ReactNode` | — | Custom page info renderer |
-| `sectionOrder` | `SectionName[]` | `["selector","pageInfo","nav"]` | Layout order |
-| `disabled` | `boolean` | `false` | Disable all controls |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-| `classes` | `PaginationClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Dropdown portal target |
-| `prevAriaLabel` | `string` | `"Previous page"` | Prev button aria-label |
-| `nextAriaLabel` | `string` | `"Next page"` | Next button aria-label |
-| `paginationAriaLabel` | `string` | `"Pagination"` | Nav landmark aria-label |
-| `pageAriaLabel` | `(page) => string` | — | Page button aria-label function |
-
----
+| `totalPages` **(required)** | number | — | Total number of pages. |
+| `siblingCount` | number | `1` | Number of sibling page buttons to show on each side of the current page. |
+| `rowsPerPage` | number | — | Current number of rows displayed per page. |
+| `rowOptions` | array | — | Available row-per-page options for the selector. |
+| `disabled` | boolean | — | Disables the entire pagination control. |
+| `onValueChange` | object | — | (page: number) => void - Fires when the current page changes. |
+| `value` | number | — | Controlled current page number. |
+| `defaultValue` | number | `1` | Initial page number for uncontrolled usage. |
+| `onRowsPerPageChange` | object | — | (rows: number) => void - Fires when the rows-per-page value changes. |
+| `showRowsPerPage` | boolean | `false` | Whether to show the rows-per-page selector. |
+| `rowsPerPageLabel` | string | `"rows"` | Label text for the rows-per-page selector. |
+| `showLabel` | string | `"Show"` | Label text for the 'show' section of the rows-per-page selector. |
+| `dropdownAriaLabel` | string | `"Rows per page"` | Accessible label for the rows-per-page dropdown. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
+| `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
+| `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
+| `prevIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
+| `nextIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
+| `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
+| `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
+| `sectionOrder` | array | — | Order of pagination sections. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for pagination sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |
+| `prevAriaLabel` | string | `"Previous page"` | Accessible label for the previous page button. |
+| `nextAriaLabel` | string | `"Next page"` | Accessible label for the next page button. |
+| `paginationAriaLabel` | string | — | Accessible label for the pagination nav element. |
+| `pageAriaLabel` | object | — | (page: number) => string - Function to generate aria-label for each page button. |
 
 ## Ref API
 
@@ -301,13 +301,12 @@ const [rows, setRows] = useState(10);
 | i18n | `title="i18n / Custom Labels"` | French labels |
 | Custom icons | `title="Custom Icons"` | prevIcon, nextIcon, dropdownIcon |
 | Custom row options | `title="Custom Row Options & Label"` | rowOptions, rowsPerPageLabel |
-| Dropdown direction | `title="Dropdown Direction"` | dropdownPosition top/bottom |
 | Pill style | `title="Pill Style"` | Full themed example |
 | Data-attribute styling | `title="Data-Attribute Styling"` | data-[active] variants |
 | Minimal/borderless | `title="Minimal / Borderless"` | Ghost style |
 | Compact | `title="Compact"` | Small sizing |
 | Boundary conditions | `title="Boundary Conditions"` | 0, 1, 3 pages |
-| Ref forwarding | `title="Ref Forwarding"` | Programmatic focus |
+| Ref forwarding | `title="Ref Forwarding & HTML Attributes"` | Programmatic focus |
 | Dropdown z-index | `title="Dropdown Z-Index"` | dropdownZIndex |
 | Disabled | `title="Disabled State"` | disabled prop |
 

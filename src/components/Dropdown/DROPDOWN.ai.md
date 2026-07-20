@@ -93,68 +93,60 @@ export default function Example() {
 
 ## All Props
 
-### Dropdown (root)
+<!-- generated from Dropdown.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `DropdownOption[]` | `[]` | Array of selectable options. |
-| `value` | `string \| null` | — | Controlled selected value. |
-| `defaultValue` | `string` | — | Uncontrolled initial value. |
-| `onValueChange` | `(value: string \| null, option: DropdownOption \| null) => void` | — | Selection change callback. |
-| `open` | `boolean` | — | Controlled open state. |
-| `defaultOpen` | `boolean` | — | Uncontrolled initial open state. |
-| `onOpenChange` | `(open: boolean) => void` | — | Open state change callback. |
-| `placeholder` | `ReactNode` | `"Select an option"` | Trigger text when nothing selected. |
-| `disabled` | `boolean` | `false` | Disable the entire dropdown. |
-| `error` | `boolean` | `false` | Error state styling. |
-| `errorMessage` | `ReactNode` | — | Displayed below the dropdown with `role="alert"`. |
-| `label` | `ReactNode` | — | Visible label above the trigger. |
-| `description` | `ReactNode` | — | Helper text below the label. |
-| `success` | `boolean` | `false` | Success state styling. |
-| `successMessage` | `ReactNode` | — | Displayed below the dropdown. |
-| `required` | `boolean` | `false` | Adds `*` to label, sets `aria-required`. |
-| `clearable` | `boolean` | `false` | Adds clear button, allows deselect. |
-| `noResultsContent` | `ReactNode` | `"No options available"` | Shown when options array is empty. |
-| `showChevron` | `boolean` | `true` | Show/hide the chevron icon. |
-| `showSelectedIcon` | `boolean` | `true` | Show check icon on selected option. |
-| `selectedIcon` | `ReactNode` | — | Custom selected indicator. |
-| `fullWidth` | `boolean` | `false` | Sets root to `width: 100%`. |
-| `loading` | `boolean` | `false` | External loading state (shows shimmer). |
-| `onLoadOptions` | `() => Promise<DropdownOption[]>` | — | Async option loader. |
-| `loadOnOpen` | `boolean` | `false` | Trigger `onLoadOptions` when opened. |
-| `onLoadError` | `(error: unknown) => void` | — | Error callback for async loading. |
-| `shimmerCount` | `number` | `5` | Number of shimmer rows when loading. |
-| `loadingText` | `ReactNode` | `"Loading..."` | SR announcement during load. |
-| `unstyled` | `boolean` | `false` | Remove all default styles. |
-| `classes` | `DropdownClasses` | — | Override individual style slots. |
-| `className` | `string` | — | Additional class on root element. |
-| `style` | `CSSProperties` | — | Inline style on root element. |
-| `keepMounted` | `boolean` | `false` | Keep popup in DOM when closed (`display: none`). |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target. |
-| `lockScroll` | `boolean` | `false` | Lock body scroll while open. |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred popup direction (auto-flips). |
-| `forceDropdownPosition` | `boolean` | `false` | Lock to `dropdownPosition`, no auto-flip. |
-| `dropdownZIndex` | `number` | `50` | z-index of the portal popup. |
-| `dropdownGap` | `number` | `4` | Gap (px) between trigger and popup. |
-| `typeaheadTimeout` | `number` | `500` | Typeahead buffer reset delay (ms). |
-| `aria-label` | `string` | — | Accessible name when no visible label. |
-| `renderTrigger` | `(props: DropdownTriggerRenderProps) => ReactNode` | — | Custom trigger renderer. |
-| `ChevronIcon` | `ComponentType` | Built-in | Custom chevron component. |
-| `CheckIcon` | `ComponentType` | Built-in | Custom check icon component. |
-| `ClearIcon` | `ComponentType` | Built-in | Custom clear icon component. |
-| `ref` | `Ref<HTMLDivElement>` | — | Forwarded to root element. |
-
-### DropdownOption
-
-| Prop | Type | Description |
-|------|------|-------------|
-| `value` | `string` | **Required.** Unique identifier. |
-| `label` | `string` | **Required.** Display text (used for typeahead). |
-| `content` | `ReactNode` | Custom render in option list. Falls back to `label`. |
-| `selectedContent` | `ReactNode` | Custom render in trigger when selected. |
-| `disabled` | `boolean` | Disable this option. |
-
----
+| `options` | array | — | List of selectable options. |
+| `value` | string \| null | — | Controlled selected value. |
+| `defaultValue` | string | — | Initial selected value for uncontrolled usage. |
+| `onValueChange` | object | — | (value: string \| null, option: DropdownOption \| null) => void - Fires when the selected value changes. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | — | Whether the dropdown is initially open (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
+| `id` | string | — | HTML id attribute for the trigger element. |
+| `name` | string | — | Form field name for the hidden input. |
+| `placeholder` | object | `"Select an option"` | React.ReactNode - Content displayed when no option is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
+| `description` | object | — | React.ReactNode - Description text rendered below the label. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |
+| `noResultsContent` | object | `"No options available"` | React.ReactNode - Content shown when no options are available. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
+| `showSelectedIcon` | boolean | `true` | Whether to show a check icon next to the selected option. |
+| `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected option indicator. |
+| `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
+| `loading` | boolean | — | Shows a loading/shimmer state. |
+| `onLoadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. |
+| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
+| `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
+| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
+| `renderTrigger` | object | — | (props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
+| `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
+| `CheckIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 
 ## Styling Guide
 

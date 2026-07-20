@@ -14,7 +14,8 @@
     },
     "error": {
       "type": "boolean",
-      "description": "Displays the input in an error state."
+      "description": "Displays the input in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -22,7 +23,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Green success state for validated fields."
+      "description": "Green success state for validated fields.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -30,7 +32,11 @@
     },
     "size": {
       "type": "string",
-      "enum": ["sm", "md", "lg"],
+      "enum": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "description": "Visual size variant. Emits data-size on the root container for CSS targeting."
     },
     "prefix": {
@@ -71,7 +77,8 @@
     },
     "clearable": {
       "type": "boolean",
-      "description": "Show a built-in clear button when the input has a value."
+      "description": "Show a built-in clear button when the input has a value.",
+      "default": false
     },
     "onClear": {
       "type": "object",
@@ -79,11 +86,13 @@
     },
     "showCount": {
       "type": "boolean",
-      "description": "Show character count (requires maxLength to be set)."
+      "description": "Show character count (requires maxLength to be set).",
+      "default": false
     },
     "loading": {
       "type": "boolean",
-      "description": "Shows a loading spinner inside the input."
+      "description": "Shows a loading spinner inside the input.",
+      "default": false
     },
     "loader": {
       "type": "object",
@@ -91,11 +100,13 @@
     },
     "loaderSize": {
       "type": "number",
-      "description": "Size of the default CircularLoader in pixels. Ignored when a custom loader prop is provided."
+      "description": "Size of the default CircularLoader in pixels. Ignored when a custom loader prop is provided.",
+      "default": 16
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Makes the input span the full width of its container."
+      "description": "Makes the input span the full width of its container.",
+      "default": false
     },
     "className": {
       "type": "string",
@@ -105,21 +116,42 @@
       "type": "object",
       "description": "Slot-based class overrides for internal elements.",
       "properties": {
-        "root": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "label": { "type": "string" },
-        "description": { "type": "string" },
-        "input": { "type": "string" },
-        "prefix": { "type": "string" },
-        "suffix": { "type": "string" },
-        "error": { "type": "string" },
-        "success": { "type": "string" },
-        "count": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "input": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "suffix": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "count": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, all default classes are removed so you can style from scratch."
+      "description": "When true, all default classes are removed so you can style from scratch.",
+      "default": false
     }
   },
   "required": []

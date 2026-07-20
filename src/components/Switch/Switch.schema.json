@@ -22,7 +22,8 @@
     },
     "defaultChecked": {
       "type": "boolean",
-      "description": "Default uncontrolled checked state."
+      "description": "Default uncontrolled checked state.",
+      "default": false
     },
     "onValueChange": {
       "type": "object",
@@ -38,11 +39,13 @@
     },
     "value": {
       "type": "string",
-      "description": "Value attribute for the hidden input element."
+      "description": "Value attribute for the hidden input element.",
+      "default": "on"
     },
     "required": {
       "type": "boolean",
-      "description": "Whether the field is required."
+      "description": "Whether the field is required.",
+      "default": false
     },
     "id": {
       "type": "string",
@@ -50,11 +53,13 @@
     },
     "disabled": {
       "type": "boolean",
-      "description": "Whether the switch is disabled."
+      "description": "Whether the switch is disabled.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Whether the switch is in an error state."
+      "description": "Whether the switch is in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -62,7 +67,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Whether the switch is in a success state."
+      "description": "Whether the switch is in a success state.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -70,7 +76,8 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "Whether the switch is in a loading state."
+      "description": "Whether the switch is in a loading state.",
+      "default": false
     },
     "loader": {
       "type": "object",
@@ -78,7 +85,8 @@
     },
     "loaderSize": {
       "type": "number",
-      "description": "Size of the default loader in pixels."
+      "description": "Size of the default loader in pixels.",
+      "default": 16
     },
     "checkedIcon": {
       "type": "object",
@@ -108,27 +116,60 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "innerRow": { "type": "string" },
-        "labelContainer": { "type": "string" },
-        "label": { "type": "string" },
-        "disabledLabel": { "type": "string" },
-        "description": { "type": "string" },
-        "tracker": { "type": "string" },
-        "disabledTracker": { "type": "string" },
-        "thumb": { "type": "string" },
-        "checkedTracker": { "type": "string" },
-        "uncheckedTracker": { "type": "string" },
-        "checkedThumb": { "type": "string" },
-        "uncheckedThumb": { "type": "string" },
-        "error": { "type": "string" },
-        "success": { "type": "string" },
-        "loading": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "innerRow": {
+          "type": "string"
+        },
+        "labelContainer": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "disabledLabel": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tracker": {
+          "type": "string"
+        },
+        "disabledTracker": {
+          "type": "string"
+        },
+        "thumb": {
+          "type": "string"
+        },
+        "checkedTracker": {
+          "type": "string"
+        },
+        "uncheckedTracker": {
+          "type": "string"
+        },
+        "checkedThumb": {
+          "type": "string"
+        },
+        "uncheckedThumb": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "loading": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, removes all default styling."
+      "description": "When true, removes all default styling.",
+      "default": false
     },
     "style": {
       "type": "object",
@@ -136,8 +177,13 @@
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
       "description": "Controls motion preferences. 'auto' respects the user's OS setting."
     }

@@ -62,6 +62,43 @@ export default function Example() {
 
 ---
 
+## All Props
+
+<!-- generated from Drawer.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
+| `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
+| `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
+| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | — | Direction from which the drawer slides in. |
+| `size` | string | — | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
+| `overlayColor` | string | — | Background color of the overlay. |
+| `overlayOpacity` | number | — | Opacity of the overlay (0-1). |
+| `overlayBlur` | number | — | Backdrop blur in pixels for the overlay. |
+| `duration` | number | — | Animation duration in milliseconds. |
+| `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
+| `closeOnOverlayClick` | boolean | `true` | Closes the drawer when the overlay is clicked. |
+| `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
+| `classes` | object | — | CSS class overrides for drawer sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
+| `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |
+| `initialFocus` | object | — | RefObject<HTMLElement> — Element to receive focus when the drawer opens. |
+| `onTransitionEnd` | object | — | (open: boolean) => void — Called when the open/close transition completes. |
+| `keepMounted` | boolean | `false` | Keep the drawer DOM mounted when closed. |
+| `modal` | boolean | `true` | Whether the drawer behaves as a modal dialog. |
+| `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
+| `swipeThreshold` | number | — | Minimum swipe distance in pixels to trigger close. |
+| `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
+| `activeSnapPointIndex` | number | — | Controlled active snap point index. |
+| `defaultSnapPointIndex` | number | — | Initial snap point index for uncontrolled usage. |
+| `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
+
 ## Accessibility
 
 - `role="dialog"` with `aria-modal` when modal
@@ -84,7 +121,7 @@ export default function Example() {
 | Swipeable | `title="Swipeable Drawer"` |
 | Snap points | `title="Snap Points"` |
 | Stacked | `title="Stacked Drawers"` |
-| Form | `title="Form Drawer"` |
+| Form | `title="Form Drawer (Real-World)"` |
 
 | File | Contains |
 |------|----------|

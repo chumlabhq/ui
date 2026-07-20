@@ -98,67 +98,68 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 ## All Props
 
-### CascadingDropdownProps
+<!-- generated from CascadingDropdown.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `CascadingOption[]` | **required** | Array of top-level menu items with optional `children` |
-| `value` | `CascadingValue` | — | Controlled value: `{ parentValue: "child" \| string[] }` |
-| `defaultValue` | `CascadingValue` | — | Uncontrolled initial value |
-| `onValueChange` | `(value, path) => void` | — | Called when selection changes |
-| `onLoadChildren` | `(parent) => Promise<CascadingOption[]>` | — | Async loader for children on hover |
-| `onLoadError` | `(error) => void` | — | Called when async child loading fails |
-| `open` | `boolean` | — | Controlled open state |
-| `defaultOpen` | `boolean` | — | Uncontrolled initial open state |
-| `onOpenChange` | `(open) => void` | — | Called when dropdown opens/closes |
-| `placeholder` | `ReactNode` | — | Trigger placeholder text |
-| `disabled` | `boolean` | `false` | Disables the dropdown |
-| `error` | `boolean` | `false` | Shows error state |
-| `errorMessage` | `ReactNode` | — | Error message below trigger |
-| `label` | `ReactNode` | — | Label above trigger |
-| `description` | `ReactNode` | — | Description text above trigger |
-| `success` | `boolean` | `false` | Shows success state |
-| `successMessage` | `ReactNode` | — | Success message below trigger |
-| `required` | `boolean` | `false` | Marks as required |
-| `clearable` | `boolean` | `false` | Shows clear button |
-| `showChevron` | `boolean` | `true` | Shows chevron on trigger |
-| `submenuPosition` | `"right" \| "left"` | `"right"` | Submenu opens to right or left |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Dropdown opens above or below |
-| `closeOnSelect` | `boolean` | `true` | Close on selection |
-| `lockScroll` | `boolean` | `false` | Prevent page scroll when open |
-| `fullWidth` | `boolean` | `false` | Trigger takes full width |
-| `classes` | `CascadingDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `showMenuSearch` | `boolean` | `false` | Show search input in menu |
-| `showSubmenuSearch` | `boolean` | `false` | Show search input in submenus |
-| `onMenuSearch` | `(query) => Promise<CascadingOption[]>` | — | Async menu search callback |
-| `onSubmenuSearch` | `(query, parent) => Promise<CascadingOption[]>` | — | Async submenu search callback |
-| `searchDebounceMs` | `number` | `300` | Debounce delay for async search |
-| `menuSearchPlaceholder` | `string` | — | Menu search placeholder |
-| `submenuSearchPlaceholder` | `string` | — | Submenu search placeholder |
-| `SearchIcon` | `ComponentType` | Built-in magnifier | Custom search icon |
-| `ClearIcon` | `ComponentType` | Built-in X | Custom clear icon |
-| `renderTrigger` | `(props) => ReactNode` | — | Custom trigger render function |
-| `shimmerCount` | `number` | `5` | Number of shimmer items during loading (max 50) |
-| `keepMounted` | `boolean` | `false` | Keep portal in DOM when closed |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal render target |
-| `dropdownZIndex` | `number` | — | z-index for dropdown portal |
-| `dropdownGap` | `number` | — | Gap between trigger and dropdown |
-
-### CascadingOption
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | **required** | Unique value identifier |
-| `label` | `string` | **required** | Display text |
-| `content` | `ReactNode` | — | Custom render for menu item |
-| `selectedContent` | `ReactNode` | — | Custom render when selected (in trigger) |
-| `disabled` | `boolean` | `false` | Disable this option |
-| `children` | `CascadingOption[]` | — | Nested submenu options |
-| `selectionMode` | `"single" \| "multi"` | `"single"` | Selection mode for this item's children |
-| `hasChildren` | `boolean` | — | Hint for async: shows chevron, triggers onLoadChildren |
-
----
+| `options` **(required)** | array | — | Top-level options for the dropdown. |
+| `value` | object | — | Controlled selection value as { [parentValue]: string \| string[] }. |
+| `defaultValue` | object | — | Initial selection value for uncontrolled usage. |
+| `onValueChange` | object | — | (value: CascadingValue, path: CascadingOption[]) => void |
+| `onLoadChildren` | object | — | (parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader. |
+| `onLoadError` | object | — | (error: unknown) => void — Called when async child loading fails. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `onOpenChange` | object | — | (open: boolean) => void |
+| `onBlur` | object | — | () => void |
+| `onFocus` | object | — | () => void |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content when no value is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message. |
+| `label` | object | — | React.ReactNode — Label above the trigger. |
+| `description` | object | — | React.ReactNode — Description text. |
+| `success` | boolean | `false` | Displays success state. |
+| `successMessage` | object | — | React.ReactNode — Success message. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during async loading. |
+| `shimmerCount` | number | — | Number of shimmer placeholders during loading. |
+| `loading` | boolean | — | Shows loading state. |
+| `clearable` | boolean | `false` | Shows a clear button to reset the selection. |
+| `showChevron` | boolean | `true` | Shows a chevron indicator on the trigger. |
+| `showSelectedIcon` | boolean | `true` | Shows an icon on selected items. |
+| `selectedIcon` | object | — | React.ReactNode — Custom icon for selected items. |
+| `checkboxIcon` | object | — | React.ReactNode — Custom checkbox icon for multi-select. |
+| `fullWidth` | boolean | `false` | Stretches the dropdown to fill its container width. |
+| `submenuPosition` | `"right"` \| `"left"` | `"right"` | Horizontal position of submenus. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical position of the dropdown. |
+| `closeOnSelect` | boolean | `true` | Closes the dropdown after an item is selected. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `lockScroll` | boolean | `false` | Locks body scroll when the dropdown is open. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
+| `keepMounted` | boolean | `false` | Keep the dropdown DOM mounted when closed. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | CSSProperties — Inline styles. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> — Custom clear icon component. |
+| `renderTrigger` | object | — | (props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function. |
+| `showMenuSearch` | boolean | `false` | Show a search input inside the main menu. |
+| `showSubmenuSearch` | boolean | `false` | Show a search input inside submenus. |
+| `menuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the main menu search input. |
+| `submenuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the submenu search input. |
+| `onMenuSearch` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
+| `onSubmenuSearch` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
+| `searchDebounceMs` | number | `300` | Debounce delay in ms for async search callbacks. |
+| `SearchIcon` | object | — | React.ComponentType<{ className?: string }> — Custom search icon component. |
+| `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
+| `submenuSearchAriaLabel` | string | `"Search submenu"` | Accessible label for the submenu search input. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
 
 ## Styling Guide
 
@@ -364,13 +365,12 @@ const searchCountries = async (query: string) => {
 | Feature | Search for | What you'll find |
 |---------|-----------|------------------|
 | Minimal example | `title="Basic Usage"` | Static options, controlled state |
-| Async single-select | `title="Async Single-Select"` | REST Countries API integration |
-| Async multi-select | `title="Async Multi-Select"` | Multi-select with API |
+| Async single-select | `title="Async Single-Select (Countries API)"` | REST Countries API integration |
+| Async multi-select | `title="Async Multi-Select (Countries API)"` | Multi-select with API |
 | Client-side search | `title="Client-Side Search"` | showMenuSearch + showSubmenuSearch |
-| Async search | `title="Async Server-Side Search"` | onMenuSearch + onSubmenuSearch with debounce |
-| Custom search styling | `title="Custom Search Styling"` | Independent menu/submenu search styles |
-| Dark theme | `title="Dark Theme"` | Full class override |
-| Custom checkbox | `title="Custom Checkbox"` | checkbox + checkboxChecked classes |
+| Async search | `title="Async Server-Side Search (Debounced)"` | onMenuSearch + onSubmenuSearch with debounce |
+| Custom search styling | `title="Custom Search Styling: Teal"` | Independent menu/submenu search styles |
+| Custom checkbox | `title="Custom Checkbox - Green Rounded"` | checkbox + checkboxChecked classes |
 | Disabled options | `title="Disabled Options"` | Per-option disabled |
 
 Source file index:

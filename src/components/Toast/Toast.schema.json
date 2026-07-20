@@ -10,8 +10,14 @@
     },
     "type": {
       "type": "string",
-      "enum": ["success", "warning", "error", "info"],
-      "description": "Visual type/severity of the toast."
+      "enum": [
+        "success",
+        "warning",
+        "error",
+        "info"
+      ],
+      "description": "Visual type/severity of the toast.",
+      "default": "info"
     },
     "message": {
       "type": "object",
@@ -27,11 +33,13 @@
     },
     "duration": {
       "type": "number",
-      "description": "Auto-dismiss duration in milliseconds."
+      "description": "Auto-dismiss duration in milliseconds.",
+      "default": 5000
     },
     "showProgress": {
       "type": "boolean",
-      "description": "Whether to show a progress bar countdown."
+      "description": "Whether to show a progress bar countdown.",
+      "default": true
     },
     "progressColor": {
       "type": "string",
@@ -43,7 +51,8 @@
     },
     "showCloseButton": {
       "type": "boolean",
-      "description": "Whether to show a close/dismiss button."
+      "description": "Whether to show a close/dismiss button.",
+      "default": true
     },
     "onDismiss": {
       "type": "object",
@@ -55,7 +64,10 @@
     },
     "role": {
       "type": "string",
-      "enum": ["alert", "status"],
+      "enum": [
+        "alert",
+        "status"
+      ],
       "description": "ARIA role for the toast element."
     },
     "style": {
@@ -64,33 +76,53 @@
     },
     "pauseOnHover": {
       "type": "boolean",
-      "description": "Whether to pause the auto-dismiss timer on hover."
+      "description": "Whether to pause the auto-dismiss timer on hover.",
+      "default": true
     },
     "closeAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the close button."
+      "description": "Accessible label for the close button.",
+      "default": "Close notification"
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "container": { "type": "string" },
-        "content": { "type": "string" },
-        "message": { "type": "string" },
-        "description": { "type": "string" },
-        "progress": { "type": "string" },
-        "closeButton": { "type": "string" },
-        "icon": { "type": "string" }
+        "container": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "progress": {
+          "type": "string"
+        },
+        "closeButton": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, removes all default styling."
+      "description": "When true, removes all default styling.",
+      "default": false
     },
     "onRemove": {
       "type": "object",
       "description": "(id: string) => void — Internal callback to remove the toast from the provider."
     }
   },
-  "required": ["id", "onRemove"]
+  "required": [
+    "id",
+    "onRemove"
+  ]
 }

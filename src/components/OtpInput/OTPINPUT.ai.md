@@ -60,7 +60,7 @@ export default function Example() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `length` | number | — | Number of OTP input fields. |
+| `length` | number | `6` | Number of OTP input fields. |
 | `value` | string | — | Controlled OTP value. |
 | `defaultValue` | string | — | Initial OTP value for uncontrolled usage. |
 | `onValueChange` | object | — | (value: string) => void - Fires when the OTP value changes. |
@@ -68,30 +68,28 @@ export default function Example() {
 | `label` | object | — | React.ReactNode - Label rendered above the input. |
 | `id` | string | — | HTML id attribute. |
 | `name` | string | — | Form field name. |
-| `required` | boolean | — | Marks the field as required. |
+| `required` | boolean | `false` | Marks the field as required. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `error` | boolean | — | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | — | Displays the input in a success state. |
+| `success` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
-| `loading` | boolean | — | Shows a loading state. |
-| `disabled` | boolean | — | Disables all input fields. |
+| `loading` | boolean | `false` | Shows a loading state. |
+| `disabled` | boolean | `false` | Disables all input fields. |
 | `groups` | array | — | Defines grouping of input fields (e.g. [3, 3] for two groups of 3). |
 | `separator` | object | — | React.ReactNode - Content rendered between groups. |
-| `allowPaste` | boolean | — | Enables pasting OTP values. |
-| `autoFocusFirst` | boolean | — | Automatically focuses the first input on mount. |
-| `inputType` | `"text"` \| `"password"` \| `"tel"` | — | HTML input type for each field. |
-| `inputPattern` | string | — | HTML pattern attribute for input validation. |
+| `allowPaste` | boolean | `true` | Enables pasting OTP values. |
+| `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
+| `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
+| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
 | `inputClassNames` | array | — | Per-input CSS class overrides. |
-| `fullWidth` | boolean | — | Makes the input span the full width of its container. |
+| `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
 | `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
 | `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
-| `groupAriaLabel` | string | — | Accessible label for the input group. |
+| `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
-| `unstyled` | boolean | — | Removes all default styling. |
-
----
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ## Accessibility
 
@@ -112,8 +110,6 @@ export default function Example() {
 |---------|-----------|
 | Minimal | `title="Basic Usage"` |
 | Label | `title="With Label"` |
-| Grouped | `title="Group Pattern"` |
-| Masked | `title="Masked"` |
 | Error | `title="Error State"` |
 
 | File | Contains |

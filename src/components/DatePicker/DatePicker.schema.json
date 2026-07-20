@@ -6,7 +6,11 @@
   "properties": {
     "mode": {
       "type": "string",
-      "enum": ["single", "range", "multiple"],
+      "enum": [
+        "single",
+        "range",
+        "multiple"
+      ],
       "description": "Selection mode: single date, date range, or multiple dates.",
       "default": "single"
     },
@@ -31,7 +35,8 @@
     },
     "defaultOpen": {
       "type": "boolean",
-      "description": "Initial open state for uncontrolled usage."
+      "description": "Initial open state for uncontrolled usage.",
+      "default": false
     },
     "onOpenChange": {
       "type": "object",
@@ -49,19 +54,53 @@
       "type": "object",
       "description": "Configuration for disabling specific dates.",
       "properties": {
-        "before": { "type": "object", "description": "Date — Disable dates before this date." },
-        "after": { "type": "object", "description": "Date — Disable dates after this date." },
-        "disablePast": { "type": "boolean" },
-        "disableFuture": { "type": "boolean" },
-        "dates": { "type": "array", "items": { "type": "object" }, "description": "Array of specific dates to disable." },
-        "daysOfWeek": { "type": "array", "items": { "type": "number" }, "description": "Days of week to disable (0=Sunday)." },
-        "custom": { "type": "object", "description": "(date: Date) => boolean — Custom disable function." }
+        "before": {
+          "type": "object",
+          "description": "Date — Disable dates before this date."
+        },
+        "after": {
+          "type": "object",
+          "description": "Date — Disable dates after this date."
+        },
+        "disablePast": {
+          "type": "boolean"
+        },
+        "disableFuture": {
+          "type": "boolean"
+        },
+        "dates": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Array of specific dates to disable."
+        },
+        "daysOfWeek": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "Days of week to disable (0=Sunday)."
+        },
+        "custom": {
+          "type": "object",
+          "description": "(date: Date) => boolean — Custom disable function."
+        }
       }
     },
     "weekStartsOn": {
       "type": "integer",
-      "enum": [0, 1, 2, 3, 4, 5, 6],
-      "description": "First day of the week (0=Sunday, 1=Monday, etc.)."
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "description": "First day of the week (0=Sunday, 1=Monday, etc.).",
+      "default": 0
     },
     "locale": {
       "type": "object",
@@ -69,43 +108,53 @@
     },
     "numberOfMonths": {
       "type": "number",
-      "description": "Number of months to display simultaneously."
+      "description": "Number of months to display simultaneously.",
+      "default": 1
     },
     "dateFormat": {
       "type": "string",
-      "description": "Date format string (date-fns format)."
+      "description": "Date format string (date-fns format).",
+      "default": "MMM d, yyyy"
     },
     "showTodayIndicator": {
       "type": "boolean",
-      "description": "Highlights today's date in the calendar."
+      "description": "Highlights today's date in the calendar.",
+      "default": true
     },
     "showTodayButton": {
       "type": "boolean",
-      "description": "Shows a 'Today' button in the calendar footer."
+      "description": "Shows a 'Today' button in the calendar footer.",
+      "default": false
     },
     "todayAction": {
       "type": "boolean",
-      "description": "Whether clicking 'Today' selects today's date."
+      "description": "Whether clicking 'Today' selects today's date.",
+      "default": false
     },
     "showWeekNumbers": {
       "type": "boolean",
-      "description": "Shows week numbers in the calendar."
+      "description": "Shows week numbers in the calendar.",
+      "default": false
     },
     "showOutsideDays": {
       "type": "boolean",
-      "description": "Shows days from adjacent months."
+      "description": "Shows days from adjacent months.",
+      "default": true
     },
     "outsideDaysSelectable": {
       "type": "boolean",
-      "description": "Whether outside days can be selected."
+      "description": "Whether outside days can be selected.",
+      "default": true
     },
     "fixedWeeks": {
       "type": "boolean",
-      "description": "Always shows 6 weeks per month for consistent height."
+      "description": "Always shows 6 weeks per month for consistent height.",
+      "default": false
     },
     "showPresets": {
       "type": "boolean",
-      "description": "Shows preset date selection buttons."
+      "description": "Shows preset date selection buttons.",
+      "default": false
     },
     "presets": {
       "type": "array",
@@ -113,10 +162,18 @@
       "items": {
         "type": "object",
         "properties": {
-          "label": { "type": "string" },
-          "getValue": { "type": "object", "description": "() => Date | DateRange | Date[]" }
+          "label": {
+            "type": "string"
+          },
+          "getValue": {
+            "type": "object",
+            "description": "() => Date | DateRange | Date[]"
+          }
         },
-        "required": ["label", "getValue"]
+        "required": [
+          "label",
+          "getValue"
+        ]
       }
     },
     "markers": {
@@ -125,22 +182,38 @@
       "items": {
         "type": "object",
         "properties": {
-          "date": { "type": "object", "description": "Date" },
-          "label": { "type": "string" },
-          "description": { "type": "string" },
-          "type": { "type": "string" },
-          "color": { "type": "string" }
+          "date": {
+            "type": "object",
+            "description": "Date"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          }
         },
-        "required": ["date", "label"]
+        "required": [
+          "date",
+          "label"
+        ]
       }
     },
     "showMarkerIndicator": {
       "type": "boolean",
-      "description": "Shows dots on marked dates."
+      "description": "Shows dots on marked dates.",
+      "default": true
     },
     "showMarkerTooltip": {
       "type": "boolean",
-      "description": "Shows tooltips on marked dates."
+      "description": "Shows tooltips on marked dates.",
+      "default": true
     },
     "id": {
       "type": "string",
@@ -156,11 +229,13 @@
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables the date picker."
+      "description": "Disables the date picker.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Displays error state."
+      "description": "Displays error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -176,7 +251,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Displays success state."
+      "description": "Displays success state.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -184,7 +260,8 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "Shows loading state."
+      "description": "Shows loading state.",
+      "default": false
     },
     "clearable": {
       "type": "boolean",
@@ -192,82 +269,202 @@
     },
     "required": {
       "type": "boolean",
-      "description": "Marks the field as required."
+      "description": "Marks the field as required.",
+      "default": false
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Stretches the date picker to fill its container width."
+      "description": "Stretches the date picker to fill its container width.",
+      "default": false
     },
     "showClearButton": {
       "type": "boolean",
-      "description": "Shows the clear button in the trigger."
+      "description": "Shows the clear button in the trigger.",
+      "default": true
     },
     "showCalendarIcon": {
       "type": "boolean",
-      "description": "Shows the calendar icon in the trigger."
+      "description": "Shows the calendar icon in the trigger.",
+      "default": true
     },
-    "calendarIcon": { "type": "object", "description": "React.ReactNode — Custom calendar icon." },
-    "clearIcon": { "type": "object", "description": "React.ReactNode — Custom clear icon." },
-    "prevMonthIcon": { "type": "object", "description": "React.ReactNode — Custom previous month icon." },
-    "nextMonthIcon": { "type": "object", "description": "React.ReactNode — Custom next month icon." },
-    "prevYearIcon": { "type": "object", "description": "React.ReactNode — Custom previous year icon." },
-    "nextYearIcon": { "type": "object", "description": "React.ReactNode — Custom next year icon." },
-    "todayIcon": { "type": "object", "description": "React.ReactNode — Custom today button icon." },
-    "monthDropdownSelectedIcon": { "type": "object", "description": "React.ReactNode — Icon for selected month in dropdown." },
-    "yearDropdownSelectedIcon": { "type": "object", "description": "React.ReactNode — Icon for selected year in dropdown." },
+    "calendarIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom calendar icon."
+    },
+    "clearIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom clear icon."
+    },
+    "prevMonthIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom previous month icon."
+    },
+    "nextMonthIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom next month icon."
+    },
+    "prevYearIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom previous year icon."
+    },
+    "nextYearIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom next year icon."
+    },
+    "todayIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Custom today button icon."
+    },
+    "monthDropdownSelectedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Icon for selected month in dropdown."
+    },
+    "yearDropdownSelectedIcon": {
+      "type": "object",
+      "description": "React.ReactNode — Icon for selected year in dropdown."
+    },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for date picker sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "trigger": { "type": "string" },
-        "input": { "type": "string" },
-        "calendarIcon": { "type": "string" },
-        "clearButton": { "type": "string" },
-        "label": { "type": "string" },
-        "error": { "type": "string" },
-        "description": { "type": "string" },
-        "success": { "type": "string" },
-        "calendar": { "type": "string" },
-        "header": { "type": "string" },
-        "monthNav": { "type": "string" },
-        "navButton": { "type": "string" },
-        "navButtonDisabled": { "type": "string" },
-        "monthGrid": { "type": "string" },
-        "grid": { "type": "string" },
-        "weekdayHeader": { "type": "string" },
-        "weekday": { "type": "string" },
-        "day": { "type": "string" },
-        "daySelected": { "type": "string" },
-        "dayToday": { "type": "string" },
-        "dayDisabled": { "type": "string" },
-        "dayOutside": { "type": "string" },
-        "dayRangeStart": { "type": "string" },
-        "dayRangeEnd": { "type": "string" },
-        "dayRangeMiddle": { "type": "string" },
-        "dayHover": { "type": "string" },
-        "dayFocused": { "type": "string" },
-        "dayMarked": { "type": "string" },
-        "weekNumber": { "type": "string" },
-        "presets": { "type": "string" },
-        "presetButton": { "type": "string" },
-        "presetActive": { "type": "string" },
-        "footer": { "type": "string" },
-        "todayButton": { "type": "string" },
-        "markerIndicator": { "type": "string" },
-        "markerTooltip": { "type": "string" },
-        "monthSelect": { "type": "string" },
-        "yearSelect": { "type": "string" },
-        "monthDropdown": { "type": "string" },
-        "yearDropdown": { "type": "string" },
-        "dropdownMenu": { "type": "string" },
-        "dropdownItem": { "type": "string" },
-        "dropdownItemSelected": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "input": {
+          "type": "string"
+        },
+        "calendarIcon": {
+          "type": "string"
+        },
+        "clearButton": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "calendar": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "monthNav": {
+          "type": "string"
+        },
+        "navButton": {
+          "type": "string"
+        },
+        "navButtonDisabled": {
+          "type": "string"
+        },
+        "monthGrid": {
+          "type": "string"
+        },
+        "grid": {
+          "type": "string"
+        },
+        "weekdayHeader": {
+          "type": "string"
+        },
+        "weekday": {
+          "type": "string"
+        },
+        "day": {
+          "type": "string"
+        },
+        "daySelected": {
+          "type": "string"
+        },
+        "dayToday": {
+          "type": "string"
+        },
+        "dayDisabled": {
+          "type": "string"
+        },
+        "dayOutside": {
+          "type": "string"
+        },
+        "dayRangeStart": {
+          "type": "string"
+        },
+        "dayRangeEnd": {
+          "type": "string"
+        },
+        "dayRangeMiddle": {
+          "type": "string"
+        },
+        "dayHover": {
+          "type": "string"
+        },
+        "dayFocused": {
+          "type": "string"
+        },
+        "dayMarked": {
+          "type": "string"
+        },
+        "weekNumber": {
+          "type": "string"
+        },
+        "presets": {
+          "type": "string"
+        },
+        "presetButton": {
+          "type": "string"
+        },
+        "presetActive": {
+          "type": "string"
+        },
+        "footer": {
+          "type": "string"
+        },
+        "todayButton": {
+          "type": "string"
+        },
+        "markerIndicator": {
+          "type": "string"
+        },
+        "markerTooltip": {
+          "type": "string"
+        },
+        "monthSelect": {
+          "type": "string"
+        },
+        "yearSelect": {
+          "type": "string"
+        },
+        "monthDropdown": {
+          "type": "string"
+        },
+        "yearDropdown": {
+          "type": "string"
+        },
+        "dropdownMenu": {
+          "type": "string"
+        },
+        "dropdownItem": {
+          "type": "string"
+        },
+        "dropdownItemSelected": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "portalContainer": {
       "type": "object",
@@ -275,35 +472,50 @@
     },
     "lockScroll": {
       "type": "boolean",
-      "description": "Locks body scroll when the calendar is open."
+      "description": "Locks body scroll when the calendar is open.",
+      "default": false
     },
     "dropdownZIndex": {
       "type": "number",
-      "description": "Z-index of the calendar popup."
+      "description": "Z-index of the calendar popup.",
+      "default": 50
     },
     "dropdownPosition": {
       "type": "string",
-      "enum": ["top", "bottom"],
-      "description": "Vertical placement of the calendar popup."
+      "enum": [
+        "top",
+        "bottom"
+      ],
+      "description": "Vertical placement of the calendar popup.",
+      "default": "bottom"
     },
     "forceDropdownPosition": {
       "type": "boolean",
-      "description": "Locks the calendar to the specified dropdownPosition without auto-flipping."
+      "description": "Locks the calendar to the specified dropdownPosition without auto-flipping.",
+      "default": false
     },
     "dropdownGap": {
       "type": "number",
-      "description": "Gap in pixels between trigger and calendar popup."
+      "description": "Gap in pixels between trigger and calendar popup.",
+      "default": 4
     },
     "keepMounted": {
       "type": "boolean",
-      "description": "Keep the calendar DOM mounted when closed."
+      "description": "Keep the calendar DOM mounted when closed.",
+      "default": false
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
-      "description": "Controls motion preferences. 'auto' respects OS setting."
+      "description": "Controls motion preferences. 'auto' respects OS setting.",
+      "default": "auto"
     }
   },
   "required": []

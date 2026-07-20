@@ -83,26 +83,26 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 | `defaultValue` | string | — | Default uncontrolled active tab ID. |
 | `onValueChange` | object | — | (tabId: string) => void — Callback fired when the active tab changes. |
 | `children` | object | — | React.ReactNode \| ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function. |
-| `orientation` | `"horizontal"` \| `"vertical"` | — | Layout orientation of the tab list. |
-| `activationMode` | `"automatic"` \| `"manual"` | — | Whether tabs activate automatically on focus or require manual activation. |
-| `loop` | boolean | — | Whether keyboard navigation loops from last tab to first. |
-| `iconPosition` | `"left"` \| `"right"` | — | Position of tab icons relative to the label. |
-| `showZeroCount` | boolean | — | Whether to show a count badge when the count is zero. |
-| `alwaysShowLabels` | boolean | — | Whether to always show tab labels (even when icons are present). |
-| `showTooltips` | boolean | — | Whether to show tooltips on tabs. |
-| `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | — | Position of tab tooltips. |
-| `tooltipOffset` | number | — | Offset distance for tab tooltips in pixels. |
-| `disabled` | boolean | — | Whether the entire tab panel is disabled. |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the tab list. |
+| `activationMode` | `"automatic"` \| `"manual"` | `"automatic"` | Whether tabs activate automatically on focus or require manual activation. |
+| `loop` | boolean | `true` | Whether keyboard navigation loops from last tab to first. |
+| `iconPosition` | `"left"` \| `"right"` | `"left"` | Position of tab icons relative to the label. |
+| `showZeroCount` | boolean | `false` | Whether to show a count badge when the count is zero. |
+| `alwaysShowLabels` | boolean | `true` | Whether to always show tab labels (even when icons are present). |
+| `showTooltips` | boolean | `true` | Whether to show tooltips on tabs. |
+| `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
+| `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
+| `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
 | `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
-| `unstyled` | boolean | — | When true, removes all default styling. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
 | `aria-label` | string | — | Accessible label for the tab list. |
 | `aria-labelledby` | string | — | ID of the element that labels the tab list. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `className` | string | — | CSS class for the root element. |
 | `style` | object | — | Inline styles applied to the root element. |
-| `forceMount` | boolean | — | Force mount all tab panels regardless of active state. |
-| `keepMounted` | boolean | — | Keep previously mounted tab panels in the DOM. |
+| `forceMount` | boolean | `false` | Force mount all tab panels regardless of active state. |
+| `keepMounted` | boolean | `false` | Keep previously mounted tab panels in the DOM. |
 
 ## Styling Guide
 
@@ -213,17 +213,17 @@ const tabs = [
 | Underlined | `title="Underlined Style"` |
 | Pill style | `title="Pill Style"` |
 | Boxed style | `title="Boxed Style"` |
-| Icons left/right | `title="With Icons"` |
-| Count badges | `title="With Count Badges"` |
-| Tooltips | `title="With Tooltips"` |
+| Icons left/right | `title="With Icons (Left)"` |
+| Count badges | `title="With Count Badges (Hide Zero)"` |
+| Tooltips | `title="With Tooltips (Bottom)"` |
 | Disabled | `title="Disabled Tab"` |
 | Gradient | `title="Gradient Style"` |
 | Keyboard | `title="Keyboard Navigation"` |
-| Dynamic tabs | `title="Dynamic Tabs"` |
+| Dynamic tabs | `title="Dynamic Tabs (Add / Remove)"` |
 | Vertical | `title="Vertical Orientation"` |
 | Manual mode | `title="Manual Activation Mode"` |
-| Custom rendering | `title="Custom Tab Rendering"` |
-| Force/keep mount | `title="Force Mount"`, `title="Keep Mounted"` |
+| Custom rendering | `title="Custom Tab Rendering (renderTab)"` |
+| Force/keep mount | `title="Force Mount (All Panels)"`, `title="Keep Mounted (Lazy Persist)"` |
 | Classes | `title="classes Record"` |
 
 ### Source file index

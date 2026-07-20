@@ -14,42 +14,67 @@
     },
     "side": {
       "type": "string",
-      "enum": ["top", "right", "bottom", "left"],
-      "description": "Preferred side of the trigger to display the tooltip."
+      "enum": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "description": "Preferred side of the trigger to display the tooltip.",
+      "default": "top"
     },
     "align": {
       "type": "string",
-      "enum": ["start", "center", "end"],
-      "description": "Alignment of the tooltip along the side."
+      "enum": [
+        "start",
+        "center",
+        "end"
+      ],
+      "description": "Alignment of the tooltip along the side.",
+      "default": "center"
     },
     "sideOffset": {
       "type": "number",
-      "description": "Distance in pixels from the trigger along the side axis."
+      "description": "Distance in pixels from the trigger along the side axis.",
+      "default": 6
     },
     "alignOffset": {
       "type": "number",
-      "description": "Offset in pixels along the alignment axis."
+      "description": "Offset in pixels along the alignment axis.",
+      "default": 0
     },
     "maxWidth": {
-      "type": ["string", "number"],
-      "description": "Maximum width of the tooltip content."
+      "type": [
+        "string",
+        "number"
+      ],
+      "description": "Maximum width of the tooltip content.",
+      "default": 300
     },
     "wordWrap": {
       "type": "string",
-      "enum": ["normal", "break-word", "nowrap"],
-      "description": "Word wrap behavior for tooltip content."
+      "enum": [
+        "normal",
+        "break-word",
+        "nowrap"
+      ],
+      "description": "Word wrap behavior for tooltip content.",
+      "default": "break-word"
     },
     "delayDuration": {
       "type": "number",
-      "description": "Delay in milliseconds before showing the tooltip."
+      "description": "Delay in milliseconds before showing the tooltip.",
+      "default": 200
     },
     "hideDelayDuration": {
       "type": "number",
-      "description": "Delay in milliseconds before hiding the tooltip."
+      "description": "Delay in milliseconds before hiding the tooltip.",
+      "default": 100
     },
     "disableHoverableContent": {
       "type": "boolean",
-      "description": "When true, the tooltip content is not hoverable (closes on mouse leave of trigger)."
+      "description": "When true, the tooltip content is not hoverable (closes on mouse leave of trigger).",
+      "default": false
     },
     "open": {
       "type": "boolean",
@@ -57,7 +82,8 @@
     },
     "defaultOpen": {
       "type": "boolean",
-      "description": "Default uncontrolled open state."
+      "description": "Default uncontrolled open state.",
+      "default": false
     },
     "onOpenChange": {
       "type": "object",
@@ -65,7 +91,8 @@
     },
     "showArrow": {
       "type": "boolean",
-      "description": "Whether to show the tooltip arrow."
+      "description": "Whether to show the tooltip arrow.",
+      "default": true
     },
     "arrowSize": {
       "type": "number",
@@ -77,27 +104,35 @@
     },
     "disabled": {
       "type": "boolean",
-      "description": "Whether the tooltip is disabled."
+      "description": "Whether the tooltip is disabled.",
+      "default": false
     },
     "truncate": {
       "type": "boolean",
-      "description": "Whether to truncate the trigger content with ellipsis."
+      "description": "Whether to truncate the trigger content with ellipsis.",
+      "default": false
     },
     "truncateWidth": {
-      "type": ["number", "string"],
+      "type": [
+        "number",
+        "string"
+      ],
       "description": "Width at which to truncate the trigger content."
     },
     "shadow": {
       "type": "string",
-      "description": "Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'."
+      "description": "Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'.",
+      "default": "lg"
     },
     "zIndex": {
       "type": "number",
-      "description": "Z-index for the tooltip."
+      "description": "Z-index for the tooltip.",
+      "default": 9999
     },
     "portal": {
       "type": "boolean",
-      "description": "Whether to render the tooltip in a portal."
+      "description": "Whether to render the tooltip in a portal.",
+      "default": true
     },
     "portalContainer": {
       "type": "object",
@@ -105,11 +140,13 @@
     },
     "asChild": {
       "type": "boolean",
-      "description": "When true, the trigger renders as the child element instead of wrapping it."
+      "description": "When true, the trigger renders as the child element instead of wrapping it.",
+      "default": false
     },
     "triggerDisplay": {
       "type": "string",
-      "description": "CSS display property for the trigger wrapper."
+      "description": "CSS display property for the trigger wrapper.",
+      "default": "inline-flex"
     },
     "className": {
       "type": "string",
@@ -119,15 +156,24 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "trigger": { "type": "string" },
-        "content": { "type": "string" },
-        "arrow": { "type": "string" },
-        "baseArrow": { "type": "string" }
+        "trigger": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "arrow": {
+          "type": "string"
+        },
+        "baseArrow": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, removes all default styling."
+      "description": "When true, removes all default styling.",
+      "default": false
     },
     "contentStyle": {
       "type": "object",
@@ -142,5 +188,7 @@
       "description": "Inline styles applied to the base arrow element."
     }
   },
-  "required": ["children"]
+  "required": [
+    "children"
+  ]
 }

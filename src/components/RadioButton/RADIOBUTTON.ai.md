@@ -58,9 +58,7 @@ export default function Example() {
 | Basic | `title="Basic Usage"` |
 | Descriptions | `title="With Labels and Descriptions"` |
 | Sizes | `title="Sizes"` |
-| Orientations | `title="Orientation"` |
 | Custom icons | `title="Custom Icons"` |
-| Unstyled | `title="Unstyled Mode"` |
 
 | File | Contains |
 |------|----------|

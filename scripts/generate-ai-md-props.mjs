@@ -17,6 +17,15 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const componentsDir = resolve(root, "src/components");
 const HEADING = "## All Props";
 
+// Headings the All Props block is inserted before, in priority order, when a
+// file has no All Props section yet. Falls back to appending at the end.
+const INSERT_BEFORE = ["## Styling Guide", "## Patterns", "## Accessibility", "## Demo Reference", "## Troubleshooting"];
+
+// Skipped: RadioButton's schema is a broken stub (2 meaningless props, no nested
+// structure) — generating from it produces a garbage table, so its schema needs
+// rebuilding first (tracked separately). BrandLogo is site-only, not shipped.
+const SKIP = new Set(["RadioButton", "BrandLogo"]);
+
 function renderType(schema) {
   if (!schema) return "—";
   if (schema.enum) return schema.enum.map((v) => `\`${JSON.stringify(v)}\``).join(" \\| ");
@@ -34,19 +43,29 @@ function cell(text) {
   return String(text ?? "").replace(/\|/g, "\\|").replace(/\s*\n\s*/g, " ").trim();
 }
 
-function buildTable(schema) {
-  const props = schema.properties || {};
-  const required = new Set(schema.required || []);
-  const rows = Object.entries(props).map(([name, def]) => {
+function propsTable(properties, required = []) {
+  const req = new Set(required);
+  const rows = Object.entries(properties).map(([name, def]) => {
     const dflt = "default" in def ? `\`${JSON.stringify(def.default)}\`` : "—";
-    const req = required.has(name) ? " **(required)**" : "";
-    return `| \`${name}\`${req} | ${renderType(def)} | ${dflt} | ${cell(def.description)} |`;
+    const flag = req.has(name) ? " **(required)**" : "";
+    return `| \`${name}\`${flag} | ${renderType(def)} | ${dflt} | ${cell(def.description)} |`;
   });
-  return [
-    "| Prop | Type | Default | Description |",
-    "|------|------|---------|-------------|",
-    ...rows,
-  ].join("\n");
+  return ["| Prop | Type | Default | Description |", "|------|------|---------|-------------|", ...rows].join("\n");
+}
+
+// oneOf schemas model several distinct components (Loader → Circular/Linear/…);
+// emit one titled sub-table per branch rather than a single flattened table.
+function buildTable(schema) {
+  if (schema.properties) return propsTable(schema.properties, schema.required);
+  if (schema.oneOf) {
+    return schema.oneOf
+      .map((branch, i) => {
+        const title = branch.title || `Variant ${i + 1}`;
+        return `### ${title}\n\n${propsTable(branch.properties || {}, branch.required)}`;
+      })
+      .join("\n\n");
+  }
+  return null;
 }
 
 function generate(componentName) {
@@ -56,28 +75,37 @@ function generate(componentName) {
   if (!existsSync(schemaPath) || !existsSync(aiMdPath)) return null;
 
   const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
-  if (!schema.properties) return null;
-
   const table = buildTable(schema);
+  if (!table) return null;
+
   const source = readFileSync(aiMdPath, "utf8");
   const block = `${HEADING}\n\n<!-- generated from ${componentName}.schema.json — edit the schema, not this table -->\n\n${table}\n`;
 
   let next;
   const start = source.indexOf(HEADING);
-  if (start === -1) {
-    // No section yet — insert before Styling Guide, else append.
-    const anchor = source.indexOf("\n## Styling Guide");
-    next =
-      anchor === -1
-        ? `${source.trimEnd()}\n\n---\n\n${block}`
-        : `${source.slice(0, anchor)}\n\n---\n\n${block}\n${source.slice(anchor + 1)}`;
-  } else {
+  if (start !== -1) {
+    // Replace the existing block up to the next top-level heading.
     const rest = source.indexOf("\n## ", start + HEADING.length);
     next = source.slice(0, start) + block + (rest === -1 ? "" : source.slice(rest));
+  } else {
+    // Insert before the first available anchor heading, else append.
+    let anchor = -1;
+    for (const h of INSERT_BEFORE) {
+      anchor = source.indexOf(`\n${h}`);
+      if (anchor !== -1) break;
+    }
+    const before = anchor === -1 ? source.trimEnd() : source.slice(0, anchor).trimEnd();
+    // Reuse an existing trailing divider instead of stacking a second one.
+    const divider = before.endsWith("---") ? "" : "\n\n---";
+    const tail = anchor === -1 ? "" : `\n${source.slice(anchor + 1)}`;
+    next = `${before}${divider}\n\n${block}${tail}`;
   }
 
   writeFileSync(aiMdPath, next);
-  return Object.keys(schema.properties).length;
+  const count = schema.properties
+    ? Object.keys(schema.properties).length
+    : (schema.oneOf || []).reduce((n, b) => n + Object.keys(b.properties || {}).length, 0);
+  return count;
 }
 
 const args = process.argv.slice(2);
@@ -93,6 +121,10 @@ if (!targets.length) {
 }
 
 for (const name of targets) {
+  if (SKIP.has(name)) {
+    console.log(`[generate-ai-md-props] ${name}: SKIPPED (${name === "RadioButton" ? "broken schema — needs rebuild" : "site-only"})`);
+    continue;
+  }
   const count = generate(name);
   if (count) console.log(`[generate-ai-md-props] ${name}: ${count} props`);
 }

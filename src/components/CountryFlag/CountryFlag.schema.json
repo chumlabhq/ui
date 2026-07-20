@@ -41,7 +41,8 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "Shows a loading shimmer placeholder."
+      "description": "Shows a loading shimmer placeholder.",
+      "default": false
     },
     "tooltip": {
       "oneOf": [
@@ -115,7 +116,8 @@
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "reduceMotion": {
       "oneOf": [
@@ -127,7 +129,8 @@
           "const": "auto"
         }
       ],
-      "description": "Controls motion preferences. 'auto' respects OS setting."
+      "description": "Controls motion preferences. 'auto' respects OS setting.",
+      "default": "auto"
     },
     "onLoad": {
       "type": "object",

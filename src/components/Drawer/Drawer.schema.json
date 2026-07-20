@@ -10,7 +10,8 @@
     },
     "defaultOpen": {
       "type": "boolean",
-      "description": "Initial open state for uncontrolled usage."
+      "description": "Initial open state for uncontrolled usage.",
+      "default": false
     },
     "onOpenChange": {
       "type": "object",
@@ -18,7 +19,8 @@
     },
     "zIndex": {
       "type": "number",
-      "description": "Z-index of the drawer overlay and panel."
+      "description": "Z-index of the drawer overlay and panel.",
+      "default": 9999
     },
     "children": {
       "type": "object",
@@ -26,7 +28,12 @@
     },
     "direction": {
       "type": "string",
-      "enum": ["left", "right", "top", "bottom"],
+      "enum": [
+        "left",
+        "right",
+        "top",
+        "bottom"
+      ],
       "description": "Direction from which the drawer slides in."
     },
     "size": {
@@ -51,43 +58,60 @@
     },
     "lockScroll": {
       "type": "boolean",
-      "description": "Locks body scroll when the drawer is open."
+      "description": "Locks body scroll when the drawer is open.",
+      "default": true
     },
     "closeOnOverlayClick": {
       "type": "boolean",
-      "description": "Closes the drawer when the overlay is clicked."
+      "description": "Closes the drawer when the overlay is clicked.",
+      "default": true
     },
     "closeOnEscape": {
       "type": "boolean",
-      "description": "Closes the drawer when the Escape key is pressed."
+      "description": "Closes the drawer when the Escape key is pressed.",
+      "default": true
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for drawer sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "overlay": { "type": "string" },
-        "panel": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "overlay": {
+          "type": "string"
+        },
+        "panel": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
       "description": "Controls motion preferences. 'auto' respects OS setting."
     },
     "trapFocus": {
       "type": "boolean",
-      "description": "Traps keyboard focus within the drawer."
+      "description": "Traps keyboard focus within the drawer.",
+      "default": true
     },
     "restoreFocus": {
       "type": "boolean",
-      "description": "Restores focus to the previously focused element when the drawer closes."
+      "description": "Restores focus to the previously focused element when the drawer closes.",
+      "default": true
     },
     "portalContainer": {
       "type": "object",
@@ -103,15 +127,18 @@
     },
     "keepMounted": {
       "type": "boolean",
-      "description": "Keep the drawer DOM mounted when closed."
+      "description": "Keep the drawer DOM mounted when closed.",
+      "default": false
     },
     "modal": {
       "type": "boolean",
-      "description": "Whether the drawer behaves as a modal dialog."
+      "description": "Whether the drawer behaves as a modal dialog.",
+      "default": true
     },
     "swipeable": {
       "type": "boolean",
-      "description": "Enables swipe-to-close gesture."
+      "description": "Enables swipe-to-close gesture.",
+      "default": false
     },
     "swipeThreshold": {
       "type": "number",
@@ -119,7 +146,9 @@
     },
     "snapPoints": {
       "type": "array",
-      "items": { "type": "number" },
+      "items": {
+        "type": "number"
+      },
       "description": "Array of snap point positions (0-1) for the drawer panel."
     },
     "activeSnapPointIndex": {

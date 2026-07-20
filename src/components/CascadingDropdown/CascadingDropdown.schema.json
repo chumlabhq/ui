@@ -10,16 +10,46 @@
       "items": {
         "type": "object",
         "properties": {
-          "value": { "type": "string" },
-          "label": { "type": "string" },
-          "content": { "type": "object", "description": "React.ReactNode — Custom display content." },
-          "selectedContent": { "type": "object", "description": "React.ReactNode — Content shown when selected." },
-          "disabled": { "type": "boolean" },
-          "children": { "type": "array", "description": "Nested child options.", "items": { "type": "object" } },
-          "selectionMode": { "type": "string", "enum": ["single", "multi"] },
-          "hasChildren": { "type": "boolean", "description": "Indicates async children are available." }
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "content": {
+            "type": "object",
+            "description": "React.ReactNode — Custom display content."
+          },
+          "selectedContent": {
+            "type": "object",
+            "description": "React.ReactNode — Content shown when selected."
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "children": {
+            "type": "array",
+            "description": "Nested child options.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "selectionMode": {
+            "type": "string",
+            "enum": [
+              "single",
+              "multi"
+            ]
+          },
+          "hasChildren": {
+            "type": "boolean",
+            "description": "Indicates async children are available."
+          }
         },
-        "required": ["value", "label"]
+        "required": [
+          "value",
+          "label"
+        ]
       }
     },
     "value": {
@@ -48,7 +78,8 @@
     },
     "defaultOpen": {
       "type": "boolean",
-      "description": "Initial open state for uncontrolled usage."
+      "description": "Initial open state for uncontrolled usage.",
+      "default": false
     },
     "onOpenChange": {
       "type": "object",
@@ -76,15 +107,18 @@
     },
     "placeholder": {
       "type": "object",
-      "description": "React.ReactNode — Placeholder content when no value is selected."
+      "description": "React.ReactNode — Placeholder content when no value is selected.",
+      "default": "Select an option"
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables the dropdown."
+      "description": "Disables the dropdown.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Displays error state."
+      "description": "Displays error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -100,7 +134,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Displays success state."
+      "description": "Displays success state.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -108,15 +143,18 @@
     },
     "required": {
       "type": "boolean",
-      "description": "Marks the field as required."
+      "description": "Marks the field as required.",
+      "default": false
     },
     "noResultsContent": {
       "type": "object",
-      "description": "React.ReactNode — Content shown when no results match."
+      "description": "React.ReactNode — Content shown when no results match.",
+      "default": "No options found"
     },
     "loadingText": {
       "type": "object",
-      "description": "React.ReactNode — Text shown during async loading."
+      "description": "React.ReactNode — Text shown during async loading.",
+      "default": "Loading..."
     },
     "shimmerCount": {
       "type": "number",
@@ -128,15 +166,18 @@
     },
     "clearable": {
       "type": "boolean",
-      "description": "Shows a clear button to reset the selection."
+      "description": "Shows a clear button to reset the selection.",
+      "default": false
     },
     "showChevron": {
       "type": "boolean",
-      "description": "Shows a chevron indicator on the trigger."
+      "description": "Shows a chevron indicator on the trigger.",
+      "default": true
     },
     "showSelectedIcon": {
       "type": "boolean",
-      "description": "Shows an icon on selected items."
+      "description": "Shows an icon on selected items.",
+      "default": true
     },
     "selectedIcon": {
       "type": "object",
@@ -148,73 +189,161 @@
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Stretches the dropdown to fill its container width."
+      "description": "Stretches the dropdown to fill its container width.",
+      "default": false
     },
     "submenuPosition": {
       "type": "string",
-      "enum": ["right", "left"],
-      "description": "Horizontal position of submenus."
+      "enum": [
+        "right",
+        "left"
+      ],
+      "description": "Horizontal position of submenus.",
+      "default": "right"
     },
     "dropdownPosition": {
       "type": "string",
-      "enum": ["top", "bottom"],
-      "description": "Vertical position of the dropdown."
+      "enum": [
+        "top",
+        "bottom"
+      ],
+      "description": "Vertical position of the dropdown.",
+      "default": "bottom"
     },
     "closeOnSelect": {
       "type": "boolean",
-      "description": "Closes the dropdown after an item is selected."
+      "description": "Closes the dropdown after an item is selected.",
+      "default": true
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for dropdown sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "trigger": { "type": "string" },
-        "menu": { "type": "string" },
-        "menuItem": { "type": "string" },
-        "menuItemSelected": { "type": "string" },
-        "menuItemFocused": { "type": "string" },
-        "menuItemDisabled": { "type": "string" },
-        "submenu": { "type": "string" },
-        "submenuContainer": { "type": "string" },
-        "submenuItem": { "type": "string" },
-        "submenuItemSelected": { "type": "string" },
-        "submenuItemFocused": { "type": "string" },
-        "label": { "type": "string" },
-        "error": { "type": "string" },
-        "description": { "type": "string" },
-        "success": { "type": "string" },
-        "chevron": { "type": "string" },
-        "submenuChevron": { "type": "string" },
-        "checkIcon": { "type": "string" },
-        "checkbox": { "type": "string" },
-        "checkboxChecked": { "type": "string" },
-        "noResults": { "type": "string" },
-        "loading": { "type": "string" },
-        "clearIcon": { "type": "string" },
-        "shimmer": { "type": "string" },
-        "shimmerItem": { "type": "string" },
-        "searchInput": { "type": "string" },
-        "searchInputElement": { "type": "string" },
-        "searchIcon": { "type": "string" },
-        "submenuSearchInput": { "type": "string" },
-        "submenuSearchInputElement": { "type": "string" },
-        "submenuSearchIcon": { "type": "string" },
-        "content": { "type": "string" },
-        "option": { "type": "string" },
-        "optionSelected": { "type": "string" },
-        "optionFocused": { "type": "string" },
-        "optionDisabled": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "menu": {
+          "type": "string"
+        },
+        "menuItem": {
+          "type": "string"
+        },
+        "menuItemSelected": {
+          "type": "string"
+        },
+        "menuItemFocused": {
+          "type": "string"
+        },
+        "menuItemDisabled": {
+          "type": "string"
+        },
+        "submenu": {
+          "type": "string"
+        },
+        "submenuContainer": {
+          "type": "string"
+        },
+        "submenuItem": {
+          "type": "string"
+        },
+        "submenuItemSelected": {
+          "type": "string"
+        },
+        "submenuItemFocused": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "chevron": {
+          "type": "string"
+        },
+        "submenuChevron": {
+          "type": "string"
+        },
+        "checkIcon": {
+          "type": "string"
+        },
+        "checkbox": {
+          "type": "string"
+        },
+        "checkboxChecked": {
+          "type": "string"
+        },
+        "noResults": {
+          "type": "string"
+        },
+        "loading": {
+          "type": "string"
+        },
+        "clearIcon": {
+          "type": "string"
+        },
+        "shimmer": {
+          "type": "string"
+        },
+        "shimmerItem": {
+          "type": "string"
+        },
+        "searchInput": {
+          "type": "string"
+        },
+        "searchInputElement": {
+          "type": "string"
+        },
+        "searchIcon": {
+          "type": "string"
+        },
+        "submenuSearchInput": {
+          "type": "string"
+        },
+        "submenuSearchInputElement": {
+          "type": "string"
+        },
+        "submenuSearchIcon": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "option": {
+          "type": "string"
+        },
+        "optionSelected": {
+          "type": "string"
+        },
+        "optionFocused": {
+          "type": "string"
+        },
+        "optionDisabled": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "lockScroll": {
       "type": "boolean",
-      "description": "Locks body scroll when the dropdown is open."
+      "description": "Locks body scroll when the dropdown is open.",
+      "default": false
     },
     "portalContainer": {
       "type": "object",
@@ -222,15 +351,18 @@
     },
     "dropdownZIndex": {
       "type": "number",
-      "description": "Z-index of the dropdown."
+      "description": "Z-index of the dropdown.",
+      "default": 50
     },
     "dropdownGap": {
       "type": "number",
-      "description": "Gap in pixels between trigger and dropdown."
+      "description": "Gap in pixels between trigger and dropdown.",
+      "default": 4
     },
     "keepMounted": {
       "type": "boolean",
-      "description": "Keep the dropdown DOM mounted when closed."
+      "description": "Keep the dropdown DOM mounted when closed.",
+      "default": false
     },
     "className": {
       "type": "string",
@@ -250,19 +382,23 @@
     },
     "showMenuSearch": {
       "type": "boolean",
-      "description": "Show a search input inside the main menu."
+      "description": "Show a search input inside the main menu.",
+      "default": false
     },
     "showSubmenuSearch": {
       "type": "boolean",
-      "description": "Show a search input inside submenus."
+      "description": "Show a search input inside submenus.",
+      "default": false
     },
     "menuSearchPlaceholder": {
       "type": "string",
-      "description": "Placeholder text for the main menu search input."
+      "description": "Placeholder text for the main menu search input.",
+      "default": "Search..."
     },
     "submenuSearchPlaceholder": {
       "type": "string",
-      "description": "Placeholder text for the submenu search input."
+      "description": "Placeholder text for the submenu search input.",
+      "default": "Search..."
     },
     "onMenuSearch": {
       "type": "object",
@@ -283,16 +419,20 @@
     },
     "menuSearchAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the menu search input."
+      "description": "Accessible label for the menu search input.",
+      "default": "Search menu"
     },
     "submenuSearchAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the submenu search input."
+      "description": "Accessible label for the submenu search input.",
+      "default": "Search submenu"
     },
     "aria-label": {
       "type": "string",
       "description": "Accessible label for the dropdown."
     }
   },
-  "required": ["options"]
+  "required": [
+    "options"
+  ]
 }

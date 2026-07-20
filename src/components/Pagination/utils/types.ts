@@ -64,10 +64,6 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   /** Current page number (1-based). Not `currentPage` or `page`. */
   value?: number;
   defaultValue?: number;
-  label?: ReactNode;
-  /** Error state flag. Pass message via `errorMessage`, not as a string here. */
-  error?: boolean;
-  errorMessage?: ReactNode;
   /** Callback when rows-per-page selection changes. Not `onRowsChange`. */
   onRowsPerPageChange?: (rows: number) => void;
   /** Show the rows-per-page selector. Default: false. */

@@ -74,34 +74,37 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 
 ## All Props
 
+<!-- generated from Checkbox.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `ReactNode` | — | Text beside the checkbox |
-| `description` | `ReactNode` | — | Helper text below the label |
-| `checked` | `boolean` | — | Controlled checked state |
-| `defaultChecked` | `boolean` | — | Initial state (uncontrolled) |
-| `indeterminate` | `boolean` | `false` | Shows minus icon instead of check |
-| `onValueChange` | `(checked: boolean) => void` | — | Fires on state change |
-| `disabled` | `boolean` | `false` | Disables the checkbox |
-| `required` | `boolean` | `false` | Marks as required |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error text below checkbox |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success text below checkbox |
-| `loading` | `boolean` | `false` | Loading state |
-| `size` | `CheckboxSize` | `"md"` | xs/sm/md/lg/xl or pixel number |
-| `shape` | `CheckboxShape` | `"rounded"` | square/rounded/circle |
-| `checkedIcon` | `ReactNode` | Built-in check | Custom icon when checked |
-| `uncheckedIcon` | `ReactNode` | — | Custom icon when unchecked |
-| `indeterminateIcon` | `ReactNode` | Built-in minus | Custom icon when indeterminate |
-| `classes` | `CheckboxClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference control |
-| `name` | `string` | — | Form field name |
-| `id` | `string` | auto | Checkbox input ID |
-| `aria-label` | `string` | — | Accessible label (when no visible label) |
-
----
+| `label` | object | — | React.ReactNode — Text label rendered beside the checkbox. |
+| `description` | object | — | React.ReactNode — Helper text rendered below the label. |
+| `checked` | boolean | — | Controlled checked state. |
+| `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
+| `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
+| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
+| `onFocus` | object | — | (event: FocusEvent) => void |
+| `onBlur` | object | — | (event: FocusEvent) => void |
+| `error` | boolean | `false` | Displays the checkbox in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the checkbox. |
+| `success` | boolean | `false` | Displays the checkbox in a success state. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the checkbox. |
+| `loading` | boolean | `false` | Displays the checkbox in a loading state. |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of the checkbox indicator. |
+| `shape` | `"square"` \| `"rounded"` \| `"circle"` | `"rounded"` | Shape of the checkbox indicator. |
+| `checkedIcon` | object | — | React.ReactNode — Custom icon for the checked state. |
+| `uncheckedIcon` | object | — | React.ReactNode — Custom icon for the unchecked state. |
+| `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
+| `classes` | object | — | CSS class overrides for checkbox sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `disabled` | boolean | `false` | Disables the checkbox. |
+| `name` | string | — | Form field name. |
+| `value` | string | — | Form field value. |
+| `id` | string | — | HTML id attribute. |
+| `required` | boolean | `false` | Marks the checkbox as required. |
 
 ## Styling Guide
 
@@ -271,7 +274,6 @@ const someChecked = items.some(Boolean);
 | Shapes | `title="Shapes"` | square, rounded, circle |
 | Custom icons | `title="Custom Icons"` | checkedIcon + uncheckedIcon |
 | Error state | `title="Error State"` | error + errorMessage |
-| Unstyled | `title="Unstyled Mode"` | Full custom styling |
 | Classes system | `title="Classes System"` | Per-slot overrides |
 
 Source file index:

@@ -88,33 +88,23 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 
 ## All Props
 
-### CountryFlagProps
+<!-- generated from CountryFlag.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `code` | `string` | **required** | Two-letter ISO country code |
-| `size` | `CountryFlagSize \| number` | `"md"` | Flag size |
-| `aspectRatio` | `number` | `0.75` | Height/width ratio |
-| `alt` | `string` | code | Accessible alt text |
-| `fallback` | `ReactNode` | — | Shown on image error |
-| `loading` | `boolean` | `false` | Show shimmer instead of flag |
-| `tooltip` | `ReactNode \| CountryFlagTooltipConfig` | — | Tooltip on hover |
-| `basePath` | `string` | — | Override the packaged flags with a remote/self-hosted directory |
-| `classes` | `CountryFlagClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-
-### CountryFlagGroupProps
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | — | Max visible flags before "+N" count |
-| `size` | `CountryFlagSize \| number` | — | Size for all children |
-| `showCountTooltip` | `boolean` | — | Tooltip on surplus count |
-| `renderSurplus` | `(count) => ReactNode` | — | Custom surplus renderer |
-| `classes` | `CountryFlagGroupClasses` | — | Per-slot class overrides |
-
----
+| `code` **(required)** | string | — | ISO 3166-1 alpha-2 country code (e.g. 'US', 'GB'). |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| `"2xl"` \| number | — | Flag size as a preset or numeric pixel value. |
+| `aspectRatio` | number | — | Aspect ratio for the flag image. |
+| `alt` | string | — | Alt text for the flag image. |
+| `fallback` | object | — | React.ReactNode — Custom fallback content when the flag image fails to load. |
+| `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
+| `tooltip` | object | — | Tooltip shown on hover. Pass a ReactNode or a config object. |
+| `basePath` | string | — | Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead. |
+| `classes` | object | — | CSS class overrides for flag sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
+| `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
 ## Styling Guide
 

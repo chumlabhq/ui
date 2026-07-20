@@ -103,88 +103,31 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 
 ## All Props
 
-### Avatar
+<!-- generated from Avatar.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `name` | `string` | — | Display name, used for initials and autoColor hash. |
-| `src` | `string` | — | Image URL. Falls back to initials on error. |
-| `alt` | `string` | — | Image alt text. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| number` | `"md"` | Preset or custom pixel size. |
-| `shape` | `"circle" \| "square" \| "rounded"` | `"circle"` | Visual shape. |
-| `maxInitials` | `number` | `2` | Max initials to display. |
-| `fallback` | `ReactNode` | — | Custom fallback content (icon, emoji, etc.). |
-| `autoColor` | `boolean` | `false` | Deterministic bg/text color from name hash. |
-| `colors` | `AvatarColors` | — | Custom color palettes for autoColor. |
-| `bordered` | `boolean \| string` | — | Border ring. `true` = auto color, string = CSS value. |
-| `status` | `AvatarStatus \| AvatarStatusConfig` | — | Presence indicator (online/offline/away/busy). |
-| `tooltip` | `ReactNode \| AvatarTooltipConfig` | — | Hover tooltip. |
-| `imageConfig` | `AvatarImageConfig` | — | Advanced img attrs (srcSet, loading, crossOrigin, etc.). |
-| `classes` | `AvatarClasses` | — | Per-slot class overrides. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `textStyle` | `CSSProperties` | — | Inline styles for initials text. |
-| `loading` | `boolean` | `false` | Show shimmer placeholder instead of content. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Disable image fade-in animation. |
-| `onLoad` | `() => void` | — | Image load success callback. |
-| `onError` | `() => void` | — | Image load error callback. |
-
-### AvatarGroup
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | — | Max visible avatars before surplus count. |
-| `size` | `AvatarSize` | `"md"` | Inherited by all children via context. |
-| `shape` | `AvatarShape` | `"circle"` | Inherited by all children. |
-| `bordered` | `boolean \| string` | — | Inherited by all children. |
-| `spacing` | `number` | `-8` | Overlap in px (negative = overlap). |
-| `ringColor` | `string` | `"white"` | Ring color between stacked avatars. |
-| `showTooltip` | `boolean` | `false` | Show hidden names as tooltip on surplus. |
-| `total` | `number` | — | Override total count for surplus calculation. |
-| `variant` | `"stack" \| "grid" \| "inline"` | `"stack"` | Layout mode. |
-| `reverseOrder` | `boolean` | `false` | Reverse stacking z-order. |
-| `renderSurplus` | `(count: number) => ReactNode` | — | Custom surplus renderer. |
-| `onAvatarClick` | `(info, event) => void` | — | Click handler with `{ index, name }`. |
-| `dir` | `"ltr" \| "rtl"` | `"ltr"` | Text direction. |
-| `classes` | `AvatarGroupClasses` | — | Per-slot: `root`, `item`. |
-
-### AvatarBadge
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | — | Notification count. |
-| `max` | `number` | `99` | Shows `99+` when exceeded. |
-| `showZero` | `boolean` | `false` | Show badge when count is 0. |
-| `dot` | `boolean` | `false` | Small dot instead of count. |
-| `position` | `CornerPosition` | `"top-right"` | Corner placement. |
-| `offset` | `BadgeOffset` | — | Pixel offset `{ x, y }`. |
-| `color` | `string` | — | Background color override. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"md"` | Size preset. |
-| `variant` | `"solid" \| "outline" \| "soft"` | `"solid"` | Visual style. |
-| `pulse` | `boolean` | `false` | Pulsing animation. |
-| `invisible` | `boolean` | `false` | Hide without unmounting. |
-
-### AvatarGroupCount (standalone)
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | **required** | Number to display. |
-| `showPlus` | `boolean` | `true` | Show `+` prefix. |
-| `format` | `(count: number) => string` | — | Custom formatter. |
-| `variant` | `"solid" \| "outline" \| "ghost"` | `"solid"` | Visual style. |
-
-### AvatarShimmer / AvatarGroupShimmer
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | `3` | (Group only) Number of placeholders. |
-| `size` | `AvatarSize` | `"md"` | Placeholder size. |
-| `shape` | `AvatarShape` | `"circle"` | Placeholder shape. |
-| `animate` | `boolean` | `true` | Pulse animation. |
-| `showCount` | `boolean` | `false` | (Group only) Show surplus count placeholder. |
-| `ringColor` | `string` | `"white"` | (Group only) Ring color for overlap. |
-| `spacing` | `number` | `-8` | (Group only) Overlap spacing. |
-
----
+| `name` | string | — | User's display name, used for initials and accessible labels. |
+| `src` | string | — | Image URL for the avatar. Falls back to initials, then fallback content. |
+| `alt` | string | — | Alt text for the avatar image. |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Avatar size as a preset or numeric pixel value. |
+| `shape` | `"circle"` \| `"square"` \| `"rounded"` | `"circle"` | Visual shape of the avatar. |
+| `maxInitials` | number | `2` | Maximum number of initials to show. |
+| `fallback` | object | — | React.ReactNode — Custom fallback content when no image or name is available. |
+| `autoColor` | boolean | `false` | Generates a deterministic background color from the name. |
+| `colors` | object | — | Custom color palettes for auto-colored mode. |
+| `bordered` | boolean \| string | — | Adds a border ring. Pass true for default color or a CSS color string. |
+| `status` | `"online"` \| `"offline"` \| `"away"` \| `"busy"` \| object | — | Presence status indicator. Pass a string for defaults or a config object. |
+| `tooltip` | object | — | Tooltip shown on hover. Pass a string/ReactNode or a config object. |
+| `imageConfig` | object | — | Advanced image loading configuration (srcSet, loading, decoding, CORS). |
+| `classes` | object | — | CSS class overrides for avatar sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
+| `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
+| `onError` | object | — | () => void — Fires when the avatar image fails to load. |
+| `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
 
 ## Styling Guide
 
@@ -424,18 +367,17 @@ For grouped avatars, match `ringColor` to your background:
 | Custom palettes | `title="Custom Color Palettes"` | colors prop with custom arrays |
 | Border ring | `title="Bordered Avatars"` | bordered={true} and CSS strings |
 | Status indicator | `title="Status Indicator"` | online/offline/away/busy |
-| Status positioning | `title="Status Position"` | Corner positions + custom color |
+| Status positioning | `title="Status Position & Custom Color"` | Corner positions + custom color |
 | Tooltip | `title="Tooltip"` | String and config object |
 | Badge notifications | `title="Avatar Badge"` | count, dot, variants, pulse |
 | Group stacking | `title="Avatar Group"` | max, spacing, ringColor, surplus |
 | Group layouts | `title="Group Layout Variants"` | stack, grid, inline |
 | Click handling | `title="Group Click Handler"` | onAvatarClick callback |
-| Standalone count | `title="AvatarGroupCount"` | variants, format, click |
+| Standalone count | `title="Avatar"` | variants, format, click |
 | Loading shimmer | `title="Loading & Shimmer"` | Toggle shimmer/content |
 | Image config | `title="Image Configuration"` | lazy, srcSet, crossOrigin |
 | Error handling | `title="Image Error Handling"` | Fallback to initials |
 | Classes system | `title="Classes System"` | Per-slot overrides |
-| Group shimmer | `title="Group Shimmer Options"` | count, shape, spacing, animate |
 | Reduced motion | `title="Reduce Motion"` | reduceMotion prop |
 
 **Source files:**

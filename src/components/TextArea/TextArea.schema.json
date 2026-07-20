@@ -14,7 +14,8 @@
     },
     "error": {
       "type": "boolean",
-      "description": "Whether the textarea is in an error state."
+      "description": "Whether the textarea is in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -22,7 +23,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Green success state for validated fields."
+      "description": "Green success state for validated fields.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -30,7 +32,11 @@
     },
     "size": {
       "type": "string",
-      "enum": ["sm", "md", "lg"],
+      "enum": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "description": "Visual size variant. Emits data-size on the root container for CSS targeting."
     },
     "startIcon": {
@@ -63,7 +69,8 @@
     },
     "clearable": {
       "type": "boolean",
-      "description": "Show a built-in clear button when the textarea has a value."
+      "description": "Show a built-in clear button when the textarea has a value.",
+      "default": false
     },
     "onClear": {
       "type": "object",
@@ -71,15 +78,18 @@
     },
     "showCount": {
       "type": "boolean",
-      "description": "Show character count (requires maxLength to be set)."
+      "description": "Show character count (requires maxLength to be set).",
+      "default": false
     },
     "autoResize": {
       "type": "boolean",
-      "description": "Automatically resize height to fit content."
+      "description": "Automatically resize height to fit content.",
+      "default": false
     },
     "loading": {
       "type": "boolean",
-      "description": "Whether the textarea is in a loading state."
+      "description": "Whether the textarea is in a loading state.",
+      "default": false
     },
     "loader": {
       "type": "object",
@@ -87,11 +97,13 @@
     },
     "loaderSize": {
       "type": "number",
-      "description": "Size of the default CircularLoader in pixels."
+      "description": "Size of the default CircularLoader in pixels.",
+      "default": 16
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Whether the textarea expands to fill its parent container."
+      "description": "Whether the textarea expands to fill its parent container.",
+      "default": false
     },
     "className": {
       "type": "string",
@@ -101,19 +113,36 @@
       "type": "object",
       "description": "Slot-based class overrides for internal elements.",
       "properties": {
-        "root": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "label": { "type": "string" },
-        "description": { "type": "string" },
-        "textarea": { "type": "string" },
-        "error": { "type": "string" },
-        "success": { "type": "string" },
-        "count": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "textarea": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "count": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, all default classes are removed; only classes overrides apply."
+      "description": "When true, all default classes are removed; only classes overrides apply.",
+      "default": false
     },
     "placeholder": {
       "type": "string",
@@ -121,11 +150,13 @@
     },
     "disabled": {
       "type": "boolean",
-      "description": "Whether the textarea is disabled."
+      "description": "Whether the textarea is disabled.",
+      "default": false
     },
     "required": {
       "type": "boolean",
-      "description": "Whether the field is required."
+      "description": "Whether the field is required.",
+      "default": false
     },
     "name": {
       "type": "string",
@@ -137,7 +168,8 @@
     },
     "rows": {
       "type": "number",
-      "description": "Number of visible text rows."
+      "description": "Number of visible text rows.",
+      "default": 4
     },
     "maxLength": {
       "type": "number",

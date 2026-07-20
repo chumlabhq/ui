@@ -90,46 +90,59 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 ## All Props
 
+<!-- generated from MultiSelectDropdown.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `MultiSelectOption[]` | `[]` | Available options |
-| `value` | `string[]` | — | Controlled selected values |
-| `defaultValue` | `string[]` | — | Initial values (uncontrolled) |
-| `onValueChange` | `(values, options) => void` | — | Selection change callback |
-| `placeholder` | `ReactNode` | — | Trigger placeholder |
-| `label` | `ReactNode` | — | Label (auto-associated via htmlFor) |
-| `description` | `ReactNode` | — | Helper text below label |
-| `disabled` | `boolean` | `false` | Disable component |
-| `required` | `boolean` | `false` | Required field |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showChevron` | `boolean` | `true` | Show chevron icon |
-| `showSelectedChips` | `boolean` | `true` | Show chips vs count |
-| `maxDisplayedChips` | `number` | — | Max visible chips |
-| `checkboxIcon` | `ReactNode` | — | Custom checkbox icon |
-| `fullWidth` | `boolean` | `false` | Full container width |
-| `loading` | `boolean` | `false` | Loading state |
-| `onLoadOptions` | `() => Promise<Option[]>` | — | Async options loader |
-| `loadOnOpen` | `boolean` | `false` | Load options on open |
-| `shimmerCount` | `number` | `5` | Shimmer placeholder count |
-| `lockScroll` | `boolean` | `false` | Lock body scroll |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred position |
-| `forceDropdownPosition` | `boolean` | `false` | Lock position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap between trigger and dropdown |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `keepMounted` | `boolean` | `false` | Keep DOM when closed |
-| `classes` | `MultiSelectDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `name` | `string` | — | Form field name |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open) => void` | — | Open state callback |
-| `renderTrigger` | `(props) => ReactNode` | — | Custom trigger renderer |
-
----
+| `options` | array | — | List of selectable options. |
+| `value` | array | — | Controlled selected values. |
+| `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
+| `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
+| `id` | string | — | HTML id attribute for the trigger element. |
+| `name` | string | — | Form field name. |
+| `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
+| `description` | object | — | React.ReactNode - Description text rendered below the label. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
+| `clearable` | boolean | `false` | Shows a clear button to deselect all values. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
+| `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
+| `loading` | boolean | — | Shows a loading/shimmer state. |
+| `onLoadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. |
+| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Whether the dropdown is initially open (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
+| `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
+| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
+| `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
+| `renderTrigger` | object | — | (props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
 
 ## Styling Guide
 
@@ -253,9 +266,9 @@ const [values, setValues] = useState<string[]>([]);
 | Position control | `title="Dropdown Position"` |
 | Force position | `forceDropdownPosition` |
 | Scroll lock | `title="Scroll Lock"` |
-| Form integration | `title="Form Integration"` |
-| Custom themes | `title="Dark Theme"`, `title="Purple Theme"` |
-| Custom checkboxes | `title="Custom Checkbox"` |
+| Form integration | `title="Form Integration (onBlur / onFocus)"` |
+| Custom themes | `title="Dark Theme"`, `title="Blue Theme"` |
+| Custom checkboxes | `title="Custom Checkbox - Green Rounded"` |
 | Combined | `title="Combined: All Features"` |
 
 ### Source file index

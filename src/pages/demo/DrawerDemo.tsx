@@ -724,13 +724,6 @@ const DrawerDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onClose"
-              type="() => void"
-              defaultVal="required"
-              description="@deprecated Use onOpenChange. Called when the drawer should close"
-              isDarkMode={dark}
-            />
-            <PropRow
               name="direction"
               type='"left"|"right"|"top"|"bottom"'
               defaultVal='"left"'

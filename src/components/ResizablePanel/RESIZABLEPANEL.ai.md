@@ -37,6 +37,27 @@ export default function Example() {
 
 ---
 
+## All Props
+
+<!-- generated from ResizablePanel.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | number | — | Controlled size value of the panel in pixels. |
+| `defaultValue` | number | `300` | Default uncontrolled size value of the panel in pixels. |
+| `onValueChange` | object | — | (value: number) => void — Callback fired when the panel size changes. |
+| `onResizeStart` | object | — | (value: number) => void — Callback fired when a resize drag begins. |
+| `onResizeEnd` | object | — | (value: number) => void — Callback fired when a resize drag ends. |
+| `minValue` | number | `200` | Minimum allowed size value in pixels. |
+| `maxValue` | number | `800` | Maximum allowed size value in pixels. |
+| `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
+| `step` | number | `10` | Step increment for resize value changes. |
+| `disabled` | boolean | `false` | Whether the resize handle is disabled. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+
 ## Accessibility
 
 - `role="separator"` on the drag handle
@@ -54,9 +75,8 @@ export default function Example() {
 | Feature | Search for |
 |---------|-----------|
 | Basic | `title="Basic Usage"` |
-| Directions | `title="Resize Direction"` |
-| Controlled | `title="Controlled"` |
-| Callbacks | `title="Callbacks"` |
+| Controlled | `title="Controlled State"` |
+| Callbacks | `title="Resize Callbacks"` |
 
 | File | Contains |
 |------|----------|

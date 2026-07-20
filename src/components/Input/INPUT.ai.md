@@ -68,37 +68,36 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 
 ## All Props
 
+<!-- generated from Input.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `ReactNode` | — | Label above the input |
-| `description` | `ReactNode` | — | Helper text below label |
-| `placeholder` | `string` | — | Placeholder text |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message text |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message text |
-| `size` | `InputSize` | — | Visual size variant (data attribute only) |
-| `prefix` | `ReactNode` | — | Static content before input (e.g. "$") |
-| `suffix` | `ReactNode` | — | Static content after input (e.g. ".com") |
-| `startIcon` | `ReactNode` | — | Icon before input |
-| `endIcon` | `ReactNode` | — | Icon after input |
-| `onStartIconClick` | `() => void` | — | Makes startIcon a button |
-| `onEndIconClick` | `() => void` | — | Makes endIcon a button |
-| `startIconLabel` | `string` | — | Aria label for clickable startIcon |
-| `endIconLabel` | `string` | — | Aria label for clickable endIcon |
-| `onValueChange` | `(value: string) => void` | — | Simple value callback |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `onClear` | `() => void` | — | Clear button callback |
-| `showCount` | `boolean` | `false` | Show character count |
-| `loading` | `boolean` | `false` | Loading state |
-| `fullWidth` | `boolean` | `false` | Full width container |
-| `classes` | `InputClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `required` | `boolean` | — | Required field |
-| `disabled` | `boolean` | — | Disabled state |
-| `readOnly` | `boolean` | — | Read-only state |
-
----
+| `label` | object | — | React.ReactNode - Label rendered above the input. |
+| `description` | object | — | React.ReactNode - Helper text rendered below the label. |
+| `error` | boolean | `false` | Displays the input in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
+| `success` | boolean | `false` | Green success state for validated fields. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
+| `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
+| `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |
+| `endIcon` | object | — | React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided. |
+| `onStartIconClick` | object | — | () => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility. |
+| `onEndIconClick` | object | — | () => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility. |
+| `startIconLabel` | string | — | Accessible label for startIcon when it is clickable. Required with onStartIconClick. |
+| `endIconLabel` | string | — | Accessible label for endIcon when it is clickable. Required with onEndIconClick. |
+| `onValueChange` | object | — | (value: string) => void - Fires with the current string value when the value changes. |
+| `clearable` | boolean | `false` | Show a built-in clear button when the input has a value. |
+| `onClear` | object | — | () => void - Callback when the clear button is clicked. |
+| `showCount` | boolean | `false` | Show character count (requires maxLength to be set). |
+| `loading` | boolean | `false` | Shows a loading spinner inside the input. |
+| `loader` | object | — | React.ReactNode - Custom loader element to replace the default spinner. |
+| `loaderSize` | number | `16` | Size of the default CircularLoader in pixels. Ignored when a custom loader prop is provided. |
+| `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
+| `className` | string | — | CSS class for the root container element. |
+| `classes` | object | — | Slot-based class overrides for internal elements. |
+| `unstyled` | boolean | `false` | When true, all default classes are removed so you can style from scratch. |
 
 ## Styling Guide
 

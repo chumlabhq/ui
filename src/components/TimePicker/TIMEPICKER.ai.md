@@ -43,11 +43,9 @@ export default function Example() {
 | `format` | `"24h"` (default) or `"12h"`. Affects display, parsing, and option generation. |
 | `minuteStep` | Clamped to 1-60. Invalid values (0, NaN, negatives) are auto-corrected. |
 | `minTime` / `maxTime` | Format: `"HH:MM"`. Dims/disables out-of-range options in both variants. |
-| `expandable` + `renderExpandedRow` | Both needed for row expansion. |
 | `keepMounted` | Only affects dropdown variant. Clock always remounts to reset selection mode. |
 | `open` + `onOpenChange` | For controlled open state. Don't mix with `defaultOpen`. |
 | `value` + `onValueChange` | For controlled mode. Don't mix with `defaultValue`. |
-| `stickyHeader` | Requires `maxHeight` to be meaningful. |
 | `forceDropdownPosition` | When true, locks to `dropdownPosition` without auto-flipping. |
 | `lockScroll` | Prevents body scroll when dropdown/clock is open. |
 | `fullWidth` | Applies `width: 100%` to root and trigger, overriding class widths. |
@@ -67,6 +65,58 @@ export default function Example() {
 DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevron) + portal(dropdown|clock)) + error/success`
 
 ---
+
+## All Props
+
+<!-- generated from TimePicker.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | string \| null | — | Current time value (e.g. '14:30' or '2:30 PM'). |
+| `defaultValue` | string \| null | — | Default time value for uncontrolled usage. |
+| `onValueChange` | object | — | (time: string \| null, timeValue: TimeValue \| null) => void — Called when the selected time changes. |
+| `onBlur` | object | — | () => void — Called when the input loses focus. |
+| `format` | `"12h"` \| `"24h"` | `"24h"` | Time display format. |
+| `minuteStep` | number | `15` | Minute interval for dropdown options and clock snapping. Clamped to 1-60. |
+| `minTime` | string | — | Minimum selectable time (e.g. '09:00'). |
+| `maxTime` | string | — | Maximum selectable time (e.g. '17:00'). |
+| `name` | string | — | Name for the hidden input for form submission. |
+| `placeholder` | string | — | Placeholder text for the input. |
+| `disabled` | boolean | `false` | Disables the component. |
+| `error` | boolean | `false` | Marks the component as having an error. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the input. |
+| `description` | object | — | React.ReactNode — Helper text displayed below the label. |
+| `success` | boolean | — | Success state. |
+| `successMessage` | object | — | React.ReactNode — Success message text. |
+| `loading` | boolean | — | Loading state. |
+| `label` | object | — | React.ReactNode — Label displayed above the input. |
+| `required` | boolean | `false` | Shows a required indicator on the label. |
+| `showEndIcon` | boolean | `true` | Show the chevron/end icon in the trigger. |
+| `endIcon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
+| `showSelectedIcon` | boolean | `true` | Show a check icon on the selected option. |
+| `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
+| `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
+| `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
+| `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
+| `clearable` | boolean | `false` | Show a clear button when a value is selected. |
+| `onClear` | object | — | () => void — Called when the clear button is clicked. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Default open state (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void — Called when the open state changes. |
+| `lockScroll` | boolean | `false` | Lock body scroll when dropdown is open. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | When true, locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index for the dropdown. |
+| `dropdownGap` | number | `4` | Gap between trigger and dropdown in pixels. |
+| `keepMounted` | boolean | `false` | Keep dropdown DOM mounted when closed (dropdown variant only). |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
+| `classes` | object | — | CSS class overrides for all sub-elements. |
+| `unstyled` | boolean | `false` | Omits built-in layout helpers so layout comes entirely from classes. |
+| `reduceMotion` | boolean \| `"auto"` | `false` | Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting. |
+| `onCancel` | object | — | () => void — Called when the clock cancel button is pressed. |
+| `onConfirm` | object | — | () => void — Called when the clock confirm button is pressed. |
+| `cancelText` | string | `"Cancel"` | Text for the clock cancel button. |
+| `okText` | string | `"OK"` | Text for the clock OK button. |
 
 ## Styling Guide
 
@@ -214,7 +264,6 @@ const [time, setTime] = useState<string | null>(null);
 | Custom rendering | `title="Custom Option Rendering"` |
 | Smart parsing | `title="Smart Parsing"` |
 | Classes system | `title="Classes System"` |
-| Unstyled | `title="Unstyled (Dropdown)"` |
 | Reduce motion | `title="Reduce Motion"` |
 
 ### Source file index

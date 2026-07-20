@@ -90,40 +90,40 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 
 ## All Props
 
+<!-- generated from Stepper.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `Step[]` | — | **Required.** Step definitions |
-| `value` | `string \| number` | — | Active step ID (controlled) |
-| `defaultValue` | `string \| number` | — | Initial step (uncontrolled) |
-| `onValueChange` | `(stepId) => void` | — | Step change callback |
-| `beforeStepChange` | `(next, current) => boolean` | — | Guard before navigation |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `variant` | `"numbered" \| "icon" \| "dot"` | `"numbered"` | Indicator style |
-| `activationMode` | `"automatic" \| "manual"` | `"manual"` | Keyboard activation mode |
-| `isStepClickable` | `(id, status) => boolean` | completed+active | Click guard |
-| `getStepStatus` | `(id, index, activeIndex) => StepStatus` | — | Custom status logic |
-| `showLabels` | `boolean` | `true` | Show step labels |
-| `showDescriptions` | `boolean` | `false` | Show step descriptions |
-| `showConnectors` | `boolean` | `true` | Show connecting lines |
-| `labelPosition` | `"bottom" \| "right"` | `"right"` | Label placement |
-| `completedIcon` | `ComponentType \| ReactNode` | Check | Global completed icon |
-| `errorIcon` | `ComponentType \| ReactNode` | X | Global error icon |
-| `fullWidth` | `boolean` | `false` | Root takes full width |
-| `showTooltips` | `boolean` | `false` | Enable tooltips |
-| `tooltipDefaults` | `StepperTooltipDefaults` | — | Default tooltip config |
-| `indicatorSize` | `number` | per variant | Override indicator px size |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-| `disabled` | `boolean` | `false` | Disable all steps |
-| `loop` | `boolean` | `false` | Loop keyboard navigation |
-| `renderStep` | `(props, defaultEl) => ReactNode` | — | Custom step renderer |
-| `classes` | `StepperClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `className` | `string` | — | Root class |
-| `style` | `CSSProperties` | — | Root inline styles |
-| `id` | `string` | — | Root HTML id |
-| `aria-label` | `string` | `"Progress"` | Nav landmark label |
-
----
+| `steps` **(required)** | array | — | Array of step definitions. |
+| `value` | string \| number | — | Controlled active step ID. |
+| `defaultValue` | string \| number | — | Default uncontrolled active step ID. |
+| `onValueChange` | object | — | (stepId: string \| number) => void — Callback fired when the active step changes. |
+| `beforeStepChange` | object | — | (nextStepId: string \| number, currentStepId: string \| number) => boolean — Guard callback invoked before changing steps. Return false to prevent the change. |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the stepper. |
+| `variant` | `"numbered"` \| `"icon"` \| `"dot"` | `"numbered"` | Visual variant of the step indicators. |
+| `activationMode` | `"automatic"` \| `"manual"` | `"manual"` | Whether steps activate automatically on focus or require manual activation. |
+| `isStepClickable` | object | — | (stepId: string \| number, status: StepStatus) => boolean — Determines whether a step is clickable. |
+| `getStepStatus` | object | — | (stepId: string \| number, index: number, activeIndex: number) => StepStatus — Custom function to determine step status. |
+| `showLabels` | boolean | `true` | Whether to show step labels. |
+| `showDescriptions` | boolean | `false` | Whether to show step descriptions. |
+| `showConnectors` | boolean | `true` | Whether to show connectors between steps. |
+| `labelPosition` | `"bottom"` \| `"right"` | `"right"` | Position of step labels relative to the indicator. |
+| `completedIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for completed steps. |
+| `errorIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for error steps. |
+| `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
+| `aria-label` | string | — | Accessible label for the stepper. |
+| `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
+| `tooltipDefaults` | object | — | Default tooltip configuration applied to all step tooltips. |
+| `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `id` | string | — | HTML id attribute. |
+| `disabled` | boolean | `false` | Whether the entire stepper is disabled. |
+| `loop` | boolean | `false` | Whether keyboard navigation loops from last step to first. |
+| `renderStep` | object | — | (props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function. |
 
 ## Styling Guide
 
@@ -282,7 +282,6 @@ const steps = [
 | Full width | `title="Full Width"` |
 | Tooltips | `title="With Tooltips (Simple)"` |
 | Tooltip config | `title="With Tooltips (Custom Config)"` |
-| Unstyled | `title="Unstyled Mode"` |
 | Custom renderer | `title="Custom Step Rendering"` |
 | Ref forwarding | `title="Ref Forwarding"` |
 
