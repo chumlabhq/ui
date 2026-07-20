@@ -55,8 +55,9 @@ export default function Example() {
 | `copyFormat` | Only affects Ctrl+C behavior. Does not change display format. |
 | `validateOnBlur` | When `true` (default), shows validation error on blur. Set `false` to disable. |
 | `validationMessage` | Overrides the built-in "Please enter a valid phone number" message. |
-| `formatPatterns` | Extends (not replaces) built-in patterns. Keyed by pattern name. |
-| `lengthRules` | Extends (not replaces) built-in rules. Keyed by country code (uppercase). |
+| `validate` | Authoritative custom validator. Receives the full `PhoneNumberData` (incl. built-in `isValid` and E.164 `fullNumber`); its verdict overrides the built-in for both the emitted `isValid` and the blur error. Return `boolean` or `{ valid, message }`. Compose via `data.isValid && myCheck(data)`. For real number validation, use the opt-in `createLibphonenumberValidator(opts?)` from `@chumlab/ui/phone-validators` — `opts.mode` (`"isValid"` default \| `"isPossible"`), `opts.mobileOnly` (default `false`; when `true`, rejects CONFIRMED fixed-line numbers like `+91 1234567890` — accepts `MOBILE` and `FIXED_LINE_OR_MOBILE`, so US and other regions that can't disambiguate still pass, which is what SMS/OTP flows want), `opts.message`. Backed by the `/max` metadata. |
+| `formatPatterns` | Merged over the built-in patterns: a matching key overrides that pattern, new keys are added. Keyed by pattern name. |
+| `lengthRules` | Merged over the built-in rules: a matching country key overrides that country's min/max, new keys are added. Keyed by country code (uppercase). |
 | `forceDropdownPosition` | Only meaningful with `dropdownPosition`. Disables auto-flip. |
 | `lockScroll` | Prevents body scroll while country dropdown is open. Default: `false`. |
 | `renderCountryOption` | Replaces default country option rendering in the dropdown list. |
@@ -111,6 +112,8 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `onClear` | `() => void` | — | Custom clear handler |
 | `validateOnBlur` | `boolean` | `true` | Validate on blur |
 | `validationMessage` | `ReactNode` | — | Custom validation message |
+| `validate` | `(data: PhoneNumberData) => boolean \| { valid: boolean; message?: string }` | — | Authoritative custom validation; overrides built-in for emitted `isValid` and blur error |
+| `autoComplete` | `string` | `"off"` | Native input autocomplete. Defaults to `off` so browser autofill can't stuff a full international number into the national-number field; pass e.g. `tel-national` to opt back in |
 | `enablePasteDetection` | `boolean` | `false` | Auto-detect country from paste |
 | `copyFormat` | `"e164" \| "international" \| "national"` | `"e164"` | Copy format |
 | `onPasteDetected` | `(data: PasteDetectedData) => void` | — | Paste detection callback |
@@ -334,6 +337,7 @@ const euCountries = [
 | Validation error shows on every blur | `validateOnBlur` defaults to `true` | Set `validateOnBlur={false}` if you want manual validation only |
 | Paste detection doesn't work | `enablePasteDetection` not set | Add `enablePasteDetection` prop |
 | Country doesn't auto-detect on paste | Number missing `+` prefix | Paste detection requires international format with dial code |
+| Want browser autofill to fill the number | `autoComplete` defaults to `"off"` to protect the split field | Pass `autoComplete="tel-national"` to opt back in |
 | Copy gives unexpected format | `copyFormat` defaults to `"e164"` | Set `copyFormat="international"` or `"national"` |
 | Controlled value not updating | Missing `onValueChange` | Always pair `value` with `onValueChange` |
 | Custom format patterns ignored | Wrong key structure | Use `{ pattern: (digits) => string, countries: ["xx"] }` |

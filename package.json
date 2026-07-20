@@ -96,6 +96,11 @@
       "import": "./dist/components/InternationalPhoneInput/index.js",
       "require": "./dist/components/InternationalPhoneInput/index.cjs"
     },
+    "./phone-validators": {
+      "types": "./dist/components/InternationalPhoneInput/validators/index.d.ts",
+      "import": "./dist/components/InternationalPhoneInput/validators/index.js",
+      "require": "./dist/components/InternationalPhoneInput/validators/index.cjs"
+    },
     "./loader": {
       "types": "./dist/components/Loader/index.d.ts",
       "import": "./dist/components/Loader/index.js",
@@ -225,6 +230,9 @@
       "international-phone-input": [
         "dist/components/InternationalPhoneInput/index.d.ts"
       ],
+      "phone-validators": [
+        "dist/components/InternationalPhoneInput/validators/index.d.ts"
+      ],
       "loader": [
         "dist/components/Loader/index.d.ts"
       ],
@@ -313,6 +321,7 @@
     "test:all": "npm run test:run && npm run test:e2e",
     "clean": "rm -rf dist",
     "build:lib": "npm run clean && vite build --mode lib && tsc --project tsconfig.lib.json",
+    "postbuild:lib": "node scripts/assert-phone-bundle.mjs",
     "build:preview": "node scripts/build-preview-vendor.mjs",
     "build:llms": "node ai/build-llms-full.mjs",
     "prepublishOnly": "npm run build:lib"
@@ -334,6 +343,7 @@
   "dependencies": {
     "@iconify/react": "6.0.2",
     "clsx": "^2.1.1",
+    "libphonenumber-js": "^1.13.9",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.0"

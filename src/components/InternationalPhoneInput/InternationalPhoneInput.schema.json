@@ -124,6 +124,14 @@
       "type": "object",
       "description": "React.ReactNode - Custom validation message shown on blur validation."
     },
+    "validate": {
+      "type": "object",
+      "description": "(data: PhoneNumberData) => boolean | { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators."
+    },
+    "autoComplete": {
+      "type": "string",
+      "description": "Native input autocomplete. Defaults to \"off\" so browser autofill can't corrupt the national-number field; pass e.g. \"tel-national\" to opt in."
+    },
     "enablePasteDetection": {
       "type": "boolean",
       "description": "Enables automatic detection and parsing of pasted phone numbers."

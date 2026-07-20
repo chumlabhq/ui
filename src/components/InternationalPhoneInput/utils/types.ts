@@ -121,6 +121,17 @@ export interface InternationalPhoneInputProps
   fullWidth?: boolean;
   validateOnBlur?: boolean;
   validationMessage?: ReactNode;
+  /**
+   * Custom validation. Receives the full PhoneNumberData (including the built-in
+   * `isValid` and the E.164 `fullNumber`) and is authoritative: its verdict
+   * overrides the built-in length check for both the emitted `isValid` and the
+   * blur error. Return a boolean, or `{ valid, message }` to also override the
+   * error text. Compose with the built-in via `data.isValid && myCheck(data)`.
+   * When omitted, the built-in length validation is used unchanged.
+   */
+  validate?: (
+    data: PhoneNumberData,
+  ) => boolean | { valid: boolean; message?: string };
   enablePasteDetection?: boolean;
   copyFormat?: CopyFormat;
   onPasteDetected?: (data: PasteDetectedData) => void;

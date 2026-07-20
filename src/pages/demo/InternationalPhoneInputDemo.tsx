@@ -7,6 +7,7 @@ import {
   type PhoneFormatPattern,
   type PhoneLengthRule,
 } from "../../components/InternationalPhoneInput";
+import { createLibphonenumberValidator } from "../../components/InternationalPhoneInput/validators";
 import { CountryFlag } from "../../components/CountryFlag";
 import { useTheme } from "./ThemeContext";
 import {
@@ -20,6 +21,34 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
+
+// Opt-in real validation via @chumlab/ui/phone-validators (libphonenumber-js).
+const anyValidPhoneValidator = createLibphonenumberValidator({
+  message: "Enter a valid phone number for the selected country",
+});
+const possiblePhoneValidator = createLibphonenumberValidator({ mode: "isPossible" });
+const mobilePhoneValidator = createLibphonenumberValidator({
+  mobileOnly: true,
+  message: "Enter a valid mobile number for the selected country",
+});
+
+// Pre-filled sample whose isValid is computed by the given validator, so each
+// demo field shows the real verdict on mount without the viewer typing.
+const phoneSample = (
+  countryCode: string,
+  dialCode: string,
+  phoneNumber: string,
+  validator: (d: PhoneNumberData) => { valid: boolean },
+): PhoneNumberData => {
+  const fullNumber = `${dialCode}${phoneNumber}`;
+  return {
+    countryCode,
+    phoneNumber,
+    fullNumber,
+    isValid: validator({ countryCode, phoneNumber, fullNumber, isValid: false })
+      .valid,
+  };
+};
 
 const StarIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 20 20" fill="currentColor" className={className}>
@@ -155,6 +184,21 @@ const InternationalPhoneInputDemo = () => {
 
   const [i18nValue, setI18nValue] = useState<PhoneNumberData | undefined>();
   const [noBlurValidationValue, setNoBlurValidationValue] = useState<PhoneNumberData | undefined>();
+  const [libIsValidValue, setLibIsValidValue] = useState<PhoneNumberData | undefined>(
+    () => phoneSample("US", "+1", "1111111111", anyValidPhoneValidator),
+  );
+  const [libIsPossibleValue, setLibIsPossibleValue] = useState<PhoneNumberData | undefined>(
+    () => phoneSample("US", "+1", "1111111111", possiblePhoneValidator),
+  );
+  const [libMobileFixedValue, setLibMobileFixedValue] = useState<PhoneNumberData | undefined>(
+    () => phoneSample("IN", "+91", "1234567890", mobilePhoneValidator),
+  );
+  const [libMobileMobileValue, setLibMobileMobileValue] = useState<PhoneNumberData | undefined>(
+    () => phoneSample("IN", "+91", "9876543210", mobilePhoneValidator),
+  );
+  const [libMobileUsValue, setLibMobileUsValue] = useState<PhoneNumberData | undefined>(
+    () => phoneSample("US", "+1", "4155550142", mobilePhoneValidator),
+  );
   const [copyFormatE164, setCopyFormatE164] = useState<PhoneNumberData | undefined>();
   const [copyFormatIntl, setCopyFormatIntl] = useState<PhoneNumberData | undefined>();
   const [copyFormatNational, setCopyFormatNational] = useState<PhoneNumberData | undefined>();
@@ -185,7 +229,9 @@ const InternationalPhoneInputDemo = () => {
       <DocsHero
         title="International Phone Input"
         description="A phone number input with country code selection, automatic formatting, paste detection, copy formats, custom rendering, extensible validation, and complete styling control through the classes prop."
-        code={`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";`}
+        code={`import { InternationalPhoneInput } from "@chumlab/ui/international-phone-input";
+// Opt-in real validation (libphonenumber-js). Only needed if you use \`validate\`:
+import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
       />
 
       <div className="space-y-8">
@@ -363,6 +409,113 @@ const InternationalPhoneInputDemo = () => {
                   onValueChange only)
                 </div>
               )}
+            </div>
+          </DemoWrapper>
+        </Section>
+
+        <Section
+          title="Real Validation (libphonenumber)"
+          description="The built-in validation is length-only. For true per-country number validation, pass the opt-in validate callback from @chumlab/ui/phone-validators (libphonenumber-js /max). It is authoritative — its verdict drives both the emitted isValid and the blur error — and lives in a separate bundle so it only loads when you use it. Each field below is pre-filled to show the verdict; edit any of them to explore."
+          isDarkMode={dark}
+        >
+          <DemoWrapper isDarkMode={dark}>
+            <div className="flex flex-col gap-8 w-full">
+              {/* isValid vs isPossible — same input, different verdict */}
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div>
+                  <DemoLabel isDarkMode={dark}>
+                    isValid — rejects invalid numbers
+                  </DemoLabel>
+                  <InternationalPhoneInput
+                    label="Phone Number"
+                    validate={anyValidPhoneValidator}
+                    value={libIsValidValue}
+                    onValueChange={setLibIsValidValue}
+                    classes={c.phone}
+                  />
+                  {libIsValidValue && (
+                    <div className={`mt-3 ${c.resultBox}`}>
+                      isValid: {libIsValidValue.isValid ? "true" : "false"} · E.164:{" "}
+                      {libIsValidValue.fullNumber || "—"}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <DemoLabel isDarkMode={dark}>
+                    isPossible — accepts anything of plausible length
+                  </DemoLabel>
+                  <InternationalPhoneInput
+                    label="Phone Number"
+                    validate={possiblePhoneValidator}
+                    value={libIsPossibleValue}
+                    onValueChange={setLibIsPossibleValue}
+                    classes={c.phone}
+                  />
+                  {libIsPossibleValue && (
+                    <div className={`mt-3 ${c.resultBox}`}>
+                      isValid: {libIsPossibleValue.isValid ? "true" : "false"} · E.164:{" "}
+                      {libIsPossibleValue.fullNumber || "—"}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* mobileOnly — rejects confirmed landlines, keeps mobiles + ambiguous */}
+              <div>
+                <DemoLabel isDarkMode={dark}>
+                  mobileOnly — rejects landlines
+                </DemoLabel>
+                <div className="grid gap-6 sm:grid-cols-3">
+                  <div>
+                    <InternationalPhoneInput
+                      label="India landline → rejected"
+                      validate={mobilePhoneValidator}
+                      value={libMobileFixedValue}
+                      onValueChange={setLibMobileFixedValue}
+                      classes={c.phone}
+                    />
+                    {libMobileFixedValue && (
+                      <div className={`mt-3 ${c.resultBox}`}>
+                        isValid: {libMobileFixedValue.isValid ? "true" : "false"} · E.164:{" "}
+                        {libMobileFixedValue.fullNumber || "—"}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <InternationalPhoneInput
+                      label="India mobile → accepted"
+                      validate={mobilePhoneValidator}
+                      value={libMobileMobileValue}
+                      onValueChange={setLibMobileMobileValue}
+                      classes={c.phone}
+                    />
+                    {libMobileMobileValue && (
+                      <div className={`mt-3 ${c.resultBox}`}>
+                        isValid: {libMobileMobileValue.isValid ? "true" : "false"} · E.164:{" "}
+                        {libMobileMobileValue.fullNumber || "—"}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <InternationalPhoneInput
+                      label="US number → accepted"
+                      validate={mobilePhoneValidator}
+                      value={libMobileUsValue}
+                      onValueChange={setLibMobileUsValue}
+                      classes={c.phone}
+                    />
+                    {libMobileUsValue && (
+                      <div className={`mt-3 ${c.resultBox}`}>
+                        isValid: {libMobileUsValue.isValid ? "true" : "false"} · E.164:{" "}
+                        {libMobileUsValue.fullNumber || "—"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </DemoWrapper>
         </Section>
@@ -1527,6 +1680,19 @@ const InternationalPhoneInputDemo = () => {
               name="validationMessage"
               type="ReactNode"
               description="Custom validation error message (i18n support)"
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="validate"
+              type="(data: PhoneNumberData) => boolean | { valid: boolean; message?: string }"
+              description="Authoritative custom validation; overrides the built-in for the emitted isValid and the blur error. Use createLibphonenumberValidator() from @chumlab/ui/phone-validators for real per-country validation."
+              isDarkMode={dark}
+            />
+            <PropRow
+              name="autoComplete"
+              type="string"
+              defaultVal='"off"'
+              description="Native input autocomplete. Defaults to off so browser autofill can't corrupt the national-number field; pass e.g. tel-national to opt in."
               isDarkMode={dark}
             />
             <PropRow

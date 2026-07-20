@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { CountryFlag } from "./CountryFlag";
+import { createLibphonenumberValidator } from "./InternationalPhoneInput/validators";
 import Reveal from "./Reveal/Reveal";
 import { Button } from "./ui";
+
+// Real per-country validation (any valid line type) for the phone preview.
+const previewPhoneValidator = createLibphonenumberValidator();
 
 /**
  * Catalog section. Five featured components in a single sticky-preview spread
@@ -933,8 +937,16 @@ function PhonePreview({ frozen = false }: { frozen?: boolean }) {
   const digits = value.replace(/\D/g, "");
   const [minLen, maxLen] = PHONE_VALID_LENGTHS[active];
   const isEmpty = digits.length === 0;
-  const isValid = digits.length >= minLen && digits.length <= maxLen;
-  const e164 = isValid ? `${country.dial}${digits}` : "";
+  const fullE164 = `${country.dial}${digits}`;
+  const isValid =
+    !isEmpty &&
+    previewPhoneValidator({
+      countryCode: country.code,
+      phoneNumber: digits,
+      fullNumber: fullE164,
+      isValid: false,
+    }).valid;
+  const e164 = isValid ? fullE164 : "";
 
   const borderClass = isEmpty
     ? "border-cl-border-input focus-within:border-cl-border-input-focus/40"
