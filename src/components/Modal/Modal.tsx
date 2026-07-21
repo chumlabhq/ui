@@ -366,7 +366,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 // its own content — covering only the area its content
                 // happens to occupy instead of the whole viewport.
                 fullScreen ? "!fixed !inset-0 outline-none max-w-none m-0 rounded-none" : "relative outline-none",
-                "bg-white dark:bg-gray-900",
+                "bg-white dark:bg-cl-bg-elevated",
                 shouldAnimate && "transition-all transform",
                 shouldAnimate && (isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"),
                 mergedClasses.content,

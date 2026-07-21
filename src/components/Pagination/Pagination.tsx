@@ -454,6 +454,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             <button
               ref={triggerRef}
               type="button"
+              disabled={disabled}
               onClick={() => {
                 const opening = !isDropdownOpen;
                 setIsDropdownOpen(opening);
@@ -552,6 +553,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               <button
                 key={item}
                 type="button"
+                disabled={disabled}
                 onClick={() => resolvedOnPageChange?.(item)}
                 className={
                   safeCurrentPage === item

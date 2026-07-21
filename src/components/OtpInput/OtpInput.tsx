@@ -250,7 +250,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(index, e),
           onFocus: handleFocus,
           onPaste: allowPaste ? undefined : (e: React.ClipboardEvent<HTMLInputElement>) => e.preventDefault(),
-          disabled,
+          disabled: disabled || loading,
           maxLength: 1,
           className: cn(mergedClasses.input, mergedClasses.inputFocused, individualClassName),
           "data-index": index,
@@ -259,7 +259,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "data-filled": valueArray[index] ? true : undefined,
         };
       },
-      [inputClassNames, inputId, inputType, inputPattern, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
+      [inputClassNames, inputId, inputType, inputPattern, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, loading, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
     );
 
     const renderSingleInput = (index: number) => {

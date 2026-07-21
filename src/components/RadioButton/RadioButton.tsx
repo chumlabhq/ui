@@ -131,14 +131,16 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         name,
         selectedValue,
         onSelect: handleSelect,
-        disabled,
+        // A loading group disables its radios so they can't be operated by
+        // keyboard mid-flight, not just visually dimmed.
+        disabled: disabled || loading,
         size,
         unstyled,
         reduceMotion: prefersReducedMotion,
         onFocus,
         onBlur,
       }),
-      [name, selectedValue, handleSelect, disabled, size, unstyled, prefersReducedMotion, onFocus, onBlur],
+      [name, selectedValue, handleSelect, disabled, loading, size, unstyled, prefersReducedMotion, onFocus, onBlur],
     );
 
     return (
@@ -300,7 +302,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         {...rest}
       >
         <span
-          className={cn(mergedClasses.radio, stateClassName, "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-blue-500") || undefined}
+          className={cn(mergedClasses.radio, stateClassName, "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
           style={{ ...sizeStyle, position: "relative" }}
           data-checked={isChecked || undefined}
           data-disabled={isDisabled || undefined}

@@ -17,8 +17,8 @@ export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   // with the indicator content (number vs check icon) and weight, not
   // hue. A separate green for "completed" reads as a clash against the
   // muted brand-blue accent in dark mode and adds visual noise.
-  indicatorActive: "bg-cl-accent text-white",
-  indicatorCompleted: "bg-cl-accent text-white",
+  indicatorActive: "bg-cl-accent text-cl-on-accent",
+  indicatorCompleted: "bg-cl-accent text-cl-on-accent",
   // Pending uses a text-tinted translucent wash so it stays visible on
   // any surface — bg-cl-bg-elevated alone would disappear inside an
   // already-elevated demo card in dark mode.

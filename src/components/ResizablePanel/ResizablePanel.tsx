@@ -321,7 +321,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
           onPointerDown={handlePointerDown}
           onKeyDown={handleSeparatorKeyDown}
           className={cn(
-            "absolute touch-none select-none motion-reduce:transition-none",
+            "absolute touch-none select-none motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
             isVertical
               ? cn(
                   "left-0 w-full h-2",

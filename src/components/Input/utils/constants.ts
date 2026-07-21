@@ -12,9 +12,9 @@ export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
   prefix: "text-sm select-none text-cl-text-tertiary dark:text-cl-text-tertiary",
   suffix: "text-sm select-none text-cl-text-tertiary dark:text-cl-text-tertiary",
   error:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-red-500 dark:text-red-400",
+    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error",
   success:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400",
+    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-success",
   count:
     "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary dark:text-cl-text-tertiary",
 };

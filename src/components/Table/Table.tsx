@@ -1218,7 +1218,7 @@ function TableInner<TData>(
                     e.stopPropagation();
                     header.column.toggleSorting();
                   }}
-                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 dark:hover:bg-white/10 ${sortIconClassName}`}
+                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent ${sortIconClassName}`}
                   aria-label={`Sort by ${columnId}`}
                   title={
                     sortDir === "asc"
@@ -1336,7 +1336,7 @@ function TableInner<TData>(
               <div
                 className={`w-0.5 h-3/5 rounded-full transition-colors ${
                   header.column.getIsResizing()
-                    ? "bg-blue-500"
+                    ? "bg-cl-accent"
                     : "bg-transparent group-hover/resize:bg-gray-400 dark:group-hover/resize:bg-gray-500"
                 }`}
               />
@@ -2252,7 +2252,7 @@ function TableInner<TData>(
                       onClick={() =>
                         setColumnFilterValues(filterDropdownState.columnId, [])
                       }
-                      className="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 cursor-pointer"
+                      className="text-xs text-cl-accent hover:text-cl-accent-hover cursor-pointer"
                     >
                       Clear
                     </button>
@@ -2268,7 +2268,7 @@ function TableInner<TData>(
                       <button
                         key={opt.value}
                         type="button"
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors ${isSelected ? "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.04]"}`}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors ${isSelected ? "bg-cl-accent-bg text-cl-accent" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.04]"}`}
                         onClick={() => {
                           if (
                             filterableColumns[filterDropdownState.columnId]
@@ -2290,7 +2290,7 @@ function TableInner<TData>(
                         }}
                       >
                         <div
-                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isSelected ? "bg-blue-500 border-blue-500 dark:bg-blue-600 dark:border-blue-600" : "border-gray-300 dark:border-gray-600"}`}
+                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isSelected ? "bg-cl-accent border-cl-accent" : "border-gray-300 dark:border-gray-600"}`}
                         >
                           {isSelected && (
                             <svg
