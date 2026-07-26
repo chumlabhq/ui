@@ -649,7 +649,6 @@ const CountryFlagDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

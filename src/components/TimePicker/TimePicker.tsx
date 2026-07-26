@@ -307,7 +307,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       [setValueState, onValueChange],
     );
 
-    // Controllable open state
     const [isOpen, setIsOpen] = useControllableState<boolean>({
       value: openProp,
       defaultValue: defaultOpen,

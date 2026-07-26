@@ -147,7 +147,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       )?.set;
       nativeInputValueSetter?.call(input, "");
 
-      // Update state via controllable hook
       setCurrentValue("");
 
       // Construct a synthetic-shaped Event whose target/currentTarget are

@@ -101,7 +101,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       [classesProp, baseClasses],
     );
 
-    // Controlled/uncontrolled state via shared hook
     const [currentValue, setCurrentValue] = useControllableState({
       value: value !== undefined ? String(value) : undefined,
       defaultValue: (defaultValue as string) ?? "",

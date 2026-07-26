@@ -745,7 +745,6 @@ const OtpInputDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -783,7 +782,6 @@ const OtpInputDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
           <div

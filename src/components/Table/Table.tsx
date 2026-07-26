@@ -56,7 +56,6 @@ import {
 
 const EMPTY_DATA: unknown[] = [];
 
-// Density padding map
 const densityPaddingMap = {
   compact: "px-2 py-1 text-xs",
   comfortable: "px-3 py-2.5 text-sm",
@@ -199,7 +198,6 @@ function TableInner<TData>(
     // Right pinned
     pinnedRightColumns = [],
 
-    // ── Batch 2 props ────────────────────────────────────────────────────
 
     editable = false,
     editableColumns,
@@ -386,7 +384,6 @@ function TableInner<TData>(
     }
   }, [filterDropdownState]);
 
-  // Internal sorting state (uncontrolled mode)
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
   const sorting = sortingProp ?? internalSorting;
 
@@ -419,7 +416,6 @@ function TableInner<TData>(
     [columnFilters, onColumnFiltersChange],
   );
 
-  // Internal global filter state (uncontrolled mode)
   const [internalGlobalFilter, setInternalGlobalFilter] = useState<string>("");
   const globalFilter = globalFilterProp ?? internalGlobalFilter;
 
@@ -428,23 +424,19 @@ function TableInner<TData>(
     useState<VisibilityState>({});
   const columnVisibility = columnVisibilityProp ?? internalColumnVisibility;
 
-  // Internal column sizing state
   const [internalColumnSizing, setInternalColumnSizing] =
     useState<ColumnSizingState>({});
   const columnSizing = columnSizingProp ?? internalColumnSizing;
 
-  // Internal column order state
   const [internalColumnOrder, setInternalColumnOrder] =
     useState<ColumnOrderState>([]);
   const columnOrder = columnOrderProp ?? internalColumnOrder;
 
-  // Grouping state
   const grouping: GroupingState = useMemo(
     () => groupByProp ?? [],
     [groupByProp],
   );
 
-  // Internal expanded state
   const expandedState: ExpandedState = useMemo(() => {
     if (!expandedRowIdsProp) return {};
     const result: Record<string, boolean> = {};
@@ -456,7 +448,6 @@ function TableInner<TData>(
   const [internalExpanded, setInternalExpanded] = useState<ExpandedState>({});
   const expanded = expandedRowIdsProp ? expandedState : internalExpanded;
 
-  // Internal row selection state
   const rowSelectionState: RowSelectionState = useMemo(() => {
     if (!selectedRowIdsProp) return {};
     const result: Record<string, boolean> = {};
@@ -471,7 +462,6 @@ function TableInner<TData>(
     ? rowSelectionState
     : internalRowSelection;
 
-  // Editable column set
   const editableColumnSet = useMemo(
     () => (editableColumns ? new Set(editableColumns) : null),
     [editableColumns],
@@ -587,7 +577,6 @@ function TableInner<TData>(
       } as ColumnDef<TData, unknown>);
     }
 
-    // Expand column
     const expandCol: ColumnDef<TData, unknown> | null = expandable
       ? ({
           id: "__expand",
@@ -666,7 +655,6 @@ function TableInner<TData>(
     selectAllMode,
   ]);
 
-  // Density padding class
   const densityClass = densityPaddingMap[density] || "";
 
   // Determine if we need filtering model
@@ -1714,7 +1702,6 @@ function TableInner<TData>(
             <tbody className={bodyClassName} role="rowgroup">
               {rows.map((row, index) => renderRow(row, index, filterFn))}
             </tbody>
-            {/* Footer */}
             {showFooter && (
               <tfoot
                 className={footerClassName}

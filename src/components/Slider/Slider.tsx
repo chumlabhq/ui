@@ -559,7 +559,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         data-orientation={orientation}
         {...rest}
       >
-        {/* Label */}
         {label && (
           <label
             id={labelId}
@@ -571,7 +570,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           </label>
         )}
 
-        {/* Description */}
         {description && (
           <p id={descriptionId} className={mc.description || undefined}>
             {description}
@@ -644,7 +642,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                     }}
                   />
                 )}
-                {/* Label */}
                 {showMarkLabels && mark.label && (
                   <span
                     className={mc.markLabel || undefined}
@@ -751,14 +748,12 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             <input type="hidden" name={name} value={values[0]} />
           ))}
 
-        {/* Error */}
         {error && errorMessage && (
           <div id={errorId} role="alert" className={mc.error || undefined}>
             {errorMessage}
           </div>
         )}
 
-        {/* Success */}
         {success && successMessage && !error && (
           <div id={`${sliderId}-success`} className={mc.success || undefined}>
             {successMessage}

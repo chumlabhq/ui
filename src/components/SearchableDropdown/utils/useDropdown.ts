@@ -184,7 +184,6 @@ export function useDropdown({
     }
   }
 
-  // Derive: should load initial options
   const shouldLoadInitial = isOpen && loadInitialOnOpen && !!onLoadInitialOptions && !hasLoadedInitial;
 
   // Derive loading state from shouldLoadInitial (pre-fetch = loading)

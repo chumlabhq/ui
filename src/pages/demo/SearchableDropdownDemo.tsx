@@ -1981,7 +1981,6 @@ const SearchableDropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── SearchableDropdownClasses Slots ──────────────────────────────── */}
       <Section title="SearchableDropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
