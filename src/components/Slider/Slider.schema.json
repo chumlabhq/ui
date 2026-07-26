@@ -6,15 +6,33 @@
   "properties": {
     "value": {
       "oneOf": [
-        { "type": "number" },
-        { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+        {
+          "type": "number"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
       ],
       "description": "Current value (number for single thumb, [number, number] for range)."
     },
     "defaultValue": {
       "oneOf": [
-        { "type": "number" },
-        { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+        {
+          "type": "number"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
       ],
       "description": "Default uncontrolled value."
     },
@@ -48,7 +66,10 @@
     },
     "orientation": {
       "type": "string",
-      "enum": ["horizontal", "vertical"],
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
       "description": "Orientation of the slider.",
       "default": "horizontal"
     },
@@ -77,15 +98,23 @@
       "items": {
         "type": "object",
         "properties": {
-          "value": { "type": "number" },
-          "label": { "type": "object", "description": "React.ReactNode" }
+          "value": {
+            "type": "number"
+          },
+          "label": {
+            "type": "object",
+            "description": "React.ReactNode"
+          }
         },
-        "required": ["value"]
+        "required": [
+          "value"
+        ]
       }
     },
     "showMarkLabels": {
       "type": "boolean",
-      "description": "Show mark labels. Defaults to true when marks are provided."
+      "description": "Show mark labels. Defaults to true when marks are provided.",
+      "default": true
     },
     "renderThumb": {
       "type": "object",
@@ -123,15 +152,18 @@
     },
     "disabled": {
       "type": "boolean",
-      "description": "Whether the slider is disabled."
+      "description": "Whether the slider is disabled.",
+      "default": false
     },
     "required": {
       "type": "boolean",
-      "description": "Whether the field is required."
+      "description": "Whether the field is required.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Whether the slider is in an error state."
+      "description": "Whether the slider is in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -153,27 +185,60 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "label": { "type": "string" },
-        "description": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "track": { "type": "string" },
-        "range": { "type": "string" },
-        "thumb": { "type": "string" },
-        "thumbActive": { "type": "string" },
-        "thumbDisabled": { "type": "string" },
-        "tooltip": { "type": "string" },
-        "mark": { "type": "string" },
-        "markDot": { "type": "string" },
-        "markDotActive": { "type": "string" },
-        "markLabel": { "type": "string" },
-        "error": { "type": "string" },
-        "success": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "track": {
+          "type": "string"
+        },
+        "range": {
+          "type": "string"
+        },
+        "thumb": {
+          "type": "string"
+        },
+        "thumbActive": {
+          "type": "string"
+        },
+        "thumbDisabled": {
+          "type": "string"
+        },
+        "tooltip": {
+          "type": "string"
+        },
+        "mark": {
+          "type": "string"
+        },
+        "markDot": {
+          "type": "string"
+        },
+        "markDotActive": {
+          "type": "string"
+        },
+        "markLabel": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, removes all default styling."
+      "description": "When true, removes all default styling.",
+      "default": false
     },
     "aria-label": {
       "type": "string",

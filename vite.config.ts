@@ -19,6 +19,16 @@ function getComponentEntries() {
   return entries;
 }
 
+// Each packaged flag is its own lazily-imported chunk. Keep them unhashed under
+// flags/ so the output is greppable and the bundle guarantee can assert that
+// none of them are reachable from the default entries.
+function flagAwareChunkName(ext: string) {
+  return (chunk: { facadeModuleId?: string | null }) =>
+    chunk.facadeModuleId?.includes("/CountryFlag/flags/")
+      ? `flags/[name].${ext}`
+      : `shared/[name]-[hash].${ext}`;
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   if (mode === "lib") {
@@ -54,12 +64,12 @@ export default defineConfig(({ mode }) => {
           output: [
             {
               format: "es",
-              chunkFileNames: "shared/[name]-[hash].js",
+              chunkFileNames: flagAwareChunkName("js"),
               assetFileNames: "style[extname]",
             },
             {
               format: "cjs",
-              chunkFileNames: "shared/[name]-[hash].cjs",
+              chunkFileNames: flagAwareChunkName("cjs"),
               entryFileNames: "[name].cjs",
               assetFileNames: "style[extname]",
             },

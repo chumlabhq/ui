@@ -8,16 +8,24 @@
       "type": "object",
       "description": "PhoneNumberValue - Controlled phone value with countryCode and phoneNumber fields.",
       "properties": {
-        "countryCode": { "type": "string" },
-        "phoneNumber": { "type": "string" }
+        "countryCode": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
       }
     },
     "defaultValue": {
       "type": "object",
       "description": "PhoneNumberValue - Default phone value for uncontrolled usage.",
       "properties": {
-        "countryCode": { "type": "string" },
-        "phoneNumber": { "type": "string" }
+        "countryCode": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
       }
     },
     "onValueChange": {
@@ -38,19 +46,37 @@
       "items": {
         "type": "object",
         "properties": {
-          "value": { "type": "string" },
-          "label": { "type": "string" },
-          "flag": { "type": "string" },
-          "dialCode": { "type": "string" },
-          "name": { "type": "string" }
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "flag": {
+            "type": "string"
+          },
+          "dialCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
         },
-        "required": ["value", "label", "flag", "dialCode", "name"]
+        "required": [
+          "value",
+          "label",
+          "flag",
+          "dialCode",
+          "name"
+        ]
       }
     },
     "preferredCountries": {
       "type": "array",
       "description": "ISO country codes to show at the top of the country list.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "id": {
       "type": "string",
@@ -70,11 +96,13 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "When true, the input is in a loading state."
+      "description": "When true, the input is in a loading state.",
+      "default": false
     },
     "clearable": {
       "type": "boolean",
-      "description": "When true, shows a clear button to reset the phone number."
+      "description": "When true, shows a clear button to reset the phone number.",
+      "default": false
     },
     "onClear": {
       "type": "object",
@@ -82,19 +110,23 @@
     },
     "required": {
       "type": "boolean",
-      "description": "Marks the field as required."
+      "description": "Marks the field as required.",
+      "default": false
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables the input."
+      "description": "Disables the input.",
+      "default": false
     },
     "readOnly": {
       "type": "boolean",
-      "description": "Makes the input read-only."
+      "description": "Makes the input read-only.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Displays the input in an error state."
+      "description": "Displays the input in an error state.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -102,7 +134,8 @@
     },
     "success": {
       "type": "boolean",
-      "description": "Displays the input in a success state."
+      "description": "Displays the input in a success state.",
+      "default": false
     },
     "successMessage": {
       "type": "object",
@@ -110,15 +143,18 @@
     },
     "placeholder": {
       "type": "string",
-      "description": "Placeholder text for the phone number input."
+      "description": "Placeholder text for the phone number input.",
+      "default": "Enter phone number"
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Makes the input span the full width of its container."
+      "description": "Makes the input span the full width of its container.",
+      "default": false
     },
     "validateOnBlur": {
       "type": "boolean",
-      "description": "Validates the phone number when the input loses focus."
+      "description": "Validates the phone number when the input loses focus.",
+      "default": true
     },
     "validationMessage": {
       "type": "object",
@@ -134,12 +170,18 @@
     },
     "enablePasteDetection": {
       "type": "boolean",
-      "description": "Enables automatic detection and parsing of pasted phone numbers."
+      "description": "Enables automatic detection and parsing of pasted phone numbers.",
+      "default": false
     },
     "copyFormat": {
       "type": "string",
-      "enum": ["e164", "international", "national"],
-      "description": "Format used when copying the phone number."
+      "enum": [
+        "e164",
+        "international",
+        "national"
+      ],
+      "description": "Format used when copying the phone number.",
+      "default": "e164"
     },
     "onPasteDetected": {
       "type": "object",
@@ -147,15 +189,18 @@
     },
     "countryDropdownPlaceholder": {
       "type": "string",
-      "description": "Placeholder text for the country dropdown."
+      "description": "Placeholder text for the country dropdown.",
+      "default": "Country"
     },
     "countrySearchPlaceholder": {
       "type": "string",
-      "description": "Placeholder text for the country search input."
+      "description": "Placeholder text for the country search input.",
+      "default": "Search countries..."
     },
     "countryDropdownAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the country dropdown."
+      "description": "Accessible label for the country dropdown.",
+      "default": "Select country"
     },
     "selectedIcon": {
       "type": "object",
@@ -194,34 +239,76 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "label": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "input": { "type": "string" },
-        "error": { "type": "string" },
-        "success": { "type": "string" },
-        "countrySelect": { "type": "string" },
-        "countrySelectTrigger": { "type": "string" },
-        "countrySelectDropdown": { "type": "string" },
-        "countrySelectSearchInput": { "type": "string" },
-        "countrySelectSearchInputElement": { "type": "string" },
-        "countrySelectOption": { "type": "string" },
-        "countrySelectOptionSelected": { "type": "string" },
-        "countrySelectOptionList": { "type": "string" },
-        "countrySelectChevron": { "type": "string" },
-        "countrySelectCheckIcon": { "type": "string" },
-        "countrySelectSearchIcon": { "type": "string" },
-        "countrySelectNoResults": { "type": "string" },
-        "description": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "input": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "countrySelect": {
+          "type": "string"
+        },
+        "countrySelectTrigger": {
+          "type": "string"
+        },
+        "countrySelectDropdown": {
+          "type": "string"
+        },
+        "countrySelectSearchInput": {
+          "type": "string"
+        },
+        "countrySelectSearchInputElement": {
+          "type": "string"
+        },
+        "countrySelectOption": {
+          "type": "string"
+        },
+        "countrySelectOptionSelected": {
+          "type": "string"
+        },
+        "countrySelectOptionList": {
+          "type": "string"
+        },
+        "countrySelectChevron": {
+          "type": "string"
+        },
+        "countrySelectCheckIcon": {
+          "type": "string"
+        },
+        "countrySelectSearchIcon": {
+          "type": "string"
+        },
+        "countrySelectNoResults": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "dropdownPosition": {
       "type": "string",
-      "enum": ["top", "bottom"],
+      "enum": [
+        "top",
+        "bottom"
+      ],
       "description": "Vertical placement of the country dropdown relative to the trigger."
     },
     "forceDropdownPosition": {

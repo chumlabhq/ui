@@ -10,14 +10,35 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "Unique tab identifier." },
-          "label": { "type": "string", "description": "Tab label text." },
-          "icon": { "type": "object", "description": "React.ReactNode — Icon displayed in the tab." },
-          "count": { "type": "number", "description": "Badge count displayed on the tab." },
-          "disabled": { "type": "boolean", "description": "Whether the tab is disabled." },
-          "tooltip": { "type": "object", "description": "React.ReactNode — Tooltip content for the tab." }
+          "id": {
+            "type": "string",
+            "description": "Unique tab identifier."
+          },
+          "label": {
+            "type": "string",
+            "description": "Tab label text."
+          },
+          "icon": {
+            "type": "object",
+            "description": "React.ReactNode — Icon displayed in the tab."
+          },
+          "count": {
+            "type": "number",
+            "description": "Badge count displayed on the tab."
+          },
+          "disabled": {
+            "type": "boolean",
+            "description": "Whether the tab is disabled."
+          },
+          "tooltip": {
+            "type": "object",
+            "description": "React.ReactNode — Tooltip content for the tab."
+          }
         },
-        "required": ["id", "label"]
+        "required": [
+          "id",
+          "label"
+        ]
       }
     },
     "id": {
@@ -42,58 +63,88 @@
     },
     "orientation": {
       "type": "string",
-      "enum": ["horizontal", "vertical"],
-      "description": "Layout orientation of the tab list."
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "description": "Layout orientation of the tab list.",
+      "default": "horizontal"
     },
     "activationMode": {
       "type": "string",
-      "enum": ["automatic", "manual"],
-      "description": "Whether tabs activate automatically on focus or require manual activation."
+      "enum": [
+        "automatic",
+        "manual"
+      ],
+      "description": "Whether tabs activate automatically on focus or require manual activation.",
+      "default": "automatic"
     },
     "loop": {
       "type": "boolean",
-      "description": "Whether keyboard navigation loops from last tab to first."
+      "description": "Whether keyboard navigation loops from last tab to first.",
+      "default": true
     },
     "iconPosition": {
       "type": "string",
-      "enum": ["left", "right"],
-      "description": "Position of tab icons relative to the label."
+      "enum": [
+        "left",
+        "right"
+      ],
+      "description": "Position of tab icons relative to the label.",
+      "default": "left"
     },
     "showZeroCount": {
       "type": "boolean",
-      "description": "Whether to show a count badge when the count is zero."
+      "description": "Whether to show a count badge when the count is zero.",
+      "default": false
     },
     "alwaysShowLabels": {
       "type": "boolean",
-      "description": "Whether to always show tab labels (even when icons are present)."
+      "description": "Whether to always show tab labels (even when icons are present).",
+      "default": true
     },
     "showTooltips": {
       "type": "boolean",
-      "description": "Whether to show tooltips on tabs."
+      "description": "Whether to show tooltips on tabs.",
+      "default": true
     },
     "tooltipPosition": {
       "type": "string",
-      "enum": ["top", "bottom", "left", "right"],
-      "description": "Position of tab tooltips."
+      "enum": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "description": "Position of tab tooltips.",
+      "default": "bottom"
     },
     "tooltipOffset": {
       "type": "number",
-      "description": "Offset distance for tab tooltips in pixels."
+      "description": "Offset distance for tab tooltips in pixels.",
+      "default": 4
     },
     "disabled": {
       "type": "boolean",
-      "description": "Whether the entire tab panel is disabled."
+      "description": "Whether the entire tab panel is disabled.",
+      "default": false
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
       "description": "Controls motion preferences. 'auto' respects the user's OS setting."
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, removes all default styling."
+      "description": "When true, removes all default styling.",
+      "default": false
     },
     "renderTab": {
       "type": "object",
@@ -111,24 +162,60 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "tabList": { "type": "string" },
-        "tab": { "type": "string" },
-        "tabActive": { "type": "string" },
-        "tabInactive": { "type": "string" },
-        "tabDisabled": { "type": "string" },
-        "tabFocus": { "type": "string" },
-        "label": { "type": "string" },
-        "labelActive": { "type": "string" },
-        "labelInactive": { "type": "string" },
-        "icon": { "type": "string" },
-        "iconActive": { "type": "string" },
-        "iconInactive": { "type": "string" },
-        "count": { "type": "string" },
-        "countActive": { "type": "string" },
-        "countInactive": { "type": "string" },
-        "indicator": { "type": "string" },
-        "panel": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "tabList": {
+          "type": "string"
+        },
+        "tab": {
+          "type": "string"
+        },
+        "tabActive": {
+          "type": "string"
+        },
+        "tabInactive": {
+          "type": "string"
+        },
+        "tabDisabled": {
+          "type": "string"
+        },
+        "tabFocus": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "labelActive": {
+          "type": "string"
+        },
+        "labelInactive": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iconActive": {
+          "type": "string"
+        },
+        "iconInactive": {
+          "type": "string"
+        },
+        "count": {
+          "type": "string"
+        },
+        "countActive": {
+          "type": "string"
+        },
+        "countInactive": {
+          "type": "string"
+        },
+        "indicator": {
+          "type": "string"
+        },
+        "panel": {
+          "type": "string"
+        }
       }
     },
     "className": {
@@ -141,12 +228,16 @@
     },
     "forceMount": {
       "type": "boolean",
-      "description": "Force mount all tab panels regardless of active state."
+      "description": "Force mount all tab panels regardless of active state.",
+      "default": false
     },
     "keepMounted": {
       "type": "boolean",
-      "description": "Keep previously mounted tab panels in the DOM."
+      "description": "Keep previously mounted tab panels in the DOM.",
+      "default": false
     }
   },
-  "required": ["tabs"]
+  "required": [
+    "tabs"
+  ]
 }

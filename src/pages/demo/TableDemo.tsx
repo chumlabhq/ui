@@ -1759,10 +1759,9 @@ import { Table } from "@chumlab/ui/table";
 import { Pagination } from "@chumlab/ui/pagination";`}
       />
 
-      <Section title="Basic Usage" description="A simple table with columns and data." isDarkMode={dark}>
+      <Section title="Basic Usage" description="A simple table with columns and data — no classes prop, using the built-in default styles." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          {/* Basic usage — works out-of-the-box with built-in styles */}
-          <Table columns={columns} data={sampleData.slice(0, 5)} classes={s} />
+          <Table columns={columns} data={sampleData.slice(0, 5)} />
         </DemoWrapper>
       </Section>
 
@@ -7334,7 +7333,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 <Table
                   columns={columns}
                   data={sampleData.slice(0, 5)}
-                  enableColumnReordering
                   columnOrder={colOrder}
                   onColumnOrderChange={setColOrder}
                   getRowId={(row) => row.id}
@@ -7379,7 +7377,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            enableColumnReordering
+            columnOrder
           </code>
           .
         </p>
@@ -7666,15 +7664,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   onSortingChange={setSortState}
                   columnVisibility={visState}
                   onColumnVisibilityChange={setVisState}
-                  onSaveView={(view) =>
-                    setSavedViews((prev) => [
-                      ...prev,
-                      {
-                        name: `Auto ${prev.length + 1}`,
-                        view: view as unknown as Record<string, unknown>,
-                      },
-                    ])
-                  }
                   classes={s}
                 />
                 <p
@@ -7696,7 +7685,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
-            onSaveView
+            onColumnVisibilityChange
           </code>{" "}
           to capture the current table state as a{" "}
           <code
@@ -8197,12 +8186,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             isDarkMode={dark}
           />
           <PropRow
-            name="onExport"
-            type="(format) => void"
-            description="Callback when export is requested"
-            isDarkMode={dark}
-          />
-          <PropRow
             name="responsiveBreakpoint"
             type="number"
             description="Viewport width for mobile card layout"
@@ -8227,12 +8210,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             isDarkMode={dark}
           />
           <PropRow
-            name="onSaveView"
-            type="(view) => void"
-            description="Callback to save current table view state"
-            isDarkMode={dark}
-          />
-          <PropRow
             name="classes"
             type="TableClasses"
             description="Slot class overrides for all table sub-elements (preferred over individual className props)"
@@ -8249,13 +8226,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             name="style"
             type="CSSProperties"
             description="Inline styles for root container"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="enableColumnReordering"
-            type="boolean"
-            defaultVal="false"
-            description="Enable column reordering via controlled order"
             isDarkMode={dark}
           />
           <PropRow

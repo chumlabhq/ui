@@ -75,46 +75,33 @@ This renders correctly with no additional props, classes, or setup. The last ite
 
 ## All Props
 
-### Breadcrumb
+<!-- generated from Breadcrumb.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `BreadcrumbItem[]` | **required** | Array of breadcrumb items. |
-| `maxVisibleItems` | `number` | `4` | Max before truncation. |
-| `separator` | `ReactNode` | — | Custom separator content (e.g., `"/"`). |
-| `separatorIcon` | `ComponentType` | `ChevronRightIcon` | Separator component (used if no `separator`). |
-| `onItemClick` | `(item: BreadcrumbItem) => void` | — | Global click handler. |
-| `classes` | `BreadcrumbClasses` | — | Per-slot class overrides. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `iconSize` | `number \| string` | — | Size for separator and ellipsis icons. |
-| `showTooltips` | `boolean` | `true` | Enable tooltips globally. |
-| `tooltipPosition` | `TooltipSide` | — | Default tooltip side. |
-| `tooltipOffset` | `number` | — | Tooltip distance offset. |
-| `defaultTooltipProps` | `BreadcrumbTooltipProps` | — | Default tooltip config for all items. |
-| `ellipsisTooltip` | `ReactNode` | — | Tooltip for the ellipsis button. |
-| `ellipsisAriaLabel` | `string` | `"Show collapsed breadcrumb items"` | Aria label for ellipsis. |
-| `dropdownPosition` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | Collapsed dropdown direction. |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index. |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target for dropdown. |
-| `onDropdownOpenChange` | `(open: boolean) => void` | — | Callback when dropdown opens/closes. |
-| `aria-label` | `string` | `"Breadcrumb"` | Nav landmark label. |
-
-### BreadcrumbItem (data shape)
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `id` | `string` | **required** | Unique identifier. |
-| `label` | `string` | **required** | Display text. |
-| `href` | `string` | — | Renders as `<a>` link. |
-| `onClick` | `() => void` | — | Per-item click (overrides global). |
-| `icon` | `ReactNode` | — | Icon element. |
-| `iconPosition` | `"left" \| "right"` | `"left"` | Icon placement. |
-| `disabled` | `boolean` | `false` | Disables interaction. |
-| `content` | `ReactNode` | — | Custom content instead of label text. |
-| `tooltip` | `ReactNode` | — | Tooltip content. |
-| `tooltipProps` | `BreadcrumbTooltipProps` | — | Per-item tooltip config. |
-
----
+| `items` **(required)** | array | — | List of breadcrumb items to render. |
+| `maxVisibleItems` | number | `4` | Maximum visible items before collapsing into an ellipsis dropdown. |
+| `separator` | object | — | React.ReactNode — Custom separator between breadcrumb items. |
+| `onItemClick` | object | — | (item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked. |
+| `aria-label` | string | — | Accessible label for the breadcrumb nav element. |
+| `classes` | object | — | CSS class overrides for breadcrumb sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | CSSProperties — Inline styles for the root element. |
+| `separatorIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component. |
+| `ellipsisIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component. |
+| `iconSize` | number \| string | `16` | Size of breadcrumb icons. |
+| `showTooltips` | boolean | `true` | Enables tooltips on breadcrumb items. |
+| `tooltipPosition` | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | `"bottom"` | Default tooltip position for all items. |
+| `tooltipOffset` | number | `4` | Default tooltip offset in pixels. |
+| `defaultTooltipProps` | object | — | Default tooltip configuration for all items. |
+| `ellipsisTooltip` | object | — | React.ReactNode — Tooltip content for the ellipsis button. |
+| `ellipsisTooltipProps` | object | — | Tooltip configuration for the ellipsis button. |
+| `dropdownPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"top"` | Position of the overflow dropdown. |
+| `dropdownZIndex` | number | `50` | Z-index of the overflow dropdown. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
+| `ellipsisAriaLabel` | string | `"Show collapsed breadcrumb items"` | Accessible label for the ellipsis button. |
+| `onDropdownOpenChange` | object | — | (open: boolean) => void — Called when the dropdown open state changes. |
 
 ## Ref API
 
@@ -316,12 +303,12 @@ const items: BreadcrumbItem[] = [
 | Feature | Search for | What you'll find |
 |---------|-----------|------------------|
 | Minimal example | `title="Basic Usage"` | 4-item trail, onItemClick |
-| Collapsed trail | `title="Truncation"` | maxVisibleItems with dropdown |
+| Collapsed trail | `title="Truncation (maxVisibleItems)"` | maxVisibleItems with dropdown |
 | Item icons | `title="With Icons"` | icon + iconPosition props |
 | Icons in dropdown | `title="Icons + Truncation"` | Icons preserved in collapsed menu |
 | Custom ReactNode items | `title="Custom Content"` | content prop with badges |
 | Anchor links | `title="With Links"` | href renders as `<a>` |
-| Per-item handlers | `title="Per-Item Click"` | item.onClick overriding global |
+| Per-item handlers | `title="Per-Item Click Handlers"` | item.onClick overriding global |
 | Hover tooltips | `title="Tooltips"` | showTooltips + per-item tooltip |
 | Ellipsis tooltip | `title="Ellipsis Tooltip"` | ellipsisTooltip prop |
 | Disabled items | `title="Disabled Items"` | disabled in trail and dropdown |
@@ -330,8 +317,7 @@ const items: BreadcrumbItem[] = [
 | Icon sizing | `title="Icon Size"` | iconSize prop |
 | Pill theme | `title="Pill Style"` | Custom pill-shaped classes |
 | Colored theme | `title="Colored Theme"` | Blue-themed with background |
-| Full-featured | `title="Combined"` | Icons + tooltips + truncation |
-| No default styles | `title="Unstyled Mode"` | unstyled with bare HTML |
+| Full-featured | `title="Combined: Tooltips + Icons + Truncation"` | Icons + tooltips + truncation |
 | Dropdown callback | `title="onDropdownOpenChange"` | Open/close state tracking |
 
 **Source files:**

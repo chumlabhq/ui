@@ -13,17 +13,7 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-interface RestCountryResponse {
-  name: { common: string; official: string };
-  cca2: string;
-  flag: string;
-  flags: { png: string; svg: string };
-  capital?: string[];
-  region: string;
-}
+import { fetchCountries, type Country } from "./lib/countries";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 
@@ -276,27 +266,27 @@ const MultiSelectDropdownDemo = () => {
   const [variantPillValue, setVariantPillValue] = useState<string[]>([]);
 
   const mapCountryToOption = useCallback(
-    (country: RestCountryResponse): MultiSelectOption => ({
-      value: country.cca2,
-      label: country.name.common,
+    (country: Country): MultiSelectOption => ({
+      value: country.code,
+      label: country.name,
       content: (
         <div className="flex items-center gap-2">
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
           <div className="flex flex-col">
-            <span className="text-sm">{country.name.common}</span>
+            <span className="text-sm">{country.name}</span>
             <span
               className={`text-xs text-cl-text-secondary`}
             >
-              {country.capital?.[0] || country.region}
+              {country.capital || country.region}
             </span>
           </div>
         </div>
       ),
-      selectedContent: <span className="truncate">{country.name.common}</span>,
+      selectedContent: <span className="truncate">{country.name}</span>,
     }),
     [],
   );
@@ -304,15 +294,11 @@ const MultiSelectDropdownDemo = () => {
   const handleLoadOptions = useCallback(async (): Promise<
     MultiSelectOption[]
   > => {
-    const response = await fetch(
-      "https://restcountries.com/v3.1/all?fields=name,flags,cca2,capital,region",
-    );
-    if (!response.ok) throw new Error("Failed to fetch countries");
-    const data: RestCountryResponse[] = await response.json();
+    const data = await fetchCountries();
     const codes = ["US", "GB", "DE", "FR", "JP", "CA", "AU", "IN", "BR", "IT"];
     return codes
-      .map((code) => data.find((r) => r.cca2 === code))
-      .filter((r): r is RestCountryResponse => r !== undefined)
+      .map((code) => data.find((r) => r.code === code))
+      .filter((r): r is Country => r !== undefined)
       .map(mapCountryToOption);
   }, [mapCountryToOption]);
 
@@ -1300,7 +1286,7 @@ const MultiSelectDropdownDemo = () => {
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-accent hover:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/60 dark:text-cl-accent dark:hover:border-cl-border-input-focus`,
                 triggerText:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
-                content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border border-cl-border-input-focus dark:bg-cl-accent/20 dark:border dark:border-cl-border-input-focus`,
+                content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus`,
                 option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/60`,
                 optionSelected: dark ? "bg-cl-accent/80" : "bg-cl-accent/10",
                 optionFocused: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",

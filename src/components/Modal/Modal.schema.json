@@ -92,24 +92,37 @@
       "default": false
     },
     "maxWidth": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Maximum width of the modal dialog."
     },
     "maxHeight": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Maximum height of the modal dialog."
     },
     "minWidth": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Minimum width of the modal dialog."
     },
     "minHeight": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Minimum height of the modal dialog."
     },
     "fullScreen": {
       "type": "boolean",
-      "description": "Expands the modal to fill the viewport."
+      "description": "Expands the modal to fill the viewport.",
+      "default": false
     },
     "centered": {
       "type": "boolean",
@@ -118,22 +131,29 @@
     },
     "overlayColor": {
       "type": "string",
-      "description": "Custom overlay background color."
+      "description": "Custom overlay background color.",
+      "default": "black"
     },
     "overlayOpacity": {
       "type": "number",
-      "description": "Overlay background opacity (0-1)."
+      "description": "Overlay background opacity (0-1).",
+      "default": 0.32
     },
     "animationDuration": {
       "type": "number",
-      "description": "Open/close animation duration in milliseconds."
+      "description": "Open/close animation duration in milliseconds.",
+      "default": 200
     },
     "disableAnimation": {
       "type": "boolean",
-      "description": "Disables open/close animations entirely."
+      "description": "Disables open/close animations entirely.",
+      "default": false
     },
     "reduceMotion": {
-      "type": ["boolean", "string"],
+      "type": [
+        "boolean",
+        "string"
+      ],
       "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
       "default": "auto"
     },
@@ -143,7 +163,8 @@
     },
     "maxNestingLevel": {
       "type": "number",
-      "description": "Maximum allowed nesting depth for stacked modals."
+      "description": "Maximum allowed nesting depth for stacked modals.",
+      "default": 5
     },
     "zIndex": {
       "type": "number",
@@ -153,26 +174,50 @@
       "type": "object",
       "description": "CSS class overrides for modal sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "overlay": { "type": "string" },
-        "container": { "type": "string" },
-        "content": { "type": "string" },
-        "header": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "icon": { "type": "string" },
-        "closeButton": { "type": "string" },
-        "closeIcon": { "type": "string" },
-        "body": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "overlay": {
+          "type": "string"
+        },
+        "container": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "closeButton": {
+          "type": "string"
+        },
+        "closeIcon": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling, rendering a plain dialog."
+      "description": "Removes all default styling, rendering a plain dialog.",
+      "default": false
     },
     "className": {
       "type": "string",
-      "description": "Additional CSS class for the dialog content panel."
+      "description": "Additional CSS class for the dialog content panel.",
+      "default": ""
     },
     "contentStyle": {
       "type": "object",
@@ -191,5 +236,7 @@
       "description": "ID of the element that describes the modal dialog."
     }
   },
-  "required": ["children"]
+  "required": [
+    "children"
+  ]
 }

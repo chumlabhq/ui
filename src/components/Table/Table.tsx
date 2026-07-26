@@ -39,6 +39,10 @@ import {
 } from "./utils";
 import TableShimmer from "./TableShimmer";
 import {
+  DEFAULT_TABLE_CLASSES,
+  UNSTYLED_TABLE_CLASSES,
+} from "./constants";
+import {
   PinIcon,
   SortAscIcon,
   SortDescIcon,
@@ -196,7 +200,6 @@ function TableInner<TData>(
     pinnedRightColumns = [],
 
     // ── Batch 2 props ────────────────────────────────────────────────────
-    onExport,
 
     editable = false,
     editableColumns,
@@ -209,7 +212,6 @@ function TableInner<TData>(
     manualPagination = false,
     manualFiltering = false,
 
-    enableColumnReordering = false,
     columnOrder: columnOrderProp,
     onColumnOrderChange,
 
@@ -237,7 +239,6 @@ function TableInner<TData>(
     groupBy: groupByProp,
     onGroupByChange,
 
-    onSaveView,
 
     showSearch = false,
     searchPlaceholder = "Search...",
@@ -253,54 +254,54 @@ function TableInner<TData>(
   }: TableProps<TData>,
   ref: React.Ref<HTMLDivElement>,
 ) {
-  // Resolve classes from the `classes` prop
-  // Passthrough props — consumed by external integrations, not used internally
-  void unstyled; void onExport; void enableColumnReordering; void onSaveView;
+  // Per-slot resolution: a supplied slot replaces the default for that slot
+  // only, so a partial `classes` object keeps defaults everywhere else.
+  const base = unstyled ? UNSTYLED_TABLE_CLASSES : DEFAULT_TABLE_CLASSES;
 
-  const containerClassName = classesProp?.container ?? "";
-  const tableClassName = classesProp?.table ?? "";
-  const headerClassName = classesProp?.header ?? "";
-  const headerRowClassName = classesProp?.headerRow ?? "";
-  const headerCellClassName = classesProp?.headerCell ?? "";
-  const headerCellHoverClassName = classesProp?.headerCellHover ?? "";
-  const headerCellContentClassName = classesProp?.headerCellContent ?? "";
-  const bodyClassName = classesProp?.body ?? "";
-  const rowClassName = classesProp?.row ?? "";
-  const cellClassName = classesProp?.cell ?? "";
-  const selectedRowClassName = classesProp?.selectedRow ?? "";
-  const pinnedContainerClassName = classesProp?.pinnedContainer ?? "";
-  const pinnedTableClassName = classesProp?.pinnedTable ?? "";
-  const unpinnedContainerClassName = classesProp?.unpinnedContainer ?? "";
-  const unpinnedTableClassName = classesProp?.unpinnedTable ?? "";
-  const emptyClassName = classesProp?.empty ?? "";
-  const pinIconClassName = classesProp?.pinIcon ?? "";
-  const pinIconHoverClassName = classesProp?.pinIconHover ?? "";
-  const pinnedPinIconClassName = classesProp?.pinnedPinIcon ?? "";
-  const pinnedPinIconHoverClassName = classesProp?.pinnedPinIconHover ?? "";
-  const pinButtonClassName = classesProp?.pinButton ?? "";
-  const pinnedPinButtonClassName = classesProp?.pinnedPinButton ?? "";
-  const shimmerClassName = classesProp?.shimmer ?? "";
-  const shimmerRowClassName = classesProp?.shimmerRow ?? "";
-  const shimmerCellClassName = classesProp?.shimmerCell ?? "";
-  const shimmerBarClassName = classesProp?.shimmerBar ?? "";
-  const checkboxClassName = classesProp?.checkbox ?? "";
-  const checkboxCellClassName = classesProp?.checkboxCell ?? "";
-  const sortIconClassName = classesProp?.sortIcon ?? "";
-  const expandIconClassName = classesProp?.expandIcon ?? "";
-  const expandedRowClassName = classesProp?.expandedRow ?? "";
-  const pinnedRightContainerClassName = classesProp?.pinnedRightContainer ?? "";
-  const pinnedRightTableClassName = classesProp?.pinnedRightTable ?? "";
-  const editInputClassName = classesProp?.editInput ?? "";
-  const dragHandleClassName = classesProp?.dragHandle ?? "";
-  const footerClassName = classesProp?.footer ?? "";
-  const searchBarClassName = classesProp?.searchBar ?? "";
-  const mobileCardClassName = classesProp?.mobileCard ?? "";
-  const groupHeaderClassName = classesProp?.groupHeader ?? "";
-  const resizeHandleClassName = classesProp?.resizeHandle ?? "";
-  const filterIconClassName = classesProp?.filterIcon ?? "";
-  const filterDropdownClassName = classesProp?.filterDropdown ?? "";
-  const loadingMoreClassName = classesProp?.loadingMore ?? "";
-  const searchInputClassName = classesProp?.searchInput ?? "";
+  const containerClassName = classesProp?.container ?? base.container;
+  const tableClassName = classesProp?.table ?? base.table;
+  const headerClassName = classesProp?.header ?? base.header;
+  const headerRowClassName = classesProp?.headerRow ?? base.headerRow;
+  const headerCellClassName = classesProp?.headerCell ?? base.headerCell;
+  const headerCellHoverClassName = classesProp?.headerCellHover ?? base.headerCellHover;
+  const headerCellContentClassName = classesProp?.headerCellContent ?? base.headerCellContent;
+  const bodyClassName = classesProp?.body ?? base.body;
+  const rowClassName = classesProp?.row ?? base.row;
+  const cellClassName = classesProp?.cell ?? base.cell;
+  const selectedRowClassName = classesProp?.selectedRow ?? base.selectedRow;
+  const pinnedContainerClassName = classesProp?.pinnedContainer ?? base.pinnedContainer;
+  const pinnedTableClassName = classesProp?.pinnedTable ?? base.pinnedTable;
+  const unpinnedContainerClassName = classesProp?.unpinnedContainer ?? base.unpinnedContainer;
+  const unpinnedTableClassName = classesProp?.unpinnedTable ?? base.unpinnedTable;
+  const emptyClassName = classesProp?.empty ?? base.empty;
+  const pinIconClassName = classesProp?.pinIcon ?? base.pinIcon;
+  const pinIconHoverClassName = classesProp?.pinIconHover ?? base.pinIconHover;
+  const pinnedPinIconClassName = classesProp?.pinnedPinIcon ?? base.pinnedPinIcon;
+  const pinnedPinIconHoverClassName = classesProp?.pinnedPinIconHover ?? base.pinnedPinIconHover;
+  const pinButtonClassName = classesProp?.pinButton ?? base.pinButton;
+  const pinnedPinButtonClassName = classesProp?.pinnedPinButton ?? base.pinnedPinButton;
+  const shimmerClassName = classesProp?.shimmer ?? base.shimmer;
+  const shimmerRowClassName = classesProp?.shimmerRow ?? base.shimmerRow;
+  const shimmerCellClassName = classesProp?.shimmerCell ?? base.shimmerCell;
+  const shimmerBarClassName = classesProp?.shimmerBar ?? base.shimmerBar;
+  const checkboxClassName = classesProp?.checkbox ?? base.checkbox;
+  const checkboxCellClassName = classesProp?.checkboxCell ?? base.checkboxCell;
+  const sortIconClassName = classesProp?.sortIcon ?? base.sortIcon;
+  const expandIconClassName = classesProp?.expandIcon ?? base.expandIcon;
+  const expandedRowClassName = classesProp?.expandedRow ?? base.expandedRow;
+  const pinnedRightContainerClassName = classesProp?.pinnedRightContainer ?? base.pinnedRightContainer;
+  const pinnedRightTableClassName = classesProp?.pinnedRightTable ?? base.pinnedRightTable;
+  const editInputClassName = classesProp?.editInput ?? base.editInput;
+  const dragHandleClassName = classesProp?.dragHandle ?? base.dragHandle;
+  const footerClassName = classesProp?.footer ?? base.footer;
+  const searchBarClassName = classesProp?.searchBar ?? base.searchBar;
+  const mobileCardClassName = classesProp?.mobileCard ?? base.mobileCard;
+  const groupHeaderClassName = classesProp?.groupHeader ?? base.groupHeader;
+  const resizeHandleClassName = classesProp?.resizeHandle ?? base.resizeHandle;
+  const filterIconClassName = classesProp?.filterIcon ?? base.filterIcon;
+  const filterDropdownClassName = classesProp?.filterDropdown ?? base.filterDropdown;
+  const loadingMoreClassName = classesProp?.loadingMore ?? base.loadingMore;
+  const searchInputClassName = classesProp?.searchInput ?? base.searchInput;
 
   const columns = columnsProp ?? COLUMNS ?? FALLBACK_COLUMNS;
   const data = dataProp ?? COLUMNS_DATA ?? FALLBACK_DATA;
@@ -1031,8 +1032,20 @@ function TableInner<TData>(
     [table, handleRowHover],
   );
 
+  // Arrow keys move `focusedCell`, but DOM focus has to follow or the
+  // roving tabindex never actually moves the caret for keyboard users.
+  useEffect(() => {
+    if (!focusedCell) return;
+    containerRef.current
+      ?.querySelector<HTMLElement>('td[data-focused="true"]')
+      ?.focus({ preventScroll: true });
+  }, [focusedCell]);
+
   const isRowSelected = useCallback(
     (row: Row<TData>) => {
+      // Checkbox selection lives in TanStack's row model; `selectedRowId` is
+      // the separate single-row highlight. A row is selected under either.
+      if (row.getIsSelected()) return true;
       if (!getRowId || !selectedRowId) return false;
       return getRowId(row.original) === selectedRowId;
     },
@@ -1205,7 +1218,7 @@ function TableInner<TData>(
                     e.stopPropagation();
                     header.column.toggleSorting();
                   }}
-                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 dark:hover:bg-white/10 ${sortIconClassName}`}
+                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent ${sortIconClassName}`}
                   aria-label={`Sort by ${columnId}`}
                   title={
                     sortDir === "asc"
@@ -1323,7 +1336,7 @@ function TableInner<TData>(
               <div
                 className={`w-0.5 h-3/5 rounded-full transition-colors ${
                   header.column.getIsResizing()
-                    ? "bg-blue-500"
+                    ? "bg-cl-accent"
                     : "bg-transparent group-hover/resize:bg-gray-400 dark:group-hover/resize:bg-gray-500"
                 }`}
               />
@@ -1368,6 +1381,11 @@ function TableInner<TData>(
     (cell: Cell<TData, unknown>, rowIndex: number, colIndex: number) => {
       const isFocused =
         focusedCell?.row === rowIndex && focusedCell?.col === colIndex;
+      // Roving tabindex needs an entry point before anything has been
+      // focused, otherwise every cell is -1 and the grid is unreachable.
+      const isTabStop = focusedCell
+        ? isFocused
+        : rowIndex === 0 && colIndex === 0;
       const columnId = getColumnId(
         cell.column.columnDef as { accessorKey?: string; id?: string },
       );
@@ -1467,9 +1485,15 @@ function TableInner<TData>(
           key={cell.id}
           className={`${cellClassName} ${isSyntheticColumn ? checkboxCellClassName : ""} ${densityClass}`}
           role="gridcell"
-          tabIndex={isFocused ? 0 : -1}
+          tabIndex={isTabStop ? 0 : -1}
           onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
-          aria-selected={isFocused}
+          onFocus={() =>
+            setFocusedCell((prev) =>
+              prev?.row === rowIndex && prev?.col === colIndex
+                ? prev
+                : { row: rowIndex, col: colIndex },
+            )
+          }
           data-focused={isFocused || undefined}
           data-editing={isEditing || undefined}
           data-grouped={isGrouped || undefined}
@@ -2228,7 +2252,7 @@ function TableInner<TData>(
                       onClick={() =>
                         setColumnFilterValues(filterDropdownState.columnId, [])
                       }
-                      className="text-xs text-blue-500 hover:text-blue-600 dark:text-blue-400 cursor-pointer"
+                      className="text-xs text-cl-accent hover:text-cl-accent-hover cursor-pointer"
                     >
                       Clear
                     </button>
@@ -2244,7 +2268,7 @@ function TableInner<TData>(
                       <button
                         key={opt.value}
                         type="button"
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors ${isSelected ? "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.04]"}`}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors ${isSelected ? "bg-cl-accent-bg text-cl-accent" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.04]"}`}
                         onClick={() => {
                           if (
                             filterableColumns[filterDropdownState.columnId]
@@ -2266,7 +2290,7 @@ function TableInner<TData>(
                         }}
                       >
                         <div
-                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isSelected ? "bg-blue-500 border-blue-500 dark:bg-blue-600 dark:border-blue-600" : "border-gray-300 dark:border-gray-600"}`}
+                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isSelected ? "bg-cl-accent border-cl-accent" : "border-gray-300 dark:border-gray-600"}`}
                         >
                           {isSelected && (
                             <svg

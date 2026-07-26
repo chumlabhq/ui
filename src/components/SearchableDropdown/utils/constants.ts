@@ -5,7 +5,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     root: "",
     wrapper: "relative",
     trigger:
-      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated text-cl-text dark:text-white hover:border-cl-border-input dark:hover:border-cl-border focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent",
+      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated text-cl-text dark:text-white hover:border-cl-border-input dark:hover:border-cl-border focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
     triggerText: "flex-1 truncate",
     content:
       "rounded-cl-md shadow-lg overflow-hidden bg-white dark:bg-cl-bg-elevated border border-cl-border dark:border-cl-border",
@@ -24,9 +24,9 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
       "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
     label:
       "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
-    error: "text-sm mt-1 text-red-500 dark:text-red-400",
+    error: "text-sm mt-1 text-cl-error",
     description: "text-xs mb-1 text-cl-text-tertiary dark:text-cl-text-tertiary",
-    success: "text-sm mt-1 text-green-600 dark:text-green-400",
+    success: "text-sm mt-1 text-cl-success",
     searchInput:
       "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border-cl-border bg-cl-bg-hover dark:bg-cl-bg",
     searchInputElement:

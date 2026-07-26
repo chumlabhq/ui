@@ -53,32 +53,42 @@ export default function Example() {
 
 ## All Props
 
+<!-- generated from Tooltip.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `content` | `ReactNode` | — | Tooltip content |
-| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Placement side |
-| `align` | `"start" \| "center" \| "end"` | `"center"` | Alignment on side |
-| `sideOffset` | `number` | `8` | Distance from trigger |
-| `alignOffset` | `number` | `0` | Alignment offset |
-| `maxWidth` | `string \| number` | — | Max tooltip width |
-| `wordWrap` | `"normal" \| "break-word" \| "nowrap"` | `"normal"` | Text wrapping |
-| `delayDuration` | `number` | `200` | Show delay (ms) |
-| `hideDelayDuration` | `number` | `0` | Hide delay (ms) |
-| `showArrow` | `boolean` | `true` | Show pointing arrow |
-| `arrowSize` | `number` | `8` | Arrow size in px |
-| `arrowColor` | `string` | — | Arrow fill color |
-| `disabled` | `boolean` | `false` | Disable tooltip |
-| `truncate` | `boolean` | `false` | Auto-truncate trigger text |
-| `shadow` | `TooltipShadow` | `"md"` | Shadow preset or custom |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open) => void` | — | Open state callback |
-| `asChild` | `boolean` | `false` | Merge props onto child |
-| `portal` | `boolean` | `true` | Render in portal |
-| `classes` | `TooltipClasses` | — | Per-slot overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `zIndex` | `number` | — | Custom z-index |
-
----
+| `children` **(required)** | object | — | React.ReactNode — The trigger element that the tooltip is attached to. |
+| `content` | object | — | React.ReactNode — Content displayed inside the tooltip. |
+| `side` | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | `"top"` | Preferred side of the trigger to display the tooltip. |
+| `align` | `"start"` \| `"center"` \| `"end"` | `"center"` | Alignment of the tooltip along the side. |
+| `sideOffset` | number | `6` | Distance in pixels from the trigger along the side axis. |
+| `alignOffset` | number | `0` | Offset in pixels along the alignment axis. |
+| `maxWidth` | string \| number | `300` | Maximum width of the tooltip content. |
+| `wordWrap` | `"normal"` \| `"break-word"` \| `"nowrap"` | `"break-word"` | Word wrap behavior for tooltip content. |
+| `delayDuration` | number | `200` | Delay in milliseconds before showing the tooltip. |
+| `hideDelayDuration` | number | `100` | Delay in milliseconds before hiding the tooltip. |
+| `disableHoverableContent` | boolean | `false` | When true, the tooltip content is not hoverable (closes on mouse leave of trigger). |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Default uncontrolled open state. |
+| `onOpenChange` | object | — | (open: boolean) => void — Callback when the open state changes. |
+| `showArrow` | boolean | `true` | Whether to show the tooltip arrow. |
+| `arrowSize` | number | — | Size of the tooltip arrow in pixels. |
+| `arrowColor` | string | — | Color of the tooltip arrow. |
+| `disabled` | boolean | `false` | Whether the tooltip is disabled. |
+| `truncate` | boolean | `false` | Whether to truncate the trigger content with ellipsis. |
+| `truncateWidth` | number \| string | — | Width at which to truncate the trigger content. |
+| `shadow` | string | `"lg"` | Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'. |
+| `zIndex` | number | `9999` | Z-index for the tooltip. |
+| `portal` | boolean | `true` | Whether to render the tooltip in a portal. |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the tooltip portal. |
+| `asChild` | boolean | `false` | When true, the trigger renders as the child element instead of wrapping it. |
+| `triggerDisplay` | string | `"inline-flex"` | CSS display property for the trigger wrapper. |
+| `className` | string | — | CSS class for the trigger wrapper element. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `contentStyle` | object | — | Inline styles applied to the tooltip content element. |
+| `arrowStyle` | object | — | Inline styles applied to the tooltip arrow element. |
+| `baseArrowStyle` | object | — | Inline styles applied to the base arrow element. |
 
 ## Styling Guide
 
@@ -138,7 +148,6 @@ Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `te
 | Arrow | `title="Arrow"` |
 | Delays | `title="Delay Duration"` |
 | Rich content | `title="Rich HTML Content"` |
-| Truncation | `title="Truncation"` |
 | Custom styling | `title="Custom Styling"` |
 | Shadows | `title="Shadow Presets"` |
 

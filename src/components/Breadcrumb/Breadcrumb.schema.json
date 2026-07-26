@@ -10,36 +10,107 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "Unique identifier for the breadcrumb item." },
-          "label": { "type": "string", "description": "Display text for the breadcrumb item." },
-          "href": { "type": "string", "description": "Navigation URL for the breadcrumb item." },
-          "onClick": { "type": "object", "description": "() => void — Click handler." },
-          "icon": { "type": "object", "description": "React.ReactNode — Icon rendered beside the label." },
-          "iconPosition": { "type": "string", "enum": ["left", "right"], "description": "Position of the icon relative to the label.", "default": "left" },
-          "disabled": { "type": "boolean", "description": "Disables the breadcrumb item." },
-          "content": { "type": "object", "description": "React.ReactNode — Custom content replacing the label." },
-          "tooltip": { "type": "object", "description": "React.ReactNode — Tooltip content." },
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the breadcrumb item."
+          },
+          "label": {
+            "type": "string",
+            "description": "Display text for the breadcrumb item."
+          },
+          "href": {
+            "type": "string",
+            "description": "Navigation URL for the breadcrumb item."
+          },
+          "onClick": {
+            "type": "object",
+            "description": "() => void — Click handler."
+          },
+          "icon": {
+            "type": "object",
+            "description": "React.ReactNode — Icon rendered beside the label."
+          },
+          "iconPosition": {
+            "type": "string",
+            "enum": [
+              "left",
+              "right"
+            ],
+            "description": "Position of the icon relative to the label.",
+            "default": "left"
+          },
+          "disabled": {
+            "type": "boolean",
+            "description": "Disables the breadcrumb item."
+          },
+          "content": {
+            "type": "object",
+            "description": "React.ReactNode — Custom content replacing the label."
+          },
+          "tooltip": {
+            "type": "object",
+            "description": "React.ReactNode — Tooltip content."
+          },
           "tooltipProps": {
             "type": "object",
             "description": "Configuration for the item tooltip.",
             "properties": {
-              "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
-              "align": { "type": "string", "enum": ["start", "center", "end"] },
-              "sideOffset": { "type": "number" },
-              "maxWidth": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
-              "delayDuration": { "type": "number" },
-              "showArrow": { "type": "boolean" },
-              "contentClassName": { "type": "string" },
-              "contentStyle": { "type": "object", "description": "CSSProperties" }
+              "side": {
+                "type": "string",
+                "enum": [
+                  "top",
+                  "right",
+                  "bottom",
+                  "left"
+                ]
+              },
+              "align": {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "center",
+                  "end"
+                ]
+              },
+              "sideOffset": {
+                "type": "number"
+              },
+              "maxWidth": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "delayDuration": {
+                "type": "number"
+              },
+              "showArrow": {
+                "type": "boolean"
+              },
+              "contentClassName": {
+                "type": "string"
+              },
+              "contentStyle": {
+                "type": "object",
+                "description": "CSSProperties"
+              }
             }
           }
         },
-        "required": ["id", "label"]
+        "required": [
+          "id",
+          "label"
+        ]
       }
     },
     "maxVisibleItems": {
       "type": "number",
-      "description": "Maximum visible items before collapsing into an ellipsis dropdown."
+      "description": "Maximum visible items before collapsing into an ellipsis dropdown.",
+      "default": 4
     },
     "separator": {
       "type": "object",
@@ -57,24 +128,51 @@
       "type": "object",
       "description": "CSS class overrides for breadcrumb sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "list": { "type": "string" },
-        "item": { "type": "string" },
-        "itemActive": { "type": "string" },
-        "itemDisabled": { "type": "string" },
-        "link": { "type": "string" },
-        "separator": { "type": "string" },
-        "icon": { "type": "string" },
-        "ellipsis": { "type": "string" },
-        "ellipsisButton": { "type": "string" },
-        "dropdown": { "type": "string" },
-        "dropdownItem": { "type": "string" },
-        "dropdownItemDisabled": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "list": {
+          "type": "string"
+        },
+        "item": {
+          "type": "string"
+        },
+        "itemActive": {
+          "type": "string"
+        },
+        "itemDisabled": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "separator": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "ellipsis": {
+          "type": "string"
+        },
+        "ellipsisButton": {
+          "type": "string"
+        },
+        "dropdown": {
+          "type": "string"
+        },
+        "dropdownItem": {
+          "type": "string"
+        },
+        "dropdownItemDisabled": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "className": {
       "type": "string",
@@ -94,36 +192,84 @@
     },
     "iconSize": {
       "oneOf": [
-        { "type": "number" },
-        { "type": "string" }
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
       ],
-      "description": "Size of breadcrumb icons."
+      "description": "Size of breadcrumb icons.",
+      "default": 16
     },
     "showTooltips": {
       "type": "boolean",
-      "description": "Enables tooltips on breadcrumb items."
+      "description": "Enables tooltips on breadcrumb items.",
+      "default": true
     },
     "tooltipPosition": {
       "type": "string",
-      "enum": ["top", "right", "bottom", "left"],
-      "description": "Default tooltip position for all items."
+      "enum": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "description": "Default tooltip position for all items.",
+      "default": "bottom"
     },
     "tooltipOffset": {
       "type": "number",
-      "description": "Default tooltip offset in pixels."
+      "description": "Default tooltip offset in pixels.",
+      "default": 4
     },
     "defaultTooltipProps": {
       "type": "object",
       "description": "Default tooltip configuration for all items.",
       "properties": {
-        "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
-        "align": { "type": "string", "enum": ["start", "center", "end"] },
-        "sideOffset": { "type": "number" },
-        "maxWidth": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
-        "delayDuration": { "type": "number" },
-        "showArrow": { "type": "boolean" },
-        "contentClassName": { "type": "string" },
-        "contentStyle": { "type": "object", "description": "CSSProperties" }
+        "side": {
+          "type": "string",
+          "enum": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        "sideOffset": {
+          "type": "number"
+        },
+        "maxWidth": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "delayDuration": {
+          "type": "number"
+        },
+        "showArrow": {
+          "type": "boolean"
+        },
+        "contentClassName": {
+          "type": "string"
+        },
+        "contentStyle": {
+          "type": "object",
+          "description": "CSSProperties"
+        }
       }
     },
     "ellipsisTooltip": {
@@ -136,12 +282,19 @@
     },
     "dropdownPosition": {
       "type": "string",
-      "enum": ["top", "bottom", "left", "right"],
-      "description": "Position of the overflow dropdown."
+      "enum": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ],
+      "description": "Position of the overflow dropdown.",
+      "default": "top"
     },
     "dropdownZIndex": {
       "type": "number",
-      "description": "Z-index of the overflow dropdown."
+      "description": "Z-index of the overflow dropdown.",
+      "default": 50
     },
     "portalContainer": {
       "type": "object",
@@ -149,12 +302,15 @@
     },
     "ellipsisAriaLabel": {
       "type": "string",
-      "description": "Accessible label for the ellipsis button."
+      "description": "Accessible label for the ellipsis button.",
+      "default": "Show collapsed breadcrumb items"
     },
     "onDropdownOpenChange": {
       "type": "object",
       "description": "(open: boolean) => void — Called when the dropdown open state changes."
     }
   },
-  "required": ["items"]
+  "required": [
+    "items"
+  ]
 }

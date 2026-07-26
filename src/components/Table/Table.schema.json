@@ -22,11 +22,13 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "Whether the table is in a loading state showing shimmer rows."
+      "description": "Whether the table is in a loading state showing shimmer rows.",
+      "default": false
     },
     "showHeader": {
       "type": "boolean",
-      "description": "Whether to show the table header row."
+      "description": "Whether to show the table header row.",
+      "default": true
     },
     "tableHeader": {
       "type": "boolean",
@@ -34,7 +36,9 @@
     },
     "pinnedColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs to pin to the left side."
     },
     "onPinColumn": {
@@ -43,12 +47,15 @@
     },
     "pinnableColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs that are allowed to be pinned."
     },
     "maxPinnedColumns": {
       "type": "number",
-      "description": "Maximum number of columns that can be pinned simultaneously."
+      "description": "Maximum number of columns that can be pinned simultaneously.",
+      "default": 3
     },
     "onCursorPosition": {
       "type": "object",
@@ -64,7 +71,8 @@
     },
     "ariaLabel": {
       "type": "string",
-      "description": "Accessible label for the table."
+      "description": "Accessible label for the table.",
+      "default": "Data table"
     },
     "caption": {
       "type": "string",
@@ -75,7 +83,10 @@
       "description": "(row: TData) => string — Function to derive a unique row ID."
     },
     "selectedRowId": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "ID of the currently selected row (single selection)."
     },
     "onRowClick": {
@@ -92,90 +103,195 @@
     },
     "isFloatingActionsHovered": {
       "type": "boolean",
-      "description": "Whether the floating actions area is being hovered."
+      "description": "Whether the floating actions area is being hovered.",
+      "default": false
     },
     "isPopupOpen": {
       "type": "boolean",
-      "description": "Whether a popup triggered from the table is currently open."
+      "description": "Whether a popup triggered from the table is currently open.",
+      "default": false
     },
     "maxWidth": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Maximum width of the table container."
     },
     "maxHeight": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Maximum height of the table container."
     },
     "minHeight": {
-      "type": ["string", "number"],
+      "type": [
+        "string",
+        "number"
+      ],
       "description": "Minimum height of the table container."
     },
     "hideVerticalScrollbar": {
       "type": "boolean",
-      "description": "Whether to hide the vertical scrollbar."
+      "description": "Whether to hide the vertical scrollbar.",
+      "default": false
     },
     "hideHorizontalScrollbar": {
       "type": "boolean",
-      "description": "Whether to hide the horizontal scrollbar."
+      "description": "Whether to hide the horizontal scrollbar.",
+      "default": false
     },
     "stickyHeader": {
       "type": "boolean",
-      "description": "Whether the header row sticks to the top when scrolling."
+      "description": "Whether the header row sticks to the top when scrolling.",
+      "default": false
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for table sub-elements.",
       "properties": {
-        "container": { "type": "string" },
-        "table": { "type": "string" },
-        "header": { "type": "string" },
-        "headerRow": { "type": "string" },
-        "headerCell": { "type": "string" },
-        "headerCellHover": { "type": "string" },
-        "headerCellContent": { "type": "string" },
-        "body": { "type": "string" },
-        "row": { "type": "string" },
-        "cell": { "type": "string" },
-        "selectedRow": { "type": "string" },
-        "pinnedContainer": { "type": "string" },
-        "pinnedTable": { "type": "string" },
-        "unpinnedContainer": { "type": "string" },
-        "unpinnedTable": { "type": "string" },
-        "empty": { "type": "string" },
-        "pinIcon": { "type": "string" },
-        "pinIconHover": { "type": "string" },
-        "pinnedPinIcon": { "type": "string" },
-        "pinnedPinIconHover": { "type": "string" },
-        "pinButton": { "type": "string" },
-        "pinnedPinButton": { "type": "string" },
-        "shimmer": { "type": "string" },
-        "shimmerRow": { "type": "string" },
-        "shimmerCell": { "type": "string" },
-        "shimmerBar": { "type": "string" },
-        "checkbox": { "type": "string" },
-        "checkboxCell": { "type": "string" },
-        "sortIcon": { "type": "string" },
-        "filterInput": { "type": "string" },
-        "filterIcon": { "type": "string" },
-        "filterDropdown": { "type": "string" },
-        "expandIcon": { "type": "string" },
-        "expandedRow": { "type": "string" },
-        "pinnedRightContainer": { "type": "string" },
-        "pinnedRightTable": { "type": "string" },
-        "editInput": { "type": "string" },
-        "dragHandle": { "type": "string" },
-        "footer": { "type": "string" },
-        "searchBar": { "type": "string" },
-        "mobileCard": { "type": "string" },
-        "groupHeader": { "type": "string" },
-        "resizeHandle": { "type": "string" },
-        "loadingMore": { "type": "string" },
-        "searchInput": { "type": "string" }
+        "container": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "headerRow": {
+          "type": "string"
+        },
+        "headerCell": {
+          "type": "string"
+        },
+        "headerCellHover": {
+          "type": "string"
+        },
+        "headerCellContent": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "row": {
+          "type": "string"
+        },
+        "cell": {
+          "type": "string"
+        },
+        "selectedRow": {
+          "type": "string"
+        },
+        "pinnedContainer": {
+          "type": "string"
+        },
+        "pinnedTable": {
+          "type": "string"
+        },
+        "unpinnedContainer": {
+          "type": "string"
+        },
+        "unpinnedTable": {
+          "type": "string"
+        },
+        "empty": {
+          "type": "string"
+        },
+        "pinIcon": {
+          "type": "string"
+        },
+        "pinIconHover": {
+          "type": "string"
+        },
+        "pinnedPinIcon": {
+          "type": "string"
+        },
+        "pinnedPinIconHover": {
+          "type": "string"
+        },
+        "pinButton": {
+          "type": "string"
+        },
+        "pinnedPinButton": {
+          "type": "string"
+        },
+        "shimmer": {
+          "type": "string"
+        },
+        "shimmerRow": {
+          "type": "string"
+        },
+        "shimmerCell": {
+          "type": "string"
+        },
+        "shimmerBar": {
+          "type": "string"
+        },
+        "checkbox": {
+          "type": "string"
+        },
+        "checkboxCell": {
+          "type": "string"
+        },
+        "sortIcon": {
+          "type": "string"
+        },
+        "filterInput": {
+          "type": "string"
+        },
+        "filterIcon": {
+          "type": "string"
+        },
+        "filterDropdown": {
+          "type": "string"
+        },
+        "expandIcon": {
+          "type": "string"
+        },
+        "expandedRow": {
+          "type": "string"
+        },
+        "pinnedRightContainer": {
+          "type": "string"
+        },
+        "pinnedRightTable": {
+          "type": "string"
+        },
+        "editInput": {
+          "type": "string"
+        },
+        "dragHandle": {
+          "type": "string"
+        },
+        "footer": {
+          "type": "string"
+        },
+        "searchBar": {
+          "type": "string"
+        },
+        "mobileCard": {
+          "type": "string"
+        },
+        "groupHeader": {
+          "type": "string"
+        },
+        "resizeHandle": {
+          "type": "string"
+        },
+        "loadingMore": {
+          "type": "string"
+        },
+        "searchInput": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "style": {
       "type": "object",
@@ -191,7 +307,8 @@
     },
     "shimmerRowCount": {
       "type": "number",
-      "description": "Number of shimmer rows to display while loading."
+      "description": "Number of shimmer rows to display while loading.",
+      "default": 10
     },
     "className": {
       "type": "string",
@@ -203,7 +320,8 @@
     },
     "sortable": {
       "type": "boolean",
-      "description": "Enable column sorting."
+      "description": "Enable column sorting.",
+      "default": false
     },
     "onSortingChange": {
       "type": "object",
@@ -215,17 +333,24 @@
     },
     "manualSorting": {
       "type": "boolean",
-      "description": "When true, sorting is handled server-side."
+      "description": "When true, sorting is handled server-side.",
+      "default": false
     },
     "selectionMode": {
       "type": "string",
-      "enum": ["single", "multiple", "none"],
+      "enum": [
+        "single",
+        "multiple",
+        "none"
+      ],
       "description": "Row selection mode.",
       "default": "none"
     },
     "selectedRowIds": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Array of selected row IDs (controlled)."
     },
     "onSelectionChange": {
@@ -234,7 +359,10 @@
     },
     "selectAllMode": {
       "type": "string",
-      "enum": ["page", "all"],
+      "enum": [
+        "page",
+        "all"
+      ],
       "description": "Whether select-all selects current page or all rows.",
       "default": "page"
     },
@@ -256,7 +384,8 @@
     },
     "enableColumnFilters": {
       "type": "boolean",
-      "description": "Enable per-column filtering."
+      "description": "Enable per-column filtering.",
+      "default": false
     },
     "filterableColumns": {
       "type": "object",
@@ -272,11 +401,14 @@
     },
     "expandable": {
       "type": "boolean",
-      "description": "Enable row expansion."
+      "description": "Enable row expansion.",
+      "default": false
     },
     "expandedRowIds": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Array of expanded row IDs (controlled)."
     },
     "onExpandedChange": {
@@ -293,12 +425,17 @@
     },
     "expandColumnPosition": {
       "type": "string",
-      "enum": ["left", "right"],
-      "description": "Position of the expand column."
+      "enum": [
+        "left",
+        "right"
+      ],
+      "description": "Position of the expand column.",
+      "default": "left"
     },
     "expandOnRowClick": {
       "type": "boolean",
-      "description": "Make the entire row clickable to toggle expansion."
+      "description": "Make the entire row clickable to toggle expansion.",
+      "default": false
     },
     "columnVisibility": {
       "type": "object",
@@ -310,7 +447,8 @@
     },
     "striped": {
       "type": "boolean",
-      "description": "Alternate row background colors."
+      "description": "Alternate row background colors.",
+      "default": false
     },
     "stripedClassName": {
       "type": "string",
@@ -318,26 +456,31 @@
     },
     "density": {
       "type": "string",
-      "enum": ["compact", "comfortable", "spacious"],
+      "enum": [
+        "compact",
+        "comfortable",
+        "spacious"
+      ],
       "description": "Controls cell padding density.",
       "default": "comfortable"
     },
     "pinnedRightColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs to pin to the right side."
-    },
-    "onExport": {
-      "type": "object",
-      "description": "(format: 'csv') => void — Callback triggered when export is requested."
     },
     "editable": {
       "type": "boolean",
-      "description": "Enable inline cell editing on double-click."
+      "description": "Enable inline cell editing on double-click.",
+      "default": false
     },
     "editableColumns": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs that are editable."
     },
     "onCellEdit": {
@@ -346,7 +489,8 @@
     },
     "enableColumnResizing": {
       "type": "boolean",
-      "description": "Enable column resizing via drag handles."
+      "description": "Enable column resizing via drag handles.",
+      "default": false
     },
     "columnSizing": {
       "type": "object",
@@ -358,19 +502,19 @@
     },
     "manualPagination": {
       "type": "boolean",
-      "description": "When true, pagination is handled server-side."
+      "description": "When true, pagination is handled server-side.",
+      "default": false
     },
     "manualFiltering": {
       "type": "boolean",
-      "description": "When true, filtering is handled server-side."
-    },
-    "enableColumnReordering": {
-      "type": "boolean",
-      "description": "Enable column reordering."
+      "description": "When true, filtering is handled server-side.",
+      "default": false
     },
     "columnOrder": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Controlled column order (array of column IDs)."
     },
     "onColumnOrderChange": {
@@ -379,7 +523,8 @@
     },
     "enableRowDragDrop": {
       "type": "boolean",
-      "description": "Enable row drag-and-drop reordering."
+      "description": "Enable row drag-and-drop reordering.",
+      "default": false
     },
     "onRowReorder": {
       "type": "object",
@@ -387,12 +532,17 @@
     },
     "dragColumnPosition": {
       "type": "string",
-      "enum": ["left", "right"],
-      "description": "Position of the drag handle column."
+      "enum": [
+        "left",
+        "right"
+      ],
+      "description": "Position of the drag handle column.",
+      "default": "left"
     },
     "showFooter": {
       "type": "boolean",
-      "description": "Show the table footer."
+      "description": "Show the table footer.",
+      "default": false
     },
     "footerContent": {
       "type": "object",
@@ -404,7 +554,8 @@
     },
     "enableCopyOnClick": {
       "type": "boolean",
-      "description": "Enable single-click cell copy to clipboard."
+      "description": "Enable single-click cell copy to clipboard.",
+      "default": false
     },
     "onCellCopy": {
       "type": "object",
@@ -412,7 +563,8 @@
     },
     "enableInfiniteScroll": {
       "type": "boolean",
-      "description": "Enable infinite scroll loading."
+      "description": "Enable infinite scroll loading.",
+      "default": false
     },
     "onLoadMore": {
       "type": "object",
@@ -420,11 +572,13 @@
     },
     "hasMore": {
       "type": "boolean",
-      "description": "Whether there is more data to load."
+      "description": "Whether there is more data to load.",
+      "default": false
     },
     "loadingMore": {
       "type": "boolean",
-      "description": "Whether more data is currently being loaded."
+      "description": "Whether more data is currently being loaded.",
+      "default": false
     },
     "infiniteEndContent": {
       "type": "object",
@@ -440,29 +594,34 @@
     },
     "groupBy": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Column IDs to group rows by."
     },
     "onGroupByChange": {
       "type": "object",
       "description": "(groupBy: string[]) => void — Callback when group-by columns change."
     },
-    "onSaveView": {
-      "type": "object",
-      "description": "(view: TableView) => void — Callback to save the current table view."
-    },
     "showSearch": {
       "type": "boolean",
-      "description": "Show a built-in search bar above the table."
+      "description": "Show a built-in search bar above the table.",
+      "default": false
     },
     "searchPlaceholder": {
       "type": "string",
-      "description": "Placeholder text for the search bar."
+      "description": "Placeholder text for the search bar.",
+      "default": "Search..."
     },
     "searchIconPosition": {
       "type": "string",
-      "enum": ["left", "right", "none"],
-      "description": "Position of the search icon."
+      "enum": [
+        "left",
+        "right",
+        "none"
+      ],
+      "description": "Position of the search icon.",
+      "default": "left"
     },
     "CheckboxIcon": {
       "type": "object",

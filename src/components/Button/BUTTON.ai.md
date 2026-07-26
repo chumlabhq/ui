@@ -101,44 +101,34 @@ To override structural defaults (e.g., different padding), include the override 
 
 ## All Props
 
-### Button
+<!-- generated from Button.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `as` | `"button" \| "a" \| "span"` | `"button"` | Rendered element type. |
-| `asChild` | `boolean` | `false` | Merge props onto child element via Slot. |
-| `className` | `string` | — | Visual styling classes (colors, shadows, borders). |
-| `size` | `"sm" \| "md" \| "lg"` | — | Emits `data-size` for CSS targeting. No built-in sizing. |
-| `disabled` | `boolean` | `false` | Disables interaction. |
-| `loading` | `boolean` | `false` | Shows loader, disables button. |
-| `loadingText` | `ReactNode` | — | Text shown during loading (replaces children). |
-| `loader` | `ReactNode` | — | Custom loader element (default: CircularLoader). |
-| `loaderPosition` | `"left" \| "right"` | `"right"` | Loader placement relative to content. |
-| `loaderSize` | `number` | `16` | Loader size in px. |
-| `fullWidth` | `boolean` | `false` | Stretch to container width. |
-| `startIcon` | `ReactNode` | — | Icon before label. |
-| `endIcon` | `ReactNode` | — | Icon after label. |
-| `iconAnimation` | `IconAnimation` | `"none"` | Animation type for icons. |
-| `animateOnHover` | `boolean` | `true` | `true` = hover-only, `false` = continuous. |
-| `animateIcon` | `"leading" \| "trailing" \| "both"` | `"trailing"` | Which icon(s) to animate. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Respects OS preference. |
-| `tooltip` | `ReactNode` | — | Hover tooltip content. |
-| `tooltipProps` | `ButtonTooltipProps` | — | Tooltip config (side, offset, delay, arrow). |
-| `classes` | `ButtonClasses` | — | Per-slot overrides: root, content, startIcon, endIcon, loader. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-
-**When `as="a"`:** requires `href`, supports `target`, `rel`.
-**When `as="span"`:** adds `role="button"`, `tabIndex=0`, Enter/Space keyboard handling.
-
-### ButtonGroup
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction (`aria-orientation`). |
-| `className` | `string` | — | Container styling. |
-| `children` | `ReactNode` | **required** | Button elements. |
-
----
+| `children` | object | — | React.ReactNode — Button content. |
+| `as` | `"button"` \| `"a"` \| `"span"` | `"button"` | HTML element to render as. |
+| `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
+| `disabled` | boolean | — | Disables interaction and applies disabled styling. |
+| `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
+| `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
+| `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
+| `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
+| `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
+| `loaderSize` | number | `16` | Pixel size of the loading spinner. |
+| `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
+| `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
+| `classes` | object | — | CSS class overrides for button sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
+| `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
+| `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
+| `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `tooltip` | object | — | React.ReactNode — Tooltip content shown on hover. |
+| `tooltipProps` | object | — | Configuration for tooltip positioning and appearance. |
+| `href` | string | — | Link destination (required when as='a'). |
+| `target` | string | — | Link target attribute (when as='a'). |
+| `rel` | string | — | Link rel attribute (when as='a'). |
 
 ## Ref API
 
@@ -377,21 +367,20 @@ const [saving, setSaving] = useState(false);
 | Core variants | `title="Basic Usage"` | Primary, secondary, outline, ghost |
 | All 6 variants | `title="Basic Variants"` | + danger, success |
 | Icon placement | `title="With Icons"` | startIcon, endIcon combinations |
-| Icon-only | `title="Icon Only"` | aria-label requirement |
-| Polymorphic | `title="Polymorphic"` | as="button", as="a", as="span" |
-| Hover animations | `title="Icon Animations"` | slideRight/Left/Up/Down |
-| Bounce/pulse/spin | `title="More Animation"` | animateIcon="leading" |
-| Both icons animated | `title="Animate Both"` | animateIcon="both" |
-| Always-on animation | `title="Continuous"` | animateOnHover={false} |
+| Icon-only | `title="Icon Only Buttons"` | aria-label requirement |
+| Polymorphic | `title="Polymorphic Rendering (as prop)"` | as="button", as="a", as="span" |
+| Hover animations | `title="Icon Animations (On Hover)"` | slideRight/Left/Up/Down |
+| Bounce/pulse/spin | `title="More Animation Effects"` | animateIcon="leading" |
+| Both icons animated | `title="Animate Both Icons"` | animateIcon="both" |
+| Always-on animation | `title="Continuous Animation"` | animateOnHover={false} |
 | Motion reduction | `title="Reduce Motion"` | reduceMotion prop |
 | Loading states | `title="Loading States"` | loaderPosition, loadingText |
 | Custom loader | `title="Custom Loader"` | Custom loader elements |
 | Click-to-load | `title="Interactive Loading"` | useState + async pattern |
 | Size presets | `title="Sizes"` | sm, md, lg |
-| Disabled | `title="Disabled"` | Disabled across variants |
+| Disabled | `title="Disabled State"` | Disabled across variants |
 | Full width | `title="Full Width"` | fullWidth prop |
 | Class slots | `title="Classes System"` | root, content, startIcon, endIcon |
-| Unstyled | `title="Unstyled Mode"` | unstyled=true |
 | Slot composition | `title="asChild"` | asChild with child element |
 | Tooltip | `title="Tooltip"` | tooltip + tooltipProps |
 | Tooltip sides | `title="Tooltip Positions"` | top, right, bottom, left |

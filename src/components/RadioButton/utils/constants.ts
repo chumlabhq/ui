@@ -24,8 +24,8 @@ export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
   checked: "border-cl-border-input-focus bg-cl-accent",
   unchecked: "border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated",
   icon: "",
-  error: "text-xs text-red-500 dark:text-red-400 mt-1",
-  success: "text-xs text-emerald-600 dark:text-emerald-400 mt-1",
+  error: "text-xs text-cl-error mt-1",
+  success: "text-xs text-cl-success mt-1",
 };
 
 export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> = {
@@ -44,8 +44,8 @@ export const DEFAULT_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
   root: "",
   label: "text-sm font-medium mb-2 block text-cl-text dark:text-white",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary mb-3",
-  error: "text-xs text-red-500 dark:text-red-400 mt-2",
-  success: "text-xs text-emerald-600 dark:text-emerald-400 mt-2",
+  error: "text-xs text-cl-error mt-2",
+  success: "text-xs text-cl-success mt-2",
 };
 
 export const UNSTYLED_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {

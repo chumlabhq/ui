@@ -176,7 +176,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
                 .join(" ") || undefined
             }
             aria-required={required || undefined}
-            disabled={disabled}
+            disabled={disabled || loading}
             onClick={handleToggle}
             className={cn(
               mergedClasses.tracker,

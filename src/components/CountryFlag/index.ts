@@ -19,6 +19,7 @@ export type {
   CountryFlagSize,
 } from "./utils/types";
 export {
+  CHUMLAB_FLAG_CDN,
   DEFAULT_COUNTRYFLAG_CLASSES,
   UNSTYLED_COUNTRYFLAG_CLASSES,
   DEFAULT_COUNTRYFLAG_GROUP_CLASSES,

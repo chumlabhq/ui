@@ -573,18 +573,12 @@ const RadioButtonDemo = () => {
                 <RadioButton
                   value="option-a"
                   label="Option A"
-                  classes={{
-                    ...c.radio,
-                    root: `${c.radio.root} opacity-50`,
-                  }}
+                  classes={c.radio}
                 />
                 <RadioButton
                   value="option-b"
                   label="Option B"
-                  classes={{
-                    ...c.radio,
-                    root: `${c.radio.root} opacity-50`,
-                  }}
+                  classes={c.radio}
                 />
               </RadioGroup>
             </div>
@@ -607,10 +601,7 @@ const RadioButtonDemo = () => {
                   value="disabled"
                   label="Disabled option"
                   disabled
-                  classes={{
-                    ...c.radio,
-                    root: `${c.radio.root} opacity-50`,
-                  }}
+                  classes={c.radio}
                 />
               </RadioGroup>
             </div>

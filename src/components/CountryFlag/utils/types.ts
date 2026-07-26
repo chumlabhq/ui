@@ -42,6 +42,11 @@ export interface CountryFlagProps
   fallback?: ReactNode;
   loading?: boolean;
   tooltip?: ReactNode | CountryFlagTooltipConfig;
+  /**
+   * Where to load the flag SVG from. Omit (the default) to use the flags
+   * packaged with the library - no network request is made. Set it to fetch
+   * `${basePath}/${code}.svg` from a CDN or self-hosted directory instead.
+   */
   basePath?: string;
   classes?: CountryFlagClasses;
   unstyled?: boolean;

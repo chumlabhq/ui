@@ -85,79 +85,37 @@ These props have dependencies — using them wrong causes silent bugs:
 
 ## All Props
 
-### Accordion (root)
+<!-- generated from Accordion.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` | `"single" \| "multiple"` | **required** | Single = one open at a time. Multiple = any number. |
-| `collapsible` | `boolean` | `false` | (single only) Allow closing the open item. |
-| `value` | `string \| string[]` | — | Controlled expanded value(s). |
-| `defaultValue` | `string \| string[]` | — | Uncontrolled initial value(s). |
-| `onValueChange` | `(value) => void` | — | Callback when expanded items change. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Padding and font size preset. |
-| `variant` | `"default" \| "bordered" \| "separated" \| "flush"` | `"default"` | Visual style. |
-| `disabled` | `boolean` | `false` | Disable all items globally. |
-| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` | Arrow key navigation direction. |
-| `dir` | `"ltr" \| "rtl"` | `"ltr"` | Text direction (affects horizontal arrow keys). |
-| `loop` | `boolean` | `true` | Wrap keyboard focus from last to first. |
-| `headingLevel` | `1-6` | `3` | HTML heading level wrapping triggers. |
-| `animationDuration` | `number` | `300` | Expand/collapse animation in ms. |
-| `animationEasing` | `string` | `"ease-in-out"` | CSS easing function. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | `"auto"` respects OS setting. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `classes` | `AccordionClasses` | — | Override classes per slot (see Classes section). |
-| `maxExpanded` | `number` | — | (multiple only) Max simultaneously open items. |
-| `defaultExpandAll` | `boolean` | `false` | (multiple, uncontrolled only) Open all on mount. |
-| `storageKey` | `string \| StorageConfig` | — | Persist state to localStorage (uncontrolled only). |
-| `expandOnPrint` | `boolean` | `false` | Force-expand all when printing. |
-| `announceExpanded` | `boolean` | `false` | aria-live announcements on toggle. |
-| `preventClose` | `(value: string) => boolean \| Promise<boolean>` | — | Conditionally prevent closing. |
-| `onExpandedChange` | `(event) => void` | — | Detailed expand/collapse event callback. |
-| `asChild` | `boolean` | `false` | Render as child element (polymorphic). |
-
-### AccordionItem
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | **required** | Unique identifier. |
-| `disabled` | `boolean` | `false` | Disable this item. |
-| `onExpandedChange` | `(isExpanded: boolean) => void` | — | Per-item toggle callback. |
-
-### AccordionTrigger
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `iconPosition` | `"left" \| "right" \| "none"` | `"right"` | Where the chevron icon appears. |
-| `iconAnimation` | `"rotate" \| "switch" \| "none"` | `"rotate"` | How the icon animates. |
-| `expandedIcon` | `ReactNode` | — | Custom icon when expanded. |
-| `collapsedIcon` | `ReactNode` | — | Custom icon when collapsed. |
-| `subtitle` | `ReactNode` | — | Secondary text below the label. |
-| `leftSlot` | `ReactNode` | — | Content to the left of the label. |
-| `rightSlot` | `ReactNode` | — | Content to the right (before icon). |
-
-### AccordionContent
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `forceMount` | `boolean` | `false` | Always render in DOM. |
-| `lazyLoad` | `boolean` | `false` | Don't render until first opened. |
-| `unmountOnClose` | `boolean` | `false` | Remove from DOM when closed. |
-| `onOpenStart` | `() => void` | — | Fires when expand animation begins. |
-| `onOpenEnd` | `() => void` | — | Fires when expand animation completes. |
-| `onCloseStart` | `() => void` | — | Fires when collapse animation begins. |
-| `onCloseEnd` | `() => void` | — | Fires when collapse animation completes. |
-
-### AccordionShimmer
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | `3` | Number of skeleton items. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Matches Accordion size. |
-| `variant` | `"default" \| "bordered" \| "separated" \| "flush"` | `"default"` | Matches Accordion variant. |
-| `animate` | `boolean` | `true` | Pulse animation. |
-| `showContent` | `boolean` | `false` | Show content placeholder lines. |
-
----
+| `type` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
+| `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
+| `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction for RTL-aware layouts. |
+| `disabled` | boolean | `false` | Disables all accordion items. |
+| `loop` | boolean | — | Whether keyboard navigation wraps from last to first item. |
+| `classes` | object | — | CSS class overrides for accordion sub-elements. |
+| `headingLevel` | `1` \| `2` \| `3` \| `4` \| `5` \| `6` | — | HTML heading level for accordion item triggers. |
+| `children` **(required)** | object | — | React.ReactNode — AccordionItem children. |
+| `asChild` | boolean | `false` | Merges accordion props onto a child element via Slot. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Preset size variant. |
+| `variant` | `"default"` \| `"bordered"` \| `"separated"` \| `"flush"` | `"default"` | Visual style variant. |
+| `animationEasing` | string | `"ease-in-out"` | CSS easing function for expand/collapse animation. |
+| `animationDuration` | number | — | Duration in milliseconds for expand/collapse animation. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
+| `expandOnPrint` | boolean | `false` | Expands all items when printing. |
+| `storageKey` | string \| object | — | Key or config for persisting expanded state to storage. |
+| `onExpandedChange` | object | — | (event: AccordionExpandEvent) => void |
+| `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |
+| `preventClose` | object | — | (value: string) => boolean \| Promise<boolean> |
+| `preventCloseTimeout` | number | — | Timeout in ms for the preventClose callback. |
+| `onFocusCapture` | object | — | (event: FocusEvent) => void |
+| `onBlurCapture` | object | — | (event: FocusEvent) => void |
+| `aria-busy` | boolean | — | ARIA busy state for async content. |
+| `aria-live` | `"off"` \| `"polite"` \| `"assertive"` | — | ARIA live region behavior. |
+| `announceExpanded` | boolean | — | Announces expanded state changes to screen readers. |
 
 ## Ref API (AccordionRef)
 
@@ -474,20 +432,18 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Feature | Search for | What you'll find |
 |---------|-----------|------------------|
 | Minimal example | `title="Basic Usage"` | Single collapsible, zero config |
-| Controlled state | `title="Controlled"` | `value` + `onValueChange` pattern |
-| Multiple mode | `title="Multiple Mode"` | Multiple items open, `maxExpanded` |
+| Controlled state | `title="Controlled Mode (Single)"` | `value` + `onValueChange` pattern |
+| Multiple mode | `title="Max Expanded (Multiple Mode)"` | Multiple items open, `maxExpanded` |
 | Visual variants | `title="Variants"` | default, bordered, separated, flush |
 | Size presets | `title="Sizes"` | sm, md, lg side by side |
 | Custom icons | `title="Custom Icons"` | `expandedIcon`, `collapsedIcon`, `iconPosition`, `iconAnimation` |
 | Trigger slots | `title="Subtitles & Slots"` | `leftSlot`, `rightSlot`, `subtitle` |
 | Disabled states | `title="Disabled"` | Per-item and global disabled |
-| Imperative API | `title="Ref API"` | `expandAll`, `collapseAll`, `toggle`, `focusItem` |
-| Animation config | `title="Animation"` | Custom duration, easing, lifecycle callbacks |
-| Accessibility | `title="Screen Reader"` | `announceExpanded`, `headingLevel` |
-| Content rendering | `title="Lazy Load"` | `lazyLoad`, `forceMount`, `unmountOnClose` |
-| Loading skeleton | `title="Shimmer"` | `AccordionShimmer` component |
-| No default styles | `title="Unstyled Mode"` | `unstyled` with bare HTML output |
-| Style overrides | `title="Classes System"` | Per-slot class customization |
+| Imperative API | `title="Imperative Ref API"` | `expandAll`, `collapseAll`, `toggle`, `focusItem` |
+| Animation config | `title="Animation Customization"` | Custom duration, easing, lifecycle callbacks |
+| Accessibility | `title="Screen Reader Announcements"` | `announceExpanded`, `headingLevel` |
+| Content rendering | `title="Lazy Loading & Unmount on Close"` | `lazyLoad`, `forceMount`, `unmountOnClose` |
+| Loading skeleton | `title="Shimmer Options"` | `AccordionShimmer` component |
 
 **Source files:**
 

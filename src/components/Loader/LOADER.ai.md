@@ -33,18 +33,57 @@ export default function Example() {
 
 ---
 
-## All Props (shared across variants)
+## All Props
+
+<!-- generated from Loader.schema.json — edit the schema, not this table -->
+
+### CircularLoader
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `number` | `24` (Circular), `4` (Linear height), varies | Size in pixels |
-| `color` | `string` | `"currentColor"` | Stroke/fill color |
-| `speed` | `number` | `1` | Animation speed multiplier |
-| `className` | `string` | — | Additional CSS classes |
-| `classes` | `*LoaderClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove default styles |
+| `size` | number | `20` | Width and height in pixels. |
+| `thickness` | number | `2` | Stroke width of track and arc. |
+| `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
+| `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
 
----
+### LinearLoader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `height` | number | `4` | Height of the bar in pixels. |
+| `width` | string \| number | `"100%"` | Width of the bar (CSS value). |
+| `speed` | number | `1.5` | Animation duration in seconds. |
+| `trackColor` | string | — | Background track color. |
+| `borderRadius` | number | `9999` | Border radius in pixels. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
+
+### DotLoader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `dotSize` | number | `8` | Diameter of each dot in pixels. |
+| `gap` | number | `4` | Gap between dots in pixels. |
+| `count` | number | `3` | Number of dots. |
+| `speed` | number | `1.4` | Full animation cycle duration in seconds. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
+
+### PulseLoader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | number | `40` | Diameter of the circle in pixels. |
+| `speed` | number | `1.5` | Animation duration in seconds. |
+| `rings` | number | `2` | Number of ripple rings. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
 
 ## Styling Guide
 
@@ -67,9 +106,9 @@ Each variant has its own class slots. Circular: `root`, `svg`, `track`, `indicat
 | Feature | Search for |
 |---------|-----------|
 | All variants | `title="Basic Usage"` |
-| Sizes | `title="Sizes"` |
-| Colors | `title="Colors"` |
-| Speed | `title="Speed"` |
+| Sizes | `title="Circular — Sizes"` |
+| Colors | `title="Circular — Colors"` |
+| Speed | `title="Circular — Speed"` |
 
 | File | Contains |
 |------|----------|

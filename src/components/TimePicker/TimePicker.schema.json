@@ -5,11 +5,17 @@
   "type": "object",
   "properties": {
     "value": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Current time value (e.g. '14:30' or '2:30 PM')."
     },
     "defaultValue": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Default time value for uncontrolled usage."
     },
     "onValueChange": {
@@ -22,13 +28,17 @@
     },
     "format": {
       "type": "string",
-      "enum": ["12h", "24h"],
+      "enum": [
+        "12h",
+        "24h"
+      ],
       "description": "Time display format.",
       "default": "24h"
     },
     "minuteStep": {
       "type": "number",
-      "description": "Minute interval for dropdown options and clock snapping. Clamped to 1-60."
+      "description": "Minute interval for dropdown options and clock snapping. Clamped to 1-60.",
+      "default": 15
     },
     "minTime": {
       "type": "string",
@@ -48,11 +58,13 @@
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables the component."
+      "description": "Disables the component.",
+      "default": false
     },
     "error": {
       "type": "boolean",
-      "description": "Marks the component as having an error."
+      "description": "Marks the component as having an error.",
+      "default": false
     },
     "errorMessage": {
       "type": "object",
@@ -80,7 +92,8 @@
     },
     "required": {
       "type": "boolean",
-      "description": "Shows a required indicator on the label."
+      "description": "Shows a required indicator on the label.",
+      "default": false
     },
     "showEndIcon": {
       "type": "boolean",
@@ -106,11 +119,15 @@
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Expand the picker to fill its parent container."
+      "description": "Expand the picker to fill its parent container.",
+      "default": false
     },
     "variant": {
       "type": "string",
-      "enum": ["dropdown", "clock"],
+      "enum": [
+        "dropdown",
+        "clock"
+      ],
       "description": "Visual variant: dropdown list or analog clock face.",
       "default": "dropdown"
     },
@@ -129,7 +146,8 @@
     },
     "defaultOpen": {
       "type": "boolean",
-      "description": "Default open state (uncontrolled)."
+      "description": "Default open state (uncontrolled).",
+      "default": false
     },
     "onOpenChange": {
       "type": "object",
@@ -142,13 +160,17 @@
     },
     "dropdownPosition": {
       "type": "string",
-      "enum": ["top", "bottom"],
+      "enum": [
+        "top",
+        "bottom"
+      ],
       "description": "Position of the dropdown relative to the trigger.",
       "default": "bottom"
     },
     "forceDropdownPosition": {
       "type": "boolean",
-      "description": "When true, locks the dropdown to the specified position without auto-flipping."
+      "description": "When true, locks the dropdown to the specified position without auto-flipping.",
+      "default": false
     },
     "dropdownZIndex": {
       "type": "number",
@@ -173,56 +195,139 @@
       "type": "object",
       "description": "CSS class overrides for all sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "label": { "type": "string" },
-        "wrapper": { "type": "string" },
-        "trigger": { "type": "string" },
-        "input": { "type": "string" },
-        "endIcon": { "type": "string" },
-        "clearIcon": { "type": "string" },
-        "dropdown": { "type": "string" },
-        "optionList": { "type": "string" },
-        "option": { "type": "string" },
-        "optionSelected": { "type": "string" },
-        "optionFocused": { "type": "string" },
-        "selectedIcon": { "type": "string" },
-        "noResults": { "type": "string" },
-        "error": { "type": "string" },
-        "description": { "type": "string" },
-        "success": { "type": "string" },
-        "clockContainer": { "type": "string" },
-        "clockDisplay": { "type": "string" },
-        "clockDisplayHours": { "type": "string" },
-        "clockDisplayMinutes": { "type": "string" },
-        "clockDisplayActive": { "type": "string" },
-        "clockDisplaySeparator": { "type": "string" },
-        "clockFace": { "type": "string" },
-        "clockHand": { "type": "string" },
-        "clockHandLine": { "type": "string" },
-        "clockHandDot": { "type": "string" },
-        "clockNumber": { "type": "string" },
-        "clockNumberSelected": { "type": "string" },
-        "clockNumberInner": { "type": "string" },
-        "clockNumberDisabled": { "type": "string" },
-        "clockCenter": { "type": "string" },
-        "clockActions": { "type": "string" },
-        "clockCancelButton": { "type": "string" },
-        "clockOkButton": { "type": "string" },
-        "clockPeriodToggle": { "type": "string" },
-        "clockPeriodButton": { "type": "string" },
-        "clockPeriodActive": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "wrapper": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "input": {
+          "type": "string"
+        },
+        "endIcon": {
+          "type": "string"
+        },
+        "clearIcon": {
+          "type": "string"
+        },
+        "dropdown": {
+          "type": "string"
+        },
+        "optionList": {
+          "type": "string"
+        },
+        "option": {
+          "type": "string"
+        },
+        "optionSelected": {
+          "type": "string"
+        },
+        "optionFocused": {
+          "type": "string"
+        },
+        "selectedIcon": {
+          "type": "string"
+        },
+        "noResults": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "success": {
+          "type": "string"
+        },
+        "clockContainer": {
+          "type": "string"
+        },
+        "clockDisplay": {
+          "type": "string"
+        },
+        "clockDisplayHours": {
+          "type": "string"
+        },
+        "clockDisplayMinutes": {
+          "type": "string"
+        },
+        "clockDisplayActive": {
+          "type": "string"
+        },
+        "clockDisplaySeparator": {
+          "type": "string"
+        },
+        "clockFace": {
+          "type": "string"
+        },
+        "clockHand": {
+          "type": "string"
+        },
+        "clockHandLine": {
+          "type": "string"
+        },
+        "clockHandDot": {
+          "type": "string"
+        },
+        "clockNumber": {
+          "type": "string"
+        },
+        "clockNumberSelected": {
+          "type": "string"
+        },
+        "clockNumberInner": {
+          "type": "string"
+        },
+        "clockNumberDisabled": {
+          "type": "string"
+        },
+        "clockCenter": {
+          "type": "string"
+        },
+        "clockActions": {
+          "type": "string"
+        },
+        "clockCancelButton": {
+          "type": "string"
+        },
+        "clockOkButton": {
+          "type": "string"
+        },
+        "clockPeriodToggle": {
+          "type": "string"
+        },
+        "clockPeriodButton": {
+          "type": "string"
+        },
+        "clockPeriodActive": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Omits built-in layout helpers so layout comes entirely from classes."
+      "description": "Omits built-in layout helpers so layout comes entirely from classes.",
+      "default": false
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
-      "description": "Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting."
+      "description": "Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting.",
+      "default": false
     },
     "onCancel": {
       "type": "object",

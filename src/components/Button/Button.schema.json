@@ -10,17 +10,26 @@
     },
     "as": {
       "type": "string",
-      "enum": ["button", "a", "span"],
+      "enum": [
+        "button",
+        "a",
+        "span"
+      ],
       "description": "HTML element to render as.",
       "default": "button"
     },
     "asChild": {
       "type": "boolean",
-      "description": "Merges button props onto a child element via Slot."
+      "description": "Merges button props onto a child element via Slot.",
+      "default": false
     },
     "size": {
       "type": "string",
-      "enum": ["sm", "md", "lg"],
+      "enum": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "description": "Emits data-size attribute for CSS targeting. No built-in sizing."
     },
     "disabled": {
@@ -37,7 +46,8 @@
     },
     "loading": {
       "type": "boolean",
-      "description": "Shows a loading spinner and disables interaction."
+      "description": "Shows a loading spinner and disables interaction.",
+      "default": false
     },
     "loadingText": {
       "type": "object",
@@ -45,12 +55,17 @@
     },
     "loaderPosition": {
       "type": "string",
-      "enum": ["left", "right"],
-      "description": "Which side of the label the loader appears on."
+      "enum": [
+        "left",
+        "right"
+      ],
+      "description": "Which side of the label the loader appears on.",
+      "default": "right"
     },
     "loaderSize": {
       "type": "number",
-      "description": "Pixel size of the loading spinner."
+      "description": "Pixel size of the loading spinner.",
+      "default": 16
     },
     "loader": {
       "type": "object",
@@ -58,27 +73,49 @@
     },
     "fullWidth": {
       "type": "boolean",
-      "description": "Stretches the button to fill its container width."
+      "description": "Stretches the button to fill its container width.",
+      "default": false
     },
     "classes": {
       "type": "object",
       "description": "CSS class overrides for button sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "content": { "type": "string" },
-        "startIcon": { "type": "string" },
-        "endIcon": { "type": "string" },
-        "loader": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "startIcon": {
+          "type": "string"
+        },
+        "endIcon": {
+          "type": "string"
+        },
+        "loader": {
+          "type": "string"
+        }
       }
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling, rendering a plain element."
+      "description": "Removes all default styling, rendering a plain element.",
+      "default": false
     },
     "iconAnimation": {
       "type": "string",
-      "enum": ["none", "slideRight", "slideLeft", "slideUp", "slideDown", "bounce", "pulse", "spin"],
-      "description": "Animation applied to icons on hover."
+      "enum": [
+        "none",
+        "slideRight",
+        "slideLeft",
+        "slideUp",
+        "slideDown",
+        "bounce",
+        "pulse",
+        "spin"
+      ],
+      "description": "Animation applied to icons on hover.",
+      "default": "none"
     },
     "animateOnHover": {
       "type": "boolean",
@@ -87,15 +124,26 @@
     },
     "animateIcon": {
       "type": "string",
-      "enum": ["leading", "trailing", "both"],
-      "description": "Which icon(s) to animate."
+      "enum": [
+        "leading",
+        "trailing",
+        "both"
+      ],
+      "description": "Which icon(s) to animate.",
+      "default": "trailing"
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
-      "description": "Controls motion preferences. 'auto' respects OS setting."
+      "description": "Controls motion preferences. 'auto' respects OS setting.",
+      "default": "auto"
     },
     "tooltip": {
       "type": "object",
@@ -105,14 +153,49 @@
       "type": "object",
       "description": "Configuration for tooltip positioning and appearance.",
       "properties": {
-        "side": { "type": "string", "enum": ["top", "right", "bottom", "left"] },
-        "align": { "type": "string", "enum": ["start", "center", "end"] },
-        "sideOffset": { "type": "number" },
-        "maxWidth": { "oneOf": [{ "type": "string" }, { "type": "number" }] },
-        "delayDuration": { "type": "number" },
-        "showArrow": { "type": "boolean" },
-        "contentClassName": { "type": "string" },
-        "contentStyle": { "type": "object", "description": "CSSProperties" }
+        "side": {
+          "type": "string",
+          "enum": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        "sideOffset": {
+          "type": "number"
+        },
+        "maxWidth": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "delayDuration": {
+          "type": "number"
+        },
+        "showArrow": {
+          "type": "boolean"
+        },
+        "contentClassName": {
+          "type": "string"
+        },
+        "contentStyle": {
+          "type": "object",
+          "description": "CSSProperties"
+        }
       }
     },
     "href": {

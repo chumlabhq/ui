@@ -87,59 +87,59 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 
 ## All Props
 
+<!-- generated from InternationalPhoneInput.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `PhoneNumberValue` | — | Controlled phone value `{ countryCode, phoneNumber }` |
-| `defaultValue` | `PhoneNumberValue` | — | Initial value (uncontrolled) |
-| `onValueChange` | `(data: PhoneNumberData) => void` | — | Fires on every change with full validation data |
-| `onCountryChange` | `(country: CountryOption) => void` | — | Fires when country changes |
-| `defaultCountry` | `string` | `"us"` | Default country code |
-| `countries` | `CountryOption[]` | `DEFAULT_COUNTRIES` | Available countries |
-| `preferredCountries` | `string[]` | `["us","gb","ca","au"]` | Countries shown at top |
-| `label` | `ReactNode` | — | Label (auto-associated via htmlFor) |
-| `description` | `ReactNode` | — | Helper text below label |
-| `required` | `boolean` | `false` | Required field |
-| `disabled` | `boolean` | `false` | Disables input |
-| `readOnly` | `boolean` | `false` | Read-only mode |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message (`role="alert"`) |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message (`role="status"`) |
-| `placeholder` | `string` | `"Enter phone number"` | Input placeholder |
-| `fullWidth` | `boolean` | `false` | Take full container width |
-| `loading` | `boolean` | `false` | Loading state (dims wrapper) |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `onClear` | `() => void` | — | Custom clear handler |
-| `validateOnBlur` | `boolean` | `true` | Validate on blur |
-| `validationMessage` | `ReactNode` | — | Custom validation message |
-| `validate` | `(data: PhoneNumberData) => boolean \| { valid: boolean; message?: string }` | — | Authoritative custom validation; overrides built-in for emitted `isValid` and blur error |
-| `autoComplete` | `string` | `"off"` | Native input autocomplete. Defaults to `off` so browser autofill can't stuff a full international number into the national-number field; pass e.g. `tel-national` to opt back in |
-| `enablePasteDetection` | `boolean` | `false` | Auto-detect country from paste |
-| `copyFormat` | `"e164" \| "international" \| "national"` | `"e164"` | Copy format |
-| `onPasteDetected` | `(data: PasteDetectedData) => void` | — | Paste detection callback |
-| `formatPatterns` | `Record<string, PhoneFormatPattern>` | — | Custom formatting patterns |
-| `lengthRules` | `Record<string, PhoneLengthRule>` | — | Custom length validation rules |
-| `selectedIcon` | `ReactNode` | — | Custom check icon in country dropdown |
-| `flagSize` | `number` | `22` | Pixel width of the flag in trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. |
-| `renderCountryOption` | `(props: CountryOptionRenderProps) => ReactNode` | — | Custom country option renderer |
-| `renderSelectedCountry` | `(country: CountryOption) => ReactNode` | — | Custom selected country renderer |
-| `countryDropdownPlaceholder` | `string` | `"Country"` | Country dropdown trigger placeholder |
-| `countrySearchPlaceholder` | `string` | `"Search countries..."` | Search input placeholder |
-| `countryDropdownAriaLabel` | `string` | `"Select country"` | Country dropdown aria-label |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Country dropdown placement |
-| `forceDropdownPosition` | `boolean` | `false` | Lock dropdown position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap between trigger and dropdown (px) |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `lockScroll` | `boolean` | `false` | Lock body scroll while dropdown open |
-| `className` | `string` | — | Root CSS class |
-| `style` | `CSSProperties` | — | Root inline styles |
-| `classes` | `InternationalPhoneInputClasses` | — | Slot-based class overrides |
-| `unstyled` | `boolean` | `false` | Strip all default classes |
-| `name` | `string` | — | Form field name (renders hidden inputs) |
-| `id` | `string` | auto | Custom ID |
-
----
+| `value` | object | — | PhoneNumberValue - Controlled phone value with countryCode and phoneNumber fields. |
+| `defaultValue` | object | — | PhoneNumberValue - Default phone value for uncontrolled usage. |
+| `onValueChange` | object | — | (data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data. |
+| `onCountryChange` | object | — | (country: CountryOption) => void - Fires when the selected country changes. |
+| `defaultCountry` | string | — | ISO country code for the default selected country. |
+| `countries` | array | — | Custom list of country options to display. |
+| `preferredCountries` | array | — | ISO country codes to show at the top of the country list. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `label` | object | — | React.ReactNode - Label rendered above the input. |
+| `description` | object | — | React.ReactNode - Helper text displayed below the label. |
+| `loading` | boolean | `false` | When true, the input is in a loading state. |
+| `clearable` | boolean | `false` | When true, shows a clear button to reset the phone number. |
+| `onClear` | object | — | () => void - Called when the clear button is clicked. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `disabled` | boolean | `false` | Disables the input. |
+| `readOnly` | boolean | `false` | Makes the input read-only. |
+| `error` | boolean | `false` | Displays the input in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
+| `success` | boolean | `false` | Displays the input in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
+| `placeholder` | string | `"Enter phone number"` | Placeholder text for the phone number input. |
+| `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
+| `validateOnBlur` | boolean | `true` | Validates the phone number when the input loses focus. |
+| `validationMessage` | object | — | React.ReactNode - Custom validation message shown on blur validation. |
+| `validate` | object | — | (data: PhoneNumberData) => boolean \| { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators. |
+| `autoComplete` | string | — | Native input autocomplete. Defaults to "off" so browser autofill can't corrupt the national-number field; pass e.g. "tel-national" to opt in. |
+| `enablePasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
+| `copyFormat` | `"e164"` \| `"international"` \| `"national"` | `"e164"` | Format used when copying the phone number. |
+| `onPasteDetected` | object | — | (data: PasteDetectedData) => void - Fires when a phone number paste is detected. |
+| `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
+| `countrySearchPlaceholder` | string | `"Search countries..."` | Placeholder text for the country search input. |
+| `countryDropdownAriaLabel` | string | `"Select country"` | Accessible label for the country dropdown. |
+| `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected country indicator. |
+| `flagSize` | number | `22` | Pixel width of the flag rendered in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. Defaults to 22. |
+| `renderCountryOption` | object | — | (props: CountryOptionRenderProps) => ReactNode - Custom render function for country options. |
+| `renderSelectedCountry` | object | — | (country: CountryOption) => ReactNode - Custom render function for the selected country display. |
+| `formatPatterns` | object | — | Record<string, PhoneFormatPattern> - Custom phone number formatting patterns by country. |
+| `lengthRules` | object | — | Record<string, PhoneLengthRule> - Custom phone number length validation rules by country. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | — | Vertical placement of the country dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | — | Locks the country dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | — | Z-index of the country dropdown popup. |
+| `dropdownGap` | number | — | Gap in pixels between trigger and country dropdown popup. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the country dropdown. |
+| `lockScroll` | boolean | — | Locks body scroll while the country dropdown is open. |
 
 ## Ref API
 
@@ -364,7 +364,6 @@ const euCountries = [
 | Custom formatting | `title="Custom Format Patterns & Length Rules"` | formatPatterns + lengthRules |
 | Color themes | `title="Custom Color Themes"` | Purple, green, orange themes |
 | Selected icons | `title="Custom Selected Icon"` | Star, circle, dot icons |
-| Unstyled mode | `title="Unstyled Mode"` | Full unstyled |
 | Form integration | `title="Form Semantics"` | name prop + hidden inputs |
 | Ref forwarding | `title="Ref Forwarding"` | Focus, select, getValue |
 | Force position | `title="Dropdown Position"` | dropdownPosition + forceDropdownPosition |

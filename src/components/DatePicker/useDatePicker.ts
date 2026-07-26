@@ -26,6 +26,7 @@ export function useDatePicker(props: UseDatePickerProps) {
   const {
     mode,
     value,
+    defaultValue,
     onValueChange,
     minDate,
     maxDate,
@@ -44,10 +45,21 @@ export function useDatePicker(props: UseDatePickerProps) {
     onMonthChange,
   } = props;
 
+  // Selection is controllable: pass `value` to drive it externally, or omit it
+  // and the picker tracks its own selection (seeded by `defaultValue`), the
+  // same way `isOpen` works below. onValueChange still fires either way, and
+  // is invoked from the handlers so its two-argument shape is preserved.
+  const [currentValue, setCurrentValue] = useControllableState<
+    Date | DateRange | Date[] | null
+  >({
+    value,
+    defaultValue: defaultValue ?? null,
+  });
+
   // Internal typed accessors for the unified value/onValueChange
-  const singleValue = mode === "single" ? (value as Date | null | undefined) : undefined;
-  const rangeValue = mode === "range" ? (value as DateRange | null | undefined) : undefined;
-  const multipleValue = mode === "multiple" ? (value as Date[] | null | undefined) : undefined;
+  const singleValue = mode === "single" ? (currentValue as Date | null | undefined) : undefined;
+  const rangeValue = mode === "range" ? (currentValue as DateRange | null | undefined) : undefined;
+  const multipleValue = mode === "multiple" ? (currentValue as Date[] | null | undefined) : undefined;
 
   const emitSingle = mode === "single"
     ? (onValueChange as ((date: Date | null, dateValue: import("./utils/types").DateValue | null) => void) | undefined)
@@ -174,6 +186,7 @@ export function useDatePicker(props: UseDatePickerProps) {
 
       if (mode === "single") {
         const dateValue = toDateValue(normalizedDate);
+        setCurrentValue(normalizedDate);
         emitSingle?.(normalizedDate, dateValue);
         handleClose();
         return;
@@ -186,6 +199,7 @@ export function useDatePicker(props: UseDatePickerProps) {
             start: toDateValue(normalizedDate),
             end: null,
           };
+          setCurrentValue(newRange);
           emitRange?.(newRange, newRangeValue);
           setRangeSelectionState("end");
         } else {
@@ -206,6 +220,7 @@ export function useDatePicker(props: UseDatePickerProps) {
             start: toDateValue(rangeStartDate),
             end: toDateValue(rangeEndDate),
           };
+          setCurrentValue(newRange);
           emitRange?.(newRange, newRangeValue);
           setRangeSelectionState("start");
           handleClose();
@@ -227,6 +242,7 @@ export function useDatePicker(props: UseDatePickerProps) {
         }
 
         const dateValues = newDates.map(toDateValue);
+        setCurrentValue(newDates.length > 0 ? newDates : null);
         emitMultiple?.(
           newDates.length > 0 ? newDates : null,
           dateValues.length > 0 ? dateValues : null,
@@ -243,6 +259,7 @@ export function useDatePicker(props: UseDatePickerProps) {
       emitSingle,
       emitRange,
       emitMultiple,
+      setCurrentValue,
       handleClose,
     ],
   );
@@ -299,6 +316,7 @@ export function useDatePicker(props: UseDatePickerProps) {
   }, []);
 
   const handleClear = useCallback(() => {
+    setCurrentValue(null);
     if (mode === "single") {
       emitSingle?.(null, null);
     } else if (mode === "range") {
@@ -307,7 +325,7 @@ export function useDatePicker(props: UseDatePickerProps) {
     } else {
       emitMultiple?.(null, null);
     }
-  }, [mode, emitSingle, emitRange, emitMultiple]);
+  }, [mode, emitSingle, emitRange, emitMultiple, setCurrentValue]);
 
   const handleTodayClick = useCallback(() => {
     const today = startOfDay(new Date());
@@ -416,6 +434,12 @@ export function useDatePicker(props: UseDatePickerProps) {
 
   return {
     isOpen,
+    // The resolved selection — the `value` prop when controlled, the internal
+    // state otherwise. Consumers must read this rather than the raw prop.
+    currentValue,
+    // Exposed for selection paths that live outside this hook (presets); a
+    // no-op when controlled, since useControllableState defers to the prop.
+    setCurrentValue,
     displayMonth,
     calendarMonths,
     selectedDates,

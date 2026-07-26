@@ -16,17 +16,11 @@ import {
   DocEdgeCases,
   DocDoDont,
 } from "./components";
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-interface CountryApiResponse {
-  name: { common: string };
-  flags: { png: string; svg: string };
-  cca2: string;
-  capital?: string[];
-  region: string;
-  subregion?: string;
-}
+import {
+  fetchCountries,
+  fetchCountriesByRegion,
+  searchCountries,
+} from "./lib/countries";
 
 // ─── Static Data ────────────────────────────────────────────────────────────
 
@@ -89,16 +83,12 @@ const regionOptionsSingle: CascadingOption[] = [
 const loadCountriesForRegion = async (
   parent: CascadingOption,
 ): Promise<CascadingOption[]> => {
-  const response = await fetch(
-    `https://restcountries.com/v3.1/region/${parent.value.toLowerCase()}?fields=name,flags,cca2,capital,subregion`,
-  );
-  const data: CountryApiResponse[] = await response.json();
+  const data = await fetchCountriesByRegion(parent.value);
 
   return data
-    .sort((a, b) => a.name.common.localeCompare(b.name.common))
     .map((country) => ({
-      value: country.cca2,
-      label: country.name.common,
+      value: country.code,
+      label: country.name,
       content: (
         <span className="flex items-center gap-2">
           {/* Build the flag URL from our own S3 bucket using the ISO
@@ -108,11 +98,11 @@ const loadCountriesForRegion = async (
               for other politically-contested codes — using our bucket
               keeps the flag set consistent with the rest of the UI. */}
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
-          <span className="truncate">{country.name.common}</span>
+          <span className="truncate">{country.name}</span>
         </span>
       ),
     }));
@@ -348,11 +338,7 @@ const searchableCategoryOptions: CascadingOption[] = [
 const asyncSearchRegions = async (
   query: string,
 ): Promise<CascadingOption[]> => {
-  const response = await fetch(
-    `https://restcountries.com/v3.1/name/${encodeURIComponent(query)}?fields=name,region`,
-  );
-  if (!response.ok) return [];
-  const data: { name: { common: string }; region: string }[] = await response.json();
+  const data = await searchCountries(query);
   // Return unique regions that have matching countries
   const regionSet = new Set(data.map((c) => c.region).filter(Boolean));
   return Array.from(regionSet)
@@ -370,17 +356,13 @@ const asyncSearchCountries = async (
   query: string,
   parent: CascadingOption,
 ): Promise<CascadingOption[]> => {
-  const response = await fetch(
-    `https://restcountries.com/v3.1/region/${parent.value.toLowerCase()}?fields=name,flags,cca2`,
-  );
-  const data: CountryApiResponse[] = await response.json();
+  const data = await fetchCountriesByRegion(parent.value);
   const q = query.toLowerCase();
   return data
-    .filter((c) => c.name.common.toLowerCase().includes(q))
-    .sort((a, b) => a.name.common.localeCompare(b.name.common))
+    .filter((c) => c.name.toLowerCase().includes(q))
     .map((country) => ({
-      value: country.cca2,
-      label: country.name.common,
+      value: country.code,
+      label: country.name,
       content: (
         <span className="flex items-center gap-2">
           {/* Build the flag URL from our own S3 bucket using the ISO
@@ -390,11 +372,11 @@ const asyncSearchCountries = async (
               for other politically-contested codes — using our bucket
               keeps the flag set consistent with the rest of the UI. */}
           <img
-            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.cca2.toLowerCase()}.svg`}
-            alt={`${country.name.common} flag`}
+            src={`https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags/${country.code.toLowerCase()}.svg`}
+            alt={`${country.name} flag`}
             className="w-5 h-4 object-cover rounded-cl-sm border border-cl-border"
           />
-          <span className="truncate">{country.name.common}</span>
+          <span className="truncate">{country.name}</span>
         </span>
       ),
     }));
@@ -543,10 +525,7 @@ const CascadingDropdownDemo = () => {
 
   const fetchRegions = useCallback(async (): Promise<CascadingOption[]> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = await fetch(
-      "https://restcountries.com/v3.1/all?fields=region",
-    );
-    const data: { region: string }[] = await response.json();
+    const data = await fetchCountries();
     const uniqueRegions = [
       ...new Set(data.map((r) => r.region).filter(Boolean)),
     ].sort();

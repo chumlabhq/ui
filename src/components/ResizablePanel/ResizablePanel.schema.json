@@ -10,7 +10,8 @@
     },
     "defaultValue": {
       "type": "number",
-      "description": "Default uncontrolled size value of the panel in pixels."
+      "description": "Default uncontrolled size value of the panel in pixels.",
+      "default": 300
     },
     "onValueChange": {
       "type": "object",
@@ -26,29 +27,44 @@
     },
     "minValue": {
       "type": "number",
-      "description": "Minimum allowed size value in pixels."
+      "description": "Minimum allowed size value in pixels.",
+      "default": 200
     },
     "maxValue": {
       "type": "number",
-      "description": "Maximum allowed size value in pixels."
+      "description": "Maximum allowed size value in pixels.",
+      "default": 800
     },
     "resizeDirection": {
       "type": "string",
-      "enum": ["left", "right", "top", "bottom"],
-      "description": "Direction from which the panel can be resized."
+      "enum": [
+        "left",
+        "right",
+        "top",
+        "bottom"
+      ],
+      "description": "Direction from which the panel can be resized.",
+      "default": "right"
     },
     "step": {
       "type": "number",
-      "description": "Step increment for resize value changes."
+      "description": "Step increment for resize value changes.",
+      "default": 10
     },
     "disabled": {
       "type": "boolean",
-      "description": "Whether the resize handle is disabled."
+      "description": "Whether the resize handle is disabled.",
+      "default": false
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
       "description": "Controls motion preferences. 'auto' respects the user's OS setting."
     },
@@ -56,8 +72,12 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "handle": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "handle": {
+          "type": "string"
+        }
       }
     },
     "handleContent": {
@@ -66,7 +86,8 @@
     },
     "unstyled": {
       "type": "boolean",
-      "description": "When true, removes all default styling."
+      "description": "When true, removes all default styling.",
+      "default": false
     }
   },
   "required": []

@@ -86,46 +86,64 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 ## All Props
 
+<!-- generated from MultiSelectSearchableDropdown.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `MultiSelectOption[]` | `[]` | Available options |
-| `value` | `string[]` | — | Controlled selected values |
-| `defaultValue` | `string[]` | — | Initial values (uncontrolled) |
-| `onValueChange` | `(values, options) => void` | — | Selection change callback |
-| `placeholder` | `ReactNode` | — | Trigger placeholder |
-| `label` | `ReactNode` | — | Label |
-| `description` | `ReactNode` | — | Helper text |
-| `showSearch` | `boolean` | `true` | Show search input |
-| `searchPlaceholder` | `string` | `"Search..."` | Search input placeholder |
-| `searchInputAriaLabel` | `string` | — | Aria-label for search input |
-| `onSearch` | `(query) => Promise<Option[]>` | — | Async search function |
-| `searchDebounceMs` | `number` | `300` | Search debounce delay |
-| `initialOptions` | `MultiSelectOption[]` | `[]` | Pre-loaded options |
-| `onLoadInitialOptions` | `() => Promise<Option[]>` | — | Async initial load |
-| `loadInitialOnOpen` | `boolean` | `false` | Load on first open |
-| `loadingText` | `ReactNode` | `"Loading..."` | Loading indicator text |
-| `disabled` | `boolean` | `false` | Disable component |
-| `required` | `boolean` | `false` | Required field |
-| `error` / `errorMessage` | `boolean` / `ReactNode` | — | Error state |
-| `success` / `successMessage` | `boolean` / `ReactNode` | — | Success state |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showChevron` | `boolean` | `true` | Show chevron |
-| `showSelectedChips` | `boolean` | `true` | Chips vs count |
-| `maxDisplayedChips` | `number` | — | Max visible chips |
-| `checkboxIcon` | `ReactNode` | — | Custom checkbox icon |
-| `fullWidth` | `boolean` | `false` | Full container width |
-| `loading` | `boolean` | `false` | Loading state |
-| `lockScroll` | `boolean` | `false` | Lock body scroll |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred position |
-| `forceDropdownPosition` | `boolean` | `false` | Lock position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap (px) |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `keepMounted` | `boolean` | `false` | Keep DOM when closed |
-| `classes` | `MultiSelectSearchableDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-
----
+| `options` | array | — | List of selectable options. |
+| `value` | array | — | Controlled selected values. |
+| `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
+| `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
+| `id` | string | — | HTML id attribute for the trigger element. |
+| `name` | string | — | Form field name. |
+| `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
+| `description` | object | — | React.ReactNode - Description text rendered below the label. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
+| `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search input. |
+| `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options match the search. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
+| `clearable` | boolean | `false` | Shows a clear button to deselect all values. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
+| `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
+| `loading` | boolean | — | Shows a loading state. |
+| `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. |
+| `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
+| `initialOptions` | array | — | Options to display before any search is performed. |
+| `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. |
+| `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Whether the dropdown is initially open (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
+| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
+| `renderTrigger` | object | — | (props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger. |
+| `searchInputAriaLabel` | string | `"Search options"` | Accessible label for the search input. |
 
 ## Styling Guide
 
@@ -245,8 +263,8 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 | Style variants | `title="Style Variants"` |
 | Position control | `title="Dropdown Position"` |
 | Scroll lock | `title="Scroll Lock"` |
-| Custom themes | `title="Dark Theme"`, `title="Purple Theme"` |
-| Custom checkboxes | `title="Custom Checkbox"` |
+| Custom themes | `title="Dark Theme"`, `title="Blue Theme"` |
+| Custom checkboxes | `title="Custom Checkbox - Green Rounded"` |
 | Uncontrolled | `title="Uncontrolled"` |
 | Combined | `title="Combined Features"` |
 

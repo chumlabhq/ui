@@ -234,9 +234,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       value: valueProp,
       defaultValue = 1,
       disabled,
-      label: _label,
-      error: _error,
-      errorMessage: _errorMessage,
       onRowsPerPageChange,
       showRowsPerPage = false,
       rowsPerPageLabel = "rows",
@@ -457,6 +454,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
             <button
               ref={triggerRef}
               type="button"
+              disabled={disabled}
               onClick={() => {
                 const opening = !isDropdownOpen;
                 setIsDropdownOpen(opening);
@@ -555,6 +553,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               <button
                 key={item}
                 type="button"
+                disabled={disabled}
                 onClick={() => resolvedOnPageChange?.(item)}
                 className={
                   safeCurrentPage === item

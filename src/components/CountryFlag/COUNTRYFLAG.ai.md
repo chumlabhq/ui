@@ -46,7 +46,7 @@ export default function Example() {
 |------|-----------|
 | `code` | Must be a valid two-letter ISO 3166-1 alpha-2 code (lowercase). Invalid codes show fallback. |
 | `size` | Preset string (`"xs"` to `"2xl"`) or pixel number. |
-| `basePath` | Directory containing `{code}.svg` files. Defaults to `/flags`. |
+| `basePath` | Omit to use the flags packaged with the library (no network request). Set it to load `{basePath}/{code}.svg` from a CDN or self-hosted directory instead. |
 | `tooltip` | Pass `ReactNode` for simple tooltip, or `CountryFlagTooltipConfig` object for full control. |
 
 ---
@@ -63,35 +63,48 @@ DOM nesting: `root(span) > img + fallback`
 
 ---
 
-## All Props
+## Flag assets
 
-### CountryFlagProps
+The SVGs ship inside the package. By default a `CountryFlag` makes **no network
+request** — the flag for a given code is lazily imported as its own chunk, so a
+bundle only carries the flags it actually renders, and the component works
+offline and in air-gapped installs. Nothing needs to be copied into `public/`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `code` | `string` | **required** | Two-letter ISO country code |
-| `size` | `CountryFlagSize \| number` | `"md"` | Flag size |
-| `aspectRatio` | `number` | `0.75` | Height/width ratio |
-| `alt` | `string` | code | Accessible alt text |
-| `fallback` | `ReactNode` | — | Shown on image error |
-| `loading` | `boolean` | `false` | Show shimmer instead of flag |
-| `tooltip` | `ReactNode \| CountryFlagTooltipConfig` | — | Tooltip on hover |
-| `basePath` | `string` | `"/flags"` | Directory for SVG files |
-| `classes` | `CountryFlagClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
+To serve flags yourself instead — a CDN, or a directory you control — pass
+`basePath`, which restores URL-based loading of `{basePath}/{code}.svg`:
 
-### CountryFlagGroupProps
+```tsx
+import { CountryFlag, CHUMLAB_FLAG_CDN } from "@chumlab/ui/country-flag";
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | — | Max visible flags before "+N" count |
-| `size` | `CountryFlagSize \| number` | — | Size for all children |
-| `showCountTooltip` | `boolean` | — | Tooltip on surplus count |
-| `renderSurplus` | `(count) => ReactNode` | — | Custom surplus renderer |
-| `classes` | `CountryFlagGroupClasses` | — | Per-slot class overrides |
+<CountryFlag code="in" />                        {/* packaged, no network */}
+<CountryFlag code="in" basePath="/flags" />      {/* your own directory */}
+<CountryFlag code="in" basePath={CHUMLAB_FLAG_CDN} /> {/* Chumlab's CDN */}
+```
+
+The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
+`onError` and sizing behave identically whichever you pick.
 
 ---
+
+## All Props
+
+<!-- generated from CountryFlag.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` **(required)** | string | — | ISO 3166-1 alpha-2 country code (e.g. 'US', 'GB'). |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| `"2xl"` \| number | — | Flag size as a preset or numeric pixel value. |
+| `aspectRatio` | number | — | Aspect ratio for the flag image. |
+| `alt` | string | — | Alt text for the flag image. |
+| `fallback` | object | — | React.ReactNode — Custom fallback content when the flag image fails to load. |
+| `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
+| `tooltip` | object | — | Tooltip shown on hover. Pass a ReactNode or a config object. |
+| `basePath` | string | — | Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead. |
+| `classes` | object | — | CSS class overrides for flag sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
+| `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
 ## Styling Guide
 
@@ -156,8 +169,8 @@ CountryFlag is image-based — no dark mode classes needed. Group count uses `bg
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| Flag not showing | Wrong code or missing SVG | Verify code is lowercase 2-letter ISO. Check `basePath` points to SVG directory |
-| Fallback always shows | Image 404 | Ensure `/flags/{code}.svg` exists |
+| Flag not showing | Unrecognised code | Verify code is a lowercase 2-letter ISO 3166-1 alpha-2 code |
+| Fallback always shows | `basePath` set but the file is missing | Ensure `{basePath}/{code}.svg` exists, or drop `basePath` to use the packaged flags |
 | Group count wrong | `max` not set | Pass `max` prop to CountryFlagGroup |
 | Tooltip not showing | Missing tooltip prop | Pass `tooltip="Country Name"` |
 | Classes don't merge | Expected additive | Classes REPLACE per slot |

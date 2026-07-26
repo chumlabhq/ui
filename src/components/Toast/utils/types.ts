@@ -58,12 +58,12 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
  *
  * @example
  * ```tsx
- * <ToastProvider position="top-right"><App /></ToastProvider>
+ * <ToastProvider position="bottom-right"><App /></ToastProvider>
  * ```
  */
 export interface ToastProviderProps {
   children: ReactNode;
-  /** Toast position on screen. Default: `"top-right"`. */
+  /** Toast position on screen. Default: `"bottom-right"`. */
   position?: ToastPosition;
   maxToasts?: number;
   containerClassName?: string;

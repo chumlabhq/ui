@@ -51,8 +51,8 @@ function MyComponent() {
 | Prop | Constraint |
 |------|-----------|
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
-| `position` | Set on `<ToastProvider>`. 6 options: `"top-right"` (default), `"top-left"`, `"top-center"`, `"bottom-right"`, `"bottom-left"`, `"bottom-center"` |
-| `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default varies by type. |
+| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
+| `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `content` | ReactNode that replaces the default message/description layout entirely |
 | `onDismiss` | Preferred over deprecated `onClose` |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
@@ -85,6 +85,32 @@ toast.dismissAll();
 
 ---
 
+## All Props
+
+<!-- generated from Toast.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` **(required)** | string | — | Unique identifier for the toast. |
+| `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
+| `message` | object | — | React.ReactNode — Primary message content. |
+| `description` | object | — | React.ReactNode — Secondary description text. |
+| `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
+| `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
+| `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
+| `progressColor` | string | — | Custom color for the progress bar. |
+| `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
+| `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
+| `onDismiss` | object | — | () => void — Fires when the toast is dismissed. |
+| `onClose` | object | — | () => void — Deprecated: use onDismiss instead. |
+| `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
+| `style` | object | — | Inline styles applied to the toast element. |
+| `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
+| `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `onRemove` **(required)** | object | — | (id: string) => void — Internal callback to remove the toast from the provider. |
+
 ## Styling Guide
 
 Toast supports CSS custom variables for theming:
@@ -105,10 +131,9 @@ Or use `classes` prop with 7 slots: container, content, message, description, pr
 | Description | `title="With Description"` |
 | Progress bar | `title="Progress Bar"` |
 | Custom icons | `title="Custom Icon"` |
-| Custom content | `title="Custom Content"` |
+| Custom content | `title="Custom Content (content prop)"` |
 | Positions | `title="Position"` |
-| Unstyled | `title="Unstyled Mode"` |
-| CSS variables | `title="CSS Variables"` |
+| CSS variables | `title="CSS Variables (Theming)"` |
 
 | File | Contains |
 |------|----------|

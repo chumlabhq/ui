@@ -86,50 +86,50 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 
 ## All Props
 
+<!-- generated from Modal.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | — | State change callback |
-| `defaultOpen` | `boolean` | `false` | Initial open state (uncontrolled) |
-| `children` | `ReactNode` | — | **Required.** Modal body content |
-| `title` | `ReactNode` | — | Title in header |
-| `description` | `ReactNode` | — | Description below title |
-| `icon` | `ReactNode` | — | Icon in header (requires `showIcon`) |
-| `showIcon` | `boolean` | `false` | Show header icon |
-| `showCloseButton` | `boolean` | `true` | Show close button |
-| `closeIcon` | `ReactNode` | — | Custom close icon |
-| `showHeader` | `boolean` | `true` | Render header section |
-| `showOverlay` | `boolean` | `true` | Render backdrop overlay |
-| `preventOutsideClick` | `boolean` | `false` | Prevent closing on overlay click |
-| `closeOnEscape` | `boolean` | `true` | Close on Escape key |
-| `lockScroll` | `boolean` | `true` | Lock body scroll when open |
-| `trapFocus` | `boolean` | `true` | Trap keyboard focus inside modal |
-| `restoreFocus` | `boolean` | `true` | Restore focus to trigger on close |
-| `initialFocus` | `RefObject<HTMLElement \| null>` | — | Element to focus on open |
-| `keepMounted` | `boolean` | `false` | Keep DOM mounted when closed |
-| `maxWidth` | `string \| number` | — | Max width of content |
-| `maxHeight` | `string \| number` | — | Max height of content |
-| `minWidth` | `string \| number` | — | Min width of content |
-| `minHeight` | `string \| number` | — | Min height of content |
-| `fullScreen` | `boolean` | `false` | Fill entire viewport |
-| `centered` | `boolean` | `true` | Center modal vertically |
-| `overlayColor` | `string` | `"black"` | Overlay background color |
-| `overlayOpacity` | `number` | `0.5` | Overlay opacity (0–1) |
-| `animationDuration` | `number` | `200` | Animation duration in ms |
-| `disableAnimation` | `boolean` | `false` | Disable all animations |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-| `nestingLevel` | `number` | auto | Nesting depth (auto-managed) |
-| `maxNestingLevel` | `number` | `5` | Maximum nesting depth |
-| `zIndex` | `number` | `9999+` | Custom z-index |
-| `classes` | `ModalClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all default classes |
-| `className` | `string` | — | Additional class on content |
-| `contentStyle` | `CSSProperties` | — | Inline styles on content |
-| `aria-label` | `string` | — | Accessible label |
-| `aria-labelledby` | `string` | — | ID of labelling element |
-| `aria-describedby` | `string` | — | ID of describing element |
-
----
+| `open` | boolean | — | Whether the modal is visible (controlled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Callback when the modal's open state changes. |
+| `defaultOpen` | boolean | `false` | Whether the modal is initially open (uncontrolled). |
+| `children` **(required)** | object | — | React.ReactNode - Modal body content. Use ModalHeader, ModalBody, ModalFooter for structure. |
+| `title` | object | — | React.ReactNode - Title rendered in the modal header. |
+| `description` | object | — | React.ReactNode - Description rendered below the title in the header. |
+| `icon` | object | — | React.ReactNode - Icon rendered in the modal header. |
+| `showIcon` | boolean | `false` | Whether to display the icon in the header. |
+| `showCloseButton` | boolean | `true` | Whether to display the close button. |
+| `closeIcon` | object | — | React.ReactNode - Custom close button icon. |
+| `showHeader` | boolean | `true` | Whether to render the built-in header section. |
+| `showOverlay` | boolean | `true` | Whether to render the backdrop overlay. |
+| `preventOutsideClick` | boolean | `false` | Prevents closing when clicking outside the modal content. |
+| `closeOnEscape` | boolean | `true` | Enables closing via the Escape key. |
+| `lockScroll` | boolean | `true` | Locks body scroll when the modal is open. |
+| `trapFocus` | boolean | `true` | Traps keyboard focus within the modal. |
+| `restoreFocus` | boolean | `true` | Restores focus to the previously focused element on close. |
+| `initialFocus` | object | — | RefObject<HTMLElement \| null> - Element to focus when the modal opens. |
+| `keepMounted` | boolean | `false` | Keeps the modal DOM mounted when closed. |
+| `maxWidth` | string \| number | — | Maximum width of the modal dialog. |
+| `maxHeight` | string \| number | — | Maximum height of the modal dialog. |
+| `minWidth` | string \| number | — | Minimum width of the modal dialog. |
+| `minHeight` | string \| number | — | Minimum height of the modal dialog. |
+| `fullScreen` | boolean | `false` | Expands the modal to fill the viewport. |
+| `centered` | boolean | `true` | Vertically centers the modal in the viewport. |
+| `overlayColor` | string | `"black"` | Custom overlay background color. |
+| `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
+| `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
+| `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
+| `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
+| `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
+| `zIndex` | number | — | CSS z-index for the modal layer. |
+| `classes` | object | — | CSS class overrides for modal sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling, rendering a plain dialog. |
+| `className` | string | `""` | Additional CSS class for the dialog content panel. |
+| `contentStyle` | object | — | Inline styles for the dialog content panel. |
+| `aria-label` | string | — | Accessible label for the modal dialog. |
+| `aria-labelledby` | string | — | ID of the element that labels the modal dialog. |
+| `aria-describedby` | string | — | ID of the element that describes the modal dialog. |
 
 ## Ref API
 
@@ -304,7 +304,7 @@ const emailRef = useRef<HTMLInputElement>(null);
 - Escape key closes modal (configurable via `closeOnEscape`)
 - Body scroll locked when open
 - Close button has `aria-label="Close modal"`
-- Nested modals: Escape only closes the topmost (event.stopPropagation)
+- Nested modals: Escape only closes the topmost (open modals are tracked in a stack)
 - Supports `prefers-reduced-motion` via `reduceMotion="auto"`
 
 ---
@@ -336,7 +336,6 @@ const emailRef = useRef<HTMLInputElement>(null);
 | Overlay & behavior | `title="Overlay & Behavior"` | Custom overlay, prevent close |
 | Nested modals | `title="Nested Modals"` | Two-level nesting |
 | Classes system | `title="Classes System"` | Per-slot class overrides |
-| Unstyled mode | `title="Unstyled Mode"` | Full custom styling |
 | Reduce motion | `title="Reduce Motion"` | true vs "auto" |
 | Focus trap | `title="Focus Trap"` | Enabled vs disabled |
 | Initial focus | `title="Initial Focus"` | Focus specific input |

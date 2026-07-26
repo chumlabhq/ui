@@ -72,37 +72,44 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 
 ## All Props
 
+<!-- generated from TextArea.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `ReactNode` | — | Label above the textarea |
-| `description` | `ReactNode` | — | Helper text below label |
-| `placeholder` | `string` | — | Placeholder text |
-| `rows` | `number` | — | Initial visible rows |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message text |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message text |
-| `size` | `TextAreaSize` | — | Visual size variant (data attribute only) |
-| `startIcon` | `ReactNode` | — | Icon before textarea |
-| `endIcon` | `ReactNode` | — | Icon after textarea |
-| `onStartIconClick` | `() => void` | — | Makes startIcon a button |
-| `onEndIconClick` | `() => void` | — | Makes endIcon a button |
-| `startIconLabel` | `string` | — | Aria label for clickable startIcon |
-| `endIconLabel` | `string` | — | Aria label for clickable endIcon |
-| `onValueChange` | `(value: string) => void` | — | Simple value callback |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showCount` | `boolean` | `false` | Show character count |
-| `autoResize` | `boolean` | `false` | Auto-grow with content |
-| `loading` | `boolean` | `false` | Loading state |
-| `fullWidth` | `boolean` | `false` | Full width container |
-| `classes` | `TextAreaClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `maxLength` | `number` | — | Max characters |
-| `required` | `boolean` | — | Required field |
-| `disabled` | `boolean` | — | Disabled state |
-| `readOnly` | `boolean` | — | Read-only state |
-
----
+| `label` | object | — | React.ReactNode — Label displayed above the textarea. |
+| `description` | object | — | React.ReactNode — Description text below the label. |
+| `error` | boolean | `false` | Whether the textarea is in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
+| `success` | boolean | `false` | Green success state for validated fields. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
+| `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
+| `onStartIconClick` | object | — | () => void — Makes startIcon a clickable button. |
+| `onEndIconClick` | object | — | () => void — Makes endIcon a clickable button. |
+| `startIconLabel` | string | — | Accessible label for startIcon when clickable. Required with onStartIconClick. |
+| `endIconLabel` | string | — | Accessible label for endIcon when clickable. Required with onEndIconClick. |
+| `onValueChange` | object | — | (value: string) => void — Fires with the current string value when the value changes. |
+| `clearable` | boolean | `false` | Show a built-in clear button when the textarea has a value. |
+| `onClear` | object | — | () => void — Callback when the clear button is clicked. |
+| `showCount` | boolean | `false` | Show character count (requires maxLength to be set). |
+| `autoResize` | boolean | `false` | Automatically resize height to fit content. |
+| `loading` | boolean | `false` | Whether the textarea is in a loading state. |
+| `loader` | object | — | React.ReactNode — Custom loader element. |
+| `loaderSize` | number | `16` | Size of the default CircularLoader in pixels. |
+| `fullWidth` | boolean | `false` | Whether the textarea expands to fill its parent container. |
+| `className` | string | — | CSS class for the root container element. |
+| `classes` | object | — | Slot-based class overrides for internal elements. |
+| `unstyled` | boolean | `false` | When true, all default classes are removed; only classes overrides apply. |
+| `placeholder` | string | — | Placeholder text for the textarea. |
+| `disabled` | boolean | `false` | Whether the textarea is disabled. |
+| `required` | boolean | `false` | Whether the field is required. |
+| `name` | string | — | Form field name attribute. |
+| `id` | string | — | HTML id attribute. |
+| `rows` | number | `4` | Number of visible text rows. |
+| `maxLength` | number | — | Maximum number of characters allowed. |
+| `value` | string | — | Controlled value of the textarea. |
+| `defaultValue` | string | — | Default uncontrolled value. |
 
 ## Styling Guide
 

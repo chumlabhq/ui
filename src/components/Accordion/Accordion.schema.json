@@ -28,7 +28,9 @@
           "description": "(value: string | null) => void"
         }
       },
-      "required": ["type"]
+      "required": [
+        "type"
+      ]
     },
     {
       "properties": {
@@ -43,12 +45,16 @@
         },
         "value": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Controlled list of expanded item values."
         },
         "defaultValue": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Initial expanded item values for uncontrolled usage."
         },
         "onValueChange": {
@@ -56,30 +62,42 @@
           "description": "(value: string[]) => void"
         }
       },
-      "required": ["type"]
+      "required": [
+        "type"
+      ]
     }
   ],
   "properties": {
     "type": {
       "type": "string",
-      "enum": ["single", "multiple"],
+      "enum": [
+        "single",
+        "multiple"
+      ],
       "description": "Selection mode: single or multiple expanded items."
     },
     "orientation": {
       "type": "string",
-      "enum": ["vertical", "horizontal"],
+      "enum": [
+        "vertical",
+        "horizontal"
+      ],
       "description": "Layout orientation for keyboard navigation.",
       "default": "vertical"
     },
     "dir": {
       "type": "string",
-      "enum": ["ltr", "rtl"],
+      "enum": [
+        "ltr",
+        "rtl"
+      ],
       "description": "Text direction for RTL-aware layouts.",
       "default": "ltr"
     },
     "disabled": {
       "type": "boolean",
-      "description": "Disables all accordion items."
+      "description": "Disables all accordion items.",
+      "default": false
     },
     "loop": {
       "type": "boolean",
@@ -89,24 +107,57 @@
       "type": "object",
       "description": "CSS class overrides for accordion sub-elements.",
       "properties": {
-        "root": { "type": "string" },
-        "item": { "type": "string" },
-        "trigger": { "type": "string" },
-        "triggerInner": { "type": "string" },
-        "content": { "type": "string" },
-        "contentWrapper": { "type": "string" },
-        "icon": { "type": "string" },
-        "iconWrapper": { "type": "string" },
-        "subtitle": { "type": "string" },
-        "triggerLeft": { "type": "string" },
-        "triggerRight": { "type": "string" },
-        "contentInner": { "type": "string" },
-        "heading": { "type": "string" }
+        "root": {
+          "type": "string"
+        },
+        "item": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "triggerInner": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "contentWrapper": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "iconWrapper": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "triggerLeft": {
+          "type": "string"
+        },
+        "triggerRight": {
+          "type": "string"
+        },
+        "contentInner": {
+          "type": "string"
+        },
+        "heading": {
+          "type": "string"
+        }
       }
     },
     "headingLevel": {
       "type": "integer",
-      "enum": [1, 2, 3, 4, 5, 6],
+      "enum": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
       "description": "HTML heading level for accordion item triggers."
     },
     "children": {
@@ -115,17 +166,27 @@
     },
     "asChild": {
       "type": "boolean",
-      "description": "Merges accordion props onto a child element via Slot."
+      "description": "Merges accordion props onto a child element via Slot.",
+      "default": false
     },
     "size": {
       "type": "string",
-      "enum": ["sm", "md", "lg"],
+      "enum": [
+        "sm",
+        "md",
+        "lg"
+      ],
       "description": "Preset size variant.",
       "default": "md"
     },
     "variant": {
       "type": "string",
-      "enum": ["default", "bordered", "separated", "flush"],
+      "enum": [
+        "default",
+        "bordered",
+        "separated",
+        "flush"
+      ],
       "description": "Visual style variant.",
       "default": "default"
     },
@@ -140,34 +201,52 @@
     },
     "reduceMotion": {
       "oneOf": [
-        { "type": "boolean" },
-        { "type": "string", "const": "auto" }
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "const": "auto"
+        }
       ],
-      "description": "Controls motion preferences. 'auto' respects OS setting."
+      "description": "Controls motion preferences. 'auto' respects OS setting.",
+      "default": "auto"
     },
     "unstyled": {
       "type": "boolean",
-      "description": "Removes all default styling."
+      "description": "Removes all default styling.",
+      "default": false
     },
     "defaultExpandAll": {
       "type": "boolean",
-      "description": "Expands all items on initial render."
+      "description": "Expands all items on initial render.",
+      "default": false
     },
     "expandOnPrint": {
       "type": "boolean",
-      "description": "Expands all items when printing."
+      "description": "Expands all items when printing.",
+      "default": false
     },
     "storageKey": {
       "oneOf": [
-        { "type": "string" },
+        {
+          "type": "string"
+        },
         {
           "type": "object",
           "description": "StorageConfig for persistent state.",
           "properties": {
-            "key": { "type": "string" },
-            "storage": { "type": "object", "description": "Storage interface (localStorage, sessionStorage)." }
+            "key": {
+              "type": "string"
+            },
+            "storage": {
+              "type": "object",
+              "description": "Storage interface (localStorage, sessionStorage)."
+            }
           },
-          "required": ["key"]
+          "required": [
+            "key"
+          ]
         }
       ],
       "description": "Key or config for persisting expanded state to storage."
@@ -202,7 +281,11 @@
     },
     "aria-live": {
       "type": "string",
-      "enum": ["off", "polite", "assertive"],
+      "enum": [
+        "off",
+        "polite",
+        "assertive"
+      ],
       "description": "ARIA live region behavior."
     },
     "announceExpanded": {
@@ -210,5 +293,8 @@
       "description": "Announces expanded state changes to screen readers."
     }
   },
-  "required": ["type", "children"]
+  "required": [
+    "type",
+    "children"
+  ]
 }

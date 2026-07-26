@@ -1,15 +1,15 @@
 # TabPanel
 
-> Accessible tab panel with icons, badges, tooltips, closable tabs, vertical orientation, lazy loading, and roving tabindex.
+> Accessible tab panel with icons, badges, tooltips, vertical orientation, keep-mounted panels, and roving tabindex.
 
 **Category:** Navigation
-**Keywords:** tabs, tab panel, tabbed interface, navigation tabs, tab list, tab content, closable, vertical tabs, lazy loading
+**Keywords:** tabs, tab panel, tabbed interface, navigation tabs, tab list, tab content, vertical tabs, keep mounted
 
 ---
 
 ## Quick Answer
 
-Use `<TabPanel tabs={[...]} defaultValue="home" renderContent={(tab) => ...} />` for a tabbed interface. Supports controlled/uncontrolled, icons, count badges, closable tabs, vertical orientation, manual activation, tooltips, and responsive horizontal scrolling. Works out-of-the-box with built-in Tailwind styles.
+Use `<TabPanel tabs={[...]} defaultValue="home">{(tab) => ...}</TabPanel>` for a tabbed interface — panel content is a children render function. Supports controlled/uncontrolled, icons, count badges, vertical orientation, manual activation, tooltips, and responsive horizontal scrolling. Works out-of-the-box with built-in Tailwind styles.
 
 ---
 
@@ -35,11 +35,9 @@ const tabs = [
 
 export default function Example() {
   return (
-    <TabPanel
-      tabs={tabs}
-      defaultValue="home"
-      renderContent={(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
-    />
+    <TabPanel tabs={tabs} defaultValue="home">
+      {(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
+    </TabPanel>
   );
 }
 ```
@@ -55,10 +53,8 @@ export default function Example() {
 | `defaultValue` | Uncontrolled mode — do not combine with `value`. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
 | `activationMode` | `"automatic"` (default) or `"manual"` (Enter/Space to activate). |
-| `closable` | When true, tabs show close button. Must handle `onClose`. |
-| `renderContent` | Function `(tab) => ReactNode`. Required for content rendering. |
+| `children` | Render function `(tab) => ReactNode`. This is how panel content is rendered — not a `renderContent` prop or `content` on tab objects. |
 | `renderTab` | Custom tab renderer. Receives `(props, defaultElement)`. |
-| `lazyMount` | Only mount panels on first activation. |
 | `keepMounted` | Keep panels in DOM after switching away. |
 | `forceMount` | Mount all panels regardless of active state. |
 | `unstyled` | Strips all defaults. Must provide styling via `classes`. |
@@ -77,33 +73,36 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 
 ## All Props
 
+<!-- generated from TabPanel.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tabs` | `Tab[]` | — | **Required.** Tab definitions |
-| `value` | `string` | — | Active tab (controlled) |
-| `defaultValue` | `string` | — | Initial tab (uncontrolled) |
-| `onValueChange` | `(tabId) => void` | — | Tab change callback |
-| `renderContent` | `(tab) => ReactNode` | — | Content renderer |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `activationMode` | `"automatic" \| "manual"` | `"automatic"` | Keyboard activation mode |
-| `closable` | `boolean` | `false` | Show close buttons |
-| `onClose` | `(tabId) => void` | — | Close tab callback |
-| `showTooltips` | `boolean` | `false` | Enable tooltips |
-| `tooltipDefaults` | `TooltipDefaults` | — | Default tooltip config |
-| `lazyMount` | `boolean` | `false` | Lazy-mount panels |
-| `keepMounted` | `boolean` | `false` | Keep inactive panels |
-| `forceMount` | `boolean` | `false` | Mount all panels |
-| `loop` | `boolean` | `true` | Loop keyboard navigation |
-| `disabled` | `boolean` | `false` | Disable all tabs |
-| `renderTab` | `(props, defaultEl) => ReactNode` | — | Custom tab renderer |
-| `classes` | `TabPanelClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `className` | `string` | — | Root class |
-| `aria-label` | `string` | `"Tabs"` | Tablist ARIA label |
-| `aria-labelledby` | `string` | — | External labelling element |
-| `id` | `string` | — | Root ID |
-
----
+| `tabs` **(required)** | array | — | Array of tab definitions. |
+| `id` | string | — | HTML id attribute. |
+| `value` | string | — | Controlled active tab ID. |
+| `defaultValue` | string | — | Default uncontrolled active tab ID. |
+| `onValueChange` | object | — | (tabId: string) => void — Callback fired when the active tab changes. |
+| `children` | object | — | React.ReactNode \| ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function. |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the tab list. |
+| `activationMode` | `"automatic"` \| `"manual"` | `"automatic"` | Whether tabs activate automatically on focus or require manual activation. |
+| `loop` | boolean | `true` | Whether keyboard navigation loops from last tab to first. |
+| `iconPosition` | `"left"` \| `"right"` | `"left"` | Position of tab icons relative to the label. |
+| `showZeroCount` | boolean | `false` | Whether to show a count badge when the count is zero. |
+| `alwaysShowLabels` | boolean | `true` | Whether to always show tab labels (even when icons are present). |
+| `showTooltips` | boolean | `true` | Whether to show tooltips on tabs. |
+| `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
+| `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
+| `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
+| `aria-label` | string | — | Accessible label for the tab list. |
+| `aria-labelledby` | string | — | ID of the element that labels the tab list. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `forceMount` | boolean | `false` | Force mount all tab panels regardless of active state. |
+| `keepMounted` | boolean | `false` | Keep previously mounted tab panels in the DOM. |
 
 ## Styling Guide
 
@@ -153,7 +152,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive} renderContent={...} />
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(tab) => ...}</TabPanel>
 ```
 
 ### With icons and badges
@@ -165,10 +164,10 @@ const tabs = [
 ];
 ```
 
-### Closable tabs
+### Keep panels mounted
 
 ```tsx
-<TabPanel tabs={tabs} closable onClose={(id) => setTabs(tabs.filter(t => t.id !== id))} />
+<TabPanel tabs={tabs} keepMounted>{(tab) => <Panel id={tab.id} />}</TabPanel>
 ```
 
 ### Vertical orientation
@@ -199,10 +198,8 @@ const tabs = [
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
 | Tabs overflow on mobile | Many tabs | Default includes `overflow-x-auto`; reduce tabs or use vertical |
-| Panel content not rendering | Missing `renderContent` | Provide render function |
-| Close button not showing | `closable` not set | Add `closable` prop |
+| Panel content not rendering | Missing children render function | Pass `{(tab) => ...}` as children |
 | Tab not activating on arrow key | `activationMode="manual"` | User must press Enter/Space |
-| Lazy panel not mounting | `lazyMount` enabled | Panel mounts on first activation |
 
 ---
 
@@ -216,17 +213,17 @@ const tabs = [
 | Underlined | `title="Underlined Style"` |
 | Pill style | `title="Pill Style"` |
 | Boxed style | `title="Boxed Style"` |
-| Icons left/right | `title="With Icons"` |
-| Count badges | `title="With Count Badges"` |
-| Tooltips | `title="With Tooltips"` |
+| Icons left/right | `title="With Icons (Left)"` |
+| Count badges | `title="With Count Badges (Hide Zero)"` |
+| Tooltips | `title="With Tooltips (Bottom)"` |
 | Disabled | `title="Disabled Tab"` |
 | Gradient | `title="Gradient Style"` |
 | Keyboard | `title="Keyboard Navigation"` |
-| Dynamic tabs | `title="Dynamic Tabs"` |
+| Dynamic tabs | `title="Dynamic Tabs (Add / Remove)"` |
 | Vertical | `title="Vertical Orientation"` |
 | Manual mode | `title="Manual Activation Mode"` |
-| Custom rendering | `title="Custom Tab Rendering"` |
-| Force/keep mount | `title="Force Mount"`, `title="Keep Mounted"` |
+| Custom rendering | `title="Custom Tab Rendering (renderTab)"` |
+| Force/keep mount | `title="Force Mount (All Panels)"`, `title="Keep Mounted (Lazy Persist)"` |
 | Classes | `title="classes Record"` |
 
 ### Source file index

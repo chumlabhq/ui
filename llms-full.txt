@@ -135,79 +135,37 @@ These props have dependencies — using them wrong causes silent bugs:
 
 ### All Props
 
-#### Accordion (root)
+<!-- generated from Accordion.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `type` | `"single" \| "multiple"` | **required** | Single = one open at a time. Multiple = any number. |
-| `collapsible` | `boolean` | `false` | (single only) Allow closing the open item. |
-| `value` | `string \| string[]` | — | Controlled expanded value(s). |
-| `defaultValue` | `string \| string[]` | — | Uncontrolled initial value(s). |
-| `onValueChange` | `(value) => void` | — | Callback when expanded items change. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Padding and font size preset. |
-| `variant` | `"default" \| "bordered" \| "separated" \| "flush"` | `"default"` | Visual style. |
-| `disabled` | `boolean` | `false` | Disable all items globally. |
-| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` | Arrow key navigation direction. |
-| `dir` | `"ltr" \| "rtl"` | `"ltr"` | Text direction (affects horizontal arrow keys). |
-| `loop` | `boolean` | `true` | Wrap keyboard focus from last to first. |
-| `headingLevel` | `1-6` | `3` | HTML heading level wrapping triggers. |
-| `animationDuration` | `number` | `300` | Expand/collapse animation in ms. |
-| `animationEasing` | `string` | `"ease-in-out"` | CSS easing function. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | `"auto"` respects OS setting. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `classes` | `AccordionClasses` | — | Override classes per slot (see Classes section). |
-| `maxExpanded` | `number` | — | (multiple only) Max simultaneously open items. |
-| `defaultExpandAll` | `boolean` | `false` | (multiple, uncontrolled only) Open all on mount. |
-| `storageKey` | `string \| StorageConfig` | — | Persist state to localStorage (uncontrolled only). |
-| `expandOnPrint` | `boolean` | `false` | Force-expand all when printing. |
-| `announceExpanded` | `boolean` | `false` | aria-live announcements on toggle. |
-| `preventClose` | `(value: string) => boolean \| Promise<boolean>` | — | Conditionally prevent closing. |
-| `onExpandedChange` | `(event) => void` | — | Detailed expand/collapse event callback. |
-| `asChild` | `boolean` | `false` | Render as child element (polymorphic). |
-
-#### AccordionItem
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | **required** | Unique identifier. |
-| `disabled` | `boolean` | `false` | Disable this item. |
-| `onExpandedChange` | `(isExpanded: boolean) => void` | — | Per-item toggle callback. |
-
-#### AccordionTrigger
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `iconPosition` | `"left" \| "right" \| "none"` | `"right"` | Where the chevron icon appears. |
-| `iconAnimation` | `"rotate" \| "switch" \| "none"` | `"rotate"` | How the icon animates. |
-| `expandedIcon` | `ReactNode` | — | Custom icon when expanded. |
-| `collapsedIcon` | `ReactNode` | — | Custom icon when collapsed. |
-| `subtitle` | `ReactNode` | — | Secondary text below the label. |
-| `leftSlot` | `ReactNode` | — | Content to the left of the label. |
-| `rightSlot` | `ReactNode` | — | Content to the right (before icon). |
-
-#### AccordionContent
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `forceMount` | `boolean` | `false` | Always render in DOM. |
-| `lazyLoad` | `boolean` | `false` | Don't render until first opened. |
-| `unmountOnClose` | `boolean` | `false` | Remove from DOM when closed. |
-| `onOpenStart` | `() => void` | — | Fires when expand animation begins. |
-| `onOpenEnd` | `() => void` | — | Fires when expand animation completes. |
-| `onCloseStart` | `() => void` | — | Fires when collapse animation begins. |
-| `onCloseEnd` | `() => void` | — | Fires when collapse animation completes. |
-
-#### AccordionShimmer
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | `3` | Number of skeleton items. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Matches Accordion size. |
-| `variant` | `"default" \| "bordered" \| "separated" \| "flush"` | `"default"` | Matches Accordion variant. |
-| `animate` | `boolean` | `true` | Pulse animation. |
-| `showContent` | `boolean` | `false` | Show content placeholder lines. |
-
----
+| `type` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
+| `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
+| `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction for RTL-aware layouts. |
+| `disabled` | boolean | `false` | Disables all accordion items. |
+| `loop` | boolean | — | Whether keyboard navigation wraps from last to first item. |
+| `classes` | object | — | CSS class overrides for accordion sub-elements. |
+| `headingLevel` | `1` \| `2` \| `3` \| `4` \| `5` \| `6` | — | HTML heading level for accordion item triggers. |
+| `children` **(required)** | object | — | React.ReactNode — AccordionItem children. |
+| `asChild` | boolean | `false` | Merges accordion props onto a child element via Slot. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Preset size variant. |
+| `variant` | `"default"` \| `"bordered"` \| `"separated"` \| `"flush"` | `"default"` | Visual style variant. |
+| `animationEasing` | string | `"ease-in-out"` | CSS easing function for expand/collapse animation. |
+| `animationDuration` | number | — | Duration in milliseconds for expand/collapse animation. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `defaultExpandAll` | boolean | `false` | Expands all items on initial render. |
+| `expandOnPrint` | boolean | `false` | Expands all items when printing. |
+| `storageKey` | string \| object | — | Key or config for persisting expanded state to storage. |
+| `onExpandedChange` | object | — | (event: AccordionExpandEvent) => void |
+| `onKeyDown` | object | — | (event: KeyboardEvent, itemValue: string \| null) => void |
+| `preventClose` | object | — | (value: string) => boolean \| Promise<boolean> |
+| `preventCloseTimeout` | number | — | Timeout in ms for the preventClose callback. |
+| `onFocusCapture` | object | — | (event: FocusEvent) => void |
+| `onBlurCapture` | object | — | (event: FocusEvent) => void |
+| `aria-busy` | boolean | — | ARIA busy state for async content. |
+| `aria-live` | `"off"` \| `"polite"` \| `"assertive"` | — | ARIA live region behavior. |
+| `announceExpanded` | boolean | — | Announces expanded state changes to screen readers. |
 
 ### Ref API (AccordionRef)
 
@@ -590,88 +548,31 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 
 ### All Props
 
-#### Avatar
+<!-- generated from Avatar.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `name` | `string` | — | Display name, used for initials and autoColor hash. |
-| `src` | `string` | — | Image URL. Falls back to initials on error. |
-| `alt` | `string` | — | Image alt text. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| number` | `"md"` | Preset or custom pixel size. |
-| `shape` | `"circle" \| "square" \| "rounded"` | `"circle"` | Visual shape. |
-| `maxInitials` | `number` | `2` | Max initials to display. |
-| `fallback` | `ReactNode` | — | Custom fallback content (icon, emoji, etc.). |
-| `autoColor` | `boolean` | `false` | Deterministic bg/text color from name hash. |
-| `colors` | `AvatarColors` | — | Custom color palettes for autoColor. |
-| `bordered` | `boolean \| string` | — | Border ring. `true` = auto color, string = CSS value. |
-| `status` | `AvatarStatus \| AvatarStatusConfig` | — | Presence indicator (online/offline/away/busy). |
-| `tooltip` | `ReactNode \| AvatarTooltipConfig` | — | Hover tooltip. |
-| `imageConfig` | `AvatarImageConfig` | — | Advanced img attrs (srcSet, loading, crossOrigin, etc.). |
-| `classes` | `AvatarClasses` | — | Per-slot class overrides. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `textStyle` | `CSSProperties` | — | Inline styles for initials text. |
-| `loading` | `boolean` | `false` | Show shimmer placeholder instead of content. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Disable image fade-in animation. |
-| `onLoad` | `() => void` | — | Image load success callback. |
-| `onError` | `() => void` | — | Image load error callback. |
-
-#### AvatarGroup
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | — | Max visible avatars before surplus count. |
-| `size` | `AvatarSize` | `"md"` | Inherited by all children via context. |
-| `shape` | `AvatarShape` | `"circle"` | Inherited by all children. |
-| `bordered` | `boolean \| string` | — | Inherited by all children. |
-| `spacing` | `number` | `-8` | Overlap in px (negative = overlap). |
-| `ringColor` | `string` | `"white"` | Ring color between stacked avatars. |
-| `showTooltip` | `boolean` | `false` | Show hidden names as tooltip on surplus. |
-| `total` | `number` | — | Override total count for surplus calculation. |
-| `variant` | `"stack" \| "grid" \| "inline"` | `"stack"` | Layout mode. |
-| `reverseOrder` | `boolean` | `false` | Reverse stacking z-order. |
-| `renderSurplus` | `(count: number) => ReactNode` | — | Custom surplus renderer. |
-| `onAvatarClick` | `(info, event) => void` | — | Click handler with `{ index, name }`. |
-| `dir` | `"ltr" \| "rtl"` | `"ltr"` | Text direction. |
-| `classes` | `AvatarGroupClasses` | — | Per-slot: `root`, `item`. |
-
-#### AvatarBadge
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | — | Notification count. |
-| `max` | `number` | `99` | Shows `99+` when exceeded. |
-| `showZero` | `boolean` | `false` | Show badge when count is 0. |
-| `dot` | `boolean` | `false` | Small dot instead of count. |
-| `position` | `CornerPosition` | `"top-right"` | Corner placement. |
-| `offset` | `BadgeOffset` | — | Pixel offset `{ x, y }`. |
-| `color` | `string` | — | Background color override. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg"` | `"md"` | Size preset. |
-| `variant` | `"solid" \| "outline" \| "soft"` | `"solid"` | Visual style. |
-| `pulse` | `boolean` | `false` | Pulsing animation. |
-| `invisible` | `boolean` | `false` | Hide without unmounting. |
-
-#### AvatarGroupCount (standalone)
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | **required** | Number to display. |
-| `showPlus` | `boolean` | `true` | Show `+` prefix. |
-| `format` | `(count: number) => string` | — | Custom formatter. |
-| `variant` | `"solid" \| "outline" \| "ghost"` | `"solid"` | Visual style. |
-
-#### AvatarShimmer / AvatarGroupShimmer
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | `number` | `3` | (Group only) Number of placeholders. |
-| `size` | `AvatarSize` | `"md"` | Placeholder size. |
-| `shape` | `AvatarShape` | `"circle"` | Placeholder shape. |
-| `animate` | `boolean` | `true` | Pulse animation. |
-| `showCount` | `boolean` | `false` | (Group only) Show surplus count placeholder. |
-| `ringColor` | `string` | `"white"` | (Group only) Ring color for overlap. |
-| `spacing` | `number` | `-8` | (Group only) Overlap spacing. |
-
----
+| `name` | string | — | User's display name, used for initials and accessible labels. |
+| `src` | string | — | Image URL for the avatar. Falls back to initials, then fallback content. |
+| `alt` | string | — | Alt text for the avatar image. |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Avatar size as a preset or numeric pixel value. |
+| `shape` | `"circle"` \| `"square"` \| `"rounded"` | `"circle"` | Visual shape of the avatar. |
+| `maxInitials` | number | `2` | Maximum number of initials to show. |
+| `fallback` | object | — | React.ReactNode — Custom fallback content when no image or name is available. |
+| `autoColor` | boolean | `false` | Generates a deterministic background color from the name. |
+| `colors` | object | — | Custom color palettes for auto-colored mode. |
+| `bordered` | boolean \| string | — | Adds a border ring. Pass true for default color or a CSS color string. |
+| `status` | `"online"` \| `"offline"` \| `"away"` \| `"busy"` \| object | — | Presence status indicator. Pass a string for defaults or a config object. |
+| `tooltip` | object | — | Tooltip shown on hover. Pass a string/ReactNode or a config object. |
+| `imageConfig` | object | — | Advanced image loading configuration (srcSet, loading, decoding, CORS). |
+| `classes` | object | — | CSS class overrides for avatar sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `textStyle` | object | — | CSSProperties — Inline styles for the initials text. |
+| `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `onLoad` | object | — | () => void — Fires when the avatar image finishes loading. |
+| `onError` | object | — | () => void — Fires when the avatar image fails to load. |
+| `asChild` | boolean | `false` | Merges avatar props onto the child element via Slot. |
 
 ### Styling Guide
 
@@ -943,46 +844,33 @@ This renders correctly with no additional props, classes, or setup. The last ite
 
 ### All Props
 
-#### Breadcrumb
+<!-- generated from Breadcrumb.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `BreadcrumbItem[]` | **required** | Array of breadcrumb items. |
-| `maxVisibleItems` | `number` | `4` | Max before truncation. |
-| `separator` | `ReactNode` | — | Custom separator content (e.g., `"/"`). |
-| `separatorIcon` | `ComponentType` | `ChevronRightIcon` | Separator component (used if no `separator`). |
-| `onItemClick` | `(item: BreadcrumbItem) => void` | — | Global click handler. |
-| `classes` | `BreadcrumbClasses` | — | Per-slot class overrides. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `iconSize` | `number \| string` | — | Size for separator and ellipsis icons. |
-| `showTooltips` | `boolean` | `true` | Enable tooltips globally. |
-| `tooltipPosition` | `TooltipSide` | — | Default tooltip side. |
-| `tooltipOffset` | `number` | — | Tooltip distance offset. |
-| `defaultTooltipProps` | `BreadcrumbTooltipProps` | — | Default tooltip config for all items. |
-| `ellipsisTooltip` | `ReactNode` | — | Tooltip for the ellipsis button. |
-| `ellipsisAriaLabel` | `string` | `"Show collapsed breadcrumb items"` | Aria label for ellipsis. |
-| `dropdownPosition` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | Collapsed dropdown direction. |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index. |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target for dropdown. |
-| `onDropdownOpenChange` | `(open: boolean) => void` | — | Callback when dropdown opens/closes. |
-| `aria-label` | `string` | `"Breadcrumb"` | Nav landmark label. |
-
-#### BreadcrumbItem (data shape)
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `id` | `string` | **required** | Unique identifier. |
-| `label` | `string` | **required** | Display text. |
-| `href` | `string` | — | Renders as `<a>` link. |
-| `onClick` | `() => void` | — | Per-item click (overrides global). |
-| `icon` | `ReactNode` | — | Icon element. |
-| `iconPosition` | `"left" \| "right"` | `"left"` | Icon placement. |
-| `disabled` | `boolean` | `false` | Disables interaction. |
-| `content` | `ReactNode` | — | Custom content instead of label text. |
-| `tooltip` | `ReactNode` | — | Tooltip content. |
-| `tooltipProps` | `BreadcrumbTooltipProps` | — | Per-item tooltip config. |
-
----
+| `items` **(required)** | array | — | List of breadcrumb items to render. |
+| `maxVisibleItems` | number | `4` | Maximum visible items before collapsing into an ellipsis dropdown. |
+| `separator` | object | — | React.ReactNode — Custom separator between breadcrumb items. |
+| `onItemClick` | object | — | (item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked. |
+| `aria-label` | string | — | Accessible label for the breadcrumb nav element. |
+| `classes` | object | — | CSS class overrides for breadcrumb sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | CSSProperties — Inline styles for the root element. |
+| `separatorIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom separator icon component. |
+| `ellipsisIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> — Custom ellipsis icon component. |
+| `iconSize` | number \| string | `16` | Size of breadcrumb icons. |
+| `showTooltips` | boolean | `true` | Enables tooltips on breadcrumb items. |
+| `tooltipPosition` | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | `"bottom"` | Default tooltip position for all items. |
+| `tooltipOffset` | number | `4` | Default tooltip offset in pixels. |
+| `defaultTooltipProps` | object | — | Default tooltip configuration for all items. |
+| `ellipsisTooltip` | object | — | React.ReactNode — Tooltip content for the ellipsis button. |
+| `ellipsisTooltipProps` | object | — | Tooltip configuration for the ellipsis button. |
+| `dropdownPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"top"` | Position of the overflow dropdown. |
+| `dropdownZIndex` | number | `50` | Z-index of the overflow dropdown. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
+| `ellipsisAriaLabel` | string | `"Show collapsed breadcrumb items"` | Accessible label for the ellipsis button. |
+| `onDropdownOpenChange` | object | — | (open: boolean) => void — Called when the dropdown open state changes. |
 
 ### Ref API
 
@@ -1246,44 +1134,34 @@ To override structural defaults (e.g., different padding), include the override 
 
 ### All Props
 
-#### Button
+<!-- generated from Button.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `as` | `"button" \| "a" \| "span"` | `"button"` | Rendered element type. |
-| `asChild` | `boolean` | `false` | Merge props onto child element via Slot. |
-| `className` | `string` | — | Visual styling classes (colors, shadows, borders). |
-| `size` | `"sm" \| "md" \| "lg"` | — | Emits `data-size` for CSS targeting. No built-in sizing. |
-| `disabled` | `boolean` | `false` | Disables interaction. |
-| `loading` | `boolean` | `false` | Shows loader, disables button. |
-| `loadingText` | `ReactNode` | — | Text shown during loading (replaces children). |
-| `loader` | `ReactNode` | — | Custom loader element (default: CircularLoader). |
-| `loaderPosition` | `"left" \| "right"` | `"right"` | Loader placement relative to content. |
-| `loaderSize` | `number` | `16` | Loader size in px. |
-| `fullWidth` | `boolean` | `false` | Stretch to container width. |
-| `startIcon` | `ReactNode` | — | Icon before label. |
-| `endIcon` | `ReactNode` | — | Icon after label. |
-| `iconAnimation` | `IconAnimation` | `"none"` | Animation type for icons. |
-| `animateOnHover` | `boolean` | `true` | `true` = hover-only, `false` = continuous. |
-| `animateIcon` | `"leading" \| "trailing" \| "both"` | `"trailing"` | Which icon(s) to animate. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Respects OS preference. |
-| `tooltip` | `ReactNode` | — | Hover tooltip content. |
-| `tooltipProps` | `ButtonTooltipProps` | — | Tooltip config (side, offset, delay, arrow). |
-| `classes` | `ButtonClasses` | — | Per-slot overrides: root, content, startIcon, endIcon, loader. |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-
-**When `as="a"`:** requires `href`, supports `target`, `rel`.
-**When `as="span"`:** adds `role="button"`, `tabIndex=0`, Enter/Space keyboard handling.
-
-#### ButtonGroup
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction (`aria-orientation`). |
-| `className` | `string` | — | Container styling. |
-| `children` | `ReactNode` | **required** | Button elements. |
-
----
+| `children` | object | — | React.ReactNode — Button content. |
+| `as` | `"button"` \| `"a"` \| `"span"` | `"button"` | HTML element to render as. |
+| `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
+| `disabled` | boolean | — | Disables interaction and applies disabled styling. |
+| `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
+| `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
+| `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
+| `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
+| `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
+| `loaderSize` | number | `16` | Pixel size of the loading spinner. |
+| `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
+| `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
+| `classes` | object | — | CSS class overrides for button sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
+| `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
+| `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
+| `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `tooltip` | object | — | React.ReactNode — Tooltip content shown on hover. |
+| `tooltipProps` | object | — | Configuration for tooltip positioning and appearance. |
+| `href` | string | — | Link destination (required when as='a'). |
+| `target` | string | — | Link target attribute (when as='a'). |
+| `rel` | string | — | Link rel attribute (when as='a'). |
 
 ### Ref API
 
@@ -1581,67 +1459,68 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 ### All Props
 
-#### CascadingDropdownProps
+<!-- generated from CascadingDropdown.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `CascadingOption[]` | **required** | Array of top-level menu items with optional `children` |
-| `value` | `CascadingValue` | — | Controlled value: `{ parentValue: "child" \| string[] }` |
-| `defaultValue` | `CascadingValue` | — | Uncontrolled initial value |
-| `onValueChange` | `(value, path) => void` | — | Called when selection changes |
-| `onLoadChildren` | `(parent) => Promise<CascadingOption[]>` | — | Async loader for children on hover |
-| `onLoadError` | `(error) => void` | — | Called when async child loading fails |
-| `open` | `boolean` | — | Controlled open state |
-| `defaultOpen` | `boolean` | — | Uncontrolled initial open state |
-| `onOpenChange` | `(open) => void` | — | Called when dropdown opens/closes |
-| `placeholder` | `ReactNode` | — | Trigger placeholder text |
-| `disabled` | `boolean` | `false` | Disables the dropdown |
-| `error` | `boolean` | `false` | Shows error state |
-| `errorMessage` | `ReactNode` | — | Error message below trigger |
-| `label` | `ReactNode` | — | Label above trigger |
-| `description` | `ReactNode` | — | Description text above trigger |
-| `success` | `boolean` | `false` | Shows success state |
-| `successMessage` | `ReactNode` | — | Success message below trigger |
-| `required` | `boolean` | `false` | Marks as required |
-| `clearable` | `boolean` | `false` | Shows clear button |
-| `showChevron` | `boolean` | `true` | Shows chevron on trigger |
-| `submenuPosition` | `"right" \| "left"` | `"right"` | Submenu opens to right or left |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Dropdown opens above or below |
-| `closeOnSelect` | `boolean` | `true` | Close on selection |
-| `lockScroll` | `boolean` | `false` | Prevent page scroll when open |
-| `fullWidth` | `boolean` | `false` | Trigger takes full width |
-| `classes` | `CascadingDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `showMenuSearch` | `boolean` | `false` | Show search input in menu |
-| `showSubmenuSearch` | `boolean` | `false` | Show search input in submenus |
-| `onMenuSearch` | `(query) => Promise<CascadingOption[]>` | — | Async menu search callback |
-| `onSubmenuSearch` | `(query, parent) => Promise<CascadingOption[]>` | — | Async submenu search callback |
-| `searchDebounceMs` | `number` | `300` | Debounce delay for async search |
-| `menuSearchPlaceholder` | `string` | — | Menu search placeholder |
-| `submenuSearchPlaceholder` | `string` | — | Submenu search placeholder |
-| `SearchIcon` | `ComponentType` | Built-in magnifier | Custom search icon |
-| `ClearIcon` | `ComponentType` | Built-in X | Custom clear icon |
-| `renderTrigger` | `(props) => ReactNode` | — | Custom trigger render function |
-| `shimmerCount` | `number` | `5` | Number of shimmer items during loading (max 50) |
-| `keepMounted` | `boolean` | `false` | Keep portal in DOM when closed |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal render target |
-| `dropdownZIndex` | `number` | — | z-index for dropdown portal |
-| `dropdownGap` | `number` | — | Gap between trigger and dropdown |
-
-#### CascadingOption
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | **required** | Unique value identifier |
-| `label` | `string` | **required** | Display text |
-| `content` | `ReactNode` | — | Custom render for menu item |
-| `selectedContent` | `ReactNode` | — | Custom render when selected (in trigger) |
-| `disabled` | `boolean` | `false` | Disable this option |
-| `children` | `CascadingOption[]` | — | Nested submenu options |
-| `selectionMode` | `"single" \| "multi"` | `"single"` | Selection mode for this item's children |
-| `hasChildren` | `boolean` | — | Hint for async: shows chevron, triggers onLoadChildren |
-
----
+| `options` **(required)** | array | — | Top-level options for the dropdown. |
+| `value` | object | — | Controlled selection value as { [parentValue]: string \| string[] }. |
+| `defaultValue` | object | — | Initial selection value for uncontrolled usage. |
+| `onValueChange` | object | — | (value: CascadingValue, path: CascadingOption[]) => void |
+| `onLoadChildren` | object | — | (parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader. |
+| `onLoadError` | object | — | (error: unknown) => void — Called when async child loading fails. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `onOpenChange` | object | — | (open: boolean) => void |
+| `onBlur` | object | — | () => void |
+| `onFocus` | object | — | () => void |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content when no value is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message. |
+| `label` | object | — | React.ReactNode — Label above the trigger. |
+| `description` | object | — | React.ReactNode — Description text. |
+| `success` | boolean | `false` | Displays success state. |
+| `successMessage` | object | — | React.ReactNode — Success message. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during async loading. |
+| `shimmerCount` | number | — | Number of shimmer placeholders during loading. |
+| `loading` | boolean | — | Shows loading state. |
+| `clearable` | boolean | `false` | Shows a clear button to reset the selection. |
+| `showChevron` | boolean | `true` | Shows a chevron indicator on the trigger. |
+| `showSelectedIcon` | boolean | `true` | Shows an icon on selected items. |
+| `selectedIcon` | object | — | React.ReactNode — Custom icon for selected items. |
+| `checkboxIcon` | object | — | React.ReactNode — Custom checkbox icon for multi-select. |
+| `fullWidth` | boolean | `false` | Stretches the dropdown to fill its container width. |
+| `submenuPosition` | `"right"` \| `"left"` | `"right"` | Horizontal position of submenus. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical position of the dropdown. |
+| `closeOnSelect` | boolean | `true` | Closes the dropdown after an item is selected. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `lockScroll` | boolean | `false` | Locks body scroll when the dropdown is open. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the dropdown. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
+| `keepMounted` | boolean | `false` | Keep the dropdown DOM mounted when closed. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | CSSProperties — Inline styles. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> — Custom clear icon component. |
+| `renderTrigger` | object | — | (props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function. |
+| `showMenuSearch` | boolean | `false` | Show a search input inside the main menu. |
+| `showSubmenuSearch` | boolean | `false` | Show a search input inside submenus. |
+| `menuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the main menu search input. |
+| `submenuSearchPlaceholder` | string | `"Search..."` | Placeholder text for the submenu search input. |
+| `onMenuSearch` | object | — | (query: string) => Promise<CascadingOption[]> — Async search for main menu. |
+| `onSubmenuSearch` | object | — | (query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu. |
+| `searchDebounceMs` | number | `300` | Debounce delay in ms for async search callbacks. |
+| `SearchIcon` | object | — | React.ComponentType<{ className?: string }> — Custom search icon component. |
+| `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
+| `submenuSearchAriaLabel` | string | `"Search submenu"` | Accessible label for the submenu search input. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
 
 ### Styling Guide
 
@@ -1782,9 +1661,9 @@ const options: CascadingOption[] = [
 
 ```tsx
 const searchCountries = async (query: string) => {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${query}`);
-  const data = await res.json();
-  return data.map((c: any) => ({ value: c.cca2, label: c.name.common }));
+  const res = await fetch(`/api/countries/search?q=${encodeURIComponent(query)}`);
+  const { countries } = await res.json();
+  return countries.map((c) => ({ value: c.code, label: c.name }));
 };
 
 <CascadingDropdown
@@ -1882,34 +1761,37 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 
 ### All Props
 
+<!-- generated from Checkbox.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `ReactNode` | — | Text beside the checkbox |
-| `description` | `ReactNode` | — | Helper text below the label |
-| `checked` | `boolean` | — | Controlled checked state |
-| `defaultChecked` | `boolean` | — | Initial state (uncontrolled) |
-| `indeterminate` | `boolean` | `false` | Shows minus icon instead of check |
-| `onValueChange` | `(checked: boolean) => void` | — | Fires on state change |
-| `disabled` | `boolean` | `false` | Disables the checkbox |
-| `required` | `boolean` | `false` | Marks as required |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error text below checkbox |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success text below checkbox |
-| `loading` | `boolean` | `false` | Loading state |
-| `size` | `CheckboxSize` | `"md"` | xs/sm/md/lg/xl or pixel number |
-| `shape` | `CheckboxShape` | `"rounded"` | square/rounded/circle |
-| `checkedIcon` | `ReactNode` | Built-in check | Custom icon when checked |
-| `uncheckedIcon` | `ReactNode` | — | Custom icon when unchecked |
-| `indeterminateIcon` | `ReactNode` | Built-in minus | Custom icon when indeterminate |
-| `classes` | `CheckboxClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference control |
-| `name` | `string` | — | Form field name |
-| `id` | `string` | auto | Checkbox input ID |
-| `aria-label` | `string` | — | Accessible label (when no visible label) |
-
----
+| `label` | object | — | React.ReactNode — Text label rendered beside the checkbox. |
+| `description` | object | — | React.ReactNode — Helper text rendered below the label. |
+| `checked` | boolean | — | Controlled checked state. |
+| `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
+| `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
+| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
+| `onFocus` | object | — | (event: FocusEvent) => void |
+| `onBlur` | object | — | (event: FocusEvent) => void |
+| `error` | boolean | `false` | Displays the checkbox in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the checkbox. |
+| `success` | boolean | `false` | Displays the checkbox in a success state. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the checkbox. |
+| `loading` | boolean | `false` | Displays the checkbox in a loading state. |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of the checkbox indicator. |
+| `shape` | `"square"` \| `"rounded"` \| `"circle"` | `"rounded"` | Shape of the checkbox indicator. |
+| `checkedIcon` | object | — | React.ReactNode — Custom icon for the checked state. |
+| `uncheckedIcon` | object | — | React.ReactNode — Custom icon for the unchecked state. |
+| `indeterminateIcon` | object | — | React.ReactNode — Custom icon for the indeterminate state. |
+| `classes` | object | — | CSS class overrides for checkbox sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `disabled` | boolean | `false` | Disables the checkbox. |
+| `name` | string | — | Form field name. |
+| `value` | string | — | Form field value. |
+| `id` | string | — | HTML id attribute. |
+| `required` | boolean | `false` | Marks the checkbox as required. |
 
 ### Styling Guide
 
@@ -2080,7 +1962,7 @@ export default function Example() {
 |------|-----------|
 | `code` | Must be a valid two-letter ISO 3166-1 alpha-2 code (lowercase). Invalid codes show fallback. |
 | `size` | Preset string (`"xs"` to `"2xl"`) or pixel number. |
-| `basePath` | Directory containing `{code}.svg` files. Defaults to `/flags`. |
+| `basePath` | Omit to use the flags packaged with the library (no network request). Set it to load `{basePath}/{code}.svg` from a CDN or self-hosted directory instead. |
 | `tooltip` | Pass `ReactNode` for simple tooltip, or `CountryFlagTooltipConfig` object for full control. |
 
 ---
@@ -2097,35 +1979,48 @@ DOM nesting: `root(span) > img + fallback`
 
 ---
 
-### All Props
+### Flag assets
 
-#### CountryFlagProps
+The SVGs ship inside the package. By default a `CountryFlag` makes **no network
+request** — the flag for a given code is lazily imported as its own chunk, so a
+bundle only carries the flags it actually renders, and the component works
+offline and in air-gapped installs. Nothing needs to be copied into `public/`.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `code` | `string` | **required** | Two-letter ISO country code |
-| `size` | `CountryFlagSize \| number` | `"md"` | Flag size |
-| `aspectRatio` | `number` | `0.75` | Height/width ratio |
-| `alt` | `string` | code | Accessible alt text |
-| `fallback` | `ReactNode` | — | Shown on image error |
-| `loading` | `boolean` | `false` | Show shimmer instead of flag |
-| `tooltip` | `ReactNode \| CountryFlagTooltipConfig` | — | Tooltip on hover |
-| `basePath` | `string` | `"/flags"` | Directory for SVG files |
-| `classes` | `CountryFlagClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
+To serve flags yourself instead — a CDN, or a directory you control — pass
+`basePath`, which restores URL-based loading of `{basePath}/{code}.svg`:
 
-#### CountryFlagGroupProps
+```tsx
+import { CountryFlag, CHUMLAB_FLAG_CDN } from "@chumlab/ui/country-flag";
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `max` | `number` | — | Max visible flags before "+N" count |
-| `size` | `CountryFlagSize \| number` | — | Size for all children |
-| `showCountTooltip` | `boolean` | — | Tooltip on surplus count |
-| `renderSurplus` | `(count) => ReactNode` | — | Custom surplus renderer |
-| `classes` | `CountryFlagGroupClasses` | — | Per-slot class overrides |
+<CountryFlag code="in" />                        {/* packaged, no network */}
+<CountryFlag code="in" basePath="/flags" />      {/* your own directory */}
+<CountryFlag code="in" basePath={CHUMLAB_FLAG_CDN} /> {/* Chumlab's CDN */}
+```
+
+The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
+`onError` and sizing behave identically whichever you pick.
 
 ---
+
+### All Props
+
+<!-- generated from CountryFlag.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` **(required)** | string | — | ISO 3166-1 alpha-2 country code (e.g. 'US', 'GB'). |
+| `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| `"2xl"` \| number | — | Flag size as a preset or numeric pixel value. |
+| `aspectRatio` | number | — | Aspect ratio for the flag image. |
+| `alt` | string | — | Alt text for the flag image. |
+| `fallback` | object | — | React.ReactNode — Custom fallback content when the flag image fails to load. |
+| `loading` | boolean | `false` | Shows a loading shimmer placeholder. |
+| `tooltip` | object | — | Tooltip shown on hover. Pass a ReactNode or a config object. |
+| `basePath` | string | — | Where to load the flag SVG from. Omit to use the flags packaged with the library (no network request). Set it to fetch `${basePath}/${code}.svg` from a CDN or self-hosted directory instead. |
+| `classes` | object | — | CSS class overrides for flag sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
+| `onLoad` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image loads. |
+| `onError` | object | — | (event: SyntheticEvent<HTMLImageElement>) => void — Fires when the flag image fails to load. |
 
 ### Styling Guide
 
@@ -2265,113 +2160,72 @@ These props have dependencies -- using them wrong causes silent bugs:
 
 ### All Props
 
-#### DatePicker
-
-Props are discriminated by `mode`. The base props are shared across all modes.
-
-#### Mode-specific value/callback
-
-| Mode | `value` type | `onValueChange` signature |
-|------|-------------|--------------------------|
-| `"single"` (default) | `Date \| null` | `(date: Date \| null, dateValue: DateValue \| null) => void` |
-| `"range"` | `DateRange \| null` | `(range: DateRange \| null, rangeValue: DateRangeValue \| null) => void` |
-| `"multiple"` | `Date[] \| null` | `(dates: Date[] \| null, dateValues: DateValue[] \| null) => void` |
-
-#### Base props
+<!-- generated from DatePicker.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `"single" \| "range" \| "multiple"` | `"single"` | Selection mode. |
-| `onClear` | `() => void` | -- | Callback when selection is cleared. |
-| `onMonthChange` | `(month: Date) => void` | -- | Callback when displayed month changes. |
-| `open` | `boolean` | -- | Controlled open state for calendar. |
-| `defaultOpen` | `boolean` | `false` | Open calendar on mount (uncontrolled). |
-| `onOpenChange` | `(open: boolean) => void` | -- | Callback when open state changes. |
-| `minDate` | `Date` | -- | Earliest selectable date. |
-| `maxDate` | `Date` | -- | Latest selectable date. |
-| `disabledDates` | `DisabledDateOptions` | -- | Fine-grained date disabling (see below). |
-| `weekStartsOn` | `0-6` | `0` | Day the week starts on (0 = Sunday). |
-| `locale` | `Locale` (date-fns) | -- | Locale for month/day names. |
-| `numberOfMonths` | `number` | `1` | Number of months displayed side by side. |
-| `dateFormat` | `string` | `"MMM d, yyyy"` | Date format string (date-fns format). |
-| `showTodayIndicator` | `boolean` | `true` | Ring indicator on today's date. |
-| `showTodayButton` | `boolean` | `false` | "Today" button in calendar footer. |
-| `todayAction` | `boolean` | `false` | Enable today quick-action. |
-| `showWeekNumbers` | `boolean` | `false` | Show ISO week numbers column. |
-| `showOutsideDays` | `boolean` | `true` | Show days from adjacent months. |
-| `outsideDaysSelectable` | `boolean` | `true` | Allow selecting outside days. |
-| `fixedWeeks` | `boolean` | `false` | Always show 6 weeks per month. |
-| `showPresets` | `boolean` | `false` | Show preset buttons panel. |
-| `presets` | `DatePreset[]` | -- | Custom presets (uses defaults if omitted). |
-| `markers` | `DateMarker[]` | -- | Dates with indicator dots/tooltips. |
-| `showMarkerIndicator` | `boolean` | `true` | Show colored dots on marked days. |
-| `showMarkerTooltip` | `boolean` | `true` | Show tooltip on hover of marked days. |
-| `id` | `string` | -- | HTML id attribute. |
-| `name` | `string` | -- | Form field name. |
-| `placeholder` | `string` | -- | Placeholder text in trigger. |
-| `disabled` | `boolean` | `false` | Disable the entire picker. |
-| `error` | `boolean` | `false` | Show error state styling. |
-| `errorMessage` | `ReactNode` | -- | Error message below trigger. |
-| `label` | `ReactNode` | -- | Label above trigger. |
-| `description` | `ReactNode` | -- | Description text below label. |
-| `success` | `boolean` | `false` | Show success state styling. |
-| `successMessage` | `ReactNode` | -- | Success message below trigger. |
-| `loading` | `boolean` | `false` | Show loading state. |
-| `clearable` | `boolean` | -- | Alias for `showClearButton`. |
-| `required` | `boolean` | `false` | Mark as required field. |
-| `fullWidth` | `boolean` | `false` | Make trigger fill container width. |
-| `showClearButton` | `boolean` | `true` | Show clear (X) button in trigger. |
-| `showCalendarIcon` | `boolean` | `true` | Show calendar icon in trigger. |
-| `calendarIcon` | `ReactNode` | -- | Custom calendar icon. |
-| `clearIcon` | `ReactNode` | -- | Custom clear icon. |
-| `prevMonthIcon` | `ReactNode` | -- | Custom previous month nav icon. |
-| `nextMonthIcon` | `ReactNode` | -- | Custom next month nav icon. |
-| `prevYearIcon` | `ReactNode` | -- | Custom previous year nav icon. |
-| `nextYearIcon` | `ReactNode` | -- | Custom next year nav icon. |
-| `todayIcon` | `ReactNode` | -- | Custom today button icon. |
-| `monthDropdownSelectedIcon` | `ReactNode` | -- | Custom check icon for month dropdown. |
-| `yearDropdownSelectedIcon` | `ReactNode` | -- | Custom check icon for year dropdown. |
-| `classes` | `DatePickerClasses` | -- | Override classes per slot (see Styling). |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `portalContainer` | `HTMLElement \| null` | -- | Portal target for calendar popover. |
-| `lockScroll` | `boolean` | `false` | Lock body scroll when calendar is open. |
-| `dropdownZIndex` | `number` | `50` | Z-index of calendar popup. |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Vertical placement of calendar. |
-| `forceDropdownPosition` | `boolean` | `false` | Prevent auto-flipping. |
-| `dropdownGap` | `number` | `4` | Gap in px between trigger and calendar. |
-| `keepMounted` | `boolean` | `false` | Keep calendar DOM mounted when closed. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | `"auto"` respects OS setting. |
-
-#### DisabledDateOptions
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `before` | `Date` | Disable all dates before this date. |
-| `after` | `Date` | Disable all dates after this date. |
-| `disablePast` | `boolean` | Disable all past dates. |
-| `disableFuture` | `boolean` | Disable all future dates. |
-| `dates` | `Date[]` | Specific dates to disable. |
-| `daysOfWeek` | `number[]` | Days of the week to disable (0-6). |
-| `custom` | `(date: Date) => boolean` | Custom function returning `true` to disable. |
-
-#### DateMarker
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `date` | `Date` | **Required.** The date to mark. |
-| `label` | `string` | **Required.** Tooltip title text. |
-| `description` | `string` | Optional tooltip description. |
-| `type` | `string` | Optional type string (e.g., `"meeting"`, `"holiday"`). |
-| `color` | `string` | Optional CSS color for the indicator dot. |
-
-#### DatePreset
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `label` | `string` | **Required.** Button text. |
-| `getValue` | `() => Date \| DateRange \| Date[]` | **Required.** Returns the value to set. |
-
----
+| `mode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
+| `value` | — | — | Controlled selected value. Type depends on mode: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). |
+| `onValueChange` | object | — | Callback when the selected value changes. Signature depends on mode. |
+| `onClear` | object | — | () => void — Called when the clear button is clicked. |
+| `onMonthChange` | object | — | (month: Date) => void — Called when the displayed month changes. |
+| `open` | boolean | — | Controlled open state of the calendar popup. |
+| `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `onOpenChange` | object | — | (open: boolean) => void |
+| `minDate` | object | — | Date — Earliest selectable date. |
+| `maxDate` | object | — | Date — Latest selectable date. |
+| `disabledDates` | object | — | Configuration for disabling specific dates. |
+| `weekStartsOn` | `0` \| `1` \| `2` \| `3` \| `4` \| `5` \| `6` | `0` | First day of the week (0=Sunday, 1=Monday, etc.). |
+| `locale` | object | — | date-fns Locale object for internationalization. |
+| `numberOfMonths` | number | `1` | Number of months to display simultaneously. |
+| `dateFormat` | string | `"MMM d, yyyy"` | Date format string (date-fns format). |
+| `showTodayIndicator` | boolean | `true` | Highlights today's date in the calendar. |
+| `showTodayButton` | boolean | `false` | Shows a 'Today' button in the calendar footer. |
+| `todayAction` | boolean | `false` | Whether clicking 'Today' selects today's date. |
+| `showWeekNumbers` | boolean | `false` | Shows week numbers in the calendar. |
+| `showOutsideDays` | boolean | `true` | Shows days from adjacent months. |
+| `outsideDaysSelectable` | boolean | `true` | Whether outside days can be selected. |
+| `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
+| `showPresets` | boolean | `false` | Shows preset date selection buttons. |
+| `presets` | array | — | Array of date presets. |
+| `markers` | array | — | Array of date markers to display on the calendar. |
+| `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
+| `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `placeholder` | string | — | Placeholder text for the trigger input. |
+| `disabled` | boolean | `false` | Disables the date picker. |
+| `error` | boolean | `false` | Displays error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message. |
+| `label` | object | — | React.ReactNode — Label above the trigger. |
+| `description` | object | — | React.ReactNode — Description text. |
+| `success` | boolean | `false` | Displays success state. |
+| `successMessage` | object | — | React.ReactNode — Success message. |
+| `loading` | boolean | `false` | Shows loading state. |
+| `clearable` | boolean | — | Shows a clear button. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
+| `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
+| `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
+| `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
+| `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
+| `prevMonthIcon` | object | — | React.ReactNode — Custom previous month icon. |
+| `nextMonthIcon` | object | — | React.ReactNode — Custom next month icon. |
+| `prevYearIcon` | object | — | React.ReactNode — Custom previous year icon. |
+| `nextYearIcon` | object | — | React.ReactNode — Custom next year icon. |
+| `todayIcon` | object | — | React.ReactNode — Custom today button icon. |
+| `monthDropdownSelectedIcon` | object | — | React.ReactNode — Icon for selected month in dropdown. |
+| `yearDropdownSelectedIcon` | object | — | React.ReactNode — Icon for selected year in dropdown. |
+| `classes` | object | — | CSS class overrides for date picker sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the calendar popup. |
+| `lockScroll` | boolean | `false` | Locks body scroll when the calendar is open. |
+| `dropdownZIndex` | number | `50` | Z-index of the calendar popup. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the calendar popup. |
+| `forceDropdownPosition` | boolean | `false` | Locks the calendar to the specified dropdownPosition without auto-flipping. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and calendar popup. |
+| `keepMounted` | boolean | `false` | Keep the calendar DOM mounted when closed. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 
 ### Styling Guide
 
@@ -2612,6 +2466,43 @@ export default function Example() {
 
 ---
 
+### All Props
+
+<!-- generated from Drawer.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
+| `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
+| `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
+| `direction` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | — | Direction from which the drawer slides in. |
+| `size` | string | — | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
+| `overlayColor` | string | — | Background color of the overlay. |
+| `overlayOpacity` | number | — | Opacity of the overlay (0-1). |
+| `overlayBlur` | number | — | Backdrop blur in pixels for the overlay. |
+| `duration` | number | — | Animation duration in milliseconds. |
+| `lockScroll` | boolean | `true` | Locks body scroll when the drawer is open. |
+| `closeOnOverlayClick` | boolean | `true` | Closes the drawer when the overlay is clicked. |
+| `closeOnEscape` | boolean | `true` | Closes the drawer when the Escape key is pressed. |
+| `classes` | object | — | CSS class overrides for drawer sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects OS setting. |
+| `trapFocus` | boolean | `true` | Traps keyboard focus within the drawer. |
+| `restoreFocus` | boolean | `true` | Restores focus to the previously focused element when the drawer closes. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the drawer. |
+| `initialFocus` | object | — | RefObject<HTMLElement> — Element to receive focus when the drawer opens. |
+| `onTransitionEnd` | object | — | (open: boolean) => void — Called when the open/close transition completes. |
+| `keepMounted` | boolean | `false` | Keep the drawer DOM mounted when closed. |
+| `modal` | boolean | `true` | Whether the drawer behaves as a modal dialog. |
+| `swipeable` | boolean | `false` | Enables swipe-to-close gesture. |
+| `swipeThreshold` | number | — | Minimum swipe distance in pixels to trigger close. |
+| `snapPoints` | array | — | Array of snap point positions (0-1) for the drawer panel. |
+| `activeSnapPointIndex` | number | — | Controlled active snap point index. |
+| `defaultSnapPointIndex` | number | — | Initial snap point index for uncontrolled usage. |
+| `onSnapPointIndexChange` | object | — | (index: number) => void — Called when the active snap point changes. |
+
 ---
 
 ## Dropdown
@@ -2701,68 +2592,60 @@ export default function Example() {
 
 ### All Props
 
-#### Dropdown (root)
+<!-- generated from Dropdown.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `DropdownOption[]` | `[]` | Array of selectable options. |
-| `value` | `string \| null` | — | Controlled selected value. |
-| `defaultValue` | `string` | — | Uncontrolled initial value. |
-| `onValueChange` | `(value: string \| null, option: DropdownOption \| null) => void` | — | Selection change callback. |
-| `open` | `boolean` | — | Controlled open state. |
-| `defaultOpen` | `boolean` | — | Uncontrolled initial open state. |
-| `onOpenChange` | `(open: boolean) => void` | — | Open state change callback. |
-| `placeholder` | `ReactNode` | `"Select an option"` | Trigger text when nothing selected. |
-| `disabled` | `boolean` | `false` | Disable the entire dropdown. |
-| `error` | `boolean` | `false` | Error state styling. |
-| `errorMessage` | `ReactNode` | — | Displayed below the dropdown with `role="alert"`. |
-| `label` | `ReactNode` | — | Visible label above the trigger. |
-| `description` | `ReactNode` | — | Helper text below the label. |
-| `success` | `boolean` | `false` | Success state styling. |
-| `successMessage` | `ReactNode` | — | Displayed below the dropdown. |
-| `required` | `boolean` | `false` | Adds `*` to label, sets `aria-required`. |
-| `clearable` | `boolean` | `false` | Adds clear button, allows deselect. |
-| `noResultsContent` | `ReactNode` | `"No options available"` | Shown when options array is empty. |
-| `showChevron` | `boolean` | `true` | Show/hide the chevron icon. |
-| `showSelectedIcon` | `boolean` | `true` | Show check icon on selected option. |
-| `selectedIcon` | `ReactNode` | — | Custom selected indicator. |
-| `fullWidth` | `boolean` | `false` | Sets root to `width: 100%`. |
-| `loading` | `boolean` | `false` | External loading state (shows shimmer). |
-| `onLoadOptions` | `() => Promise<DropdownOption[]>` | — | Async option loader. |
-| `loadOnOpen` | `boolean` | `false` | Trigger `onLoadOptions` when opened. |
-| `onLoadError` | `(error: unknown) => void` | — | Error callback for async loading. |
-| `shimmerCount` | `number` | `5` | Number of shimmer rows when loading. |
-| `loadingText` | `ReactNode` | `"Loading..."` | SR announcement during load. |
-| `unstyled` | `boolean` | `false` | Remove all default styles. |
-| `classes` | `DropdownClasses` | — | Override individual style slots. |
-| `className` | `string` | — | Additional class on root element. |
-| `style` | `CSSProperties` | — | Inline style on root element. |
-| `keepMounted` | `boolean` | `false` | Keep popup in DOM when closed (`display: none`). |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target. |
-| `lockScroll` | `boolean` | `false` | Lock body scroll while open. |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred popup direction (auto-flips). |
-| `forceDropdownPosition` | `boolean` | `false` | Lock to `dropdownPosition`, no auto-flip. |
-| `dropdownZIndex` | `number` | `50` | z-index of the portal popup. |
-| `dropdownGap` | `number` | `4` | Gap (px) between trigger and popup. |
-| `typeaheadTimeout` | `number` | `500` | Typeahead buffer reset delay (ms). |
-| `aria-label` | `string` | — | Accessible name when no visible label. |
-| `renderTrigger` | `(props: DropdownTriggerRenderProps) => ReactNode` | — | Custom trigger renderer. |
-| `ChevronIcon` | `ComponentType` | Built-in | Custom chevron component. |
-| `CheckIcon` | `ComponentType` | Built-in | Custom check icon component. |
-| `ClearIcon` | `ComponentType` | Built-in | Custom clear icon component. |
-| `ref` | `Ref<HTMLDivElement>` | — | Forwarded to root element. |
-
-#### DropdownOption
-
-| Prop | Type | Description |
-|------|------|-------------|
-| `value` | `string` | **Required.** Unique identifier. |
-| `label` | `string` | **Required.** Display text (used for typeahead). |
-| `content` | `ReactNode` | Custom render in option list. Falls back to `label`. |
-| `selectedContent` | `ReactNode` | Custom render in trigger when selected. |
-| `disabled` | `boolean` | Disable this option. |
-
----
+| `options` | array | — | List of selectable options. |
+| `value` | string \| null | — | Controlled selected value. |
+| `defaultValue` | string | — | Initial selected value for uncontrolled usage. |
+| `onValueChange` | object | — | (value: string \| null, option: DropdownOption \| null) => void - Fires when the selected value changes. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | — | Whether the dropdown is initially open (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
+| `id` | string | — | HTML id attribute for the trigger element. |
+| `name` | string | — | Form field name for the hidden input. |
+| `placeholder` | object | `"Select an option"` | React.ReactNode - Content displayed when no option is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
+| `description` | object | — | React.ReactNode - Description text rendered below the label. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |
+| `noResultsContent` | object | `"No options available"` | React.ReactNode - Content shown when no options are available. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
+| `showSelectedIcon` | boolean | `true` | Whether to show a check icon next to the selected option. |
+| `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected option indicator. |
+| `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
+| `loading` | boolean | — | Shows a loading/shimmer state. |
+| `onLoadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. |
+| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
+| `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
+| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
+| `renderTrigger` | object | — | (props: DropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
+| `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
+| `CheckIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom check icon component. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom clear icon component. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
 
 ### Styling Guide
 
@@ -2973,37 +2856,36 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 
 ### All Props
 
+<!-- generated from Input.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `ReactNode` | — | Label above the input |
-| `description` | `ReactNode` | — | Helper text below label |
-| `placeholder` | `string` | — | Placeholder text |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message text |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message text |
-| `size` | `InputSize` | — | Visual size variant (data attribute only) |
-| `prefix` | `ReactNode` | — | Static content before input (e.g. "$") |
-| `suffix` | `ReactNode` | — | Static content after input (e.g. ".com") |
-| `startIcon` | `ReactNode` | — | Icon before input |
-| `endIcon` | `ReactNode` | — | Icon after input |
-| `onStartIconClick` | `() => void` | — | Makes startIcon a button |
-| `onEndIconClick` | `() => void` | — | Makes endIcon a button |
-| `startIconLabel` | `string` | — | Aria label for clickable startIcon |
-| `endIconLabel` | `string` | — | Aria label for clickable endIcon |
-| `onValueChange` | `(value: string) => void` | — | Simple value callback |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `onClear` | `() => void` | — | Clear button callback |
-| `showCount` | `boolean` | `false` | Show character count |
-| `loading` | `boolean` | `false` | Loading state |
-| `fullWidth` | `boolean` | `false` | Full width container |
-| `classes` | `InputClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `required` | `boolean` | — | Required field |
-| `disabled` | `boolean` | — | Disabled state |
-| `readOnly` | `boolean` | — | Read-only state |
-
----
+| `label` | object | — | React.ReactNode - Label rendered above the input. |
+| `description` | object | — | React.ReactNode - Helper text rendered below the label. |
+| `error` | boolean | `false` | Displays the input in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
+| `success` | boolean | `false` | Green success state for validated fields. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
+| `suffix` | object | — | React.ReactNode - Inline text or element rendered after the input (e.g. 'USD', '.com'). |
+| `startIcon` | object | — | React.ReactNode - Icon rendered before the input. Becomes a button when onStartIconClick is provided. |
+| `endIcon` | object | — | React.ReactNode - Icon rendered after the input. Becomes a button when onEndIconClick is provided. |
+| `onStartIconClick` | object | — | () => void - Makes startIcon a clickable button. Requires startIconLabel for accessibility. |
+| `onEndIconClick` | object | — | () => void - Makes endIcon a clickable button. Requires endIconLabel for accessibility. |
+| `startIconLabel` | string | — | Accessible label for startIcon when it is clickable. Required with onStartIconClick. |
+| `endIconLabel` | string | — | Accessible label for endIcon when it is clickable. Required with onEndIconClick. |
+| `onValueChange` | object | — | (value: string) => void - Fires with the current string value when the value changes. |
+| `clearable` | boolean | `false` | Show a built-in clear button when the input has a value. |
+| `onClear` | object | — | () => void - Callback when the clear button is clicked. |
+| `showCount` | boolean | `false` | Show character count (requires maxLength to be set). |
+| `loading` | boolean | `false` | Shows a loading spinner inside the input. |
+| `loader` | object | — | React.ReactNode - Custom loader element to replace the default spinner. |
+| `loaderSize` | number | `16` | Size of the default CircularLoader in pixels. Ignored when a custom loader prop is provided. |
+| `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
+| `className` | string | — | CSS class for the root container element. |
+| `classes` | object | — | Slot-based class overrides for internal elements. |
+| `unstyled` | boolean | `false` | When true, all default classes are removed so you can style from scratch. |
 
 ### Styling Guide
 
@@ -3160,59 +3042,59 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 
 ### All Props
 
+<!-- generated from InternationalPhoneInput.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `PhoneNumberValue` | — | Controlled phone value `{ countryCode, phoneNumber }` |
-| `defaultValue` | `PhoneNumberValue` | — | Initial value (uncontrolled) |
-| `onValueChange` | `(data: PhoneNumberData) => void` | — | Fires on every change with full validation data |
-| `onCountryChange` | `(country: CountryOption) => void` | — | Fires when country changes |
-| `defaultCountry` | `string` | `"us"` | Default country code |
-| `countries` | `CountryOption[]` | `DEFAULT_COUNTRIES` | Available countries |
-| `preferredCountries` | `string[]` | `["us","gb","ca","au"]` | Countries shown at top |
-| `label` | `ReactNode` | — | Label (auto-associated via htmlFor) |
-| `description` | `ReactNode` | — | Helper text below label |
-| `required` | `boolean` | `false` | Required field |
-| `disabled` | `boolean` | `false` | Disables input |
-| `readOnly` | `boolean` | `false` | Read-only mode |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message (`role="alert"`) |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message (`role="status"`) |
-| `placeholder` | `string` | `"Enter phone number"` | Input placeholder |
-| `fullWidth` | `boolean` | `false` | Take full container width |
-| `loading` | `boolean` | `false` | Loading state (dims wrapper) |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `onClear` | `() => void` | — | Custom clear handler |
-| `validateOnBlur` | `boolean` | `true` | Validate on blur |
-| `validationMessage` | `ReactNode` | — | Custom validation message |
-| `validate` | `(data: PhoneNumberData) => boolean \| { valid: boolean; message?: string }` | — | Authoritative custom validation; overrides built-in for emitted `isValid` and blur error |
-| `autoComplete` | `string` | `"off"` | Native input autocomplete. Defaults to `off` so browser autofill can't stuff a full international number into the national-number field; pass e.g. `tel-national` to opt back in |
-| `enablePasteDetection` | `boolean` | `false` | Auto-detect country from paste |
-| `copyFormat` | `"e164" \| "international" \| "national"` | `"e164"` | Copy format |
-| `onPasteDetected` | `(data: PasteDetectedData) => void` | — | Paste detection callback |
-| `formatPatterns` | `Record<string, PhoneFormatPattern>` | — | Custom formatting patterns |
-| `lengthRules` | `Record<string, PhoneLengthRule>` | — | Custom length validation rules |
-| `selectedIcon` | `ReactNode` | — | Custom check icon in country dropdown |
-| `flagSize` | `number` | `22` | Pixel width of the flag in trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. |
-| `renderCountryOption` | `(props: CountryOptionRenderProps) => ReactNode` | — | Custom country option renderer |
-| `renderSelectedCountry` | `(country: CountryOption) => ReactNode` | — | Custom selected country renderer |
-| `countryDropdownPlaceholder` | `string` | `"Country"` | Country dropdown trigger placeholder |
-| `countrySearchPlaceholder` | `string` | `"Search countries..."` | Search input placeholder |
-| `countryDropdownAriaLabel` | `string` | `"Select country"` | Country dropdown aria-label |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Country dropdown placement |
-| `forceDropdownPosition` | `boolean` | `false` | Lock dropdown position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap between trigger and dropdown (px) |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `lockScroll` | `boolean` | `false` | Lock body scroll while dropdown open |
-| `className` | `string` | — | Root CSS class |
-| `style` | `CSSProperties` | — | Root inline styles |
-| `classes` | `InternationalPhoneInputClasses` | — | Slot-based class overrides |
-| `unstyled` | `boolean` | `false` | Strip all default classes |
-| `name` | `string` | — | Form field name (renders hidden inputs) |
-| `id` | `string` | auto | Custom ID |
-
----
+| `value` | object | — | PhoneNumberValue - Controlled phone value with countryCode and phoneNumber fields. |
+| `defaultValue` | object | — | PhoneNumberValue - Default phone value for uncontrolled usage. |
+| `onValueChange` | object | — | (data: PhoneNumberData) => void - Fires when the phone number changes, providing full validation data. |
+| `onCountryChange` | object | — | (country: CountryOption) => void - Fires when the selected country changes. |
+| `defaultCountry` | string | — | ISO country code for the default selected country. |
+| `countries` | array | — | Custom list of country options to display. |
+| `preferredCountries` | array | — | ISO country codes to show at the top of the country list. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `label` | object | — | React.ReactNode - Label rendered above the input. |
+| `description` | object | — | React.ReactNode - Helper text displayed below the label. |
+| `loading` | boolean | `false` | When true, the input is in a loading state. |
+| `clearable` | boolean | `false` | When true, shows a clear button to reset the phone number. |
+| `onClear` | object | — | () => void - Called when the clear button is clicked. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `disabled` | boolean | `false` | Disables the input. |
+| `readOnly` | boolean | `false` | Makes the input read-only. |
+| `error` | boolean | `false` | Displays the input in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
+| `success` | boolean | `false` | Displays the input in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
+| `placeholder` | string | `"Enter phone number"` | Placeholder text for the phone number input. |
+| `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
+| `validateOnBlur` | boolean | `true` | Validates the phone number when the input loses focus. |
+| `validationMessage` | object | — | React.ReactNode - Custom validation message shown on blur validation. |
+| `validate` | object | — | (data: PhoneNumberData) => boolean \| { valid: boolean; message?: string } - Authoritative custom validator. Overrides the built-in length check for both the emitted isValid and the blur error. For real number validation, use createLibphonenumberValidator() from @chumlab/ui/phone-validators. |
+| `autoComplete` | string | — | Native input autocomplete. Defaults to "off" so browser autofill can't corrupt the national-number field; pass e.g. "tel-national" to opt in. |
+| `enablePasteDetection` | boolean | `false` | Enables automatic detection and parsing of pasted phone numbers. |
+| `copyFormat` | `"e164"` \| `"international"` \| `"national"` | `"e164"` | Format used when copying the phone number. |
+| `onPasteDetected` | object | — | (data: PasteDetectedData) => void - Fires when a phone number paste is detected. |
+| `countryDropdownPlaceholder` | string | `"Country"` | Placeholder text for the country dropdown. |
+| `countrySearchPlaceholder` | string | `"Search countries..."` | Placeholder text for the country search input. |
+| `countryDropdownAriaLabel` | string | `"Select country"` | Accessible label for the country dropdown. |
+| `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected country indicator. |
+| `flagSize` | number | `22` | Pixel width of the flag rendered in the trigger and dropdown options. Height auto-scales at the 22:17 aspect ratio. Defaults to 22. |
+| `renderCountryOption` | object | — | (props: CountryOptionRenderProps) => ReactNode - Custom render function for country options. |
+| `renderSelectedCountry` | object | — | (country: CountryOption) => ReactNode - Custom render function for the selected country display. |
+| `formatPatterns` | object | — | Record<string, PhoneFormatPattern> - Custom phone number formatting patterns by country. |
+| `lengthRules` | object | — | Record<string, PhoneLengthRule> - Custom phone number length validation rules by country. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | — | Vertical placement of the country dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | — | Locks the country dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | — | Z-index of the country dropdown popup. |
+| `dropdownGap` | number | — | Gap in pixels between trigger and country dropdown popup. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the country dropdown. |
+| `lockScroll` | boolean | — | Locks body scroll while the country dropdown is open. |
 
 ### Ref API
 
@@ -3415,18 +3297,57 @@ export default function Example() {
 
 ---
 
-### All Props (shared across variants)
+### All Props
+
+<!-- generated from Loader.schema.json — edit the schema, not this table -->
+
+#### CircularLoader
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `number` | `24` (Circular), `4` (Linear height), varies | Size in pixels |
-| `color` | `string` | `"currentColor"` | Stroke/fill color |
-| `speed` | `number` | `1` | Animation speed multiplier |
-| `className` | `string` | — | Additional CSS classes |
-| `classes` | `*LoaderClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove default styles |
+| `size` | number | `20` | Width and height in pixels. |
+| `thickness` | number | `2` | Stroke width of track and arc. |
+| `speed` | number | `0.75` | Animation duration in seconds (lower = faster). |
+| `trackColor` | string | — | Background track color. Default: currentColor at 20% opacity. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
 
----
+#### LinearLoader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `height` | number | `4` | Height of the bar in pixels. |
+| `width` | string \| number | `"100%"` | Width of the bar (CSS value). |
+| `speed` | number | `1.5` | Animation duration in seconds. |
+| `trackColor` | string | — | Background track color. |
+| `borderRadius` | number | `9999` | Border radius in pixels. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
+
+#### DotLoader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `dotSize` | number | `8` | Diameter of each dot in pixels. |
+| `gap` | number | `4` | Gap between dots in pixels. |
+| `count` | number | `3` | Number of dots. |
+| `speed` | number | `1.4` | Full animation cycle duration in seconds. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
+
+#### PulseLoader
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | number | `40` | Diameter of the circle in pixels. |
+| `speed` | number | `1.5` | Animation duration in seconds. |
+| `rings` | number | `2` | Number of ripple rings. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | — | Removes all default styling. |
 
 ### Styling Guide
 
@@ -3516,50 +3437,50 @@ DOM nesting: `root > overlay + container > content(role="dialog") > header(icon 
 
 ### All Props
 
+<!-- generated from Modal.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | — | State change callback |
-| `defaultOpen` | `boolean` | `false` | Initial open state (uncontrolled) |
-| `children` | `ReactNode` | — | **Required.** Modal body content |
-| `title` | `ReactNode` | — | Title in header |
-| `description` | `ReactNode` | — | Description below title |
-| `icon` | `ReactNode` | — | Icon in header (requires `showIcon`) |
-| `showIcon` | `boolean` | `false` | Show header icon |
-| `showCloseButton` | `boolean` | `true` | Show close button |
-| `closeIcon` | `ReactNode` | — | Custom close icon |
-| `showHeader` | `boolean` | `true` | Render header section |
-| `showOverlay` | `boolean` | `true` | Render backdrop overlay |
-| `preventOutsideClick` | `boolean` | `false` | Prevent closing on overlay click |
-| `closeOnEscape` | `boolean` | `true` | Close on Escape key |
-| `lockScroll` | `boolean` | `true` | Lock body scroll when open |
-| `trapFocus` | `boolean` | `true` | Trap keyboard focus inside modal |
-| `restoreFocus` | `boolean` | `true` | Restore focus to trigger on close |
-| `initialFocus` | `RefObject<HTMLElement \| null>` | — | Element to focus on open |
-| `keepMounted` | `boolean` | `false` | Keep DOM mounted when closed |
-| `maxWidth` | `string \| number` | — | Max width of content |
-| `maxHeight` | `string \| number` | — | Max height of content |
-| `minWidth` | `string \| number` | — | Min width of content |
-| `minHeight` | `string \| number` | — | Min height of content |
-| `fullScreen` | `boolean` | `false` | Fill entire viewport |
-| `centered` | `boolean` | `true` | Center modal vertically |
-| `overlayColor` | `string` | `"black"` | Overlay background color |
-| `overlayOpacity` | `number` | `0.5` | Overlay opacity (0–1) |
-| `animationDuration` | `number` | `200` | Animation duration in ms |
-| `disableAnimation` | `boolean` | `false` | Disable all animations |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-| `nestingLevel` | `number` | auto | Nesting depth (auto-managed) |
-| `maxNestingLevel` | `number` | `5` | Maximum nesting depth |
-| `zIndex` | `number` | `9999+` | Custom z-index |
-| `classes` | `ModalClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all default classes |
-| `className` | `string` | — | Additional class on content |
-| `contentStyle` | `CSSProperties` | — | Inline styles on content |
-| `aria-label` | `string` | — | Accessible label |
-| `aria-labelledby` | `string` | — | ID of labelling element |
-| `aria-describedby` | `string` | — | ID of describing element |
-
----
+| `open` | boolean | — | Whether the modal is visible (controlled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Callback when the modal's open state changes. |
+| `defaultOpen` | boolean | `false` | Whether the modal is initially open (uncontrolled). |
+| `children` **(required)** | object | — | React.ReactNode - Modal body content. Use ModalHeader, ModalBody, ModalFooter for structure. |
+| `title` | object | — | React.ReactNode - Title rendered in the modal header. |
+| `description` | object | — | React.ReactNode - Description rendered below the title in the header. |
+| `icon` | object | — | React.ReactNode - Icon rendered in the modal header. |
+| `showIcon` | boolean | `false` | Whether to display the icon in the header. |
+| `showCloseButton` | boolean | `true` | Whether to display the close button. |
+| `closeIcon` | object | — | React.ReactNode - Custom close button icon. |
+| `showHeader` | boolean | `true` | Whether to render the built-in header section. |
+| `showOverlay` | boolean | `true` | Whether to render the backdrop overlay. |
+| `preventOutsideClick` | boolean | `false` | Prevents closing when clicking outside the modal content. |
+| `closeOnEscape` | boolean | `true` | Enables closing via the Escape key. |
+| `lockScroll` | boolean | `true` | Locks body scroll when the modal is open. |
+| `trapFocus` | boolean | `true` | Traps keyboard focus within the modal. |
+| `restoreFocus` | boolean | `true` | Restores focus to the previously focused element on close. |
+| `initialFocus` | object | — | RefObject<HTMLElement \| null> - Element to focus when the modal opens. |
+| `keepMounted` | boolean | `false` | Keeps the modal DOM mounted when closed. |
+| `maxWidth` | string \| number | — | Maximum width of the modal dialog. |
+| `maxHeight` | string \| number | — | Maximum height of the modal dialog. |
+| `minWidth` | string \| number | — | Minimum width of the modal dialog. |
+| `minHeight` | string \| number | — | Minimum height of the modal dialog. |
+| `fullScreen` | boolean | `false` | Expands the modal to fill the viewport. |
+| `centered` | boolean | `true` | Vertically centers the modal in the viewport. |
+| `overlayColor` | string | `"black"` | Custom overlay background color. |
+| `overlayOpacity` | number | `0.32` | Overlay background opacity (0-1). |
+| `animationDuration` | number | `200` | Open/close animation duration in milliseconds. |
+| `disableAnimation` | boolean | `false` | Disables open/close animations entirely. |
+| `reduceMotion` | boolean \| string | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `nestingLevel` | number | — | Current nesting depth for stacked modals. Managed automatically. |
+| `maxNestingLevel` | number | `5` | Maximum allowed nesting depth for stacked modals. |
+| `zIndex` | number | — | CSS z-index for the modal layer. |
+| `classes` | object | — | CSS class overrides for modal sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling, rendering a plain dialog. |
+| `className` | string | `""` | Additional CSS class for the dialog content panel. |
+| `contentStyle` | object | — | Inline styles for the dialog content panel. |
+| `aria-label` | string | — | Accessible label for the modal dialog. |
+| `aria-labelledby` | string | — | ID of the element that labels the modal dialog. |
+| `aria-describedby` | string | — | ID of the element that describes the modal dialog. |
 
 ### Ref API
 
@@ -3808,46 +3729,59 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 ### All Props
 
+<!-- generated from MultiSelectDropdown.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `MultiSelectOption[]` | `[]` | Available options |
-| `value` | `string[]` | — | Controlled selected values |
-| `defaultValue` | `string[]` | — | Initial values (uncontrolled) |
-| `onValueChange` | `(values, options) => void` | — | Selection change callback |
-| `placeholder` | `ReactNode` | — | Trigger placeholder |
-| `label` | `ReactNode` | — | Label (auto-associated via htmlFor) |
-| `description` | `ReactNode` | — | Helper text below label |
-| `disabled` | `boolean` | `false` | Disable component |
-| `required` | `boolean` | `false` | Required field |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showChevron` | `boolean` | `true` | Show chevron icon |
-| `showSelectedChips` | `boolean` | `true` | Show chips vs count |
-| `maxDisplayedChips` | `number` | — | Max visible chips |
-| `checkboxIcon` | `ReactNode` | — | Custom checkbox icon |
-| `fullWidth` | `boolean` | `false` | Full container width |
-| `loading` | `boolean` | `false` | Loading state |
-| `onLoadOptions` | `() => Promise<Option[]>` | — | Async options loader |
-| `loadOnOpen` | `boolean` | `false` | Load options on open |
-| `shimmerCount` | `number` | `5` | Shimmer placeholder count |
-| `lockScroll` | `boolean` | `false` | Lock body scroll |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred position |
-| `forceDropdownPosition` | `boolean` | `false` | Lock position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap between trigger and dropdown |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `keepMounted` | `boolean` | `false` | Keep DOM when closed |
-| `classes` | `MultiSelectDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `name` | `string` | — | Form field name |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open) => void` | — | Open state callback |
-| `renderTrigger` | `(props) => ReactNode` | — | Custom trigger renderer |
-
----
+| `options` | array | — | List of selectable options. |
+| `value` | array | — | Controlled selected values. |
+| `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
+| `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
+| `id` | string | — | HTML id attribute for the trigger element. |
+| `name` | string | — | Form field name. |
+| `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
+| `description` | object | — | React.ReactNode - Description text rendered below the label. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
+| `clearable` | boolean | `false` | Shows a clear button to deselect all values. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
+| `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
+| `loading` | boolean | — | Shows a loading/shimmer state. |
+| `onLoadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. |
+| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Whether the dropdown is initially open (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
+| `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
+| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
+| `ChevronIcon` | object | — | React.ComponentType<{ className?: string; style?: CSSProperties }> - Custom chevron icon component. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
+| `renderTrigger` | object | — | (props: MultiSelectDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger element. |
 
 ### Styling Guide
 
@@ -4009,46 +3943,64 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 ### All Props
 
+<!-- generated from MultiSelectSearchableDropdown.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `MultiSelectOption[]` | `[]` | Available options |
-| `value` | `string[]` | — | Controlled selected values |
-| `defaultValue` | `string[]` | — | Initial values (uncontrolled) |
-| `onValueChange` | `(values, options) => void` | — | Selection change callback |
-| `placeholder` | `ReactNode` | — | Trigger placeholder |
-| `label` | `ReactNode` | — | Label |
-| `description` | `ReactNode` | — | Helper text |
-| `showSearch` | `boolean` | `true` | Show search input |
-| `searchPlaceholder` | `string` | `"Search..."` | Search input placeholder |
-| `searchInputAriaLabel` | `string` | — | Aria-label for search input |
-| `onSearch` | `(query) => Promise<Option[]>` | — | Async search function |
-| `searchDebounceMs` | `number` | `300` | Search debounce delay |
-| `initialOptions` | `MultiSelectOption[]` | `[]` | Pre-loaded options |
-| `onLoadInitialOptions` | `() => Promise<Option[]>` | — | Async initial load |
-| `loadInitialOnOpen` | `boolean` | `false` | Load on first open |
-| `loadingText` | `ReactNode` | `"Loading..."` | Loading indicator text |
-| `disabled` | `boolean` | `false` | Disable component |
-| `required` | `boolean` | `false` | Required field |
-| `error` / `errorMessage` | `boolean` / `ReactNode` | — | Error state |
-| `success` / `successMessage` | `boolean` / `ReactNode` | — | Success state |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showChevron` | `boolean` | `true` | Show chevron |
-| `showSelectedChips` | `boolean` | `true` | Chips vs count |
-| `maxDisplayedChips` | `number` | — | Max visible chips |
-| `checkboxIcon` | `ReactNode` | — | Custom checkbox icon |
-| `fullWidth` | `boolean` | `false` | Full container width |
-| `loading` | `boolean` | `false` | Loading state |
-| `lockScroll` | `boolean` | `false` | Lock body scroll |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred position |
-| `forceDropdownPosition` | `boolean` | `false` | Lock position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap (px) |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `keepMounted` | `boolean` | `false` | Keep DOM when closed |
-| `classes` | `MultiSelectSearchableDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-
----
+| `options` | array | — | List of selectable options. |
+| `value` | array | — | Controlled selected values. |
+| `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
+| `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
+| `id` | string | — | HTML id attribute for the trigger element. |
+| `name` | string | — | Form field name. |
+| `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
+| `disabled` | boolean | `false` | Disables the dropdown. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
+| `description` | object | — | React.ReactNode - Description text rendered below the label. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
+| `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search input. |
+| `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options match the search. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode - Text shown during async loading. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
+| `clearable` | boolean | `false` | Shows a clear button to deselect all values. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
+| `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
+| `loading` | boolean | — | Shows a loading state. |
+| `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. |
+| `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
+| `initialOptions` | array | — | Options to display before any search is performed. |
+| `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. |
+| `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
+| `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
+| `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
+| `classes` | object | — | CSS class overrides for dropdown sub-elements. |
+| `className` | string | — | Additional CSS class for the root element. |
+| `style` | object | — | Inline styles for the root element. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Whether the dropdown is initially open (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void - Fires when the open state changes. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the dropdown popup. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | Locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index of the dropdown popup. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown popup. |
+| `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void - Fires when the dropdown loses focus. |
+| `onFocus` | object | — | () => void - Fires when the dropdown receives focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
+| `ClearIcon` | object | — | React.ComponentType<{ className?: string }> - Custom clear icon component. |
+| `renderTrigger` | object | — | (props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode - Custom render function for the trigger. |
+| `searchInputAriaLabel` | string | `"Search options"` | Accessible label for the search input. |
 
 ### Styling Guide
 
@@ -4170,12 +4122,49 @@ export default function Example() {
 | Prop | Constraint |
 |------|-----------|
 | `length` | Defaults to 6. Controls number of input fields. |
-| `type` | `"numeric"` (default) or `"alphanumeric"`. Restricts allowed characters. |
-| `groupPattern` | Array like `[3,3]` to visually group inputs with separators. Sum must equal `length`. |
-| `validate` | Custom function `(char) => boolean`. Overrides `type` filtering. |
-| `masked` | Shows dots instead of characters (like password fields). |
+| `inputPattern` | Regex string restricting allowed characters, e.g. `"\\d*"` for digits only. Also drives `inputMode`. |
+| `inputType` | `"text"` (default), `"tel"`, or `"password"`. Use `"password"` to mask characters. |
+| `groups` | Array like `[3, 3]` to visually group inputs with separators. Sum must equal `length`. |
+| `validate` | Custom function `(char) => boolean`. Overrides `inputPattern` filtering. |
 
 ---
+
+### All Props
+
+<!-- generated from OtpInput.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `length` | number | `6` | Number of OTP input fields. |
+| `value` | string | — | Controlled OTP value. |
+| `defaultValue` | string | — | Initial OTP value for uncontrolled usage. |
+| `onValueChange` | object | — | (value: string) => void - Fires when the OTP value changes. |
+| `onComplete` | object | — | (value: string) => void - Fires when all fields are filled. |
+| `label` | object | — | React.ReactNode - Label rendered above the input. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `description` | object | — | React.ReactNode - Helper text rendered below the label. |
+| `error` | boolean | `false` | Displays the input in an error state. |
+| `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
+| `success` | boolean | `false` | Displays the input in a success state. |
+| `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
+| `loading` | boolean | `false` | Shows a loading state. |
+| `disabled` | boolean | `false` | Disables all input fields. |
+| `groups` | array | — | Defines grouping of input fields (e.g. [3, 3] for two groups of 3). |
+| `separator` | object | — | React.ReactNode - Content rendered between groups. |
+| `allowPaste` | boolean | `true` | Enables pasting OTP values. |
+| `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
+| `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
+| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
+| `inputClassNames` | array | — | Per-input CSS class overrides. |
+| `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
+| `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
+| `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
+| `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
+| `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
 
 ---
 
@@ -4244,40 +4233,40 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 
 ### All Props
 
+<!-- generated from Pagination.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | — | Current page (1-indexed, controlled) |
-| `defaultValue` | `number` | `1` | Initial page (uncontrolled) |
-| `totalPages` | `number` | — | **Required.** Total pages |
-| `onValueChange` | `(page) => void` | — | Page change callback |
-| `siblingCount` | `number` | `1` | Pages around current page |
-| `showRowsPerPage` | `boolean` | `false` | Show rows-per-page selector |
-| `rowsPerPage` | `number` | — | Current rows per page |
-| `onRowsPerPageChange` | `(rows) => void` | — | Rows change callback |
-| `rowOptions` | `number[]` | `[5,10,25,50,100]` | Dropdown options |
-| `rowsPerPageLabel` | `string` | `"rows"` | Label after selector |
-| `showLabel` | `string` | `"Show"` | Label before selector |
-| `dropdownAriaLabel` | `string` | `"Rows per page"` | Dropdown ARIA label |
-| `dropdownPosition` | `"top" \| "bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom) |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | — | Gap between trigger and dropdown |
-| `prevIcon` | `ComponentType \| ReactNode` | Chevron | Previous button icon |
-| `nextIcon` | `ComponentType \| ReactNode` | Chevron | Next button icon |
-| `dropdownIcon` | `ComponentType \| ReactNode` | Chevron | Dropdown icon |
-| `renderEllipsis` | `(props) => ReactNode` | — | Custom ellipsis renderer |
-| `renderPageInfo` | `(props) => ReactNode` | — | Custom page info renderer |
-| `sectionOrder` | `SectionName[]` | `["selector","pageInfo","nav"]` | Layout order |
-| `disabled` | `boolean` | `false` | Disable all controls |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-| `classes` | `PaginationClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Dropdown portal target |
-| `prevAriaLabel` | `string` | `"Previous page"` | Prev button aria-label |
-| `nextAriaLabel` | `string` | `"Next page"` | Next button aria-label |
-| `paginationAriaLabel` | `string` | `"Pagination"` | Nav landmark aria-label |
-| `pageAriaLabel` | `(page) => string` | — | Page button aria-label function |
-
----
+| `totalPages` **(required)** | number | — | Total number of pages. |
+| `siblingCount` | number | `1` | Number of sibling page buttons to show on each side of the current page. |
+| `rowsPerPage` | number | — | Current number of rows displayed per page. |
+| `rowOptions` | array | — | Available row-per-page options for the selector. |
+| `disabled` | boolean | — | Disables the entire pagination control. |
+| `onValueChange` | object | — | (page: number) => void - Fires when the current page changes. |
+| `value` | number | — | Controlled current page number. |
+| `defaultValue` | number | `1` | Initial page number for uncontrolled usage. |
+| `onRowsPerPageChange` | object | — | (rows: number) => void - Fires when the rows-per-page value changes. |
+| `showRowsPerPage` | boolean | `false` | Whether to show the rows-per-page selector. |
+| `rowsPerPageLabel` | string | `"rows"` | Label text for the rows-per-page selector. |
+| `showLabel` | string | `"Show"` | Label text for the 'show' section of the rows-per-page selector. |
+| `dropdownAriaLabel` | string | `"Rows per page"` | Accessible label for the rows-per-page dropdown. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
+| `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
+| `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
+| `prevIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
+| `nextIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
+| `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
+| `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
+| `sectionOrder` | array | — | Order of pagination sections. |
+| `reduceMotion` | `true` \| `false` \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for pagination sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `portalContainer` | object | — | HTMLElement \| null - Portal target for the rows-per-page dropdown. |
+| `prevAriaLabel` | string | `"Previous page"` | Accessible label for the previous page button. |
+| `nextAriaLabel` | string | `"Next page"` | Accessible label for the next page button. |
+| `paginationAriaLabel` | string | — | Accessible label for the pagination nav element. |
+| `pageAriaLabel` | object | — | (page: number) => string - Function to generate aria-label for each page button. |
 
 ### Ref API
 
@@ -4495,6 +4484,27 @@ export default function Example() {
 
 ---
 
+### All Props
+
+<!-- generated from ResizablePanel.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | number | — | Controlled size value of the panel in pixels. |
+| `defaultValue` | number | `300` | Default uncontrolled size value of the panel in pixels. |
+| `onValueChange` | object | — | (value: number) => void — Callback fired when the panel size changes. |
+| `onResizeStart` | object | — | (value: number) => void — Callback fired when a resize drag begins. |
+| `onResizeEnd` | object | — | (value: number) => void — Callback fired when a resize drag ends. |
+| `minValue` | number | `200` | Minimum allowed size value in pixels. |
+| `maxValue` | number | `800` | Maximum allowed size value in pixels. |
+| `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
+| `step` | number | `10` | Step increment for resize value changes. |
+| `disabled` | boolean | `false` | Whether the resize handle is disabled. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `handleContent` | object | — | React.ReactNode — Custom content rendered inside the resize handle. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+
 ---
 
 ## SearchableDropdown
@@ -4581,52 +4591,67 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 ### All Props
 
+<!-- generated from SearchableDropdown.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | `SearchableDropdownOption[]` | `[]` | Available options |
-| `value` | `string \| null` | — | Controlled selected value |
-| `defaultValue` | `string` | — | Initial value (uncontrolled) |
-| `onValueChange` | `(value, option) => void` | — | Selection change callback |
-| `placeholder` | `ReactNode` | — | Trigger placeholder |
-| `label` | `ReactNode` | — | Label (auto-associated via htmlFor) |
-| `description` | `ReactNode` | — | Helper text below label |
-| `showSearch` | `boolean` | `true` | Show search input |
-| `searchPlaceholder` | `string` | `"Search..."` | Search input placeholder |
-| `searchInputAriaLabel` | `string` | `"Search options"` | Search input aria-label |
-| `onSearch` | `(query) => Promise<Option[]>` | — | Async search function |
-| `searchDebounceMs` | `number` | `300` | Search debounce delay |
-| `initialOptions` | `Option[]` | `[]` | Pre-loaded options for async |
-| `onLoadInitialOptions` | `() => Promise<Option[]>` | — | Async initial load on open |
-| `loadInitialOnOpen` | `boolean` | `false` | Trigger initial load on open |
-| `disabled` | `boolean` | `false` | Disable component |
-| `required` | `boolean` | `false` | Required field |
-| `error` / `errorMessage` | `boolean` / `ReactNode` | — | Error state |
-| `success` / `successMessage` | `boolean` / `ReactNode` | — | Success state |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showChevron` | `boolean` | `true` | Show chevron icon |
-| `showSelectedIcon` | `boolean` | `true` | Show check icon on selected |
-| `selectedIcon` | `ReactNode` | — | Custom selected icon |
-| `fullWidth` | `boolean` | `false` | Full container width |
-| `loading` | `boolean` | `false` | Loading state |
-| `shimmerCount` | `number` | `5` | Shimmer placeholder count |
-| `lockScroll` | `boolean` | `false` | Lock body scroll |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Preferred position |
-| `forceDropdownPosition` | `boolean` | `false` | Lock position, no auto-flip |
-| `dropdownZIndex` | `number` | `50` | Dropdown z-index |
-| `dropdownGap` | `number` | `4` | Gap (px) |
-| `portalContainer` | `HTMLElement \| null` | `document.body` | Portal target |
-| `keepMounted` | `boolean` | `false` | Keep DOM when closed |
-| `typeaheadTimeout` | `number` | `500` | Type-ahead buffer reset (ms) |
-| `classes` | `SearchableDropdownClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `name` | `string` | — | Form field name |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open) => void` | — | Open state callback |
-| `renderTrigger` | `(props) => ReactNode` | — | Custom trigger renderer |
-| `ChevronIcon` / `CheckIcon` / `ClearIcon` / `SearchIcon` | `ComponentType` | — | Custom icon components |
-| `loadingText` | `ReactNode` | — | Custom loading indicator |
-
----
+| `options` | array | — | Array of dropdown options. |
+| `value` | string \| null | — | Controlled selected value. |
+| `defaultValue` | string | — | Default uncontrolled selected value. |
+| `onValueChange` | object | — | (value: string \| null, option: SearchableDropdownOption \| null) => void — Callback fired when the selected value changes. |
+| `open` | boolean | — | Controlled open state of the dropdown. |
+| `defaultOpen` | boolean | `false` | Default uncontrolled open state. |
+| `onOpenChange` | object | — | (open: boolean) => void — Callback fired when the open state changes. |
+| `id` | string | — | HTML id attribute for the component. |
+| `name` | string | — | Form field name attribute. |
+| `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content shown when no value is selected. |
+| `disabled` | boolean | `false` | Whether the dropdown is disabled. |
+| `error` | boolean | `false` | Whether the dropdown is in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the dropdown. |
+| `label` | object | — | React.ReactNode — Label displayed above the dropdown. |
+| `description` | object | — | React.ReactNode — Description text displayed below the label. |
+| `success` | boolean | `false` | Whether the dropdown is in a success state. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the dropdown. |
+| `required` | boolean | `false` | Whether the field is required. |
+| `clearable` | boolean | `false` | Whether the selected value can be cleared. |
+| `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
+| `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search input. |
+| `searchInputAriaLabel` | string | `"Search options"` | Custom aria-label for the search input. Defaults to 'Search options'. |
+| `noResultsContent` | object | `"No results found"` | React.ReactNode — Content shown when no search results are found. |
+| `showChevron` | boolean | `true` | Whether to show the chevron icon on the trigger. |
+| `showSelectedIcon` | boolean | `true` | Whether to show a check icon on the selected option. |
+| `selectedIcon` | object | — | React.ReactNode — Custom icon for the selected option. |
+| `fullWidth` | boolean | `false` | Whether the dropdown expands to fill its parent container. |
+| `loading` | boolean | — | Whether the dropdown is in a loading state. |
+| `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. |
+| `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
+| `initialOptions` | array | — | Initial options to display before any search is performed. |
+| `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. |
+| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. |
+| `onLoadError` | object | — | (error: unknown) => void — Callback when async loading fails. |
+| `shimmerCount` | number | `5` | Number of shimmer placeholder items to show while loading. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `keepMounted` | boolean | `false` | Whether to keep the dropdown DOM mounted when closed. |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | When true, locks the dropdown to the specified dropdownPosition without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index for the dropdown. |
+| `dropdownGap` | number | `4` | Gap between trigger and dropdown in pixels. |
+| `typeaheadTimeout` | number | `500` | Timeout in milliseconds for typeahead keyboard navigation. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `lockScroll` | boolean | `false` | Whether to lock body scroll when the dropdown is open. |
+| `aria-label` | string | — | Accessible label for the dropdown. |
+| `onBlur` | object | — | () => void — Callback fired when the dropdown loses focus. |
+| `onFocus` | object | — | () => void — Callback fired when the dropdown gains focus. |
+| `onKeyDown` | object | — | (event: React.KeyboardEvent) => void — Callback fired on keydown events. |
+| `renderTrigger` | object | — | (props: SearchableDropdownTriggerRenderProps) => ReactNode — Custom trigger render function. |
+| `ChevronIcon` | object | — | React.ComponentType — Custom chevron icon component. |
+| `CheckIcon` | object | — | React.ComponentType — Custom check icon component. |
+| `ClearIcon` | object | — | React.ComponentType — Custom clear icon component. |
+| `SearchIcon` | object | — | React.ComponentType — Custom search icon component. |
+| `loadingText` | object | `"Loading..."` | React.ReactNode — Text shown during loading state. |
 
 ### Styling Guide
 
@@ -4772,10 +4797,52 @@ export default function Example() {
 | `min` / `max` | Defaults 0/100. `min` must be less than `max`. |
 | `step` | Defaults 1. Value snaps to nearest step. |
 | `marks` | Array of `{ value, label? }`. Rendered as dots on track. |
-| `showTooltip` | `"always"`, `"hover"`, or `false`. Shows value above thumb. |
+| `showTooltip` | `boolean`. Shows the value above the thumb on hover/drag. Use `tooltipAlways` to keep it visible. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
 
 ---
+
+### All Props
+
+<!-- generated from Slider.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | number \| array | — | Current value (number for single thumb, [number, number] for range). |
+| `defaultValue` | number \| array | — | Default uncontrolled value. |
+| `onValueChange` | object | — | (value: SliderValue) => void — Fires when the value changes. |
+| `onValueCommit` | object | — | (value: SliderValue) => void — Fires when a drag interaction ends (commit). |
+| `min` | number | `0` | Minimum value. |
+| `max` | number | `100` | Maximum value. |
+| `step` | number | `1` | Step increment. |
+| `minStepsBetweenThumbs` | number | `0` | Minimum distance between range thumbs. |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Orientation of the slider. |
+| `inverted` | boolean | `false` | Reverse the slider direction. |
+| `showTooltip` | boolean | `false` | Show value tooltip on hover/drag. |
+| `tooltipAlways` | boolean | `false` | Always show tooltip, not just on hover/drag. |
+| `formatTooltip` | object | — | (value: number) => string — Format the tooltip display value. |
+| `marks` | array | — | Marks/ticks on the track. |
+| `showMarkLabels` | boolean | `true` | Show mark labels. Defaults to true when marks are provided. |
+| `renderThumb` | object | — | (props: SliderThumbRenderProps) => ReactNode — Custom thumb content renderer. |
+| `renderMark` | object | — | (props: SliderMarkRenderProps) => ReactNode — Custom mark dot renderer. |
+| `markDotSize` | number | `6` | Size of mark dots in pixels. |
+| `transitionDuration` | number | `200` | Duration in ms of the click-to-jump animation when the user clicks a mark or any point on the track. Set to 0 to disable. The animation is automatically suppressed during an active drag so the thumb tracks the cursor 1:1. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name attribute. |
+| `label` | object | — | React.ReactNode — Label displayed above the slider. |
+| `description` | object | — | React.ReactNode — Description text. |
+| `disabled` | boolean | `false` | Whether the slider is disabled. |
+| `required` | boolean | `false` | Whether the field is required. |
+| `error` | boolean | `false` | Whether the slider is in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the slider. |
+| `success` | boolean | — | Whether the slider is in a success state. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the slider. |
+| `loading` | boolean | — | Whether the slider is in a loading state. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `aria-label` | string | — | Accessible label for the slider. |
+| `aria-labelledby` | string | — | ID of the element that labels the slider. |
+| `aria-valuetext` | string | — | Human-readable text alternative for the current value. |
 
 ---
 
@@ -4863,40 +4930,40 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 
 ### All Props
 
+<!-- generated from Stepper.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `Step[]` | — | **Required.** Step definitions |
-| `value` | `string \| number` | — | Active step ID (controlled) |
-| `defaultValue` | `string \| number` | — | Initial step (uncontrolled) |
-| `onValueChange` | `(stepId) => void` | — | Step change callback |
-| `beforeStepChange` | `(next, current) => boolean` | — | Guard before navigation |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `variant` | `"numbered" \| "icon" \| "dot"` | `"numbered"` | Indicator style |
-| `activationMode` | `"automatic" \| "manual"` | `"manual"` | Keyboard activation mode |
-| `isStepClickable` | `(id, status) => boolean` | completed+active | Click guard |
-| `getStepStatus` | `(id, index, activeIndex) => StepStatus` | — | Custom status logic |
-| `showLabels` | `boolean` | `true` | Show step labels |
-| `showDescriptions` | `boolean` | `false` | Show step descriptions |
-| `showConnectors` | `boolean` | `true` | Show connecting lines |
-| `labelPosition` | `"bottom" \| "right"` | `"right"` | Label placement |
-| `completedIcon` | `ComponentType \| ReactNode` | Check | Global completed icon |
-| `errorIcon` | `ComponentType \| ReactNode` | X | Global error icon |
-| `fullWidth` | `boolean` | `false` | Root takes full width |
-| `showTooltips` | `boolean` | `false` | Enable tooltips |
-| `tooltipDefaults` | `StepperTooltipDefaults` | — | Default tooltip config |
-| `indicatorSize` | `number` | per variant | Override indicator px size |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | Motion preference |
-| `disabled` | `boolean` | `false` | Disable all steps |
-| `loop` | `boolean` | `false` | Loop keyboard navigation |
-| `renderStep` | `(props, defaultEl) => ReactNode` | — | Custom step renderer |
-| `classes` | `StepperClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `className` | `string` | — | Root class |
-| `style` | `CSSProperties` | — | Root inline styles |
-| `id` | `string` | — | Root HTML id |
-| `aria-label` | `string` | `"Progress"` | Nav landmark label |
-
----
+| `steps` **(required)** | array | — | Array of step definitions. |
+| `value` | string \| number | — | Controlled active step ID. |
+| `defaultValue` | string \| number | — | Default uncontrolled active step ID. |
+| `onValueChange` | object | — | (stepId: string \| number) => void — Callback fired when the active step changes. |
+| `beforeStepChange` | object | — | (nextStepId: string \| number, currentStepId: string \| number) => boolean — Guard callback invoked before changing steps. Return false to prevent the change. |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the stepper. |
+| `variant` | `"numbered"` \| `"icon"` \| `"dot"` | `"numbered"` | Visual variant of the step indicators. |
+| `activationMode` | `"automatic"` \| `"manual"` | `"manual"` | Whether steps activate automatically on focus or require manual activation. |
+| `isStepClickable` | object | — | (stepId: string \| number, status: StepStatus) => boolean — Determines whether a step is clickable. |
+| `getStepStatus` | object | — | (stepId: string \| number, index: number, activeIndex: number) => StepStatus — Custom function to determine step status. |
+| `showLabels` | boolean | `true` | Whether to show step labels. |
+| `showDescriptions` | boolean | `false` | Whether to show step descriptions. |
+| `showConnectors` | boolean | `true` | Whether to show connectors between steps. |
+| `labelPosition` | `"bottom"` \| `"right"` | `"right"` | Position of step labels relative to the indicator. |
+| `completedIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for completed steps. |
+| `errorIcon` | object | — | React.ComponentType \| React.ReactNode — Default icon for error steps. |
+| `fullWidth` | boolean | `false` | Whether the stepper expands to fill its container. |
+| `aria-label` | string | — | Accessible label for the stepper. |
+| `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
+| `tooltipDefaults` | object | — | Default tooltip configuration applied to all step tooltips. |
+| `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `id` | string | — | HTML id attribute. |
+| `disabled` | boolean | `false` | Whether the entire stepper is disabled. |
+| `loop` | boolean | `false` | Whether keyboard navigation loops from last step to first. |
+| `renderStep` | object | — | (props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function. |
 
 ### Styling Guide
 
@@ -5045,13 +5112,50 @@ export default function Example() {
 
 ---
 
+### All Props
+
+<!-- generated from Switch.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | string | — | CSS class for the root element. |
+| `label` | object | — | React.ReactNode — Label displayed alongside the switch. |
+| `description` | object | — | React.ReactNode — Description text below the label. |
+| `checked` | boolean | — | Controlled checked state. |
+| `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
+| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
+| `name` | string | — | Form field name attribute. |
+| `value` | string | `"on"` | Value attribute for the hidden input element. |
+| `required` | boolean | `false` | Whether the field is required. |
+| `id` | string | — | HTML id attribute. |
+| `disabled` | boolean | `false` | Whether the switch is disabled. |
+| `error` | boolean | `false` | Whether the switch is in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the switch. |
+| `success` | boolean | `false` | Whether the switch is in a success state. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the switch. |
+| `loading` | boolean | `false` | Whether the switch is in a loading state. |
+| `loader` | object | — | React.ReactNode — Custom loader element. |
+| `loaderSize` | number | `16` | Size of the default loader in pixels. |
+| `checkedIcon` | object | — | React.ReactNode — Icon displayed inside the thumb when checked. |
+| `uncheckedIcon` | object | — | React.ReactNode — Icon displayed inside the thumb when unchecked. |
+| `transitionDuration` | number | — | Duration of the toggle transition in milliseconds. |
+| `transitionTimingFunction` | string | — | CSS timing function for the toggle transition. |
+| `renderLabel` | object | — | (props: SwitchRenderProps) => ReactNode — Custom label render function. |
+| `renderDescription` | object | — | (props: SwitchRenderProps) => ReactNode — Custom description render function. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+
 ### Styling Guide
 
 Switch supports CSS custom properties for easy theming:
-- `--switch-width`, `--switch-height` — overall dimensions
+- `--switch-tracker-width`, `--switch-tracker-height` — track dimensions
 - `--switch-thumb-size` — thumb diameter
-- `--switch-thumb-offset` — thumb inset from track edge
-- `--switch-checked-bg`, `--switch-unchecked-bg` — track colors
+- `--switch-thumb-bg` — thumb color
+- `--switch-tracker-checked-bg`, `--switch-tracker-unchecked-bg` — track colors
+- `--switch-focus-ring` — focus ring color
 
 Or use the `classes` prop with 14 slots for full control.
 
@@ -5110,12 +5214,12 @@ export default function Example() {
 | `manualSorting` | When true, sorting is server-side; table won't sort locally. |
 | `pinnedColumns` | Array of column IDs to pin left. Requires `onPinColumn` for interactive. |
 | `expandable` + `renderExpandedRow` | Both needed for row expansion. |
-| `draggable` + `onReorder` | Both needed for drag-and-drop row reordering. |
+| `enableRowDragDrop` + `onRowReorder` | Both needed for drag-and-drop row reordering. |
 | `editable` + `onCellEdit` | Both needed for inline cell editing. |
-| `resizable` | Enables column resize handles. |
+| `enableColumnResizing` | Enables column resize handles. |
 | `stickyHeader` | Requires `maxHeight` to be meaningful. |
-| `infiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
-| `globalSearch` | Enables built-in search bar. |
+| `enableInfiniteScroll` + `onLoadMore` + `hasMore` | All three for infinite scroll. |
+| `showSearch` | Enables built-in search bar. |
 | `classes` | Per-slot class overrides. **Replaces** per slot, not additive. |
 
 ---
@@ -5131,6 +5235,115 @@ export default function Example() {
 DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight) > table > thead > tr > th + tbody > tr > td`
 
 ---
+
+### All Props
+
+<!-- generated from Table.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | array | — | TanStack ColumnDef array defining table columns. |
+| `data` | array | — | Array of row data objects. |
+| `COLUMNS` | array | — | Deprecated alias for columns. |
+| `COLUMNS_DATA` | array | — | Deprecated alias for data. |
+| `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
+| `showHeader` | boolean | `true` | Whether to show the table header row. |
+| `tableHeader` | boolean | — | Legacy alias for showHeader. |
+| `pinnedColumns` | array | — | Column IDs to pin to the left side. |
+| `onPinColumn` | object | — | (columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned. |
+| `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |
+| `maxPinnedColumns` | number | `3` | Maximum number of columns that can be pinned simultaneously. |
+| `onCursorPosition` | object | — | (position: { x: number; y: number } \| null) => void — Callback with cursor position over the table. |
+| `onCursorOverHeader` | object | — | (isOverHeader: boolean) => void — Callback when cursor enters/leaves the header. |
+| `emptyContent` | object | — | React.ReactNode — Content shown when the table has no data. |
+| `ariaLabel` | string | `"Data table"` | Accessible label for the table. |
+| `caption` | string | — | Accessible caption rendered as a visually hidden <caption> element. |
+| `getRowId` | object | — | (row: TData) => string — Function to derive a unique row ID. |
+| `selectedRowId` | string \| null | — | ID of the currently selected row (single selection). |
+| `onRowClick` | object | — | (rowData: TData) => void — Callback fired when a row is clicked. |
+| `onRowHover` | object | — | (rowIndex: number \| null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered. |
+| `floatingActions` | object | — | React.ReactNode — Floating action elements displayed on row hover. |
+| `isFloatingActionsHovered` | boolean | `false` | Whether the floating actions area is being hovered. |
+| `isPopupOpen` | boolean | `false` | Whether a popup triggered from the table is currently open. |
+| `maxWidth` | string \| number | — | Maximum width of the table container. |
+| `maxHeight` | string \| number | — | Maximum height of the table container. |
+| `minHeight` | string \| number | — | Minimum height of the table container. |
+| `hideVerticalScrollbar` | boolean | `false` | Whether to hide the vertical scrollbar. |
+| `hideHorizontalScrollbar` | boolean | `false` | Whether to hide the horizontal scrollbar. |
+| `stickyHeader` | boolean | `false` | Whether the header row sticks to the top when scrolling. |
+| `classes` | object | — | CSS class overrides for table sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `style` | object | — | Inline styles applied to the root container. |
+| `PinIcon` | object | — | React.ComponentType — Custom pin icon component (unpinned state). |
+| `PinnedIcon` | object | — | React.ComponentType — Custom pin icon component (pinned state). |
+| `shimmerRowCount` | number | `10` | Number of shimmer rows to display while loading. |
+| `className` | string | — | CSS class for the root element. |
+| `children` | object | — | React.ReactNode — Child elements. |
+| `sortable` | boolean | `false` | Enable column sorting. |
+| `onSortingChange` | object | — | (sorting: SortingState) => void — Callback when sorting state changes. |
+| `sorting` | array | — | Controlled sorting state. |
+| `manualSorting` | boolean | `false` | When true, sorting is handled server-side. |
+| `selectionMode` | `"single"` \| `"multiple"` \| `"none"` | `"none"` | Row selection mode. |
+| `selectedRowIds` | array | — | Array of selected row IDs (controlled). |
+| `onSelectionChange` | object | — | (selectedIds: string[]) => void — Callback when selection changes. |
+| `selectAllMode` | `"page"` \| `"all"` | `"page"` | Whether select-all selects current page or all rows. |
+| `globalFilter` | string | — | Global filter value for searching across all columns. |
+| `onGlobalFilterChange` | object | — | (value: string) => void — Callback when global filter changes. |
+| `columnFilters` | array | — | Controlled column filters state. |
+| `onColumnFiltersChange` | object | — | (filters: ColumnFiltersState) => void — Callback when column filters change. |
+| `enableColumnFilters` | boolean | `false` | Enable per-column filtering. |
+| `filterableColumns` | object | — | Map of column ID to filter options configuration. |
+| `FilterIcon` | object | — | React.ComponentType — Custom filter icon component. |
+| `renderColumnFilter` | object | — | (columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer. |
+| `expandable` | boolean | `false` | Enable row expansion. |
+| `expandedRowIds` | array | — | Array of expanded row IDs (controlled). |
+| `onExpandedChange` | object | — | (expandedIds: string[]) => void — Callback when expanded rows change. |
+| `renderExpandedRow` | object | — | (row: TData) => ReactNode — Render function for expanded row content. |
+| `ExpandIcon` | object | — | React.ComponentType — Custom expand icon component. |
+| `expandColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the expand column. |
+| `expandOnRowClick` | boolean | `false` | Make the entire row clickable to toggle expansion. |
+| `columnVisibility` | object | — | Controlled column visibility map (column ID to boolean). |
+| `onColumnVisibilityChange` | object | — | (visibility: Record<string, boolean>) => void — Callback when column visibility changes. |
+| `striped` | boolean | `false` | Alternate row background colors. |
+| `stripedClassName` | string | — | Custom CSS class for striped rows. |
+| `density` | `"compact"` \| `"comfortable"` \| `"spacious"` | `"comfortable"` | Controls cell padding density. |
+| `pinnedRightColumns` | array | — | Column IDs to pin to the right side. |
+| `editable` | boolean | `false` | Enable inline cell editing on double-click. |
+| `editableColumns` | array | — | Column IDs that are editable. |
+| `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |
+| `enableColumnResizing` | boolean | `false` | Enable column resizing via drag handles. |
+| `columnSizing` | object | — | Controlled column sizing state. |
+| `onColumnSizingChange` | object | — | (sizing: ColumnSizingState) => void — Callback when column sizing changes. |
+| `manualPagination` | boolean | `false` | When true, pagination is handled server-side. |
+| `manualFiltering` | boolean | `false` | When true, filtering is handled server-side. |
+| `columnOrder` | array | — | Controlled column order (array of column IDs). |
+| `onColumnOrderChange` | object | — | (order: string[]) => void — Callback when column order changes. |
+| `enableRowDragDrop` | boolean | `false` | Enable row drag-and-drop reordering. |
+| `onRowReorder` | object | — | (fromIndex: number, toIndex: number) => void — Callback when a row is reordered. |
+| `dragColumnPosition` | `"left"` \| `"right"` | `"left"` | Position of the drag handle column. |
+| `showFooter` | boolean | `false` | Show the table footer. |
+| `footerContent` | object | — | React.ReactNode — Custom footer content rendered inside <tfoot>. |
+| `onContextMenu` | object | — | (event: React.MouseEvent, row: TData) => void — Callback on right-click of a row. |
+| `enableCopyOnClick` | boolean | `false` | Enable single-click cell copy to clipboard. |
+| `onCellCopy` | object | — | (value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied. |
+| `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
+| `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
+| `hasMore` | boolean | `false` | Whether there is more data to load. |
+| `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
+| `infiniteEndContent` | object | — | React.ReactNode — Content shown when all data is loaded. |
+| `responsiveBreakpoint` | number | — | Viewport width below which the table renders as card layout. |
+| `renderMobileCard` | object | — | (row: TData) => ReactNode — Render function for mobile card layout. |
+| `groupBy` | array | — | Column IDs to group rows by. |
+| `onGroupByChange` | object | — | (groupBy: string[]) => void — Callback when group-by columns change. |
+| `showSearch` | boolean | `false` | Show a built-in search bar above the table. |
+| `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search bar. |
+| `searchIconPosition` | `"left"` \| `"right"` \| `"none"` | `"left"` | Position of the search icon. |
+| `CheckboxIcon` | object | — | React.ComponentType — Custom checkbox component for multi-row selection. |
+| `checkboxColor` | string | — | Simple color customization for the default checkbox. |
+| `DragHandleIcon` | object | — | React.ComponentType — Custom drag handle icon component. |
+| `SearchIcon` | object | — | React.ComponentType — Custom search icon component. |
+| `onSearchClear` | object | — | () => void — Callback when the search clear button is clicked. |
+| `loadingMoreContent` | object | — | React.ReactNode — Custom content for the loading more indicator. |
 
 ### Styling Guide
 
@@ -5202,10 +5415,10 @@ const [sorting, setSorting] = useState<SortingState>([]);
 
 ## TabPanel
 
-> Accessible tab panel with icons, badges, tooltips, closable tabs, vertical orientation, lazy loading, and roving tabindex.
+> Accessible tab panel with icons, badges, tooltips, vertical orientation, keep-mounted panels, and roving tabindex.
 
 **Category:** Navigation
-**Keywords:** tabs, tab panel, tabbed interface, navigation tabs, tab list, tab content, closable, vertical tabs, lazy loading
+**Keywords:** tabs, tab panel, tabbed interface, navigation tabs, tab list, tab content, vertical tabs, keep mounted
 
 ### Import
 
@@ -5229,11 +5442,9 @@ const tabs = [
 
 export default function Example() {
   return (
-    <TabPanel
-      tabs={tabs}
-      defaultValue="home"
-      renderContent={(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
-    />
+    <TabPanel tabs={tabs} defaultValue="home">
+      {(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
+    </TabPanel>
   );
 }
 ```
@@ -5249,10 +5460,8 @@ export default function Example() {
 | `defaultValue` | Uncontrolled mode — do not combine with `value`. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
 | `activationMode` | `"automatic"` (default) or `"manual"` (Enter/Space to activate). |
-| `closable` | When true, tabs show close button. Must handle `onClose`. |
-| `renderContent` | Function `(tab) => ReactNode`. Required for content rendering. |
+| `children` | Render function `(tab) => ReactNode`. This is how panel content is rendered — not a `renderContent` prop or `content` on tab objects. |
 | `renderTab` | Custom tab renderer. Receives `(props, defaultElement)`. |
-| `lazyMount` | Only mount panels on first activation. |
 | `keepMounted` | Keep panels in DOM after switching away. |
 | `forceMount` | Mount all panels regardless of active state. |
 | `unstyled` | Strips all defaults. Must provide styling via `classes`. |
@@ -5271,33 +5480,36 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 
 ### All Props
 
+<!-- generated from TabPanel.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tabs` | `Tab[]` | — | **Required.** Tab definitions |
-| `value` | `string` | — | Active tab (controlled) |
-| `defaultValue` | `string` | — | Initial tab (uncontrolled) |
-| `onValueChange` | `(tabId) => void` | — | Tab change callback |
-| `renderContent` | `(tab) => ReactNode` | — | Content renderer |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `activationMode` | `"automatic" \| "manual"` | `"automatic"` | Keyboard activation mode |
-| `closable` | `boolean` | `false` | Show close buttons |
-| `onClose` | `(tabId) => void` | — | Close tab callback |
-| `showTooltips` | `boolean` | `false` | Enable tooltips |
-| `tooltipDefaults` | `TooltipDefaults` | — | Default tooltip config |
-| `lazyMount` | `boolean` | `false` | Lazy-mount panels |
-| `keepMounted` | `boolean` | `false` | Keep inactive panels |
-| `forceMount` | `boolean` | `false` | Mount all panels |
-| `loop` | `boolean` | `true` | Loop keyboard navigation |
-| `disabled` | `boolean` | `false` | Disable all tabs |
-| `renderTab` | `(props, defaultEl) => ReactNode` | — | Custom tab renderer |
-| `classes` | `TabPanelClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `className` | `string` | — | Root class |
-| `aria-label` | `string` | `"Tabs"` | Tablist ARIA label |
-| `aria-labelledby` | `string` | — | External labelling element |
-| `id` | `string` | — | Root ID |
-
----
+| `tabs` **(required)** | array | — | Array of tab definitions. |
+| `id` | string | — | HTML id attribute. |
+| `value` | string | — | Controlled active tab ID. |
+| `defaultValue` | string | — | Default uncontrolled active tab ID. |
+| `onValueChange` | object | — | (tabId: string) => void — Callback fired when the active tab changes. |
+| `children` | object | — | React.ReactNode \| ((tab: Tab) => ReactNode) — Tab panel content, either static or a render function. |
+| `orientation` | `"horizontal"` \| `"vertical"` | `"horizontal"` | Layout orientation of the tab list. |
+| `activationMode` | `"automatic"` \| `"manual"` | `"automatic"` | Whether tabs activate automatically on focus or require manual activation. |
+| `loop` | boolean | `true` | Whether keyboard navigation loops from last tab to first. |
+| `iconPosition` | `"left"` \| `"right"` | `"left"` | Position of tab icons relative to the label. |
+| `showZeroCount` | boolean | `false` | Whether to show a count badge when the count is zero. |
+| `alwaysShowLabels` | boolean | `true` | Whether to always show tab labels (even when icons are present). |
+| `showTooltips` | boolean | `true` | Whether to show tooltips on tabs. |
+| `tooltipPosition` | `"top"` \| `"bottom"` \| `"left"` \| `"right"` | `"bottom"` | Position of tab tooltips. |
+| `tooltipOffset` | number | `4` | Offset distance for tab tooltips in pixels. |
+| `disabled` | boolean | `false` | Whether the entire tab panel is disabled. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `renderTab` | object | — | (props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function. |
+| `aria-label` | string | — | Accessible label for the tab list. |
+| `aria-labelledby` | string | — | ID of the element that labels the tab list. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `className` | string | — | CSS class for the root element. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `forceMount` | boolean | `false` | Force mount all tab panels regardless of active state. |
+| `keepMounted` | boolean | `false` | Keep previously mounted tab panels in the DOM. |
 
 ### Styling Guide
 
@@ -5347,7 +5559,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive} renderContent={...} />
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(tab) => ...}</TabPanel>
 ```
 
 #### With icons and badges
@@ -5359,10 +5571,10 @@ const tabs = [
 ];
 ```
 
-#### Closable tabs
+#### Keep panels mounted
 
 ```tsx
-<TabPanel tabs={tabs} closable onClose={(id) => setTabs(tabs.filter(t => t.id !== id))} />
+<TabPanel tabs={tabs} keepMounted>{(tab) => <Panel id={tab.id} />}</TabPanel>
 ```
 
 #### Vertical orientation
@@ -5441,37 +5653,44 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 
 ### All Props
 
+<!-- generated from TextArea.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `ReactNode` | — | Label above the textarea |
-| `description` | `ReactNode` | — | Helper text below label |
-| `placeholder` | `string` | — | Placeholder text |
-| `rows` | `number` | — | Initial visible rows |
-| `error` | `boolean` | `false` | Error state |
-| `errorMessage` | `ReactNode` | — | Error message text |
-| `success` | `boolean` | `false` | Success state |
-| `successMessage` | `ReactNode` | — | Success message text |
-| `size` | `TextAreaSize` | — | Visual size variant (data attribute only) |
-| `startIcon` | `ReactNode` | — | Icon before textarea |
-| `endIcon` | `ReactNode` | — | Icon after textarea |
-| `onStartIconClick` | `() => void` | — | Makes startIcon a button |
-| `onEndIconClick` | `() => void` | — | Makes endIcon a button |
-| `startIconLabel` | `string` | — | Aria label for clickable startIcon |
-| `endIconLabel` | `string` | — | Aria label for clickable endIcon |
-| `onValueChange` | `(value: string) => void` | — | Simple value callback |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `showCount` | `boolean` | `false` | Show character count |
-| `autoResize` | `boolean` | `false` | Auto-grow with content |
-| `loading` | `boolean` | `false` | Loading state |
-| `fullWidth` | `boolean` | `false` | Full width container |
-| `classes` | `TextAreaClasses` | — | Per-slot class overrides |
-| `unstyled` | `boolean` | `false` | Remove all default styles |
-| `maxLength` | `number` | — | Max characters |
-| `required` | `boolean` | — | Required field |
-| `disabled` | `boolean` | — | Disabled state |
-| `readOnly` | `boolean` | — | Read-only state |
-
----
+| `label` | object | — | React.ReactNode — Label displayed above the textarea. |
+| `description` | object | — | React.ReactNode — Description text below the label. |
+| `error` | boolean | `false` | Whether the textarea is in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
+| `success` | boolean | `false` | Green success state for validated fields. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
+| `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
+| `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
+| `endIcon` | object | — | React.ReactNode — Icon rendered after the textarea. |
+| `onStartIconClick` | object | — | () => void — Makes startIcon a clickable button. |
+| `onEndIconClick` | object | — | () => void — Makes endIcon a clickable button. |
+| `startIconLabel` | string | — | Accessible label for startIcon when clickable. Required with onStartIconClick. |
+| `endIconLabel` | string | — | Accessible label for endIcon when clickable. Required with onEndIconClick. |
+| `onValueChange` | object | — | (value: string) => void — Fires with the current string value when the value changes. |
+| `clearable` | boolean | `false` | Show a built-in clear button when the textarea has a value. |
+| `onClear` | object | — | () => void — Callback when the clear button is clicked. |
+| `showCount` | boolean | `false` | Show character count (requires maxLength to be set). |
+| `autoResize` | boolean | `false` | Automatically resize height to fit content. |
+| `loading` | boolean | `false` | Whether the textarea is in a loading state. |
+| `loader` | object | — | React.ReactNode — Custom loader element. |
+| `loaderSize` | number | `16` | Size of the default CircularLoader in pixels. |
+| `fullWidth` | boolean | `false` | Whether the textarea expands to fill its parent container. |
+| `className` | string | — | CSS class for the root container element. |
+| `classes` | object | — | Slot-based class overrides for internal elements. |
+| `unstyled` | boolean | `false` | When true, all default classes are removed; only classes overrides apply. |
+| `placeholder` | string | — | Placeholder text for the textarea. |
+| `disabled` | boolean | `false` | Whether the textarea is disabled. |
+| `required` | boolean | `false` | Whether the field is required. |
+| `name` | string | — | Form field name attribute. |
+| `id` | string | — | HTML id attribute. |
+| `rows` | number | `4` | Number of visible text rows. |
+| `maxLength` | number | — | Maximum number of characters allowed. |
+| `value` | string | — | Controlled value of the textarea. |
+| `defaultValue` | string | — | Default uncontrolled value. |
 
 ### Styling Guide
 
@@ -5578,11 +5797,9 @@ export default function Example() {
 | `format` | `"24h"` (default) or `"12h"`. Affects display, parsing, and option generation. |
 | `minuteStep` | Clamped to 1-60. Invalid values (0, NaN, negatives) are auto-corrected. |
 | `minTime` / `maxTime` | Format: `"HH:MM"`. Dims/disables out-of-range options in both variants. |
-| `expandable` + `renderExpandedRow` | Both needed for row expansion. |
 | `keepMounted` | Only affects dropdown variant. Clock always remounts to reset selection mode. |
 | `open` + `onOpenChange` | For controlled open state. Don't mix with `defaultOpen`. |
 | `value` + `onValueChange` | For controlled mode. Don't mix with `defaultValue`. |
-| `stickyHeader` | Requires `maxHeight` to be meaningful. |
 | `forceDropdownPosition` | When true, locks to `dropdownPosition` without auto-flipping. |
 | `lockScroll` | Prevents body scroll when dropdown/clock is open. |
 | `fullWidth` | Applies `width: 100%` to root and trigger, overriding class widths. |
@@ -5602,6 +5819,58 @@ export default function Example() {
 DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevron) + portal(dropdown|clock)) + error/success`
 
 ---
+
+### All Props
+
+<!-- generated from TimePicker.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | string \| null | — | Current time value (e.g. '14:30' or '2:30 PM'). |
+| `defaultValue` | string \| null | — | Default time value for uncontrolled usage. |
+| `onValueChange` | object | — | (time: string \| null, timeValue: TimeValue \| null) => void — Called when the selected time changes. |
+| `onBlur` | object | — | () => void — Called when the input loses focus. |
+| `format` | `"12h"` \| `"24h"` | `"24h"` | Time display format. |
+| `minuteStep` | number | `15` | Minute interval for dropdown options and clock snapping. Clamped to 1-60. |
+| `minTime` | string | — | Minimum selectable time (e.g. '09:00'). |
+| `maxTime` | string | — | Maximum selectable time (e.g. '17:00'). |
+| `name` | string | — | Name for the hidden input for form submission. |
+| `placeholder` | string | — | Placeholder text for the input. |
+| `disabled` | boolean | `false` | Disables the component. |
+| `error` | boolean | `false` | Marks the component as having an error. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the input. |
+| `description` | object | — | React.ReactNode — Helper text displayed below the label. |
+| `success` | boolean | — | Success state. |
+| `successMessage` | object | — | React.ReactNode — Success message text. |
+| `loading` | boolean | — | Loading state. |
+| `label` | object | — | React.ReactNode — Label displayed above the input. |
+| `required` | boolean | `false` | Shows a required indicator on the label. |
+| `showEndIcon` | boolean | `true` | Show the chevron/end icon in the trigger. |
+| `endIcon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
+| `showSelectedIcon` | boolean | `true` | Show a check icon on the selected option. |
+| `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
+| `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
+| `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
+| `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
+| `clearable` | boolean | `false` | Show a clear button when a value is selected. |
+| `onClear` | object | — | () => void — Called when the clear button is clicked. |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Default open state (uncontrolled). |
+| `onOpenChange` | object | — | (open: boolean) => void — Called when the open state changes. |
+| `lockScroll` | boolean | `false` | Lock body scroll when dropdown is open. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Position of the dropdown relative to the trigger. |
+| `forceDropdownPosition` | boolean | `false` | When true, locks the dropdown to the specified position without auto-flipping. |
+| `dropdownZIndex` | number | `50` | Z-index for the dropdown. |
+| `dropdownGap` | number | `4` | Gap between trigger and dropdown in pixels. |
+| `keepMounted` | boolean | `false` | Keep dropdown DOM mounted when closed (dropdown variant only). |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the dropdown portal. |
+| `classes` | object | — | CSS class overrides for all sub-elements. |
+| `unstyled` | boolean | `false` | Omits built-in layout helpers so layout comes entirely from classes. |
+| `reduceMotion` | boolean \| `"auto"` | `false` | Controls motion preferences. 'auto' respects the user's OS prefers-reduced-motion setting. |
+| `onCancel` | object | — | () => void — Called when the clock cancel button is pressed. |
+| `onConfirm` | object | — | () => void — Called when the clock confirm button is pressed. |
+| `cancelText` | string | `"Cancel"` | Text for the clock cancel button. |
+| `okText` | string | `"OK"` | Text for the clock OK button. |
 
 ### Styling Guide
 
@@ -5736,8 +6005,8 @@ function MyComponent() {
 | Prop | Constraint |
 |------|-----------|
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
-| `position` | Set on `<ToastProvider>`. 6 options: `"top-right"` (default), `"top-left"`, `"top-center"`, `"bottom-right"`, `"bottom-left"`, `"bottom-center"` |
-| `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default varies by type. |
+| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
+| `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `content` | ReactNode that replaces the default message/description layout entirely |
 | `onDismiss` | Preferred over deprecated `onClose` |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
@@ -5758,6 +6027,32 @@ toast.dismissAll();
 ```
 
 ---
+
+### All Props
+
+<!-- generated from Toast.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` **(required)** | string | — | Unique identifier for the toast. |
+| `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
+| `message` | object | — | React.ReactNode — Primary message content. |
+| `description` | object | — | React.ReactNode — Secondary description text. |
+| `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
+| `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
+| `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
+| `progressColor` | string | — | Custom color for the progress bar. |
+| `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
+| `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
+| `onDismiss` | object | — | () => void — Fires when the toast is dismissed. |
+| `onClose` | object | — | () => void — Deprecated: use onDismiss instead. |
+| `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
+| `style` | object | — | Inline styles applied to the toast element. |
+| `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
+| `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `onRemove` **(required)** | object | — | (id: string) => void — Internal callback to remove the toast from the provider. |
 
 ### Styling Guide
 
@@ -5818,32 +6113,42 @@ export default function Example() {
 
 ### All Props
 
+<!-- generated from Tooltip.schema.json — edit the schema, not this table -->
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `content` | `ReactNode` | — | Tooltip content |
-| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Placement side |
-| `align` | `"start" \| "center" \| "end"` | `"center"` | Alignment on side |
-| `sideOffset` | `number` | `8` | Distance from trigger |
-| `alignOffset` | `number` | `0` | Alignment offset |
-| `maxWidth` | `string \| number` | — | Max tooltip width |
-| `wordWrap` | `"normal" \| "break-word" \| "nowrap"` | `"normal"` | Text wrapping |
-| `delayDuration` | `number` | `200` | Show delay (ms) |
-| `hideDelayDuration` | `number` | `0` | Hide delay (ms) |
-| `showArrow` | `boolean` | `true` | Show pointing arrow |
-| `arrowSize` | `number` | `8` | Arrow size in px |
-| `arrowColor` | `string` | — | Arrow fill color |
-| `disabled` | `boolean` | `false` | Disable tooltip |
-| `truncate` | `boolean` | `false` | Auto-truncate trigger text |
-| `shadow` | `TooltipShadow` | `"md"` | Shadow preset or custom |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open) => void` | — | Open state callback |
-| `asChild` | `boolean` | `false` | Merge props onto child |
-| `portal` | `boolean` | `true` | Render in portal |
-| `classes` | `TooltipClasses` | — | Per-slot overrides |
-| `unstyled` | `boolean` | `false` | Strip all defaults |
-| `zIndex` | `number` | — | Custom z-index |
-
----
+| `children` **(required)** | object | — | React.ReactNode — The trigger element that the tooltip is attached to. |
+| `content` | object | — | React.ReactNode — Content displayed inside the tooltip. |
+| `side` | `"top"` \| `"right"` \| `"bottom"` \| `"left"` | `"top"` | Preferred side of the trigger to display the tooltip. |
+| `align` | `"start"` \| `"center"` \| `"end"` | `"center"` | Alignment of the tooltip along the side. |
+| `sideOffset` | number | `6` | Distance in pixels from the trigger along the side axis. |
+| `alignOffset` | number | `0` | Offset in pixels along the alignment axis. |
+| `maxWidth` | string \| number | `300` | Maximum width of the tooltip content. |
+| `wordWrap` | `"normal"` \| `"break-word"` \| `"nowrap"` | `"break-word"` | Word wrap behavior for tooltip content. |
+| `delayDuration` | number | `200` | Delay in milliseconds before showing the tooltip. |
+| `hideDelayDuration` | number | `100` | Delay in milliseconds before hiding the tooltip. |
+| `disableHoverableContent` | boolean | `false` | When true, the tooltip content is not hoverable (closes on mouse leave of trigger). |
+| `open` | boolean | — | Controlled open state. |
+| `defaultOpen` | boolean | `false` | Default uncontrolled open state. |
+| `onOpenChange` | object | — | (open: boolean) => void — Callback when the open state changes. |
+| `showArrow` | boolean | `true` | Whether to show the tooltip arrow. |
+| `arrowSize` | number | — | Size of the tooltip arrow in pixels. |
+| `arrowColor` | string | — | Color of the tooltip arrow. |
+| `disabled` | boolean | `false` | Whether the tooltip is disabled. |
+| `truncate` | boolean | `false` | Whether to truncate the trigger content with ellipsis. |
+| `truncateWidth` | number \| string | — | Width at which to truncate the trigger content. |
+| `shadow` | string | `"lg"` | Shadow preset or custom CSS shadow value. Presets: 'none', 'sm', 'md', 'lg', 'xl', '2xl'. |
+| `zIndex` | number | `9999` | Z-index for the tooltip. |
+| `portal` | boolean | `true` | Whether to render the tooltip in a portal. |
+| `portalContainer` | object | — | HTMLElement \| null — Custom container element for the tooltip portal. |
+| `asChild` | boolean | `false` | When true, the trigger renders as the child element instead of wrapping it. |
+| `triggerDisplay` | string | `"inline-flex"` | CSS display property for the trigger wrapper. |
+| `className` | string | — | CSS class for the trigger wrapper element. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `contentStyle` | object | — | Inline styles applied to the tooltip content element. |
+| `arrowStyle` | object | — | Inline styles applied to the tooltip arrow element. |
+| `baseArrowStyle` | object | — | Inline styles applied to the base arrow element. |
 
 ### Styling Guide
 

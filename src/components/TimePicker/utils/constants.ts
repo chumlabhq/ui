@@ -23,9 +23,9 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   selectedIcon: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
   noResults:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
-  error: "text-sm mt-1 text-red-500 dark:text-red-400",
+  error: "text-sm mt-1 text-cl-error",
   description: "text-xs mb-1 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  success: "text-sm mt-1 text-green-600 dark:text-green-400",
+  success: "text-sm mt-1 text-cl-success",
   clockContainer:
     "p-3 sm:p-4 border rounded-cl-lg shadow-lg bg-white dark:bg-cl-bg-elevated border-cl-border dark:border-cl-border",
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
@@ -34,7 +34,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockDisplayMinutes:
     "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary dark:text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   clockDisplayActive:
-    "bg-cl-accent dark:bg-cl-accent text-white hover:bg-cl-accent dark:hover:bg-cl-accent",
+    "bg-cl-accent dark:bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:hover:bg-cl-accent",
   clockDisplaySeparator:
     "text-2xl font-semibold text-cl-text-tertiary dark:text-cl-text-tertiary",
   clockFace:
@@ -46,7 +46,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockNumber:
     "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary dark:text-cl-text-secondary hover:text-cl-text dark:hover:text-white",
   clockNumberSelected:
-    "text-white font-bold bg-cl-accent dark:bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
+    "text-cl-on-accent font-bold bg-cl-accent dark:bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
   clockNumberInner: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
   clockNumberDisabled:
     "opacity-30 cursor-not-allowed text-cl-text-secondary dark:text-cl-text-secondary",
@@ -55,12 +55,12 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   clockCancelButton:
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary dark:text-cl-text-secondary hover:bg-black/5 dark:hover:bg-white/10",
   clockOkButton:
-    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent dark:bg-cl-accent text-white hover:bg-cl-accent dark:hover:bg-cl-accent",
+    "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent dark:bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:hover:bg-cl-accent",
   clockPeriodToggle: "flex flex-col gap-1 ml-3",
   clockPeriodButton:
     "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary dark:text-cl-text-tertiary hover:bg-black/5 dark:hover:bg-white/10",
   clockPeriodActive:
-    "bg-cl-accent dark:bg-cl-accent text-white",
+    "bg-cl-accent dark:bg-cl-accent text-cl-on-accent",
 };
 
 export const UNSTYLED_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {

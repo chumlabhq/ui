@@ -4,7 +4,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   root: "",
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated text-cl-text dark:text-white hover:border-cl-border-input dark:hover:border-cl-border focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated text-cl-text dark:text-white hover:border-cl-border-input dark:hover:border-cl-border focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
   // No overflow-y-auto on the menu itself — submenus pop out to the side
   // as `position: absolute` children of menu items, and `overflow: auto`
   // on the menu container would clip those submenu panels. Long menus
@@ -29,9 +29,9 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   submenuItemFocused: "bg-cl-bg-hover dark:bg-cl-bg-elevated",
   label:
     "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
-  error: "text-sm mt-1 text-red-500 dark:text-red-400",
+  error: "text-sm mt-1 text-cl-error",
   description: "text-xs mb-1 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  success: "text-sm mt-1 text-green-600 dark:text-green-400",
+  success: "text-sm mt-1 text-cl-success",
   chevron:
     "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary dark:text-cl-text-tertiary",
   submenuChevron: "w-4 h-4 shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary",
@@ -39,7 +39,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   checkbox:
     "w-4 h-4 shrink-0 flex items-center justify-center rounded border border-cl-border-input dark:border-cl-border",
   checkboxChecked:
-    "bg-cl-accent dark:bg-cl-accent border-cl-border-input-focus dark:border-cl-border-input-focus text-white",
+    "bg-cl-accent dark:bg-cl-accent border-cl-border-input-focus dark:border-cl-border-input-focus text-cl-on-accent",
   noResults:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
   clearIcon:

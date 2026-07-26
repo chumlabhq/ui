@@ -342,9 +342,9 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   input:
     "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
   error:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-red-500 dark:text-red-400",
+    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error",
   success:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400",
+    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-success",
   countrySelect: "",
   countrySelectTrigger:
     "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[110px] sm:min-w-[130px] border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 hover:bg-cl-bg-hover dark:hover:bg-white/6 text-cl-text dark:text-cl-text-secondary",

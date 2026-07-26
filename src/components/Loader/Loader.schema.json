@@ -9,7 +9,6 @@
       "description": "A spinning circular loading indicator.",
       "type": "object",
       "properties": {
-        "variant": { "type": "string", "const": "circular" },
         "size": {
           "type": "number",
           "description": "Width and height in pixels.",
@@ -29,45 +28,57 @@
           "type": "string",
           "description": "Background track color. Default: currentColor at 20% opacity."
         },
-        "color": {
-          "type": "string",
-          "description": "Spinner color (applied via currentColor / className)."
-        },
         "reduceMotion": {
-          "type": ["boolean", "string"],
+          "type": [
+            "boolean",
+            "string"
+          ],
           "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
-          "enum": [true, false, "auto"]
+          "enum": [
+            true,
+            false,
+            "auto"
+          ]
         },
         "classes": {
           "type": "object",
           "description": "CSS class overrides for sub-elements.",
           "properties": {
-            "root": { "type": "string" },
-            "svg": { "type": "string" },
-            "track": { "type": "string" },
-            "indicator": { "type": "string" }
+            "root": {
+              "type": "string"
+            },
+            "svg": {
+              "type": "string"
+            },
+            "track": {
+              "type": "string"
+            },
+            "indicator": {
+              "type": "string"
+            }
           }
         },
         "unstyled": {
           "type": "boolean",
           "description": "Removes all default styling."
         }
-      },
-      "required": []
+      }
     },
     {
       "title": "LinearLoader",
       "description": "A horizontal progress bar loading indicator.",
       "type": "object",
       "properties": {
-        "variant": { "type": "string", "const": "linear" },
         "height": {
           "type": "number",
           "description": "Height of the bar in pixels.",
           "default": 4
         },
         "width": {
-          "type": ["string", "number"],
+          "type": [
+            "string",
+            "number"
+          ],
           "description": "Width of the bar (CSS value).",
           "default": "100%"
         },
@@ -86,31 +97,40 @@
           "default": 9999
         },
         "reduceMotion": {
-          "type": ["boolean", "string"],
+          "type": [
+            "boolean",
+            "string"
+          ],
           "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
-          "enum": [true, false, "auto"]
+          "enum": [
+            true,
+            false,
+            "auto"
+          ]
         },
         "classes": {
           "type": "object",
           "description": "CSS class overrides for sub-elements.",
           "properties": {
-            "root": { "type": "string" },
-            "bar": { "type": "string" }
+            "root": {
+              "type": "string"
+            },
+            "bar": {
+              "type": "string"
+            }
           }
         },
         "unstyled": {
           "type": "boolean",
           "description": "Removes all default styling."
         }
-      },
-      "required": []
+      }
     },
     {
       "title": "DotLoader",
       "description": "An animated bouncing dots loading indicator.",
       "type": "object",
       "properties": {
-        "variant": { "type": "string", "const": "dot" },
         "dotSize": {
           "type": "number",
           "description": "Diameter of each dot in pixels.",
@@ -132,31 +152,40 @@
           "default": 1.4
         },
         "reduceMotion": {
-          "type": ["boolean", "string"],
+          "type": [
+            "boolean",
+            "string"
+          ],
           "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
-          "enum": [true, false, "auto"]
+          "enum": [
+            true,
+            false,
+            "auto"
+          ]
         },
         "classes": {
           "type": "object",
           "description": "CSS class overrides for sub-elements.",
           "properties": {
-            "root": { "type": "string" },
-            "dot": { "type": "string" }
+            "root": {
+              "type": "string"
+            },
+            "dot": {
+              "type": "string"
+            }
           }
         },
         "unstyled": {
           "type": "boolean",
           "description": "Removes all default styling."
         }
-      },
-      "required": []
+      }
     },
     {
       "title": "PulseLoader",
       "description": "A pulsing ripple loading indicator.",
       "type": "object",
       "properties": {
-        "variant": { "type": "string", "const": "pulse" },
         "size": {
           "type": "number",
           "description": "Diameter of the circle in pixels.",
@@ -173,25 +202,37 @@
           "default": 2
         },
         "reduceMotion": {
-          "type": ["boolean", "string"],
+          "type": [
+            "boolean",
+            "string"
+          ],
           "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
-          "enum": [true, false, "auto"]
+          "enum": [
+            true,
+            false,
+            "auto"
+          ]
         },
         "classes": {
           "type": "object",
           "description": "CSS class overrides for sub-elements.",
           "properties": {
-            "root": { "type": "string" },
-            "core": { "type": "string" },
-            "ring": { "type": "string" }
+            "root": {
+              "type": "string"
+            },
+            "core": {
+              "type": "string"
+            },
+            "ring": {
+              "type": "string"
+            }
           }
         },
         "unstyled": {
           "type": "boolean",
           "description": "Removes all default styling."
         }
-      },
-      "required": []
+      }
     }
   ]
 }

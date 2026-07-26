@@ -193,7 +193,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
             type="button"
             onClick={handleClose}
             className={cn(
-              !isUnstyled && "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors",
+              !isUnstyled && "cursor-pointer shrink-0 p-1 rounded hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80",
               mergedClasses.closeButton,
             )}
             aria-label={closeAriaLabel}

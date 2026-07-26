@@ -92,113 +92,72 @@ These props have dependencies -- using them wrong causes silent bugs:
 
 ## All Props
 
-### DatePicker
-
-Props are discriminated by `mode`. The base props are shared across all modes.
-
-#### Mode-specific value/callback
-
-| Mode | `value` type | `onValueChange` signature |
-|------|-------------|--------------------------|
-| `"single"` (default) | `Date \| null` | `(date: Date \| null, dateValue: DateValue \| null) => void` |
-| `"range"` | `DateRange \| null` | `(range: DateRange \| null, rangeValue: DateRangeValue \| null) => void` |
-| `"multiple"` | `Date[] \| null` | `(dates: Date[] \| null, dateValues: DateValue[] \| null) => void` |
-
-#### Base props
+<!-- generated from DatePicker.schema.json — edit the schema, not this table -->
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `"single" \| "range" \| "multiple"` | `"single"` | Selection mode. |
-| `onClear` | `() => void` | -- | Callback when selection is cleared. |
-| `onMonthChange` | `(month: Date) => void` | -- | Callback when displayed month changes. |
-| `open` | `boolean` | -- | Controlled open state for calendar. |
-| `defaultOpen` | `boolean` | `false` | Open calendar on mount (uncontrolled). |
-| `onOpenChange` | `(open: boolean) => void` | -- | Callback when open state changes. |
-| `minDate` | `Date` | -- | Earliest selectable date. |
-| `maxDate` | `Date` | -- | Latest selectable date. |
-| `disabledDates` | `DisabledDateOptions` | -- | Fine-grained date disabling (see below). |
-| `weekStartsOn` | `0-6` | `0` | Day the week starts on (0 = Sunday). |
-| `locale` | `Locale` (date-fns) | -- | Locale for month/day names. |
-| `numberOfMonths` | `number` | `1` | Number of months displayed side by side. |
-| `dateFormat` | `string` | `"MMM d, yyyy"` | Date format string (date-fns format). |
-| `showTodayIndicator` | `boolean` | `true` | Ring indicator on today's date. |
-| `showTodayButton` | `boolean` | `false` | "Today" button in calendar footer. |
-| `todayAction` | `boolean` | `false` | Enable today quick-action. |
-| `showWeekNumbers` | `boolean` | `false` | Show ISO week numbers column. |
-| `showOutsideDays` | `boolean` | `true` | Show days from adjacent months. |
-| `outsideDaysSelectable` | `boolean` | `true` | Allow selecting outside days. |
-| `fixedWeeks` | `boolean` | `false` | Always show 6 weeks per month. |
-| `showPresets` | `boolean` | `false` | Show preset buttons panel. |
-| `presets` | `DatePreset[]` | -- | Custom presets (uses defaults if omitted). |
-| `markers` | `DateMarker[]` | -- | Dates with indicator dots/tooltips. |
-| `showMarkerIndicator` | `boolean` | `true` | Show colored dots on marked days. |
-| `showMarkerTooltip` | `boolean` | `true` | Show tooltip on hover of marked days. |
-| `id` | `string` | -- | HTML id attribute. |
-| `name` | `string` | -- | Form field name. |
-| `placeholder` | `string` | -- | Placeholder text in trigger. |
-| `disabled` | `boolean` | `false` | Disable the entire picker. |
-| `error` | `boolean` | `false` | Show error state styling. |
-| `errorMessage` | `ReactNode` | -- | Error message below trigger. |
-| `label` | `ReactNode` | -- | Label above trigger. |
-| `description` | `ReactNode` | -- | Description text below label. |
-| `success` | `boolean` | `false` | Show success state styling. |
-| `successMessage` | `ReactNode` | -- | Success message below trigger. |
-| `loading` | `boolean` | `false` | Show loading state. |
-| `clearable` | `boolean` | -- | Alias for `showClearButton`. |
-| `required` | `boolean` | `false` | Mark as required field. |
-| `fullWidth` | `boolean` | `false` | Make trigger fill container width. |
-| `showClearButton` | `boolean` | `true` | Show clear (X) button in trigger. |
-| `showCalendarIcon` | `boolean` | `true` | Show calendar icon in trigger. |
-| `calendarIcon` | `ReactNode` | -- | Custom calendar icon. |
-| `clearIcon` | `ReactNode` | -- | Custom clear icon. |
-| `prevMonthIcon` | `ReactNode` | -- | Custom previous month nav icon. |
-| `nextMonthIcon` | `ReactNode` | -- | Custom next month nav icon. |
-| `prevYearIcon` | `ReactNode` | -- | Custom previous year nav icon. |
-| `nextYearIcon` | `ReactNode` | -- | Custom next year nav icon. |
-| `todayIcon` | `ReactNode` | -- | Custom today button icon. |
-| `monthDropdownSelectedIcon` | `ReactNode` | -- | Custom check icon for month dropdown. |
-| `yearDropdownSelectedIcon` | `ReactNode` | -- | Custom check icon for year dropdown. |
-| `classes` | `DatePickerClasses` | -- | Override classes per slot (see Styling). |
-| `unstyled` | `boolean` | `false` | Strip all default classes. |
-| `portalContainer` | `HTMLElement \| null` | -- | Portal target for calendar popover. |
-| `lockScroll` | `boolean` | `false` | Lock body scroll when calendar is open. |
-| `dropdownZIndex` | `number` | `50` | Z-index of calendar popup. |
-| `dropdownPosition` | `"top" \| "bottom"` | `"bottom"` | Vertical placement of calendar. |
-| `forceDropdownPosition` | `boolean` | `false` | Prevent auto-flipping. |
-| `dropdownGap` | `number` | `4` | Gap in px between trigger and calendar. |
-| `keepMounted` | `boolean` | `false` | Keep calendar DOM mounted when closed. |
-| `reduceMotion` | `boolean \| "auto"` | `"auto"` | `"auto"` respects OS setting. |
-
-### DisabledDateOptions
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `before` | `Date` | Disable all dates before this date. |
-| `after` | `Date` | Disable all dates after this date. |
-| `disablePast` | `boolean` | Disable all past dates. |
-| `disableFuture` | `boolean` | Disable all future dates. |
-| `dates` | `Date[]` | Specific dates to disable. |
-| `daysOfWeek` | `number[]` | Days of the week to disable (0-6). |
-| `custom` | `(date: Date) => boolean` | Custom function returning `true` to disable. |
-
-### DateMarker
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `date` | `Date` | **Required.** The date to mark. |
-| `label` | `string` | **Required.** Tooltip title text. |
-| `description` | `string` | Optional tooltip description. |
-| `type` | `string` | Optional type string (e.g., `"meeting"`, `"holiday"`). |
-| `color` | `string` | Optional CSS color for the indicator dot. |
-
-### DatePreset
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `label` | `string` | **Required.** Button text. |
-| `getValue` | `() => Date \| DateRange \| Date[]` | **Required.** Returns the value to set. |
-
----
+| `mode` | `"single"` \| `"range"` \| `"multiple"` | `"single"` | Selection mode: single date, date range, or multiple dates. |
+| `value` | — | — | Controlled selected value. Type depends on mode: Date \| null (single), DateRange \| null (range), Date[] \| null (multiple). |
+| `onValueChange` | object | — | Callback when the selected value changes. Signature depends on mode. |
+| `onClear` | object | — | () => void — Called when the clear button is clicked. |
+| `onMonthChange` | object | — | (month: Date) => void — Called when the displayed month changes. |
+| `open` | boolean | — | Controlled open state of the calendar popup. |
+| `defaultOpen` | boolean | `false` | Initial open state for uncontrolled usage. |
+| `onOpenChange` | object | — | (open: boolean) => void |
+| `minDate` | object | — | Date — Earliest selectable date. |
+| `maxDate` | object | — | Date — Latest selectable date. |
+| `disabledDates` | object | — | Configuration for disabling specific dates. |
+| `weekStartsOn` | `0` \| `1` \| `2` \| `3` \| `4` \| `5` \| `6` | `0` | First day of the week (0=Sunday, 1=Monday, etc.). |
+| `locale` | object | — | date-fns Locale object for internationalization. |
+| `numberOfMonths` | number | `1` | Number of months to display simultaneously. |
+| `dateFormat` | string | `"MMM d, yyyy"` | Date format string (date-fns format). |
+| `showTodayIndicator` | boolean | `true` | Highlights today's date in the calendar. |
+| `showTodayButton` | boolean | `false` | Shows a 'Today' button in the calendar footer. |
+| `todayAction` | boolean | `false` | Whether clicking 'Today' selects today's date. |
+| `showWeekNumbers` | boolean | `false` | Shows week numbers in the calendar. |
+| `showOutsideDays` | boolean | `true` | Shows days from adjacent months. |
+| `outsideDaysSelectable` | boolean | `true` | Whether outside days can be selected. |
+| `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
+| `showPresets` | boolean | `false` | Shows preset date selection buttons. |
+| `presets` | array | — | Array of date presets. |
+| `markers` | array | — | Array of date markers to display on the calendar. |
+| `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
+| `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
+| `id` | string | — | HTML id attribute. |
+| `name` | string | — | Form field name. |
+| `placeholder` | string | — | Placeholder text for the trigger input. |
+| `disabled` | boolean | `false` | Disables the date picker. |
+| `error` | boolean | `false` | Displays error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message. |
+| `label` | object | — | React.ReactNode — Label above the trigger. |
+| `description` | object | — | React.ReactNode — Description text. |
+| `success` | boolean | `false` | Displays success state. |
+| `successMessage` | object | — | React.ReactNode — Success message. |
+| `loading` | boolean | `false` | Shows loading state. |
+| `clearable` | boolean | — | Shows a clear button. |
+| `required` | boolean | `false` | Marks the field as required. |
+| `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
+| `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
+| `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
+| `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
+| `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
+| `prevMonthIcon` | object | — | React.ReactNode — Custom previous month icon. |
+| `nextMonthIcon` | object | — | React.ReactNode — Custom next month icon. |
+| `prevYearIcon` | object | — | React.ReactNode — Custom previous year icon. |
+| `nextYearIcon` | object | — | React.ReactNode — Custom next year icon. |
+| `todayIcon` | object | — | React.ReactNode — Custom today button icon. |
+| `monthDropdownSelectedIcon` | object | — | React.ReactNode — Icon for selected month in dropdown. |
+| `yearDropdownSelectedIcon` | object | — | React.ReactNode — Icon for selected year in dropdown. |
+| `classes` | object | — | CSS class overrides for date picker sub-elements. |
+| `unstyled` | boolean | `false` | Removes all default styling. |
+| `portalContainer` | object | — | HTMLElement \| null — Portal container for the calendar popup. |
+| `lockScroll` | boolean | `false` | Locks body scroll when the calendar is open. |
+| `dropdownZIndex` | number | `50` | Z-index of the calendar popup. |
+| `dropdownPosition` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement of the calendar popup. |
+| `forceDropdownPosition` | boolean | `false` | Locks the calendar to the specified dropdownPosition without auto-flipping. |
+| `dropdownGap` | number | `4` | Gap in pixels between trigger and calendar popup. |
+| `keepMounted` | boolean | `false` | Keep the calendar DOM mounted when closed. |
+| `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
 
 ## Styling Guide
 
@@ -415,7 +374,6 @@ To find a specific demo implementation, search for these `title=` strings in the
 |---------|-----------|------------------|
 | Minimal example | `title="Basic Usage"` | Single date, zero config |
 | Range selection | `title="Date Range Selection"` | `mode="range"` pattern |
-| Custom range colors | `title="Range Selection -- Custom Colors"` | Emerald, amber, rose, violet range themes |
 | Multiple dates | `title="Multiple Date Selection"` | `mode="multiple"` pattern |
 | Presets | `title="Date Presets"` | Built-in range presets |
 | Markers and tooltips | `title="Date Markers"` | `markers`, `showMarkerIndicator`, `showMarkerTooltip` |
@@ -447,7 +405,6 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Scroll behavior | `title="Scroll Behavior"` | `lockScroll` prop |
 | Dropdown position | `title="Dropdown Position"` | `dropdownPosition`, `forceDropdownPosition` |
 | Custom icons | `title="Custom Icons"` | Icon override props |
-| Unstyled mode | `title="Unstyled Mode"` | `unstyled` with bare output |
 | Reduce motion | `title="Reduce Motion"` | `reduceMotion` prop |
 
 **Source files:**

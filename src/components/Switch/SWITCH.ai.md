@@ -64,13 +64,50 @@ export default function Example() {
 
 ---
 
+## All Props
+
+<!-- generated from Switch.schema.json — edit the schema, not this table -->
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | string | — | CSS class for the root element. |
+| `label` | object | — | React.ReactNode — Label displayed alongside the switch. |
+| `description` | object | — | React.ReactNode — Description text below the label. |
+| `checked` | boolean | — | Controlled checked state. |
+| `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
+| `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
+| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
+| `name` | string | — | Form field name attribute. |
+| `value` | string | `"on"` | Value attribute for the hidden input element. |
+| `required` | boolean | `false` | Whether the field is required. |
+| `id` | string | — | HTML id attribute. |
+| `disabled` | boolean | `false` | Whether the switch is disabled. |
+| `error` | boolean | `false` | Whether the switch is in an error state. |
+| `errorMessage` | object | — | React.ReactNode — Error message displayed below the switch. |
+| `success` | boolean | `false` | Whether the switch is in a success state. |
+| `successMessage` | object | — | React.ReactNode — Success message displayed below the switch. |
+| `loading` | boolean | `false` | Whether the switch is in a loading state. |
+| `loader` | object | — | React.ReactNode — Custom loader element. |
+| `loaderSize` | number | `16` | Size of the default loader in pixels. |
+| `checkedIcon` | object | — | React.ReactNode — Icon displayed inside the thumb when checked. |
+| `uncheckedIcon` | object | — | React.ReactNode — Icon displayed inside the thumb when unchecked. |
+| `transitionDuration` | number | — | Duration of the toggle transition in milliseconds. |
+| `transitionTimingFunction` | string | — | CSS timing function for the toggle transition. |
+| `renderLabel` | object | — | (props: SwitchRenderProps) => ReactNode — Custom label render function. |
+| `renderDescription` | object | — | (props: SwitchRenderProps) => ReactNode — Custom description render function. |
+| `classes` | object | — | CSS class overrides for sub-elements. |
+| `unstyled` | boolean | `false` | When true, removes all default styling. |
+| `style` | object | — | Inline styles applied to the root element. |
+| `reduceMotion` | boolean \| `"auto"` | — | Controls motion preferences. 'auto' respects the user's OS setting. |
+
 ## Styling Guide
 
 Switch supports CSS custom properties for easy theming:
-- `--switch-width`, `--switch-height` — overall dimensions
+- `--switch-tracker-width`, `--switch-tracker-height` — track dimensions
 - `--switch-thumb-size` — thumb diameter
-- `--switch-thumb-offset` — thumb inset from track edge
-- `--switch-checked-bg`, `--switch-unchecked-bg` — track colors
+- `--switch-thumb-bg` — thumb color
+- `--switch-tracker-checked-bg`, `--switch-tracker-unchecked-bg` — track colors
+- `--switch-focus-ring` — focus ring color
 
 Or use the `classes` prop with 14 slots for full control.
 
@@ -85,8 +122,7 @@ Or use the `classes` prop with 14 slots for full control.
 | Basic | `title="Basic Usage"` |
 | Icons | `title="With Icons"` |
 | Custom colors | `title="Custom Colors"` |
-| CSS vars | `title="CSS Custom Properties"` |
-| Unstyled | `title="Unstyled Mode"` |
+| CSS vars | `title="CSS Custom Properties (Theming)"` |
 | Form | `title="Form Semantics"` |
 
 | File | Contains |
