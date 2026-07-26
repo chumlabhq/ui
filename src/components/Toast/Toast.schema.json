@@ -58,10 +58,6 @@
       "type": "object",
       "description": "() => void — Fires when the toast is dismissed."
     },
-    "onClose": {
-      "type": "object",
-      "description": "() => void — Deprecated: use onDismiss instead."
-    },
     "role": {
       "type": "string",
       "enum": [

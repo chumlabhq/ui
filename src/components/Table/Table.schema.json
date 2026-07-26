@@ -12,14 +12,6 @@
       "type": "array",
       "description": "Array of row data objects."
     },
-    "COLUMNS": {
-      "type": "array",
-      "description": "Deprecated alias for columns."
-    },
-    "COLUMNS_DATA": {
-      "type": "array",
-      "description": "Deprecated alias for data."
-    },
     "loading": {
       "type": "boolean",
       "description": "Whether the table is in a loading state showing shimmer rows.",
@@ -29,10 +21,6 @@
       "type": "boolean",
       "description": "Whether to show the table header row.",
       "default": true
-    },
-    "tableHeader": {
-      "type": "boolean",
-      "description": "Legacy alias for showHeader."
     },
     "pinnedColumns": {
       "type": "array",

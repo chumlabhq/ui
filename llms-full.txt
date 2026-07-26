@@ -1737,7 +1737,6 @@ This renders correctly with no additional props, classes, or setup.
 | `checked` + `onValueChange` | Controlled mode. Must provide both. |
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
 | `indeterminate` | Overrides checked visual. The underlying input is still checked/unchecked. |
-| `onCheckedChange` | Deprecated — use `onValueChange` instead. If both provided, `onValueChange` wins. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
 | `classes.checked` / `classes.unchecked` | REPLACE per slot. Provide full styling — not additive. |
 
@@ -1771,7 +1770,6 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
 | `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
-| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
 | `error` | boolean | `false` | Displays the checkbox in an error state. |
@@ -5151,7 +5149,6 @@ export default function Example() {
 |------|-----------|
 | `checked` + `onValueChange` | Controlled mode. |
 | `defaultChecked` | Uncontrolled mode. Cannot combine with `checked`. |
-| `onCheckedChange` | Deprecated — use `onValueChange`. |
 | `checkedIcon` / `uncheckedIcon` | ReactNode rendered inside the thumb. |
 | `transitionDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
 
@@ -5169,7 +5166,6 @@ export default function Example() {
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
-| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
 | `name` | string | — | Form field name attribute. |
 | `value` | string | `"on"` | Value attribute for the hidden input element. |
 | `required` | boolean | `false` | Whether the field is required. |
@@ -5289,11 +5285,8 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 |------|------|---------|-------------|
 | `columns` | array | — | TanStack ColumnDef array defining table columns. |
 | `data` | array | — | Array of row data objects. |
-| `COLUMNS` | array | — | Deprecated alias for columns. |
-| `COLUMNS_DATA` | array | — | Deprecated alias for data. |
 | `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
 | `showHeader` | boolean | `true` | Whether to show the table header row. |
-| `tableHeader` | boolean | — | Legacy alias for showHeader. |
 | `pinnedColumns` | array | — | Column IDs to pin to the left side. |
 | `onPinColumn` | object | — | (columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned. |
 | `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |
@@ -6053,7 +6046,7 @@ function MyComponent() {
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `content` | ReactNode that replaces the default message/description layout entirely |
-| `onDismiss` | Preferred over deprecated `onClose` |
+| `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
 
 ---
@@ -6090,7 +6083,6 @@ toast.dismissAll();
 | `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
 | `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
 | `onDismiss` | object | — | () => void — Fires when the toast is dismissed. |
-| `onClose` | object | — | () => void — Deprecated: use onDismiss instead. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
 | `style` | object | — | Inline styles applied to the toast element. |
 | `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |

@@ -29,10 +29,6 @@
       "type": "object",
       "description": "(checked: boolean) => void — Fires when the checked state changes."
     },
-    "onCheckedChange": {
-      "type": "object",
-      "description": "(checked: boolean) => void — Deprecated: use onValueChange instead."
-    },
     "name": {
       "type": "string",
       "description": "Form field name attribute."

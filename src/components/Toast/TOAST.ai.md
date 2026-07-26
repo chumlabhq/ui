@@ -54,7 +54,7 @@ function MyComponent() {
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `content` | ReactNode that replaces the default message/description layout entirely |
-| `onDismiss` | Preferred over deprecated `onClose` |
+| `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
 
 ---
@@ -102,7 +102,6 @@ toast.dismissAll();
 | `icon` | object | — | React.ReactNode — Custom icon replacing the default type icon. |
 | `showCloseButton` | boolean | `true` | Whether to show a close/dismiss button. |
 | `onDismiss` | object | — | () => void — Fires when the toast is dismissed. |
-| `onClose` | object | — | () => void — Deprecated: use onDismiss instead. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
 | `style` | object | — | Inline styles applied to the toast element. |
 | `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |

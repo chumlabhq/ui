@@ -50,7 +50,6 @@ This renders correctly with no additional props, classes, or setup.
 | `checked` + `onValueChange` | Controlled mode. Must provide both. |
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
 | `indeterminate` | Overrides checked visual. The underlying input is still checked/unchecked. |
-| `onCheckedChange` | Deprecated — use `onValueChange` instead. If both provided, `onValueChange` wins. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
 | `classes.checked` / `classes.unchecked` | REPLACE per slot. Provide full styling — not additive. |
 
@@ -84,7 +83,6 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
 | `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
-| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
 | `error` | boolean | `false` | Displays the checkbox in an error state. |

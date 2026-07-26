@@ -47,7 +47,6 @@ export default function Example() {
 |------|-----------|
 | `checked` + `onValueChange` | Controlled mode. |
 | `defaultChecked` | Uncontrolled mode. Cannot combine with `checked`. |
-| `onCheckedChange` | Deprecated — use `onValueChange`. |
 | `checkedIcon` / `uncheckedIcon` | ReactNode rendered inside the thumb. |
 | `transitionDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
 
@@ -76,7 +75,6 @@ export default function Example() {
 | `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Default uncontrolled checked state. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
-| `onCheckedChange` | object | — | (checked: boolean) => void — Deprecated: use onValueChange instead. |
 | `name` | string | — | Form field name attribute. |
 | `value` | string | `"on"` | Value attribute for the hidden input element. |
 | `required` | boolean | `false` | Whether the field is required. |
