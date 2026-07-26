@@ -995,7 +995,6 @@ const PaginationDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Props ────────────────────────────────────────────────────── */}
       <Section title="Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1180,7 +1179,6 @@ const PaginationDemo = () => {
         </div>
       </Section>
 
-      {/* ─── PaginationClasses Slots ──────────────────────────────────── */}
       <Section title="PaginationClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

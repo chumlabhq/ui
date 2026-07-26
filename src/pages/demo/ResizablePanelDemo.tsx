@@ -1068,7 +1068,6 @@ const ResizablePanelDemo = () => {
         </div>
       </Section>
 
-      {/* ─── ResizablePanelClasses Slots ──────────────────────────────── */}
       <Section title="ResizablePanelClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

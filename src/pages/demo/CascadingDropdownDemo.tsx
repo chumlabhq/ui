@@ -1888,7 +1888,6 @@ const CascadingDropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Props ──────────────────────────────────────────────────────── */}
       <Section title="Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -2173,7 +2172,6 @@ const CascadingDropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── CascadingOption Interface ──────────────────────────────────── */}
       <Section title="CascadingOption Interface" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -2229,7 +2227,6 @@ const CascadingDropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── CascadingDropdownClasses Slots ─────────────────────────────── */}
       <Section title="CascadingDropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

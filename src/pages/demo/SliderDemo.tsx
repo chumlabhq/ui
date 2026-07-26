@@ -173,7 +173,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Steps ────────────────────────────────────────────────────── */}
       <Section title="Steps" description="Discrete step increments snap the thumb to fixed values." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-8 w-full sm:max-w-sm">
@@ -189,7 +188,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Marks ────────────────────────────────────────────────────── */}
       <Section title="Marks" description="Visual tick marks with optional labels along the track. Customise dot size, style, or use renderMark for fully custom dots." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-12 w-full sm:max-w-md">
@@ -372,7 +370,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Tooltip ──────────────────────────────────────────────────── */}
       <Section title="Tooltip" description="Show a value tooltip on hover/drag, or always. Use formatTooltip for custom display." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-10 w-full sm:max-w-sm">
@@ -401,7 +398,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Custom Thumb ─────────────────────────────────────────────── */}
       <Section title="Custom Thumb" description="Use renderThumb to render icons, images, or any content inside the thumb." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-10 w-full sm:max-w-sm">
@@ -479,7 +475,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Min Steps Between Thumbs ─────────────────────────────────── */}
       <Section title="Min Steps Between Thumbs" description="Enforce a minimum distance between range thumbs." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-sm space-y-3">
@@ -495,7 +490,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Controlled ───────────────────────────────────────────────── */}
       <Section title="Controlled" description="Fully controlled via value and onValueChange. External buttons can set the value." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-sm space-y-4">
@@ -521,7 +515,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── onValueCommit ────────────────────────────────────────────── */}
       <Section title="onValueCommit" description="Fires only when the user finishes dragging (pointer up). Useful for debounced API calls." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-sm space-y-3">
@@ -540,7 +533,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Disabled ─────────────────────────────────────────────────── */}
       <Section title="Disabled" description="The slider is non-interactive when disabled." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-6 w-full sm:max-w-sm">
@@ -550,7 +542,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Success State ─────────────────────────────────────────────── */}
       <Section title="Success State" description="Display a success message for valid slider values." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <Slider
@@ -564,14 +555,12 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Loading State ─────────────────────────────────────────────── */}
       <Section title="Loading State" description="Show a loading state while the value is being saved." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <Slider label="Saving preference..." defaultValue={50} loading classes={c.slider} />
         </DemoWrapper>
       </Section>
 
-      {/* ── Vertical ─────────────────────────────────────────────────── */}
       <Section title="Vertical" description="Set orientation to 'vertical' for a vertical slider." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap items-end gap-10 h-52">
@@ -600,7 +589,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Inverted ─────────────────────────────────────────────────── */}
       <Section title="Inverted" description="Reverse the slider direction with the inverted prop." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-sm space-y-3">
@@ -610,7 +598,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Color Variants ───────────────────────────────────────────── */}
       <Section title="Color Variants" description="Override the range and thumb classes for custom colors." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-6 w-full sm:max-w-sm">
@@ -637,7 +624,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Custom Styling ───────────────────────────────────────────── */}
       <Section title="Custom Styling" description="Full control via the classes prop. Every part of the slider is customisable." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-col gap-6 w-full sm:max-w-sm">
@@ -670,7 +656,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Form Integration ─────────────────────────────────────────── */}
       <Section title="Form Integration" description="Hidden inputs are rendered when name is set. The value is submitted with the form." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-sm space-y-3">
@@ -720,7 +705,6 @@ const SliderDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ── Props Reference ──────────────────────────────────────────── */}
       <Section title="Props Reference" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -757,7 +741,6 @@ const SliderDemo = () => {
         </div>
       </Section>
 
-      {/* ── SliderClasses Slots ──────────────────────────────────────── */}
       <Section title="SliderClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -780,7 +763,6 @@ const SliderDemo = () => {
         </div>
       </Section>
 
-      {/* ── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -796,7 +778,6 @@ const SliderDemo = () => {
         </div>
       </Section>
 
-      {/* ── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div className={`space-y-2 text-sm text-cl-text-secondary`}>

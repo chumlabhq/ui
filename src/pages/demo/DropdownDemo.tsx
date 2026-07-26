@@ -2099,7 +2099,6 @@ const DropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── DropdownClasses Slots ───────────────────────────────────────── */}
       <Section title="DropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

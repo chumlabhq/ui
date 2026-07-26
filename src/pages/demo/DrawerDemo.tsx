@@ -944,7 +944,6 @@ const DrawerDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1006,7 +1005,6 @@ const DrawerDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" isDarkMode={dark}>
         <div className={c.card}>
           <div
@@ -1090,7 +1088,6 @@ const DrawerDemo = () => {
         ]}
       />
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1100,7 +1097,6 @@ const DrawerDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div className={`space-y-2 text-sm text-cl-text-secondary`}>

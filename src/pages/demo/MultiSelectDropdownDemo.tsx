@@ -1835,7 +1835,6 @@ const MultiSelectDropdownDemo = () => {
         </div>
       </Section>
 
-      {/* ─── MultiSelectDropdownClasses Slots ────────────────────────────── */}
       <Section title="MultiSelectDropdownClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

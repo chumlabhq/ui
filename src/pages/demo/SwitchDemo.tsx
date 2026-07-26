@@ -678,7 +678,6 @@ const SwitchDemo = () => {
         </div>
       </Section>
 
-      {/* ── API Reference ──────────────────────────────────────────────── */}
       <Section title="API Reference" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>

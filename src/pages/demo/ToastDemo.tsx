@@ -1002,7 +1002,6 @@ const ToastDemoContent = ({
         </DemoWrapper>
       </Section>
 
-      {/* ─── ToastConfig Props ────────────────────────────────────────── */}
       <Section title="ToastConfig Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1119,7 +1118,6 @@ const ToastDemoContent = ({
         </div>
       </Section>
 
-      {/* ─── ToastProviderProps ────────────────────────────────────────── */}
       <Section title="ToastProvider Props" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1208,7 +1206,6 @@ const ToastDemoContent = ({
         </div>
       </Section>
 
-      {/* ─── ToastClasses Slots ───────────────────────────────────────── */}
       <Section title="ToastClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1258,7 +1255,6 @@ const ToastDemoContent = ({
         </div>
       </Section>
 
-      {/* ─── useToast Methods ─────────────────────────────────────────── */}
       <Section title="useToast Methods" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1388,7 +1384,6 @@ const ToastDemoContent = ({
         ]}
       />
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1398,7 +1393,6 @@ const ToastDemoContent = ({
         </div>
       </Section>
 
-      {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div className={`space-y-2 text-sm text-cl-text-secondary`}>

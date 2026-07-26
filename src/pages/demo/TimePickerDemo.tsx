@@ -492,7 +492,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── With Description ────────────────────────────────────────────── */}
       <Section title="With Description" description="Add helper text below the label." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <TimePicker
@@ -506,7 +505,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Success State ─────────────────────────────────────────────────── */}
       <Section title="Success State" description="Display a success message when a valid time is selected." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <TimePicker
@@ -520,7 +518,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Loading State ─────────────────────────────────────────────────── */}
       <Section title="Loading State" description="Show a loading state while checking availability." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <TimePicker label="Checking slots..." loading placeholder="Pick a time" classes={c.timepicker} />
@@ -1464,7 +1461,6 @@ const TimePickerDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── Data Attributes ──────────────────────────────────────────── */}
       <Section title="Data Attributes" description="Use for CSS-based state styling." isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
@@ -1480,7 +1476,6 @@ const TimePickerDemo = () => {
         </div>
       </Section>
 
-      {/* ─── Accessibility ────────────────────────────────────────────── */}
       <Section title="Accessibility" description="Built-in accessibility features." isDarkMode={dark}>
         <div className={c.card}>
           <div

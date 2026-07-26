@@ -1480,7 +1480,6 @@ const TabPanelDemo = () => {
         </div>
       </Section>
 
-      {/* ─── TabPanelClasses Slots ───────────────────────────────────────── */}
       <Section title="TabPanelClasses Slots" isDarkMode={dark}>
         <div className={c.card}>
           <PropsTable isDarkMode={dark}>
