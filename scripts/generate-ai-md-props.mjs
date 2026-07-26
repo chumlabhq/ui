@@ -21,10 +21,8 @@ const HEADING = "## All Props";
 // file has no All Props section yet. Falls back to appending at the end.
 const INSERT_BEFORE = ["## Styling Guide", "## Patterns", "## Accessibility", "## Demo Reference", "## Troubleshooting"];
 
-// Skipped: RadioButton's schema is a broken stub (2 meaningless props, no nested
-// structure) — generating from it produces a garbage table, so its schema needs
-// rebuilding first (tracked separately). BrandLogo is site-only, not shipped.
-const SKIP = new Set(["RadioButton", "BrandLogo"]);
+// Skipped: BrandLogo is site-only, not shipped as a public subpath.
+const SKIP = new Set(["BrandLogo"]);
 
 function renderType(schema) {
   if (!schema) return "—";
