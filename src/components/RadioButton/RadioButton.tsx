@@ -26,6 +26,7 @@ interface RadioGroupContextValue {
   selectedValue: string;
   onSelect: (value: string) => void;
   disabled?: boolean;
+  error?: boolean;
   size?: RadioButtonSize;
   unstyled?: boolean;
   reduceMotion?: boolean;
@@ -134,13 +135,14 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         // A loading group disables its radios so they can't be operated by
         // keyboard mid-flight, not just visually dimmed.
         disabled: disabled || loading,
+        error,
         size,
         unstyled,
         reduceMotion: prefersReducedMotion,
         onFocus,
         onBlur,
       }),
-      [name, selectedValue, handleSelect, disabled, loading, size, unstyled, prefersReducedMotion, onFocus, onBlur],
+      [name, selectedValue, handleSelect, disabled, loading, error, size, unstyled, prefersReducedMotion, onFocus, onBlur],
     );
 
     return (
@@ -294,7 +296,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
       <label
         ref={ref}
         htmlFor={radioId}
-        className={cn(mergedClasses.root, className) || undefined}
+        className={cn(mergedClasses.root, className, !unstyled && isDisabled && "opacity-50") || undefined}
         style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
         data-checked={isChecked || undefined}
         data-disabled={isDisabled || undefined}
@@ -302,10 +304,11 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         {...rest}
       >
         <span
-          className={cn(mergedClasses.radio, stateClassName, "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
+          className={cn(mergedClasses.radio, stateClassName, !unstyled && ctx.error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
           style={{ ...sizeStyle, position: "relative" }}
           data-checked={isChecked || undefined}
           data-disabled={isDisabled || undefined}
+          data-error={ctx.error || undefined}
         >
           <input
             type="radio"

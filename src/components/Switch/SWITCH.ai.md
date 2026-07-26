@@ -103,10 +103,11 @@ export default function Example() {
 ## Styling Guide
 
 Switch supports CSS custom properties for easy theming:
-- `--switch-width`, `--switch-height` — overall dimensions
+- `--switch-tracker-width`, `--switch-tracker-height` — track dimensions
 - `--switch-thumb-size` — thumb diameter
-- `--switch-thumb-offset` — thumb inset from track edge
-- `--switch-checked-bg`, `--switch-unchecked-bg` — track colors
+- `--switch-thumb-bg` — thumb color
+- `--switch-tracker-checked-bg`, `--switch-tracker-unchecked-bg` — track colors
+- `--switch-focus-ring` — focus ring color
 
 Or use the `classes` prop with 14 slots for full control.
 

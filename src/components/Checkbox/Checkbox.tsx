@@ -46,6 +46,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       defaultChecked = false,
       indeterminate = false,
       disabled = false,
+      readOnly = false,
       required = false,
       onCheckedChange,
       onValueChange,
@@ -133,13 +134,15 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }, [indeterminate, isChecked, mergedClasses]);
 
     // ─── Handlers ───────────────────────────────────────────────────────
+    // The native readonly attribute does nothing on checkboxes, so the guard has
+    // to live here - readOnly blocks the change but must not read as disabled.
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!disabled) {
+        if (!disabled && !readOnly) {
           setIsChecked(event.target.checked);
         }
       },
-      [disabled, setIsChecked],
+      [disabled, readOnly, setIsChecked],
     );
 
     // ─── Icon ───────────────────────────────────────────────────────────
@@ -163,8 +166,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div
-        className={cn(mergedClasses.root, className, loading && "opacity-50 pointer-events-none") || undefined}
+        className={cn(mergedClasses.root, className, loading && "opacity-50 pointer-events-none", !unstyled && disabled && "opacity-50") || undefined}
         data-disabled={disabled || undefined}
+        data-readonly={readOnly || undefined}
         data-error={error || undefined}
         data-checked={isChecked || undefined}
         data-indeterminate={indeterminate || undefined}
@@ -176,7 +180,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span
-            className={cn(mergedClasses.checkbox, stateClassName, shapeClass, "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
+            className={cn(mergedClasses.checkbox, stateClassName, shapeClass, !unstyled && error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
@@ -190,6 +194,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               name={name}
               checked={isChecked}
               disabled={disabled || loading}
+              readOnly={readOnly}
+              aria-readonly={readOnly || undefined}
               required={required}
               onChange={handleChange}
               onFocus={onFocus}

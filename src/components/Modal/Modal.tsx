@@ -29,6 +29,7 @@ import {
   DEFAULT_MODAL_CLASSES,
   UNSTYLED_MODAL_CLASSES,
 } from "./utils/constants";
+import { pushModal, popModal, isTopModal } from "./utils/helpers";
 
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
@@ -158,13 +159,24 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
     }, [isOpen, keepMounted, mounted, effectiveDuration]);
 
+    useEffect(() => {
+      if (isOpen) {
+        pushModal(modalId);
+        return () => popModal(modalId);
+      }
+    }, [isOpen, modalId]);
+
     // Keyboard: Escape + Focus trap
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
         if (!isOpen) return;
 
         if (event.key === "Escape" && closeOnEscape) {
-          event.stopPropagation();
+          // Every open modal listens on document, so stopPropagation can't stop a
+          // sibling listener on that same node - only the stack tells us who is on
+          // top, and only stopImmediatePropagation keeps the rest from firing.
+          if (!isTopModal(modalId)) return;
+          event.stopImmediatePropagation();
           handleClose();
           return;
         }
@@ -191,7 +203,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           }
         }
       },
-      [isOpen, closeOnEscape, trapFocus, handleClose],
+      [isOpen, closeOnEscape, trapFocus, handleClose, modalId],
     );
 
     useEffect(() => {

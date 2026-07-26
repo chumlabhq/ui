@@ -304,7 +304,7 @@ const emailRef = useRef<HTMLInputElement>(null);
 - Escape key closes modal (configurable via `closeOnEscape`)
 - Body scroll locked when open
 - Close button has `aria-label="Close modal"`
-- Nested modals: Escape only closes the topmost (event.stopPropagation)
+- Nested modals: Escape only closes the topmost (open modals are tracked in a stack)
 - Supports `prefers-reduced-motion` via `reduceMotion="auto"`
 
 ---

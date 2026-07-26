@@ -51,8 +51,8 @@ function MyComponent() {
 | Prop | Constraint |
 |------|-----------|
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
-| `position` | Set on `<ToastProvider>`. 6 options: `"top-right"` (default), `"top-left"`, `"top-center"`, `"bottom-right"`, `"bottom-left"`, `"bottom-center"` |
-| `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default varies by type. |
+| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
+| `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `content` | ReactNode that replaces the default message/description layout entirely |
 | `onDismiss` | Preferred over deprecated `onClose` |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |

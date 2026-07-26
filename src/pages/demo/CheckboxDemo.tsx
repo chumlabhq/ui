@@ -319,10 +319,7 @@ const CheckboxDemo = () => {
             disabled
             size="md"
             shape="rounded"
-            classes={{
-              ...c.checkbox,
-              checkbox: `${c.checkbox.checkbox} opacity-50`,
-            }}
+            classes={c.checkbox}
           />
           <Checkbox
             label="Disabled checked"
@@ -330,10 +327,7 @@ const CheckboxDemo = () => {
             checked
             size="md"
             shape="rounded"
-            classes={{
-              ...c.checkbox,
-              checkbox: `${c.checkbox.checkbox} opacity-50`,
-            }}
+            classes={c.checkbox}
           />
         </DemoWrapper>
       </Section>
@@ -355,13 +349,7 @@ const CheckboxDemo = () => {
             }
             size="md"
             shape="rounded"
-            classes={{
-              ...c.checkbox,
-              checkbox: `${c.checkbox.checkbox} ${!errorDemo ? (dark ? "border border-cl-error" : "border-cl-error") : ""}`,
-              label: !errorDemo
-                ? `text-sm font-medium text-cl-error`
-                : c.checkbox.label,
-            }}
+            classes={c.checkbox}
           />
         </DemoWrapper>
       </Section>

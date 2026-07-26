@@ -20,11 +20,14 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   disabledLabel: "text-cl-text-tertiary dark:text-cl-text-tertiary cursor-not-allowed",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
   tracker:
-    "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,#3b82f6)] cursor-pointer",
+    "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,var(--cl-accent))] cursor-pointer",
   disabledTracker: "opacity-50 cursor-not-allowed",
   thumb:
     "inline-flex items-center justify-center transform h-[var(--switch-thumb-size,1rem)] w-[var(--switch-thumb-size,1rem)] rounded-full bg-[var(--switch-thumb-bg,white)] shadow-md transition-transform duration-200 motion-reduce:transition-none",
-  checkedTracker: "bg-[var(--switch-tracker-checked-bg,#2563eb)]",
+  checkedTracker: "bg-[var(--switch-tracker-checked-bg,var(--cl-accent))]",
+  // Literal grays on purpose: the off-track needs a solid mid-gray and the
+  // palette has no token for one - every neutral is a surface or a low-alpha
+  // overlay. Maps to a token once a solid neutral exists (same gap as Table).
   uncheckedTracker: "bg-[var(--switch-tracker-unchecked-bg,#d1d5db)] dark:bg-[var(--switch-tracker-unchecked-bg,#4b5563)]",
   checkedThumb: "translate-x-4.5",
   uncheckedThumb: "translate-x-0.5",
