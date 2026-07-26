@@ -509,7 +509,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       <div className={mergedClasses.pageInfo}>
         {renderPageInfo({
           value: safeCurrentPage,
-          currentPage: safeCurrentPage,
           totalPages: safeTotalPages,
           rowsPerPage,
         })}
@@ -537,7 +536,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                   {renderEllipsis({
                     position: index < visiblePages.length / 2 ? "start" : "end",
                     onValueChange: resolvedOnPageChange!,
-                    onPageChange: resolvedOnPageChange!,
                   })}
                 </Fragment>
               ) : (

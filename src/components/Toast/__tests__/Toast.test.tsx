@@ -195,8 +195,8 @@ describe("Toast", () => {
       });
     });
 
-    it("calls onClose callback when toast is dismissed", async () => {
-      const onClose = vi.fn();
+    it("calls onDismiss callback when toast is dismissed", async () => {
+      const onDismiss = vi.fn();
       let toastApi: ReturnType<typeof useToast>;
 
       renderWithProvider(
@@ -204,13 +204,13 @@ describe("Toast", () => {
       );
 
       await act(async () => {
-        toastApi.info("Message", { onClose });
+        toastApi.info("Message", { onDismiss });
       });
 
       const closeButton = screen.getByRole("button", { name: "Close notification" });
       fireEvent.click(closeButton);
 
-      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onDismiss).toHaveBeenCalledTimes(1);
     });
   });
 

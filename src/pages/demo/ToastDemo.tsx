@@ -738,7 +738,7 @@ const ToastDemoContent = ({
       {/* ─── Callbacks ────────────────────────────────────────────────── */}
       <Section
         title="Callbacks"
-        description="Use onDismiss callback to execute code when a toast is dismissed. (onClose is deprecated — use onDismiss instead.)"
+        description="Use onDismiss callback to execute code when a toast is dismissed."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
@@ -1080,12 +1080,6 @@ const ToastDemoContent = ({
               name="onDismiss"
               type="() => void"
               description="Callback fired when toast is dismissed"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onClose"
-              type="() => void"
-              description="Deprecated — use onDismiss instead"
               isDarkMode={dark}
             />
             <PropRow

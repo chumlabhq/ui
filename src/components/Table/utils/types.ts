@@ -135,11 +135,8 @@ export interface TableClasses {
 export interface TableProps<TData> {
   columns?: ColumnDef<TData>[];
   data?: TData[];
-  COLUMNS?: ColumnDef<TData>[];
-  COLUMNS_DATA?: TData[];
   loading?: boolean;
   showHeader?: boolean;
-  tableHeader?: boolean;
   pinnedColumns?: string[];
   onPinColumn?: (columnId: string, isPinned: boolean) => void;
   pinnableColumns?: string[];

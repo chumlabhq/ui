@@ -701,12 +701,6 @@ const SwitchDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onCheckedChange"
-              type="(checked: boolean) => void"
-              description="Deprecated — use onValueChange instead"
-              isDarkMode={dark}
-            />
-            <PropRow
               name="label"
               type="ReactNode"
               description="Label text for the switch"

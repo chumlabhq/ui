@@ -27,7 +27,6 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       description,
       checked: controlledChecked,
       defaultChecked = false,
-      onCheckedChange,
       onValueChange,
       name,
       value = "on",
@@ -67,7 +66,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
-      onChange: onValueChange ?? onCheckedChange,
+      onChange: onValueChange,
     });
 
     const handleToggle = useCallback(() => {

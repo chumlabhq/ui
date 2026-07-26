@@ -55,34 +55,34 @@ describe("Switch Component", () => {
   });
 
   describe("Toggle Behavior", () => {
-    it("calls onCheckedChange when clicked", async () => {
+    it("calls onValueChange when clicked", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
         <Switch
           checked={false}
-          onCheckedChange={onCheckedChange}
+          onValueChange={onValueChange}
           aria-label="Toggle feature"
         />
       );
 
       await user.click(screen.getByRole("switch"));
-      expect(onCheckedChange).toHaveBeenCalledTimes(1);
+      expect(onValueChange).toHaveBeenCalledTimes(1);
     });
 
-    it("calls onCheckedChange when label is clicked", async () => {
+    it("calls onValueChange when label is clicked", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
         <Switch
           label="Enable notifications"
           checked={false}
-          onCheckedChange={onCheckedChange}
+          onValueChange={onValueChange}
         />
       );
 
       await user.click(screen.getByText("Enable notifications"));
-      expect(onCheckedChange).toHaveBeenCalledTimes(1);
+      expect(onValueChange).toHaveBeenCalledTimes(1);
     });
 
     it("reflects controlled checked state via aria-checked", () => {
@@ -97,20 +97,20 @@ describe("Switch Component", () => {
   });
 
   describe("Disabled State", () => {
-    it("does not call onCheckedChange when disabled", async () => {
+    it("does not call onValueChange when disabled", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
         <Switch
           checked={false}
-          onCheckedChange={onCheckedChange}
+          onValueChange={onValueChange}
           disabled
           aria-label="Toggle"
         />
       );
 
       await user.click(screen.getByRole("switch"));
-      expect(onCheckedChange).not.toHaveBeenCalled();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
 
     it("sets disabled attribute on button when disabled", () => {
@@ -140,11 +140,11 @@ describe("Switch Component", () => {
 
     it("toggles on Space key press", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
         <Switch
           checked={false}
-          onCheckedChange={onCheckedChange}
+          onValueChange={onValueChange}
           aria-label="Toggle"
         />
       );
@@ -152,16 +152,16 @@ describe("Switch Component", () => {
       const switchEl = screen.getByRole("switch");
       switchEl.focus();
       await user.keyboard(" ");
-      expect(onCheckedChange).toHaveBeenCalledTimes(1);
+      expect(onValueChange).toHaveBeenCalledTimes(1);
     });
 
     it("toggles on Enter key press", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
         <Switch
           checked={false}
-          onCheckedChange={onCheckedChange}
+          onValueChange={onValueChange}
           aria-label="Toggle"
         />
       );
@@ -169,16 +169,16 @@ describe("Switch Component", () => {
       const switchEl = screen.getByRole("switch");
       switchEl.focus();
       await user.keyboard("{Enter}");
-      expect(onCheckedChange).toHaveBeenCalledTimes(1);
+      expect(onValueChange).toHaveBeenCalledTimes(1);
     });
 
     it("does not toggle on Space when disabled", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
         <Switch
           checked={false}
-          onCheckedChange={onCheckedChange}
+          onValueChange={onValueChange}
           disabled
           aria-label="Toggle"
         />
@@ -187,7 +187,7 @@ describe("Switch Component", () => {
       const switchEl = screen.getByRole("switch");
       switchEl.focus();
       await user.keyboard(" ");
-      expect(onCheckedChange).not.toHaveBeenCalled();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
   });
 
@@ -278,11 +278,11 @@ describe("Switch Component", () => {
     });
 
     it("allows programmatic click via ref", async () => {
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       const ref = createRef<HTMLButtonElement>();
-      render(<Switch ref={ref} onCheckedChange={onCheckedChange} aria-label="Toggle" />);
+      render(<Switch ref={ref} onValueChange={onValueChange} aria-label="Toggle" />);
       ref.current?.click();
-      expect(onCheckedChange).toHaveBeenCalledTimes(1);
+      expect(onValueChange).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -560,7 +560,7 @@ describe("Switch Component", () => {
   });
 
   describe("Edge Cases", () => {
-    it("renders without onCheckedChange (uncontrolled display)", () => {
+    it("renders without onValueChange (uncontrolled display)", () => {
       render(<Switch checked={true} aria-label="Toggle" />);
       expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "true");
     });
@@ -572,16 +572,16 @@ describe("Switch Component", () => {
 
     it("handles rapid toggle calls", async () => {
       const user = userEvent.setup();
-      const onCheckedChange = vi.fn();
+      const onValueChange = vi.fn();
       render(
-        <Switch onCheckedChange={onCheckedChange} aria-label="Toggle" />
+        <Switch onValueChange={onValueChange} aria-label="Toggle" />
       );
 
       const switchEl = screen.getByRole("switch");
       await user.click(switchEl);
       await user.click(switchEl);
       await user.click(switchEl);
-      expect(onCheckedChange).toHaveBeenCalledTimes(3);
+      expect(onValueChange).toHaveBeenCalledTimes(3);
     });
   });
 });

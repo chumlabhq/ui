@@ -467,7 +467,7 @@ describe("Pagination", () => {
           value={25}
           totalPages={50}
           onValueChange={onValueChange}
-          renderEllipsis={({ onPageChange: go }) => (
+          renderEllipsis={({ onValueChange: go }) => (
             <button type="button" onClick={() => go(10)} data-testid="jump-btn">
               Go
             </button>
@@ -504,8 +504,8 @@ describe("Pagination", () => {
           value={3}
           totalPages={10}
           onValueChange={() => {}}
-          renderPageInfo={({ currentPage, totalPages }) => (
-            <span data-testid="page-info">Page {currentPage} of {totalPages}</span>
+          renderPageInfo={({ value, totalPages }) => (
+            <span data-testid="page-info">Page {value} of {totalPages}</span>
           )}
         />
       );

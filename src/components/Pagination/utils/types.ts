@@ -7,16 +7,12 @@ export interface IconProps {
 export interface EllipsisRenderProps {
   position: "start" | "end";
   onValueChange: (page: number) => void;
-  /** @deprecated Use `onValueChange` instead. */
-  onPageChange: (page: number) => void;
 }
 
 export interface PageInfoRenderProps {
   value: number;
   totalPages: number;
   rowsPerPage?: number;
-  /** @deprecated Use `value` instead. */
-  currentPage: number;
 }
 
 export type SectionName = "selector" | "pageInfo" | "nav";
