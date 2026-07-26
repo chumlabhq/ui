@@ -92,11 +92,11 @@ const DoubleArrowRightIcon = ({ className }: { className?: string }) => (
 // ─── Jump-to-Page Ellipsis ───────────────────────────────────────────────────
 
 const JumpToPageEllipsis = ({
-  onPageChange,
+  onValueChange,
   dark: _dark,
   variant = "default",
 }: {
-  onPageChange: (page: number) => void;
+  onValueChange: (page: number) => void;
   dark: boolean;
   variant?: "default" | "pill" | "ghost";
 }) => {
@@ -113,7 +113,7 @@ const JumpToPageEllipsis = ({
   const handleSubmit = () => {
     const page = parseInt(value, 10);
     if (!isNaN(page) && page > 0) {
-      onPageChange(page);
+      onValueChange(page);
     }
     setIsEditing(false);
     setValue("");
@@ -343,9 +343,9 @@ const PaginationDemo = () => {
                 value={jumpPage}
                 totalPages={50}
                 onValueChange={setJumpPage}
-                renderEllipsis={({ onPageChange }) => (
+                renderEllipsis={({ onValueChange }) => (
                   <JumpToPageEllipsis
-                    onPageChange={onPageChange}
+                    onValueChange={onValueChange}
                     dark={dark}
                     variant="default"
                   />
@@ -364,9 +364,9 @@ const PaginationDemo = () => {
                   value={jumpPillPage}
                   totalPages={50}
                   onValueChange={setJumpPillPage}
-                  renderEllipsis={({ onPageChange }) => (
+                  renderEllipsis={({ onValueChange }) => (
                     <JumpToPageEllipsis
-                      onPageChange={onPageChange}
+                      onValueChange={onValueChange}
                       dark={dark}
                       variant="pill"
                     />
@@ -396,9 +396,9 @@ const PaginationDemo = () => {
                   value={jumpGhostPage}
                   totalPages={30}
                   onValueChange={setJumpGhostPage}
-                  renderEllipsis={({ onPageChange }) => (
+                  renderEllipsis={({ onValueChange }) => (
                     <JumpToPageEllipsis
-                      onPageChange={onPageChange}
+                      onValueChange={onValueChange}
                       dark={dark}
                       variant="ghost"
                     />
@@ -437,11 +437,11 @@ const PaginationDemo = () => {
               setPageInfoPage(1);
             }}
             showRowsPerPage
-            renderPageInfo={({ currentPage, totalPages, rowsPerPage: rpp }) => (
+            renderPageInfo={({ value, totalPages, rowsPerPage: rpp }) => (
               <span
                 className={`text-sm tabular-nums text-cl-text-secondary`}
               >
-                Page {currentPage} of {totalPages}
+                Page {value} of {totalPages}
                 {rpp ? ` (${rpp} per page)` : ""}
               </span>
             )}
@@ -471,11 +471,11 @@ const PaginationDemo = () => {
             }}
             showRowsPerPage
             sectionOrder={["nav", "pageInfo", "selector"]}
-            renderPageInfo={({ currentPage, totalPages }) => (
+            renderPageInfo={({ value, totalPages }) => (
               <span
                 className={`text-sm tabular-nums text-cl-text-secondary`}
               >
-                {currentPage} / {totalPages}
+                {value} / {totalPages}
               </span>
             )}
             classes={{
@@ -554,11 +554,11 @@ const PaginationDemo = () => {
             prevAriaLabel="Page pr\u00e9c\u00e9dente"
             nextAriaLabel="Page suivante"
             pageAriaLabel={(page) => `Page ${page}`}
-            renderPageInfo={({ currentPage, totalPages }) => (
+            renderPageInfo={({ value, totalPages }) => (
               <span
                 className={`text-sm text-cl-text-secondary`}
               >
-                Page {currentPage} sur {totalPages}
+                Page {value} sur {totalPages}
               </span>
             )}
             classes={{
