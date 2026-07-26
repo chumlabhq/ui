@@ -1396,7 +1396,7 @@ const AccordionDemo = () => {
       {/* ─── Item onExpandedChange ──────────────────────────────────── */}
       <Section
         title="Per-Item Expanded Callback"
-        description="Use onExpandedChange on AccordionItem to react to individual item state changes. (onToggle is deprecated.)"
+        description="Use onExpandedChange on AccordionItem to react to individual item state changes."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
@@ -1668,12 +1668,6 @@ const AccordionDemo = () => {
               name="onExpandedChange"
               type="(isExpanded: boolean) => void"
               description="Callback when this item expands or collapses"
-              isDarkMode={dark}
-            />
-            <PropRow
-              name="onToggle"
-              type="(isExpanded: boolean) => void"
-              description="Deprecated — use onExpandedChange instead"
               isDarkMode={dark}
             />
             <PropRow

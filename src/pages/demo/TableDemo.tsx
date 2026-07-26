@@ -7707,21 +7707,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             isDarkMode={dark}
           />
           <PropRow
-            name="COLUMNS"
-            type="ColumnDef[]"
-            description="Alternative to columns prop"
-            isDarkMode={dark}
-          />
-          <PropRow
             name="data"
             type="TData[]"
             description="Table data array"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="COLUMNS_DATA"
-            type="TData[]"
-            description="Alternative to data prop"
             isDarkMode={dark}
           />
           <PropRow
@@ -7736,12 +7724,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             type="boolean"
             defaultVal="true"
             description="Show/hide table header"
-            isDarkMode={dark}
-          />
-          <PropRow
-            name="tableHeader"
-            type="boolean"
-            description="Alternative to showHeader prop"
             isDarkMode={dark}
           />
           <PropRow
@@ -8654,15 +8636,15 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         <div className={c.card}>
         <PropsTable isDarkMode={dark}>
           <PropRow
-            name="columns / COLUMNS"
+            name="columns"
             type="ColumnDef[]"
-            description="TanStack column definitions (or COLUMNS static export)"
+            description="TanStack column definitions"
             isDarkMode={dark}
           />
           <PropRow
-            name="data / COLUMNS_DATA"
+            name="data"
             type="TData[]"
-            description="Row data (or COLUMNS_DATA static export)"
+            description="Row data"
             isDarkMode={dark}
           />
           <PropRow

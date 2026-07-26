@@ -48,7 +48,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled = false,
       readOnly = false,
       required = false,
-      onCheckedChange,
       onValueChange,
       onFocus,
       onBlur,
@@ -83,7 +82,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const [isChecked, setIsChecked] = useControllableState({
       value: controlledChecked,
       defaultValue: defaultChecked,
-      onChange: onValueChange ?? onCheckedChange,
+      onChange: onValueChange,
     });
 
     useEffect(() => {

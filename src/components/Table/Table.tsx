@@ -115,11 +115,8 @@ function TableInner<TData>(
   {
     columns: columnsProp,
     data: dataProp,
-    COLUMNS,
-    COLUMNS_DATA,
     loading = false,
     showHeader = true,
-    tableHeader,
     pinnedColumns = [],
     onPinColumn,
     pinnableColumns,
@@ -301,9 +298,9 @@ function TableInner<TData>(
   const loadingMoreClassName = classesProp?.loadingMore ?? base.loadingMore;
   const searchInputClassName = classesProp?.searchInput ?? base.searchInput;
 
-  const columns = columnsProp ?? COLUMNS ?? FALLBACK_COLUMNS;
-  const data = dataProp ?? COLUMNS_DATA ?? FALLBACK_DATA;
-  const shouldShowHeader = tableHeader ?? showHeader;
+  const columns = columnsProp ?? FALLBACK_COLUMNS;
+  const data = dataProp ?? FALLBACK_DATA;
+  const shouldShowHeader = showHeader;
   const [focusedCell, setFocusedCell] = useState<{
     row: number;
     col: number;

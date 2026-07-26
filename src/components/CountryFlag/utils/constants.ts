@@ -5,8 +5,6 @@ import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses } fro
 // default - by default nothing leaves the app.
 export const CHUMLAB_FLAG_CDN = "https://chumflagscdn.s3.ap-south-1.amazonaws.com/flags";
 
-/** @deprecated Renamed to CHUMLAB_FLAG_CDN. No longer the default base path. */
-export const DEFAULT_FLAG_BASE_PATH = CHUMLAB_FLAG_CDN;
 export const DEFAULT_ASPECT_RATIO = 0.75;
 
 export const SIZE_MAP: Record<CountryFlagSize, number> = {

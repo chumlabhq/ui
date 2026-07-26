@@ -87,11 +87,8 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 |------|------|---------|-------------|
 | `columns` | array | — | TanStack ColumnDef array defining table columns. |
 | `data` | array | — | Array of row data objects. |
-| `COLUMNS` | array | — | Deprecated alias for columns. |
-| `COLUMNS_DATA` | array | — | Deprecated alias for data. |
 | `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
 | `showHeader` | boolean | `true` | Whether to show the table header row. |
-| `tableHeader` | boolean | — | Legacy alias for showHeader. |
 | `pinnedColumns` | array | — | Column IDs to pin to the left side. |
 | `onPinColumn` | object | — | (columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned. |
 | `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |

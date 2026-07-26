@@ -54,11 +54,6 @@ export interface CheckboxProps
   indeterminate?: boolean;
   /** Fires when the checked state changes. */
   onValueChange?: (checked: boolean) => void;
-  /**
-   * @deprecated Use `onValueChange` instead — kept for backward compatibility.
-   * If both are provided, `onValueChange` takes precedence.
-   */
-  onCheckedChange?: (checked: boolean) => void;
   /** Fires when the checkbox receives focus. */
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   /** Fires when the checkbox loses focus. */

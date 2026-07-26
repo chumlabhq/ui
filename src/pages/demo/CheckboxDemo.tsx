@@ -630,12 +630,6 @@ const CheckboxDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="onCheckedChange"
-              type="(checked: boolean) => void"
-              description="Deprecated — use onValueChange instead"
-              isDarkMode={dark}
-            />
-            <PropRow
               name="disabled"
               type="boolean"
               defaultVal="false"

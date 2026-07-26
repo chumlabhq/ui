@@ -117,13 +117,6 @@ describe("Table", () => {
 
       expect(screen.getByRole("region", { name: "Users table" })).toBeInTheDocument();
     });
-
-    it("uses legacy COLUMNS/COLUMNS_DATA props", () => {
-      render(<Table COLUMNS={columns} COLUMNS_DATA={data} />);
-
-      expect(screen.getByText("Alice")).toBeInTheDocument();
-      expect(screen.getByText("Name")).toBeInTheDocument();
-    });
   });
 
   describe("Header", () => {

@@ -32,7 +32,6 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   icon,
   showCloseButton = true,
   onDismiss,
-  onClose,
   onRemove,
   role: roleProp,
   classes: classesProp,
@@ -48,14 +47,14 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toastRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const resolvedDismissCallback = onDismiss ?? onClose;
+  const resolvedDismissCallback = onDismiss;
   const onCloseRef = useRef(resolvedDismissCallback);
   const onRemoveRef = useRef(onRemove);
 
   useEffect(() => {
-    onCloseRef.current = onDismiss ?? onClose;
+    onCloseRef.current = onDismiss;
     onRemoveRef.current = onRemove;
-  }, [onDismiss, onClose, onRemove]);
+  }, [onDismiss, onRemove]);
   const [isPaused, setIsPaused] = useState(false);
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);

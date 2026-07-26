@@ -12,11 +12,10 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     className,
     asChild = false,
     onExpandedChange,
-    onToggle,
     "aria-describedby": ariaDescribedBy,
     ...rest
   }, ref) => {
-    const resolvedCallback = onExpandedChange ?? onToggle;
+    const resolvedCallback = onExpandedChange;
     const config = useAccordionConfig();
     const context = useAccordionContext();
     const isExpanded = useIsItemExpanded(value);
