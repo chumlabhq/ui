@@ -102,12 +102,19 @@ writeFileSync(
  *   @source "../node_modules/@chumlab/ui/dist";
  */
 
-/* Dark is the default: it is the surface the components were designed against. */
+/* Dark is the default: it is the surface the components were designed against.
+ *
+ * Both switches are honoured, because the components' \`dark:\` utilities key off
+ * the \`.dark\` class (see the @custom-variant in styles.css). If tokens listened
+ * only to [data-theme], a consumer setting class="dark" would get dark utilities
+ * with light tokens - or the reverse - which is unreadable either way. */
 :root,
+:root.dark,
 :root[data-theme="dark"] {
 ${indent(dark)}
 }
 
+:root.light,
 :root[data-theme="light"] {
 ${indent(light)}
 }

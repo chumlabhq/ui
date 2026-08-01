@@ -31,6 +31,7 @@ An open-source React component library with **30 production-ready components** �
 ## 30-Second Example
 
 ```tsx
+import "@chumlab/ui/styles.css";
 import { Button, Input, Modal } from "@chumlab/ui";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ export default function App() {
       <Input label="Email" placeholder="you@example.com" clearable />
 
       <Button
-        className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg"
+        className="px-4 py-2 rounded-cl-md bg-cl-accent text-cl-on-accent"
         onClick={() => setOpen(true)}
       >
         Open Modal
@@ -55,6 +56,12 @@ export default function App() {
   );
 }
 ```
+
+The `styles.css` import is required — without it the components render unstyled.
+It carries the `cl-*` design tokens and the components' own layout rules, so this
+works with no Tailwind in your project. It is not a general Tailwind build, so
+utilities of your own (`bg-blue-600`, `rounded-lg`) still need Tailwind or your
+own CSS.
 
 ---
 
@@ -253,11 +260,16 @@ Every stateful component supports both:
 
 ## Dark Mode
 
-Add `class="dark"` to `<html>` — every component adapts automatically:
+Dark is the default. To opt into light, set either switch on `<html>`:
 
 ```html
-<html class="dark"></html>
+<html class="light">          <!-- or -->
+<html data-theme="light">
 ```
+
+Both are honoured, and both drive the design tokens and the components' own
+`dark:` styles together — so they can never disagree. `class="dark"` /
+`data-theme="dark"` are accepted too if you prefer to be explicit.
 
 No theme provider, no configuration, no extra imports.
 
@@ -287,6 +299,12 @@ Every component ships with:
 | `useReducedMotion`          | Respects `prefers-reduced-motion`                    |
 | `useIsomorphicLayoutEffect` | SSR safe `useLayoutEffect`                           |
 | `SR_ONLY_STYLE`             | Screen-reader-only inline styles                     |
+| `copyToClipboard`           | `(text) => Promise<boolean>` — clipboard write with a success flag |
+| `isInteractiveElement`      | `(target) => boolean` — is an event target a control? |
+| `exportTableToCSV`          | `(data, columns, filename?)` — download table rows as CSV |
+| `getColumnId`               | Resolve a TanStack column's id from its definition    |
+| `getSortDirection`          | Map a sort state to an `aria-sort` value              |
+| `useModal` / `useToast` / `useTimePicker` | Hooks powering Modal, Toast and TimePicker |
 
 ---
 
@@ -325,10 +343,14 @@ npm run build:lib      # Build library
 ## FAQ
 
 **Does it work with Next.js?**
-Yes. Compatible with App Router and Pages Router. Use `"use client"` for interactive components.
+Yes — App Router and Pages Router. The interactive components already ship with
+`"use client"`, so you can import them straight into a Server Component. Import
+`@chumlab/ui/styles.css` once in your root layout.
 
 **Can I use it without Tailwind CSS?**
-Yes. Use the `unstyled` prop or pass `UNSTYLED_*_CLASSES` constants and apply your own CSS.
+Yes — that is the default path. `import "@chumlab/ui/styles.css"` is precompiled
+and needs no Tailwind. If you want to drop the styling entirely and supply your
+own, use the `unstyled` prop or the `UNSTYLED_*_CLASSES` constants.
 
 **How do I report a bug?**
 Open an issue on [GitHub](https://github.com/chumlabhq/ui/issues).

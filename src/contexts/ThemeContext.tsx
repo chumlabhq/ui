@@ -92,6 +92,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Colocated with ThemeProvider on purpose: the provider and its consumer hook
+// are one API, and 35 call sites import the hook from here. The rule is about
+// Fast Refresh granularity in dev, not correctness, and this file never ships.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
   if (!ctx) {

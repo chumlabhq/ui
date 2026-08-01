@@ -296,7 +296,8 @@
     "llms.txt",
     "llms-full.txt",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE"
   ],
   "sideEffects": [
     "*.css"
@@ -387,5 +388,8 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

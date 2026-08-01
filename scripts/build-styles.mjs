@@ -32,10 +32,20 @@ const tokens = readFileSync(TOKENS, "utf8");
 
 // theme + utilities only - no preflight. The tokens are inlined rather than
 // @import-ed so the @theme block resolves in this same compilation.
+// The `dark:` variant must mirror the TOKEN logic exactly, or the two disagree
+// and the result is unreadable. Tokens are dark on bare :root and flip only on
+// .light / [data-theme="light"], so the variant is written the same way: dark
+// applies unless the consumer has explicitly opted into light.
+//
+// Tailwind's default `dark:` is @media (prefers-color-scheme), which ignores the
+// consumer's choice entirely - on a light-mode OS that rendered near-white text
+// on a white surface (1.15:1). This is the fix for that.
 const input = `
 @layer theme, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:where(:root:not(.light):not([data-theme="light"]), :root:not(.light):not([data-theme="light"]) *));
 
 ${tokens}
 `;

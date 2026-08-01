@@ -1,0 +1,74 @@
+@chumlab/ui — third-party notices
+=================================
+
+@chumlab/ui is MIT licensed; see LICENSE.
+
+Most dependencies are declared rather than bundled: react, react-dom, clsx,
+tailwind-merge, @tanstack/react-table and date-fns are resolved from the
+consumer's own node_modules and carry their own licences there. The items below
+are the exception — their code or assets are compiled into this package's
+`dist/`, so their notices are reproduced here.
+
+
+libphonenumber-js
+-----------------
+Bundled into `dist/components/InternationalPhoneInput/validators/` (reachable
+only via the opt-in `@chumlab/ui/phone-validators` subpath; the default
+InternationalPhoneInput entry does not include it).
+
+    The MIT License
+
+    Copyright (c) 2016 @catamphetamine <purecatamphetamine@gmail.com>
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+    IN THE SOFTWARE.
+
+    https://gitlab.com/catamphetamine/libphonenumber-js
+
+libphonenumber-js derives its phone-number metadata from Google's libphonenumber
+(Apache License 2.0) — https://github.com/google/libphonenumber
+
+
+flag-icons
+----------
+Three flag SVGs shipped in `dist/flags/` (bq, xk, yt) originate from
+lipis/flag-icons. The remaining flags are Chumlab's own assets.
+
+    The MIT License (MIT)
+
+    Copyright (c) 2013 Panayiotis Lipiridis
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+    IN THE SOFTWARE.
+
+    https://github.com/lipis/flag-icons

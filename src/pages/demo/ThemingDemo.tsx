@@ -37,6 +37,21 @@ const ThemingDemo = () => {
       </header>
 
       <Section
+        title="Getting the tokens"
+        description="The tokens ship in the stylesheet. Import it once and every token below is available."
+      >
+        <CodeBlock code={`import "@chumlab/ui/styles.css";`} />
+        <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
+          Already running Tailwind? Import{" "}
+          <code className="font-mono text-[12px] text-accent">
+            @chumlab/ui/tokens.css
+          </code>{" "}
+          instead and let Tailwind generate the utilities. Import one or the
+          other, never both.
+        </p>
+      </Section>
+
+      <Section
         title="Light & dark out of the box"
         description="Set data-theme on <html> and the same tokens flip to their light values automatically."
       >

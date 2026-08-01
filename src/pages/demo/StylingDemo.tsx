@@ -33,7 +33,14 @@ const StylingDemo = () => {
         <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
           Works with Tailwind, CSS Modules, plain CSS, or any combination.
           The library uses the Tailwind merge convention so utility
-          conflicts resolve to your override.
+          conflicts resolve to your override &mdash; including against its own{" "}
+          <code className="font-mono text-[12px] text-accent">cl-</code> token
+          utilities, so{" "}
+          <code className="font-mono text-[12px] text-accent">rounded-none</code>{" "}
+          genuinely replaces a component&rsquo;s{" "}
+          <code className="font-mono text-[12px] text-accent">rounded-cl-md</code>.
+          You never need{" "}
+          <code className="font-mono text-[12px] text-accent">!important</code>.
         </p>
       </Section>
 
