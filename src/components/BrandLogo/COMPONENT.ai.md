@@ -1,3 +1,5 @@
+<!-- INTERNAL: BrandLogo is site-only. It is excluded from the npm package
+     (vite.config EXCLUDED_COMPONENTS) and has no @chumlab/ui subpath. -->
 # BrandLogo
 
 > Chumlab brand identity components — logo mark (image), wordmark (styled text), and full logo (mark + wordmark combined).
@@ -16,7 +18,7 @@ Use `<LogoMark />` for the icon only, `<LogoWordmark />` for the text only, or `
 ## Import
 
 ```tsx
-import { LogoMark, LogoWordmark, LogoFull } from "@chumlab/ui/brand-logo";
+import { LogoMark, LogoWordmark, LogoFull } from "../../components/BrandLogo";
 ```
 
 ---
@@ -24,7 +26,7 @@ import { LogoMark, LogoWordmark, LogoFull } from "@chumlab/ui/brand-logo";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { LogoMark, LogoWordmark, LogoFull } from "@chumlab/ui/brand-logo";
+import { LogoMark, LogoWordmark, LogoFull } from "../../components/BrandLogo";
 
 export default function Header() {
   return (

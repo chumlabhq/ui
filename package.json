@@ -328,7 +328,7 @@
     "build:llms": "node ai/build-llms-full.mjs",
     "build:flags": "node scripts/generate-flags.mjs",
     "prepublishOnly": "npm run build:lib",
-    "prepack": "npm run build:lib",
+    "prepack": "npm run build:lib && npm run build:llms",
     "build:tokens": "node scripts/build-tokens.mjs",
     "build:styles": "node scripts/build-styles.mjs"
   },

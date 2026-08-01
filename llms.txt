@@ -6,9 +6,20 @@
 ## Install
 npm install @chumlab/ui
 
-## Tailwind CSS (required)
+## Styles (required)
+Import once at the app entry. Without it components render unstyled.
+import "@chumlab/ui/styles.css";
+
+styles.css is precompiled and needs no Tailwind. It carries the cl-* design
+tokens and the components' own layout utilities, and contains no CSS reset.
+It is NOT a general Tailwind build - arbitrary utilities you write yourself
+still need Tailwind or your own CSS.
+
+## Styles, if the project already runs Tailwind
 @import "tailwindcss";
-@source "../node_modules/@chumlab/ui/dist/**/*.js";
+@import "@chumlab/ui/tokens.css";
+@source "../node_modules/@chumlab/ui/dist";
+Import styles.css OR tokens.css, never both.
 
 ## Import
 import { Button } from "@chumlab/ui/button";
@@ -39,7 +50,10 @@ Never pass a string to `error` — it is not `error="message"`.
 
 ### Styling: className + classes
 - `className` goes on the root element
+- `className` on the root is merged LAST and WINS on conflict, including against the
+  library's own `cl-*` utilities. Never emit `!important`.
 - `classes` is an object for per-slot overrides: `classes={{ trigger: "...", content: "..." }}`
+- `--cl-*` tokens are the theme-level layer: override in `:root` and every component follows.
 - `unstyled` strips all default classes
 - Components have NO built-in colors — you provide them via className/classes
 

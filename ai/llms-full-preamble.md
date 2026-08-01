@@ -13,9 +13,18 @@ GitHub: https://github.com/chumlabhq/ui
 ## Install
 npm install @chumlab/ui
 
-## Tailwind CSS setup (required)
-In your CSS file where you import Tailwind, add:
-@source "../node_modules/@chumlab/ui/dist/**/*.js";
+## Styles (required)
+Import once at the app entry. Without it components render unstyled:
+import "@chumlab/ui/styles.css";
+
+Precompiled, needs no Tailwind, ships no CSS reset. It carries only the
+library's own utilities - your own arbitrary classes still need Tailwind.
+
+If the project already runs Tailwind, import the tokens instead and let it
+generate the utilities:
+@import "tailwindcss";
+@import "@chumlab/ui/tokens.css";
+@source "../node_modules/@chumlab/ui/dist";
 
 ## Import patterns
 import { Button } from "@chumlab/ui";           // full library (dev only, no tree-shaking)
@@ -27,9 +36,33 @@ InternationalPhoneInput → /international-phone-input.
 
 ## Shared patterns
 - Controlled: value + onValueChange. Uncontrolled: defaultValue. Never combine both.
-- Styling: classes prop overrides per-slot. unstyled strips all defaults. className for root.
+- Every component accepts className on its root, and every component forwards a ref
+  to its underlying DOM node.
 - Dark mode: Tailwind dark: variants. Add .dark class to <html>.
 - All components are WCAG 2.1 AA, keyboard navigable, screen reader compatible.
+
+## Customization — three layers, in order of reach
+1. `className` on the root. It is merged LAST, so it WINS on conflict — including
+   against the library's own `cl-*` token utilities. `className="rounded-none"`
+   genuinely replaces the component's `rounded-cl-md`; you do not need `!important`
+   and you should never emit it.
+2. `classes` — a typed per-slot map for parts the root cannot reach:
+   `classes={{ trigger: "...", content: "..." }}`. Use it when className is not
+   enough. `unstyled` strips the defaults entirely.
+3. `--cl-*` design tokens — theme-level, propagates through every component.
+   Override in `:root` and every component follows:
+   `:root { --cl-accent: #7c3aed; --cl-radius-md: 0px; }`
+   Tokens come in light/dark pairs and flip on `:root[data-theme="light"]`.
+
+Prefer the lowest layer that works. Reach for tokens when the change should apply
+everywhere, className when it is one instance.
+
+## Styling utilities available to generated code
+The stylesheet a consumer imports (`@chumlab/ui/styles.css`) carries the `cl-*`
+token scale plus the layout utilities the components themselves use. It is NOT a
+full Tailwind build. If the target project does not run Tailwind, arbitrary
+utilities you invent (`shadow-2xl`, `bg-purple-300`) will have no rule behind
+them — prefer the `cl-*` tokens and the component's own props.
 
 ## Common mistakes (AVOID these patterns)
 - ✗ `error="Required field"` — `error` is a boolean. Use `error errorMessage="Required field"` (two props). Same for `success` + `successMessage`.
