@@ -82,15 +82,33 @@ export default function App() {
 npm install @chumlab/ui
 ```
 
-Add the library to your Tailwind CSS content sources so its classes are included in your build:
+Then import the stylesheet:
+
+```js
+import "@chumlab/ui/styles.css";
+```
+
+That is the whole setup. `styles.css` is precompiled — it carries the design
+tokens *and* the layout rules the components are built from, so they render
+correctly with no Tailwind in your project. It contains no CSS reset, so your
+own page styling is untouched.
+
+### Using Tailwind yourself
+
+If your project already runs Tailwind and you would rather it generate the
+utilities (so they dedupe against your own), import the tokens instead and point
+Tailwind at the package:
 
 ```css
 @import "tailwindcss";
+@import "@chumlab/ui/tokens.css";
 
-@source "../node_modules/@chumlab/ui/dist/**/*.js";
+@source "../node_modules/@chumlab/ui/dist";
 ```
 
-Add the `@source` line right below your existing `@import "tailwindcss"` — typically in `app.css`, `globals.css`, or `index.css`.
+The `@source` path is resolved **relative to the CSS file** — the example assumes
+the common layout with your stylesheet in `src/`. Import one or the other, not
+both.
 
 ### Peer dependencies
 

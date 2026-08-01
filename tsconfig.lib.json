@@ -22,6 +22,8 @@
     "src/contexts",
     "src/redux",
     "src/components/BrandLogo",
+    "src/components/Reveal",
+    "src/components/ui",
     "src/components/SiteHeader.tsx",
     "src/components/SiteFooter.tsx",
     "src/components/BuyMeCoffee.tsx",

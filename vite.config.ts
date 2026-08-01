@@ -1,11 +1,13 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "path";
-import { readdirSync } from "fs";
+import { readdirSync, readFileSync } from "fs";
 
-// Components excluded from the npm library (site-only)
-const EXCLUDED_COMPONENTS = new Set(["BrandLogo"]);
+// Components excluded from the npm library (site-only). These are built for the
+// marketing site and docs; shipping them bloats the tarball and, in ui/Button's
+// case, publishes a SECOND Button that would confuse consumers.
+const EXCLUDED_COMPONENTS = new Set(["BrandLogo", "Reveal", "ui"]);
 
 // Build per-component entry map: { "components/Button/index": "src/components/Button/index.ts", ... }
 function getComponentEntries() {
@@ -30,11 +32,77 @@ function flagAwareChunkName(ext: string) {
 }
 
 // https://vite.dev/config/
+
+// React Server Components boundary marker.
+//
+// Next.js App Router treats every module as a Server Component by default, so a
+// consumer importing an interactive component into a server page gets a build
+// error unless someone marks the boundary. Making the CONSUMER wrap every
+// import is the common library failure; marking it here is what Radix, MUI and
+// react-aria do.
+//
+// Only chunks that actually need it are marked - a directive on a purely
+// presentational chunk would needlessly force it out of RSC. Hooks, context and
+// DOM event props are what genuinely cannot cross the boundary.
+const CLIENT_ONLY =
+  /\b(useState|useEffect|useLayoutEffect|useReducer|useContext|useRef|useMemo|useCallback|createContext|useSyncExternalStore|useImperativeHandle)\b|\bon[A-Z]\w+\s*:/;
+
+function useClientDirective(): Plugin {
+  return {
+    name: "chumlab-use-client",
+    generateBundle(_options, bundle) {
+      const chunks = Object.values(bundle).filter((c) => c.type === "chunk");
+      const needsDirective = new Set(
+        chunks.filter((c) => CLIENT_ONLY.test(c.code)).map((c) => c.fileName),
+      );
+
+      // A per-component entry is usually a bare re-export of a shared chunk, so
+      // it carries no hook of its own. Propagating up the import graph means the
+      // module a CONSUMER names is itself the boundary, instead of depending on
+      // their bundler to trace the re-export.
+      for (let changed = true; changed; ) {
+        changed = false;
+        for (const chunk of chunks) {
+          if (needsDirective.has(chunk.fileName)) continue;
+          if (chunk.imports.some((i) => needsDirective.has(i))) {
+            needsDirective.add(chunk.fileName);
+            changed = true;
+          }
+        }
+      }
+
+      for (const chunk of chunks) {
+        if (!needsDirective.has(chunk.fileName)) continue;
+        // Must precede every import to be a valid directive prologue.
+        chunk.code = `"use client";\n${chunk.code}`;
+      }
+      this.info(`use client: marked ${needsDirective.size} of ${chunks.length} chunks`);
+    },
+  };
+}
+
+// Copies the design tokens into dist as tokens.css, for consumers who run
+// Tailwind themselves. Copied rather than compiled ON PURPOSE: the file's
+// @theme block is what lets the consumer's Tailwind generate the cl-* utilities
+// the components emit, and running Tailwind over it would consume @theme.
+function copyTokens(): Plugin {
+  return {
+    name: "chumlab-copy-tokens",
+    generateBundle() {
+      this.emitFile({
+        type: "asset",
+        fileName: "tokens.css",
+        source: readFileSync(resolve(__dirname, "src/styles/tokens.css"), "utf8"),
+      });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   if (mode === "lib") {
     const componentEntries = getComponentEntries();
     return {
-      plugins: [react(), tailwindcss()],
+      plugins: [react(), tailwindcss(), useClientDirective(), copyTokens()],
       publicDir: false,
       build: {
         sourcemap: false,
