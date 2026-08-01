@@ -40,6 +40,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   providerUnstyled = false,
   pauseOnHover = true,
   style,
+  className,
   closeAriaLabel = "Close notification",
 }, ref) {
   const deadlineRef = useRef<number>(0);
@@ -153,6 +154,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
         !isUnstyled && "relative overflow-hidden rounded-cl-md border shadow-lg",
         !isUnstyled && (defaultContainerStyles[type] ?? defaultContainerStyles.default),
         mergedClasses.container,
+        className,
       )}
       style={style}
       onMouseEnter={handleMouseEnter}

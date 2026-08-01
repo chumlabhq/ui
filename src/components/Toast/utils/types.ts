@@ -46,6 +46,10 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
   onRemove: (id: string) => void;
   providerClasses?: ToastClasses;
   providerUnstyled?: boolean;
+  /** Merged onto the toast root after the default and `classes.container` styles,
+   *  so a consumer's class wins on conflict. Every other component already
+   *  accepted this; Toast was the one that did not. */
+  className?: string;
 }
 
 /**
