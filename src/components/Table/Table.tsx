@@ -1380,7 +1380,6 @@ function TableInner<TData>(
       const isSyntheticColumn =
         isCheckboxColumn || isExpandColumn || isDragColumn;
 
-      // Check for rowSpan/colSpan in column meta
       const meta = cell.column.columnDef.meta as
         | { rowSpan?: number; colSpan?: number }
         | undefined;
@@ -1541,7 +1540,6 @@ function TableInner<TData>(
       const isExpanded = expandable && row.getIsExpanded();
       const totalCols = filteredCells.length;
 
-      // Check if this is a group header row
       const isGroupRow = grouping.length > 0 && row.getIsGrouped();
 
       const rowDragProps = enableRowDragDrop
@@ -1625,7 +1623,8 @@ function TableInner<TData>(
     ],
   );
 
-  // Need React in scope for Fragment
+  // The automatic JSX runtime leaves React out of scope, but keyed
+  // multi-element rows below are emitted as <React.Fragment key=…>.
   const React = { Fragment: __Fragment };
 
   const renderTable = useCallback(
@@ -2305,7 +2304,6 @@ function TableInner<TData>(
   );
 }
 
-// Import Fragment for use inside renderRow
 import { Fragment as __Fragment } from "react";
 
 const Table = forwardRef(TableInner) as <TData>(
