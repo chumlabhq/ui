@@ -1,0 +1,62 @@
+name: Feature request
+description: Suggest a new component, prop, or capability.
+title: "[Feature]: "
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Requests that start from a concrete problem tend to produce better APIs
+        than ones that start from a proposed solution — so the first field
+        matters more than the second.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: What are you building, and where does the library get in the way?
+      placeholder: |
+        I need a Table where a row can expand into a nested Table, but
+        renderExpandedRow doesn't give me access to the parent row's state.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like the API to look like?
+      description: A sketch is fine — it does not need to be final.
+      render: tsx
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What have you tried instead?
+      description: |
+        The `classes` slot map, `className`, `--cl-*` token overrides, and the
+        `render*` props cover a lot. Knowing which of these you tried and why
+        they fell short helps place the feature correctly.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - "A new prop or option on an existing component"
+        - "A new component"
+        - "Types / TypeScript"
+        - "Theming or styling"
+        - "Accessibility"
+        - "Docs"
+        - "Build / packaging"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you be willing to open a PR for this?
+      options:
+        - label: "I'd be happy to implement it if the approach is agreed first"

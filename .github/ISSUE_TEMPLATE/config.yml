@@ -1,0 +1,16 @@
+# Blank issues are disabled so every report arrives with the fields needed to
+# act on it. The links below catch the two things that are not bugs — usage
+# questions and security reports — before they become issues.
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://chumlab.com/getting-started
+    about: Installation, the required styles import, theming, and every component's props.
+
+  - name: Usage question
+    url: https://github.com/chumlabhq/ui/discussions
+    about: "\"How do I…\" questions belong in Discussions — you'll usually get an answer faster there."
+
+  - name: Security vulnerability
+    url: mailto:hello@chumlab.com
+    about: Please report privately by email rather than opening a public issue.

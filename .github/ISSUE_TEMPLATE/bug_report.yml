@@ -1,0 +1,135 @@
+name: Bug report
+description: Something in @chumlab/ui behaves incorrectly.
+title: "[Bug]: "
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file this. A minimal reproduction is the
+        single most useful thing you can include — it usually decides whether a
+        bug gets fixed this week or sits waiting for clarification.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is affected?
+      options:
+        - "Not component-specific (build, types, styling, docs)"
+        - Accordion
+        - Avatar
+        - Breadcrumb
+        - Button
+        - CascadingDropdown
+        - Checkbox
+        - CountryFlag
+        - DatePicker
+        - Drawer
+        - Dropdown
+        - Input
+        - InternationalPhoneInput
+        - Loader
+        - Modal
+        - MultiSelectDropdown
+        - MultiSelectSearchableDropdown
+        - OtpInput
+        - Pagination
+        - RadioButton
+        - ResizablePanel
+        - SearchableDropdown
+        - Slider
+        - Stepper
+        - Switch
+        - Table
+        - TabPanel
+        - Textarea
+        - TimePicker
+        - Toast
+        - Tooltip
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected instead.
+      placeholder: |
+        Expected: the dropdown closes when I press Escape.
+        Actual: it stays open and focus is lost.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: |
+        Steps, or a minimal code snippet. A link to a StackBlitz/CodeSandbox is
+        ideal. Please reduce it to the smallest case that still shows the bug.
+      render: tsx
+      placeholder: |
+        import "@chumlab/ui/styles.css";
+        import { Dropdown } from "@chumlab/ui";
+
+        // 1. render this
+        // 2. press Escape
+        // 3. observe …
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: "@chumlab/ui version"
+      description: "`npm ls @chumlab/ui`"
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: react-version
+    attributes:
+      label: React version
+      placeholder: "19.2.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      options:
+        - "Next.js (App Router)"
+        - "Next.js (Pages Router)"
+        - "Vite"
+        - "Remix / React Router"
+        - "Create React App"
+        - "Other / none"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: styling
+    attributes:
+      label: How are you loading the styles?
+      description: See the README's Installation section.
+      options:
+        - 'import "@chumlab/ui/styles.css" (precompiled — the default)'
+        - 'Tailwind + @chumlab/ui/tokens.css + @source'
+        - "Neither / not sure"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and OS
+      placeholder: "Chrome 141 on macOS 15"
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Console errors, screenshots, or a note on how often it happens.
