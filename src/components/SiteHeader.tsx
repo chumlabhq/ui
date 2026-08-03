@@ -4,6 +4,7 @@ import { useBuyMeCoffee } from "./useBuyMeCoffee";
 import { UserMenu } from "./UserMenu";
 import { Button } from "./ui";
 import { useEnterPlayground } from "../pages/playground/lib/enterPlayground";
+import { PLAYGROUND_ENABLED } from "../lib/flags";
 import { useTheme } from "../contexts/ThemeContext";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
@@ -157,16 +158,18 @@ export function SiteHeader() {
               >
                 Components
               </Link>
-              <a
-                href="/#ai-playground"
-                onClick={goToAIPlayground}
-                className={navLink}
-                data-track-event="nav_click"
-                data-track-location="header"
-                data-track-target="playground"
-              >
-                Playground
-              </a>
+              {PLAYGROUND_ENABLED && (
+                <a
+                  href="/#ai-playground"
+                  onClick={goToAIPlayground}
+                  className={navLink}
+                  data-track-event="nav_click"
+                  data-track-location="header"
+                  data-track-target="playground"
+                >
+                  Playground
+                </a>
+              )}
               <Link
                 to="/blog"
                 className={navLink}
@@ -266,18 +269,20 @@ export function SiteHeader() {
 
               {/* fullWidthMobile={false}: header CTAs stay inline next to the
                   hamburger; never stretch at any width. */}
-              <Button
-                variant="primary"
-                size="sm"
-                fullWidthMobile={false}
-                className="hidden sm:inline-flex border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:-translate-y-px hover:shadow-[0_10px_28px_-5px_var(--accent-glow)] hover:brightness-110 active:translate-y-0 active:brightness-95"
-                onClick={enterPlayground}
-                data-track-event="cta_click"
-                data-track-location="header"
-                data-track-target="playground"
-              >
-                Playground
-              </Button>
+              {PLAYGROUND_ENABLED && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  fullWidthMobile={false}
+                  className="hidden sm:inline-flex border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:-translate-y-px hover:shadow-[0_10px_28px_-5px_var(--accent-glow)] hover:brightness-110 active:translate-y-0 active:brightness-95"
+                  onClick={enterPlayground}
+                  data-track-event="cta_click"
+                  data-track-location="header"
+                  data-track-target="playground"
+                >
+                  Playground
+                </Button>
+              )}
 
               <Button
                 variant="primary"
@@ -360,16 +365,18 @@ export function SiteHeader() {
             >
               Components
             </Link>
-            <a
-              href="/#ai-playground"
-              onClick={goToAIPlayground}
-              className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
-              data-track-event="nav_click"
-              data-track-location="mobile_menu"
-              data-track-target="playground"
-            >
-              Playground
-            </a>
+            {PLAYGROUND_ENABLED && (
+              <a
+                href="/#ai-playground"
+                onClick={goToAIPlayground}
+                className="text-[15px] font-normal text-cl-text py-3.5 rule rule-b"
+                data-track-event="nav_click"
+                data-track-location="mobile_menu"
+                data-track-target="playground"
+              >
+                Playground
+              </a>
+            )}
             <Link
               to="/blog"
               onClick={() => setMenuOpen(false)}
@@ -417,20 +424,22 @@ export function SiteHeader() {
               GitHub
             </a>
 
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => {
-                setMenuOpen(false);
-                enterPlayground();
-              }}
-              className="mt-6 border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:brightness-110 active:brightness-95"
-              data-track-event="cta_click"
-              data-track-location="mobile_menu"
-              data-track-target="playground"
-            >
-              Playground
-            </Button>
+            {PLAYGROUND_ENABLED && (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => {
+                  setMenuOpen(false);
+                  enterPlayground();
+                }}
+                className="mt-6 border-transparent bg-[color:var(--accent)] font-semibold text-white shadow-[0_6px_18px_-4px_var(--accent-glow)] transition-all duration-150 hover:bg-[color:var(--accent)] hover:brightness-110 active:brightness-95"
+                data-track-event="cta_click"
+                data-track-location="mobile_menu"
+                data-track-target="playground"
+              >
+                Playground
+              </Button>
+            )}
 
             <Button
               variant="primary"

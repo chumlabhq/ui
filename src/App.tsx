@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee";
+import { PLAYGROUND_ENABLED } from "./lib/flags";
 import Home from "./pages/Home";
 import OauthRedirect from "./pages/oauth/OauthRedirect";
 import Playground from "./pages/playground/Playground";
@@ -110,11 +111,18 @@ const App = () => {
         <Route path="toast" element={<ToastDemo />} />
         <Route path="tooltip" element={<TooltipDemo />} />
       </Route>
-      <Route path="playground" element={<Playground />} />
-      <Route path="playground/admin" element={<PlaygroundAdmin />} />
-      {/* Route-based chat: the open chat lives in the URL so a refresh restores
-          it (static /admin still wins by route ranking). */}
-      <Route path="playground/:chatId" element={<Playground />} />
+      {/* Registered only while the playground is enabled. With the flag off
+          these paths fall through to the catch-all below and redirect home, so
+          /playground is unreachable by direct URL as well as unlinked. */}
+      {PLAYGROUND_ENABLED && (
+        <Route path="playground">
+          <Route index element={<Playground />} />
+          <Route path="admin" element={<PlaygroundAdmin />} />
+          {/* Route-based chat: the open chat lives in the URL so a refresh
+              restores it (static /admin still wins by route ranking). */}
+          <Route path=":chatId" element={<Playground />} />
+        </Route>
+      )}
       <Route path="oauth/google" element={<OauthRedirect />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

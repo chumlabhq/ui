@@ -4,6 +4,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import Reveal from "./Reveal/Reveal";
 import logoLight from "../assets/images/logo-light.png";
 import logoDark from "../assets/images/logo-dark.png";
+import { PLAYGROUND_ENABLED } from "../lib/flags";
 
 /**
  * Deep-space site footer. Four-row layout:
@@ -116,16 +117,18 @@ export function SiteFooter() {
               </Link>
             </FooterLink>
             <FooterLink>
-              <a
-                href="/#ai-playground"
-                onClick={goToAIPlayground}
-                className={`${LINK_CLASS} inline-flex items-center gap-2`}
-                data-track-event="nav_click"
-                data-track-location="footer"
-                data-track-target="playground"
-              >
-                AI Playground
-              </a>
+              {PLAYGROUND_ENABLED && (
+                <a
+                  href="/#ai-playground"
+                  onClick={goToAIPlayground}
+                  className={`${LINK_CLASS} inline-flex items-center gap-2`}
+                  data-track-event="nav_click"
+                  data-track-location="footer"
+                  data-track-target="playground"
+                >
+                  AI Playground
+                </a>
+              )}
             </FooterLink>
             <FooterLink>
               <Link

@@ -7,6 +7,7 @@ import { Button } from "../../components/ui";
 import GateCluster from "./components/GateCluster";
 import type { GateLamps, LampState } from "./lib/gates";
 import logoSmall from "../../assets/images/logo-small.png";
+import { PLAYGROUND_ENABLED } from "../../lib/flags";
 
 // Register the few icons this section renders so they paint instantly and never
 // hit api.iconify.design on the public landing page. Data lifted verbatim from
@@ -1604,6 +1605,7 @@ export default function AIPlaygroundSection() {
   // entry guard now — authenticated users land in /playground, everyone else
   // starts auth. No onboarding modal.
   useEffect(() => {
+    if (!PLAYGROUND_ENABLED) return;
     if (params.get("openPlayground") !== "1") return;
     const p = new URLSearchParams(params);
     p.delete("openPlayground");
@@ -1857,22 +1859,24 @@ export default function AIPlaygroundSection() {
               handled. From idea to production ready code in a single paste.
             </p>
 
-            <Button
-              variant="primary"
-              size="md"
-              onClick={enterPlayground}
-              className="group mt-7 sm:mt-8"
-              endIcon={
-                <span
-                  aria-hidden
-                  className="transition-transform group-hover:translate-x-0.5"
-                >
-                  →
-                </span>
-              }
-            >
-              Try the AI Playground
-            </Button>
+            {PLAYGROUND_ENABLED && (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={enterPlayground}
+                className="group mt-7 sm:mt-8"
+                endIcon={
+                  <span
+                    aria-hidden
+                    className="transition-transform group-hover:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                }
+              >
+                Try the AI Playground
+              </Button>
+            )}
           </div>
         </div>
       </section>

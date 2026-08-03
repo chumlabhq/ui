@@ -11,6 +11,7 @@ import { CatalogSection } from "../components/CatalogSection";
 import { ChumlabComparisonSection } from "../components/ChumlabComparisonSection";
 import Reveal from "../components/Reveal/Reveal";
 import { Button } from "../components/ui";
+import { PLAYGROUND_ENABLED } from "../lib/flags";
 
 // ─── FAQ preview (subset of full FAQ data) ─────────────────────────────────
 
@@ -162,56 +163,58 @@ const Home = () => {
           {/* Announcement pill — chip-inside-a-pill. On screens below
               640px the message text collapses, leaving just the chip + arrow
               so the pill never wraps. */}
-          <Link
-            to="/?openPlayground=1#ai-playground"
-            className="hero-pill group inline-flex items-center transition-colors max-w-full"
-            data-track-event="cta_click"
-            data-track-location="home_hero_pill"
-            data-track-target="ai_playground"
-            style={{
-              gap: 10,
-              padding: "4px 16px 4px 4px",
-              border: "0.5px solid var(--border-soft)",
-              borderRadius: 100,
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.borderColor = "var(--border-active)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.borderColor = "var(--border-soft)")
-            }
-          >
-            <span
-              className="inline-flex items-center shrink-0"
+          {PLAYGROUND_ENABLED && (
+            <Link
+              to="/?openPlayground=1#ai-playground"
+              className="hero-pill group inline-flex items-center transition-colors max-w-full"
+              data-track-event="cta_click"
+              data-track-location="home_hero_pill"
+              data-track-target="ai_playground"
               style={{
-                background: "var(--accent)",
-                color: "var(--bg-base)",
-                padding: "4px 11px",
+                gap: 10,
+                padding: "4px 16px 4px 4px",
+                border: "0.5px solid var(--border-soft)",
                 borderRadius: 100,
-                fontSize: 10.5,
-                fontWeight: 500,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                gap: 5,
               }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.borderColor = "var(--border-active)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.borderColor = "var(--border-soft)")
+              }
             >
-              <SparkleGlyph />
-              AI Playground
-            </span>
-            <span
-              className="hidden sm:inline text-fg whitespace-nowrap"
-              style={{ fontSize: 13, fontWeight: 500 }}
-            >
-              Skip writing components from scratch
-            </span>
-            <span
-              aria-hidden
-              className="transition-all duration-150 group-hover:translate-x-1 group-hover:[color:var(--text-primary)]"
-              style={{ color: "var(--text-tertiary)", fontSize: 14 }}
-            >
-              &rarr;
-            </span>
-          </Link>
+              <span
+                className="inline-flex items-center shrink-0"
+                style={{
+                  background: "var(--accent)",
+                  color: "var(--bg-base)",
+                  padding: "4px 11px",
+                  borderRadius: 100,
+                  fontSize: 10.5,
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  gap: 5,
+                }}
+              >
+                <SparkleGlyph />
+                AI Playground
+              </span>
+              <span
+                className="hidden sm:inline text-fg whitespace-nowrap"
+                style={{ fontSize: 13, fontWeight: 500 }}
+              >
+                Skip writing components from scratch
+              </span>
+              <span
+                aria-hidden
+                className="transition-all duration-150 group-hover:translate-x-1 group-hover:[color:var(--text-primary)]"
+                style={{ color: "var(--text-tertiary)", fontSize: 14 }}
+              >
+                &rarr;
+              </span>
+            </Link>
+          )}
 
           {/* Headline — mixed weights + opacity hierarchy. Mobile allows
               natural wrapping (2-3 lines is fine); on `sm:` and up the lines
