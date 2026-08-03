@@ -196,7 +196,7 @@ const GettingStartedDemo = () => {
               description="Add the CSS file inside your <head> tag."
             >
               <CodeBlock
-                code={`<link\n  href="https://cdn.jsdelivr.net/npm/@chumlab/ui@1.0.0/dist/styles.css"\n  rel="stylesheet"\n/>`}
+                code={`<link\n  href="https://cdn.jsdelivr.net/npm/@chumlab/ui/dist/styles.css"\n  rel="stylesheet"\n/>`}
               />
             </Section>
 
@@ -210,7 +210,7 @@ const GettingStartedDemo = () => {
               description="The build imports react by bare specifier, so the browser needs an import map to resolve it."
             >
               <CodeBlock
-                code={`<script type="importmap">\n  {\n    "imports": {\n      "react": "https://esm.sh/react@19",\n      "react-dom": "https://esm.sh/react-dom@19",\n      "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime",\n      "clsx": "https://esm.sh/clsx@2",\n      "tailwind-merge": "https://esm.sh/tailwind-merge@3"\n    }\n  }\n</script>\n\n<script type="module">\n  import { Button } from "https://cdn.jsdelivr.net/npm/@chumlab/ui@1.0.0/dist/index.js";\n</script>`}
+                code={`<script type="importmap">\n  {\n    "imports": {\n      "react": "https://esm.sh/react@19",\n      "react-dom": "https://esm.sh/react-dom@19",\n      "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime",\n      "clsx": "https://esm.sh/clsx@2",\n      "tailwind-merge": "https://esm.sh/tailwind-merge@3"\n    }\n  }\n</script>\n\n<script type="module">\n  import { Button } from "https://cdn.jsdelivr.net/npm/@chumlab/ui/dist/index.js";\n</script>`}
               />
               <p className="text-[13px] mt-3 text-fg-tertiary">
                 Table and DatePicker additionally need{" "}
