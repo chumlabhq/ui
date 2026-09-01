@@ -29,7 +29,7 @@ async function triggerToast(
 
 test.describe("Toast Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
   });
 
@@ -56,14 +56,15 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
         .locator('button:has-text("Success with Description")')
         .first();
 
-      if ((await withDescButton.count()) > 0) {
-        await withDescButton.scrollIntoViewIfNeeded();
-        await withDescButton.click();
-        await waitForToastVisible(page);
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(withDescButton.first()).toBeVisible();
+      await withDescButton.scrollIntoViewIfNeeded();
+      await withDescButton.click();
+      await waitForToastVisible(page);
 
-        const toast = page.locator(TOAST_SELECTOR).first();
-        await expect(toast).toContainText("File uploaded");
-      }
+      const toast = page.locator(TOAST_SELECTOR).first();
+      await expect(toast).toContainText("File uploaded");
     });
 
     for (const type of ["success", "error", "warning", "info"] as const) {
@@ -91,17 +92,18 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
     test("should auto-dismiss after duration", async ({ page }) => {
       const quickButton = page.locator('button:has-text("2 Seconds")').first();
 
-      if ((await quickButton.count()) > 0) {
-        await quickButton.scrollIntoViewIfNeeded();
-        await quickButton.click();
-        await waitForToastVisible(page);
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(quickButton.first()).toBeVisible();
+      await quickButton.scrollIntoViewIfNeeded();
+      await quickButton.click();
+      await waitForToastVisible(page);
 
-        await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
 
-        await page.waitForTimeout(2500);
+      await page.waitForTimeout(2500);
 
-        await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
-      }
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
     });
 
     test("should not auto-dismiss persistent toasts", async ({ page }) => {
@@ -109,15 +111,16 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
         .locator('button:has-text("Persistent (Infinity)")')
         .first();
 
-      if ((await persistentButton.count()) > 0) {
-        await persistentButton.scrollIntoViewIfNeeded();
-        await persistentButton.click();
-        await waitForToastVisible(page);
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(persistentButton.first()).toBeVisible();
+      await persistentButton.scrollIntoViewIfNeeded();
+      await persistentButton.click();
+      await waitForToastVisible(page);
 
-        await page.waitForTimeout(3000);
+      await page.waitForTimeout(3000);
 
-        await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
-      }
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
     });
 
     test("should dismiss all toasts via Dismiss All button", async ({
@@ -130,12 +133,13 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
         .locator('button:has-text("Dismiss All")')
         .first();
 
-      if ((await dismissAllButton.count()) > 0) {
-        await dismissAllButton.scrollIntoViewIfNeeded();
-        await dismissAllButton.click();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(dismissAllButton.first()).toBeVisible();
+      await dismissAllButton.scrollIntoViewIfNeeded();
+      await dismissAllButton.click();
 
-        await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
-      }
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
     });
   });
 
@@ -143,39 +147,41 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
     test("should pause progress on hover", async ({ page }) => {
       const quickButton = page.locator('button:has-text("2 Seconds")').first();
 
-      if ((await quickButton.count()) > 0) {
-        await quickButton.scrollIntoViewIfNeeded();
-        await quickButton.click();
-        await waitForToastVisible(page);
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(quickButton.first()).toBeVisible();
+      await quickButton.scrollIntoViewIfNeeded();
+      await quickButton.click();
+      await waitForToastVisible(page);
 
-        const toast = page.locator(TOAST_SELECTOR).first();
-        await toast.hover();
+      const toast = page.locator(TOAST_SELECTOR).first();
+      await toast.hover();
 
-        await page.waitForTimeout(3000);
-        await expect(toast).toBeVisible();
-      }
+      await page.waitForTimeout(3000);
+      await expect(toast).toBeVisible();
     });
 
     test("should resume progress on mouse leave", async ({ page }) => {
       const quickButton = page.locator('button:has-text("2 Seconds")').first();
 
-      if ((await quickButton.count()) > 0) {
-        await quickButton.scrollIntoViewIfNeeded();
-        await quickButton.click();
-        await waitForToastVisible(page);
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(quickButton.first()).toBeVisible();
+      await quickButton.scrollIntoViewIfNeeded();
+      await quickButton.click();
+      await waitForToastVisible(page);
 
-        const toast = page.locator(TOAST_SELECTOR).first();
-        await toast.hover();
+      const toast = page.locator(TOAST_SELECTOR).first();
+      await toast.hover();
 
-        await page.waitForTimeout(1000);
-        await expect(toast).toBeVisible();
+      await page.waitForTimeout(1000);
+      await expect(toast).toBeVisible();
 
-        await page.mouse.move(0, 0);
+      await page.mouse.move(0, 0);
 
-        await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0, {
-          timeout: 5000,
-        });
-      }
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0, {
+        timeout: 5000,
+      });
     });
   });
 
@@ -194,15 +200,16 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
         .locator('button:has-text("Without Progress")')
         .first();
 
-      if ((await noProgressButton.count()) > 0) {
-        await noProgressButton.scrollIntoViewIfNeeded();
-        await noProgressButton.click();
-        await waitForToastVisible(page);
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(noProgressButton.first()).toBeVisible();
+      await noProgressButton.scrollIntoViewIfNeeded();
+      await noProgressButton.click();
+      await waitForToastVisible(page);
 
-        const toast = page.locator(TOAST_SELECTOR).first();
-        const progressBar = toast.locator(".absolute.bottom-0");
-        await expect(progressBar).toHaveCount(0);
-      }
+      const toast = page.locator(TOAST_SELECTOR).first();
+      const progressBar = toast.locator(".absolute.bottom-0");
+      await expect(progressBar).toHaveCount(0);
     });
   });
 
@@ -212,23 +219,24 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
         .locator('button:has-text("Trigger 10 Toasts")')
         .first();
 
-      if ((await multipleButton.count()) > 0) {
-        await multipleButton.scrollIntoViewIfNeeded();
-        await multipleButton.click();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(multipleButton.first()).toBeVisible();
+      await multipleButton.scrollIntoViewIfNeeded();
+      await multipleButton.click();
 
-        await page.waitForTimeout(1500);
+      await page.waitForTimeout(1500);
 
-        const toasts = page.locator(TOAST_SELECTOR);
-        const count = await toasts.count();
-        expect(count).toBeLessThanOrEqual(5);
-      }
+      const toasts = page.locator(TOAST_SELECTOR);
+      const count = await toasts.count();
+      expect(count).toBeLessThanOrEqual(5);
     });
   });
 });
 
 test.describe("Toast Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
   });
 
@@ -274,24 +282,25 @@ test.describe("Toast Keyboard Navigation", () => {
       .locator('button:has-text("With Escape Dismissal")')
       .first();
 
-    if ((await escapeButton.count()) > 0) {
-      await escapeButton.scrollIntoViewIfNeeded();
-      await escapeButton.click();
-      await waitForToastVisible(page);
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(escapeButton.first()).toBeVisible();
+    await escapeButton.scrollIntoViewIfNeeded();
+    await escapeButton.click();
+    await waitForToastVisible(page);
 
-      // The demo's ToastProvider does not set dismissOnEscape=true,
-      // so pressing Escape should have no effect on the toast.
-      await page.keyboard.press("Escape");
+    // The demo's ToastProvider does not set dismissOnEscape=true,
+    // so pressing Escape should have no effect on the toast.
+    await page.keyboard.press("Escape");
 
-      // Toast should still be visible since dismissOnEscape is not enabled
-      await expect(page.locator(TOAST_SELECTOR).first()).toBeVisible();
-    }
+    // Toast should still be visible since dismissOnEscape is not enabled
+    await expect(page.locator(TOAST_SELECTOR).first()).toBeVisible();
   });
 });
 
 test.describe("Toast Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
     await injectAxe(page);
   });
@@ -350,7 +359,7 @@ test.describe("Toast Accessibility Tests", () => {
 
 test.describe("Toast Position Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
   });
 
@@ -365,24 +374,26 @@ test.describe("Toast Position Tests", () => {
     test(`should display toast at ${position} position`, async ({ page }) => {
       const positionButton = page.locator(`button:has-text("${position}")`);
 
-      if ((await positionButton.count()) > 0) {
-        await positionButton.scrollIntoViewIfNeeded();
-        await positionButton.click();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(positionButton.first()).toBeVisible();
+      await positionButton.scrollIntoViewIfNeeded();
+      await positionButton.click();
 
-        const showButton = page
-          .locator('button:has-text("Show Toast at Current Position")')
-          .first();
+      const showButton = page
+        .locator('button:has-text("Show Toast at Current Position")')
+        .first();
 
-        if ((await showButton.count()) > 0) {
-          await showButton.scrollIntoViewIfNeeded();
-          await showButton.click();
+      // The guard used to make this pass when the trigger was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(showButton).toBeVisible();
+      await showButton.scrollIntoViewIfNeeded();
+      await showButton.click();
 
-          await waitForToastVisible(page);
+      await waitForToastVisible(page);
 
-          const toast = page.locator(TOAST_SELECTOR).first();
-          await expect(toast).toBeVisible();
-        }
-      }
+      const toast = page.locator(TOAST_SELECTOR).first();
+      await expect(toast).toBeVisible();
     });
   }
 });
@@ -397,7 +408,7 @@ test.describe("Toast Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
 
     await triggerToast(page, "success");
@@ -438,7 +449,7 @@ test.describe("Toast Responsive Tests", () => {
 
 test.describe("Toast Custom Content Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
   });
 
@@ -447,17 +458,18 @@ test.describe("Toast Custom Content Tests", () => {
       .locator('button:has-text("With Action Buttons")')
       .first();
 
-    if ((await actionButton.count()) > 0) {
-      await actionButton.scrollIntoViewIfNeeded();
-      await actionButton.click();
-      await waitForToastVisible(page);
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(actionButton.first()).toBeVisible();
+    await actionButton.scrollIntoViewIfNeeded();
+    await actionButton.click();
+    await waitForToastVisible(page);
 
-      const toast = page.locator(TOAST_SELECTOR).first();
-      const buttons = toast.locator("button");
-      const buttonCount = await buttons.count();
+    const toast = page.locator(TOAST_SELECTOR).first();
+    const buttons = toast.locator("button");
+    const buttonCount = await buttons.count();
 
-      expect(buttonCount).toBeGreaterThanOrEqual(2);
-    }
+    expect(buttonCount).toBeGreaterThanOrEqual(2);
   });
 
   test("should render toast with custom layout", async ({ page }) => {
@@ -465,27 +477,29 @@ test.describe("Toast Custom Content Tests", () => {
       .locator('button:has-text("Custom Layout")')
       .first();
 
-    if ((await customButton.count()) > 0) {
-      await customButton.scrollIntoViewIfNeeded();
-      await customButton.click();
-      await waitForToastVisible(page);
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(customButton.first()).toBeVisible();
+    await customButton.scrollIntoViewIfNeeded();
+    await customButton.click();
+    await waitForToastVisible(page);
 
-      const toast = page.locator(TOAST_SELECTOR).first();
-      await expect(toast).toBeVisible();
-    }
+    const toast = page.locator(TOAST_SELECTOR).first();
+    await expect(toast).toBeVisible();
   });
 
   test("should render toast with custom icon", async ({ page }) => {
     const iconButton = page.locator('button:has-text("Rocket Icon")').first();
 
-    if ((await iconButton.count()) > 0) {
-      await iconButton.scrollIntoViewIfNeeded();
-      await iconButton.click();
-      await waitForToastVisible(page);
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(iconButton.first()).toBeVisible();
+    await iconButton.scrollIntoViewIfNeeded();
+    await iconButton.click();
+    await waitForToastVisible(page);
 
-      const toast = page.locator(TOAST_SELECTOR).first();
-      await expect(toast).toBeVisible();
-    }
+    const toast = page.locator(TOAST_SELECTOR).first();
+    await expect(toast).toBeVisible();
   });
 });
 
@@ -496,7 +510,7 @@ test.describe("Toast Performance Tests", () => {
   }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
 
     const loadTime = Date.now() - startTime;
@@ -509,7 +523,7 @@ test.describe("Toast Performance Tests", () => {
     page,
     browserName,
   }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
 
     const startTime = Date.now();
@@ -528,7 +542,7 @@ test.describe("Toast Performance Tests", () => {
   });
 
   test("should smoothly dismiss multiple toasts", async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
 
     for (let i = 0; i < 3; i++) {
@@ -539,20 +553,21 @@ test.describe("Toast Performance Tests", () => {
       .locator('button:has-text("Dismiss All")')
       .first();
 
-    if ((await dismissAllButton.count()) > 0) {
-      await dismissAllButton.scrollIntoViewIfNeeded();
-      await dismissAllButton.click();
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(dismissAllButton.first()).toBeVisible();
+    await dismissAllButton.scrollIntoViewIfNeeded();
+    await dismissAllButton.click();
 
-      await page.waitForTimeout(500);
+    await page.waitForTimeout(500);
 
-      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
-    }
+    await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
   });
 });
 
 test.describe("Toast Focus Management", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/toast");
+    await page.goto("/toast");
     await page.waitForLoadState("networkidle");
   });
 

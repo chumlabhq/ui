@@ -19,7 +19,7 @@ function getOtpInputs(page: import("@playwright/test").Page) {
 
 test.describe("OTP Input - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
     await waitForOtpVisible(page);
   });
@@ -253,18 +253,19 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
 
       const allInputs = firstOtpWrapper.locator("input");
 
-      if ((await allInputs.count()) > 0) {
-        await allInputs.first().click();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(allInputs.first()).toBeVisible();
+      await allInputs.first().click();
 
-        // Type through the group
-        await page.keyboard.type("123456");
+      // Type through the group
+      await page.keyboard.type("123456");
 
-        const count = await allInputs.count();
+      const count = await allInputs.count();
 
-        for (let i = 0; i < Math.min(count, 6); i++) {
-          const value = await allInputs.nth(i).inputValue();
-          expect(value).toBe(String(i + 1));
-        }
+      for (let i = 0; i < Math.min(count, 6); i++) {
+        const value = await allInputs.nth(i).inputValue();
+        expect(value).toBe(String(i + 1));
       }
     });
   });
@@ -278,9 +279,10 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
       // Look for error message
       const errorMessage = page.locator('[role="alert"]');
 
-      if ((await errorMessage.count()) > 0) {
-        await expect(errorMessage.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(errorMessage.first()).toBeVisible();
+      await expect(errorMessage.first()).toBeVisible();
     });
 
     test("should mark inputs with aria-invalid in error state", async ({
@@ -288,9 +290,10 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
     }) => {
       const invalidInputs = page.locator('input[aria-invalid="true"]');
 
-      if ((await invalidInputs.count()) > 0) {
-        await expect(invalidInputs.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(invalidInputs.first()).toBeVisible();
+      await expect(invalidInputs.first()).toBeVisible();
     });
   });
 
@@ -305,26 +308,28 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
       // Find disabled inputs nearby
       const disabledInputs = page.locator("input:disabled");
 
-      if ((await disabledInputs.count()) > 0) {
-        await expect(disabledInputs.first()).toBeDisabled();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledInputs.first()).toBeVisible();
+      await expect(disabledInputs.first()).toBeDisabled();
     });
 
     test("should not accept input when disabled", async ({ page }) => {
       const disabledInputs = page.locator("input:disabled");
 
-      if ((await disabledInputs.count()) > 0) {
-        const input = disabledInputs.first();
-        const valueBefore = await input.inputValue();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledInputs.first()).toBeVisible();
+      const input = disabledInputs.first();
+      const valueBefore = await input.inputValue();
 
-        // Attempt to type (should not work)
-        await input.type("9").catch(() => {
-          // Expected to fail
-        });
+      // Attempt to type (should not work)
+      await input.type("9").catch(() => {
+        // Expected to fail
+      });
 
-        const valueAfter = await input.inputValue();
-        expect(valueAfter).toBe(valueBefore);
-      }
+      const valueAfter = await input.inputValue();
+      expect(valueAfter).toBe(valueBefore);
     });
   });
 
@@ -336,19 +341,20 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
       // Find password type inputs
       const passwordInputs = page.locator('input[type="password"]');
 
-      if ((await passwordInputs.count()) > 0) {
-        await expect(passwordInputs.first()).toHaveAttribute(
-          "type",
-          "password",
-        );
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(passwordInputs.first()).toBeVisible();
+      await expect(passwordInputs.first()).toHaveAttribute(
+        "type",
+        "password",
+      );
     });
   });
 });
 
 test.describe("OTP Input - Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
     await waitForOtpVisible(page);
   });
@@ -392,7 +398,7 @@ test.describe("OTP Input - Keyboard Navigation", () => {
 
 test.describe("OTP Input - Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
     await waitForOtpVisible(page);
     await injectAxe(page);
@@ -464,14 +470,15 @@ test.describe("OTP Input - Accessibility Tests", () => {
   }) => {
     const inputsWithDescribedBy = page.locator("input[aria-describedby]");
 
-    if ((await inputsWithDescribedBy.count()) > 0) {
-      const input = inputsWithDescribedBy.first();
-      const describedBy = await input.getAttribute("aria-describedby");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(inputsWithDescribedBy.first()).toBeVisible();
+    const input = inputsWithDescribedBy.first();
+    const describedBy = await input.getAttribute("aria-describedby");
 
-      if (describedBy) {
-        const errorElement = page.locator(`[id="${describedBy}"]`);
-        await expect(errorElement).toBeVisible();
-      }
+    if (describedBy) {
+      const errorElement = page.locator(`[id="${describedBy}"]`);
+      await expect(errorElement).toBeVisible();
     }
   });
 
@@ -488,9 +495,10 @@ test.describe("OTP Input - Accessibility Tests", () => {
       if (forAttr) {
         // Check if corresponding input exists using attribute selector (avoids CSS.escape issue)
         const input = page.locator(`[id="${forAttr}"]`);
-        if ((await input.count()) > 0) {
-          await expect(input).toBeVisible();
-        }
+        // The guard used to make this pass when the element was absent, which is
+        // the failure the test exists to catch. Assert presence, then behaviour.
+        await expect(input.first()).toBeVisible();
+        await expect(input).toBeVisible();
       }
     }
   });
@@ -507,7 +515,7 @@ test.describe("OTP Input - Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
 
     if (browserName === "firefox") {
@@ -536,7 +544,7 @@ test.describe("OTP Input - Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
 
     const inputs = getOtpInputs(page);
@@ -567,7 +575,7 @@ test.describe("OTP Input - Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
 
     const inputs = getOtpInputs(page);
@@ -587,7 +595,7 @@ test.describe("OTP Input - Responsive Tests", () => {
 
 test.describe("OTP Input - Browser-Specific Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
     await waitForOtpVisible(page);
   });
@@ -645,7 +653,7 @@ test.describe("OTP Input - Performance Tests", () => {
   }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("networkidle");
 
     const inputs = page.locator('[aria-label="Digit 1 of 6"]').first();
@@ -662,7 +670,7 @@ test.describe("OTP Input - Performance Tests", () => {
   test("should handle multiple OTP inputs on page efficiently", async ({
     page,
   }) => {
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
     await waitForOtpVisible(page);
 
@@ -698,7 +706,7 @@ test.describe("OTP Input - Full User Flows", () => {
   test.setTimeout(60000);
   
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/otp-input");
+    await page.goto("/otp-input");
     await page.waitForLoadState("domcontentloaded");
     await waitForOtpVisible(page);
   });

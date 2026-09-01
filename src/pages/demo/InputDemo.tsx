@@ -256,6 +256,8 @@ const InputDemo = () => {
   // State
   const [showPw, setShowPw] = useState(false);
   const [search, setSearch] = useState("");
+  // An alert() here blocks the page and every automated check with it.
+  const [lastAction, setLastAction] = useState("");
   const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -416,13 +418,16 @@ const InputDemo = () => {
               ))}
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Clickable icons</span>
+                <span className={c.sectionLabel} data-demo-action>
+                  {lastAction}
+                </span>
                 <Input
                   aria-label="Search with clear"
                   placeholder="Type to search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   startIcon={<SearchIcon className={c.icon} />}
-                  onStartIconClick={() => alert("Search!")}
+                  onStartIconClick={() => setLastAction("Search submitted")}
                   startIconLabel="Submit search"
                   endIcon={
                     search ? <CloseIcon className={c.iconHover} /> : undefined

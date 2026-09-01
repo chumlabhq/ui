@@ -4,7 +4,7 @@ import { injectAxe } from "axe-playwright";
 import { watchClicks } from "./_helpers";
 test.describe("Avatar Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
     // Wait for avatar content to be visible
     await page.locator('[data-shape]').first().waitFor({ state: "visible" });
@@ -236,7 +236,7 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
 
 test.describe("Avatar Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
     await page.locator('[data-shape]').first().waitFor({ state: "visible" });
     await injectAxe(page);
@@ -305,7 +305,7 @@ test.describe("Avatar Accessibility Tests", () => {
 
 test.describe("Avatar Responsive Tests", () => {
   test("should render correctly on mobile viewport", async ({ page }) => {
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
     
     // Wait for content
@@ -332,7 +332,7 @@ test.describe("Avatar Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
 
     const avatar = page.locator('[data-shape]').first();
@@ -356,7 +356,7 @@ test.describe("Avatar Performance Tests", () => {
   test("should load page within acceptable time", async ({ page, browserName }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
     await page.locator('[data-shape]').first().waitFor({ state: "visible" });
 
@@ -368,7 +368,7 @@ test.describe("Avatar Performance Tests", () => {
   });
 
   test("should handle multiple avatars without performance issues", async ({ page }) => {
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
     await page.locator('[data-shape]').first().waitFor({ state: "visible" });
 
@@ -390,7 +390,7 @@ test.describe("Avatar Performance Tests", () => {
 
 test.describe("Avatar Image Fallback", () => {
   test("should handle image loading gracefully", async ({ page }) => {
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
 
     // Find avatars with images
@@ -410,7 +410,7 @@ test.describe("Avatar Image Fallback", () => {
   });
 
   test("should show initials when data-has-image is not present", async ({ page }) => {
-    await page.goto("/demo/avatar");
+    await page.goto("/avatar");
     await page.waitForLoadState("domcontentloaded");
 
     // Find avatars without images (no data-has-image attribute)

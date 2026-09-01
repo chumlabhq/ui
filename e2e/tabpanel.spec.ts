@@ -3,7 +3,7 @@ import { injectAxe, checkA11y } from "axe-playwright";
 
 test.describe("TabPanel Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/tab-panel");
+    await page.goto("/tab-panel");
     await page.waitForLoadState("domcontentloaded");
     await page.getByRole("tablist").first().waitFor({ state: "visible" });
   });

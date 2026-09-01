@@ -9,7 +9,7 @@ async function waitForPanelVisible(page: import("@playwright/test").Page) {
 
 test.describe("ResizablePanel Component", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/resizable-panel");
+    await page.goto("/resizable-panel");
     await page.waitForLoadState("domcontentloaded");
     await waitForPanelVisible(page);
   });
@@ -242,7 +242,7 @@ test.describe("ResizablePanel Component", () => {
 
 test.describe("ResizablePanel - Cross Browser", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/resizable-panel");
+    await page.goto("/resizable-panel");
     await page.waitForLoadState("domcontentloaded");
   });
 
@@ -272,7 +272,7 @@ test.describe("ResizablePanel - Mobile Touch", () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/resizable-panel");
+    await page.goto("/resizable-panel");
     await page.waitForLoadState("domcontentloaded");
   });
 
@@ -288,7 +288,7 @@ test.describe("ResizablePanel - Mobile Touch", () => {
 
 test.describe("ResizablePanel - Full User Flow", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/resizable-panel");
+    await page.goto("/resizable-panel");
     await page.waitForLoadState("domcontentloaded");
   });
 

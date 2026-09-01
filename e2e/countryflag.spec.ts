@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("CountryFlag Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/country-flag");
+    await page.goto("/country-flag");
     await page.waitForLoadState("domcontentloaded");
     await page.locator('[role="img"]').first().waitFor({ state: "visible" });
   });
@@ -61,9 +61,10 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
         hasText: /^\+\d+$/,
       });
 
-      if ((await countBadges.count()) > 0) {
-        await expect(countBadges.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(countBadges.first()).toBeVisible();
+      await expect(countBadges.first()).toBeVisible();
     });
 
     test("should include hidden count in group aria-label", async ({
@@ -138,9 +139,10 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     test("should render standalone shimmer placeholders", async ({ page }) => {
       const shimmers = page.locator('[aria-label="Loading flag"]');
 
-      if ((await shimmers.count()) > 0) {
-        await expect(shimmers.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(shimmers.first()).toBeVisible();
+      await expect(shimmers.first()).toBeVisible();
     });
 
     test("should render group shimmer with loading group label", async ({
@@ -148,9 +150,10 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     }) => {
       const groupShimmers = page.locator('[aria-label="Loading flag group"]');
 
-      if ((await groupShimmers.count()) > 0) {
-        await expect(groupShimmers.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(groupShimmers.first()).toBeVisible();
+      await expect(groupShimmers.first()).toBeVisible();
     });
 
     test("loading flags inside a group should show shimmer alongside real flags", async ({
@@ -204,9 +207,10 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     }) => {
       // The "Error State & Fallback" section has invalid codes like "xx"
       const fallbackSection = page.locator("text=Error State").locator("..");
-      if ((await fallbackSection.count()) > 0) {
-        await expect(fallbackSection).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(fallbackSection.first()).toBeVisible();
+      await expect(fallbackSection).toBeVisible();
     });
   });
 });

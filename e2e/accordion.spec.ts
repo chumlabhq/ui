@@ -3,7 +3,7 @@ import { injectAxe } from "axe-playwright";
 
 test.describe("Accordion Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/accordion");
+    await page.goto("/accordion");
     await page.waitForLoadState("domcontentloaded");
     // Wait for accordion to be visible instead of networkidle (more reliable)
     await page
@@ -62,21 +62,22 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       const accordion = page.locator('[data-orientation="vertical"]').first();
       const triggers = accordion.getByRole("button");
 
-      if ((await triggers.count()) >= 2) {
-        const trigger1 = triggers.first();
-        const trigger2 = triggers.nth(1);
+      // The guard used to make this pass when the demo rendered fewer than
+      // 2 triggers, which is the failure the test exists to catch.
+      expect(await triggers.count()).toBeGreaterThanOrEqual(2);
+      const trigger1 = triggers.first();
+      const trigger2 = triggers.nth(1);
 
-        // Click first trigger to ensure it's open
-        await trigger1.click();
-        await page.waitForTimeout(100);
+      // Click first trigger to ensure it's open
+      await trigger1.click();
+      await page.waitForTimeout(100);
 
-        // Click second trigger
-        await trigger2.click();
-        await page.waitForTimeout(100);
+      // Click second trigger
+      await trigger2.click();
+      await page.waitForTimeout(100);
 
-        // In single mode, second should now be expanded
-        await expect(trigger2).toHaveAttribute("aria-expanded", "true");
-      }
+      // In single mode, second should now be expanded
+      await expect(trigger2).toHaveAttribute("aria-expanded", "true");
     });
   });
 
@@ -85,65 +86,69 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       const accordion = page.locator('[data-orientation="vertical"]').first();
       const triggers = accordion.getByRole("button");
 
-      if ((await triggers.count()) >= 2) {
-        // Focus first trigger
-        await triggers.first().focus();
-        await expect(triggers.first()).toBeFocused();
+      // The guard used to make this pass when the demo rendered fewer than
+      // 2 triggers, which is the failure the test exists to catch.
+      expect(await triggers.count()).toBeGreaterThanOrEqual(2);
+      // Focus first trigger
+      await triggers.first().focus();
+      await expect(triggers.first()).toBeFocused();
 
-        // Press ArrowDown
-        await page.keyboard.press("ArrowDown");
+      // Press ArrowDown
+      await page.keyboard.press("ArrowDown");
 
-        // Second trigger should be focused
-        await expect(triggers.nth(1)).toBeFocused();
-      }
+      // Second trigger should be focused
+      await expect(triggers.nth(1)).toBeFocused();
     });
 
     test("should navigate with ArrowUp key", async ({ page }) => {
       const accordion = page.locator('[data-orientation="vertical"]').first();
       const triggers = accordion.getByRole("button");
 
-      if ((await triggers.count()) >= 2) {
-        // Focus second trigger
-        await triggers.nth(1).focus();
+      // The guard used to make this pass when the demo rendered fewer than
+      // 2 triggers, which is the failure the test exists to catch.
+      expect(await triggers.count()).toBeGreaterThanOrEqual(2);
+      // Focus second trigger
+      await triggers.nth(1).focus();
 
-        // Press ArrowUp
-        await page.keyboard.press("ArrowUp");
+      // Press ArrowUp
+      await page.keyboard.press("ArrowUp");
 
-        // First trigger should be focused
-        await expect(triggers.first()).toBeFocused();
-      }
+      // First trigger should be focused
+      await expect(triggers.first()).toBeFocused();
     });
 
     test("should navigate to first with Home key", async ({ page }) => {
       const accordion = page.locator('[data-orientation="vertical"]').first();
       const triggers = accordion.getByRole("button");
 
-      if ((await triggers.count()) >= 2) {
-        // Focus last trigger
-        await triggers.last().focus();
+      // The guard used to make this pass when the demo rendered fewer than
+      // 2 triggers, which is the failure the test exists to catch.
+      expect(await triggers.count()).toBeGreaterThanOrEqual(2);
+      // Focus last trigger
+      await triggers.last().focus();
 
-        // Press Home
-        await page.keyboard.press("Home");
+      // Press Home
+      await page.keyboard.press("Home");
 
-        // First trigger should be focused
-        await expect(triggers.first()).toBeFocused();
-      }
+      // First trigger should be focused
+      await expect(triggers.first()).toBeFocused();
     });
 
     test("should navigate to last with End key", async ({ page }) => {
       const accordion = page.locator('[data-orientation="vertical"]').first();
       const triggers = accordion.getByRole("button");
 
-      if ((await triggers.count()) >= 2) {
-        // Focus first trigger
-        await triggers.first().focus();
+      // The guard used to make this pass when the demo rendered fewer than
+      // 2 triggers, which is the failure the test exists to catch.
+      expect(await triggers.count()).toBeGreaterThanOrEqual(2);
+      // Focus first trigger
+      await triggers.first().focus();
 
-        // Press End
-        await page.keyboard.press("End");
+      // Press End
+      await page.keyboard.press("End");
 
-        // Last trigger should be focused
-        await expect(triggers.last()).toBeFocused();
-      }
+      // Last trigger should be focused
+      await expect(triggers.last()).toBeFocused();
     });
 
     test("should toggle with Enter key", async ({ page }) => {
@@ -256,19 +261,20 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       // Find SVG icon
       const icon = trigger.locator("svg").first();
 
-      if ((await icon.count()) > 0) {
-        // Check icon has rotation class or transform when item is expanded
-        const isExpanded = await trigger.getAttribute("aria-expanded");
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(icon.first()).toBeVisible();
+      // Check icon has rotation class or transform when item is expanded
+      const isExpanded = await trigger.getAttribute("aria-expanded");
 
-        if (isExpanded === "true") {
-          const hasRotation = await icon.evaluate((el) => {
-            return (
-              el.classList.contains("rotate-180") ||
-              window.getComputedStyle(el).transform.includes("matrix")
-            );
-          });
-          expect(hasRotation).toBe(true);
-        }
+      if (isExpanded === "true") {
+        const hasRotation = await icon.evaluate((el) => {
+          return (
+            el.classList.contains("rotate-180") ||
+            window.getComputedStyle(el).transform.includes("matrix")
+          );
+        });
+        expect(hasRotation).toBe(true);
       }
     });
   });
@@ -287,18 +293,19 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
     test("should show disabled visual styles", async ({ page }) => {
       const disabledButton = page.locator("button[disabled]").first();
 
-      if ((await disabledButton.count()) > 0) {
-        const hasDisabledStyles = await disabledButton.evaluate((el) => {
-          const styles = window.getComputedStyle(el);
-          return (
-            parseFloat(styles.opacity) < 1 ||
-            styles.cursor === "not-allowed" ||
-            el.classList.contains("opacity-50")
-          );
-        });
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledButton.first()).toBeVisible();
+      const hasDisabledStyles = await disabledButton.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return (
+          parseFloat(styles.opacity) < 1 ||
+          styles.cursor === "not-allowed" ||
+          el.classList.contains("opacity-50")
+        );
+      });
 
-        expect(hasDisabledStyles).toBe(true);
-      }
+      expect(hasDisabledStyles).toBe(true);
     });
   });
 
@@ -306,9 +313,10 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
     test("should find accordion with data-type=multiple", async ({ page }) => {
       const multiAccordion = page.locator('[data-type="multiple"]').first();
 
-      if ((await multiAccordion.count()) > 0) {
-        await expect(multiAccordion).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(multiAccordion.first()).toBeVisible();
+      await expect(multiAccordion).toBeVisible();
     });
 
     test("should allow multiple items open in multiple mode", async ({
@@ -316,35 +324,36 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
     }) => {
       const multiAccordion = page.locator('[data-type="multiple"]').first();
 
-      if ((await multiAccordion.count()) > 0) {
-        const triggers = multiAccordion.getByRole("button");
-        const triggerCount = await triggers.count();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(multiAccordion.first()).toBeVisible();
+      const triggers = multiAccordion.getByRole("button");
+      const triggerCount = await triggers.count();
 
-        if (triggerCount >= 2) {
-          // First, close all items to start from known state
-          for (let i = 0; i < triggerCount; i++) {
-            const trigger = triggers.nth(i);
-            const isExpanded = await trigger.getAttribute("aria-expanded");
-            if (isExpanded === "true") {
-              await trigger.click();
-              await page.waitForTimeout(50);
-            }
+      if (triggerCount >= 2) {
+        // First, close all items to start from known state
+        for (let i = 0; i < triggerCount; i++) {
+          const trigger = triggers.nth(i);
+          const isExpanded = await trigger.getAttribute("aria-expanded");
+          if (isExpanded === "true") {
+            await trigger.click();
+            await page.waitForTimeout(50);
           }
-
-          // Now open first two items
-          await triggers.first().click();
-          await page.waitForTimeout(100);
-
-          await triggers.nth(1).click();
-          await page.waitForTimeout(100);
-
-          // Both should now be expanded (multiple mode allows this)
-          const state1 = await triggers.first().getAttribute("aria-expanded");
-          const state2 = await triggers.nth(1).getAttribute("aria-expanded");
-
-          expect(state1).toBe("true");
-          expect(state2).toBe("true");
         }
+
+        // Now open first two items
+        await triggers.first().click();
+        await page.waitForTimeout(100);
+
+        await triggers.nth(1).click();
+        await page.waitForTimeout(100);
+
+        // Both should now be expanded (multiple mode allows this)
+        const state1 = await triggers.first().getAttribute("aria-expanded");
+        const state2 = await triggers.nth(1).getAttribute("aria-expanded");
+
+        expect(state1).toBe("true");
+        expect(state2).toBe("true");
       }
     });
   });
@@ -394,7 +403,7 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
 
 test.describe("Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/accordion");
+    await page.goto("/accordion");
     await page.waitForLoadState("domcontentloaded");
     await page
       .locator('[data-orientation="vertical"]')
@@ -489,7 +498,7 @@ test.describe("Performance Tests", () => {
   test("should load page within acceptable time", async ({ page }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/accordion");
+    await page.goto("/accordion");
     await page.waitForLoadState("domcontentloaded");
     await page
       .locator('[data-orientation="vertical"]')
@@ -503,7 +512,7 @@ test.describe("Performance Tests", () => {
   });
 
   test("should handle rapid interactions without errors", async ({ page }) => {
-    await page.goto("/demo/accordion");
+    await page.goto("/accordion");
     await page.waitForLoadState("domcontentloaded");
     await page
       .locator('[data-orientation="vertical"]')
@@ -533,7 +542,7 @@ test.describe("Performance Tests", () => {
 
 test.describe("Visual Regression", () => {
   test("accordion collapsed state", async ({ page }) => {
-    await page.goto("/demo/accordion");
+    await page.goto("/accordion");
     await page.waitForLoadState("domcontentloaded");
 
     const firstAccordion = page.locator('[data-orientation="vertical"]').first();

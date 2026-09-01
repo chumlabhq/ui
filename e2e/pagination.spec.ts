@@ -34,7 +34,7 @@ async function tapOrClick(locator: import("@playwright/test").Locator) {
 
 test.describe("Pagination Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
   });
@@ -226,7 +226,7 @@ test.describe("Pagination Component - Cross-Browser Tests", () => {
 
 test.describe("Pagination Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
   });
@@ -376,7 +376,7 @@ test.describe("Pagination Keyboard Navigation", () => {
 
 test.describe("Pagination Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
     await injectAxe(page);
@@ -443,9 +443,10 @@ test.describe("Pagination Accessibility Tests", () => {
 
     const ellipsis = pagination.locator('[aria-hidden="true"]');
 
-    if (await ellipsis.count() > 0) {
-      await expect(ellipsis.first()).toHaveAttribute("aria-hidden", "true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(ellipsis.first()).toBeVisible();
+    await expect(ellipsis.first()).toHaveAttribute("aria-hidden", "true");
   });
 
   test("should have proper ARIA attributes on dropdown trigger", async ({ page }) => {
@@ -502,7 +503,7 @@ test.describe("Pagination Accessibility Tests", () => {
 
 test.describe("Pagination Advanced Features", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
   });
@@ -608,7 +609,7 @@ test.describe("Pagination Advanced Features", () => {
 
 test.describe("Pagination Edge Cases", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("domcontentloaded");
     await waitForPaginationVisible(page);
   });
@@ -656,7 +657,7 @@ test.describe("Pagination Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("domcontentloaded");
     await waitForPaginationVisible(page);
 
@@ -676,7 +677,7 @@ test.describe("Pagination Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("domcontentloaded");
     await waitForPaginationVisible(page);
 
@@ -696,7 +697,7 @@ test.describe("Pagination Responsive Tests", () => {
 
 test.describe("Pagination Focus Management", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
   });
@@ -749,7 +750,7 @@ test.describe("Pagination Performance Tests", () => {
   test("should load page within acceptable time", async ({ page, browserName }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
 
     const nav = page.locator(NAV_SELECTOR).first();
@@ -764,7 +765,7 @@ test.describe("Pagination Performance Tests", () => {
   });
 
   test("should handle rapid page navigation without lag", async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
 
@@ -783,7 +784,7 @@ test.describe("Pagination Performance Tests", () => {
   });
 
   test("should handle rapid dropdown interactions without lag", async ({ page }) => {
-    await page.goto("/demo/pagination");
+    await page.goto("/pagination");
     await page.waitForLoadState("networkidle");
     await waitForPaginationVisible(page);
 

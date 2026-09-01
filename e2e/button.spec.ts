@@ -14,7 +14,7 @@ async function waitForButtonVisible(page: import("@playwright/test").Page) {
 
 test.describe("Button Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("networkidle");
     await waitForButtonVisible(page);
   });
@@ -39,11 +39,12 @@ test.describe("Button Component - Cross-Browser Tests", () => {
     test("should render anchor buttons when configured", async ({ page }) => {
       const linkButtons = page.locator("a[aria-disabled], a[data-loading]");
 
-      if ((await linkButtons.count()) > 0) {
-        const link = linkButtons.first();
-        await expect(link).toBeVisible();
-        await expect(link).toHaveAttribute("href");
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(linkButtons.first()).toBeVisible();
+      const link = linkButtons.first();
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute("href");
     });
   });
 
@@ -69,16 +70,18 @@ test.describe("Keyboard Navigation", () => {
       test(`should activate span button on ${key} key`, async ({ page }) => {
         const spanButton = page.locator('span[role="button"]').first();
         // Was guarded by `if (count > 0)`, which passed when the demo rendered
-        // no span button — the case the test exists to cover. The demo's span
-        // buttons sit below the fold behind a scroll-reveal, so attach-then-
-        // scroll mirrors what waitForButtonVisible does for the <button> set.
-        await spanButton.waitFor({ state: "attached", timeout: 10000 });
+        // no span button — the case the test exists to cover.
         await spanButton.scrollIntoViewIfNeeded();
         await expect(spanButton).toBeVisible();
-        const clicks = await watchClicks(page);
+
+        // A span calls its onClick directly from onKeyDown; it dispatches no DOM
+        // click, so the document-level counter used for real buttons sees
+        // nothing here. The demo counts activations instead.
+        const readout = page.locator("[data-span-activations]");
+        await expect(readout).toHaveAttribute("data-span-activations", "0");
         await spanButton.focus();
         await page.keyboard.press(key);
-        await expect.poll(clicks).toBeGreaterThan(0);
+        await expect(readout).toHaveAttribute("data-span-activations", "1");
       });
     }
   });
@@ -87,20 +90,22 @@ test.describe("Keyboard Navigation", () => {
     test("should display loading indicator when loading", async ({ page }) => {
       const loadingButton = page.locator('[data-loading="true"]').first();
 
-      if ((await loadingButton.count()) > 0) {
-        await loadingButton.scrollIntoViewIfNeeded();
-        await expect(loadingButton).toBeVisible();
-        await expect(loadingButton).toHaveAttribute("aria-busy", "true");
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(loadingButton.first()).toBeVisible();
+      await loadingButton.scrollIntoViewIfNeeded();
+      await expect(loadingButton).toBeVisible();
+      await expect(loadingButton).toHaveAttribute("aria-busy", "true");
     });
 
     test("should not respond to clicks when loading", async ({ page }) => {
       const loadingButton = page.locator('button[data-loading="true"]').first();
 
-      if ((await loadingButton.count()) > 0) {
-        // Button should be disabled
-        await expect(loadingButton).toBeDisabled();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(loadingButton.first()).toBeVisible();
+      // Button should be disabled
+      await expect(loadingButton).toBeDisabled();
     });
   });
 
@@ -108,20 +113,22 @@ test.describe("Keyboard Navigation", () => {
     test("should display disabled buttons correctly", async ({ page }) => {
       const disabledButton = page.locator("button:disabled").first();
 
-      if ((await disabledButton.count()) > 0) {
-        await expect(disabledButton).toBeVisible();
-        await expect(disabledButton).toHaveAttribute("aria-disabled", "true");
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledButton.first()).toBeVisible();
+      await expect(disabledButton).toBeVisible();
+      await expect(disabledButton).toHaveAttribute("aria-disabled", "true");
     });
 
     test("should not respond to clicks when disabled", async ({ page }) => {
       const disabledButton = page.locator("button:disabled").first();
 
-      if ((await disabledButton.count()) > 0) {
-        // Click should not throw, but button remains disabled
-        await disabledButton.click({ force: true });
-        await expect(disabledButton).toBeDisabled();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledButton.first()).toBeVisible();
+      // Click should not throw, but button remains disabled
+      await disabledButton.click({ force: true });
+      await expect(disabledButton).toBeDisabled();
     });
 
     test("should prevent navigation for disabled anchor buttons", async ({
@@ -129,19 +136,20 @@ test.describe("Keyboard Navigation", () => {
     }) => {
       const disabledLink = page.locator('a[aria-disabled="true"]').first();
 
-      if ((await disabledLink.count()) > 0) {
-        const urlBefore = page.url();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledLink.first()).toBeVisible();
+      const urlBefore = page.url();
 
-        page.on("dialog", (dialog) => dialog.dismiss());
+      page.on("dialog", (dialog) => dialog.dismiss());
 
-        const [popup] = await Promise.all([
-          page.waitForEvent("popup", { timeout: 2000 }).catch(() => null),
-          disabledLink.click({ force: true }),
-        ]);
+      const [popup] = await Promise.all([
+        page.waitForEvent("popup", { timeout: 2000 }).catch(() => null),
+        disabledLink.click({ force: true }),
+      ]);
 
-        expect(popup).toBeNull();
-        expect(page.url()).toBe(urlBefore);
-      }
+      expect(popup).toBeNull();
+      expect(page.url()).toBe(urlBefore);
     });
   });
 
@@ -149,22 +157,24 @@ test.describe("Keyboard Navigation", () => {
     test("should render button groups with role='group'", async ({ page }) => {
       const groups = page.locator('[role="group"]');
 
-      if ((await groups.count()) > 0) {
-        const group = groups.first();
-        await expect(group).toBeVisible();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(groups.first()).toBeVisible();
+      const group = groups.first();
+      await expect(group).toBeVisible();
 
-        // Group should contain buttons
-        const buttonsInGroup = group.locator("button");
-        expect(await buttonsInGroup.count()).toBeGreaterThan(0);
-      }
+      // Group should contain buttons
+      const buttonsInGroup = group.locator("button");
+      expect(await buttonsInGroup.count()).toBeGreaterThan(0);
     });
 
     test("should support aria-label on button groups", async ({ page }) => {
       const labeledGroup = page.locator('[role="group"][aria-label]').first();
 
-      if ((await labeledGroup.count()) > 0) {
-        await expect(labeledGroup).toHaveAttribute("aria-label");
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(labeledGroup.first()).toBeVisible();
+      await expect(labeledGroup).toHaveAttribute("aria-label");
     });
   });
 
@@ -181,9 +191,10 @@ test.describe("Keyboard Navigation", () => {
 
       const tooltip = page.locator('[role="tooltip"]');
 
-      if ((await tooltip.count()) > 0) {
-        await expect(tooltip).toBeVisible({ timeout: 3000 });
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(tooltip.first()).toBeVisible();
+      await expect(tooltip).toBeVisible({ timeout: 3000 });
       // If no tooltip found, that's okay - not all buttons have tooltips
     });
   });
@@ -198,28 +209,29 @@ test.describe("Keyboard Navigation", () => {
         .locator("button:has(.transition-transform)")
         .first();
 
-      if ((await buttonWithIcon.count()) > 0) {
-        await buttonWithIcon.waitFor({ state: "visible", timeout: 5000 });
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(buttonWithIcon.first()).toBeVisible();
+      await buttonWithIcon.waitFor({ state: "visible", timeout: 5000 });
 
-        // Hover to trigger animation - use dispatchEvent for Firefox reliability
-        if (browserName === "firefox") {
-          await buttonWithIcon.dispatchEvent("mouseenter");
-          await page.waitForTimeout(100); // Wait for Firefox to process
-        } else {
-          await buttonWithIcon.hover();
-        }
-
-        // Animation classes should be present
-        const iconContainer = buttonWithIcon.locator(".transition-transform");
-        await expect(iconContainer).toBeVisible();
+      // Hover to trigger animation - use dispatchEvent for Firefox reliability
+      if (browserName === "firefox") {
+        await buttonWithIcon.dispatchEvent("mouseenter");
+        await page.waitForTimeout(100); // Wait for Firefox to process
+      } else {
+        await buttonWithIcon.hover();
       }
+
+      // Animation classes should be present
+      const iconContainer = buttonWithIcon.locator(".transition-transform");
+      await expect(iconContainer).toBeVisible();
     });
   });
 });
 
 test.describe("Button Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("networkidle");
     await waitForButtonVisible(page);
     await injectAxe(page);
@@ -261,35 +273,39 @@ test.describe("Button Accessibility Tests", () => {
     const spanButtons = page.locator('span[role="button"]');
 
     // All buttons should be accessible
-    if ((await buttons.count()) > 0) {
-      const button = buttons.first();
-      await expect(button).toBeVisible();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(buttons.first()).toBeVisible();
+    const button = buttons.first();
+    await expect(button).toBeVisible();
 
     // Span buttons should have proper role
-    if ((await spanButtons.count()) > 0) {
-      const spanButton = spanButtons.first();
-      await expect(spanButton).toHaveAttribute("role", "button");
-      await expect(spanButton).toHaveAttribute("tabindex");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(spanButtons.first()).toBeVisible();
+    const spanButton = spanButtons.first();
+    await expect(spanButton).toHaveAttribute("role", "button");
+    await expect(spanButton).toHaveAttribute("tabindex");
   });
 
   test("should have aria-busy on loading buttons", async ({ page }) => {
     const loadingButtons = page.locator('[data-loading="true"]');
 
-    if ((await loadingButtons.count()) > 0) {
-      await expect(loadingButtons.first()).toHaveAttribute("aria-busy", "true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(loadingButtons.first()).toBeVisible();
+    await expect(loadingButtons.first()).toHaveAttribute("aria-busy", "true");
   });
 
   test("should have aria-disabled on disabled buttons", async ({ page }) => {
     const disabledButtons = page.locator('[data-disabled="true"]');
 
-    if ((await disabledButtons.count()) > 0) {
-      const button = disabledButtons.first();
-      await button.scrollIntoViewIfNeeded();
-      await expect(button).toHaveAttribute("aria-disabled", "true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(disabledButtons.first()).toBeVisible();
+    const button = disabledButtons.first();
+    await button.scrollIntoViewIfNeeded();
+    await expect(button).toHaveAttribute("aria-disabled", "true");
   });
 
   test("button groups should have role='group'", async ({ page }) => {
@@ -314,7 +330,7 @@ test.describe("Button Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("domcontentloaded");
     await waitForButtonVisible(page);
 
@@ -338,7 +354,7 @@ test.describe("Button Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("domcontentloaded");
     await waitForButtonVisible(page);
 
@@ -354,29 +370,30 @@ test.describe("Button Responsive Tests", () => {
   });
 
   test("full-width buttons should span container width", async ({ page }) => {
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("networkidle");
     await waitForButtonVisible(page);
 
     const fullWidthButton = page.locator('[data-full-width="true"]').first();
 
-    if ((await fullWidthButton.count()) > 0) {
-      await fullWidthButton.scrollIntoViewIfNeeded();
-      await expect(fullWidthButton).toBeVisible();
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(fullWidthButton.first()).toBeVisible();
+    await fullWidthButton.scrollIntoViewIfNeeded();
+    await expect(fullWidthButton).toBeVisible();
 
-      // Should have w-full class
-      const hasFullWidth = await fullWidthButton.evaluate((el) => {
-        return el.classList.contains("w-full");
-      });
+    // Should have w-full class
+    const hasFullWidth = await fullWidthButton.evaluate((el) => {
+      return el.classList.contains("w-full");
+    });
 
-      expect(hasFullWidth).toBe(true);
-    }
+    expect(hasFullWidth).toBe(true);
   });
 });
 
 test.describe("Button Focus Management", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("networkidle");
     await waitForButtonVisible(page);
   });
@@ -399,18 +416,19 @@ test.describe("Button Focus Management", () => {
     const focused = page.locator(":focus");
 
     // If focused element exists, it should not be disabled
-    if ((await focused.count()) > 0) {
-      const isDisabled = await focused.evaluate((el) => {
-        return (
-          (el as HTMLButtonElement).disabled ||
-          el.getAttribute("aria-disabled") === "true"
-        );
-      });
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(focused.first()).toBeVisible();
+    const isDisabled = await focused.evaluate((el) => {
+      return (
+        (el as HTMLButtonElement).disabled ||
+        el.getAttribute("aria-disabled") === "true"
+      );
+    });
 
-      // Focused element should not be a disabled button
-      // (disabled span buttons with tabindex=-1 should be skipped)
-      expect(isDisabled).toBe(false);
-    }
+    // Focused element should not be a disabled button
+    // (disabled span buttons with tabindex=-1 should be skipped)
+    expect(isDisabled).toBe(false);
   });
 
   test("span buttons should be focusable when not disabled", async ({
@@ -420,10 +438,11 @@ test.describe("Button Focus Management", () => {
       .locator('span[role="button"]:not([aria-disabled="true"])')
       .first();
 
-    if ((await spanButton.count()) > 0) {
-      await spanButton.focus();
-      await expect(spanButton).toBeFocused();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(spanButton.first()).toBeVisible();
+    await spanButton.focus();
+    await expect(spanButton).toBeFocused();
   });
 
   test("span buttons should not be focusable when disabled", async ({
@@ -433,9 +452,10 @@ test.describe("Button Focus Management", () => {
       .locator('span[role="button"][aria-disabled="true"]')
       .first();
 
-    if ((await disabledSpanButton.count()) > 0) {
-      await expect(disabledSpanButton).toHaveAttribute("tabindex", "-1");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(disabledSpanButton.first()).toBeVisible();
+    await expect(disabledSpanButton).toHaveAttribute("tabindex", "-1");
   });
 });
 
@@ -446,7 +466,7 @@ test.describe("Button Performance Tests", () => {
   }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("networkidle");
 
     const button = page.locator("button").first();
@@ -464,7 +484,7 @@ test.describe("Button Performance Tests", () => {
   test("should handle multiple button interactions without lag", async ({
     page,
   }) => {
-    await page.goto("/demo/button");
+    await page.goto("/button");
     await page.waitForLoadState("networkidle");
     await waitForButtonVisible(page);
 

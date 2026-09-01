@@ -197,6 +197,9 @@ const ButtonDemo = () => {
   const c = getClasses(dark);
   const [loading, setLoading] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  // The caption below claims span buttons support Enter/Space. Without an
+  // onClick there was nothing to observe, so the claim went unverified.
+  const [spanActivations, setSpanActivations] = useState(0);
 
   const simulateLoading = () => {
     setLoading(true);
@@ -367,7 +370,11 @@ const ButtonDemo = () => {
               as=&quot;span&quot; (keyboard accessible)
             </p>
             <DemoWrapper isDarkMode={dark} layout="inline">
-              <Button as="span" className={c.text}>
+              <Button
+                as="span"
+                className={c.text}
+                onClick={() => setSpanActivations((n) => n + 1)}
+              >
                 Text Button
               </Button>
               <Button
@@ -375,9 +382,13 @@ const ButtonDemo = () => {
                 className={c.text}
                 endIcon={<ArrowRightIcon />}
                 iconAnimation="slideRight"
+                onClick={() => setSpanActivations((n) => n + 1)}
               >
                 Learn More
               </Button>
+              <span className={c.label} data-span-activations={spanActivations}>
+                Activated {spanActivations}x
+              </span>
             </DemoWrapper>
           </div>
         </div>

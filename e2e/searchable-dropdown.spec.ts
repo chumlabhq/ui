@@ -26,7 +26,7 @@ async function getSearchInputForTrigger(
 
 test.describe("SearchableDropdown Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/searchable-dropdown");
+    await page.goto("/searchable-dropdown");
     await page.waitForLoadState("domcontentloaded");
     await page.getByRole("combobox").first().waitFor({ state: "visible" });
   });

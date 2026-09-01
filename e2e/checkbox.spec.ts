@@ -11,7 +11,7 @@ async function waitForCheckboxVisible(page: import("@playwright/test").Page) {
 
 test.describe("Checkbox Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
     await waitForCheckboxVisible(page);
   });
@@ -45,9 +45,10 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
       // Find checkbox with label
       const labelText = page.locator("text=Accept terms and conditions");
 
-      if ((await labelText.count()) > 0) {
-        await expect(labelText.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(labelText.first()).toBeVisible();
+      await expect(labelText.first()).toBeVisible();
     });
 
     test("should display description text", async ({ page }) => {
@@ -55,9 +56,10 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         "text=Receive email updates about your account activity"
       );
 
-      if ((await description.count()) > 0) {
-        await expect(description.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(description.first()).toBeVisible();
+      await expect(description.first()).toBeVisible();
     });
   });
 
@@ -77,7 +79,9 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         await page.keyboard.press("Tab");
       }
 
-      expect(await focusedCheckbox.count()).toBeGreaterThanOrEqual(0);
+      // Was `toBeGreaterThanOrEqual(0)`, which a count can never fail. The loop
+      // above tabs until a checkbox has focus; the point is that one does.
+      expect(await focusedCheckbox.count()).toBeGreaterThan(0);
     });
 
     test("should toggle checkbox with Space key", async ({ page }) => {
@@ -140,9 +144,10 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         .locator('input[type="checkbox"]:disabled')
         .first();
 
-      if ((await disabledCheckbox.count()) > 0) {
-        await expect(disabledCheckbox).toBeDisabled();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledCheckbox.first()).toBeVisible();
+      await expect(disabledCheckbox).toBeDisabled();
     });
 
     test("should not toggle disabled checkbox on click", async ({ page }) => {
@@ -150,18 +155,19 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         .locator('input[type="checkbox"]:disabled')
         .first();
 
-      if ((await disabledCheckbox.count()) > 0) {
-        await disabledCheckbox.scrollIntoViewIfNeeded();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledCheckbox.first()).toBeVisible();
+      await disabledCheckbox.scrollIntoViewIfNeeded();
 
-        const wasChecked = await disabledCheckbox.isChecked();
+      const wasChecked = await disabledCheckbox.isChecked();
 
-        // Try to click (force: true to bypass actionability checks for disabled)
-        await disabledCheckbox.click({ force: true });
+      // Try to click (force: true to bypass actionability checks for disabled)
+      await disabledCheckbox.click({ force: true });
 
-        // State should not have changed
-        const isNowChecked = await disabledCheckbox.isChecked();
-        expect(isNowChecked).toBe(wasChecked);
-      }
+      // State should not have changed
+      const isNowChecked = await disabledCheckbox.isChecked();
+      expect(isNowChecked).toBe(wasChecked);
     });
   });
 
@@ -169,10 +175,11 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
     test("should display error message", async ({ page }) => {
       const errorMessage = page.locator('[role="alert"]').first();
 
-      if ((await errorMessage.count()) > 0) {
-        await errorMessage.scrollIntoViewIfNeeded();
-        await expect(errorMessage).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(errorMessage.first()).toBeVisible();
+      await errorMessage.scrollIntoViewIfNeeded();
+      await expect(errorMessage).toBeVisible();
     });
 
     test("should mark error checkbox with aria-invalid", async ({ page }) => {
@@ -180,9 +187,10 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         .locator('input[type="checkbox"][aria-invalid="true"]')
         .first();
 
-      if ((await invalidCheckbox.count()) > 0) {
-        await expect(invalidCheckbox).toHaveAttribute("aria-invalid", "true");
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(invalidCheckbox.first()).toBeVisible();
+      await expect(invalidCheckbox).toHaveAttribute("aria-invalid", "true");
     });
   });
 
@@ -193,10 +201,11 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         .locator('[data-indeterminate="true"]')
         .first();
 
-      if ((await indeterminateContainer.count()) > 0) {
-        await indeterminateContainer.scrollIntoViewIfNeeded();
-        await expect(indeterminateContainer).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(indeterminateContainer.first()).toBeVisible();
+      await indeterminateContainer.scrollIntoViewIfNeeded();
+      await expect(indeterminateContainer).toBeVisible();
     });
   });
 
@@ -205,10 +214,11 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
       // Find required checkbox by looking for asterisk
       const requiredIndicator = page.locator('span:text("*")').first();
 
-      if ((await requiredIndicator.count()) > 0) {
-        await requiredIndicator.scrollIntoViewIfNeeded();
-        await expect(requiredIndicator).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(requiredIndicator.first()).toBeVisible();
+      await requiredIndicator.scrollIntoViewIfNeeded();
+      await expect(requiredIndicator).toBeVisible();
     });
 
     test("should set aria-required on required checkboxes", async ({ page }) => {
@@ -216,16 +226,17 @@ test.describe("Checkbox Component - Cross-Browser Tests", () => {
         .locator('input[type="checkbox"][aria-required="true"]')
         .first();
 
-      if ((await requiredCheckbox.count()) > 0) {
-        await expect(requiredCheckbox).toHaveAttribute("aria-required", "true");
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(requiredCheckbox.first()).toBeVisible();
+      await expect(requiredCheckbox).toHaveAttribute("aria-required", "true");
     });
   });
 });
 
 test.describe("Checkbox Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
     await waitForCheckboxVisible(page);
     await injectAxe(page);
@@ -276,12 +287,13 @@ test.describe("Checkbox Accessibility Tests", () => {
       'input[type="checkbox"][aria-invalid="true"]'
     );
 
-    if ((await errorCheckboxes.count()) > 0) {
-      await expect(errorCheckboxes.first()).toHaveAttribute(
-        "aria-invalid",
-        "true"
-      );
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(errorCheckboxes.first()).toBeVisible();
+    await expect(errorCheckboxes.first()).toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
   });
 
   test("should have aria-describedby linking to error message", async ({
@@ -291,22 +303,24 @@ test.describe("Checkbox Accessibility Tests", () => {
       .locator('input[type="checkbox"][aria-describedby]')
       .first();
 
-    if ((await checkboxWithError.count()) > 0) {
-      const describedBy = await checkboxWithError.getAttribute("aria-describedby");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(checkboxWithError.first()).toBeVisible();
+    const describedBy = await checkboxWithError.getAttribute("aria-describedby");
 
-      if (describedBy && describedBy.includes("error")) {
-        const errorElement = page.locator(`[id="${describedBy.split(" ").find(id => id.includes("error"))}"]`);
-        await expect(errorElement).toBeVisible();
-      }
+    if (describedBy && describedBy.includes("error")) {
+      const errorElement = page.locator(`[id="${describedBy.split(" ").find(id => id.includes("error"))}"]`);
+      await expect(errorElement).toBeVisible();
     }
   });
 
   test("error messages should have role='alert'", async ({ page }) => {
     const alerts = page.locator('[role="alert"]');
 
-    if ((await alerts.count()) > 0) {
-      await expect(alerts.first()).toHaveAttribute("role", "alert");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(alerts.first()).toBeVisible();
+    await expect(alerts.first()).toHaveAttribute("role", "alert");
   });
 });
 
@@ -318,7 +332,7 @@ test.describe("Checkbox Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
 
     const checkbox = page.locator('input[type="checkbox"]').first();
@@ -339,7 +353,7 @@ test.describe("Checkbox Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
 
     const checkbox = page
@@ -365,7 +379,7 @@ test.describe("Checkbox Responsive Tests", () => {
 
 test.describe("Checkbox Focus Management", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
     await waitForCheckboxVisible(page);
   });
@@ -391,17 +405,18 @@ test.describe("Checkbox Focus Management", () => {
       await page.keyboard.press("Tab");
 
       const focused = page.locator(":focus");
-      if ((await focused.count()) > 0) {
-        const isCheckbox = await focused.evaluate(
-          (el) => el.tagName === "INPUT" && (el as HTMLInputElement).type === "checkbox"
-        );
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(focused.first()).toBeVisible();
+      const isCheckbox = await focused.evaluate(
+        (el) => el.tagName === "INPUT" && (el as HTMLInputElement).type === "checkbox"
+      );
 
-        if (isCheckbox) {
-          const isDisabled = await focused.evaluate(
-            (el) => (el as HTMLInputElement).disabled
-          );
-          expect(isDisabled).toBe(false);
-        }
+      if (isCheckbox) {
+        const isDisabled = await focused.evaluate(
+          (el) => (el as HTMLInputElement).disabled
+        );
+        expect(isDisabled).toBe(false);
       }
     }
   });
@@ -414,7 +429,7 @@ test.describe("Checkbox Performance Tests", () => {
   }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("networkidle");
 
     const checkbox = page.locator('input[type="checkbox"]').first();
@@ -431,7 +446,7 @@ test.describe("Checkbox Performance Tests", () => {
     page,
     browserName,
   }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
     await waitForCheckboxVisible(page);
 
@@ -456,7 +471,7 @@ test.describe("Checkbox Performance Tests", () => {
   });
 
   test("should handle multiple checkboxes on page", async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("networkidle");
     await waitForCheckboxVisible(page);
 
@@ -495,33 +510,35 @@ test.describe("Checkbox Performance Tests", () => {
 
 test.describe("Checkbox Form Integration", () => {
   test("should have name attribute for form submission", async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
 
     const namedCheckboxes = page.locator('input[type="checkbox"][name]');
 
-    if ((await namedCheckboxes.count()) > 0) {
-      const name = await namedCheckboxes.first().getAttribute("name");
-      expect(name).toBeTruthy();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(namedCheckboxes.first()).toBeVisible();
+    const name = await namedCheckboxes.first().getAttribute("name");
+    expect(name).toBeTruthy();
   });
 
   test("should have id attribute for label association", async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
 
     const checkboxWithId = page.locator('input[type="checkbox"][id]');
 
-    if ((await checkboxWithId.count()) > 0) {
-      const id = await checkboxWithId.first().getAttribute("id");
-      expect(id).toBeTruthy();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(checkboxWithId.first()).toBeVisible();
+    const id = await checkboxWithId.first().getAttribute("id");
+    expect(id).toBeTruthy();
   });
 });
 
 test.describe("Checkbox Visual States", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/checkbox");
+    await page.goto("/checkbox");
     await page.waitForLoadState("domcontentloaded");
     await waitForCheckboxVisible(page);
   });
@@ -531,39 +548,44 @@ test.describe("Checkbox Visual States", () => {
     const xsCheckbox = page.locator('[data-size="xs"]').first();
     const xlCheckbox = page.locator('[data-size="xl"]').first();
 
-    if ((await xsCheckbox.count()) > 0) {
-      await xsCheckbox.scrollIntoViewIfNeeded();
-      await expect(xsCheckbox).toBeVisible();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(xsCheckbox.first()).toBeVisible();
+    await xsCheckbox.scrollIntoViewIfNeeded();
+    await expect(xsCheckbox).toBeVisible();
 
-    if ((await xlCheckbox.count()) > 0) {
-      await xlCheckbox.scrollIntoViewIfNeeded();
-      await expect(xlCheckbox).toBeVisible();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(xlCheckbox.first()).toBeVisible();
+    await xlCheckbox.scrollIntoViewIfNeeded();
+    await expect(xlCheckbox).toBeVisible();
   });
 
   test("should display different shapes", async ({ page }) => {
     const squareCheckbox = page.locator('[data-shape="square"]').first();
     const circleCheckbox = page.locator('[data-shape="circle"]').first();
 
-    if ((await squareCheckbox.count()) > 0) {
-      await squareCheckbox.scrollIntoViewIfNeeded();
-      await expect(squareCheckbox).toBeVisible();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(squareCheckbox.first()).toBeVisible();
+    await squareCheckbox.scrollIntoViewIfNeeded();
+    await expect(squareCheckbox).toBeVisible();
 
-    if ((await circleCheckbox.count()) > 0) {
-      await circleCheckbox.scrollIntoViewIfNeeded();
-      await expect(circleCheckbox).toBeVisible();
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(circleCheckbox.first()).toBeVisible();
+    await circleCheckbox.scrollIntoViewIfNeeded();
+    await expect(circleCheckbox).toBeVisible();
   });
 
   test("should toggle visual state on data-checked", async ({ page }) => {
     // Find a checkbox container
     const container = page.locator('[data-checked="true"]').first();
 
-    if ((await container.count()) > 0) {
-      await container.scrollIntoViewIfNeeded();
-      await expect(container).toHaveAttribute("data-checked", "true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(container.first()).toBeVisible();
+    await container.scrollIntoViewIfNeeded();
+    await expect(container).toHaveAttribute("data-checked", "true");
   });
 });

@@ -3,7 +3,7 @@ import { injectAxe, checkA11y } from "axe-playwright";
 
 test.describe("Drawer Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/drawer");
+    await page.goto("/drawer");
     await page.waitForLoadState("domcontentloaded");
   });
 

@@ -9,7 +9,7 @@ async function waitForStepperVisible(page: import("@playwright/test").Page) {
 
 test.describe("Stepper Component", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/stepper");
+    await page.goto("/stepper");
     await page.waitForLoadState("domcontentloaded");
     await waitForStepperVisible(page);
   });
@@ -232,7 +232,7 @@ test.describe("Stepper Component", () => {
 
 test.describe("Stepper - Cross Browser", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/stepper");
+    await page.goto("/stepper");
     await page.waitForLoadState("domcontentloaded");
   });
 
@@ -260,7 +260,7 @@ test.describe("Stepper - Mobile Touch", () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/stepper");
+    await page.goto("/stepper");
     await page.waitForLoadState("domcontentloaded");
   });
 
@@ -290,7 +290,7 @@ test.describe("Stepper - Mobile Touch", () => {
 
 test.describe("Stepper - Full User Flow", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/stepper");
+    await page.goto("/stepper");
     await page.waitForLoadState("domcontentloaded");
   });
 

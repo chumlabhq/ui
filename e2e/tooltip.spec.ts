@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Tooltip Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/tooltip");
+    await page.goto("/tooltip");
     await page.waitForLoadState("domcontentloaded");
   });
 
@@ -355,7 +355,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
 test.describe("Tooltip - Mobile Interactions", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/tooltip");
+    await page.goto("/tooltip");
     await page.waitForLoadState("domcontentloaded");
   });
 
@@ -389,7 +389,7 @@ test.describe("Tooltip - Mobile Interactions", () => {
 
 test.describe("Tooltip - Browser-Specific Behavior", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/tooltip");
+    await page.goto("/tooltip");
     await page.waitForLoadState("domcontentloaded");
   });
 

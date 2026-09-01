@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Dropdown Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/dropdown");
+    await page.goto("/dropdown");
     await page.waitForLoadState("domcontentloaded");
     await page.getByRole("combobox").first().waitFor({ state: "visible" });
   });

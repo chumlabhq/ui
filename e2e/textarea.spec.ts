@@ -4,17 +4,16 @@ import { injectAxe } from "axe-playwright";
 import { watchClicks } from "./_helpers";
 // Helper to wait for textarea visibility with scroll support
 async function waitForTextAreaVisible(page: import("@playwright/test").Page) {
-  const textarea = page.locator("textarea").first();
-  // Wait for element to be attached to DOM first
-  await textarea.waitFor({ state: "attached", timeout: 10000 });
-  // Then scroll into view and wait for visibility
-  await textarea.scrollIntoViewIfNeeded();
+  // `.first()` used to pick a hidden control in the site chrome, which can
+  // never be scrolled to — every test in this file then died in beforeEach.
+  const textarea = page.locator("textarea:visible").first();
   await textarea.waitFor({ state: "visible", timeout: 10000 });
+  await textarea.scrollIntoViewIfNeeded();
 }
 
 test.describe("TextArea Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
     await waitForTextAreaVisible(page);
   });
@@ -56,10 +55,11 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
     test("should display placeholder text", async ({ page }) => {
       const textareaWithPlaceholder = page.locator("textarea[placeholder]").first();
 
-      if ((await textareaWithPlaceholder.count()) > 0) {
-        const placeholder = await textareaWithPlaceholder.getAttribute("placeholder");
-        expect(placeholder).toBeTruthy();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(textareaWithPlaceholder.first()).toBeVisible();
+      const placeholder = await textareaWithPlaceholder.getAttribute("placeholder");
+      expect(placeholder).toBeTruthy();
     });
   });
 
@@ -67,31 +67,34 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
     test("should display labels for textareas", async ({ page }) => {
       const labels = page.locator("label");
 
-      if ((await labels.count()) > 0) {
-        await expect(labels.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(labels.first()).toBeVisible();
+      await expect(labels.first()).toBeVisible();
     });
 
     test("should show required indicator on required fields", async ({ page }) => {
       const requiredIndicator = page.locator('span:text("*")');
 
-      if ((await requiredIndicator.count()) > 0) {
-        await expect(requiredIndicator.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(requiredIndicator.first()).toBeVisible();
+      await expect(requiredIndicator.first()).toBeVisible();
     });
 
     test("clicking label should focus associated textarea", async ({ page }) => {
       const label = page.locator("label").first();
 
-      if ((await label.count()) > 0) {
-        await label.click();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(label.first()).toBeVisible();
+      await label.click();
 
-        // The associated textarea should be focused
-        const forAttr = await label.getAttribute("for");
-        if (forAttr) {
-          const textarea = page.locator(`#${forAttr}`);
-          await expect(textarea).toBeFocused();
-        }
+      // The associated textarea should be focused
+      const forAttr = await label.getAttribute("for");
+      if (forAttr) {
+        const textarea = page.locator(`#${forAttr}`);
+        await expect(textarea).toBeFocused();
       }
     });
   });
@@ -108,13 +111,14 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
       // Find elements with role="button" that are icon wrappers
       const iconButtons = page.locator('[role="button"]');
 
-      if ((await iconButtons.count()) > 0) {
-        const button = iconButtons.first();
-        await expect(button).toBeVisible();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(iconButtons.first()).toBeVisible();
+      const button = iconButtons.first();
+      await expect(button).toBeVisible();
 
-        // Should be clickable without errors
-        await button.click();
-      }
+      // Should be clickable without errors
+      await button.click();
     });
   });
 
@@ -122,17 +126,19 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
     test("should display error message", async ({ page }) => {
       const errorMessages = page.locator('[role="alert"]');
 
-      if ((await errorMessages.count()) > 0) {
-        await expect(errorMessages.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(errorMessages.first()).toBeVisible();
+      await expect(errorMessages.first()).toBeVisible();
     });
 
     test("should mark invalid textareas with aria-invalid", async ({ page }) => {
       const invalidTextareas = page.locator('textarea[aria-invalid="true"]');
 
-      if ((await invalidTextareas.count()) > 0) {
-        await expect(invalidTextareas.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(invalidTextareas.first()).toBeVisible();
+      await expect(invalidTextareas.first()).toBeVisible();
     });
   });
 
@@ -141,34 +147,28 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
       // Look for explicitly disabled textareas
       const disabledTextarea = page.locator('textarea[placeholder="Disabled textarea"]');
 
-      if ((await disabledTextarea.count()) > 0) {
-        await disabledTextarea.scrollIntoViewIfNeeded();
-        await expect(disabledTextarea).toBeVisible();
-        await expect(disabledTextarea).toBeDisabled();
-      } else {
-        // Fallback: find any disabled textarea and scroll to it
-        const anyDisabledTextarea = page.locator("textarea:disabled").first();
-        if ((await anyDisabledTextarea.count()) > 0) {
-          await anyDisabledTextarea.scrollIntoViewIfNeeded();
-          await expect(anyDisabledTextarea).toBeDisabled();
-        }
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledTextarea.first()).toBeVisible();
+      await disabledTextarea.first().scrollIntoViewIfNeeded();
+      await expect(disabledTextarea.first()).toBeDisabled();
     });
 
     test("should not allow typing in disabled textarea", async ({ page }) => {
       const disabledTextarea = page.locator("textarea:disabled").first();
 
-      if ((await disabledTextarea.count()) > 0) {
-        const valueBefore = await disabledTextarea.inputValue();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledTextarea.first()).toBeVisible();
+      const valueBefore = await disabledTextarea.inputValue();
 
-        // Attempt to type (should not work on disabled textarea)
-        await disabledTextarea.type("test").catch(() => {
-          // Expected to fail or do nothing
-        });
+      // Attempt to type (should not work on disabled textarea)
+      await disabledTextarea.type("test").catch(() => {
+        // Expected to fail or do nothing
+      });
 
-        const valueAfter = await disabledTextarea.inputValue();
-        expect(valueAfter).toBe(valueBefore);
-      }
+      const valueAfter = await disabledTextarea.inputValue();
+      expect(valueAfter).toBe(valueBefore);
     });
   });
 
@@ -177,16 +177,17 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
       // Look for loader elements (CircularLoader or custom)
       const loaders = page.locator('[data-loading="true"]');
 
-      if ((await loaders.count()) > 0) {
-        await expect(loaders.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(loaders.first()).toBeVisible();
+      await expect(loaders.first()).toBeVisible();
     });
   });
 });
 
 test.describe("TextArea Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
     await waitForTextAreaVisible(page);
   });
@@ -218,9 +219,11 @@ test.describe("TextArea Keyboard Navigation", () => {
   });
 
   test("should activate icon buttons with Enter key", async ({ page }) => {
-    // Was guarded by `if (count > 0)` and asserted nothing: it passed both
-    // when the icon button was missing and when Enter did nothing.
-    const button = page.locator('[role="button"]').first();
+    // Two things were wrong here. The guard made it pass when nothing was
+    // found, and `[role="button"]` finds nothing on this page at all: a
+    // clickable field icon renders as a real <button type="button"> with an
+    // aria-label (FieldWrapper.tsx:176-183), never a role="button" span.
+    const button = page.getByRole("button", { name: "Send message" }).first();
     await expect(button).toBeVisible();
 
     const clicks = await watchClicks(page);
@@ -230,9 +233,11 @@ test.describe("TextArea Keyboard Navigation", () => {
   });
 
   test("should activate icon buttons with Space key", async ({ page }) => {
-    // Was guarded by `if (count > 0)` and asserted nothing: it passed both
-    // when the icon button was missing and when Space did nothing.
-    const button = page.locator('[role="button"]').first();
+    // Two things were wrong here. The guard made it pass when nothing was
+    // found, and `[role="button"]` finds nothing on this page at all: a
+    // clickable field icon renders as a real <button type="button"> with an
+    // aria-label (FieldWrapper.tsx:176-183), never a role="button" span.
+    const button = page.getByRole("button", { name: "Send message" }).first();
     await expect(button).toBeVisible();
 
     const clicks = await watchClicks(page);
@@ -264,7 +269,7 @@ test.describe("TextArea Keyboard Navigation", () => {
 
 test.describe("TextArea Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
     await waitForTextAreaVisible(page);
     await injectAxe(page);
@@ -312,9 +317,10 @@ test.describe("TextArea Accessibility Tests", () => {
         const label = page.locator(`label[for="${id}"]`);
 
         // Verify label is visible when present
-        if ((await label.count()) > 0) {
-          await expect(label).toBeVisible();
-        }
+        // The guard used to make this pass when the element was absent, which is
+        // the failure the test exists to catch. Assert presence, then behaviour.
+        await expect(label.first()).toBeVisible();
+        await expect(label).toBeVisible();
       }
     }
   });
@@ -324,10 +330,11 @@ test.describe("TextArea Accessibility Tests", () => {
       '[data-error="true"] textarea, textarea[aria-invalid="true"]',
     );
 
-    if ((await errorTextareas.count()) > 0) {
-      const textarea = errorTextareas.first();
-      await expect(textarea).toHaveAttribute("aria-invalid", "true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(errorTextareas.first()).toBeVisible();
+    const textarea = errorTextareas.first();
+    await expect(textarea).toHaveAttribute("aria-invalid", "true");
   });
 
   test("should have aria-describedby linking to error message", async ({
@@ -335,26 +342,28 @@ test.describe("TextArea Accessibility Tests", () => {
   }) => {
     const textareasWithError = page.locator("textarea[aria-describedby]");
 
-    if ((await textareasWithError.count()) > 0) {
-      const textarea = textareasWithError.first();
-      const describedBy = await textarea.getAttribute("aria-describedby");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(textareasWithError.first()).toBeVisible();
+    const textarea = textareasWithError.first();
+    const describedBy = await textarea.getAttribute("aria-describedby");
 
-      if (describedBy) {
-        // Use attribute selector instead of ID selector to handle special characters
-        const errorElement = page.locator(`[id="${describedBy}"]`);
-        await expect(errorElement).toBeVisible();
-      }
+    if (describedBy) {
+      // Use attribute selector instead of ID selector to handle special characters
+      const errorElement = page.locator(`[id="${describedBy}"]`);
+      await expect(errorElement).toBeVisible();
     }
   });
 
   test("should mark required textareas with aria-required", async ({ page }) => {
     const requiredTextareas = page.locator("textarea[required]");
 
-    if ((await requiredTextareas.count()) > 0) {
-      const textarea = requiredTextareas.first();
-      const ariaRequired = await textarea.getAttribute("aria-required");
-      expect(ariaRequired).toBe("true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(requiredTextareas.first()).toBeVisible();
+    const textarea = requiredTextareas.first();
+    const ariaRequired = await textarea.getAttribute("aria-required");
+    expect(ariaRequired).toBe("true");
   });
 
   test("icon buttons should have button role when clickable", async ({
@@ -363,16 +372,17 @@ test.describe("TextArea Accessibility Tests", () => {
     // Find elements that appear to be icon buttons
     const iconButtons = page.locator('[role="button"]');
 
-    if ((await iconButtons.count()) > 0) {
-      const button = iconButtons.first();
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(iconButtons.first()).toBeVisible();
+    const button = iconButtons.first();
 
-      // Verify role is correctly set
-      await expect(button).toHaveAttribute("role", "button");
+    // Verify role is correctly set
+    await expect(button).toHaveAttribute("role", "button");
 
-      // Should be focusable (tabindex=0)
-      const tabIndex = await button.getAttribute("tabindex");
-      expect(tabIndex).toBe("0");
-    }
+    // Should be focusable (tabindex=0)
+    const tabIndex = await button.getAttribute("tabindex");
+    expect(tabIndex).toBe("0");
   });
 });
 
@@ -385,7 +395,7 @@ test.describe("TextArea Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
 
     // Wait for textareas to be attached to DOM
@@ -410,7 +420,7 @@ test.describe("TextArea Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
 
     const textarea = page.locator("textarea").first();
@@ -429,7 +439,7 @@ test.describe("TextArea Responsive Tests", () => {
   });
 
   test("fullWidth textareas should span container", async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
     await waitForTextAreaVisible(page);
 
@@ -468,7 +478,7 @@ test.describe("TextArea Performance Tests", () => {
   }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("networkidle");
 
     const textarea = page.locator("textarea").first();
@@ -487,7 +497,7 @@ test.describe("TextArea Performance Tests", () => {
     page,
     browserName,
   }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
 
     const textarea = page.locator("textarea").first();
@@ -516,7 +526,7 @@ test.describe("TextArea Performance Tests", () => {
   });
 
   test("should handle multiple textareas on page", async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("networkidle");
     await waitForTextAreaVisible(page);
 
@@ -542,32 +552,34 @@ test.describe("TextArea Performance Tests", () => {
 
 test.describe("TextArea Form Integration", () => {
   test("should work within form context", async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
 
     // Find textareas with name attribute (form-ready)
     const namedTextareas = page.locator("textarea[name]");
 
-    if ((await namedTextareas.count()) > 0) {
-      const textarea = namedTextareas.first();
-      const name = await textarea.getAttribute("name");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(namedTextareas.first()).toBeVisible();
+    const textarea = namedTextareas.first();
+    const name = await textarea.getAttribute("name");
 
-      expect(name).toBeTruthy();
-    }
+    expect(name).toBeTruthy();
   });
 
   test("should respect rows attribute", async ({ page }) => {
-    await page.goto("/demo/text-area");
+    await page.goto("/text-area");
     await page.waitForLoadState("domcontentloaded");
 
     const textareasWithRows = page.locator("textarea[rows]");
 
-    if ((await textareasWithRows.count()) > 0) {
-      const textarea = textareasWithRows.first();
-      const rows = await textarea.getAttribute("rows");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(textareasWithRows.first()).toBeVisible();
+    const textarea = textareasWithRows.first();
+    const rows = await textarea.getAttribute("rows");
 
-      expect(rows).toBeTruthy();
-      expect(parseInt(rows!, 10)).toBeGreaterThan(0);
-    }
+    expect(rows).toBeTruthy();
+    expect(parseInt(rows!, 10)).toBeGreaterThan(0);
   });
 });

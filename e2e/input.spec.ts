@@ -4,17 +4,16 @@ import { injectAxe } from "axe-playwright";
 import { watchClicks } from "./_helpers";
 // Helper to wait for input visibility with scroll support
 async function waitForInputVisible(page: import("@playwright/test").Page) {
-  const input = page.locator("input").first();
-  // Wait for element to be attached to DOM first
-  await input.waitFor({ state: "attached", timeout: 10000 });
-  // Then scroll into view and wait for visibility
-  await input.scrollIntoViewIfNeeded();
+  // `.first()` used to pick a hidden control in the site chrome, which can
+  // never be scrolled to — every test in this file then died in beforeEach.
+  const input = page.locator("input:visible").first();
   await input.waitFor({ state: "visible", timeout: 10000 });
+  await input.scrollIntoViewIfNeeded();
 }
 
 test.describe("Input Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
     await waitForInputVisible(page);
   });
@@ -48,11 +47,12 @@ test.describe("Input Component - Cross-Browser Tests", () => {
     test("should display placeholder text", async ({ page }) => {
       const inputWithPlaceholder = page.locator("input[placeholder]").first();
 
-      if ((await inputWithPlaceholder.count()) > 0) {
-        const placeholder =
-          await inputWithPlaceholder.getAttribute("placeholder");
-        expect(placeholder).toBeTruthy();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(inputWithPlaceholder.first()).toBeVisible();
+      const placeholder =
+        await inputWithPlaceholder.getAttribute("placeholder");
+      expect(placeholder).toBeTruthy();
     });
   });
 
@@ -60,9 +60,10 @@ test.describe("Input Component - Cross-Browser Tests", () => {
     test("should display labels for inputs", async ({ page }) => {
       const labels = page.locator("label");
 
-      if ((await labels.count()) > 0) {
-        await expect(labels.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(labels.first()).toBeVisible();
+      await expect(labels.first()).toBeVisible();
     });
 
     test("should show required indicator on required fields", async ({
@@ -70,23 +71,25 @@ test.describe("Input Component - Cross-Browser Tests", () => {
     }) => {
       const requiredIndicator = page.locator('span:text("*")');
 
-      if ((await requiredIndicator.count()) > 0) {
-        await expect(requiredIndicator.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(requiredIndicator.first()).toBeVisible();
+      await expect(requiredIndicator.first()).toBeVisible();
     });
 
     test("clicking label should focus associated input", async ({ page }) => {
       const label = page.locator("label").first();
 
-      if ((await label.count()) > 0) {
-        await label.click();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(label.first()).toBeVisible();
+      await label.click();
 
-        // The associated input should be focused
-        const forAttr = await label.getAttribute("for");
-        if (forAttr) {
-          const input = page.locator(`#${forAttr}`);
-          await expect(input).toBeFocused();
-        }
+      // The associated input should be focused
+      const forAttr = await label.getAttribute("for");
+      if (forAttr) {
+        const input = page.locator(`#${forAttr}`);
+        await expect(input).toBeFocused();
       }
     });
   });
@@ -103,13 +106,14 @@ test.describe("Input Component - Cross-Browser Tests", () => {
       // Find elements with role="button" that are icon wrappers
       const iconButtons = page.locator('[role="button"]');
 
-      if ((await iconButtons.count()) > 0) {
-        const button = iconButtons.first();
-        await expect(button).toBeVisible();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(iconButtons.first()).toBeVisible();
+      const button = iconButtons.first();
+      await expect(button).toBeVisible();
 
-        // Should be clickable without errors
-        await button.click();
-      }
+      // Should be clickable without errors
+      await button.click();
     });
   });
 
@@ -117,17 +121,19 @@ test.describe("Input Component - Cross-Browser Tests", () => {
     test("should display error message", async ({ page }) => {
       const errorMessages = page.locator('[role="alert"]');
 
-      if ((await errorMessages.count()) > 0) {
-        await expect(errorMessages.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(errorMessages.first()).toBeVisible();
+      await expect(errorMessages.first()).toBeVisible();
     });
 
     test("should mark invalid inputs with aria-invalid", async ({ page }) => {
       const invalidInputs = page.locator('input[aria-invalid="true"]');
 
-      if ((await invalidInputs.count()) > 0) {
-        await expect(invalidInputs.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(invalidInputs.first()).toBeVisible();
+      await expect(invalidInputs.first()).toBeVisible();
     });
   });
 
@@ -137,34 +143,28 @@ test.describe("Input Component - Cross-Browser Tests", () => {
       // Find the disabled input with "Disabled input" placeholder
       const disabledInput = page.locator('input[placeholder="Disabled input"]');
 
-      if ((await disabledInput.count()) > 0) {
-        await disabledInput.scrollIntoViewIfNeeded();
-        await expect(disabledInput).toBeVisible();
-        await expect(disabledInput).toBeDisabled();
-      } else {
-        // Fallback: find any disabled input and scroll to it
-        const anyDisabledInput = page.locator("input:disabled").first();
-        if ((await anyDisabledInput.count()) > 0) {
-          await anyDisabledInput.scrollIntoViewIfNeeded();
-          await expect(anyDisabledInput).toBeDisabled();
-        }
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledInput.first()).toBeVisible();
+      await disabledInput.first().scrollIntoViewIfNeeded();
+      await expect(disabledInput.first()).toBeDisabled();
     });
 
     test("should not allow typing in disabled input", async ({ page }) => {
       const disabledInput = page.locator("input:disabled").first();
 
-      if ((await disabledInput.count()) > 0) {
-        const valueBefore = await disabledInput.inputValue();
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(disabledInput.first()).toBeVisible();
+      const valueBefore = await disabledInput.inputValue();
 
-        // Attempt to type (should not work on disabled input)
-        await disabledInput.type("test").catch(() => {
-          // Expected to fail or do nothing
-        });
+      // Attempt to type (should not work on disabled input)
+      await disabledInput.type("test").catch(() => {
+        // Expected to fail or do nothing
+      });
 
-        const valueAfter = await disabledInput.inputValue();
-        expect(valueAfter).toBe(valueBefore);
-      }
+      const valueAfter = await disabledInput.inputValue();
+      expect(valueAfter).toBe(valueBefore);
     });
   });
 
@@ -173,16 +173,17 @@ test.describe("Input Component - Cross-Browser Tests", () => {
       // Look for loader elements (CircularLoader or custom)
       const loaders = page.locator('[data-loading="true"]');
 
-      if ((await loaders.count()) > 0) {
-        await expect(loaders.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(loaders.first()).toBeVisible();
+      await expect(loaders.first()).toBeVisible();
     });
   });
 });
 
 test.describe("Input Keyboard Navigation", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
     await waitForInputVisible(page);
   });
@@ -214,9 +215,11 @@ test.describe("Input Keyboard Navigation", () => {
   });
 
   test("should activate icon buttons with Enter key", async ({ page }) => {
-    // Was guarded by `if (count > 0)` and asserted nothing: it passed both when
-    // the icon button was missing and when Enter did nothing.
-    const button = page.locator('[role="button"]').first();
+    // Two things were wrong here. The guard made it pass when nothing was
+    // found, and `[role="button"]` finds nothing on this page at all: a
+    // clickable field icon renders as a real <button type="button"> with an
+    // aria-label (FieldWrapper.tsx:176-183), never a role="button" span.
+    const button = page.getByRole("button", { name: "Submit search" });
     await expect(button).toBeVisible();
 
     const clicks = await watchClicks(page);
@@ -226,9 +229,11 @@ test.describe("Input Keyboard Navigation", () => {
   });
 
   test("should activate icon buttons with Space key", async ({ page }) => {
-    // Was guarded by `if (count > 0)` and asserted nothing: it passed both
-    // when the icon button was missing and when Space did nothing.
-    const button = page.locator('[role="button"]').first();
+    // Two things were wrong here. The guard made it pass when nothing was
+    // found, and `[role="button"]` finds nothing on this page at all: a
+    // clickable field icon renders as a real <button type="button"> with an
+    // aria-label (FieldWrapper.tsx:176-183), never a role="button" span.
+    const button = page.getByRole("button", { name: "Submit search" });
     await expect(button).toBeVisible();
 
     const clicks = await watchClicks(page);
@@ -249,7 +254,7 @@ test.describe("Input Keyboard Navigation", () => {
 
 test.describe("Input Accessibility Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
     await waitForInputVisible(page);
     await injectAxe(page);
@@ -297,9 +302,10 @@ test.describe("Input Accessibility Tests", () => {
         const label = page.locator(`label[for="${id}"]`);
 
         // Verify label is visible when present
-        if ((await label.count()) > 0) {
-          await expect(label).toBeVisible();
-        }
+        // The guard used to make this pass when the element was absent, which is
+        // the failure the test exists to catch. Assert presence, then behaviour.
+        await expect(label.first()).toBeVisible();
+        await expect(label).toBeVisible();
       }
     }
   });
@@ -309,10 +315,11 @@ test.describe("Input Accessibility Tests", () => {
       '[data-error="true"] input, input[aria-invalid="true"]',
     );
 
-    if ((await errorInputs.count()) > 0) {
-      const input = errorInputs.first();
-      await expect(input).toHaveAttribute("aria-invalid", "true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(errorInputs.first()).toBeVisible();
+    const input = errorInputs.first();
+    await expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
   test("should have aria-describedby linking to error message", async ({
@@ -320,27 +327,29 @@ test.describe("Input Accessibility Tests", () => {
   }) => {
     const inputsWithError = page.locator("input[aria-describedby]");
 
-    if ((await inputsWithError.count()) > 0) {
-      const input = inputsWithError.first();
-      const describedBy = await input.getAttribute("aria-describedby");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(inputsWithError.first()).toBeVisible();
+    const input = inputsWithError.first();
+    const describedBy = await input.getAttribute("aria-describedby");
 
-      if (describedBy) {
-        // Use attribute selector instead of ID selector to handle special characters
-        // (React's useId() generates IDs with colons that need escaping in CSS)
-        const errorElement = page.locator(`[id="${describedBy}"]`);
-        await expect(errorElement).toBeVisible();
-      }
+    if (describedBy) {
+      // Use attribute selector instead of ID selector to handle special characters
+      // (React's useId() generates IDs with colons that need escaping in CSS)
+      const errorElement = page.locator(`[id="${describedBy}"]`);
+      await expect(errorElement).toBeVisible();
     }
   });
 
   test("should mark required inputs with aria-required", async ({ page }) => {
     const requiredInputs = page.locator("input[required]");
 
-    if ((await requiredInputs.count()) > 0) {
-      const input = requiredInputs.first();
-      const ariaRequired = await input.getAttribute("aria-required");
-      expect(ariaRequired).toBe("true");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(requiredInputs.first()).toBeVisible();
+    const input = requiredInputs.first();
+    const ariaRequired = await input.getAttribute("aria-required");
+    expect(ariaRequired).toBe("true");
   });
 
   test("icon buttons should have button role when clickable", async ({
@@ -349,16 +358,17 @@ test.describe("Input Accessibility Tests", () => {
     // Find elements that appear to be icon buttons (have role="button")
     const iconButtons = page.locator('[role="button"]');
 
-    if ((await iconButtons.count()) > 0) {
-      const button = iconButtons.first();
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(iconButtons.first()).toBeVisible();
+    const button = iconButtons.first();
 
-      // Verify role is correctly set
-      await expect(button).toHaveAttribute("role", "button");
+    // Verify role is correctly set
+    await expect(button).toHaveAttribute("role", "button");
 
-      // Should be focusable (tabindex=0)
-      const tabIndex = await button.getAttribute("tabindex");
-      expect(tabIndex).toBe("0");
-    }
+    // Should be focusable (tabindex=0)
+    const tabIndex = await button.getAttribute("tabindex");
+    expect(tabIndex).toBe("0");
   });
 });
 
@@ -374,7 +384,7 @@ test.describe("Input Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
     // Firefox needs extra time for rendering after viewport changes
@@ -405,7 +415,7 @@ test.describe("Input Responsive Tests", () => {
       await page.setViewportSize({ width: 375, height: 667 });
     }
 
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
     const input = page.locator("input").first();
@@ -424,7 +434,7 @@ test.describe("Input Responsive Tests", () => {
   });
 
   test("fullWidth inputs should span container", async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
     await waitForInputVisible(page);
 
@@ -464,7 +474,7 @@ test.describe("Input Performance Tests", () => {
   }) => {
     const startTime = Date.now();
 
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("networkidle");
 
     const input = page.locator("input").first();
@@ -483,7 +493,7 @@ test.describe("Input Performance Tests", () => {
     page,
     browserName,
   }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
     const input = page.locator("input").first();
@@ -512,7 +522,7 @@ test.describe("Input Performance Tests", () => {
   });
 
   test("should handle multiple inputs on page", async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     // Use domcontentloaded instead of networkidle to avoid Firefox timeouts
     await page.waitForLoadState("domcontentloaded");
     await waitForInputVisible(page);
@@ -539,22 +549,23 @@ test.describe("Input Performance Tests", () => {
 
 test.describe("Input Form Integration", () => {
   test("should work within form context", async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
     // Find inputs with name attribute (form-ready)
     const namedInputs = page.locator("input[name]");
 
-    if ((await namedInputs.count()) > 0) {
-      const input = namedInputs.first();
-      const name = await input.getAttribute("name");
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(namedInputs.first()).toBeVisible();
+    const input = namedInputs.first();
+    const name = await input.getAttribute("name");
 
-      expect(name).toBeTruthy();
-    }
+    expect(name).toBeTruthy();
   });
 
   test("should support different input types", async ({ page }) => {
-    await page.goto("/demo/input");
+    await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
     // Check for various input types
@@ -566,13 +577,15 @@ test.describe("Input Form Integration", () => {
     expect(await textInputs.count()).toBeGreaterThanOrEqual(0);
 
     // If email inputs exist, verify type
-    if ((await emailInputs.count()) > 0) {
-      await expect(emailInputs.first()).toHaveAttribute("type", "email");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(emailInputs.first()).toBeVisible();
+    await expect(emailInputs.first()).toHaveAttribute("type", "email");
 
     // If password inputs exist, verify type
-    if ((await passwordInputs.count()) > 0) {
-      await expect(passwordInputs.first()).toHaveAttribute("type", "password");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(passwordInputs.first()).toBeVisible();
+    await expect(passwordInputs.first()).toHaveAttribute("type", "password");
   });
 });

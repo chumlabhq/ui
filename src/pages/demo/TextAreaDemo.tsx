@@ -183,6 +183,8 @@ const TextAreaDemo = () => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [message, setMessage] = useState("");
+  // An alert() here blocks the page and every automated check with it.
+  const [lastAction, setLastAction] = useState("");
   const [bio, setBio] = useState("");
   const [feedback, setFeedback] = useState("");
   const [notes, setNotes] = useState("");
@@ -399,6 +401,9 @@ const TextAreaDemo = () => {
               </div>
               <div className="space-y-1.5">
                 <span className={c.sectionLabel}>Clickable end icon</span>
+                <span className={c.sectionLabel} data-demo-action>
+                  {lastAction}
+                </span>
                 <TextArea
                   aria-label="With send button"
                   placeholder="Type and send..."
@@ -406,7 +411,7 @@ const TextAreaDemo = () => {
                   onChange={(e) => setMessage(e.target.value)}
                   endIcon={<SendIcon className={c.iconHover} />}
                   onEndIconClick={() => {
-                    alert(`Sent: ${message}`);
+                    setLastAction(`Sent: ${message}`);
                     setMessage("");
                   }}
                   endIconLabel="Send message"
@@ -419,7 +424,7 @@ const TextAreaDemo = () => {
                   aria-label="With attach button"
                   placeholder="Click the icon to attach..."
                   startIcon={<FileIcon className={c.iconHover} />}
-                  onStartIconClick={() => alert("Attach file clicked")}
+                  onStartIconClick={() => setLastAction("Attach file clicked")}
                   startIconLabel="Attach file"
                   classes={c.textarea}
                 />

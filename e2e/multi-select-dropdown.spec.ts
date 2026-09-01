@@ -57,7 +57,7 @@ async function closeDropdownViaClickOutside(
 
 test.describe("MultiSelectDropdown Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/multi-select-dropdown");
+    await page.goto("/multi-select-dropdown");
     await page.waitForLoadState("domcontentloaded");
     const trigger = page.getByRole("combobox").first();
     await trigger.waitFor({ state: "visible" });

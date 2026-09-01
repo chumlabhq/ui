@@ -9,7 +9,7 @@ async function waitForSwitchVisible(page: import("@playwright/test").Page) {
 
 test.describe("Switch Component", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/switch");
+    await page.goto("/switch");
     await page.waitForLoadState("domcontentloaded");
     await waitForSwitchVisible(page);
   });
@@ -219,7 +219,7 @@ test.describe("Switch Component", () => {
 
 test.describe("Switch - Cross Browser", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/switch");
+    await page.goto("/switch");
   });
 
   test("toggle works consistently", async ({ page }) => {
@@ -269,7 +269,7 @@ test.describe("Switch - Mobile Touch", () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/switch");
+    await page.goto("/switch");
   });
 
   test("touch tap toggles switch", async ({ page, browserName }) => {
@@ -309,7 +309,7 @@ test.describe("Switch - Mobile Viewport", () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/switch");
+    await page.goto("/switch");
   });
 
   test("switch is accessible at mobile viewport", async ({ page }) => {
@@ -327,7 +327,7 @@ test.describe("Switch - Mobile Viewport", () => {
 
 test.describe("Switch - Full User Flow", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/demo/switch");
+    await page.goto("/switch");
   });
 
   test("user can toggle multiple switches in sequence", async ({ page }) => {
