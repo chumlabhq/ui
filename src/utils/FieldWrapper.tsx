@@ -165,7 +165,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
           {prefix != null && (
             <span
               data-slot="prefix"
-              className={cn("inline-flex shrink-0 select-none", prefixClassName)}
+              className={cn("inline-flex shrink-0", prefixClassName)}
             >
               {prefix}
             </span>
@@ -228,7 +228,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
           {suffix != null && (
             <span
               data-slot="suffix"
-              className={cn("inline-flex shrink-0 select-none", suffixClassName)}
+              className={cn("inline-flex shrink-0", suffixClassName)}
             >
               {suffix}
             </span>
