@@ -546,8 +546,14 @@ describe("DatePicker", () => {
       render(<DatePicker unstyled />);
       const trigger = screen.getByRole("combobox");
 
-      // In unstyled mode the trigger should not carry the default styled classes
-      expect(trigger.className).not.toContain("border-gray-300");
+      // Was `not.toContain("border-gray-300")` — a class DatePicker has never
+      // emitted, so the assertion could not fail. The trigger default is
+      // "flex items-center gap-2 w-full px-3 py-2.5 border border-cl-border-input …";
+      // under ADR 001 the layout half survives `unstyled` and the paint does not.
+      expect(trigger).toHaveClass("flex", "items-center", "w-full");
+      expect(trigger).not.toHaveClass("border-cl-border-input");
+      expect(trigger).not.toHaveClass("rounded-cl-md");
+      expect(trigger).not.toHaveClass("px-3");
 
       // It should still be functional
       await openCalendar(user);

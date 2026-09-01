@@ -72,9 +72,12 @@ describe("marker contract", () => {
     });
   });
 
-  describe.each(COMPONENTS)("$name", ({ Component, props }) => {
+  describe.each(COMPONENTS)("$name", ({ Component, props, wrap }) => {
+    const mount = (node: React.ReactNode) => (wrap ? wrap(node) : node);
     it("renders at least one marked element", () => {
-      const { container } = render(<Component {...props} />);
+      const { container } = render(
+        mount(<Component {...props} />) as React.ReactElement,
+      );
       const tokens = classTokens(container);
       // A component that renders no class at all needs no marker; one that
       // renders classes must scope them, or none of dist/styles.css applies.
@@ -83,7 +86,9 @@ describe("marker contract", () => {
     });
 
     it("never carries the marker twice on one element", () => {
-      const { container } = render(<Component {...props} />);
+      const { container } = render(
+        mount(<Component {...props} />) as React.ReactElement,
+      );
       for (const el of [container, ...Array.from(container.querySelectorAll("*"))]) {
         const cls = el.getAttribute?.("class");
         if (!cls) continue;

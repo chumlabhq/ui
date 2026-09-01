@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 import { installMatchMedia, resetMediaQueries } from "./matchMedia";
+import { resetReducedMotionCache } from "../utils/useReducedMotion";
 
 // The SSR contract suite runs with `environment: "node"`, where there is no
 // window to patch. Everything below this guard is jsdom setup; bail rather than
@@ -13,6 +14,7 @@ afterEach(() => {
   if (hasDom) {
     cleanup();
     resetMediaQueries();
+    resetReducedMotionCache();
   }
 });
 

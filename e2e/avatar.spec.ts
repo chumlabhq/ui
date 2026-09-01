@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
 
+import { watchClicks } from "./_helpers";
 test.describe("Avatar Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/demo/avatar");
@@ -34,22 +35,24 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
       // Find avatars with images
       const avatarImages = page.locator('[data-shape] img');
       
-      if (await avatarImages.count() > 0) {
-        const firstImage = avatarImages.first();
-        await expect(firstImage).toBeVisible();
-        
-        const src = await firstImage.getAttribute("src");
-        expect(src).toBeTruthy();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(avatarImages.first()).toBeVisible();
+      const firstImage = avatarImages.first();
+      await expect(firstImage).toBeVisible();
+      
+      const src = await firstImage.getAttribute("src");
+      expect(src).toBeTruthy();
     });
 
     test("should show status indicator when configured", async ({ page }) => {
       // Look for status indicators (small colored dots)
       const statusIndicators = page.locator('[aria-label="online"], [aria-label="offline"], [aria-label="away"], [aria-label="busy"]');
       
-      if (await statusIndicators.count() > 0) {
-        await expect(statusIndicators.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(statusIndicators.first()).toBeVisible();
+      await expect(statusIndicators.first()).toBeVisible();
     });
   });
 
@@ -57,45 +60,48 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
     test("should render circle shape correctly", async ({ page }) => {
       const circleAvatar = page.locator('[data-shape="circle"]').first();
       
-      if (await circleAvatar.count() > 0) {
-        await expect(circleAvatar).toBeVisible();
-        
-        const borderRadius = await circleAvatar.evaluate((el) => {
-          return window.getComputedStyle(el).borderRadius;
-        });
-        
-        // Circle should have large border-radius (9999px or 50%)
-        expect(borderRadius === "9999px" || borderRadius === "50%").toBe(true);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(circleAvatar.first()).toBeVisible();
+      await expect(circleAvatar).toBeVisible();
+      
+      const borderRadius = await circleAvatar.evaluate((el) => {
+        return window.getComputedStyle(el).borderRadius;
+      });
+      
+      // Circle should have large border-radius (9999px or 50%)
+      expect(borderRadius === "9999px" || borderRadius === "50%").toBe(true);
     });
 
     test("should render square shape correctly", async ({ page }) => {
       const squareAvatar = page.locator('[data-shape="square"]').first();
       
-      if (await squareAvatar.count() > 0) {
-        await expect(squareAvatar).toBeVisible();
-        
-        const borderRadius = await squareAvatar.evaluate((el) => {
-          return window.getComputedStyle(el).borderRadius;
-        });
-        
-        expect(borderRadius === "0px" || borderRadius === "0").toBe(true);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(squareAvatar.first()).toBeVisible();
+      await expect(squareAvatar).toBeVisible();
+      
+      const borderRadius = await squareAvatar.evaluate((el) => {
+        return window.getComputedStyle(el).borderRadius;
+      });
+      
+      expect(borderRadius === "0px" || borderRadius === "0").toBe(true);
     });
 
     test("should render rounded shape correctly", async ({ page }) => {
       const roundedAvatar = page.locator('[data-shape="rounded"]').first();
       
-      if (await roundedAvatar.count() > 0) {
-        await expect(roundedAvatar).toBeVisible();
-        
-        const borderRadius = await roundedAvatar.evaluate((el) => {
-          return window.getComputedStyle(el).borderRadius;
-        });
-        
-        // Rounded should have moderate border-radius
-        expect(borderRadius !== "0px" && borderRadius !== "9999px").toBe(true);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(roundedAvatar.first()).toBeVisible();
+      await expect(roundedAvatar).toBeVisible();
+      
+      const borderRadius = await roundedAvatar.evaluate((el) => {
+        return window.getComputedStyle(el).borderRadius;
+      });
+      
+      // Rounded should have moderate border-radius
+      expect(borderRadius !== "0px" && borderRadius !== "9999px").toBe(true);
     });
   });
 
@@ -103,40 +109,45 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
     test("should display avatar group with overlapping avatars", async ({ page }) => {
       const avatarGroup = page.locator('[role="group"]').first();
       
-      if (await avatarGroup.count() > 0) {
-        await expect(avatarGroup).toBeVisible();
-        
-        // Group should contain multiple avatars
-        const avatarsInGroup = avatarGroup.locator('[data-shape]');
-        const count = await avatarsInGroup.count();
-        expect(count).toBeGreaterThan(0);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(avatarGroup.first()).toBeVisible();
+      await expect(avatarGroup).toBeVisible();
+      
+      // Group should contain multiple avatars
+      const avatarsInGroup = avatarGroup.locator('[data-shape]');
+      const count = await avatarsInGroup.count();
+      expect(count).toBeGreaterThan(0);
     });
 
     test("should show surplus count when max exceeded", async ({ page }) => {
       // Look for surplus count element ("+N")
       const surplusCount = page.locator('text=/\\+\\d+/').first();
       
-      if (await surplusCount.count() > 0) {
-        await expect(surplusCount).toBeVisible();
-        
-        // Verify it contains a number
-        const text = await surplusCount.textContent();
-        expect(text).toMatch(/\+\d+/);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(surplusCount).toBeVisible();
+      
+      // Verify it contains a number
+      const text = await surplusCount.textContent();
+      expect(text).toMatch(/\+\d+/);
     });
 
     test("should handle avatar click in group", async ({ page }) => {
+      // Two nested guards and no assertion: it passed when the group was
+      // missing, when no avatar in it was clickable, and when the click did
+      // nothing.
       const avatarGroup = page.locator('[role="group"]').first();
-      
-      if (await avatarGroup.count() > 0) {
-        const clickableAvatar = avatarGroup.locator('[data-shape][style*="cursor: pointer"]').first();
-        
-        if (await clickableAvatar.count() > 0) {
-          // Should be able to click without errors
-          await clickableAvatar.click();
-        }
-      }
+      await expect(avatarGroup).toBeVisible();
+
+      const clickableAvatar = avatarGroup
+        .locator('[data-shape][style*="cursor: pointer"]')
+        .first();
+      await expect(clickableAvatar).toBeVisible();
+
+      const clicks = await watchClicks(page);
+      await clickableAvatar.click();
+      await expect.poll(clicks).toBeGreaterThan(0);
     });
   });
 
@@ -145,31 +156,34 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
       // Look for badge elements with role="status"
       const badges = page.locator('[role="status"]:not([aria-label*="Loading"])');
       
-      if (await badges.count() > 0) {
-        const badge = badges.first();
-        await expect(badge).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(badges.first()).toBeVisible();
+      const badge = badges.first();
+      await expect(badge).toBeVisible();
     });
 
     test("should display dot badge", async ({ page }) => {
       const dotBadges = page.locator('[aria-label="New notification"]');
       
-      if (await dotBadges.count() > 0) {
-        await expect(dotBadges.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(dotBadges.first()).toBeVisible();
+      await expect(dotBadges.first()).toBeVisible();
     });
 
     test("should show correct badge count", async ({ page }) => {
       // Find badges with count
       const countBadges = page.locator('[role="status"][aria-label*="notification"]');
       
-      if (await countBadges.count() > 0) {
-        const badge = countBadges.first();
-        const text = await badge.textContent();
-        
-        // Should contain a number
-        expect(text).toMatch(/\d+/);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(countBadges.first()).toBeVisible();
+      const badge = countBadges.first();
+      const text = await badge.textContent();
+      
+      // Should contain a number
+      expect(text).toMatch(/\d+/);
     });
   });
 
@@ -177,23 +191,25 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
     test("should display loading shimmer", async ({ page }) => {
       const shimmers = page.locator('[aria-label="Loading avatar"], [aria-label="Loading avatar group"]');
       
-      if (await shimmers.count() > 0) {
-        await expect(shimmers.first()).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(shimmers.first()).toBeVisible();
+      await expect(shimmers.first()).toBeVisible();
     });
 
     test("should animate shimmer with pulse effect", async ({ page }) => {
       const shimmer = page.locator('[aria-label="Loading avatar"]').first();
       
-      if (await shimmer.count() > 0) {
-        const hasAnimation = await shimmer.evaluate((el) => {
-          const classes = el.className;
-          return classes.includes("animate-pulse") || 
-            window.getComputedStyle(el).animation !== "none";
-        });
-        
-        expect(hasAnimation).toBe(true);
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(shimmer.first()).toBeVisible();
+      const hasAnimation = await shimmer.evaluate((el) => {
+        const classes = el.className;
+        return classes.includes("animate-pulse") || 
+          window.getComputedStyle(el).animation !== "none";
+      });
+      
+      expect(hasAnimation).toBe(true);
     });
   });
 
@@ -210,9 +226,10 @@ test.describe("Avatar Component - Cross-Browser Tests", () => {
       // Check if tooltip appeared (tooltip content is usually in a portal)
       const tooltip = page.locator('[role="tooltip"]');
       
-      if (await tooltip.count() > 0) {
-        await expect(tooltip).toBeVisible();
-      }
+      // The guard used to make this pass when the element was absent, which is
+      // the failure the test exists to catch. Assert presence, then behaviour.
+      await expect(tooltip.first()).toBeVisible();
+      await expect(tooltip).toBeVisible();
     });
   });
 });
@@ -261,25 +278,28 @@ test.describe("Avatar Accessibility Tests", () => {
   test("should have proper ARIA attributes on avatars", async ({ page }) => {
     const avatar = page.locator('[data-shape][role="img"]').first();
     
-    if (await avatar.count() > 0) {
-      await expect(avatar).toHaveAttribute("aria-label");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(avatar.first()).toBeVisible();
+    await expect(avatar).toHaveAttribute("aria-label");
   });
 
   test("should have proper role on avatar groups", async ({ page }) => {
     const group = page.locator('[role="group"]').first();
     
-    if (await group.count() > 0) {
-      await expect(group).toHaveAttribute("aria-label");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(group.first()).toBeVisible();
+    await expect(group).toHaveAttribute("aria-label");
   });
 
   test("should have proper role on badges", async ({ page }) => {
     const badge = page.locator('[role="status"]').first();
     
-    if (await badge.count() > 0) {
-      await expect(badge).toHaveAttribute("aria-label");
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(badge.first()).toBeVisible();
+    await expect(badge).toHaveAttribute("aria-label");
   });
 });
 
@@ -376,16 +396,17 @@ test.describe("Avatar Image Fallback", () => {
     // Find avatars with images
     const avatarImages = page.locator('[data-shape] img');
     
-    if (await avatarImages.count() > 0) {
-      const firstImage = avatarImages.first();
-      
-      // Wait for image to have a src
-      await expect(firstImage).toHaveAttribute("src");
-      
-      // Check loading attribute
-      const loading = await firstImage.getAttribute("loading");
-      expect(["lazy", "eager", null]).toContain(loading);
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(avatarImages.first()).toBeVisible();
+    const firstImage = avatarImages.first();
+    
+    // Wait for image to have a src
+    await expect(firstImage).toHaveAttribute("src");
+    
+    // Check loading attribute
+    const loading = await firstImage.getAttribute("loading");
+    expect(["lazy", "eager", null]).toContain(loading);
   });
 
   test("should show initials when data-has-image is not present", async ({ page }) => {
@@ -395,12 +416,13 @@ test.describe("Avatar Image Fallback", () => {
     // Find avatars without images (no data-has-image attribute)
     const textAvatars = page.locator('[data-shape]:not([data-has-image])');
     
-    if (await textAvatars.count() > 0) {
-      const avatar = textAvatars.first();
-      const text = await avatar.textContent();
-      
-      // Should have some text content (initials)
-      expect(text?.trim().length).toBeGreaterThan(0);
-    }
+    // The guard used to make this pass when the element was absent, which is
+    // the failure the test exists to catch. Assert presence, then behaviour.
+    await expect(textAvatars.first()).toBeVisible();
+    const avatar = textAvatars.first();
+    const text = await avatar.textContent();
+    
+    // Should have some text content (initials)
+    expect(text?.trim().length).toBeGreaterThan(0);
   });
 });

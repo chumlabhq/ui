@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
+import { watchClicks } from "./_helpers";
 
 // Helper to wait for button visibility with scroll support
 async function waitForButtonVisible(page: import("@playwright/test").Page) {
@@ -46,7 +47,7 @@ test.describe("Button Component - Cross-Browser Tests", () => {
     });
   });
 
-  test.describe("Keyboard Navigation", () => {
+test.describe("Keyboard Navigation", () => {
     test("should be focusable via Tab key", async ({ page }) => {
       await page.keyboard.press("Tab");
 
@@ -55,41 +56,31 @@ test.describe("Button Component - Cross-Browser Tests", () => {
       await expect(focusedElement).toBeVisible();
     });
 
-    test("should activate button on Enter key", async ({ page }) => {
-      const button = page.locator("button").first();
-      await button.focus();
+    for (const key of ["Enter", "Space"] as const) {
+      test(`should activate button on ${key} key`, async ({ page }) => {
+        const button = page.locator("button").first();
+        await expect(button).toBeVisible();
+        const clicks = await watchClicks(page);
+        await button.focus();
+        await page.keyboard.press(key);
+        await expect.poll(clicks).toBeGreaterThan(0);
+      });
 
-      // Press Enter - should not throw
-      await page.keyboard.press("Enter");
-    });
-
-    test("should activate button on Space key", async ({ page }) => {
-      const button = page.locator("button").first();
-      await button.focus();
-
-      // Press Space - should not throw
-      await page.keyboard.press("Space");
-    });
-
-    test("should activate span button on Enter key", async ({ page }) => {
-      const spanButton = page.locator('span[role="button"]').first();
-
-      if ((await spanButton.count()) > 0) {
+      test(`should activate span button on ${key} key`, async ({ page }) => {
+        const spanButton = page.locator('span[role="button"]').first();
+        // Was guarded by `if (count > 0)`, which passed when the demo rendered
+        // no span button — the case the test exists to cover. The demo's span
+        // buttons sit below the fold behind a scroll-reveal, so attach-then-
+        // scroll mirrors what waitForButtonVisible does for the <button> set.
+        await spanButton.waitFor({ state: "attached", timeout: 10000 });
+        await spanButton.scrollIntoViewIfNeeded();
+        await expect(spanButton).toBeVisible();
+        const clicks = await watchClicks(page);
         await spanButton.focus();
-        await page.keyboard.press("Enter");
-        // Should not throw
-      }
-    });
-
-    test("should activate span button on Space key", async ({ page }) => {
-      const spanButton = page.locator('span[role="button"]').first();
-
-      if ((await spanButton.count()) > 0) {
-        await spanButton.focus();
-        await page.keyboard.press("Space");
-        // Should not throw
-      }
-    });
+        await page.keyboard.press(key);
+        await expect.poll(clicks).toBeGreaterThan(0);
+      });
+    }
   });
 
   test.describe("Loading State", () => {

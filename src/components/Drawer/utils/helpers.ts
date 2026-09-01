@@ -1,25 +1,16 @@
-import { type CSSProperties, useSyncExternalStore } from "react";
+import { type CSSProperties } from "react";
 import type { DrawerDirection } from "./types";
 
 export { getFocusableElements } from "../../../utils/focusUtils";
+import { useReducedMotion } from "../../../utils/useReducedMotion";
 
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-function subscribeReducedMotion(callback: () => void): () => void {
-  if (typeof window === "undefined") return () => {};
-  const mql = window.matchMedia(REDUCED_MOTION_QUERY);
-  mql.addEventListener("change", callback);
-  return () => mql.removeEventListener("change", callback);
-}
-
-function getReducedMotionSnapshot(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
-}
-
-export function usePrefersReducedMotion(): boolean {
-  return useSyncExternalStore(subscribeReducedMotion, getReducedMotionSnapshot, () => false);
-}
+/**
+ * Kept as a named export because Drawer's call sites use it, but the
+ * implementation now lives in src/utils/useReducedMotion — this file held the
+ * only correct copy while two others drifted (AUDIT-GAP §2.5), and one is the
+ * right number.
+ */
+export const usePrefersReducedMotion = useReducedMotion;
 
 export const getDirectionStyles = (
   direction: DrawerDirection,

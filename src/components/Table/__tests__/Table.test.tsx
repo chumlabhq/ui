@@ -1189,14 +1189,19 @@ describe("Table", () => {
       });
       await user.click(filterButtons[0]);
 
-      // Click on a filter option inside the filter dropdown
       const filterContent = document.querySelector("[data-table-filter-content]");
-      const optionButtons = filterContent?.querySelectorAll("button");
-      // The first button might be "Clear", the subsequent ones are options
-      if (optionButtons && optionButtons.length > 0) {
-        const lastOption = optionButtons[optionButtons.length - 1];
-        await user.click(lastOption);
-      }
+      expect(filterContent, "the filter dropdown did not open").not.toBeNull();
+
+      const option = within(filterContent as HTMLElement).getByRole("button", {
+        name: "Bob",
+      });
+      await user.click(option);
+
+      // The test is named for filtering; asserting it is the point. Scoped to
+      // the grid because the option button also reads "Bob".
+      const grid = screen.getByRole("grid");
+      expect(within(grid).getByText("Bob")).toBeInTheDocument();
+      expect(within(grid).queryByText("Alice")).not.toBeInTheDocument();
     });
   });
 
@@ -1251,30 +1256,22 @@ describe("Table", () => {
 
   describe("Mobile card rendering", () => {
     it("renders mobile cards when renderMobileCard is provided and mobileBreakpoint met", () => {
-      // Mock matchMedia to simulate mobile viewport
-      const originalMatchMedia = window.matchMedia;
-      window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-        matches: true,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      }));
-
+      // This used to stub matchMedia to `matches: true` and assert nothing.
+      // The stub was inert: Table switches on window.innerWidth against
+      // responsiveBreakpoint, never on a media query, so the mobile branch was
+      // not reached and there was nothing to assert. jsdom reports 1024, so a
+      // breakpoint above it is what puts the table in card mode.
       render(
         <Table
           columns={columns}
           data={data}
-          responsiveBreakpoint={1024}
+          responsiveBreakpoint={9999}
           renderMobileCard={(row) => <div data-testid="mobile-card">{row.name}</div>}
         />
       );
 
-      // Restore
-      window.matchMedia = originalMatchMedia;
+      expect(screen.getAllByTestId("mobile-card")).toHaveLength(data.length);
+      expect(screen.queryByRole("grid")).not.toBeInTheDocument();
     });
   });
 });
@@ -1879,6 +1876,7 @@ describe("Table – additional coverage", () => {
 
   describe("mobile card onContextMenu", () => {
     it("renders mobile cards with onContextMenu when mobileBreakpoint is exceeded", () => {
+      const onContextMenu = vi.fn();
       // jsdom innerWidth is 0, so mobileBreakpoint of 9999 ensures mobile view
       render(
         <Table
@@ -1886,15 +1884,14 @@ describe("Table – additional coverage", () => {
           data={data}
           responsiveBreakpoint={9999}
           renderMobileCard={(row) => <div data-testid="mobile-card">{(row as Person).name}</div>}
-          onContextMenu={vi.fn()}
+          onContextMenu={onContextMenu}
           ariaLabel="t"
         />,
       );
-      const cards = screen.queryAllByTestId("mobile-card");
-      if (cards.length > 0) {
-        fireEvent.contextMenu(cards[0].parentElement!);
-      }
-      // Test passes if no error thrown
+      const cards = screen.getAllByTestId("mobile-card");
+      expect(cards.length).toBeGreaterThan(0);
+      fireEvent.contextMenu(cards[0].parentElement!);
+      expect(onContextMenu).toHaveBeenCalled();
     });
   });
 

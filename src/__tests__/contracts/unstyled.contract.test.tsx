@@ -62,9 +62,15 @@ describe("unstyled contract", () => {
       for (const f of fixtures) {
         for (const [target, on] of [[styled, false], [unstyled, true]] as const) {
           const { container } = render(
-            <Component {...props} {...f.props} unstyled={on}>
+            (f.wrap ? f.wrap(
+              <Component {...props} {...f.props} unstyled={on}>
               {f.children as React.ReactNode}
-            </Component>,
+            </Component>
+            ) : (
+              <Component {...props} {...f.props} unstyled={on}>
+              {f.children as React.ReactNode}
+            </Component>
+            )) as React.ReactElement,
           );
           if (f.act) await f.act(container);
           for (const t of classTokens(document.body)) target.add(t);
@@ -91,9 +97,15 @@ describe("unstyled contract", () => {
       for (const f of fixtures) {
         for (const [target, on] of [[styled, false], [unstyled, true]] as const) {
           const { container } = render(
-            <Component {...props} {...f.props} unstyled={on}>
+            (f.wrap ? f.wrap(
+              <Component {...props} {...f.props} unstyled={on}>
               {f.children as React.ReactNode}
-            </Component>,
+            </Component>
+            ) : (
+              <Component {...props} {...f.props} unstyled={on}>
+              {f.children as React.ReactNode}
+            </Component>
+            )) as React.ReactElement,
           );
           if (f.act) await f.act(container);
           for (const t of classTokens(document.body)) target.add(t);

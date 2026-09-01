@@ -68,9 +68,15 @@ const tokensUnder = async (
   const seen = new Set<string>();
   for (const f of fixtures) {
     const { container } = render(
-      <Component {...props} {...f.props} {...extraProps}>
+      (f.wrap ? f.wrap(
+        <Component {...props} {...f.props} {...extraProps}>
         {f.children as React.ReactNode}
-      </Component>,
+      </Component>
+      ) : (
+        <Component {...props} {...f.props} {...extraProps}>
+        {f.children as React.ReactNode}
+      </Component>
+      )) as React.ReactElement,
     );
     if (f.act) await f.act(container);
     for (const token of motionOnElements(document.body)) seen.add(token);
@@ -152,7 +158,9 @@ describe("reduced motion contract", () => {
       ).toEqual([]);
     });
 
-    it("composes with unstyled rather than fighting it", async () => {
+    it.runIf(component.supports.unstyled)(
+      "composes with unstyled rather than fighting it",
+      async () => {
       // Motion is decorative under ADR 001, so `unstyled` removes it too. The
       // two must not depend on each other: either alone, or both together, must
       // leave nothing moving.
@@ -181,6 +189,7 @@ describe("reduced motion contract", () => {
         stale,
         `motionLeaks entries that no longer leak — remove them from 002-unrenderable-keys.json: ${stale.join(" ")}`,
       ).toEqual([]);
-    });
+      },
+    );
   });
 });

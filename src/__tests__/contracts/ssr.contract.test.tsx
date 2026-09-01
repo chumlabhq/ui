@@ -26,20 +26,23 @@ describe("SSR contract", () => {
     expect(typeof window).toBe("undefined");
   });
 
-  describe.each(COMPONENTS)("$name", ({ Component, props, supports }) => {
+  describe.each(COMPONENTS)("$name", ({ Component, props, supports, wrap }) => {
+    const mount = (node: React.ReactNode) => (wrap ? wrap(node) : node);
     it("renders to string with default props", () => {
-      expect(() => renderToString(<Component {...props} />)).not.toThrow();
+      expect(() => renderToString(mount(<Component {...props} />) as React.ReactElement)).not.toThrow();
     });
 
     it.runIf(supports.keepMounted)("renders to string with keepMounted", () => {
       expect(() =>
-        renderToString(<Component {...props} keepMounted />),
+        renderToString(mount(<Component {...props} keepMounted />) as React.ReactElement),
       ).not.toThrow();
     });
 
     it.runIf(supports.open)("renders to string while open", () => {
       expect(() =>
-        renderToString(<Component {...props} open onOpenChange={() => {}} />),
+        renderToString(
+          mount(<Component {...props} open onOpenChange={() => {}} />) as React.ReactElement,
+        ),
       ).not.toThrow();
     });
   });

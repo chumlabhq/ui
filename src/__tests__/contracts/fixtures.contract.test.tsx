@@ -41,10 +41,13 @@ const tokensFrom = async (
   fixture: ReturnType<typeof fixturesFor>[number],
   overrides: Record<string, string>,
 ) => {
-  const { container } = render(
+  const element = (
     <Component {...fixture.props} classes={overrides}>
       {fixture.children as React.ReactNode}
-    </Component>,
+    </Component>
+  );
+  const { container } = render(
+    (fixture.wrap ? fixture.wrap(element) : element) as React.ReactElement,
   );
   if (fixture.act) await fixture.act(container);
   // Portalled content lives outside `container`; read the whole document.

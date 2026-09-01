@@ -1274,8 +1274,10 @@ describe("Tooltip", () => {
       await waitFor(() => {
         const tooltip = screen.getByRole("tooltip");
         // Unstyled should not have the default content classes
-        expect(tooltip.className).not.toContain("rounded-lg");
-        expect(tooltip.className).not.toContain("bg-white");
+        // Was `not.toContain("rounded-lg")` — Tooltip uses the cl-* scale and
+        // has never emitted rounded-lg, so half of this test was inert.
+        expect(tooltip).not.toHaveClass("rounded-cl-md");
+        expect(tooltip).not.toHaveClass("bg-white");
       });
     });
   });

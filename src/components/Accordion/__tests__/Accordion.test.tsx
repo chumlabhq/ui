@@ -1706,7 +1706,9 @@ describe("AccordionShimmer – extended", () => {
     const root = container.firstChild as HTMLElement;
     expect(root).not.toHaveClass("border");
     expect(root).not.toHaveClass("space-y-2");
-    expect(root).not.toHaveClass("rounded-lg");
+    // Was `rounded-lg`, which the bordered variant has never emitted; its
+    // radius comes from the cl-* scale.
+    expect(root).not.toHaveClass("rounded-cl-md");
   });
 
   it("TITLE_WIDTHS cycle correctly for items beyond index 5 (index % 5)", () => {

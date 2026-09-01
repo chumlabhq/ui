@@ -53,6 +53,10 @@
     },
     "Breadcrumb": {
       "itemDisabled": "state-gated \u2014 applied to a disabled crumb that is not the current page; ADR 002 R4 replaces it with data-disabled"
+    },
+    "RadioButton/RadioButton": {
+      "error": "dead \u2014 the radio item never renders error text; the group does, from DEFAULT_RADIO_GROUP_CLASSES.error. Surfaced once the registry stopped reading only the first class set.",
+      "success": "dead \u2014 same, the group owns the success message"
     }
   },
   "$comment2": "decorativeLeaks: tokens that survive `unstyled` because they are written as literals at a JSX call site rather than declared in a constants file. Every one is already counted by constants.contract's ratcheting baseline (125 literals, 92 of them structural), which is the gate that owns them; they are recorded here so unstyled.contract names them rather than silently excluding them. Both ratchets move DOWN only, and unstyled.contract fails if a token listed here stops leaking.",
@@ -114,5 +118,11 @@
     "Toast": [
       "transition-colors"
     ]
+  },
+  "$comment4": "hydrationMismatches: fixtures whose server markup and first client render disagree. Recorded rather than fixed because the underlying behaviour is out of scope for the phase that found it; hydration.contract fails if an entry stops mismatching, so the list ratchets down.",
+  "hydrationMismatches": {
+    "Table": {
+      "with-footer": "Table.tsx:1713 renders `footerContent` as a direct child of <tfoot>. A text node cannot be a child of tfoot, so the HTML parser relocates it and hydration disagrees. Not a reduced-motion bug \u2014 invalid markup. Fix is to wrap footerContent in <tr><td colSpan>."
+    }
   }
 }

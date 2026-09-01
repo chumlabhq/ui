@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { InternationalPhoneInput } from "../index";
 import type { PhoneNumberData } from "../utils/types";
@@ -351,8 +351,15 @@ describe("InternationalPhoneInput", () => {
       });
       input.dispatchEvent(pasteEvent);
 
-      // Should have detected the country from the paste
-      // The paste handler parses the international number
+      // The expectation used to sit in a comment. It is the whole point of the
+      // test: a pasted +44 number switches the country and reports the parse.
+      await waitFor(() => {
+        expect(onPasteDetected).toHaveBeenCalled();
+      });
+      expect(onCountryChange).toHaveBeenCalledWith(
+        expect.objectContaining({ value: "GB" }),
+      );
+      expect(onValueChange).toHaveBeenCalled();
     });
 
     it("does not detect paste when enablePasteDetection is false", async () => {
@@ -410,10 +417,17 @@ describe("InternationalPhoneInput", () => {
 
       // Open the country dropdown - click on the trigger that shows "+1"
       const dialCode = screen.getByText("+1");
-      const trigger = dialCode.closest("button") || dialCode.parentElement;
-      if (trigger) {
-        await user.click(trigger);
-      }
+      const trigger = dialCode.closest("button") ?? dialCode.parentElement;
+      expect(trigger, "no country trigger to click").not.toBeNull();
+      await user.click(trigger!);
+
+      // Opening the list is not the assertion — picking from it is.
+      const option = await screen.findByText(/United Kingdom/i);
+      await user.click(option);
+
+      expect(onCountryChange).toHaveBeenCalledWith(
+        expect.objectContaining({ value: "GB" }),
+      );
     });
   });
 

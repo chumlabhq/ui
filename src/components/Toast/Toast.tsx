@@ -4,8 +4,8 @@ import { CloseIcon } from "./utils/icons";
 import { getDefaultIcon } from "./utils/getDefaultIcon";
 import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants";
 import { cn } from "../../utils/scopedCn";
-import { isBrowser } from "../../utils/isBrowser";
 
+import { useReducedMotion } from "../../utils/useReducedMotion";
 /**
  * Component: Toast
  *
@@ -59,18 +59,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const [isPaused, setIsPaused] = useState(false);
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
-    if (!isBrowser) return false;
-    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-  });
-
-  useEffect(() => {
-    if (!isBrowser) return;
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
-  }, []);
+  const prefersReducedMotion = useReducedMotion();
 
   const isUnstyled = unstyled || providerUnstyled;
   const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;

@@ -20,6 +20,11 @@ export interface Fixture {
    * hover/focus/selection (`itemHighlighted`, `dayFocused`) have no prop.
    */
   act?: (container: HTMLElement) => void | Promise<void>;
+  /**
+   * Wraps the rendered element. Sub-components that need a parent context —
+   * a RadioButton outside its RadioGroup throws — have no other route.
+   */
+  wrap?: (node: ReactNode) => ReactNode;
   /** Why this fixture exists, when the name is not self-evident. */
   note?: string;
 }

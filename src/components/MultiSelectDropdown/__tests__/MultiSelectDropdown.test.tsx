@@ -421,10 +421,11 @@ describe("MultiSelectDropdown", () => {
       });
       removeButton.dispatchEvent(enterEvent);
 
-      // onRemove is called via React synthetic events, but stopPropagation
-      // should prevent the parent handler from being called for Enter/Space
-      // Since dispatchEvent bypasses React, let's verify via userEvent approach
-      // that the parent doesn't receive it
+      // The comment that used to close this test described the assertion
+      // without making it: the chip handles Enter itself and stops the event
+      // reaching the surrounding handler.
+      expect(onRemove).toHaveBeenCalledWith("apple");
+      expect(parentKeyDown).not.toHaveBeenCalled();
     });
 
     it("displays selectedContent when available", () => {

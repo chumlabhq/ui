@@ -80,14 +80,23 @@ describe("classes override contract", () => {
         const ignored: string[] = [];
 
         for (const [key, tokens] of identifying) {
-          const { container } = render(
-            <Component {...props} classes={{ [key]: `ovr-${key}` }} />,
-          );
+          for (const f of fixtures) {
+            const element = (
+              <Component {...props} {...f.props} classes={{ [key]: `ovr-${key}` }}>
+                {f.children as React.ReactNode}
+              </Component>
+            );
+            const { container } = render(
+              (f.wrap ? f.wrap(element) : element) as React.ReactElement,
+            );
+            if (f.act) await f.act(container);
 
-          // The slot's identifying tokens must not survive its own override,
-          // whether the component ignored the value outright or merged with it.
-          if (elementsWithAll(container, tokens).length > 0) {
-            ignored.push(`${key} (kept ${tokens.join(" ")})`);
+            // The slot's identifying tokens must not survive its own override,
+            // whether the component ignored the value outright or merged with it.
+            if (elementsWithAll(document.body, tokens).length > 0) {
+              ignored.push(`${key} in "${f.name}" (kept ${tokens.join(" ")})`);
+            }
+            cleanup();
           }
         }
 
@@ -103,10 +112,13 @@ describe("classes override contract", () => {
         );
         const leftover = new Set<string>();
         for (const f of fixtures) {
-          const { container } = render(
+          const element = (
             <Component {...props} {...f.props} classes={overrides}>
               {f.children as React.ReactNode}
-            </Component>,
+            </Component>
+          );
+          const { container } = render(
+            (f.wrap ? f.wrap(element) : element) as React.ReactElement,
           );
           if (f.act) await f.act(container);
           for (const [key, tokens] of identifying)

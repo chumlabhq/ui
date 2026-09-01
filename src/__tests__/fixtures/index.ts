@@ -14,7 +14,12 @@ const modules = import.meta.glob("./*.fixtures.tsx", { eager: true }) as Record<
 
 export const FIXTURES: Record<string, Fixtures> = Object.fromEntries(
   Object.entries(modules).map(([path, mod]) => [
-    path.replace("./", "").replace(".fixtures.tsx", ""),
+    // "CountryFlag.CountryFlagGroup.fixtures.tsx" -> "CountryFlag/CountryFlagGroup",
+    // the registry's name for a sub-component's class set.
+    path
+      .replace("./", "")
+      .replace(".fixtures.tsx", "")
+      .replace(/\.(?=[A-Z])/g, "/"),
     mod.default,
   ]),
 );

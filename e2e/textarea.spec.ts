@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
 
+import { watchClicks } from "./_helpers";
 // Helper to wait for textarea visibility with scroll support
 async function waitForTextAreaVisible(page: import("@playwright/test").Page) {
   const textarea = page.locator("textarea").first();
@@ -217,27 +218,27 @@ test.describe("TextArea Keyboard Navigation", () => {
   });
 
   test("should activate icon buttons with Enter key", async ({ page }) => {
-    const iconButtons = page.locator('[role="button"]');
+    // Was guarded by `if (count > 0)` and asserted nothing: it passed both
+    // when the icon button was missing and when Enter did nothing.
+    const button = page.locator('[role="button"]').first();
+    await expect(button).toBeVisible();
 
-    if ((await iconButtons.count()) > 0) {
-      const button = iconButtons.first();
-      await button.focus();
-      await page.keyboard.press("Enter");
-
-      // Should have executed without errors
-    }
+    const clicks = await watchClicks(page);
+    await button.focus();
+    await page.keyboard.press("Enter");
+    await expect.poll(clicks).toBeGreaterThan(0);
   });
 
   test("should activate icon buttons with Space key", async ({ page }) => {
-    const iconButtons = page.locator('[role="button"]');
+    // Was guarded by `if (count > 0)` and asserted nothing: it passed both
+    // when the icon button was missing and when Space did nothing.
+    const button = page.locator('[role="button"]').first();
+    await expect(button).toBeVisible();
 
-    if ((await iconButtons.count()) > 0) {
-      const button = iconButtons.first();
-      await button.focus();
-      await page.keyboard.press("Space");
-
-      // Should have executed without errors
-    }
+    const clicks = await watchClicks(page);
+    await button.focus();
+    await page.keyboard.press("Space");
+    await expect.poll(clicks).toBeGreaterThan(0);
   });
 
   test("should allow typing after tabbing to textarea", async ({ page }) => {
