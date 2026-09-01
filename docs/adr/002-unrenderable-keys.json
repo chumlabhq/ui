@@ -118,11 +118,5 @@
     "Toast": [
       "transition-colors"
     ]
-  },
-  "$comment4": "hydrationMismatches: fixtures whose server markup and first client render disagree. Recorded rather than fixed because the underlying behaviour is out of scope for the phase that found it; hydration.contract fails if an entry stops mismatching, so the list ratchets down.",
-  "hydrationMismatches": {
-    "Table": {
-      "with-footer": "Table.tsx:1713 renders `footerContent` as a direct child of <tfoot>. A text node cannot be a child of tfoot, so the HTML parser relocates it and hydration disagrees. Not a reduced-motion bug \u2014 invalid markup. Fix is to wrap footerContent in <tr><td colSpan>."
-    }
   }
 }

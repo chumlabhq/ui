@@ -26,16 +26,6 @@ import { act } from "@testing-library/react";
 import { COMPONENTS } from "./registry";
 import { fixturesFor } from "../fixtures";
 import { setReducedMotion } from "../../test/matchMedia";
-import waivers from "../../../docs/adr/002-unrenderable-keys.json";
-
-/**
- * Known mismatches, by component and fixture. Recorded rather than fixed when
- * the cause is out of scope for the phase that found it. The staleness check
- * below fails if an entry stops mismatching, so the list can only shrink.
- */
-const KNOWN = (waivers as {
-  hydrationMismatches: Record<string, Record<string, string>>;
-}).hydrationMismatches;
 
 const candidates = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
@@ -87,11 +77,8 @@ describe("hydration contract", () => {
     const fixtures = fixturesFor(component.name);
     const { Component, props, wrap } = component;
 
-    const waived = KNOWN[component.name] ?? {};
-
     it("hydrates without a mismatch when reduced motion is on", async () => {
       const failures: string[] = [];
-      const stale: string[] = [];
 
       for (const fixture of fixtures) {
         // The server does not know the preference; the client does. That
@@ -123,10 +110,7 @@ describe("hydration contract", () => {
         const root = await hydrate(container, tree);
 
         const mismatched = errors.filter((e) => HYDRATION_WARNING.test(e));
-        if (mismatched.length && !(fixture.name in waived)) {
-          failures.push(`${fixture.name}: ${mismatched[0]}`);
-        }
-        if (!mismatched.length && fixture.name in waived) stale.push(fixture.name);
+        if (mismatched.length) failures.push(`${fixture.name}: ${mismatched[0]}`);
 
         await act(async () => {
           root?.unmount();
@@ -137,10 +121,6 @@ describe("hydration contract", () => {
       expect(
         failures,
         `hydration mismatched under prefers-reduced-motion:\n${failures.join("\n")}`,
-      ).toEqual([]);
-      expect(
-        stale,
-        `hydrationMismatches entries that no longer mismatch — remove them from 002-unrenderable-keys.json: ${stale.join(", ")}`,
       ).toEqual([]);
     });
   });

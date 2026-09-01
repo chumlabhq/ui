@@ -1710,9 +1710,17 @@ function TableInner<TData>(
                 role="rowgroup"
                 data-table-footer
               >
-                {footerContent
-                  ? footerContent
-                  : table.getFooterGroups().map((footerGroup) => (
+                {footerContent ? (
+                  // A text node cannot be a child of <tfoot>: the parser hoists
+                  // it out of the table, so the server's markup and the client's
+                  // first render disagree and hydration reports a mismatch.
+                  <tr role="row">
+                    <td colSpan={table.getVisibleLeafColumns().length}>
+                      {footerContent}
+                    </td>
+                  </tr>
+                ) : (
+                  table.getFooterGroups().map((footerGroup) => (
                       <tr key={footerGroup.id} role="row">
                         {footerGroup.headers
                           .filter((header) => {
@@ -1741,7 +1749,8 @@ function TableInner<TData>(
                             </td>
                           ))}
                       </tr>
-                    ))}
+                  ))
+                )}
               </tfoot>
             )}
           </table>
