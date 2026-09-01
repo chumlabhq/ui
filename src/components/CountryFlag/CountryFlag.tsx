@@ -14,6 +14,7 @@ import { Tooltip } from "../Tooltip";
 import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 /**
  * Component: CountryFlag
  *
@@ -81,7 +82,13 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     const src = usePackaged ? packagedSrc : `${basePath}/${normalizedCode}.svg`;
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
+    const prefersReducedMotionForClasses = useReducedMotion();
+
+    const baseClassesRaw = unstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses: Required<CountryFlagClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

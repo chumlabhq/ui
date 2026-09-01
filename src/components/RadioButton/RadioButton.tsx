@@ -19,6 +19,7 @@ import {
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/scopedCn";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 // ─── Context ──────────────────────────────────────────────────────────────────
 
 interface RadioGroupContextValue {
@@ -107,7 +108,11 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     );
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_RADIO_GROUP_CLASSES : DEFAULT_RADIO_GROUP_CLASSES;
+    const baseClassesRaw = unstyled ? UNSTYLED_RADIO_GROUP_CLASSES : DEFAULT_RADIO_GROUP_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<RadioGroupClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
@@ -229,7 +234,8 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
     const radioId = rest.id || generatedId;
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_RADIO_CLASSES : DEFAULT_RADIO_CLASSES;
+    const baseClassesRaw = unstyled ? UNSTYLED_RADIO_CLASSES : DEFAULT_RADIO_CLASSES;
+    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
     const mergedClasses: Required<RadioButtonClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

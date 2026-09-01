@@ -88,5 +88,31 @@
       "rounded",
       "py-2"
     ]
+  },
+  "$comment3": "motionLeaks: animation utilities that survive prefers-reduced-motion because they are written as literals at a JSX site (constants.contract's ratcheting baseline owns those) or because they come from a nested component the parent does not yet pass `unstyled` to (GATE-HONESTY \u00a74, deferred). Neither is fixable inside the reduced-motion work without touching code that is out of scope, so they are named here rather than hidden. reduced-motion.contract fails if an entry stops leaking.",
+  "motionLeaks": {
+    "Button": [
+      "animate-spin"
+    ],
+    "CountryFlag": [
+      "animate-pulse"
+    ],
+    "Input": [
+      "animate-spin"
+    ],
+    "TextArea": [
+      "animate-spin"
+    ],
+    "MultiSelectDropdown": [
+      "animate-pulse"
+    ],
+    "Table": [
+      "transition-transform",
+      "transition-colors",
+      "transition-opacity"
+    ],
+    "Toast": [
+      "transition-colors"
+    ]
   }
 }

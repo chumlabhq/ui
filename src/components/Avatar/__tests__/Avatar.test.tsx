@@ -1,6 +1,12 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
+
 import {
   Avatar,
   AvatarGroup,

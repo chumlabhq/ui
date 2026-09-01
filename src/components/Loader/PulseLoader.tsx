@@ -7,6 +7,7 @@ import {
 import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
   (
     {
@@ -36,9 +37,11 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
 
-    const baseClasses = unstyled
+    const baseClassesRaw = unstyled
       ? UNSTYLED_PULSE_LOADER_CLASSES
       : DEFAULT_PULSE_LOADER_CLASSES;
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
     const mergedClasses: Required<PulseLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

@@ -5,6 +5,7 @@ import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { cn } from "../../utils/scopedCn";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 /**
  * Component: Switch
  *
@@ -76,7 +77,11 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     }, [disabled, isChecked, setIsChecked]);
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_SWITCH_CLASSES : DEFAULT_SWITCH_CLASSES;
+    const baseClassesRaw = unstyled ? UNSTYLED_SWITCH_CLASSES : DEFAULT_SWITCH_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<SwitchClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

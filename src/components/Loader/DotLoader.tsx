@@ -7,6 +7,7 @@ import {
 import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
   (
     {
@@ -26,9 +27,11 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const dots = Array.from({ length: count });
 
-    const baseClasses = unstyled
+    const baseClassesRaw = unstyled
       ? UNSTYLED_DOT_LOADER_CLASSES
       : DEFAULT_DOT_LOADER_CLASSES;
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
     const mergedClasses: Required<DotLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

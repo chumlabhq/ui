@@ -19,6 +19,7 @@ import { Slot } from "../../utils/Slot";
 import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 /**
  * Component: Button
  *
@@ -75,7 +76,13 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
   // ─── Merged classes system ──────────────────────────────────────────
-  const baseClasses = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;
+  const prefersReducedMotionForClasses = useReducedMotion();
+
+  const baseClassesRaw = unstyled ? UNSTYLED_BUTTON_CLASSES : DEFAULT_BUTTON_CLASSES;
+  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+  // this handles the other reason to stop animating. Applied to the defaults
+  // only — a class string the consumer supplied is theirs to control.
+  const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
   const mergedClasses: Required<ButtonClasses> = useMemo(
     () => ({
       root: classesProp?.root ?? baseClasses.root,
@@ -116,6 +123,8 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const effectiveAnimation = effectiveReduceMotion ? "none" : iconAnimation;
 
   const animationClasses = useMemo(() => {
+    // No motionSafeClasses here: `effectiveAnimation` above is already forced to
+    // "none" under reduced motion, so the map never reaches the DOM.
     const map = animateOnHover ? HOVER_ANIMATION_MAP : CONTINUOUS_ANIMATION_MAP;
     const classes = effectiveAnimation !== "none" ? map[effectiveAnimation] : "";
     return {

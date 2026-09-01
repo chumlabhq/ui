@@ -22,10 +22,16 @@
  * is exactly the defect. No reachability inference is needed, so there is
  * nothing left to get wrong.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry";
 import { fixturesFor } from "../fixtures";
+
+import { setReducedMotion } from "../../test/matchMedia";
+
+// Fixtures render motion-aware components; the stub answers nothing
+// until asked. reduced-motion.contract is where the true branch is tested.
+beforeEach(() => setReducedMotion(false));
 
 const candidates = COMPONENTS.filter((c) => c.supports.classes && c.defaults);
 

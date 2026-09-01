@@ -196,7 +196,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
           {clearable && currentLength > 0 && (
             <button
               type="button"
-              className="inline-flex shrink-0 cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+              className="inline-flex shrink-0 cursor-pointer opacity-50 hover:opacity-100 transition-opacity motion-reduce:transition-none"
               onClick={onClearClick}
               disabled={isDisabled || loading}
               aria-label={clearLabel}

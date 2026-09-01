@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
+import { installMatchMedia, resetMediaQueries } from "./matchMedia";
 
 // The SSR contract suite runs with `environment: "node"`, where there is no
 // window to patch. Everything below this guard is jsdom setup; bail rather than
@@ -9,7 +10,10 @@ const hasDom = typeof window !== "undefined";
 
 // Cleanup after each test
 afterEach(() => {
-  if (hasDom) cleanup();
+  if (hasDom) {
+    cleanup();
+    resetMediaQueries();
+  }
 });
 
 if (hasDom) {
@@ -24,20 +28,9 @@ if (hasDom) {
   globalThis.ResizeObserver =
     ResizeObserverMock as unknown as typeof ResizeObserver;
 
-  // Mock matchMedia
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
+  // matchMedia answers nothing until a test says what a query returns.
+  // See src/test/matchMedia.ts for why "false by default" was the wrong stub.
+  installMatchMedia();
 
   // Mock scrollIntoView
   Element.prototype.scrollIntoView = vi.fn();

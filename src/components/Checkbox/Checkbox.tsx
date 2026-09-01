@@ -13,6 +13,7 @@ import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 /**
  * Component: Checkbox
  *
@@ -92,7 +93,11 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }, [indeterminate]);
 
     // ─── Merged classes system ──────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_CHECKBOX_CLASSES : DEFAULT_CHECKBOX_CLASSES;
+    const baseClassesRaw = unstyled ? UNSTYLED_CHECKBOX_CLASSES : DEFAULT_CHECKBOX_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<CheckboxClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

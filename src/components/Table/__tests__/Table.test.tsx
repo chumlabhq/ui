@@ -3,6 +3,12 @@ import { render, screen, within, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Table } from "../index";
 import type { ColumnDef } from "@tanstack/react-table";
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
+
 import {
   getColumnId,
   getSortDirection,

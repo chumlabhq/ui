@@ -864,6 +864,12 @@ describe("useToast Hook", () => {
 
 import { getDefaultIcon } from "../utils/getDefaultIcon";
 
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
+
 describe("getDefaultIcon", () => {
   it("returns InfoIcon for unknown type (default case)", () => {
     const icon = getDefaultIcon("unknown" as never);

@@ -17,7 +17,7 @@
  * suite was previously asserting the contract only on whichever handful of slots
  * a bare render happened to produce.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS, classTokens } from "./registry";
 import { fixturesFor } from "../fixtures";
@@ -33,6 +33,12 @@ import waivers from "../../../docs/adr/002-unrenderable-keys.json";
 const LEAKS = (waivers as { decorativeLeaks: Record<string, string[]> })
   .decorativeLeaks;
 import { isStructural, splitLayers } from "../../utils/classLayers";
+
+import { setReducedMotion } from "../../test/matchMedia";
+
+// Fixtures render motion-aware components; the stub answers nothing
+// until asked. reduced-motion.contract is where the true branch is tested.
+beforeEach(() => setReducedMotion(false));
 
 const candidates = COMPONENTS.filter((c) => c.supports.unstyled && c.defaults);
 

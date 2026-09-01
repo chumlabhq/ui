@@ -35,7 +35,7 @@ import {
   INDICATOR_SIZE,
   ICON_SIZE,
 } from "./utils/constants";
-import { structuralOnly } from "../../utils/classLayers";
+import { structuralOnly, motionSafeClasses } from "../../utils/classLayers";
 
 const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
 
@@ -560,9 +560,13 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     ref,
   ) => {
     const prefersReducedMotion = useReducedMotion(reduceMotion);
-    const baseClasses = unstyled
+    const baseClassesRaw = unstyled
       ? UNSTYLED_STEPPER_CLASSES
       : DEFAULT_STEPPER_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     // Variant sizing is a default class set like any other, so it takes the
     // same ADR 001 split: `w-7 h-7` survives `unstyled`, `text-xs font-medium`

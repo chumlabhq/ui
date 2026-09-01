@@ -37,6 +37,8 @@ import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -385,9 +387,16 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       ClearIcon: ClearIconProp = ClearIconDefault,
     } = props;
 
-    const baseClasses = unstyled
+    const prefersReducedMotion = useReducedMotion();
+
+    const baseClassesRaw = unstyled
       ? UNSTYLED_DROPDOWN_CLASSES
       : DEFAULT_DROPDOWN_CLASSES;
+
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<DropdownClasses> = useMemo(
       () => ({

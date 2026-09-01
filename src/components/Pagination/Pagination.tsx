@@ -21,6 +21,7 @@ import { useControllableState } from "../../utils/useControllableState";
 import { isBrowser } from "../../utils/isBrowser";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 interface DropdownCoords {
   top: number;
   left: number;
@@ -273,7 +274,15 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const resolvedCurrentPage = currentPage ?? 1;
     const resolvedOnPageChange = setCurrentPage;
 
-    const baseClasses = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
+    const baseClassesRaw = unstyled ? UNSTYLED_PAGINATION_CLASSES : DEFAULT_PAGINATION_CLASSES;
+
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+
+    // this handles the other reason to stop animating. Applied to the defaults
+
+    // only — a class string the consumer supplied is theirs to control.
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,
       nav: classesProp?.nav ?? baseClasses.nav,

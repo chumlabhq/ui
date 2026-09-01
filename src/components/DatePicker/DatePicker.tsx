@@ -49,6 +49,7 @@ import { cn } from "../../utils/scopedCn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
+import { motionSafeClasses } from "../../utils/classLayers";
 import {
   DEFAULT_DATEPICKER_CLASSES,
   UNSTYLED_DATEPICKER_CLASSES,
@@ -558,9 +559,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const resolvedShowClearButton = showClearButton ?? clearable ?? true;
 
     // ─── Merged classes ────────────────────────────────────────────────
-    const baseClasses = unstyled
+    const prefersReducedMotionForClasses = useReducedMotion();
+
+    const baseClassesRaw = unstyled
       ? UNSTYLED_DATEPICKER_CLASSES
       : DEFAULT_DATEPICKER_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses = useMemo<Required<DatePickerClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,

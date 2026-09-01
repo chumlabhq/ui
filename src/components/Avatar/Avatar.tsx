@@ -33,6 +33,7 @@ import { isTooltipConfig } from "../../utils/isTooltipConfig";
 const AVATAR_DARK_CSS = `.dark [style*="--avatar-dark-bg"]{background-color:var(--avatar-dark-bg)!important;color:var(--avatar-dark-text)!important;border-color:var(--avatar-dark-border)!important}`;
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 const isStatusConfig = (status: unknown): status is AvatarStatusConfig => {
   return (
     typeof status === "object" &&
@@ -122,7 +123,18 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const statusSize = getStatusSize(effectiveSize);
     const borderRadius = getBorderRadius(effectiveShape);
 
-    const baseClasses = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;
+    const prefersReducedMotionForClasses = useReducedMotion();
+
+
+    const baseClassesRaw = unstyled ? UNSTYLED_AVATAR_CLASSES : DEFAULT_AVATAR_CLASSES;
+
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+
+    // this handles the other reason to stop animating. Applied to the defaults
+
+    // only — a class string the consumer supplied is theirs to control.
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({

@@ -1,6 +1,12 @@
-import { describe, it, expect, vi, beforeAll } from "vitest";
+import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { Slider } from "../index";
+
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
 
 // jsdom doesn't support pointer capture
 beforeAll(() => {

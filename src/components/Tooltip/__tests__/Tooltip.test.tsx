@@ -1567,6 +1567,12 @@ describe("Tooltip", () => {
 // ── Direct tests for tooltip positioning helpers ────────────────────────────
 import { computeForSide, wouldOverflow, calculatePosition } from "../utils/helpers";
 
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
+
 function makeDOMRect(x: number, y: number, width: number, height: number): DOMRect {
   return {
     x, y, width, height,

@@ -14,6 +14,8 @@ import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 export const InputLabel = FieldLabel;
 
 /**
@@ -106,7 +108,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         .join(" ") || undefined;
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_INPUT_CLASSES : DEFAULT_INPUT_CLASSES;
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled ? UNSTYLED_INPUT_CLASSES : DEFAULT_INPUT_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<InputClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

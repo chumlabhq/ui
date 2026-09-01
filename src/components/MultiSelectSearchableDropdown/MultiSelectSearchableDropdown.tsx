@@ -9,6 +9,8 @@ import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelect
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
 import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
 import { cn } from "../../utils/scopedCn";
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
@@ -387,9 +389,14 @@ const MultiSelectSearchableDropdown = forwardRef<
     },
     ref
   ) => {
-    const baseClasses = unstyled
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled
       ? UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES
       : DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<MultiSelectSearchableDropdownClasses> = useMemo(
       () => ({

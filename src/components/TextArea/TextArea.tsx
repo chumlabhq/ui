@@ -15,6 +15,8 @@ import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 export const TextAreaLabel = FieldLabel;
 
 /**
@@ -86,7 +88,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const isInteractive = !isDisabled && !readOnly && !loading;
 
     // ─── Merged classes ─────────────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_TEXTAREA_CLASSES : DEFAULT_TEXTAREA_CLASSES;
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled ? UNSTYLED_TEXTAREA_CLASSES : DEFAULT_TEXTAREA_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<TextAreaClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

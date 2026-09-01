@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, act as rtlAct } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TimePicker } from "../index";
@@ -2352,6 +2352,12 @@ describe("TimePicker (additional coverage)", () => {
 // ═══════════════════════════════════════════════════════════════════════
 import { renderHook, act } from "@testing-library/react";
 import { useTimePicker } from "../useTimePicker";
+
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
 
 describe("useTimePicker (additional coverage)", () => {
   const baseProps = {

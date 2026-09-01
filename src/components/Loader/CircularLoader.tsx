@@ -7,6 +7,7 @@ import {
 import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 /**
  * Component: CircularLoader
  *
@@ -34,9 +35,11 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
     const radius = 10 - thickness / 2;
     const circumference = 2 * Math.PI * radius;
 
-    const baseClasses = unstyled
+    const baseClassesRaw = unstyled
       ? UNSTYLED_CIRCULAR_LOADER_CLASSES
       : DEFAULT_CIRCULAR_LOADER_CLASSES;
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
     const mergedClasses: Required<CircularLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

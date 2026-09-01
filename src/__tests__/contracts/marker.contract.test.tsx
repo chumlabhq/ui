@@ -10,12 +10,18 @@
  * if the test's own elements were pre-marked, they would pass regardless of
  * whether Slot propagates the marker.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
 import { MARKER, cn } from "../../utils/scopedCn";
 import { cn as publicCn } from "../../utils/cn";
 import { MARKER as RUNTIME_MARKER } from "../../jsx/mark";
 import { COMPONENTS, classTokens } from "./registry";
+
+import { setReducedMotion } from "../../test/matchMedia";
+
+// Fixtures render motion-aware components; the stub answers nothing
+// until asked. reduced-motion.contract is where the true branch is tested.
+beforeEach(() => setReducedMotion(false));
 
 const marked = (el: Element | null) =>
   !!el?.getAttribute("class")?.split(/\s+/).includes(MARKER);

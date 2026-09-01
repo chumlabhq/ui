@@ -18,11 +18,17 @@
  * docs/adr/002-unrenderable-keys.json with a reason and stays in the API until
  * ADR 002 R7/R8 retires it in the vocabulary phase.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { COMPONENTS } from "./registry";
 import { fixturesFor } from "../fixtures";
 import unrenderable from "../../../docs/adr/002-unrenderable-keys.json";
+
+import { setReducedMotion } from "../../test/matchMedia";
+
+// Fixtures render motion-aware components; the stub answers nothing
+// until asked. reduced-motion.contract is where the true branch is tested.
+beforeEach(() => setReducedMotion(false));
 
 const WAIVED = unrenderable as { waived: Record<string, Record<string, string>> };
 

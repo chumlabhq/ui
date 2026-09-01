@@ -41,6 +41,8 @@ import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 function resolveInitialCountry(
   value: PhoneNumberValue | undefined,
   defaultValue: PhoneNumberValue | undefined,
@@ -159,9 +161,14 @@ const InternationalPhoneInput = forwardRef<
     },
     ref,
   ) => {
-    const baseClasses = unstyled
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled
       ? UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES
       : DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<InternationalPhoneInputClasses> = useMemo(
       () => ({

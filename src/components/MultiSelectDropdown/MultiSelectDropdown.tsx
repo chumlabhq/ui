@@ -18,6 +18,8 @@ import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 const MAX_STATUS_LABELS = 5;
 
 interface MultiSelectDropdownContentProps {
@@ -258,7 +260,12 @@ const MultiSelectDropdown = forwardRef<
     },
     ref,
   ) => {
-    const baseClasses = unstyled ? UNSTYLED_MULTISELECTDROPDOWN_CLASSES : DEFAULT_MULTISELECTDROPDOWN_CLASSES;
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled ? UNSTYLED_MULTISELECTDROPDOWN_CLASSES : DEFAULT_MULTISELECTDROPDOWN_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<MultiSelectDropdownClasses> = useMemo(
       () => ({

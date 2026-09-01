@@ -31,6 +31,7 @@ import {
 } from "./utils/constants";
 import { pushModal, popModal, isTopModal } from "./utils/helpers";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 const BASE_Z_INDEX = 9999;
 const Z_INDEX_INCREMENT = 10;
 
@@ -114,9 +115,13 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const shouldAnimate = effectiveDuration > 0;
 
     // Merge classes: individual classNames take precedence over classes object
-    const baseClasses = unstyled
+    const baseClassesRaw = unstyled
       ? UNSTYLED_MODAL_CLASSES
       : DEFAULT_MODAL_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses = useMemo<Required<ModalClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,

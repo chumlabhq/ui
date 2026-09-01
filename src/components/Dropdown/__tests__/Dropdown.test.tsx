@@ -1,9 +1,16 @@
+import { beforeEach } from "vitest";
 import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Dropdown from '../Dropdown';
 import type { DropdownOption } from '../utils/types';
+
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
 
 /**
  * Unit & Integration Tests for Dropdown Component

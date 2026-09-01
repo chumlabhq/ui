@@ -15,6 +15,12 @@ import {
   getDefaultStorageConfig,
 } from "../index";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
+
 import type {
   AccordionSingleProps,
   AccordionMultipleProps,

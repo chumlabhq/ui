@@ -727,6 +727,12 @@ describe("useModal", () => {
 
 import { CloseIcon, InfoIcon } from "../icons";
 
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
+
 describe("Modal Icons", () => {
   it("renders CloseIcon with className", () => {
     const { container } = render(<CloseIcon className="test-class" />);

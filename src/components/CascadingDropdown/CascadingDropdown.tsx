@@ -7,6 +7,8 @@ import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDef
 import { cn } from "../../utils/scopedCn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -329,7 +331,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     ref,
   ) => {
     const shimmerCount = Math.min(Math.max(0, rawShimmerCount), 50);
-    const baseClasses = unstyled ? UNSTYLED_CASCADINGDROPDOWN_CLASSES : DEFAULT_CASCADINGDROPDOWN_CLASSES;
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled ? UNSTYLED_CASCADINGDROPDOWN_CLASSES : DEFAULT_CASCADINGDROPDOWN_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
 
     const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
       () => ({

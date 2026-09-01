@@ -79,3 +79,65 @@ export const structuralOnly = <T extends Record<string, string>>(
       typeof value === "string" ? splitLayers(value).structural.join(" ") : "",
     ]),
   ) as { [K in keyof T]: string };
+
+/**
+ * Utilities that make something move.
+ *
+ * Narrower than the ADR's "Motion" group on purpose: `transform`, `scale-*`,
+ * `rotate-*` and `translate-*` are static geometry unless a transition drives
+ * them, and stripping them would move a `-translate-y-1/2` centred element
+ * rather than calm it. Only the utilities that animate come out.
+ */
+const MOTION: RegExp[] = [
+  /^transition(-|$)/,
+  /^duration-/,
+  /^ease-/,
+  /^delay-/,
+  /^animate-/,
+];
+
+export const isMotion = (token: string): boolean => {
+  // `transition-none` switches motion OFF; counting it as motion would make the
+  // idiomatic opt-out look like the thing it opts out of.
+  const base = baseUtility(token);
+  if (base === "transition-none") return false;
+
+  // A `motion-safe:` or `motion-reduce:` utility is already gated by the media
+  // query in CSS — that is the platform's own mechanism, not a component
+  // ignoring the preference — so it is not a violation either way.
+  if (/(^|:)motion-(safe|reduce):/.test(`:${token}`)) return false;
+
+  return MOTION.some((pattern) => pattern.test(base));
+};
+
+/**
+ * Strips animation from a class string when the user has asked for reduced
+ * motion. Returns the string unchanged otherwise, so the caller can apply it
+ * unconditionally.
+ *
+ * Lives beside the structural/decorative split because it is the same question
+ * asked of the same tokens — which is also why `unstyled` and reduced motion
+ * compose rather than fight: motion is decorative, so `unstyled` has already
+ * removed it and this becomes a no-op.
+ */
+export const motionSafe = (value: string, prefersReducedMotion: boolean): string =>
+  prefersReducedMotion
+    ? value
+        .split(/\s+/)
+        .filter((token) => token && !isMotion(token))
+        .join(" ")
+    : value;
+
+/** `motionSafe` over every value of a class set. */
+export const motionSafeClasses = <T extends Record<string, string>>(
+  classes: T,
+  prefersReducedMotion: boolean,
+): T => {
+  if (!prefersReducedMotion) return classes;
+  return Object.fromEntries(
+    Object.entries(classes).map(([key, value]) => [
+      key,
+      typeof value === "string" ? motionSafe(value, true) : value,
+    ]),
+  ) as T;
+};

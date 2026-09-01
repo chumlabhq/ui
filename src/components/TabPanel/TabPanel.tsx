@@ -16,6 +16,7 @@ import { useReducedMotion } from "../../utils/useReducedMotion";
 import TabButton from "./components/TabButton";
 import { Tooltip } from "../Tooltip";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 /**
  * Component: TabPanel
  *
@@ -219,7 +220,15 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
       [setActiveValue, activationMode],
     );
 
-    const baseClasses = unstyled ? UNSTYLED_TABPANEL_CLASSES : DEFAULT_TABPANEL_CLASSES;
+    const baseClassesRaw = unstyled ? UNSTYLED_TABPANEL_CLASSES : DEFAULT_TABPANEL_CLASSES;
+
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+
+    // this handles the other reason to stop animating. Applied to the defaults
+
+    // only — a class string the consumer supplied is theirs to control.
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const resolvedClasses: ResolvedClasses = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

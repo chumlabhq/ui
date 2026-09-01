@@ -30,6 +30,8 @@ import {
 import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger";
 import { isBrowser } from "../../utils/isBrowser";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 const INTERACTIVE_ELEMENT_TYPES = new Set([
   "button",
   "a",
@@ -93,7 +95,18 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const generatedId = useId();
     const tooltipId = `tooltip-${generatedId}`;
 
-    const baseClasses = unstyled ? UNSTYLED_TOOLTIP_CLASSES : DEFAULT_TOOLTIP_CLASSES;
+    const prefersReducedMotionForClasses = useReducedMotion();
+
+
+    const baseClassesRaw = unstyled ? UNSTYLED_TOOLTIP_CLASSES : DEFAULT_TOOLTIP_CLASSES;
+
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+
+    // this handles the other reason to stop animating. Applied to the defaults
+
+    // only — a class string the consumer supplied is theirs to control.
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses = useMemo(() => ({
       trigger: classesProp?.trigger ?? baseClasses.trigger,
       content: classesProp?.content ?? baseClasses.content,

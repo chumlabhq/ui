@@ -1,9 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import CircularLoader from "../CircularLoader";
 import LinearLoader from "../LinearLoader";
 import DotLoader from "../DotLoader";
 import PulseLoader from "../PulseLoader";
+
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
 
 describe("CircularLoader", () => {
   it("renders with role='status' and aria-label", () => {

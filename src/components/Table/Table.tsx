@@ -252,7 +252,12 @@ function TableInner<TData>(
 ) {
   // Per-slot resolution: a supplied slot replaces the default for that slot
   // only, so a partial `classes` object keeps defaults everywhere else.
-  const base = unstyled ? UNSTYLED_TABLE_CLASSES : DEFAULT_TABLE_CLASSES;
+  const prefersReducedMotion = useReducedMotion();
+  const baseRaw = unstyled ? UNSTYLED_TABLE_CLASSES : DEFAULT_TABLE_CLASSES;
+  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+  // this handles the other reason to stop animating. Applied to the defaults
+  // only — a class string the consumer supplied is theirs to control.
+  const base = motionSafeClasses(baseRaw, prefersReducedMotion);
 
   const containerClassName = classesProp?.container ?? base.container;
   const tableClassName = classesProp?.table ?? base.table;
@@ -2307,6 +2312,8 @@ function TableInner<TData>(
 
 import { Fragment as __Fragment } from "react";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 const Table = forwardRef(TableInner) as <TData>(
   props: TableProps<TData> & { ref?: React.Ref<HTMLDivElement> },
 ) => React.ReactElement | null;

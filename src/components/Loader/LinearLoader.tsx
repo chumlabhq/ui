@@ -7,6 +7,7 @@ import {
 import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
+import { motionSafeClasses } from "../../utils/classLayers";
 const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
   (
     {
@@ -28,9 +29,11 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     const trackBg = trackColor ?? "currentColor";
     const w = typeof width === "number" ? `${width}px` : width;
 
-    const baseClasses = unstyled
+    const baseClassesRaw = unstyled
       ? UNSTYLED_LINEAR_LOADER_CLASSES
       : DEFAULT_LINEAR_LOADER_CLASSES;
+
+    const baseClasses = motionSafeClasses(baseClassesRaw, useReducedMotion());
     const mergedClasses: Required<LinearLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

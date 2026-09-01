@@ -25,6 +25,7 @@ import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep }
 import { isBrowser } from "../../utils/isBrowser";
 
 import { cn } from "../../utils/scopedCn";
+import { motionSafeClasses } from "../../utils/classLayers";
 interface DropdownCoords {
   top: number;
   left: number;
@@ -214,9 +215,15 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     ref,
   ) => {
     // ── Class merging (matches library pattern: classes ?? base) ────────
-    const baseClasses = unstyled
+    const prefersReducedMotionForClasses = useReducedMotion();
+
+    const baseClassesRaw = unstyled
       ? UNSTYLED_TIMEPICKER_CLASSES
       : DEFAULT_TIMEPICKER_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
     const mergedClasses = useMemo<Required<TimePickerClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,

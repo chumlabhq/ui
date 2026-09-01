@@ -1,9 +1,15 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MultiSelectDropdown, MultiSelectDropdownShimmer, SelectedChip } from "../index";
 import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types";
 import { DEFAULT_MULTISELECTDROPDOWN_CLASSES } from "../utils/constants";
+
+import { setReducedMotion } from "../../../test/matchMedia";
+
+// The stub answers nothing by default, so every file that renders a
+// motion-aware component states the preference it is testing under.
+beforeEach(() => setReducedMotion(false));
 
 const options: MultiSelectOption[] = [
   { value: "apple", label: "Apple" },

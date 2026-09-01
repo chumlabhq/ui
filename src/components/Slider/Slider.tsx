@@ -18,6 +18,8 @@ import { useControllableState } from "../../utils/useControllableState";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import { cn } from "../../utils/scopedCn";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function clamp(val: number, min: number, max: number) {
@@ -284,9 +286,14 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     });
 
     // ─── Classes ────────────────────────────────────────────────────────
-    const baseClasses = unstyled
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled
       ? UNSTYLED_SLIDER_CLASSES
       : DEFAULT_SLIDER_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mc: Required<SliderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

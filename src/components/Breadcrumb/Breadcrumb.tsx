@@ -24,6 +24,8 @@ import Tooltip from "../Tooltip/Tooltip";
 import { cn } from "../../utils/scopedCn";
 import { isBrowser } from "../../utils/isBrowser";
 
+import { motionSafeClasses } from "../../utils/classLayers";
+import { useReducedMotion } from "../../utils/useReducedMotion";
 interface DropdownCoords {
   top: number;
   left: number;
@@ -346,7 +348,12 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     }, [isDropdownOpen, onDropdownOpenChange]);
 
     // ─── Merged classes system ────────────────────────────────────────
-    const baseClasses = unstyled ? UNSTYLED_BREADCRUMB_CLASSES : DEFAULT_BREADCRUMB_CLASSES;
+    const prefersReducedMotion = useReducedMotion();
+    const baseClassesRaw = unstyled ? UNSTYLED_BREADCRUMB_CLASSES : DEFAULT_BREADCRUMB_CLASSES;
+    // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+    // this handles the other reason to stop animating. Applied to the defaults
+    // only — a class string the consumer supplied is theirs to control.
+    const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<BreadcrumbClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,

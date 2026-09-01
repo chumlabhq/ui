@@ -42,7 +42,7 @@ import { useAccordionStateManager } from "./hooks/useAccordionStateManager";
 import { usePrintStyles } from "./hooks/usePrintStyles";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 
-import { structuralOnly } from "../../utils/classLayers";
+import { structuralOnly, motionSafeClasses } from "../../utils/classLayers";
 const DEFAULT_PREVENT_CLOSE_TIMEOUT = 10000;
 
 /**
@@ -200,7 +200,13 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const variantClasses = unstyled
     ? structuralOnly(VARIANT_CLASSES[variant])
     : VARIANT_CLASSES[variant];
-  const baseClasses = unstyled ? UNSTYLED_ACCORDION_CLASSES : DEFAULT_ACCORDION_CLASSES;
+  const prefersReducedMotionForClasses = useReducedMotion();
+
+  const baseClassesRaw = unstyled ? UNSTYLED_ACCORDION_CLASSES : DEFAULT_ACCORDION_CLASSES;
+  // Motion is decorative under ADR 001, so `unstyled` has already removed it;
+  // this handles the other reason to stop animating. Applied to the defaults
+  // only — a class string the consumer supplied is theirs to control.
+  const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
 
   const mergedClasses: AccordionClasses = useMemo(
     () => ({

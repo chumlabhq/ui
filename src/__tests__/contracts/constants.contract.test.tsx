@@ -17,8 +17,14 @@
  * rule was introduced, and it may only shrink. A new literal at a new call site
  * fails immediately; retiring one means deleting its line here.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeEach } from "vitest";
 import { isStructural } from "../../utils/classLayers";
+
+import { setReducedMotion } from "../../test/matchMedia";
+
+// Fixtures render motion-aware components; the stub answers nothing
+// until asked. reduced-motion.contract is where the true branch is tested.
+beforeEach(() => setReducedMotion(false));
 
 const sources = import.meta.glob("../../components/**/*.tsx", {
   eager: true,
