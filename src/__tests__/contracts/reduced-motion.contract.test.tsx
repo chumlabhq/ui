@@ -125,7 +125,9 @@ describe("reduced motion contract", () => {
   });
 
   describe.each(candidates)("$name", (component) => {
-    const fixtures = fixturesFor(component.name);
+    // `render` fixtures own their markup; these suites drive the component
+    // themselves from fixture props, so there is nothing for them to apply.
+    const fixtures = fixturesFor(component.name).filter((f) => !f.render);
     // Whether this component claims to animate at all, read from its own
     // defaults. A component with no motion in its constants is not required to
     // produce any — but one that declares motion must actually emit it, or the

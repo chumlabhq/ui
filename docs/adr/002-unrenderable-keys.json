@@ -118,5 +118,39 @@
     "Toast": [
       "transition-colors"
     ]
+  },
+  "$comment5": "axeBaseline: accessibility violations recorded against fixture pages, by violation id, with the cause. e2e/accessibility.spec.ts fails on anything not listed, and on a listed entry that stops firing, so the list ratchets down only. Recorded rather than fixed where the fix is a design decision (the --cl-text-tertiary value) or sits in an area this phase does not touch (the combobox pattern).",
+  "axeBaseline": {
+    "color-contrast": {
+      "count": 18,
+      "cause": "--cl-text-tertiary is 45% over the page ground (~3.4:1), under the 4.5:1 WCAG AA needs for text. It backs the `description` slot on ~15 components plus Breadcrumb, RadioButton, Stepper and Table. One token, not fifteen components \u2014 raising it or moving text slots to --cl-text-secondary is a design decision, and TabPanel's tabInactive was moved to secondary in this phase as the precedent.",
+      "components": [
+        "Breadcrumb",
+        "CascadingDropdown",
+        "Checkbox",
+        "DatePicker",
+        "Dropdown",
+        "Input",
+        "InternationalPhoneInput",
+        "MultiSelectDropdown",
+        "MultiSelectSearchableDropdown",
+        "OtpInput",
+        "RadioButton",
+        "SearchableDropdown",
+        "Slider",
+        "Stepper",
+        "Switch",
+        "Table",
+        "TextArea",
+        "TimePicker"
+      ]
+    },
+    "button-name": {
+      "count": 1,
+      "cause": "InternationalPhoneInput's country trigger is a role=combobox button with no accessible name. The combobox pattern is explicitly out of scope for this phase (AUDIT-GAP 3.3/3.4).",
+      "components": [
+        "InternationalPhoneInput"
+      ]
+    }
   }
 }

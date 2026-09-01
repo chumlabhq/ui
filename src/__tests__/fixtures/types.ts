@@ -25,6 +25,16 @@ export interface Fixture {
    * a RadioButton outside its RadioGroup throws — have no other route.
    */
   wrap?: (node: ReactNode) => ReactNode;
+  /**
+   * Takes over rendering entirely, for behaviour a static prop set cannot
+   * reach: "opens on trigger click" needs a trigger and a piece of state, and
+   * the alternative is reaching back into a demo page, which is what
+   * E2E-INVENTORY.md is about.
+   *
+   * A `render` fixture is excluded from the `classes`-key contracts, which work
+   * by passing a sentinel `classes` map the fixture would not receive.
+   */
+  render?: () => ReactNode;
   /** Why this fixture exists, when the name is not self-evident. */
   note?: string;
 }

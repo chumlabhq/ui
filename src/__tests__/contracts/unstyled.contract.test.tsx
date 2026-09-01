@@ -48,7 +48,7 @@ describe("unstyled contract", () => {
   });
 
   describe.each(candidates)("$name", ({ name, Component, props, defaults }) => {
-    const fixtures = fixturesFor(name);
+    const fixtures = fixturesFor(name).filter((f) => !f.render);
     // Tokens the component's own defaults declare as structural.
     const declaredStructural = new Set(
       Object.values(defaults!).flatMap((value) =>

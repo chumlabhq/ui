@@ -172,6 +172,9 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             id={switchId}
             role="switch"
             aria-checked={isChecked}
+            // `disabled` alone is not exposed on a custom role in every AT, and
+            // the ARIA switch pattern expects the state explicitly.
+            aria-disabled={disabled || loading || undefined}
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={

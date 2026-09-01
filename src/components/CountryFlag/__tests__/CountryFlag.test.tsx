@@ -207,11 +207,15 @@ describe("CountryFlag", () => {
       expect(screen.getByRole("img")).toHaveAttribute("aria-label", "Germany");
     });
 
-    it("does not mark the inner img as aria-hidden", () => {
+    it("marks the inner img as aria-hidden", () => {
+      // Was `not.toHaveAttribute` — asserting the defect. The wrapper carries
+      // role="img" and the accessible name, so the inner image must be taken
+      // out of the tree or it is announced twice (axe: image-redundant-alt /
+      // the E2E-INVENTORY.md CountryFlag finding).
       render(<CountryFlag code="us" />);
 
       const img = screen.getByRole("img").querySelector("img")!;
-      expect(img).not.toHaveAttribute("aria-hidden");
+      expect(img).toHaveAttribute("aria-hidden", "true");
     });
   });
 

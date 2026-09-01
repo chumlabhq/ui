@@ -71,7 +71,9 @@ describe("fixtures contract", () => {
 
   describe.each(candidates)("$name", ({ name, Component, defaults }) => {
     const keys = Object.keys(defaults!);
-    const fixtures = fixturesFor(name);
+    // `render` fixtures own their markup and never receive the sentinel
+    // `classes` map, so they cannot answer this question either way.
+    const fixtures = fixturesFor(name).filter((f) => !f.render);
     const waived = waivedFor(name);
 
     it("renders every documented classes key across its fixtures", async () => {

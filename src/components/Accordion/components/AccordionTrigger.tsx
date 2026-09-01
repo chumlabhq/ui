@@ -123,7 +123,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const shouldShowIcon = iconPosition !== "none";
     const iconElement = shouldShowIcon && (
-      <span className={config.classes.iconWrapper || undefined} aria-hidden="true">
+      <span className={config.classes.iconWrapper || undefined} aria-hidden="true" inert>
         {renderIcon()}
       </span>
     );
@@ -159,7 +159,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     ) : (
       <>
         {leftSlot && (
-          <span className={config.classes.triggerLeft || undefined} aria-hidden="true">
+          <span className={config.classes.triggerLeft || undefined} aria-hidden="true" inert>
             {leftSlot}
           </span>
         )}
@@ -174,7 +174,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         </span>
         {iconPosition === "right" && iconElement}
         {rightSlot && (
-          <span className={config.classes.triggerRight || undefined} aria-hidden="true">
+          <span className={config.classes.triggerRight || undefined} aria-hidden="true" inert>
             {rightSlot}
           </span>
         )}

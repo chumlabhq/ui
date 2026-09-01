@@ -74,7 +74,7 @@ describe("classes override contract", () => {
     "$name",
     ({ name, Component, props, defaults, allTokenCounts }) => {
       const identifying = identifyingTokens(defaults!, allTokenCounts);
-      const fixtures = fixturesFor(name);
+      const fixtures = fixturesFor(name).filter((f) => !f.render);
 
         it("a consumer value displaces the default for every slot it renders", async () => {
         const ignored: string[] = [];

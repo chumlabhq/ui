@@ -326,7 +326,7 @@
     "test:all": "npm run test:run && npm run test:e2e",
     "clean": "rm -rf dist",
     "build:lib": "npm run clean && npm run build:tokens && vite build --mode lib && tsc --project tsconfig.lib.json && npm run build:styles",
-    "postbuild:lib": "node scripts/assert-phone-bundle.mjs && node scripts/assert-flag-bundle.mjs && node scripts/assert-styles-bundle.mjs",
+    "postbuild:lib": "node scripts/assert-phone-bundle.mjs && node scripts/assert-flag-bundle.mjs && node scripts/assert-styles-bundle.mjs && node scripts/assert-fixture-bundle.mjs",
     "build:preview": "node scripts/build-preview-vendor.mjs",
     "build:llms": "node ai/build-llms-full.mjs",
     "build:flags": "node scripts/generate-flags.mjs",

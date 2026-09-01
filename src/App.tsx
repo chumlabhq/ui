@@ -1,8 +1,18 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop";
 import { useAnalytics } from "./hooks/useAnalytics";
 import { BuyMeCoffeeProvider } from "./components/BuyMeCoffee";
 import { PLAYGROUND_ENABLED } from "./lib/flags";
+
+// Fixture pages exist so e2e can drive components without going through demo
+// prose (E2E-INVENTORY.md). The import sits inside a ternary on
+// import.meta.env.DEV, which is a literal in a production build, so Rollup
+// drops the branch AND its chunk — a top-level lazy(() => import(...)) would
+// have emitted the chunk regardless.
+const FixtureRoutes = import.meta.env.DEV
+  ? lazy(() => import("./pages/fixtures/FixtureRoutes"))
+  : null;
 import Home from "./pages/Home";
 import OauthRedirect from "./pages/oauth/OauthRedirect";
 import Playground from "./pages/playground/Playground";
@@ -122,6 +132,16 @@ const App = () => {
               restores it (static /admin still wins by route ranking). */}
           <Route path=":chatId" element={<Playground />} />
         </Route>
+      )}
+      {FixtureRoutes && (
+        <Route
+          path="__fixtures/*"
+          element={
+            <Suspense fallback={null}>
+              <FixtureRoutes />
+            </Suspense>
+          }
+        />
       )}
       <Route path="oauth/google" element={<OauthRedirect />} />
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -163,6 +163,10 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
             // src would fire a spurious error before the flag even resolves.
             src={src ?? undefined}
             alt=""
+            // The wrapper carries role="img" and the accessible name, so the
+            // inner image must not also be announced. `alt=""` alone leaves it
+            // in the tree for some AT; aria-hidden takes it out.
+            aria-hidden="true"
             width={width}
             height={height}
             loading="lazy"

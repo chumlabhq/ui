@@ -74,7 +74,9 @@ describe("hydration contract", () => {
   });
 
   describe.each(candidates)("$name", (component) => {
-    const fixtures = fixturesFor(component.name);
+    // `render` fixtures own their markup; these suites drive the component
+    // themselves from fixture props, so there is nothing for them to apply.
+    const fixtures = fixturesFor(component.name).filter((f) => !f.render);
     const { Component, props, wrap } = component;
 
     it("hydrates without a mismatch when reduced motion is on", async () => {

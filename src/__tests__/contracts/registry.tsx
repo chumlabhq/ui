@@ -15,7 +15,13 @@
  * omission.
  */
 import type { ComponentType, ReactNode } from "react";
-import { RadioGroup } from "../../components/RadioButton";
+import {
+  EXPORT_ALIAS,
+  REQUIRED_PROPS,
+  REQUIRED_WRAPPER,
+} from "./registryMaps";
+
+export { EXPORT_ALIAS, REQUIRED_PROPS, REQUIRED_WRAPPER };
 import index from "../../../ai/component-index.json";
 
 interface IndexEntry {
@@ -127,46 +133,8 @@ const owners = (component: string): Map<string, string> => {
   return out;
 };
 
-/**
- * Index entries whose name is not an export. `Loader` is a family
- * (CircularLoader, LinearLoader, DotLoader, PulseLoader) with no single
- * `Loader` export; the index names the family, so pick a representative.
- */
-const EXPORT_ALIAS: Record<string, string> = {
-  Loader: "CircularLoader",
-  // `RadioButton` throws outside a RadioGroup; the group is the public entry.
-  RadioButton: "RadioGroup",
-};
 
-/**
- * Sub-components that throw outside a parent context. Hand-maintained like
- * REQUIRED_PROPS, and just as small: a RadioButton outside its RadioGroup
- * throws, and no prop combination substitutes for the provider.
- */
-const REQUIRED_WRAPPER: Record<string, (node: ReactNode) => ReactNode> = {
-  "RadioButton/RadioButton": (node) => <RadioGroup>{node}</RadioGroup>,
-};
 
-/** Minimal props for components that cannot render bare. Keyed by index name. */
-const REQUIRED_PROPS: Record<string, Record<string, unknown>> = {
-  Accordion: { type: "single", children: null },
-  Breadcrumb: { items: [{ id: "home", label: "Home" }] },
-  CascadingDropdown: { options: [] },
-  CountryFlag: { countryCode: "US" },
-  Dropdown: { options: [] },
-  MultiSelectDropdown: { options: [] },
-  MultiSelectSearchableDropdown: { options: [] },
-  Pagination: { currentPage: 1, totalPages: 3 },
-  RadioButton: { options: [{ value: "a", label: "A" }] },
-  SearchableDropdown: { options: [] },
-  Stepper: { steps: [{ id: "a", label: "A" }] },
-  Table: { data: [], columns: [] },
-  TabPanel: { tabs: [{ id: "a", label: "A", content: "A" }] },
-  Tooltip: { content: "tip", children: "trigger" },
-  Modal: { children: "body" },
-  Drawer: { children: "body" },
-  Toast: { message: "hi" },
-};
 
 export interface ComponentUnderContract {
   /** The component that owns this class set — the index name for the primary. */

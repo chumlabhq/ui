@@ -128,16 +128,29 @@ test.describe("ResizablePanel Component", () => {
       const separator = rightSection.getByRole("separator");
       const initialValue = Number(await separator.getAttribute("aria-valuenow"));
 
+      // The handle sits below the fold: its box was at y=766 in a 720px
+      // viewport, so every synthetic mouse event landed outside the window and
+      // the value never moved.
+      await separator.scrollIntoViewIfNeeded();
       const box = await separator.boundingBox();
       expect(box).not.toBeNull();
 
-      await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+      const startX = box!.x + box!.width / 2;
+      const y = box!.y + box!.height / 2;
+
+      // A single jump from press to release is one pointermove, and the
+      // component tracks the delta per move — the browser does not interpolate.
+      // Intermediate steps are what make a synthetic drag look like a drag.
+      await page.mouse.move(startX, y);
       await page.mouse.down();
-      await page.mouse.move(box!.x + box!.width / 2 + 50, box!.y + box!.height / 2);
+      for (let step = 1; step <= 10; step++) {
+        await page.mouse.move(startX + step * 5, y);
+      }
       await page.mouse.up();
 
-      const newValue = Number(await separator.getAttribute("aria-valuenow"));
-      expect(newValue).toBeGreaterThan(initialValue);
+      await expect
+        .poll(async () => Number(await separator.getAttribute("aria-valuenow")))
+        .toBeGreaterThan(initialValue);
     });
   });
 
@@ -195,7 +208,10 @@ test.describe("ResizablePanel Component", () => {
       await separator.focus();
       await page.keyboard.press("ArrowRight");
 
-      const log = callbackSection.locator(".font-mono");
+      // `.font-mono` matches the size readout as well as the log, so the
+      // strict-mode locator resolved to two elements. The log is the scrollable
+      // one; scope to it rather than taking whichever came first.
+      const log = callbackSection.locator(".font-mono.overflow-y-auto").first();
       await expect(log).toContainText("onResizeStart");
       await expect(log).toContainText("onResizeEnd");
     });
