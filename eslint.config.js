@@ -34,4 +34,27 @@ export default tseslint.config(
       "no-unused-vars": "off",
     },
   },
+  {
+    // The public `cn` (src/utils/cn.ts) is re-exported from the package and
+    // deliberately does NOT add the cl-s scope marker, because a consumer
+    // calling it on their own markup must not have the library's confined
+    // utilities start matching their elements. Library code needs the marking
+    // variant or `asChild` silently renders unstyled — AUDIT-GAP.md §1.1.
+    files: ["src/components/**/*.{ts,tsx}"],
+    ignores: ["src/components/**/__tests__/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/utils/cn", "**/utils/cn.ts"],
+              message:
+                "Import { cn } from utils/scopedCn inside src/components — the public cn does not carry the cl-s marker.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

@@ -47,6 +47,19 @@ const twMerge = extendTailwindMerge({
   },
 });
 
+/**
+ * Merges class strings, last-wins on conflict.
+ *
+ * PUBLIC. This is the `cn` re-exported from the package root, so consumers call
+ * it on their own markup. It must never add the `cl-s` scope marker: the
+ * library's utilities ship confined to that marker precisely so they cannot
+ * match a consumer's elements, and stamping it onto consumer markup would
+ * re-open the failure that motivated the scoping — a page whose own `.hidden`
+ * meant "dimmed" had our `display: none` applied and its content vanished
+ * (scripts/build-styles.mjs:8-18).
+ *
+ * Library code wants the marking variant instead: src/utils/scopedCn.ts.
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

@@ -33,14 +33,17 @@ for (const f of [STYLES, TOKENS]) {
 }
 
 const css = readFileSync(STYLES, "utf8");
-const hasRule = (cls) => new RegExp(`^\\s*\\.${cls}\\s*\\{`, "m").test(css);
+// Utilities ship confined to the marker class - see scripts/build-styles.mjs.
+const hasRule = (cls) =>
+  new RegExp(`^\\s*\\.${cls}:where\\(\\.cl-s\\)\\s*\\{`, "m").test(css);
 
 // The exact mechanism that puts a selected tick inline and right-aligned.
 const TICK_LAYOUT = ["flex", "items-center", "justify-between"];
 for (const cls of TICK_LAYOUT) {
   if (!hasRule(cls)) fail(`.${cls} has no rule - selectable rows will stack instead of sitting inline`);
 }
-if (!/\.flex\s*\{\s*display:\s*flex/.test(css)) fail(".flex does not declare display:flex");
+if (!/\.flex:where\(\.cl-s\)\s*\{\s*display:\s*flex/.test(css))
+  fail(".flex does not declare display:flex");
 
 // Structural utilities the rest of the library positions with.
 for (const cls of ["inline-flex", "shrink-0", "w-full", "absolute", "relative", "flex-1", "truncate"]) {
@@ -55,6 +58,40 @@ if (/box-sizing:\s*border-box/.test(css) && /^\s*\*,\s*::after/m.test(css)) {
 
 // The stylesheet is useless without the values its utilities reference.
 if (!/--cl-accent:/.test(css)) fail("design tokens are missing from styles.css");
+
+// Without a declared order, a consumer's Tailwind introduces `base` as a new
+// layer that sorts after ours, and its preflight overrides our utilities -
+// every component loses its padding and corners. The `base` slot must be
+// reserved even though we never fill it.
+const ORDER = /^@layer\s+([^;{]+);/m.exec(css);
+if (!ORDER) {
+  fail("styles.css declares no layer order - a consumer's preflight would outrank our utilities");
+} else {
+  const layers = ORDER[1].split(",").map((l) => l.trim());
+  if (!layers.includes("base")) {
+    fail(`layer order [${layers.join(", ")}] omits 'base' - a consumer's preflight would sort last and win`);
+  }
+  if (layers.indexOf("base") > layers.indexOf("utilities")) {
+    fail("'base' is declared after 'utilities' - a consumer's preflight would win");
+  }
+}
+
+// The utilities we ship are plain Tailwind names - `.hidden`, `.table`,
+// `.container`. Unconfined they also match the CONSUMER's markup, and a page
+// whose own `.hidden` only sets opacity had our `display: none` applied and its
+// content disappeared. Every utility must carry the marker; see build-styles.mjs.
+const utilities = css.slice(css.indexOf("@layer utilities"));
+const unconfined = (utilities.match(/^[ \t]*\.[^{}\n]*\{/gm) || []).filter(
+  (sel) => !sel.includes(":where(.cl-s)"),
+);
+if (unconfined.length) {
+  fail(
+    `${unconfined.length} utility rule(s) ship unconfined and would style consumer markup: ${unconfined
+      .slice(0, 5)
+      .map((s) => s.trim())
+      .join(", ")}`,
+  );
+}
 
 // Every layout class the built components actually reference must resolve.
 const LAYOUT = /\b(flex|inline-flex|grid|items-(?:center|start|end)|justify-(?:between|center|end)|ml-auto|shrink-0|flex-1)\b/g;
@@ -78,7 +115,7 @@ if (process.exitCode) {
   process.exit(1);
 }
 
-const rules = (css.match(/^\s*\.[a-zA-Z0-9\\:._-]+\s*\{/gm) || []).length;
+const rules = (css.match(/^\s*\.[a-zA-Z0-9\\:._/[\]-]+(?::where\(\.cl-s\))?[^{]*\{/gm) || []).length;
 console.log(`✓ styles.css carries ${rules} rules incl. the flex/align set the tick depends on`);
 console.log(`✓ ${referenced.size} distinct layout classes referenced by components all resolve`);
 console.log("✓ no preflight - the consumer's own page styling is untouched");

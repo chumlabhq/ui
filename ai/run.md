@@ -50,9 +50,11 @@ The pipeline runs in 5 phases. Each phase is gated — proceed only if all prior
 1. `01-audit.md` — System audit, identify blockers / high / low issues
 2. `02-fix.md` — Fix all 🔴 blockers and 🟡 high issues
 3. `03-regression.md` — Detect any new issues caused by fixes
+3b. `verify-contracts.md` — Cross-cutting contract gate (marker, SSR, unstyled, classes)
 4. `04-validate.md` — Final correctness gate
 
-**Gate:** No 🔴 blockers, no regressions, validate = SAFE TO SHIP. If any condition fails, STOP.
+**Gate:** No 🔴 blockers, no regressions, contract suites green outside the recorded
+`contracts.knownFailing` waiver list, validate = SAFE TO SHIP. If any condition fails, STOP.
 
 ### PHASE 2 — QUALITY (system hardening)
 
@@ -93,6 +95,7 @@ Pipeline must STOP IMMEDIATELY (no further steps) if:
 
 - Any 🔴 blocker is unresolved after step 02
 - Step 03 finds any new regression
+- Step 03b reports a contract failure outside `contracts.knownFailing`
 - Step 04 returns NOT SAFE TO SHIP
 - Any phase gate fails its threshold
 - A step is missing required input artifacts from prior steps
@@ -110,7 +113,7 @@ When stopping, the pipeline must:
 
 The pipeline is COMPLETE only when:
 
-- All 19 steps return `PASS`
+- All 20 steps return `PASS`
 - No regressions detected at any phase
 - Validation result = SAFE TO SHIP
 - Coverage thresholds met for tests, accessibility, responsive, theme, performance
@@ -125,7 +128,7 @@ At pipeline completion, return:
 
 ```
 PIPELINE: <PASS | FAIL>
-COMPLETED STEPS: <count>/19
+COMPLETED STEPS: <count>/20
 
 ISSUES FIXED: <count>
 REGRESSIONS: <count>

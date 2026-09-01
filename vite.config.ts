@@ -102,7 +102,15 @@ export default defineConfig(({ mode }) => {
   if (mode === "lib") {
     const componentEntries = getComponentEntries();
     return {
-      plugins: [react(), tailwindcss(), useClientDirective(), copyTokens()],
+      plugins: [
+        // Compiles the library against src/jsx, which stamps a marker class on
+        // every rendered DOM element so the utilities in dist/styles.css can be
+        // scoped to our own markup. See src/jsx/jsx-runtime.ts.
+        react({ jsxImportSource: resolve(__dirname, "src/jsx") }),
+        tailwindcss(),
+        useClientDirective(),
+        copyTokens(),
+      ],
       publicDir: false,
       build: {
         sourcemap: false,

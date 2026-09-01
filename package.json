@@ -310,6 +310,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
+    "test:contracts": "vitest run --project=contracts",
+    "test:unit": "vitest run --project=unit",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch",
