@@ -3,80 +3,19 @@ import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
 /**
- * Repointed from /drawer to fixture pages.
+ * Repointed from /drawer to fixture pages, then cut to what needs a browser.
  *
  * Every test here used to open the drawer via
  * `getByRole("button", { name: "Navigation Menu" })`. That label, and five
  * others the spec relied on, had been gone from the demo for some time — all 18
- * tests failed on the same timeout (E2E-INVENTORY.md). The behaviour under test
- * is unchanged; what it renders against is a fixture with no prose to drift.
+ * tests failed on the same timeout (E2E-INVENTORY.md). Ten of the eighteen then
+ * turned out to duplicate Drawer.test.tsx and were deleted rather than
+ * repointed (E2E-TRIAGE.md); what is left is focus, geometry, gesture and axe.
  */
 
 const DIALOG = '[role="dialog"]';
 
 test.describe("Drawer", () => {
-  test.describe("Basic Functionality", () => {
-    test("opens on trigger click", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "with-trigger");
-      await expect(page.locator(DIALOG)).toHaveCount(0);
-
-      await page.locator("[data-harness-trigger]").click();
-
-      const dialog = page.locator(DIALOG);
-      await expect(dialog).toBeVisible();
-      await expect(dialog).toHaveAttribute("aria-modal", "true");
-    });
-
-    test("closes on Escape", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "with-trigger");
-      await page.locator("[data-harness-trigger]").click();
-      await expect(page.locator(DIALOG)).toBeVisible();
-
-      await page.keyboard.press("Escape");
-      await expect(page.locator(DIALOG)).not.toBeVisible();
-    });
-
-    test("closes on overlay click", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "with-trigger");
-      await page.locator("[data-harness-trigger]").click();
-      await expect(page.locator(DIALOG)).toBeVisible();
-
-      // Let the open transition settle before clicking: the overlay animates
-      // its opacity, so a click that races it either misses or waits out the
-      // actionability check.
-      await page.locator("[data-drawer-overlay]").waitFor({ state: "visible" });
-      await page.waitForTimeout(400);
-      await page.mouse.click(5, 5);
-      await expect(page.locator(DIALOG)).not.toBeVisible();
-    });
-
-    test("closes via the close button", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "with-trigger");
-      await page.locator("[data-harness-trigger]").click();
-      const dialog = page.locator(DIALOG);
-      await expect(dialog).toBeVisible();
-
-      const close = dialog.locator("[data-drawer-close]");
-      await expect(close).toBeVisible();
-      await close.click();
-      await expect(dialog).not.toBeVisible();
-    });
-  });
-
-  test.describe("Directions", () => {
-    for (const [fixture, direction] of [
-      ["open", "right"],
-      ["open-left", "left"],
-    ] as const) {
-      test(`renders the ${direction} drawer`, async ({ page }) => {
-        await gotoFixture(page, "Drawer", fixture);
-        const dialog = page.locator(DIALOG);
-        await expect(dialog).toBeVisible();
-        await expect(dialog).toHaveAttribute("aria-modal", "true");
-      });
-    }
-  });
-
   test.describe("Focus Management", () => {
     test("restores focus to the trigger on close", async ({ page }) => {
       await gotoFixture(page, "Drawer", "with-trigger");
@@ -103,70 +42,53 @@ test.describe("Drawer", () => {
     });
   });
 
-  test.describe("Non-Modal Drawer", () => {
-    test("opens without aria-modal", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "with-trigger-non-modal");
-      await page.locator("[data-harness-trigger]").click();
-
+  test.describe("Gestures", () => {
+    test("dismisses a bottom sheet on a downward swipe", async ({ page }) => {
+      await gotoFixture(page, "Drawer", "swipeable-bottom");
       const dialog = page.locator(DIALOG);
       await expect(dialog).toBeVisible();
-      await expect(dialog).not.toHaveAttribute("aria-modal", "true");
-    });
 
-    test("leaves the page behind it interactive", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "with-trigger-non-modal");
-      const trigger = page.locator("[data-harness-trigger]");
-      await trigger.click();
-      await expect(page.locator(DIALOG)).toBeVisible();
-
-      await expect(trigger).toBeEnabled();
-    });
-  });
-
-  test.describe("Keep Mounted", () => {
-    test("keeps the panel in the DOM while closed", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "closed-kept-mounted");
-      const dialog = page.locator(DIALOG);
-      await expect(dialog).toBeAttached();
-
-      // `keepMounted` parks the panel off-screen rather than unmounting it, so
-      // "not visible" is the wrong question — Playwright counts an element with
-      // a box as visible wherever it sits.
       const box = (await dialog.boundingBox())!;
-      expect(box.x + box.width).toBeLessThanOrEqual(0);
+      const x = box.x + box.width / 2;
+      const start = box.y + 12;
+
+      await page.mouse.move(x, start);
+      await page.mouse.down();
+      // Intermediate moves, not a single jump: the drag handler reads deltas
+      // between pointer events, and headless chromium delivers exactly the
+      // moves that are asked for (E2E-INVENTORY.md, resizablepanel).
+      for (let i = 1; i <= 8; i++) {
+        await page.mouse.move(x, start + (box.height * i) / 8);
+      }
+      await page.mouse.up();
+
+      await expect(dialog).not.toBeVisible();
+    });
+
+    test("raises the panel when the snap point index rises", async ({ page }) => {
+      await gotoFixture(page, "Drawer", "snap-points");
+      const dialog = page.locator(DIALOG);
+      await expect(dialog).toBeVisible();
+
+      // A snap point moves the panel, it does not resize it: the fraction
+      // becomes a `translateY` percentage, so the observable is the top edge.
+      const topAt = async (index: number) => {
+        await page.locator(`[data-harness-index="${index}"]`).click();
+        await page.waitForTimeout(500);
+        return (await dialog.boundingBox())!.y;
+      };
+
+      const low = await topAt(0);
+      const high = await topAt(2);
+      expect(high).toBeLessThan(low);
     });
   });
 
   test.describe("Accessibility", () => {
-    test("has a dialog role and a label", async ({ page }) => {
-      await gotoFixture(page, "Drawer", "open");
-      const dialog = page.locator(DIALOG);
-      await expect(dialog).toBeVisible();
-
-      const labelled = await dialog.evaluate(
-        (el) =>
-          el.hasAttribute("aria-label") || el.hasAttribute("aria-labelledby"),
-      );
-      expect(labelled, "the dialog has no accessible name").toBe(true);
-    });
-
     test("passes an axe audit", async ({ page }) => {
       await gotoFixture(page, "Drawer", "open");
       await injectAxe(page);
       await checkA11y(page, DIALOG, { detailedReport: true });
-    });
-
-    test("respects prefers-reduced-motion", async ({ page }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      await gotoFixture(page, "Drawer", "open");
-
-      const dialog = page.locator(DIALOG);
-      await expect(dialog).toBeVisible();
-      const classes = (await dialog.getAttribute("class")) ?? "";
-      expect(
-        classes.split(/\s+/).filter((c) => /^(transition|duration|animate)-/.test(c)),
-        "the drawer animated under prefers-reduced-motion",
-      ).toEqual([]);
     });
   });
 

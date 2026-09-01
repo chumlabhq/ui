@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
+import { gotoFixture } from "./_nav";
 
 import { watchClicks } from "./_helpers";
 // Helper to wait for input visibility with scroll support
@@ -18,43 +19,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
     await waitForInputVisible(page);
   });
 
-  test.describe("Basic Functionality", () => {
-    test("should render input components on the page", async ({ page }) => {
-      const inputs = page.locator("input");
-      await expect(inputs.first()).toBeVisible();
-
-      const count = await inputs.count();
-      expect(count).toBeGreaterThan(0);
-    });
-
-    test("should accept user input", async ({ page }) => {
-      const input = page.locator("input").first();
-
-      await input.fill("Hello World");
-
-      await expect(input).toHaveValue("Hello World");
-    });
-
-    test("should clear input value", async ({ page }) => {
-      const input = page.locator("input").first();
-
-      await input.fill("Test value");
-      await input.clear();
-
-      await expect(input).toHaveValue("");
-    });
-
-    test("should display placeholder text", async ({ page }) => {
-      const inputWithPlaceholder = page.locator("input[placeholder]").first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(inputWithPlaceholder.first()).toBeVisible();
-      const placeholder =
-        await inputWithPlaceholder.getAttribute("placeholder");
-      expect(placeholder).toBeTruthy();
-    });
-  });
 
   test.describe("Labels", () => {
     test("should display labels for inputs", async ({ page }) => {
@@ -102,19 +66,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test("should handle clickable icon interactions", async ({ page }) => {
-      // Find elements with role="button" that are icon wrappers
-      const iconButtons = page.locator('[role="button"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(iconButtons.first()).toBeVisible();
-      const button = iconButtons.first();
-      await expect(button).toBeVisible();
-
-      // Should be clickable without errors
-      await button.click();
-    });
   });
 
   test.describe("Error States", () => {
@@ -138,17 +89,6 @@ test.describe("Input Component - Cross-Browser Tests", () => {
   });
 
   test.describe("Disabled States", () => {
-    test("should render disabled inputs", async ({ page }) => {
-      // Look for explicitly disabled inputs (not loading state which also disables)
-      // Find the disabled input with "Disabled input" placeholder
-      const disabledInput = page.locator('input[placeholder="Disabled input"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(disabledInput.first()).toBeVisible();
-      await disabledInput.first().scrollIntoViewIfNeeded();
-      await expect(disabledInput.first()).toBeDisabled();
-    });
 
     test("should not allow typing in disabled input", async ({ page }) => {
       const disabledInput = page.locator("input:disabled").first();
@@ -242,14 +182,6 @@ test.describe("Input Keyboard Navigation", () => {
     await expect.poll(clicks).toBeGreaterThan(0);
   });
 
-  test("should allow typing after tabbing to input", async ({ page }) => {
-    const input = page.locator("input").first();
-    await input.focus();
-
-    await page.keyboard.type("Hello");
-
-    await expect(input).toHaveValue("Hello");
-  });
 });
 
 test.describe("Input Accessibility Tests", () => {
@@ -289,26 +221,6 @@ test.describe("Input Accessibility Tests", () => {
     expect(criticalViolations).toHaveLength(0);
   });
 
-  test("should have proper labels on inputs", async ({ page }) => {
-    const labeledInputs = page.locator("input[id]");
-    const count = await labeledInputs.count();
-
-    for (let i = 0; i < Math.min(count, 5); i++) {
-      const input = labeledInputs.nth(i);
-      const id = await input.getAttribute("id");
-
-      if (id) {
-        // Check if there's a label pointing to this input
-        const label = page.locator(`label[for="${id}"]`);
-
-        // Verify label is visible when present
-        // The guard used to make this pass when the element was absent, which is
-        // the failure the test exists to catch. Assert presence, then behaviour.
-        await expect(label.first()).toBeVisible();
-        await expect(label).toBeVisible();
-      }
-    }
-  });
 
   test("should have aria-invalid on error inputs", async ({ page }) => {
     const errorInputs = page.locator(
@@ -352,24 +264,6 @@ test.describe("Input Accessibility Tests", () => {
     expect(ariaRequired).toBe("true");
   });
 
-  test("icon buttons should have button role when clickable", async ({
-    page,
-  }) => {
-    // Find elements that appear to be icon buttons (have role="button")
-    const iconButtons = page.locator('[role="button"]');
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(iconButtons.first()).toBeVisible();
-    const button = iconButtons.first();
-
-    // Verify role is correctly set
-    await expect(button).toHaveAttribute("role", "button");
-
-    // Should be focusable (tabindex=0)
-    const tabIndex = await button.getAttribute("tabindex");
-    expect(tabIndex).toBe("0");
-  });
 });
 
 test.describe("Input Responsive Tests", () => {
@@ -467,102 +361,8 @@ test.describe("Input Responsive Tests", () => {
   });
 });
 
-test.describe("Input Performance Tests", () => {
-  test("should load page within acceptable time", async ({
-    page,
-    browserName,
-  }) => {
-    const startTime = Date.now();
-
-    await page.goto("/input");
-    await page.waitForLoadState("networkidle");
-
-    const input = page.locator("input").first();
-    await input.waitFor({ state: "attached", timeout: 10000 });
-    await input.scrollIntoViewIfNeeded();
-    await input.waitFor({ state: "visible", timeout: 10000 });
-
-    const loadTime = Date.now() - startTime;
-
-    // Mobile browsers and Firefox have higher overhead in CI environments
-    const threshold = browserName === "firefox" ? 15000 : 10000;
-    expect(loadTime).toBeLessThan(threshold);
-  });
-
-  test("should handle rapid typing without lag", async ({
-    page,
-    browserName,
-  }) => {
-    await page.goto("/input");
-    await page.waitForLoadState("domcontentloaded");
-
-    const input = page.locator("input").first();
-    await input.waitFor({ state: "attached", timeout: 10000 });
-    await input.scrollIntoViewIfNeeded();
-    await input.click();
-
-    // Use shorter string for Firefox to avoid timeout issues
-    const testString =
-      browserName === "firefox"
-        ? "Quick brown fox"
-        : "The quick brown fox jumps over the lazy dog";
-
-    const startTime = Date.now();
-
-    // Use fill for faster, more reliable input (instead of keyboard.type)
-    await input.fill(testString);
-
-    const typeTime = Date.now() - startTime;
-
-    await expect(input).toHaveValue(testString);
-
-    // Firefox and WebKit have higher overhead than Chromium
-    const buffer = browserName === "chromium" ? 1000 : 2000;
-    expect(typeTime).toBeLessThan(testString.length * 10 + buffer);
-  });
-
-  test("should handle multiple inputs on page", async ({ page }) => {
-    await page.goto("/input");
-    // Use domcontentloaded instead of networkidle to avoid Firefox timeouts
-    await page.waitForLoadState("domcontentloaded");
-    await waitForInputVisible(page);
-
-    const inputs = page.locator("input");
-    const count = await inputs.count();
-
-    // Page should handle many inputs
-    expect(count).toBeGreaterThan(0);
-
-    // Spot check a few inputs work correctly
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      const input = inputs.nth(i);
-      await input.scrollIntoViewIfNeeded();
-
-      if (!(await input.isDisabled())) {
-        await input.fill(`Test ${i}`);
-        await expect(input).toHaveValue(`Test ${i}`);
-        await input.clear();
-      }
-    }
-  });
-});
 
 test.describe("Input Form Integration", () => {
-  test("should work within form context", async ({ page }) => {
-    await page.goto("/input");
-    await page.waitForLoadState("domcontentloaded");
-
-    // Find inputs with name attribute (form-ready)
-    const namedInputs = page.locator("input[name]");
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(namedInputs.first()).toBeVisible();
-    const input = namedInputs.first();
-    const name = await input.getAttribute("name");
-
-    expect(name).toBeTruthy();
-  });
 
   test("should support different input types", async ({ page }) => {
     await page.goto("/input");
@@ -587,5 +387,37 @@ test.describe("Input Form Integration", () => {
     // the failure the test exists to catch. Assert presence, then behaviour.
     await expect(passwordInputs.first()).toBeVisible();
     await expect(passwordInputs.first()).toHaveAttribute("type", "password");
+  });
+});
+
+/**
+ * The three of input.spec.ts's thirteen stale tests that need a browser
+ * (E2E-TRIAGE.md). Eight duplicated Input.test.tsx; two — form participation
+ * and id uniqueness across instances — moved there as unit tests.
+ */
+test.describe("Input (fixtures)", () => {
+  test("accepts typing after Tab reaches it", async ({ page }) => {
+    await gotoFixture(page, "Input", "labelled");
+
+    const input = page.locator("input").first();
+    for (let i = 0; i < 8; i++) {
+      await page.keyboard.press("Tab");
+      if (await input.evaluate((el) => document.activeElement === el)) break;
+    }
+    await expect(input).toBeFocused();
+
+    await page.keyboard.type("typed after tab");
+    await expect(input).toHaveValue("typed after tab");
+  });
+
+
+  test("keeps every character of fast typing", async ({ page }) => {
+    await gotoFixture(page, "Input", "default");
+
+    const input = page.locator("input").first();
+    await input.click();
+    await page.keyboard.type("abcdefghijklmnopqrstuvwxyz", { delay: 0 });
+
+    await expect(input).toHaveValue("abcdefghijklmnopqrstuvwxyz");
   });
 });

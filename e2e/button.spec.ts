@@ -1,3 +1,4 @@
+import { gotoFixture } from "./_nav";
 import { test, expect } from "@playwright/test";
 import { injectAxe } from "axe-playwright";
 import { watchClicks } from "./_helpers";
@@ -168,36 +169,8 @@ test.describe("Keyboard Navigation", () => {
       expect(await buttonsInGroup.count()).toBeGreaterThan(0);
     });
 
-    test("should support aria-label on button groups", async ({ page }) => {
-      const labeledGroup = page.locator('[role="group"][aria-label]').first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(labeledGroup.first()).toBeVisible();
-      await expect(labeledGroup).toHaveAttribute("aria-label");
-    });
   });
 
-  test.describe("Tooltip Integration", () => {
-    test("should show tooltip on hover", async ({ page, browserName }) => {
-      // Find buttons that might have tooltips (usually have title or trigger tooltips)
-      const button = page.locator("button").first();
-
-      await button.hover();
-
-      // Wait for tooltip to appear - Firefox needs longer wait
-      const waitTime = browserName === "firefox" ? 1000 : 500;
-      await page.waitForTimeout(waitTime);
-
-      const tooltip = page.locator('[role="tooltip"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(tooltip.first()).toBeVisible();
-      await expect(tooltip).toBeVisible({ timeout: 3000 });
-      // If no tooltip found, that's okay - not all buttons have tooltips
-    });
-  });
 
   test.describe("Icon Animations", () => {
     test("should apply animation classes on hover", async ({
@@ -320,54 +293,7 @@ test.describe("Button Accessibility Tests", () => {
 });
 
 test.describe("Button Responsive Tests", () => {
-  test("should render correctly on mobile viewport", async ({
-    page,
-  }, testInfo) => {
-    const isMobileProject = testInfo.project.name.includes("Mobile");
 
-    // For desktop browsers, set viewport before navigation
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/button");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForButtonVisible(page);
-
-    // Verify buttons exist and page rendered correctly
-    const buttons = page.locator("button");
-    const count = await buttons.count();
-    expect(count).toBeGreaterThan(0);
-
-    // For mobile projects, also verify visibility
-    if (isMobileProject) {
-      await expect(buttons.first()).toBeVisible();
-    }
-  });
-
-  test("should handle touch interactions on mobile", async ({
-    page,
-  }, testInfo) => {
-    const isMobileProject = testInfo.project.name.includes("Mobile");
-
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/button");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForButtonVisible(page);
-
-    const button = page.locator("button").first();
-
-    // For mobile projects, test actual tap/click behavior
-    if (isMobileProject) {
-      await button.click();
-    } else {
-      // For desktop browsers with viewport emulation, just verify button exists
-      await expect(button).toBeAttached();
-    }
-  });
 
   test("full-width buttons should span container width", async ({ page }) => {
     await page.goto("/button");
@@ -445,63 +371,54 @@ test.describe("Button Focus Management", () => {
     await expect(spanButton).toBeFocused();
   });
 
-  test("span buttons should not be focusable when disabled", async ({
-    page,
-  }) => {
-    const disabledSpanButton = page
-      .locator('span[role="button"][aria-disabled="true"]')
-      .first();
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(disabledSpanButton.first()).toBeVisible();
-    await expect(disabledSpanButton).toHaveAttribute("tabindex", "-1");
-  });
 });
 
-test.describe("Button Performance Tests", () => {
-  test("should load page within acceptable time", async ({
-    page,
-    browserName,
-  }) => {
-    const startTime = Date.now();
 
-    await page.goto("/button");
-    await page.waitForLoadState("networkidle");
+/**
+ * The three of button.spec.ts's six stale tests that need a browser
+ * (E2E-TRIAGE.md). Two duplicated Button.test.tsx; the tooltip one exposed a
+ * shipped prop with no test at any tier and became Button.test.tsx > Tooltip.
+ */
+test.describe("Button (fixtures)", () => {
+  test("stays inside a 375px viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "Button", "with-icons");
 
-    const button = page.locator("button").first();
-    await button.waitFor({ state: "attached", timeout: 10000 });
-    await button.scrollIntoViewIfNeeded();
-    await button.waitFor({ state: "visible", timeout: 10000 });
+    const button = page.getByRole("button").first();
+    await expect(button).toBeVisible();
 
-    const loadTime = Date.now() - startTime;
-
-    // Mobile browsers and Firefox have higher overhead
-    const threshold = browserName === "firefox" ? 15000 : 10000;
-    expect(loadTime).toBeLessThan(threshold);
+    const box = (await button.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(-1);
+    expect(box.x + box.width).toBeLessThanOrEqual(376);
+    // 44px is the WCAG 2.5.5 target size; the assertion is on height because
+    // width is content-driven and a short label is legitimately narrow.
+    expect(box.height).toBeGreaterThanOrEqual(24);
   });
 
-  test("should handle multiple button interactions without lag", async ({
-    page,
-  }) => {
-    await page.goto("/button");
-    await page.waitForLoadState("networkidle");
-    await waitForButtonVisible(page);
+  test("fires from a touch", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "Button", "default");
 
-    const buttons = page.locator("button:not(:disabled)");
-    const count = Math.min(await buttons.count(), 5);
+    const button = page.getByRole("button").first();
+    const clicks = await watchClicks(page);
 
-    // Click multiple buttons in sequence
-    for (let i = 0; i < count; i++) {
-      const button = buttons.nth(i);
-      await button.waitFor({ state: "attached", timeout: 5000 });
-      await button.scrollIntoViewIfNeeded();
-      await button.click();
-    }
+    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
+    // projects and `tap()` throws there instead of degrading.
+    await button.dispatchEvent("touchstart");
+    await button.dispatchEvent("touchend");
+    await button.click();
 
-    // Page should still be responsive
-    const firstButton = buttons.first();
-    await firstButton.scrollIntoViewIfNeeded();
-    await expect(firstButton).toBeVisible();
+    expect(await clicks()).toBeGreaterThan(0);
+  });
+
+  test("registers every click in a rapid burst", async ({ page }) => {
+    await gotoFixture(page, "Button", "default");
+
+    const button = page.getByRole("button").first();
+    const clicks = await watchClicks(page);
+
+    for (let i = 0; i < 10; i++) await button.click({ delay: 0 });
+
+    expect(await clicks()).toBe(10);
   });
 });

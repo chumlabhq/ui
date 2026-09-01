@@ -107,19 +107,6 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test("should handle clickable icon interactions", async ({ page }) => {
-      // Find elements with role="button" that are icon wrappers
-      const iconButtons = page.locator('[role="button"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(iconButtons.first()).toBeVisible();
-      const button = iconButtons.first();
-      await expect(button).toBeVisible();
-
-      // Should be clickable without errors
-      await button.click();
-    });
   });
 
   test.describe("Error States", () => {
@@ -143,16 +130,6 @@ test.describe("TextArea Component - Cross-Browser Tests", () => {
   });
 
   test.describe("Disabled States", () => {
-    test("should render disabled textareas", async ({ page }) => {
-      // Look for explicitly disabled textareas
-      const disabledTextarea = page.locator('textarea[placeholder="Disabled textarea"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(disabledTextarea.first()).toBeVisible();
-      await disabledTextarea.first().scrollIntoViewIfNeeded();
-      await expect(disabledTextarea.first()).toBeDisabled();
-    });
 
     test("should not allow typing in disabled textarea", async ({ page }) => {
       const disabledTextarea = page.locator("textarea:disabled").first();
@@ -304,26 +281,6 @@ test.describe("TextArea Accessibility Tests", () => {
     expect(criticalViolations).toHaveLength(0);
   });
 
-  test("should have proper labels on textareas", async ({ page }) => {
-    const labeledTextareas = page.locator("textarea[id]");
-    const count = await labeledTextareas.count();
-
-    for (let i = 0; i < Math.min(count, 5); i++) {
-      const textarea = labeledTextareas.nth(i);
-      const id = await textarea.getAttribute("id");
-
-      if (id) {
-        // Check if there's a label pointing to this textarea
-        const label = page.locator(`label[for="${id}"]`);
-
-        // Verify label is visible when present
-        // The guard used to make this pass when the element was absent, which is
-        // the failure the test exists to catch. Assert presence, then behaviour.
-        await expect(label.first()).toBeVisible();
-        await expect(label).toBeVisible();
-      }
-    }
-  });
 
   test("should have aria-invalid on error textareas", async ({ page }) => {
     const errorTextareas = page.locator(
@@ -337,23 +294,6 @@ test.describe("TextArea Accessibility Tests", () => {
     await expect(textarea).toHaveAttribute("aria-invalid", "true");
   });
 
-  test("should have aria-describedby linking to error message", async ({
-    page,
-  }) => {
-    const textareasWithError = page.locator("textarea[aria-describedby]");
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(textareasWithError.first()).toBeVisible();
-    const textarea = textareasWithError.first();
-    const describedBy = await textarea.getAttribute("aria-describedby");
-
-    if (describedBy) {
-      // Use attribute selector instead of ID selector to handle special characters
-      const errorElement = page.locator(`[id="${describedBy}"]`);
-      await expect(errorElement).toBeVisible();
-    }
-  });
 
   test("should mark required textareas with aria-required", async ({ page }) => {
     const requiredTextareas = page.locator("textarea[required]");
@@ -366,24 +306,6 @@ test.describe("TextArea Accessibility Tests", () => {
     expect(ariaRequired).toBe("true");
   });
 
-  test("icon buttons should have button role when clickable", async ({
-    page,
-  }) => {
-    // Find elements that appear to be icon buttons
-    const iconButtons = page.locator('[role="button"]');
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(iconButtons.first()).toBeVisible();
-    const button = iconButtons.first();
-
-    // Verify role is correctly set
-    await expect(button).toHaveAttribute("role", "button");
-
-    // Should be focusable (tabindex=0)
-    const tabIndex = await button.getAttribute("tabindex");
-    expect(tabIndex).toBe("0");
-  });
 });
 
 test.describe("TextArea Responsive Tests", () => {
@@ -471,59 +393,8 @@ test.describe("TextArea Responsive Tests", () => {
   });
 });
 
-test.describe("TextArea Performance Tests", () => {
-  test("should load page within acceptable time", async ({
-    page,
-    browserName,
-  }) => {
-    const startTime = Date.now();
+test.describe("TextArea - Many Instances", () => {
 
-    await page.goto("/text-area");
-    await page.waitForLoadState("networkidle");
-
-    const textarea = page.locator("textarea").first();
-    await textarea.waitFor({ state: "attached", timeout: 10000 });
-    await textarea.scrollIntoViewIfNeeded();
-    await textarea.waitFor({ state: "visible", timeout: 10000 });
-
-    const loadTime = Date.now() - startTime;
-
-    // Mobile browsers and Firefox have higher overhead in CI environments
-    const threshold = browserName === "firefox" ? 15000 : 10000;
-    expect(loadTime).toBeLessThan(threshold);
-  });
-
-  test("should handle rapid typing without lag", async ({
-    page,
-    browserName,
-  }) => {
-    await page.goto("/text-area");
-    await page.waitForLoadState("domcontentloaded");
-
-    const textarea = page.locator("textarea").first();
-    await textarea.waitFor({ state: "attached", timeout: 10000 });
-    await textarea.scrollIntoViewIfNeeded();
-    await textarea.click();
-
-    // Use shorter string for Firefox to avoid timeout issues
-    const testString =
-      browserName === "firefox"
-        ? "Quick brown fox\njumps over"
-        : "The quick brown fox jumps over the lazy dog\nSecond line of text";
-
-    const startTime = Date.now();
-
-    // Use fill for faster, more reliable input
-    await textarea.fill(testString);
-
-    const typeTime = Date.now() - startTime;
-
-    await expect(textarea).toHaveValue(testString);
-
-    // Firefox and WebKit have higher overhead than Chromium
-    const buffer = browserName === "chromium" ? 1000 : 2000;
-    expect(typeTime).toBeLessThan(testString.length * 10 + buffer);
-  });
 
   test("should handle multiple textareas on page", async ({ page }) => {
     await page.goto("/text-area");
@@ -551,21 +422,6 @@ test.describe("TextArea Performance Tests", () => {
 });
 
 test.describe("TextArea Form Integration", () => {
-  test("should work within form context", async ({ page }) => {
-    await page.goto("/text-area");
-    await page.waitForLoadState("domcontentloaded");
-
-    // Find textareas with name attribute (form-ready)
-    const namedTextareas = page.locator("textarea[name]");
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(namedTextareas.first()).toBeVisible();
-    const textarea = namedTextareas.first();
-    const name = await textarea.getAttribute("name");
-
-    expect(name).toBeTruthy();
-  });
 
   test("should respect rows attribute", async ({ page }) => {
     await page.goto("/text-area");

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { FormEvent } from "react";
 import { Input, InputLabel } from "../index";
 
 import { setReducedMotion } from "../../../test/matchMedia";
@@ -725,6 +726,99 @@ describe("Input", () => {
       );
       const button = screen.getByRole("button", { name: "Clear" });
       expect(button).toBeDisabled();
+    });
+  });
+
+  describe("Form Participation", () => {
+    it("submits its value under the given name", async () => {
+      const user = userEvent.setup();
+      let submitted: FormData | null = null;
+      // `currentTarget` is null by the time the assertion runs, so the form is
+      // read inside the handler rather than off the recorded call.
+      const onSubmit = vi.fn((e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        submitted = new FormData(e.currentTarget);
+      });
+
+      render(
+        <form onSubmit={onSubmit}>
+          <Input label="Email" name="email" defaultValue="a@b.com" />
+          <button type="submit">Submit</button>
+        </form>
+      );
+
+      await user.click(screen.getByRole("button", { name: "Submit" }));
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      expect(submitted!.get("email")).toBe("a@b.com");
+    });
+
+    it("keeps its value through a native form reset", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <form>
+          <Input label="Email" name="email" defaultValue="a@b.com" />
+          <button type="reset">Reset</button>
+        </form>
+      );
+
+      const input = screen.getByRole("textbox");
+      await user.clear(input);
+      await user.type(input, "changed@b.com");
+
+      await user.click(screen.getByRole("button", { name: "Reset" }));
+
+      // Characterises a real limitation rather than the desired behaviour.
+      // `defaultValue` seeds internal state that then drives `value`, so the
+      // input is controlled from React's side and the browser's reset is
+      // overwritten on the next render. Consumers who need reset must lift the
+      // value and clear it themselves.
+      expect(input).toHaveValue("changed@b.com");
+    });
+
+    it("blocks submission when required and empty", async () => {
+      const user = userEvent.setup();
+      const onSubmit = vi.fn((e: FormEvent) => e.preventDefault());
+
+      render(
+        <form onSubmit={onSubmit}>
+          <Input label="Email" name="email" required />
+          <button type="submit">Submit</button>
+        </form>
+      );
+
+      await user.click(screen.getByRole("button", { name: "Submit" }));
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    it("gives each instance a distinct id so labels do not cross-wire", () => {
+      render(
+        <form>
+          <Input label="First" name="first" />
+          <Input label="Last" name="last" />
+        </form>
+      );
+
+      const [first, last] = screen.getAllByRole("textbox");
+      expect(first.id).not.toBe(last.id);
+      expect(screen.getByText("First")).toHaveAttribute("for", first.id);
+      expect(screen.getByText("Last")).toHaveAttribute("for", last.id);
+    });
+
+    it("gives each instance distinct error and description ids", () => {
+      render(
+        <>
+          <Input label="First" error errorMessage="Bad first" description="D1" />
+          <Input label="Last" error errorMessage="Bad last" description="D2" />
+        </>
+      );
+
+      const [first, last] = screen.getAllByRole("textbox");
+      expect(first).toHaveAttribute("aria-describedby");
+      expect(first.getAttribute("aria-describedby")).not.toBe(
+        last.getAttribute("aria-describedby")
+      );
     });
   });
 

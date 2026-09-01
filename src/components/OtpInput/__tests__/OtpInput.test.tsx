@@ -170,6 +170,23 @@ describe("OtpInput", () => {
       expect(inputs[1]).toHaveAttribute("maxLength", "1");
     });
 
+    it("sets a digits-only pattern by default", () => {
+      render(<OtpInput />);
+
+      expect(screen.getAllByRole("textbox")[0]).toHaveAttribute(
+        "pattern",
+        "\\d*"
+      );
+    });
+
+    it("widens inputMode to text when the pattern is overridden", () => {
+      render(<OtpInput inputPattern="[A-Za-z0-9]" />);
+
+      const first = screen.getAllByRole("textbox")[0];
+      expect(first).toHaveAttribute("pattern", "[A-Za-z0-9]");
+      expect(first).toHaveAttribute("inputMode", "text");
+    });
+
     it("sets inputMode to numeric", () => {
       render(<OtpInput />);
 

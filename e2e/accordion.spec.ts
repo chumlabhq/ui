@@ -494,22 +494,7 @@ test.describe("Accessibility Tests", () => {
   });
 });
 
-test.describe("Performance Tests", () => {
-  test("should load page within acceptable time", async ({ page }) => {
-    const startTime = Date.now();
-
-    await page.goto("/accordion");
-    await page.waitForLoadState("domcontentloaded");
-    await page
-      .locator('[data-orientation="vertical"]')
-      .first()
-      .waitFor({ state: "visible" });
-
-    const loadTime = Date.now() - startTime;
-
-    // Should load within 5 seconds
-    expect(loadTime).toBeLessThan(5000);
-  });
+test.describe("Repeated Interaction", () => {
 
   test("should handle rapid interactions without errors", async ({ page }) => {
     await page.goto("/accordion");

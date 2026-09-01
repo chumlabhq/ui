@@ -1,3 +1,4 @@
+import { gotoFixture } from "./_nav";
 import { test, expect } from "@playwright/test";
 
 test.describe("Tooltip Component - Cross-Browser Tests", () => {
@@ -15,34 +16,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test("should show tooltip on hover", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-    });
-
-    test("should hide tooltip when mouse leaves trigger", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.hover();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-
-      await page.mouse.move(0, 0);
-      await page.waitForTimeout(300);
-
-      await expect(tooltip).not.toBeVisible();
-    });
 
     test("should show tooltip with arrow", async ({ page }) => {
       const arrowSection = page.locator("section").filter({ hasText: "Arrow" }).first();
@@ -96,25 +70,6 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       }
     });
 
-    test("should position tooltip on bottom", async ({ page }) => {
-      const positionsSection = page.locator("section").filter({ hasText: "Positions" }).first();
-      const trigger = positionsSection.locator("button").filter({ hasText: /^Bottom$/ });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.hover();
-      await page.waitForTimeout(500);
-
-      const tooltip = page.getByRole("tooltip", { name: "Bottom tooltip" });
-      await expect(tooltip).toBeVisible();
-
-      await expect(async () => {
-        const triggerBox = await trigger.boundingBox();
-        const tooltipBox = await tooltip.boundingBox();
-        expect(triggerBox).toBeTruthy();
-        expect(tooltipBox).toBeTruthy();
-        expect(tooltipBox!.y).toBeGreaterThan(triggerBox!.y + triggerBox!.height / 2);
-      }).toPass({ timeout: 5000 });
-    });
 
     test("should position tooltip on right", async ({ page, isMobile }) => {
       const positionsSection = page.locator("section").filter({ hasText: "Positions" }).first();
@@ -160,53 +115,6 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
     });
   });
 
-  test.describe("Keyboard Navigation", () => {
-    test("should show tooltip on focus", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.focus();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-    });
-
-    test("should dismiss tooltip on Escape key", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.focus();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-
-      await page.keyboard.press("Escape");
-      await page.waitForTimeout(200);
-
-      await expect(tooltip).not.toBeVisible();
-    });
-
-    test("should hide tooltip when focus moves away", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.focus();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-
-      await page.locator("body").click({ position: { x: 10, y: 10 } });
-      await page.waitForTimeout(300);
-
-      await expect(tooltip).not.toBeVisible();
-    });
-  });
 
   test.describe("Disabled State", () => {
     test("should not show tooltip when disabled", async ({ page }) => {
@@ -325,32 +233,6 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
     });
   });
 
-  test.describe("Accessibility", () => {
-    test("should have proper ARIA attributes", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.hover();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-
-      const tooltipId = await tooltip.getAttribute("id");
-      expect(tooltipId).toBeTruthy();
-      expect(tooltipId).toMatch(/^tooltip-/);
-    });
-
-    test("should have focusable trigger", async ({ page }) => {
-      const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-      const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-      await trigger.scrollIntoViewIfNeeded();
-
-      await trigger.focus();
-      await expect(trigger).toBeFocused();
-    });
-  });
 });
 
 test.describe("Tooltip - Mobile Interactions", () => {
@@ -359,22 +241,6 @@ test.describe("Tooltip - Mobile Interactions", () => {
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("should show tooltip on touch/tap for mobile", async ({ page, browserName, isMobile }) => {
-    const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-    const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-    await trigger.scrollIntoViewIfNeeded();
-
-    if (isMobile && browserName !== "firefox") {
-      await trigger.tap();
-    } else {
-      await trigger.hover();
-    }
-    await page.waitForTimeout(300);
-
-    await expect(trigger).toBeVisible();
-    const buttons = page.locator("button");
-    await expect(buttons.first()).toBeVisible();
-  });
 
   test("should render tooltip triggers correctly on mobile", async ({ page }) => {
     const buttons = page.locator("button");
@@ -387,63 +253,68 @@ test.describe("Tooltip - Mobile Interactions", () => {
   });
 });
 
-test.describe("Tooltip - Browser-Specific Behavior", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/tooltip");
-    await page.waitForLoadState("domcontentloaded");
-  });
 
-  test("should handle rapid hover/unhover without memory leaks", async ({ page }) => {
-    const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-    const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-    await trigger.scrollIntoViewIfNeeded();
+/**
+ * The three of tooltip.spec.ts's twelve stale tests that need a browser
+ * (E2E-TRIAGE.md). The other nine duplicated Tooltip.test.tsx, which covers
+ * hover, focus, Escape, touch, the ARIA wiring and the portal in jsdom.
+ */
+test.describe("Tooltip (fixtures)", () => {
+  test("places the tooltip below the trigger when side=bottom", async ({ page }) => {
+    await gotoFixture(page, "Tooltip", "bottom");
 
-    for (let i = 0; i < 5; i++) {
-      await trigger.hover();
-      await page.waitForTimeout(50);
-      await page.mouse.move(0, 0);
-      await page.waitForTimeout(50);
-    }
-
-    const buttons = page.locator("button");
-    await expect(buttons.first()).toBeVisible();
-  });
-
-  test("should handle scroll during tooltip display", async ({ page, isMobile }) => {
-    const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-    const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-    await trigger.scrollIntoViewIfNeeded();
-
-    if (isMobile) {
-      await trigger.tap();
-      await page.waitForTimeout(300);
-
-      const buttons = page.locator("button");
-      await expect(buttons.first()).toBeVisible();
-    } else {
-      await trigger.hover();
-      await page.waitForTimeout(300);
-
-      const tooltip = page.getByRole("tooltip", { name: "This is a basic tooltip" });
-      await expect(tooltip).toBeVisible();
-
-      await page.mouse.wheel(0, 100);
-      await page.waitForTimeout(100);
-
-      const buttons = page.locator("button");
-      await expect(buttons.first()).toBeVisible();
-    }
-  });
-
-  test("should render tooltip in portal (body)", async ({ page }) => {
-    const basicSection = page.locator("section").filter({ hasText: "Basic Tooltip" }).first();
-    const trigger = basicSection.locator("button").filter({ hasText: "Hover me" });
-    await trigger.scrollIntoViewIfNeeded();
-
+    const trigger = page.getByRole("button", { name: "Trigger" });
     await trigger.hover();
-    await page.waitForTimeout(300);
 
-    const tooltip = page.locator('body > [role="tooltip"]');
-    await expect(tooltip.first()).toBeVisible();
+    const tooltip = page.getByRole("tooltip");
+    await expect(tooltip).toBeVisible();
+
+    await expect(async () => {
+      const t = (await trigger.boundingBox())!;
+      const tip = (await tooltip.boundingBox())!;
+      expect(tip.y).toBeGreaterThan(t.y + t.height / 2);
+    }).toPass({ timeout: 5000 });
+  });
+
+  test("reaches the trigger by Tab", async ({ page }) => {
+    await gotoFixture(page, "Tooltip", "closed");
+
+    const trigger = page.getByRole("button", { name: "Trigger" });
+    for (let i = 0; i < 8; i++) {
+      await page.keyboard.press("Tab");
+      if (await trigger.evaluate((el) => document.activeElement === el)) break;
+    }
+
+    await expect(trigger).toBeFocused();
+  });
+
+  test("keeps the tooltip anchored to the trigger through a scroll", async ({ page }) => {
+    await gotoFixture(page, "Tooltip", "in-scroller");
+
+    const trigger = page.getByRole("button", { name: "Trigger" });
+    await trigger.scrollIntoViewIfNeeded();
+    // Opened by focus, not hover: the scroll below moves the trigger out from
+    // under the pointer, which would close a hover-opened tooltip and leave the
+    // test measuring nothing.
+    await trigger.focus();
+
+    const tooltip = page.getByRole("tooltip");
+    await expect(tooltip).toBeVisible();
+
+    const offsetNow = async () => {
+      const t = (await trigger.boundingBox())!;
+      const tip = (await tooltip.boundingBox())!;
+      return tip.y - t.y;
+    };
+
+    const before = await offsetNow();
+    await page.evaluate(() => window.scrollBy(0, 200));
+
+    // The tooltip is  and repositioned from a scroll listener,
+    // so "still anchored" — not "still on screen" — is the assertion that fails
+    // if that listener goes away.
+    await expect(async () => {
+      expect(Math.abs((await offsetNow()) - before)).toBeLessThan(4);
+    }).toPass({ timeout: 5000 });
   });
 });

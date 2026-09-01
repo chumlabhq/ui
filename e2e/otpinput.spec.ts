@@ -73,26 +73,6 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
       }
     });
 
-    test("should only accept numeric input", async ({ page }) => {
-      const digitsSection = page.getByRole("heading", { name: "Digits Only" });
-      await digitsSection.scrollIntoViewIfNeeded();
-
-      const sectionContainer = digitsSection.locator("..").locator("..");
-      const digitsGroup = sectionContainer
-        .locator('[role="group"][aria-label="One-time password input"]')
-        .first();
-      const inputs = digitsGroup.locator("input");
-      const firstInput = inputs.first();
-
-      await firstInput.click();
-
-      for (const char of "abc123") {
-        await page.keyboard.press(char);
-        await page.waitForTimeout(50);
-      }
-
-      await expect(firstInput).toHaveValue("1", { timeout: 5000 });
-    });
   });
 
   test.describe("Paste Functionality", () => {
@@ -120,32 +100,6 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
       await expect(inputs.nth(2)).toHaveValue("7");
     });
 
-    test("should filter non-digits from typed content", async ({ page }) => {
-      const digitsSection = page.getByRole("heading", { name: "Digits Only" });
-      await digitsSection.scrollIntoViewIfNeeded();
-
-      const sectionContainer = digitsSection.locator("..").locator("..");
-      const digitsGroup = sectionContainer
-        .locator('[role="group"][aria-label="One-time password input"]')
-        .first();
-      const inputs = digitsGroup.locator("input");
-      const firstInput = inputs.first();
-
-      await firstInput.click();
-
-      // Type mixed content character-by-character: digits should be accepted
-      // and auto-advance, non-digits (dashes) should be rejected by validate.
-      // This verifies the same filtering behavior as paste filtering.
-      for (const char of "1-2-3-4-5-6") {
-        await page.keyboard.press(char === "-" ? "Minus" : char);
-        await page.waitForTimeout(50);
-      }
-
-      // Only digits should have been accepted, filling all 6 inputs
-      for (let i = 0; i < 6; i++) {
-        await expect(inputs.nth(i)).toHaveValue(String(i + 1));
-      }
-    });
   });
 
   test.describe("Keyboard Navigation", () => {
@@ -216,103 +170,9 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
     });
   });
 
-  test.describe("Grouped OTP Inputs", () => {
-    test("should display grouped inputs with separators", async ({ page }) => {
-      // Find grouped OTP section - use heading for reliable targeting
-      const groupedSection = page.getByRole("heading", {
-        name: "Grouped OTP Variations",
-      });
-      await groupedSection.scrollIntoViewIfNeeded();
 
-      // Look for OTP inputs with separators (dash separators exist in the demo)
-      const separators = page
-        .locator('[role="group"][aria-label="One-time password input"]')
-        .filter({
-          has: page.locator('span:has-text("-")'),
-        });
-
-      const count = await separators.count();
-      expect(count).toBeGreaterThan(0);
-    });
-
-    test("should navigate through grouped inputs seamlessly", async ({
-      page,
-    }) => {
-      // Find a grouped OTP section - use heading for precise targeting
-      const groupedSection = page.getByRole("heading", {
-        name: "Layout Variations",
-      });
-      await groupedSection.scrollIntoViewIfNeeded();
-
-      // Get the first grouped OTP in the Layout Variations section
-      // The section contains multiple OTP inputs with [data-group] elements
-      const layoutSection = groupedSection.locator("..").locator("..");
-      const firstOtpWrapper = layoutSection
-        .locator('[role="group"][aria-label="One-time password input"]')
-        .first();
-
-      const allInputs = firstOtpWrapper.locator("input");
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(allInputs.first()).toBeVisible();
-      await allInputs.first().click();
-
-      // Type through the group
-      await page.keyboard.type("123456");
-
-      const count = await allInputs.count();
-
-      for (let i = 0; i < Math.min(count, 6); i++) {
-        const value = await allInputs.nth(i).inputValue();
-        expect(value).toBe(String(i + 1));
-      }
-    });
-  });
-
-  test.describe("Error States", () => {
-    test("should display error styling on error state", async ({ page }) => {
-      // Use heading role to avoid matching table cells
-      const errorSection = page.getByRole("heading", { name: "Error State" });
-      await errorSection.scrollIntoViewIfNeeded();
-
-      // Look for error message
-      const errorMessage = page.locator('[role="alert"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(errorMessage.first()).toBeVisible();
-      await expect(errorMessage.first()).toBeVisible();
-    });
-
-    test("should mark inputs with aria-invalid in error state", async ({
-      page,
-    }) => {
-      const invalidInputs = page.locator('input[aria-invalid="true"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(invalidInputs.first()).toBeVisible();
-      await expect(invalidInputs.first()).toBeVisible();
-    });
-  });
 
   test.describe("Disabled State", () => {
-    test("should render disabled OTP inputs", async ({ page }) => {
-      // Use heading role to avoid matching table cells
-      const disabledSection = page.getByRole("heading", {
-        name: "Disabled State",
-      });
-      await disabledSection.scrollIntoViewIfNeeded();
-
-      // Find disabled inputs nearby
-      const disabledInputs = page.locator("input:disabled");
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(disabledInputs.first()).toBeVisible();
-      await expect(disabledInputs.first()).toBeDisabled();
-    });
 
     test("should not accept input when disabled", async ({ page }) => {
       const disabledInputs = page.locator("input:disabled");
@@ -333,23 +193,6 @@ test.describe("OTP Input - Cross-Browser Tests", () => {
     });
   });
 
-  test.describe("Password/Masked Input", () => {
-    test("should mask input when inputType is password", async ({ page }) => {
-      const passwordSection = page.locator("text=Password Type (masked)");
-      await passwordSection.scrollIntoViewIfNeeded();
-
-      // Find password type inputs
-      const passwordInputs = page.locator('input[type="password"]');
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(passwordInputs.first()).toBeVisible();
-      await expect(passwordInputs.first()).toHaveAttribute(
-        "type",
-        "password",
-      );
-    });
-  });
 });
 
 test.describe("OTP Input - Keyboard Navigation", () => {
@@ -444,16 +287,6 @@ test.describe("OTP Input - Accessibility Tests", () => {
     }
   });
 
-  test("should have role=group on wrapper", async ({ page }) => {
-    const wrapper = page
-      .locator('[role="group"][aria-label="One-time password input"]')
-      .first();
-    await expect(wrapper).toBeVisible();
-    await expect(wrapper).toHaveAttribute(
-      "aria-roledescription",
-      "One-time password input",
-    );
-  });
 
   test("should have autocomplete=one-time-code on first input", async ({
     page,
@@ -465,22 +298,6 @@ test.describe("OTP Input - Accessibility Tests", () => {
     );
   });
 
-  test("should have aria-describedby linking to error in error state", async ({
-    page,
-  }) => {
-    const inputsWithDescribedBy = page.locator("input[aria-describedby]");
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(inputsWithDescribedBy.first()).toBeVisible();
-    const input = inputsWithDescribedBy.first();
-    const describedBy = await input.getAttribute("aria-describedby");
-
-    if (describedBy) {
-      const errorElement = page.locator(`[id="${describedBy}"]`);
-      await expect(errorElement).toBeVisible();
-    }
-  });
 
   test("should have labels properly associated via htmlFor", async ({
     page,
@@ -646,60 +463,6 @@ test.describe("OTP Input - Browser-Specific Tests", () => {
   });
 });
 
-test.describe("OTP Input - Performance Tests", () => {
-  test("should load page within acceptable time", async ({
-    page,
-    browserName,
-  }) => {
-    const startTime = Date.now();
-
-    await page.goto("/otp-input");
-    await page.waitForLoadState("networkidle");
-
-    const inputs = page.locator('[aria-label="Digit 1 of 6"]').first();
-    await inputs.waitFor({ state: "attached", timeout: 10000 });
-    await inputs.scrollIntoViewIfNeeded();
-    await inputs.waitFor({ state: "visible", timeout: 10000 });
-
-    const loadTime = Date.now() - startTime;
-
-    const threshold = browserName === "firefox" ? 15000 : 10000;
-    expect(loadTime).toBeLessThan(threshold);
-  });
-
-  test("should handle multiple OTP inputs on page efficiently", async ({
-    page,
-  }) => {
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForOtpVisible(page);
-
-    const otpGroups = page.locator('[role="group"][aria-label="One-time password input"]');
-    const count = await otpGroups.count();
-
-    // Page should handle many OTP components
-    expect(count).toBeGreaterThan(5);
-
-    // Spot check a few work correctly
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      const group = otpGroups.nth(i);
-      const firstInput = group.locator("input").first();
-
-      await firstInput.scrollIntoViewIfNeeded();
-
-      if (!(await firstInput.isDisabled())) {
-        await firstInput.click();
-        await page.keyboard.type("1");
-
-        await expect(firstInput).toHaveValue("1");
-
-        // Clear for next iteration
-        await page.keyboard.press("Backspace");
-        await page.keyboard.press("Backspace");
-      }
-    }
-  });
-});
 
 test.describe("OTP Input - Full User Flows", () => {
   // Increase timeout for this test suite to handle slower browsers

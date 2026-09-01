@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button, ButtonGroup } from "../index";
 
@@ -426,6 +426,171 @@ describe("Button", () => {
       const fullWidthIndex = classes.indexOf("w-full");
       const customIndex = classes.indexOf("custom-button");
       expect(customIndex).toBeGreaterThan(fullWidthIndex);
+    });
+  });
+
+  describe("Tooltip", () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+    });
+
+    afterEach(() => {
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
+    });
+
+    it("renders no tooltip when the prop is absent", () => {
+      render(<Button>Save</Button>);
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    it("shows the tooltip on hover", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button tooltip="Saves your work" tooltipProps={{ delayDuration: 0 }}>
+          Save
+        </Button>
+      );
+
+      await user.hover(screen.getByRole("button", { name: "Save" }));
+
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toHaveTextContent("Saves your work");
+      });
+    });
+
+    it("hides the tooltip on unhover", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button tooltip="Saves your work" tooltipProps={{ delayDuration: 0 }}>
+          Save
+        </Button>
+      );
+
+      const button = screen.getByRole("button", { name: "Save" });
+      await user.hover(button);
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+      });
+
+      await user.unhover(button);
+      await waitFor(() => {
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      });
+    });
+
+    it("shows the tooltip on keyboard focus", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button tooltip="Saves your work" tooltipProps={{ delayDuration: 0 }}>
+          Save
+        </Button>
+      );
+
+      await user.tab();
+
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toHaveTextContent("Saves your work");
+      });
+    });
+
+    it("honours tooltipProps.delayDuration", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button tooltip="Delayed" tooltipProps={{ delayDuration: 300 }}>
+          Save
+        </Button>
+      );
+
+      await user.hover(screen.getByRole("button", { name: "Save" }));
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+
+      await act(async () => {
+        vi.advanceTimersByTime(300);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+      });
+    });
+
+    it("describes the button by the tooltip while it is open", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button tooltip="Saves your work" tooltipProps={{ delayDuration: 0 }}>
+          Save
+        </Button>
+      );
+
+      const button = screen.getByRole("button", { name: "Save" });
+      await user.hover(button);
+
+      await waitFor(() => {
+        const tooltip = screen.getByRole("tooltip");
+        expect(button).toHaveAttribute("aria-describedby", tooltip.id);
+      });
+    });
+
+    it("still fires onClick when wrapped in a tooltip", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onClick = vi.fn();
+
+      render(
+        <Button tooltip="Saves your work" onClick={onClick}>
+          Save
+        </Button>
+      );
+
+      await user.click(screen.getByRole("button", { name: "Save" }));
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("passes tooltipProps through to the tooltip", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button
+          tooltip="Configured"
+          tooltipProps={{
+            maxWidth: 123,
+            contentClassName: "custom-tooltip",
+            delayDuration: 0,
+          }}
+        >
+          Save
+        </Button>
+      );
+
+      await user.hover(screen.getByRole("button", { name: "Save" }));
+
+      // `side` is deliberately not asserted here: it only moves the computed
+      // top/left, and every rect is zero in jsdom. e2e/tooltip.spec.ts owns it.
+      await waitFor(() => {
+        const tooltip = screen.getByRole("tooltip");
+        expect(tooltip).toHaveClass("custom-tooltip");
+        expect(tooltip).toHaveStyle({ maxWidth: "123px" });
+      });
+    });
+
+    it("wraps the anchor variant too", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      render(
+        <Button as="a" href="/somewhere" tooltip="Go there" tooltipProps={{ delayDuration: 0 }}>
+          Link
+        </Button>
+      );
+
+      await user.hover(screen.getByRole("link", { name: "Link" }));
+
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toHaveTextContent("Go there");
+      });
     });
   });
 

@@ -1,3 +1,4 @@
+import { gotoFixture } from "./_nav";
 import { test, expect } from "@playwright/test";
 
 test.describe("CountryFlag Component - Cross-Browser Tests", () => {
@@ -20,22 +21,7 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
       expect(count).toBeGreaterThan(0);
     });
 
-    test("should load flag images from the local path", async ({ page }) => {
-      const img = page.locator('[role="img"] img').first();
-      const src = await img.getAttribute("src");
 
-      expect(src).toContain("/flags/");
-      expect(src).toMatch(/\.svg$/);
-    });
-
-    test("should render flags at multiple sizes", async ({ page }) => {
-      const sizeSection = page.locator("section").filter({ hasText: "Preset Sizes" }).first();
-      await expect(sizeSection).toBeVisible();
-
-      const flags = sizeSection.locator('[role="img"]');
-      const count = await flags.count();
-      expect(count).toBeGreaterThanOrEqual(6);
-    });
   });
 
   // -------------------------------------------------------------------------
@@ -156,27 +142,6 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
       await expect(groupShimmers.first()).toBeVisible();
     });
 
-    test("loading flags inside a group should show shimmer alongside real flags", async ({
-      page,
-    }) => {
-      // The demo has a group with 2 loading + 2 real flags
-      const groups = page.locator('[role="group"]');
-      const groupCount = await groups.count();
-
-      let found = false;
-      for (let i = 0; i < groupCount; i++) {
-        const group = groups.nth(i);
-        const shimmers = group.locator('[role="status"]');
-        const flags = group.locator('[role="img"]');
-
-        if ((await shimmers.count()) > 0 && (await flags.count()) > 0) {
-          found = true;
-          break;
-        }
-      }
-
-      expect(found).toBe(true);
-    });
   });
 
   // -------------------------------------------------------------------------
@@ -201,16 +166,47 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
   // Error / fallback states
   // -------------------------------------------------------------------------
 
-  test.describe("Error handling", () => {
-    test("should show fallback content for invalid country codes", async ({
-      page,
-    }) => {
-      // The "Error State & Fallback" section has invalid codes like "xx"
-      const fallbackSection = page.locator("text=Error State").locator("..");
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(fallbackSection.first()).toBeVisible();
-      await expect(fallbackSection).toBeVisible();
-    });
+});
+
+/**
+ * countryflag.spec.ts's one stale test that needs a browser (E2E-TRIAGE.md).
+ * The other three duplicated CountryFlag.test.tsx, which covers src building,
+ * the size presets and the fallback path in jsdom.
+ *
+ * Rewritten: the original only counted a shimmer and an image in the same
+ * group, which jsdom can do. What needs a browser is that the two line up —
+ * a decoded image and a placeholder sharing a row without a jump.
+ */
+test.describe("CountryFlagGroup (fixtures)", () => {
+  test("aligns shimmers with decoded flags on one row", async ({ page }) => {
+    await gotoFixture(page, "CountryFlag/CountryFlagGroup", "mixed-loading");
+
+    const shimmers = page.locator('[data-fixture] [role="status"]');
+    const flags = page.locator('[data-fixture] [role="img"]');
+    await expect(shimmers).toHaveCount(2);
+    await expect(flags).toHaveCount(2);
+
+    // Waits for decode: a flag measured before its image resolves has the
+    // placeholder's box, which would make the comparison vacuous.
+    await expect(async () => {
+      const loaded = await flags.first().evaluate(
+        (el) => el.querySelector("img")?.complete === true,
+      );
+      expect(loaded).toBe(true);
+    }).toPass({ timeout: 5000 });
+
+    const boxes = await Promise.all(
+      [shimmers.nth(0), flags.nth(0), shimmers.nth(1), flags.nth(1)].map((l) =>
+        l.boundingBox(),
+      ),
+    );
+    const tops = boxes.map((b) => b!.y);
+    const heights = boxes.map((b) => b!.height);
+
+    expect(Math.max(...tops) - Math.min(...tops), "the row is not level").toBeLessThan(2);
+    expect(
+      Math.max(...heights) - Math.min(...heights),
+      "a shimmer and a flag are different heights, so the row jumps as flags load",
+    ).toBeLessThan(2);
   });
 });

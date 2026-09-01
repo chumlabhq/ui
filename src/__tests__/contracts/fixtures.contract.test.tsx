@@ -69,6 +69,26 @@ describe("fixtures contract", () => {
     ).toEqual([]);
   });
 
+  it("every component keeps a fixture the sentinel contracts can drive", () => {
+    // `render` is an escape hatch that opts a fixture out of five suites at
+    // once — this one, overrides, unstyled, reduced-motion and hydration — and
+    // it does it silently. Each of those filters `render` out and then returns
+    // early on an empty list, so a component whose fixtures were ALL `render`
+    // would pass every one of them without asserting anything. The per-key
+    // check below already proves each key is reachable from a non-render
+    // fixture; this is the case that check cannot see, because it never runs.
+    const unusable = candidates
+      .filter((c) => {
+        const all = fixturesFor(c.name);
+        return all.length > 0 && all.every((f) => f.render);
+      })
+      .map((c) => c.name);
+    expect(
+      unusable,
+      `components whose fixtures are all \`render\`, so the classes contracts skip them entirely — add one static fixture: ${unusable.join(", ")}`,
+    ).toEqual([]);
+  });
+
   describe.each(candidates)("$name", ({ name, Component, defaults }) => {
     const keys = Object.keys(defaults!);
     // `render` fixtures own their markup and never receive the sentinel

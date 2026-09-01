@@ -9,7 +9,7 @@ const fixtures: Fixtures = [
   { name: "icon", props: { steps: STEPS, value: 1, variant: "icon" } },
   { name: "label-bottom", props: { steps: STEPS, value: 1, labelPosition: "bottom" } },
   { name: "with-error", props: { steps: STEPS.map((s, i) => (i === 1 ? { ...s, status: "error" } : s)), value: 1 } },
-  { name: "clickable", props: { steps: STEPS, value: 1, clickable: true } },
+  { name: "clickable", props: { steps: STEPS, defaultValue: 1, clickable: true }, note: "Uncontrolled: e2e clicks it, and a controlled `value` with no handler would swallow the change." },
   { name: "disabled", props: { steps: STEPS.map((s) => ({ ...s, disabled: true })), value: 0 } },
   { name: "with-tooltips", props: { steps: STEPS.map((s) => ({ ...s, tooltip: "Tip" })), value: 1, showTooltips: true } },
   { name: "last-complete", props: { steps: STEPS, value: 2 } },

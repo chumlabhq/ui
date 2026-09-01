@@ -4,7 +4,10 @@ Input: the 103 rows marked **stale test** in `E2E-INVENTORY.md`. This document
 decides, per test, whether it belongs in the e2e tier, is already asserted
 elsewhere, or is real behaviour that has no home yet.
 
-No test file was changed. Nothing was committed.
+**Executed on `refactor/v1-hardening`.** Three verdicts changed during execution,
+when the re-verification pass reached citations the triage had not grepped; they
+are marked **[corrected]** in the tables below and the counts here are the
+corrected ones. Everything else was carried out as written.
 
 ## Verdicts
 
@@ -33,27 +36,31 @@ Unit-test paths are abbreviated: `Drawer.test.tsx` means
 | pagination.spec.ts | 18 | 7 | 10 | 1 | yes, 7 tests |
 | input.spec.ts | 13 | 3 | 8 | 2 | yes, 3 tests |
 | tooltip.spec.ts | 12 | 3 | 9 | 0 | yes, 3 tests |
-| otpinput.spec.ts | 10 | 0 | 8 | 2 | **no — delete the spec** |
+| otpinput.spec.ts | 10 | 0 | 10 | 0 | delete 10 tests; spec survives on untriaged tests |
 | stepper.spec.ts | 10 | 3 | 7 | 0 | yes, 3 tests |
 | button.spec.ts | 6 | 3 | 2 | 1 | yes, 3 tests |
-| textarea.spec.ts | 6 | 0 | 5 | 1 | **no — delete the spec** |
+| textarea.spec.ts | 6 | 0 | 5 | 1 | delete 6 tests; spec survives on untriaged tests |
 | countryflag.spec.ts | 4 | 1 | 3 | 0 | yes, 1 test |
-| avatar.spec.ts | 2 | 0 | 1 | 1 | **no — delete the spec** |
-| checkbox.spec.ts | 2 | 0 | 2 | 0 | **no — delete the spec** |
+| avatar.spec.ts | 2 | 0 | 2 | 0 | delete 2 tests; spec survives on untriaged tests |
+| checkbox.spec.ts | 2 | 0 | 2 | 0 | delete 2 tests; spec survives on untriaged tests |
 | switch.spec.ts | 1 | 1 | 0 | 0 | yes, 1 test |
 | toast.spec.ts | 1 | 1 | 0 | 0 | yes, 1 test |
-| **Total** | **103** | **30** | **65** | **8** | **9 of 13 specs** |
+| **Total** | **103** | **30** | **68** | **5** | **13 of 13 spec files** |
 
-**63% of the stale e2e suite is duplicate coverage.** Repointing it would have
-bought nothing. 30 tests are worth the browser; 8 are behaviours that need a unit
+**66% of the stale e2e suite is duplicate coverage.** Repointing it would have
+bought nothing. 30 tests are worth the browser; 5 are behaviours that need a unit
 test written, not a spec repointed.
 
-Four specs die outright: `otpinput`, `textarea`, `avatar`, `checkbox`. Not one of
-their 21 tests asserts anything a browser is required for.
+Not one of the 21 stale tests in `otpinput`, `textarea`, `avatar` or `checkbox`
+asserts anything a browser is required for, so all 21 were deleted. **The four
+spec files were not.** The triage classified only the 103 stale tests; those four
+files hold 131 tests between them, and the 110 that were passing were never
+triaged. Spot-checking them found real browser-only work — axe audits, mobile
+viewports, touch, tab traversal, "clicking label focuses the textarea". Deleting
+the files would have taken that with them, so each kept its untriaged remainder.
+Triaging those 110 is the obvious next pass.
 
-Of the nine that survive, five survive on three tests or fewer. The realistic
-shape of the e2e tier after this is roughly 30 tests across 9 files, most of them
-focus, viewport, touch, and axe.
+Of the nine specs with browser-only work, five survive on three tests or fewer.
 
 ### On the drawer hour
 
@@ -181,13 +188,26 @@ here; noted.
 
 ## otpinput.spec.ts — 10
 
-Nothing here needs a browser. The spec should be deleted, but two of its tests
-contradict the unit tier and must be resolved before they are.
+Nothing here needs a browser. All ten were deleted.
+
+The two "numeric" tests looked like a contradiction until `validate` was grepped
+— see the **[corrected]** rows. **OtpInput has no numeric mode and no
+alphanumeric mode; it has no mode at all.** It accepts any character and filtering
+is opt-in through one prop, `validate: (char) => boolean`, applied on typing
+(`OtpInput.tsx:170`) and on paste (`:158`, `:218`). Two other props change only
+the *advertisement*: `inputPattern` (default `"\\d*"`) sets the HTML `pattern`
+and flips `inputMode` to `numeric` (`:235`), and `inputType="tel"` does the same.
+Neither filters anything — `pattern` is form-validation metadata, not an input
+filter. So a default `<OtpInput />` tells the browser and the screen reader
+("Digit N of M", `:251`) that it wants digits, and then accepts letters. That
+incoherence is a source decision, not a test gap, and is left for a human;
+`OtpInput.test.tsx` now also pins the pattern/inputMode wiring, which had no
+test at all.
 
 | Test | Verdict | Evidence |
 |---|---|---|
-| should only accept numeric input | UNCOVERED-BUT-NOT-BROWSER ⚠ | **Contradicts** `OtpInput.test.tsx:151` *does not filter non-numeric characters internally*. The e2e asserts filtering the component deliberately does not do. It never failed only because it ran against the marketing home page and found no inputs. Decide the intended behaviour before writing anything; `:173` sets inputMode to numeric is the only related assertion that exists. |
-| should filter non-digits from typed content | UNCOVERED-BUT-NOT-BROWSER ⚠ | Same contradiction; see also `OtpInput.test.tsx:343` does not filter non-numeric characters from paste |
+| should only accept numeric input | COVERED **[corrected]** | `OtpInput.test.tsx:729` rejects invalid characters when validate is provided; `:782` accepts all characters when no validate prop. The triage read this as a contradiction with `:151` because it had not grepped `validate` — `:151` pins the no-`validate` default, `:729` pins the filtering path, and the demo section the e2e drove ("Digits Only") was the `validate` case. Both states are tested. |
+| should filter non-digits from typed content | COVERED **[corrected]** | `OtpInput.test.tsx:761` filters invalid characters from paste when validate is provided; `:729` for typing |
 | should navigate through grouped inputs seamlessly | COVERED | `OtpInput.test.tsx:191` moves focus to next input after typing digit, and the focus-navigation block through `:303` |
 | should display grouped inputs with separators | COVERED | `OtpInput.test.tsx:64` renders inputs in groups; `:71` renders separator between groups; `:82` correct number across groups |
 | should display error styling on error state | COVERED | `OtpInput.test.tsx:467` sets data-error attribute on container |
@@ -216,7 +236,7 @@ contradict the unit tier and must be resolved before they are.
 
 | Test | Verdict | Evidence |
 |---|---|---|
-| should support aria-label on button groups | COVERED | `Button.test.tsx:480` accepts aria-label for screen readers (ButtonGroup); `:455` renders children with role='group' |
+| should support aria-label on button groups | COVERED | `Button.test.tsx:481` accepts aria-label for screen readers (ButtonGroup); `:455` renders children with role='group' |
 | should show tooltip on hover | UNCOVERED-BUT-NOT-BROWSER | `Button.tsx:66`–`:188` implement a real `tooltip`/`tooltipProps` prop, and grep for `tooltip` in `Button.test.tsx` returns **0 hits**. `Tooltip.test.tsx:97` covers Tooltip's own hover, not Button's wiring of it. Write the unit test. |
 | span buttons should not be focusable when disabled | COVERED | `Button.test.tsx:314` has tabIndex=-1 when disabled (for `as="span" disabled`) — the attribute is the mechanism, and it is what regresses |
 | should render correctly on mobile viewport | BROWSER-ONLY | Computed layout at a set viewport |
@@ -247,7 +267,7 @@ contradict the unit tier and must be resolved before they are.
 
 | Test | Verdict | Evidence |
 |---|---|---|
-| should handle avatar click in group | UNCOVERED-BUT-NOT-BROWSER | `Avatar.test.tsx:647` calls onClick when clicked covers `AvatarGroupCount` (the +N chip) only. Nothing covers clicking an individual avatar inside a group. If the e2e meant the chip, this is COVERED at `:647`; the conservative verdict assumes it meant an avatar. Confirm the intent, then either delete or write the unit test. |
+| should handle avatar click in group | COVERED **[corrected]** | `Avatar.test.tsx:446` calls onAvatarClick with correct info; `:465` via Enter; `:486` via Space. The triage grepped `onClick` and found only `AvatarGroupCount` at `:647`; the prop is `onAvatarClick`, and it is covered three ways. |
 | should show tooltip on hover | COVERED | `Avatar.test.tsx:509` builds tooltip content from remaining children names (AvatarGroup `showTooltip`); the hover-to-show mechanism is `Tooltip.test.tsx:97` |
 
 ## checkbox.spec.ts — 2
@@ -269,21 +289,60 @@ contradict the unit tier and must be resolved before they are.
 |---|---|---|
 | should handle touch interactions on mobile | BROWSER-ONLY | Touch/swipe dismissal. Grep for `touch`/`swipe` in `Toast.test.tsx` returns **0 hits**, so this is the only assertion of swipe-to-dismiss anywhere. |
 
-## Recommended order of work
+## What was executed
 
-1. **Delete 65 COVERED e2e tests**, which removes four specs entirely
-   (`otpinput`, `textarea`, `avatar`, `checkbox`). Cheapest, largest win; no new
-   test code.
-2. **Repoint the 30 BROWSER-ONLY tests** onto fixtures. Nine specs, and five of
-   them are three tests or fewer — nothing like the drawer hour.
-3. **Write the 8 UNCOVERED tests at the unit tier.** Resolve the two OtpInput
-   contradictions first: they assert digit filtering that
-   `OtpInput.test.tsx:151`/`:343` say the component deliberately does not do.
-   The `Button.tooltip` gap is the most substantive of the eight — a shipped prop
-   with no test at any tier.
+Order was units first, then repoints, then deletes, so no behaviour was ever
+uncovered mid-flight.
 
-Three of the 30 BROWSER-ONLY tests are wall-clock "without lag" assertions
-(`pagination` rapid navigation, `input` rapid typing, `button` multiple
-interactions) plus one page-load timing test in `input`. They technically require
-a browser and technically cannot fail. Deleting them too takes the e2e tier to
-about 26 tests.
+**Unit tests written (5 UNCOVERED + the Button tooltip gap):**
+
+| Where | Tests | For |
+|---|---|---|
+| `Pagination.test.tsx` | 1 | both nav buttons enabled on a middle page |
+| `Input.test.tsx` > Form Participation | 5 | submit under `name`, `required` blocking, id/`aria-describedby` uniqueness across instances, and a characterisation of native form reset |
+| `TextArea.test.tsx` > Form Participation | 3 | submit under `name`, `required` blocking, id uniqueness |
+| `Button.test.tsx` > Tooltip | 9 | hover, unhover, focus, `delayDuration`, `aria-describedby`, `onClick` survival, `tooltipProps` pass-through, the anchor variant |
+| `OtpInput.test.tsx` | 2 | the `pattern`/`inputMode` wiring, which had no test |
+
+**Repointed (30 BROWSER-ONLY):** `drawer` 8, `pagination` 7, `input` 3,
+`tooltip` 3, `stepper` 3, `button` 3, `countryflag` 1, `switch` 1 (fanned to 4
+fixtures), `toast` 1. Six were rewritten rather than moved, because the originals
+could not fail: four called `.focus()` and asserted `toBeFocused()`, one counted
+a shimmer and an image in the same group, one asserted a button was still
+visible after a scroll.
+
+**Deleted (68 COVERED).** No spec file was deleted — see the note under Summary.
+
+**New fixtures:** `Drawer/swipeable-bottom`, `Drawer/snap-points`,
+`Tooltip/bottom`, `Tooltip/in-scroller`, `Toast/dismissable`,
+`CountryFlag.CountryFlagGroup/mixed-loading`; `Toggle` gained `defaultOpen` and
+`_harness` gained `IndexPicker` and `Dismissable`.
+
+**Contract guard (the render-fixture hole).** `fixtures.contract` gained *every
+component keeps a fixture the sentinel contracts can drive*. The per-key check
+already filtered `render` out, so a key reachable only from a render fixture
+would fail it — the case it could not see was a component whose fixtures were
+**all** `render`: five suites would filter to an empty list and return early,
+passing without asserting. Verified falsifiable by inverting the predicate, which
+names all 33 components and fails.
+
+## Still open
+
+- **110 untriaged e2e tests** in `otpinput`, `textarea`, `avatar` and `checkbox`
+  — the passing remainder of the four specs the triage expected to delete.
+- **`OtpInput` advertises digits and accepts anything.** `pattern="\\d*"`,
+  `inputMode="numeric"` and the "Digit N of M" label are all defaults; nothing
+  filters without `validate`. Source decision.
+- **`Input` ignores `<button type="reset">`.** `defaultValue` seeds internal
+  state that drives `value`, so the browser's reset is overwritten on the next
+  render. Pinned by `Input.test.tsx` > *keeps its value through a native form
+  reset*, which characterises the limitation rather than the desired behaviour.
+- **Fixture props are unchecked.** `Fixture["props"]` is
+  `Record<string, unknown>`, so every `Pagination` fixture passed `currentPage` —
+  a prop whose own doc comment says "Not `currentPage`" — and silently rendered
+  page 1. Fixed here for `Pagination` and `Stepper`; the type still permits it
+  everywhere else.
+- **`tabpanel.spec.ts` axe** — pre-existing, E2E-INVENTORY.md's fourth library bug.
+- **`--cl-text-tertiary` contrast** — the Stepper and Switch axe repoints waive
+  `color-contrast` only, citing the existing ratcheted baseline in
+  `docs/adr/002-unrenderable-keys.json`, which lists both components.

@@ -1,3 +1,4 @@
+import { gotoFixture } from "./_nav";
 import { test, expect } from "@playwright/test";
 import { injectAxe, checkA11y } from "axe-playwright";
 
@@ -188,16 +189,6 @@ test.describe("Switch Component", () => {
   });
 
   test.describe("Accessibility", () => {
-    test("switch components have no accessibility violations", async ({ page }) => {
-      await injectAxe(page);
-
-      const switchSection = page.locator("section").filter({ hasText: "Basic Switch" }).first();
-      await switchSection.scrollIntoViewIfNeeded();
-
-      await checkA11y(page, '[role="switch"]', {
-        detailedReport: true,
-      });
-    });
 
     test("switch has correct role and aria attributes", async ({ page }) => {
       const switchEl = page.getByRole("switch").first();
@@ -381,4 +372,27 @@ test.describe("Switch - Full User Flow", () => {
     await expect(description).toContainText("Dark mode enabled");
     await expect(switchEl).toHaveAttribute("aria-checked", "true");
   });
+});
+
+/**
+ * switch.spec.ts's one stale test (E2E-TRIAGE.md), and the only axe coverage
+ * Switch has anywhere — Switch.test.tsx runs no axe at all, so this could not
+ * be deleted. Run across the labelled fixtures rather than one, since the
+ * label association is most of what axe has to check on a switch.
+ */
+test.describe("Switch (fixtures)", () => {
+  for (const fixture of ["labelled", "checked-labelled", "disabled", "error"]) {
+    test(`passes an axe audit: ${fixture}`, async ({ page }) => {
+      await gotoFixture(page, "Switch", fixture);
+      await injectAxe(page);
+      // `color-contrast` off, and only that: Switch is on the
+      // `--cl-text-tertiary` baseline in docs/adr/002-unrenderable-keys.json,
+      // one token awaiting a design decision and already ratcheted by
+      // accessibility.spec.ts.
+      await checkA11y(page, "[data-fixture]", {
+        detailedReport: true,
+        axeOptions: { rules: { "color-contrast": { enabled: false } } },
+      });
+    });
+  }
 });

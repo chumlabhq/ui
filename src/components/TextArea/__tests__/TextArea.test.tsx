@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { FormEvent } from "react";
 import { TextArea, TextAreaLabel } from "../index";
 
 import { setReducedMotion } from "../../../test/matchMedia";
@@ -416,6 +417,60 @@ describe("TextArea", () => {
       render(<TextArea aria-label="test" ref={(el) => { taRef = el; }} defaultValue="test" />);
       expect(taRef).not.toBeNull();
       expect(taRef!.value).toBe("test");
+    });
+  });
+
+  describe("Form Participation", () => {
+    it("submits its value under the given name", async () => {
+      const user = userEvent.setup();
+      let submitted: FormData | null = null;
+      // `currentTarget` is null by the time the assertion runs, so the form is
+      // read inside the handler rather than off the recorded call.
+      const onSubmit = vi.fn((e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        submitted = new FormData(e.currentTarget);
+      });
+
+      render(
+        <form onSubmit={onSubmit}>
+          <TextArea label="Bio" name="bio" defaultValue="hello" />
+          <button type="submit">Submit</button>
+        </form>
+      );
+
+      await user.click(screen.getByRole("button", { name: "Submit" }));
+
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      expect(submitted!.get("bio")).toBe("hello");
+    });
+
+    it("blocks submission when required and empty", async () => {
+      const user = userEvent.setup();
+      const onSubmit = vi.fn((e: FormEvent) => e.preventDefault());
+
+      render(
+        <form onSubmit={onSubmit}>
+          <TextArea label="Bio" name="bio" required />
+          <button type="submit">Submit</button>
+        </form>
+      );
+
+      await user.click(screen.getByRole("button", { name: "Submit" }));
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    it("gives each instance a distinct id so labels do not cross-wire", () => {
+      render(
+        <form>
+          <TextArea label="First" name="first" />
+          <TextArea label="Second" name="second" />
+        </form>
+      );
+
+      const [first, second] = screen.getAllByRole("textbox");
+      expect(first.id).not.toBe(second.id);
+      expect(screen.getByText("First")).toHaveAttribute("for", first.id);
+      expect(screen.getByText("Second")).toHaveAttribute("for", second.id);
     });
   });
 

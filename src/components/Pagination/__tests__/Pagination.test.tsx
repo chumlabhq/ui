@@ -92,6 +92,19 @@ describe("Pagination", () => {
       expect(next).toHaveAttribute("data-disabled");
     });
 
+    it("enables both nav buttons on a middle page", () => {
+      render(
+        <Pagination value={3} totalPages={5} onValueChange={() => {}} />
+      );
+
+      const prev = screen.getByRole("button", { name: "Previous page" });
+      const next = screen.getByRole("button", { name: "Next page" });
+      expect(prev).toBeEnabled();
+      expect(prev).not.toHaveAttribute("data-disabled");
+      expect(next).toBeEnabled();
+      expect(next).not.toHaveAttribute("data-disabled");
+    });
+
     it("renders ellipsis for many pages", () => {
       render(
         <Pagination value={1} totalPages={50} onValueChange={() => {}} />

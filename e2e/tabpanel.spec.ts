@@ -369,21 +369,4 @@ test.describe("TabPanel Component - Cross-Browser Tests", () => {
     });
   });
 
-  test.describe("Performance", () => {
-    test("should switch tabs without layout thrashing", async ({ page }) => {
-      const tablist = page.getByRole("tablist").first();
-      const tabs = tablist.getByRole("tab");
-      const tabCount = await tabs.count();
-
-      const start = Date.now();
-
-      for (let i = 0; i < tabCount; i++) {
-        await tabs.nth(i).click();
-        await expect(tabs.nth(i)).toHaveAttribute("aria-selected", "true");
-      }
-
-      const duration = Date.now() - start;
-      expect(duration).toBeLessThan(5000);
-    });
-  });
 });
