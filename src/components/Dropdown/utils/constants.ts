@@ -1,4 +1,5 @@
 import type { DropdownClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
   root: "",
@@ -31,25 +32,5 @@ export const DEFAULT_DROPDOWN_CLASSES: Required<DropdownClasses> = {
     "mx-2 my-1.5 h-4 rounded bg-cl-bg-hover dark:bg-cl-bg-elevated animate-pulse",
 };
 
-export const UNSTYLED_DROPDOWN_CLASSES: Required<DropdownClasses> = {
-  root: "",
-  wrapper: "",
-  trigger: "",
-  triggerText: "",
-  content: "",
-  optionList: "",
-  option: "",
-  optionSelected: "",
-  optionFocused: "",
-  optionDisabled: "",
-  chevron: "",
-  checkIcon: "",
-  clearIcon: "",
-  noResults: "",
-  label: "",
-  error: "",
-  description: "",
-  success: "",
-  shimmer: "",
-  shimmerItem: "",
-};
+export const UNSTYLED_DROPDOWN_CLASSES: Required<DropdownClasses> =
+  structuralOnly(DEFAULT_DROPDOWN_CLASSES);

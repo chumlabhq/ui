@@ -1,4 +1,5 @@
 import type { SliderClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   root: "flex flex-col gap-2",
@@ -21,21 +22,5 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   success: "text-sm text-cl-success mt-1",
 };
 
-export const UNSTYLED_SLIDER_CLASSES: Required<SliderClasses> = {
-  root: "",
-  label: "",
-  description: "",
-  wrapper: "",
-  track: "",
-  range: "",
-  thumb: "",
-  thumbActive: "",
-  thumbDisabled: "",
-  tooltip: "",
-  mark: "",
-  markDot: "",
-  markDotActive: "",
-  markLabel: "",
-  error: "",
-  success: "",
-};
+export const UNSTYLED_SLIDER_CLASSES: Required<SliderClasses> =
+  structuralOnly(DEFAULT_SLIDER_CLASSES);

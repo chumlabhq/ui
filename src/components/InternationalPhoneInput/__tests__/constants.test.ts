@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { isStructural } from "../../../utils/classLayers";
 import {
   PHONE_FORMATTING_PATTERNS,
   DEFAULT_COUNTRIES,
@@ -227,9 +228,33 @@ describe("DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES", () => {
 });
 
 describe("UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES", () => {
-  it("all class values are empty strings", () => {
-    for (const value of Object.values(UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES)) {
-      expect(value).toBe("");
+  // Was: "all class values are empty strings". That invariant WAS the defect
+  // ADR 001 describes — it made `unstyled` strip layout along with decoration,
+  // so an unstyled phone input lost `flex flex-col` and stacked wrong. The set
+  // is now derived from the defaults, and the invariant is the split itself.
+  it("every value carries only structural utilities", () => {
+    for (const [key, value] of Object.entries(
+      UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
+    )) {
+      const decorative = value.split(/\s+/).filter((t) => t && !isStructural(t));
+      expect(decorative, `${key} kept decorative utilities`).toEqual([]);
+    }
+  });
+
+  it("keeps every structural utility its default declares", () => {
+    for (const [key, value] of Object.entries(
+      DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES,
+    )) {
+      const expected = value.split(/\s+/).filter((t) => t && isStructural(t));
+      const actual = new Set(
+        UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES[
+          key as keyof typeof UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES
+        ]
+          .split(/\s+/)
+          .filter(Boolean),
+      );
+      const dropped = expected.filter((t) => !actual.has(t));
+      expect(dropped, `${key} dropped structural utilities`).toEqual([]);
     }
   });
 });

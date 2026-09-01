@@ -15,7 +15,7 @@ import type { PaginationProps, PaginationClasses, IconProps, SectionName } from 
 import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants";
 import { getVisiblePages } from "./utils/helpers";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icons";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useControllableState } from "../../utils/useControllableState";
 import { isBrowser } from "../../utils/isBrowser";
@@ -450,7 +450,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       showRowsPerPage && rowsPerPage !== undefined ? (
         <div className={mergedClasses.selector}>
           <span className={mergedClasses.label}>{showLabel}</span>
-          <div className={cn("relative", mergedClasses.selectorDropdownWrapper)}>
+          <div className={cn(mergedClasses.selectorDropdownWrapper)}>
             <button
               ref={triggerRef}
               type="button"
@@ -516,7 +516,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     ) : null;
 
     const navSection = (
-      <div className={cn("flex items-center gap-2", mergedClasses.nav)}>
+      <div className={cn(mergedClasses.nav)}>
         <button
           type="button"
           onClick={handlePrevPage}
@@ -528,7 +528,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           {renderIcon(prevIcon, ChevronLeftIcon, mergedClasses.prevIcon, "w-5 h-5")}
         </button>
 
-        <div className={cn("flex items-center gap-2", mergedClasses.pageButtons)}>
+        <div className={cn(mergedClasses.pageButtons)}>
           {visiblePages.map((item, index) =>
             item === "ellipsis" ? (
               renderEllipsis ? (

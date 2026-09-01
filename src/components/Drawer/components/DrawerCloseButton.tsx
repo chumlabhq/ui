@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { DrawerCloseButtonProps } from "../utils/types";
 import { useDrawerContext } from "../utils/context";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const DrawerCloseButton = forwardRef<HTMLButtonElement, DrawerCloseButtonProps>(
   ({ children, className, onClick, ...rest }, ref) => {

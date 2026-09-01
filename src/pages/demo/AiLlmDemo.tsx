@@ -46,11 +46,11 @@ const AiLlmDemo = () => {
             guess about precedence.
           </li>
           <li>
-            <span className="text-fg font-medium">Composable primitives</span>{" "}
-            — <code className="font-mono text-[12px] text-accent">Dropdown.Trigger</code>,
-            {" "}<code className="font-mono text-[12px] text-accent">Dropdown.Content</code>,
-            {" "}<code className="font-mono text-[12px] text-accent">Dropdown.Item</code>.
-            Smaller surface, fewer props, less for an LLM to guess at.
+            <span className="text-fg font-medium">Flat, predictable exports</span>{" "}
+              — <code className="font-mono text-[12px] text-accent">ModalHeader</code>,
+              {" "}<code className="font-mono text-[12px] text-accent">DrawerBody</code>,
+              {" "}<code className="font-mono text-[12px] text-accent">AccordionItem</code>.
+              One import shape, no dot-notation for an LLM to guess at.
           </li>
         </ul>
       </Section>

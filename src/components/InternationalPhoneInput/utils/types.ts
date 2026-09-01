@@ -51,6 +51,14 @@ export interface InternationalPhoneInputClasses {
   error?: string;
   success?: string;
   countrySelect?: string;
+  /** A row inside the country list: flag + name + dial code. */
+  countryOptionRow?: string;
+  countryOptionFlag?: string;
+  countryOptionLabel?: string;
+  /** The selected country shown on the trigger. */
+  countrySelectedRow?: string;
+  countrySelectedFlag?: string;
+  countrySelectedLabel?: string;
   countrySelectTrigger?: string;
   countrySelectDropdown?: string;
   countrySelectSearchInput?: string;

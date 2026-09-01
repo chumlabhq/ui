@@ -2,7 +2,7 @@ import { forwardRef, useMemo, useEffect, useRef } from "react";
 import { useAccordionConfig, useAccordionContext, useIsItemExpanded, AccordionItemContext } from "../utils/context";
 import { Slot } from "../../../utils/Slot";
 import type { AccordionItemProps, AccordionItemContextValue } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   ({

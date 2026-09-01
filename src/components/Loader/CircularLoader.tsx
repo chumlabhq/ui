@@ -4,7 +4,7 @@ import {
   DEFAULT_CIRCULAR_LOADER_CLASSES,
   UNSTYLED_CIRCULAR_LOADER_CLASSES,
 } from "./utils/constants";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 /**

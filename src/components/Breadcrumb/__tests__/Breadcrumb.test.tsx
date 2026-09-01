@@ -644,13 +644,15 @@ describe("Breadcrumb", () => {
   });
 
   describe("Unstyled Mode", () => {
-    it("applies empty classes when unstyled", () => {
+    // ADR 001: the list default is "flex flex-wrap items-center gap-1" — the
+    // first three are what make the crumbs a row, gap-1 is spacing.
+    it("keeps the list's layout and drops its spacing when unstyled", () => {
       render(<Breadcrumb items={items} unstyled />);
 
       const nav = screen.getByRole("navigation");
       const list = within(nav).getByRole("list");
-      // Unstyled classes are all empty strings
-      expect(list.className).toBeFalsy();
+      expect(list).toHaveClass("flex", "flex-wrap", "items-center");
+      expect(list).not.toHaveClass("gap-1");
     });
   });
 

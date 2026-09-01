@@ -8,7 +8,7 @@ import React, {
 import type { OtpInputProps, OtpInputClasses } from "./utils/types";
 import { DEFAULT_OTPINPUT_CLASSES, UNSTYLED_OTPINPUT_CLASSES } from "./utils/constants";
 import { OtpInputLabel } from "./components/OtpInputLabel";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 

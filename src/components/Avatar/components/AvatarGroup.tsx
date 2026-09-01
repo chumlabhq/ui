@@ -8,7 +8,7 @@ import {
   DEFAULT_SHAPE,
 } from "../utils/constants";
 import { AvatarGroupContext } from "../utils/context";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const variantClassNames = {
   stack: "flex items-center",

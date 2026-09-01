@@ -50,6 +50,8 @@ export interface DatePickerClasses {
   trigger?: string;
   /** Text input inside trigger */
   input?: string;
+  /** The trigger's clear/calendar icon row. */
+  triggerActions?: string;
   /** Calendar icon in trigger */
   calendarIcon?: string;
   /** Clear button in trigger */

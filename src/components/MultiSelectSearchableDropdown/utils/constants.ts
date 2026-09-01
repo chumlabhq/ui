@@ -1,4 +1,5 @@
 import type { MultiSelectSearchableDropdownClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelectSearchableDropdownClasses> =
   {
@@ -41,41 +42,11 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
     searchInput:
       "flex items-center gap-2 px-3 py-2 border-b border-cl-border dark:border-cl-border dark:bg-cl-bg-elevated",
     searchInputElement:
-      "flex-1 bg-transparent focus:outline-none text-cl-text dark:text-cl-text placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary",
+      "flex-1 bg-transparent outline-none flex-1 bg-transparent focus:outline-none text-cl-text dark:text-cl-text placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary",
     searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary",
     moreCount:
       "inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-bg-hover dark:bg-cl-text/10 text-cl-text-secondary dark:text-cl-text-secondary",
   };
 
 export const UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelectSearchableDropdownClasses> =
-  {
-    root: "",
-    wrapper: "",
-    trigger: "",
-    triggerText: "",
-    content: "",
-    optionList: "",
-    option: "",
-    optionSelected: "",
-    optionFocused: "",
-    optionDisabled: "",
-    chevron: "",
-    checkbox: "",
-    checkboxChecked: "",
-    checkboxIcon: "",
-    chip: "",
-    chipRemove: "",
-    noResults: "",
-    clearIcon: "",
-    loading: "",
-    shimmer: "",
-    shimmerItem: "",
-    label: "",
-    error: "",
-    description: "",
-    success: "",
-    searchInput: "",
-    searchInputElement: "",
-    searchIcon: "",
-    moreCount: "",
-  };
+  structuralOnly(DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES);

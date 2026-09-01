@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { CheckIcon } from "../utils/icons";
 import type { ReactNode } from "react";
 
@@ -55,7 +55,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined}>
         {isSelected &&
           (checkboxIcon || (
-            <CheckIcon className={classes.checkboxIcon || "w-full h-full"} />
+            <CheckIcon className={classes.checkboxIcon || undefined} />
           ))}
       </span>
       <span className="flex-1 truncate">

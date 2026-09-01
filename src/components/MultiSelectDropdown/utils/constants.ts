@@ -1,4 +1,5 @@
 import type { MultiSelectDropdownClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownClasses> =
   {
@@ -42,30 +43,4 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
   };
 
 export const UNSTYLED_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownClasses> =
-  {
-    root: "",
-    wrapper: "",
-    trigger: "",
-    triggerText: "",
-    content: "",
-    optionList: "",
-    option: "",
-    optionSelected: "",
-    optionFocused: "",
-    optionDisabled: "",
-    chevron: "",
-    checkbox: "",
-    checkboxChecked: "",
-    checkboxIcon: "",
-    chip: "",
-    chipRemove: "",
-    noResults: "",
-    clearIcon: "",
-    label: "",
-    error: "",
-    description: "",
-    success: "",
-    shimmer: "",
-    shimmerItem: "",
-    moreCount: "",
-  };
+  structuralOnly(DEFAULT_MULTISELECTDROPDOWN_CLASSES);

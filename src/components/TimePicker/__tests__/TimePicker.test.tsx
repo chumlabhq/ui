@@ -415,12 +415,16 @@ describe("TimePicker", () => {
 
   // ─── Unstyled mode ──────────────────────────────────────────────────
   describe("Unstyled mode", () => {
-    it("uses unstyled classes when unstyled=true", () => {
+    // ADR 001: the root default is "inline-flex flex-col gap-1 text-cl-text …",
+    // which carries both categories — display and flex-direction are structural
+    // and survive; colour and spacing are decorative and do not.
+    it("keeps structural layout and strips decoration when unstyled=true", () => {
       const { container } = render(<TimePicker unstyled />);
-      // With unstyled, root class should be empty
-      const root = container.firstElementChild;
-      // It should not have the default styled classes
-      expect(root?.className).not.toContain("inline-flex");
+      const root = container.firstElementChild!;
+
+      expect(root).toHaveClass("inline-flex", "flex-col");
+      expect(root).not.toHaveClass("text-cl-text");
+      expect(root).not.toHaveClass("gap-1");
     });
   });
 

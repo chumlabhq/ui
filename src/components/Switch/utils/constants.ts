@@ -1,4 +1,5 @@
 import type { SwitchClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const CSS_VARS = {
   trackerChecked: "--switch-tracker-checked-bg",
@@ -33,24 +34,8 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   uncheckedThumb: "translate-x-0.5",
   error: "text-sm text-cl-error mt-2",
   success: "text-sm text-cl-success mt-2",
-  loading: "",
+  loading: "animate-spin",
 };
 
-export const UNSTYLED_SWITCH_CLASSES: Required<SwitchClasses> = {
-  root: "",
-  innerRow: "",
-  labelContainer: "",
-  label: "",
-  disabledLabel: "",
-  description: "",
-  tracker: "",
-  disabledTracker: "",
-  thumb: "",
-  checkedTracker: "",
-  uncheckedTracker: "",
-  checkedThumb: "",
-  uncheckedThumb: "",
-  error: "",
-  success: "",
-  loading: "",
-};
+export const UNSTYLED_SWITCH_CLASSES: Required<SwitchClasses> =
+  structuralOnly(DEFAULT_SWITCH_CLASSES);

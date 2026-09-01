@@ -1198,11 +1198,22 @@ describe("Drawer", () => {
   });
 
   describe("Unstyled Mode", () => {
-    it("applies unstyled classes when unstyled is true", () => {
+    // ADR 001: z-* is structural — an overlay that loses its stacking order
+    // renders behind the content it is meant to cover, which is a layout
+    // failure, not a visual one. DEFAULT_DRAWER_CLASSES.root is z-999999 and
+    // nothing else, so unstyled keeps it whole.
+    it("keeps stacking order when unstyled is true", () => {
       renderDrawer({ unstyled: true });
       const dialog = screen.getByRole("dialog");
-      // Unstyled classes are empty strings, so no class should be applied from defaults
-      expect(dialog.className).not.toContain("z-999999");
+      expect(dialog).toHaveClass("z-999999");
+    });
+
+    it("drops the overlay transition when unstyled is true", () => {
+      renderDrawer({ unstyled: true });
+      const overlay = document.querySelector("[data-drawer-overlay]");
+      if (!overlay) return;
+      expect(overlay).toHaveClass("fixed", "inset-0");
+      expect(overlay).not.toHaveClass("transition-opacity");
     });
   });
 

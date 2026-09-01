@@ -37,7 +37,7 @@ import { SearchableDropdown } from "../SearchableDropdown";
 import type { SearchableDropdownOption } from "../SearchableDropdown";
 import { useControllableState } from "../../utils/useControllableState";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
 
@@ -173,6 +173,18 @@ const InternationalPhoneInput = forwardRef<
         error: classesProp?.error ?? baseClasses.error,
         success: classesProp?.success ?? baseClasses.success,
         countrySelect: classesProp?.countrySelect ?? baseClasses.countrySelect,
+        countryOptionRow:
+          classesProp?.countryOptionRow ?? baseClasses.countryOptionRow,
+        countryOptionFlag:
+          classesProp?.countryOptionFlag ?? baseClasses.countryOptionFlag,
+        countryOptionLabel:
+          classesProp?.countryOptionLabel ?? baseClasses.countryOptionLabel,
+        countrySelectedRow:
+          classesProp?.countrySelectedRow ?? baseClasses.countrySelectedRow,
+        countrySelectedFlag:
+          classesProp?.countrySelectedFlag ?? baseClasses.countrySelectedFlag,
+        countrySelectedLabel:
+          classesProp?.countrySelectedLabel ?? baseClasses.countrySelectedLabel,
         countrySelectTrigger:
           classesProp?.countrySelectTrigger ?? baseClasses.countrySelectTrigger,
         countrySelectDropdown:
@@ -288,14 +300,15 @@ const InternationalPhoneInput = forwardRef<
               isSelected: country.value === selectedCountryCode,
             })
           ) : (
-            <div className="flex items-center gap-2 min-w-0">
+            <div className={mergedClasses.countryOptionRow || undefined}>
               <CountryFlag
                 code={country.flag}
                 size={flagSize}
-                className="shrink-0 rounded-cl-sm"
+                unstyled={unstyled}
+                className={mergedClasses.countryOptionFlag || undefined}
                 style={{ height: Math.round((flagSize * 17) / 22) }}
               />
-              <span className="text-sm wrap-break-word min-w-0">
+              <span className={mergedClasses.countryOptionLabel || undefined}>
                 {country.name} ({country.dialCode})
               </span>
             </div>
@@ -303,14 +316,15 @@ const InternationalPhoneInput = forwardRef<
           selectedContent: renderSelectedCountry ? (
             renderSelectedCountry(country)
           ) : (
-            <div className="flex items-center gap-2">
+            <div className={mergedClasses.countrySelectedRow || undefined}>
               <CountryFlag
                 code={country.flag}
                 size={flagSize}
-                className="rounded-cl-sm"
+                unstyled={unstyled}
+                className={mergedClasses.countrySelectedFlag || undefined}
                 style={{ height: Math.round((flagSize * 17) / 22) }}
               />
-              <span className="text-sm">{country.dialCode}</span>
+              <span className={mergedClasses.countrySelectedLabel || undefined}>{country.dialCode}</span>
             </div>
           ),
         })),
@@ -320,6 +334,13 @@ const InternationalPhoneInput = forwardRef<
         renderSelectedCountry,
         selectedCountryCode,
         flagSize,
+        unstyled,
+        mergedClasses.countryOptionRow,
+        mergedClasses.countryOptionFlag,
+        mergedClasses.countryOptionLabel,
+        mergedClasses.countrySelectedRow,
+        mergedClasses.countrySelectedFlag,
+        mergedClasses.countrySelectedLabel,
       ],
     );
 

@@ -1,4 +1,5 @@
 import type { InputClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
   root: "flex flex-col",
@@ -8,7 +9,7 @@ export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary dark:text-cl-text-tertiary",
   input:
-    "w-full bg-transparent outline-none text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary",
+    "flex-1 min-w-0 w-full bg-transparent outline-none text-sm text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary",
   prefix: "text-sm select-none text-cl-text-tertiary dark:text-cl-text-tertiary",
   suffix: "text-sm select-none text-cl-text-tertiary dark:text-cl-text-tertiary",
   error:
@@ -19,15 +20,5 @@ export const DEFAULT_INPUT_CLASSES: Required<InputClasses> = {
     "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary dark:text-cl-text-tertiary",
 };
 
-export const UNSTYLED_INPUT_CLASSES: Required<InputClasses> = {
-  root: "",
-  wrapper: "",
-  label: "",
-  description: "",
-  input: "",
-  prefix: "",
-  suffix: "",
-  error: "",
-  success: "",
-  count: "",
-};
+export const UNSTYLED_INPUT_CLASSES: Required<InputClasses> =
+  structuralOnly(DEFAULT_INPUT_CLASSES);

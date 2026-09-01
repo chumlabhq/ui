@@ -3,7 +3,7 @@ import { useAccordionConfig, useAccordionItemContext } from "../utils/context";
 import { Slot } from "../../../utils/Slot";
 import { mergeRefs } from "../../../utils/mergeRefs";
 import type { AccordionContentProps } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
   (

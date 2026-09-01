@@ -17,7 +17,7 @@ import {
   UNSTYLED_RADIO_GROUP_CLASSES,
 } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 

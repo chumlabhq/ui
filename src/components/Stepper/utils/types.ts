@@ -44,6 +44,10 @@ export interface StepperClasses {
   root?: string;
   list?: string;
   stepContainer?: string;
+  /** Step container in vertical orientation. */
+  stepContainerVertical?: string;
+  /** Step container in horizontal orientation. */
+  stepContainerHorizontal?: string;
   step?: string;
   stepInteractive?: string;
   stepDisabled?: string;

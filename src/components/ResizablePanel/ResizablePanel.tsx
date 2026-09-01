@@ -14,7 +14,7 @@ import {
   DEFAULT_RESIZABLEPANEL_CLASSES,
   UNSTYLED_RESIZABLEPANEL_CLASSES,
 } from "./utils/constants";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
@@ -292,7 +292,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         {...rest}
         ref={ref}
         id={panelId}
-        className={cn("relative", mergedClasses.root, className)}
+        className={cn(mergedClasses.root, className)}
         style={
           {
             ...style,

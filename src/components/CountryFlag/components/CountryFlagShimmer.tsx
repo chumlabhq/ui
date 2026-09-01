@@ -3,7 +3,7 @@ import type {
   CountryFlagShimmerProps,
   CountryFlagGroupShimmerProps,
 } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { getPixelSize } from "../utils/helpers";
 import { DEFAULT_ASPECT_RATIO } from "../utils/constants";
 import { useReducedMotion } from "../../../utils/useReducedMotion";

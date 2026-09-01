@@ -2,7 +2,7 @@ import { forwardRef, useMemo } from "react";
 import type { AccordionShimmerProps } from "../utils/types";
 import { SIZE_CLASSES, VARIANT_CLASSES } from "../utils/constants";
 import { Slot } from "../../../utils/Slot";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const TITLE_WIDTHS = [75, 68, 82, 70, 78];
 const SUBTITLE_WIDTHS = [55, 62, 48, 58, 52];

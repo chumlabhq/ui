@@ -1,4 +1,5 @@
 import type { TextAreaClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
   root: "flex flex-col",
@@ -8,7 +9,7 @@ export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary dark:text-cl-text-tertiary",
   textarea:
-    "w-full bg-transparent outline-none text-sm resize-y text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary",
+    "flex-1 min-w-0 w-full bg-transparent outline-none text-sm resize-y text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary",
   error:
     "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error",
   success:
@@ -17,13 +18,5 @@ export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
     "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary dark:text-cl-text-tertiary",
 };
 
-export const UNSTYLED_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
-  root: "",
-  wrapper: "",
-  label: "",
-  description: "",
-  textarea: "",
-  error: "",
-  success: "",
-  count: "",
-};
+export const UNSTYLED_TEXTAREA_CLASSES: Required<TextAreaClasses> =
+  structuralOnly(DEFAULT_TEXTAREA_CLASSES);

@@ -4,7 +4,7 @@ import {
   DEFAULT_DOT_LOADER_CLASSES,
   UNSTYLED_DOT_LOADER_CLASSES,
 } from "./utils/constants";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(

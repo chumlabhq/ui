@@ -1,4 +1,5 @@
 import type { DrawerClasses, DrawerDirection } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_DIRECTION: DrawerDirection = "left";
 export const DEFAULT_SIZE = "300px";
@@ -20,8 +21,5 @@ export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
   panel: "fixed z-999999",
 };
 
-export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> = {
-  root: "",
-  overlay: "",
-  panel: "",
-};
+export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> =
+  structuralOnly(DEFAULT_DRAWER_CLASSES);

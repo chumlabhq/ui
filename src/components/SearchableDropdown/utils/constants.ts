@@ -1,4 +1,5 @@
 import type { SearchableDropdownClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClasses> =
   {
@@ -38,28 +39,4 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
   };
 
 export const UNSTYLED_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClasses> =
-  {
-    root: "",
-    wrapper: "",
-    trigger: "",
-    triggerText: "",
-    content: "",
-    optionList: "",
-    option: "",
-    optionSelected: "",
-    optionFocused: "",
-    optionDisabled: "",
-    chevron: "",
-    checkIcon: "",
-    clearIcon: "",
-    noResults: "",
-    label: "",
-    error: "",
-    description: "",
-    success: "",
-    searchInput: "",
-    searchInputElement: "",
-    searchIcon: "",
-    shimmer: "",
-    shimmerItem: "",
-  };
+  structuralOnly(DEFAULT_SEARCHABLEDROPDOWN_CLASSES);

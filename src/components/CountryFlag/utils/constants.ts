@@ -1,4 +1,5 @@
 import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 // Opt-in CDN for consumers who would rather serve flags over the network than
 // use the packaged SVGs: <CountryFlag basePath={CHUMLAB_FLAG_CDN} />. Not a
@@ -27,11 +28,8 @@ export const DEFAULT_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> = {
   fallback: "",
 };
 
-export const UNSTYLED_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> = {
-  root: "",
-  image: "",
-  fallback: "",
-};
+export const UNSTYLED_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> =
+  structuralOnly(DEFAULT_COUNTRYFLAG_CLASSES);
 
 export const DEFAULT_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses> = {
   root: "flex items-center -space-x-1.5",
@@ -43,8 +41,5 @@ export const DEFAULT_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses
     "shrink-0 inline-flex items-center justify-center rounded-cl-sm border border-cl-border bg-cl-bg-elevated text-cl-text-secondary text-[10px] font-medium tabular-nums select-none",
 };
 
-export const UNSTYLED_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses> = {
-  root: "",
-  item: "",
-  count: "",
-};
+export const UNSTYLED_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses> =
+  structuralOnly(DEFAULT_COUNTRYFLAG_GROUP_CLASSES);

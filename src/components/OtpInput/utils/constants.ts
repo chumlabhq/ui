@@ -1,4 +1,5 @@
 import type { OtpInputClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
   root: "",
@@ -30,15 +31,5 @@ export const PRESET_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
   success: "text-sm text-cl-success mt-2",
 };
 
-export const UNSTYLED_OTPINPUT_CLASSES: Required<OtpInputClasses> = {
-  root: "",
-  wrapper: "",
-  group: "",
-  input: "",
-  inputFocused: "",
-  label: "",
-  error: "",
-  separator: "",
-  description: "",
-  success: "",
-};
+export const UNSTYLED_OTPINPUT_CLASSES: Required<OtpInputClasses> =
+  structuralOnly(DEFAULT_OTPINPUT_CLASSES);

@@ -3,7 +3,7 @@ import type { AvatarShimmerProps, AvatarGroupShimmerProps } from "../utils/types
 import { DEFAULT_SIZE, DEFAULT_SHAPE, DEFAULT_SPACING } from "../utils/constants";
 import { getNumericSize, getBorderRadius } from "../utils/helpers";
 import { Slot } from "../../../utils/Slot";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { useReducedMotion } from "../../../utils/useReducedMotion";
 
 export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(

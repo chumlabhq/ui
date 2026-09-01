@@ -28,7 +28,7 @@ import {
 } from "./utils/helpers";
 import type { DropdownCoords } from "./utils/helpers";
 import DropdownShimmer from "./components/DropdownShimmer";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import {
   DEFAULT_DROPDOWN_CLASSES,
   UNSTYLED_DROPDOWN_CLASSES,
@@ -101,7 +101,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <CheckIconComponent className={classes.checkIcon || undefined} />
+          <CheckIconComponent className={cn(classes.checkIcon) || undefined} />
         ))}
     </div>
   );
@@ -631,7 +631,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               </span>
               {showChevron && (
                 <ChevronIcon
-                  className={mergedClasses.chevron || undefined}
+                  className={cn(mergedClasses.chevron) || undefined}
                   style={isOpen ? { transform: "rotate(180deg)" } : undefined}
                 />
               )}

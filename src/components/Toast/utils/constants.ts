@@ -1,4 +1,5 @@
 import type { ToastType, ToastPosition, ToastClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const getRoleForType = (type: ToastType): "alert" | "status" => {
   switch (type) {
@@ -50,12 +51,5 @@ export const DEFAULT_TOAST_CLASSES: Required<ToastClasses> = {
   icon: "",
 };
 
-export const UNSTYLED_TOAST_CLASSES: Required<ToastClasses> = {
-  container: "",
-  content: "",
-  message: "",
-  description: "",
-  progress: "",
-  closeButton: "",
-  icon: "",
-};
+export const UNSTYLED_TOAST_CLASSES: Required<ToastClasses> =
+  structuralOnly(DEFAULT_TOAST_CLASSES);

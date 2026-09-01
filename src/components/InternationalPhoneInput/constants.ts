@@ -1,5 +1,6 @@
 import type { CountryOption } from "./utils/types";
 import type { InternationalPhoneInputClasses } from "./utils/types";
+import { structuralOnly } from "../../utils/classLayers";
 
 export const PHONE_FORMATTING_PATTERNS: Record<
   string,
@@ -346,6 +347,12 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   success:
     "text-xs mt-1.5 flex items-center gap-1.5 text-cl-success",
   countrySelect: "",
+  countryOptionRow: "flex items-center gap-2 min-w-0",
+  countryOptionFlag: "shrink-0 rounded-cl-sm",
+  countryOptionLabel: "text-sm wrap-break-word min-w-0",
+  countrySelectedRow: "flex items-center gap-2",
+  countrySelectedFlag: "rounded-cl-sm",
+  countrySelectedLabel: "text-sm",
   countrySelectTrigger:
     "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[110px] sm:min-w-[130px] border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 hover:bg-cl-bg-hover dark:hover:bg-white/6 text-cl-text dark:text-cl-text-secondary",
   countrySelectDropdown:
@@ -369,24 +376,5 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
     "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
 };
 
-export const UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> = {
-  root: "",
-  label: "",
-  description: "",
-  wrapper: "",
-  input: "",
-  error: "",
-  success: "",
-  countrySelect: "",
-  countrySelectTrigger: "",
-  countrySelectDropdown: "",
-  countrySelectSearchInput: "",
-  countrySelectSearchInputElement: "",
-  countrySelectOption: "",
-  countrySelectOptionSelected: "",
-  countrySelectOptionList: "",
-  countrySelectChevron: "",
-  countrySelectCheckIcon: "",
-  countrySelectSearchIcon: "",
-  countrySelectNoResults: "",
-};
+export const UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPhoneInputClasses> =
+  structuralOnly(DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES);

@@ -9,6 +9,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { isBrowser } from "../../utils/isBrowser";
+import { cn } from "../../utils/scopedCn";
 import {
   useReactTable,
   getCoreRowModel,
@@ -1298,11 +1299,11 @@ function TableInner<TData>(
               >
                 {isPinned ? (
                   <PinnedIconComponent
-                    className={`w-4 h-4 ${pinnedPinIconClassName}`}
+                    className={cn("w-4 h-4", pinnedPinIconClassName)}
                   />
                 ) : (
                   <UnpinnedIconComponent
-                    className={`w-4 h-4 ${pinIconClassName}`}
+                    className={cn("w-4 h-4", pinIconClassName)}
                   />
                 )}
               </button>

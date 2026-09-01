@@ -8,7 +8,7 @@ import type {
 import Toast from "../Toast";
 import { ToastContext } from "../utils/context";
 import { positionClasses, stackDirectionClasses, PROGRESS_KEYFRAMES } from "../utils/constants";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { isBrowser } from "../../../utils/isBrowser";
 
 interface ToastState extends ToastConfig {

@@ -11,7 +11,7 @@ import { usePackagedFlag } from "./utils/packagedFlags";
 import { useCountryFlagGroupContext } from "./utils/context";
 import { CountryFlagShimmer } from "./components/CountryFlagShimmer";
 import { Tooltip } from "../Tooltip";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 /**

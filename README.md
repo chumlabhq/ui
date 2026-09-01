@@ -219,11 +219,24 @@ import { Table } from "@chumlab/ui/table";
 
 ### Go fully unstyled
 
+Every component takes an `unstyled` prop that drops its default classes while
+keeping the behaviour, ARIA wiring, and keyboard handling:
+
 ```tsx
-import { UNSTYLED_DROPDOWN_CLASSES } from "@chumlab/ui";
+<Dropdown options={options} unstyled classes={{ trigger: "my-trigger", option: "my-option" }} />
+```
+
+Every component also ships a ready-made empty class map, exported from its own
+subpath, if you would rather start from the slot names:
+
+```tsx
+import { Dropdown, UNSTYLED_DROPDOWN_CLASSES } from "@chumlab/ui/dropdown";
 
 <Dropdown options={options} classes={UNSTYLED_DROPDOWN_CLASSES} />;
 ```
+
+`DEFAULT_*_CLASSES` is exported the same way if you want to extend the defaults
+rather than replace them.
 
 ### Target states with CSS
 
@@ -292,7 +305,7 @@ Every component ships with:
 
 | Export                      | Description                                          |
 | --------------------------- | ---------------------------------------------------- |
-| `cn`                        | Tailwind-aware class merging (clsx + tailwind-merge) |
+| `cn`                        | Tailwind-aware class merging (clsx + tailwind-merge). Merges your classes only — it adds nothing of the library's own, so it is safe to use on your own markup. |
 | `Slot`                      | Composition primitive for `asChild` pattern          |
 | `mergeRefs`                 | Combine multiple React refs                          |
 | `useControllableState`      | Dual controlled/uncontrolled state hook              |

@@ -8,7 +8,7 @@ import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOp
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
 import { ChevronDownIcon, CheckIcon, SearchIcon, XIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import {
   DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES,
@@ -255,7 +255,7 @@ const OptionItem = memo(function OptionItem({
       onMouseEnter={() => onHover(index)}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined}>
-        {isSelected && (checkboxIcon || <CheckIcon className={classes.checkboxIcon || "w-full h-full"} />)}
+        {isSelected && (checkboxIcon || <CheckIcon className={classes.checkboxIcon || undefined} />)}
       </span>
       <span className="flex-1 truncate">
         {option.content || option.label}
@@ -669,7 +669,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         )}
 
         <div
-          className={cn("relative", mergedClasses.wrapper) || undefined}
+          className={mergedClasses.wrapper || undefined}
         >
           {renderTrigger ? (
             renderTrigger({
@@ -720,7 +720,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
+              <span className={mergedClasses.triggerText || undefined}>
                 {showSelectedChips && selectedOptions.length > 0 ? (
                   <>
                     {displayedChips.map((option) => (
@@ -799,7 +799,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onClick={(e) => e.stopPropagation()}
-                  className={cn("flex-1 bg-transparent outline-none", mergedClasses.searchInputElement) || undefined}
+                  className={cn(mergedClasses.searchInputElement) || undefined}
                 />
               </div>
             )}

@@ -11,7 +11,7 @@ import { ChevronDownIcon } from "../utils/icons";
 import { Slot } from "../../../utils/Slot";
 import { mergeRefs } from "../../../utils/mergeRefs";
 import type { AccordionTriggerProps } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
   (
@@ -167,7 +167,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         <span className={config.classes.triggerInner || undefined}>
           <span>{children}</span>
           {subtitle && (
-            <span className={cn("block", config.classes.subtitle) || undefined}>
+            <span className={cn(config.classes.subtitle) || undefined}>
               {subtitle}
             </span>
           )}

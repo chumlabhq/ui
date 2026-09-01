@@ -3,7 +3,7 @@ import type { ToastProps, ToastClasses } from "./utils/types";
 import { CloseIcon } from "./utils/icons";
 import { getDefaultIcon } from "./utils/getDefaultIcon";
 import { getRoleForType, defaultContainerStyles, DEFAULT_TOAST_CLASSES, UNSTYLED_TOAST_CLASSES } from "./utils/constants";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { isBrowser } from "../../utils/isBrowser";
 
 /**

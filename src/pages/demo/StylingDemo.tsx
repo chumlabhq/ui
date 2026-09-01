@@ -95,19 +95,25 @@ const StylingDemo = () => {
         description="When you want to keep our accessibility logic but bring your own visuals top to bottom."
       >
         <CodeBlock
-          code={`import { Dropdown } from "@chumlab/ui/dropdown/unstyled";
+          code={`import { Dropdown } from "@chumlab/ui";
 
-<Dropdown.Root>
-  <Dropdown.Trigger className="my-button-styles" />
-  <Dropdown.Content className="my-menu-styles">
-    <Dropdown.Item className="my-item-styles">One</Dropdown.Item>
-  </Dropdown.Content>
-</Dropdown.Root>`}
+<Dropdown
+  options={options}
+  unstyled
+  classes={{
+    trigger: "my-trigger-styles",
+    content: "my-menu-styles",
+    option: "my-option-styles",
+  }}
+/>`}
         />
         <p className="mt-4 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl">
-          Available for the bigger composite primitives. You get focus
-          management, keyboard navigation, ARIA wiring, and portal
-          rendering — and zero default classes.
+          Every component accepts{" "}
+          <code className="font-mono text-[12px] text-accent">unstyled</code>. It
+          drops the default classes and keeps everything else — focus management,
+          keyboard navigation, ARIA wiring, and portal rendering. Name the slots
+          you want through{" "}
+          <code className="font-mono text-[12px] text-accent">classes</code>.
         </p>
       </Section>
     </div>

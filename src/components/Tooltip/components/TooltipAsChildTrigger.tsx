@@ -1,6 +1,6 @@
 import { cloneElement } from "react";
 import type { ReactElement, Ref } from "react";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { mergeTooltipRefs } from "../utils/helpers";
 
 interface TooltipAsChildTriggerProps {

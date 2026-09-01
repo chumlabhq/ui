@@ -4,7 +4,7 @@ import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject } from "
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
 import {
@@ -200,7 +200,7 @@ const Submenu = memo(function Submenu({
     >
       {showSearch && (
         <div className={submenuSearchInputClass || classes.searchInput || undefined}>
-          <SearchIcon className={submenuSearchIconClass || classes.searchIcon || undefined} />
+          <SearchIcon className={cn(submenuSearchIconClass || classes.searchIcon) || undefined} />
           <input
             type="text"
             value={searchQuery || ""}
@@ -336,6 +336,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         root: classesProp?.root ?? baseClasses.root,
         wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
+        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
         menu: classesProp?.menu ?? baseClasses.menu,
         menuItem: classesProp?.menuItem ?? baseClasses.menuItem,
         menuItemSelected: classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
@@ -610,7 +611,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
 
         <div
           ref={containerRef}
-          className={cn("relative", mergedClasses.root) || undefined}
+          className={cn(mergedClasses.root) || undefined}
         >
           {renderTrigger ? (
             // eslint-disable-next-line react-hooks/refs -- ref callback is intentionally passed to render prop for consumer to attach
@@ -657,7 +658,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className="flex-1 text-left truncate">
+              <span className={mergedClasses.triggerText || undefined}>
                 {displayValue || placeholder}
               </span>
               {showChevron && (
@@ -704,7 +705,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
             >
               {showMenuSearch && (
                 <div className={mergedClasses.searchInput || undefined}>
-                  <SearchIconComponent className={mergedClasses.searchIcon || undefined} />
+                  <SearchIconComponent className={cn(mergedClasses.searchIcon) || undefined} />
                   <input
                     type="text"
                     value={menuSearchQuery}

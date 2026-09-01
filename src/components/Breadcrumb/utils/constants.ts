@@ -1,4 +1,5 @@
 import type { BreadcrumbClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   root: "",
@@ -21,18 +22,5 @@ export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   dropdownItemDisabled: "opacity-50 cursor-not-allowed",
 };
 
-export const UNSTYLED_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
-  root: "",
-  list: "",
-  item: "",
-  itemActive: "",
-  itemDisabled: "",
-  link: "",
-  separator: "",
-  icon: "",
-  ellipsis: "",
-  ellipsisButton: "",
-  dropdown: "",
-  dropdownItem: "",
-  dropdownItemDisabled: "",
-};
+export const UNSTYLED_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> =
+  structuralOnly(DEFAULT_BREADCRUMB_CLASSES);

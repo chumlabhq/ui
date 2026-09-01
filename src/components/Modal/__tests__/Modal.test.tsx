@@ -615,7 +615,9 @@ describe("Modal", () => {
       expect(dialog.className).not.toContain("bg-white");
     });
 
-    it("does not apply fixed positioning classes to root when unstyled=true", () => {
+    // ADR 001: `unstyled` strips decoration, not layout. Without these the modal
+    // renders inline in document flow instead of as an overlay.
+    it("keeps structural positioning on the root when unstyled=true", () => {
       render(
         <Modal open onOpenChange={() => {}} unstyled>
           <p>Content</p>
@@ -623,7 +625,7 @@ describe("Modal", () => {
       );
 
       const root = document.querySelector("[data-modal-root]")!;
-      expect(root.className).not.toContain("fixed inset-0");
+      expect(root).toHaveClass("fixed", "inset-0", "flex");
     });
   });
 

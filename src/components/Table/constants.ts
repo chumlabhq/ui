@@ -1,4 +1,5 @@
 import type { TableClasses } from "./utils/types";
+import { structuralOnly } from "../../utils/classLayers";
 
 export {
   DEFAULT_ROW_OPTIONS,
@@ -72,49 +73,5 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   searchInput: "",
 };
 
-export const UNSTYLED_TABLE_CLASSES: Required<TableClasses> = {
-  container: "",
-  table: "",
-  header: "",
-  headerRow: "",
-  headerCell: "",
-  headerCellHover: "",
-  headerCellContent: "",
-  body: "",
-  row: "",
-  cell: "",
-  selectedRow: "",
-  pinnedContainer: "",
-  pinnedTable: "",
-  unpinnedContainer: "",
-  unpinnedTable: "",
-  empty: "",
-  pinIcon: "",
-  pinIconHover: "",
-  pinnedPinIcon: "",
-  pinnedPinIconHover: "",
-  pinButton: "",
-  pinnedPinButton: "",
-  shimmer: "",
-  shimmerRow: "",
-  shimmerCell: "",
-  shimmerBar: "",
-  checkbox: "",
-  checkboxCell: "",
-  sortIcon: "",
-  filterIcon: "",
-  filterDropdown: "",
-  expandIcon: "",
-  expandedRow: "",
-  pinnedRightContainer: "",
-  pinnedRightTable: "",
-  editInput: "",
-  dragHandle: "",
-  footer: "",
-  searchBar: "",
-  mobileCard: "",
-  groupHeader: "",
-  resizeHandle: "",
-  loadingMore: "",
-  searchInput: "",
-};
+export const UNSTYLED_TABLE_CLASSES: Required<TableClasses> =
+  structuralOnly(DEFAULT_TABLE_CLASSES);

@@ -9,7 +9,7 @@ import {
   getBorderRadius,
   parseBorder,
 } from "../utils/helpers";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { isTooltipConfig } from "../../../utils/isTooltipConfig";
 
 const variantClassNames = {

@@ -11,7 +11,7 @@ import type { TextAreaProps, TextAreaClasses } from "./utils/types";
 import { DEFAULT_TEXTAREA_CLASSES, UNSTYLED_TEXTAREA_CLASSES } from "./utils/constants";
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
@@ -228,7 +228,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           maxLength={maxLength}
           rows={rows}
           data-slot="textarea"
-          className={cn("flex-1 min-w-0", mergedClasses.textarea)}
+          className={cn(mergedClasses.textarea)}
           style={autoResize ? { overflow: "hidden", resize: "none" } : undefined}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}

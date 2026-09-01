@@ -26,7 +26,7 @@ import {
 } from "./utils/helpers";
 import { useAvatarGroupContext } from "./utils/context";
 import { AvatarShimmer } from "./components/AvatarShimmer";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { injectStyles } from "../../utils/injectStyles";
 import { isTooltipConfig } from "../../utils/isTooltipConfig";
 

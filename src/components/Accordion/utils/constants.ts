@@ -1,5 +1,6 @@
 import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig } from "./types";
 import { isBrowser } from "../../../utils/isBrowser";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",
@@ -11,28 +12,15 @@ export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
   icon: "shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary transition-transform duration-200",
   iconWrapper: "shrink-0",
-  subtitle: "text-cl-text-tertiary dark:text-cl-text-tertiary font-normal mt-0.5",
+  subtitle: "block text-cl-text-tertiary dark:text-cl-text-tertiary font-normal mt-0.5",
   triggerLeft: "mr-2 shrink-0",
   triggerRight: "ml-2 shrink-0",
   contentInner: "",
   heading: "",
 };
 
-export const UNSTYLED_ACCORDION_CLASSES: Required<AccordionClasses> = {
-  root: "",
-  item: "",
-  trigger: "",
-  triggerInner: "",
-  content: "",
-  contentWrapper: "",
-  icon: "",
-  iconWrapper: "",
-  subtitle: "",
-  triggerLeft: "",
-  triggerRight: "",
-  contentInner: "",
-  heading: "",
-};
+export const UNSTYLED_ACCORDION_CLASSES: Required<AccordionClasses> =
+  structuralOnly(DEFAULT_ACCORDION_CLASSES);
 
 
 export const DEFAULT_ANIMATION_DURATION = 300;

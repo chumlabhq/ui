@@ -4,7 +4,7 @@ import {
   type ButtonHTMLAttributes,
   type ReactNode,
 } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 
 /**
  * Marketing-site Button.

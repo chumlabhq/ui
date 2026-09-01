@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { TooltipShadowPreset, TooltipWordWrap, TooltipClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 // Alpha values bumped from the original 0.12–0.30 range to 0.18–0.45 so
 // the same shadow reads correctly on both light AND dark surfaces. The
@@ -38,19 +39,15 @@ export const wordWrapStyles: Record<TooltipWordWrap, CSSProperties> = {
  * reads as a continuous extension of the tooltip in either theme.
  */
 export const DEFAULT_TOOLTIP_CLASSES: Required<TooltipClasses> = {
-  trigger: "",
+  trigger: "block truncate",
   content:
     "rounded-cl-md bg-cl-bg-elevated border border-cl-border px-2.5 py-1.5 text-[12px] leading-[1.4] text-cl-text shadow-cl-md",
   arrow: "",
   baseArrow: "fill-cl-bg-elevated stroke-cl-border [stroke-width:1]",
 };
 
-export const UNSTYLED_TOOLTIP_CLASSES: Required<TooltipClasses> = {
-  trigger: "",
-  content: "",
-  arrow: "",
-  baseArrow: "",
-};
+export const UNSTYLED_TOOLTIP_CLASSES: Required<TooltipClasses> =
+  structuralOnly(DEFAULT_TOOLTIP_CLASSES);
 
 export const INTERACTIVE_TAGS = new Set([
   "button",

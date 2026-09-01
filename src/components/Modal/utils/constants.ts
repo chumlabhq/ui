@@ -1,4 +1,5 @@
 import type { ModalClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_MODAL_CLASSES: Required<ModalClasses> = {
   root: "fixed inset-0 z-50 flex items-center justify-center",
@@ -17,16 +18,5 @@ export const DEFAULT_MODAL_CLASSES: Required<ModalClasses> = {
   body: "px-6 pb-6",
 };
 
-export const UNSTYLED_MODAL_CLASSES: Required<ModalClasses> = {
-  root: "",
-  overlay: "",
-  container: "",
-  content: "",
-  header: "",
-  title: "",
-  description: "",
-  icon: "",
-  closeButton: "",
-  closeIcon: "",
-  body: "",
-};
+export const UNSTYLED_MODAL_CLASSES: Required<ModalClasses> =
+  structuralOnly(DEFAULT_MODAL_CLASSES);

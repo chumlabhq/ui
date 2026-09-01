@@ -1,4 +1,5 @@
 import type { TimePickerClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   root: "inline-flex flex-col gap-1 text-cl-text dark:text-cl-text",
@@ -63,43 +64,5 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "bg-cl-accent dark:bg-cl-accent text-cl-on-accent",
 };
 
-export const UNSTYLED_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
-  root: "",
-  label: "",
-  wrapper: "",
-  trigger: "",
-  input: "",
-  endIcon: "",
-  clearIcon: "",
-  dropdown: "",
-  optionList: "",
-  option: "",
-  optionSelected: "",
-  optionFocused: "",
-  selectedIcon: "",
-  noResults: "",
-  error: "",
-  description: "",
-  success: "",
-  clockContainer: "",
-  clockDisplay: "",
-  clockDisplayHours: "",
-  clockDisplayMinutes: "",
-  clockDisplayActive: "",
-  clockDisplaySeparator: "",
-  clockFace: "",
-  clockHand: "",
-  clockHandLine: "",
-  clockHandDot: "",
-  clockNumber: "",
-  clockNumberSelected: "",
-  clockNumberInner: "",
-  clockNumberDisabled: "",
-  clockCenter: "",
-  clockActions: "",
-  clockCancelButton: "",
-  clockOkButton: "",
-  clockPeriodToggle: "",
-  clockPeriodButton: "",
-  clockPeriodActive: "",
-};
+export const UNSTYLED_TIMEPICKER_CLASSES: Required<TimePickerClasses> =
+  structuralOnly(DEFAULT_TIMEPICKER_CLASSES);

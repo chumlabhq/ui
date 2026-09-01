@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import type { ButtonGroupProps } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
   ({ children, className, orientation = "horizontal", ...rest }, ref) => {

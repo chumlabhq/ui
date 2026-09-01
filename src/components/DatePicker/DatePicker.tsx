@@ -45,7 +45,7 @@ import {
   isSameDay,
   getDefaultPresets,
 } from "./utils";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useStablePositionAfterOpen } from "../../utils/useStablePositionAfterOpen";
 import { isBrowser } from "../../utils/isBrowser";
 import { useReducedMotion } from "../../utils/useReducedMotion";
@@ -215,8 +215,13 @@ function useMarkerTooltip(
     setPosition(null);
   }, []);
 
+  // Same guard as the calendar portal. Reachable only from a pointer event
+  // today, so it never fired on a server — but the state that gates it is one
+  // refactor away from being an initial value.
+  const tooltipTarget = isBrowser ? (portalContainer ?? document.body) : null;
+
   const tooltipPortal =
-    isVisible && position && marker
+    isVisible && position && marker && tooltipTarget
       ? createPortal(
           <div
             role="tooltip"
@@ -260,7 +265,7 @@ function useMarkerTooltip(
               <div className="text-cl-text-tertiary mt-1 capitalize text-[11px]">{marker.type}</div>
             )}
           </div>,
-          portalContainer ?? document.body,
+          tooltipTarget,
         )
       : null;
 
@@ -561,6 +566,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       root: classesProp?.root ?? baseClasses.root,
       trigger: classesProp?.trigger ?? baseClasses.trigger,
       input: classesProp?.input ?? baseClasses.input,
+      triggerActions: classesProp?.triggerActions ?? baseClasses.triggerActions,
       calendarIcon: classesProp?.calendarIcon ?? baseClasses.calendarIcon,
       clearButton: classesProp?.clearButton ?? baseClasses.clearButton,
       label: classesProp?.label ?? baseClasses.label,
@@ -910,6 +916,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       [mergedClasses],
     );
 
+    // Matches the guard every other portal component uses (TimePicker.tsx:604,
+    // CascadingDropdown.tsx:552): `document` does not exist on the server, and
+    // `keepMounted` / `open` make this branch reachable during SSR.
+    const portalTarget = isBrowser ? (portalContainer ?? document.body) : null;
+
     // ─── Render ────────────────────────────────────────────────────────
     return (
       <div
@@ -959,7 +970,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             <span className={mergedClasses.input}>
               {hasValue ? displayValue : placeholder || defaultPlaceholder}
             </span>
-            <div className="flex items-center gap-1">
+            <div className={mergedClasses.triggerActions || undefined}>
               {resolvedShowClearButton && hasValue && !disabled && (
                 <span
                   role="button"
@@ -984,7 +995,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             </div>
           </button>
 
-          {(isOpen || keepMounted) && createPortal(
+          {(isOpen || keepMounted) && portalTarget && createPortal(
             <div
               ref={calendarRef}
               id={calendarId}
@@ -1213,7 +1224,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 </div>
               )}
             </div>,
-            portalContainer ?? document.body,
+            portalTarget,
           )}
         </div>
 

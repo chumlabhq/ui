@@ -35,13 +35,14 @@ import type {
   AccordionClasses,
   AccordionRef,
 } from "./utils/types";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useAccordionFocus } from "./hooks/useAccordionFocus";
 import { useAccordionStorage, useStorageSync } from "./hooks/useAccordionStorage";
 import { useAccordionStateManager } from "./hooks/useAccordionStateManager";
 import { usePrintStyles } from "./hooks/usePrintStyles";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 
+import { structuralOnly } from "../../utils/classLayers";
 const DEFAULT_PREVENT_CLOSE_TIMEOUT = 10000;
 
 /**
@@ -191,37 +192,33 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   useStorageSync(internalValue, writeToStorage, isControlled);
 
   // ─── Styling ─────────────────────────────────────────────────────────────
-  const sizeClasses = SIZE_CLASSES[size];
-  const variantClasses = VARIANT_CLASSES[variant];
+  const sizeClasses = unstyled ? structuralOnly(SIZE_CLASSES[size]) : SIZE_CLASSES[size];
+  // ADR 001: `unstyled` strips decoration, not layout. The variant and size maps
+  // are default class sets like any other, so they take the same split rather
+  // than collapsing to "" — otherwise `overflow-hidden` on a bordered accordion
+  // and `w-full` on its trigger disappear along with the colours.
+  const variantClasses = unstyled
+    ? structuralOnly(VARIANT_CLASSES[variant])
+    : VARIANT_CLASSES[variant];
   const baseClasses = unstyled ? UNSTYLED_ACCORDION_CLASSES : DEFAULT_ACCORDION_CLASSES;
 
   const mergedClasses: AccordionClasses = useMemo(
     () => ({
       root:
-        classesProp?.root ??
-        (unstyled ? "" : cn(baseClasses.root, variantClasses.root)),
-      item: classesProp?.item ?? (unstyled ? "" : variantClasses.item),
+        classesProp?.root ?? cn(baseClasses.root, variantClasses.root),
+      item: classesProp?.item ?? variantClasses.item,
       trigger:
         classesProp?.trigger ??
-        (unstyled
-          ? ""
-          : cn(
-              baseClasses.trigger,
-              sizeClasses.trigger,
-              variantClasses.trigger,
-            )),
+        cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger),
       triggerInner: classesProp?.triggerInner ?? baseClasses.triggerInner,
       content:
-        classesProp?.content ??
-        (unstyled ? "" : cn(baseClasses.content, sizeClasses.content)),
+        classesProp?.content ?? cn(baseClasses.content, sizeClasses.content),
       contentWrapper: classesProp?.contentWrapper ?? baseClasses.contentWrapper,
       icon:
-        classesProp?.icon ??
-        (unstyled ? "" : cn(baseClasses.icon, sizeClasses.icon)),
+        classesProp?.icon ?? cn(baseClasses.icon, sizeClasses.icon),
       iconWrapper: classesProp?.iconWrapper ?? baseClasses.iconWrapper,
       subtitle:
-        classesProp?.subtitle ??
-        (unstyled ? "" : cn(baseClasses.subtitle, sizeClasses.subtitle)),
+        classesProp?.subtitle ?? cn(baseClasses.subtitle, sizeClasses.subtitle),
       triggerLeft: classesProp?.triggerLeft ?? baseClasses.triggerLeft,
       triggerRight: classesProp?.triggerRight ?? baseClasses.triggerRight,
       contentInner: classesProp?.contentInner ?? baseClasses.contentInner,

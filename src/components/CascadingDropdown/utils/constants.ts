@@ -1,10 +1,12 @@
 import type { CascadingDropdownClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
-  root: "",
+  root: "relative",
   wrapper: "relative",
   trigger:
     "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated text-cl-text dark:text-white hover:border-cl-border-input dark:hover:border-cl-border focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent",
+  triggerText: "flex-1 text-left truncate",
   // No overflow-y-auto on the menu itself — submenus pop out to the side
   // as `position: absolute` children of menu items, and `overflow: auto`
   // on the menu container would clip those submenu panels. Long menus
@@ -66,43 +68,5 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
 };
 
-export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> = {
-  root: "",
-  wrapper: "",
-  trigger: "",
-  menu: "",
-  menuItem: "",
-  menuItemSelected: "",
-  menuItemFocused: "",
-  menuItemDisabled: "",
-  submenu: "",
-  submenuContainer: "",
-  submenuItem: "",
-  submenuItemSelected: "",
-  submenuItemFocused: "",
-  label: "",
-  error: "",
-  description: "",
-  success: "",
-  chevron: "",
-  submenuChevron: "",
-  checkIcon: "",
-  checkbox: "",
-  checkboxChecked: "",
-  noResults: "",
-  clearIcon: "",
-  loading: "",
-  shimmer: "",
-  shimmerItem: "",
-  searchInput: "",
-  searchInputElement: "",
-  searchIcon: "",
-  submenuSearchInput: "",
-  submenuSearchInputElement: "",
-  submenuSearchIcon: "",
-  content: "",
-  option: "",
-  optionSelected: "",
-  optionFocused: "",
-  optionDisabled: "",
-};
+export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> =
+  structuralOnly(DEFAULT_CASCADINGDROPDOWN_CLASSES);

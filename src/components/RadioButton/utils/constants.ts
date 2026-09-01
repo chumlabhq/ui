@@ -1,4 +1,5 @@
 import type { RadioButtonSize, RadioButtonClasses, RadioGroupClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const SIZE_MAP: Record<Exclude<RadioButtonSize, number>, number> = {
   xs: 14,
@@ -28,17 +29,8 @@ export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
   success: "text-xs text-cl-success mt-1",
 };
 
-export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> = {
-  root: "",
-  label: "",
-  description: "",
-  radio: "",
-  checked: "",
-  unchecked: "",
-  icon: "",
-  error: "",
-  success: "",
-};
+export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> =
+  structuralOnly(DEFAULT_RADIO_CLASSES);
 
 export const DEFAULT_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
   root: "",
@@ -48,10 +40,5 @@ export const DEFAULT_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
   success: "text-xs text-cl-success mt-2",
 };
 
-export const UNSTYLED_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> = {
-  root: "",
-  label: "",
-  description: "",
-  error: "",
-  success: "",
-};
+export const UNSTYLED_RADIO_GROUP_CLASSES: Required<RadioGroupClasses> =
+  structuralOnly(DEFAULT_RADIO_GROUP_CLASSES);

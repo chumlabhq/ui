@@ -1,4 +1,5 @@
 import type { IconAnimation, ButtonClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const BASE_TRANSITION = "transition-transform duration-200";
 
@@ -32,10 +33,5 @@ export const DEFAULT_BUTTON_CLASSES: Required<ButtonClasses> = {
   loader: "",
 };
 
-export const UNSTYLED_BUTTON_CLASSES: Required<ButtonClasses> = {
-  root: "",
-  content: "",
-  startIcon: "",
-  endIcon: "",
-  loader: "",
-};
+export const UNSTYLED_BUTTON_CLASSES: Required<ButtonClasses> =
+  structuralOnly(DEFAULT_BUTTON_CLASSES);

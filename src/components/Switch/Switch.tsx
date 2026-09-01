@@ -3,7 +3,7 @@ import type { SwitchProps, SwitchClasses, SwitchRenderProps } from "./utils/type
 import { DEFAULT_SWITCH_CLASSES, UNSTYLED_SWITCH_CLASSES } from "./utils/constants";
 import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 
 /**
  * Component: Switch
@@ -204,7 +204,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
               <svg
                 role="status"
                 aria-label="Loading"
-                className={cn("animate-spin", mergedClasses.loading) || undefined}
+                className={cn(mergedClasses.loading) || undefined}
                 width={loaderSize}
                 height={loaderSize}
                 viewBox="0 0 24 24"

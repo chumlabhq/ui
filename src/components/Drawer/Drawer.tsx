@@ -39,7 +39,7 @@ import {
 } from "./utils/constants";
 import { DrawerContext } from "./utils/context";
 import { useControllableState } from "../../utils/useControllableState";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 
 import { isBrowser } from "../../utils/isBrowser";

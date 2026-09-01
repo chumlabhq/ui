@@ -22,6 +22,8 @@ export interface CascadingDropdownClasses {
   root?: string;
   wrapper?: string;
   trigger?: string;
+  /** The trigger\'s value/placeholder text. */
+  triggerText?: string;
   menu?: string;
   menuItem?: string;
   menuItemSelected?: string;

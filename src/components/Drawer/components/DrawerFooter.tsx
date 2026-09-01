@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import type { DrawerFooterProps } from "../utils/types";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 
 const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
   ({ children, className, ...rest }, ref) => {

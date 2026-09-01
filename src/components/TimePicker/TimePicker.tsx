@@ -24,6 +24,7 @@ import { ClockFace } from "./ClockFace";
 import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep } from "./utils";
 import { isBrowser } from "../../utils/isBrowser";
 
+import { cn } from "../../utils/scopedCn";
 interface DropdownCoords {
   top: number;
   left: number;
@@ -779,13 +780,14 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
                 </span>
               ) : (
                 <ChevronDownIcon
-                  className={[
+                  className={cn(
                     mergedClasses.endIcon,
-                    !prefersReducedMotion ? "transition-transform duration-200" : "",
-                    !prefersReducedMotion && isOpen ? "rotate-180" : "",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
+                    // The transition lives in the endIcon default; drop it here
+                    // rather than re-adding it, so `classes.endIcon` and
+                    // `unstyled` both reach it.
+                    prefersReducedMotion && "transition-none",
+                    !prefersReducedMotion && isOpen && "rotate-180",
+                  )}
                 />
               ))}
           </div>

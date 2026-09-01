@@ -447,14 +447,17 @@ describe("InternationalPhoneInput", () => {
   });
 
   describe("Unstyled mode", () => {
-    it("uses unstyled classes when unstyled is true", () => {
+    // ADR 001: the root default is "flex flex-col gap-1". Display and
+    // flex-direction are structural; gap-* is spacing, so it is decorative.
+    it("keeps structural layout and strips decoration when unstyled is true", () => {
       const { container } = render(
         <InternationalPhoneInput unstyled />
       );
 
-      const root = container.firstElementChild;
-      // Unstyled classes are empty strings, so the root should not have default styled classes
-      expect(root?.className).not.toContain("flex-col");
+      const root = container.firstElementChild!;
+
+      expect(root).toHaveClass("flex", "flex-col");
+      expect(root).not.toHaveClass("gap-1");
     });
   });
 

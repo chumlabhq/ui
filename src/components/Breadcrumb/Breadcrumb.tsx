@@ -21,7 +21,7 @@ import {
 import { ChevronRightIcon, EllipsisIcon as DefaultEllipsisIcon } from "./icons";
 import BreadcrumbItemContent from "./components/BreadcrumbItemContent";
 import Tooltip from "../Tooltip/Tooltip";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { isBrowser } from "../../utils/isBrowser";
 
 interface DropdownCoords {

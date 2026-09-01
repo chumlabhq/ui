@@ -9,7 +9,7 @@ import { ChevronDownIcon, ClearIcon as ClearIconDefault } from "./utils/icons";
 import MultiSelectDropdownShimmer from "./components/MultiSelectDropdownShimmer";
 import { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption";
 import { SelectedChip } from "./components/SelectedChip";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import {
   DEFAULT_MULTISELECTDROPDOWN_CLASSES,
   UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
@@ -509,7 +509,7 @@ const MultiSelectDropdown = forwardRef<
         )}
 
         <div
-          className={cn("relative", mergedClasses.wrapper) || undefined}
+          className={mergedClasses.wrapper || undefined}
         >
           {renderTrigger ? (
             renderTrigger({
@@ -560,7 +560,7 @@ const MultiSelectDropdown = forwardRef<
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className={mergedClasses.triggerText || "flex-1 flex items-center gap-1 min-w-0 overflow-hidden"}>
+              <span className={mergedClasses.triggerText || undefined}>
                 {showSelectedChips && selectedOptions.length > 0 ? (
                   <>
                     {displayedChips.map((option) => (
@@ -587,7 +587,7 @@ const MultiSelectDropdown = forwardRef<
               </span>
               {showChevron && (
                 <ChevronIconProp
-                  className={mergedClasses.chevron || undefined}
+                  className={cn(mergedClasses.chevron) || undefined}
                   style={isOpen ? { transform: "rotate(180deg)" } : undefined}
                 />
               )}

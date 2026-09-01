@@ -10,7 +10,7 @@ import {
 } from "./utils/constants";
 import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons";
 import { useControllableState } from "../../utils/useControllableState";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 
 /**

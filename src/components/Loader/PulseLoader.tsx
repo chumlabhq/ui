@@ -4,7 +4,7 @@ import {
   DEFAULT_PULSE_LOADER_CLASSES,
   UNSTYLED_PULSE_LOADER_CLASSES,
 } from "./utils/constants";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(

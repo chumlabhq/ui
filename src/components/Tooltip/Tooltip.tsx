@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { ReactElement, Ref } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import { useControllableState } from "../../utils/useControllableState";
 import type { TooltipProps } from "./utils/types";
@@ -374,7 +374,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const triggerContent = truncate ? (
       <span
         ref={textRef}
-        className={cn("block truncate", mergedClasses.trigger)}
+        className={cn(mergedClasses.trigger)}
         style={truncateStyle}
       >
         {children}

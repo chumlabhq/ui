@@ -16,7 +16,7 @@ import {
 import { CircularLoader } from "../Loader";
 import { Tooltip } from "../Tooltip";
 import { Slot } from "../../utils/Slot";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 
 /**

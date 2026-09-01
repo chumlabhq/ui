@@ -16,7 +16,7 @@ import {
 import { isBrowser } from "../../utils/isBrowser";
 import { useControllableState } from "../../utils/useControllableState";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

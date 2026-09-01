@@ -10,7 +10,7 @@ import type { InputProps, InputClasses } from "./utils/types";
 import { DEFAULT_INPUT_CLASSES, UNSTYLED_INPUT_CLASSES } from "./utils/constants";
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
@@ -222,7 +222,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           readOnly={readOnly}
           maxLength={maxLength}
           data-slot="input"
-          className={cn("flex-1 min-w-0", mergedClasses.input)}
+          className={cn(mergedClasses.input)}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}
           aria-required={required || undefined}

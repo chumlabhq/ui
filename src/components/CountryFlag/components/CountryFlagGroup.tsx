@@ -10,7 +10,7 @@ import {
   DEFAULT_COUNTRYFLAG_GROUP_CLASSES,
 } from "../utils/constants";
 import { Tooltip } from "../../Tooltip";
-import { cn } from "../../../utils/cn";
+import { cn } from "../../../utils/scopedCn";
 import { getPixelSize, isTooltipConfig } from "../utils/helpers";
 import { CountryFlagGroupContext } from "../utils/context";
 

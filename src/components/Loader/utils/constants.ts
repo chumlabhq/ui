@@ -1,3 +1,4 @@
+import { structuralOnly } from "../../../utils/classLayers";
 import type {
   CircularLoaderClasses,
   LinearLoaderClasses,
@@ -14,12 +15,8 @@ export const DEFAULT_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> = 
   indicator: "",
 };
 
-export const UNSTYLED_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> = {
-  root: "",
-  svg: "",
-  track: "",
-  indicator: "",
-};
+export const UNSTYLED_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> =
+  structuralOnly(DEFAULT_CIRCULAR_LOADER_CLASSES);
 
 // ─── LinearLoader ───────────────────────────────────────────────────────────
 
@@ -28,10 +25,8 @@ export const DEFAULT_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> = {
   bar: "",
 };
 
-export const UNSTYLED_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> = {
-  root: "",
-  bar: "",
-};
+export const UNSTYLED_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> =
+  structuralOnly(DEFAULT_LINEAR_LOADER_CLASSES);
 
 // ─── DotLoader ──────────────────────────────────────────────────────────────
 
@@ -40,10 +35,8 @@ export const DEFAULT_DOT_LOADER_CLASSES: Required<DotLoaderClasses> = {
   dot: "",
 };
 
-export const UNSTYLED_DOT_LOADER_CLASSES: Required<DotLoaderClasses> = {
-  root: "",
-  dot: "",
-};
+export const UNSTYLED_DOT_LOADER_CLASSES: Required<DotLoaderClasses> =
+  structuralOnly(DEFAULT_DOT_LOADER_CLASSES);
 
 // ─── PulseLoader ────────────────────────────────────────────────────────────
 
@@ -53,8 +46,5 @@ export const DEFAULT_PULSE_LOADER_CLASSES: Required<PulseLoaderClasses> = {
   ring: "",
 };
 
-export const UNSTYLED_PULSE_LOADER_CLASSES: Required<PulseLoaderClasses> = {
-  root: "",
-  core: "",
-  ring: "",
-};
+export const UNSTYLED_PULSE_LOADER_CLASSES: Required<PulseLoaderClasses> =
+  structuralOnly(DEFAULT_PULSE_LOADER_CLASSES);

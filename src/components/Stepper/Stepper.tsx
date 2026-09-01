@@ -25,14 +25,17 @@ import type {
 } from "./utils/types";
 import { CheckIcon, ErrorIcon, DotIcon } from "./utils/icons";
 import { Tooltip } from "../Tooltip";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import { useControllableState } from "../../utils/useControllableState";
 import { useReducedMotion } from "../../utils/useReducedMotion";
 import { isTooltipConfig } from "../../utils/isTooltipConfig";
 import {
   DEFAULT_STEPPER_CLASSES,
   UNSTYLED_STEPPER_CLASSES,
+  INDICATOR_SIZE,
+  ICON_SIZE,
 } from "./utils/constants";
+import { structuralOnly } from "../../utils/classLayers";
 
 const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
 
@@ -86,23 +89,11 @@ const defaultIsStepClickable = (
   status: StepStatus,
 ): boolean => status === "completed" || status === "active";
 
-const INDICATOR_SIZE: Record<string, string> = {
-  dot: "w-2.5 h-2.5 sm:w-3 sm:h-3",
-  icon: "w-8 h-8 sm:w-10 sm:h-10",
-  numbered: "w-7 h-7 text-xs sm:w-8 sm:h-8 sm:text-sm font-medium",
-};
-
 /** Default indicator pixel sizes per variant (used for connector alignment) */
 const INDICATOR_PX: Record<string, number> = {
   dot: 12,
   icon: 40,
   numbered: 32,
-};
-
-const ICON_SIZE: Record<string, string> = {
-  dot: "w-full h-full",
-  icon: "w-4 h-4 sm:w-5 sm:h-5",
-  numbered: "w-3.5 h-3.5 sm:w-4 sm:h-4",
 };
 
 interface StepItemInternalProps {
@@ -129,6 +120,8 @@ interface StepItemInternalProps {
   showTooltips: boolean;
   tooltipDefaults: StepperTooltipDefaults;
   classes: Required<StepperClasses>;
+  /** Variant sizing, already split by `unstyled` at the parent. */
+  sizeClasses: { indicator: string; icon: string };
   nextStepStatus?: StepStatus;
 }
 
@@ -175,14 +168,15 @@ const StepItem = memo(function StepItem({
   showTooltips,
   tooltipDefaults,
   classes,
+  sizeClasses,
   nextStepStatus,
 }: StepItemInternalProps) {
   const isHorizontal = orientation === "horizontal";
   const isLabelBottom = labelPosition === "bottom";
   const isInteractive = isClickable;
 
-  const indicatorSizeClass = INDICATOR_SIZE[variant] ?? INDICATOR_SIZE.numbered;
-  const iconSizeClass = ICON_SIZE[variant] ?? ICON_SIZE.numbered;
+  const indicatorSizeClass = sizeClasses.indicator;
+  const iconSizeClass = sizeClasses.icon;
 
   const iconClassName = cn(iconSizeClass, classes.indicatorIcon);
 
@@ -390,7 +384,7 @@ const StepItem = memo(function StepItem({
 
     return (
       <li
-        className={cn("flex flex-col", classes.stepContainer)}
+        className={cn(classes.stepContainerVertical, classes.stepContainer)}
         data-status={status}
         data-orientation={orientation}
       >
@@ -506,7 +500,7 @@ const StepItem = memo(function StepItem({
 
   return (
     <li
-      className={cn("shrink-0", classes.stepContainer)}
+      className={cn(classes.stepContainerHorizontal, classes.stepContainer)}
       data-status={status}
       data-orientation={orientation}
     >
@@ -570,11 +564,27 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       ? UNSTYLED_STEPPER_CLASSES
       : DEFAULT_STEPPER_CLASSES;
 
+    // Variant sizing is a default class set like any other, so it takes the
+    // same ADR 001 split: `w-7 h-7` survives `unstyled`, `text-xs font-medium`
+    // does not. Resolved here because `variant` is a Stepper-level prop.
+    const variantSizeClasses = useMemo(() => {
+      const raw = {
+        indicator: INDICATOR_SIZE[variant] ?? INDICATOR_SIZE.numbered,
+        icon: ICON_SIZE[variant] ?? ICON_SIZE.numbered,
+      };
+      return unstyled ? structuralOnly(raw) : raw;
+    }, [variant, unstyled]);
+
     const mergedClasses: Required<StepperClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
         list: classesProp?.list ?? baseClasses.list,
         stepContainer: classesProp?.stepContainer ?? baseClasses.stepContainer,
+        stepContainerVertical:
+          classesProp?.stepContainerVertical ?? baseClasses.stepContainerVertical,
+        stepContainerHorizontal:
+          classesProp?.stepContainerHorizontal ??
+          baseClasses.stepContainerHorizontal,
         step: classesProp?.step ?? baseClasses.step,
         stepInteractive:
           classesProp?.stepInteractive ?? baseClasses.stepInteractive,
@@ -887,6 +897,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
               isLast,
               variant,
               indicatorPx: indicatorSizeProp ?? INDICATOR_PX[variant] ?? 32,
+              sizeClasses: variantSizeClasses,
               orientation,
               labelPosition,
               showLabels,

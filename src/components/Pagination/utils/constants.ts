@@ -1,4 +1,5 @@
 import type { PaginationClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_ROW_OPTIONS = [5, 10, 25, 50, 100] as const;
 
@@ -20,7 +21,7 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
     "flex items-center gap-2 px-3 py-1.5 rounded-cl-md border transition-colors cursor-pointer border-cl-border dark:border-cl-border bg-white dark:bg-cl-bg-elevated hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 text-cl-text dark:text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg",
   selectorDropdown:
     "rounded-cl-md shadow-lg py-1 border min-w-[64px] bg-white dark:bg-cl-bg-elevated border-cl-border dark:border-cl-border",
-  selectorDropdownWrapper: "",
+  selectorDropdownWrapper: "relative",
   selectorOption:
     "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-text/10 data-[selected]:bg-cl-accent/15 dark:data-[selected]:bg-cl-accent/60 data-[selected]:text-cl-accent dark:data-[selected]:text-cl-accent data-[highlighted]:bg-cl-bg-hover dark:data-[highlighted]:bg-cl-text/10 text-cl-text dark:text-cl-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg",
   label: "text-sm text-cl-text-secondary dark:text-cl-text-tertiary",
@@ -31,22 +32,5 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   pageInfo: "flex items-center",
 };
 
-export const UNSTYLED_PAGINATION_CLASSES: Required<PaginationClasses> = {
-  root: "",
-  nav: "",
-  pageButtons: "",
-  pageButton: "",
-  activePageButton: "",
-  navButton: "",
-  ellipsis: "",
-  selector: "",
-  selectorButton: "",
-  selectorDropdown: "",
-  selectorDropdownWrapper: "",
-  selectorOption: "",
-  label: "",
-  dropdownIcon: "",
-  prevIcon: "",
-  nextIcon: "",
-  pageInfo: "",
-};
+export const UNSTYLED_PAGINATION_CLASSES: Required<PaginationClasses> =
+  structuralOnly(DEFAULT_PAGINATION_CLASSES);

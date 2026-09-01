@@ -1,9 +1,11 @@
 import type { DatePickerClasses } from "./utils/types";
+import { structuralOnly } from "../../utils/classLayers";
 
 export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   root: "",
   trigger: "flex items-center gap-2 w-full px-3 py-2.5 border border-cl-border-input dark:border-cl-border rounded-cl-md bg-white dark:bg-cl-bg-elevated hover:border-cl-border-input dark:hover:border-cl-border focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent focus:border-transparent cursor-pointer transition-all text-sm text-cl-text dark:text-cl-text",
   input: "flex-1 text-left truncate",
+  triggerActions: "flex items-center gap-1",
   calendarIcon: "w-5 h-5 shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary",
   clearButton: "p-2 rounded-full hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated text-cl-text-tertiary hover:text-cl-text-secondary dark:hover:text-cl-text-secondary transition-colors shrink-0",
   label: "block text-sm font-medium text-cl-text dark:text-cl-text-secondary mb-1.5",
@@ -47,15 +49,5 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   dropdownItemSelected: "bg-cl-accent/15 dark:bg-cl-accent/30 text-cl-accent dark:text-cl-accent font-medium",
 };
 
-export const UNSTYLED_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
-  root: "", trigger: "", input: "", calendarIcon: "", clearButton: "",
-  label: "", error: "", description: "", success: "", calendar: "", header: "", monthNav: "",
-  navButton: "", navButtonDisabled: "", monthGrid: "", grid: "",
-  weekdayHeader: "", weekday: "", day: "", daySelected: "", dayToday: "",
-  dayDisabled: "", dayOutside: "", dayRangeStart: "", dayRangeEnd: "",
-  dayRangeMiddle: "", dayHover: "", dayFocused: "", dayMarked: "",
-  weekNumber: "", presets: "", presetButton: "", presetActive: "",
-  footer: "", todayButton: "", markerIndicator: "", markerTooltip: "",
-  monthSelect: "", yearSelect: "", monthDropdown: "", yearDropdown: "",
-  dropdownMenu: "", dropdownItem: "", dropdownItemSelected: "",
-};
+export const UNSTYLED_DATEPICKER_CLASSES: Required<DatePickerClasses> =
+  structuralOnly(DEFAULT_DATEPICKER_CLASSES);

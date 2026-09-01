@@ -1,4 +1,5 @@
 import type { CheckboxSize, CheckboxShape, CheckboxClasses } from "./types";
+import { structuralOnly } from "../../../utils/classLayers";
 
 export const SIZE_MAP: Record<Exclude<CheckboxSize, number>, number> = {
   xs: 14,
@@ -36,16 +37,5 @@ export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   success: "text-sm text-cl-success",
 };
 
-export const UNSTYLED_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
-  root: "",
-  labelContainer: "",
-  label: "",
-  description: "",
-  checkbox: "",
-  checked: "",
-  unchecked: "",
-  indeterminate: "",
-  icon: "",
-  error: "",
-  success: "",
-};
+export const UNSTYLED_CHECKBOX_CLASSES: Required<CheckboxClasses> =
+  structuralOnly(DEFAULT_CHECKBOX_CLASSES);

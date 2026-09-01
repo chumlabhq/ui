@@ -24,7 +24,7 @@ import {
 import type { DropdownCoords } from "./utils/helpers";
 import SearchableDropdownShimmer from "./components/SearchableDropdownShimmer";
 import { SearchableDropdownOption as SearchableDropdownOptionComponent } from "./components/SearchableDropdownOption";
-import { cn } from "../../utils/cn";
+import { cn } from "../../utils/scopedCn";
 import {
   DEFAULT_SEARCHABLEDROPDOWN_CLASSES,
   UNSTYLED_SEARCHABLEDROPDOWN_CLASSES,
@@ -270,7 +270,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
     >
       {showSearch && (
         <div className={classes.searchInput || undefined}>
-          <SearchIconComponent className={classes.searchIcon} />
+          <SearchIconComponent className={cn(classes.searchIcon) || undefined} />
           <input
             ref={searchInputRef}
             type="text"
@@ -674,7 +674,7 @@ const SearchableDropdown = forwardRef<
             </span>
             {showChevron && (
               <ChevronIcon
-                className={mergedClasses.chevron || undefined}
+                className={cn(mergedClasses.chevron) || undefined}
                 style={isOpen ? { transform: "rotate(180deg)" } : undefined}
               />
             )}
