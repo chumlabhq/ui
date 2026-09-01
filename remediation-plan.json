@@ -1,0 +1,831 @@
+[
+  {
+    "id": "1.1",
+    "section": "1. cl-s marker blast radius",
+    "severity": "ship-blocker",
+    "files": [
+      "src/utils/Slot.tsx:27",
+      "src/utils/slotHelpers.ts:37-41",
+      "src/components/Button/Button.tsx:203-206",
+      "src/components/Accordion/components/AccordionItem.tsx:54",
+      "src/components/Accordion/components/AccordionTrigger.tsx:155",
+      "src/components/Accordion/components/AccordionContent.tsx:183",
+      "src/components/Accordion/Accordion.tsx:334",
+      "src/components/Avatar/components/AvatarGroupCount.tsx:4",
+      "src/jsx/mark.ts:28-34"
+    ],
+    "summary": "Slot renders via cloneElement, which bypasses the library JSX runtime, so the library's own className (variant, size and layout utilities) lands on a consumer-created element with no cl-s marker and every rule in dist/styles.css fails to match. asChild is documented API on 4 components across 11 Slot render sites; the failure is silent.",
+    "fixShape": "Export the marker from src/jsx/mark.ts and append it inside Slot's className merge (slotHelpers.mergeProps), so cloned children carry it exactly as jsx-runtime children do. Add an assertion in scripts/assert-styles-bundle.mjs or a new unit test that renders <Button asChild> and requires the marker on the resulting element.",
+    "estimate": "S",
+    "dependsOn": [
+      "1.7"
+    ]
+  },
+  {
+    "id": "1.2",
+    "section": "1. cl-s marker blast radius",
+    "severity": "ship-blocker",
+    "files": [
+      "src/components/Tooltip/components/TooltipAsChildTrigger.tsx:41",
+      "src/components/Tooltip/components/TooltipAsChildTrigger.tsx:96-97"
+    ],
+    "summary": "Tooltip's asChild path calls cloneElement directly rather than through Slot and merges triggerClassName with cn(), reproducing 1.1 on a separate code path that a fix to Slot alone will not cover.",
+    "fixShape": "Route TooltipAsChildTrigger through Slot, or apply the same marker append at the cn() call site. Prefer the former so there is one clone path in the library.",
+    "estimate": "S",
+    "dependsOn": [
+      "1.1"
+    ]
+  },
+  {
+    "id": "1.3",
+    "section": "1. cl-s marker blast radius",
+    "severity": "defect",
+    "files": [
+      "src/components/Dropdown/Dropdown.tsx:633",
+      "src/components/Dropdown/utils/constants.ts:19-20"
+    ],
+    "summary": "Slot-icon props (ChevronIcon, ClearIcon, SearchIcon, CheckIcon, ExpandIcon, CheckboxIcon - 14 declared props, 20 JSX sites) receive a className built from the library's defaults, but a consumer-supplied icon component renders its svg through the consumer's runtime, so the sizing and colour classes silently no-op.",
+    "fixShape": "Wrap consumer icon components in a marked host element (a span carrying the class) rather than passing className into an opaque component, or document that icon slots must forward className to a marked element. The wrapper is the only option that cannot be got wrong at the call site.",
+    "estimate": "M",
+    "dependsOn": [
+      "1.1"
+    ]
+  },
+  {
+    "id": "1.4",
+    "section": "1. cl-s marker blast radius",
+    "severity": "defect",
+    "files": [
+      "src/components/Dropdown/Dropdown.tsx:610-624",
+      "src/components/Dropdown/utils/types.ts:34-46",
+      "src/components/SearchableDropdown/utils/types.ts:100",
+      "src/components/MultiSelectDropdown/utils/types.ts:98",
+      "src/components/MultiSelectSearchableDropdown/utils/types.ts:112",
+      "src/components/CascadingDropdown/utils/types.ts:136"
+    ],
+    "summary": "When renderTrigger is supplied the default button branch is skipped, so classes.trigger and classes.triggerText are discarded with no error. The render-prop payload carries ref, id, role and the aria set but no className, so the consumer cannot re-apply what they configured.",
+    "fixShape": "Add className to the *TriggerRenderProps interfaces and populate it from mergedClasses.trigger, so the render prop can spread it. Cheapest honest fix; alternatively make renderTrigger and classes.trigger mutually exclusive in the types.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "1.5",
+    "section": "1. cl-s marker blast radius",
+    "severity": "inconsistency",
+    "files": [
+      "README.md",
+      "llms.txt",
+      "llms-full.txt:57-62",
+      "src/jsx/mark.ts"
+    ],
+    "summary": "The marker mechanism is not documented in README.md, llms.txt or llms-full.txt. Its consequence for consumer-authored markup is described obliquely at llms-full.txt:57-62, but nothing tells a consumer that the library's utilities are scoped to library-rendered elements, which is why 1.1 through 1.4 read as bugs rather than as a stated boundary.",
+    "fixShape": "Add a short section to README.md and llms-full.txt stating that dist/styles.css utilities are scoped to elements the library renders, what that means for asChild and render props, and that consumer markup needs its own Tailwind build.",
+    "estimate": "S",
+    "dependsOn": [
+      "1.1",
+      "1.3",
+      "1.4"
+    ]
+  },
+  {
+    "id": "1.7",
+    "section": "1. cl-s marker blast radius",
+    "severity": "ship-blocker",
+    "files": [
+      "src/jsx/mark.ts",
+      "src/test"
+    ],
+    "summary": "The string cl-s appears zero times across all 47 test files. No test asserts that a rendered element carries the marker, and none asserts that asChild output lacks it. The mechanism every shipped style depends on is entirely unverified, which is what allows 1.1 to exist undetected.",
+    "fixShape": "Add a cross-cutting test file (not per component) that renders one representative of each rendering path - plain host element, portal subtree, asChild/Slot, icon slot, render prop - and asserts marker presence or documented absence for each.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "2.1",
+    "section": "2. SSR correctness",
+    "severity": "ship-blocker",
+    "files": [
+      "src/components/DatePicker/DatePicker.tsx:987",
+      "src/components/DatePicker/DatePicker.tsx:542",
+      "src/components/DatePicker/utils/types.ts:161-162"
+    ],
+    "summary": "DatePicker's calendar portal evaluates portalContainer ?? document.body during render with no isBrowser guard, reachable via the public keepMounted, open or defaultOpen props. Server rendering <DatePicker keepMounted /> throws 'document is not defined'. All twelve sibling portal components guard this correctly, making DatePicker the sole outlier.",
+    "fixShape": "Mirror the sibling pattern: compute portalTarget as isBrowser ? (portalContainer ?? document.body) : null and gate the createPortal call on it, exactly as TimePicker.tsx:604 and CascadingDropdown.tsx:552 do.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "2.2",
+    "section": "2. SSR correctness",
+    "severity": "defect",
+    "files": [
+      "src/components/DatePicker/useDatePicker.ts:80"
+    ],
+    "summary": "The initial display month is startOfMonth(new Date()), read during the initial-value computation. A server in UTC and a client in a negative offset can be in different months at the same instant, producing a hydration mismatch across the whole role=grid subtree.",
+    "fixShape": "Render a stable initial month on the server (null or a caller-supplied referenceDate prop) and resolve the real 'now' in an effect after mount, or accept an explicit today/referenceDate prop so the value is caller-controlled and deterministic.",
+    "estimate": "M",
+    "dependsOn": [
+      "2.6"
+    ]
+  },
+  {
+    "id": "2.3",
+    "section": "2. SSR correctness",
+    "severity": "defect",
+    "files": [
+      "src/components/DatePicker/utils.ts:94",
+      "src/components/DatePicker/utils.ts:308"
+    ],
+    "summary": "isDateDisabled is called per cell during render and reads startOfDay(new Date()); getDefaultPresets does the same. Same timezone split as 2.2, affecting which cell is marked current and which cells render disabled.",
+    "fixShape": "Thread a single 'today' value in from the component (computed once, post-mount, alongside the 2.2 fix) rather than each helper reading the clock independently.",
+    "estimate": "M",
+    "dependsOn": [
+      "2.2"
+    ]
+  },
+  {
+    "id": "2.4",
+    "section": "2. SSR correctness",
+    "severity": "defect",
+    "files": [
+      "src/components/TimePicker/ClockFace.tsx:86-89",
+      "src/components/TimePicker/utils.ts:12-14"
+    ],
+    "summary": "ClockFace's displayValue useMemo falls back to getDefaultTimeValue(format), which reads new Date(). Uncontrolled, the server and the client render different times.",
+    "fixShape": "Same shape as 2.2 - resolve the wall-clock fallback in an effect after mount, or require the caller to supply it.",
+    "estimate": "S",
+    "dependsOn": [
+      "2.6"
+    ]
+  },
+  {
+    "id": "2.5",
+    "section": "2. SSR correctness",
+    "severity": "defect",
+    "files": [
+      "src/utils/useReducedMotion.ts:5-8",
+      "src/components/Toast/Toast.tsx:62-65",
+      "src/components/Drawer/utils/helpers.ts:8-22"
+    ],
+    "summary": "Three reduced-motion implementations exist. Drawer's uses useSyncExternalStore with an explicit server snapshot and is correct. The shared useReducedMotion hook and an inline duplicate in Toast both read matchMedia from a useState initializer, so on hydration a reduced-motion user's client render disagrees with the server's false.",
+    "fixShape": "Replace the body of src/utils/useReducedMotion.ts with Drawer's useSyncExternalStore implementation, delete the inline copy in Toast.tsx, and point Drawer at the shared hook. One implementation, the one already known to be correct.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "2.6",
+    "section": "2. SSR correctness",
+    "severity": "ship-blocker",
+    "files": [
+      "src/test",
+      "ai/system-state.json:867"
+    ],
+    "summary": "react-dom/server, renderToString and renderToStaticMarkup appear in zero of 47 test files. Across 2,976 test blocks nothing renders a component on the server, yet ai/system-state.json:867 records 'SSR safety - carried PASS' as a release gate. That gate is unbacked and is what 2.1 passed through.",
+    "fixShape": "Add one cross-cutting SSR suite that renderToString's every exported component in its default state plus its open/keepMounted state, asserting no throw. Wire it into the release gate so the recorded PASS means something.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "3.1",
+    "section": "3. Accessibility",
+    "severity": "ship-blocker",
+    "files": [
+      "src/components/DatePicker/DatePicker.tsx:991-992",
+      "src/components/DatePicker/DatePicker.tsx:367",
+      "src/components/DatePicker/DatePicker.tsx:1176",
+      "src/utils/focusUtils.ts:21-28",
+      "README.md:294-299"
+    ],
+    "summary": "DatePicker declares role=dialog aria-modal=true but implements no focus trap and calls .focus() zero times anywhere in its directory. Tab escapes the calendar while AT believes the page is inert; opening never moves focus into the grid, so its onKeyDown handlers are unreachable by keyboard; closing never restores focus to the trigger. WCAG 2.1 AA failure under 2.4.3 and 4.1.2 against an explicit AA claim.",
+    "fixShape": "Adopt the Modal focus pattern: on open, move focus to the selected or today cell; trap Tab within the dialog using getFocusableElements; on close, restore to the trigger. Implement roving tabindex over the grid cells so arrow keys move DOM focus, not just state.",
+    "estimate": "L",
+    "dependsOn": [
+      "3.9"
+    ]
+  },
+  {
+    "id": "3.2",
+    "section": "3. Accessibility",
+    "severity": "defect",
+    "files": [
+      "src/components/TimePicker/TimePicker.tsx:649-650",
+      "src/components/TimePicker/ClockFace.tsx:385-399",
+      "src/utils/focusUtils.ts:1-18"
+    ],
+    "summary": "TimePicker declares role=dialog aria-modal=true with no trap in TimePicker.tsx. ClockFace implements one inline against its own 2-entry selector string with none of focusUtils' visibility filtering, so the dialog is trapped only while the clock face shows, and less correctly than Modal or Drawer.",
+    "fixShape": "Delete the inline trap in ClockFace and trap at the TimePicker dialog boundary using getFocusableElements, matching Modal.",
+    "estimate": "M",
+    "dependsOn": [
+      "3.9"
+    ]
+  },
+  {
+    "id": "3.3",
+    "section": "3. Accessibility",
+    "severity": "ship-blocker",
+    "files": [
+      "src/components/SearchableDropdown/SearchableDropdown.tsx:240-242",
+      "src/components/SearchableDropdown/SearchableDropdown.tsx:275-286",
+      "src/components/SearchableDropdown/SearchableDropdown.tsx:610"
+    ],
+    "summary": "Focus moves to the search input on open, but that input has no role=combobox, no aria-expanded and no aria-activedescendant, while aria-activedescendant sits on the now-unfocused trigger. Under the ARIA 1.2 combobox pattern the attribute must be on the focused element, so arrow-key movement through options produces no screen reader announcement at all.",
+    "fixShape": "Move the combobox semantics to whichever element holds focus: give the search input role=combobox, aria-expanded, aria-controls and aria-activedescendant, and drop aria-activedescendant from the trigger when showSearch is on.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "3.4",
+    "section": "3. Accessibility",
+    "severity": "ship-blocker",
+    "files": [
+      "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx:494",
+      "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx:792-802",
+      "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx:708"
+    ],
+    "summary": "Identical to 3.3 and one step worse: the search input lacks even aria-autocomplete alongside the missing role, aria-expanded and aria-activedescendant, while the trigger holds the attribute at :708.",
+    "fixShape": "Same as 3.3, applied to MSSD. Do both in one change so the two searchable dropdowns cannot diverge again.",
+    "estimate": "M",
+    "dependsOn": [
+      "3.3"
+    ]
+  },
+  {
+    "id": "3.5",
+    "section": "3. Accessibility",
+    "severity": "defect",
+    "files": [
+      "src/components/Pagination/Pagination.tsx:182",
+      "src/components/Pagination/Pagination.tsx:468-470"
+    ],
+    "summary": "Pagination puts aria-activedescendant on the role=listbox node, which never holds focus, and its rows-per-page trigger has aria-expanded, aria-haspopup and aria-controls but no role=combobox. It is the only family member placing the attribute this way.",
+    "fixShape": "Add role=combobox to the trigger and move aria-activedescendant onto it, matching Dropdown.tsx:563-566.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "3.6",
+    "section": "3. Accessibility",
+    "severity": "inconsistency",
+    "files": [
+      "src/components/CascadingDropdown/CascadingDropdown.tsx",
+      "src/components/Breadcrumb/Breadcrumb.tsx",
+      "src/components/DatePicker/DatePicker.tsx",
+      "src/components/Pagination/Pagination.tsx"
+    ],
+    "summary": "The ten dropdown-family components have not converged on one interaction pattern. Five use listbox/option with combobox triggers; CascadingDropdown uses menu/menuitemcheckbox for the same value-selection interaction; Breadcrumb uses menu/menuitem for navigation links; DatePicker uses grid/gridcell; Pagination uses listbox with no combobox. Three of the ten have no aria-activedescendant anywhere in their directory.",
+    "fixShape": "Pick listbox/option + combobox trigger as the house pattern for value selection, migrate CascadingDropdown and Pagination onto it, and record the exception for Breadcrumb (navigation) and DatePicker (grid) with the rationale. Extract the shared aria wiring so a new dropdown cannot invent a third pattern.",
+    "estimate": "L",
+    "dependsOn": [
+      "3.3",
+      "3.4",
+      "3.5"
+    ]
+  },
+  {
+    "id": "3.7",
+    "section": "3. Accessibility",
+    "severity": "defect",
+    "files": [
+      "README.md:298",
+      "src/components/Breadcrumb",
+      "src/components/CascadingDropdown",
+      "src/components/Dropdown",
+      "src/components/Input",
+      "src/components/InternationalPhoneInput",
+      "src/components/MultiSelectDropdown",
+      "src/components/MultiSelectSearchableDropdown",
+      "src/components/OtpInput",
+      "src/components/SearchableDropdown",
+      "src/components/Slider",
+      "src/components/Table",
+      "src/components/TextArea"
+    ],
+    "summary": "README.md:298 claims prefers-reduced-motion support for every component. Twelve shipped components carry transition/animate/duration classes with no reduced-motion path anywhere in their directory.",
+    "fixShape": "Either wire the shared useReducedMotion hook into the twelve, or narrow the README claim to the components that implement it. Do 2.5 first so there is one hook to wire in.",
+    "estimate": "M",
+    "dependsOn": [
+      "2.5"
+    ]
+  },
+  {
+    "id": "3.8",
+    "section": "3. Accessibility",
+    "severity": "defect",
+    "files": [
+      "src/components/CascadingDropdown/CascadingDropdown.tsx:456",
+      "src/components/Pagination/Pagination.tsx:327",
+      "src/components/Table/Table.tsx:361"
+    ],
+    "summary": "Eight components register both mousedown and touchstart for click-outside; these three register mousedown only, so a tap outside does not dismiss them on touch devices. All three type the handler as (MouseEvent | TouchEvent), so the omission is an oversight.",
+    "fixShape": "Register touchstart alongside mousedown in all three, matching Dropdown.tsx:518-522.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "3.9",
+    "section": "3. Accessibility",
+    "severity": "inconsistency",
+    "files": [
+      "src/utils/focusUtils.ts:1-28",
+      "src/components/TimePicker/ClockFace.tsx:385-399",
+      "src/components/Modal/Modal.tsx:188-202",
+      "src/components/Drawer/Drawer.tsx"
+    ],
+    "summary": "Three focus-trap implementations: the shared focusUtils helper used by Modal and Drawer, an inline 2-entry-selector variant in ClockFace, and none at all in DatePicker despite its dialog role.",
+    "fixShape": "Extract a useFocusTrap hook wrapping getFocusableElements with the Tab-cycling logic currently duplicated in Modal and Drawer, then adopt it in ClockFace/TimePicker and DatePicker.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "4.1",
+    "section": "4. API surface consistency",
+    "severity": "inconsistency",
+    "files": [
+      "src/components/Dropdown/utils/types.ts:116",
+      "src/components/Pagination/utils/types.ts:71",
+      "src/components/TimePicker/utils/types.ts:252",
+      "src/components/MultiSelectSearchableDropdown/utils/types.ts:104",
+      "src/components/DatePicker/utils/types.ts:239",
+      "src/components/SearchableDropdown/utils/types.ts:91",
+      "src/components/InternationalPhoneInput/utils/types.ts:158",
+      "src/components/MultiSelectDropdown/utils/types.ts:89",
+      "src/components/Breadcrumb/utils/types.ts:78",
+      "src/components/CascadingDropdown/utils/types.ts:129",
+      "src/components/Tooltip/utils/types.ts:51",
+      "src/components/Drawer/utils/types.ts:28",
+      "src/components/Toast/utils/types.ts:72",
+      "src/components/Modal/utils/types.ts:103"
+    ],
+    "summary": "The same concept is named dropdownZIndex on ten components and zIndex on four. Naming only; the layering-scale question is out of scope for this audit.",
+    "fixShape": "Pick one name, add the other as a deprecated alias for one minor version, and update llms-full.txt's prop tables.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "4.2",
+    "section": "4. API surface consistency",
+    "severity": "inconsistency",
+    "files": [
+      "src/index.ts"
+    ],
+    "summary": "Every component's own index.ts exports its DEFAULT_*_CLASSES and UNSTYLED_*_CLASSES at full parity, but the root barrel re-exports only the SLIDER and TABLE pairs. Importing DEFAULT_DROPDOWN_CLASSES from '@chumlab/ui' fails while the subpath import succeeds, with nothing in the docs marking the difference.",
+    "fixShape": "Decide one way and apply it uniformly: re-export all 30 pairs from the root barrel, or remove the two that are there and document constants as subpath-only.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "4.3",
+    "section": "4. API surface consistency",
+    "severity": "inconsistency",
+    "files": [
+      "src/components/Accordion/hooks/useAccordionStateManager.ts:70-98",
+      "src/utils/useControllableState.ts",
+      "src/components/Accordion/utils/types.ts:121-125"
+    ],
+    "summary": "Twenty-one components route controlled/uncontrolled state through useControllableState. Accordion hand-rolls its own in useAccordionStateManager despite exposing the same value/defaultValue/onValueChange contract, so two implementations of one contract exist with no shared tests.",
+    "fixShape": "Migrate Accordion onto useControllableState, keeping its Set-based internal representation behind the hook. Add a shared contract test exercised by every component that claims the pattern.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "4.4",
+    "section": "4. API surface consistency",
+    "severity": "defect",
+    "files": [
+      "src/components/Dropdown/utils/types.ts",
+      "src/components/Dropdown/Dropdown.tsx:363-386",
+      "src/components/Modal/utils/types.ts",
+      "src/components/Table/utils/types.ts"
+    ],
+    "summary": "Dropdown, Modal and Table declare closed prop interfaces with no extends HTMLAttributes and no ...rest spread onto the root, so data-testid, id and undeclared aria-* attributes silently vanish. Ten other components do extend HTML attributes. 'aria-label' is declared explicitly on only 11 of 30, so on the rest it depends on whether that component happens to extend.",
+    "fixShape": "Extend Omit<HTMLAttributes<T>, conflicts> on the three closed interfaces and spread the rest onto the root element, matching Drawer/utils/types.ts:20 and Pagination/utils/types.ts:48.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "4.5",
+    "section": "4. API surface consistency",
+    "severity": "inconsistency",
+    "files": [
+      "src/components/Drawer/utils/types.ts",
+      "src/components/TabPanel/utils/types.ts",
+      "src/components/Breadcrumb/utils/types.ts",
+      "src/components/TimePicker/utils/types.ts",
+      "src/components/DatePicker/utils/types.ts",
+      "src/components/CascadingDropdown/utils/types.ts",
+      "src/components/Pagination/utils/types.ts"
+    ],
+    "summary": "classes slot keys use five names for the popup surface (content x10, panel x2, dropdown x2, dropdownMenu x1, menu x1), three for the selectable row (option x6, item x4, menuItem x1), two for the chevron (chevron x5, dropdownIcon x1), and split the outer wrappers across root x27, wrapper x11 and container x3 with no stated rule for when a component gets two.",
+    "fixShape": "Write down the slot vocabulary, then rename to it with the old keys accepted and deprecated for one minor version. Enforce with a test that reads every *Classes interface and rejects keys outside the vocabulary.",
+    "estimate": "L",
+    "dependsOn": []
+  },
+  {
+    "id": "4.6",
+    "section": "4. API surface consistency",
+    "severity": "inconsistency",
+    "files": [
+      "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx:802"
+    ],
+    "summary": "The search input hardcodes cn('flex-1 bg-transparent outline-none', mergedClasses.searchInputElement) inline. Those three utilities are absent from the DEFAULT_ set, are not removed by unstyled, and cannot be overridden through classes - the only default in the library that does not live in a constants.ts.",
+    "fixShape": "Move the three utilities into DEFAULT_MULTI_SELECT_SEARCHABLE_DROPDOWN_CLASSES.searchInputElement and render mergedClasses.searchInputElement directly.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "5.1",
+    "section": "5. Lifecycle",
+    "severity": "defect",
+    "files": [
+      "src/components/Dropdown/Dropdown.tsx:165-171",
+      "src/components/MultiSelectDropdown/MultiSelectDropdown.tsx:68-73",
+      "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx:97-102",
+      "src/components/SearchableDropdown/SearchableDropdown.tsx:128-135",
+      "src/components/Pagination/Pagination.tsx:139-141",
+      "src/components/Breadcrumb/Breadcrumb.tsx:200-202"
+    ],
+    "summary": "Six effects schedule a requestAnimationFrame and return no cleanup, so a frame scheduled just before unmount still runs. Four capture the id but rely on a sibling effect that only cancels while isOpen is true; Pagination and Breadcrumb hold no handle at all, so their frame is uncancellable and re-scheduled on every updatePosition identity change. React 18 makes the resulting setState a silent no-op, which is why it has gone unnoticed. 143 of 166 acquisitions elsewhere are clean.",
+    "fixShape": "Return a cleanup that cancels the frame from each of the six effects, and give Pagination and Breadcrumb a rafIdRef to cancel through.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "5.2",
+    "section": "5. Lifecycle",
+    "severity": "defect",
+    "files": [
+      "src/components/Dropdown/Dropdown.tsx:511-522",
+      "src/components/SearchableDropdown/SearchableDropdown.tsx:483-497",
+      "src/components/DatePicker/DatePicker.tsx:100-105",
+      "src/components/TimePicker/TimePicker.tsx:463-467"
+    ],
+    "summary": "Every click-outside handler in the library listens on mousedown and mostly touchstart, but none registers focusin or focusout. Tabbing out of an open dropdown, calendar or menu leaves it open and rendered over the newly focused control.",
+    "fixShape": "Add a focusin listener alongside the existing mousedown/touchstart pair that closes when focus lands outside both the trigger and the portalled content, reusing the same data-dropdown-id closest() check.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "5.3",
+    "section": "5. Lifecycle",
+    "severity": "inconsistency",
+    "files": [
+      "src/components/Table/Table.tsx:357-359",
+      "src/components/Table/Table.tsx:371-372"
+    ],
+    "summary": "Table special-cases closest('[data-table-filter-content], [data-dropdown-id]') so a dropdown portalled from inside a Table filter does not dismiss the filter. It works, but it couples Table to a data attribute the dropdown family owns and never publishes; a rename in either place breaks the other silently.",
+    "fixShape": "Publish the portal-descendant check as a shared helper (isInsideLibraryPortal(target)) that owns the attribute name, and have both Table and the dropdowns call it.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "6.1",
+    "section": "6. Test honesty",
+    "severity": "ship-blocker",
+    "files": [
+      "src/components/Modal/__tests__/Modal.test.tsx:606-616",
+      "src/components/Modal/__tests__/Modal.test.tsx:618-626",
+      "src/components/TimePicker/__tests__/TimePicker.test.tsx:423",
+      "src/components/InternationalPhoneInput/__tests__/InternationalPhoneInput.test.tsx:457"
+    ],
+    "summary": "For the structural-class behaviour this is not a coverage gap - it is asserted as the requirement. Modal.test.tsx:618-626 is titled 'does not apply fixed positioning classes to root when unstyled=true' and asserts className does not contain 'fixed inset-0'. TimePicker:423 and InternationalPhoneInput:457 assert the same for 'inline-flex' and 'flex-col'. Any change to the unstyled semantics fails all four assertions.",
+    "fixShape": "These four assertions must be rewritten as part of whatever change alters the unstyled contract - treat them as a hard dependency of that work, not as incidental fallout. Rewrite them to assert the intended split (structural classes retained, decorative stripped) rather than deleting them.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "6.2",
+    "section": "6. Test honesty",
+    "severity": "defect",
+    "files": [
+      "src/test",
+      "src/components"
+    ],
+    "summary": "Measured coverage across 2,976 test blocks in 47 files: SSR render 0 files, cl-s marker 0 files, prefers-reduced-motion 1 hit, portal layering 4 files / 6 hits, zIndex 4 files / 9 hits, unstyled 8 component files (22 of 30 components untested). Covered well: classes-override precedence 18 files / 82 hits, onSearch 5/54, onLoadInitialOptions 2/35, renderTrigger 5/35, asChild 4/29, keepMounted 6/43. Both zero rows are cross-cutting mechanisms, and the suite is organised strictly per component with nowhere for such a test to live.",
+    "fixShape": "Add a src/test/cross-cutting/ directory for mechanism-level suites (marker, SSR, portal layering, reduced motion) that iterate the exported component list, so a new component is covered by construction rather than by remembering.",
+    "estimate": "L",
+    "dependsOn": [
+      "1.7",
+      "2.6"
+    ]
+  },
+  {
+    "id": "6.3",
+    "section": "6. Test honesty",
+    "severity": "ship-blocker",
+    "files": [
+      "e2e/accordion.spec.ts:534-547",
+      "e2e/accordion.spec.ts-snapshots",
+      "playwright.config.ts"
+    ],
+    "summary": "There are zero toHaveScreenshot or toMatchSnapshot calls anywhere in e2e/. The block named 'Visual Regression' asserts only that a bounding box is non-null with non-zero width and height, and e2e/accordion.spec.ts-snapshots/ holds three orphaned baseline PNGs no assertion references. The failure category that actually reached production has no automated visual check, behind naming that implies it does. Eleven of thirty components have no e2e spec at all, DatePicker among them.",
+    "fixShape": "Either restore real toHaveScreenshot assertions against the existing baselines across the five configured projects, or delete the orphaned snapshots and rename the describe block so it stops implying coverage that does not exist. Add specs for the eleven uncovered components, starting with DatePicker.",
+    "estimate": "L",
+    "dependsOn": []
+  },
+  {
+    "id": "7.1",
+    "section": "7. Bundle reality",
+    "severity": "defect",
+    "files": [
+      "ai/system-state.json:183",
+      "ai/run.md:157-162"
+    ],
+    "summary": "The recorded size gate measures a single built chunk, not the import closure a consumer actually pays for. On the current build the gap is 1.15x for DatePicker (12.63 kb chunk vs 14.48 kb closure) and 2.8x for InternationalPhoneInput (10.31 vs 29.23).",
+    "fixShape": "Change the gate to walk the transitive import graph from each dist/components/*/index.js entry, excluding dist/flags/*, and gzip the union. Record both numbers so the historical series stays comparable.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "7.2",
+    "section": "7. Bundle reality",
+    "severity": "ship-blocker",
+    "files": [
+      "dist/shared/DatePicker-BNO0mm_X.js",
+      "ai/system-state.json:183",
+      "ai/run.md:159"
+    ],
+    "summary": "The DatePicker chunk alone is 12.63 kb gzipped on the current build, past the 12 kb hard fail. The recorded value is 10.25 kb from 2026-04-28, still classified HIGH rather than BLOCKER on the strength of that stale number. The ratchet has not been re-run, so the release gate is green against a measurement of a chunk that has since crossed its own limit.",
+    "fixShape": "Re-run the size gate against the current build, update system-state.json, and either reduce DatePicker below 12 kb or record an explicit waiver with a rationale. Wire the gate into CI so it cannot go stale again.",
+    "estimate": "M",
+    "dependsOn": [
+      "7.1"
+    ]
+  },
+  {
+    "id": "7.3",
+    "section": "7. Bundle reality",
+    "severity": "defect",
+    "files": [
+      "ai/run.md:157-162",
+      "vite.config.ts:13-22"
+    ],
+    "summary": "Measured by import closure, 24 of 30 subpaths exceed their class target and 7 exceed the 12 kb hard fail: InternationalPhoneInput 29.23, Table 16.57, DatePicker 14.48, Avatar 13.11, TimePicker 12.39, Stepper 12.24, CountryFlag 12.05. Some is honest composition - 16.1 kb of IPI's 29 kb is SearchableDropdown, Tooltip and CountryFlag, which it legitimately reuses - so the 'locale-aware <=10 kb' class cannot be met by a composing component.",
+    "fixShape": "Make the ceilings closure-aware and class-aware together: charge a component only for code it does not share with its declared dependencies, or give composing components an explicit recorded waiver naming what they compose. Then re-baseline the ratchet.",
+    "estimate": "L",
+    "dependsOn": [
+      "7.1",
+      "7.2"
+    ]
+  },
+  {
+    "id": "7.4",
+    "section": "7. Bundle reality",
+    "severity": "inconsistency",
+    "files": [
+      "dist/shared/DatePicker-BNO0mm_X.js",
+      "dist/shared/Dropdown-C9yvVAdr.js",
+      "dist/shared/MultiSelectSearchableDropdown-Chw4kiL5.js",
+      "dist/shared/MultiSelectDropdown-C_so0CFs.js",
+      "dist/shared/SearchableDropdown-CarZqjuU.js",
+      "dist/shared/Tooltip-L8No0na_.js",
+      "dist/shared/TimePicker-bokqfAPe.js",
+      "dist/shared/Breadcrumb-C6lwS3F9.js",
+      "dist/shared/Pagination-aFfNHjHv.js"
+    ],
+    "summary": "Nine built chunks each carry an independent copy of the viewport-reading coordinate function - seven reading visualViewport, two an innerHeight-only variant. Per copy minified: 645 raw bytes, ~359 bytes gzipped in isolation, so roughly 5.8 kb raw / ~3 kb gzipped duplicated across the package. Reported as a measurement because section 7 asked for it; the byte cost is modest and the reason to consolidate is drift, which this audit does not re-argue.",
+    "fixShape": "Consolidating is the existing positioning-helper workstream. If it proceeds, expect ~3 kb gzipped back across the package and one shared chunk in its place.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-1.1",
+    "section": "1. Recorded PASSes in ai/system-state.json",
+    "severity": "ship-blocker",
+    "files": [
+      "ai/system-state.json:183",
+      "ai/system-state.json:861",
+      "ai/system-state.json:867",
+      "ai/system-state.json:868",
+      "package.json:319",
+      "dist/index.js"
+    ],
+    "summary": "Every dist-reading record was written against a build from 2026-08-04; 94 source files are now newer. The three assert scripts run only as postbuild:lib so they cannot themselves read a stale dist, but nothing detects that the recorded values have outlived the artifact they measured \u2014 validate reads the record, not the filesystem. AUDIT-GAP \u00a77.2 already showed DatePicker at 12.63 kb against a recorded 10.25 kb.",
+    "fixShape": "Stamp the dist build hash/mtime into system-state alongside every dist-derived number, and have 04-validate fail when it does not match the current dist. Cheaper alternative: make the size gate a test in the contracts tier that rebuilds or refuses to report.",
+    "estimate": "M",
+    "dependsOn": [
+      "7.1",
+      "7.2"
+    ]
+  },
+  {
+    "id": "GH-1.2",
+    "section": "1. Recorded PASSes in ai/system-state.json",
+    "severity": "defect",
+    "files": [
+      "ai/system-state.json"
+    ],
+    "summary": "validation.tests records '2992/2992 (45 files)'; the suite is now 3307 passed / 40 skipped across 56 files. validation.step04Cycle3.checks.tests additionally asserts '0 skipped', which is false. Nothing compares the recorded count to a fresh run, so the record would still read PASS if the suite had shrunk.",
+    "fixShape": "Have the test gate write counts from the actual run rather than a hand-copied string, and fail when the recorded total is not the one just produced.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-1.3",
+    "section": "1. Recorded PASSes in ai/system-state.json",
+    "severity": "ship-blocker",
+    "files": [
+      "ai/system-state.json",
+      "e2e/drawer.spec.ts",
+      "e2e/resizablepanel.spec.ts:208",
+      "e2e/switch.spec.ts:196",
+      "e2e/tabpanel.spec.ts:311",
+      "e2e/tabpanel.spec.ts:321"
+    ],
+    "summary": "validation.accessibility PASS covers 30 components and rests on 4 of 20 e2e specs. Two scope checkA11y to a single selector, the one full-page audit disables scrollable-region-focusable, and zero unit tests use axe. DatePicker \u2014 which ships role=dialog aria-modal=true with no focus trap and zero .focus() calls (AUDIT-GAP \u00a73.1) \u2014 has no e2e spec at all.",
+    "fixShape": "Add a cross-cutting a11y contract that runs axe over every component from ai/component-index.json at its default and open states, unscoped, with no disabled rules. Record per-component results so the PASS names what it covered.",
+    "estimate": "L",
+    "dependsOn": [
+      "3.1",
+      "6.3"
+    ]
+  },
+  {
+    "id": "GH-1.4",
+    "section": "1. Recorded PASSes in ai/system-state.json",
+    "severity": "defect",
+    "files": [
+      "ai/system-state.json",
+      "playwright.config.ts:32",
+      "playwright.config.ts:36"
+    ],
+    "summary": "validation.responsive claims 'all 30 components verified at 6 breakpoints 320/375/768/1024/1440/1920'. Every setViewportSize call in the suite uses 1280 or 375; device presets add 393 and 390. 320, 768, 1024, 1440 and 1920 are never rendered. The narrowest width exercised is 55px above the claimed floor.",
+    "fixShape": "Either add Playwright projects for the four missing widths and assert no horizontal overflow at each, or narrow the record to the two widths actually covered.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-2.1",
+    "section": "2. Assertions that cannot fail",
+    "severity": "defect",
+    "files": [
+      "src/components/InternationalPhoneInput/__tests__/InternationalPhoneInput.test.tsx:324",
+      "src/components/InternationalPhoneInput/__tests__/InternationalPhoneInput.test.tsx:398",
+      "src/components/MultiSelectDropdown/__tests__/MultiSelectDropdown.test.tsx:398",
+      "src/components/Table/__tests__/Table.test.tsx:1164",
+      "src/components/Table/__tests__/Table.test.tsx:1247",
+      "src/components/Table/__tests__/Table.test.tsx:1875",
+      "e2e/button.spec.ts:58",
+      "e2e/button.spec.ts:66",
+      "e2e/button.spec.ts:74",
+      "e2e/button.spec.ts:84",
+      "e2e/input.spec.ts:215",
+      "e2e/input.spec.ts:227",
+      "e2e/textarea.spec.ts:219",
+      "e2e/textarea.spec.ts:231",
+      "e2e/avatar.spec.ts:129"
+    ],
+    "summary": "15 tests contain no expect and assert nothing by any mechanism. Six unit tests create vi.fn() spies, dispatch the event, then state the expectation in a trailing comment. Four e2e tests named 'should activate button on Enter/Space key' verify only that keyboard.press did not throw, which it cannot.",
+    "fixShape": "Assert the spy was called with the expected argument in the unit tests; assert the observable effect (click handler fired, value changed, dialog opened) in the e2e tests. Add an eslint rule or a vitest reporter check that fails a test block containing no expect.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-2.2",
+    "section": "2. Assertions that cannot fail",
+    "severity": "ship-blocker",
+    "files": [
+      "e2e/avatar.spec.ts:37",
+      "e2e/avatar.spec.ts:50",
+      "e2e/avatar.spec.ts:60",
+      "e2e/avatar.spec.ts:75",
+      "e2e/avatar.spec.ts:89",
+      "e2e/avatar.spec.ts:106",
+      "e2e/avatar.spec.ts:120",
+      "e2e/avatar.spec.ts:135",
+      "e2e/avatar.spec.ts:148",
+      "e2e/avatar.spec.ts:157",
+      "e2e/avatar.spec.ts:166",
+      "e2e/pagination.spec.ts:446",
+      "src/components/Slider/__tests__/Slider.test.tsx:887"
+    ],
+    "summary": "19 of avatar.spec.ts's 26 tests wrap their assertions in `if (await X.count() > 0)`, so each passes when the element under test is absent \u2014 the exact failure the test exists to catch. Same shape at pagination.spec.ts:446 and Slider.test.tsx:887, where an assertion sits behind `if (onValueChange.mock.calls.length > 0)`.",
+    "fixShape": "Replace each guard with an assertion that the subject exists \u2014 `await expect(locator).toHaveCount(n)` before acting on it. Where a demo genuinely may not render the variant, fix the demo page rather than making the test optional.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-2.3",
+    "section": "2. Assertions that cannot fail",
+    "severity": "defect",
+    "files": [
+      "src/components/DatePicker/__tests__/DatePicker.test.tsx:544",
+      "src/components/Tooltip/__tests__/Tooltip.test.tsx:1277",
+      "src/components/Accordion/__tests__/Accordion.test.tsx:1703"
+    ],
+    "summary": "Three negative class assertions name a utility that appears in zero non-test files of that component: border-gray-300 on DatePicker (which uses border-cl-border-input) and rounded-lg on Tooltip and Accordion (both use rounded-cl-md). The DatePicker one is the only class assertion in a test named 'renders in unstyled mode without default classes', so that test verifies nothing it claims to.",
+    "fixShape": "Point each assertion at a utility the component's constants actually declare, chosen from its decorative half so the assertion stays correct under ADR 001.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-2.4",
+    "section": "2. Assertions that cannot fail",
+    "severity": "defect",
+    "files": [
+      "e2e/accordion.spec.ts:534",
+      "e2e/accordion.spec.ts-snapshots"
+    ],
+    "summary": "Zero toHaveScreenshot/toMatchSnapshot assertions exist anywhere, yet 10 PNG baselines sit in e2e/accordion.spec.ts-snapshots/ referenced by nothing. The describe block named 'Visual Regression' asserts only a non-zero bounding box, which a completely unstyled render satisfies. Restates AUDIT-GAP \u00a76.3 with the artifact count.",
+    "fixShape": "Restore real toHaveScreenshot assertions against the existing baselines, or delete the orphaned PNGs and rename the block so it stops implying coverage that does not exist.",
+    "estimate": "M",
+    "dependsOn": [
+      "6.3"
+    ]
+  },
+  {
+    "id": "GH-2.5",
+    "section": "2. Assertions that cannot fail",
+    "severity": "cosmetic",
+    "files": [
+      "e2e/checkbox.spec.ts:129"
+    ],
+    "summary": "expect(true).toBe(...) \u2014 a tautology. Eleven other expect(<array literal>).toContain(actual) sites are legitimate membership assertions but weak: they pass for any member of the set and cannot detect a wrong-but-valid state.",
+    "fixShape": "Assert the specific expected value at checkbox.spec.ts:129. Leave the membership assertions unless the specific value is knowable, in which case tighten them.",
+    "estimate": "S",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-3",
+    "section": "3. classes keys no test renders",
+    "severity": "ship-blocker",
+    "files": [
+      "src/__tests__/contracts/overrides.contract.test.tsx",
+      "src/__tests__/contracts/registry.ts"
+    ],
+    "summary": "377 of 495 classes keys never render under the contract tier's props; 213 never render there and are never named in any of the 47 unit test files, 20 e2e specs or 5 contract suites. Each is a documented, typed, exported key whose promised replace-the-default behaviour is demonstrated nowhere. Concentrated in Table (34), DatePicker (30), CascadingDropdown (24) and Stepper (22). Three keys added by phase 2's own sweep \u2014 IPI countryOptionRow/Flag/Label \u2014 arrived untested.",
+    "fixShape": "Extend registry.ts with per-component state fixtures (open, loading, error, disabled, with-label, with-selection) so open-state, shimmer and status slots render, then make overrides.contract FAIL on a key it could not render rather than skipping it. The 213 become an explicit ratcheting list instead of 213 silent passes.",
+    "estimate": "L",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-4",
+    "section": "4. unstyled/classes propagation",
+    "severity": "defect",
+    "files": [
+      "src/components/Button/Button.tsx:91",
+      "src/components/Breadcrumb/Breadcrumb.tsx:129",
+      "src/components/Breadcrumb/Breadcrumb.tsx:582",
+      "src/components/Breadcrumb/Breadcrumb.tsx:681",
+      "src/components/Avatar/components/AvatarGroupCount.tsx:103",
+      "src/components/CountryFlag/components/CountryFlagGroup.tsx:172",
+      "src/components/InternationalPhoneInput/InternationalPhoneInput.tsx:619"
+    ],
+    "summary": "Six of seven nesting sites do not propagate unstyled: <Button loading unstyled> still renders a fully styled CircularLoader, and <Breadcrumb unstyled> still renders styled Tooltips. No site forwards the parent's classes map, so a consumer cannot reach a nested component's slots at all. The IPI/CountryFlag case was caught in phase 2 only because the leaking token happened to also be in IPI's own defaults; the other six contribute tokens their parent never declares and are invisible to unstyled.contract.",
+    "fixShape": "Propagate unstyled at all six sites. Add a contract assertion that renders each nesting parent with unstyled and asserts no descendant carries a decorative token from the NESTED component's defaults \u2014 which is what would have caught these.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-5.1",
+    "section": "5. README claims",
+    "severity": "defect",
+    "files": [
+      "README.md:300",
+      "src/components/InternationalPhoneInput/constants.ts:344",
+      "src/components/Breadcrumb/utils/constants.ts:14",
+      "src/components/DatePicker/constants.ts:24",
+      "src/components/OtpInput/utils/constants.ts:9",
+      "src/components/Stepper/utils/constants.ts:63",
+      "src/components/Dropdown/utils/constants.ts:6"
+    ],
+    "summary": "'44px+ touch targets' is false. h-11 (44px) appears in zero shipped component constants \u2014 its only uses are in ui/Button.tsx and SiteFooter.tsx, both excluded from the package. Shipped interactive defaults are 40px (h-10, py-2.5 + text-sm) and Stepper's icon indicator is 32px below the sm breakpoint. No test asserts 44, min-h-11 or min-w-11 anywhere.",
+    "fixShape": "Decide the real floor and either raise the defaults to meet it or correct the README. Then add an assertion \u2014 a unit check over the constants for a minimum h-*/py-* on interactive slots is cheaper and more reliable than measuring layout in e2e.",
+    "estimate": "M",
+    "dependsOn": []
+  },
+  {
+    "id": "GH-5.2",
+    "section": "5. README claims",
+    "severity": "defect",
+    "files": [
+      "README.md:298",
+      "src/test/setup.ts:29-40"
+    ],
+    "summary": "'prefers-reduced-motion support' for every component is false \u2014 12 shipped components animate with no reduced-motion path (AUDIT-GAP \u00a73.7). The gate is also inert: setup.ts mocks matchMedia to return matches:false unconditionally, so under vitest the reduced-motion branch is never taken and a component that implements it correctly is indistinguishable from one that ignores it.",
+    "fixShape": "Make the matchMedia mock configurable per test and add a contract suite that renders every component with prefers-reduced-motion forced true, asserting no transition/animate utility survives. Then either wire the 12 components up or narrow the README claim.",
+    "estimate": "M",
+    "dependsOn": [
+      "2.5",
+      "3.7"
+    ]
+  },
+  {
+    "id": "GH-5.3",
+    "section": "5. README claims",
+    "severity": "inconsistency",
+    "files": [
+      "README.md:77",
+      "README.md:81",
+      "package.json:302",
+      "scripts/assert-flag-bundle.mjs:35",
+      "scripts/assert-phone-bundle.mjs:1"
+    ],
+    "summary": "'Responsive (320px+)' is plausible \u2014 the constants are mobile-first by construction \u2014 but 320px is never rendered by anything. 'Tree-shakeable' is genuinely gated for the two payloads that matter (flags, libphonenumber-js) and for subpath exports, but nothing asserts that importing one component does not pull in others: IPI's import closure is 29.23 kb gzipped, 16.1 kb of it other components.",
+    "fixShape": "Add a 320px viewport project asserting no horizontal overflow. For tree-shaking, extend the bundle gate to the transitive import closure per subpath (remediation 7.1) so the claim and the measurement agree.",
+    "estimate": "M",
+    "dependsOn": [
+      "7.1",
+      "GH-1.4"
+    ]
+  }
+]
