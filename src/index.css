@@ -103,8 +103,14 @@
 
   /* Text */
   --cl-text: #edeff4;
-  --cl-text-secondary: rgba(237, 239, 244, 0.65);
-  --cl-text-tertiary: rgba(237, 239, 244, 0.45);
+  /* Both raised together, and that is the point: tertiary at 45% measured
+     4.02:1 on --cl-bg, under the 4.5:1 WCAG AA needs for text, and it had
+     failed in three separate places before anyone measured it. Lifting only
+     tertiary would have closed the gap to secondary from dL* 18.1 to 11.7 and
+     made the two indistinguishable, so the whole step moves up and the scale
+     keeps its spacing. Guarded by contrast.contract.test.ts. */
+  --cl-text-secondary: rgba(237, 239, 244, 0.72);
+  --cl-text-tertiary: rgba(237, 239, 244, 0.52);
   --cl-text-disabled: rgba(237, 239, 244, 0.3);
 
   /* Borders */
@@ -212,8 +218,12 @@
   --cl-bg-input: #ffffff;
 
   --cl-text: #0f1218;
-  --cl-text-secondary: rgba(15, 18, 24, 0.7);
-  --cl-text-tertiary: rgba(15, 18, 24, 0.5);
+  /* Light needed the bigger lift: tertiary at 50% was 3.46:1 on --cl-bg-hover,
+     and the minimum that clears 4.5:1 there is 58%. Secondary follows for the
+     same reason it does in dark — at 70% against a 62% tertiary the pair
+     collapses to dL* 7.8. */
+  --cl-text-secondary: rgba(15, 18, 24, 0.8);
+  --cl-text-tertiary: rgba(15, 18, 24, 0.62);
   --cl-text-disabled: rgba(15, 18, 24, 0.35);
 
   --cl-border: rgba(15, 18, 24, 0.1);

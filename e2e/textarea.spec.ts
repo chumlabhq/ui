@@ -74,12 +74,7 @@ test.describe("TextArea (fixtures)", () => {
     test("passes an axe audit", async ({ page }) => {
       await gotoFixture(page, "TextArea", "labelled");
       await injectAxe(page);
-      // `color-contrast` off, and only that: TextArea is on the
-      // `--cl-text-tertiary` baseline in docs/adr/002-unrenderable-keys.json.
-      await checkA11y(page, "[data-fixture]", {
-        detailedReport: true,
-        axeOptions: { rules: { "color-contrast": { enabled: false } } },
-      });
+      await checkA11y(page, "[data-fixture]", { detailedReport: true });
     });
   });
 

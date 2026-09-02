@@ -419,7 +419,7 @@ const ModalDemo = () => {
           content: `w-full max-w-md rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border dark:border dark:border-cl-border`,
           header: "flex items-start gap-3 p-5 pb-3",
           title: `font-bold text-lg text-cl-text`,
-          closeButton: `shrink-0 p-1.5 rounded-cl-md ml-auto transition-colors hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+          closeButton: `shrink-0 p-1.5 rounded-cl-md ml-auto transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated`,
           closeIcon: "w-5 h-5",
           body: "px-5 pb-5",
         }}

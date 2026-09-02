@@ -3937,7 +3937,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   ...s,
                   ...s,
                   row: `${s.row} select-none`,
-                  expandIcon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+                  expandIcon: "",
                 }}
               />
             );

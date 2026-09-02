@@ -19,6 +19,16 @@ import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegi
  * so a production build drops the branch and the chunk;
  * scripts/assert-fixture-bundle.mjs asserts it never reaches the package.
  */
+/** Reachable by a screen reader, invisible on the page. */
+const SR_ONLY = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  overflow: "hidden",
+  clip: "rect(0 0 0 0)",
+  whiteSpace: "nowrap",
+} as const;
+
 export default function FixtureRoute() {
   const { component: slug = "", fixture: fixtureName = "" } = useParams();
   const component = fromSlug(slug);
@@ -91,19 +101,16 @@ export default function FixtureRoute() {
     <main style={{ padding: 24 }}>
       {/* Outside the marked element on purpose: a page with no h1 trips axe's
           document-level rules, and a component audit scoped to [data-fixture]
-          should not then inherit this heading's level. */}
-      <h1
-        style={{
-          position: "absolute",
-          width: 1,
-          height: 1,
-          overflow: "hidden",
-          clip: "rect(0 0 0 0)",
-          whiteSpace: "nowrap",
-        }}
-      >
+          should not then inherit this heading's level.
+
+          Both levels, not just the h1: `heading-order` faults a SKIP, and
+          Accordion's trigger defaults to h3 (DEFAULT_HEADING_LEVEL). An h1
+          alone left h1 -> h3 and reported all seven Accordion fixtures. The h2
+          is the rung between them. */}
+      <h1 style={SR_ONLY}>
         {component}/{fixture.name}
       </h1>
+      <h2 style={SR_ONLY}>Fixture</h2>
       <div
         // The identifying attribute the navigation guard asserts on, and the
         // subtree an accessibility audit scopes to.

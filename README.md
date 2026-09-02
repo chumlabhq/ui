@@ -297,7 +297,6 @@ Every component ships with:
 - Focus trapping and restoration (Modal, Drawer)
 - Screen reader announcements (`aria-live`)
 - `prefers-reduced-motion` support
-- 44px+ touch targets
 
 ---
 

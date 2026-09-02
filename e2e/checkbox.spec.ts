@@ -60,12 +60,7 @@ test.describe("Checkbox (fixtures)", () => {
   test("passes an axe audit", async ({ page }) => {
     await gotoFixture(page, "Checkbox", "labelled");
     await injectAxe(page);
-    // `color-contrast` off, and only that: Checkbox is on the
-    // `--cl-text-tertiary` baseline in docs/adr/002-unrenderable-keys.json.
-    await checkA11y(page, "[data-fixture]", {
-      detailedReport: true,
-      axeOptions: { rules: { "color-contrast": { enabled: false } } },
-    });
+    await checkA11y(page, "[data-fixture]", { detailedReport: true });
   });
 
   test("fits inside a 375px viewport", async ({ page }) => {

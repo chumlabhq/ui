@@ -41,18 +41,18 @@
       "verdict": "PASS",
       "rerunReason": "User-invoked re-execution. Prior pass verified existence of homepage assets but did not check per-component-page TechArticle/canonical or scan for forbidden geo tags.",
       "findings": [
-        "BLOCKER FIXED \u2014 index.html carried 4 forbidden meta tags (geo.region=IN, geo.placename=India, geo.position=28.6139;77.2090, ICBM=28.6139, 77.2090) despite the spec's explicit prohibition (\"GEO\" in this pipeline = Generative Engine Optimization, not geographic targeting). All four removed; replaced with an explanatory comment so future contributors don't re-add them.",
-        "GAP FIXED \u2014 per-component-page TechArticle JSON-LD and canonical were missing for the 30+ docs routes under Demo.tsx. Added a useCanonical + useJsonLd block in Demo.tsx that builds a TechArticle from the active route's NAV_SECTIONS metadata. Single hook covers every demo route automatically; the 'page-tech-article' id ensures the script replaces (not duplicates) on route change."
+        "BLOCKER FIXED — index.html carried 4 forbidden meta tags (geo.region=IN, geo.placename=India, geo.position=28.6139;77.2090, ICBM=28.6139, 77.2090) despite the spec's explicit prohibition (\"GEO\" in this pipeline = Generative Engine Optimization, not geographic targeting). All four removed; replaced with an explanatory comment so future contributors don't re-add them.",
+        "GAP FIXED — per-component-page TechArticle JSON-LD and canonical were missing for the 30+ docs routes under Demo.tsx. Added a useCanonical + useJsonLd block in Demo.tsx that builds a TechArticle from the active route's NAV_SECTIONS metadata. Single hook covers every demo route automatically; the 'page-tech-article' id ensures the script replaces (not duplicates) on route change."
       ],
       "verified": {
         "indexHtmlJsonLd": "5 scripts, all parse cleanly: Organization, SoftwareApplication, WebSite, FAQPage, BreadcrumbList",
-        "perPageTitle": "PASS \u2014 useDocumentTitle in Demo.tsx writes a unique '<DisplayName> Component | Chumlab UI' for every route from NAV_SECTIONS",
-        "perPageDescription": "PASS \u2014 useDocumentTitle accepts the per-route description from NAV_SECTIONS and upserts <meta name=description>",
-        "perPageCanonical": "PASS (now) \u2014 useCanonical writes <link rel=canonical> for each route to https://chumlab.com/<path>",
-        "perPageTechArticle": "PASS (now) \u2014 useJsonLd injects a TechArticle script with @id=page-tech-article on every component/guide/intro route",
-        "duplicateTitles": "PASS \u2014 only one static <title> in index.html; all routes override at runtime via useDocumentTitle",
-        "geoTags": "PASS \u2014 0 geo.* / ICBM tags after fix; explanatory comment in place",
-        "publicAssets": "llms.txt 2.5KB, robots.txt 471B, sitemap.xml 8.8KB \u2014 all intact"
+        "perPageTitle": "PASS — useDocumentTitle in Demo.tsx writes a unique '<DisplayName> Component | Chumlab UI' for every route from NAV_SECTIONS",
+        "perPageDescription": "PASS — useDocumentTitle accepts the per-route description from NAV_SECTIONS and upserts <meta name=description>",
+        "perPageCanonical": "PASS (now) — useCanonical writes <link rel=canonical> for each route to https://chumlab.com/<path>",
+        "perPageTechArticle": "PASS (now) — useJsonLd injects a TechArticle script with @id=page-tech-article on every component/guide/intro route",
+        "duplicateTitles": "PASS — only one static <title> in index.html; all routes override at runtime via useDocumentTitle",
+        "geoTags": "PASS — 0 geo.* / ICBM tags after fix; explanatory comment in place",
+        "publicAssets": "llms.txt 2.5KB, robots.txt 471B, sitemap.xml 8.8KB — all intact"
       },
       "deferred": {
         "lighthouseSeo": "Requires deployed docs site + headless Chrome runner",
@@ -65,7 +65,7 @@
       "step": "17-npm-audit",
       "at": "2026-04-28T01:09:50Z",
       "reason": "3 publish-readiness issues blocked release: dist/ leaked redux+contexts via tsc declaration emission; CHANGELOG missing 1.0.0; package.json author undefined.",
-      "resolvedBy": "step-17-cycle-2 at 2026-04-28T01:14:28Z \u2014 tsconfig.lib.json now excludes src/contexts, src/redux, and the marketing flat files in src/components/; CHANGELOG 1.0.0 entry added documenting all changes since 0.1.0 (Added/Changed/Fixed/Deferred sections); author set to {name:Chumlab, email:hello@chumlab.com, url:https://chumlab.com}."
+      "resolvedBy": "step-17-cycle-2 at 2026-04-28T01:14:28Z — tsconfig.lib.json now excludes src/contexts, src/redux, and the marketing flat files in src/components/; CHANGELOG 1.0.0 entry added documenting all changes since 0.1.0 (Added/Changed/Fixed/Deferred sections); author set to {name:Chumlab, email:hello@chumlab.com, url:https://chumlab.com}."
     },
     "allStepsComplete": true,
     "rerunDate": "2026-04-27",
@@ -83,7 +83,7 @@
         "step": "02-fix-cycle-2",
         "severity": "low",
         "type": "lint",
-        "description": "Single ESLint warning remaining: src/contexts/ThemeContext.tsx:95 \u2014 react-refresh/only-export-components. The file exports both ThemeProvider (component) and useTheme (hook); fast-refresh wants components only. DX-only impact (HMR still works), production unaffected. Splitting requires updating ~3 imports; deferred."
+        "description": "Single ESLint warning remaining: src/contexts/ThemeContext.tsx:95 — react-refresh/only-export-components. The file exports both ThemeProvider (component) and useTheme (hook); fast-refresh wants components only. DX-only impact (HMR still works), production unaffected. Splitting requires updating ~3 imports; deferred."
       }
     ],
     "startedAt": "2026-04-27T22:10:52Z",
@@ -179,8 +179,8 @@
         "severity": "high",
         "component": "DatePicker",
         "file": "dist/shared/DatePicker-*.cjs",
-        "description": "DatePicker chunk 10.25KB gzipped \u2014 0.25KB over class target ceiling (10KB for date/calendar components per run.md STRICT MODE) but well under the 12KB hard-fail. Reclassified from BLOCKER \u2192 HIGH after option-B policy update at 2026-04-28T00:52:30Z (class-specific thresholds added).",
-        "evidence": "vite build --mode lib output 2026-04-28T00:48Z: dist/shared/DatePicker-D7SQLxwx.cjs 35.04 KB / gzip: 10.25 KB",
+        "description": "DatePicker chunk 12.32KB gzipped - over the 12KB date-class HARD FAIL (was recorded at 10.25KB, over the 10KB target only)",
+        "evidence": "vite build --mode lib output RE-MEASURED 2026-09-02: dist/shared/DatePicker-Bvhk9TGp.js gzip 12.32 KB - now OVER the 12KB date-class hard fail, not merely over the 10KB target. The prior evidence line quoted 35.04 KB / gzip 10.25 KB from 2026-04-28T00:48Z against a dist that no longer exists.",
         "status": "open",
         "policyChange": "Reclassified after class-specific bundle thresholds added to run.md/07-validate.md"
       },
@@ -239,7 +239,7 @@
         "id": "PERF-001",
         "type": "performance",
         "component": "Multiple",
-        "description": "98 inline style objects across published library components \u2014 most are dynamic positioning that cannot be statically extracted; 4 static sites in DatePicker marker tooltip moved to Tailwind classes (FIX-PERF-DATEPICKER-MARKER-V5-LOW). Remaining 94 sites are dynamic and accepted as-is.",
+        "description": "98 inline style objects across published library components — most are dynamic positioning that cannot be statically extracted; 4 static sites in DatePicker marker tooltip moved to Tailwind classes (FIX-PERF-DATEPICKER-MARKER-V5-LOW). Remaining 94 sites are dynamic and accepted as-is.",
         "status": "fixed-partial"
       },
       {
@@ -329,7 +329,7 @@
         "severity": "low",
         "component": "Marketing",
         "file": "src/components/{GetStartedSection,ChumlabComparisonSection}.tsx",
-        "description": "dangerouslySetInnerHTML used with JSON.stringify for JSON-LD schema injection. Content is hardcoded constants (safe today), but lacks </script> escape if content becomes dynamic. Marketing page only \u2014 not in published library.",
+        "description": "dangerouslySetInnerHTML used with JSON.stringify for JSON-LD schema injection. Content is hardcoded constants (safe today), but lacks </script> escape if content becomes dynamic. Marketing page only — not in published library.",
         "evidence": "src/components/GetStartedSection.tsx:86; src/components/ChumlabComparisonSection.tsx:320",
         "status": "fixed"
       }
@@ -362,7 +362,7 @@
         "file": "src/components/Input/Input.tsx",
         "description": "Event cast as unknown as ChangeEvent<HTMLInputElement> in handleClear",
         "status": "deferred",
-        "deferredReason": "Investigated swap to native dispatchEvent path (setter + dispatch input event) \u2014 broke jsdom controlled-input tests because React's internal _valueTracker reconciles input.value back to the controlled prop value before our onChange listener observes the change. Manual synthetic-event construction with double cast remains the contract our tests verify; cast is contained to one site and now carries an inline rationale comment.",
+        "deferredReason": "Investigated swap to native dispatchEvent path (setter + dispatch input event) — broke jsdom controlled-input tests because React's internal _valueTracker reconciles input.value back to the controlled prop value before our onChange listener observes the change. Manual synthetic-event construction with double cast remains the contract our tests verify; cast is contained to one site and now carries an inline rationale comment.",
         "deferredAt": "2026-04-28"
       },
       {
@@ -645,7 +645,7 @@
         "A11Y-TOOLTIP-001",
         "SECURITY-JSONLD-001"
       ],
-      "description": "Phase A trivial fixes: wrapped MultiSelectDropdownContent in React.memo (saves re-renders when parent state changes); replaced AvatarGroup index-only fallback key with a content-aware composite (childName-index) for better identity stability; added isBrowser guard to ClockFace pointerup/pointercancel listeners (defense in depth \u2014 useEffect already client-side); Tooltip Escape handler now stopPropagation()s before close so it can't dismiss an enclosing Modal/Drawer; JSON-LD payloads in marketing sections now escape '</' to '<\\/' inside JSON.stringify so a future closing-script-tag substring can't break HTML parsing.",
+      "description": "Phase A trivial fixes: wrapped MultiSelectDropdownContent in React.memo (saves re-renders when parent state changes); replaced AvatarGroup index-only fallback key with a content-aware composite (childName-index) for better identity stability; added isBrowser guard to ClockFace pointerup/pointercancel listeners (defense in depth — useEffect already client-side); Tooltip Escape handler now stopPropagation()s before close so it can't dismiss an enclosing Modal/Drawer; JSON-LD payloads in marketing sections now escape '</' to '<\\/' inside JSON.stringify so a future closing-script-tag substring can't break HTML parsing.",
       "filesModified": [
         "src/components/MultiSelectDropdown/MultiSelectDropdown.tsx",
         "src/components/Avatar/components/AvatarGroup.tsx",
@@ -664,7 +664,7 @@
         "TYPE-006",
         "TYPE-007"
       ],
-      "description": "Phase B type-safety: Modal previousActiveElement now uses instanceof HTMLElement narrowing instead of a bare cast; Stepper extracts an isExoticIconComponent type predicate so the runtime $$typeof narrowing produces a real ComponentType (single cast contained inside the predicate); AvatarGroup keyboard activation now calls e.currentTarget.click() to dispatch a real click \u2014 eliminates the KeyboardEvent\u2192MouseEvent cast and routes through the existing onClick handler with a proper SyntheticMouseEvent; DatePicker handleClearClick + SearchableDropdown handleClear widened to React.SyntheticEvent so both onClick (MouseEvent) and onKeyDown (KeyboardEvent) call sites work without unsafe casts. TYPE-008/TYPE-009 attempted via native dispatch path (setter + dispatchEvent) but reverted because jsdom + React's _valueTracker reconciles controlled-input value back before our onChange observes it \u2014 moved to deferred with rationale.",
+      "description": "Phase B type-safety: Modal previousActiveElement now uses instanceof HTMLElement narrowing instead of a bare cast; Stepper extracts an isExoticIconComponent type predicate so the runtime $$typeof narrowing produces a real ComponentType (single cast contained inside the predicate); AvatarGroup keyboard activation now calls e.currentTarget.click() to dispatch a real click — eliminates the KeyboardEvent→MouseEvent cast and routes through the existing onClick handler with a proper SyntheticMouseEvent; DatePicker handleClearClick + SearchableDropdown handleClear widened to React.SyntheticEvent so both onClick (MouseEvent) and onKeyDown (KeyboardEvent) call sites work without unsafe casts. TYPE-008/TYPE-009 attempted via native dispatch path (setter + dispatchEvent) but reverted because jsdom + React's _valueTracker reconciles controlled-input value back before our onChange observes it — moved to deferred with rationale.",
       "filesModified": [
         "src/components/Modal/Modal.tsx",
         "src/components/Stepper/Stepper.tsx",
@@ -679,7 +679,7 @@
         "THEME-SHADOW-001",
         "THEME-TABLE-STRIPE"
       ],
-      "description": "Phase C theme: Tooltip shadow preset alphas bumped from 0.12-0.30 to 0.18-0.45 so they read on dark surfaces (the previous values were tuned for white bg); DatePicker marker tooltip inline boxShadow alpha 0.15 \u2192 0.25 for the same reason; Table default striped row dark mode bg-white/[0.02] \u2192 bg-white/[0.04] (doubled alpha, still subtle, now actually visible). A11Y-BREADCRUMB-001 deferred \u2014 fixing requires updating 8+ test assertions on the role=menu/menuitem queries; flagged for a dedicated cycle.",
+      "description": "Phase C theme: Tooltip shadow preset alphas bumped from 0.12-0.30 to 0.18-0.45 so they read on dark surfaces (the previous values were tuned for white bg); DatePicker marker tooltip inline boxShadow alpha 0.15 → 0.25 for the same reason; Table default striped row dark mode bg-white/[0.02] → bg-white/[0.04] (doubled alpha, still subtle, now actually visible). A11Y-BREADCRUMB-001 deferred — fixing requires updating 8+ test assertions on the role=menu/menuitem queries; flagged for a dedicated cycle.",
       "filesModified": [
         "src/components/Tooltip/utils/constants.ts",
         "src/components/DatePicker/DatePicker.tsx",
@@ -691,7 +691,7 @@
       "fixed": [
         "DOC-NAMING-001"
       ],
-      "description": "Phase D doc renames: 8 placeholder COMPONENT.ai.md files renamed to <NAME>.ai.md to match the convention used by the other 22 components \u2014 DATEPICKER, DROPDOWN, INTERNATIONALPHONEINPUT, MULTISELECTDROPDOWN, MULTISELECTSEARCHABLEDROPDOWN, SEARCHABLEDROPDOWN, TABLE, TIMEPICKER. Updated 16 source-comment references (8 in each component's index.ts and main .tsx file). BrandLogo's COMPONENT.ai.md left as-is since BrandLogo isn't in the published-30 set.",
+      "description": "Phase D doc renames: 8 placeholder COMPONENT.ai.md files renamed to <NAME>.ai.md to match the convention used by the other 22 components — DATEPICKER, DROPDOWN, INTERNATIONALPHONEINPUT, MULTISELECTDROPDOWN, MULTISELECTSEARCHABLEDROPDOWN, SEARCHABLEDROPDOWN, TABLE, TIMEPICKER. Updated 16 source-comment references (8 in each component's index.ts and main .tsx file). BrandLogo's COMPONENT.ai.md left as-is since BrandLogo isn't in the published-30 set.",
       "filesModified": [
         "src/components/DatePicker/DATEPICKER.ai.md (renamed from COMPONENT.ai.md)",
         "src/components/Dropdown/DROPDOWN.ai.md (renamed)",
@@ -701,8 +701,8 @@
         "src/components/SearchableDropdown/SEARCHABLEDROPDOWN.ai.md (renamed)",
         "src/components/Table/TABLE.ai.md (renamed)",
         "src/components/TimePicker/TIMEPICKER.ai.md (renamed)",
-        "src/components/{8}/index.ts \u2014 comment ref updated",
-        "src/components/{8}/{Name}.tsx \u2014 JSDoc @see / Reference comment ref updated"
+        "src/components/{8}/index.ts — comment ref updated",
+        "src/components/{8}/{Name}.tsx — JSDoc @see / Reference comment ref updated"
       ]
     },
     {
@@ -710,7 +710,7 @@
       "fixed": [
         "PERF-001"
       ],
-      "description": "Phase E perf-partial: DatePicker marker tooltip's static inline styles (display:flex, alignItems, gap, fontWeight, marginTop, fontSize, textTransform \u2014 4 sites) extracted to Tailwind classes (flex, items-center, gap-1.5, font-semibold, mt-0.5, mt-1, capitalize, text-[11px]). Total inline-style sites in published library: 98 \u2192 94. Remaining 94 are dynamic positioning/sizing (transform, top/left from refs, computed widths) that genuinely cannot be statically extracted. Marked fixed-partial; no measured perf regression existed and the audit description was structural rather than perf-driven.",
+      "description": "Phase E perf-partial: DatePicker marker tooltip's static inline styles (display:flex, alignItems, gap, fontWeight, marginTop, fontSize, textTransform — 4 sites) extracted to Tailwind classes (flex, items-center, gap-1.5, font-semibold, mt-0.5, mt-1, capitalize, text-[11px]). Total inline-style sites in published library: 98 → 94. Remaining 94 are dynamic positioning/sizing (transform, top/left from refs, computed widths) that genuinely cannot be statically extracted. Marked fixed-partial; no measured perf regression existed and the audit description was structural rather than perf-driven.",
       "filesModified": [
         "src/components/DatePicker/DatePicker.tsx"
       ]
@@ -783,7 +783,7 @@
     "performance": {
       "measuredAt": "2026-04-28T00:52:30Z",
       "treeShakingWorks": true,
-      "thresholdPolicy": "class-specific (option-B, 2026-04-28T00:52:30Z) \u2014 see run.md STRICT MODE",
+      "thresholdPolicy": "class-specific (option-B, 2026-04-28T00:52:30Z) — see run.md STRICT MODE",
       "perComponentBundleSizes": {
         "withinClassTarget": 26,
         "overTargetUnderHardFail": 4,
@@ -795,17 +795,17 @@
           "AccordionShimmer 7.51KB (leaf target 5KB; hard-fail 10KB)"
         ],
         "withinTargetExamples": [
-          "TimePicker 9.42KB \u2264 10 (date target)",
-          "InternationalPhoneInput 9.48KB \u2264 10 (locale target)",
-          "MultiSelectSearchableDropdown 6.72KB \u2264 8 (composite target)",
-          "SearchableDropdown 6.85KB \u2264 8",
-          "MultiSelectDropdown 6.22KB \u2264 8",
-          "CascadingDropdown 7.35KB \u2264 8"
+          "TimePicker 9.42KB ≤ 10 (date target)",
+          "InternationalPhoneInput 9.48KB ≤ 10 (locale target)",
+          "MultiSelectSearchableDropdown 6.72KB ≤ 8 (composite target)",
+          "SearchableDropdown 6.85KB ≤ 8",
+          "MultiSelectDropdown 6.22KB ≤ 8",
+          "CascadingDropdown 7.35KB ≤ 8"
         ],
-        "ipiCountryConstants": "12.33KB shared chunk \u2014 IPI dataset (270+ countries), not a component; tree-shaken out for consumers who don't import IPI"
+        "ipiCountryConstants": "12.33KB shared chunk — IPI dataset (270+ countries), not a component; tree-shaken out for consumers who don't import IPI"
       },
-      "renderProfileMs": "DEFERRED \u2014 requires React Profiler runtime infra not available in this pipeline run",
-      "lighthouseScore": "DEFERRED \u2014 requires deployed docs site + headless Chrome runner"
+      "renderProfileMs": "DEFERRED — requires React Profiler runtime infra not available in this pipeline run",
+      "lighthouseScore": "DEFERRED — requires deployed docs site + headless Chrome runner"
     },
     "semanticText": 100,
     "demos": 100,
@@ -813,9 +813,9 @@
     "seo": {
       "verifiedAt": "2026-04-28T01:05:44Z",
       "publicAssets": {
-        "llms.txt": "present (2.5KB) \u2014 entity definition, key facts, install, components catalog, comparison framing",
-        "robots.txt": "present (471B) \u2014 AI bots GPTBot/ClaudeBot/PerplexityBot/Google-Extended explicitly allowed; sitemap referenced",
-        "sitemap.xml": "present (8.8KB) \u2014 homepage + components + blog + FAQ + about with priority and changefreq"
+        "llms.txt": "present (2.5KB) — entity definition, key facts, install, components catalog, comparison framing",
+        "robots.txt": "present (471B) — AI bots GPTBot/ClaudeBot/PerplexityBot/Google-Extended explicitly allowed; sitemap referenced",
+        "sitemap.xml": "present (8.8KB) — homepage + components + blog + FAQ + about with priority and changefreq"
       },
       "indexHtmlMetadata": {
         "title": "Chumlab. Components that ship at the speed of thought.",
@@ -823,7 +823,7 @@
         "ogTags": "type, site_name, title, description, url, image (1200x630), locale",
         "twitterCard": "summary_large_image with title/description/image",
         "canonical": "https://chumlab.com/",
-        "geoTags": "none (correctly absent \u2014 Chumlab UI is geographically neutral)",
+        "geoTags": "none (correctly absent — Chumlab UI is geographically neutral)",
         "robotsMeta": "present with max-snippet/max-image-preview/max-video-preview directives"
       },
       "jsonLdSchemas": {
@@ -842,32 +842,34 @@
           "SearchAction"
         ]
       },
-      "lighthouseSeo": "DEFERRED \u2014 requires deployed docs site + headless Chrome runner"
+      "lighthouseSeo": "DEFERRED — requires deployed docs site + headless Chrome runner"
     }
   },
   "validation": {
     "typescript": "PASS - 0 errors (tsc --build, re-verified 2026-09-02). Previously recorded as PASS on `tsc --noEmit`, which is a no-op here: the root tsconfig.json is a solution file with `files: []`, so --noEmit compiles the empty set and exits 0 whatever the source says. Proven by planting a type error and watching --noEmit report nothing while --build reported it. The gate is now `npm run typecheck` (scripts/assert-typecheck.mjs), which plants that error itself and fails if the gate does not catch it.",
     "tests": "PASS - 3549/3549 across 59 files, 63 skipped. Every skip is an `it.runIf` guard, not a disabled test: 50 in ssr.contract (25 of 35 registry entries declare neither `open` nor `keepMounted`, x2 tests), 11 in reduced-motion.contract (entries whose defaults declare no motion, or pair it with a motion-reduce: CSS opt-out), and 2 for entries whose owning component has no `unstyled` prop. Zero .skip / xit / .only anywhere in the suite. Counts must be taken from the run, not carried forward - the previous value (2992/2992, 45 files) had drifted by 11 files and 557 assertions (GATE-HONESTY 1.2).",
     "ssr": "PASS - all issues fixed",
-    "accessibility": "PARTIAL - rebuilt 2026-09-02 from e2e/accessibility.spec.ts, an axe run against fixture pages. Covers 35 of 35 registry entries (30 indexed components plus 5 sub-component class sets), one fixture each, scoped to [data-fixture] so the subject is the component rather than the page. No rule disabled. 19 violations remain, recorded with a cause in docs/adr/002-unrenderable-keys.json under axeBaseline and ratcheting down only: 18 x color-contrast, all from --cl-text-tertiary at 45% (~3.4:1) backing the `description` slot and similar text - one design-token decision, not 18 component bugs; and 1 x button-name on InternationalPhoneInput's country combobox, which the combobox-pattern phase owns. PARTIAL, not PASS, per ADR 003 D4: 19 known violations stand, and one fixture per component is a sample, not exhaustive coverage of every state. The previous PASS described four e2e specs - two selector-scoped, one with scrollable-region-focusable disabled - all navigating to /demo/<name>, which redirects to the marketing home page. It was an audit of the home page (E2E-INVENTORY.md, GATE-HONESTY 1.3).",
-    "theme": "PASS - 0 blockers, coverage 98%, both prior LOW theme issues (THEME-SHADOW-001, THEME-TABLE-STRIPE) closed in cycle 5; remaining hardcoded color references in published library are CSS-var fallback defaults (Toast), semantic status colors (Avatar online/offline/away/busy), or data palettes for auto-colored avatars \u2014 none are theme regressions; verified 2026-04-28",
+    "accessibility": "PARTIAL - rebuilt 2026-09-02 from e2e/accessibility-full.spec.ts (project `a11y-full`), an axe sweep of EVERY fixture, not one per component. 276 fixtures across 35 registry entries, 353s, scoped to [data-fixture] so the subject is the component rather than the harness page, with no rule disabled. 84 violations outstanding, all serious/critical/moderate: 59 x button-name, 16 x label, 7 x heading-order, 2 x label-title-only. Of the 59 button-name, 56 are the role=combobox trigger on DatePicker, Dropdown, InternationalPhoneInput, MultiSelectDropdown, MultiSelectSearchableDropdown and SearchableDropdown - the combobox pattern, explicitly out of scope (AUDIT-GAP 3.3/3.4); 3 are Switch's role=switch button in the fixtures that pass no label. The 16 label and 2 label-title-only are Checkbox/Input/TextArea fixtures that render the bare control with no label, which is the consumer's to supply - the `labelled` fixture of each is clean. The 7 heading-order are Accordion's h3 triggers on a fixture page that renders no h1/h2, an artefact of the harness. ZERO color-contrast: the 18 that stood here were all --cl-text-tertiary at 45%/50% (3.46-4.09:1); the token was raised to 52%/62% and now measures 5.07-5.26:1 on every surface in both themes, gated by src/__tests__/contracts/contrast.contract.test.ts. PARTIAL, not PASS, per ADR 003 D4: 84 known violations stand. The gate that fails on regression is e2e/accessibility.spec.ts, which carries the ratcheting axeBaseline; accessibility-full is the sweep that finds what one fixture per component cannot - it is how Avatar's with-status was caught announcing nothing. The previous PARTIAL described one fixture per component and reported 19 violations; it was honest about being a sample and this is the exhaustive run it pointed at.",
+    "theme": "PASS - 0 blockers, coverage 98%, both prior LOW theme issues (THEME-SHADOW-001, THEME-TABLE-STRIPE) closed in cycle 5; remaining hardcoded color references in published library are CSS-var fallback defaults (Toast), semantic status colors (Avatar online/offline/away/busy), or data palettes for auto-colored avatars — none are theme regressions; verified 2026-04-28",
     "responsive": "PASS - 0 blockers, coverage 100% (all 30 components verified at 6 breakpoints 320/375/768/1024/1440/1920); 3 final LOW min-w issues fixed via FIX-RESP-MIN-W-V5-05 at 2026-04-28T00:27Z; verified 2026-04-28",
-    "security": "PASS - all 10 step-16 checks passed 2026-04-28: (1) Unsafe HTML \u2014 only 2 dangerouslySetInnerHTML uses, both in marketing JSON-LD with </ escape per SECURITY-JSONLD-001; 3 other grep hits are code examples inside blog post string content, not executed. (2) eval/Function/setTimeout(string)/setInterval(string) \u2014 0 hits. (3) Prop injection \u2014 Button polymorphic `as` prop restricted to button|a|span; no unrestricted href acceptance from user input. (4) Event handler strings \u2014 0. (5) innerHTML/outerHTML/document.write \u2014 0. (6) Sensitive logging \u2014 3 console calls (BuyMeCoffee, Button, Modal) all log static developer warnings or Error objects, no PII. (7) npm audit --production \u2014 0 advisories at any severity (info/low/moderate/high/critical all 0). (8) License compatibility \u2014 0 GPL/AGPL in package.json or via direct deps. (9) Supply chain \u2014 package-lock.json committed (202KB), 34 deps all pinned (no *, no latest, no git+/file:), .env gitignored (not tracked). (10) Committed secrets \u2014 0; `.env` file gitignored, .env.example committed for onboarding. 0 blockers, 0 high.",
-    "seo": "PASS - re-verified 2026-04-28T01:55Z (cycle 2). Cycle-2 caught and fixed two real defects the cycle-1 pass missed: (1) index.html carried 4 forbidden geo/ICBM tags (geo.region=IN, geo.placename=India, geo.position, ICBM) \u2014 removed; (2) per-component-page TechArticle JSON-LD + canonical were missing for the 30+ docs routes \u2014 added centrally via Demo.tsx using existing useCanonical + useJsonLd hooks. All 5 homepage JSON-LD scripts (Organization, SoftwareApplication, WebSite, FAQPage, BreadcrumbList) parse cleanly. Per-route titles and descriptions remain unique via useDocumentTitle. public/llms.txt + public/robots.txt + public/sitemap.xml intact. Lighthouse SEO score deferred (needs deployed site).",
-    "brand": "PASS - 0 internal inconsistencies. Canonical strings used everywhere: 'Chumlab' (display), 'Chumlab UI' (product), '@chumlab/ui' (npm package), 'chumlabhq/ui' (GitHub org \u2014 note: 'chumlabhq' not 'chumlab' because the latter was unavailable; project chose this consistently). Uppercase 'CHUMLAB' references in Home.tsx and ChumlabComparisonSection.tsx are typographic styling for heading labels, not brand violations. Spec template's example GitHub org 'chumlab/ui' is a placeholder; project's canonical is 'chumlabhq/ui'. Verified 2026-04-28",
-    "demos": "PASS - 30/30 published components covered at src/pages/demo/<Name>Demo.tsx + 8 supplementary demos (Accessibility, AiLlm, Animation, GettingStarted, Introduction, Styling, Theming, Demo entry); project uses relative imports for dev iteration speed (deviates from spec's @chumlab/ui import convention but satisfies the spirit \u2014 demos render in both modes and are referenced from docs); verified 2026-04-28",
+    "security": "PASS - all 10 step-16 checks passed 2026-04-28: (1) Unsafe HTML — only 2 dangerouslySetInnerHTML uses, both in marketing JSON-LD with </ escape per SECURITY-JSONLD-001; 3 other grep hits are code examples inside blog post string content, not executed. (2) eval/Function/setTimeout(string)/setInterval(string) — 0 hits. (3) Prop injection — Button polymorphic `as` prop restricted to button|a|span; no unrestricted href acceptance from user input. (4) Event handler strings — 0. (5) innerHTML/outerHTML/document.write — 0. (6) Sensitive logging — 3 console calls (BuyMeCoffee, Button, Modal) all log static developer warnings or Error objects, no PII. (7) npm audit --production — 0 advisories at any severity (info/low/moderate/high/critical all 0). (8) License compatibility — 0 GPL/AGPL in package.json or via direct deps. (9) Supply chain — package-lock.json committed (202KB), 34 deps all pinned (no *, no latest, no git+/file:), .env gitignored (not tracked). (10) Committed secrets — 0; `.env` file gitignored, .env.example committed for onboarding. 0 blockers, 0 high.",
+    "seo": "PASS - re-verified 2026-04-28T01:55Z (cycle 2). Cycle-2 caught and fixed two real defects the cycle-1 pass missed: (1) index.html carried 4 forbidden geo/ICBM tags (geo.region=IN, geo.placename=India, geo.position, ICBM) — removed; (2) per-component-page TechArticle JSON-LD + canonical were missing for the 30+ docs routes — added centrally via Demo.tsx using existing useCanonical + useJsonLd hooks. All 5 homepage JSON-LD scripts (Organization, SoftwareApplication, WebSite, FAQPage, BreadcrumbList) parse cleanly. Per-route titles and descriptions remain unique via useDocumentTitle. public/llms.txt + public/robots.txt + public/sitemap.xml intact. Lighthouse SEO score deferred (needs deployed site).",
+    "brand": "PASS - 0 internal inconsistencies. Canonical strings used everywhere: 'Chumlab' (display), 'Chumlab UI' (product), '@chumlab/ui' (npm package), 'chumlabhq/ui' (GitHub org — note: 'chumlabhq' not 'chumlab' because the latter was unavailable; project chose this consistently). Uppercase 'CHUMLAB' references in Home.tsx and ChumlabComparisonSection.tsx are typographic styling for heading labels, not brand violations. Spec template's example GitHub org 'chumlab/ui' is a placeholder; project's canonical is 'chumlabhq/ui'. Verified 2026-04-28",
+    "demos": "PASS - 30/30 published components covered at src/pages/demo/<Name>Demo.tsx + 8 supplementary demos (Accessibility, AiLlm, Animation, GettingStarted, Introduction, Styling, Theming, Demo entry); project uses relative imports for dev iteration speed (deviates from spec's @chumlab/ui import convention but satisfies the spirit — demos render in both modes and are referenced from docs); verified 2026-04-28",
     "knowledge": "PASS - 31 .ai.md files (30 published library components + BrandLogo); 8 placeholder COMPONENT.ai.md filenames renamed to <NAME>.ai.md per DOC-NAMING-001 fix; project uses its own section taxonomy (Quick Answer / Basic Usage / Prop Constraints / All Props / Styling Guide / Patterns / Accessibility / Troubleshooting / Demo Reference) which differs from the spec's heading set but conveys equivalent information; verified 2026-04-28",
-    "aiIndex": "PASS - /ai/component-index.json regenerated 2026-04-28T01:01:02Z (file was deleted during the v4\u2192v5 migration but the validation field carried a stale PASS claim; rebuilt programmatically from the 30 .schema.json + .ai.md files). Categories: form 16, navigation 4, display 4, overlay 3, feedback 2, layout 1. Each entry references its actual schema, knowledge (post DOC-NAMING-001 rename), demo, and source path.",
-    "performance": "PASS - 0 blockers under class-specific thresholds (option-B applied 2026-04-28T00:52:30Z). DatePicker 10.25KB \u2264 12KB date-class hard-fail, TimePicker 9.42KB \u2264 12KB, IPI 9.48KB \u2264 12KB, all 4 composite-form components \u2264 12KB. 4 HIGH bundles over class target ceiling: DatePicker (date target 10KB), AvatarBadge/Dropdown/AccordionShimmer (leaf target 5KB). Tree-shaking PASS via subpath exports. Render profile + Lighthouse deferred (need additional infra). Verified 2026-04-28",
-    "changelog": "PASS - CHANGELOG.md [1.0.0] - 2026-04-28 entry verified 2026-04-28T01:16:46Z. 4 sections (Added, Changed, Fixed, Deferred), no empty headings. 34 user-facing bullet entries (not commit messages). Keep a Changelog format. Version bump from 0.1.0 \u2192 1.0.0 was a pre-pipeline decision (package.json was already at 1.0.0 when this v5 run started); pipeline did not auto-bump. Major bump is justified by behavioural changes documented in the CHANGELOG (Slider data-dragging now fires on pointermove not pointerdown; TabPanel classes.root composes additively with className) and by reaching first-stable-release milestone. CHANGELOG-vs-package.json version match verified.",
-    "publishDryRun": "PASS - all 9 step-19 checks PASS (or correctly handled) 2026-04-28T01:19:43Z. (1) Pipeline state \u2014 all prior steps PASS, failedStep null, confidence MEDIUM (correctly derived from 5 deferred items per step-04 rule; not a defect). (2) Clean build \u2014 DEFERRED to avoid `rm -rf node_modules` destructive op; equivalent freshness was verified in step 17 cycle 2 (clean build:lib + 0 TS errors + 0 lint errors + 2992/2992 tests). (3) npm pack --dry-run \u2014 PASS, 371.8KB / 373 files / chumlab-ui-1.0.0.tgz. (4) Tarball inspection \u2014 PASS, real tarball generated at 371.8KB. (5) Local install verification \u2014 PASS in /tmp/chumlab-verify: fresh project, installed the tarball + react^19 + react-dom^19, ran ReactDOMServer.renderToString on subpath imports \u2014 Button (452 chars), Input (898 chars), Tooltip (66 chars) all rendered without errors. Note: barrel import from `@chumlab/ui` pulls DatePicker which requires date-fns (optional peer) \u2014 subpath imports are the documented recommended pattern and they work cleanly. (6) Tarball sanity scan \u2014 PASS, 0 forbidden patterns (no src/, no .test., no .ai.md, no .schema.json, no .env, no tsconfig.json, no vitest.config, no node_modules, no .eslintrc); README.md \u2713 and LICENSE \u2713 present. (7) npm publish --dry-run \u2014 PASS, output `+ @chumlab/ui@1.0.0`, zero errors. (8) Registry collision check \u2014 PASS, npm view returned 404 (version 1.0.0 is available on npm). (9) Manual sanity \u2014 USER_ACTION_REQUIRED: visit npmjs.com/package/@chumlab/ui and github.com/chumlabhq/ui to verify reachability before publish.",
+    "aiIndex": "PASS - /ai/component-index.json regenerated 2026-04-28T01:01:02Z (file was deleted during the v4→v5 migration but the validation field carried a stale PASS claim; rebuilt programmatically from the 30 .schema.json + .ai.md files). Categories: form 16, navigation 4, display 4, overlay 3, feedback 2, layout 1. Each entry references its actual schema, knowledge (post DOC-NAMING-001 rename), demo, and source path.",
+    "performance": "FAIL - 2 hard-fail bundles, re-measured 2026-09-02 from a real build:lib. Table 15.30KB gzipped against a 10KB leaf hard-fail; DatePicker 12.32KB against a 12KB date-class hard-fail. @tanstack/react-table, date-fns, clsx and tailwind-merge are all external (vite.config.ts:131), so these are the components' own code. 6 more over class target, none over hard fail: TimePicker 10.80 (date target 10), InternationalPhoneInput 10.46 (locale target 10), AccordionShimmer 8.59, Dropdown 6.90, AvatarBadge 6.13, Stepper 5.80 (leaf target 5). Composite-form components all clear: CascadingDropdown 9.05, MSSD 7.71, SearchableDropdown 7.70, MSD 7.09. The previous record read PASS on 2026-04-28 numbers - DatePicker 10.25KB, Table 6.2KB - that had not been re-measured since. AUDIT-GAP 7.2 already caught DatePicker at 12.63KB, past its hard fail, while the record still said 10.25. Measured on dist/shared/<Name>-<hash>.js, the component's own chunk: folding in dist/components/<Name>/** reports InternationalPhoneInput at 52.58KB by counting the opt-in ./phone-validators entry that carries libphonenumber on purpose and that no default consumer loads.",
+    "changelog": "PASS - CHANGELOG.md [1.0.0] - 2026-04-28 entry verified 2026-04-28T01:16:46Z. 4 sections (Added, Changed, Fixed, Deferred), no empty headings. 34 user-facing bullet entries (not commit messages). Keep a Changelog format. Version bump from 0.1.0 → 1.0.0 was a pre-pipeline decision (package.json was already at 1.0.0 when this v5 run started); pipeline did not auto-bump. Major bump is justified by behavioural changes documented in the CHANGELOG (Slider data-dragging now fires on pointermove not pointerdown; TabPanel classes.root composes additively with className) and by reaching first-stable-release milestone. CHANGELOG-vs-package.json version match verified.",
+    "publishDryRun": "PASS - all 9 step-19 checks PASS (or correctly handled) 2026-04-28T01:19:43Z. (1) Pipeline state — all prior steps PASS, failedStep null, confidence MEDIUM (correctly derived from 5 deferred items per step-04 rule; not a defect). (2) Clean build — DEFERRED to avoid `rm -rf node_modules` destructive op; equivalent freshness was verified in step 17 cycle 2 (clean build:lib + 0 TS errors + 0 lint errors + 2992/2992 tests). (3) npm pack --dry-run — PASS, 371.8KB / 373 files / chumlab-ui-1.0.0.tgz. (4) Tarball inspection — PASS, real tarball generated at 371.8KB. (5) Local install verification — PASS in /tmp/chumlab-verify: fresh project, installed the tarball + react^19 + react-dom^19, ran ReactDOMServer.renderToString on subpath imports — Button (452 chars), Input (898 chars), Tooltip (66 chars) all rendered without errors. Note: barrel import from `@chumlab/ui` pulls DatePicker which requires date-fns (optional peer) — subpath imports are the documented recommended pattern and they work cleanly. (6) Tarball sanity scan — PASS, 0 forbidden patterns (no src/, no .test., no .ai.md, no .schema.json, no .env, no tsconfig.json, no vitest.config, no node_modules, no .eslintrc); README.md ✓ and LICENSE ✓ present. (7) npm publish --dry-run — PASS, output `+ @chumlab/ui@1.0.0`, zero errors. (8) Registry collision check — PASS, npm view returned 404 (version 1.0.0 is available on npm). (9) Manual sanity — USER_ACTION_REQUIRED: visit npmjs.com/package/@chumlab/ui and github.com/chumlabhq/ui to verify reachability before publish.",
     "readme": "PASS - README.md present at repo root, 329 lines (deliberately exceeds spec's 200-line guideline to keep the full component table + styling examples + FAQ in one place; trimming would degrade rather than improve). All required sections present (30-second example, why, install/import, components, styling, dark mode, a11y, browser support, dev, contributing, FAQ, license). Code blocks syntactically valid TS/bash. Zero internal AI-infrastructure references (.ai.md, .schema.json, embeddings, /ai/ paths). External link reachability not verified in this run. Verified 2026-04-28",
-    "schema": "PASS - 31 .schema.json files (30 published + BrandLogo) using JSON Schema draft format ($schema/title/description/type/properties/required) \u2014 industry-standard, ajv-validatable. Project chose this over the pipeline spec's custom flat format (name/category/states/a11y/theme/ssr/complexity); both convey component contracts but the JSON Schema variant is interoperable with existing tooling. Verified 2026-04-28",
-    "semanticText": "PASS - /ai/semantic-text.json regenerated 2026-04-28T01:04:37Z (file was deleted in v4\u2192v5 migration; rebuilt programmatically by extracting tagline + Quick Answer + schema description for each of the 30 components and composing a 80-200 word grounded paragraph). Stats: avg 109 words, min 86, max 139, 0 entries outside the 80-200 range. No marketing language; component names repeated for embedding clustering; props from .schema.json mentioned for retrieval accuracy. Ready for downstream embedding pipeline (OpenAI/Cohere/sentence-transformers).",
-    "npmAudit": "PASS - all 14 step-17 checks pass after blocker fixes 2026-04-28T01:14:28Z. (1) package.json \u2014 name/version/license/repo/bugs/homepage/keywords valid + author now set to {Chumlab, hello@chumlab.com, https://chumlab.com}. (2) Entry points \u2014 main/module/types/31 exports all valid. (3) Build output \u2014 tsconfig.lib.json now excludes src/contexts, src/redux, and the marketing flat files in src/components/, so dist/ contains only components/, shared/, utils/, and root index.{cjs,js,d.ts}. (4) Files whitelist [dist, llms.txt, llms-full.txt, README.md, LICENSE]; npm pack ships 373 files at 371.8KB gzipped (was 389/378.9KB before the leak fix \u2014 saved 16 files / 7KB). (5) Dependencies \u2014 react/react-dom in peerDeps, @tanstack/react-table + date-fns optional. (6) Tree shaking \u2014 sideEffects:['*.css'], per-component subpath exports verified. (7) TypeScript \u2014 RE-VERIFIED 2026-09-02 with `tsc --build`: 0 errors. The original reading used `tsc --noEmit`, which is a no-op against this root config and proved nothing; the .d.ts emit claim came from `tsc --project tsconfig.lib.json`, which is scoped and did run. (8) SSR safety \u2014 carried PASS. (9) README \u2014 present, no internal AI infra refs. (10) LICENSE \u2014 present, MIT. (11) CHANGELOG \u2014 [1.0.0] - 2026-04-28 entry added with full Added/Changed/Fixed/Deferred sections. (12) npm pack dry-run \u2014 clean, no source/test/internal files. (13) Build verification \u2014 clean. (14) Version readiness \u2014 0 console.log/debugger/TODO in src/components.",
-    "build": "PASS - npm run build (tsc -b && vite build) clean as of 2026-04-28T00:17:35Z; dist/ built; gzip 695kB (chunk-size warning, not fatal)",
+    "schema": "PASS - 31 .schema.json files (30 published + BrandLogo) using JSON Schema draft format ($schema/title/description/type/properties/required) — industry-standard, ajv-validatable. Project chose this over the pipeline spec's custom flat format (name/category/states/a11y/theme/ssr/complexity); both convey component contracts but the JSON Schema variant is interoperable with existing tooling. Verified 2026-04-28",
+    "semanticText": "PASS - /ai/semantic-text.json regenerated 2026-04-28T01:04:37Z (file was deleted in v4→v5 migration; rebuilt programmatically by extracting tagline + Quick Answer + schema description for each of the 30 components and composing a 80-200 word grounded paragraph). Stats: avg 109 words, min 86, max 139, 0 entries outside the 80-200 range. No marketing language; component names repeated for embedding clustering; props from .schema.json mentioned for retrieval accuracy. Ready for downstream embedding pipeline (OpenAI/Cohere/sentence-transformers).",
+    "npmAudit": "PASS - all 14 step-17 checks pass after blocker fixes 2026-04-28T01:14:28Z. (1) package.json — name/version/license/repo/bugs/homepage/keywords valid + author now set to {Chumlab, hello@chumlab.com, https://chumlab.com}. (2) Entry points — main/module/types/31 exports all valid. (3) Build output — tsconfig.lib.json now excludes src/contexts, src/redux, and the marketing flat files in src/components/, so dist/ contains only components/, shared/, utils/, and root index.{cjs,js,d.ts}. (4) Files whitelist [dist, llms.txt, llms-full.txt, README.md, LICENSE]; npm pack RE-MEASURED 2026-09-02: 1136 files, 1.7MB packed / 5.5MB unpacked. The recorded 373 files / 371.8KB predates the per-flag chunk split, which emits 250 flag chunks in each of two formats plus types; those are opt-in and tree-shaken, so the default entry is unaffected (assert-flag-bundle.mjs gates it), but the package figures in this record were four years of drift out of date. (5) Dependencies — react/react-dom in peerDeps, @tanstack/react-table + date-fns optional. (6) Tree shaking — sideEffects:['*.css'], per-component subpath exports verified. (7) TypeScript — RE-VERIFIED 2026-09-02 with `tsc --build`: 0 errors. The original reading used `tsc --noEmit`, which is a no-op against this root config and proved nothing; the .d.ts emit claim came from `tsc --project tsconfig.lib.json`, which is scoped and did run. (8) SSR safety — carried PASS. (9) README — present, no internal AI infra refs. (10) LICENSE — present, MIT. (11) CHANGELOG — [1.0.0] - 2026-04-28 entry added with full Added/Changed/Fixed/Deferred sections. (12) npm pack dry-run — clean, no source/test/internal files. (13) Build verification — clean. (14) Version readiness — 0 console.log/debugger/TODO in src/components.",
+    "build": "PASS - `npm run build:lib` clean, re-measured 2026-09-02 against the dist this record's fingerprint covers. tokens -> vite lib build -> tsc --project tsconfig.lib.json -> styles. All five postbuild:lib assertions pass: phone bundle libphonenumber-free on the default entry, 250 per-flag chunks in both formats, styles.css 602 rules with 562 selectors confined to .cl-s and no preflight, 1128 built files carrying no fixture-harness code. The previous reading described `npm run build` (the app bundle, gzip 695kB, 2026-04-28); this one describes the library build, which is what the other three dist-derived records measure.",
+    "distFingerprint": "sha256:1973efbf62ef42535f918384c2f3c611:1130",
+    "distFingerprintNote": "sha256 of the shipped .js/.cjs/.mjs/.d.ts/.css under dist/, written by `node scripts/assert-dist-records.mjs --stamp` only after the dist-derived records are re-measured, and cleared by `postbuild:lib` because a new build means they no longer describe anything. null = never captured: the records below predate the guard (GATE-HONESTY 1.1), and `npm run verify:dist-records` fails until someone re-measures and stamps. Records it covers: validation.build, validation.performance, validation.npmAudit, issues.high[8].evidence.",
     "lint": "PASS - eslint reports 0 errors, 1 pre-existing warning (ThemeContext fast-refresh DX) verified 2026-04-28",
-    "coverage": "PASS - tests 65.88% \u2265 65% floor per run.md STRICT MODE (lowered from 80% via option-B at 2026-04-28T00:24:16Z; ratchet-upward-only rule active)",
+    "coverage": "PASS - tests 65.88% ≥ 65% floor per run.md STRICT MODE (lowered from 80% via option-B at 2026-04-28T00:24:16Z; ratchet-upward-only rule active)",
     "step04Cycle2": {
       "runAt": "2026-04-28T00:21:53Z",
       "verdict": "NOT SAFE TO SHIP",
@@ -883,7 +885,7 @@
         "security": "PASS"
       },
       "failingCheck": "tests (sub-check: coverage)",
-      "resolvedBy": "Option B applied at 2026-04-28T00:24:16Z \u2014 coverage threshold lowered 80% \u2192 65% in run.md + 04-validate.md with ratchet-upward-only rule"
+      "resolvedBy": "Option B applied at 2026-04-28T00:24:16Z — coverage threshold lowered 80% → 65% in run.md + 04-validate.md with ratchet-upward-only rule"
     },
     "step04Cycle3": {
       "runAt": "2026-04-28T00:24:16Z",
@@ -896,10 +898,10 @@
         "typescript": "PASS (tsc --build: 0 errors, re-verified 2026-09-02). Recorded at the time from `tsc --noEmit`, a no-op against the root solution config.",
         "build": "PASS (tsc -b && vite build succeeds; dist/ produced; gzip 695kB main bundle)",
         "ssr": "PASS",
-        "lint": "PASS (0 errors; 1 pre-existing warning \u2264 baseline)",
+        "lint": "PASS (0 errors; 1 pre-existing warning ≤ baseline)",
         "security": "PASS (npm audit 0 vulns)"
       },
-      "policyChange": "Coverage floor lowered 80% \u2192 65% in run.md + 04-validate.md (option B). Ratchet-upward-only rule added: once a higher coverage % is reached and validated, the floor moves up and never down. Long-term target unchanged (80% then 90%)."
+      "policyChange": "Coverage floor lowered 80% → 65% in run.md + 04-validate.md (option B). Ratchet-upward-only rule added: once a higher coverage % is reached and validated, the floor moves up and never down. Long-term target unchanged (80% then 90%)."
     }
   },
   "confidence": "MEDIUM",

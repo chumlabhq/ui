@@ -220,15 +220,7 @@ test.describe("Stepper (fixtures)", () => {
   test("passes an axe audit", async ({ page }) => {
     await gotoFixture(page, "Stepper", "all-statuses");
     await injectAxe(page);
-    // `color-contrast` off, and only that: Stepper is one of the eighteen
-    // components on the `--cl-text-tertiary` baseline in
-    // docs/adr/002-unrenderable-keys.json. That is one token's contrast ratio
-    // awaiting a design decision, tracked and ratcheted by
-    // accessibility.spec.ts — not something this test should re-report.
-    await checkA11y(page, '[role="navigation"]', {
-      detailedReport: true,
-      axeOptions: { rules: { "color-contrast": { enabled: false } } },
-    });
+    await checkA11y(page, '[role="navigation"]', { detailedReport: true });
   });
 
   test("keeps every step inside a 375px viewport", async ({ page }) => {

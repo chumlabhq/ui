@@ -11,6 +11,7 @@ import {
 import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons";
 import { useControllableState } from "../../utils/useControllableState";
 import { cn } from "../../utils/scopedCn";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 import { mergeRefs } from "../../utils/mergeRefs";
 
 import { motionSafeClasses } from "../../utils/classLayers";
@@ -74,6 +75,14 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const generatedId = useId();
     const checkboxId = id || generatedId;
+
+    // A control nobody can name is a control nobody can use. Dev-only.
+    useAccessibleNameWarning("Checkbox", {
+      label,
+      "aria-label": (rest as Record<string, unknown>)["aria-label"],
+      "aria-labelledby": (rest as Record<string, unknown>)["aria-labelledby"],
+      title: (rest as Record<string, unknown>).title,
+    });
     const errorId = `${checkboxId}-error`;
     const descriptionId = `${checkboxId}-description`;
 

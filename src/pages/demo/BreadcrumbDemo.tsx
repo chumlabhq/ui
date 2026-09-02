@@ -145,7 +145,7 @@ const getClasses = (dark: boolean) => ({
     separator: dark ? "text-cl-text-secondary" : "text-cl-text-tertiary",
     icon: "shrink-0",
     link: `flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline dark:text-cl-accent dark:hover:text-cl-accent dark:hover:underline`,
-    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+    ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-bg-hover text-cl-text-secondary dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
  dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border`,
     dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
     dropdownItemDisabled: dark
@@ -157,7 +157,7 @@ const getClasses = (dark: boolean) => ({
  item: `flex items-center gap-1 px-4 py-2 text-sm rounded-full transition-all cursor-pointer bg-transparent text-cl-text-secondary hover:text-cl-text bg-white hover:bg-cl-bg-hover border border-cl-border hover:shadow-sm dark:text-cl-text-tertiary dark:hover:text-cl-text dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     itemActive: `flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-full border border-none cursor-default shadow-md bg-cl-text text-cl-bg dark:bg-cl-text dark:text-cl-bg`,
     separator: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
- ellipsisButton: `flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-white hover:bg-cl-bg-hover text-cl-text-tertiary border border-cl-border hover:shadow-sm dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary dark:border dark:border-cl-border`,
+ ellipsisButton: `flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-white hover:bg-cl-bg-hover text-cl-text-secondary border border-cl-border hover:shadow-sm dark:bg-cl-bg-elevated dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary dark:border dark:border-cl-border`,
  dropdown: `flex flex-col min-w-40 rounded-cl-lg shadow-lg py-2 bg-cl-bg-elevated border border-cl-border`,
     dropdownItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
   },

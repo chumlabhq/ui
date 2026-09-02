@@ -406,8 +406,8 @@ const PaginationDemo = () => {
                   classes={{
                     ...c.pagination,
                     root: "flex items-center",
-                    navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
-                    pageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+                    navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
+                    pageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
                     activePageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-white`,
                     pageButtons: "flex items-center gap-0.5",
                     prevIcon: "w-4 h-4",
@@ -780,9 +780,9 @@ const PaginationDemo = () => {
             onValueChange={setDataAttrPage}
             classes={{
               ...c.pagination,
-              navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
-              pageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
-              activePageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
+              navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
+              pageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
+              activePageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
             }}
           />
         </DemoWrapper>
@@ -803,8 +803,8 @@ const PaginationDemo = () => {
               classes={{
                 ...c.pagination,
                 root: "flex items-center",
-                navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
-                pageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
+                navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
+                pageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
                 activePageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-white`,
                 ellipsis: `px-1 text-cl-text-disabled`,
                 pageButtons: "flex items-center gap-0.5",
@@ -831,7 +831,7 @@ const PaginationDemo = () => {
               classes={{
                 ...c.pagination,
                 root: "flex items-center gap-0.5",
-                navButton: `p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-tertiary dark:hover:bg-cl-bg-elevated dark:text-cl-text-tertiary`,
+                navButton: `p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
                 pageButton: `px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
                 activePageButton:
                   "px-2 py-0.5 text-sm rounded bg-cl-accent text-white",

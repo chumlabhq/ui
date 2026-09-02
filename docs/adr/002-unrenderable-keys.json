@@ -108,35 +108,106 @@
   },
   "$comment5": "axeBaseline: accessibility violations recorded against fixture pages, by violation id, with the cause. e2e/accessibility.spec.ts fails on anything not listed, and on a listed entry that stops firing, so the list ratchets down only. Recorded rather than fixed where the fix is a design decision (the --cl-text-tertiary value) or sits in an area this phase does not touch (the combobox pattern).",
   "axeBaseline": {
-    "color-contrast": {
-      "count": 18,
-      "cause": "--cl-text-tertiary is 45% over the page ground (~3.4:1), under the 4.5:1 WCAG AA needs for text. It backs the `description` slot on ~15 components plus Breadcrumb, RadioButton, Stepper and Table. One token, not fifteen components \u2014 raising it or moving text slots to --cl-text-secondary is a design decision, and TabPanel's tabInactive was moved to secondary in this phase as the precedent.",
-      "components": [
-        "Breadcrumb",
-        "CascadingDropdown",
-        "Checkbox",
-        "DatePicker",
-        "Dropdown",
-        "Input",
-        "InternationalPhoneInput",
-        "MultiSelectDropdown",
-        "MultiSelectSearchableDropdown",
-        "OtpInput",
-        "RadioButton",
-        "SearchableDropdown",
-        "Slider",
-        "Stepper",
-        "Switch",
-        "Table",
-        "TextArea",
-        "TimePicker"
-      ]
-    },
     "button-name": {
       "count": 1,
       "cause": "InternationalPhoneInput's country trigger is a role=combobox button with no accessible name. The combobox pattern is explicitly out of scope for this phase (AUDIT-GAP 3.3/3.4).",
       "components": [
         "InternationalPhoneInput"
+      ]
+    }
+  },
+  "$comment6": "axeFixtureExpectations: which FIXTURES may carry which axe rule in the full sweep (e2e/accessibility-full.spec.ts, project a11y-full). Per-fixture, not per-rule: a rule waived globally would have hidden Avatar/with-status, which announced nothing. A finding on any fixture not listed here fails; a listed fixture that stops reporting fails too, so the list ratchets down.",
+  "axeFixtureExpectations": {
+    "label": {
+      "reason": "The fixture renders a bare control on purpose and must keep doing so \u2014 the library cannot force a consumer to label anything, and an external <label for> is legitimate. The silence was the defect, and it is fixed: these components now warn in dev via src/utils/useAccessibleNameWarning.ts. Every `labelled` fixture of each component is clean.",
+      "fixtures": [
+        "Checkbox/checked",
+        "Checkbox/default",
+        "Checkbox/indeterminate",
+        "Checkbox/loading",
+        "Input/default",
+        "Input/disabled",
+        "Input/loading",
+        "Input/with-adornments",
+        "Input/with-affixes",
+        "Input/with-counter",
+        "Input/with-value-clearable",
+        "TextArea/default",
+        "TextArea/disabled",
+        "TextArea/loading",
+        "TextArea/with-counter",
+        "TextArea/with-value-clearable"
+      ]
+    },
+    "label-title-only": {
+      "reason": "The same defect as `label`, reported under a different rule: `showCount` adds `aria-describedby`, and axe faults a described-but-unnamed control here. Neither Input nor TextArea sets a `title` attribute \u2014 verified \u2014 and nothing in the docs or .ai.md files proposes `title` as a labelling mechanism. Covered by the same dev warning, which calls out `title` explicitly.",
+      "fixtures": [
+        "Input/with-counter",
+        "TextArea/with-counter"
+      ]
+    },
+    "button-name": {
+      "reason": "56 of these are the role=combobox trigger with no accessible name, across six components \u2014 the combobox pattern, out of scope (AUDIT-GAP 3.3/3.4). The other 3 are Switch's role=switch button in the fixtures that pass no label, the same case as `label` above.",
+      "fixtures": [
+        "DatePicker/bounded",
+        "DatePicker/closed",
+        "DatePicker/disabled",
+        "DatePicker/loading",
+        "DatePicker/multiple",
+        "DatePicker/open",
+        "DatePicker/open-with-value",
+        "DatePicker/range",
+        "DatePicker/with-dropdowns",
+        "DatePicker/with-markers",
+        "DatePicker/with-presets",
+        "DatePicker/with-today-button",
+        "DatePicker/with-week-numbers",
+        "Dropdown/closed",
+        "Dropdown/disabled",
+        "Dropdown/loading",
+        "Dropdown/open",
+        "Dropdown/open-empty",
+        "Dropdown/open-keyboard-focus",
+        "Dropdown/open-with-selection",
+        "InternationalPhoneInput/country-open",
+        "InternationalPhoneInput/default",
+        "InternationalPhoneInput/disabled",
+        "InternationalPhoneInput/error",
+        "InternationalPhoneInput/labelled",
+        "InternationalPhoneInput/loading",
+        "InternationalPhoneInput/readonly",
+        "InternationalPhoneInput/success",
+        "InternationalPhoneInput/with-value",
+        "MultiSelectDropdown/chips-overflow",
+        "MultiSelectDropdown/closed",
+        "MultiSelectDropdown/disabled",
+        "MultiSelectDropdown/loading",
+        "MultiSelectDropdown/multi-value",
+        "MultiSelectDropdown/open",
+        "MultiSelectDropdown/open-empty",
+        "MultiSelectDropdown/open-keyboard-focus",
+        "MultiSelectDropdown/open-with-selection",
+        "MultiSelectSearchableDropdown/chips-overflow",
+        "MultiSelectSearchableDropdown/closed",
+        "MultiSelectSearchableDropdown/disabled",
+        "MultiSelectSearchableDropdown/loading",
+        "MultiSelectSearchableDropdown/multi-value",
+        "MultiSelectSearchableDropdown/open",
+        "MultiSelectSearchableDropdown/open-empty",
+        "MultiSelectSearchableDropdown/open-keyboard-focus",
+        "MultiSelectSearchableDropdown/open-search",
+        "MultiSelectSearchableDropdown/open-with-selection",
+        "SearchableDropdown/closed",
+        "SearchableDropdown/disabled",
+        "SearchableDropdown/loading",
+        "SearchableDropdown/open",
+        "SearchableDropdown/open-empty",
+        "SearchableDropdown/open-keyboard-focus",
+        "SearchableDropdown/open-search",
+        "SearchableDropdown/open-with-selection",
+        "Switch/checked",
+        "Switch/default",
+        "Switch/loading"
       ]
     }
   }

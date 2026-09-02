@@ -121,7 +121,7 @@ const getClasses = (dark: boolean) => ({
   },
   phoneDisabled: {
     input: `flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm opacity-50 cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-secondary border-cl-border bg-cl-bg-hover dark:text-cl-text-tertiary dark:placeholder:text-cl-text-secondary dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
-    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover text-cl-text-tertiary dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02] dark:text-cl-text-tertiary`,
+    countrySelectTrigger: `flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[130px] opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover dark:border dark:border-cl-text/5 dark:bg-cl-text/[0.02]`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-tertiary`,
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,

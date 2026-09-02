@@ -893,3 +893,334 @@ Not fixed — the task was to fix TabPanelDemo and report the rest. The change i
 mechanical (tertiary → secondary on 27 lines), but each demo needs its own axe
 pass afterwards, and thirteen of them hinge on the same `label` decision that
 `--cl-text-tertiary` itself is waiting on.
+
+---
+
+# Appendix I — `--cl-text-tertiary`, raised
+
+## The measurement
+
+| theme | token | was | on --cl-bg | on --cl-bg-hover |
+|---|---|---|---|---|
+| dark | tertiary | 45% | 4.02 FAIL | 4.09 FAIL |
+| light | tertiary | 50% | 3.53 FAIL | 3.46 FAIL |
+
+The minimum alpha clearing 4.5:1 on the worst surface is **0.4835 dark, 0.5822
+light**.
+
+## What was changed, and why both tokens moved
+
+Raising tertiary alone closes the gap to secondary. Measured as ΔL* on `--cl-bg`:
+
+| | current | tertiary raised alone | both raised |
+|---|---|---|---|
+| dark | 18.1 | 11.7 | **17.8** |
+| light | 19.0 | **7.8** | **18.0** |
+
+Light collapses to ΔL* 7.8 — the two weights become one. So the step moves as a
+unit:
+
+- dark: secondary `0.65 → 0.72`, tertiary `0.45 → 0.52`
+- light: secondary `0.70 → 0.80`, tertiary `0.50 → 0.62`
+
+**This is not what the instruction said.** It said to *lower* secondary if the
+two collapse. Lowering secondary moves it toward tertiary and collapses the gap
+further — and at a low enough value secondary fails 4.5:1 too. Raising it is the
+only adjustment that satisfies both stated goals. Flagged rather than assumed.
+
+## Result — every text token against every surface, both themes
+
+### dark (default)
+
+| token | bg | bg-elevated | bg-hover | bg-input |
+|---|---|---|---|---|
+| `--cl-text` | 17.62 | 16.91 | 16.63 | 17.62 |
+| `--cl-text-secondary` | 9.11 | 8.93 | 8.85 | 9.11 |
+| `--cl-text-tertiary` | 5.07 | 5.09 | 5.09 | 5.07 |
+| `--cl-text-disabled` | 2.35 exempt | 2.44 exempt | 2.46 exempt | 2.35 exempt |
+
+### light (`.light`)
+
+| token | bg | bg-elevated | bg-hover | bg-input |
+|---|---|---|---|---|
+| `--cl-text` | 18.75 | 17.80 | 17.28 | 18.75 |
+| `--cl-text-secondary` | 10.17 | 9.83 | 9.65 | 10.17 |
+| `--cl-text-tertiary` | 5.26 | 5.16 | 5.11 | 5.26 |
+| `--cl-text-disabled` | 2.27 exempt | 2.26 exempt | 2.25 exempt | 2.27 exempt |
+
+`--cl-text-disabled` is exempt by WCAG 1.4.3, which excludes inactive controls;
+holding it to 4.5:1 would make disabled indistinguishable from enabled. It is
+excluded from the contract by name, with that reason.
+
+## The gate
+
+`src/__tests__/contracts/contrast.contract.test.ts` — 27 assertions. It parses
+the values out of `src/index.css` rather than carrying its own copy, so a test
+that agrees with itself but not with the stylesheet is impossible.
+
+Proven falsifiable both ways:
+
+- restoring dark tertiary to 45% → *"`--cl-text-tertiary` on `--cl-bg` is 4.02:1,
+  under WCAG AA's 4.5:1 for text"*, three surfaces red
+- collapsing secondary onto tertiary → *"secondary and tertiary are only ΔL* 3.6
+  apart"*
+
+## Consequences
+
+- `axeBaseline.color-contrast` went **18 → 0**. `accessibility.spec.ts`'s
+  stale-baseline ratchet caught it and demanded the entry be removed; it is gone,
+  leaving `button-name` as the only baselined rule.
+- The five fixture axe tests that disabled `color-contrast` citing that baseline
+  no longer need to. **No rule is disabled in any fixture-scoped axe test.**
+- The 72 demo overrides that restate the library's own tertiary resolve without
+  being edited — confirmed by the full sweep finding **zero** contrast violations
+  across 276 fixtures.
+
+---
+
+# Appendix J — the demo overrides, corrected
+
+**The 27 in Appendix H was wrong. The real number is 15.**
+
+Twelve of the twenty-seven were false positives: eleven `label` entries and one
+`fallback`, all sitting at the top level of a demo's own style factory beside
+`card`, `kbd` and `note`, used as `className={s.label}` on the demo's section
+headings. They are demo chrome, not `classes` overrides. Deleting them, as the
+instruction for the thirteen `label`s directed, would have broken the demos
+without touching a single component.
+
+The over-count came from matching a key name against the library's `classes`
+vocabulary without checking whether the enclosing object is ever handed to a
+`classes` prop. Three successive scanners disagreed before I stopped and read the
+files.
+
+## The 15 real overrides, all fixed
+
+| Demo | Line(s) | Key | Library default | Action |
+|---|---|---|---|---|
+| PaginationDemo | 409, 783, 806, 834 | `navButton` | `text-cl-text-secondary` | named the right token |
+| PaginationDemo | 410, 784, 807 | `pageButton` | `dark:text-cl-text-secondary` | named the right token |
+| PaginationDemo | 785 | `activePageButton` | — | named the right token |
+| BreadcrumbDemo | 148, 160 | `ellipsisButton` | `text-cl-text-secondary` | named the right token |
+| CountryFlagDemo | 34 | `count` | `text-cl-text-secondary` | named the right token |
+| StepperDemo | 776 | `indicator` | sets no colour | named the right token |
+| InternationalPhoneInputDemo | 124 | `countrySelectTrigger` | sets no colour | **removed** — `opacity-50` already reads as disabled |
+| ModalDemo | 422 | `closeButton` | sets no colour | **removed** — the default inherits `--cl-text` |
+| TableDemo | 3940 | `expandIcon` | `""` | **removed** — both ternary branches were identical |
+
+TabPanelDemo's twenty, fixed in the previous phase, are not counted here.
+
+---
+
+# Appendix K — the full accessibility sweep
+
+`e2e/accessibility-full.spec.ts`, project `a11y-full`. Excluded from every other
+project by `testIgnore`, so it never runs in a default local pass.
+
+**276 fixtures, 35 registry entries, 353s (5m53s), 84 violations.** Written to
+`e2e/.a11y-full-report.json` as well as logged — a record built from scrollback is
+the kind that outlives its run.
+
+| Rule | Nodes | Where |
+|---|---|---|
+| `button-name` | 59 | DatePicker 13, MultiSelectSearchableDropdown 10, IPI 9, MultiSelectDropdown 9, SearchableDropdown 8, Dropdown 7, **Switch 3** |
+| `label` | 16 | Input 7, TextArea 5, Checkbox 4 |
+| `heading-order` | 7 | Accordion |
+| `label-title-only` | 2 | Input 1, TextArea 1 |
+
+**Zero `color-contrast`.**
+
+### What they are
+
+- **56 of the 59 `button-name`** are the `role="combobox"` trigger with no
+  accessible name, on the six dropdown-family components. This is the combobox
+  pattern, on the do-not-touch list and already the only entry in `axeBaseline`.
+  The sweep shows it is six components wide, not the one the baseline names.
+- **3 `button-name` on Switch** — `<button role="switch">` in the `default`,
+  `checked` and `loading` fixtures, which pass no label. Every `labelled` fixture
+  is clean. A consumer must name a switch; the fixture does not.
+- **16 `label` + 2 `label-title-only`** — Checkbox, Input and TextArea fixtures
+  that render the bare control. `accessibility.spec.ts` already prefers the
+  `labelled` fixture for exactly this reason, and every `labelled` variant is
+  clean.
+- **7 `heading-order`** — Accordion's `<h3>` triggers on a fixture page that
+  renders no `h1`/`h2`. A harness artefact, not the component.
+
+Nothing was fixed, as instructed. On this reading the sweep found **no new
+library defect** beyond the six-component reach of the known combobox gap — the
+one it did find, Avatar's `with-status` announcing nothing, was caught building
+it and is already fixed.
+
+---
+
+# Appendix L — two records closed
+
+## The dist content-hash guard
+
+`scripts/assert-dist-records.mjs`. Four records describe `dist/`:
+`validation.build`, `validation.performance`, `validation.npmAudit`, and
+`issues.high[8].evidence` (the DatePicker chunk size). GATE-HONESTY 1.1 found
+that the three `assert-*.mjs` scripts cannot read a stale dist — but nothing
+detected drift *between* runs, and AUDIT-GAP 7.2 caught the DatePicker chunk at
+12.63kb, past its hard fail, while the record still said 10.25.
+
+`validation.distFingerprint` is a sha256 over the shipped `.js/.cjs/.mjs/.d.ts/.css`.
+
+| Mode | Who runs it | Effect |
+|---|---|---|
+| default | `npm run verify:dist-records`, and `04-validate.md` | fails if the fingerprint is missing or has drifted, naming the four stale records |
+| `--invalidate` | `postbuild:lib` | clears it — a new dist means the numbers describe the previous one |
+| `--stamp` | after the four values are re-measured | records the current fingerprint |
+
+Build invalidates, measurement stamps. Proven end to end: stamp → verify passes →
+append one byte to a dist CSS file → *"dist has changed since these records were
+written"* → restore → passes → invalidate.
+
+**Left invalidated**, which is the honest state: `dist/` currently holds an app
+build, not the `build:lib` output those records were written against, so
+`npm run verify:dist-records` fails until someone re-measures.
+
+## README
+
+`- 44px+ touch targets` removed (ADR 003 D2 — no claim without a gate). Nothing
+ever measured it, and the OtpInput fixture sweep shows slots at 32px, so it was
+also false. The `prefers-reduced-motion` line stays: `reduced-motion.contract`
+gates it in both directions.
+
+---
+
+# Appendix M — the last four
+
+## 1. `heading-order` — the h1 was already there; the skip was the problem
+
+`FixtureRoute` already rendered a visually-hidden `h1`. The seven Accordion
+nodes persisted because `heading-order` faults a **skip**, not an absence:
+Accordion's trigger defaults to `h3` (`DEFAULT_HEADING_LEVEL`), so `h1 → h3`
+jumps a level.
+
+Added the missing rung — a visually-hidden `h2` beside the `h1`, both outside
+`[data-fixture]` so a component-scoped audit does not inherit them. All seven
+clear; the full sweep drops 84 → 77.
+
+## 2 & 3. `label` and `label-title-only` are one defect, not two
+
+**Item 3's premise does not hold.** Neither Input nor TextArea sets a `title`
+attribute — the rendered nodes carry only `aria-describedby="…-count"`:
+
+```
+<input id="_r_1_" maxlength="40" … aria-describedby="_r_1_-count" type="text" value="hi">
+  Only title used to generate label for form element
+```
+
+axe's rule name mentions `title`; what actually fires it is a control that is
+*described* but not *named*. The `with-counter` fixture adds `aria-describedby`
+for the character count, so the same missing-name defect reports under a second
+rule. **18 nodes, one cause.**
+
+### The docs check, before touching anything
+
+Grepped every `.ai.md`, `docs/**` and `README.md` for `title` near
+label/aria/accessibility wording. **Nothing proposes the HTML `title` attribute
+as a labelling mechanism.** Every hit is one of two innocents:
+
+- `title="Basic Usage"` in the demo-reference tables — the demo *section*
+  heading attribute, in 17 `.ai.md` files
+- Modal's `title` **prop**, which renders a real heading and is auto-linked via
+  `aria-labelledby` (`MODAL.ai.md:298`) — a correct mechanism, not this one
+- `docs/adr/002-classes-key-vocabulary.md:42`, where `title` is a `classes` key
+  name for the header slot
+
+**No documentation changed.**
+
+### The warning
+
+`src/utils/useAccessibleNameWarning.ts`, wired into Input, TextArea and Checkbox.
+Warns once per instance when none of `label` / `aria-label` / `aria-labelledby`
+is present, and names `title` explicitly when it is the only thing there.
+Guarded by `import.meta.env.DEV`, so the branch and the strings leave the
+production build. It warns from an effect rather than during render —
+`react-hooks/refs` forbids reading the once-guard ref in the render pass.
+
+The message says the warning may be a false positive if the consumer supplies an
+external `<label for>`, because it can be, and a warning that overstates its
+case gets muted.
+
+21 tests in `src/components/Input/__tests__/accessibleName.test.tsx`: silent when
+named three different ways, loud when not, the `title` special case, once per
+instance across re-renders, and twice for two instances.
+
+### The expectation list
+
+`docs/adr/002-unrenderable-keys.json` → `axeFixtureExpectations`, and
+`accessibility-full.spec.ts` now asserts against it in both directions:
+
+- a finding on a fixture with no recorded expectation **fails**
+- an expectation that no longer reports **fails as stale**
+
+Per **fixture**, not per rule. A rule waived across the board is what would have
+hidden `Avatar/with-status` — the finding this sweep exists for. 16 `label`
+fixtures, 2 `label-title-only`, 59 `button-name`; `heading-order` is not listed,
+because it is fixed.
+
+The sweep is now a gate, not a report: **276 fixtures, 349s, 77 violations, all
+accounted for.**
+
+## 4. The dist records, earned
+
+`npm run build:lib` ran clean — all five `postbuild:lib` assertions pass, and the
+guard invalidated the fingerprint on the way out, as designed.
+
+### Bundle sizes, re-measured
+
+Measured on `dist/shared/<Name>-<hash>.js`, the component's own chunk.
+`@tanstack/react-table`, `date-fns`, `clsx` and `tailwind-merge` are external
+(`vite.config.ts:131`), so these are the components' own bytes.
+
+| component | gzip KB | class | target | hard fail | status |
+|---|---|---|---|---|---|
+| Table | 15.30 | leaf | 5 | 10 | **HARD FAIL** |
+| DatePicker | 12.32 | date | 10 | 12 | **HARD FAIL** |
+| TimePicker | 10.80 | date | 10 | 12 | over target |
+| InternationalPhoneInput | 10.46 | locale | 10 | 12 | over target |
+| CascadingDropdown | 9.05 | composite | 10 | 12 | ok |
+| AccordionShimmer | 8.59 | leaf | 5 | 10 | over target |
+| MultiSelectSearchableDropdown | 7.71 | composite | 10 | 12 | ok |
+| SearchableDropdown | 7.70 | composite | 10 | 12 | ok |
+| MultiSelectDropdown | 7.09 | composite | 10 | 12 | ok |
+| Dropdown | 6.90 | leaf | 5 | 10 | over target |
+| AvatarBadge | 6.13 | leaf | 5 | 10 | over target |
+| Stepper | 5.80 | leaf | 5 | 10 | over target |
+
+**Two hard fails.** `validation.performance` read PASS on numbers from
+2026-04-28 — DatePicker 10.25, Table 6.2 — and now reads FAIL.
+
+DatePicker was the one you named: recorded 10.25, AUDIT-GAP 7.2 caught 12.63,
+今 12.32. It has been over its 12 KB hard fail for some time and the record said
+PASS throughout. **Table is the bigger surprise** — 6.2 → 15.30 KB against a
+10 KB ceiling, and nobody had looked.
+
+One measurement trap worth recording: folding in `dist/components/<Name>/**`
+reports InternationalPhoneInput at **52.58 KB**, because that path includes the
+opt-in `./phone-validators` entry carrying libphonenumber on purpose. The real
+default entry is 10.46 KB, and `assert-phone-bundle.mjs` already gates the
+separation. Measure the component chunk, not the directory.
+
+### Package
+
+`npm pack --dry-run`: **1136 files, 1.7 MB packed, 5.5 MB unpacked**, against a
+recorded 373 files / 371.8 KB. The growth is the per-flag chunk split — 250 flag
+chunks in each of two formats plus types — which is opt-in and tree-shaken, so
+the default entry is unaffected. The record was simply years stale.
+
+### Green for the right reason
+
+```
+✓ stamped sha256:1973efbf62ef42535f918384c2f3c611:1130
+✓ dist-derived records match dist/ (sha256:1973efbf62ef42535f918384c2f3c611:1130)
+```
+
+All four records — `validation.build`, `validation.performance`,
+`validation.npmAudit`, `issues.high[8].evidence` — were re-measured against this
+exact artifact before the stamp. `validation.build` was re-scoped from the app
+build to `build:lib`, since that is what the other three and the fingerprint
+describe.

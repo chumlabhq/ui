@@ -42,6 +42,11 @@ Run each check. Each is independent and must PASS.
 
 ### 4. TypeScript
 
+- [ ] `npm run verify:dist-records` passes — the four dist-derived records
+      (validation.build, .performance, .npmAudit, issues.high[8].evidence) are
+      tied to a dist fingerprint. `postbuild:lib` clears it, so after any build
+      they read as unverified until re-measured and re-stamped. Read the
+      filesystem, not the record (GATE-HONESTY 1.1).
 - [ ] `npm run typecheck` passes — it runs `tsc --build` and first proves the
       gate can fail by planting a type error. Never `tsc --noEmit`: the root
       tsconfig.json is a solution file with `files: []`, so `--noEmit`

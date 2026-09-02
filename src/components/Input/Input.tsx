@@ -11,6 +11,7 @@ import { DEFAULT_INPUT_CLASSES, UNSTYLED_INPUT_CLASSES } from "./utils/constants
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/scopedCn";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
@@ -80,6 +81,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const generatedId = useId();
     const inputId = id || generatedId;
+
+    // A control nobody can name is a control nobody can use. Dev-only.
+    useAccessibleNameWarning("Input", {
+      label,
+      "aria-label": (rest as Record<string, unknown>)["aria-label"],
+      "aria-labelledby": (rest as Record<string, unknown>)["aria-labelledby"],
+      title: (rest as Record<string, unknown>).title,
+    });
     const errorId = `${inputId}-error`;
     const successId = `${inputId}-success`;
     const descriptionId = `${inputId}-description`;

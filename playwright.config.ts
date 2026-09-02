@@ -14,25 +14,43 @@ export default defineConfig({
     video: "retain-on-failure",
   },
   projects: [
+    /**
+     * The full accessibility sweep: every fixture of every component, not one
+     * per component. Minutes long, so it is its own project and every other
+     * project ignores it — `npx playwright test --project=a11y-full`.
+     *
+     * It has its own project rather than a tag because the sweep needs a much
+     * longer timeout than any behavioural spec should be allowed.
+     */
+    {
+      name: "a11y-full",
+      testMatch: /accessibility-full\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"] },
+    },
     {
       name: "chromium",
+      testIgnore: /accessibility-full\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
     },
     {
       name: "firefox",
+      testIgnore: /accessibility-full\.spec\.ts/,
       use: { ...devices["Desktop Firefox"] },
     },
     {
       name: "webkit",
+      testIgnore: /accessibility-full\.spec\.ts/,
       use: { ...devices["Desktop Safari"] },
     },
     // Mobile viewports
     {
       name: "Mobile Chrome",
+      testIgnore: /accessibility-full\.spec\.ts/,
       use: { ...devices["Pixel 5"] },
     },
     {
       name: "Mobile Safari",
+      testIgnore: /accessibility-full\.spec\.ts/,
       use: { ...devices["iPhone 12"] },
     },
   ],

@@ -773,7 +773,7 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={{
                 ...c.stepper,
-                indicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-tertiary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-tertiary dark:data-[status=pending]:border-white/15`,
+                indicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-secondary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-secondary dark:data-[status=pending]:border-white/15`,
                 indicatorActive: "",
                 indicatorCompleted: "",
                 indicatorPending: "",

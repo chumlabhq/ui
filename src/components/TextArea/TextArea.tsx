@@ -12,6 +12,7 @@ import { DEFAULT_TEXTAREA_CLASSES, UNSTYLED_TEXTAREA_CLASSES } from "./utils/con
 import { FieldLabel } from "../../utils/FieldLabel";
 import { FieldWrapper } from "../../utils/FieldWrapper";
 import { cn } from "../../utils/scopedCn";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 
@@ -80,6 +81,14 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ) => {
     const generatedId = useId();
     const textAreaId = id || generatedId;
+
+    // A control nobody can name is a control nobody can use. Dev-only.
+    useAccessibleNameWarning("TextArea", {
+      label,
+      "aria-label": (rest as Record<string, unknown>)["aria-label"],
+      "aria-labelledby": (rest as Record<string, unknown>)["aria-labelledby"],
+      title: (rest as Record<string, unknown>).title,
+    });
     const errorId = `${textAreaId}-error`;
     const successId = `${textAreaId}-success`;
     const descriptionId = `${textAreaId}-description`;

@@ -24,5 +24,10 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  // Test files are typechecked by tsconfig.test.json, which is the config that
+  // has node and vitest types. Leaving them here as well means a test using
+  // `node:fs` fails the build for a missing type the test config provides.
+  // Fixtures are deliberately NOT excluded — they are typechecked here.
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
 }

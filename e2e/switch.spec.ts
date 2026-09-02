@@ -385,14 +385,7 @@ test.describe("Switch (fixtures)", () => {
     test(`passes an axe audit: ${fixture}`, async ({ page }) => {
       await gotoFixture(page, "Switch", fixture);
       await injectAxe(page);
-      // `color-contrast` off, and only that: Switch is on the
-      // `--cl-text-tertiary` baseline in docs/adr/002-unrenderable-keys.json,
-      // one token awaiting a design decision and already ratcheted by
-      // accessibility.spec.ts.
-      await checkA11y(page, "[data-fixture]", {
-        detailedReport: true,
-        axeOptions: { rules: { "color-contrast": { enabled: false } } },
-      });
+      await checkA11y(page, "[data-fixture]", { detailedReport: true });
     });
   }
 });
