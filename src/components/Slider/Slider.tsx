@@ -140,8 +140,6 @@ function Thumb({
 
   const thumbClassName = cn(
     classes.thumb,
-    isDragging && classes.thumbActive,
-    disabled && classes.thumbDisabled,
   );
 
   return (
@@ -305,11 +303,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         track: classesProp?.track ?? baseClasses.track,
         range: classesProp?.range ?? baseClasses.range,
         thumb: classesProp?.thumb ?? baseClasses.thumb,
-        thumbActive: classesProp?.thumbActive ?? baseClasses.thumbActive,
-        thumbDisabled: classesProp?.thumbDisabled ?? baseClasses.thumbDisabled,
         valueText: classesProp?.valueText ?? baseClasses.valueText,
         marker: classesProp?.marker ?? baseClasses.marker,
-        markDotActive: classesProp?.markDotActive ?? baseClasses.markDotActive,
         message: classesProp?.message ?? baseClasses.message,
       }),
       [classesProp, baseClasses],
@@ -637,7 +632,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                   </div>
                 ) : (
                   <div
-                    className={cn(mc.marker, inRange && mc.markDotActive) || undefined}
+                    className={mc.marker || undefined}
                     data-state={inRange ? "active" : undefined}
                     style={{
                       position: "absolute",

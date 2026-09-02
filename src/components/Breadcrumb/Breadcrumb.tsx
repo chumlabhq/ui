@@ -359,8 +359,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         root: classesProp?.root ?? baseClasses.root,
         list: classesProp?.list ?? baseClasses.list,
         item: classesProp?.item ?? baseClasses.item,
-        itemActive: classesProp?.itemActive ?? baseClasses.itemActive,
-        itemDisabled: classesProp?.itemDisabled ?? baseClasses.itemDisabled,
         link: classesProp?.link ?? baseClasses.link,
         separator: classesProp?.separator ?? baseClasses.separator,
         itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
@@ -368,7 +366,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         ellipsisTrigger: classesProp?.ellipsisTrigger ?? baseClasses.ellipsisTrigger,
         content: classesProp?.content ?? baseClasses.content,
         collapsedItem: classesProp?.collapsedItem ?? baseClasses.collapsedItem,
-        dropdownItemDisabled: classesProp?.dropdownItemDisabled ?? baseClasses.dropdownItemDisabled,
       }),
       [classesProp, baseClasses],
     );
@@ -606,7 +603,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           return wrapWithTooltip(
             <a
               href={item.href}
-              className={cn(mergedClasses.link, isActive ? mergedClasses.itemActive : mergedClasses.item) || undefined}
+              className={cn(mergedClasses.link, mergedClasses.item) || undefined}
               onClick={(e) => {
                 if (item.onClick || onItemClick) {
                   e.preventDefault();
@@ -626,7 +623,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         if (isActive) {
           return wrapWithTooltip(
             <span
-              className={mergedClasses.itemActive || undefined}
+              className={mergedClasses.item || undefined}
               aria-current="page"
               data-state="active"
             >
@@ -641,7 +638,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             type="button"
             disabled={isDisabled}
             tabIndex={isDisabled ? -1 : 0}
-            className={cn(mergedClasses.item, isDisabled && mergedClasses.itemDisabled) || undefined}
+            className={mergedClasses.item || undefined}
             onClick={() => handleItemClick(item)}
             data-state="inactive"
             data-disabled={isDisabled || undefined}
@@ -708,7 +705,6 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               dropdownId={dropdownId}
               dropdownClassName={mergedClasses.content}
               dropdownItemClassName={mergedClasses.collapsedItem}
-              dropdownItemDisabledClassName={mergedClasses.dropdownItemDisabled}
               iconClassName={mergedClasses.itemIcon}
               collapsedItems={collapsedItems}
               position={dropdownPosition}

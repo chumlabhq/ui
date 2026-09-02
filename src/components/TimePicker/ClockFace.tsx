@@ -431,9 +431,7 @@ export function ClockFace({
           key={`${isInner ? "inner" : "outer"}-${num}`}
           className={[
             cls.clockNumber,
-            isSelected && cls.clockNumberSelected,
             isInner && cls.clockNumber,
-            isDisabled && cls.clockNumberDisabled,
           ]
             .filter(Boolean)
             .join(" ")}
@@ -456,9 +454,7 @@ export function ClockFace({
       selectionMode,
       displayValue,
       cls.clockNumber,
-      cls.clockNumberSelected,
       cls.clockNumber,
-      cls.clockNumberDisabled,
       reduceMotion,
       isHourDisabled,
       isMinuteDisabled,
@@ -496,7 +492,6 @@ export function ClockFace({
           type="button"
           className={[
             cls.clockHours,
-            selectionMode === "hours" && cls.clockDisplayActive,
           ]
             .filter(Boolean)
             .join(" ")}
@@ -513,7 +508,6 @@ export function ClockFace({
           type="button"
           className={[
             cls.clockMinutes,
-            selectionMode === "minutes" && cls.clockDisplayActive,
           ]
             .filter(Boolean)
             .join(" ")}
@@ -532,7 +526,6 @@ export function ClockFace({
               type="button"
               className={[
                 cls.periodButton,
-                displayValue.period === "AM" && cls.clockPeriodActive,
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -548,7 +541,6 @@ export function ClockFace({
               type="button"
               className={[
                 cls.periodButton,
-                displayValue.period === "PM" && cls.clockPeriodActive,
               ]
                 .filter(Boolean)
                 .join(" ")}

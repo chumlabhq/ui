@@ -611,8 +611,6 @@ const darkPaginationOptionStyle =
   "w-full px-3 py-2 text-left text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-white transition-colors";
 const darkPaginationPageStyle =
   "w-8 h-8 flex items-center justify-center text-sm text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors";
-const darkPaginationActivePageStyle =
-  "w-8 h-8 flex items-center justify-center text-sm font-semibold text-white bg-cl-accent rounded-cl-md";
 const darkPaginationNavStyle =
   "p-2 text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors data-[disabled]:opacity-30 data-[disabled]:cursor-not-allowed data-[disabled]:hover:bg-transparent";
 const darkPaginationEllipsisStyle = "px-1 text-cl-text-tertiary";
@@ -2282,7 +2280,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               root: `${s.container} overflow-x-auto`,
               pinIcon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
-              pinnedPinIcon: dark ? "text-cl-warning" : "text-cl-warning",
             }}
           />
         </DemoWrapper>
@@ -2322,9 +2319,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               root: `${s.container} overflow-x-auto`,
               pinnedRegion: "shrink-0 sticky left-0 z-30 bg-white dark:bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
               pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
-              pinnedPinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
               pinIcon: "text-cl-text-tertiary",
-              pinnedPinIcon: dark ? "text-cl-success" : "text-cl-success",
             }}
           />
         </DemoWrapper>
@@ -2405,7 +2400,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               selectorDropdown: pClasses.selectorDropdown,
               selectorOption: pClasses.selectorOption,
               item: pClasses.pageButton,
-              activePageButton: pClasses.activePageButton,
               navButton: pClasses.navButton,
               ellipsis: pClasses.ellipsis,
               label: pClasses.label,
@@ -2432,7 +2426,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               selectorDropdown: darkPaginationDropdownStyle,
               selectorOption: darkPaginationOptionStyle,
               item: darkPaginationPageStyle,
-              activePageButton: darkPaginationActivePageStyle,
               navButton: darkPaginationNavStyle,
               row: darkPaginationNavContainerStyle,
               list: darkPaginationPageContainerStyle,
@@ -2961,7 +2954,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   classes={{
                     ...s,
                     ...s,
-                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-success/15 hover:bg-cl-success/15 dark:border-cl-text/[0.04] dark:bg-cl-success/10 dark:hover:bg-cl-success/15`,
                   }}
                 />
               </div>
@@ -3072,7 +3064,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   classes={{
                     ...s,
                     ...s,
-                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-warning/50 hover:bg-cl-warning/15 dark:border-cl-text/[0.04] dark:bg-cl-warning/5 dark:hover:bg-cl-warning/10`,
                   }}
                 />
               </div>
@@ -3166,7 +3157,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   classes={{
                     ...s,
                     ...s,
-                    selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent/10 hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:bg-cl-accent/10 dark:hover:bg-cl-accent/15`,
                   }}
                 />
               </div>
@@ -3841,9 +3831,6 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   expandButton: dark
                     ? "text-cl-accent hover:text-cl-accent"
                     : "text-cl-accent hover:text-cl-accent",
-                  expandedRow: dark
-                    ? "border-t border-cl-text/[0.04]"
-                    : "border-t border-cl-border",
                 }}
               />
             );

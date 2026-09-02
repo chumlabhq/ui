@@ -199,7 +199,7 @@ root
 | Selected item highlight | `menuItemSelected` | Stacks on top of menuItem |
 | Focused item (keyboard) | `menuItemFocused` | Stacks on top of menuItem |
 | Submenu panel | `subContent` | |
-| Checkbox style | `itemControl` + `checkboxChecked` | checkboxChecked applied when checked |
+| Checkbox style | `itemControl` +  | checkboxChecked applied when checked |
 | Search bar in menu | `searchControl`, `searchInput`, `searchIcon` | |
 | Search bar in submenu | `subSearchControl` | Falls back to `searchControl` if empty |
 | Loading state | `loading`, `loading`, `loadingItem` | |

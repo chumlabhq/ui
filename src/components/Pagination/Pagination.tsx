@@ -288,7 +288,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       row: classesProp?.row ?? baseClasses.row,
       list: classesProp?.list ?? baseClasses.list,
       item: classesProp?.item ?? baseClasses.item,
-      activePageButton: classesProp?.activePageButton ?? baseClasses.activePageButton,
       navButton: classesProp?.navButton ?? baseClasses.navButton,
       ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
       rowsPerPage: classesProp?.rowsPerPage ?? baseClasses.rowsPerPage,
@@ -561,11 +560,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 type="button"
                 disabled={disabled}
                 onClick={() => resolvedOnPageChange?.(item)}
-                className={
-                  safeCurrentPage === item
-                    ? mergedClasses.activePageButton
-                    : mergedClasses.item
-                }
+                className={mergedClasses.item}
                 aria-label={pageAriaLabel ? pageAriaLabel(item) : `Page ${item}`}
                 aria-current={safeCurrentPage === item ? "page" : undefined}
                 data-state={safeCurrentPage === item ? "active" : undefined}

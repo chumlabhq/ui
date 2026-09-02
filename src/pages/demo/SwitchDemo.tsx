@@ -239,8 +239,6 @@ const SwitchDemo = () => {
               uncheckedIcon={<SunIcon />}
               classes={{
                 ...c.switch,
-                checkedTracker: dark ? "bg-cl-accent" : "bg-cl-accent",
-                uncheckedTracker: dark ? "bg-cl-warning" : "bg-cl-warning/30",
               }}
             />
           </div>
@@ -287,7 +285,6 @@ const SwitchDemo = () => {
               classes={{
                 ...c.switch,
                 label: `text-sm font-medium text-cl-error dark:text-cl-error cursor-pointer`,
-                uncheckedTracker: dark ? "bg-cl-error/20" : "bg-cl-error/15",
               }}
             />
             <Switch
@@ -362,8 +359,6 @@ const SwitchDemo = () => {
               classes={{
                 ...c.switch,
                 label: `text-sm font-medium text-cl-accent cursor-pointer`,
-                checkedTracker: dark ? "bg-cl-accent" : "bg-cl-accent",
-                uncheckedTracker: dark ? "bg-cl-accent/20" : "bg-cl-accent/10",
               }}
             />
             <Switch
@@ -373,8 +368,6 @@ const SwitchDemo = () => {
               classes={{
                 ...c.switch,
                 label: `text-sm font-medium text-cl-success cursor-pointer`,
-                checkedTracker: dark ? "bg-cl-success" : "bg-cl-success",
-                uncheckedTracker: dark ? "bg-cl-success/20" : "bg-cl-success/15",
               }}
             />
           </div>
@@ -399,8 +392,6 @@ const SwitchDemo = () => {
                 control: `relative inline-flex items-center h-4 w-7 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
                 thumb:
                   "inline-flex items-center justify-center transform h-3 w-3 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
-                checkedThumb: "translate-x-3.5",
-                uncheckedThumb: "translate-x-0.5",
               }}
             />
             <Switch
@@ -419,8 +410,6 @@ const SwitchDemo = () => {
                 control: `relative inline-flex items-center h-7 w-12 rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 cursor-pointer focus-visible:ring-cl-accent dark:focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
                 thumb:
                   "inline-flex items-center justify-center transform h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 motion-reduce:transition-none",
-                checkedThumb: "translate-x-6",
-                uncheckedThumb: "translate-x-1",
               }}
             />
           </div>
@@ -449,8 +438,6 @@ const SwitchDemo = () => {
                 classes={{
                   ...c.switch,
                   label: `text-sm font-medium text-cl-accent cursor-pointer`,
-                  checkedTracker: undefined,
-                  uncheckedTracker: undefined,
                 }}
               />
             </div>
@@ -468,8 +455,6 @@ const SwitchDemo = () => {
                 classes={{
                   ...c.switch,
                   label: `text-sm font-medium text-cl-success cursor-pointer`,
-                  checkedTracker: undefined,
-                  uncheckedTracker: undefined,
                 }}
               />
             </div>

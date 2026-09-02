@@ -15,15 +15,9 @@ export interface SwitchClasses {
   row?: string;
   labelGroup?: string;
   label?: string;
-  disabledLabel?: string;
   description?: string;
   control?: string;
-  disabledTracker?: string;
   thumb?: string;
-  checkedTracker?: string;
-  uncheckedTracker?: string;
-  checkedThumb?: string;
-  uncheckedThumb?: string;
   message?: string;
   loading?: string;
 }

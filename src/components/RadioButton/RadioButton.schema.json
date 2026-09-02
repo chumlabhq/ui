@@ -215,12 +215,6 @@
             "control": {
               "type": "string"
             },
-            "checked": {
-              "type": "string"
-            },
-            "unchecked": {
-              "type": "string"
-            },
             "itemIndicator": {
               "type": "string"
             },

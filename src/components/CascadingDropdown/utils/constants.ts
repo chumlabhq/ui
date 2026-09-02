@@ -19,16 +19,11 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   // square highlight escaping the rounded card.
   item:
     "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
-  menuItemSelected: "bg-cl-accent/15 dark:bg-cl-accent/50 font-medium",
-  menuItemFocused: "bg-cl-bg-hover dark:bg-cl-bg-elevated",
-  menuItemDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
   subContent:
     "min-w-full sm:min-w-[180px] max-h-[320px] overflow-y-auto rounded-cl-md shadow-lg bg-white dark:bg-cl-bg-elevated border border-cl-border dark:border-cl-border",
   subPositioner: "z-[9999]",
   subItem:
     "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
-  submenuItemSelected: "bg-cl-accent/15 dark:bg-cl-accent/50 font-medium",
-  submenuItemFocused: "bg-cl-bg-hover dark:bg-cl-bg-elevated",
   label:
     "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
   message: "text-sm mt-1 text-cl-error text-cl-success",
@@ -39,8 +34,6 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
   itemControl:
     "w-4 h-4 shrink-0 flex items-center justify-center rounded border border-cl-border-input dark:border-cl-border",
-  checkboxChecked:
-    "bg-cl-accent dark:bg-cl-accent border-cl-border-input-focus dark:border-cl-border-input-focus text-cl-on-accent",
   empty:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
   clearTrigger:
@@ -57,11 +50,6 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   subSearchControl: "",
   subSearchInput: "",
   subSearchIcon: "",
-  option:
-    "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
-  optionSelected: "bg-cl-accent/15 dark:bg-cl-accent/50 font-medium",
-  optionFocused: "bg-cl-bg-hover dark:bg-cl-bg-elevated",
-  optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
 };
 
 export const UNSTYLED_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasses> =

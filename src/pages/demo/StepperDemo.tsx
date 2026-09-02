@@ -172,25 +172,20 @@ const getClasses = (_dark: boolean) => ({
   // so a single object is correct for both modes. Previously light mode
   // got `{}` here and fell through to raw green-500 / red-500 from the
   // library defaults, which read as disconnected from the brand palette.
+  // ADR 002 R4: the per-status keys are gone. The same brand palette is now
+  // expressed as data-variants on the surviving parts — which is the migration
+  // a consumer has to make, so the demo shows it rather than hiding it.
   stepper: {
-    stepInteractive:
+    trigger:
       "cursor-pointer rounded-cl-md px-2 py-1.5 hover:bg-cl-bg-hover dark:hover:bg-cl-text/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
-    indicatorActive: "bg-cl-accent text-white",
-    indicatorCompleted: "bg-cl-accent text-white",
-    indicatorPending: "bg-black/[0.06] dark:bg-white/10 text-cl-text-secondary",
-    indicatorError: "bg-cl-error text-white",
-    labelActive: "text-cl-accent",
-    labelCompleted: "text-cl-text",
-    labelPending: "text-cl-text-tertiary",
-    labelError: "text-cl-error",
-    descriptionActive: "text-cl-accent",
-    descriptionCompleted: "text-cl-text-secondary",
-    descriptionPending: "text-cl-text-tertiary",
-    descriptionError: "text-cl-error",
-    connectorHorizontal: "w-full h-0.5 bg-black/[0.08] dark:bg-white/15",
-    connectorVertical: "w-0.5 h-6 bg-black/[0.08] dark:bg-white/15",
-    connectorActive: "bg-cl-accent/30",
-    connectorCompleted: "bg-cl-accent",
+    itemIndicator:
+      "data-[state=active]:bg-cl-accent data-[state=active]:text-white data-[state=completed]:bg-cl-accent data-[state=completed]:text-white data-[state=inactive]:bg-black/[0.06] dark:data-[state=inactive]:bg-white/10 data-[state=inactive]:text-cl-text-secondary data-[invalid]:bg-cl-error data-[invalid]:text-white",
+    itemText:
+      "data-[state=active]:text-cl-accent data-[state=completed]:text-cl-text data-[state=inactive]:text-cl-text-tertiary data-[invalid]:text-cl-error",
+    description:
+      "data-[state=active]:text-cl-accent data-[state=completed]:text-cl-text-secondary data-[state=inactive]:text-cl-text-tertiary data-[invalid]:text-cl-error",
+    separator:
+      "data-[orientation=horizontal]:w-full data-[orientation=horizontal]:h-0.5 data-[orientation=vertical]:w-0.5 data-[orientation=vertical]:h-6 bg-black/[0.08] dark:bg-white/15 data-[state=active]:bg-cl-accent/30 data-[state=completed]:bg-cl-accent",
   } as const,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -612,18 +607,9 @@ const StepperDemo = () => {
             classes={{
               ...c.stepper,
               trigger: `flex items-center gap-2 px-3 py-2 rounded-cl-lg border-2 border-transparent transition-all hover:border-cl-border-input-focus dark:hover:border-cl-border-input-focus/30`,
-              stepInteractive:
-                "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2",
               itemIndicator: `shrink-0 rounded-cl-lg flex items-center justify-center shadow-lg bg-cl-accent text-white shadow-accent dark:bg-cl-accent dark:text-white dark:shadow-accent/20`,
-              indicatorActive: "",
-              indicatorCompleted: "",
-              indicatorPending: "",
               itemIcon: "w-5 h-5",
               itemText: `text-sm font-semibold text-cl-accent dark:text-cl-accent`,
-              labelActive: "",
-              labelCompleted: "",
-              labelPending: "",
-              connectorHorizontal: `w-full h-1 rounded-full bg-cl-accent/10 dark:bg-cl-accent/30`,
             }}
           />
         </DemoWrapper>
@@ -774,11 +760,7 @@ const StepperDemo = () => {
               classes={{
                 ...c.stepper,
                 itemIndicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-secondary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-secondary dark:data-[status=pending]:border-white/15`,
-                indicatorActive: "",
-                indicatorCompleted: "",
-                indicatorPending: "",
                 itemIcon: "w-5 h-5",
-                connectorHorizontal: "w-full h-0.5 rounded-full bg-black/[0.08] dark:bg-white/15",
               }}
             />
             <p

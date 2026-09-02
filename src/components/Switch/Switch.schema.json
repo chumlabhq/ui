@@ -124,31 +124,13 @@
         "label": {
           "type": "string"
         },
-        "disabledLabel": {
-          "type": "string"
-        },
         "description": {
           "type": "string"
         },
         "control": {
           "type": "string"
         },
-        "disabledTracker": {
-          "type": "string"
-        },
         "thumb": {
-          "type": "string"
-        },
-        "checkedTracker": {
-          "type": "string"
-        },
-        "uncheckedTracker": {
-          "type": "string"
-        },
-        "checkedThumb": {
-          "type": "string"
-        },
-        "uncheckedThumb": {
           "type": "string"
         },
         "message": {

@@ -44,39 +44,14 @@ export interface StepperClasses {
   root?: string;
   list?: string;
   item?: string;
-  /** Step container in vertical orientation. */
-  stepContainerVertical?: string;
-  /** Step container in horizontal orientation. */
-  stepContainerHorizontal?: string;
   trigger?: string;
-  stepInteractive?: string;
-  stepDisabled?: string;
   itemIndicator?: string;
   indicatorTrigger?: string;
   itemIcon?: string;
-  indicatorActive?: string;
-  indicatorCompleted?: string;
-  indicatorPending?: string;
-  indicatorError?: string;
   row?: string;
-  labelWrapperBottom?: string;
   itemText?: string;
-  labelActive?: string;
-  labelCompleted?: string;
-  labelPending?: string;
-  labelError?: string;
   description?: string;
-  descriptionActive?: string;
-  descriptionCompleted?: string;
-  descriptionPending?: string;
-  descriptionError?: string;
   separator?: string;
-  connectorHorizontal?: string;
-  connectorVertical?: string;
-  connectorActive?: string;
-  connectorCompleted?: string;
-  connectorPending?: string;
-  connectorError?: string;
 }
 
 export interface StepperTooltipDefaults {

@@ -185,15 +185,15 @@ The component has three styling modes:
 | Calendar/clear icons | `icon`, `clearTrigger` | Icons inside trigger |
 | Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
 | Calendar popover | `content` | Outer container of calendar |
-| Month/year navigation | `header`, `row`, `navButton`, `navButtonDisabled` | Calendar header area |
+| Month/year navigation | `header`, `row`, `navButton` | Calendar header area |
 | Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem`, `dropdownItemSelected` | Month/year selectors |
 | Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
-| Day cells | `item`, `daySelected`, `dayToday`, `dayDisabled`, `dayOutside` | Individual calendar days |
+| Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | `dayFocused` | Focused day ring |
-| Marked days | `dayMarked`, `markerIndicator`, `markerTooltip` | Marker visuals |
+| Marked days | `markerIndicator`, `markerTooltip` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
-| Presets | `presetGroup`, `presetTrigger`, `presetActive` | Preset buttons panel |
+| Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
 | Footer / today button | `footer`, `todayTrigger` | Calendar footer |
 | Multi-month layout | `listRow`, `list` | Side-by-side months |
 

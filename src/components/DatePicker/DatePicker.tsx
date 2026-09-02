@@ -280,15 +280,7 @@ interface DayCellProps {
   datePickerId: string;
   classes: {
     day: string;
-    daySelected: string;
-    dayToday: string;
-    dayDisabled: string;
-    dayOutside: string;
-    dayRangeStart: string;
-    dayRangeEnd: string;
-    dayRangeMiddle: string;
     dayFocused: string;
-    dayMarked: string;
     markerIndicator: string;
     markerTooltip: string;
   };
@@ -333,15 +325,7 @@ const DayCell = memo(function DayCell({
 
   const classNames = cn(
     cls.day,
-    day.isSelected && cls.daySelected,
-    day.isToday && showTodayIndicator && cls.dayToday,
-    day.isDisabled && cls.dayDisabled,
-    day.isOutside && cls.dayOutside,
-    day.isRangeStart && cls.dayRangeStart,
-    day.isRangeEnd && cls.dayRangeEnd,
-    day.isInRange && cls.dayRangeMiddle,
     isFocused && cls.dayFocused,
-    day.isMarked && cls.dayMarked,
   );
 
   return (
@@ -357,7 +341,9 @@ const DayCell = memo(function DayCell({
         disabled={day.isDisabled}
         className={classNames}
         data-selected={day.isSelected || undefined}
-        data-today={day.isToday || undefined}
+        // The deleted dayToday key was gated on showTodayIndicator; the
+        // attribute that replaces it has to honour the same prop.
+        data-today={(day.isToday && showTodayIndicator) || undefined}
         data-disabled={day.isDisabled || undefined}
         data-outside={day.isOutside || undefined}
         data-range-start={day.isRangeStart || undefined}
@@ -410,7 +396,6 @@ interface PresetsPanelProps {
   multipleValue?: Date[] | null;
   presetsClassName: string;
   presetButtonClassName: string;
-  presetActiveClassName: string;
   onPresetClick: (preset: DatePreset) => void;
 }
 
@@ -422,7 +407,6 @@ const PresetsPanel = memo(function PresetsPanel({
   multipleValue,
   presetsClassName,
   presetButtonClassName,
-  presetActiveClassName,
   onPresetClick,
 }: PresetsPanelProps) {
   const isPresetActive = useCallback(
@@ -472,7 +456,6 @@ const PresetsPanel = memo(function PresetsPanel({
             type="button"
             className={cn(
               presetButtonClassName,
-              isActive && presetActiveClassName,
             )}
             data-active={isActive || undefined}
             // ADR 002 R4 / Amendment E: data-active converges on data-state.
@@ -597,34 +580,21 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       header: classesProp?.header ?? baseClasses.header,
       row: classesProp?.row ?? baseClasses.row,
       navButton: classesProp?.navButton ?? baseClasses.navButton,
-      navButtonDisabled: classesProp?.navButtonDisabled ?? baseClasses.navButtonDisabled,
       listRow: classesProp?.listRow ?? baseClasses.listRow,
       list: classesProp?.list ?? baseClasses.list,
       listHeader: classesProp?.listHeader ?? baseClasses.listHeader,
       weekday: classesProp?.weekday ?? baseClasses.weekday,
       item: classesProp?.item ?? baseClasses.item,
-      daySelected: classesProp?.daySelected ?? baseClasses.daySelected,
-      dayToday: classesProp?.dayToday ?? baseClasses.dayToday,
-      dayDisabled: classesProp?.dayDisabled ?? baseClasses.dayDisabled,
-      dayOutside: classesProp?.dayOutside ?? baseClasses.dayOutside,
-      dayRangeStart: classesProp?.dayRangeStart ?? baseClasses.dayRangeStart,
-      dayRangeEnd: classesProp?.dayRangeEnd ?? baseClasses.dayRangeEnd,
-      dayRangeMiddle: classesProp?.dayRangeMiddle ?? baseClasses.dayRangeMiddle,
-      dayHover: classesProp?.dayHover ?? baseClasses.dayHover,
       dayFocused: classesProp?.dayFocused ?? baseClasses.dayFocused,
-      dayMarked: classesProp?.dayMarked ?? baseClasses.dayMarked,
       weekNumber: classesProp?.weekNumber ?? baseClasses.weekNumber,
       presetGroup: classesProp?.presetGroup ?? baseClasses.presetGroup,
       presetTrigger: classesProp?.presetTrigger ?? baseClasses.presetTrigger,
-      presetActive: classesProp?.presetActive ?? baseClasses.presetActive,
       footer: classesProp?.footer ?? baseClasses.footer,
       todayTrigger: classesProp?.todayTrigger ?? baseClasses.todayTrigger,
       markerIndicator: classesProp?.markerIndicator ?? baseClasses.markerIndicator,
       markerTooltip: classesProp?.markerTooltip ?? baseClasses.markerTooltip,
       monthSelect: classesProp?.monthSelect ?? baseClasses.monthSelect,
       yearSelect: classesProp?.yearSelect ?? baseClasses.yearSelect,
-      monthDropdown: classesProp?.monthDropdown ?? baseClasses.monthDropdown,
-      yearDropdown: classesProp?.yearDropdown ?? baseClasses.yearDropdown,
       subContent: classesProp?.subContent ?? baseClasses.subContent,
       subItem: classesProp?.subItem ?? baseClasses.subItem,
       dropdownItemSelected: classesProp?.dropdownItemSelected ?? baseClasses.dropdownItemSelected,
@@ -921,15 +891,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const dayCellClasses = useMemo(
       () => ({
         day: mergedClasses.item,
-        daySelected: mergedClasses.daySelected,
-        dayToday: mergedClasses.dayToday,
-        dayDisabled: mergedClasses.dayDisabled,
-        dayOutside: mergedClasses.dayOutside,
-        dayRangeStart: mergedClasses.dayRangeStart,
-        dayRangeEnd: mergedClasses.dayRangeEnd,
-        dayRangeMiddle: mergedClasses.dayRangeMiddle,
         dayFocused: mergedClasses.dayFocused,
-        dayMarked: mergedClasses.dayMarked,
         markerIndicator: mergedClasses.markerIndicator,
         markerTooltip: mergedClasses.markerTooltip,
       }),
@@ -1040,7 +1002,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   multipleValue={multipleValue}
                   presetsClassName={mergedClasses.presetGroup}
                   presetButtonClassName={mergedClasses.presetTrigger}
-                  presetActiveClassName={mergedClasses.presetActive}
                   onPresetClick={handlePresetClick}
                 />
               )}

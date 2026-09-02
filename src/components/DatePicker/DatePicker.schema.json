@@ -363,9 +363,6 @@
         "navButton": {
           "type": "string"
         },
-        "navButtonDisabled": {
-          "type": "string"
-        },
         "listRow": {
           "type": "string"
         },
@@ -381,34 +378,7 @@
         "item": {
           "type": "string"
         },
-        "daySelected": {
-          "type": "string"
-        },
-        "dayToday": {
-          "type": "string"
-        },
-        "dayDisabled": {
-          "type": "string"
-        },
-        "dayOutside": {
-          "type": "string"
-        },
-        "dayRangeStart": {
-          "type": "string"
-        },
-        "dayRangeEnd": {
-          "type": "string"
-        },
-        "dayRangeMiddle": {
-          "type": "string"
-        },
-        "dayHover": {
-          "type": "string"
-        },
         "dayFocused": {
-          "type": "string"
-        },
-        "dayMarked": {
           "type": "string"
         },
         "weekNumber": {
@@ -418,9 +388,6 @@
           "type": "string"
         },
         "presetTrigger": {
-          "type": "string"
-        },
-        "presetActive": {
           "type": "string"
         },
         "footer": {
@@ -439,12 +406,6 @@
           "type": "string"
         },
         "yearSelect": {
-          "type": "string"
-        },
-        "monthDropdown": {
-          "type": "string"
-        },
-        "yearDropdown": {
           "type": "string"
         },
         "subContent": {

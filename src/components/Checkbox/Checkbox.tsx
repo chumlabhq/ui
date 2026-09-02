@@ -114,9 +114,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
         control: classesProp?.control ?? baseClasses.control,
-        checked: classesProp?.checked ?? baseClasses.checked,
-        unchecked: classesProp?.unchecked ?? baseClasses.unchecked,
-        indeterminate: classesProp?.indeterminate ?? baseClasses.indeterminate,
         itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         message: classesProp?.message ?? baseClasses.message,
       }),
@@ -139,11 +136,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }, [boxSize]);
 
     // ─── State class ────────────────────────────────────────────────────
-    const stateClassName = useMemo(() => {
-      if (indeterminate) return mergedClasses.indeterminate;
-      if (isChecked) return mergedClasses.checked;
-      return mergedClasses.unchecked;
-    }, [indeterminate, isChecked, mergedClasses]);
+    // ADR 002 R4: checked/unchecked/indeterminate are data-state values on
+    // `control`, so there is no state class to pick between.
+    const stateClassName = undefined;
 
     // ─── Handlers ───────────────────────────────────────────────────────
     // The native readonly attribute does nothing on checkboxes, so the guard has

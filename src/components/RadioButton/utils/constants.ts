@@ -22,11 +22,7 @@ export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
   label: "text-sm font-medium text-cl-text dark:text-cl-text",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
   control: "shrink-0 flex items-center justify-center rounded-full border-2 border-cl-border-input dark:border-cl-border transition-colors",
-  checked: "border-cl-border-input-focus bg-cl-accent",
-  unchecked: "border-cl-border-input dark:border-cl-border bg-white dark:bg-cl-bg-elevated",
   itemIndicator: "",
-  error: "text-xs text-cl-error mt-1",
-  success: "text-xs text-cl-success mt-1",
 };
 
 export const UNSTYLED_RADIO_CLASSES: Required<RadioButtonClasses> =

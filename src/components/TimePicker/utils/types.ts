@@ -37,10 +37,6 @@ export interface TimePickerClasses {
   list?: string;
   /** Individual option. */
   item?: string;
-  /** Modifier added to the selected option. */
-  optionSelected?: string;
-  /** Modifier added to the keyboard-focused option. */
-  optionFocused?: string;
   /** Check-mark icon inside a selected option. */
   itemIndicator?: string;
   /** "No matching times" message. */
@@ -59,8 +55,6 @@ export interface TimePickerClasses {
   clockHours?: string;
   /** Minutes button in the display. */
   clockMinutes?: string;
-  /** Active (selected) display button modifier. */
-  clockDisplayActive?: string;
   /** Colon separator in the display. */
   clockSeparator?: string;
   /** Circular clock face. */
@@ -73,10 +67,6 @@ export interface TimePickerClasses {
   clockHandDot?: string;
   /** Number label on the clock face. */
   clockNumber?: string;
-  /** Selected number modifier. */
-  clockNumberSelected?: string;
-  /** Disabled number modifier (out of min/max range). */
-  clockNumberDisabled?: string;
   /** Center dot of the clock. */
   clockCenter?: string;
   /** Actions row (Cancel / OK). */
@@ -89,8 +79,6 @@ export interface TimePickerClasses {
   row?: string;
   /** Individual AM or PM button. */
   periodButton?: string;
-  /** Active period button modifier. */
-  clockPeriodActive?: string;
 }
 
 /** Subset of TimePickerClasses relevant to ClockFace. */
@@ -100,23 +88,23 @@ export type ClockFaceClasses = Pick<
   | "clockDisplay"
   | "clockHours"
   | "clockMinutes"
-  | "clockDisplayActive"
+  
   | "clockSeparator"
   | "clockFace"
   | "clockHand"
   | "clockHandLine"
   | "clockHandDot"
   | "clockNumber"
-  | "clockNumberSelected"
+  
   | "clockNumber"
-  | "clockNumberDisabled"
+  
   | "clockCenter"
   | "footer"
   | "cancelButton"
   | "confirmButton"
   | "row"
   | "periodButton"
-  | "clockPeriodActive"
+  
 >;
 
 /** Props for the standalone ClockFace component. */

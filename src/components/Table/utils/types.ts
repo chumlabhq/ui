@@ -41,8 +41,6 @@ export interface TableClasses {
   header?: string;
   /** Individual `<th>` elements. */
   headerCell?: string;
-  /** Applied on header cell hover. */
-  headerCellHover?: string;
   /** The content wrapper inside each header cell. */
   headerCellText?: string;
   /** The `<tbody>` element. */
@@ -51,8 +49,6 @@ export interface TableClasses {
   item?: string;
   /** Individual `<td>` elements. */
   cell?: string;
-  /** Applied to a selected row. */
-  selectedRow?: string;
   /** Container for pinned columns. */
   pinnedRegion?: string;
   /** The `<table>` element for pinned columns. */
@@ -63,16 +59,8 @@ export interface TableClasses {
   empty?: string;
   /** Pin icon (unpinned state). */
   pinIcon?: string;
-  /** Pin icon hover. */
-  pinIconHover?: string;
-  /** Pin icon (pinned state). */
-  pinnedPinIcon?: string;
-  /** Pin icon hover (pinned state). */
-  pinnedPinIconHover?: string;
   /** Pin button (unpinned state). */
   pinButton?: string;
-  /** Pin button (pinned state). */
-  pinnedPinButton?: string;
   /** Shimmer container. */
   loading?: string;
   /** Shimmer row. */
@@ -92,8 +80,6 @@ export interface TableClasses {
   filterContent?: string;
   /** Expand/collapse icon button. */
   expandButton?: string;
-  /** Expanded row content container. */
-  expandedRow?: string;
   /** Right-pinned column container. */
   pinnedRightRegion?: string;
   /** The `<table>` element for right-pinned columns. */

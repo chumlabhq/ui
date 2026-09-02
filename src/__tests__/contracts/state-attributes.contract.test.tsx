@@ -23,6 +23,7 @@ import { resolve } from "node:path";
 import { COMPONENTS } from "./registry";
 import { fixturesFor } from "../fixtures";
 import { setReducedMotion } from "../../test/matchMedia";
+import { SELECTOR } from "./partSelectors";
 
 beforeEach(() => setReducedMotion(false));
 
@@ -42,12 +43,6 @@ const SPEC = JSON.parse(
   readFileSync(resolve(process.cwd(), "docs/adr/002-state-attributes.json"), "utf8"),
 ) as { requirements: Requirement[] };
 
-/**
- * Where each part lives in the rendered DOM. Parts are not yet named in the
- * markup — that is Task 3 — so until then they are located by role or by the
- * element the component actually renders. Wrong selector, false failure, so
- * every one of these was read off a rendered fixture rather than guessed.
- */
 /** Components whose validation feedback Amendment B merges into one part. */
 const MESSAGE_COMPONENTS = [
   ...new Set(
@@ -59,34 +54,6 @@ const MESSAGE_COMPONENTS = [
   ),
 ];
 
-const SELECTOR: Record<string, string> = {
-  // Breadcrumb marks the crumb on the <a>, Pagination on the page <button>, so
-  // both are part of `item` even though neither is a list element.
-  "item": '[role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="tab"], [role="gridcell"], li, tr, nav a, nav span[data-state], nav button[aria-label^="Page"]',
-  "subItem": '[role="option"]',
-  "control": '[role="switch"], [role="checkbox"], input[type="checkbox"] + span, span[data-state], [data-state]',
-  "thumb": '[role="slider"], [role="switch"] span, span[data-state]',
-  "input": "input",
-  "itemIndicator": "[data-status], svg",
-  // Stepper's label wrapper is a div carrying data-align, not a span.
-  "itemText": "span[data-status], span[data-state], div[data-align], span",
-  "itemIcon": "span[data-status], span[data-state], svg",
-  "description": "[data-status]",
-  "separator": "[data-next-status], [data-status]",
-  "count": "span",
-  "marker": "[data-state]",
-  "clockDisplay": "[data-state]",
-  "periodButton": "button",
-  "clockNumber": "[data-selected], [data-disabled]",
-  "presetTrigger": "button",
-  "pinButton": "button",
-  "countrySelect.item": '[role="option"]',
-  // The validation message has no stable role — half the success elements carry
-  // none — so the union includes both attributes. That is not circular: each
-  // fixture renders exactly one of the two messages, so the OTHER attribute's
-  // absence is still measured on a real element that could have carried it.
-  "message": '[role="alert"], [role="status"], [data-invalid], [data-valid]',
-};
 
 /** Every attribute value seen on any element matching `part`, across all fixtures. */
 const collect = async (componentName: string, part: string, attribute: string) => {

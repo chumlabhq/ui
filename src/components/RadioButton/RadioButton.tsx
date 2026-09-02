@@ -241,11 +241,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
         control: classesProp?.control ?? baseClasses.control,
-        checked: classesProp?.checked ?? baseClasses.checked,
-        unchecked: classesProp?.unchecked ?? baseClasses.unchecked,
         itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
       }),
       [classesProp, baseClasses],
     );
@@ -267,7 +263,8 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
     }, [boxSize]);
 
     // ─── State class ────────────────────────────────────────────────────
-    const stateClassName = isChecked ? mergedClasses.checked : mergedClasses.unchecked;
+    // ADR 002 R4: data-state="checked"/"unchecked" on `control`.
+    const stateClassName = undefined;
 
     // ─── Handler ────────────────────────────────────────────────────────
     const handleChange = useCallback(() => {

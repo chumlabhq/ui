@@ -206,19 +206,10 @@
         "thumb": {
           "type": "string"
         },
-        "thumbActive": {
-          "type": "string"
-        },
-        "thumbDisabled": {
-          "type": "string"
-        },
         "valueText": {
           "type": "string"
         },
         "marker": {
-          "type": "string"
-        },
-        "markDotActive": {
           "type": "string"
         },
         "message": {

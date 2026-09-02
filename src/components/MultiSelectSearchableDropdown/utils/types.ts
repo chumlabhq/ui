@@ -16,12 +16,8 @@ export interface MultiSelectSearchableDropdownClasses {
   content?: string;
   list?: string;
   item?: string;
-  optionSelected?: string;
-  optionFocused?: string;
-  optionDisabled?: string;
   icon?: string;
   itemControl?: string;
-  checkboxChecked?: string;
   itemIndicator?: string;
   chip?: string;
   chipRemove?: string;

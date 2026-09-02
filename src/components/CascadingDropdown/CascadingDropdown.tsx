@@ -43,13 +43,10 @@ const SubmenuItem = memo(function SubmenuItem({
 }) {
   const combinedClassName = cn(
     classes.subItem,
-    isSelected && classes.submenuItemSelected,
-    isFocused && classes.submenuItemFocused,
   );
 
   const combinedCheckboxClassName = cn(
     classes.itemControl,
-    isSelected && classes.checkboxChecked,
   );
   // ADR 002 R4: the state the checkboxChecked key named; Radix Checkbox spelling.
   const checkboxState = isSelected ? "checked" : "unchecked";
@@ -112,8 +109,6 @@ const MenuItem = memo(function MenuItem({
 }) {
   const combinedClassName = cn(
     classes.item,
-    isSelected && classes.menuItemSelected,
-    isFocused && classes.menuItemFocused,
   );
 
   return (
@@ -349,14 +344,9 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         value: classesProp?.value ?? baseClasses.value,
         content: classesProp?.content ?? baseClasses.content,
         item: classesProp?.item ?? baseClasses.item,
-        menuItemSelected: classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
-        menuItemFocused: classesProp?.menuItemFocused ?? baseClasses.menuItemFocused,
-        menuItemDisabled: classesProp?.menuItemDisabled ?? baseClasses.menuItemDisabled,
         subContent: classesProp?.subContent ?? baseClasses.subContent,
         subPositioner: classesProp?.subPositioner ?? baseClasses.subPositioner,
         subItem: classesProp?.subItem ?? baseClasses.subItem,
-        submenuItemSelected: classesProp?.submenuItemSelected ?? baseClasses.submenuItemSelected,
-        submenuItemFocused: classesProp?.submenuItemFocused ?? baseClasses.submenuItemFocused,
         label: classesProp?.label ?? baseClasses.label,
         message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
@@ -364,7 +354,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
         itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         itemControl: classesProp?.itemControl ?? baseClasses.itemControl,
-        checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
         empty: classesProp?.empty ?? baseClasses.empty,
         clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
         loading: classesProp?.loading ?? baseClasses.loading,
@@ -375,10 +364,6 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         subSearchControl: classesProp?.subSearchControl ?? classesProp?.searchControl ?? (baseClasses.subSearchControl || baseClasses.searchControl),
         subSearchInput: classesProp?.subSearchInput ?? classesProp?.searchInput ?? (baseClasses.subSearchInput || baseClasses.searchInput),
         subSearchIcon: classesProp?.subSearchIcon ?? classesProp?.searchIcon ?? (baseClasses.subSearchIcon || baseClasses.searchIcon),
-        option: classesProp?.option ?? classesProp?.item ?? baseClasses.item,
-        optionSelected: classesProp?.optionSelected ?? classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
-        optionFocused: classesProp?.optionFocused ?? classesProp?.menuItemFocused ?? baseClasses.menuItemFocused,
-        optionDisabled: classesProp?.optionDisabled ?? classesProp?.menuItemDisabled ?? baseClasses.menuItemDisabled,
       }),
       [classesProp, baseClasses],
     );

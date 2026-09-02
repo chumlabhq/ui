@@ -733,9 +733,6 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
-                  optionSelected: dark
-                    ? "bg-cl-success/40 border-l-[3px] border-cl-success pl-3"
-                    : "bg-cl-success/15 border-l-[3px] border-cl-success pl-3",
                   itemIndicator: dark ? "text-cl-success" : "text-cl-success",
                 }}
               />
@@ -793,9 +790,6 @@ const DropdownDemo = () => {
                 showSelectedIcon={false}
                 classes={{
                   ...c.dropdown,
-                  optionSelected: dark
-                    ? "bg-cl-accent/40 font-semibold text-cl-accent"
-                    : "bg-cl-accent/10 font-semibold text-cl-accent",
                 }}
               />
             </div>
@@ -821,8 +815,6 @@ const DropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
-                  optionFocused: dark ? "bg-cl-accent/50" : "bg-cl-accent/10",
-                  optionSelected: dark ? "bg-cl-accent/40" : "bg-cl-accent/10",
                   itemIndicator: `w-4 h-4 shrink-0 text-cl-accent`,
                 }}
               />
@@ -837,8 +829,6 @@ const DropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-success focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-success`,
-                  optionFocused: dark ? "bg-cl-success/50" : "bg-cl-success/15",
-                  optionSelected: dark ? "bg-cl-success/40" : "bg-cl-success/15",
                   itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
               />

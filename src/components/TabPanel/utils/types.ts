@@ -18,19 +18,9 @@ export interface TabPanelClasses {
   root?: string;
   list?: string;
   item?: string;
-  tabActive?: string;
-  tabInactive?: string;
-  tabDisabled?: string;
-  tabFocus?: string;
   itemText?: string;
-  labelActive?: string;
-  labelInactive?: string;
   itemIcon?: string;
-  iconActive?: string;
-  iconInactive?: string;
   count?: string;
-  countActive?: string;
-  countInactive?: string;
   indicator?: string;
   content?: string;
 }
@@ -94,19 +84,9 @@ export interface ResolvedClasses {
   root: string;
   list: string;
   item: string;
-  tabActive: string;
-  tabInactive: string;
-  tabDisabled: string;
-  tabFocus: string;
   itemText: string;
-  labelActive: string;
-  labelInactive: string;
   itemIcon: string;
-  iconActive: string;
-  iconInactive: string;
   count: string;
-  countActive: string;
-  countInactive: string;
   indicator: string;
   content: string;
 }

@@ -156,7 +156,7 @@ root (row, flex flex-wrap)
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Root layout | `root` | Controls flex direction and gap |
-| Page buttons | `item`, `activePageButton` | Inactive and active styles |
+| Page buttons | `item` | Inactive and active styles |
 | Prev/next buttons | `navButton` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
 | Rows dropdown trigger | `selectorButton` | |

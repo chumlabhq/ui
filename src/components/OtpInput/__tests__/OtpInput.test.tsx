@@ -773,14 +773,11 @@ describe("OtpInput", () => {
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
-    it("applies classes.inputFocused to inputs", () => {
-      render(<OtpInput classes={{ inputFocused: "custom-focus" }} />);
-
-      const inputs = screen.getAllByRole("textbox");
-      inputs.forEach((input) => {
-        expect(input).toHaveClass("custom-focus");
-      });
-    });
+    // `inputFocused` is deleted, and this test asserted the bug that justified
+    // it (remediation-plan ADR002-T2.1): the key was applied to EVERY slot
+    // unconditionally, so it never expressed focus. OtpInput tracks no focused
+    // index, so there is no state to assert — a `focus:` variant on `input` is
+    // the replacement.
 
     it("applies classes.separator to separator", () => {
       render(

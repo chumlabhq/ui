@@ -155,9 +155,6 @@
         "input": {
           "type": "string"
         },
-        "inputFocused": {
-          "type": "string"
-        },
         "label": {
           "type": "string"
         },

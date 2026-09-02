@@ -137,12 +137,6 @@
         "item": {
           "type": "string"
         },
-        "itemActive": {
-          "type": "string"
-        },
-        "itemDisabled": {
-          "type": "string"
-        },
         "link": {
           "type": "string"
         },
@@ -162,9 +156,6 @@
           "type": "string"
         },
         "collapsedItem": {
-          "type": "string"
-        },
-        "dropdownItemDisabled": {
           "type": "string"
         }
       }

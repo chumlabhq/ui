@@ -146,9 +146,9 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | Description text | `description` |
 | Clock container | `clockContent` |
 | Clock face circle | `clockFace` |
-| Clock numbers | `clockNumber`, `clockNumberSelected` |
+| Clock numbers | `clockNumber` |
 | Clock hand | `clockHand`, `clockHandLine`, `clockHandDot` |
-| AM/PM buttons | `periodButton`, `clockPeriodActive` |
+| AM/PM buttons | `periodButton` |
 | OK/Cancel buttons | `confirmButton`, `cancelButton` |
 
 ### Dark mode

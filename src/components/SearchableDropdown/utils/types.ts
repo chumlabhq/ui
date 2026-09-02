@@ -11,9 +11,6 @@ export interface SearchableDropdownClasses {
   content?: string;
   list?: string;
   item?: string;
-  optionSelected?: string;
-  optionFocused?: string;
-  optionDisabled?: string;
   icon?: string;
   itemIndicator?: string;
   clearTrigger?: string;

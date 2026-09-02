@@ -482,7 +482,6 @@ const BreadcrumbDemo = () => {
                 items={itemsWithDisabled}
                 classes={{
                   ...c.breadcrumb,
-                  itemDisabled: c.breadcrumb.itemDisabled,
                 }}
                 onItemClick={handleItemClick}
               />
@@ -508,7 +507,6 @@ const BreadcrumbDemo = () => {
                   ellipsisTrigger: c.breadcrumb.ellipsisButton,
                   content: c.breadcrumb.dropdown,
                   collapsedItem: c.breadcrumb.dropdownItem,
-                  dropdownItemDisabled: c.breadcrumb.dropdownItemDisabled,
                 }}
                 onItemClick={handleItemClick}
               />

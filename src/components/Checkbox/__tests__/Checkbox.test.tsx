@@ -437,42 +437,25 @@ describe("Checkbox", () => {
     });
   });
 
-  describe("State ClassNames", () => {
-    it("applies classes.checked when checked", () => {
-      render(
-        <Checkbox
-          checked
-          onValueChange={() => {}}
-          classes={{ control: "checkbox", checked: "is-checked" }}
-        />
-      );
-
-      const checkboxSpan = document.querySelector(".checkbox");
-      expect(checkboxSpan).toHaveClass("is-checked");
+  /**
+   * ADR 002 R4: `checked`, `unchecked` and `indeterminate` are gone. The state
+   * they named is `data-state` on `control`, which is what a consumer targets
+   * now — so that is what these assert.
+   */
+  describe("State attributes on control", () => {
+    it("marks control checked", () => {
+      render(<Checkbox checked onValueChange={() => {}} classes={{ control: "checkbox" }} />);
+      expect(document.querySelector(".checkbox")).toHaveAttribute("data-state", "checked");
     });
 
-    it("applies classes.unchecked when unchecked", () => {
-      render(
-        <Checkbox
-          checked={false}
-          classes={{ control: "checkbox", unchecked: "is-unchecked" }}
-        />
-      );
-
-      const checkboxSpan = document.querySelector(".checkbox");
-      expect(checkboxSpan).toHaveClass("is-unchecked");
+    it("marks control unchecked", () => {
+      render(<Checkbox checked={false} classes={{ control: "checkbox" }} />);
+      expect(document.querySelector(".checkbox")).toHaveAttribute("data-state", "unchecked");
     });
 
-    it("applies classes.indeterminate when indeterminate", () => {
-      render(
-        <Checkbox
-          indeterminate
-          classes={{ control: "checkbox", indeterminate: "is-indeterminate" }}
-        />
-      );
-
-      const checkboxSpan = document.querySelector(".checkbox");
-      expect(checkboxSpan).toHaveClass("is-indeterminate");
+    it("marks control indeterminate", () => {
+      render(<Checkbox indeterminate classes={{ control: "checkbox" }} />);
+      expect(document.querySelector(".checkbox")).toHaveAttribute("data-state", "indeterminate");
     });
   });
 

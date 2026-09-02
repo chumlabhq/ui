@@ -33,8 +33,6 @@ export interface BreadcrumbClasses {
   root?: string;
   list?: string;
   item?: string;
-  itemActive?: string;
-  itemDisabled?: string;
   link?: string;
   separator?: string;
   itemIcon?: string;
@@ -42,7 +40,6 @@ export interface BreadcrumbClasses {
   ellipsisTrigger?: string;
   content?: string;
   collapsedItem?: string;
-  dropdownItemDisabled?: string;
 }
 
 export type DropdownPosition = "top" | "bottom" | "left" | "right";

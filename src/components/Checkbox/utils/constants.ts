@@ -29,9 +29,6 @@ export const DEFAULT_CHECKBOX_CLASSES: Required<CheckboxClasses> = {
   label: "text-sm font-medium text-cl-text dark:text-cl-text",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
   control: "inline-flex items-center justify-center border-2 transition-colors cursor-pointer",
-  checked: "bg-cl-accent dark:bg-cl-accent border-cl-border-input-focus dark:border-cl-border-input-focus text-cl-on-accent",
-  unchecked: "bg-white dark:bg-cl-bg-elevated border-cl-border-input dark:border-cl-border",
-  indeterminate: "bg-cl-accent dark:bg-cl-accent border-cl-border-input-focus dark:border-cl-border-input-focus text-cl-on-accent",
   itemIndicator: "",
   message: "text-sm text-cl-error text-cl-success",
 };

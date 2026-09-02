@@ -151,9 +151,6 @@
         "headerCell": {
           "type": "string"
         },
-        "headerCellHover": {
-          "type": "string"
-        },
         "headerCellText": {
           "type": "string"
         },
@@ -164,9 +161,6 @@
           "type": "string"
         },
         "cell": {
-          "type": "string"
-        },
-        "selectedRow": {
           "type": "string"
         },
         "pinnedRegion": {
@@ -184,19 +178,7 @@
         "pinIcon": {
           "type": "string"
         },
-        "pinIconHover": {
-          "type": "string"
-        },
-        "pinnedPinIcon": {
-          "type": "string"
-        },
-        "pinnedPinIconHover": {
-          "type": "string"
-        },
         "pinButton": {
-          "type": "string"
-        },
-        "pinnedPinButton": {
           "type": "string"
         },
         "loading": {
@@ -227,9 +209,6 @@
           "type": "string"
         },
         "expandButton": {
-          "type": "string"
-        },
-        "expandedRow": {
           "type": "string"
         },
         "pinnedRightRegion": {

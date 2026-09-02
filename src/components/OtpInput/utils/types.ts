@@ -12,7 +12,6 @@ export interface OtpInputClasses {
   control?: string;
   group?: string;
   input?: string;
-  inputFocused?: string;
   label?: string;
   message?: string;
   separator?: string;

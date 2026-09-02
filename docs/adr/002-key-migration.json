@@ -24,92 +24,92 @@
     "promotedByAmendmentF": 45
   },
   "vocabularyAmendments": {
-    "control": "Ark Slider.Control / Combobox / Select / Field — VERIFIED https://ark-ui.com/docs/components/slider, https://ark-ui.com/docs/components/date-picker",
+    "control": "Ark Slider.Control / Combobox / Select / Field \u2014 VERIFIED https://ark-ui.com/docs/components/slider, https://ark-ui.com/docs/components/date-picker",
     "ellipsis": "Ark Pagination.Ellipsis",
-    "fallback": "Radix Avatar.Fallback — VERIFIED https://www.radix-ui.com/primitives/docs/components/avatar",
-    "image": "Radix Avatar.Image — VERIFIED https://www.radix-ui.com/primitives/docs/components/avatar",
-    "indicator": "Radix Checkbox.Indicator — VERIFIED https://www.radix-ui.com/primitives/docs/components/checkbox. Also Radix NavigationMenu.Indicator and Ark Tabs.Indicator. CORRECTED: an earlier record cited Radix Tabs.Indicator, which does not exist — Radix Tabs is Root/List/Trigger/Content",
-    "marker": "Ark Slider.Marker — VERIFIED https://ark-ui.com/docs/components/slider",
+    "fallback": "Radix Avatar.Fallback \u2014 VERIFIED https://www.radix-ui.com/primitives/docs/components/avatar",
+    "image": "Radix Avatar.Image \u2014 VERIFIED https://www.radix-ui.com/primitives/docs/components/avatar",
+    "indicator": "Radix Checkbox.Indicator \u2014 VERIFIED https://www.radix-ui.com/primitives/docs/components/checkbox. Also Radix NavigationMenu.Indicator and Ark Tabs.Indicator. CORRECTED: an earlier record cited Radix Tabs.Indicator, which does not exist \u2014 Radix Tabs is Root/List/Trigger/Content",
+    "marker": "Ark Slider.Marker \u2014 VERIFIED https://ark-ui.com/docs/components/slider",
     "monthSelect": "Ark DatePicker.MonthSelect",
-    "navButton": "DIVERGENT — Ark ships PrevTrigger and NextTrigger as separate parts (https://ark-ui.com/docs/components/date-picker). Unified here as one part with data-side per R4: the two controls are structurally identical, so splitting them would mint a key with no reachable difference",
-    "positioner": "Ark DatePicker.Positioner — VERIFIED https://ark-ui.com/docs/components/date-picker",
-    "presetTrigger": "Ark DatePicker PresetTrigger — VERIFIED https://ark-ui.com/docs/components/date-picker",
-    "range": "Ark Slider.Range — VERIFIED https://ark-ui.com/docs/components/slider",
-    "resizeHandle": "react-resizable-panels PanelResizeHandle — RECALLED, blocking",
-    "thumb": "Ark Slider.Thumb — VERIFIED https://ark-ui.com/docs/components/slider",
-    "track": "Ark Slider.Track — VERIFIED https://ark-ui.com/docs/components/slider",
-    "valueText": "Ark Slider.ValueText — VERIFIED https://ark-ui.com/docs/components/slider",
+    "navButton": "DIVERGENT \u2014 Ark ships PrevTrigger and NextTrigger as separate parts (https://ark-ui.com/docs/components/date-picker). Unified here as one part with data-side per R4: the two controls are structurally identical, so splitting them would mint a key with no reachable difference",
+    "positioner": "Ark DatePicker.Positioner \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
+    "presetTrigger": "Ark DatePicker PresetTrigger \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
+    "range": "Ark Slider.Range \u2014 VERIFIED https://ark-ui.com/docs/components/slider",
+    "resizeHandle": "react-resizable-panels PanelResizeHandle \u2014 RECALLED, blocking",
+    "thumb": "Ark Slider.Thumb \u2014 VERIFIED https://ark-ui.com/docs/components/slider",
+    "track": "Ark Slider.Track \u2014 VERIFIED https://ark-ui.com/docs/components/slider",
+    "valueText": "Ark Slider.ValueText \u2014 VERIFIED https://ark-ui.com/docs/components/slider",
     "yearSelect": "Ark DatePicker.YearSelect",
-    "cancelButton": "NOVEL — footer action",
-    "cell": "NOVEL — grounded in the HTML <td> it renders",
-    "clockDisplay": "NOVEL — same",
-    "clockFace": "NOVEL — no peer library ships an analogue clock picker",
-    "clockHand": "NOVEL — same",
-    "clockNumber": "NOVEL — same",
-    "closeIcon": "NOVEL — the glyph inside `closeButton`",
-    "confirmButton": "NOVEL — footer action",
-    "count": "NOVEL — a numeric badge or counter; shared by 5 components",
-    "dragHandle": "NOVEL — row reorder grip",
-    "expandButton": "NOVEL — row expansion control",
-    "filterButton": "NOVEL — column filter control",
-    "filterContent": "NOVEL — the column filter surface",
-    "headerCell": "NOVEL — grounded in the HTML <th> it renders",
-    "labelGroup": "NOVEL — the label + description column beside a control",
-    "link": "NOVEL — the <a> inside a breadcrumb item",
-    "listHeader": "NOVEL — the weekday header row of a grid `list`",
-    "listRow": "NOVEL — a row within a grid `list`",
-    "loadingBar": "NOVEL — the bar inside a skeleton cell",
-    "loadingItem": "NOVEL — one row of the skeleton; sibling of `loading`",
-    "markerIndicator": "NOVEL — the event dot on a calendar day",
-    "mobileCard": "NOVEL — Table's below-breakpoint render",
-    "navIcon": "NOVEL — the glyph inside `navButton`",
-    "pageInfo": "NOVEL — the 'N of M' readout",
-    "periodButton": "NOVEL — AM/PM toggle",
-    "pinButton": "NOVEL — column pin control",
-    "pinnedRegion": "NOVEL — Table's sticky pinned-column region",
-    "prefix": "NOVEL — static text before an input",
-    "presetGroup": "NOVEL — the cluster of preset triggers in the calendar footer",
-    "row": "NOVEL — a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
-    "scrollRegion": "NOVEL — Table's horizontally scrolling region",
-    "searchIcon": "NOVEL — the glyph inside `searchInput`; sibling of `icon`",
-    "sortIcon": "NOVEL — column sort affordance",
-    "status": "NOVEL — Avatar presence dot; no peer anatomy has one",
-    "subContent": "NOVEL — a nested `content` surface; Ark has no submenu anatomy",
-    "subItem": "NOVEL — same",
-    "subPositioner": "NOVEL — Ark Positioner, one level down",
-    "suffix": "NOVEL — static text after an input",
-    "triggerActions": "NOVEL — the icon cluster at the end of a trigger",
-    "weekNumber": "NOVEL — ISO week column",
-    "weekday": "NOVEL — calendar column heading",
-    "clearTrigger": "Ark DatePicker.ClearTrigger — VERIFIED https://ark-ui.com/docs/components/date-picker",
-    "closeTrigger": "Ark Dialog.CloseTrigger — VERIFIED https://ark-ui.com/docs/components/dialog",
-    "day": "DIVERGENT — Ark's calendar cell is TableCell + TableCellTrigger (https://ark-ui.com/docs/components/date-picker). Our day is a single button, so adopting the split would mint two keys for one element",
-    "searchControl": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "subSearchControl": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "itemControl": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "itemRow": "RETIRED — see Stepper.step; the element is Ark's Steps.Trigger",
-    "itemIcon": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "collapsedItem": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "ellipsisTrigger": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "todayTrigger": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "triggerRow": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "headerCellText": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "pinnedList": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "pinnedRightList": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "loadingFooter": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "loadingRow": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "pinnedRightRegion": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "clockHours": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "clockMinutes": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "clockSeparator": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "clockContent": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "indicatorTrigger": "DIVERGENT — Ark Steps ships a single Trigger (https://ark-ui.com/docs/components/steps). We ship a second control for the bottom-label layout, where only the indicator sits inside it",
-    "subSearchIcon": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "subSearchInput": "NOVEL — Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "header": "Radix Accordion.Header — VERIFIED (Root/Item/Header/Trigger/Content)",
-    "separator": "Ark Steps.Separator — VERIFIED https://ark-ui.com/docs/components/steps",
-    "markerGroup": "Ark Slider.MarkerGroup — VERIFIED https://ark-ui.com/docs/components/slider; available if a marker container needs a name",
-    "overlay": "Radix Dialog.Overlay — VERIFIED https://www.radix-ui.com/primitives/docs/components/dialog. Ark spells the same part Backdrop (https://ark-ui.com/docs/components/dialog); we follow Radix"
+    "cancelButton": "NOVEL \u2014 footer action",
+    "cell": "NOVEL \u2014 grounded in the HTML <td> it renders",
+    "clockDisplay": "NOVEL \u2014 same",
+    "clockFace": "NOVEL \u2014 no peer library ships an analogue clock picker",
+    "clockHand": "NOVEL \u2014 same",
+    "clockNumber": "NOVEL \u2014 same",
+    "closeIcon": "NOVEL \u2014 the glyph inside `closeButton`",
+    "confirmButton": "NOVEL \u2014 footer action",
+    "count": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
+    "dragHandle": "NOVEL \u2014 row reorder grip",
+    "expandButton": "NOVEL \u2014 row expansion control",
+    "filterButton": "NOVEL \u2014 column filter control",
+    "filterContent": "NOVEL \u2014 the column filter surface",
+    "headerCell": "NOVEL \u2014 grounded in the HTML <th> it renders",
+    "labelGroup": "NOVEL \u2014 the label + description column beside a control",
+    "link": "NOVEL \u2014 the <a> inside a breadcrumb item",
+    "listHeader": "NOVEL \u2014 the weekday header row of a grid `list`",
+    "listRow": "NOVEL \u2014 a row within a grid `list`",
+    "loadingBar": "NOVEL \u2014 the bar inside a skeleton cell",
+    "loadingItem": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
+    "markerIndicator": "NOVEL \u2014 the event dot on a calendar day",
+    "mobileCard": "NOVEL \u2014 Table's below-breakpoint render",
+    "navIcon": "NOVEL \u2014 the glyph inside `navButton`",
+    "pageInfo": "NOVEL \u2014 the 'N of M' readout",
+    "periodButton": "NOVEL \u2014 AM/PM toggle",
+    "pinButton": "NOVEL \u2014 column pin control",
+    "pinnedRegion": "NOVEL \u2014 Table's sticky pinned-column region",
+    "prefix": "NOVEL \u2014 static text before an input",
+    "presetGroup": "NOVEL \u2014 the cluster of preset triggers in the calendar footer",
+    "row": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+    "scrollRegion": "NOVEL \u2014 Table's horizontally scrolling region",
+    "searchIcon": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
+    "sortIcon": "NOVEL \u2014 column sort affordance",
+    "status": "NOVEL \u2014 Avatar presence dot; no peer anatomy has one",
+    "subContent": "NOVEL \u2014 a nested `content` surface; Ark has no submenu anatomy",
+    "subItem": "NOVEL \u2014 same",
+    "subPositioner": "NOVEL \u2014 Ark Positioner, one level down",
+    "suffix": "NOVEL \u2014 static text after an input",
+    "triggerActions": "NOVEL \u2014 the icon cluster at the end of a trigger",
+    "weekNumber": "NOVEL \u2014 ISO week column",
+    "weekday": "NOVEL \u2014 calendar column heading",
+    "clearTrigger": "Ark DatePicker.ClearTrigger \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
+    "closeTrigger": "Ark Dialog.CloseTrigger \u2014 VERIFIED https://ark-ui.com/docs/components/dialog",
+    "day": "DIVERGENT \u2014 Ark's calendar cell is TableCell + TableCellTrigger (https://ark-ui.com/docs/components/date-picker). Our day is a single button, so adopting the split would mint two keys for one element",
+    "searchControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "subSearchControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "itemControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "itemRow": "RETIRED \u2014 see Stepper.step; the element is Ark's Steps.Trigger",
+    "itemIcon": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "collapsedItem": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "ellipsisTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "todayTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "triggerRow": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "headerCellText": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "pinnedList": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "pinnedRightList": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "loadingFooter": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "loadingRow": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "pinnedRightRegion": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockHours": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockMinutes": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockSeparator": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockContent": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "indicatorTrigger": "DIVERGENT \u2014 Ark Steps ships a single Trigger (https://ark-ui.com/docs/components/steps). We ship a second control for the bottom-label layout, where only the indicator sits inside it",
+    "subSearchIcon": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "subSearchInput": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "header": "Radix Accordion.Header \u2014 VERIFIED (Root/Item/Header/Trigger/Content)",
+    "separator": "Ark Steps.Separator \u2014 VERIFIED https://ark-ui.com/docs/components/steps",
+    "markerGroup": "Ark Slider.MarkerGroup \u2014 VERIFIED https://ark-ui.com/docs/components/slider; available if a marker container needs a name",
+    "overlay": "Radix Dialog.Overlay \u2014 VERIFIED https://www.radix-ui.com/primitives/docs/components/dialog. Ark spells the same part Backdrop (https://ark-ui.com/docs/components/dialog); we follow Radix"
   },
   "r6NestingKeys": [
     "countrySelect",
@@ -1114,7 +1114,7 @@
       "outcome": "renamed",
       "to": "triggerActions",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the icon cluster at the end of a trigger",
+      "precedent": "NOVEL \u2014 the icon cluster at the end of a trigger",
       "promotedByAmendmentC": true,
       "note": "layout-only (R5) | AMENDMENT C: promoted, carries structural utilities (shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: icon was already claimed",
       "structuralBefore": [
@@ -1164,7 +1164,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "clipping wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (absolute inset-0 overflow-hidden flex); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -1198,7 +1198,7 @@
       "outcome": "unchanged",
       "to": "status",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — Avatar presence dot; no peer anatomy has one",
+      "precedent": "NOVEL \u2014 Avatar presence dot; no peer anatomy has one",
       "note": "AMENDMENT: presence indicator dot",
       "structuralBefore": [
         "absolute",
@@ -1330,7 +1330,7 @@
       "outcome": "unchanged",
       "to": "link",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the <a> inside a breadcrumb item",
+      "precedent": "NOVEL \u2014 the <a> inside a breadcrumb item",
       "note": "AMENDMENT: the anchor inside an item; no R2 term",
       "structuralBefore": [
         "flex",
@@ -1470,10 +1470,10 @@
       "owner": "CascadingDropdown",
       "key": "checkboxChecked",
       "outcome": "deleted-as-state",
-      "to": "control",
+      "to": "itemControl",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
-      "note": "data-state=checked; NOT dead - reachable with selectionMode + defaultValue",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "note": "data-state=checked; NOT dead - reachable with selectionMode + defaultValue | TARGET CORRECTED in Task 3b: was `control`, but Amendment F moved the element this key styles onto `itemControl` (cn(classes.itemControl, isSelected && \u2026) at CascadingDropdown.tsx:50). The stale target made the replacement route look broken.",
       "structuralBefore": []
     },
     {
@@ -1688,7 +1688,7 @@
       "outcome": "renamed",
       "to": "searchIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the glyph inside `searchInput`; sibling of `icon`",
+      "precedent": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
       "promotedByAmendmentC": true,
       "note": "(R5) - LIVE | AMENDMENT C: promoted, carries structural utilities (w-4 h-4 shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -1742,7 +1742,7 @@
       "outcome": "renamed",
       "to": "loadingItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — one row of the skeleton; sibling of `loading`",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-4); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -1756,7 +1756,7 @@
       "outcome": "renamed",
       "to": "subContent",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a nested `content` surface; Ark has no submenu anatomy",
+      "precedent": "NOVEL \u2014 a nested `content` surface; Ark has no submenu anatomy",
       "promotedByAmendmentC": true,
       "note": "a nested `content` surface; same part, distinguished by depth not by key (R5) | AMENDMENT C: promoted, carries structural utilities (min-w-full sm:min-w-[180px] max-h-[320px] overflow-y-auto); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -1787,7 +1787,7 @@
       "outcome": "renamed",
       "to": "subPositioner",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — Ark Positioner, one level down",
+      "precedent": "NOVEL \u2014 Ark Positioner, one level down",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (z-[9999]); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: subContent was already claimed",
       "structuralBefore": [
@@ -1801,7 +1801,7 @@
       "outcome": "renamed",
       "to": "subItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "promotedByAmendmentC": true,
       "note": "same part as `item` one level down (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -1825,9 +1825,9 @@
       "owner": "CascadingDropdown",
       "key": "submenuItemSelected",
       "outcome": "deleted-as-state",
-      "to": "item",
+      "to": "subItem",
       "vocabulary": "R2",
-      "note": "data-selected",
+      "note": "data-selected | TARGET CORRECTED in Task 3b: was `item`, but Amendment F moved the element this key styles onto `subItem` (cn(classes.subItem, isSelected && \u2026) at CascadingDropdown.tsx:45). The stale target made the replacement route look broken.",
       "structuralBefore": []
     },
     {
@@ -1908,7 +1908,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -1922,7 +1922,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT: R2's `input` is text entry; a boolean control needs its own term",
       "structuralBefore": [
         "inline-flex",
@@ -1937,7 +1937,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked",
       "structuralBefore": []
     },
@@ -1978,7 +1978,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=indeterminate",
       "structuralBefore": []
     },
@@ -1999,7 +1999,7 @@
       "outcome": "renamed",
       "to": "labelGroup",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the label + description column beside a control",
+      "precedent": "NOVEL \u2014 the label + description column beside a control",
       "promotedByAmendmentC": true,
       "note": "layout-only (R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed",
       "structuralBefore": [
@@ -2034,7 +2034,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=unchecked",
       "structuralBefore": []
     },
@@ -2083,7 +2083,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: the +N surplus badge",
       "structuralBefore": [
         "shrink-0",
@@ -2287,7 +2287,7 @@
       "outcome": "renamed",
       "to": "subItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": " | collision-resolved: item was already claimed",
       "structuralBefore": [
         "flex",
@@ -2303,7 +2303,7 @@
       "outcome": "deleted-as-state",
       "to": "subItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "data-selected | collision-resolved: item was already claimed",
       "structuralBefore": []
     },
@@ -2314,7 +2314,7 @@
       "outcome": "renamed",
       "to": "subContent",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a nested `content` surface; Ark has no submenu anatomy",
+      "precedent": "NOVEL \u2014 a nested `content` surface; Ark has no submenu anatomy",
       "note": "AUDIT-GAP 4.5 names this the fifth synonym for the popup surface | collision-resolved: content was already claimed",
       "structuralBefore": [
         "absolute",
@@ -2404,7 +2404,7 @@
       "outcome": "unchanged",
       "to": "markerIndicator",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the event dot on a calendar day",
+      "precedent": "NOVEL \u2014 the event dot on a calendar day",
       "wasStateGated": true,
       "note": "AMENDMENT: the event dot on a day",
       "structuralBefore": [
@@ -2447,7 +2447,7 @@
       "outcome": "renamed",
       "to": "listRow",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a row within a grid `list`",
+      "precedent": "NOVEL \u2014 a row within a grid `list`",
       "promotedByAmendmentC": true,
       "note": "wrapper around `grid` (R5) | AMENDMENT C: promoted, carries structural utilities (flex); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -2461,7 +2461,7 @@
       "outcome": "renamed",
       "to": "row",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
       "promotedByAmendmentC": true,
       "note": "layout-only row (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: header was already claimed",
       "structuralBefore": [
@@ -2534,7 +2534,7 @@
       "outcome": "renamed",
       "to": "presetGroup",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the cluster of preset triggers in the calendar footer",
+      "precedent": "NOVEL \u2014 the cluster of preset triggers in the calendar footer",
       "promotedByAmendmentC": true,
       "note": "the preset row (R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-wrap); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: footer was already claimed",
       "structuralBefore": [
@@ -2599,7 +2599,7 @@
       "outcome": "renamed",
       "to": "triggerActions",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the icon cluster at the end of a trigger",
+      "precedent": "NOVEL \u2014 the icon cluster at the end of a trigger",
       "promotedByAmendmentC": true,
       "note": "layout-only icon row (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -2614,7 +2614,7 @@
       "outcome": "unchanged",
       "to": "weekNumber",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — ISO week column",
+      "precedent": "NOVEL \u2014 ISO week column",
       "note": "AMENDMENT; NOT dead - showWeekNumbers renders it",
       "structuralBefore": [
         "flex",
@@ -2629,7 +2629,7 @@
       "outcome": "unchanged",
       "to": "weekday",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — calendar column heading",
+      "precedent": "NOVEL \u2014 calendar column heading",
       "note": "AMENDMENT: Mo/Tu/We column heading",
       "structuralBefore": []
     },
@@ -2640,7 +2640,7 @@
       "outcome": "renamed",
       "to": "listHeader",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the weekday header row of a grid `list`",
+      "precedent": "NOVEL \u2014 the weekday header row of a grid `list`",
       "promotedByAmendmentC": true,
       "note": "the weekday row (R5) | AMENDMENT C: promoted, carries structural utilities (grid grid-cols-7); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -2890,7 +2890,7 @@
       "outcome": "renamed",
       "to": "loadingItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — one row of the skeleton; sibling of `loading`",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
       "promotedByAmendmentC": true,
       "note": "a row of the same skeleton (R5) | AMENDMENT C: promoted, carries structural utilities (h-4); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -2942,7 +2942,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -2956,7 +2956,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: character counter",
       "structuralBefore": []
     },
@@ -3016,7 +3016,7 @@
       "outcome": "unchanged",
       "to": "prefix",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — static text before an input",
+      "precedent": "NOVEL \u2014 static text before an input",
       "note": "AMENDMENT: static text before the input",
       "structuralBefore": []
     },
@@ -3053,7 +3053,7 @@
       "outcome": "unchanged",
       "to": "suffix",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — static text after an input",
+      "precedent": "NOVEL \u2014 static text after an input",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -3383,7 +3383,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-stretch); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -3419,7 +3419,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-full w-full); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -3541,7 +3541,7 @@
       "outcome": "renamed",
       "to": "closeIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the glyph inside `closeButton`",
+      "precedent": "NOVEL \u2014 the glyph inside `closeButton`",
       "promotedByAmendmentC": true,
       "note": "the glyph inside closeButton (R5) | AMENDMENT C: promoted, carries structural utilities (w-5 h-5); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -3677,10 +3677,10 @@
       "owner": "MultiSelectDropdown",
       "key": "checkboxChecked",
       "outcome": "deleted-as-state",
-      "to": "control",
+      "to": "itemControl",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
-      "note": "data-state=checked",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "note": "data-state=checked | TARGET CORRECTED in Task 3b: was `control`, but Amendment F moved the element this key styles onto `itemControl` (MultiSelectDropdownOption.tsx:38). The stale target made the replacement route look broken.",
       "structuralBefore": []
     },
     {
@@ -3800,7 +3800,7 @@
       "outcome": "renamed",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: the +N overflow badge, same part as CountryFlagGroup.count",
       "structuralBefore": [
         "inline-flex",
@@ -3953,7 +3953,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -3983,10 +3983,10 @@
       "owner": "MultiSelectSearchableDropdown",
       "key": "checkboxChecked",
       "outcome": "deleted-as-state",
-      "to": "control",
+      "to": "itemControl",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
-      "note": "data-state=checked",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "note": "data-state=checked | TARGET CORRECTED in Task 3b: was `control`, but Amendment F moved the element this key styles onto `itemControl` (MultiSelectSearchableDropdown.tsx:242). The stale target made the replacement route look broken.",
       "structuralBefore": []
     },
     {
@@ -4116,7 +4116,7 @@
       "outcome": "renamed",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT",
       "structuralBefore": [
         "inline-flex",
@@ -4207,7 +4207,7 @@
       "outcome": "renamed",
       "to": "searchIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the glyph inside `searchInput`; sibling of `icon`",
+      "precedent": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-4 h-4 shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -4314,7 +4314,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -4428,7 +4428,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -4487,7 +4487,7 @@
       "outcome": "renamed",
       "to": "row",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed",
       "structuralBefore": [
@@ -4513,7 +4513,7 @@
       "outcome": "renamed",
       "to": "navIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the glyph inside `navButton`",
+      "precedent": "NOVEL \u2014 the glyph inside `navButton`",
       "promotedByAmendmentC": true,
       "note": "data-side=end | AMENDMENT C: promoted, carries structural utilities (w-5 h-5); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -4552,7 +4552,7 @@
       "outcome": "unchanged",
       "to": "pageInfo",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the 'N of M' readout",
+      "precedent": "NOVEL \u2014 the 'N of M' readout",
       "note": "AMENDMENT: the 'N of M' readout",
       "structuralBefore": [
         "flex",
@@ -4566,7 +4566,7 @@
       "outcome": "renamed",
       "to": "navIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the glyph inside `navButton`",
+      "precedent": "NOVEL \u2014 the glyph inside `navButton`",
       "promotedByAmendmentC": true,
       "note": "distinguished by data-side=start (R4/R5) | AMENDMENT C: promoted, carries structural utilities (w-5 h-5); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -4710,7 +4710,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked",
       "structuralBefore": []
     },
@@ -4763,7 +4763,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT: sibling of `checkbox`",
       "structuralBefore": [
         "shrink-0",
@@ -4799,7 +4799,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=unchecked",
       "structuralBefore": []
     },
@@ -4996,7 +4996,7 @@
       "outcome": "renamed",
       "to": "searchIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the glyph inside `searchInput`; sibling of `icon`",
+      "precedent": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
       "promotedByAmendmentC": true,
       "note": "decorative glyph inside the search box (R5) | AMENDMENT C: promoted, carries structural utilities (w-4 h-4 shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -5050,7 +5050,7 @@
       "outcome": "renamed",
       "to": "loadingItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — one row of the skeleton; sibling of `loading`",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
       "promotedByAmendmentC": true,
       "note": "a row of the same skeleton (R5) | AMENDMENT C: promoted, carries structural utilities (h-4); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -5102,7 +5102,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -5285,7 +5285,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -5552,7 +5552,7 @@
       "outcome": "renamed",
       "to": "row",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: itemText was already claimed",
       "structuralBefore": [
@@ -5565,9 +5565,9 @@
       "owner": "Stepper",
       "key": "labelWrapperBottom",
       "outcome": "deleted-as-state",
-      "to": "itemText",
+      "to": "row",
       "vocabulary": "R2",
-      "note": "data-align=bottom",
+      "note": "data-align=bottom | TARGET CORRECTED in Task 3b: was `itemText`, but Amendment F moved the element this key styles onto `row` (cn(classes.row, isLabelBottom && \u2026) at Stepper.tsx:294). The stale target made the replacement route look broken.",
       "structuralBefore": [
         "items-center"
       ]
@@ -5599,7 +5599,7 @@
       "outcome": "renamed",
       "to": "trigger",
       "vocabulary": "R2",
-      "note": "AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->item) | CORRECTED (Ark Steps comparison): this is a <button> with onClick/onKeyDown wrapping the indicator and label — Ark's Steps.Trigger, not a layout row. `itemRow` was a misnomer, so R2's `trigger` replaces it",
+      "note": "AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->item) | CORRECTED (Ark Steps comparison): this is a <button> with onClick/onKeyDown wrapping the indicator and label \u2014 Ark's Steps.Trigger, not a layout row. `itemRow` was a misnomer, so R2's `trigger` replaces it",
       "promotedByAmendmentF": true,
       "structuralBefore": [
         "flex",
@@ -5680,7 +5680,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked",
       "structuralBefore": []
     },
@@ -5711,7 +5711,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-disabled",
       "structuralBefore": []
     },
@@ -5732,7 +5732,7 @@
       "outcome": "renamed",
       "to": "row",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed",
       "structuralBefore": [
@@ -5757,7 +5757,7 @@
       "outcome": "renamed",
       "to": "labelGroup",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the label + description column beside a control",
+      "precedent": "NOVEL \u2014 the label + description column beside a control",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed",
       "structuralBefore": [
@@ -5822,7 +5822,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT: `track` matches Slider's part of the same shape",
       "structuralBefore": [
         "relative",
@@ -5850,7 +5850,7 @@
       "outcome": "deleted-as-state",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=unchecked",
       "structuralBefore": []
     },
@@ -5861,7 +5861,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: the badge on a tab",
       "structuralBefore": []
     },
@@ -5872,7 +5872,7 @@
       "outcome": "deleted-as-state",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "data-state=active",
       "structuralBefore": []
     },
@@ -5883,7 +5883,7 @@
       "outcome": "deleted-as-state",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "data-state=inactive",
       "structuralBefore": []
     },
@@ -6070,7 +6070,7 @@
       "outcome": "unchanged",
       "to": "cell",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — grounded in the HTML <td> it renders",
+      "precedent": "NOVEL \u2014 grounded in the HTML <td> it renders",
       "note": "AMENDMENT",
       "structuralBefore": [
         "whitespace-nowrap"
@@ -6083,7 +6083,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT | collision-resolved: control was already claimed",
       "structuralBefore": []
     },
@@ -6094,7 +6094,7 @@
       "outcome": "absorbed-into-parent",
       "to": "cell",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — grounded in the HTML <td> it renders",
+      "precedent": "NOVEL \u2014 grounded in the HTML <td> it renders",
       "note": "(R5)",
       "structuralBefore": []
     },
@@ -6118,7 +6118,7 @@
       "outcome": "unchanged",
       "to": "dragHandle",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — row reorder grip",
+      "precedent": "NOVEL \u2014 row reorder grip",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -6154,7 +6154,7 @@
       "outcome": "renamed",
       "to": "expandButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — row expansion control",
+      "precedent": "NOVEL \u2014 row expansion control",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -6175,7 +6175,7 @@
       "outcome": "renamed",
       "to": "filterContent",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the column filter surface",
+      "precedent": "NOVEL \u2014 the column filter surface",
       "note": "AMENDMENT: a nested popup; R6 candidate",
       "structuralBefore": []
     },
@@ -6186,7 +6186,7 @@
       "outcome": "renamed",
       "to": "filterButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column filter control",
+      "precedent": "NOVEL \u2014 column filter control",
       "note": "the glyph and its control are one part",
       "structuralBefore": []
     },
@@ -6227,7 +6227,7 @@
       "outcome": "unchanged",
       "to": "headerCell",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — grounded in the HTML <th> it renders",
+      "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
       "note": "AMENDMENT",
       "structuralBefore": [
         "whitespace-nowrap"
@@ -6240,7 +6240,7 @@
       "outcome": "renamed",
       "to": "headerCellText",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — grounded in the HTML <th> it renders",
+      "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
       "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->headerCell)",
       "promotedByAmendmentF": true,
       "structuralBefore": []
@@ -6252,7 +6252,7 @@
       "outcome": "deleted-as-state",
       "to": "headerCell",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — grounded in the HTML <th> it renders",
+      "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
       "note": "a :hover utility on headerCell (R4/R5)",
       "structuralBefore": []
     },
@@ -6284,7 +6284,7 @@
       "outcome": "unchanged",
       "to": "mobileCard",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — Table's below-breakpoint render",
+      "precedent": "NOVEL \u2014 Table's below-breakpoint render",
       "note": "AMENDMENT: the below-breakpoint card render",
       "structuralBefore": []
     },
@@ -6295,7 +6295,7 @@
       "outcome": "unchanged",
       "to": "pinButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column pin control",
+      "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
       "note": "AMENDMENT",
       "structuralBefore": [
@@ -6309,7 +6309,7 @@
       "outcome": "unchanged",
       "to": "pinIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column pin control",
+      "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
       "note": "the glyph and its button are one control; state-gated, not dead | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->pinButton)",
       "promotedByAmendmentF": true,
@@ -6322,7 +6322,7 @@
       "outcome": "deleted-as-state",
       "to": "pinButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column pin control",
+      "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
       "note": "a :hover utility (R4)",
       "structuralBefore": []
@@ -6334,7 +6334,7 @@
       "outcome": "renamed",
       "to": "pinnedRegion",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — Table's sticky pinned-column region",
+      "precedent": "NOVEL \u2014 Table's sticky pinned-column region",
       "promotedByAmendmentC": true,
       "note": "the pinned-column split is layout, distinguished by data-pinned (R5) | AMENDMENT C: promoted, carries structural utilities (shrink-0 sticky left-0 z-30); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -6351,7 +6351,7 @@
       "outcome": "deleted-as-state",
       "to": "pinButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column pin control",
+      "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
       "note": "data-state=active",
       "structuralBefore": [
@@ -6365,7 +6365,7 @@
       "outcome": "deleted-as-state",
       "to": "pinButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column pin control",
+      "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
       "note": "data-state=active (already pinned)",
       "structuralBefore": []
@@ -6377,7 +6377,7 @@
       "outcome": "deleted-as-state",
       "to": "pinButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column pin control",
+      "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
       "note": "a :hover utility",
       "structuralBefore": []
@@ -6486,7 +6486,7 @@
       "outcome": "renamed",
       "to": "loadingBar",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — the bar inside a skeleton cell",
+      "precedent": "NOVEL \u2014 the bar inside a skeleton cell",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-full w-full); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: loadingItem was already claimed",
       "structuralBefore": [
@@ -6501,7 +6501,7 @@
       "outcome": "renamed",
       "to": "loadingItem",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — one row of the skeleton; sibling of `loading`",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-14); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -6526,7 +6526,7 @@
       "outcome": "unchanged",
       "to": "sortIcon",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — column sort affordance",
+      "precedent": "NOVEL \u2014 column sort affordance",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -6549,7 +6549,7 @@
       "outcome": "renamed",
       "to": "scrollRegion",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — Table's horizontally scrolling region",
+      "precedent": "NOVEL \u2014 Table's horizontally scrolling region",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (min-w-0 flex-1 overflow-x-auto); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -6578,7 +6578,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a numeric badge or counter; shared by 5 components",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -6701,7 +6701,7 @@
       "outcome": "renamed",
       "to": "cancelButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — footer action",
+      "precedent": "NOVEL \u2014 footer action",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -6712,7 +6712,7 @@
       "outcome": "unchanged",
       "to": "clockCenter",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — no peer library ships an analogue clock picker",
+      "precedent": "NOVEL \u2014 no peer library ships an analogue clock picker",
       "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockFace)",
       "promotedByAmendmentF": true,
       "structuralBefore": []
@@ -6735,7 +6735,7 @@
       "outcome": "unchanged",
       "to": "clockDisplay",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "AMENDMENT: the HH:MM readout",
       "structuralBefore": [
         "flex",
@@ -6748,10 +6748,10 @@
       "owner": "TimePicker",
       "key": "clockDisplayActive",
       "outcome": "deleted-as-state",
-      "to": "clockDisplay",
+      "to": "clockHours",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
-      "note": "data-state=active (which unit is being set)",
+      "precedent": "NOVEL \u2014 same",
+      "note": "data-state=active (which unit is being set) | TARGET CORRECTED in Task 3b: was `clockDisplay`, but Amendment F moved the element this key styles onto `clockHours` (ClockFace.tsx:497 \u2014 the hours/minutes buttons, not the wrapper). The stale target made the replacement route look broken.",
       "structuralBefore": []
     },
     {
@@ -6761,7 +6761,7 @@
       "outcome": "renamed",
       "to": "clockHours",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockDisplay)",
       "promotedByAmendmentF": true,
       "structuralBefore": []
@@ -6773,7 +6773,7 @@
       "outcome": "renamed",
       "to": "clockMinutes",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockDisplay)",
       "promotedByAmendmentF": true,
       "structuralBefore": []
@@ -6785,7 +6785,7 @@
       "outcome": "renamed",
       "to": "clockSeparator",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "the colon (R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockDisplay)",
       "promotedByAmendmentF": true,
       "structuralBefore": []
@@ -6797,7 +6797,7 @@
       "outcome": "unchanged",
       "to": "clockFace",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — no peer library ships an analogue clock picker",
+      "precedent": "NOVEL \u2014 no peer library ships an analogue clock picker",
       "note": "AMENDMENT",
       "structuralBefore": [
         "relative",
@@ -6814,7 +6814,7 @@
       "outcome": "unchanged",
       "to": "clockHand",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "AMENDMENT",
       "structuralBefore": [
         "absolute",
@@ -6828,7 +6828,7 @@
       "outcome": "unchanged",
       "to": "clockHandDot",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-3 h-3); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->clockHand)",
       "promotedByAmendmentF": true,
@@ -6844,7 +6844,7 @@
       "outcome": "unchanged",
       "to": "clockHandLine",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockHand)",
       "promotedByAmendmentF": true,
       "structuralBefore": []
@@ -6856,7 +6856,7 @@
       "outcome": "unchanged",
       "to": "clockNumber",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "AMENDMENT",
       "structuralBefore": [
         "absolute"
@@ -6869,7 +6869,7 @@
       "outcome": "deleted-as-state",
       "to": "clockNumber",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "data-disabled",
       "structuralBefore": []
     },
@@ -6880,7 +6880,7 @@
       "outcome": "absorbed-into-parent",
       "to": "clockNumber",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5)",
       "structuralBefore": []
     },
@@ -6891,7 +6891,7 @@
       "outcome": "deleted-as-state",
       "to": "clockNumber",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — same",
+      "precedent": "NOVEL \u2014 same",
       "note": "data-selected",
       "structuralBefore": [
         "w-8",
@@ -6908,7 +6908,7 @@
       "outcome": "renamed",
       "to": "confirmButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — footer action",
+      "precedent": "NOVEL \u2014 footer action",
       "note": "AMENDMENT",
       "structuralBefore": []
     },
@@ -6919,7 +6919,7 @@
       "outcome": "deleted-as-state",
       "to": "periodButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — AM/PM toggle",
+      "precedent": "NOVEL \u2014 AM/PM toggle",
       "note": "data-state=active",
       "structuralBefore": []
     },
@@ -6930,7 +6930,7 @@
       "outcome": "renamed",
       "to": "periodButton",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — AM/PM toggle",
+      "precedent": "NOVEL \u2014 AM/PM toggle",
       "note": "AMENDMENT: AM/PM",
       "structuralBefore": []
     },
@@ -6941,7 +6941,7 @@
       "outcome": "renamed",
       "to": "row",
       "vocabulary": "amendment",
-      "precedent": "NOVEL — a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: clockDisplay was already claimed",
       "structuralBefore": [
@@ -7136,7 +7136,7 @@
       "outcome": "renamed",
       "to": "control",
       "vocabulary": "amendment",
-      "precedent": "Ark Combobox / Select / Field — the interactive box inside the root",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "promotedByAmendmentC": true,
       "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent",
       "structuralBefore": [
@@ -7258,7 +7258,7 @@
       ]
     }
   ],
-  "$correctedOn": "2026-09-02 (Task 3a): 24 rows carried outcome `unchanged` while naming a different target, so they were renames counted as no-ops. Corrected to `renamed` and the totals recomputed from the rows. key-migration.contract now asserts an `unchanged` row targets its own key, and that every total matches a count over the rows — neither was checked, which is why the drift survived.",
+  "$correctedOn": "2026-09-02 (Task 3a): 24 rows carried outcome `unchanged` while naming a different target, so they were renames counted as no-ops. Corrected to `renamed` and the totals recomputed from the rows. key-migration.contract now asserts an `unchanged` row targets its own key, and that every total matches a count over the rows \u2014 neither was checked, which is why the drift survived.",
   "$correctedRows": [
     "Accordion.heading -> header",
     "Avatar.initials -> fallback",
@@ -7869,5 +7869,7 @@
       ]
     ]
   },
-  "$coLocatedBeforeComment": "Key pairs written into one className expression before Task 3a, i.e. two handles on ONE element. R9's merge test needs these to tell 'two keys on one element' (harmless) from 'two elements on one key' (the ADR 001 defect). Frozen from git HEAD for the same reason as structuralBefore: after the rename the old names are gone from the source and the check could no longer see its own evidence."
+  "$coLocatedBeforeComment": "Key pairs written into one className expression before Task 3a, i.e. two handles on ONE element. R9's merge test needs these to tell 'two keys on one element' (harmless) from 'two elements on one key' (the ADR 001 defect). Frozen from git HEAD for the same reason as structuralBefore: after the rename the old names are gone from the source and the check could no longer see its own evidence.",
+  "$task3bOutcome": "104 of the 108 planned deletions applied (97 state + 11 dead, minus 4 held back). Held back: CascadingDropdown.content \u2014 the dead list was re-derived post-3a and `menu` had taken that name, so it is a live key with 5 source references, not a dead one; DatePicker.dayFocused and DatePicker.dropdownItemSelected \u2014 blocked on the a11y phase, which is on the do-not-touch list, so the replacement state cannot be reached and the route cannot be proven; InternationalPhoneInput.countrySelectOptionSelected \u2014 its route is R6-nested and needs Task 4. Live keys are 384 against the table's predicted 369: the difference is those 4 plus the 12 R6-nested absorbs Task 3a deferred, whose keys still exist under their old names.",
+  "$task3bFindings": "The replacement contract found six state rows whose `to` had gone stale under Amendment F (checkboxChecked -> itemControl in three components, labelWrapperBottom -> row, submenuItemSelected -> subItem, clockDisplayActive -> clockHours) and three states with no attribute on the element the surviving key styles (Switch's label had no data-disabled, both Stepper connectors had no data-orientation) \u2014 all fixed before deleting. CascadingDropdown.menuItemDisabled was the sixteenth key wrongly waived on this branch: its recorded reason said a disabled top-level option did not render it, but the fixture marked a disabled CHILD, not a top-level option."
 }

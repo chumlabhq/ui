@@ -376,8 +376,6 @@ const PaginationDemo = () => {
                     root: "flex flex-wrap items-center gap-1",
  navButton: `p-2 rounded-full shadow-sm transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary`,
  item: `w-9 h-9 rounded-full shadow-sm flex items-center justify-center text-sm transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
-                    activePageButton:
-                      "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-cl-accent text-white",
                     list: "flex items-center gap-1",
                     navIcon: "w-4 h-4 text-cl-text-secondary",
                   }}
@@ -407,7 +405,6 @@ const PaginationDemo = () => {
                     root: "flex items-center",
                     navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
                     item: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
-                    activePageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-white`,
                     list: "flex items-center gap-0.5",
                     navIcon: "w-4 h-4",
                   }}
@@ -596,8 +593,6 @@ const PaginationDemo = () => {
                   ...c.pagination,
                   root: "flex flex-wrap items-center justify-between gap-4",
                   navButton: `p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border-input-focus bg-cl-accent/10 hover:bg-cl-accent/10 text-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/30 dark:hover:bg-cl-accent/50 dark:text-cl-accent`,
-                  activePageButton:
-                    "px-3 py-1 rounded-cl-md border border-cl-border-input-focus bg-cl-accent text-white",
                   navIcon: "w-5 h-5 text-cl-accent",
                 }}
               />
@@ -627,8 +622,6 @@ const PaginationDemo = () => {
                     classes={{
                       ...c.pagination,
                       navButton: `p-2 rounded-full border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-success bg-cl-success/15 hover:bg-cl-success/15 dark:border dark:border-cl-success dark:bg-cl-success/30 dark:hover:bg-cl-success/50`,
-                      activePageButton:
-                        "px-3 py-1 rounded-cl-md border border-cl-success bg-cl-success text-white",
                     }}
                   />
                 </div>
@@ -748,8 +741,6 @@ const PaginationDemo = () => {
               row: "flex items-center gap-1",
  navButton: `p-2 rounded-full shadow-sm hover:shadow transition-shadow disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text-secondary`,
  item: `w-10 h-10 rounded-full shadow-sm hover:shadow transition-shadow flex items-center justify-center cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
-              activePageButton:
-                "w-10 h-10 rounded-full shadow-md flex items-center justify-center bg-cl-accent text-white",
               list: "flex items-center gap-1",
  selectorButton: `flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border dark:text-cl-text`,
  selectorDropdown: `rounded-cl-lg shadow-lg py-2 min-w-[80px] bg-white border border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
@@ -778,7 +769,6 @@ const PaginationDemo = () => {
               ...c.pagination,
               navButton: `p-2 rounded-cl-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
               item: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
-              activePageButton: `px-3 py-1 rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover data-[active]:bg-cl-accent data-[active]:text-white data-[active]:hover:bg-cl-accent/90 dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text dark:data-[active]:bg-cl-accent dark:data-[active]:text-white dark:data-[active]:hover:bg-cl-accent/90`,
             }}
           />
         </DemoWrapper>
@@ -801,7 +791,6 @@ const PaginationDemo = () => {
                 root: "flex items-center",
                 navButton: `p-1.5 rounded-cl-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
                 item: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover hover:text-cl-text dark:text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:hover:text-cl-text`,
-                activePageButton: `min-w-[36px] h-9 rounded-cl-md flex items-center justify-center text-sm font-medium bg-cl-bg text-white dark:bg-cl-bg-elevated dark:text-white`,
                 ellipsis: `px-1 text-cl-text-disabled`,
                 list: "flex items-center gap-0.5",
                 navIcon: "w-4 h-4",
@@ -828,8 +817,6 @@ const PaginationDemo = () => {
                 root: "flex items-center gap-0.5",
                 navButton: `p-1 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:bg-cl-bg-hover text-cl-text-secondary dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
                 item: `px-2 py-0.5 text-sm rounded transition-colors cursor-pointer hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-bg-elevated dark:text-cl-text-secondary`,
-                activePageButton:
-                  "px-2 py-0.5 text-sm rounded bg-cl-accent text-white",
                 list: "flex items-center gap-0.5",
                 ellipsis: `px-1 text-sm text-cl-text-tertiary`,
                 navIcon: "w-3.5 h-3.5",

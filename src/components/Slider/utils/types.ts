@@ -20,16 +20,10 @@ export interface SliderClasses {
   range?: string;
   /** Draggable thumb(s) */
   thumb?: string;
-  /** Active/dragging thumb */
-  thumbActive?: string;
-  /** Disabled thumb */
-  thumbDisabled?: string;
   /** Value tooltip above the thumb */
   valueText?: string;
   /** Mark tick container */
   marker?: string;
-  /** Active mark tick dot (within range) */
-  markDotActive?: string;
   /** Error message */
   message?: string;
 }

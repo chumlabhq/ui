@@ -79,9 +79,6 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       className={
         cn(
           classes.item,
-          isSelected && classes.optionSelected,
-          isFocused && classes.optionFocused,
-          isDisabled && classes.optionDisabled,
         ) || undefined
       }
       data-selected={isSelected || undefined}
@@ -407,11 +404,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         content: classesProp?.content ?? baseClasses.content,
         list: classesProp?.list ?? baseClasses.list,
         item: classesProp?.item ?? baseClasses.item,
-        optionSelected:
-          classesProp?.optionSelected ?? baseClasses.optionSelected,
-        optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
-        optionDisabled:
-          classesProp?.optionDisabled ?? baseClasses.optionDisabled,
         icon: classesProp?.icon ?? baseClasses.icon,
         itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,

@@ -19,8 +19,6 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   list: "max-h-60 overflow-y-auto",
   item:
     "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
-  optionSelected: "bg-cl-accent/15 dark:bg-cl-accent/40 font-medium",
-  optionFocused: "bg-cl-bg-hover dark:bg-cl-bg-elevated",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
   empty:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
@@ -33,8 +31,6 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary dark:text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   clockMinutes:
     "px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary dark:text-cl-text-secondary hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
-  clockDisplayActive:
-    "bg-cl-accent dark:bg-cl-accent text-cl-on-accent hover:bg-cl-accent dark:hover:bg-cl-accent",
   clockSeparator:
     "text-2xl font-semibold text-cl-text-tertiary dark:text-cl-text-tertiary",
   clockFace:
@@ -45,10 +41,6 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/30",
   clockNumber:
     "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary dark:text-cl-text-secondary hover:text-cl-text dark:hover:text-white text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
-  clockNumberSelected:
-    "text-cl-on-accent font-bold bg-cl-accent dark:bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberDisabled:
-    "opacity-30 cursor-not-allowed text-cl-text-secondary dark:text-cl-text-secondary",
   clockCenter: "fill-cl-accent dark:fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton:
@@ -58,8 +50,6 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
   row: "flex flex-col gap-1 ml-3",
   periodButton:
     "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary dark:text-cl-text-tertiary hover:bg-black/5 dark:hover:bg-white/10",
-  clockPeriodActive:
-    "bg-cl-accent dark:bg-cl-accent text-cl-on-accent",
 };
 
 export const UNSTYLED_TIMEPICKER_CLASSES: Required<TimePickerClasses> =

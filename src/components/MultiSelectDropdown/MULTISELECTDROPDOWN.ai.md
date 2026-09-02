@@ -174,8 +174,8 @@ root
 | Trigger button | `trigger` | Contains chips/text |
 | Selected chips | `chip`, `chipRemove` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
-| Option row | `item`, `optionSelected`, `optionFocused` | |
-| Checkbox | `itemControl`, `checkboxChecked`, `itemIndicator` | |
+| Option row | `item` | |
+| Checkbox | `itemControl`, `itemIndicator` | |
 | Chevron icon | `icon` | |
 | "+N more" badge | `count` | |
 

@@ -144,9 +144,6 @@
         "item": {
           "type": "string"
         },
-        "activePageButton": {
-          "type": "string"
-        },
         "navButton": {
           "type": "string"
         },

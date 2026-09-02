@@ -184,8 +184,8 @@ message
 | Selected text appearance | `value` | Has `truncate` by default |
 | Popup container | `content` | Border, shadow, bg |
 | Option row | `item` | Hover/cursor styles |
-| Selected option highlight | `optionSelected` | Applied on top of `item` |
-| Keyboard-focused option | `optionFocused` | Applied on top of `item` |
+| Selected option highlight |  | Applied on top of `item` |
+| Keyboard-focused option |  | Applied on top of `item` |
 | Disabled option | `optionDisabled` | Includes `pointer-events-none` |
 | Dropdown arrow icon | `icon` | Size, color, transition |
 | Check mark on selected | `itemIndicator` | Size, color |

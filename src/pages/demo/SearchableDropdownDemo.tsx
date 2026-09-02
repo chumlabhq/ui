@@ -756,9 +756,6 @@ const SearchableDropdownDemo = () => {
                 showSelectedIcon={false}
                 classes={{
                   ...c.dropdown,
-                  optionSelected: dark
-                    ? "bg-cl-accent/50 font-medium"
-                    : "bg-cl-accent/10 font-medium",
                 }}
               />
             </div>

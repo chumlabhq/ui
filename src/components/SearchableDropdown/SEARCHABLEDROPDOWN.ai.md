@@ -188,7 +188,7 @@ root
 | Trigger button | `trigger` |
 | Selected text | `value` |
 | Dropdown panel | `content` |
-| Option row | `item`, `optionSelected`, `optionFocused` |
+| Option row | `item` |
 | Check icon | `itemIndicator` |
 | Clear button | `clearTrigger` |
 | No results text | `empty` |

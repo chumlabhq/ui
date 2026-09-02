@@ -171,43 +171,13 @@
         "item": {
           "type": "string"
         },
-        "tabActive": {
-          "type": "string"
-        },
-        "tabInactive": {
-          "type": "string"
-        },
-        "tabDisabled": {
-          "type": "string"
-        },
-        "tabFocus": {
-          "type": "string"
-        },
         "itemText": {
-          "type": "string"
-        },
-        "labelActive": {
-          "type": "string"
-        },
-        "labelInactive": {
           "type": "string"
         },
         "itemIcon": {
           "type": "string"
         },
-        "iconActive": {
-          "type": "string"
-        },
-        "iconInactive": {
-          "type": "string"
-        },
         "count": {
-          "type": "string"
-        },
-        "countActive": {
-          "type": "string"
-        },
-        "countInactive": {
           "type": "string"
         },
         "indicator": {

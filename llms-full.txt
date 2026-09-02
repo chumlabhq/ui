@@ -948,7 +948,7 @@ const navRef = useRef<HTMLElement>(null);
 | Trail container layout | `list` | Flex container for items + separators. |
 | Inactive item styling | `item` | Buttons/spans for non-link, non-active items. |
 | Active (last) item styling | `itemActive` | The current page indicator. |
-| Disabled item look | `itemDisabled` | Appended to `item` class when disabled. |
+| Disabled item look |  | Appended to `item` class when disabled. |
 | Link items (with href) | `link` | Anchors — separate slot from `item`. |
 | Separator icon/text | `separator` | Between each item. |
 | Icon inside items | `itemIcon` | Applied to the icon wrapper span. |
@@ -1593,7 +1593,7 @@ root
 | Selected item highlight | `menuItemSelected` | Stacks on top of menuItem |
 | Focused item (keyboard) | `menuItemFocused` | Stacks on top of menuItem |
 | Submenu panel | `subContent` | |
-| Checkbox style | `itemControl` + `checkboxChecked` | checkboxChecked applied when checked |
+| Checkbox style | `itemControl` +  | checkboxChecked applied when checked |
 | Search bar in menu | `searchControl`, `searchInput`, `searchIcon` | |
 | Search bar in submenu | `subSearchControl` | Falls back to `searchControl` if empty |
 | Loading state | `loading`, `loading`, `loadingItem` | |
@@ -1767,9 +1767,7 @@ This renders correctly with no additional props, classes, or setup.
 
 | Prop | Constraint |
 |------|-----------|
-| `checked` + `onValueChange` | Controlled mode. Must provide both. |
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
-| `indeterminate` | Overrides checked visual. The underlying input is still checked/unchecked. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
 | `classes.checked` / `classes.unchecked` | REPLACE per slot. Provide full styling — not additive. |
 
@@ -1799,9 +1797,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Text label rendered beside the checkbox. |
 | `description` | object | — | React.ReactNode — Helper text rendered below the label. |
-| `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
-| `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
@@ -2284,15 +2280,15 @@ The component has three styling modes:
 | Calendar/clear icons | `icon`, `clearTrigger` | Icons inside trigger |
 | Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
 | Calendar popover | `content` | Outer container of calendar |
-| Month/year navigation | `header`, `row`, `navButton`, `navButtonDisabled` | Calendar header area |
+| Month/year navigation | `header`, `row`, `navButton` | Calendar header area |
 | Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem`, `dropdownItemSelected` | Month/year selectors |
 | Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
-| Day cells | `item`, `daySelected`, `dayToday`, `dayDisabled`, `dayOutside` | Individual calendar days |
+| Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | `dayFocused` | Focused day ring |
-| Marked days | `dayMarked`, `markerIndicator`, `markerTooltip` | Marker visuals |
+| Marked days | `markerIndicator`, `markerTooltip` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
-| Presets | `presetGroup`, `presetTrigger`, `presetActive` | Preset buttons panel |
+| Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
 | Footer / today button | `footer`, `todayTrigger` | Calendar footer |
 | Multi-month layout | `listRow`, `list` | Side-by-side months |
 
@@ -2714,8 +2710,8 @@ message
 | Selected text appearance | `value` | Has `truncate` by default |
 | Popup container | `content` | Border, shadow, bg |
 | Option row | `item` | Hover/cursor styles |
-| Selected option highlight | `optionSelected` | Applied on top of `item` |
-| Keyboard-focused option | `optionFocused` | Applied on top of `item` |
+| Selected option highlight |  | Applied on top of `item` |
+| Keyboard-focused option |  | Applied on top of `item` |
 | Disabled option | `optionDisabled` | Includes `pointer-events-none` |
 | Dropdown arrow icon | `icon` | Size, color, transition |
 | Check mark on selected | `itemIndicator` | Size, color |
@@ -3844,8 +3840,8 @@ root
 | Trigger button | `trigger` | Contains chips/text |
 | Selected chips | `chip`, `chipRemove` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
-| Option row | `item`, `optionSelected`, `optionFocused` | |
-| Checkbox | `itemControl`, `checkboxChecked`, `itemIndicator` | |
+| Option row | `item` | |
+| Checkbox | `itemControl`, `itemIndicator` | |
 | Chevron icon | `icon` | |
 | "+N more" badge | `count` | |
 
@@ -4371,7 +4367,7 @@ root (row, flex flex-wrap)
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Root layout | `root` | Controls flex direction and gap |
-| Page buttons | `item`, `activePageButton` | Inactive and active styles |
+| Page buttons | `item` | Inactive and active styles |
 | Prev/next buttons | `navButton` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
 | Rows dropdown trigger | `selectorButton` | |
@@ -4787,7 +4783,7 @@ root
 | Trigger button | `trigger` |
 | Selected text | `value` |
 | Dropdown panel | `content` |
-| Option row | `item`, `optionSelected`, `optionFocused` |
+| Option row | `item` |
 | Check icon | `itemIndicator` |
 | Clear button | `clearTrigger` |
 | No results text | `empty` |
@@ -5090,9 +5086,9 @@ root (nav, data-orientation, data-variant)
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
-| Indicator circle | `itemIndicator` + status classes (`indicatorActive`, etc.) | |
+| Indicator circle | `itemIndicator` + status classes (etc.) | |
 | Step number/icon inside | `itemIcon` | |
-| Step label text | `itemText` + status classes (`labelActive`, etc.) | |
+| Step label text | `itemText` + status classes (etc.) | |
 | Step description | `description` + status classes | |
 | Connecting line | `connectorHorizontal` / `connectorVertical` + status classes | |
 | Clickable step hover | `stepInteractive` | |
@@ -5628,11 +5624,11 @@ root (w-full)
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
 | Tab list container | `list` |
-| Tab button | `item`, `tabActive`, `tabInactive`, `tabDisabled` |
+| Tab button | `item` |
 | Tab focus ring | `tabFocus` |
-| Tab label text | `itemText`, `labelActive`, `labelInactive` |
-| Tab icon | `itemIcon`, `iconActive`, `iconInactive` |
-| Count badge | `count`, `countActive`, `countInactive` |
+| Tab label text | `itemText` |
+| Tab icon | `itemIcon` |
+| Count badge | `count` |
 | Active underline | `indicator` |
 | Panel content | `content` |
 
@@ -5993,9 +5989,9 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | Description text | `description` |
 | Clock container | `clockContent` |
 | Clock face circle | `clockFace` |
-| Clock numbers | `clockNumber`, `clockNumberSelected` |
+| Clock numbers | `clockNumber` |
 | Clock hand | `clockHand`, `clockHandLine`, `clockHandDot` |
-| AM/PM buttons | `periodButton`, `clockPeriodActive` |
+| AM/PM buttons | `periodButton` |
 | OK/Cancel buttons | `confirmButton`, `cancelButton` |
 
 #### Dark mode

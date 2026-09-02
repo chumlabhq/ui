@@ -14,14 +14,10 @@ export const DEFAULT_MULTISELECTDROPDOWN_CLASSES: Required<MultiSelectDropdownCl
     list: "max-h-60 overflow-y-auto",
     item:
       "flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
-    optionSelected: "bg-cl-accent/15 dark:bg-cl-accent/50",
-    optionFocused: "bg-cl-bg-hover dark:bg-cl-text/10",
-    optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
     icon:
       "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary dark:text-cl-text-tertiary",
     itemControl:
       "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input dark:border-cl-border",
-    checkboxChecked: "bg-cl-accent dark:bg-cl-accent border-cl-border-input-focus dark:border-cl-border-input-focus text-cl-on-accent",
     itemIndicator: "w-full h-full",
     chip:
       "inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/15 dark:bg-cl-text/10 text-cl-accent dark:text-cl-text",

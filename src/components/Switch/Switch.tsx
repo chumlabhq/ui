@@ -88,15 +88,9 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         row: classesProp?.row ?? baseClasses.row,
         labelGroup: classesProp?.labelGroup ?? baseClasses.labelGroup,
         label: classesProp?.label ?? baseClasses.label,
-        disabledLabel: classesProp?.disabledLabel ?? baseClasses.disabledLabel,
         description: classesProp?.description ?? baseClasses.description,
         control: classesProp?.control ?? baseClasses.control,
-        disabledTracker: classesProp?.disabledTracker ?? baseClasses.disabledTracker,
         thumb: classesProp?.thumb ?? baseClasses.thumb,
-        checkedTracker: classesProp?.checkedTracker ?? baseClasses.checkedTracker,
-        uncheckedTracker: classesProp?.uncheckedTracker ?? baseClasses.uncheckedTracker,
-        checkedThumb: classesProp?.checkedThumb ?? baseClasses.checkedThumb,
-        uncheckedThumb: classesProp?.uncheckedThumb ?? baseClasses.uncheckedThumb,
         message: classesProp?.message ?? baseClasses.message,
         loading: classesProp?.loading ?? baseClasses.loading,
       }),
@@ -143,9 +137,12 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
                 : label && (
                     <label
                       htmlFor={switchId}
+                      // ADR 002 R4: the state the disabledLabel key named. The
+                      // attribute has to sit on the element `label` styles, or
+                      // the replacement variant has nothing to match.
+                      data-disabled={disabled || undefined}
                       className={cn(
                         mergedClasses.label,
-                        disabled && mergedClasses.disabledLabel,
                       ) || undefined}
                     >
                       {label}
@@ -188,8 +185,6 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             onClick={handleToggle}
             className={cn(
               mergedClasses.control,
-              disabled && mergedClasses.disabledTracker,
-              isChecked ? mergedClasses.checkedTracker : mergedClasses.uncheckedTracker,
               loading && "opacity-50 pointer-events-none",
             ) || undefined}
             style={transitionStyle}
@@ -199,10 +194,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             {...buttonProps}
           >
             <span
-              className={cn(
-                mergedClasses.thumb,
-                isChecked ? mergedClasses.checkedThumb : mergedClasses.uncheckedThumb,
-              ) || undefined}
+              className={mergedClasses.thumb || undefined}
               // ADR 002 R4: the state the checkedThumb/uncheckedThumb keys named.
               data-state={isChecked ? "checked" : "unchecked"}
               style={transitionStyle}

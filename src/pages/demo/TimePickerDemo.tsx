@@ -35,8 +35,6 @@ const getClasses = (dark: boolean) => ({
     content: `border rounded-cl-md shadow-lg overflow-hidden bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
     list: "max-h-60 overflow-y-auto",
     item: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-black/5 dark:text-cl-text dark:hover:bg-white/10`,
-    optionSelected: dark ? "bg-cl-accent/50 font-medium" : "bg-cl-accent/10 font-medium",
-    optionFocused: dark ? "bg-white/10" : "bg-black/5",
     itemIndicator: `w-4 h-4 shrink-0 text-cl-accent`,
     empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
     message: `text-sm mt-1 text-cl-error`,
@@ -44,22 +42,18 @@ const getClasses = (dark: boolean) => ({
     clockDisplay: "flex items-center justify-center gap-1 mb-4",
     clockHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
     clockMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
-    clockDisplayActive: dark ? "bg-cl-accent text-white hover:bg-cl-accent/90" : "bg-cl-accent text-white hover:bg-cl-accent/90",
     clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
     clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated`,
     clockHand: "absolute inset-0",
     clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
     clockHandDot: `w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/90`,
     clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text dark:text-cl-text-secondary dark:hover:text-white text-xs text-cl-text-tertiary",
-    clockNumberSelected: dark ? "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
-    clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
     clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
     footer: "flex items-center justify-end gap-2 mt-4",
     cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-black/5 dark:text-cl-text-secondary dark:hover:bg-white/10`,
     confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent/90",
     row: "flex flex-col gap-1 ml-3",
     periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-black/5 dark:text-cl-text-tertiary dark:hover:bg-white/10`,
-    clockPeriodActive: dark ? "bg-cl-accent text-white" : "bg-cl-accent text-white",
   } satisfies TimePickerClasses,
 });
 
@@ -75,8 +69,6 @@ const darkTheme: TimePickerClasses = {
   content: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-elevated border-cl-border",
   list: "max-h-60 overflow-y-auto",
   item: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-text hover:bg-cl-bg-elevated transition-colors",
-  optionSelected: "bg-cl-text/10 font-medium",
-  optionFocused: "bg-cl-bg-elevated",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   empty: "px-3 py-4 text-sm text-cl-text-tertiary text-center",
 };
@@ -90,8 +82,6 @@ const warmTheme: TimePickerClasses = {
   content: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border-cl-warning",
   list: "max-h-60 overflow-y-auto",
   item: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-warning hover:bg-cl-warning/15 transition-colors",
-  optionSelected: "bg-cl-warning/15 font-medium",
-  optionFocused: "bg-cl-warning/15",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-warning",
   empty: "px-3 py-4 text-sm text-cl-warning text-center",
 };
@@ -105,13 +95,11 @@ const coolTheme: TimePickerClasses = {
   content: "border rounded-cl-md shadow-lg overflow-hidden bg-cl-accent/10 border-cl-border-input-focus",
   list: "max-h-60 overflow-y-auto",
   item: "flex items-center justify-between px-3 py-2 cursor-pointer text-sm text-cl-accent hover:bg-cl-accent/10 transition-colors",
-  optionSelected: "bg-cl-accent/10 font-medium",
-  optionFocused: "bg-cl-accent/10",
   itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
   empty: "px-3 py-4 text-sm text-cl-accent text-center",
 };
 
-const getMinimalTheme = (dark: boolean): TimePickerClasses => ({
+const getMinimalTheme = (): TimePickerClasses => ({
   root: `inline-flex flex-col gap-1 text-cl-text`,
   control: "relative",
   trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-b bg-transparent cursor-text border border-cl-border-input text-cl-text hover:border-cl-border focus-within:border-cl-border dark:border dark:border-cl-border dark:text-white dark:hover:border-cl-border-input dark:focus-within:border-cl-text`,
@@ -120,8 +108,6 @@ const getMinimalTheme = (dark: boolean): TimePickerClasses => ({
   content: `rounded shadow-sm overflow-hidden border bg-white border-cl-border dark:bg-cl-bg-elevated dark:border dark:border-cl-border`,
   list: "max-h-60 overflow-y-auto",
   item: `flex items-center justify-between px-3 py-2 cursor-pointer text-sm transition-colors text-cl-text hover:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-elevated`,
-  optionSelected: "font-medium",
-  optionFocused: dark ? "bg-cl-bg-elevated" : "bg-cl-bg-hover",
   itemIndicator: `w-4 h-4 shrink-0 text-cl-text-secondary`,
   empty: `px-3 py-4 text-sm text-center text-cl-text-tertiary`,
 });
@@ -138,22 +124,18 @@ const getEmeraldClockTheme = (dark: boolean): TimePickerClasses => ({
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
   clockHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   clockMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
-  clockDisplayActive: dark ? "bg-cl-success text-white hover:bg-cl-success" : "bg-cl-success text-white hover:bg-cl-success",
   clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
   clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-success/15 dark:bg-cl-success/30`,
   clockHand: "absolute inset-0",
   clockHandLine: dark ? "stroke-cl-success" : "stroke-cl-success",
   clockHandDot: `w-3 h-3 rounded-full bg-cl-success/30`,
   clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
-  clockNumberSelected: dark ? "text-white font-bold bg-cl-success rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-success rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
   clockCenter: dark ? "fill-cl-success" : "fill-cl-success",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success text-white hover:bg-cl-success",
   row: "flex flex-col gap-1 ml-3",
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
-  clockPeriodActive: dark ? "bg-cl-success text-white" : "bg-cl-success text-white",
 });
 
 const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
@@ -166,22 +148,18 @@ const getRoseClockTheme = (dark: boolean): TimePickerClasses => ({
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
   clockHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   clockMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
-  clockDisplayActive: dark ? "bg-cl-accent text-white hover:bg-cl-accent" : "bg-cl-accent text-white hover:bg-cl-accent",
   clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
   clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-accent/10 dark:bg-cl-accent/30`,
   clockHand: "absolute inset-0",
   clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
   clockHandDot: `w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/90`,
   clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
-  clockNumberSelected: dark ? "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
   clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent",
   row: "flex flex-col gap-1 ml-3",
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
-  clockPeriodActive: dark ? "bg-cl-accent text-white" : "bg-cl-accent text-white",
 });
 
 const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
@@ -194,22 +172,18 @@ const getVioletClockTheme = (dark: boolean): TimePickerClasses => ({
   clockDisplay: "flex items-center justify-center gap-1 mb-4",
   clockHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   clockMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
-  clockDisplayActive: dark ? "bg-cl-accent text-white hover:bg-cl-accent" : "bg-cl-accent text-white hover:bg-cl-accent",
   clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
   clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-accent/10 dark:bg-cl-accent/30`,
   clockHand: "absolute inset-0",
   clockHandLine: dark ? "stroke-cl-accent" : "stroke-cl-accent",
   clockHandDot: `w-3 h-3 rounded-full bg-cl-accent dark:bg-cl-accent/90`,
   clockNumber: "absolute text-sm font-medium cursor-pointer select-none transition-colors text-cl-text-secondary hover:text-cl-text text-xs text-cl-text-tertiary",
-  clockNumberSelected: dark ? "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center" : "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
-  clockNumberDisabled: `opacity-30 cursor-not-allowed text-cl-text-disabled`,
   clockCenter: dark ? "fill-cl-accent" : "fill-cl-accent",
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-white hover:bg-cl-accent",
   row: "flex flex-col gap-1 ml-3",
   periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
-  clockPeriodActive: dark ? "bg-cl-accent text-white" : "bg-cl-accent text-white",
 });
 
 // ─── Custom icon components ──────────────────────────────────────────────────
@@ -724,7 +698,7 @@ const TimePickerDemo = () => {
                 onValueChange={(v) => setMinimalThemeVal(v)}
                 placeholder="Select time..."
                 showSelectedIcon={false}
-                classes={getMinimalTheme(dark)}
+                classes={getMinimalTheme()}
               />
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {minimalThemeVal ?? "none"}</span>
             </div>
@@ -978,22 +952,18 @@ const TimePickerDemo = () => {
                 clockDisplay: "flex items-center justify-center gap-1 mb-4",
                 clockHours: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer text-cl-text-secondary`,
                 clockMinutes: `px-3 py-2 text-2xl font-semibold rounded-cl-md cursor-pointer text-cl-text-secondary`,
-                clockDisplayActive: "bg-cl-accent text-white",
                 clockSeparator: `text-2xl font-semibold text-cl-text-tertiary`,
                 clockFace: `relative w-52 h-52 mx-auto rounded-full bg-cl-bg-hover dark:bg-cl-bg-elevated`,
                 clockHand: "absolute inset-0",
                 clockHandLine: "stroke-cl-accent",
                 clockHandDot: "w-3 h-3 rounded-full bg-cl-accent",
                 clockNumber: "absolute text-sm font-medium cursor-pointer select-none text-cl-text-secondary text-xs text-cl-text-tertiary",
-                clockNumberSelected: "text-white font-bold bg-cl-accent rounded-full w-8 h-8 flex items-center justify-center",
-                clockNumberDisabled: "opacity-30 cursor-not-allowed",
                 clockCenter: "fill-cl-accent",
                 footer: "flex items-center justify-end gap-2 mt-4",
                 cancelButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary`,
                 confirmButton: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-white",
                 row: "flex flex-col gap-1 ml-3",
                 periodButton: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary`,
-                clockPeriodActive: "bg-cl-accent text-white",
               }}
             />
             <span className={`text-sm ${c.text}`}>
@@ -1414,7 +1384,6 @@ const TimePickerDemo = () => {
               classes={{
                 ...c.timepicker,
                 trigger: `flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-2 rounded-full transition-colors border-cl-success bg-cl-success/15 text-cl-text dark:border dark:border-cl-success dark:bg-cl-bg-elevated dark:text-cl-text`,
-                optionSelected: dark ? "bg-cl-success/40 font-medium" : "bg-cl-success/15 font-medium",
               }}
             />
             <span className={`text-sm ${c.text}`}>

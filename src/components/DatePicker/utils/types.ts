@@ -70,8 +70,6 @@ export interface DatePickerClasses {
   row?: string;
   /** Navigation button (prev/next month/year) */
   navButton?: string;
-  /** Disabled navigation button */
-  navButtonDisabled?: string;
   /** Multi-month grid wrapper */
   listRow?: string;
   /** Single month grid */
@@ -82,34 +80,14 @@ export interface DatePickerClasses {
   weekday?: string;
   /** Calendar day cell */
   item?: string;
-  /** Selected day */
-  daySelected?: string;
-  /** Today indicator */
-  dayToday?: string;
-  /** Disabled day */
-  dayDisabled?: string;
-  /** Outside month day */
-  dayOutside?: string;
-  /** Range start day */
-  dayRangeStart?: string;
-  /** Range end day */
-  dayRangeEnd?: string;
-  /** Days within range */
-  dayRangeMiddle?: string;
-  /** Hovered day */
-  dayHover?: string;
   /** Keyboard focused day */
   dayFocused?: string;
-  /** Marked day */
-  dayMarked?: string;
   /** Week number column */
   weekNumber?: string;
   /** Preset buttons container */
   presetGroup?: string;
   /** Individual preset button */
   presetTrigger?: string;
-  /** Active preset button */
-  presetActive?: string;
   /** Calendar footer */
   footer?: string;
   /** Today button in footer */
@@ -122,10 +100,6 @@ export interface DatePickerClasses {
   monthSelect?: string;
   /** Year select button */
   yearSelect?: string;
-  /** Month dropdown menu */
-  monthDropdown?: string;
-  /** Year dropdown menu */
-  yearDropdown?: string;
   /** Generic dropdown menu */
   subContent?: string;
   /** Dropdown item */

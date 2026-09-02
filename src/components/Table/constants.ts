@@ -13,18 +13,10 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   header: "",
   headerCell:
     "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated dark:bg-[#111118] border-cl-border dark:border-white/[0.06]",
-  // Inset box-shadow (not bg) for the hover tint so the opaque base
-  // `bg-cl-bg-elevated` survives on hover. A direct `bg-` swap drops the
-  // header to 4% opacity and lets rows scroll through visually under
-  // sticky headers.
-  headerCellHover:
-    "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
   headerCellText: "",
   body: "",
   item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
   cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text dark:text-cl-text",
-  selectedRow:
-    "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] bg-cl-accent/15 dark:bg-cl-accent/10 hover:bg-cl-accent/15 dark:hover:bg-cl-accent/15",
   // Right separator uses an inset box-shadow (not border-r-2) so the
   // parent's `overflow: hidden` + `rounded-cl-md` reliably clips it at
   // the rounded corner. A real border on a sticky element can escape
@@ -38,13 +30,8 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   empty:
     "flex items-center justify-center py-12 text-cl-text-tertiary dark:text-cl-text-tertiary",
   pinIcon: "text-cl-text-tertiary",
-  pinIconHover: "",
-  pinnedPinIcon: "text-cl-accent",
-  pinnedPinIconHover: "",
   pinButton:
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
-  pinnedPinButton:
-    "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-accent/15",
   loading:
     "w-full border rounded-cl-md overflow-hidden border-cl-border dark:border-white/[0.06]",
   loadingRow: "border-b border-cl-border dark:border-white/[0.04]",
@@ -56,7 +43,6 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   filterButton: "",
   filterContent: "",
   expandButton: "",
-  expandedRow: "",
   pinnedRightRegion: "",
   pinnedRightList: "",
   input: "",

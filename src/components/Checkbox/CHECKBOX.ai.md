@@ -47,9 +47,7 @@ This renders correctly with no additional props, classes, or setup.
 
 | Prop | Constraint |
 |------|-----------|
-| `checked` + `onValueChange` | Controlled mode. Must provide both. |
 | `defaultChecked` | Uncontrolled mode. Cannot be used with `checked`. |
-| `indeterminate` | Overrides checked visual. The underlying input is still checked/unchecked. |
 | `size` | Preset string (`"xs"` to `"xl"`) or number (pixel value). |
 | `classes.checked` / `classes.unchecked` | REPLACE per slot. Provide full styling — not additive. |
 
@@ -79,9 +77,7 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Text label rendered beside the checkbox. |
 | `description` | object | — | React.ReactNode — Helper text rendered below the label. |
-| `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
-| `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
@@ -239,7 +235,6 @@ const someChecked = items.some(Boolean);
 - `aria-required` set when `required={true}`
 - `aria-describedby` links error/success messages and description
 - Error and success messages use `role="alert"` for live announcements
-- `indeterminate` is set programmatically on the DOM input via ref
 - Supports `prefers-reduced-motion` via `reduceMotion` prop
 
 ---

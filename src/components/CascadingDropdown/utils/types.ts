@@ -26,14 +26,9 @@ export interface CascadingDropdownClasses {
   value?: string;
   content?: string;
   item?: string;
-  menuItemSelected?: string;
-  menuItemFocused?: string;
-  menuItemDisabled?: string;
   subContent?: string;
   subPositioner?: string;
   subItem?: string;
-  submenuItemSelected?: string;
-  submenuItemFocused?: string;
   label?: string;
   message?: string;
   description?: string;
@@ -41,7 +36,6 @@ export interface CascadingDropdownClasses {
   itemIcon?: string;
   itemIndicator?: string;
   itemControl?: string;
-  checkboxChecked?: string;
   empty?: string;
   loading?: string;
   clearTrigger?: string;
@@ -58,14 +52,6 @@ export interface CascadingDropdownClasses {
   subSearchInput?: string;
   /** Search icon in submenu search inputs. Falls back to `searchIcon` if not set. */
   subSearchIcon?: string;
-  /** Alias for `menuItem` — matches Dropdown naming convention. */
-  option?: string;
-  /** Alias for `menuItemSelected` — matches Dropdown naming convention. */
-  optionSelected?: string;
-  /** Alias for `menuItemFocused` — matches Dropdown naming convention. */
-  optionFocused?: string;
-  /** Alias for `menuItemDisabled` — matches Dropdown naming convention. */
-  optionDisabled?: string;
 }
 
 /**

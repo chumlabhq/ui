@@ -646,7 +646,6 @@ const InternationalPhoneInput = forwardRef<
               searchControl: mergedClasses.countrySelectSearchInput,
               searchInput: mergedClasses.countrySelectSearchInputElement,
               item: mergedClasses.countrySelectOption,
-              optionSelected: mergedClasses.countrySelectOptionSelected,
               list: mergedClasses.countrySelectOptionList,
               icon: mergedClasses.countrySelectChevron,
               itemIndicator: mergedClasses.countrySelectCheckIcon,

@@ -264,23 +264,17 @@ function TableInner<TData>(
   const headerClassName = classesProp?.header ?? base.header;
   const headerRowClassName = classesProp?.header ?? base.header;
   const headerCellClassName = classesProp?.headerCell ?? base.headerCell;
-  const headerCellHoverClassName = classesProp?.headerCellHover ?? base.headerCellHover;
   const headerCellContentClassName = classesProp?.headerCellText ?? base.headerCellText;
   const bodyClassName = classesProp?.body ?? base.body;
   const rowClassName = classesProp?.item ?? base.item;
   const cellClassName = classesProp?.cell ?? base.cell;
-  const selectedRowClassName = classesProp?.selectedRow ?? base.selectedRow;
   const pinnedContainerClassName = classesProp?.pinnedRegion ?? base.pinnedRegion;
   const pinnedTableClassName = classesProp?.pinnedList ?? base.pinnedList;
   const unpinnedContainerClassName = classesProp?.scrollRegion ?? base.scrollRegion;
   const unpinnedTableClassName = classesProp?.list ?? base.list;
   const emptyClassName = classesProp?.empty ?? base.empty;
   const pinIconClassName = classesProp?.pinIcon ?? base.pinIcon;
-  const pinIconHoverClassName = classesProp?.pinIconHover ?? base.pinIconHover;
-  const pinnedPinIconClassName = classesProp?.pinnedPinIcon ?? base.pinnedPinIcon;
-  const pinnedPinIconHoverClassName = classesProp?.pinnedPinIconHover ?? base.pinnedPinIconHover;
   const pinButtonClassName = classesProp?.pinButton ?? base.pinButton;
-  const pinnedPinButtonClassName = classesProp?.pinnedPinButton ?? base.pinnedPinButton;
   const shimmerClassName = classesProp?.loading ?? base.loading;
   const shimmerRowClassName = classesProp?.loadingRow ?? base.loadingRow;
   const shimmerCellClassName = classesProp?.loadingItem ?? base.loadingItem;
@@ -289,7 +283,6 @@ function TableInner<TData>(
   const checkboxCellClassName = classesProp?.cell ?? base.cell;
   const sortIconClassName = classesProp?.sortIcon ?? base.sortIcon;
   const expandIconClassName = classesProp?.expandButton ?? base.expandButton;
-  const expandedRowClassName = classesProp?.expandedRow ?? base.expandedRow;
   const pinnedRightContainerClassName = classesProp?.pinnedRightRegion ?? base.pinnedRightRegion;
   const pinnedRightTableClassName = classesProp?.pinnedRightList ?? base.pinnedRightList;
   const editInputClassName = classesProp?.input ?? base.input;
@@ -1186,7 +1179,7 @@ function TableInner<TData>(
         <th
           key={header.id}
           colSpan={header.colSpan > 1 ? header.colSpan : undefined}
-          className={`group/header ${headerCellClassName} ${isCheckboxColumn || isExpandColumn || isDragColumn ? checkboxCellClassName : ""} ${headerCellHoverClassName ? `hover:${headerCellHoverClassName}` : ""} ${densityClass}`}
+          className={`group/header ${headerCellClassName} ${isCheckboxColumn || isExpandColumn || isDragColumn ? checkboxCellClassName : ""} ${densityClass}`}
           role="columnheader"
           aria-sort={getSortDirection(header.column.getIsSorted())}
           data-pinned={isPinned || undefined}
@@ -1286,8 +1279,8 @@ function TableInner<TData>(
                 disabled={isDisabled}
                 className={`${
                   isPinned
-                    ? `opacity-100 ${pinnedPinButtonClassName} ${pinnedPinIconHoverClassName ? `hover:${pinnedPinIconHoverClassName}` : ""}`
-                    : `opacity-0 group-hover/header:opacity-100 ${pinButtonClassName} ${pinIconHoverClassName ? `hover:${pinIconHoverClassName}` : ""} ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`
+                    ? `opacity-100 ${pinButtonClassName}`
+                    : `opacity-0 group-hover/header:opacity-100 ${pinButtonClassName} ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`
                 }`}
                 aria-label={
                   isPinned
@@ -1306,7 +1299,7 @@ function TableInner<TData>(
               >
                 {isPinned ? (
                   <PinnedIconComponent
-                    className={cn("w-4 h-4", pinnedPinIconClassName)}
+                    className={cn("w-4 h-4", pinIconClassName)}
                   />
                 ) : (
                   <UnpinnedIconComponent
@@ -1340,18 +1333,13 @@ function TableInner<TData>(
     },
     [
       headerCellClassName,
-      headerCellHoverClassName,
       headerCellContentClassName,
       pinnedColumnIds,
       pinnableColumnIds,
       onPinColumn,
       handlePinClick,
       pinIconClassName,
-      pinIconHoverClassName,
-      pinnedPinIconClassName,
-      pinnedPinIconHoverClassName,
       pinButtonClassName,
-      pinnedPinButtonClassName,
       canPinMore,
       effectiveMaxPinnedColumns,
       UnpinnedIconComponent,
@@ -1565,7 +1553,7 @@ function TableInner<TData>(
       return (
         <React.Fragment key={row.id}>
           <tr
-            className={`${selected ? selectedRowClassName : rowClassName} ${isStriped ? stripedClassNameProp || "bg-gray-50 dark:bg-white/[0.04]" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
+            className={`${rowClassName} ${isStriped ? stripedClassNameProp || "bg-gray-50 dark:bg-white/[0.04]" : ""} ${isGroupRow ? groupHeaderClassName : ""} ${dragRowIndex === rowIndex ? "opacity-50" : ""} ${expandOnRowClick && expandable ? "cursor-pointer" : ""}`}
             onClick={(e) => handleRowClick(row, e)}
             onMouseEnter={(e) =>
               handleRowHover(rowIndex, { current: e.currentTarget })
@@ -1598,7 +1586,7 @@ function TableInner<TData>(
           </tr>
           {isExpanded && renderExpandedRow && !isGroupRow && (
             <tr data-expanded-content role="row">
-              <td colSpan={totalCols} className={expandedRowClassName}>
+              <td colSpan={totalCols} className={""}>
                 {renderExpandedRow(row.original)}
               </td>
             </tr>
@@ -1609,7 +1597,6 @@ function TableInner<TData>(
     // eslint-disable-next-line react-hooks/exhaustive-deps -- React (Fragment) is a stable module import
     [
       isRowSelected,
-      selectedRowClassName,
       rowClassName,
       handleRowClick,
       handleRowHover,
@@ -1618,7 +1605,6 @@ function TableInner<TData>(
       striped,
       expandable,
       renderExpandedRow,
-      expandedRowClassName,
       enableRowDragDrop,
       handleDragStart,
       handleDragOver,

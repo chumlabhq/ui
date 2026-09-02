@@ -27,6 +27,17 @@ const NESTED = [
   { value: "veg", label: "Veg", children: [{ value: "c", label: "Carrot" }] },
 ];
 
+/**
+ * NESTED marks a disabled option inside a parent's children, so only submenu
+ * items ever carried data-disabled. `menuItemDisabled` was twice recorded
+ * "attempted, still unreachable" against fixtures that could not reach it: the
+ * disabled flag has to be on a TOP-LEVEL option.
+ */
+const DISABLED_TOP = [
+  { value: "fruit", label: "Fruit", children: [{ value: "a", label: "Apple" }] },
+  { value: "veg", label: "Veg", disabled: true, children: [{ value: "c", label: "Carrot" }] },
+];
+
 /** The menu is portalled from a layout effect, so it is absent until effects flush. */
 const settle = () => tick();
 
@@ -42,6 +53,11 @@ const openSubmenu = async (c: HTMLElement) => {
 
 const fixtures: Fixtures<typeof CascadingDropdown> = [
   { name: "closed", props: { options: NESTED } },
+  {
+    name: "disabled-top-level",
+    props: { options: DISABLED_TOP, defaultOpen: true, keepMounted: true },
+    act: settle,
+  },
   { name: "labelled", props: { options: NESTED, label: "Produce", description: "Pick one." } },
   { name: "open", props: { options: NESTED, defaultOpen: true, keepMounted: true }, act: settle },
   {

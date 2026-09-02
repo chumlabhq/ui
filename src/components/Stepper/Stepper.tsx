@@ -125,24 +125,6 @@ interface StepItemInternalProps {
   nextStepStatus?: StepStatus;
 }
 
-const getStatusClass = (
-  status: StepStatus,
-  active: string,
-  completed: string,
-  pending: string,
-  error: string,
-): string => {
-  switch (status) {
-    case "active":
-      return active;
-    case "completed":
-      return completed;
-    case "pending":
-      return pending;
-    case "error":
-      return error;
-  }
-};
 
 /**
  * ADR 002 R4. `data-status` is this component's own enum
@@ -264,14 +246,7 @@ const StepItem = memo(function StepItem({
       </Tooltip>
     );
   };
-
-  const indicatorStatusClass = getStatusClass(
-    status,
-    classes.indicatorActive,
-    classes.indicatorCompleted,
-    classes.indicatorPending,
-    classes.indicatorError,
-  );
+  const indicatorStatusClass = undefined;
 
   const indicator = (
     <div
@@ -293,7 +268,6 @@ const StepItem = memo(function StepItem({
       <div
         className={cn(
           classes.row,
-          isLabelBottom && classes.labelWrapperBottom,
         )}
         // ADR 002 R4: the state the labelWrapperBottom key named.
         data-align={isLabelBottom ? "bottom" : undefined}
@@ -302,13 +276,6 @@ const StepItem = memo(function StepItem({
           <span
             className={cn(
               classes.itemText,
-              getStatusClass(
-                status,
-                classes.labelActive,
-                classes.labelCompleted,
-                classes.labelPending,
-                classes.labelError,
-              ),
             )}
             data-status={status}
       {...stateAttrsFor(status)}
@@ -320,13 +287,6 @@ const StepItem = memo(function StepItem({
           <span
             className={cn(
               classes.description,
-              getStatusClass(
-                status,
-                classes.descriptionActive,
-                classes.descriptionCompleted,
-                classes.descriptionPending,
-                classes.descriptionError,
-              ),
             )}
             data-status={status}
       {...stateAttrsFor(status)}
@@ -352,17 +312,10 @@ const StepItem = memo(function StepItem({
       showConnectors && !isLast ? (
         <div
           className={cn(
-            classes.connectorVertical,
             classes.separator,
-            getStatusClass(
-              status,
-              classes.connectorActive,
-              classes.connectorCompleted,
-              classes.connectorPending,
-              classes.connectorError,
-            ),
           )}
           style={{ marginLeft: connectorMarginLeft }}
+          data-orientation={orientation}
           data-status={status}
       {...stateAttrsFor(status)}
           data-next-status={nextStepStatus}
@@ -379,7 +332,7 @@ const StepItem = memo(function StepItem({
         onKeyDown={handleKeyDown}
         aria-current={status === "active" ? "step" : undefined}
         aria-label={sharedAriaLabel}
-        className={cn(classes.trigger, classes.stepInteractive)}
+        className={classes.trigger}
         data-status={status}
       {...stateAttrsFor(status)}
         data-clickable="true"
@@ -394,7 +347,7 @@ const StepItem = memo(function StepItem({
         aria-current={status === "active" ? "step" : undefined}
         aria-disabled={isDisabled || undefined}
         aria-label={sharedAriaLabel}
-        className={cn(classes.trigger, isDisabled && classes.stepDisabled)}
+        className={classes.trigger}
         data-status={status}
       {...stateAttrsFor(status)}
         data-disabled={isDisabled || undefined}
@@ -406,7 +359,7 @@ const StepItem = memo(function StepItem({
 
     return (
       <li
-        className={cn(classes.stepContainerVertical, classes.item)}
+        className={classes.item}
         data-status={status}
       {...stateAttrsFor(status)}
         data-orientation={orientation}
@@ -467,7 +420,7 @@ const StepItem = memo(function StepItem({
         aria-current={status === "active" ? "step" : undefined}
         aria-disabled={isDisabled || undefined}
         aria-label={bottomAriaLabel}
-        className={isDisabled ? classes.stepDisabled : undefined}
+        
         data-status={status}
       {...stateAttrsFor(status)}
         data-disabled={isDisabled || undefined}
@@ -508,7 +461,7 @@ const StepItem = memo(function StepItem({
       onKeyDown={handleKeyDown}
       aria-current={status === "active" ? "step" : undefined}
       aria-label={stepAriaLabel}
-      className={cn(classes.trigger, classes.stepInteractive)}
+      className={classes.trigger}
       data-status={status}
       {...stateAttrsFor(status)}
       data-clickable="true"
@@ -523,7 +476,7 @@ const StepItem = memo(function StepItem({
       aria-current={status === "active" ? "step" : undefined}
       aria-disabled={isDisabled || undefined}
       aria-label={stepAriaLabel}
-      className={cn(classes.trigger, isDisabled && classes.stepDisabled)}
+      className={classes.trigger}
       data-status={status}
       {...stateAttrsFor(status)}
       data-disabled={isDisabled || undefined}
@@ -535,7 +488,7 @@ const StepItem = memo(function StepItem({
 
   return (
     <li
-      className={cn(classes.stepContainerHorizontal, classes.item)}
+      className={classes.item}
       data-status={status}
       {...stateAttrsFor(status)}
       data-orientation={orientation}
@@ -622,60 +575,16 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         root: classesProp?.root ?? baseClasses.root,
         list: classesProp?.list ?? baseClasses.list,
         item: classesProp?.item ?? baseClasses.item,
-        stepContainerVertical:
-          classesProp?.stepContainerVertical ?? baseClasses.stepContainerVertical,
-        stepContainerHorizontal:
-          classesProp?.stepContainerHorizontal ??
-          baseClasses.stepContainerHorizontal,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
-        stepInteractive:
-          classesProp?.stepInteractive ?? baseClasses.stepInteractive,
-        stepDisabled: classesProp?.stepDisabled ?? baseClasses.stepDisabled,
         itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         indicatorTrigger:
           classesProp?.indicatorTrigger ?? baseClasses.indicatorTrigger,
         itemIcon:
           classesProp?.itemIcon ?? baseClasses.itemIcon,
-        indicatorActive:
-          classesProp?.indicatorActive ?? baseClasses.indicatorActive,
-        indicatorCompleted:
-          classesProp?.indicatorCompleted ?? baseClasses.indicatorCompleted,
-        indicatorPending:
-          classesProp?.indicatorPending ?? baseClasses.indicatorPending,
-        indicatorError:
-          classesProp?.indicatorError ?? baseClasses.indicatorError,
         row: classesProp?.row ?? baseClasses.row,
-        labelWrapperBottom:
-          classesProp?.labelWrapperBottom ?? baseClasses.labelWrapperBottom,
         itemText: classesProp?.itemText ?? baseClasses.itemText,
-        labelActive: classesProp?.labelActive ?? baseClasses.labelActive,
-        labelCompleted:
-          classesProp?.labelCompleted ?? baseClasses.labelCompleted,
-        labelPending: classesProp?.labelPending ?? baseClasses.labelPending,
-        labelError: classesProp?.labelError ?? baseClasses.labelError,
         description: classesProp?.description ?? baseClasses.description,
-        descriptionActive:
-          classesProp?.descriptionActive ?? baseClasses.descriptionActive,
-        descriptionCompleted:
-          classesProp?.descriptionCompleted ??
-          baseClasses.descriptionCompleted,
-        descriptionPending:
-          classesProp?.descriptionPending ?? baseClasses.descriptionPending,
-        descriptionError:
-          classesProp?.descriptionError ?? baseClasses.descriptionError,
         separator: classesProp?.separator ?? baseClasses.separator,
-        connectorHorizontal:
-          classesProp?.connectorHorizontal ?? baseClasses.connectorHorizontal,
-        connectorVertical:
-          classesProp?.connectorVertical ?? baseClasses.connectorVertical,
-        connectorActive:
-          classesProp?.connectorActive ?? baseClasses.connectorActive,
-        connectorCompleted:
-          classesProp?.connectorCompleted ?? baseClasses.connectorCompleted,
-        connectorPending:
-          classesProp?.connectorPending ?? baseClasses.connectorPending,
-        connectorError:
-          classesProp?.connectorError ?? baseClasses.connectorError,
       }),
       [classesProp, baseClasses],
     );
@@ -997,17 +906,10 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
                   >
                     <div
                       className={cn(
-                        mergedClasses.connectorHorizontal,
                         mergedClasses.separator,
-                        getStatusClass(
-                          status,
-                          mergedClasses.connectorActive,
-                          mergedClasses.connectorCompleted,
-                          mergedClasses.connectorPending,
-                          mergedClasses.connectorError,
-                        ),
                       )}
                       style={connectorStyle}
+                      data-orientation={orientation}
                       data-status={status}
       {...stateAttrsFor(status)}
                       data-next-status={nextStatus}

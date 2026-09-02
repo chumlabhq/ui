@@ -10,12 +10,9 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   range: "rounded-full bg-cl-accent dark:bg-cl-accent/30",
   thumb:
     "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab",
-  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-accent ring-offset-2 dark:ring-offset-cl-bg",
-  thumbDisabled: "opacity-50 cursor-not-allowed",
   valueText:
     "absolute px-2 py-1 text-xs font-medium text-white bg-cl-bg dark:bg-cl-bg-elevated rounded-cl-md shadow-sm whitespace-nowrap pointer-events-none",
   marker: "rounded-full bg-white dark:bg-cl-bg-hover border-2 border-cl-border-input dark:border-cl-border text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
-  markDotActive: "border-cl-border-input-focus dark:border-cl-border-input-focus bg-white dark:bg-cl-bg-hover",
   message: "text-sm text-cl-error mt-1 text-cl-success",
 };
 

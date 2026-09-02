@@ -289,7 +289,6 @@ const CheckboxDemo = () => {
             shape="rounded"
             classes={{
               ...c.checkbox,
-              checked: `bg-cl-error border border-cl-error dark:bg-cl-error dark:border dark:border-cl-error text-cl-bg`,
             }}
           />
           <Checkbox
@@ -301,7 +300,6 @@ const CheckboxDemo = () => {
             shape="rounded"
             classes={{
               ...c.checkbox,
-              checked: `bg-cl-warning border border-cl-warning dark:bg-cl-warning dark:border dark:border-cl-warning text-cl-bg`,
             }}
           />
         </DemoWrapper>
@@ -567,7 +565,6 @@ const CheckboxDemo = () => {
             checked
             classes={{
               ...c.checkbox,
-              checked: `bg-cl-success border border-cl-success dark:bg-cl-success dark:border dark:border-cl-success text-cl-bg`,
               label: `text-sm font-medium text-cl-success`,
             }}
             size="md"
@@ -578,7 +575,6 @@ const CheckboxDemo = () => {
             checked
             classes={{
               ...c.checkbox,
-              checked: `bg-cl-accent border border-cl-border-input-focus dark:bg-cl-accent dark:border dark:border-cl-border-input-focus text-white`,
               label: `text-sm font-medium text-cl-accent dark:text-cl-accent`,
             }}
             size="md"

@@ -11,8 +11,6 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
   list: "flex flex-wrap items-center gap-2",
   item:
     "px-3 py-1 rounded-cl-md border transition-colors cursor-pointer border-cl-border dark:border-cl-border hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated text-cl-text dark:text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg",
-  activePageButton:
-    "px-3 py-1 rounded-cl-md bg-cl-accent text-cl-on-accent border border-cl-border-input-focus focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg",
   navButton:
     "p-2 rounded-cl-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer border-cl-border dark:border-cl-border hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated text-cl-text-secondary dark:text-cl-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-cl-bg",
   ellipsis: "px-2 select-none text-cl-text-tertiary dark:text-cl-text-tertiary",

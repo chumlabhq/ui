@@ -146,7 +146,7 @@ const navRef = useRef<HTMLElement>(null);
 | Trail container layout | `list` | Flex container for items + separators. |
 | Inactive item styling | `item` | Buttons/spans for non-link, non-active items. |
 | Active (last) item styling | `itemActive` | The current page indicator. |
-| Disabled item look | `itemDisabled` | Appended to `item` class when disabled. |
+| Disabled item look |  | Appended to `item` class when disabled. |
 | Link items (with href) | `link` | Anchors — separate slot from `item`. |
 | Separator icon/text | `separator` | Between each item. |
 | Icon inside items | `itemIcon` | Applied to the icon wrapper span. |

@@ -128,11 +128,11 @@ root (w-full)
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
 | Tab list container | `list` |
-| Tab button | `item`, `tabActive`, `tabInactive`, `tabDisabled` |
+| Tab button | `item` |
 | Tab focus ring | `tabFocus` |
-| Tab label text | `itemText`, `labelActive`, `labelInactive` |
-| Tab icon | `itemIcon`, `iconActive`, `iconInactive` |
-| Count badge | `count`, `countActive`, `countInactive` |
+| Tab label text | `itemText` |
+| Tab icon | `itemIcon` |
+| Count badge | `count` |
 | Active underline | `indicator` |
 | Panel content | `content` |
 

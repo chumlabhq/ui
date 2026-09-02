@@ -246,12 +246,6 @@
         "trigger": {
           "type": "string"
         },
-        "stepInteractive": {
-          "type": "string"
-        },
-        "stepDisabled": {
-          "type": "string"
-        },
         "itemIndicator": {
           "type": "string"
         },
@@ -261,73 +255,16 @@
         "itemIcon": {
           "type": "string"
         },
-        "indicatorActive": {
-          "type": "string"
-        },
-        "indicatorCompleted": {
-          "type": "string"
-        },
-        "indicatorPending": {
-          "type": "string"
-        },
-        "indicatorError": {
-          "type": "string"
-        },
         "row": {
-          "type": "string"
-        },
-        "labelWrapperBottom": {
           "type": "string"
         },
         "itemText": {
           "type": "string"
         },
-        "labelActive": {
-          "type": "string"
-        },
-        "labelCompleted": {
-          "type": "string"
-        },
-        "labelPending": {
-          "type": "string"
-        },
-        "labelError": {
-          "type": "string"
-        },
         "description": {
           "type": "string"
         },
-        "descriptionActive": {
-          "type": "string"
-        },
-        "descriptionCompleted": {
-          "type": "string"
-        },
-        "descriptionPending": {
-          "type": "string"
-        },
-        "descriptionError": {
-          "type": "string"
-        },
         "separator": {
-          "type": "string"
-        },
-        "connectorHorizontal": {
-          "type": "string"
-        },
-        "connectorVertical": {
-          "type": "string"
-        },
-        "connectorActive": {
-          "type": "string"
-        },
-        "connectorCompleted": {
-          "type": "string"
-        },
-        "connectorPending": {
-          "type": "string"
-        },
-        "connectorError": {
           "type": "string"
         }
       }

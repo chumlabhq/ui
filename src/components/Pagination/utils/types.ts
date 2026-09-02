@@ -22,7 +22,6 @@ export interface PaginationClasses {
   row?: string;
   list?: string;
   item?: string;
-  activePageButton?: string;
   navButton?: string;
   ellipsis?: string;
   rowsPerPage?: string;

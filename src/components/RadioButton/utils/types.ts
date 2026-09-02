@@ -13,16 +13,8 @@ export interface RadioButtonClasses {
   description?: string;
   /** The radio indicator circle. */
   control?: string;
-  /** Applied when the radio is checked. */
-  checked?: string;
-  /** Applied when the radio is unchecked. */
-  unchecked?: string;
   /** The inner dot/icon inside the indicator. */
   itemIndicator?: string;
-  /** Error message element. */
-  error?: string;
-  /** Success message element. */
-  success?: string;
 }
 
 /** CSS class overrides for radio group sub-elements. */

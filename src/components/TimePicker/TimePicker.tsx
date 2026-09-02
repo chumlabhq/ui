@@ -92,8 +92,6 @@ const TimeOption = memo(function TimeOption({
   index: number;
   classes: {
     option: string;
-    optionSelected: string;
-    optionFocused: string;
     selectedIcon: string;
   };
   showSelectedIcon: boolean;
@@ -103,13 +101,7 @@ const TimeOption = memo(function TimeOption({
   onHover: (index: number) => void;
   optionTextClass: string;
 }) {
-  const combinedClassName = [
-    classes.option,
-    isSelected && classes.optionSelected,
-    isFocused && classes.optionFocused,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const combinedClassName = [classes.option].filter(Boolean).join(" ");
 
   return (
     <div
@@ -236,8 +228,6 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       content: classesProp?.content ?? baseClasses.content,
       list: classesProp?.list ?? baseClasses.list,
       item: classesProp?.item ?? baseClasses.item,
-      optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
-      optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
       itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
       empty: classesProp?.empty ?? baseClasses.empty,
       message: classesProp?.message ?? baseClasses.message,
@@ -246,22 +236,18 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       clockDisplay: classesProp?.clockDisplay ?? baseClasses.clockDisplay,
       clockHours: classesProp?.clockHours ?? baseClasses.clockHours,
       clockMinutes: classesProp?.clockMinutes ?? baseClasses.clockMinutes,
-      clockDisplayActive: classesProp?.clockDisplayActive ?? baseClasses.clockDisplayActive,
       clockSeparator: classesProp?.clockSeparator ?? baseClasses.clockSeparator,
       clockFace: classesProp?.clockFace ?? baseClasses.clockFace,
       clockHand: classesProp?.clockHand ?? baseClasses.clockHand,
       clockHandLine: classesProp?.clockHandLine ?? baseClasses.clockHandLine,
       clockHandDot: classesProp?.clockHandDot ?? baseClasses.clockHandDot,
       clockNumber: classesProp?.clockNumber ?? baseClasses.clockNumber,
-      clockNumberSelected: classesProp?.clockNumberSelected ?? baseClasses.clockNumberSelected,
-      clockNumberDisabled: classesProp?.clockNumberDisabled ?? baseClasses.clockNumberDisabled,
       clockCenter: classesProp?.clockCenter ?? baseClasses.clockCenter,
       footer: classesProp?.footer ?? baseClasses.footer,
       cancelButton: classesProp?.cancelButton ?? baseClasses.cancelButton,
       confirmButton: classesProp?.confirmButton ?? baseClasses.confirmButton,
       row: classesProp?.row ?? baseClasses.row,
       periodButton: classesProp?.periodButton ?? baseClasses.periodButton,
-      clockPeriodActive: classesProp?.clockPeriodActive ?? baseClasses.clockPeriodActive,
     }), [classesProp, baseClasses]);
 
     // Clock classes sub-object
@@ -270,31 +256,25 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       clockDisplay: mergedClasses.clockDisplay,
       clockHours: mergedClasses.clockHours,
       clockMinutes: mergedClasses.clockMinutes,
-      clockDisplayActive: mergedClasses.clockDisplayActive,
       clockSeparator: mergedClasses.clockSeparator,
       clockFace: mergedClasses.clockFace,
       clockHand: mergedClasses.clockHand,
       clockHandLine: mergedClasses.clockHandLine,
       clockHandDot: mergedClasses.clockHandDot,
       clockNumber: mergedClasses.clockNumber,
-      clockNumberSelected: mergedClasses.clockNumberSelected,
-      clockNumberDisabled: mergedClasses.clockNumberDisabled,
       clockCenter: mergedClasses.clockCenter,
       footer: mergedClasses.footer,
       cancelButton: mergedClasses.cancelButton,
       confirmButton: mergedClasses.confirmButton,
       row: mergedClasses.row,
       periodButton: mergedClasses.periodButton,
-      clockPeriodActive: mergedClasses.clockPeriodActive,
     }), [mergedClasses]);
 
     // Option classes sub-object for TimeOption
     const optionClasses = useMemo(() => ({
       option: mergedClasses.item,
-      optionSelected: mergedClasses.optionSelected,
-      optionFocused: mergedClasses.optionFocused,
       selectedIcon: mergedClasses.itemIndicator,
-    }), [mergedClasses.item, mergedClasses.optionSelected, mergedClasses.optionFocused, mergedClasses.itemIndicator]);
+    }), [mergedClasses.item, mergedClasses.itemIndicator]);
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
 

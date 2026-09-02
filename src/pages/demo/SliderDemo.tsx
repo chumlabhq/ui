@@ -250,7 +250,6 @@ const SliderDemo = () => {
                 classes={{
                   ...c.slider,
                   marker: `rounded-full bg-cl-bg-hover dark:bg-cl-text/10`,
-                  markDotActive: dark ? "bg-cl-accent/90" : "bg-cl-accent",
                 }}
               />
             </div>
@@ -412,7 +411,6 @@ const SliderDemo = () => {
                 classes={{
                   ...c.slider,
                   thumb: `absolute rounded-full bg-white border-2 border-cl-border-input-focus shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
-                  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-accent ring-offset-2",
                   range: "rounded-full bg-cl-accent/90",
                 }}
                 showTooltip
@@ -432,7 +430,6 @@ const SliderDemo = () => {
                 classes={{
                   ...c.slider,
                   thumb: `absolute rounded-full bg-white border-2 border-cl-warning shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-warning focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
-                  thumbActive: "cursor-grabbing shadow-lg ring-2 ring-cl-warning ring-offset-2",
                   range: "rounded-full bg-cl-warning/30",
                 }}
                 showTooltip
@@ -615,7 +612,6 @@ const SliderDemo = () => {
                     ...c.slider,
                     range: `rounded-full ${rangeCls}`,
                     thumb: `absolute rounded-full bg-white ${border} shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:${ring} focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
-                    thumbActive: `cursor-grabbing shadow-lg ${ring} ring-2 ring-offset-2`,
                   }}
                 />
               </div>
@@ -635,7 +631,6 @@ const SliderDemo = () => {
                 classes={{
                   ...c.slider,
                   thumb: `absolute rounded-cl-md bg-cl-accent shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 hover:shadow-lg cursor-grab dark:focus-visible:ring-offset-cl-bg`,
-                  thumbActive: "cursor-grabbing shadow-lg",
                 }}
               />
             </div>

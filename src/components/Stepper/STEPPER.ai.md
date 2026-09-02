@@ -152,9 +152,9 @@ root (nav, data-orientation, data-variant)
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
-| Indicator circle | `itemIndicator` + status classes (`indicatorActive`, etc.) | |
+| Indicator circle | `itemIndicator` + status classes (etc.) | |
 | Step number/icon inside | `itemIcon` | |
-| Step label text | `itemText` + status classes (`labelActive`, etc.) | |
+| Step label text | `itemText` + status classes (etc.) | |
 | Step description | `description` + status classes | |
 | Connecting line | `connectorHorizontal` / `connectorVertical` + status classes | |
 | Clickable step hover | `stepInteractive` | |

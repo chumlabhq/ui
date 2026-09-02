@@ -232,15 +232,11 @@ const OptionItem = memo(function OptionItem({
   const combinedOptionClassName =
     cn(
       classes.item,
-      isSelected && classes.optionSelected,
-      isFocused && classes.optionFocused,
-      option.disabled && classes.optionDisabled,
     ) || undefined;
 
   const combinedCheckboxClassName =
     cn(
       classes.itemControl,
-      isSelected && classes.checkboxChecked,
     ) || undefined;
   // ADR 002 R4: the state the checkboxChecked key named.
   const checkboxState = isSelected ? "checked" : "unchecked";
@@ -409,12 +405,8 @@ const MultiSelectSearchableDropdown = forwardRef<
         content: classesProp?.content ?? baseClasses.content,
         list: classesProp?.list ?? baseClasses.list,
         item: classesProp?.item ?? baseClasses.item,
-        optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
-        optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
-        optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
         icon: classesProp?.icon ?? baseClasses.icon,
         itemControl: classesProp?.itemControl ?? baseClasses.itemControl,
-        checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
         itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         chip: classesProp?.chip ?? baseClasses.chip,
         chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,

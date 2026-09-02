@@ -30,7 +30,6 @@ const TabButton = memo(function TabButton({
     <span
       className={cn(
         classNames.itemIcon,
-        isActive ? classNames.iconActive : classNames.iconInactive,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
       aria-hidden="true"
@@ -43,7 +42,6 @@ const TabButton = memo(function TabButton({
     <span
       className={cn(
         classNames.itemText,
-        isActive ? classNames.labelActive : classNames.labelInactive,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
     >
@@ -55,7 +53,6 @@ const TabButton = memo(function TabButton({
     <span
       className={cn(
         classNames.count,
-        isActive ? classNames.countActive : classNames.countInactive,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
       aria-label={`${count} items`}
@@ -80,10 +77,7 @@ const TabButton = memo(function TabButton({
       onClick={() => !isDisabled && ctx.onSelect(tab.id)}
       onKeyDown={(e) => ctx.onKeyDown(e, index)}
       className={cn(
-        classNames.tabFocus,
         classNames.item,
-        isActive ? classNames.tabActive : classNames.tabInactive,
-        isDisabled && classNames.tabDisabled,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
       data-disabled={isDisabled || undefined}

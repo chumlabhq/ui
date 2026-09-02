@@ -18,12 +18,6 @@ export interface CheckboxClasses {
   description?: string;
   /** The checkbox indicator box. */
   control?: string;
-  /** Applied when the checkbox is checked. */
-  checked?: string;
-  /** Applied when the checkbox is unchecked. */
-  unchecked?: string;
-  /** Applied when the checkbox is in the indeterminate state. */
-  indeterminate?: string;
   /** The check/indeterminate icon inside the indicator. */
   itemIndicator?: string;
   /** Error message element. */

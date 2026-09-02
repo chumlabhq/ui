@@ -341,8 +341,6 @@ export default function BlogListing() {
                   list: "flex items-center gap-1",
                   item:
                     "w-9 h-9 text-sm font-medium text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
-                  activePageButton:
-                    "w-9 h-9 text-sm font-medium bg-fg text-bg-base flex items-center justify-center cursor-pointer rounded-md",
                   navButton:
                     "w-9 h-9 text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
                   ellipsis:

@@ -195,22 +195,10 @@
         "item": {
           "type": "string"
         },
-        "optionSelected": {
-          "type": "string"
-        },
-        "optionFocused": {
-          "type": "string"
-        },
-        "optionDisabled": {
-          "type": "string"
-        },
         "icon": {
           "type": "string"
         },
         "itemControl": {
-          "type": "string"
-        },
-        "checkboxChecked": {
           "type": "string"
         },
         "itemIndicator": {

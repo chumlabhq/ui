@@ -28,6 +28,9 @@
     "RadioButton/RadioButton": {
       "error": "dead \u2014 read the source: RadioButton.tsx renders error text only inside RadioGroup (:192), from DEFAULT_RADIO_GROUP_CLASSES. The item's own class set never reaches an error element.",
       "success": "dead \u2014 same; the group owns the success message (RadioButton.tsx:198)."
+    },
+    "InternationalPhoneInput": {
+      "countrySelectOptionSelected": "KEPT, not deleted \u2014 Task 3b held this key back because its replacement route is R6-nested (countrySelect.item + data-selected) and the nesting is Task 4. Deleting the child dropdown's own `optionSelected` removed the sink this key fed, so it now renders nothing. It stays as public API rather than being removed before the replacement exists; Task 4 wires it and this waiver goes."
     }
   },
   "$comment2": "waived: keys no fixture renders. RE-AUDITED 2026-09-02 by attempting each state with a fixture rather than by re-reading the reason. 15 keys have now been wrongly waived across three components \u2014 CascadingDropdown's six search keys (a fixture passed `showSearch`, which is not a prop), DatePicker's dayMarked/markerIndicator/presetActive (the fixture opened on the wrong month), and Table's six pin keys (canShowPinButton requires an onPinColumn handler no fixture passed). Every one had a specific, plausible, invented reason: markerIndicator's said 'marker rendering needs layout measurement jsdom does not provide'. A specific false reason is worse than a vague one because it stops the next reader checking. Every surviving reason below states what was ATTEMPTED.",

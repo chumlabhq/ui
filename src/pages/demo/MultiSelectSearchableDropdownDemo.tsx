@@ -812,13 +812,10 @@ const MultiSelectSearchableDropdownDemo = () => {
                 searchInput: "text-white placeholder:text-white/50",
                 item:
                   "flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/[0.08] transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-                optionSelected: "bg-white/[0.12] font-medium",
-                optionFocused: "bg-white/[0.08]",
                 icon:
                   "w-4 h-4 shrink-0 transition-transform duration-200 text-white/60",
                 itemControl:
                   "w-4 h-4 shrink-0 border border-white/30 rounded flex items-center justify-center",
-                checkboxChecked: "bg-cl-accent border-cl-accent text-white",
                 searchIcon: "w-4 h-4 shrink-0 text-white/60",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-white/[0.10] text-white rounded-cl-md shrink-0 max-w-[100px]",
                 chipRemove:
@@ -855,13 +852,8 @@ const MultiSelectSearchableDropdownDemo = () => {
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus`,
                 searchControl: `flex items-center gap-2 px-3 py-2 border-b border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/20`,
                 item: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/60`,
-                optionSelected: dark ? "bg-cl-accent/80" : "bg-cl-accent/10",
-                optionFocused: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",
                 icon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
                 itemControl: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input-focus dark:border dark:border-cl-border-input-focus`,
-                checkboxChecked: dark
-                  ? "bg-cl-accent border-cl-border-input-focus text-white"
-                  : "bg-cl-accent border-cl-border-input-focus text-white",
                 searchIcon: `w-4 h-4 shrink-0 text-cl-accent`,
                 chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/60 dark:text-cl-accent`,
                 chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-accent`,
@@ -892,7 +884,6 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 itemControl: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
-                checkboxChecked: "bg-cl-success border-cl-success text-white",
               }}
               aria-label="Green checkbox fruits"
             />
@@ -918,7 +909,6 @@ const MultiSelectSearchableDropdownDemo = () => {
                 ...c.dropdown,
                 itemControl:
                   "w-5 h-5 shrink-0 border-2 border-cl-warning rounded-cl-sm flex items-center justify-center",
-                checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
               aria-label="Orange checkbox fruits"
             />
@@ -953,7 +943,6 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 itemControl: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-warning dark:border dark:border-cl-warning`,
-                checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
               aria-label="Custom icon fruits"
             />
@@ -1373,9 +1362,6 @@ const MultiSelectSearchableDropdownDemo = () => {
                 value:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus`,
-                optionSelected: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",
-                optionFocused: dark ? "bg-cl-accent/40" : "bg-cl-accent/10",
-                checkboxChecked: "bg-cl-accent border-cl-border-input-focus text-white",
                 chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/60 dark:text-cl-accent`,
               }}
             />

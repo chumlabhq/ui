@@ -13,9 +13,6 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     list: "max-h-60 overflow-y-auto",
     item:
       "flex items-center justify-between px-3 py-2 cursor-pointer transition-colors text-cl-text dark:text-cl-text hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated first:rounded-t-cl-md last:rounded-b-cl-md",
-    optionSelected: "bg-cl-accent/15 dark:bg-cl-accent/50 font-medium",
-    optionFocused: "bg-cl-bg-hover dark:bg-cl-bg-elevated",
-    optionDisabled: "opacity-50 cursor-not-allowed pointer-events-none",
     icon:
       "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary dark:text-cl-text-tertiary",
     itemIndicator: "w-4 h-4 shrink-0 text-cl-accent dark:text-cl-accent",
