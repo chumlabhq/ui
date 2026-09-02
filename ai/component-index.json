@@ -56,11 +56,16 @@
       "anatomy": {
         "root": {
           "item": {
-            "content": {},
-            "heading": {
+            "content": {
+              "body": {}
+            },
+            "header": {
               "trigger": {
                 "description": {},
-                "icon": {}
+                "icon": {},
+                "itemIcon": {},
+                "itemText": {},
+                "triggerActions": {}
               }
             }
           }
@@ -112,9 +117,10 @@
       "knowledge": "src/components/Avatar/AVATAR.ai.md",
       "anatomy": {
         "root": {
-          "fallback": {},
-          "image": {},
-          "initials": {},
+          "control": {
+            "fallback": {},
+            "image": {}
+          },
           "status": {}
         }
       }
@@ -228,6 +234,7 @@
       "anatomy": {
         "root": {
           "icon": {},
+          "itemText": {},
           "loading": {}
         }
       }
@@ -317,22 +324,29 @@
           "content": {
             "empty": {},
             "item": {
-              "checkbox": {},
               "itemIcon": {},
               "itemIndicator": {}
             },
             "loading": {},
-            "searchInput": {}
+            "searchInput": {},
+            "subPositioner": {
+              "subContent": {
+                "subItem": {}
+              }
+            }
+          },
+          "control": {
+            "trigger": {
+              "clearButton": {},
+              "icon": {},
+              "value": {}
+            }
           },
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
-          "trigger": {
-            "clearButton": {},
-            "icon": {},
-            "value": {}
-          }
+          "loadingItem": {},
+          "message": {},
+          "searchIcon": {}
         }
       }
     },
@@ -387,12 +401,13 @@
       "knowledge": "src/components/Checkbox/CHECKBOX.ai.md",
       "anatomy": {
         "root": {
-          "checkbox": {},
-          "description": {},
-          "errorText": {},
-          "helperText": {},
+          "control": {},
           "itemIndicator": {},
-          "label": {}
+          "labelGroup": {
+            "description": {},
+            "label": {}
+          },
+          "message": {}
         }
       }
     },
@@ -534,11 +549,14 @@
         "root": {
           "content": {
             "footer": {
-              "presetButton": {}
+              "presetGroup": {
+                "presetTrigger": {}
+              }
             },
             "header": {
               "monthSelect": {},
               "navButton": {},
+              "row": {},
               "yearSelect": {}
             },
             "list": {
@@ -548,17 +566,22 @@
               },
               "weekNumber": {},
               "weekday": {}
+            },
+            "subContent": {
+              "subItem": {}
             }
           },
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "listHeader": {},
+          "listRow": {},
+          "message": {},
           "trigger": {
             "clearButton": {},
             "icon": {},
             "input": {}
-          }
+          },
+          "triggerActions": {}
         }
       }
     },
@@ -704,10 +727,11 @@
             },
             "loading": {}
           },
+          "control": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "loadingItem": {},
+          "message": {},
           "trigger": {
             "clearButton": {},
             "icon": {},
@@ -768,10 +792,9 @@
         "root": {
           "count": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "input": {},
           "label": {},
+          "message": {},
           "prefix": {},
           "suffix": {}
         }
@@ -848,13 +871,13 @@
       "knowledge": "src/components/InternationalPhoneInput/INTERNATIONALPHONEINPUT.ai.md",
       "anatomy": {
         "root": {
+          "control": {},
           "countrySelect": {},
           "description": {},
-          "errorText": {},
           "flag": {},
-          "helperText": {},
           "input": {},
           "label": {},
+          "message": {},
           "value": {}
         }
       }
@@ -882,24 +905,26 @@
       "knowledge": "src/components/Loader/LOADER.ai.md",
       "anatomy": {
         "root": {
-          "indicator": {},
-          "track": {}
+          "control": {
+            "range": {},
+            "track": {}
+          }
         }
       },
       "subAnatomy": {
         "DotLoader": {
           "root": {
-            "indicator": {}
+            "range": {}
           }
         },
         "LinearLoader": {
           "root": {
-            "indicator": {}
+            "range": {}
           }
         },
         "PulseLoader": {
           "root": {
-            "indicator": {}
+            "range": {}
           }
         }
       }
@@ -968,16 +993,19 @@
       "knowledge": "src/components/Modal/MODAL.ai.md",
       "anatomy": {
         "root": {
-          "content": {
-            "body": {},
-            "closeButton": {},
-            "header": {
-              "description": {},
-              "title": {}
-            }
-          },
+          "closeIcon": {},
           "icon": {},
-          "overlay": {}
+          "overlay": {},
+          "positioner": {
+            "content": {
+              "body": {},
+              "closeButton": {},
+              "header": {
+                "description": {},
+                "title": {}
+              }
+            }
+          }
         }
       }
     },
@@ -1058,17 +1086,16 @@
             "empty": {},
             "list": {
               "item": {
-                "checkbox": {},
                 "itemIndicator": {}
               }
             },
             "loading": {}
           },
+          "control": {},
           "count": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "message": {},
           "trigger": {
             "chip": {
               "chipRemove": {}
@@ -1162,18 +1189,18 @@
             "empty": {},
             "list": {
               "item": {
-                "checkbox": {},
                 "itemIndicator": {}
               }
             },
             "loading": {},
             "searchInput": {}
           },
+          "control": {},
           "count": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "message": {},
+          "searchIcon": {},
           "trigger": {
             "chip": {
               "chipRemove": {}
@@ -1239,14 +1266,14 @@
       "knowledge": "src/components/OtpInput/OTPINPUT.ai.md",
       "anatomy": {
         "root": {
+          "control": {},
           "description": {},
-          "errorText": {},
           "group": {
             "input": {},
             "separator": {}
           },
-          "helperText": {},
-          "label": {}
+          "label": {},
+          "message": {}
         }
       }
     },
@@ -1308,12 +1335,15 @@
       "anatomy": {
         "root": {
           "label": {},
-          "list": {
-            "ellipsis": {},
-            "item": {}
-          },
           "navButton": {},
+          "navIcon": {},
           "pageInfo": {},
+          "row": {
+            "list": {
+              "ellipsis": {},
+              "item": {}
+            }
+          },
           "rowsPerPage": {}
         }
       }
@@ -1345,18 +1375,17 @@
       "anatomy": {
         "root": {
           "description": {},
-          "errorText": {},
-          "helperText": {},
-          "label": {}
+          "label": {},
+          "message": {}
         }
       },
       "subAnatomy": {
         "RadioButton": {
           "root": {
+            "control": {},
             "description": {},
             "itemIndicator": {},
-            "label": {},
-            "radio": {}
+            "label": {}
           }
         }
       }
@@ -1399,7 +1428,7 @@
       "knowledge": "src/components/ResizablePanel/RESIZABLEPANEL.ai.md",
       "anatomy": {
         "root": {
-          "handle": {}
+          "resizeHandle": {}
         }
       }
     },
@@ -1494,10 +1523,12 @@
             "loading": {},
             "searchInput": {}
           },
+          "control": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "loadingItem": {},
+          "message": {},
+          "searchIcon": {},
           "trigger": {
             "clearButton": {},
             "icon": {},
@@ -1565,15 +1596,15 @@
       "knowledge": "src/components/Slider/SLIDER.ai.md",
       "anatomy": {
         "root": {
+          "control": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "message": {},
           "track": {
-            "mark": {},
+            "marker": {},
             "range": {},
             "thumb": {
-              "tooltip": {}
+              "valueText": {}
             }
           }
         }
@@ -1635,10 +1666,12 @@
         "root": {
           "list": {
             "item": {
-              "connector": {},
               "description": {},
               "itemIndicator": {},
-              "itemText": {}
+              "row": {
+                "itemText": {}
+              },
+              "separator": {}
             }
           }
         }
@@ -1697,13 +1730,16 @@
       "knowledge": "src/components/Switch/SWITCH.ai.md",
       "anatomy": {
         "root": {
-          "description": {},
-          "errorText": {},
-          "helperText": {},
-          "label": {},
           "loading": {},
-          "track": {
-            "thumb": {}
+          "message": {},
+          "row": {
+            "control": {
+              "thumb": {}
+            },
+            "labelGroup": {
+              "description": {},
+              "label": {}
+            }
           }
         }
       }
@@ -1842,7 +1878,7 @@
             "body": {
               "item": {
                 "cell": {
-                  "checkbox": {},
+                  "control": {},
                   "expandButton": {},
                   "input": {}
                 },
@@ -1860,9 +1896,15 @@
               }
             }
           },
-          "loading": {},
+          "loading": {
+            "loadingItem": {
+              "loadingBar": {}
+            }
+          },
           "mobileCard": {},
+          "pinnedRegion": {},
           "resizeHandle": {},
+          "scrollRegion": {},
           "searchInput": {}
         }
       }
@@ -1990,10 +2032,9 @@
         "root": {
           "count": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "input": {},
-          "label": {}
+          "label": {},
+          "message": {}
         }
       }
     },
@@ -2068,7 +2109,8 @@
         "root": {
           "content": {
             "clockDisplay": {
-              "periodButton": {}
+              "periodButton": {},
+              "row": {}
             },
             "clockFace": {
               "clockHand": {},
@@ -2085,10 +2127,10 @@
               }
             }
           },
+          "control": {},
           "description": {},
-          "errorText": {},
-          "helperText": {},
           "label": {},
+          "message": {},
           "trigger": {
             "clearButton": {},
             "icon": {},
@@ -2143,7 +2185,7 @@
           "closeButton": {},
           "description": {},
           "icon": {},
-          "progress": {},
+          "indicator": {},
           "title": {}
         }
       }

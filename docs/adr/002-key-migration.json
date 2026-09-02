@@ -1,70 +1,96 @@
 {
-  "": "Four R4 attribute values are also needed and are not in the ADR's list: data-outside and data-range (DatePicker day cells), data-marked (DatePicker markers), and the value 'completed' for data-state (Stepper).",
+  "$comment": "ADR 002 Task 1, revised 2026-09-02 under Amendments A-D. One row per pre-migration classes key, all 523 across 35 registry entries. No source changed.",
   "recordedOn": "2026-09-02",
+  "amendments": {
+    "A": "Every name outside R2 cites a peer precedent or is marked NOVEL. Peer conventions absorbed 9 coinages: checkbox/radio/tracker/wrapper -> control (Ark), progress -> indicator, Loader indicator -> track+range (Ark Progress), connector -> separator (Ark Steps, already R2), heading -> header (Radix Accordion, already R2), initials -> fallback (Radix Avatar), mark -> marker (Ark Slider), tooltip -> valueText (Ark Slider), handle -> resizeHandle, presetButton -> presetTrigger (Ark DatePicker).",
+    "B": "error + success collapse into `message` carrying data-state. Verified first: all 14 components that render a success message guard it with !error, so none can show both. R2's errorText and helperText are retired. The two-part exception is unused.",
+    "C": "An absorbed key carrying structural utilities is promoted. 105 absorbed rows re-checked against splitLayers: 53 carried structural classes and were promoted with canonical names, 17 were R6 relocations to a child (access preserved), 52 remain absorbed.",
+    "D": "Four R4 attribute values accepted: data-outside (Ark data-outside-range), data-range (Ark data-in-range; tri-value form ours), data-marked (NOVEL), `completed` for data-state (Ark Steps data-complete)."
+  },
+  "$comment_count": "57 amendment terms, up from 46 before the amendments and not down, because A and C pull opposite ways: A collapsed 9 coinages into peer names, C forced 53 previously-absorbed elements back into the vocabulary and 20 of them needed a name. 16 of the 57 now carry a peer precedent where none did before.",
   "totals": {
     "entries": 35,
     "keysBefore": 523,
-    "keysAfter": 305,
-    "renamed": 125,
-    "unchanged": 185,
+    "keysAfter": 331,
+    "renamed": 176,
+    "unchanged": 184,
     "deletedAsState": 97,
     "deletedAsDead": 11,
-    "absorbedIntoParent": 105
+    "absorbedIntoParent": 55,
+    "promotedByAmendmentC": 53,
+    "amendmentTerms": 57,
+    "withPeerPrecedent": 16,
+    "novel": 41
   },
-  "vocabularyAmendmentsNeeded": [
-    "cancelButton",
-    "cell",
-    "checkbox",
-    "clockDisplay",
-    "clockFace",
-    "clockHand",
-    "clockNumber",
-    "confirmButton",
-    "connector",
-    "count",
-    "dragHandle",
-    "ellipsis",
-    "expandButton",
-    "fallback",
-    "filterContent",
-    "handle",
-    "headerCell",
-    "heading",
-    "icon",
-    "image",
-    "indicator",
-    "initials",
-    "item",
-    "itemIndicator",
-    "link",
-    "mark",
-    "markerIndicator",
-    "markerTooltip",
-    "mobileCard",
-    "monthSelect",
-    "navButton",
-    "pageInfo",
-    "periodButton",
-    "pinButton",
-    "prefix",
-    "presetButton",
-    "progress",
-    "radio",
-    "range",
-    "resizeHandle",
-    "sortIcon",
-    "status",
-    "suffix",
-    "thumb",
-    "track",
-    "weekNumber",
-    "weekday",
-    "yearSelect"
+  "vocabularyAmendments": {
+    "control": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+    "ellipsis": "Ark Pagination.Ellipsis",
+    "fallback": "Radix Avatar.Fallback",
+    "image": "Radix Avatar.Image",
+    "indicator": "Radix Checkbox.Indicator, Ark Tabs.Indicator, Ark Steps.Indicator",
+    "marker": "Ark Slider.Marker",
+    "monthSelect": "Ark DatePicker.MonthSelect",
+    "navButton": "Ark splits these as prevTrigger/nextTrigger; unified here as one part with data-side per R4, because both are styled identically in this library",
+    "positioner": "Ark Dialog.Positioner",
+    "presetTrigger": "Ark DatePicker.PresetTrigger",
+    "range": "Radix Slider.Range, Ark Progress.Range",
+    "resizeHandle": "react-resizable-panels PanelResizeHandle",
+    "thumb": "Radix Slider.Thumb, Radix Switch.Thumb",
+    "track": "Radix Slider.Track, Ark Progress.Track",
+    "valueText": "Ark Slider.ValueText",
+    "yearSelect": "Ark DatePicker.YearSelect",
+    "cancelButton": "NOVEL \u2014 footer action",
+    "cell": "NOVEL \u2014 grounded in the HTML <td> it renders",
+    "clockDisplay": "NOVEL \u2014 same",
+    "clockFace": "NOVEL \u2014 no peer library ships an analogue clock picker",
+    "clockHand": "NOVEL \u2014 same",
+    "clockNumber": "NOVEL \u2014 same",
+    "closeIcon": "NOVEL \u2014 the glyph inside `closeButton`",
+    "confirmButton": "NOVEL \u2014 footer action",
+    "count": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
+    "dragHandle": "NOVEL \u2014 row reorder grip",
+    "expandButton": "NOVEL \u2014 row expansion control",
+    "filterButton": "NOVEL \u2014 column filter control",
+    "filterContent": "NOVEL \u2014 the column filter surface",
+    "headerCell": "NOVEL \u2014 grounded in the HTML <th> it renders",
+    "labelGroup": "NOVEL \u2014 the label + description column beside a control",
+    "link": "NOVEL \u2014 the <a> inside a breadcrumb item",
+    "listHeader": "NOVEL \u2014 the weekday header row of a grid `list`",
+    "listRow": "NOVEL \u2014 a row within a grid `list`",
+    "loadingBar": "NOVEL \u2014 the bar inside a skeleton cell",
+    "loadingItem": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
+    "markerIndicator": "NOVEL \u2014 the event dot on a calendar day",
+    "mobileCard": "NOVEL \u2014 Table's below-breakpoint render",
+    "navIcon": "NOVEL \u2014 the glyph inside `navButton`",
+    "pageInfo": "NOVEL \u2014 the 'N of M' readout",
+    "periodButton": "NOVEL \u2014 AM/PM toggle",
+    "pinButton": "NOVEL \u2014 column pin control",
+    "pinnedRegion": "NOVEL \u2014 Table's sticky pinned-column region",
+    "prefix": "NOVEL \u2014 static text before an input",
+    "presetGroup": "NOVEL \u2014 the cluster of preset triggers in the calendar footer",
+    "row": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+    "scrollRegion": "NOVEL \u2014 Table's horizontally scrolling region",
+    "searchIcon": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
+    "sortIcon": "NOVEL \u2014 column sort affordance",
+    "status": "NOVEL \u2014 Avatar presence dot; no peer anatomy has one",
+    "subContent": "NOVEL \u2014 a nested `content` surface; Ark has no submenu anatomy",
+    "subItem": "NOVEL \u2014 same",
+    "subPositioner": "NOVEL \u2014 Ark Positioner, one level down",
+    "suffix": "NOVEL \u2014 static text after an input",
+    "triggerActions": "NOVEL \u2014 the icon cluster at the end of a trigger",
+    "weekNumber": "NOVEL \u2014 ISO week column",
+    "weekday": "NOVEL \u2014 calendar column heading"
+  },
+  "r6NestingKeys": [
+    "countrySelect",
+    "flag",
+    "rowsPerPage",
+    "markerTooltip"
   ],
   "dualOwnerComponents": {
     "CountryFlag": [
-      "CountryFlag (DEFAULT_COUNTRYFLAG_CLASSES)",
-      "CountryFlagGroup (DEFAULT_COUNTRYFLAG_GROUP_CLASSES)"
+      "CountryFlag",
+      "CountryFlagGroup"
     ],
     "RadioButton": [
       "RadioGroup (DEFAULT_RADIO_GROUP_CLASSES)",
@@ -80,57 +106,57 @@
   "perComponent": {
     "Accordion": {
       "keysBefore": 13,
-      "keysAfter": 7,
-      "renamed": 1,
-      "unchanged": 6,
+      "keysAfter": 11,
+      "renamed": 7,
+      "unchanged": 5,
       "deletedAsState": 0,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 6
+      "absorbedIntoParent": 1
     },
     "Avatar": {
       "keysBefore": 6,
       "keysAfter": 5,
-      "renamed": 0,
+      "renamed": 1,
       "unchanged": 5,
       "deletedAsState": 0,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 1
+      "absorbedIntoParent": 0
     },
     "Breadcrumb": {
       "keysBefore": 13,
       "keysAfter": 8,
-      "renamed": 2,
+      "renamed": 3,
       "unchanged": 7,
       "deletedAsState": 3,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 1
+      "absorbedIntoParent": 0
     },
     "Button": {
       "keysBefore": 5,
-      "keysAfter": 3,
-      "renamed": 1,
+      "keysAfter": 4,
+      "renamed": 3,
       "unchanged": 2,
       "deletedAsState": 0,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 2
+      "absorbedIntoParent": 0
     },
     "CascadingDropdown": {
       "keysBefore": 39,
-      "keysAfter": 17,
-      "renamed": 12,
+      "keysAfter": 21,
+      "renamed": 18,
       "unchanged": 5,
       "deletedAsState": 6,
       "deletedAsDead": 5,
-      "absorbedIntoParent": 11
+      "absorbedIntoParent": 5
     },
     "Checkbox": {
       "keysBefore": 11,
       "keysAfter": 7,
-      "renamed": 2,
+      "renamed": 3,
       "unchanged": 5,
       "deletedAsState": 3,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 1
+      "absorbedIntoParent": 0
     },
     "CountryFlag": {
       "keysBefore": 3,
@@ -152,12 +178,12 @@
     },
     "DatePicker": {
       "keysBefore": 45,
-      "keysAfter": 22,
-      "renamed": 8,
+      "keysAfter": 28,
+      "renamed": 14,
       "unchanged": 16,
       "deletedAsState": 11,
       "deletedAsDead": 4,
-      "absorbedIntoParent": 6
+      "absorbedIntoParent": 0
     },
     "Drawer": {
       "keysBefore": 3,
@@ -170,16 +196,16 @@
     },
     "Dropdown": {
       "keysBefore": 20,
-      "keysAfter": 15,
-      "renamed": 10,
+      "keysAfter": 16,
+      "renamed": 12,
       "unchanged": 5,
       "deletedAsState": 3,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 2
+      "absorbedIntoParent": 0
     },
     "Input": {
       "keysBefore": 10,
-      "keysAfter": 9,
+      "keysAfter": 8,
       "renamed": 2,
       "unchanged": 7,
       "deletedAsState": 0,
@@ -189,20 +215,20 @@
     "InternationalPhoneInput": {
       "keysBefore": 25,
       "keysAfter": 9,
-      "renamed": 5,
+      "renamed": 6,
       "unchanged": 4,
       "deletedAsState": 1,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 15
+      "absorbedIntoParent": 14
     },
     "Loader": {
       "keysBefore": 4,
-      "keysAfter": 3,
-      "renamed": 0,
+      "keysAfter": 4,
+      "renamed": 1,
       "unchanged": 3,
       "deletedAsState": 0,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 1
+      "absorbedIntoParent": 0
     },
     "Loader/DotLoader": {
       "keysBefore": 2,
@@ -233,52 +259,52 @@
     },
     "Modal": {
       "keysBefore": 11,
-      "keysAfter": 9,
-      "renamed": 0,
+      "keysAfter": 11,
+      "renamed": 2,
       "unchanged": 9,
       "deletedAsState": 0,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 2
+      "absorbedIntoParent": 0
     },
     "MultiSelectDropdown": {
       "keysBefore": 25,
-      "keysAfter": 19,
-      "renamed": 11,
+      "keysAfter": 18,
+      "renamed": 12,
       "unchanged": 8,
       "deletedAsState": 4,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 2
+      "absorbedIntoParent": 1
     },
     "MultiSelectSearchableDropdown": {
       "keysBefore": 29,
       "keysAfter": 20,
-      "renamed": 13,
+      "renamed": 15,
       "unchanged": 8,
       "deletedAsState": 4,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 4
+      "absorbedIntoParent": 2
     },
     "OtpInput": {
       "keysBefore": 10,
       "keysAfter": 8,
-      "renamed": 2,
+      "renamed": 3,
       "unchanged": 6,
       "deletedAsState": 1,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 1
+      "absorbedIntoParent": 0
     },
     "Pagination": {
       "keysBefore": 17,
-      "keysAfter": 8,
-      "renamed": 3,
+      "keysAfter": 10,
+      "renamed": 6,
       "unchanged": 5,
       "deletedAsState": 1,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 8
+      "absorbedIntoParent": 5
     },
     "RadioButton": {
       "keysBefore": 5,
-      "keysAfter": 5,
+      "keysAfter": 4,
       "renamed": 2,
       "unchanged": 3,
       "deletedAsState": 0,
@@ -305,39 +331,39 @@
     },
     "SearchableDropdown": {
       "keysBefore": 23,
-      "keysAfter": 16,
-      "renamed": 11,
+      "keysAfter": 18,
+      "renamed": 14,
       "unchanged": 5,
       "deletedAsState": 3,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 4
+      "absorbedIntoParent": 1
     },
     "Slider": {
       "keysBefore": 16,
       "keysAfter": 10,
-      "renamed": 3,
+      "renamed": 4,
       "unchanged": 7,
       "deletedAsState": 3,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 3
+      "absorbedIntoParent": 2
     },
     "Stepper": {
       "keysBefore": 34,
-      "keysAfter": 7,
-      "renamed": 2,
-      "unchanged": 5,
-      "deletedAsState": 23,
-      "deletedAsDead": 0,
-      "absorbedIntoParent": 4
-    },
-    "Switch": {
-      "keysBefore": 16,
       "keysAfter": 8,
       "renamed": 3,
       "unchanged": 5,
+      "deletedAsState": 23,
+      "deletedAsDead": 0,
+      "absorbedIntoParent": 3
+    },
+    "Switch": {
+      "keysBefore": 16,
+      "keysAfter": 9,
+      "renamed": 5,
+      "unchanged": 5,
       "deletedAsState": 6,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 2
+      "absorbedIntoParent": 0
     },
     "TabPanel": {
       "keysBefore": 18,
@@ -350,16 +376,16 @@
     },
     "Table": {
       "keysBefore": 44,
-      "keysAfter": 22,
-      "renamed": 7,
+      "keysAfter": 26,
+      "renamed": 12,
       "unchanged": 16,
       "deletedAsState": 7,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 14
+      "absorbedIntoParent": 9
     },
     "TextArea": {
       "keysBefore": 8,
-      "keysAfter": 7,
+      "keysAfter": 6,
       "renamed": 3,
       "unchanged": 4,
       "deletedAsState": 0,
@@ -368,12 +394,12 @@
     },
     "TimePicker": {
       "keysBefore": 38,
-      "keysAfter": 22,
-      "renamed": 10,
+      "keysAfter": 23,
+      "renamed": 13,
       "unchanged": 12,
       "deletedAsState": 6,
       "deletedAsDead": 0,
-      "absorbedIntoParent": 10
+      "absorbedIntoParent": 7
     },
     "Toast": {
       "keysBefore": 7,
@@ -398,11 +424,16 @@
     "Accordion": {
       "root": {
         "item": {
-          "content": {},
-          "heading": {
+          "content": {
+            "body": {}
+          },
+          "header": {
             "trigger": {
               "description": {},
-              "icon": {}
+              "icon": {},
+              "itemIcon": {},
+              "itemText": {},
+              "triggerActions": {}
             }
           }
         }
@@ -410,9 +441,10 @@
     },
     "Avatar": {
       "root": {
-        "fallback": {},
-        "image": {},
-        "initials": {},
+        "control": {
+          "fallback": {},
+          "image": {}
+        },
         "status": {}
       }
     },
@@ -433,6 +465,7 @@
     "Button": {
       "root": {
         "icon": {},
+        "itemText": {},
         "loading": {}
       }
     },
@@ -441,32 +474,40 @@
         "content": {
           "empty": {},
           "item": {
-            "checkbox": {},
             "itemIcon": {},
             "itemIndicator": {}
           },
           "loading": {},
-          "searchInput": {}
+          "searchInput": {},
+          "subPositioner": {
+            "subContent": {
+              "subItem": {}
+            }
+          }
+        },
+        "control": {
+          "trigger": {
+            "clearButton": {},
+            "icon": {},
+            "value": {}
+          }
         },
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
-        "trigger": {
-          "clearButton": {},
-          "icon": {},
-          "value": {}
-        }
+        "loadingItem": {},
+        "message": {},
+        "searchIcon": {}
       }
     },
     "Checkbox": {
       "root": {
-        "checkbox": {},
-        "description": {},
-        "errorText": {},
-        "helperText": {},
+        "control": {},
         "itemIndicator": {},
-        "label": {}
+        "labelGroup": {
+          "description": {},
+          "label": {}
+        },
+        "message": {}
       }
     },
     "CountryFlag": {
@@ -485,11 +526,14 @@
       "root": {
         "content": {
           "footer": {
-            "presetButton": {}
+            "presetGroup": {
+              "presetTrigger": {}
+            }
           },
           "header": {
             "monthSelect": {},
             "navButton": {},
+            "row": {},
             "yearSelect": {}
           },
           "list": {
@@ -499,17 +543,22 @@
             },
             "weekNumber": {},
             "weekday": {}
+          },
+          "subContent": {
+            "subItem": {}
           }
         },
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "listHeader": {},
+        "listRow": {},
+        "message": {},
         "trigger": {
           "clearButton": {},
           "icon": {},
           "input": {}
-        }
+        },
+        "triggerActions": {}
       }
     },
     "Drawer": {
@@ -529,10 +578,11 @@
           },
           "loading": {}
         },
+        "control": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "loadingItem": {},
+        "message": {},
         "trigger": {
           "clearButton": {},
           "icon": {},
@@ -544,59 +594,63 @@
       "root": {
         "count": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "input": {},
         "label": {},
+        "message": {},
         "prefix": {},
         "suffix": {}
       }
     },
     "InternationalPhoneInput": {
       "root": {
+        "control": {},
         "countrySelect": {},
         "description": {},
-        "errorText": {},
         "flag": {},
-        "helperText": {},
         "input": {},
         "label": {},
+        "message": {},
         "value": {}
       }
     },
     "Loader": {
       "root": {
-        "indicator": {},
-        "track": {}
+        "control": {
+          "range": {},
+          "track": {}
+        }
       }
     },
     "Loader/DotLoader": {
       "root": {
-        "indicator": {}
+        "range": {}
       }
     },
     "Loader/LinearLoader": {
       "root": {
-        "indicator": {}
+        "range": {}
       }
     },
     "Loader/PulseLoader": {
       "root": {
-        "indicator": {}
+        "range": {}
       }
     },
     "Modal": {
       "root": {
-        "content": {
-          "body": {},
-          "closeButton": {},
-          "header": {
-            "description": {},
-            "title": {}
-          }
-        },
+        "closeIcon": {},
         "icon": {},
-        "overlay": {}
+        "overlay": {},
+        "positioner": {
+          "content": {
+            "body": {},
+            "closeButton": {},
+            "header": {
+              "description": {},
+              "title": {}
+            }
+          }
+        }
       }
     },
     "MultiSelectDropdown": {
@@ -605,17 +659,16 @@
           "empty": {},
           "list": {
             "item": {
-              "checkbox": {},
               "itemIndicator": {}
             }
           },
           "loading": {}
         },
+        "control": {},
         "count": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "message": {},
         "trigger": {
           "chip": {
             "chipRemove": {}
@@ -632,18 +685,18 @@
           "empty": {},
           "list": {
             "item": {
-              "checkbox": {},
               "itemIndicator": {}
             }
           },
           "loading": {},
           "searchInput": {}
         },
+        "control": {},
         "count": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "message": {},
+        "searchIcon": {},
         "trigger": {
           "chip": {
             "chipRemove": {}
@@ -656,47 +709,49 @@
     },
     "OtpInput": {
       "root": {
+        "control": {},
         "description": {},
-        "errorText": {},
         "group": {
           "input": {},
           "separator": {}
         },
-        "helperText": {},
-        "label": {}
+        "label": {},
+        "message": {}
       }
     },
     "Pagination": {
       "root": {
         "label": {},
-        "list": {
-          "ellipsis": {},
-          "item": {}
-        },
         "navButton": {},
+        "navIcon": {},
         "pageInfo": {},
+        "row": {
+          "list": {
+            "ellipsis": {},
+            "item": {}
+          }
+        },
         "rowsPerPage": {}
       }
     },
     "RadioButton": {
       "root": {
         "description": {},
-        "errorText": {},
-        "helperText": {},
-        "label": {}
+        "label": {},
+        "message": {}
       }
     },
     "RadioButton/RadioButton": {
       "root": {
+        "control": {},
         "description": {},
         "itemIndicator": {},
-        "label": {},
-        "radio": {}
+        "label": {}
       }
     },
     "ResizablePanel": {
       "root": {
-        "handle": {}
+        "resizeHandle": {}
       }
     },
     "SearchableDropdown": {
@@ -711,10 +766,12 @@
           "loading": {},
           "searchInput": {}
         },
+        "control": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "loadingItem": {},
+        "message": {},
+        "searchIcon": {},
         "trigger": {
           "clearButton": {},
           "icon": {},
@@ -724,15 +781,15 @@
     },
     "Slider": {
       "root": {
+        "control": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "message": {},
         "track": {
-          "mark": {},
+          "marker": {},
           "range": {},
           "thumb": {
-            "tooltip": {}
+            "valueText": {}
           }
         }
       }
@@ -741,23 +798,28 @@
       "root": {
         "list": {
           "item": {
-            "connector": {},
             "description": {},
             "itemIndicator": {},
-            "itemText": {}
+            "row": {
+              "itemText": {}
+            },
+            "separator": {}
           }
         }
       }
     },
     "Switch": {
       "root": {
-        "description": {},
-        "errorText": {},
-        "helperText": {},
-        "label": {},
         "loading": {},
-        "track": {
-          "thumb": {}
+        "message": {},
+        "row": {
+          "control": {
+            "thumb": {}
+          },
+          "labelGroup": {
+            "description": {},
+            "label": {}
+          }
         }
       }
     },
@@ -782,7 +844,7 @@
           "body": {
             "item": {
               "cell": {
-                "checkbox": {},
+                "control": {},
                 "expandButton": {},
                 "input": {}
               },
@@ -800,9 +862,15 @@
             }
           }
         },
-        "loading": {},
+        "loading": {
+          "loadingItem": {
+            "loadingBar": {}
+          }
+        },
         "mobileCard": {},
+        "pinnedRegion": {},
         "resizeHandle": {},
+        "scrollRegion": {},
         "searchInput": {}
       }
     },
@@ -810,17 +878,17 @@
       "root": {
         "count": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "input": {},
-        "label": {}
+        "label": {},
+        "message": {}
       }
     },
     "TimePicker": {
       "root": {
         "content": {
           "clockDisplay": {
-            "periodButton": {}
+            "periodButton": {},
+            "row": {}
           },
           "clockFace": {
             "clockHand": {},
@@ -837,10 +905,10 @@
             }
           }
         },
+        "control": {},
         "description": {},
-        "errorText": {},
-        "helperText": {},
         "label": {},
+        "message": {},
         "trigger": {
           "clearButton": {},
           "icon": {},
@@ -853,7 +921,7 @@
         "closeButton": {},
         "description": {},
         "icon": {},
-        "progress": {},
+        "indicator": {},
         "title": {}
       }
     },
@@ -869,10 +937,10 @@
       "component": "Accordion",
       "owner": "Accordion",
       "key": "content",
-      "outcome": "unchanged",
-      "to": "content",
+      "outcome": "renamed",
+      "to": "body",
       "vocabulary": "R2",
-      "note": ""
+      "note": "the padded inner div; content is now the animating box promoted from contentWrapper (Amendment C)"
     },
     {
       "component": "Accordion",
@@ -887,18 +955,19 @@
       "component": "Accordion",
       "owner": "Accordion",
       "key": "contentWrapper",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "content",
       "vocabulary": "R2",
-      "note": "animation height wrapper; no semantics of its own (R5)"
+      "promotedByAmendmentC": true,
+      "note": "animation height wrapper; no semantics of its own (R5) | AMENDMENT C: promoted, carries structural utilities (overflow-hidden); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Accordion",
       "owner": "Accordion",
       "key": "heading",
       "outcome": "unchanged",
-      "to": "heading",
-      "vocabulary": "amendment",
+      "to": "header",
+      "vocabulary": "R2",
       "note": "AMENDMENT: the h2-h6 wrapper the trigger sits in; no R2 term"
     },
     {
@@ -914,10 +983,11 @@
       "component": "Accordion",
       "owner": "Accordion",
       "key": "iconWrapper",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "icon",
       "vocabulary": "R2",
-      "note": "sizing span around the chevron (R5)"
+      "promotedByAmendmentC": true,
+      "note": "sizing span around the chevron (R5) | AMENDMENT C: promoted, carries structural utilities (shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Accordion",
@@ -959,28 +1029,32 @@
       "component": "Accordion",
       "owner": "Accordion",
       "key": "triggerInner",
-      "outcome": "absorbed-into-parent",
-      "to": "trigger",
+      "outcome": "renamed",
+      "to": "itemText",
       "vocabulary": "R2",
-      "note": "layout-only flex wrapper inside the trigger button (R5)"
+      "promotedByAmendmentC": true,
+      "note": "layout-only flex wrapper inside the trigger button (R5) | AMENDMENT C: promoted, carries structural utilities (flex-1); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Accordion",
       "owner": "Accordion",
       "key": "triggerLeft",
-      "outcome": "absorbed-into-parent",
-      "to": "trigger",
+      "outcome": "renamed",
+      "to": "itemIcon",
       "vocabulary": "R2",
-      "note": "layout-only (R5)"
+      "promotedByAmendmentC": true,
+      "note": "layout-only (R5) | AMENDMENT C: promoted, carries structural utilities (shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Accordion",
       "owner": "Accordion",
       "key": "triggerRight",
-      "outcome": "absorbed-into-parent",
-      "to": "trigger",
-      "vocabulary": "R2",
-      "note": "layout-only (R5)"
+      "outcome": "renamed",
+      "to": "triggerActions",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the icon cluster at the end of a trigger",
+      "promotedByAmendmentC": true,
+      "note": "layout-only (R5) | AMENDMENT C: promoted, carries structural utilities (shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: icon was already claimed"
     },
     {
       "component": "Avatar",
@@ -989,6 +1063,7 @@
       "outcome": "unchanged",
       "to": "fallback",
       "vocabulary": "amendment",
+      "precedent": "Radix Avatar.Fallback",
       "note": "AMENDMENT: distinct from `empty`; renders when the image fails"
     },
     {
@@ -998,6 +1073,7 @@
       "outcome": "unchanged",
       "to": "image",
       "vocabulary": "amendment",
+      "precedent": "Radix Avatar.Image",
       "note": "AMENDMENT: no R2 term for a rendered <img>"
     },
     {
@@ -1005,18 +1081,21 @@
       "owner": "Avatar",
       "key": "initials",
       "outcome": "unchanged",
-      "to": "initials",
+      "to": "fallback",
       "vocabulary": "amendment",
+      "precedent": "Radix Avatar.Fallback",
       "note": "AMENDMENT: no R2 term"
     },
     {
       "component": "Avatar",
       "owner": "Avatar",
       "key": "inner",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "clipping wrapper (R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "clipping wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (absolute inset-0 overflow-hidden flex); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Avatar",
@@ -1034,6 +1113,7 @@
       "outcome": "unchanged",
       "to": "status",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 Avatar presence dot; no peer anatomy has one",
       "note": "AMENDMENT: presence indicator dot"
     },
     {
@@ -1070,16 +1150,19 @@
       "outcome": "unchanged",
       "to": "ellipsis",
       "vocabulary": "amendment",
+      "precedent": "Ark Pagination.Ellipsis",
       "note": "AMENDMENT: the collapsed-items indicator"
     },
     {
       "component": "Breadcrumb",
       "owner": "Breadcrumb",
       "key": "ellipsisButton",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "ellipsis",
-      "vocabulary": "R2",
-      "note": "the button IS the ellipsis; two keys for one element (R5)"
+      "vocabulary": "amendment",
+      "precedent": "Ark Pagination.Ellipsis",
+      "promotedByAmendmentC": true,
+      "note": "the button IS the ellipsis; two keys for one element (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center justify-center w-10); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Breadcrumb",
@@ -1115,8 +1198,8 @@
       "outcome": "deleted-as-state",
       "to": "item",
       "vocabulary": "R2",
-      "note": "data-disabled",
-      "wasStateGated": true
+      "wasStateGated": true,
+      "note": "data-disabled"
     },
     {
       "component": "Breadcrumb",
@@ -1125,6 +1208,7 @@
       "outcome": "unchanged",
       "to": "link",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the <a> inside a breadcrumb item",
       "note": "AMENDMENT: the anchor inside an item; no R2 term"
     },
     {
@@ -1158,19 +1242,21 @@
       "component": "Button",
       "owner": "Button",
       "key": "content",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
+      "outcome": "renamed",
+      "to": "itemText",
       "vocabulary": "R2",
-      "note": "the label span; Button has no floating surface, so `content` here means something else than R2's `content` and is layout-only (R5)"
+      "promotedByAmendmentC": true,
+      "note": "the label span; Button has no floating surface, so `content` here means something else than R2's `content` and is layout-only (R5) | AMENDMENT C: promoted, carries structural utilities (inline-flex items-center justify-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Button",
       "owner": "Button",
       "key": "endIcon",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "icon",
       "vocabulary": "R2",
-      "note": "same part as startIcon, distinguished by data-side=start|end (R4)"
+      "promotedByAmendmentC": true,
+      "note": "same part as startIcon, distinguished by data-side=start|end (R4) | AMENDMENT C: promoted, carries structural utilities (inline-flex shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Button",
@@ -1196,7 +1282,7 @@
       "key": "startIcon",
       "outcome": "unchanged",
       "to": "icon",
-      "vocabulary": "amendment",
+      "vocabulary": "R2",
       "note": "AMENDMENT-ADJACENT: two icon slots need distinguishing; see `icon` + data-side"
     },
     {
@@ -1213,17 +1299,18 @@
       "owner": "CascadingDropdown",
       "key": "checkbox",
       "outcome": "unchanged",
-      "to": "checkbox",
-      "vocabulary": "amendment",
-      "note": "AMENDMENT; NOT dead - the corrected typed fixture renders it via per-option selectionMode"
+      "to": "itemIndicator",
+      "vocabulary": "R2",
+      "note": "AMENDMENT; NOT dead - the corrected typed fixture renders it via per-option selectionMode | collision-resolved: control was already claimed"
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "checkboxChecked",
       "outcome": "deleted-as-state",
-      "to": "checkbox",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked; NOT dead - reachable with selectionMode + defaultValue"
     },
     {
@@ -1250,9 +1337,8 @@
       "key": "content",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD (002-unrenderable-keys): zero source references. The NAME is freed and reused by `menu` below.",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD (002-unrenderable-keys): zero source references. The NAME is freed and reused by `menu` below."
     },
     {
       "component": "CascadingDropdown",
@@ -1268,7 +1354,7 @@
       "owner": "CascadingDropdown",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -1315,8 +1401,8 @@
       "outcome": "deleted-as-state",
       "to": "item",
       "vocabulary": "R2",
-      "note": "data-disabled",
-      "wasStateGated": true
+      "wasStateGated": true,
+      "note": "data-disabled"
     },
     {
       "component": "CascadingDropdown",
@@ -1334,8 +1420,8 @@
       "outcome": "deleted-as-state",
       "to": "item",
       "vocabulary": "R2",
-      "note": "data-selected (was state-gated, not dead)",
-      "wasStateGated": true
+      "wasStateGated": true,
+      "note": "data-selected (was state-gated, not dead)"
     },
     {
       "component": "CascadingDropdown",
@@ -1352,9 +1438,8 @@
       "key": "option",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references. Name freed for `menuItem`.",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references. Name freed for `menuItem`."
     },
     {
       "component": "CascadingDropdown",
@@ -1362,9 +1447,8 @@
       "key": "optionDisabled",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references.",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references."
     },
     {
       "component": "CascadingDropdown",
@@ -1372,9 +1456,8 @@
       "key": "optionFocused",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references.",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references."
     },
     {
       "component": "CascadingDropdown",
@@ -1382,9 +1465,8 @@
       "key": "optionSelected",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references.",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references."
     },
     {
       "component": "CascadingDropdown",
@@ -1399,28 +1481,31 @@
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "searchIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "searchInput",
-      "vocabulary": "R2",
-      "note": "(R5) - LIVE"
+      "outcome": "renamed",
+      "to": "searchIcon",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
+      "promotedByAmendmentC": true,
+      "note": "(R5) - LIVE | AMENDMENT C: promoted, carries structural utilities (w-4 h-4 shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "searchInput",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "(R5) - LIVE, not dead: showMenuSearch exists"
+      "promotedByAmendmentC": true,
+      "note": "(R5) - LIVE, not dead: showMenuSearch exists | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "searchInputElement",
-      "outcome": "renamed",
+      "outcome": "absorbed-into-parent",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "LIVE: the six search keys were wrongly recorded dead on a fixture passing `showSearch`, which is not a prop; `showMenuSearch`/`showSubmenuSearch` are"
+      "note": "LIVE: the six search keys were wrongly recorded dead on a fixture passing `showSearch`, which is not a prop; `showMenuSearch`/`showSubmenuSearch` are | collision: the box keeps the name; this element carries no structural utility"
     },
     {
       "component": "CascadingDropdown",
@@ -1435,19 +1520,23 @@
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "shimmerItem",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "loadingItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-4); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "submenu",
-      "outcome": "absorbed-into-parent",
-      "to": "content",
-      "vocabulary": "R2",
-      "note": "a nested `content` surface; same part, distinguished by depth not by key (R5)"
+      "outcome": "renamed",
+      "to": "subContent",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a nested `content` surface; Ark has no submenu anatomy",
+      "promotedByAmendmentC": true,
+      "note": "a nested `content` surface; same part, distinguished by depth not by key (R5) | AMENDMENT C: promoted, carries structural utilities (min-w-full sm:min-w-[180px] max-h-[320px] overflow-y-auto); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "CascadingDropdown",
@@ -1462,19 +1551,23 @@
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "submenuContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "content",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "subPositioner",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 Ark Positioner, one level down",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (z-[9999]); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: subContent was already claimed"
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "submenuItem",
-      "outcome": "absorbed-into-parent",
-      "to": "item",
-      "vocabulary": "R2",
-      "note": "same part as `item` one level down (R5)"
+      "outcome": "renamed",
+      "to": "subItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
+      "promotedByAmendmentC": true,
+      "note": "same part as `item` one level down (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "CascadingDropdown",
@@ -1483,8 +1576,8 @@
       "outcome": "deleted-as-state",
       "to": "item",
       "vocabulary": "R2",
-      "note": "data-highlighted",
-      "wasStateGated": true
+      "wasStateGated": true,
+      "note": "data-highlighted"
     },
     {
       "component": "CascadingDropdown",
@@ -1527,7 +1620,7 @@
       "owner": "CascadingDropdown",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -1553,18 +1646,21 @@
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Checkbox",
       "owner": "Checkbox",
       "key": "checkbox",
       "outcome": "unchanged",
-      "to": "checkbox",
+      "to": "control",
       "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT: R2's `input` is text entry; a boolean control needs its own term"
     },
     {
@@ -1572,8 +1668,9 @@
       "owner": "Checkbox",
       "key": "checked",
       "outcome": "deleted-as-state",
-      "to": "checkbox",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked"
     },
     {
@@ -1590,7 +1687,7 @@
       "owner": "Checkbox",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": "R2 form furniture"
     },
@@ -1608,8 +1705,9 @@
       "owner": "Checkbox",
       "key": "indeterminate",
       "outcome": "deleted-as-state",
-      "to": "checkbox",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=indeterminate"
     },
     {
@@ -1625,10 +1723,12 @@
       "component": "Checkbox",
       "owner": "Checkbox",
       "key": "labelContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "layout-only (R5)"
+      "outcome": "renamed",
+      "to": "labelGroup",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the label + description column beside a control",
+      "promotedByAmendmentC": true,
+      "note": "layout-only (R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed"
     },
     {
       "component": "Checkbox",
@@ -1644,7 +1744,7 @@
       "owner": "Checkbox",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": "R2 form furniture; success message is helper text"
     },
@@ -1653,8 +1753,9 @@
       "owner": "Checkbox",
       "key": "unchecked",
       "outcome": "deleted-as-state",
-      "to": "checkbox",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=unchecked"
     },
     {
@@ -1664,6 +1765,7 @@
       "outcome": "unchanged",
       "to": "fallback",
       "vocabulary": "amendment",
+      "precedent": "Radix Avatar.Fallback",
       "note": "AMENDMENT"
     },
     {
@@ -1673,6 +1775,7 @@
       "outcome": "unchanged",
       "to": "image",
       "vocabulary": "amendment",
+      "precedent": "Radix Avatar.Image",
       "note": "AMENDMENT"
     },
     {
@@ -1691,6 +1794,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: the +N surplus badge"
     },
     {
@@ -1763,8 +1867,8 @@
       "outcome": "deleted-as-state",
       "to": "item",
       "vocabulary": "R2",
-      "note": "data-highlighted (was state-gated, not dead)",
-      "wasStateGated": true
+      "wasStateGated": true,
+      "note": "data-highlighted (was state-gated, not dead)"
     },
     {
       "component": "DatePicker",
@@ -1772,9 +1876,8 @@
       "key": "dayHover",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references; a :hover utility on `item` is the replacement",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references; a :hover utility on `item` is the replacement"
     },
     {
       "component": "DatePicker",
@@ -1782,9 +1885,9 @@
       "key": "dayMarked",
       "outcome": "deleted-as-state",
       "to": "item",
-      "vocabulary": "amendment",
-      "note": "data-marked - AMENDMENT to the R4 attribute list",
-      "wasStateGated": true
+      "vocabulary": "R2",
+      "wasStateGated": true,
+      "note": "data-marked - AMENDMENT to the R4 attribute list"
     },
     {
       "component": "DatePicker",
@@ -1792,7 +1895,7 @@
       "key": "dayOutside",
       "outcome": "deleted-as-state",
       "to": "item",
-      "vocabulary": "amendment",
+      "vocabulary": "R2",
       "note": "data-outside (adjacent month) - AMENDMENT to the R4 attribute list"
     },
     {
@@ -1819,7 +1922,7 @@
       "key": "dayRangeStart",
       "outcome": "deleted-as-state",
       "to": "item",
-      "vocabulary": "amendment",
+      "vocabulary": "R2",
       "note": "data-range=start - AMENDMENT to the R4 attribute list"
     },
     {
@@ -1854,34 +1957,37 @@
       "owner": "DatePicker",
       "key": "dropdownItem",
       "outcome": "renamed",
-      "to": "item",
-      "vocabulary": "R2",
-      "note": ""
+      "to": "subItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
+      "note": " | collision-resolved: item was already claimed"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "dropdownItemSelected",
       "outcome": "deleted-as-state",
-      "to": "item",
-      "vocabulary": "R2",
-      "note": "data-selected"
+      "to": "subItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
+      "note": "data-selected | collision-resolved: item was already claimed"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "dropdownMenu",
       "outcome": "renamed",
-      "to": "content",
-      "vocabulary": "R2",
-      "note": "AUDIT-GAP 4.5 names this the fifth synonym for the popup surface"
+      "to": "subContent",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a nested `content` surface; Ark has no submenu anatomy",
+      "note": "AUDIT-GAP 4.5 names this the fifth synonym for the popup surface | collision-resolved: content was already claimed"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -1937,8 +2043,9 @@
       "outcome": "unchanged",
       "to": "markerIndicator",
       "vocabulary": "amendment",
-      "note": "AMENDMENT: the event dot on a day",
-      "wasStateGated": true
+      "precedent": "NOVEL \u2014 the event dot on a calendar day",
+      "wasStateGated": true,
+      "note": "AMENDMENT: the event dot on a day"
     },
     {
       "component": "DatePicker",
@@ -1946,9 +2053,9 @@
       "key": "markerTooltip",
       "outcome": "unchanged",
       "to": "markerTooltip",
-      "vocabulary": "amendment",
-      "note": "AMENDMENT; candidate for R6 nesting into Tooltip",
-      "wasStateGated": true
+      "vocabulary": "R6-nested",
+      "wasStateGated": true,
+      "note": "AMENDMENT; candidate for R6 nesting into Tooltip"
     },
     {
       "component": "DatePicker",
@@ -1956,27 +2063,30 @@
       "key": "monthDropdown",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references; the live key is monthSelect",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references; the live key is monthSelect"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "monthGrid",
-      "outcome": "absorbed-into-parent",
-      "to": "list",
-      "vocabulary": "R2",
-      "note": "wrapper around `grid` (R5)"
+      "outcome": "renamed",
+      "to": "listRow",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a row within a grid `list`",
+      "promotedByAmendmentC": true,
+      "note": "wrapper around `grid` (R5) | AMENDMENT C: promoted, carries structural utilities (flex); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "monthNav",
-      "outcome": "absorbed-into-parent",
-      "to": "header",
-      "vocabulary": "R2",
-      "note": "layout-only row (R5)"
+      "outcome": "renamed",
+      "to": "row",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "promotedByAmendmentC": true,
+      "note": "layout-only row (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: header was already claimed"
     },
     {
       "component": "DatePicker",
@@ -1985,6 +2095,7 @@
       "outcome": "unchanged",
       "to": "monthSelect",
       "vocabulary": "amendment",
+      "precedent": "Ark DatePicker.MonthSelect",
       "note": "AMENDMENT: the month dropdown trigger"
     },
     {
@@ -1994,6 +2105,7 @@
       "outcome": "unchanged",
       "to": "navButton",
       "vocabulary": "amendment",
+      "precedent": "Ark splits these as prevTrigger/nextTrigger; unified here as one part with data-side per R4, because both are styled identically in this library",
       "note": "AMENDMENT: previous/next month control"
     },
     {
@@ -2002,37 +2114,40 @@
       "key": "navButtonDisabled",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD (002-unrenderable-keys): zero source references. Would have been data-disabled under R4 anyway.",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD (002-unrenderable-keys): zero source references. Would have been data-disabled under R4 anyway."
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "presetActive",
       "outcome": "deleted-as-state",
-      "to": "presetButton",
-      "vocabulary": "R2",
-      "note": "data-state=active",
-      "wasStateGated": true
+      "to": "presetTrigger",
+      "vocabulary": "amendment",
+      "precedent": "Ark DatePicker.PresetTrigger",
+      "wasStateGated": true,
+      "note": "data-state=active"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "presetButton",
       "outcome": "unchanged",
-      "to": "presetButton",
+      "to": "presetTrigger",
       "vocabulary": "amendment",
+      "precedent": "Ark DatePicker.PresetTrigger",
       "note": "AMENDMENT: a quick-range control"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "presets",
-      "outcome": "absorbed-into-parent",
-      "to": "footer",
-      "vocabulary": "R2",
-      "note": "the preset row (R5)"
+      "outcome": "renamed",
+      "to": "presetGroup",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the cluster of preset triggers in the calendar footer",
+      "promotedByAmendmentC": true,
+      "note": "the preset row (R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-wrap); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: footer was already claimed"
     },
     {
       "component": "DatePicker",
@@ -2048,7 +2163,7 @@
       "owner": "DatePicker",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2056,10 +2171,12 @@
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "todayButton",
-      "outcome": "absorbed-into-parent",
-      "to": "presetButton",
-      "vocabulary": "R2",
-      "note": "a preset by another name (R5)"
+      "outcome": "renamed",
+      "to": "presetTrigger",
+      "vocabulary": "amendment",
+      "precedent": "Ark DatePicker.PresetTrigger",
+      "promotedByAmendmentC": true,
+      "note": "a preset by another name (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "DatePicker",
@@ -2074,10 +2191,12 @@
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "triggerActions",
-      "outcome": "absorbed-into-parent",
-      "to": "trigger",
-      "vocabulary": "R2",
-      "note": "layout-only icon row (R5)"
+      "outcome": "renamed",
+      "to": "triggerActions",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the icon cluster at the end of a trigger",
+      "promotedByAmendmentC": true,
+      "note": "layout-only icon row (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "DatePicker",
@@ -2086,6 +2205,7 @@
       "outcome": "unchanged",
       "to": "weekNumber",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 ISO week column",
       "note": "AMENDMENT; NOT dead - showWeekNumbers renders it"
     },
     {
@@ -2095,16 +2215,19 @@
       "outcome": "unchanged",
       "to": "weekday",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 calendar column heading",
       "note": "AMENDMENT: Mo/Tu/We column heading"
     },
     {
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "weekdayHeader",
-      "outcome": "absorbed-into-parent",
-      "to": "list",
-      "vocabulary": "R2",
-      "note": "the weekday row (R5)"
+      "outcome": "renamed",
+      "to": "listHeader",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the weekday header row of a grid `list`",
+      "promotedByAmendmentC": true,
+      "note": "the weekday row (R5) | AMENDMENT C: promoted, carries structural utilities (grid grid-cols-7); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "DatePicker",
@@ -2112,9 +2235,8 @@
       "key": "yearDropdown",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: zero source references; the live key is yearSelect",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: zero source references; the live key is yearSelect"
     },
     {
       "component": "DatePicker",
@@ -2123,6 +2245,7 @@
       "outcome": "unchanged",
       "to": "yearSelect",
       "vocabulary": "amendment",
+      "precedent": "Ark DatePicker.YearSelect",
       "note": "AMENDMENT: the year dropdown trigger"
     },
     {
@@ -2202,7 +2325,7 @@
       "owner": "Dropdown",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2291,17 +2414,19 @@
       "component": "Dropdown",
       "owner": "Dropdown",
       "key": "shimmerItem",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
-      "vocabulary": "R2",
-      "note": "a row of the same skeleton (R5)"
+      "outcome": "renamed",
+      "to": "loadingItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
+      "promotedByAmendmentC": true,
+      "note": "a row of the same skeleton (R5) | AMENDMENT C: promoted, carries structural utilities (h-4); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Dropdown",
       "owner": "Dropdown",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2327,10 +2452,12 @@
       "component": "Dropdown",
       "owner": "Dropdown",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Input",
@@ -2339,6 +2466,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: character counter"
     },
     {
@@ -2355,7 +2483,7 @@
       "owner": "Input",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2384,6 +2512,7 @@
       "outcome": "unchanged",
       "to": "prefix",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 static text before an input",
       "note": "AMENDMENT: static text before the input"
     },
     {
@@ -2400,7 +2529,7 @@
       "owner": "Input",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2411,6 +2540,7 @@
       "outcome": "unchanged",
       "to": "suffix",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 static text after an input",
       "note": "AMENDMENT"
     },
     {
@@ -2428,7 +2558,7 @@
       "key": "countryOptionFlag",
       "outcome": "renamed",
       "to": "flag",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6: value becomes CountryFlag's own classes object"
     },
     {
@@ -2437,7 +2567,7 @@
       "key": "countryOptionLabel",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.itemText",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2446,7 +2576,7 @@
       "key": "countryOptionRow",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.item",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2455,7 +2585,7 @@
       "key": "countrySelect",
       "outcome": "renamed",
       "to": "countrySelect",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6: value becomes SearchableDropdown's own classes object"
     },
     {
@@ -2464,7 +2594,7 @@
       "key": "countrySelectCheckIcon",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.itemIndicator",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2473,7 +2603,7 @@
       "key": "countrySelectChevron",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.icon",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2482,7 +2612,7 @@
       "key": "countrySelectDropdown",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.content",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2491,9 +2621,9 @@
       "key": "countrySelectNoResults",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.empty",
-      "vocabulary": "R2",
-      "note": "R6; was state-gated, not dead",
-      "wasStateGated": true
+      "vocabulary": "R6-nested",
+      "wasStateGated": true,
+      "note": "R6; was state-gated, not dead"
     },
     {
       "component": "InternationalPhoneInput",
@@ -2501,7 +2631,7 @@
       "key": "countrySelectOption",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.item",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2510,7 +2640,7 @@
       "key": "countrySelectOptionList",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.list",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2519,7 +2649,7 @@
       "key": "countrySelectOptionSelected",
       "outcome": "deleted-as-state",
       "to": "countrySelect.item",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "data-selected, on the child (R4 + R6)"
     },
     {
@@ -2528,7 +2658,7 @@
       "key": "countrySelectSearchIcon",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.searchInput",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2537,7 +2667,7 @@
       "key": "countrySelectSearchInput",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.searchInput",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2546,7 +2676,7 @@
       "key": "countrySelectSearchInputElement",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.searchInput",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2555,7 +2685,7 @@
       "key": "countrySelectTrigger",
       "outcome": "absorbed-into-parent",
       "to": "countrySelect.trigger",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6 nesting; no flat prefixed name"
     },
     {
@@ -2564,7 +2694,7 @@
       "key": "countrySelectedFlag",
       "outcome": "absorbed-into-parent",
       "to": "flag",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -2599,7 +2729,7 @@
       "owner": "InternationalPhoneInput",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2635,7 +2765,7 @@
       "owner": "InternationalPhoneInput",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2643,18 +2773,21 @@
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-stretch); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Loader",
       "owner": "CircularLoader (DEFAULT_CIRCULAR_LOADER_CLASSES)",
       "key": "indicator",
       "outcome": "unchanged",
-      "to": "indicator",
+      "to": "range",
       "vocabulary": "amendment",
+      "precedent": "Radix Slider.Range, Ark Progress.Range",
       "note": "AMENDMENT; the sweeping arc"
     },
     {
@@ -2670,10 +2803,12 @@
       "component": "Loader",
       "owner": "CircularLoader (DEFAULT_CIRCULAR_LOADER_CLASSES)",
       "key": "svg",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-full w-full); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Loader",
@@ -2682,6 +2817,7 @@
       "outcome": "unchanged",
       "to": "track",
       "vocabulary": "amendment",
+      "precedent": "Radix Slider.Track, Ark Progress.Track",
       "note": "AMENDMENT; shared with Slider/Switch"
     },
     {
@@ -2689,8 +2825,9 @@
       "owner": "DotLoader (DEFAULT_DOT_LOADER_CLASSES)",
       "key": "dot",
       "outcome": "renamed",
-      "to": "indicator",
-      "vocabulary": "R2",
+      "to": "range",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Range, Ark Progress.Range",
       "note": "same part"
     },
     {
@@ -2707,8 +2844,9 @@
       "owner": "LinearLoader (DEFAULT_LINEAR_LOADER_CLASSES)",
       "key": "bar",
       "outcome": "renamed",
-      "to": "indicator",
-      "vocabulary": "R2",
+      "to": "range",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Range, Ark Progress.Range",
       "note": "the moving element, same part as CircularLoader's arc"
     },
     {
@@ -2725,8 +2863,9 @@
       "owner": "PulseLoader (DEFAULT_PULSE_LOADER_CLASSES)",
       "key": "core",
       "outcome": "renamed",
-      "to": "indicator",
-      "vocabulary": "R2",
+      "to": "range",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Range, Ark Progress.Range",
       "note": "same part"
     },
     {
@@ -2734,8 +2873,9 @@
       "owner": "PulseLoader (DEFAULT_PULSE_LOADER_CLASSES)",
       "key": "ring",
       "outcome": "absorbed-into-parent",
-      "to": "indicator",
-      "vocabulary": "R2",
+      "to": "range",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Range, Ark Progress.Range",
       "note": "(R5)"
     },
     {
@@ -2769,19 +2909,23 @@
       "component": "Modal",
       "owner": "Modal",
       "key": "closeIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "closeButton",
-      "vocabulary": "R2",
-      "note": "the glyph inside closeButton (R5)"
+      "outcome": "renamed",
+      "to": "closeIcon",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the glyph inside `closeButton`",
+      "promotedByAmendmentC": true,
+      "note": "the glyph inside closeButton (R5) | AMENDMENT C: promoted, carries structural utilities (w-5 h-5); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Modal",
       "owner": "Modal",
       "key": "container",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "centering wrapper (R5); AUDIT-GAP 4.5"
+      "outcome": "renamed",
+      "to": "positioner",
+      "vocabulary": "amendment",
+      "precedent": "Ark Dialog.Positioner",
+      "promotedByAmendmentC": true,
+      "note": "centering wrapper (R5); AUDIT-GAP 4.5 | AMENDMENT C: promoted, carries structural utilities (relative z-10 flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed"
     },
     {
       "component": "Modal",
@@ -2851,17 +2995,18 @@
       "owner": "MultiSelectDropdown",
       "key": "checkbox",
       "outcome": "unchanged",
-      "to": "checkbox",
-      "vocabulary": "amendment",
-      "note": "AMENDMENT (see Checkbox)"
+      "to": "itemIndicator",
+      "vocabulary": "R2",
+      "note": "AMENDMENT (see Checkbox) | collision-resolved: control was already claimed"
     },
     {
       "component": "MultiSelectDropdown",
       "owner": "MultiSelectDropdown",
       "key": "checkboxChecked",
       "outcome": "deleted-as-state",
-      "to": "checkbox",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked"
     },
     {
@@ -2932,7 +3077,7 @@
       "owner": "MultiSelectDropdown",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -2952,6 +3097,7 @@
       "outcome": "renamed",
       "to": "count",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: the +N overflow badge, same part as CountryFlagGroup.count"
     },
     {
@@ -3040,7 +3186,7 @@
       "owner": "MultiSelectDropdown",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3066,27 +3212,30 @@
       "component": "MultiSelectDropdown",
       "owner": "MultiSelectDropdown",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "checkbox",
       "outcome": "unchanged",
-      "to": "checkbox",
-      "vocabulary": "amendment",
-      "note": "AMENDMENT"
+      "to": "itemIndicator",
+      "vocabulary": "R2",
+      "note": "AMENDMENT | collision-resolved: control was already claimed"
     },
     {
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "checkboxChecked",
       "outcome": "deleted-as-state",
-      "to": "checkbox",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked"
     },
     {
@@ -3157,7 +3306,7 @@
       "owner": "MultiSelectSearchableDropdown",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3186,6 +3335,7 @@
       "outcome": "renamed",
       "to": "count",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT"
     },
     {
@@ -3255,28 +3405,31 @@
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "searchIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "searchInput",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "searchIcon",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-4 h-4 shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "searchInput",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "searchInputElement",
-      "outcome": "renamed",
+      "outcome": "absorbed-into-parent",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": ""
+      "note": " | collision: the box keeps the name; this element carries no structural utility"
     },
     {
       "component": "MultiSelectSearchableDropdown",
@@ -3301,7 +3454,7 @@
       "owner": "MultiSelectSearchableDropdown",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3327,10 +3480,12 @@
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "OtpInput",
@@ -3346,7 +3501,7 @@
       "owner": "OtpInput",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3409,7 +3564,7 @@
       "owner": "OtpInput",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3417,10 +3572,12 @@
       "component": "OtpInput",
       "owner": "OtpInput",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Pagination",
@@ -3437,7 +3594,7 @@
       "key": "dropdownIcon",
       "outcome": "absorbed-into-parent",
       "to": "rowsPerPage.icon",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "AUDIT-GAP 4.5 + R6"
     },
     {
@@ -3447,6 +3604,7 @@
       "outcome": "unchanged",
       "to": "ellipsis",
       "vocabulary": "amendment",
+      "precedent": "Ark Pagination.Ellipsis",
       "note": "AMENDMENT; shared with Breadcrumb"
     },
     {
@@ -3462,10 +3620,12 @@
       "component": "Pagination",
       "owner": "Pagination",
       "key": "nav",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "row",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed"
     },
     {
       "component": "Pagination",
@@ -3474,16 +3634,19 @@
       "outcome": "unchanged",
       "to": "navButton",
       "vocabulary": "amendment",
+      "precedent": "Ark splits these as prevTrigger/nextTrigger; unified here as one part with data-side per R4, because both are styled identically in this library",
       "note": "AMENDMENT; shared name with DatePicker's prev/next"
     },
     {
       "component": "Pagination",
       "owner": "Pagination",
       "key": "nextIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "navButton",
-      "vocabulary": "R2",
-      "note": "data-side=end"
+      "outcome": "renamed",
+      "to": "navIcon",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the glyph inside `navButton`",
+      "promotedByAmendmentC": true,
+      "note": "data-side=end | AMENDMENT C: promoted, carries structural utilities (w-5 h-5); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Pagination",
@@ -3510,16 +3673,19 @@
       "outcome": "unchanged",
       "to": "pageInfo",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the 'N of M' readout",
       "note": "AMENDMENT: the 'N of M' readout"
     },
     {
       "component": "Pagination",
       "owner": "Pagination",
       "key": "prevIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "navButton",
-      "vocabulary": "R2",
-      "note": "distinguished by data-side=start (R4/R5)"
+      "outcome": "renamed",
+      "to": "navIcon",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the glyph inside `navButton`",
+      "promotedByAmendmentC": true,
+      "note": "distinguished by data-side=start (R4/R5) | AMENDMENT C: promoted, carries structural utilities (w-5 h-5); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Pagination",
@@ -3536,7 +3702,7 @@
       "key": "selector",
       "outcome": "renamed",
       "to": "rowsPerPage",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6: value becomes Dropdown's own classes object"
     },
     {
@@ -3545,7 +3711,7 @@
       "key": "selectorButton",
       "outcome": "absorbed-into-parent",
       "to": "rowsPerPage.trigger",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6: the rows-per-page control is a nested Dropdown"
     },
     {
@@ -3554,7 +3720,7 @@
       "key": "selectorDropdown",
       "outcome": "absorbed-into-parent",
       "to": "rowsPerPage.content",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -3563,7 +3729,7 @@
       "key": "selectorDropdownWrapper",
       "outcome": "absorbed-into-parent",
       "to": "rowsPerPage.content",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6 (R5)"
     },
     {
@@ -3572,7 +3738,7 @@
       "key": "selectorOption",
       "outcome": "absorbed-into-parent",
       "to": "rowsPerPage.item",
-      "vocabulary": "R2",
+      "vocabulary": "R6-nested",
       "note": "R6"
     },
     {
@@ -3589,7 +3755,7 @@
       "owner": "RadioGroup (DEFAULT_RADIO_GROUP_CLASSES)",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3616,7 +3782,7 @@
       "owner": "RadioGroup (DEFAULT_RADIO_GROUP_CLASSES)",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3625,8 +3791,9 @@
       "owner": "RadioButton item (DEFAULT_RADIO_CLASSES)",
       "key": "checked",
       "outcome": "deleted-as-state",
-      "to": "radio",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked"
     },
     {
@@ -3644,9 +3811,8 @@
       "key": "error",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD (002-unrenderable-keys): the item never renders error text; the group owns it",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD (002-unrenderable-keys): the item never renders error text; the group owns it"
     },
     {
       "component": "RadioButton/RadioButton",
@@ -3671,8 +3837,9 @@
       "owner": "RadioButton item (DEFAULT_RADIO_CLASSES)",
       "key": "radio",
       "outcome": "unchanged",
-      "to": "radio",
+      "to": "control",
       "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT: sibling of `checkbox`"
     },
     {
@@ -3690,17 +3857,17 @@
       "key": "success",
       "outcome": "deleted-as-dead",
       "to": null,
-      "vocabulary": "R2",
-      "note": "DEAD: same, the group owns the success message",
-      "waivedAsDead": true
+      "waivedAsDead": true,
+      "note": "DEAD: same, the group owns the success message"
     },
     {
       "component": "RadioButton/RadioButton",
       "owner": "RadioButton item (DEFAULT_RADIO_CLASSES)",
       "key": "unchecked",
       "outcome": "deleted-as-state",
-      "to": "radio",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=unchecked"
     },
     {
@@ -3708,8 +3875,9 @@
       "owner": "ResizablePanel",
       "key": "handle",
       "outcome": "unchanged",
-      "to": "handle",
+      "to": "resizeHandle",
       "vocabulary": "amendment",
+      "precedent": "react-resizable-panels PanelResizeHandle",
       "note": "AMENDMENT: the drag divider"
     },
     {
@@ -3771,7 +3939,7 @@
       "owner": "SearchableDropdown",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3851,28 +4019,31 @@
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "searchIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "searchInput",
-      "vocabulary": "R2",
-      "note": "decorative glyph inside the search box (R5)"
+      "outcome": "renamed",
+      "to": "searchIcon",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the glyph inside `searchInput`; sibling of `icon`",
+      "promotedByAmendmentC": true,
+      "note": "decorative glyph inside the search box (R5) | AMENDMENT C: promoted, carries structural utilities (w-4 h-4 shrink-0); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "searchInput",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "wrapper around the input element (R5)"
+      "promotedByAmendmentC": true,
+      "note": "wrapper around the input element (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "searchInputElement",
-      "outcome": "renamed",
+      "outcome": "absorbed-into-parent",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "R2 names the text entry itself"
+      "note": "R2 names the text entry itself | collision: the box keeps the name; this element carries no structural utility"
     },
     {
       "component": "SearchableDropdown",
@@ -3887,17 +4058,19 @@
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "shimmerItem",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
-      "vocabulary": "R2",
-      "note": "a row of the same skeleton (R5)"
+      "outcome": "renamed",
+      "to": "loadingItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
+      "promotedByAmendmentC": true,
+      "note": "a row of the same skeleton (R5) | AMENDMENT C: promoted, carries structural utilities (h-4); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3923,10 +4096,12 @@
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "the bordered box; AUDIT-GAP 4.5 root/wrapper (R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Slider",
@@ -3942,7 +4117,7 @@
       "owner": "Slider",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -3960,8 +4135,9 @@
       "owner": "Slider",
       "key": "mark",
       "outcome": "unchanged",
-      "to": "mark",
+      "to": "marker",
       "vocabulary": "amendment",
+      "precedent": "Ark Slider.Marker",
       "note": "AMENDMENT: a tick on the track"
     },
     {
@@ -3969,8 +4145,9 @@
       "owner": "Slider",
       "key": "markDot",
       "outcome": "absorbed-into-parent",
-      "to": "mark",
-      "vocabulary": "R2",
+      "to": "marker",
+      "vocabulary": "amendment",
+      "precedent": "Ark Slider.Marker",
       "note": "(R5)"
     },
     {
@@ -3978,8 +4155,9 @@
       "owner": "Slider",
       "key": "markDotActive",
       "outcome": "deleted-as-state",
-      "to": "mark",
-      "vocabulary": "R2",
+      "to": "marker",
+      "vocabulary": "amendment",
+      "precedent": "Ark Slider.Marker",
       "note": "data-state=active"
     },
     {
@@ -3987,8 +4165,9 @@
       "owner": "Slider",
       "key": "markLabel",
       "outcome": "absorbed-into-parent",
-      "to": "mark",
-      "vocabulary": "R2",
+      "to": "marker",
+      "vocabulary": "amendment",
+      "precedent": "Ark Slider.Marker",
       "note": "(R5)"
     },
     {
@@ -3998,6 +4177,7 @@
       "outcome": "unchanged",
       "to": "range",
       "vocabulary": "amendment",
+      "precedent": "Radix Slider.Range, Ark Progress.Range",
       "note": "AMENDMENT: the filled portion of the track"
     },
     {
@@ -4014,7 +4194,7 @@
       "owner": "Slider",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -4025,6 +4205,7 @@
       "outcome": "unchanged",
       "to": "thumb",
       "vocabulary": "amendment",
+      "precedent": "Radix Slider.Thumb, Radix Switch.Thumb",
       "note": "AMENDMENT"
     },
     {
@@ -4033,9 +4214,10 @@
       "key": "thumbActive",
       "outcome": "deleted-as-state",
       "to": "thumb",
-      "vocabulary": "R2",
-      "note": "data-state=active (dragging); state-gated, not dead",
-      "wasStateGated": true
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Thumb, Radix Switch.Thumb",
+      "wasStateGated": true,
+      "note": "data-state=active (dragging); state-gated, not dead"
     },
     {
       "component": "Slider",
@@ -4043,7 +4225,8 @@
       "key": "thumbDisabled",
       "outcome": "deleted-as-state",
       "to": "thumb",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Thumb, Radix Switch.Thumb",
       "note": "data-disabled"
     },
     {
@@ -4051,8 +4234,9 @@
       "owner": "Slider",
       "key": "tooltip",
       "outcome": "renamed",
-      "to": "tooltip",
-      "vocabulary": "R2",
+      "to": "valueText",
+      "vocabulary": "amendment",
+      "precedent": "Ark Slider.ValueText",
       "note": "R6 candidate: value bubble; nests Tooltip's classes if it becomes one"
     },
     {
@@ -4062,24 +4246,27 @@
       "outcome": "unchanged",
       "to": "track",
       "vocabulary": "amendment",
+      "precedent": "Radix Slider.Track, Ark Progress.Track",
       "note": "AMENDMENT"
     },
     {
       "component": "Slider",
       "owner": "Slider",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Stepper",
       "owner": "Stepper",
       "key": "connector",
       "outcome": "unchanged",
-      "to": "connector",
-      "vocabulary": "amendment",
+      "to": "separator",
+      "vocabulary": "R2",
       "note": "AMENDMENT: the line between steps"
     },
     {
@@ -4087,7 +4274,7 @@
       "owner": "Stepper",
       "key": "connectorActive",
       "outcome": "deleted-as-state",
-      "to": "connector",
+      "to": "separator",
       "vocabulary": "R2",
       "note": "data-state=active"
     },
@@ -4096,7 +4283,7 @@
       "owner": "Stepper",
       "key": "connectorCompleted",
       "outcome": "deleted-as-state",
-      "to": "connector",
+      "to": "separator",
       "vocabulary": "R2",
       "note": "data-state=completed"
     },
@@ -4105,7 +4292,7 @@
       "owner": "Stepper",
       "key": "connectorError",
       "outcome": "deleted-as-state",
-      "to": "connector",
+      "to": "separator",
       "vocabulary": "R2",
       "note": "data-invalid"
     },
@@ -4114,7 +4301,7 @@
       "owner": "Stepper",
       "key": "connectorHorizontal",
       "outcome": "deleted-as-state",
-      "to": "connector",
+      "to": "separator",
       "vocabulary": "R2",
       "note": "data-orientation=horizontal"
     },
@@ -4123,7 +4310,7 @@
       "owner": "Stepper",
       "key": "connectorPending",
       "outcome": "deleted-as-state",
-      "to": "connector",
+      "to": "separator",
       "vocabulary": "R2",
       "note": "data-state=inactive"
     },
@@ -4132,7 +4319,7 @@
       "owner": "Stepper",
       "key": "connectorVertical",
       "outcome": "deleted-as-state",
-      "to": "connector",
+      "to": "separator",
       "vocabulary": "R2",
       "note": "data-orientation=vertical"
     },
@@ -4214,7 +4401,7 @@
       "key": "indicatorCompleted",
       "outcome": "deleted-as-state",
       "to": "itemIndicator",
-      "vocabulary": "amendment",
+      "vocabulary": "R2",
       "note": "data-state=completed - AMENDMENT to the R4 value list"
     },
     {
@@ -4293,10 +4480,12 @@
       "component": "Stepper",
       "owner": "Stepper",
       "key": "labelWrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "itemText",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "row",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: itemText was already claimed"
     },
     {
       "component": "Stepper",
@@ -4385,7 +4574,8 @@
       "key": "checkedThumb",
       "outcome": "deleted-as-state",
       "to": "thumb",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Thumb, Radix Switch.Thumb",
       "note": "data-state=checked"
     },
     {
@@ -4393,8 +4583,9 @@
       "owner": "Switch",
       "key": "checkedTracker",
       "outcome": "deleted-as-state",
-      "to": "track",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=checked"
     },
     {
@@ -4420,8 +4611,9 @@
       "owner": "Switch",
       "key": "disabledTracker",
       "outcome": "deleted-as-state",
-      "to": "track",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-disabled"
     },
     {
@@ -4429,7 +4621,7 @@
       "owner": "Switch",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -4437,10 +4629,12 @@
       "component": "Switch",
       "owner": "Switch",
       "key": "innerRow",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "row",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed"
     },
     {
       "component": "Switch",
@@ -4455,10 +4649,12 @@
       "component": "Switch",
       "owner": "Switch",
       "key": "labelContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "labelGroup",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the label + description column beside a control",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: control was already claimed"
     },
     {
       "component": "Switch",
@@ -4483,7 +4679,7 @@
       "owner": "Switch",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -4494,6 +4690,7 @@
       "outcome": "unchanged",
       "to": "thumb",
       "vocabulary": "amendment",
+      "precedent": "Radix Slider.Thumb, Radix Switch.Thumb",
       "note": "AMENDMENT"
     },
     {
@@ -4501,8 +4698,9 @@
       "owner": "Switch",
       "key": "tracker",
       "outcome": "renamed",
-      "to": "track",
+      "to": "control",
       "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "AMENDMENT: `track` matches Slider's part of the same shape"
     },
     {
@@ -4511,7 +4709,8 @@
       "key": "uncheckedThumb",
       "outcome": "deleted-as-state",
       "to": "thumb",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "Radix Slider.Thumb, Radix Switch.Thumb",
       "note": "data-state=unchecked"
     },
     {
@@ -4519,8 +4718,9 @@
       "owner": "Switch",
       "key": "uncheckedTracker",
       "outcome": "deleted-as-state",
-      "to": "track",
-      "vocabulary": "R2",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
       "note": "data-state=unchecked"
     },
     {
@@ -4530,6 +4730,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT: the badge on a tab"
     },
     {
@@ -4538,7 +4739,8 @@
       "key": "countActive",
       "outcome": "deleted-as-state",
       "to": "count",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "data-state=active"
     },
     {
@@ -4547,7 +4749,8 @@
       "key": "countInactive",
       "outcome": "deleted-as-state",
       "to": "count",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "data-state=inactive"
     },
     {
@@ -4584,6 +4787,7 @@
       "outcome": "unchanged",
       "to": "indicator",
       "vocabulary": "amendment",
+      "precedent": "Radix Checkbox.Indicator, Ark Tabs.Indicator, Ark Steps.Indicator",
       "note": "AMENDMENT: the moving underline; distinct from R2's itemIndicator"
     },
     {
@@ -4701,6 +4905,7 @@
       "outcome": "unchanged",
       "to": "cell",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 grounded in the HTML <td> it renders",
       "note": "AMENDMENT"
     },
     {
@@ -4708,9 +4913,10 @@
       "owner": "Table",
       "key": "checkbox",
       "outcome": "unchanged",
-      "to": "checkbox",
+      "to": "control",
       "vocabulary": "amendment",
-      "note": "AMENDMENT"
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "note": "AMENDMENT | collision-resolved: control was already claimed"
     },
     {
       "component": "Table",
@@ -4718,7 +4924,8 @@
       "key": "checkboxCell",
       "outcome": "absorbed-into-parent",
       "to": "cell",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 grounded in the HTML <td> it renders",
       "note": "(R5)"
     },
     {
@@ -4737,6 +4944,7 @@
       "outcome": "unchanged",
       "to": "dragHandle",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 row reorder grip",
       "note": "AMENDMENT"
     },
     {
@@ -4746,8 +4954,8 @@
       "outcome": "renamed",
       "to": "input",
       "vocabulary": "R2",
-      "note": "R2 text entry; state-gated, not dead",
-      "wasStateGated": true
+      "wasStateGated": true,
+      "note": "R2 text entry; state-gated, not dead"
     },
     {
       "component": "Table",
@@ -4765,6 +4973,7 @@
       "outcome": "unchanged",
       "to": "expandButton",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 row expansion control",
       "note": "AMENDMENT"
     },
     {
@@ -4783,6 +4992,7 @@
       "outcome": "renamed",
       "to": "filterContent",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the column filter surface",
       "note": "AMENDMENT: a nested popup; R6 candidate"
     },
     {
@@ -4791,7 +5001,8 @@
       "key": "filterIcon",
       "outcome": "renamed",
       "to": "filterButton",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column filter control",
       "note": "the glyph and its control are one part"
     },
     {
@@ -4828,6 +5039,7 @@
       "outcome": "unchanged",
       "to": "headerCell",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
       "note": "AMENDMENT"
     },
     {
@@ -4836,7 +5048,8 @@
       "key": "headerCellContent",
       "outcome": "absorbed-into-parent",
       "to": "headerCell",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
       "note": "(R5)"
     },
     {
@@ -4845,7 +5058,8 @@
       "key": "headerCellHover",
       "outcome": "deleted-as-state",
       "to": "headerCell",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
       "note": "a :hover utility on headerCell (R4/R5)"
     },
     {
@@ -4873,6 +5087,7 @@
       "outcome": "unchanged",
       "to": "mobileCard",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 Table's below-breakpoint render",
       "note": "AMENDMENT: the below-breakpoint card render"
     },
     {
@@ -4882,8 +5097,9 @@
       "outcome": "unchanged",
       "to": "pinButton",
       "vocabulary": "amendment",
-      "note": "AMENDMENT",
-      "wasStateGated": true
+      "precedent": "NOVEL \u2014 column pin control",
+      "wasStateGated": true,
+      "note": "AMENDMENT"
     },
     {
       "component": "Table",
@@ -4891,9 +5107,10 @@
       "key": "pinIcon",
       "outcome": "unchanged",
       "to": "pinButton",
-      "vocabulary": "R2",
-      "note": "the glyph and its button are one control; state-gated, not dead",
-      "wasStateGated": true
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column pin control",
+      "wasStateGated": true,
+      "note": "the glyph and its button are one control; state-gated, not dead"
     },
     {
       "component": "Table",
@@ -4901,18 +5118,21 @@
       "key": "pinIconHover",
       "outcome": "deleted-as-state",
       "to": "pinButton",
-      "vocabulary": "R2",
-      "note": "a :hover utility (R4)",
-      "wasStateGated": true
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column pin control",
+      "wasStateGated": true,
+      "note": "a :hover utility (R4)"
     },
     {
       "component": "Table",
       "owner": "Table",
       "key": "pinnedContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "the pinned-column split is layout, distinguished by data-pinned (R5)"
+      "outcome": "renamed",
+      "to": "pinnedRegion",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 Table's sticky pinned-column region",
+      "promotedByAmendmentC": true,
+      "note": "the pinned-column split is layout, distinguished by data-pinned (R5) | AMENDMENT C: promoted, carries structural utilities (shrink-0 sticky left-0 z-30); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Table",
@@ -4920,9 +5140,10 @@
       "key": "pinnedPinButton",
       "outcome": "deleted-as-state",
       "to": "pinButton",
-      "vocabulary": "R2",
-      "note": "data-state=active",
-      "wasStateGated": true
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column pin control",
+      "wasStateGated": true,
+      "note": "data-state=active"
     },
     {
       "component": "Table",
@@ -4930,9 +5151,10 @@
       "key": "pinnedPinIcon",
       "outcome": "deleted-as-state",
       "to": "pinButton",
-      "vocabulary": "R2",
-      "note": "data-state=active (already pinned)",
-      "wasStateGated": true
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column pin control",
+      "wasStateGated": true,
+      "note": "data-state=active (already pinned)"
     },
     {
       "component": "Table",
@@ -4940,9 +5162,10 @@
       "key": "pinnedPinIconHover",
       "outcome": "deleted-as-state",
       "to": "pinButton",
-      "vocabulary": "R2",
-      "note": "a :hover utility",
-      "wasStateGated": true
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column pin control",
+      "wasStateGated": true,
+      "note": "a :hover utility"
     },
     {
       "component": "Table",
@@ -4978,6 +5201,7 @@
       "outcome": "unchanged",
       "to": "resizeHandle",
       "vocabulary": "amendment",
+      "precedent": "react-resizable-panels PanelResizeHandle",
       "note": "AMENDMENT"
     },
     {
@@ -5029,19 +5253,23 @@
       "component": "Table",
       "owner": "Table",
       "key": "shimmerBar",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "loadingBar",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 the bar inside a skeleton cell",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-full w-full); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: loadingItem was already claimed"
     },
     {
       "component": "Table",
       "owner": "Table",
       "key": "shimmerCell",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "loadingItem",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 one row of the skeleton; sibling of `loading`",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (h-14); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Table",
@@ -5059,6 +5287,7 @@
       "outcome": "unchanged",
       "to": "sortIcon",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 column sort affordance",
       "note": "AMENDMENT"
     },
     {
@@ -5074,19 +5303,22 @@
       "component": "Table",
       "owner": "Table",
       "key": "unpinnedContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "scrollRegion",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 Table's horizontally scrolling region",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (min-w-0 flex-1 overflow-x-auto); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Table",
       "owner": "Table",
       "key": "unpinnedTable",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "list",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-full); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "TextArea",
@@ -5095,6 +5327,7 @@
       "outcome": "unchanged",
       "to": "count",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a numeric badge or counter; shared by 5 components",
       "note": "AMENDMENT"
     },
     {
@@ -5111,7 +5344,7 @@
       "owner": "TextArea",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -5138,7 +5371,7 @@
       "owner": "TextArea",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -5185,6 +5418,7 @@
       "outcome": "unchanged",
       "to": "cancelButton",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 footer action",
       "note": "AMENDMENT"
     },
     {
@@ -5193,7 +5427,8 @@
       "key": "clockCenter",
       "outcome": "absorbed-into-parent",
       "to": "clockFace",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 no peer library ships an analogue clock picker",
       "note": "(R5)"
     },
     {
@@ -5212,6 +5447,7 @@
       "outcome": "unchanged",
       "to": "clockDisplay",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "AMENDMENT: the HH:MM readout"
     },
     {
@@ -5220,7 +5456,8 @@
       "key": "clockDisplayActive",
       "outcome": "deleted-as-state",
       "to": "clockDisplay",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "data-state=active (which unit is being set)"
     },
     {
@@ -5229,7 +5466,8 @@
       "key": "clockDisplayHours",
       "outcome": "absorbed-into-parent",
       "to": "clockDisplay",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5)"
     },
     {
@@ -5238,7 +5476,8 @@
       "key": "clockDisplayMinutes",
       "outcome": "absorbed-into-parent",
       "to": "clockDisplay",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5)"
     },
     {
@@ -5247,7 +5486,8 @@
       "key": "clockDisplaySeparator",
       "outcome": "absorbed-into-parent",
       "to": "clockDisplay",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "the colon (R5)"
     },
     {
@@ -5257,6 +5497,7 @@
       "outcome": "unchanged",
       "to": "clockFace",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 no peer library ships an analogue clock picker",
       "note": "AMENDMENT"
     },
     {
@@ -5266,16 +5507,19 @@
       "outcome": "unchanged",
       "to": "clockHand",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "AMENDMENT"
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockHandDot",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "clockHand",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-3 h-3); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "TimePicker",
@@ -5283,7 +5527,8 @@
       "key": "clockHandLine",
       "outcome": "absorbed-into-parent",
       "to": "clockHand",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5)"
     },
     {
@@ -5293,6 +5538,7 @@
       "outcome": "unchanged",
       "to": "clockNumber",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "AMENDMENT"
     },
     {
@@ -5301,7 +5547,8 @@
       "key": "clockNumberDisabled",
       "outcome": "deleted-as-state",
       "to": "clockNumber",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "data-disabled"
     },
     {
@@ -5310,7 +5557,8 @@
       "key": "clockNumberInner",
       "outcome": "absorbed-into-parent",
       "to": "clockNumber",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "(R5)"
     },
     {
@@ -5319,7 +5567,8 @@
       "key": "clockNumberSelected",
       "outcome": "deleted-as-state",
       "to": "clockNumber",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 same",
       "note": "data-selected"
     },
     {
@@ -5329,6 +5578,7 @@
       "outcome": "unchanged",
       "to": "confirmButton",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 footer action",
       "note": "AMENDMENT"
     },
     {
@@ -5337,7 +5587,8 @@
       "key": "clockPeriodActive",
       "outcome": "deleted-as-state",
       "to": "periodButton",
-      "vocabulary": "R2",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 AM/PM toggle",
       "note": "data-state=active"
     },
     {
@@ -5347,16 +5598,19 @@
       "outcome": "unchanged",
       "to": "periodButton",
       "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 AM/PM toggle",
       "note": "AMENDMENT: AM/PM"
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockPeriodToggle",
-      "outcome": "absorbed-into-parent",
-      "to": "clockDisplay",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "row",
+      "vocabulary": "amendment",
+      "precedent": "NOVEL \u2014 a layout cluster carrying structural utilities and no other semantic role; one name rather than six per-component coinages",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex flex-col); absorbing it would take layout control away, which ADR 001 exists to prevent | collision-resolved: clockDisplay was already claimed"
     },
     {
       "component": "TimePicker",
@@ -5390,7 +5644,7 @@
       "owner": "TimePicker",
       "key": "error",
       "outcome": "renamed",
-      "to": "errorText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -5480,7 +5734,7 @@
       "owner": "TimePicker",
       "key": "success",
       "outcome": "renamed",
-      "to": "helperText",
+      "to": "message",
       "vocabulary": "R2",
       "note": ""
     },
@@ -5497,10 +5751,12 @@
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
-      "vocabulary": "R2",
-      "note": "(R5)"
+      "outcome": "renamed",
+      "to": "control",
+      "vocabulary": "amendment",
+      "precedent": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+      "promotedByAmendmentC": true,
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (relative); absorbing it would take layout control away, which ADR 001 exists to prevent"
     },
     {
       "component": "Toast",
@@ -5561,8 +5817,9 @@
       "owner": "Toast",
       "key": "progress",
       "outcome": "unchanged",
-      "to": "progress",
+      "to": "indicator",
       "vocabulary": "amendment",
+      "precedent": "Radix Checkbox.Indicator, Ark Tabs.Indicator, Ark Steps.Indicator",
       "note": "AMENDMENT: the auto-dismiss progress bar"
     },
     {
@@ -5601,8 +5858,5 @@
       "vocabulary": "R2",
       "note": ""
     }
-  ],
-  "$comment": "ADR 002 Task 1 - the key migration table. One row per existing `classes` key, all 523 across 35 registry entries. Produced 2026-09-02 against the CORRECTED, typed fixtures, registry and REQUIRED_PROPS; the key data is trustworthy in a way it was not when the ADR was written. No source changed. Outcomes: renamed | unchanged | deleted-as-state (R4, replaced by a data attribute) | deleted-as-dead (R7/R8, no prop combination renders it) | absorbed-into-parent (R5, no semantic role of its own).",
-  "$comment_deadCrossCheck": "Every deleted-as-dead row is one of the 11 keys recorded dead in 002-unrenderable-keys.json, and no key recorded merely state-gated is deleted as dead. The 18 state-gated keys are LIVE: 12 become data attributes under R4, 6 survive as parts. CascadingDropdown's six search keys are NOT here - they were recorded dead on the evidence of a fixture passing `showSearch`, which is not a prop; `showMenuSearch` and `showSubmenuSearch` are, and the corrected fixtures render them.",
-  "$comment_vocabulary": "R2's part list was drawn for menu and overlay components and does not cover the library's domain parts. 67 rows resolve to a name outside it, needing 48 new terms by ADR amendment before Task 3 can apply this table. They are listed under vocabularyAmendmentsNeeded and flagged per row as vocabulary:'amendment'."
+  ]
 }

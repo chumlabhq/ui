@@ -1,6 +1,6 @@
 # ADR 002 — `classes` key vocabulary
 
-**Status:** Accepted
+**Status:** Accepted; amended 2026-09-02 (Amendments A-D)
 **Date:** 2026-09-01
 **Supersedes:** nothing
 **Related:** ADR 001 (unstyled contract), AUDIT-GAP §4.5, GATE-HONESTY §3
@@ -51,8 +51,41 @@ Part names are drawn from the fixed list below. The same DOM role gets the same 
 | `arrow` | pointer/caret on floating content |
 | `empty` | empty-state element |
 | `loading` | skeleton or spinner element |
-| `label`, `helperText`, `errorText` | form furniture around a control |
+| `label` | form furniture around a control |
+| `message` | validation feedback; carries `data-state="error"` or `"success"` (Amendment B) |
 | `chip`, `chipLabel`, `chipRemove` | multi-value tokens |
+
+### R2a — Amendment procedure (Amendment A, 2026-09-02)
+
+R2's list was drawn from Radix and Ark menu anatomy. It has no word for a slider thumb, a
+calendar cell or a table row, and the migration surfaced 46 parts outside it. Free-form
+coinage at that scale is how a second emergent vocabulary starts, so:
+
+**Every name outside R2 must cite a peer-library precedent (Radix, Ark/Zag, Base UI) or be
+marked explicitly novel.** Where a peer convention exists it wins over a descriptive
+coinage. The accepted list, with precedents, is `vocabularyAmendments` in
+`docs/adr/002-key-migration.json`.
+
+Conventions that absorbed coinages in this amendment:
+
+| Coinage | Accepted | Precedent |
+| --- | --- | --- |
+| `checkbox`, `radio`, `tracker`, and nine spellings of `wrapper` | `control` | Ark Checkbox / RadioGroup / Switch / Combobox / Select |
+| `progress`, and Loader's `indicator` | `indicator`, `track` + `range` | Radix Checkbox.Indicator; Ark Progress |
+| `connector` | `separator` | Ark Steps — already in R2 |
+| `heading` | `header` | Radix Accordion — already in R2 |
+| `initials` | `fallback` | Radix Avatar: initials ARE the fallback |
+| `mark` | `marker` | Ark Slider |
+| Slider's `tooltip` | `valueText` | Ark Slider |
+| `handle` | `resizeHandle` | react-resizable-panels |
+| `presetButton` | `presetTrigger` | Ark DatePicker |
+
+`clockFace`, `clockHand`, `clockNumber`, `day` and the Table controls are genuinely novel —
+no peer library ships an analogue clock picker or a data grid with this anatomy — and are
+marked so rather than dressed in a borrowed name.
+
+A key whose value is another library component's `classes` object (R6) names the child, not
+a part, and needs no amendment.
 
 ### R3 — Qualifier first, head noun last, camelCase
 
@@ -69,6 +102,13 @@ Emitted attributes, on every part where the state is meaningful:
 - `data-orientation` — `horizontal` | `vertical`
 - `data-side`, `data-align` — for positioned content
 
+Added by Amendment D (2026-09-02), each with the same precedent test:
+
+- `data-outside` — a calendar cell belonging to an adjacent month. *Precedent: Ark DatePicker `data-outside-range`.*
+- `data-range` — `start` | `middle` | `end` for a cell inside a selected range. *Precedent: Ark DatePicker `data-in-range`; the tri-value form is ours.*
+- `data-marked` — a calendar cell carrying an event marker. *NOVEL.*
+- `completed` as a `data-state` value — a finished step. *Precedent: Ark Steps `data-complete`.*
+
 Consumer usage:
 
 ```tsx
@@ -80,6 +120,23 @@ Any existing key whose name encodes a state (`itemSelected`, `triggerDisabled`, 
 ### R5 — No key for untargetable elements
 
 A pure layout wrapper with no semantic role earns a part name only if it carries structural classes a consumer would plausibly need to change. Otherwise it is absorbed into its parent part and gets no key. "It exists in the DOM" is not sufficient grounds for a key.
+
+**Amendment C (2026-09-02) makes the structural half binding.** A key whose default value
+contains any structural utility under `src/utils/classLayers.ts` may **not** be absorbed:
+absorbing it takes layout control away from the consumer, which is the failure ADR 001
+exists to prevent. The first pass of the migration absorbed 105 keys; re-checking them
+against `splitLayers` found **53 carrying structural classes**, and all 53 were promoted to
+parts with canonical names. Absorption is now decidable by a command rather than by
+judgement, and the check belongs in `fixtures.contract`.
+
+### R4a — One validation message (Amendment B, 2026-09-02)
+
+`error` and `success` are one part, `message`, carrying `data-state="error"` or
+`data-state="success"`. R2's `errorText` and `helperText` are retired.
+
+Checked before deciding: **all fourteen components that render a success message guard it
+with `!error`**, so none can show both at once and no component needs two parts. If one ever
+does, it keeps two — that is the stated exception, and it is currently unused.
 
 ### R6 — Nested components nest their classes
 
