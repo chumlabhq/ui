@@ -432,7 +432,6 @@ const StepItem = memo(function StepItem({
     return (
       <li
         className={cn(
-          "shrink-0 flex flex-col items-center",
           classes.item,
         )}
         data-status={status}

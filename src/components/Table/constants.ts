@@ -13,7 +13,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   header: "",
   headerCell:
     "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated dark:bg-[#111118] border-cl-border dark:border-white/[0.06]",
-  headerCellText: "",
+  headerCellText: "flex items-center",
   body: "",
   item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
   cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text dark:text-cl-text",
@@ -29,7 +29,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   scrollRegion: "min-w-0 flex-1 overflow-x-auto",
   empty:
     "flex items-center justify-center py-12 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  pinIcon: "text-cl-text-tertiary",
+  pinIcon: "text-cl-text-tertiary w-4 h-4",
   pinButton:
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   loading:

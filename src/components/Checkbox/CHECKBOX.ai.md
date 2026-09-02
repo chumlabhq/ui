@@ -106,7 +106,30 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CHECKBOX_CLASSES` with dark mode
 2. **Partial override** (`classes={{ checked: "..." }}`) — REPLACES that slot, others keep defaults
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `control` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<Checkbox
+  classes={{
+    control:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[state=checked]:bg-cl-accent " +
+      "data-[state=indeterminate]:bg-cl-accent/60 " +
+      "data-[state=unchecked]:bg-transparent ",
+  }}
+/>
+
+// Passing only `control: "data-[state=checked]:…"` drops the base and the other
+// 2 states.
+```
 
 ### Slot → visual mapping
 

@@ -131,7 +131,33 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 
 1. **Default** — uses `DEFAULT_STEPPER_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you build from scratch
+
+```tsx
+// `separator` carries the base AND 6 state variants. Overriding it
+// replaces all of them, so write them together:
+<Stepper
+  classes={{
+    separator:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[invalid]:text-cl-error " +
+      "data-[orientation=horizontal]:h-0.5 data-[orientation=horizontal]:w-full " +
+      "data-[orientation=vertical]:w-0.5 data-[orientation=vertical]:h-6 " +
+      "data-[state=active]:text-cl-accent " +
+      "data-[state=completed]:text-cl-text " +
+      "data-[state=inactive]:text-cl-text-tertiary ",
+  }}
+/>
+
+// Passing only `separator: "data-[invalid]:…"` drops the base and the other
+// 5 states.
+```
 
 ### Slot → visual mapping
 

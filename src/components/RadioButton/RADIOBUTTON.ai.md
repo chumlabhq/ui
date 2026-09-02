@@ -84,6 +84,23 @@ export default function Example() {
 | `classes` | object | — | CSS class overrides for radio sub-elements. |
 | `className` | string | — | Additional class names applied to the radio root. |
 
+## Class overrides (RadioButton item)
+
+```tsx
+// `control` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<RadioButton
+  classes={{
+    control:
+      "rounded-full border w-4 h-4 " +      // base
+      "data-[state=checked]:bg-cl-accent data-[state=checked]:border-cl-accent " +
+      "data-[state=unchecked]:bg-transparent ",
+  }}
+/>
+
+// Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
+```
+
 ## Accessibility
 
 - Native `<input type="radio">` — browser handles arrow key navigation

@@ -112,6 +112,12 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 
 1. **Default** — uses `DEFAULT_COUNTRYFLAG_CLASSES` (layout + overflow)
 2. **Partial override** — REPLACES per slot
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty
 
 ### Slot → visual mapping

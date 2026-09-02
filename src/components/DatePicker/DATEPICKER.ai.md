@@ -167,6 +167,12 @@ The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_DATEPICKER_CLASSES` -- fully styled with dark mode support.
 2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive.
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
@@ -174,6 +180,29 @@ The component has three styling modes:
 <DatePicker classes={{ trigger: "my-custom-trigger" }} />
 
 // The other slots (content, item, etc.) still use their defaults.
+```
+
+```tsx
+// `item` carries the base AND 9 state variants. Overriding it
+// replaces all of them, so write them together:
+<DatePicker
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[marked]:underline " +
+      "data-[outside]:opacity-40 " +
+      "data-[range=end]:rounded-r-full " +
+      "data-[range=middle]:rounded-none " +
+      "data-[range=start]:rounded-l-full " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent " +
+      "data-[today]:font-semibold ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 8 states.
 ```
 
 ### Slot overview

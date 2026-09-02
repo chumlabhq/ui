@@ -124,7 +124,29 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_TIMEPICKER_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `clockNumber` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<TimePicker
+  classes={{
+    clockNumber:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `clockNumber: "data-[disabled]:…"` drops the base and the other
+// 1 states.
+```
 
 ### Key slots
 

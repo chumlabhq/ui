@@ -121,7 +121,29 @@ const navRef = useRef<HTMLElement>(null);
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_BREADCRUMB_CLASSES` with dark mode support.
 2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled=true`): All slots empty. You provide everything.
+
+```tsx
+// `item` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<Breadcrumb
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=active]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 1 states.
+```
 
 ### Slot → visual mapping
 

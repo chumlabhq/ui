@@ -52,6 +52,29 @@ export default function Example() {
 
 ---
 
+## Class overrides
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
+```tsx
+// `control` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<Switch
+  classes={{
+    control:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=checked]:bg-cl-accent " +
+      "data-[state=unchecked]:bg-transparent ",
+  }}
+/>
+
+// Passing only `control: "data-[disabled]:…"` drops the base and the other 2 states.
+```
+
 ## Accessibility
 
 - `<button role="switch" aria-checked>` — native ARIA switch pattern

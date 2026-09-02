@@ -4,7 +4,7 @@ import { structuralOnly } from "../../../utils/classLayers";
 export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   root: "",
   list: "list-none m-0 p-0",
-  item: "",
+  item: "shrink-0 flex flex-col items-center",
   trigger: "flex items-center gap-1.5 sm:gap-2 transition-colors motion-reduce:transition-none",
   itemIndicator:
     "shrink-0 rounded-full flex items-center justify-center transition-colors motion-reduce:transition-none",

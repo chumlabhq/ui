@@ -96,6 +96,28 @@ export default function Example() {
 | `aria-labelledby` | string | — | ID of the element that labels the slider. |
 | `aria-valuetext` | string | — | Human-readable text alternative for the current value. |
 
+## Class overrides
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
+```tsx
+// `thumb` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<Slider
+  classes={{
+    thumb:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=active]:scale-110 ",
+  }}
+/>
+
+// Passing only `thumb: "data-[disabled]:…"` drops the base and the other 1 states.
+```
+
 ## Accessibility
 
 - `role="slider"` on each thumb with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`

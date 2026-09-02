@@ -167,7 +167,29 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CASCADINGDROPDOWN_CLASSES` with full dark mode
 2. **Partial override** (`classes={{ trigger: "..." }}`) — REPLACES that slot only, others keep defaults
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `item` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<CascadingDropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 1 states.
+```
 
 ### Slot → visual mapping
 

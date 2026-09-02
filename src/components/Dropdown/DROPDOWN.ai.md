@@ -154,7 +154,30 @@ export default function Example() {
 
 1. **Default** (no `classes`, no `unstyled`) — uses built-in Tailwind classes with dark mode support
 2. **Partial override** (`classes={{ trigger: "..." }}`) — **replaces** that slot entirely, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
+
+```tsx
+// `item` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<Dropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 2 states.
+```
 
 ### Slot → visual mapping
 

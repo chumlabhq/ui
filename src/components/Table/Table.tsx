@@ -1188,7 +1188,7 @@ function TableInner<TData>(
           style={Object.keys(headerStyle).length > 0 ? headerStyle : undefined}
         >
           <div
-            className={`flex items-center ${enableColumnResizing ? "overflow-hidden pr-3" : ""} ${headerCellContentClassName}`}
+            className={`${enableColumnResizing ? "overflow-hidden pr-3" : ""} ${headerCellContentClassName}`}
           >
             <span
               className={`flex items-center gap-1 ${enableColumnResizing ? "truncate" : ""}`}
@@ -1299,11 +1299,11 @@ function TableInner<TData>(
               >
                 {isPinned ? (
                   <PinnedIconComponent
-                    className={cn("w-4 h-4", pinIconClassName)}
+                    className={cn( pinIconClassName)}
                   />
                 ) : (
                   <UnpinnedIconComponent
-                    className={cn("w-4 h-4", pinIconClassName)}
+                    className={cn( pinIconClassName)}
                   />
                 )}
               </button>

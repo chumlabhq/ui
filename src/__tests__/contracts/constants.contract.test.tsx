@@ -37,40 +37,51 @@ const NOT_SHIPPED =
   /(CatalogSection|ChumlabComparison|GetStarted|SiteHeader|SiteFooter|BuyMeCoffee|WhyChumlab|Typographic|UserMenu|Announcement|FaqLogo|Reveal|\/ui\/|BrandLogo|__tests__)/;
 
 /**
- * Literal class strings still written at JSX call sites when this rule landed.
+ * Literal class strings still written at JSX call sites.
  * Ratchets DOWN only — see the docblock. Each entry is `Component/file.tsx`
  * with the count of literal-class expressions remaining in it.
+ *
+ * CORRECTED in Task 3c. The old figures totalled 125 and were not a floor but a
+ * blind spot: the scanner was a single-line regex, so a className that wrapped
+ * — which is most of the interesting ones — was invisible, and comments inside
+ * one were read as class strings. The real total was 230. These numbers are the
+ * measured truth, not a relaxation; the ratchet resumes from here.
  */
 const BASELINE: Record<string, number> = {
-  "Table/Table.tsx": 42,
-  "DatePicker/DatePicker.tsx": 22,
-  "Toast/Toast.tsx": 8,
-  "CascadingDropdown/CascadingDropdown.tsx": 6,
-  "MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx": 6,
+  "Accordion/components/AccordionShimmer.tsx": 10,
+  "Avatar/components/AvatarBadge.tsx": 2,
+  "Avatar/components/AvatarGroupCount.tsx": 2,
+  "Avatar/components/AvatarShimmer.tsx": 3,
+  "CascadingDropdown/CascadingDropdown.tsx": 9,
   "Checkbox/Checkbox.tsx": 5,
-  "RadioButton/RadioButton.tsx": 5,
-  "Accordion/components/AccordionShimmer.tsx": 3,
-  "MultiSelectDropdown/MultiSelectDropdown.tsx": 3,
-  "MultiSelectDropdown/components/MultiSelectDropdownShimmer.tsx": 3,
-  "Stepper/Stepper.tsx": 3,
-  "Loader/CircularLoader.tsx": 2,
-  "MultiSelectDropdown/components/SelectedChip.tsx": 2,
-  "OtpInput/OtpInput.tsx": 2,
-  "TimePicker/TimePicker.tsx": 2,
-  "Toast/components/ToastProvider.tsx": 2,
-  "Avatar/components/AvatarShimmer.tsx": 1,
   "CountryFlag/components/CountryFlagGroup.tsx": 1,
-  "CountryFlag/components/CountryFlagShimmer.tsx": 1,
+  "CountryFlag/components/CountryFlagShimmer.tsx": 3,
+  "DatePicker/DatePicker.tsx": 22,
+  "Drawer/Drawer.tsx": 8,
   "Input/Input.tsx": 1,
   "InternationalPhoneInput/InternationalPhoneInput.tsx": 1,
+  "Loader/CircularLoader.tsx": 2,
+  "Modal/Modal.tsx": 15,
+  "MultiSelectDropdown/MultiSelectDropdown.tsx": 3,
   "MultiSelectDropdown/components/MultiSelectDropdownOption.tsx": 1,
+  "MultiSelectDropdown/components/MultiSelectDropdownShimmer.tsx": 3,
+  "MultiSelectDropdown/components/SelectedChip.tsx": 2,
+  "MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx": 6,
+  "OtpInput/OtpInput.tsx": 2,
   "Pagination/Pagination.tsx": 1,
+  "RadioButton/RadioButton.tsx": 9,
+  "ResizablePanel/ResizablePanel.tsx": 7,
   "SearchableDropdown/components/SearchableDropdownOption.tsx": 1,
+  "Stepper/Stepper.tsx": 9,
+  "Switch/Switch.tsx": 1,
+  "Table/Table.tsx": 75,
+  "Table/icons.tsx": 2,
   "TextArea/TextArea.tsx": 1,
+  "TimePicker/TimePicker.tsx": 5,
+  "Toast/Toast.tsx": 11,
+  "Toast/components/ToastProvider.tsx": 3,
 };
 
-const CLASSNAME = /className=(?:"([^"]*)"|\{([^}]*)\})/g;
-const STRING_LITERAL = /"([^"]*)"/g;
 /** A Tailwind-shaped token: lowercase start, or an arbitrary/important prefix. */
 const LOOKS_LIKE_UTILITY = /^[a-z![]/;
 
@@ -80,26 +91,75 @@ interface Finding {
   value: string;
 }
 
+/**
+ * End of the `className={...}` expression starting at `open`, string-aware.
+ *
+ * The scanner was a single-line regex (`className=\{([^}]*)\}`) and so could
+ * not see a className that wraps — which is most of the interesting ones. It
+ * under-reported the baseline, and the `transition-all` that reduced-motion
+ * caught on Table's pin button had been sitting inside one of those.
+ */
+const closeBrace = (text: string, open: number): number => {
+  let depth = 0;
+  for (let i = open; i < text.length; i += 1) {
+    const ch = text[i];
+    if (ch === '"' || ch === "'" || ch === "`") {
+      const quote = ch;
+      i += 1;
+      while (i < text.length && text[i] !== quote) i += text[i] === "\\" ? 2 : 1;
+    } else if (ch === "{") depth += 1;
+    else if (ch === "}") {
+      depth -= 1;
+      if (depth === 0) return i;
+    }
+  }
+  return text.length;
+};
+
+/**
+ * Comments inside a className expression are not class strings, and an
+ * apostrophe in prose ("the element's layout") reads as a quoted literal if
+ * they are left in. Strip them before extracting.
+ */
+const stripComments = (expression: string): string =>
+  expression.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/\/\/[^\n]*/g, " ");
+
+/** Every quoted or backticked chunk in an expression, ignoring interpolations. */
+const literalsIn = (raw: string): string[] => {
+  const expression = stripComments(raw);
+  const out: string[] = [];
+  for (const m of expression.matchAll(/"([^"]*)"|'([^']*)'/g)) out.push(m[1] ?? m[2]);
+  for (const m of expression.matchAll(/`([^`]*)`/g)) {
+    // a template's static text, split at each ${...}
+    for (const chunk of m[1].split(/\$\{[^}]*\}/)) out.push(chunk);
+  }
+  return out;
+};
+
 const scan = (): Finding[] => {
   const found: Finding[] = [];
   for (const [path, source] of Object.entries(sources)) {
     if (NOT_SHIPPED.test(path)) continue;
     const file = path.replace("../../components/", "");
-    source.split("\n").forEach((line, i) => {
-      for (const match of line.matchAll(CLASSNAME)) {
-        const [, bare, expression] = match;
-        if (bare !== undefined) {
-          if (bare.trim()) found.push({ file, line: i + 1, value: bare });
-          continue;
-        }
-        for (const inner of expression.matchAll(STRING_LITERAL)) {
-          const value = inner[1].trim();
-          if (value && LOOKS_LIKE_UTILITY.test(value)) {
-            found.push({ file, line: i + 1, value });
-          }
+    const lineOf = (index: number) => source.slice(0, index).split("\n").length;
+
+    for (const m of source.matchAll(/className=/g)) {
+      const after = m.index + m[0].length;
+      if (source[after] === '"') {
+        const close = source.indexOf('"', after + 1);
+        const value = source.slice(after + 1, close).trim();
+        if (value) found.push({ file, line: lineOf(after), value });
+        continue;
+      }
+      if (source[after] !== "{") continue;
+      const expression = source.slice(after, closeBrace(source, after) + 1);
+      for (const raw of literalsIn(expression)) {
+        const value = raw.trim();
+        if (value && LOOKS_LIKE_UTILITY.test(value)) {
+          found.push({ file, line: lineOf(after), value });
         }
       }
-    });
+    }
   }
   return found;
 };
@@ -186,4 +246,11 @@ describe("constants contract", () => {
  * one is a latent ADR 001 violation; the six that actually reached the DOM were
  * fixed in this branch, and this number must only fall.
  */
-const STRUCTURAL_BASELINE = 92;
+/**
+ * CORRECTED in Task 3c, from 92. Not a relaxation: the scanner was a single-line
+ * regex, so a className that wrapped was invisible and comments inside one were
+ * read as class strings. 59 of these were always here and could not be seen.
+ * They are the ADR 001 defect the hard gate exists to catch, and the number to
+ * drive down first.
+ */
+const STRUCTURAL_BASELINE = 151;

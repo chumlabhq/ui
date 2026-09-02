@@ -231,6 +231,12 @@ The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_ACCORDION_CLASSES` — fully styled with dark mode support.
 2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive — if you pass `trigger: "my-class"`, the entire default trigger class string is replaced, not appended.
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
@@ -613,6 +619,12 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_AVATAR_CLASSES` — minimal layout styles.
 2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled=true`): All slots are empty. You provide everything.
 
 #### Slot → visual mapping
@@ -923,7 +935,29 @@ const navRef = useRef<HTMLElement>(null);
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_BREADCRUMB_CLASSES` with dark mode support.
 2. **Partial override** (`unstyled=false`, partial `classes`): Your value **replaces** the default for that slot. Other slots keep defaults.
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled=true`): All slots empty. You provide everything.
+
+```tsx
+// `item` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<Breadcrumb
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=active]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 1 states.
+```
 
 #### Slot → visual mapping
 
@@ -1561,7 +1595,29 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CASCADINGDROPDOWN_CLASSES` with full dark mode
 2. **Partial override** (`classes={{ trigger: "..." }}`) — REPLACES that slot only, others keep defaults
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `item` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<CascadingDropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 1 states.
+```
 
 #### Slot → visual mapping
 
@@ -1826,7 +1882,30 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 
 1. **Default** (no classes, no unstyled) — uses `DEFAULT_CHECKBOX_CLASSES` with dark mode
 2. **Partial override** (`classes={{ checked: "..." }}`) — REPLACES that slot, others keep defaults
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `control` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<Checkbox
+  classes={{
+    control:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[state=checked]:bg-cl-accent " +
+      "data-[state=indeterminate]:bg-cl-accent/60 " +
+      "data-[state=unchecked]:bg-transparent ",
+  }}
+/>
+
+// Passing only `control: "data-[state=checked]:…"` drops the base and the other
+// 2 states.
+```
 
 #### Slot → visual mapping
 
@@ -2055,6 +2134,12 @@ The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
 
 1. **Default** — uses `DEFAULT_COUNTRYFLAG_CLASSES` (layout + overflow)
 2. **Partial override** — REPLACES per slot
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty
 
 #### Slot → visual mapping
@@ -2262,6 +2347,12 @@ The component has three styling modes:
 
 1. **Default** (`unstyled=false`, no `classes`): Uses `DEFAULT_DATEPICKER_CLASSES` -- fully styled with dark mode support.
 2. **Partial override** (`unstyled=false`, partial `classes`): Your values **replace** the default for that slot. Unspecified slots keep their defaults. This is NOT additive.
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled=true`): All slots start as empty strings. You must provide everything via `classes`.
 
 ```tsx
@@ -2269,6 +2360,29 @@ The component has three styling modes:
 <DatePicker classes={{ trigger: "my-custom-trigger" }} />
 
 // The other slots (content, item, etc.) still use their defaults.
+```
+
+```tsx
+// `item` carries the base AND 9 state variants. Overriding it
+// replaces all of them, so write them together:
+<DatePicker
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[marked]:underline " +
+      "data-[outside]:opacity-40 " +
+      "data-[range=end]:rounded-r-full " +
+      "data-[range=middle]:rounded-none " +
+      "data-[range=start]:rounded-l-full " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent " +
+      "data-[today]:font-semibold ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 8 states.
 ```
 
 #### Slot overview
@@ -2680,7 +2794,30 @@ export default function Example() {
 
 1. **Default** (no `classes`, no `unstyled`) — uses built-in Tailwind classes with dark mode support
 2. **Partial override** (`classes={{ trigger: "..." }}`) — **replaces** that slot entirely, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
+
+```tsx
+// `item` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<Dropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 2 states.
+```
 
 #### Slot → visual mapping
 
@@ -2920,6 +3057,12 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 
 1. **Default** — uses `DEFAULT_INPUT_CLASSES` with dark mode, focus ring, rounded corners
 2. **Partial override** — REPLACES per slot
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty
 
 #### Slot → visual mapping
@@ -3151,6 +3294,12 @@ console.log(inputRef.current?.value);
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
 #### Slot → visual mapping
@@ -3533,6 +3682,12 @@ modalRef.current?.focus();
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_MODAL_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
 #### Slot → visual mapping
@@ -3816,7 +3971,30 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_MULTISELECTDROPDOWN_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `item` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<MultiSelectDropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 2 states.
+```
 
 #### Slot → visual mapping
 
@@ -4035,7 +4213,30 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 1. **Default** — uses `DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES`
 2. **Partial override** — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty, you build from scratch
+
+```tsx
+// `item` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<MultiSelectSearchableDropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 2 states.
+```
 
 #### Slot → visual mapping
 
@@ -4339,6 +4540,12 @@ paginationRef.current?.focus();
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_PAGINATION_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
 
 #### Slot → visual mapping
@@ -4544,6 +4751,23 @@ export default function Example() {
 | `uncheckedIcon` | object | — | React.ReactNode - Custom icon for the unchecked state. |
 | `classes` | object | — | CSS class overrides for radio sub-elements. |
 | `className` | string | — | Additional class names applied to the radio root. |
+
+### Class overrides (RadioButton item)
+
+```tsx
+// `control` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<RadioButton
+  classes={{
+    control:
+      "rounded-full border w-4 h-4 " +      // base
+      "data-[state=checked]:bg-cl-accent data-[state=checked]:border-cl-accent " +
+      "data-[state=unchecked]:bg-transparent ",
+  }}
+/>
+
+// Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
+```
 
 ---
 
@@ -4753,7 +4977,30 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 1. **Default** — uses `DEFAULT_SEARCHABLEDROPDOWN_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you build from scratch
+
+```tsx
+// `item` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<SearchableDropdown
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[highlighted]:bg-cl-bg-hover " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 2 states.
+```
 
 #### Slot → visual mapping
 
@@ -4938,6 +5185,28 @@ export default function Example() {
 | `aria-labelledby` | string | — | ID of the element that labels the slider. |
 | `aria-valuetext` | string | — | Human-readable text alternative for the current value. |
 
+### Class overrides
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
+```tsx
+// `thumb` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<Slider
+  classes={{
+    thumb:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=active]:scale-110 ",
+  }}
+/>
+
+// Passing only `thumb: "data-[disabled]:…"` drops the base and the other 1 states.
+```
+
 ---
 
 ## Stepper
@@ -5065,7 +5334,33 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 
 1. **Default** — uses `DEFAULT_STEPPER_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you build from scratch
+
+```tsx
+// `separator` carries the base AND 6 state variants. Overriding it
+// replaces all of them, so write them together:
+<Stepper
+  classes={{
+    separator:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[invalid]:text-cl-error " +
+      "data-[orientation=horizontal]:h-0.5 data-[orientation=horizontal]:w-full " +
+      "data-[orientation=vertical]:w-0.5 data-[orientation=vertical]:h-6 " +
+      "data-[state=active]:text-cl-accent " +
+      "data-[state=completed]:text-cl-text " +
+      "data-[state=inactive]:text-cl-text-tertiary ",
+  }}
+/>
+
+// Passing only `separator: "data-[invalid]:…"` drops the base and the other
+// 5 states.
+```
 
 #### Slot → visual mapping
 
@@ -5204,6 +5499,29 @@ export default function Example() {
 | `transitionDuration` | Respects `reduceMotion` — set to 0ms when motion reduced. |
 
 ---
+
+### Class overrides
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
+```tsx
+// `control` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<Switch
+  classes={{
+    control:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=checked]:bg-cl-accent " +
+      "data-[state=unchecked]:bg-transparent ",
+  }}
+/>
+
+// Passing only `control: "data-[disabled]:…"` drops the base and the other 2 states.
+```
 
 ### All Props
 
@@ -5440,7 +5758,29 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 
 1. **Default** — uses `DEFAULT_TABLE_CLASSES`
 2. **Partial override** — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty, you build from scratch
+
+```tsx
+// `item` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<Table
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent " +
+      "data-[state=open]:bg-cl-accent/10 ",
+  }}
+/>
+
+// Passing only `item: "data-[selected]:…"` drops the base and the other
+// 1 states.
+```
 
 #### Key slots
 
@@ -5606,7 +5946,30 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 
 1. **Default** — uses `DEFAULT_TABPANEL_CLASSES`
 2. **Partial override** — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty, you build from scratch
+
+```tsx
+// `item` carries the base AND 3 state variants. Overriding it
+// replaces all of them, so write them together:
+<TabPanel
+  classes={{
+    item:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[state=active]:text-cl-accent " +
+      "data-[state=inactive]:text-cl-text-tertiary ",
+  }}
+/>
+
+// Passing only `item: "data-[disabled]:…"` drops the base and the other
+// 2 states.
+```
 
 #### Slot → visual mapping
 
@@ -5787,6 +6150,12 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 
 1. **Default** — uses `DEFAULT_TEXTAREA_CLASSES` with dark mode, focus ring
 2. **Partial override** — REPLACES per slot
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** — all slots empty
 
 #### Slot → visual mapping
@@ -5967,7 +6336,29 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_TIMEPICKER_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
+
+**A slot that carries states is replaced as a whole.** Several slots absorbed what were
+separate per-state keys, so overriding one replaces its base styling *and* every state
+variant on it. Write the base and all the states you want in one string — a one-state
+override silently drops the rest.
+
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything
+
+```tsx
+// `clockNumber` carries the base AND 2 state variants. Overriding it
+// replaces all of them, so write them together:
+<TimePicker
+  classes={{
+    clockNumber:
+      "rounded-cl-md px-2 py-1 " +           // base
+      "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed " +
+      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent ",
+  }}
+/>
+
+// Passing only `clockNumber: "data-[disabled]:…"` drops the base and the other
+// 1 states.
+```
 
 #### Key slots
 

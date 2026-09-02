@@ -4811,8 +4811,10 @@
       "to": "resizeHandle",
       "vocabulary": "amendment",
       "precedent": "react-resizable-panels PanelResizeHandle",
-      "note": "AMENDMENT: the drag divider",
-      "structuralBefore": []
+      "note": "AMENDMENT: the drag divider | TASK 3C: structuralBefore corrected from [] to ['absolute'] \u2014 these utilities were call-site literals, so the frozen record read empty and R9 could not weigh them.",
+      "structuralBefore": [
+        "absolute"
+      ]
     },
     {
       "component": "ResizablePanel",
@@ -5613,9 +5615,14 @@
       "outcome": "renamed",
       "to": "item",
       "vocabulary": "R2",
-      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->item)",
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->item) | TASK 3C: structuralBefore corrected from [] to ['flex', 'flex-col', 'items-center', 'shrink-0'] \u2014 these utilities were call-site literals, so the frozen record read empty and R9 could not weigh them.",
       "promotedByAmendmentF": true,
-      "structuralBefore": []
+      "structuralBefore": [
+        "flex",
+        "flex-col",
+        "items-center",
+        "shrink-0"
+      ]
     },
     {
       "component": "Stepper",
@@ -6241,9 +6248,12 @@
       "to": "headerCellText",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
-      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->headerCell)",
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->headerCell) | TASK 3C: structuralBefore corrected from [] to ['flex', 'items-center'] \u2014 these utilities were call-site literals, so the frozen record read empty and R9 could not weigh them.",
       "promotedByAmendmentF": true,
-      "structuralBefore": []
+      "structuralBefore": [
+        "flex",
+        "items-center"
+      ]
     },
     {
       "component": "Table",
@@ -6311,9 +6321,12 @@
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
-      "note": "the glyph and its button are one control; state-gated, not dead | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->pinButton)",
+      "note": "the glyph and its button are one control; state-gated, not dead | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->pinButton) | TASK 3C: structuralBefore corrected from [] to ['h-4', 'w-4'] \u2014 these utilities were call-site literals, so the frozen record read empty and R9 could not weigh them.",
       "promotedByAmendmentF": true,
-      "structuralBefore": []
+      "structuralBefore": [
+        "h-4",
+        "w-4"
+      ]
     },
     {
       "component": "Table",
@@ -7873,5 +7886,8 @@
   "$task3bOutcome": "104 of the 108 planned deletions applied (97 state + 11 dead, minus 4 held back). Held back: CascadingDropdown.content \u2014 the dead list was re-derived post-3a and `menu` had taken that name, so it is a live key with 5 source references, not a dead one; DatePicker.dayFocused and DatePicker.dropdownItemSelected \u2014 blocked on the a11y phase, which is on the do-not-touch list, so the replacement state cannot be reached and the route cannot be proven; InternationalPhoneInput.countrySelectOptionSelected \u2014 its route is R6-nested and needs Task 4. Live keys are 384 against the table's predicted 369: the difference is those 4 plus the 12 R6-nested absorbs Task 3a deferred, whose keys still exist under their old names.",
   "$task3bFindings": "The replacement contract found six state rows whose `to` had gone stale under Amendment F (checkboxChecked -> itemControl in three components, labelWrapperBottom -> row, submenuItemSelected -> subItem, clockDisplayActive -> clockHours) and three states with no attribute on the element the surviving key styles (Switch's label had no data-disabled, both Stepper connectors had no data-orientation) \u2014 all fixed before deleting. CascadingDropdown.menuItemDisabled was the sixteenth key wrongly waived on this branch: its recorded reason said a disabled top-level option did not render it, but the fixture marked a disabled CHILD, not a top-level option.",
   "$task4Outcome": "R6 nesting wired at the two sites the table records: InternationalPhoneInput.countrySelect (a real child \u2014 SearchableDropdown \u2014 so its key takes SearchableDropdownClasses) and Pagination.rowsPerPage (namespaced, because Pagination builds the selector inline rather than rendering a child). `unstyled` travels the same path: structuralOnly and motionSafeClasses now recurse into a nested bag, which they previously mapped to \"\". Live top-level keys 384 -> 368. Reconciled: the table's 369 counts nested slots individually; counting a nested bag as one key it predicts 363, plus 2 for the still-held deletions that add a name (CascadingDropdown.content was already counted as `menu`'s rename target), plus 3 for itemRow/itemIcon/itemText.",
-  "$task4Correction": "The table mapped countryOptionRow/Flag/Label to countrySelect.itemRow/itemIcon/itemText, but SearchableDropdownClasses has no such parts \u2014 those elements are rendered by IPI's own renderOption into the child's `item` slot. Folding them in would have grown SearchableDropdown's public API for one caller, so they stay IPI's parts under the R2 names itemRow/itemIcon/itemText. Task 4 also does NOT cover DatePicker.markerTooltip or Slider's valueText: the table records those as R6 *candidates*, not committed nestings, and Button/Stepper/Breadcrumb reach Tooltip through tooltipProps.contentClassName rather than a classes key."
+  "$task4Correction": "The table mapped countryOptionRow/Flag/Label to countrySelect.itemRow/itemIcon/itemText, but SearchableDropdownClasses has no such parts \u2014 those elements are rendered by IPI's own renderOption into the child's `item` slot. Folding them in would have grown SearchableDropdown's public API for one caller, so they stay IPI's parts under the R2 names itemRow/itemIcon/itemText. Task 4 also does NOT cover DatePicker.markerTooltip or Slider's valueText: the table records those as R6 *candidates*, not committed nestings, and Button/Stepper/Breadcrumb reach Tooltip through tooltipProps.contentClassName rather than a classes key.",
+  "$task3cComment": "R9's structural evidence was frozen from constants, and a key whose utilities lived at the call site therefore froze as []. Moving a literal in makes the real layer knowable, so the affected rows are corrected here rather than left reading empty.",
+  "$task3cOutcome": "Scanner fixed first, as asked. It was a single-line regex, so any className that wrapped was invisible, and comments inside one were read as class strings. True count 230, not the 125 the ratchet recorded; structural literals 151, not 92. Both baselines corrected to the measured truth and the ratchet resumes from there \u2014 a correction, not a relaxation. Of the 230: 22 could absorb into a key already on the same element, and 6 of those moved (ResizablePanel.handle, Stepper.item, Table.pinIcon, Table.headerCellText and two more); the rest are inside template expressions whose span covers the interpolations, so an automated remover cannot take just the literal. 109 are conditional \u2014 they express state and belong in R4 data-variants, not static defaults. 101 sit on unkeyed elements and need new public keys, each of which is permanent API and has to clear the precedent scheme, the collision guard and R9. Baseline now 226; no new key was minted, so the key count stays at 368.",
+  "$task3cR9": "R9 re-run against real data. Task 3b had repointed its structural test at a frozen record, and that record was captured from constants carrying the same blind spot, so four keys had frozen as [] while their utilities sat at the call site: ResizablePanel.handle (absolute), Stepper.item (shrink-0 flex flex-col items-center), Table.pinIcon (w-4 h-4), Table.headerCellText (flex items-center). Corrected. None changed a merge verdict \u2014 none is in a multi-claimant group \u2014 and 0 of the 22 merge groups now has a target still carrying call-site literals, so R9 is sound for every group it judges."
 }
