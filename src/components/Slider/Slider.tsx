@@ -167,6 +167,8 @@ function Thumb({
       }}
       data-index={index}
       data-dragging={isDragging || undefined}
+      // ADR 002 R4: the state the thumbActive key named.
+      data-state={isDragging ? "active" : undefined}
       data-disabled={disabled || undefined}
       onPointerDown={(e) => onPointerDown(e, index)}
       onKeyDown={(e) => onKeyDown(e, index)}
@@ -639,6 +641,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 ) : (
                   <div
                     className={cn(mc.markDot, inRange && mc.markDotActive) || undefined}
+                    data-state={inRange ? "active" : undefined}
                     style={{
                       position: "absolute",
                       width: `${markDotSize}px`,

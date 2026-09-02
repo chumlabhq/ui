@@ -1280,6 +1280,8 @@ function TableInner<TData>(
             {canShowPinButton && (
               <button
                 type="button"
+                // ADR 002 R4: the state the pinnedPinButton key named.
+                data-state={isPinned ? "active" : undefined}
                 onClick={(e) => handlePinClick(columnId, isPinned, e)}
                 disabled={isDisabled}
                 className={`shrink-0 transition-all ${
@@ -1584,6 +1586,8 @@ function TableInner<TData>(
             data-clickable={onRowClick ? true : undefined}
             data-striped={isStriped || undefined}
             data-expanded={isExpanded || undefined}
+            // ADR 002 R4 / Amendment E: data-expanded converges on data-state.
+            data-state={isExpanded ? "open" : "closed"}
             data-group-row={isGroupRow || undefined}
             data-dragging={dragRowIndex === rowIndex || undefined}
             {...rowDragProps}

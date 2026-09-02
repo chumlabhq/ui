@@ -102,6 +102,40 @@ Emitted attributes, on every part where the state is meaningful:
 - `data-orientation` — `horizontal` | `vertical`
 - `data-side`, `data-align` — for positioned content
 
+Added by **Amendment E** (2026-09-02). R4 was drawn from the same menu-and-overlay sample
+R2 was, and the library already emits 86 `data-*` attributes it never saw. The full
+classification is `docs/adr/002-state-attribute-catalogue.json`; the state-bearing outcome:
+
+**Converged onto the R4 name** — 8 attributes, 74 emission sites:
+
+| Was | Now | Precedent |
+| --- | --- | --- |
+| `data-error` | `data-invalid` | Ark Field, Radix Form |
+| `data-open` | `data-state="open"` | Radix, on every disclosure |
+| `data-checked` | `data-state="checked"` | Radix Checkbox / Switch / RadioGroup |
+| `data-active` | `data-state="active"` | Ark Tabs / Steps |
+| `data-indeterminate` | `data-state="indeterminate"` | Radix Checkbox |
+| `data-expanded` | `data-state="open"` | Radix Accordion |
+| `data-pending` | `data-state="inactive"` | Ark Steps |
+| `data-position` | `data-side` | Radix Popper |
+| `data-focused` | `data-highlighted` | Radix, Ark — landed in the first slice |
+
+**Added to R4** — 9 attributes: `data-today` (Ark DatePicker), `data-dragging` (Ark Slider),
+`data-placeholder` (Radix Select), and six marked NOVEL because no peer ships a data grid or
+an OTP field: `data-clickable`, `data-sorted`, `data-pinned`, `data-editing`,
+`data-resizing`, `data-filled`. `data-clickable` is **not** the inverse of `data-disabled` —
+a Stepper step ahead of the current one is non-clickable without being disabled, which is
+why R4's original list could not express it.
+
+**Kept under the existing name, with a reason** — 5. `data-success` because R4 has
+`data-invalid` and no positive counterpart, and no peer ships one; `data-status` because
+Stepper's enum carries `error` and `pending`, which `data-state` cannot hold in one slot;
+`data-direction` because writing direction is not a state; `data-next-status` because it
+describes the *next* element; and the three `data-range-*` booleans until Task 3 retires
+them alongside the keys they mirror.
+
+The remaining 54 are identity, configuration and test hooks, outside R4's scope.
+
 Added by Amendment D (2026-09-02), each with the same precedent test:
 
 - `data-outside` — a calendar cell belonging to an adjacent month. *Precedent: Ark DatePicker `data-outside-range`.*

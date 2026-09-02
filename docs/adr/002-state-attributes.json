@@ -1,7 +1,8 @@
 {
-  "$comment": "Derived from the 97 deleted-as-state rows of 002-key-migration.json, not written by hand. Every row names a state a consumer can target today and must still be able to target after Task 3. This is the input to state-attributes.contract.test.tsx.",
+  "$comment": "Derived from the 97 deleted-as-state rows of 002-key-migration.json, not written by hand, and re-derived 2026-09-02 against R4 as amended by Amendment E (002-state-attribute-catalogue.json). Every row names a state a consumer can target today and must still be able to target after Task 3.",
   "recordedOn": "2026-09-02",
   "r4Gaps": {
+    "$comment": "Both were found by reading source, not by trusting the migration notes. Both are now in R4 via Amendment E, along with seven more the catalogue surfaced.",
     "data-today": "DatePicker's dayToday. `today` is not `active`: a day can be today AND selected AND disabled at once, and data-state holds one value. DatePicker already emits data-today (DatePicker.tsx:360), so R4's list was incomplete rather than the component wrong.",
     "data-clickable": "Stepper's stepInteractive. Not the inverse of disabled: a step ahead of the current one is non-clickable without being disabled. Stepper already emits data-clickable (Stepper.tsx:364)."
   },
@@ -748,5 +749,6 @@
         "optionSelected"
       ]
     }
-  ]
+  ],
+  "amendedBy": "Amendment E \u2014 8 attributes converged, 9 added to R4, 5 kept with a reason"
 }

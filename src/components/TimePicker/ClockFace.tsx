@@ -500,6 +500,7 @@ export function ClockFace({
           ]
             .filter(Boolean)
             .join(" ")}
+          data-state={selectionMode === "hours" ? "active" : undefined}
           onClick={() => setSelectionMode("hours")}
           aria-pressed={selectionMode === "hours"}
           data-active={selectionMode === "hours" || undefined}
@@ -516,6 +517,7 @@ export function ClockFace({
           ]
             .filter(Boolean)
             .join(" ")}
+          data-state={selectionMode === "minutes" ? "active" : undefined}
           onClick={() => setSelectionMode("minutes")}
           aria-pressed={selectionMode === "minutes"}
           data-active={selectionMode === "minutes" || undefined}
@@ -534,6 +536,7 @@ export function ClockFace({
               ]
                 .filter(Boolean)
                 .join(" ")}
+          data-state={displayValue.period === "AM" ? "active" : undefined}
               onClick={() => togglePeriod("AM")}
               aria-pressed={displayValue.period === "AM"}
               data-active={displayValue.period === "AM" || undefined}
@@ -549,6 +552,7 @@ export function ClockFace({
               ]
                 .filter(Boolean)
                 .join(" ")}
+          data-state={displayValue.period === "PM" ? "active" : undefined}
               onClick={() => togglePeriod("PM")}
               aria-pressed={displayValue.period === "PM"}
               data-active={displayValue.period === "PM" || undefined}

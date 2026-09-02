@@ -1,0 +1,175 @@
+{
+  "$comment": "Every data-* attribute the library emits, classified against ADR 002 R4. R4 was drawn from the same menu-and-overlay sample R2 was; this is the catalogue that amends it against what actually ships. Counts are emission sites in src/components.",
+  "recordedOn": "2026-09-02",
+  "converge": {
+    "data-error": {
+      "sites": 30,
+      "to": "data-invalid",
+      "precedent": "Ark Field / Radix Form emit data-invalid"
+    },
+    "data-open": {
+      "sites": 18,
+      "to": "data-state=\"open\"",
+      "precedent": "Radix emits data-state=\"open|closed\" on every disclosure"
+    },
+    "data-checked": {
+      "sites": 9,
+      "to": "data-state=\"checked\"",
+      "precedent": "Radix Checkbox / Switch / RadioGroup"
+    },
+    "data-active": {
+      "sites": 6,
+      "to": "data-state=\"active\"",
+      "precedent": "Ark Tabs / Steps"
+    },
+    "data-indeterminate": {
+      "sites": 2,
+      "to": "data-state=\"indeterminate\"",
+      "precedent": "Radix Checkbox"
+    },
+    "data-expanded": {
+      "sites": 2,
+      "to": "data-state=\"open\"",
+      "precedent": "Radix Accordion"
+    },
+    "data-pending": {
+      "sites": 1,
+      "to": "data-state=\"inactive\"",
+      "precedent": "Ark Steps"
+    },
+    "data-position": {
+      "sites": 6,
+      "to": "data-side",
+      "precedent": "Radix Popper emits data-side"
+    }
+  },
+  "addToR4": {
+    "data-today": {
+      "sites": 1,
+      "precedent": "Ark DatePicker emits data-today on the current day"
+    },
+    "data-clickable": {
+      "sites": 5,
+      "precedent": "NOVEL - no peer ships it. Not the inverse of data-disabled: a Stepper step ahead of the current one is non-clickable without being disabled."
+    },
+    "data-dragging": {
+      "sites": 2,
+      "precedent": "Ark Slider emits data-dragging on the thumb"
+    },
+    "data-placeholder": {
+      "sites": 2,
+      "precedent": "Radix Select emits data-placeholder on an unset trigger"
+    },
+    "data-sorted": {
+      "sites": 1,
+      "precedent": "NOVEL - column sort direction; no peer ships a data grid"
+    },
+    "data-pinned": {
+      "sites": 1,
+      "precedent": "NOVEL - column pinning; same"
+    },
+    "data-editing": {
+      "sites": 1,
+      "precedent": "NOVEL - cell edit mode; same"
+    },
+    "data-resizing": {
+      "sites": 2,
+      "precedent": "NOVEL - active resize drag; sibling of data-dragging"
+    },
+    "data-filled": {
+      "sites": 1,
+      "precedent": "NOVEL - an OTP slot holding a character"
+    }
+  },
+  "keepWithReason": {
+    "data-success": {
+      "sites": 16,
+      "reason": "R4 has data-invalid but no positive counterpart, and no peer ships one. Renaming it data-valid would mint a term nothing else uses. Amendment B puts error|success on the MESSAGE part's data-state; this attribute stays on the field root, where it says something data-invalid cannot."
+    },
+    "data-status": {
+      "sites": 15,
+      "reason": "Stepper's own enum (completed|active|pending|error). data-state now carries the library-wide value alongside it, but data-status keeps `error` and `pending`, which data-state's vocabulary cannot express in one slot."
+    },
+    "data-direction": {
+      "sites": 4,
+      "reason": "Writing direction (ltr|rtl), not a state. Distinct from data-orientation."
+    },
+    "data-next-status": {
+      "sites": 2,
+      "reason": "Stepper connector's lookahead; describes the NEXT step, so no single-element state attribute fits."
+    },
+    "data-range-start / -end / -in-range": {
+      "sites": 3,
+      "reason": "Superseded by the tri-value data-range added in Amendment D. Kept until Task 3 retires them alongside the keys they mirror; removing them now would break consumers before the replacement is documented."
+    }
+  },
+  "notState": {
+    "$comment": "Identity, configuration and test hooks. Outside R4's scope; no convergence owed.",
+    "identity": [
+      "data-slot",
+      "data-toast-id",
+      "data-dropdown-id",
+      "data-breadcrumb-dropdown-id",
+      "data-testid",
+      "data-index",
+      "data-column-index",
+      "data-code",
+      "data-nesting-level",
+      "data-modal-root",
+      "data-modal-overlay",
+      "data-modal-container",
+      "data-modal-content",
+      "data-modal-header",
+      "data-modal-body",
+      "data-modal-footer",
+      "data-drawer-panel",
+      "data-drawer-overlay",
+      "data-drawer-header",
+      "data-drawer-body",
+      "data-drawer-footer",
+      "data-drawer-close",
+      "data-table-container",
+      "data-table-search",
+      "data-table-footer",
+      "data-table-filter-content",
+      "data-edit-input",
+      "data-drag-handle",
+      "data-resize-handle",
+      "data-mobile-view",
+      "data-mobile-card",
+      "data-expanded-content",
+      "data-loading-more",
+      "data-group-row",
+      "data-inner"
+    ],
+    "configuration": [
+      "data-value",
+      "data-size",
+      "data-shape",
+      "data-variant",
+      "data-density",
+      "data-striped",
+      "data-grouped",
+      "data-group",
+      "data-full-width",
+      "data-auto-resize",
+      "data-autofocus",
+      "data-reduce-motion",
+      "data-truncated",
+      "data-type",
+      "data-marker-type",
+      "data-has-image",
+      "data-has-submenu",
+      "data-dropdown-open",
+      "data-accordion-expand-print"
+    ]
+  },
+  "totals": {
+    "distinctAttributesEmitted": 86,
+    "converge": 8,
+    "addToR4": 9,
+    "keptWithReason": 5,
+    "notState": 54,
+    "classified": 76
+  }
+}

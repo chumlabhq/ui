@@ -475,6 +475,8 @@ const PresetsPanel = memo(function PresetsPanel({
               isActive && presetActiveClassName,
             )}
             data-active={isActive || undefined}
+            // ADR 002 R4 / Amendment E: data-active converges on data-state.
+            data-state={isActive ? "active" : undefined}
             onClick={() => onPresetClick(preset)}
           >
             {preset.label}

@@ -51,6 +51,8 @@ const SubmenuItem = memo(function SubmenuItem({
     classes.checkbox,
     isSelected && classes.checkboxChecked,
   );
+  // ADR 002 R4: the state the checkboxChecked key named; Radix Checkbox spelling.
+  const checkboxState = isSelected ? "checked" : "unchecked";
 
   return (
     <div
@@ -69,6 +71,7 @@ const SubmenuItem = memo(function SubmenuItem({
       {selectionMode === "multi" && (
         <span
           className={combinedCheckboxClassName || undefined}
+          data-state={checkboxState}
           data-checked={isSelected || undefined}
         >
           {isSelected &&

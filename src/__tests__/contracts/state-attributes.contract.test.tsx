@@ -101,6 +101,64 @@ const collect = async (componentName: string, part: string, attribute: string) =
 };
 
 describe("state attributes contract", () => {
+  /**
+   * The probe every gate on this branch owes: a component that stops emitting an
+   * attribute must be caught. Without it, "the attribute was found" and "the
+   * selector matched nothing" produce the same green.
+   */
+  describe("self-check", () => {
+    const Emitting = () => (
+      <ul>
+        <li role="option" data-selected="true">on</li>
+        <li role="option">off</li>
+      </ul>
+    );
+    const Regressed = () => (
+      <ul>
+        <li role="option">on</li>
+        <li role="option">off</li>
+      </ul>
+    );
+    const scan = (Node: () => React.ReactElement, attribute: string) => {
+      render(<Node />);
+      const seen = new Set<string>();
+      for (const n of Array.from(document.body.querySelectorAll(SELECTOR["item"]))) {
+        const v = n.getAttribute(attribute);
+        if (v !== null) seen.add(v);
+      }
+      cleanup();
+      return seen;
+    };
+
+    it("sees the attribute when it is emitted", () => {
+      expect(scan(Emitting, "data-selected").size).toBeGreaterThan(0);
+    });
+
+    it("catches a component that stops emitting it", () => {
+      const seen = scan(Regressed, "data-selected");
+      // This is the exact assertion the per-requirement test makes. If it did
+      // not fail here, every green below would be meaningless.
+      expect(seen.size).toBe(0);
+      expect(() =>
+        expect(seen.size, "data-selected never reaches the part").toBeGreaterThan(0),
+      ).toThrow();
+    });
+
+    it("catches an attribute that is always on, which carries no state", () => {
+      const AlwaysOn = () => (
+        <ul>
+          <li role="option" data-selected="true">a</li>
+          <li role="option" data-selected="true">b</li>
+        </ul>
+      );
+      render(<AlwaysOn />);
+      const nodes = Array.from(document.body.querySelectorAll(SELECTOR["item"]));
+      const absentSomewhere = nodes.some((n) => n.getAttribute("data-selected") === null);
+      cleanup();
+      expect(absentSomewhere).toBe(false);
+    });
+  });
+
   it("the requirement list is derived, not hand-written", () => {
     expect(SPEC.requirements.length).toBeGreaterThan(60);
     for (const r of SPEC.requirements) {
