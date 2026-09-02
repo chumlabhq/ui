@@ -32,6 +32,11 @@ interface Requirement {
   attribute: string;
   values: string[] | null;
   fromKeys: string[];
+  /** Absent = asserted here. See `$comment_tiers` in the spec. */
+  tier?: "browserTier" | "blocked";
+  tierReason?: string;
+  assertedIn?: string;
+  blockedOn?: string;
 }
 const SPEC = JSON.parse(
   readFileSync(resolve(process.cwd(), "docs/adr/002-state-attributes.json"), "utf8"),
@@ -169,7 +174,43 @@ describe("state attributes contract", () => {
     }
   });
 
-  describe.each(SPEC.requirements.map((r) => [`${r.component} ${r.part} ${r.attribute}`, r] as const))(
+  const JSDOM_TIER = SPEC.requirements.filter((r) => !r.tier);
+  const BROWSER_TIER = SPEC.requirements.filter((r) => r.tier === "browserTier");
+  const BLOCKED = SPEC.requirements.filter((r) => r.tier === "blocked");
+
+  /**
+   * Without this, `browserTier` is a waiver with a nicer name: a requirement
+   * could be moved out of this suite and asserted nowhere at all.
+   */
+  it.each(BROWSER_TIER.map((r) => [`${r.component} ${r.part} ${r.attribute}`, r] as const))(
+    "%s is asserted in the browser tier",
+    (_label, r) => {
+      expect(r.assertedIn, "browserTier with no spec named").toBeTruthy();
+      const spec = readFileSync(resolve(process.cwd(), r.assertedIn!), "utf8");
+      expect(
+        spec.includes(r.attribute),
+        `${r.assertedIn} does not assert ${r.attribute}. A requirement moved out of the jsdom tier and into no tier at all is a waiver.`,
+      ).toBe(true);
+    },
+  );
+
+  /**
+   * The inverse assertion: a blocked requirement that starts passing has been
+   * unblocked, and the row must be reclassified rather than left as folklore.
+   */
+  it.each(BLOCKED.map((r) => [`${r.component} ${r.part} ${r.attribute}`, r] as const))(
+    "%s is still blocked",
+    async (_label, r) => {
+      expect(r.blockedOn, "blocked with no phase named").toBeTruthy();
+      const { seen } = await collect(r.component, r.part, r.attribute);
+      expect(
+        seen.size,
+        `${r.attribute} now reaches ${r.component} ${r.part}. It was blocked on ${r.blockedOn}; move it back into the asserted tier.`,
+      ).toBe(0);
+    },
+  );
+
+  describe.each(JSDOM_TIER.map((r) => [`${r.component} ${r.part} ${r.attribute}`, r] as const))(
     "%s",
     (_label, r) => {
       it("reaches the DOM, with every documented value, and is absent somewhere", async () => {

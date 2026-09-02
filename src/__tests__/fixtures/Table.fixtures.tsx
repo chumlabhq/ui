@@ -17,8 +17,17 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "loading", props: { data: [], columns: COLUMNS, loading: true } },
   {
     name: "pinned-column",
-    props: { data: ROWS, columns: COLUMNS, pinnedColumns: ["name"], pinnableColumns: ["name", "role"] },
-    note: "The only fixture where pinButton reaches data-state=active.",
+    props: { data: ROWS, columns: COLUMNS, pinnedColumns: ["name"], pinnableColumns: ["name", "role"], onPinColumn: () => {} },
+    note: "The only fixture where pinButton reaches data-state=active. Needs all three: pinnableColumns to make the control eligible, onPinColumn because canShowPinButton requires a handler, and pinnedColumns to put it in the active state.",
+  },
+  {
+    name: "editing-cell",
+    props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID, onCellEdit: () => {} },
+    note: "Attempts editInput: edit mode opens on double-click.",
+    act: (c) => {
+      const cell = c.ownerDocument.querySelector("tbody td");
+      if (cell) fireEvent.doubleClick(cell);
+    },
   },
   { name: "with-search", props: { data: ROWS, columns: COLUMNS, showSearch: true } },
   { name: "with-footer", props: { data: ROWS, columns: COLUMNS, showFooter: true, footerContent: "Total" } },

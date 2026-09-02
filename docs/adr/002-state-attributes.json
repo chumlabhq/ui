@@ -132,7 +132,10 @@
       "values": null,
       "fromKeys": [
         "dayFocused"
-      ]
+      ],
+      "tier": "blocked",
+      "tierReason": "Needs a focused day, and DatePicker calls .focus() nowhere (AUDIT-GAP 3.1). Reaching it means changing focus management, which is on the do-not-touch list until the a11y phase. NOT unreachable \u2014 blocked on a named phase.",
+      "blockedOn": "a11y phase (DatePicker focus management)"
     },
     {
       "component": "DatePicker",
@@ -192,7 +195,10 @@
       "values": null,
       "fromKeys": [
         "dropdownItemSelected"
-      ]
+      ],
+      "tier": "blocked",
+      "tierReason": "The month/year menu marks its selection through the same focus path. Blocked with the row above and resolves with it.",
+      "blockedOn": "a11y phase (DatePicker focus management)"
     },
     {
       "component": "DatePicker",
@@ -388,7 +394,10 @@
       ],
       "fromKeys": [
         "thumbActive"
-      ]
+      ],
+      "tier": "browserTier",
+      "tierReason": "Gated on isDragging, which is set from a pointer sequence with setPointerCapture. jsdom implements no pointer capture, so the handler cannot reach the state however the event is faked. Same triage that moved 30 tests to the fixture tier: assert it where the capability exists.",
+      "assertedIn": "e2e/slider.spec.ts"
     },
     {
       "component": "Slider",
@@ -678,7 +687,10 @@
       "fromKeys": [
         "pinnedPinButton",
         "pinnedPinIcon"
-      ]
+      ],
+      "tier": "browserTier",
+      "tierReason": "The pin control ships at opacity-0 and appears on group-hover/header. jsdom resolves no hover and no computed opacity, so a jsdom assertion would pass against an element the user can never see.",
+      "assertedIn": "e2e/table.spec.ts"
     },
     {
       "component": "Table",
@@ -748,5 +760,6 @@
       ]
     }
   ],
-  "amendedBy": "Amendment E \u2014 8 attributes converged, 9 added to R4, 5 kept with a reason"
+  "amendedBy": "Amendment E \u2014 8 attributes converged, 9 added to R4, 5 kept with a reason",
+  "$comment_tiers": "A requirement with no `tier` is asserted in the jsdom contract. `browserTier` means the state needs a capability jsdom lacks (pointer capture, hover, computed style) and is asserted in e2e instead \u2014 every one is checked by a guard in the contract, so the classification cannot become a waiver wearing a new name. `blocked` names the phase that unblocks it, and the contract FAILS if a blocked requirement starts passing, because a blocker that silently resolves is how a requirement gets forgotten."
 }

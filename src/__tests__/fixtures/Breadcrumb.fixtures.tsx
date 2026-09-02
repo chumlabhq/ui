@@ -5,6 +5,11 @@ import { CRUMBS } from "./_data";
 
 const fixtures: Fixtures<typeof Breadcrumb> = [
   { name: "default", props: { items: CRUMBS } },
+  {
+    name: "disabled-mid",
+    props: { items: [CRUMBS[0], { ...CRUMBS[1], disabled: true }, { id: "last", label: "Last" }] },
+    note: "itemDisabled applies to a disabled crumb that is NOT the current page. CRUMBS puts its disabled crumb last, where isActive wins, so the key looked unreachable.",
+  },
   { name: "collapsed", props: { items: [...CRUMBS, ...CRUMBS], maxVisibleItems: 3 }, note: "Drives the ellipsis and its menu." },
   {
     name: "collapsed-open",
