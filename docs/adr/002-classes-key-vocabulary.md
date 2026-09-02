@@ -192,6 +192,41 @@ After 1.0: removing or renaming a key is a major. Adding one is a minor. Changin
 
 Per phase 2.5, `fixtures.contract` must render every key in every anatomy at least once. A key that cannot be rendered by any prop combination is dead by definition and is removed under R7.
 
+### R9 — One key, one element (Amendment F, 2026-09-02)
+
+Amendment C forbade absorbing a key whose element carries structural utilities: the
+consumer loses their only handle on how the box participates in layout, which is the defect
+ADR 001 exists to prevent. That rule was right and its scope was wrong. It was applied to
+the 53 rows being rewritten at the time and to no others, and it never examined a single
+R6-nested target.
+
+The rule generalises. **Any element that ends up sharing a key with a different element must
+not merge differing structural layers.** How the table spells the row is irrelevant — an
+absorb, a shared rename target and an R6 nesting all produce the same DOM outcome, and only
+the absorb column was ever checked.
+
+Re-running the test over all three populations found 30 further groups: 20 absorbs, 7 shared
+rename targets and 3 R6 nestings. `Breadcrumb.ellipsisButton` was one of Amendment C's own
+promotions, promoted straight into a collision with the `ellipsis` it now shared.
+
+Two distinctions the generalised test has to make, or it reports noise:
+
+- **Two keys on one element is not a merge.** `cn(classes.content, classes.contentInner)`
+  is one div with two handles. The contract reads the component source and treats keys
+  written into the same `className` expression as co-located.
+- **Equal structural layers merge harmlessly.** `Pagination.navIcon` folds two icons that
+  are both `w-5 h-5`; nothing is stranded.
+
+45 rows were promoted to their own part. Names are R2 heads where one fits and qualifier-
+first compounds otherwise, following Amendment C's convention; all 22 new terms are NOVEL
+and claim no precedent.
+
+**Known limit.** The test reads each key's default from its constants file, so an element
+whose structural utilities are still written at the call site reports an empty layer.
+`Table.headerCellContent` is `""` in constants while carrying `flex items-center` at
+`Table.tsx:1198`. The test is exactly as complete as the constants ratchet, and becomes
+sound when the remaining literals move (Task 3c).
+
 ## Consequences
 
 **Accepted costs.** Every component, every constants file, every test naming a key, all 30 `*.ai.md`, `llms-full.txt`, `component-index.json`, and the AI Playground's codegen prompts and vendored bundle change in one sweep. Partial adoption is worse than none: a half-renamed vocabulary is exactly the state this ADR exists to end.

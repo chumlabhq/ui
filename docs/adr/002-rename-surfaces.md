@@ -1,6 +1,6 @@
 # ADR 002 — surfaces the rename must reach
 
-Produced during Task 3a. The rename itself is held (see
+Produced during Task 3a; counts refreshed after Amendment F. The rename itself is held (see
 `002-migration-blockers.json`), but the blast radius does not depend on when it
 lands, and an AI surface naming a key that no longer exists fails **silently**:
 an unknown key in a `classes` object is ignored, so a playground generation
@@ -13,8 +13,8 @@ does not preserve under that name.
 
 | Artifact | Old key names present |
 | --- | --- |
-| `llms-full.txt` | 160 |
-| `ai/component-index.json` | 36 |
+| `llms-full.txt` | 161 |
+| `ai/component-index.json` | 39 |
 
 `ai/build-llms-full.mjs` regenerates `llms-full.txt` from the `.ai.md` files, so
 the `.ai.md` files are the real source and must be corrected first.

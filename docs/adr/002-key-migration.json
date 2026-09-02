@@ -11,28 +11,29 @@
   "totals": {
     "entries": 35,
     "keysBefore": 523,
-    "keysAfter": 331,
-    "renamed": 200,
-    "unchanged": 160,
+    "keysAfter": 369,
+    "renamed": 230,
+    "unchanged": 161,
     "deletedAsState": 97,
     "deletedAsDead": 11,
-    "absorbedIntoParent": 55,
+    "absorbedIntoParent": 24,
     "promotedByAmendmentC": 53,
-    "amendmentTerms": 57,
+    "amendmentTerms": 82,
     "withPeerPrecedent": 16,
-    "novel": 41
+    "novel": 41,
+    "promotedByAmendmentF": 45
   },
   "vocabularyAmendments": {
-    "control": "Ark Combobox / Select / Field \u2014 the interactive box inside the root",
+    "control": "Ark Combobox/Select/Field Control \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
     "ellipsis": "Ark Pagination.Ellipsis",
     "fallback": "Radix Avatar.Fallback",
     "image": "Radix Avatar.Image",
     "indicator": "Radix Checkbox.Indicator, Ark Tabs.Indicator, Ark Steps.Indicator",
     "marker": "Ark Slider.Marker",
     "monthSelect": "Ark DatePicker.MonthSelect",
-    "navButton": "Ark splits these as prevTrigger/nextTrigger; unified here as one part with data-side per R4, because both are styled identically in this library",
-    "positioner": "Ark Dialog.Positioner",
-    "presetTrigger": "Ark DatePicker.PresetTrigger",
+    "navButton": "DIVERGENT \u2014 Ark ships PrevTrigger and NextTrigger as separate parts (https://ark-ui.com/docs/components/date-picker). Unified here as one part with data-side per R4: the two controls are structurally identical, so splitting them would mint a key with no reachable difference",
+    "positioner": "Ark Positioner \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
+    "presetTrigger": "Ark DatePicker PresetTrigger \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
     "range": "Radix Slider.Range, Ark Progress.Range",
     "resizeHandle": "react-resizable-panels PanelResizeHandle",
     "thumb": "Radix Slider.Thumb, Radix Switch.Thumb",
@@ -79,7 +80,32 @@
     "suffix": "NOVEL \u2014 static text after an input",
     "triggerActions": "NOVEL \u2014 the icon cluster at the end of a trigger",
     "weekNumber": "NOVEL \u2014 ISO week column",
-    "weekday": "NOVEL \u2014 calendar column heading"
+    "weekday": "NOVEL \u2014 calendar column heading",
+    "clearTrigger": "Ark ClearTrigger \u2014 RECALLED, blocking",
+    "closeTrigger": "Ark Dialog CloseTrigger \u2014 RECALLED, blocking",
+    "day": "DIVERGENT \u2014 Ark's calendar cell is TableCell + TableCellTrigger (https://ark-ui.com/docs/components/date-picker). Our day is a single button, so adopting the split would mint two keys for one element",
+    "searchControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "subSearchControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "itemControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "itemRow": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "itemIcon": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "collapsedItem": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "ellipsisTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "todayTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "triggerRow": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "headerCellText": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "pinnedList": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "pinnedRightList": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "loadingFooter": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "loadingRow": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "pinnedRightRegion": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockHours": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockMinutes": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockSeparator": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "clockContent": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "indicatorTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "subSearchIcon": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "subSearchInput": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head"
   },
   "r6NestingKeys": [
     "countrySelect",
@@ -946,10 +972,11 @@
       "component": "Accordion",
       "owner": "Accordion",
       "key": "contentInner",
-      "outcome": "absorbed-into-parent",
-      "to": "content",
+      "outcome": "renamed",
+      "to": "body",
       "vocabulary": "R2",
-      "note": "padding wrapper (R5)"
+      "note": "padding wrapper (R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->content)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Accordion",
@@ -1130,9 +1157,10 @@
       "owner": "Breadcrumb",
       "key": "dropdownItem",
       "outcome": "renamed",
-      "to": "item",
+      "to": "collapsedItem",
       "vocabulary": "R2",
-      "note": "the overflow menu's rows are items of the same list vocabulary"
+      "note": "the overflow menu's rows are items of the same list vocabulary | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->item)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Breadcrumb",
@@ -1158,11 +1186,12 @@
       "owner": "Breadcrumb",
       "key": "ellipsisButton",
       "outcome": "renamed",
-      "to": "ellipsis",
+      "to": "ellipsisTrigger",
       "vocabulary": "amendment",
       "precedent": "Ark Pagination.Ellipsis",
       "promotedByAmendmentC": true,
-      "note": "the button IS the ellipsis; two keys for one element (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center justify-center w-10); absorbing it would take layout control away, which ADR 001 exists to prevent"
+      "note": "the button IS the ellipsis; two keys for one element (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center justify-center w-10); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->ellipsis)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Breadcrumb",
@@ -1299,9 +1328,10 @@
       "owner": "CascadingDropdown",
       "key": "checkbox",
       "outcome": "renamed",
-      "to": "itemIndicator",
+      "to": "itemControl",
       "vocabulary": "R2",
-      "note": "AMENDMENT; NOT dead - the corrected typed fixture renders it via per-option selectionMode | collision-resolved: control was already claimed"
+      "note": "AMENDMENT; NOT dead - the corrected typed fixture renders it via per-option selectionMode | collision-resolved: control was already claimed | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->itemIndicator)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "CascadingDropdown",
@@ -1327,9 +1357,9 @@
       "owner": "CascadingDropdown",
       "key": "clearIcon",
       "outcome": "renamed",
-      "to": "clearButton",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": ""
+      "note": "AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "CascadingDropdown",
@@ -1493,19 +1523,21 @@
       "owner": "CascadingDropdown",
       "key": "searchInput",
       "outcome": "renamed",
-      "to": "searchInput",
+      "to": "searchControl",
       "vocabulary": "R2",
       "promotedByAmendmentC": true,
-      "note": "(R5) - LIVE, not dead: showMenuSearch exists | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
+      "note": "(R5) - LIVE, not dead: showMenuSearch exists | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "searchInputElement",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "LIVE: the six search keys were wrongly recorded dead on a fixture passing `showSearch`, which is not a prop; `showMenuSearch`/`showSubmenuSearch` are | collision: the box keeps the name; this element carries no structural utility"
+      "note": "LIVE: the six search keys were wrongly recorded dead on a fixture passing `showSearch`, which is not a prop; `showMenuSearch`/`showSubmenuSearch` are | collision: the box keeps the name; this element carries no structural utility | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "CascadingDropdown",
@@ -1592,28 +1624,31 @@
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "submenuSearchIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "searchInput",
+      "outcome": "renamed",
+      "to": "subSearchIcon",
       "vocabulary": "R2",
-      "note": "(R5) - LIVE"
+      "note": "(R5) - LIVE | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "submenuSearchInput",
-      "outcome": "absorbed-into-parent",
-      "to": "searchInput",
+      "outcome": "renamed",
+      "to": "subSearchControl",
       "vocabulary": "R2",
-      "note": "same part one level down (R5) - LIVE"
+      "note": "same part one level down (R5) - LIVE | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "CascadingDropdown",
       "owner": "CascadingDropdown",
       "key": "submenuSearchInputElement",
-      "outcome": "absorbed-into-parent",
-      "to": "searchInput",
+      "outcome": "renamed",
+      "to": "subSearchInput",
       "vocabulary": "R2",
-      "note": "(R5) - LIVE"
+      "note": "(R5) - LIVE | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "CascadingDropdown",
@@ -1837,10 +1872,10 @@
       "component": "DatePicker",
       "owner": "DatePicker",
       "key": "clearButton",
-      "outcome": "unchanged",
-      "to": "clearButton",
+      "outcome": "renamed",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": ""
+      "note": "AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "DatePicker",
@@ -2172,11 +2207,12 @@
       "owner": "DatePicker",
       "key": "todayButton",
       "outcome": "renamed",
-      "to": "presetTrigger",
+      "to": "todayTrigger",
       "vocabulary": "amendment",
       "precedent": "Ark DatePicker.PresetTrigger",
       "promotedByAmendmentC": true,
-      "note": "a preset by another name (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
+      "note": "a preset by another name (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->presetTrigger)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "DatePicker",
@@ -2298,9 +2334,9 @@
       "owner": "Dropdown",
       "key": "clearIcon",
       "outcome": "renamed",
-      "to": "clearButton",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": "R2 names the control, not the glyph"
+      "note": "R2 names the control, not the glyph | AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "Dropdown",
@@ -2547,19 +2583,21 @@
       "component": "Input",
       "owner": "Input",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
+      "outcome": "renamed",
+      "to": "control",
       "vocabulary": "R2",
-      "note": "the bordered field box; root is the outer stack. AUDIT-GAP 4.5 flags root/wrapper with no rule (R5)"
+      "note": "the bordered field box; root is the outer stack. AUDIT-GAP 4.5 flags root/wrapper with no rule (R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->root)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countryOptionFlag",
       "outcome": "renamed",
-      "to": "flag",
+      "to": "countrySelect.itemIcon",
       "vocabulary": "R6-nested",
-      "note": "R6: value becomes CountryFlag's own classes object"
+      "note": "R6: value becomes CountryFlag's own classes object | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->flag)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
@@ -2574,10 +2612,11 @@
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countryOptionRow",
-      "outcome": "absorbed-into-parent",
-      "to": "countrySelect.item",
+      "outcome": "renamed",
+      "to": "countrySelect.itemRow",
       "vocabulary": "R6-nested",
-      "note": "R6"
+      "note": "R6 | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->countrySelect.item)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
@@ -2656,28 +2695,31 @@
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countrySelectSearchIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "countrySelect.searchInput",
+      "outcome": "renamed",
+      "to": "countrySelect.searchIcon",
       "vocabulary": "R6-nested",
-      "note": "R6"
+      "note": "R6 | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->countrySelect.searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countrySelectSearchInput",
-      "outcome": "absorbed-into-parent",
-      "to": "countrySelect.searchInput",
+      "outcome": "renamed",
+      "to": "countrySelect.searchControl",
       "vocabulary": "R6-nested",
-      "note": "R6"
+      "note": "R6 | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->countrySelect.searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countrySelectSearchInputElement",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "countrySelect.searchInput",
       "vocabulary": "R6-nested",
-      "note": "R6"
+      "note": "R6 | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->countrySelect.searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
@@ -2692,28 +2734,31 @@
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countrySelectedFlag",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "flag",
       "vocabulary": "R6-nested",
-      "note": "R6"
+      "note": "R6 | AMENDMENT F: keeps this part; its former partner moved into the countrySelect child, so nothing else claims the name",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countrySelectedLabel",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "value",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: keeps this part; its former partner moved into the countrySelect child, so nothing else claims the name",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
       "owner": "InternationalPhoneInput",
       "key": "countrySelectedRow",
       "outcome": "renamed",
-      "to": "value",
+      "to": "triggerRow",
       "vocabulary": "R2",
-      "note": "the chosen country shown in the trigger"
+      "note": "the chosen country shown in the trigger | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->value)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "InternationalPhoneInput",
@@ -2900,10 +2945,10 @@
       "component": "Modal",
       "owner": "Modal",
       "key": "closeButton",
-      "outcome": "unchanged",
-      "to": "closeButton",
+      "outcome": "renamed",
+      "to": "closeTrigger",
       "vocabulary": "R2",
-      "note": ""
+      "note": "AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "Modal",
@@ -2995,9 +3040,10 @@
       "owner": "MultiSelectDropdown",
       "key": "checkbox",
       "outcome": "renamed",
-      "to": "itemIndicator",
+      "to": "itemControl",
       "vocabulary": "R2",
-      "note": "AMENDMENT (see Checkbox) | collision-resolved: control was already claimed"
+      "note": "AMENDMENT (see Checkbox) | collision-resolved: control was already claimed | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->itemIndicator)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "MultiSelectDropdown",
@@ -3050,9 +3096,9 @@
       "owner": "MultiSelectDropdown",
       "key": "clearIcon",
       "outcome": "renamed",
-      "to": "clearButton",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": "R2 names the control, not the glyph"
+      "note": "R2 names the control, not the glyph | AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "MultiSelectDropdown",
@@ -3224,9 +3270,10 @@
       "owner": "MultiSelectSearchableDropdown",
       "key": "checkbox",
       "outcome": "renamed",
-      "to": "itemIndicator",
+      "to": "itemControl",
       "vocabulary": "R2",
-      "note": "AMENDMENT | collision-resolved: control was already claimed"
+      "note": "AMENDMENT | collision-resolved: control was already claimed | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->itemIndicator)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "MultiSelectSearchableDropdown",
@@ -3279,9 +3326,9 @@
       "owner": "MultiSelectSearchableDropdown",
       "key": "clearIcon",
       "outcome": "renamed",
-      "to": "clearButton",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": "R2 names the control, not the glyph"
+      "note": "R2 names the control, not the glyph | AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "MultiSelectSearchableDropdown",
@@ -3417,19 +3464,21 @@
       "owner": "MultiSelectSearchableDropdown",
       "key": "searchInput",
       "outcome": "renamed",
-      "to": "searchInput",
+      "to": "searchControl",
       "vocabulary": "R2",
       "promotedByAmendmentC": true,
-      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "MultiSelectSearchableDropdown",
       "owner": "MultiSelectSearchableDropdown",
       "key": "searchInputElement",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": " | collision: the box keeps the name; this element carries no structural utility"
+      "note": "collision: the box keeps the name; this element carries no structural utility | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "MultiSelectSearchableDropdown",
@@ -3727,10 +3776,11 @@
       "component": "Pagination",
       "owner": "Pagination",
       "key": "selectorDropdownWrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "rowsPerPage.content",
+      "outcome": "renamed",
+      "to": "rowsPerPage.positioner",
       "vocabulary": "R6-nested",
-      "note": "R6 (R5)"
+      "note": "R6 (R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->rowsPerPage.content)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Pagination",
@@ -3912,9 +3962,9 @@
       "owner": "SearchableDropdown",
       "key": "clearIcon",
       "outcome": "renamed",
-      "to": "clearButton",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": "R2 names the control, not the glyph"
+      "note": "R2 names the control, not the glyph | AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "SearchableDropdown",
@@ -4031,19 +4081,21 @@
       "owner": "SearchableDropdown",
       "key": "searchInput",
       "outcome": "renamed",
-      "to": "searchInput",
+      "to": "searchControl",
       "vocabulary": "R2",
       "promotedByAmendmentC": true,
-      "note": "wrapper around the input element (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent"
+      "note": "wrapper around the input element (R5) | AMENDMENT C: promoted, carries structural utilities (flex items-center); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "SearchableDropdown",
       "owner": "SearchableDropdown",
       "key": "searchInputElement",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "searchInput",
       "vocabulary": "R2",
-      "note": "R2 names the text entry itself | collision: the box keeps the name; this element carries no structural utility"
+      "note": "R2 names the text entry itself | collision: the box keeps the name; this element carries no structural utility | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->searchInput)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "SearchableDropdown",
@@ -4390,10 +4442,11 @@
       "component": "Stepper",
       "owner": "Stepper",
       "key": "indicatorButton",
-      "outcome": "absorbed-into-parent",
-      "to": "itemIndicator",
+      "outcome": "renamed",
+      "to": "indicatorTrigger",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->itemIndicator)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Stepper",
@@ -4417,10 +4470,11 @@
       "component": "Stepper",
       "owner": "Stepper",
       "key": "indicatorIcon",
-      "outcome": "absorbed-into-parent",
-      "to": "itemIndicator",
+      "outcome": "renamed",
+      "to": "itemIcon",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->itemIndicator)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Stepper",
@@ -4519,18 +4573,20 @@
       "owner": "Stepper",
       "key": "step",
       "outcome": "renamed",
-      "to": "item",
+      "to": "itemRow",
       "vocabulary": "R2",
-      "note": ""
+      "note": "AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->item)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Stepper",
       "owner": "Stepper",
       "key": "stepContainer",
-      "outcome": "absorbed-into-parent",
+      "outcome": "renamed",
       "to": "item",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->item)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Stepper",
@@ -5046,11 +5102,12 @@
       "component": "Table",
       "owner": "Table",
       "key": "headerCellContent",
-      "outcome": "absorbed-into-parent",
-      "to": "headerCell",
+      "outcome": "renamed",
+      "to": "headerCellText",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 grounded in the HTML <th> it renders",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->headerCell)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
@@ -5075,10 +5132,11 @@
       "component": "Table",
       "owner": "Table",
       "key": "loadingMore",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
+      "outcome": "renamed",
+      "to": "loadingFooter",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->loading)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
@@ -5105,12 +5163,13 @@
       "component": "Table",
       "owner": "Table",
       "key": "pinIcon",
-      "outcome": "renamed",
-      "to": "pinButton",
+      "outcome": "unchanged",
+      "to": "pinIcon",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 column pin control",
       "wasStateGated": true,
-      "note": "the glyph and its button are one control; state-gated, not dead"
+      "note": "the glyph and its button are one control; state-gated, not dead | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->pinButton)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
@@ -5171,28 +5230,31 @@
       "component": "Table",
       "owner": "Table",
       "key": "pinnedRightContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
+      "outcome": "renamed",
+      "to": "pinnedRightRegion",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->root)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
       "owner": "Table",
       "key": "pinnedRightTable",
-      "outcome": "absorbed-into-parent",
-      "to": "list",
+      "outcome": "renamed",
+      "to": "pinnedRightList",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->list)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
       "owner": "Table",
       "key": "pinnedTable",
-      "outcome": "absorbed-into-parent",
-      "to": "list",
+      "outcome": "renamed",
+      "to": "pinnedList",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->list)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
@@ -5275,10 +5337,11 @@
       "component": "Table",
       "owner": "Table",
       "key": "shimmerRow",
-      "outcome": "absorbed-into-parent",
-      "to": "loading",
+      "outcome": "renamed",
+      "to": "loadingRow",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->loading)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "Table",
@@ -5388,19 +5451,20 @@
       "component": "TextArea",
       "owner": "TextArea",
       "key": "wrapper",
-      "outcome": "absorbed-into-parent",
-      "to": "root",
+      "outcome": "renamed",
+      "to": "control",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->root)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clearIcon",
       "outcome": "renamed",
-      "to": "clearButton",
+      "to": "clearTrigger",
       "vocabulary": "R2",
-      "note": ""
+      "note": "AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "TimePicker",
@@ -5425,20 +5489,22 @@
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockCenter",
-      "outcome": "absorbed-into-parent",
-      "to": "clockFace",
+      "outcome": "unchanged",
+      "to": "clockCenter",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 no peer library ships an analogue clock picker",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockFace)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockContainer",
-      "outcome": "absorbed-into-parent",
-      "to": "content",
+      "outcome": "renamed",
+      "to": "clockContent",
       "vocabulary": "R2",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->content)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
@@ -5464,31 +5530,34 @@
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockDisplayHours",
-      "outcome": "absorbed-into-parent",
-      "to": "clockDisplay",
+      "outcome": "renamed",
+      "to": "clockHours",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 same",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockDisplay)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockDisplayMinutes",
-      "outcome": "absorbed-into-parent",
-      "to": "clockDisplay",
+      "outcome": "renamed",
+      "to": "clockMinutes",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 same",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockDisplay)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockDisplaySeparator",
-      "outcome": "absorbed-into-parent",
-      "to": "clockDisplay",
+      "outcome": "renamed",
+      "to": "clockSeparator",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 same",
-      "note": "the colon (R5)"
+      "note": "the colon (R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockDisplay)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
@@ -5514,22 +5583,24 @@
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockHandDot",
-      "outcome": "renamed",
-      "to": "clockHand",
+      "outcome": "unchanged",
+      "to": "clockHandDot",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 same",
       "promotedByAmendmentC": true,
-      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-3 h-3); absorbing it would take layout control away, which ADR 001 exists to prevent"
+      "note": "(R5) | AMENDMENT C: promoted, carries structural utilities (w-3 h-3); absorbing it would take layout control away, which ADR 001 exists to prevent | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->clockHand)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
       "owner": "TimePicker",
       "key": "clockHandLine",
-      "outcome": "absorbed-into-parent",
-      "to": "clockHand",
+      "outcome": "unchanged",
+      "to": "clockHandLine",
       "vocabulary": "amendment",
       "precedent": "NOVEL \u2014 same",
-      "note": "(R5)"
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->clockHand)",
+      "promotedByAmendmentF": true
     },
     {
       "component": "TimePicker",
@@ -5762,10 +5833,10 @@
       "component": "Toast",
       "owner": "Toast",
       "key": "closeButton",
-      "outcome": "unchanged",
-      "to": "closeButton",
+      "outcome": "renamed",
+      "to": "closeTrigger",
       "vocabulary": "R2",
-      "note": ""
+      "note": "AMENDMENT F: button/trigger family unified on Ark's Trigger spelling (PresetTrigger/ClearTrigger/CloseTrigger); precedent for this member is RECALLED, so the rename is blocked until checked"
     },
     {
       "component": "Toast",
@@ -5885,5 +5956,96 @@
     "TimePicker.clockOkButton -> confirmButton",
     "TimePicker.clockPeriodButton -> periodButton",
     "Toast.progress -> indicator"
-  ]
+  ],
+  "declaredMerges": {
+    "Accordion.body": [
+      "content",
+      "contentInner"
+    ],
+    "Accordion.icon": [
+      "icon",
+      "iconWrapper"
+    ],
+    "Avatar.fallback": [
+      "fallback",
+      "initials"
+    ],
+    "Button.icon": [
+      "endIcon",
+      "startIcon"
+    ],
+    "CascadingDropdown.message": [
+      "error",
+      "success"
+    ],
+    "Checkbox.message": [
+      "error",
+      "success"
+    ],
+    "DatePicker.message": [
+      "error",
+      "success"
+    ],
+    "Dropdown.message": [
+      "error",
+      "success"
+    ],
+    "Input.message": [
+      "error",
+      "success"
+    ],
+    "InternationalPhoneInput.message": [
+      "error",
+      "success"
+    ],
+    "MultiSelectDropdown.message": [
+      "error",
+      "success"
+    ],
+    "MultiSelectSearchableDropdown.loading": [
+      "loading",
+      "shimmer"
+    ],
+    "MultiSelectSearchableDropdown.message": [
+      "error",
+      "success"
+    ],
+    "OtpInput.message": [
+      "error",
+      "success"
+    ],
+    "Pagination.navIcon": [
+      "nextIcon",
+      "prevIcon"
+    ],
+    "RadioButton.message": [
+      "error",
+      "success"
+    ],
+    "SearchableDropdown.message": [
+      "error",
+      "success"
+    ],
+    "Slider.message": [
+      "error",
+      "success"
+    ],
+    "Switch.message": [
+      "error",
+      "success"
+    ],
+    "Table.list": [
+      "table",
+      "unpinnedTable"
+    ],
+    "TextArea.message": [
+      "error",
+      "success"
+    ],
+    "TimePicker.message": [
+      "error",
+      "success"
+    ]
+  },
+  "$declaredMergesComment": "Targets that more than one surviving key deliberately claims. A shared target not listed here is two elements fighting over one key. Every entry must also pass the structural test: the elements it merges may not have differing structural layers unless they are the same element (two keys on one className), which the contract detects from source."
 }

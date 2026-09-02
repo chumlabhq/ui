@@ -1,92 +1,106 @@
 # ADR 002 — precedent verification ledger
 
-**Status:** open — 27 claims await checking
+**Status:** 5 claims resolved against live docs; 26 still unchecked
 **Date:** 2026-09-02
 
 ## Why this exists
 
 Amendments A and E accept names outside R2 only if they cite a peer-library precedent.
-Every one of those citations was written by an agent with **no network access and no Radix,
-Ark or Zag dependency in this repo**. They are recall or reviewer assertion, not verified
-fact.
+Every one of those citations was written by an agent with no network access and no Radix,
+Ark or Zag dependency in this repo. These names are permanent public API from the moment
+they ship, and a wrong precedent does not merely mislabel a row — it launders a coinage
+into a borrowed name and the library carries it forever.
 
-These names are permanent public API from the moment they ship. A wrong precedent does not
-just mislabel a row in a table — it justifies a name the library then carries forever, and
-the whole point of the precedent test was to stop coinage. A recalled precedent that turns
-out to be invented is worse than an honest `NOVEL`, because it launders the coinage.
-
-**No name in this ledger may be changed on the strength of recall.** The rows marked
-`recalled` are the ones to check.
+**No name in this ledger may be changed on the strength of recall.**
 
 ## Confidence markers
 
+The scheme now separates two claims that the old one collapsed. "No peer has this" and
+"peers have this and we chose otherwise" are different statements, and only the second one
+obliges us to justify the divergence.
+
 | Marker | Meaning |
 | --- | --- |
-| `verified-in-repo` | Confirmed against a dependency present in `node_modules`, or against this repo's own source |
-| `asserted-on-review` | Stated by the reviewer in the task that accepted it; cited, not independently checked |
-| `recalled` | Written from the agent's model recall. **Unverified. Check before 1.0.** |
+| `VERIFIED` | Confirmed against the peer's live documentation or a dependency in this repo, with the URL recorded |
+| `RECALLED` | Written from model recall. **Unverified — blocks the rename.** |
+| `DIVERGENT` | The peer ships this part and we deliberately chose otherwise. Requires a stated reason, not a citation |
+| `NOVEL` | No peer ships an analogue; the name is ours and claims nothing |
 
-## Part names — Amendment A (`002-key-migration.json` → `vocabularyAmendments`)
+## Resolved this round
 
-16 claims. All `recalled` unless noted.
+Checked against `https://ark-ui.com/docs/components/date-picker`.
 
-| Our name | Claimed peer part | Library | Confidence |
+| Name | Marker | Note |
+| --- | --- | --- |
+| `positioner` | **VERIFIED** | Ark ships `Positioner` |
+| `control` | **VERIFIED** | Ark ships `Control` |
+| `presetTrigger` | **VERIFIED** | Ark ships `PresetTrigger` |
+| `navButton` | **DIVERGENT** | Ark splits `PrevTrigger` / `NextTrigger`. The old ledger cited Ark *for* `navButton`, which was wrong as written. Unified here as one part carrying `data-side`, because the two controls are structurally identical — splitting them would mint a key with no reachable difference, and R4 already resolves direction as an attribute. Recorded as DIVERGENT rather than NOVEL: Ark demonstrably has these parts, which is the definition of a divergence, not a novelty. |
+| `day` | **DIVERGENT** | Previously marked NOVEL. Ark's calendar cell is `TableCell` + `TableCellTrigger`; ours is a single button, so adopting the split would mint two keys for one element. |
+
+`data-valid` was verified in the previous round against the Radix Form docs (custom
+validation section), which puts `[data-valid]` and `[data-invalid]` on Field, Control,
+Label and **Message** — the last of which is why Amendment B's message part is the right
+place for them.
+
+### The button/trigger family
+
+`presetTrigger`, `clearButton` and `closeButton` were three spellings of one idea. Ark is
+the only peer that ships all three (`PresetTrigger`, `ClearTrigger`, `CloseTrigger`), so the
+family is unified on **Trigger**; the Button spelling would have mixed Ark with Radix
+Dialog's `Close`. `clearButton` → `clearTrigger` and `closeButton` → `closeTrigger` are
+recorded in the migration table, but only `presetTrigger` is VERIFIED — the other two are
+RECALLED and appear in the blocking list below.
+
+## Still RECALLED — these block renames
+
+20 rows across 10 names cannot be renamed until these are checked. Exact peer part claimed:
+
+| Our name | Exact peer part claimed | Library | Rows blocked |
 | --- | --- | --- | --- |
-| `control` | `Combobox.Control`, `Select.Control`, `Field.Control` | Ark | recalled |
-| `ellipsis` | `Pagination.Ellipsis` | Ark | recalled |
-| `fallback` | `Avatar.Fallback` | Radix | recalled |
-| `image` | `Avatar.Image` | Radix | recalled |
-| `indicator` | `Checkbox.Indicator`; `Tabs.Indicator`; `Steps.Indicator` | Radix; Ark | recalled |
-| `marker` | `Slider.Marker` | Ark | recalled |
-| `monthSelect` | `DatePicker.MonthSelect` | Ark | recalled |
-| `navButton` | `Pagination.PrevTrigger` / `NextTrigger` — **not a match**; we unify them as one part plus `data-side` | Ark | recalled, and deliberately divergent |
-| `positioner` | `Dialog.Positioner` | Ark | recalled |
-| `presetTrigger` | `DatePicker.PresetTrigger` | Ark | recalled |
-| `range` | `Slider.Range`; `Progress.Range` | Radix; Ark | recalled |
-| `resizeHandle` | `PanelResizeHandle` | react-resizable-panels | recalled |
-| `thumb` | `Slider.Thumb`, `Switch.Thumb` | Radix | recalled |
-| `track` | `Slider.Track`; `Progress.Track` | Radix; Ark | recalled |
-| `valueText` | `Slider.ValueText` | Ark | recalled |
-| `yearSelect` | `DatePicker.YearSelect` | Ark | recalled |
+| `clearTrigger` | `ClearTrigger` | Ark | 7 |
+| `range` | `Progress.Range`; `Slider.Range` | Ark; Radix | 4 |
+| `closeTrigger` | `Dialog.CloseTrigger` | Ark | 2 |
+| `header` | `Accordion.Header` wrapping the trigger | Radix | 1 |
+| `fallback` | `Avatar.Fallback` | Radix | 1 |
+| `resizeHandle` | `PanelResizeHandle` | react-resizable-panels | 1 |
+| `marker` | `Slider.Marker` | Ark | 1 |
+| `valueText` | `Slider.ValueText` | Ark | 1 |
+| `separator` | `Steps.Separator` as our step connector | Ark | 1 |
+| `indicator` | `Checkbox.Indicator`; `Tabs.Indicator`; `Steps.Indicator` | Radix; Ark | 1 |
 
-The other 36 amendment terms are marked `NOVEL` and claim no precedent, so nothing is owed
-on them. `clockFace`, `clockHand`, `clockNumber`, the Table controls and `message` are in
-that set.
+## Still RECALLED — not currently blocking a rename
 
-## State attributes — Amendment E (`002-state-attribute-catalogue.json`)
+These names are already in use or are attribute values, so no rename waits on them, but the
+citation is still unchecked.
 
-12 claims.
+| Our name | Exact peer part claimed | Library |
+| --- | --- | --- |
+| `ellipsis` | `Pagination.Ellipsis` | Ark |
+| `image` | `Avatar.Image` | Radix |
+| `monthSelect` | `DatePicker.MonthSelect` | Ark |
+| `yearSelect` | `DatePicker.YearSelect` | Ark |
+| `thumb` | `Slider.Thumb`, `Switch.Thumb` | Radix |
+| `track` | `Slider.Track`; `Progress.Track` | Radix; Ark |
+| `data-invalid` | `data-invalid` on Field | Ark; Radix Form |
+| `data-state="open"` | `data-state="open\|closed"` | Radix |
+| `data-state="checked"` | Checkbox / Switch / RadioGroup | Radix |
+| `data-state="indeterminate"` | `data-state="indeterminate"` | Radix |
+| `data-state="active"` | Tabs / Steps | Ark |
+| `data-state="inactive"` | Steps | Ark |
+| `data-side` | `data-side` | Radix Popper |
+| `data-today` | `data-today` | Ark DatePicker |
+| `data-dragging` | `data-dragging` on the thumb | Ark Slider |
+| `data-placeholder` | `data-placeholder` on an unset trigger | Radix Select |
 
-| Our attribute | Claimed peer attribute | Library | Confidence |
-| --- | --- | --- | --- |
-| `data-valid` (from `data-success`) | `[data-valid]` and `[data-invalid]` on Field, Control, Label, Message | Radix Form | **asserted-on-review** — cited to the Radix Form docs, custom validation section |
-| `data-invalid` (from `data-error`) | `data-invalid` | Ark Field; Radix Form | recalled |
-| `data-state="open"` (from `data-open`) | `data-state="open\|closed"` | Radix | recalled |
-| `data-state="open"` (from `data-expanded`) | Accordion `data-state` | Radix | recalled |
-| `data-state="checked"` (from `data-checked`) | Checkbox / Switch / RadioGroup `data-state` | Radix | recalled |
-| `data-state="indeterminate"` | Checkbox `data-state="indeterminate"` | Radix | recalled |
-| `data-state="active"` (from `data-active`) | Tabs / Steps | Ark | recalled |
-| `data-state="inactive"` (from `data-pending`) | Steps | Ark | recalled |
-| `data-side` (from `data-position`) | `data-side` | Radix Popper | recalled |
-| `data-today` | `data-today` on the current day | Ark DatePicker | recalled |
-| `data-dragging` | `data-dragging` on the thumb | Ark Slider | recalled |
-| `data-placeholder` | `data-placeholder` on an unset trigger | Radix Select | recalled |
+## NOVEL
 
-The six attributes marked `NOVEL` — `data-clickable`, `data-sorted`, `data-pinned`,
-`data-editing`, `data-resizing`, `data-filled` — claim nothing and need no check.
+Amendment F added 22 promotion names — `searchControl`, `itemControl`, `itemRow`,
+`collapsedItem`, `ellipsisTrigger`, `todayTrigger`, `triggerRow`, `headerCellText`,
+`pinnedList`, `pinnedRightList`, `pinnedRightRegion`, `loadingFooter`, `loadingRow`,
+`clockHours`, `clockMinutes`, `clockSeparator`, `clockContent`, `indicatorTrigger`,
+`subSearchIcon`, `subSearchInput`, `subSearchControl`, `itemIcon` — all qualifier-first
+compounds of an R2 or VERIFIED head. They claim no precedent and need no check.
 
-## Also worth checking
-
-Two claims in `002-key-migration.json` that read as precedent but were reasoning, not
-citation:
-
-- **`connector` → `separator`**, attributed to "Ark Steps". Ark Steps does have a
-  `Separator`; whether it is the same element as our step connector is the open question.
-- **`heading` → `header`**, attributed to "Radix Accordion". Radix Accordion has
-  `Accordion.Header`; the claim is that it wraps the trigger the way ours does.
-
-## What to do with a failed check
-
-Downgrade the row to `NOVEL` and keep the name, or pick the real peer name — but the name
-change is a Task 3 edit, not a table edit, because by then the constants and `.ai.md` files
-carry it. Cheapest to resolve now.
+`clockFace`, `clockHand`, `clockNumber` and the Table controls remain NOVEL. `day` has moved
+out of this set to DIVERGENT.
