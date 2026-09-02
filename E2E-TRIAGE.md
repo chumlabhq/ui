@@ -1224,3 +1224,192 @@ All four records — `validation.build`, `validation.performance`,
 exact artifact before the stamp. `validation.build` was re-scoped from the app
 build to `build:lib`, since that is what the other three and the fingerprint
 describe.
+
+---
+
+# Appendix N — bundle size, gated
+
+`scripts/assert-bundle-size.mjs`, `npm run verify:bundle-size`.
+
+## What it measures, and the two ways to get it wrong
+
+Both of which had already happened here:
+
+- **`dist/components/<Name>/**`** sweeps in sibling *entries*. IPI's
+  `./phone-validators` lives there and carries libphonenumber on purpose;
+  counting it reports **52.58 KB**, a number no consumer ever pays.
+- **One `dist/shared/<Name>-<hash>.js` chunk** undercounts, because an entry
+  usually pulls several. `dist/components/Table/index.js` imports two.
+
+A third, found while writing it: following `import()` sums CountryFlag's 250
+lazy per-flag chunks and reports it at **349 KB**. Only static imports count.
+
+So the gate reports two numbers per entry:
+
+| | what it is | enforced? |
+|---|---|---|
+| `own` | the component's own chunk | **yes** — this is the basis the ceilings in `ai/07-performance.md` were set against |
+| `closure` | the eager static closure of the public entry — what `@chumlab/ui/<name>` actually costs | reported |
+
+Gating on `closure` against ceilings written for `own` would report **nine**
+components as regressions without one byte having changed. That is a threshold
+decision, not a regression, and it is recorded rather than acted on.
+
+## Result — red, as intended
+
+```
+✓ self-check: a 25.39 KB entry is caught against the 10 KB leaf ceiling, across 2 files
+  component                           own  closure  class      ceiling
+  Table                             15.30    17.83  leaf        5/10  HARD FAIL
+  DatePicker                        12.32    14.62  date       10/12  HARD FAIL
+  TimePicker                        10.80    13.14  date       10/12  over target
+  InternationalPhoneInput           10.46    27.58  locale     10/12  over target
+  …
+  30 entries measured, 4 over target, 2 over hard fail (measured on own-chunk)
+  for reference, 9 entries exceed their ceiling on closure
+✗ 2 bundle(s) over the class hard fail
+```
+
+The self-check plants a ceiling-busting entry and requires it to be caught. Its
+first draft used 400,000 repeated characters, which gzip to **0.48 KB** — the
+self-check caught its own probe not being a probe. It uses random bytes now.
+
+## Where it is wired, and where it deliberately is not
+
+`ai/04-validate.md` and the PR template, beside `verify:dist-records`.
+
+**Not** in `postbuild:lib`. That chain is `&&`-joined, so a red gate there would
+fail `build:lib`, which `prebuild` runs, which would make `npm run build` fail
+too — the whole site unbuildable because Table is 5 KB over. The breach belongs
+in validation, not in everyone's build.
+
+`validation.performance` now cites the gate as its source instead of carrying
+hand-transcribed numbers.
+
+---
+
+# Appendix O — Table's 15.30 KB, diagnosed
+
+**Report only. Nothing changed.**
+
+## First: there was never a 6.2 KB measurement
+
+`ai/07-performance.md:167` reads `- Table : 6.2kb (over 5kb threshold)`. It sits
+under `## OUTPUT FORMAT`, in a fenced block alongside `PERFORMANCE AUDIT — <ISO
+date>`, `TREE SHAKING: <PASS | FAIL>` and `Performance : <score>`.
+
+**It is the worked example showing the shape of the report.** Button 1.8kb,
+DatePicker 4.1kb and Table 6.2kb are illustrative filler. `git log -S` dates the
+line to `ec514bd` (2026-04-28), the commit that wrote the step's documentation.
+
+So Table did not grow 2.5× from an honest 6.2 KB. **It has never been measured
+before today.** The figure that has been quoted as its size is a placeholder
+somebody read as data — the same failure mode as `validation.performance`, one
+level further upstream.
+
+## What did change, and when
+
+| commit | date | Table.tsx | lines |
+|---|---|---|---|
+| 32ae771 | 2026-03-30 | 21.5 KB | 644 |
+| **aa36173** | **2026-04-02** | **74.6 KB** | **2143** |
+| ec514bd | 2026-04-28 | 81.2 KB | 2309 |
+| e55aad9 | 2026-09-01 | 83.1 KB | 2332 |
+
+One commit — *"updating all the components, working on the Table an…"* — took it
+from 644 to 2143 lines. Everything since is noise by comparison: +8.5 KB across
+five months. **Table has been this size since April.**
+
+## Where the 81 KB of source sits
+
+| region | KB raw | share |
+|---|---|---|
+| sub-render helpers | 23.8 | 29.4% |
+| column & filter derivation | 14.6 | 18.0% |
+| desktop table render | 12.8 | 15.8% |
+| imports + hooks + types | 9.8 | 12.1% |
+| mobile card view | 6.2 | 7.6% |
+| state (editing / dnd / filters) | 5.9 | 7.3% |
+| responsive + infinite scroll | 4.8 | 5.9% |
+| editing / copy / dnd handlers | 3.0 | 3.6% |
+
+By feature, counted as lines mentioning it (a line can serve two, so these
+overlap and do not sum):
+
+| feature | lines | of 2332 |
+|---|---|---|
+| expandable rows | 77 | 3.3% |
+| column filters | 70 | 3.0% |
+| column pinning | 63 | 2.7% |
+| sorting | 36 | 1.5% |
+| inline editing | 27 | 1.2% |
+| infinite scroll | 22 | 0.9% |
+| row selection | 13 | 0.6% |
+| mobile card path | 8 | 0.3% |
+| search bar | 7 | 0.3% |
+| drag & drop | 5 | 0.2% |
+
+14 `useState`, 22 `useCallback`, 10 `useMemo` in one component.
+
+## The chunk itself
+
+```
+shared/Table-D08pRczv.js        58.4 raw   15.30 gz   ← the component
+shared/useReducedMotion.js       2.8        1.28
+shared/scopedCn.js               1.6        0.72
+shared/constants.js              2.8        0.68
+components/Table/index.js        0.8        0.45
+                                            17.83 gz  closure
+```
+
+`@tanstack/react-table`, `date-fns`, `clsx` and `tailwind-merge` are external
+(`vite.config.ts:131`), so **15.30 KB is Table's own code**. `TableShimmer` and
+`icons` are *not* in it — verified by string search on the built chunk — so the
+shimmer contributes nothing to this number and removing it would save nothing.
+
+## What comes off with the composition refactor
+
+- **The 42 literal class strings.** `docs/adr/002-classes-key-vocabulary.md:10`:
+  ~125 candidate keys blocked behind the vocabulary decision, *"`Table.tsx` alone
+  accounts for 42"*. I count 54 literal `className` strings in the file totalling
+  **4.3 KB raw**. Moving them into `DEFAULT_TABLE_CLASSES` relocates the bytes
+  rather than deleting them — the win is that `unstyled` and `classes` start
+  working, not size. Expect **little or no KB**.
+- **The column-filter dropdown.** Table positions its own: an overflow-shift
+  effect at `Table.tsx:381` and a right-edge alignment handler at `:1246` with a
+  hardcoded `dropdownWidth = 220` estimate. `computeDropdownCoords` already
+  exists — **twice**, in `Dropdown/utils/helpers.ts:12` and
+  `SearchableDropdown/utils/helpers.ts:10`. That is the "positioning
+  reimplemented four times" finding from the opening audit, and Table is one of
+  the copies. Consolidating removes Table's copy and one of the other two.
+- **`useReducedMotion` / `scopedCn` / `constants`** (2.68 KB of the closure) are
+  already shared; they appear in Table's number only because the closure counts
+  what an isolated import pulls. Nothing to win.
+
+Realistic composition saving: **1–2 KB**, mostly the positioning block. It does
+not bring 15.30 under 10.
+
+## What needs Table-specific work
+
+The weight is the monolith, not any single feature:
+
+- **`sub-render helpers` at 23.8 KB (29%)** is the largest region and the obvious
+  extraction target — filter dropdowns, header cells, pin controls, the expanded
+  row. Splitting them into `Table/components/*` makes them separately
+  tree-shakeable for consumers who use none of them.
+- **The mobile card view, 6.2 KB (7.6%)**, is a second complete render path that
+  every consumer downloads whether or not they set `responsiveBreakpoint`. It is
+  the cleanest single lazy-load candidate.
+- **Inline editing, drag & drop, infinite scroll** — 5.7% of lines between them,
+  each opt-in by prop, each currently eager.
+
+Getting Table under a 10 KB leaf ceiling means splitting it. Getting it under a
+ceiling appropriate to a data grid means **deciding it is not a leaf** — a
+`grid` class alongside `date`, `locale` and `composite` is the honest option,
+and it is a threshold decision, not a refactor.
+
+## DatePicker
+
+12.32 KB against a 12 KB date-class hard fail — the ceiling we already knew
+about, first caught at 12.63 KB in AUDIT-GAP 7.2 and recorded as 10.25 KB
+throughout. Now gated.

@@ -309,6 +309,7 @@
     "lint": "eslint .",
     "typecheck": "node scripts/assert-typecheck.mjs",
     "verify:dist-records": "node scripts/assert-dist-records.mjs",
+    "verify:bundle-size": "node scripts/assert-bundle-size.mjs",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",

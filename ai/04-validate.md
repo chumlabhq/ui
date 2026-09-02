@@ -42,6 +42,17 @@ Run each check. Each is independent and must PASS.
 
 ### 4. TypeScript
 
+- [ ] `npm run verify:bundle-size` passes — measures every packaged entry's
+      gzipped size against its class ceiling and fails on a hard-fail breach.
+      Needs a `build:lib` dist. NOT wired into `postbuild:lib` on purpose: it is
+      red today (Table, DatePicker), and chaining it there would make the
+      library unbuildable and take `npm run build` with it. The breach belongs
+      in validation, not in everyone's build.
+      Reports two numbers per entry — `own`, the component's own chunk, which is
+      the basis the ceilings were set against and what the gate enforces; and
+      `closure`, the eager static closure of the public entry, which is what a
+      consumer actually downloads. Nine entries exceed their ceiling on
+      `closure`. That is a threshold decision, not a regression.
 - [ ] `npm run verify:dist-records` passes — the four dist-derived records
       (validation.build, .performance, .npmAudit, issues.high[8].evidence) are
       tied to a dist fingerprint. `postbuild:lib` clears it, so after any build

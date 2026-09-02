@@ -19,6 +19,7 @@ rework if the direction differs.
 
 - [ ] `npm test` passes
 - [ ] `npm run typecheck` passes (runs `tsc --build`; never `tsc --noEmit`)
+- [ ] `npm run verify:bundle-size` is no worse than on `main` (needs `npm run build:lib`)
 - [ ] `npm run lint` reports no errors
 - [ ] Touched components keep their keyboard and screen-reader behaviour
 - [ ] New or changed props are reflected in the component's `.schema.json`
