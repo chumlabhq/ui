@@ -48,6 +48,17 @@ const SPEC = JSON.parse(
  * element the component actually renders. Wrong selector, false failure, so
  * every one of these was read off a rendered fixture rather than guessed.
  */
+/** Components whose validation feedback Amendment B merges into one part. */
+const MESSAGE_COMPONENTS = [
+  ...new Set(
+    (
+      JSON.parse(
+        readFileSync(resolve(process.cwd(), "docs/adr/002-state-attributes.json"), "utf8"),
+      ) as { requirements: { component: string; part: string }[] }
+    ).requirements.filter((r) => r.part === "message").map((r) => r.component),
+  ),
+];
+
 const SELECTOR: Record<string, string> = {
   // Breadcrumb marks the crumb on the <a>, Pagination on the page <button>, so
   // both are part of `item` even though neither is a list element.
@@ -70,6 +81,11 @@ const SELECTOR: Record<string, string> = {
   "presetTrigger": "button",
   "pinButton": "button",
   "countrySelect.item": '[role="option"]',
+  // The validation message has no stable role — half the success elements carry
+  // none — so the union includes both attributes. That is not circular: each
+  // fixture renders exactly one of the two messages, so the OTHER attribute's
+  // absence is still measured on a real element that could have carried it.
+  "message": '[role="alert"], [role="status"], [data-invalid], [data-valid]',
 };
 
 /** Every attribute value seen on any element matching `part`, across all fixtures. */
@@ -164,6 +180,60 @@ describe("state attributes contract", () => {
       const absentSomewhere = nodes.some((n) => n.getAttribute("data-selected") === null);
       cleanup();
       expect(absentSomewhere).toBe(false);
+    });
+  });
+
+  /**
+   * Amendment B collapses `error` and `success` into one `message` part. That is
+   * only sound while at most one of the two can render: a component showing both
+   * at once would need two parts after all, and one key could not style them
+   * differently.
+   *
+   * Every component guards the success branch with `!error`, but the fixtures
+   * never set both flags, so nothing exercised the guard. This forces the
+   * conflict rather than observing its absence.
+   */
+  describe.each(MESSAGE_COMPONENTS)("%s message", (name) => {
+    it("renders one validity state, never both", async () => {
+      const entry = COMPONENTS.find((c) => c.name === name);
+      if (!entry) throw new Error(`${name} is not in the registry`);
+      const base = fixturesFor(name).find((f) => f.name === "error");
+      if (!base) throw new Error(`${name} has no error fixture to build the conflict from`);
+
+      const Component = entry.Component;
+      const element = (
+        <Component
+          {...entry.props}
+          {...(base.props as Record<string, unknown>)}
+          error
+          errorMessage="Invalid"
+          success
+          successMessage="Valid"
+        >
+          {base.children as React.ReactNode}
+        </Component>
+      );
+      render(
+        (base.wrap ? base.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
+      );
+
+      // Scoped by message text, not by attribute alone: most roots also carry
+      // data-valid, and this assertion is about the message part.
+      const messages = (attribute: string, text: string) =>
+        Array.from(document.body.querySelectorAll(`[${attribute}]`)).filter(
+          (el) => el.textContent === text,
+        );
+      const invalid = messages("data-invalid", "Invalid");
+      const valid = messages("data-valid", "Valid");
+      expect(
+        invalid.length,
+        `${name} shows no invalid message when error and success are both set`,
+      ).toBeGreaterThan(0);
+      expect(
+        valid.length,
+        `${name} renders both validity states at once, so one \`message\` part cannot style them apart`,
+      ).toBe(0);
+      cleanup();
     });
   });
 

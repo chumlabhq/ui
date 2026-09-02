@@ -249,11 +249,16 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
           </div>
         )}
 
+        {/* ADR 002 Amendment B: `error` and `success` collapse into one `message`
+            part, so validity has to be readable on the message element itself.
+            The root carries data-valid too (above), but a consumer styling the
+            merged part can only reach it from here. */}
         {error && errorMessage && (
           <div
             id={errorId}
             role="alert"
             data-slot="error"
+            data-invalid
             className={errorClassName}
           >
             {errorMessage}
@@ -265,6 +270,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
             id={successId}
             role="status"
             data-slot="success"
+            data-valid
             className={successClassName}
           >
             {successMessage}

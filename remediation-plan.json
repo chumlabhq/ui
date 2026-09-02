@@ -842,5 +842,29 @@
     "recommendation": "Either track the focused index and apply `inputFocused` to that slot alone, emitting `data-highlighted` alongside it \u2014 or drop the key and let consumers use a `focus:` variant on `input`, which is how it is currently recorded in docs/adr/002-state-attributes.json under cssPseudoReplacements. The second is cheaper and matches what the component actually does.",
     "blockedBy": "ADR 002 Task 3 \u2014 the key is deleted or repaired there, not in Task 2",
     "recordedOn": "2026-09-02"
+  },
+  {
+    "id": "ADR002-T3b.1",
+    "section": "ADR 002 \u2014 validity attributes",
+    "severity": "bug",
+    "files": [
+      "src/components/CascadingDropdown/CascadingDropdown.tsx:608",
+      "src/components/Checkbox/Checkbox.tsx:196",
+      "src/components/DatePicker/DatePicker.tsx:955",
+      "src/components/Dropdown/Dropdown.tsx:601",
+      "src/components/MultiSelectDropdown/MultiSelectDropdown.tsx:501",
+      "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.tsx:663",
+      "src/components/OtpInput/OtpInput.tsx:353",
+      "src/components/RadioButton/RadioButton.tsx:168",
+      "src/components/SearchableDropdown/SearchableDropdown.tsx:644",
+      "src/components/Slider/Slider.tsx:567",
+      "src/components/Switch/Switch.tsx:136",
+      "src/components/TimePicker/TimePicker.tsx:696"
+    ],
+    "summary": "12 components emit data-valid on the root as `{success || undefined}` with no !error guard, so the root reports valid while an error message is displayed. The library's own intent is documented against it: Input and TextArea use `{(!error && success) || undefined}`, FieldWrapper derives `showSuccess = !error && success`, and Input/__tests__/Input.test.tsx:186 asserts 'does NOT set data-valid when error is also true'. A consumer styling on [data-valid] gets a success-styled root wrapped around an error message.",
+    "evidence": "Surfaced by the new 'renders one validity state, never both' case in state-attributes.contract, which initially failed on 12 of 15 components because an unscoped [data-valid] query matched the root. The message elements themselves are correct \u2014 every one guards success with !error.",
+    "fixShape": "Change the 12 to `{(!error && success) || undefined}`, matching Input. Then widen the contract's exclusivity case from message-scoped to whole-render, which is the assertion it wanted to make in the first place.",
+    "estimate": "S",
+    "dependsOn": []
   }
 ]

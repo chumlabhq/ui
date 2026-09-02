@@ -255,13 +255,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={mergedClasses.error || undefined}>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.error || undefined}>
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

@@ -1,6 +1,6 @@
 # ADR 002 — precedent verification ledger
 
-**Status:** 5 claims resolved against live docs; 26 still unchecked
+**Status:** 18 claims verified against live docs; 3 still unchecked; 2 divergences recorded
 **Date:** 2026-09-02
 
 ## Why this exists
@@ -26,62 +26,93 @@ obliges us to justify the divergence.
 | `DIVERGENT` | The peer ships this part and we deliberately chose otherwise. Requires a stated reason, not a citation |
 | `NOVEL` | No peer ships an analogue; the name is ours and claims nothing |
 
-## Resolved this round
+## Verified against live docs
 
-Checked against `https://ark-ui.com/docs/components/date-picker`.
+### Ark Slider — `https://ark-ui.com/docs/components/slider`
+Parts: Root, Label, ValueText, Control, Track, Range, Thumb, HiddenInput, MarkerGroup, Marker.
 
-| Name | Marker | Note |
+| Our name | Peer part | Marker |
 | --- | --- | --- |
-| `positioner` | **VERIFIED** | Ark ships `Positioner` |
-| `control` | **VERIFIED** | Ark ships `Control` |
-| `presetTrigger` | **VERIFIED** | Ark ships `PresetTrigger` |
-| `navButton` | **DIVERGENT** | Ark splits `PrevTrigger` / `NextTrigger`. The old ledger cited Ark *for* `navButton`, which was wrong as written. Unified here as one part carrying `data-side`, because the two controls are structurally identical — splitting them would mint a key with no reachable difference, and R4 already resolves direction as an attribute. Recorded as DIVERGENT rather than NOVEL: Ark demonstrably has these parts, which is the definition of a divergence, not a novelty. |
-| `day` | **DIVERGENT** | Previously marked NOVEL. Ark's calendar cell is `TableCell` + `TableCellTrigger`; ours is a single button, so adopting the split would mint two keys for one element. |
+| `range` | `Slider.Range` | **VERIFIED** |
+| `track` | `Slider.Track` | **VERIFIED** |
+| `thumb` | `Slider.Thumb` | **VERIFIED** |
+| `marker` | `Slider.Marker` | **VERIFIED** |
+| `valueText` | `Slider.ValueText` | **VERIFIED** |
+| `control` | `Slider.Control` (also Combobox, Select, Field) | **VERIFIED** |
 
-`data-valid` was verified in the previous round against the Radix Form docs (custom
-validation section), which puts `[data-valid]` and `[data-invalid]` on Field, Control,
-Label and **Message** — the last of which is why Amendment B's message part is the right
-place for them.
+Ark also ships `Slider.MarkerGroup`. Recorded in `vocabularyAmendments` as the available
+name should a marker container ever need one; nothing claims it today.
 
-### The button/trigger family
+### Ark DatePicker — `https://ark-ui.com/docs/components/date-picker`
 
-`presetTrigger`, `clearButton` and `closeButton` were three spellings of one idea. Ark is
-the only peer that ships all three (`PresetTrigger`, `ClearTrigger`, `CloseTrigger`), so the
-family is unified on **Trigger**; the Button spelling would have mixed Ark with Radix
-Dialog's `Close`. `clearButton` → `clearTrigger` and `closeButton` → `closeTrigger` are
-recorded in the migration table, but only `presetTrigger` is VERIFIED — the other two are
-RECALLED and appear in the blocking list below.
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `clearTrigger` | `DatePicker.ClearTrigger` | **VERIFIED** |
+| `positioner` | `DatePicker.Positioner` | **VERIFIED** |
+| `presetTrigger` | `DatePicker.PresetTrigger` | **VERIFIED** |
+
+`clearTrigger` was the largest single blocker at 7 rows. With it verified, the button/trigger
+family is settled on Ark's Trigger spelling with two of its three members confirmed.
+
+### Radix Avatar — `https://www.radix-ui.com/primitives/docs/components/avatar`
+Parts: Root, Image, Fallback.
+
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `fallback` | `Avatar.Fallback` | **VERIFIED** |
+| `image` | `Avatar.Image` | **VERIFIED** |
+
+### Radix Checkbox — `https://www.radix-ui.com/primitives/docs/components/checkbox`
+Parts: Root, Indicator.
+
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `indicator` | `Checkbox.Indicator` | **VERIFIED** |
+
+**Citation corrected.** The old row claimed `Tabs.Indicator` under Radix. Radix Tabs has no
+Indicator part — it is Root/List/Trigger/Content. Radix's Indicator parts are Checkbox and
+NavigationMenu; `Tabs.Indicator` is Ark's. The name was right and the attribution was not,
+which is the failure mode this ledger exists to catch: a correct name resting on a citation
+nobody had opened.
+
+### Radix Accordion
+Parts: Root, Item, Header, Trigger, Content.
+
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `header` | `Accordion.Header` wrapping the trigger | **VERIFIED** |
+
+### Radix Form
+
+`data-valid` and `data-invalid` sit on Field, Control, Label and **Message**. The Message
+placement is why Amendment B's message part is the right home for them.
+
+## Divergences
+
+| Name | Marker | Reason |
+| --- | --- | --- |
+| `navButton` | **DIVERGENT** | Ark splits `PrevTrigger` / `NextTrigger`. Unified here as one part carrying `data-side`: the two controls are structurally identical, so splitting them would mint a key with no reachable difference, and R4 already resolves direction as an attribute. Recorded as DIVERGENT rather than NOVEL because Ark demonstrably ships these parts. |
+| `day` | **DIVERGENT** | Ark's calendar cell is `TableCell` + `TableCellTrigger`; ours is a single button, so adopting the split would mint two keys for one element. |
 
 ## Still RECALLED — these block renames
 
-20 rows across 10 names cannot be renamed until these are checked. Exact peer part claimed:
+4 rows across 3 names. Exact peer part claimed:
 
 | Our name | Exact peer part claimed | Library | Rows blocked |
 | --- | --- | --- | --- |
-| `clearTrigger` | `ClearTrigger` | Ark | 7 |
-| `range` | `Progress.Range`; `Slider.Range` | Ark; Radix | 4 |
-| `closeTrigger` | `Dialog.CloseTrigger` | Ark | 2 |
-| `header` | `Accordion.Header` wrapping the trigger | Radix | 1 |
-| `fallback` | `Avatar.Fallback` | Radix | 1 |
-| `resizeHandle` | `PanelResizeHandle` | react-resizable-panels | 1 |
-| `marker` | `Slider.Marker` | Ark | 1 |
-| `valueText` | `Slider.ValueText` | Ark | 1 |
-| `separator` | `Steps.Separator` as our step connector | Ark | 1 |
-| `indicator` | `Checkbox.Indicator`; `Tabs.Indicator`; `Steps.Indicator` | Radix; Ark | 1 |
+| `closeTrigger` | `Dialog.CloseTrigger` | Ark | 2 — `Modal.closeButton`, `Toast.closeButton` |
+| `resizeHandle` | `PanelResizeHandle` | react-resizable-panels | 1 — `ResizablePanel.handle` |
+| `separator` | `Steps.Separator` as our step connector | Ark | 1 — `Stepper.connector` |
 
-## Still RECALLED — not currently blocking a rename
+## Still RECALLED — not blocking a rename
 
-These names are already in use or are attribute values, so no rename waits on them, but the
-citation is still unchecked.
+Already in use, or attribute values; no rename waits on them.
 
 | Our name | Exact peer part claimed | Library |
 | --- | --- | --- |
 | `ellipsis` | `Pagination.Ellipsis` | Ark |
-| `image` | `Avatar.Image` | Radix |
 | `monthSelect` | `DatePicker.MonthSelect` | Ark |
 | `yearSelect` | `DatePicker.YearSelect` | Ark |
-| `thumb` | `Slider.Thumb`, `Switch.Thumb` | Radix |
-| `track` | `Slider.Track`; `Progress.Track` | Radix; Ark |
 | `data-invalid` | `data-invalid` on Field | Ark; Radix Form |
 | `data-state="open"` | `data-state="open\|closed"` | Radix |
 | `data-state="checked"` | Checkbox / Switch / RadioGroup | Radix |

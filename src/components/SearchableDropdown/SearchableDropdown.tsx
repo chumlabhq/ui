@@ -786,6 +786,7 @@ const SearchableDropdown = forwardRef<
         <div
           id={errorId}
           role="alert"
+          data-invalid
           className={mergedClasses.error || undefined}
         >
           {errorMessage}
@@ -793,7 +794,7 @@ const SearchableDropdown = forwardRef<
       )}
 
       {success && successMessage && !error && (
-        <div className={mergedClasses.success || undefined}>{successMessage}</div>
+        <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
       )}
     </div>
   );

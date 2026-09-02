@@ -737,6 +737,7 @@ const InternationalPhoneInput = forwardRef<
           <div
             id={errorId}
             role="alert"
+            data-invalid
             className={mergedClasses.error || undefined}
             data-slot="error"
           >
@@ -748,6 +749,7 @@ const InternationalPhoneInput = forwardRef<
           <div
             id={successId}
             role="status"
+            data-valid
             className={mergedClasses.success || undefined}
             data-slot="success"
           >

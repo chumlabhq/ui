@@ -803,12 +803,12 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" className={mergedClasses.error}>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.error}>
             {errorMessage}
           </div>
         )}
         {success && successMessage && !error && (
-          <div id={successId} className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div id={successId} data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
         )}
       </div>
     );

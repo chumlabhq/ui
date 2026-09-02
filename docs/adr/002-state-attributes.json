@@ -758,8 +758,309 @@
       "fromKeys": [
         "optionSelected"
       ]
+    },
+    {
+      "component": "CascadingDropdown",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "CascadingDropdown",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Checkbox",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Checkbox",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "DatePicker",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "DatePicker",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Dropdown",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Dropdown",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Input",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Input",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "InternationalPhoneInput",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "InternationalPhoneInput",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "OtpInput",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "OtpInput",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "RadioButton",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "RadioButton",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "SearchableDropdown",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "SearchableDropdown",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Slider",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Slider",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Switch",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "Switch",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "TextArea",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "TextArea",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "TimePicker",
+      "part": "message",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "error"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
+    },
+    {
+      "component": "TimePicker",
+      "part": "message",
+      "attribute": "data-valid",
+      "values": null,
+      "fromKeys": [
+        "success"
+      ],
+      "note": "Amendment B: `error` and `success` collapse into one `message` part, so validity must be readable on the message element. Emitted there in this slice; the key merge itself is the next one."
     }
   ],
   "amendedBy": "Amendment E \u2014 8 attributes converged, 9 added to R4, 5 kept with a reason",
-  "$comment_tiers": "A requirement with no `tier` is asserted in the jsdom contract. `browserTier` means the state needs a capability jsdom lacks (pointer capture, hover, computed style) and is asserted in e2e instead \u2014 every one is checked by a guard in the contract, so the classification cannot become a waiver wearing a new name. `blocked` names the phase that unblocks it, and the contract FAILS if a blocked requirement starts passing, because a blocker that silently resolves is how a requirement gets forgotten."
+  "$comment_tiers": "A requirement with no `tier` is asserted in the jsdom contract. `browserTier` means the state needs a capability jsdom lacks (pointer capture, hover, computed style) and is asserted in e2e instead \u2014 every one is checked by a guard in the contract, so the classification cannot become a waiver wearing a new name. `blocked` names the phase that unblocks it, and the contract FAILS if a blocked requirement starts passing, because a blocker that silently resolves is how a requirement gets forgotten.",
+  "$messageComment": "All 15 components guard the success message with !error (FieldWrapper derives `showSuccess = !error && success`; InternationalPhoneInput derives `displaySuccess = success && !displayError`), so exactly one of the two states is live per render. That is what makes a single `message` part sufficient \u2014 a component rendering both at once would need two parts after all, and the contract asserts the exclusivity rather than trusting it."
 }
