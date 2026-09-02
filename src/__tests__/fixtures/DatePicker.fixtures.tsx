@@ -1,4 +1,5 @@
 import { fireEvent } from "@testing-library/react";
+import { tick } from "./_act";
 import { DatePicker } from "../../components/DatePicker";
 import type { Fixtures } from "./types";
 
@@ -27,7 +28,26 @@ const fixtures: Fixtures<typeof DatePicker> = [
     props: { defaultOpen: true, showWeekNumbers: true },
     note: "The only fixture rendering `weekNumber`. It was waived as needing 'a locale week config the fixture could not resolve'; `showWeekNumbers` alone is enough.",
   },
-  { name: "with-markers", props: { defaultOpen: true, markers: [{ date: D, label: "Release", color: "#f00", type: "event" }] } },
+  {
+    name: "with-markers",
+    props: { defaultOpen: true, value: D, markers: [{ date: D, label: "Release", color: "#f00", type: "event" }] },
+    note: "`value` pins the calendar to the marker's month. Without it the grid opened on today and the marked day was never rendered, so data-marked had no fixture.",
+  },
+  {
+    name: "with-active-preset",
+    props: { defaultOpen: true, showPresets: true, value: new Date() },
+    note: "A preset matching the current value is the only way presetTrigger reaches its active state.",
+  },
+  {
+    name: "keyboard-focus",
+    props: { defaultOpen: true, value: D },
+    note: "Arrow-keys the grid so a day carries data-highlighted. Uses the component's own keyboard handling; touches no focus management.",
+    act: async (c) => {
+      const grid = c.ownerDocument.querySelector('[role="grid"]');
+      if (grid) fireEvent.keyDown(grid, { key: "ArrowRight" });
+      await tick();
+    },
+  },
   { name: "bounded", props: { defaultOpen: true, minDate: new Date(2026, 0, 10), maxDate: new Date(2026, 0, 20) } },
   { name: "error", props: { label: "Date", error: true, errorMessage: "Required" } },
   { name: "success", props: { label: "Date", success: true, successMessage: "Saved" } },

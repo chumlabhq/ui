@@ -46,13 +46,14 @@ const SPEC = JSON.parse(
 const SELECTOR: Record<string, string> = {
   // Breadcrumb marks the crumb on the <a>, Pagination on the page <button>, so
   // both are part of `item` even though neither is a list element.
-  "item": '[role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="tab"], [role="gridcell"], li, tr, nav a, nav button[aria-label^="Page"]',
+  "item": '[role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="tab"], [role="gridcell"], li, tr, nav a, nav span[data-state], nav button[aria-label^="Page"]',
   "subItem": '[role="option"]',
   "control": '[role="switch"], [role="checkbox"], input[type="checkbox"] + span, span[data-state], [data-state]',
   "thumb": '[role="slider"], [role="switch"] span, span[data-state]',
   "input": "input",
   "itemIndicator": "[data-status], svg",
-  "itemText": "span[data-status], span[data-state], span",
+  // Stepper's label wrapper is a div carrying data-align, not a span.
+  "itemText": "span[data-status], span[data-state], div[data-align], span",
   "itemIcon": "span[data-status], span[data-state], svg",
   "description": "[data-status]",
   "separator": "[data-next-status], [data-status]",

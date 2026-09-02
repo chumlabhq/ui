@@ -18,10 +18,7 @@
       "navButtonDisabled": "dead \u2014 zero source references; ADR 002 R4 replaces it with data-disabled",
       "dayHover": "dead \u2014 zero source references; a :hover utility on `day` is the idiomatic replacement",
       "dayFocused": "state-gated \u2014 grid focus, and DatePicker calls .focus() nowhere at all (AUDIT-GAP \u00a73.1), so no interaction can reach it until focus management lands",
-      "dayMarked": "state-gated \u2014 reached only through the marker path below",
-      "markerIndicator": "state-gated \u2014 marker rendering needs layout measurement jsdom does not provide",
-      "markerTooltip": "state-gated \u2014 needs a hover over a marked day plus positioning",
-      "presetActive": "state-gated \u2014 needs a preset whose range equals the current value; ADR 002 R4 replaces it with data-state"
+      "markerTooltip": "state-gated \u2014 needs a hover over a marked day plus positioning"
     },
     "InternationalPhoneInput": {
       "countrySelectNoResults": "state-gated \u2014 needs a search string matching no country inside the nested SearchableDropdown, and IPI exposes no path to set it"

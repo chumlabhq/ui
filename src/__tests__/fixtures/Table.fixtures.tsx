@@ -15,6 +15,11 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "default", props: { data: ROWS, columns: COLUMNS } },
   { name: "empty", props: { data: [], columns: COLUMNS } },
   { name: "loading", props: { data: [], columns: COLUMNS, loading: true } },
+  {
+    name: "pinned-column",
+    props: { data: ROWS, columns: COLUMNS, pinnedColumns: ["name"], pinnableColumns: ["name", "role"] },
+    note: "The only fixture where pinButton reaches data-state=active.",
+  },
   { name: "with-search", props: { data: ROWS, columns: COLUMNS, showSearch: true } },
   { name: "with-footer", props: { data: ROWS, columns: COLUMNS, showFooter: true, footerContent: "Total" } },
   {

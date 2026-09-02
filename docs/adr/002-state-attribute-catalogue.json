@@ -45,7 +45,7 @@
     "data-success": {
       "sites": 16,
       "to": "data-valid",
-      "precedent": "Radix Form emits [data-valid] and [data-invalid] together on Field, Control, Label and Message. NOT independently verified here: Radix is not a dependency of this repo and the check had no network access; recorded on the reviewer's statement. The asymmetry with data-invalid is what made keeping data-success awkward, and this removes it."
+      "precedent": "Radix Form adds both [data-valid] and [data-invalid] to Field, Control, Label and Message \u2014 https://www.radix-ui.com/primitives/docs/components/form, under custom validation. Verified on review 2026-09-02. The asymmetry with data-invalid is what made keeping data-success awkward, and this removes it."
     }
   },
   "addToR4": {

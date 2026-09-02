@@ -119,7 +119,7 @@ classification is `docs/adr/002-state-attribute-catalogue.json`; the state-beari
 | `data-pending` | `data-state="inactive"` | Ark Steps |
 | `data-position` | `data-side` | Radix Popper |
 | `data-focused` | `data-highlighted` | Radix, Ark — landed in the first slice |
-| `data-success` | `data-valid` | Radix Form emits `[data-valid]` beside `[data-invalid]`. Recorded on review; not independently verified — Radix is not a dependency here. |
+| `data-success` | `data-valid` | Radix Form adds `[data-valid]` and `[data-invalid]` to Field, Control, Label and Message ([docs](https://www.radix-ui.com/primitives/docs/components/form), custom validation) |
 
 **Added to R4** — 9 attributes: `data-today` (Ark DatePicker), `data-dragging` (Ark Slider),
 `data-placeholder` (Radix Select), and six marked NOVEL because no peer ships a data grid or

@@ -484,6 +484,8 @@ const StepItem = memo(function StepItem({
         )}
         data-status={status}
       {...stateAttrsFor(status)}
+        data-disabled={isDisabled || undefined}
+        data-clickable={isClickable || undefined}
         data-orientation={orientation}
       >
         {wrapWithTooltip(indicatorEl)}
@@ -537,6 +539,8 @@ const StepItem = memo(function StepItem({
       data-status={status}
       {...stateAttrsFor(status)}
       data-orientation={orientation}
+      data-disabled={isDisabled || undefined}
+      data-clickable={isClickable || undefined}
     >
       {wrapWithTooltip(stepContent)}
     </li>

@@ -827,5 +827,20 @@
       "7.1",
       "GH-1.4"
     ]
+  },
+  {
+    "id": "ADR002-T2.1",
+    "section": "ADR 002 Task 2 \u2014 state attributes",
+    "severity": "bug",
+    "files": [
+      "src/components/OtpInput/OtpInput.tsx:303",
+      "src/components/OtpInput/utils/constants.ts:10",
+      "src/components/OtpInput/utils/constants.ts:26"
+    ],
+    "summary": "OtpInput's `inputFocused` class is applied to EVERY slot unconditionally, so a consumer who sets `classes.inputFocused` styles all six inputs rather than the focused one. It is not merely a dead key: it is a shipped styling bug with a public key attached.",
+    "evidence": "OtpInput.tsx:303 reads `className: cn(mergedClasses.input, mergedClasses.inputFocused, individualClassName)` \u2014 `inputFocused` sits beside `input` with no condition guarding it. Its default is the empty string in both DEFAULT_OTPINPUT_CLASSES (constants.ts:10) and UNSTYLED_OTPINPUT_CLASSES (:26), which is why nothing has looked wrong: with an empty default the unconditional application is invisible until a consumer overrides the key. The component tracks no focus index \u2014 `handleFocus` only selects the slot's contents \u2014 so there is no state a data attribute could carry either. Found while deriving ADR 002 R4's replacement attributes: `inputFocused` was the one deleted-as-state key with no state behind it.",
+    "recommendation": "Either track the focused index and apply `inputFocused` to that slot alone, emitting `data-highlighted` alongside it \u2014 or drop the key and let consumers use a `focus:` variant on `input`, which is how it is currently recorded in docs/adr/002-state-attributes.json under cssPseudoReplacements. The second is cheaper and matches what the component actually does.",
+    "blockedBy": "ADR 002 Task 3 \u2014 the key is deleted or repaired there, not in Task 2",
+    "recordedOn": "2026-09-02"
   }
 ]
