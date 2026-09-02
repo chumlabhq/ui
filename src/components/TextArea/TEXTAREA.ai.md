@@ -61,7 +61,7 @@ export default function Example() {
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
 - `data-error` on root — when error state
-- `data-success` on root — when success state
+- `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
 - `data-slot="textarea"` on the textarea element
 - `data-slot="count"` on the character count

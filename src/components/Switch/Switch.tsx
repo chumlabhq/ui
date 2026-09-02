@@ -133,7 +133,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         data-state={isChecked ? "checked" : "unchecked"}
         data-error={error || undefined}
         data-loading={loading || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
       >
         <div className={mergedClasses.innerRow || undefined}>
@@ -204,6 +204,8 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
                 mergedClasses.thumb,
                 isChecked ? mergedClasses.checkedThumb : mergedClasses.uncheckedThumb,
               ) || undefined}
+              // ADR 002 R4: the state the checkedThumb/uncheckedThumb keys named.
+              data-state={isChecked ? "checked" : "unchecked"}
               style={transitionStyle}
             >
               {isChecked ? checkedIcon : uncheckedIcon}

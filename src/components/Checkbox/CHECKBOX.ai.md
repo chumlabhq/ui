@@ -65,7 +65,7 @@ This renders correctly with no additional props, classes, or setup.
 - `data-shape` on root — "square", "rounded", or "circle"
 - `data-reduce-motion` on root — when reduced motion active
 - `data-loading` on root — when loading
-- `data-success` on root — when success state
+- `data-valid` on root — when success state
 
 DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelContainer > label-text + description) + error/success`
 

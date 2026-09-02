@@ -160,14 +160,14 @@ describe("TextArea", () => {
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
-    it("sets data-success on container only when no error", () => {
+    it("sets data-valid on container only when no error", () => {
       render(<TextArea aria-label="test" success className="test-container" />);
-      expect(document.querySelector(".test-container")).toHaveAttribute("data-success", "true");
+      expect(document.querySelector(".test-container")).toHaveAttribute("data-valid", "true");
     });
 
-    it("does NOT set data-success when error is also true", () => {
+    it("does NOT set data-valid when error is also true", () => {
       render(<TextArea aria-label="test" success error className="test-container" />);
-      expect(document.querySelector(".test-container")).not.toHaveAttribute("data-success");
+      expect(document.querySelector(".test-container")).not.toHaveAttribute("data-valid");
     });
 
     it("applies classes.success to success message", () => {

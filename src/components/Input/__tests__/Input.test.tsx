@@ -177,16 +177,16 @@ describe("Input", () => {
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
 
-    it("sets data-success on container only when no error", () => {
+    it("sets data-valid on container only when no error", () => {
       render(<Input aria-label="test" success className="test-container" />);
       const container = document.querySelector(".test-container");
-      expect(container).toHaveAttribute("data-success", "true");
+      expect(container).toHaveAttribute("data-valid", "true");
     });
 
-    it("does NOT set data-success when error is also true", () => {
+    it("does NOT set data-valid when error is also true", () => {
       render(<Input aria-label="test" success error className="test-container" />);
       const container = document.querySelector(".test-container");
-      expect(container).not.toHaveAttribute("data-success");
+      expect(container).not.toHaveAttribute("data-valid");
     });
 
     it("applies classes.success to success message", () => {

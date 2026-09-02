@@ -32,6 +32,7 @@ const TabButton = memo(function TabButton({
         classNames.icon,
         isActive ? classNames.iconActive : classNames.iconInactive,
       ) || undefined}
+      data-state={isActive ? "active" : "inactive"}
       aria-hidden="true"
     >
       {tab.icon}
@@ -44,6 +45,7 @@ const TabButton = memo(function TabButton({
         classNames.label,
         isActive ? classNames.labelActive : classNames.labelInactive,
       ) || undefined}
+      data-state={isActive ? "active" : "inactive"}
     >
       {tab.label}
     </span>
@@ -55,6 +57,7 @@ const TabButton = memo(function TabButton({
         classNames.count,
         isActive ? classNames.countActive : classNames.countInactive,
       ) || undefined}
+      data-state={isActive ? "active" : "inactive"}
       aria-label={`${count} items`}
     >
       {count}

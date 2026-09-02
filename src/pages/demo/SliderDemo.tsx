@@ -769,7 +769,7 @@ const SliderDemo = () => {
             <PropRow name="data-disabled" type="Root, thumb" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-error" type="Root" description="Present when error state is active" isDarkMode={dark} />
             <PropRow name="data-loading" type="Root" description="Present when loading=true" isDarkMode={dark} />
-            <PropRow name="data-success" type="Root" description="Present when success=true (without error)" isDarkMode={dark} />
+            <PropRow name="data-valid" type="Root" description="Present when success=true (without error)" isDarkMode={dark} />
             <PropRow name="data-orientation" type="Root, wrapper" description='"horizontal" or "vertical"' isDarkMode={dark} />
             <PropRow name="data-index" type="Thumb" description="0 for single/first thumb, 1 for second range thumb" isDarkMode={dark} />
             <PropRow name="data-dragging" type="Thumb" description="Present when thumb is being dragged" isDarkMode={dark} />

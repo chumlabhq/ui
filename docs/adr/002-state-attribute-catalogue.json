@@ -41,6 +41,11 @@
       "sites": 6,
       "to": "data-side",
       "precedent": "Radix Popper emits data-side"
+    },
+    "data-success": {
+      "sites": 16,
+      "to": "data-valid",
+      "precedent": "Radix Form emits [data-valid] and [data-invalid] together on Field, Control, Label and Message. NOT independently verified here: Radix is not a dependency of this repo and the check had no network access; recorded on the reviewer's statement. The asymmetry with data-invalid is what made keeping data-success awkward, and this removes it."
     }
   },
   "addToR4": {
@@ -82,10 +87,6 @@
     }
   },
   "keepWithReason": {
-    "data-success": {
-      "sites": 16,
-      "reason": "R4 has data-invalid but no positive counterpart, and no peer ships one. Renaming it data-valid would mint a term nothing else uses. Amendment B puts error|success on the MESSAGE part's data-state; this attribute stays on the field root, where it says something data-invalid cannot."
-    },
     "data-status": {
       "sites": 15,
       "reason": "Stepper's own enum (completed|active|pending|error). data-state now carries the library-wide value alongside it, but data-status keeps `error` and `pending`, which data-state's vocabulary cannot express in one slot."
@@ -166,9 +167,9 @@
   },
   "totals": {
     "distinctAttributesEmitted": 86,
-    "converge": 8,
+    "converge": 9,
     "addToR4": 9,
-    "keptWithReason": 5,
+    "keptWithReason": 4,
     "notState": 54,
     "classified": 76
   }

@@ -295,6 +295,8 @@ const StepItem = memo(function StepItem({
           classes.labelWrapper,
           isLabelBottom && classes.labelWrapperBottom,
         )}
+        // ADR 002 R4: the state the labelWrapperBottom key named.
+        data-align={isLabelBottom ? "bottom" : undefined}
       >
         {showLabels && step.label && (
           <span
@@ -408,6 +410,11 @@ const StepItem = memo(function StepItem({
         data-status={status}
       {...stateAttrsFor(status)}
         data-orientation={orientation}
+        // ADR 002 R4: the states stepDisabled and stepInteractive named. Clickable
+        // is not the inverse of disabled — a step ahead of the current one is
+        // neither clickable nor disabled.
+        data-disabled={isDisabled || undefined}
+        data-clickable={isClickable || undefined}
       >
         {wrapWithTooltip(stepContent)}
         {verticalConnector}

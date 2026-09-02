@@ -517,11 +517,11 @@ describe("InternationalPhoneInput", () => {
   });
 
   describe("Success state", () => {
-    it("sets data-success on root when success is true", () => {
+    it("sets data-valid on root when success is true", () => {
       const { container } = render(
         <InternationalPhoneInput success />
       );
-      expect(container.firstElementChild).toHaveAttribute("data-success");
+      expect(container.firstElementChild).toHaveAttribute("data-valid");
     });
   });
 

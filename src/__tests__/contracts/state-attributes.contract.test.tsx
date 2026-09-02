@@ -44,14 +44,16 @@ const SPEC = JSON.parse(
  * every one of these was read off a rendered fixture rather than guessed.
  */
 const SELECTOR: Record<string, string> = {
-  "item": '[role="option"], [role="menuitem"], [role="tab"], [role="gridcell"], li, tr',
+  // Breadcrumb marks the crumb on the <a>, Pagination on the page <button>, so
+  // both are part of `item` even though neither is a list element.
+  "item": '[role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="tab"], [role="gridcell"], li, tr, nav a, nav button[aria-label^="Page"]',
   "subItem": '[role="option"]',
   "control": '[role="switch"], [role="checkbox"], input[type="checkbox"] + span, span[data-state], [data-state]',
   "thumb": '[role="slider"], [role="switch"] span, span[data-state]',
   "input": "input",
   "itemIndicator": "[data-status], svg",
-  "itemText": "span[data-status], span",
-  "itemIcon": "span[data-status], svg",
+  "itemText": "span[data-status], span[data-state], span",
+  "itemIcon": "span[data-status], span[data-state], svg",
   "description": "[data-status]",
   "separator": "[data-next-status], [data-status]",
   "count": "span",
@@ -86,15 +88,15 @@ const collect = async (componentName: string, part: string, attribute: string) =
     fixtures += 1;
 
     const nodes = Array.from(document.body.querySelectorAll(selector));
-    let anyHere = false;
     for (const n of nodes) {
       const v = n.getAttribute(attribute);
-      if (v !== null) {
-        seen.add(v);
-        anyHere = true;
-      }
+      if (v !== null) seen.add(v);
+      // Per ELEMENT, not per fixture: a boolean state is meaningful when some
+      // matching element lacks it, and the interesting case is a disabled
+      // option sitting beside enabled ones in the SAME fixture. Checking this
+      // per fixture asked a weaker question and passed things it should not.
+      else absentSomewhere = true;
     }
-    if (nodes.length > 0 && !anyHere) absentSomewhere = true;
     cleanup();
   }
   return { seen, absentSomewhere, fixtures };

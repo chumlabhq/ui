@@ -350,7 +350,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-loading={loading || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
         {...rest}
       >
         {label && (

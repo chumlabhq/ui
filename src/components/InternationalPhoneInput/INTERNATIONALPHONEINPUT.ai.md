@@ -71,13 +71,13 @@ export default function Example() {
 **Root (`data-slot="root"`):**
 - `data-disabled` — when `disabled={true}`
 - `data-error` — when `error={true}` or validation fails
-- `data-success` — when `success={true}` (without error)
+- `data-valid` — when `success={true}` (without error)
 - `data-readonly` — when `readOnly={true}`
 - `data-full-width` — when `fullWidth={true}`
 - `data-loading` — when `loading={true}`
 
 **Input (`data-slot="input"`):**
-- `data-disabled`, `data-error`, `data-success`, `data-readonly` — mirrors root
+- `data-disabled`, `data-error`, `data-valid`, `data-readonly` — mirrors root
 
 **Other slots:** `data-slot="label"`, `data-slot="wrapper"`, `data-slot="error"`, `data-slot="success"`
 

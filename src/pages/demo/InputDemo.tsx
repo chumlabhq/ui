@@ -1505,7 +1505,7 @@ const InputDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="data-success"
+              name="data-valid"
               type="container, input"
               description="Present when success = true (without error)"
               isDarkMode={dark}

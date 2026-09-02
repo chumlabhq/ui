@@ -595,7 +595,7 @@ const InternationalPhoneInput = forwardRef<
         data-slot="root"
         data-disabled={disabled || undefined}
         data-error={displayError || undefined}
-        data-success={displaySuccess || undefined}
+        data-valid={displaySuccess || undefined}
         data-readonly={readOnly || undefined}
         data-full-width={fullWidth || undefined}
         data-loading={loading || undefined}
@@ -683,7 +683,7 @@ const InternationalPhoneInput = forwardRef<
             data-slot="input"
             data-disabled={disabled || undefined}
             data-error={displayError || undefined}
-            data-success={displaySuccess || undefined}
+            data-valid={displaySuccess || undefined}
             data-readonly={readOnly || undefined}
             {...rest}
           />

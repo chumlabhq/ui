@@ -598,7 +598,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-full-width={fullWidth || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
       >
         {label && (
           <label

@@ -30,6 +30,13 @@
       "part": "pinButton",
       "key": "pinnedPinIconHover",
       "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
+    },
+    {
+      "component": "OtpInput",
+      "part": "input",
+      "key": "inputFocused",
+      "replacement": "a Tailwind focus: variant on `input`; no attribute needed",
+      "evidence": "The key never expressed a tracked state. OtpInput.tsx:303 applies mergedClasses.inputFocused to EVERY slot unconditionally, and its default in utils/constants.ts is the empty string. A consumer setting classes.inputFocused today styles all six inputs, not the focused one. OtpInput tracks no focus index, so there is no state for an attribute to carry \u2014 this is a bug in the key, not a gap in R4."
     }
   ],
   "requirements": [
@@ -308,15 +315,6 @@
       "values": null,
       "fromKeys": [
         "optionSelected"
-      ]
-    },
-    {
-      "component": "OtpInput",
-      "part": "input",
-      "attribute": "data-highlighted",
-      "values": null,
-      "fromKeys": [
-        "inputFocused"
       ]
     },
     {

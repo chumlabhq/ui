@@ -72,7 +72,7 @@ export default function Example() {
 ## Data Attributes (for CSS selectors and testing)
 
 **Root element:**
-- `data-disabled`, `data-error`, `data-open`, `data-full-width`, `data-success`
+- `data-disabled`, `data-error`, `data-open`, `data-full-width`, `data-valid`
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open`, `data-placeholder`

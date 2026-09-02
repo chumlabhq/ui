@@ -975,7 +975,7 @@ const SearchableDropdownDemo = () => {
       {/* ─── Success State ─────────────────────────────────────────────────── */}
       <Section
         title="Success State"
-        description="Use success and successMessage to display a success confirmation. The trigger receives data-success for custom styling."
+        description="Use success and successMessage to display a success confirmation. The trigger receives data-valid for custom styling."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -2141,7 +2141,7 @@ const SearchableDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="data-success"
+              name="data-valid"
               type="root, trigger"
               description="Present when in success state"
               isDarkMode={dark}

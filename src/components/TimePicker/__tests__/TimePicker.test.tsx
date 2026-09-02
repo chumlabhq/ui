@@ -286,11 +286,11 @@ describe("TimePicker", () => {
       expect(screen.getByText("Looks good")).toBeInTheDocument();
     });
 
-    it("sets data-success on root when success", () => {
+    it("sets data-valid on root when success", () => {
       const { container } = render(<TimePicker success />);
 
       const root = container.firstElementChild;
-      expect(root).toHaveAttribute("data-success", "true");
+      expect(root).toHaveAttribute("data-valid", "true");
     });
   });
 

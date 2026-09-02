@@ -242,6 +242,8 @@ const OptionItem = memo(function OptionItem({
       classes.checkbox,
       isSelected && classes.checkboxChecked,
     ) || undefined;
+  // ADR 002 R4: the state the checkboxChecked key named.
+  const checkboxState = isSelected ? "checked" : "unchecked";
 
   return (
     <div
@@ -256,7 +258,7 @@ const OptionItem = memo(function OptionItem({
       onClick={() => onToggle(option)}
       onMouseEnter={() => onHover(index)}
     >
-      <span className={combinedCheckboxClassName} data-checked={isSelected || undefined}>
+      <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected && (checkboxIcon || <CheckIcon className={classes.checkboxIcon || undefined} />)}
       </span>
       <span className="flex-1 truncate">
@@ -658,7 +660,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-full-width={fullWidth || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
       >
         {label && (
           <label

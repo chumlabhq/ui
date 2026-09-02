@@ -38,6 +38,8 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       classes.checkbox,
       isSelected && classes.checkboxChecked,
     ) || undefined;
+  // ADR 002 R4: the state the checkboxChecked key named.
+  const checkboxState = isSelected ? "checked" : "unchecked";
 
   return (
     <div
@@ -52,7 +54,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       onClick={() => onToggle(option)}
       onMouseEnter={() => onHover(index)}
     >
-      <span className={combinedCheckboxClassName} data-checked={isSelected || undefined}>
+      <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected &&
           (checkboxIcon || (
             <CheckIcon className={classes.checkboxIcon || undefined} />

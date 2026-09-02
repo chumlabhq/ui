@@ -788,7 +788,7 @@ const RadioButtonDemo = () => {
             <PropRow name="data-disabled" type="RadioButton, RadioGroup" description="Present when disabled" isDarkMode={dark} />
             <PropRow name="data-value" type="RadioButton" description="The value prop of the radio button" isDarkMode={dark} />
             <PropRow name="data-error" type="RadioGroup" description="Present when error=true" isDarkMode={dark} />
-            <PropRow name="data-success" type="RadioGroup" description="Present when success=true" isDarkMode={dark} />
+            <PropRow name="data-valid" type="RadioGroup" description="Present when success=true" isDarkMode={dark} />
             <PropRow name="data-loading" type="RadioGroup" description="Present when loading=true" isDarkMode={dark} />
             <PropRow name="data-orientation" type="RadioGroup" description='"horizontal" or "vertical"' isDarkMode={dark} />
             <PropRow name="data-reduce-motion" type="RadioGroup" description="Present when reduced motion is active" isDarkMode={dark} />

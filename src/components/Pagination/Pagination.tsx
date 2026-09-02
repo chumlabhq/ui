@@ -569,6 +569,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 }
                 aria-label={pageAriaLabel ? pageAriaLabel(item) : `Page ${item}`}
                 aria-current={safeCurrentPage === item ? "page" : undefined}
+                data-state={safeCurrentPage === item ? "active" : undefined}
                 data-active={safeCurrentPage === item || undefined}
               >
                 {item}

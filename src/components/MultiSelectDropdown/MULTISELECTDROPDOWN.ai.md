@@ -75,7 +75,7 @@ export default function Example() {
 - `data-error` — when `error={true}`
 - `data-open` — when dropdown is open
 - `data-full-width` — when `fullWidth={true}`
-- `data-success` — when `success={true}`
+- `data-valid` — when `success={true}`
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root

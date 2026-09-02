@@ -193,7 +193,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         data-shape={shape || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
         data-loading={loading || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span

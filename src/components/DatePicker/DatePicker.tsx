@@ -952,7 +952,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-loading={loading || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
       >
         {label && (
           <label htmlFor={triggerId} className={mergedClasses.label}>

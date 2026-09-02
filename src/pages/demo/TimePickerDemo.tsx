@@ -1468,7 +1468,7 @@ const TimePickerDemo = () => {
             <PropRow name="data-error" type="root" description="Present when error=true" isDarkMode={dark} />
             <PropRow name="data-open" type="root" description="Present when dropdown/clock is open" isDarkMode={dark} />
             <PropRow name="data-loading" type="root" description="Present when loading=true" isDarkMode={dark} />
-            <PropRow name="data-success" type="root" description="Present when success=true (without error)" isDarkMode={dark} />
+            <PropRow name="data-valid" type="root" description="Present when success=true (without error)" isDarkMode={dark} />
             <PropRow name="data-position" type="dropdown" description='"top" or "bottom" — current dropdown position' isDarkMode={dark} />
             <PropRow name="data-selected" type="option" description="Present on the currently selected time option" isDarkMode={dark} />
             <PropRow name="data-highlighted" type="option" description="Present on the keyboard-focused time option" isDarkMode={dark} />

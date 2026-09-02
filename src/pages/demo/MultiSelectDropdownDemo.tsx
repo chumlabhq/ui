@@ -2013,7 +2013,7 @@ const MultiSelectDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="data-success"
+              name="data-valid"
               type="root, trigger"
               description="Present when in success state"
               isDarkMode={dark}

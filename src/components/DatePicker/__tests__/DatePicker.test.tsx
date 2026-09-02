@@ -354,10 +354,10 @@ describe("DatePicker", () => {
       expect(root).toHaveAttribute("data-error");
     });
 
-    it("sets data-success on the root when success is true", () => {
+    it("sets data-valid on the root when success is true", () => {
       const { container } = render(<DatePicker success />);
       const root = container.firstElementChild;
-      expect(root).toHaveAttribute("data-success");
+      expect(root).toHaveAttribute("data-valid");
     });
 
     it("renders success message text", () => {

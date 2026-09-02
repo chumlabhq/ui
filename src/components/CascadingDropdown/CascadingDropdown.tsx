@@ -605,7 +605,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-open={isOpen || undefined}
-        data-success={success || undefined}
+        data-valid={success || undefined}
         data-full-width={fullWidth || undefined}
       >
         {label && (

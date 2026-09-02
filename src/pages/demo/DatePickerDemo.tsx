@@ -2100,7 +2100,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               isDarkMode={dark}
             />
             <PropRow
-              name="data-success"
+              name="data-valid"
               type="root"
               description="Present when success=true (without error)"
               isDarkMode={dark}

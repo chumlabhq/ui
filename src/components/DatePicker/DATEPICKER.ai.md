@@ -69,7 +69,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-error` -- when error state is active
 - `data-open` -- when calendar is open
 - `data-loading` -- when loading state is active
-- `data-success` -- when success state is active
+- `data-valid` -- when success state is active
 
 ### Day cells
 - `data-selected` -- selected day

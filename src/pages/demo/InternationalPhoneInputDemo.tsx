@@ -2078,7 +2078,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
               isDarkMode={dark}
             />
             <PropRow
-              name="data-success"
+              name="data-valid"
               type="root, input"
               description="Present when success = true (without error)"
               isDarkMode={dark}
