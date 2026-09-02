@@ -1,6 +1,7 @@
+import { CountryFlag } from "../../components/CountryFlag";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof CountryFlag> = [
   {
     name: "resolved",
     props: { code: "US" },

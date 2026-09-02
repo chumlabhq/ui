@@ -47,7 +47,7 @@ export default function Example() {
 | Prop | Constraint |
 |------|-----------|
 | `length` | Defaults to 6. Controls number of input fields. |
-| `inputPattern` | Regex string restricting allowed characters, e.g. `"\\d*"` for digits only. Also drives `inputMode`. |
+| `inputPattern` | Regex string restricting allowed characters, e.g. `"\\d*"` for digits only. The single source for what a slot accepts: it sets the `pattern` attribute, drives `inputMode`, names the slots "Digit" or "Character", **and filters typed and pasted characters**. |
 | `inputType` | `"text"` (default), `"tel"`, or `"password"`. Use `"password"` to mask characters. |
 | `groups` | Array like `[3, 3]` to visually group inputs with separators. Sum must equal `length`. |
 | `validate` | Custom function `(char) => boolean`. Overrides `inputPattern` filtering. |
@@ -81,15 +81,37 @@ export default function Example() {
 | `allowPaste` | boolean | `true` | Enables pasting OTP values. |
 | `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
 | `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
-| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
+| `inputPattern` | string | `"\\\\d*"` | Allowed characters. Sets the `pattern` attribute and filters input. Default accepts digits only. |
 | `inputClassNames` | array | — | Per-input CSS class overrides. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
-| `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
+| `validate` | object | — | (char: string) => boolean - Per-character filter. Overrides the one derived from `inputPattern`. |
 | `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
 | `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
+
+## Changed behaviour
+
+**A default `<OtpInput />` now rejects non-digits.**
+
+`inputPattern` defaults to `"\\d*"` and has always set the `pattern` attribute,
+`inputMode="numeric"` and the "Digit N of M" slot labels. It did not filter,
+because `pattern` is form-validation metadata that browsers do not apply to
+typing — so the component told the browser, the soft keyboard and the screen
+reader that it wanted digits, and then accepted letters (E2E-TRIAGE.md). The
+filter is now derived from the same pattern, so all four agree.
+
+- **Digits-only consumers:** no change; this is what the labels already claimed.
+- **Consumers relying on the permissive default** must now say so, with
+  `inputPattern="[\\s\\S]"` or an explicit `validate`.
+- **Alphanumeric codes:** `inputPattern="[A-Za-z0-9]"`, which also widens
+  `inputMode` to `"text"` and relabels the slots "Character N of M".
+- An explicit `validate` still wins outright.
+- A pattern that will not compile falls back to accepting everything, matching
+  what the browser does with the attribute.
+
+---
 
 ## Accessibility
 

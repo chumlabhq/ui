@@ -208,6 +208,11 @@ const rtlTabs: Tab[] = [
 
 // ─── Themed Classes ──────────────────────────────────────────────────────────
 
+// `text-cl-text-secondary`, never tertiary: tertiary is ~3.4:1 on the page
+// ground and fails WCAG AA for text. The library moved TabPanel's own
+// `tabInactive` off it (TabPanel/utils/constants.ts:14); this map used to hand
+// it straight back on every instance the page renders, which is what made the
+// old whole-page axe audit report 77 contrast nodes (E2E-TRIAGE.md Appendix D).
 const getClasses = (dark: boolean) => ({
   tabs: {
     underline: {
@@ -216,8 +221,8 @@ const getClasses = (dark: boolean) => ({
       tab: "relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
       tabActive: dark ? "text-cl-accent" : "text-cl-accent",
       tabInactive: dark
-        ? "text-cl-text-tertiary hover:text-cl-text"
-        : "text-cl-text-tertiary hover:text-cl-text",
+        ? "text-cl-text-secondary hover:text-cl-text"
+        : "text-cl-text-secondary hover:text-cl-text",
       tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
       indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
       panel: "p-4",
@@ -233,7 +238,7 @@ const getClasses = (dark: boolean) => ({
         ? "bg-cl-bg-elevated text-white shadow-sm"
         : "bg-white text-cl-text shadow-sm",
       tabInactive: dark
-        ? "text-cl-text-tertiary hover:text-cl-text"
+        ? "text-cl-text-secondary hover:text-cl-text"
         : "text-cl-text-secondary hover:text-cl-text",
       tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
       panel: "p-4 mt-2",
@@ -244,21 +249,21 @@ const getClasses = (dark: boolean) => ({
       tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none",
       tabActive: dark ? "text-cl-accent" : "text-cl-accent",
       tabInactive: dark
-        ? "text-cl-text-tertiary hover:text-cl-text"
-        : "text-cl-text-tertiary hover:text-cl-text",
+        ? "text-cl-text-secondary hover:text-cl-text"
+        : "text-cl-text-secondary hover:text-cl-text",
       tabDisabled: dark
-        ? "opacity-40 cursor-not-allowed hover:text-cl-text-tertiary"
-        : "opacity-40 cursor-not-allowed hover:text-cl-text-tertiary",
+        ? "opacity-40 cursor-not-allowed hover:text-cl-text-secondary"
+        : "opacity-40 cursor-not-allowed hover:text-cl-text-secondary",
       tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
       iconActive: dark ? "text-cl-accent" : "text-cl-accent",
-      iconInactive: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+      iconInactive: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
       count: "px-2 py-0.5 text-xs font-semibold rounded-full",
       countActive: dark
         ? "bg-cl-accent/20 text-cl-accent"
         : "bg-cl-accent/10 text-cl-accent",
       countInactive: dark
-        ? "bg-cl-bg-elevated text-cl-text-tertiary"
-        : "bg-cl-bg-hover text-cl-text-tertiary",
+        ? "bg-cl-bg-elevated text-cl-text-secondary"
+        : "bg-cl-bg-hover text-cl-text-secondary",
       indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent dark:bg-cl-accent/90`,
       panel: "p-4",
     },
@@ -268,10 +273,10 @@ const getClasses = (dark: boolean) => ({
   contentTitle: `text-base font-semibold mb-1 text-cl-text`,
   contentCard: `rounded-cl-md p-4 bg-cl-bg-hover border border-cl-border dark:bg-cl-text/[0.02] dark:border dark:border-cl-text/[0.04]`,
   stat: `text-2xl font-bold text-cl-text`,
-  statLabel: `text-xs text-cl-text-tertiary`,
+  statLabel: `text-xs text-cl-text-secondary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
-  label: `text-xs font-medium text-cl-text-tertiary`,
+  label: `text-xs font-medium text-cl-text-secondary`,
  note: `mt-3 p-3 rounded-cl-md text-xs bg-cl-bg-elevated border border-cl-border text-cl-accent`,
   btn: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text hover:bg-cl-bg-elevated`,
   btnPrimary: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-text text-cl-bg hover:opacity-90`,
@@ -452,8 +457,8 @@ const TabPanelDemo = () => {
                 ? "bg-cl-bg-elevated text-cl-accent border-cl-border border-b-gray-800 rounded-t-lg"
                 : "bg-white text-cl-accent border-cl-border border-b-white rounded-t-lg",
               tabInactive: dark
-                ? "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-elevated"
-                : "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover",
+                ? "text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated"
+                : "text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover",
               tabFocus: c.tabs.underline.tabFocus,
  panel: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-white dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
             }}
@@ -737,10 +742,10 @@ const TabPanelDemo = () => {
                 ? "bg-cl-bg-elevated text-cl-accent shadow-md"
                 : "bg-white text-cl-accent shadow-md",
               tabInactive: dark
-                ? "text-cl-text-tertiary hover:text-cl-accent hover:bg-cl-bg-elevated/50"
-                : "text-cl-text-tertiary hover:text-cl-accent hover:bg-cl-text/50",
+                ? "text-cl-text-secondary hover:text-cl-accent hover:bg-cl-bg-elevated/50"
+                : "text-cl-text-secondary hover:text-cl-accent hover:bg-cl-text/50",
               iconActive: dark ? "text-cl-accent" : "text-cl-accent",
-              iconInactive: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
+              iconInactive: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
               panel: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
             }}
           >
@@ -913,7 +918,7 @@ const TabPanelDemo = () => {
               </TabPanel>
             ) : (
               <div
-                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-tertiary dark:border dark:border-cl-border dark:text-cl-text-tertiary`}
+                className={`p-8 text-center rounded-cl-md border-2 border-dashed border-cl-border text-cl-text-secondary dark:border dark:border-cl-border dark:text-cl-text-secondary`}
               >
                 No tabs. Click &quot;Add Tab&quot; to create one.
               </div>
@@ -965,8 +970,8 @@ const TabPanelDemo = () => {
                 ? "text-cl-accent bg-cl-accent/30"
                 : "text-cl-accent bg-cl-accent/10",
               tabInactive: dark
-                ? "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-elevated"
-                : "text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover",
+                ? "text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated"
+                : "text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover",
               tabFocus: c.tabs.underline.tabFocus,
               iconActive: c.tabs.icon.iconActive,
               iconInactive: c.tabs.icon.iconInactive,

@@ -1,6 +1,7 @@
+import { ResizablePanel } from "../../components/ResizablePanel";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof ResizablePanel> = [
   { name: "default", props: {}, children: <div>Panel</div> },
   { name: "disabled", props: { disabled: true }, children: <div>Panel</div> },
 ];

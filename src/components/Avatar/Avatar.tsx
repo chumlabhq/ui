@@ -289,6 +289,10 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
                 statusSize,
               ),
             }}
+            // `role="img"`, not a bare span: ARIA prohibits `aria-label` on the
+            // implicit `generic` role, so the label was dropped and the status
+            // announced to nobody. axe flags it as `aria-prohibited-attr`.
+            role="img"
             aria-label={`${name || alt || "User"} is ${statusConfig.type}`}
           />
         )}

@@ -1,3 +1,4 @@
+import { RadioButton } from "../../components/RadioButton";
 import { RadioGroup } from "../../components/RadioButton";
 import type { Fixtures } from "./types";
 
@@ -8,7 +9,7 @@ import type { Fixtures } from "./types";
  */
 const inGroup = (node: React.ReactNode) => <RadioGroup>{node}</RadioGroup>;
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof RadioButton> = [
   { name: "default", props: { value: "a", label: "Apple" }, wrap: inGroup },
   { name: "described", props: { value: "a", label: "Apple", description: "A fruit" }, wrap: inGroup },
   { name: "disabled", props: { value: "a", label: "Apple", disabled: true }, wrap: inGroup },

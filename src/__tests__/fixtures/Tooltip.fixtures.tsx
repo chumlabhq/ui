@@ -1,6 +1,7 @@
+import { Tooltip } from "../../components/Tooltip";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Tooltip> = [
   { name: "closed", props: { content: "Tip" }, children: <button>Trigger</button> },
   { name: "open", props: { content: "Tip", open: true }, children: <button>Trigger</button> },
   {

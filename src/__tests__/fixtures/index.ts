@@ -1,4 +1,4 @@
-import type { Fixtures } from "./types";
+import type { AnyFixtures } from "./types";
 
 /**
  * Every component's fixtures, keyed by the name used in ai/component-index.json.
@@ -9,10 +9,10 @@ import type { Fixtures } from "./types";
  */
 const modules = import.meta.glob("./*.fixtures.tsx", { eager: true }) as Record<
   string,
-  { default: Fixtures }
+  { default: AnyFixtures }
 >;
 
-export const FIXTURES: Record<string, Fixtures> = Object.fromEntries(
+export const FIXTURES: Record<string, AnyFixtures> = Object.fromEntries(
   Object.entries(modules).map(([path, mod]) => [
     // "CountryFlag.CountryFlagGroup.fixtures.tsx" -> "CountryFlag/CountryFlagGroup",
     // the registry's name for a sub-component's class set.
@@ -24,7 +24,7 @@ export const FIXTURES: Record<string, Fixtures> = Object.fromEntries(
   ]),
 );
 
-export const fixturesFor = (component: string): Fixtures =>
+export const fixturesFor = (component: string): AnyFixtures =>
   FIXTURES[component] ?? [];
 
-export type { Fixture, Fixtures } from "./types";
+export type { Fixture, Fixtures, AnyFixtures } from "./types";

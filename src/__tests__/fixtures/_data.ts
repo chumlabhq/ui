@@ -11,9 +11,12 @@ export const STEPS = [
   { id: "three", label: "Done", description: "All set" },
 ];
 
+// No `content` key: TabPanelProps documents panel content as a `children`
+// render function and says so ("Not a `renderContent` prop or `content` on tab
+// objects"). Every TabPanel fixture carried one anyway, and it was ignored.
 export const TABS = [
-  { id: "one", label: "First", content: "First panel", icon: "1", count: 3 },
-  { id: "two", label: "Second", content: "Second panel", disabled: true },
+  { id: "one", label: "First", icon: "1", count: 3 },
+  { id: "two", label: "Second", disabled: true },
 ];
 
 export const CRUMBS = [

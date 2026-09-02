@@ -1,6 +1,7 @@
+import { Modal } from "../../components/Modal";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Modal> = [
   { name: "open", props: { open: true, title: "Title", description: "Description" }, children: "Body" },
   { name: "open-no-close", props: { open: true, title: "Title", showCloseButton: false }, children: "Body" },
   { name: "with-icon", props: { open: true, title: "Title", showIcon: true, icon: <span>!</span> }, children: "Body" },

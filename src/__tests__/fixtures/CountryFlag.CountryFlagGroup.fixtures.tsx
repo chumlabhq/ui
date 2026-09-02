@@ -1,4 +1,4 @@
-import { CountryFlag, CountryFlagShimmer } from "../../components/CountryFlag";
+import { CountryFlag, CountryFlagGroup, CountryFlagShimmer } from "../../components/CountryFlag";
 import type { Fixtures } from "./types";
 
 // An array, not a fragment: the group counts children to work out the surplus,
@@ -7,10 +7,10 @@ const flags = ["US", "GB", "FR"].map((code) => (
   <CountryFlag key={code} code={code} />
 ));
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof CountryFlagGroup> = [
   { name: "default", props: {}, children: flags },
   { name: "capped", props: { max: 2 }, children: flags, note: "Drives the surplus count." },
-  { name: "with-tooltips", props: { max: 2, showTooltip: true }, children: flags },
+  { name: "with-tooltips", props: { max: 2, showCountTooltip: true }, children: flags },
   {
     name: "mixed-loading",
     props: {},

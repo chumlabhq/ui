@@ -420,6 +420,62 @@ describe("TextArea", () => {
     });
   });
 
+  describe("Multiline", () => {
+    it("keeps newlines in the value", async () => {
+      const user = userEvent.setup();
+      render(<TextArea label="Bio" />);
+
+      const textarea = screen.getByRole("textbox");
+      await user.click(textarea);
+      await user.type(textarea, "first{enter}second");
+
+      expect(textarea).toHaveValue("first\nsecond");
+    });
+
+    it("reports newlines through onValueChange", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(<TextArea label="Bio" onValueChange={onValueChange} />);
+
+      await user.click(screen.getByRole("textbox"));
+      await user.type(screen.getByRole("textbox"), "a{enter}b");
+
+      expect(onValueChange).toHaveBeenLastCalledWith("a\nb");
+    });
+
+    it("does not submit its form on Enter", async () => {
+      const user = userEvent.setup();
+      const onSubmit = vi.fn((e: FormEvent) => e.preventDefault());
+
+      render(
+        <form onSubmit={onSubmit}>
+          <TextArea label="Bio" name="bio" />
+        </form>
+      );
+
+      const textarea = screen.getByRole("textbox");
+      await user.click(textarea);
+      await user.type(textarea, "line{enter}");
+
+      expect(onSubmit).not.toHaveBeenCalled();
+      expect(textarea).toHaveValue("line\n");
+    });
+  });
+
+  describe("Label Association", () => {
+    it("focuses the textarea when its label is clicked", async () => {
+      const user = userEvent.setup();
+      render(<TextArea label="Bio" />);
+
+      const textarea = screen.getByRole("textbox");
+      expect(textarea).not.toHaveFocus();
+
+      await user.click(screen.getByText("Bio"));
+
+      expect(textarea).toHaveFocus();
+    });
+  });
+
   describe("Form Participation", () => {
     it("submits its value under the given name", async () => {
       const user = userEvent.setup();

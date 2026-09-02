@@ -23,9 +23,9 @@ export { OtpInputLabel };
  *
  * AI Usage Guidelines:
  * - Use `length` to set number of digits (default 6)
- * - Use `type` for numeric/alphanumeric restriction
- * - Use `groupPattern` for visual grouping (e.g., [3,3])
- * - Use `masked` for password-style dots
+ * - Use `inputPattern` for the accepted character set (default `"\\d*"`)
+ * - Use `groups` for visual grouping (e.g., [3,3])
+ * - Use `inputType="password"` for password-style dots
  *
  * Reference: OTPINPUT.ai.md (this directory), src/pages/demo/OtpInputDemo.tsx
  */
@@ -119,6 +119,47 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
       [classesProp, baseClasses],
     );
 
+    /**
+     * `inputPattern` is the single source for what a slot accepts.
+     *
+     * It already set the `pattern` attribute, chose `inputMode` and named the
+     * slots "Digit" or "Character" — but nothing filtered, because `pattern` is
+     * form-validation metadata the browser does not apply to typing. A default
+     * OtpInput therefore told the browser, the soft keyboard and the screen
+     * reader that it wanted digits, and then accepted letters (E2E-TRIAGE.md).
+     * Deriving `validate` from the same pattern makes the four agree.
+     *
+     * The pattern is a whole-value regex by HTML's definition, so it is
+     * anchored and tested one character at a time.
+     */
+    const patternTest = useMemo(() => {
+      if (!inputPattern) return null;
+      try {
+        const re = new RegExp(`^(?:${inputPattern})$`);
+        return (char: string) => re.test(char);
+      } catch {
+        // An unparseable pattern still reaches the DOM attribute, where the
+        // browser ignores it. Filtering on it would reject every keystroke.
+        return null;
+      }
+    }, [inputPattern]);
+
+    /** An explicit `validate` wins; otherwise the pattern is the rule. */
+    const acceptsChar = validate ?? patternTest ?? undefined;
+
+    /**
+     * Asked of the resolved pattern rather than compared against the literal
+     * `"\\d*"`, so `[0-9]` and `\\d` are recognised as numeric too.
+     */
+    const digitsOnly = useMemo(
+      () =>
+        inputType === "tel" ||
+        (!!patternTest &&
+          "0123456789".split("").every(patternTest) &&
+          !patternTest("a")),
+      [inputType, patternTest],
+    );
+
     const valueArray = useMemo(() => {
       const arr = value.split("").slice(0, length);
       while (arr.length < length) arr.push("");
@@ -155,7 +196,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           let filledCount = 0;
           for (const char of inputValue) {
             if (filledCount >= length) break;
-            if (validate && !validate(char)) continue;
+            if (acceptsChar && !acceptsChar(char)) continue;
             newValueArray[filledCount] = char;
             filledCount++;
           }
@@ -167,7 +208,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         }
 
         const char = inputValue.slice(0, 1);
-        if (char && validate && !validate(char)) return;
+        if (char && acceptsChar && !acceptsChar(char)) return;
         const newValueArray = [...valueArray];
         newValueArray[index] = char;
         const newValue = newValueArray.join("");
@@ -175,7 +216,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         if (char && index < length - 1) focusInput(index + 1);
         if (newValueArray.every((c) => c !== "")) handleComplete(newValue);
       },
-      [valueArray, fireChange, handleComplete, length, focusInput, validate],
+      [valueArray, fireChange, handleComplete, length, focusInput, acceptsChar],
     );
 
     const handleKeyDown = useCallback(
@@ -215,7 +256,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         let filledCount = 0;
         for (const char of pastedData) {
           if (filledCount >= length) break;
-          if (validate && !validate(char)) continue;
+          if (acceptsChar && !acceptsChar(char)) continue;
           newValueArray[filledCount] = char;
           filledCount++;
         }
@@ -224,7 +265,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         focusInput(Math.max(0, filledCount - 1));
         if (newValueArray.every((c) => c !== "")) handleComplete(newValue);
       },
-      [allowPaste, valueArray, fireChange, handleComplete, length, focusInput, validate],
+      [allowPaste, valueArray, fireChange, handleComplete, length, focusInput, acceptsChar],
     );
 
     const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => { e.target.select(); }, []);
@@ -232,7 +273,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const createInputProps = useCallback(
       (index: number) => {
         const individualClassName = inputClassNames?.[index] || "";
-        const resolvedInputMode = inputType === "tel" || inputPattern === "\\d*" ? ("numeric" as const) : ("text" as const);
+        const resolvedInputMode = digitsOnly ? ("numeric" as const) : ("text" as const);
 
         return {
           ref:
@@ -248,7 +289,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           autoComplete: index === 0 ? "one-time-code" : "off",
           "aria-label": inputAriaLabel
             ? inputAriaLabel(index, length)
-            : `${inputType === "tel" || inputPattern === "\\d*" ? "Digit" : "Character"} ${index + 1} of ${length}`,
+            : `${digitsOnly ? "Digit" : "Character"} ${index + 1} of ${length}`,
           "aria-invalid": error || undefined,
           "aria-required": required || undefined,
           "aria-describedby": error && errorMessage ? errorId : undefined,
@@ -266,7 +307,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "data-filled": valueArray[index] ? true : undefined,
         };
       },
-      [inputClassNames, inputId, inputType, inputPattern, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, loading, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
+      [inputClassNames, inputId, inputType, inputPattern, digitsOnly, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, loading, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
     );
 
     const renderSingleInput = (index: number) => {

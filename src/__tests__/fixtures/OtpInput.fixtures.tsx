@@ -1,6 +1,7 @@
+import { OtpInput } from "../../components/OtpInput";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof OtpInput> = [
   { name: "default", props: { length: 4 } },
   { name: "labelled", props: { length: 4, label: "Code", description: "Check your email." } },
   { name: "with-value", props: { length: 4, defaultValue: "12" } },

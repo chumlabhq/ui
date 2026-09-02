@@ -1,14 +1,8 @@
 {
   "$comment": "Companion record to docs/adr/002-classes-key-vocabulary.md. Keys that no prop combination drives into the DOM, with the reason. Governed by ADR 002 R7/R8: these are candidates for deletion in the vocabulary phase, NOT deleted here. fixtures.contract fails if a waived key becomes reachable, so this list cannot rot. Two reason classes: 'dead' \u2014 the key is declared but no source line renders it, verified by reference count; 'state-gated' \u2014 the key renders only in a state jsdom cannot reach (pointer capture, hover, layout measurement) and needs an e2e or a prop the component does not expose.",
-  "recordedOn": "2026-09-01",
+  "recordedOn": "2026-09-02",
   "waived": {
     "CascadingDropdown": {
-      "searchInput": "dead \u2014 CascadingDropdownProps declares no search prop at all, so the menu's search box can never render",
-      "searchInputElement": "dead \u2014 same, no search prop exists",
-      "searchIcon": "dead \u2014 same, no search prop exists",
-      "submenuSearchInput": "dead \u2014 same, no search prop exists",
-      "submenuSearchInputElement": "dead \u2014 same, no search prop exists",
-      "submenuSearchIcon": "dead \u2014 same, no search prop exists",
       "content": "dead \u2014 zero source references; duplicates the menu vocabulary (AUDIT-GAP \u00a74.5)",
       "option": "dead \u2014 zero source references; superseded by menuItem",
       "optionSelected": "dead \u2014 zero source references; superseded by menuItem + data-selected under ADR 002 R4",
@@ -16,9 +10,7 @@
       "optionDisabled": "dead \u2014 zero source references; superseded by menuItem + data-disabled under ADR 002 R4",
       "menuItemSelected": "state-gated \u2014 needs a selection inside a portalled submenu; ADR 002 R4 replaces it with data-selected",
       "menuItemDisabled": "state-gated \u2014 ADR 002 R4 replaces it with data-disabled",
-      "submenuItemFocused": "state-gated \u2014 keyboard highlight inside a submenu; ADR 002 R4 replaces it with data-highlighted",
-      "checkbox": "state-gated \u2014 only renders for multi-select leaf rows inside an entered submenu",
-      "checkboxChecked": "state-gated \u2014 same, plus a selection; ADR 002 R4 replaces it with data-state"
+      "submenuItemFocused": "state-gated \u2014 keyboard highlight inside a submenu; ADR 002 R4 replaces it with data-highlighted"
     },
     "DatePicker": {
       "monthDropdown": "dead \u2014 zero source references",
@@ -29,11 +21,7 @@
       "dayMarked": "state-gated \u2014 reached only through the marker path below",
       "markerIndicator": "state-gated \u2014 marker rendering needs layout measurement jsdom does not provide",
       "markerTooltip": "state-gated \u2014 needs a hover over a marked day plus positioning",
-      "weekNumber": "state-gated \u2014 needs showWeekNumbers together with a locale week config the fixture could not resolve",
-      "presetActive": "state-gated \u2014 needs a preset whose range equals the current value; ADR 002 R4 replaces it with data-state",
-      "dropdownMenu": "state-gated \u2014 the month/year menu opens from a click inside a portalled calendar",
-      "dropdownItem": "state-gated \u2014 same",
-      "dropdownItemSelected": "state-gated \u2014 same; ADR 002 R4 replaces it with data-selected"
+      "presetActive": "state-gated \u2014 needs a preset whose range equals the current value; ADR 002 R4 replaces it with data-state"
     },
     "InternationalPhoneInput": {
       "countrySelectNoResults": "state-gated \u2014 needs a search string matching no country inside the nested SearchableDropdown, and IPI exposes no path to set it"
@@ -48,8 +36,7 @@
       "pinnedPinIconHover": "state-gated \u2014 same; ADR 002 R4 makes this a :hover utility",
       "pinButton": "state-gated \u2014 same",
       "pinnedPinButton": "state-gated \u2014 same",
-      "editInput": "state-gated \u2014 cell edit mode opens on double-click and needs a measured cell",
-      "mobileCard": "state-gated \u2014 the mobile branch reads window.innerWidth via a resize observer jsdom does not fire"
+      "editInput": "state-gated \u2014 cell edit mode opens on double-click and needs a measured cell"
     },
     "Breadcrumb": {
       "itemDisabled": "state-gated \u2014 applied to a disabled crumb that is not the current page; ADR 002 R4 replaces it with data-disabled"

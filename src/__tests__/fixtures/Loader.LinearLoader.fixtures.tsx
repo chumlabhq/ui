@@ -1,8 +1,8 @@
+import { LinearLoader } from "../../components/Loader";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof LinearLoader> = [
   { name: "default", props: {} },
-  { name: "with-label", props: { label: "Loading" } },
-  { name: "sized", props: { size: 48 } },
+  { name: "sized", props: { height: 8, width: 240 } },
 ];
 export default fixtures;

@@ -1,8 +1,9 @@
+import { SearchableDropdown } from "../../components/SearchableDropdown";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 import { OPTIONS } from "./_data";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof SearchableDropdown> = [
   { name: "closed", props: { options: OPTIONS } },
   { name: "labelled", props: { options: OPTIONS, label: "Fruit", description: "Pick one." } },
   { name: "open", props: { options: OPTIONS, defaultOpen: true } },

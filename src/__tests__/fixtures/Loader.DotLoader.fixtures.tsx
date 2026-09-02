@@ -1,8 +1,8 @@
+import { DotLoader } from "../../components/Loader";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof DotLoader> = [
   { name: "default", props: {} },
-  { name: "with-label", props: { label: "Loading" } },
-  { name: "sized", props: { size: 48 } },
+  { name: "sized", props: { dotSize: 12, gap: 8 } },
 ];
 export default fixtures;

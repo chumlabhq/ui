@@ -148,11 +148,64 @@ describe("OtpInput", () => {
   });
 
   describe("Digit Input Behavior", () => {
-    it("does not filter non-numeric characters internally", async () => {
+    it("rejects a non-digit under the default pattern", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
 
       render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+      await user.type(inputs[0], "a");
+
+      expect(onValueChange).not.toHaveBeenCalled();
+    });
+
+    it("accepts a digit under the default pattern", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+
+      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+      await user.type(inputs[0], "7");
+
+      expect(onValueChange).toHaveBeenCalledWith("7");
+    });
+
+    it("accepts letters when the pattern allows them", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+
+      render(
+        <OtpInput
+          inputPattern="[A-Za-z0-9]"
+          onValueChange={onValueChange}
+          autoFocusFirst={false}
+        />
+      );
+
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[0]);
+      await user.type(inputs[0], "a");
+
+      expect(onValueChange).toHaveBeenCalledWith("a");
+    });
+
+    it("falls back to accepting everything when the pattern will not compile", async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+
+      // The browser ignores an unparseable `pattern`; filtering on it would
+      // reject every keystroke instead.
+      render(
+        <OtpInput
+          inputPattern="[unclosed"
+          onValueChange={onValueChange}
+          autoFocusFirst={false}
+        />
+      );
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
@@ -357,7 +410,7 @@ describe("OtpInput", () => {
       expect(onValueChange).toHaveBeenCalledWith("123456");
     });
 
-    it("does not filter non-numeric characters from paste", async () => {
+    it("drops non-digits from a paste under the default pattern", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
 
@@ -369,7 +422,7 @@ describe("OtpInput", () => {
       const wrapper = inputs[0].parentElement!;
       simulatePaste(wrapper, "1a2b3c");
 
-      expect(onValueChange).toHaveBeenCalledWith("1a2b3c");
+      expect(onValueChange).toHaveBeenCalledWith("123");
     });
 
     it("does not handle paste when allowPaste=false", async () => {
@@ -796,16 +849,26 @@ describe("OtpInput", () => {
       expect(onValueChange).toHaveBeenCalledWith("123");
     });
 
-    it("accepts all characters when no validate prop", async () => {
+    it("an explicit validate overrides the pattern-derived default", async () => {
       const user = userEvent.setup();
       const onValueChange = vi.fn();
 
-      render(<OtpInput onValueChange={onValueChange} autoFocusFirst={false} />);
+      // The default pattern is digits-only; this `validate` is letters-only,
+      // and it is the one that must apply.
+      render(
+        <OtpInput
+          onValueChange={onValueChange}
+          validate={(char) => /^[a-z]$/.test(char)}
+          autoFocusFirst={false}
+        />
+      );
 
       const inputs = screen.getAllByRole("textbox");
       await user.click(inputs[0]);
-      await user.type(inputs[0], "a");
+      await user.type(inputs[0], "5");
+      expect(onValueChange).not.toHaveBeenCalled();
 
+      await user.type(inputs[0], "a");
       expect(onValueChange).toHaveBeenCalledWith("a");
     });
   });
@@ -949,7 +1012,7 @@ describe("OtpInput - Multi-character Input Handling", () => {
 
     const { fireEvent } = await import("@testing-library/react");
     // Type 3 chars into input[0] — should move focus to index 2
-    fireEvent.change(inputs[0], { target: { value: "abc" } });
+    fireEvent.change(inputs[0], { target: { value: "123" } });
 
     expect(inputs[2]).toHaveFocus();
   });

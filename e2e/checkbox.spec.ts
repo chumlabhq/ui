@@ -1,515 +1,94 @@
 import { test, expect } from "@playwright/test";
-import { injectAxe } from "axe-playwright";
-
-// Helper to wait for checkbox visibility with scroll support
-async function waitForCheckboxVisible(page: import("@playwright/test").Page) {
-  const checkbox = page.locator('input[type="checkbox"]').first();
-  await checkbox.waitFor({ state: "attached", timeout: 10000 });
-  await checkbox.scrollIntoViewIfNeeded();
-  await checkbox.waitFor({ state: "attached", timeout: 10000 });
-}
-
-test.describe("Checkbox Component - Cross-Browser Tests", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForCheckboxVisible(page);
-  });
-
-  test.describe("Basic Functionality", () => {
-    test("should render checkbox components on the page", async ({ page }) => {
-      const checkboxes = page.locator('input[type="checkbox"]');
-      const count = await checkboxes.count();
-
-      expect(count).toBeGreaterThan(0);
-    });
-
-    test("should toggle checkbox state on click", async ({ page }) => {
-      // Find a checkbox with a label that we can reliably locate
-      const checkbox = page
-        .locator('input[type="checkbox"]:not(:disabled)')
-        .first();
-      await checkbox.scrollIntoViewIfNeeded();
-
-      const wasChecked = await checkbox.isChecked();
-
-      // Click the checkbox directly (now works with absolute positioning)
-      await checkbox.click();
-
-      // Verify state changed
-      const isNowChecked = await checkbox.isChecked();
-      expect(isNowChecked).toBe(!wasChecked);
-    });
-
-    test("should render labels correctly", async ({ page }) => {
-      // Find checkbox with label
-      const labelText = page.locator("text=Accept terms and conditions");
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(labelText.first()).toBeVisible();
-      await expect(labelText.first()).toBeVisible();
-    });
-
-    test("should display description text", async ({ page }) => {
-      const description = page.locator(
-        "text=Receive email updates about your account activity"
-      );
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(description.first()).toBeVisible();
-      await expect(description.first()).toBeVisible();
-    });
-  });
-
-  test.describe("Keyboard Navigation", () => {
-
-    test("should toggle checkbox with Space key", async ({ page }) => {
-      // Find an enabled checkbox
-      const checkbox = page
-        .locator('input[type="checkbox"]:not(:disabled)')
-        .first();
-      await checkbox.scrollIntoViewIfNeeded();
-
-      const wasChecked = await checkbox.isChecked();
-
-      // Focus and press Space
-      await checkbox.focus();
-      await page.keyboard.press("Space");
-
-      // State should have toggled
-      const isNowChecked = await checkbox.isChecked();
-      expect(isNowChecked).toBe(!wasChecked);
-    });
-
-    test("should navigate through checkboxes with Tab", async ({
-      page,
-      browserName,
-    }) => {
-      const checkboxes = page.locator(
-        'input[type="checkbox"]:not(:disabled)'
-      );
-      const count = await checkboxes.count();
-
-      if (count >= 2) {
-        const firstCheckbox = checkboxes.first();
-        await firstCheckbox.scrollIntoViewIfNeeded();
-        await firstCheckbox.focus();
-
-        // Tab to next focusable element
-        await page.keyboard.press("Tab");
-
-        // WebKit/Safari handles focus differently for hidden inputs
-        // Use JavaScript to check activeElement instead of :focus selector
-        const hasActiveElement = await page.evaluate(() => {
-          const active = document.activeElement;
-          return active !== null && active !== document.body;
-        });
-
-        // On WebKit/Safari, focus may not move as expected for hidden inputs
-        // This is a browser limitation, not a component bug
-        if (browserName === "webkit") {
-          // Just verify the test didn't error - WebKit focus behavior varies
-          expect(true).toBe(true);
-        } else {
-          expect(hasActiveElement).toBe(true);
-        }
-      }
-    });
-  });
-
-  test.describe("Disabled State", () => {
-    test("should render disabled checkboxes", async ({ page }) => {
-      const disabledCheckbox = page
-        .locator('input[type="checkbox"]:disabled')
-        .first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(disabledCheckbox.first()).toBeVisible();
-      await expect(disabledCheckbox).toBeDisabled();
-    });
-
-    test("should not toggle disabled checkbox on click", async ({ page }) => {
-      const disabledCheckbox = page
-        .locator('input[type="checkbox"]:disabled')
-        .first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(disabledCheckbox.first()).toBeVisible();
-      await disabledCheckbox.scrollIntoViewIfNeeded();
-
-      const wasChecked = await disabledCheckbox.isChecked();
-
-      // Try to click (force: true to bypass actionability checks for disabled)
-      await disabledCheckbox.click({ force: true });
-
-      // State should not have changed
-      const isNowChecked = await disabledCheckbox.isChecked();
-      expect(isNowChecked).toBe(wasChecked);
-    });
-  });
-
-  test.describe("Error State", () => {
-    test("should display error message", async ({ page }) => {
-      const errorMessage = page.locator('[role="alert"]').first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(errorMessage.first()).toBeVisible();
-      await errorMessage.scrollIntoViewIfNeeded();
-      await expect(errorMessage).toBeVisible();
-    });
-
-    test("should mark error checkbox with aria-invalid", async ({ page }) => {
-      const invalidCheckbox = page
-        .locator('input[type="checkbox"][aria-invalid="true"]')
-        .first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(invalidCheckbox.first()).toBeVisible();
-      await expect(invalidCheckbox).toHaveAttribute("aria-invalid", "true");
-    });
-  });
-
-  test.describe("Indeterminate State", () => {
-    test("should display indeterminate checkboxes", async ({ page }) => {
-      // Look for checkboxes with indeterminate state (via data attribute on container)
-      const indeterminateContainer = page
-        .locator('[data-indeterminate="true"]')
-        .first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(indeterminateContainer.first()).toBeVisible();
-      await indeterminateContainer.scrollIntoViewIfNeeded();
-      await expect(indeterminateContainer).toBeVisible();
-    });
-  });
-
-  test.describe("Required State", () => {
-    test("should display required indicator", async ({ page }) => {
-      // Find required checkbox by looking for asterisk
-      const requiredIndicator = page.locator('span:text("*")').first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(requiredIndicator.first()).toBeVisible();
-      await requiredIndicator.scrollIntoViewIfNeeded();
-      await expect(requiredIndicator).toBeVisible();
-    });
-
-    test("should set aria-required on required checkboxes", async ({ page }) => {
-      const requiredCheckbox = page
-        .locator('input[type="checkbox"][aria-required="true"]')
-        .first();
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(requiredCheckbox.first()).toBeVisible();
-      await expect(requiredCheckbox).toHaveAttribute("aria-required", "true");
-    });
-  });
-});
-
-test.describe("Checkbox Accessibility Tests", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForCheckboxVisible(page);
-    await injectAxe(page);
-  });
-
-  test("should have no critical accessibility violations", async ({ page }) => {
-    const results = await page.evaluate(async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const axeResults = await (window as any).axe.run(
-        'input[type="checkbox"], [role="alert"]',
-        {
-          rules: {
-            "color-contrast": { enabled: false },
-            region: { enabled: false },
-          },
-        }
-      );
-      return axeResults.violations;
-    });
-
-    const criticalViolations = results.filter(
-      (v: { impact: string }) => v.impact === "critical"
-    );
-
-    if (criticalViolations.length > 0) {
-      console.log(
-        "Critical accessibility violations:",
-        JSON.stringify(criticalViolations, null, 2)
-      );
-    }
-
-    expect(criticalViolations).toHaveLength(0);
-  });
-
-  test("should have proper checkbox roles", async ({ page }) => {
-    const checkboxes = page.locator('input[type="checkbox"]');
-    const count = await checkboxes.count();
-
-    expect(count).toBeGreaterThan(0);
-
-    // Verify first checkbox has correct attributes
-    const firstCheckbox = checkboxes.first();
-    await expect(firstCheckbox).toHaveAttribute("type", "checkbox");
-  });
-
-  test("should have aria-invalid on error checkboxes", async ({ page }) => {
-    const errorCheckboxes = page.locator(
-      'input[type="checkbox"][aria-invalid="true"]'
-    );
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(errorCheckboxes.first()).toBeVisible();
-    await expect(errorCheckboxes.first()).toHaveAttribute(
-      "aria-invalid",
-      "true"
-    );
-  });
-
-  test("should have aria-describedby linking to error message", async ({
-    page,
-  }) => {
-    const checkboxWithError = page
-      .locator('input[type="checkbox"][aria-describedby]')
-      .first();
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(checkboxWithError.first()).toBeVisible();
-    const describedBy = await checkboxWithError.getAttribute("aria-describedby");
-
-    if (describedBy && describedBy.includes("error")) {
-      const errorElement = page.locator(`[id="${describedBy.split(" ").find(id => id.includes("error"))}"]`);
-      await expect(errorElement).toBeVisible();
-    }
-  });
-
-  test("error messages should have role='alert'", async ({ page }) => {
-    const alerts = page.locator('[role="alert"]');
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(alerts.first()).toBeVisible();
-    await expect(alerts.first()).toHaveAttribute("role", "alert");
-  });
-});
-
-test.describe("Checkbox Responsive Tests", () => {
-  test("should render correctly on mobile viewport", async ({ page }, testInfo) => {
-    const isMobileProject = testInfo.project.name.includes("Mobile");
-
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-
-    const checkbox = page.locator('input[type="checkbox"]').first();
-    await checkbox.waitFor({ state: "attached", timeout: 5000 });
-
-    const count = await page.locator('input[type="checkbox"]').count();
-    expect(count).toBeGreaterThan(0);
-
-    if (isMobileProject) {
-      await checkbox.scrollIntoViewIfNeeded();
-    }
-  });
-
-  test("should handle touch interactions on mobile", async ({ page }, testInfo) => {
-    const isMobileProject = testInfo.project.name.includes("Mobile");
-
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-
-    const checkbox = page
-      .locator('input[type="checkbox"]:not(:disabled)')
-      .first();
-    await checkbox.waitFor({ state: "attached", timeout: 5000 });
-
-    if (isMobileProject) {
-      await checkbox.scrollIntoViewIfNeeded();
-
-      const wasChecked = await checkbox.isChecked();
-
-      // Click the checkbox directly (works with absolute positioning)
-      await checkbox.click();
-
-      const isNowChecked = await checkbox.isChecked();
-      expect(isNowChecked).toBe(!wasChecked);
-    } else {
-      await expect(checkbox).toBeAttached();
-    }
-  });
-});
-
-test.describe("Checkbox Focus Management", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForCheckboxVisible(page);
-  });
-
-  test("should maintain focus after toggle", async ({ page }) => {
-    const checkbox = page
-      .locator('input[type="checkbox"]:not(:disabled)')
-      .first();
-    await checkbox.scrollIntoViewIfNeeded();
-    await checkbox.focus();
-
-    await page.keyboard.press("Space");
-
-    // Checkbox should still be focused
-    await expect(checkbox).toBeFocused();
-  });
-
-  test("disabled checkboxes should not receive focus via Tab", async ({
-    page,
-  }) => {
-    // Tab through and verify no disabled checkbox gets focus
-    for (let i = 0; i < 20; i++) {
+import { injectAxe, checkA11y } from "axe-playwright";
+import { gotoFixture } from "./_nav";
+
+/**
+ * Six of checkbox.spec.ts's thirty-one tests (E2E-TRIAGE.md, Appendix B).
+ *
+ * Twenty-three duplicated Checkbox.test.tsx — every state, every ARIA link,
+ * Space activation, id generation — and two measured the dev server. What is
+ * left is tab order, where focus lands after a click, axe and a viewport.
+ */
+
+const BOX = '[data-fixture] input[type="checkbox"]';
+
+test.describe("Checkbox (fixtures)", () => {
+  test("moves between checkboxes in document order", async ({ page }) => {
+    await gotoFixture(page, "Checkbox", "siblings");
+
+    const boxes = page.locator(BOX);
+    await expect(boxes).toHaveCount(3);
+
+    for (let i = 0; i < 10; i++) {
       await page.keyboard.press("Tab");
-
-      const focused = page.locator(":focus");
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(focused.first()).toBeVisible();
-      const isCheckbox = await focused.evaluate(
-        (el) => el.tagName === "INPUT" && (el as HTMLInputElement).type === "checkbox"
-      );
-
-      if (isCheckbox) {
-        const isDisabled = await focused.evaluate(
-          (el) => (el as HTMLInputElement).disabled
-        );
-        expect(isDisabled).toBe(false);
-      }
+      if (await boxes.first().evaluate((el) => document.activeElement === el)) break;
     }
+    await expect(boxes.first()).toBeFocused();
+
+    await page.keyboard.press("Tab");
+    // Straight to the third: the middle one is disabled, and skipping it is
+    // the browser's own sequential-navigation rule, not the component's.
+    await expect(boxes.nth(2)).toBeFocused();
   });
-});
 
-test.describe("Checkbox - Many Instances", () => {
+  test("does not give a disabled checkbox focus", async ({ page }) => {
+    await gotoFixture(page, "Checkbox", "siblings");
 
+    const disabled = page.locator(BOX).nth(1);
+    await expect(disabled).toBeDisabled();
 
-  test("should handle multiple checkboxes on page", async ({ page }) => {
-    await page.goto("/checkbox");
-    await page.waitForLoadState("networkidle");
-    await waitForCheckboxVisible(page);
+    for (let i = 0; i < 10; i++) await page.keyboard.press("Tab");
 
-    const checkboxes = page.locator('input[type="checkbox"]');
-    const count = await checkboxes.count();
-
-    expect(count).toBeGreaterThan(0);
-
-    // Spot check a few checkboxes work correctly using click (most reliable)
-    const enabledCheckboxes = page.locator(
-      'input[type="checkbox"]:not(:disabled)'
+    const focusedDisabled = await disabled.evaluate(
+      (el) => document.activeElement === el,
     );
-    const enabledCount = await enabledCheckboxes.count();
-
-    for (let i = 0; i < Math.min(enabledCount, 3); i++) {
-      const checkbox = enabledCheckboxes.nth(i);
-      await checkbox.scrollIntoViewIfNeeded();
-
-      const wasChecked = await checkbox.isChecked();
-      
-      // Use click for more reliable cross-browser toggling
-      await checkbox.click({ force: true });
-      
-      // Wait for state to update
-      await page.waitForTimeout(100);
-      
-      const isNowChecked = await checkbox.isChecked();
-      expect(isNowChecked).toBe(!wasChecked);
-
-      // Toggle back
-      await checkbox.click({ force: true });
-      await page.waitForTimeout(100);
-    }
-  });
-});
-
-test.describe("Checkbox Form Integration", () => {
-
-  test("should have id attribute for label association", async ({ page }) => {
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-
-    const checkboxWithId = page.locator('input[type="checkbox"][id]');
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(checkboxWithId.first()).toBeVisible();
-    const id = await checkboxWithId.first().getAttribute("id");
-    expect(id).toBeTruthy();
-  });
-});
-
-test.describe("Checkbox Visual States", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/checkbox");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForCheckboxVisible(page);
+    expect(focusedDisabled, "Tab landed on the disabled checkbox").toBe(false);
   });
 
-  test("should display different sizes", async ({ page }) => {
-    // Look for size data attributes
-    const xsCheckbox = page.locator('[data-size="xs"]').first();
-    const xlCheckbox = page.locator('[data-size="xl"]').first();
+  test("keeps focus on the checkbox after a click", async ({ page }) => {
+    await gotoFixture(page, "Checkbox", "labelled");
 
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(xsCheckbox.first()).toBeVisible();
-    await xsCheckbox.scrollIntoViewIfNeeded();
-    await expect(xsCheckbox).toBeVisible();
+    const box = page.locator(BOX);
+    await box.click();
 
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(xlCheckbox.first()).toBeVisible();
-    await xlCheckbox.scrollIntoViewIfNeeded();
-    await expect(xlCheckbox).toBeVisible();
+    await expect(box).toBeChecked();
+    // Where the browser puts focus after a click, which the onFocus/onBlur
+    // handler tests in jsdom cannot answer.
+    await expect(box).toBeFocused();
   });
 
-  test("should display different shapes", async ({ page }) => {
-    const squareCheckbox = page.locator('[data-shape="square"]').first();
-    const circleCheckbox = page.locator('[data-shape="circle"]').first();
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(squareCheckbox.first()).toBeVisible();
-    await squareCheckbox.scrollIntoViewIfNeeded();
-    await expect(squareCheckbox).toBeVisible();
-
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(circleCheckbox.first()).toBeVisible();
-    await circleCheckbox.scrollIntoViewIfNeeded();
-    await expect(circleCheckbox).toBeVisible();
+  test("passes an axe audit", async ({ page }) => {
+    await gotoFixture(page, "Checkbox", "labelled");
+    await injectAxe(page);
+    // `color-contrast` off, and only that: Checkbox is on the
+    // `--cl-text-tertiary` baseline in docs/adr/002-unrenderable-keys.json.
+    await checkA11y(page, "[data-fixture]", {
+      detailedReport: true,
+      axeOptions: { rules: { "color-contrast": { enabled: false } } },
+    });
   });
 
-  test("should toggle visual state on data-checked", async ({ page }) => {
-    // Find a checkbox container
-    const container = page.locator('[data-checked="true"]').first();
+  test("fits inside a 375px viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "Checkbox", "labelled");
 
-    // The guard used to make this pass when the element was absent, which is
-    // the failure the test exists to catch. Assert presence, then behaviour.
-    await expect(container.first()).toBeVisible();
-    await container.scrollIntoViewIfNeeded();
-    await expect(container).toHaveAttribute("data-checked", "true");
+    const control = page.locator("[data-fixture]").first();
+    const box = (await control.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(-1);
+    expect(box.x + box.width).toBeLessThanOrEqual(376);
+  });
+
+  test("toggles from a touch", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "Checkbox", "labelled");
+
+    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
+    // projects and `tap()` throws there instead of degrading.
+    const box = page.locator(BOX);
+    await box.dispatchEvent("touchstart");
+    await box.dispatchEvent("touchend");
+    await box.click();
+
+    await expect(box).toBeChecked();
   });
 });

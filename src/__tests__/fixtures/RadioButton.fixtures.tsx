@@ -1,3 +1,4 @@
+import { RadioGroup } from "../../components/RadioButton";
 import { RadioButton } from "../../components/RadioButton";
 import type { Fixtures } from "./types";
 
@@ -14,7 +15,7 @@ const radios = (
   </>
 );
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof RadioGroup> = [
   { name: "default", props: {}, children: radios },
   { name: "labelled", props: { label: "Fruit", description: "Pick one." }, children: radios },
   { name: "with-value", props: { defaultValue: "a" }, children: radios },

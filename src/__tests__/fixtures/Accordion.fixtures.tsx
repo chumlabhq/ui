@@ -1,3 +1,4 @@
+import { Accordion } from "../../components/Accordion";
 import AccordionItem from "../../components/Accordion/components/AccordionItem";
 import AccordionTrigger from "../../components/Accordion/components/AccordionTrigger";
 import AccordionContent from "../../components/Accordion/components/AccordionContent";
@@ -33,7 +34,7 @@ const focusableSlots = (
   </AccordionItem>
 );
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Accordion> = [
   {
     name: "focusable-slot",
     // headingLevel 2: audited in isolation the trigger's default h3 has no h2

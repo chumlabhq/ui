@@ -1,10 +1,11 @@
+import { InternationalPhoneInput } from "../../components/InternationalPhoneInput";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof InternationalPhoneInput> = [
   { name: "default", props: {} },
   { name: "labelled", props: { label: "Phone", description: "Include country code." } },
-  { name: "with-value", props: { defaultValue: "+442071234567", clearable: true } },
+  { name: "with-value", props: { defaultValue: { countryCode: "GB", phoneNumber: "2071234567" }, clearable: true } },
   { name: "country-open", props: {}, act: (c) => {
       const btn = c.querySelector("[role='combobox'], button");
       if (btn) fireEvent.click(btn);

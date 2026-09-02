@@ -1,11 +1,17 @@
 import { fireEvent } from "@testing-library/react";
-import type { Fixtures } from "./types";
+import type { Fixture } from "./types";
+import type { TableProps } from "../../components/Table/utils/types";
 import { ROWS, COLUMNS } from "./_data";
 
-const GET_ID = (r: { id: string }) => r.id;
+type Row = (typeof ROWS)[number];
+
+const GET_ID = (r: Row) => r.id;
 const FILTERABLE = { role: { options: [{ label: "Engineer", value: "Engineer" }], multi: true } };
 
-const fixtures: Fixtures = [
+// `Fixture<TableProps<Row>>` rather than `Fixtures<typeof Table>`: Table is
+// generic over its row, and `ComponentProps` of a generic forwardRef collapses
+// the parameter to `unknown`, which would reject every typed accessor.
+const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "default", props: { data: ROWS, columns: COLUMNS } },
   { name: "empty", props: { data: [], columns: COLUMNS } },
   { name: "loading", props: { data: [], columns: COLUMNS, loading: true } },
@@ -30,7 +36,7 @@ const fixtures: Fixtures = [
   { name: "editable", props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID } },
   { name: "draggable", props: { data: ROWS, columns: COLUMNS, enableRowDragDrop: true, getRowId: GET_ID } },
   { name: "grouped", props: { data: ROWS, columns: COLUMNS, groupBy: ["role"] } },
-  { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, mobileBreakpoint: 9999 } },
+  { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 } },
   { name: "load-more", props: { data: ROWS, columns: COLUMNS, hasMore: true, loadingMore: true, enableInfiniteScroll: true, onLoadMore: () => {} } },
   {
     name: "pinned-right",

@@ -1,5 +1,23 @@
 import type { ReactNode } from "react";
-import { RadioGroup } from "../../components/RadioButton";
+import { RadioButton as RadioButtonItem, RadioGroup } from "../../components/RadioButton";
+import type { AccordionProps } from "../../components/Accordion/utils/types";
+import type { BreadcrumbProps } from "../../components/Breadcrumb/utils/types";
+import type { CascadingDropdownProps } from "../../components/CascadingDropdown/utils/types";
+import type { CountryFlagProps } from "../../components/CountryFlag/utils/types";
+import type { DropdownProps } from "../../components/Dropdown/utils/types";
+import type { DrawerProps } from "../../components/Drawer/utils/types";
+import type { ModalProps } from "../../components/Modal/utils/types";
+import type { MultiSelectDropdownProps } from "../../components/MultiSelectDropdown/utils/types";
+import type { MultiSelectSearchableDropdownProps } from "../../components/MultiSelectSearchableDropdown/utils/types";
+import type { PaginationProps } from "../../components/Pagination/utils/types";
+import type { RadioGroupProps } from "../../components/RadioButton/utils/types";
+import type { SearchableDropdownProps } from "../../components/SearchableDropdown/utils/types";
+import type { StepperProps } from "../../components/Stepper/utils/types";
+import type { TableProps } from "../../components/Table/utils/types";
+import type { TabPanelProps } from "../../components/TabPanel/utils/types";
+import type { ToastProps } from "../../components/Toast/utils/types";
+import type { TooltipProps } from "../../components/Tooltip/utils/types";
+
 
 /**
  * The hand-maintained half of the registry, split out so it can be imported
@@ -23,27 +41,74 @@ export const EXPORT_ALIAS: Record<string, string> = {
   RadioButton: "RadioGroup",
 };
 
-/** Minimal props for components that cannot render bare. Keyed by index name. */
-export const REQUIRED_PROPS: Record<string, Record<string, unknown>> = {
+/**
+ * Minimal props for components that cannot render bare. Keyed by index name.
+ *
+ * Type-checked against each component's real props via the `satisfies` below.
+ * It carried the same defect the fixture props did — `countryCode`,
+ * `currentPage`, a `content` key on a tab object, a `Toast` missing both its
+ * required props — and nothing caught any of it, because the map was
+ * `Record<string, unknown>` (E2E-TRIAGE.md Appendix C).
+ *
+ * The imports above are `import type`, so they are erased at compile time. This
+ * module is loaded by the dev-only fixture route, which exists precisely to
+ * avoid pulling the whole library into a page; a value import of seventeen
+ * components here would undo that.
+ *
+ * `children` is optional in the shape: some entries supply one because the
+ * component cannot render without it, and the widened export below is what the
+ * two call sites index by an arbitrary registry name.
+ */
+type Minimal<P> = (P extends unknown ? Omit<P, "children"> : never) & {
+  children?: ReactNode;
+};
+
+interface RequiredPropsShape {
+  Accordion: Minimal<AccordionProps>;
+  Breadcrumb: Minimal<BreadcrumbProps>;
+  CascadingDropdown: Minimal<CascadingDropdownProps>;
+  CountryFlag: Minimal<CountryFlagProps>;
+  Dropdown: Minimal<DropdownProps>;
+  MultiSelectDropdown: Minimal<MultiSelectDropdownProps>;
+  MultiSelectSearchableDropdown: Minimal<MultiSelectSearchableDropdownProps>;
+  Pagination: Minimal<PaginationProps>;
+  RadioButton: Minimal<RadioGroupProps>;
+  SearchableDropdown: Minimal<SearchableDropdownProps>;
+  Stepper: Minimal<StepperProps>;
+  Table: Minimal<TableProps<unknown>>;
+  TabPanel: Minimal<TabPanelProps>;
+  Tooltip: Minimal<TooltipProps>;
+  Modal: Minimal<ModalProps>;
+  Drawer: Minimal<DrawerProps>;
+  Toast: Minimal<ToastProps>;
+}
+
+const TYPED_REQUIRED_PROPS = {
   Accordion: { type: "single", children: null },
   Breadcrumb: { items: [{ id: "home", label: "Home" }] },
   CascadingDropdown: { options: [] },
-  CountryFlag: { countryCode: "US" },
+  CountryFlag: { code: "US" },
   Dropdown: { options: [] },
   MultiSelectDropdown: { options: [] },
   MultiSelectSearchableDropdown: { options: [] },
-  Pagination: { currentPage: 1, totalPages: 3 },
-  RadioButton: { options: [{ value: "a", label: "A" }] },
+  Pagination: { defaultValue: 1, totalPages: 3 },
+  // Not `options`: RadioGroup takes RadioButton children, and an `options`
+  // array renders an empty group — the same defect the fixtures had, still
+  // here because nothing checked this map.
+  RadioButton: { children: <RadioButtonItem value="a" label="A" /> },
   SearchableDropdown: { options: [] },
   Stepper: { steps: [{ id: "a", label: "A" }] },
   Table: { data: [], columns: [] },
-  TabPanel: { tabs: [{ id: "a", label: "A", content: "A" }] },
+  TabPanel: { tabs: [{ id: "a", label: "A" }] },
   Tooltip: { content: "tip", children: "trigger" },
   Modal: { children: "body" },
   Drawer: { children: "body" },
-  Toast: { message: "hi" },
-};
+  Toast: { id: "t", onRemove: () => {}, message: "hi" },
+} satisfies RequiredPropsShape;
 
+/** Widened: both call sites look up an arbitrary registry name. */
+export const REQUIRED_PROPS: Record<string, Record<string, unknown>> =
+  TYPED_REQUIRED_PROPS;
 /**
  * Sub-components that throw outside a parent context. Hand-maintained like
  * REQUIRED_PROPS, and just as small: a RadioButton outside its RadioGroup

@@ -42,7 +42,10 @@ Run each check. Each is independent and must PASS.
 
 ### 4. TypeScript
 
-- [ ] `tsc --noEmit` returns zero errors
+- [ ] `npm run typecheck` passes — it runs `tsc --build` and first proves the
+      gate can fail by planting a type error. Never `tsc --noEmit`: the root
+      tsconfig.json is a solution file with `files: []`, so `--noEmit`
+      compiles nothing and exits 0 regardless of the source.
 - [ ] No new `any` types introduced
 - [ ] No new double assertions
 

@@ -4,7 +4,7 @@ import DrawerHeader from "../../components/Drawer/components/DrawerHeader";
 import { IndexPicker, Toggle } from "./_harness";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Drawer> = [
   {
     name: "with-trigger",
     props: {},

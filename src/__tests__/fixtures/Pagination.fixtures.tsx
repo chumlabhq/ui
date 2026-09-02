@@ -1,3 +1,4 @@
+import { Pagination } from "../../components/Pagination";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 
@@ -8,7 +9,7 @@ import type { Fixtures } from "./types";
  * silently rendered page 1. `Fixture["props"]` is `Record<string, unknown>`,
  * which is why nothing caught it.)
  */
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Pagination> = [
   { name: "default", props: { defaultValue: 1, totalPages: 5 } },
   { name: "middle", props: { defaultValue: 5, totalPages: 20 }, note: "Drives the ellipsis, and leaves both nav buttons enabled." },
   {

@@ -1,3 +1,4 @@
+import { gotoFixture } from "./_nav";
 import { test, expect } from "@playwright/test";
 import { injectAxe, checkA11y } from "axe-playwright";
 
@@ -308,21 +309,6 @@ test.describe("TabPanel Component - Cross-Browser Tests", () => {
       }
     });
 
-    test("should pass axe accessibility audit", async ({ page }) => {
-      await injectAxe(page);
-      await checkA11y(page, undefined, {
-        detailedReport: true,
-        axeOptions: {
-          runOnly: {
-            type: "tag",
-            values: ["wcag2a", "wcag2aa"],
-          },
-          rules: {
-            "scrollable-region-focusable": { enabled: false },
-          },
-        },
-      });
-    });
   });
 
   test.describe("Focus Management", () => {
@@ -369,4 +355,35 @@ test.describe("TabPanel Component - Cross-Browser Tests", () => {
     });
   });
 
+});
+
+/**
+ * The axe audit, moved off the demo page.
+ *
+ * It used to call `checkA11y(page, undefined, ...)`. A `undefined` selector
+ * audits the whole document, so this was auditing all of `/tab-panel` — the
+ * docs sidebar, the page's own prose, and fifteen TabPanel instances that the
+ * demo hands `text-cl-text-tertiary` back through the `classes` prop
+ * (TabPanelDemo.tsx:219-261), undoing the library's own fix. 77 contrast nodes,
+ * almost none of them the component. That is E2E-INVENTORY.md's finding again:
+ * a spec reporting on a page instead of on the library.
+ *
+ * Scoped to `[data-fixture]`, across every fixture rather than one, and with no
+ * rule disabled — `scrollable-region-focusable` is no longer needed either,
+ * because it was the demo page's scroll containers that tripped it.
+ */
+test.describe("TabPanel (fixtures)", () => {
+  for (const fixture of [
+    "default",
+    "vertical",
+    "second-active",
+    "inactive-count",
+    "kept-mounted",
+  ]) {
+    test(`passes an axe audit: ${fixture}`, async ({ page }) => {
+      await gotoFixture(page, "TabPanel", fixture);
+      await injectAxe(page);
+      await checkA11y(page, "[data-fixture]", { detailedReport: true });
+    });
+  }
 });

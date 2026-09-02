@@ -1,6 +1,7 @@
+import { Checkbox } from "../../components/Checkbox";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Checkbox> = [
   { name: "default", props: {} },
   { name: "checked", props: { defaultChecked: true } },
   { name: "indeterminate", props: { indeterminate: true } },
@@ -9,5 +10,17 @@ const fixtures: Fixtures = [
   { name: "success", props: { label: "Accept", success: true, successMessage: "Thanks" } },
   { name: "disabled", props: { label: "Accept", disabled: true } },
   { name: "loading", props: { loading: true } },
+  {
+    name: "siblings",
+    props: { label: "Middle", disabled: true },
+    note: "The FIXTURE is the disabled one, between two native checkboxes. Library siblings would be rendered without `unstyled` and leak their decorative classes into unstyled.contract's measurement.",
+    wrap: (node) => (
+      <>
+        <input type="checkbox" aria-label="Before" />
+        {node}
+        <input type="checkbox" aria-label="After" />
+      </>
+    ),
+  },
 ];
 export default fixtures;

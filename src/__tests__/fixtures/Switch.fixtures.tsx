@@ -1,6 +1,7 @@
+import { Switch } from "../../components/Switch";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Switch> = [
   { name: "default", props: {} },
   { name: "checked", props: { defaultChecked: true } },
   { name: "labelled", props: { label: "Notify", description: "Email me." } },

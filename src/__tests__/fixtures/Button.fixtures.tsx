@@ -1,6 +1,7 @@
+import { Button } from "../../components/Button";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Button> = [
   { name: "default", props: {}, children: "Save" },
   { name: "loading", props: { loading: true }, children: "Save" },
   { name: "disabled", props: { disabled: true }, children: "Save" },

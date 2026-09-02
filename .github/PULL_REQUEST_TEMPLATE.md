@@ -18,7 +18,7 @@ rework if the direction differs.
 ## Checks
 
 - [ ] `npm test` passes
-- [ ] `npx tsc -b` is clean
+- [ ] `npm run typecheck` passes (runs `tsc --build`; never `tsc --noEmit`)
 - [ ] `npm run lint` reports no errors
 - [ ] Touched components keep their keyboard and screen-reader behaviour
 - [ ] New or changed props are reflected in the component's `.schema.json`

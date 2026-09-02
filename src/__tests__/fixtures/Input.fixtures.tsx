@@ -1,6 +1,7 @@
+import { Input } from "../../components/Input";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Input> = [
   { name: "default", props: {} },
   { name: "labelled", props: { label: "Email", description: "We never share it." } },
   { name: "error", props: { label: "Email", error: true, errorMessage: "Required" } },

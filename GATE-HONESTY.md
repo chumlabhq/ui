@@ -122,10 +122,19 @@ Any component added since is invisible to all five contract suites.
 
 ### 1.7 Records that are genuinely earned — no marker
 
-`validation.typescript` (`tsc --noEmit`, re-verified clean), `validation.lint` (`eslint .`,
-clean), `validation.build`'s compile half, `validation.security` (npm audit + a real
-`dangerouslySetInnerHTML` count), `validation.changelog`, `validation.publishDryRun`
-(`npm pack --dry-run`). These trace to a command that fails when the claim is false.
+`validation.lint` (`eslint .`, clean), `validation.build`'s compile half,
+`validation.security` (npm audit + a real `dangerouslySetInnerHTML` count),
+`validation.changelog`, `validation.publishDryRun` (`npm pack --dry-run`). These trace to a
+command that fails when the claim is false.
+
+> **Correction, 2026-09-02.** `validation.typescript` was listed here, on the strength of
+> `tsc --noEmit` being "re-verified clean". It does not belong: the root `tsconfig.json` is
+> a solution file (`{"files": [], "references": [...]}`), so `tsc --noEmit` compiles the
+> empty set and exits 0 whatever the source says. It is section 2's failure mode, not
+> section 1's — an assertion that cannot fail — and this audit missed it by re-running the
+> command instead of testing whether the command can fail. It is now `npm run typecheck`
+> (`scripts/assert-typecheck.mjs`), which plants a deliberate type error, requires the gate
+> to reject it, and only then reports clean.
 
 ---
 

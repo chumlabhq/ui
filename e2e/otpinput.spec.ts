@@ -1,565 +1,84 @@
 import { test, expect } from "@playwright/test";
-import { injectAxe } from "axe-playwright";
+import { injectAxe, checkA11y } from "axe-playwright";
+import { gotoFixture } from "./_nav";
 
-// Helper to wait for OTP inputs visibility with scroll support
-async function waitForOtpVisible(page: import("@playwright/test").Page) {
-  const input = page.locator('[aria-label="Digit 1 of 6"]').first();
-  await input.waitFor({ state: "attached", timeout: 10000 });
-  await input.scrollIntoViewIfNeeded();
-  await input.waitFor({ state: "visible", timeout: 10000 });
-}
+/**
+ * Five of otpinput.spec.ts's thirty-nine tests (E2E-TRIAGE.md, Appendix B).
+ *
+ * The other thirty-four duplicated OtpInput.test.tsx — every arrow key, every
+ * paste path, the disabled state, the ARIA wiring — or measured the dev
+ * server's speed. What is left needs a real browser: axe, a viewport, a touch,
+ * and where focus actually lands.
+ */
 
-// Helper to get OTP input group
-function getOtpInputs(page: import("@playwright/test").Page) {
-  return page
-    .locator('[role="group"][aria-label="One-time password input"]')
-    .first()
-    .locator("input");
-}
+const INPUTS = "[data-fixture] input";
 
-test.describe("OTP Input - Cross-Browser Tests", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForOtpVisible(page);
-  });
-
-  test.describe("Basic Functionality", () => {
-    test("should render OTP input components on the page", async ({ page }) => {
-      const otpGroups = page.locator('[role="group"][aria-label="One-time password input"]');
-      await expect(otpGroups.first()).toBeVisible();
-
-      const count = await otpGroups.count();
-      expect(count).toBeGreaterThan(0);
-    });
-
-    test("should accept digit input in first field", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-      const firstInput = inputs.first();
-
-      await firstInput.click();
-      await page.keyboard.type("5");
-
-      await expect(firstInput).toHaveValue("5");
-    });
-
-    test("should auto-advance to next input after entering digit", async ({
-      page,
-    }) => {
-      const inputs = getOtpInputs(page);
-      const firstInput = inputs.first();
-      const secondInput = inputs.nth(1);
-
-      await firstInput.click();
-      // Use press instead of type for more reliable cross-browser behavior
-      await page.keyboard.press("1");
-      
-      // Wait for focus to advance with timeout for Firefox
-      await expect(secondInput).toBeFocused({ timeout: 5000 });
-    });
-
-    test("should complete full OTP entry", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-      const firstInput = inputs.first();
-
-      await firstInput.click();
-
-      // Type complete OTP
-      await page.keyboard.type("123456");
-
-      // Verify all inputs filled
-      for (let i = 0; i < 6; i++) {
-        await expect(inputs.nth(i)).toHaveValue(String(i + 1));
-      }
-    });
-
-  });
-
-  test.describe("Paste Functionality", () => {
-    test("should handle paste of complete OTP", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-      const firstInput = inputs.first();
-
-      await firstInput.click();
-
-      // Paste OTP code
-      await page.evaluate(() => {
-        const pasteEvent = new ClipboardEvent("paste", {
-          bubbles: true,
-          clipboardData: new DataTransfer(),
-        });
-        pasteEvent.clipboardData!.setData("text/plain", "987654");
-        document
-          .querySelector('[role="group"][aria-label="One-time password input"]')
-          ?.dispatchEvent(pasteEvent);
-      });
-
-      // Verify pasted values
-      await expect(inputs.nth(0)).toHaveValue("9");
-      await expect(inputs.nth(1)).toHaveValue("8");
-      await expect(inputs.nth(2)).toHaveValue("7");
-    });
-
-  });
-
-  test.describe("Keyboard Navigation", () => {
-    test("should navigate left with ArrowLeft", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-
-      // Click third input
-      await inputs.nth(2).click();
-      await page.keyboard.press("ArrowLeft");
-
-      await expect(inputs.nth(1)).toBeFocused();
-    });
-
-    test("should navigate right with ArrowRight", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-
-      await inputs.nth(1).click();
-      await page.keyboard.press("ArrowRight");
-
-      await expect(inputs.nth(2)).toBeFocused();
-    });
-
-    test("should navigate to first input with Home", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-
-      await inputs.nth(4).click();
-      await page.keyboard.press("Home");
-
-      await expect(inputs.first()).toBeFocused();
-    });
-
-    test("should navigate to last input with End", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-
-      await inputs.first().click();
-      await page.keyboard.press("End");
-
-      await expect(inputs.nth(5)).toBeFocused();
-    });
-
-    test("should clear and navigate back on Backspace", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-
-      // Enter some digits first
-      await inputs.first().click();
-      await page.keyboard.type("12");
-      // After typing "12": index 0 has "1", index 1 has "2", focus is on index 2 (empty)
-
-      // Backspace on empty input clears previous digit and moves focus there
-      await page.keyboard.press("Backspace");
-
-      // Focus should be on index 1 (the cleared digit's position)
-      await expect(inputs.nth(1)).toBeFocused();
-    });
-
-    test("should clear current input on Delete", async ({ page }) => {
-      const inputs = getOtpInputs(page);
-
-      await inputs.first().click();
-      await page.keyboard.type("1");
-
-      // Go back and press Delete
-      await page.keyboard.press("ArrowLeft");
-      await page.keyboard.press("Delete");
-
-      await expect(inputs.first()).toHaveValue("");
-      await expect(inputs.first()).toBeFocused();
-    });
-  });
-
-
-
-  test.describe("Disabled State", () => {
-
-    test("should not accept input when disabled", async ({ page }) => {
-      const disabledInputs = page.locator("input:disabled");
-
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(disabledInputs.first()).toBeVisible();
-      const input = disabledInputs.first();
-      const valueBefore = await input.inputValue();
-
-      // Attempt to type (should not work)
-      await input.type("9").catch(() => {
-        // Expected to fail
-      });
-
-      const valueAfter = await input.inputValue();
-      expect(valueAfter).toBe(valueBefore);
-    });
-  });
-
-});
-
-test.describe("OTP Input - Keyboard Navigation", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForOtpVisible(page);
-  });
-
-  test("should allow full keyboard-only OTP entry", async ({ page }) => {
-    const inputs = getOtpInputs(page);
-    
-    // Focus first input via click, then use keyboard only
-    await inputs.first().click();
-
-    // Type digits (should auto-advance)
-    await page.keyboard.type("654321");
-
-    // Verify the values were entered sequentially
-    const expectedValues = ["6", "5", "4", "3", "2", "1"];
-    for (let i = 0; i < 6; i++) {
-      await expect(inputs.nth(i)).toHaveValue(expectedValues[i]);
-    }
-  });
-
-  test("should support navigation and editing", async ({ page }) => {
-    const inputs = getOtpInputs(page);
-
-    // Enter OTP
-    await inputs.first().click();
-    await page.keyboard.type("111111");
-
-    // Navigate to middle and change value
-    await page.keyboard.press("Home");
-    await page.keyboard.press("ArrowRight");
-    await page.keyboard.press("ArrowRight");
-
-    // Delete and type new value
-    await page.keyboard.press("Delete");
-    await page.keyboard.type("9");
-
-    // Third input should now be 9
-    await expect(inputs.nth(2)).toHaveValue("9");
-  });
-});
-
-test.describe("OTP Input - Accessibility Tests", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForOtpVisible(page);
+test.describe("OtpInput (fixtures)", () => {
+  test("passes an axe audit", async ({ page }) => {
+    await gotoFixture(page, "OtpInput", "labelled");
     await injectAxe(page);
-  });
-
-  test("should have no critical accessibility violations", async ({ page }) => {
-    const results = await page.evaluate(async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const axeResults = await (window as any).axe.run(
-        '[role="group"][aria-label="One-time password input"], label, [role=alert]',
-        {
-          rules: {
-            "color-contrast": { enabled: false },
-            region: { enabled: false },
-          },
-        },
-      );
-      return axeResults.violations;
+    // `color-contrast` off, and only that: OtpInput is on the
+    // `--cl-text-tertiary` baseline in docs/adr/002-unrenderable-keys.json,
+    // one token awaiting a design decision and already ratcheted by
+    // accessibility.spec.ts.
+    await checkA11y(page, "[data-fixture]", {
+      detailedReport: true,
+      axeOptions: { rules: { "color-contrast": { enabled: false } } },
     });
-
-    const criticalViolations = results.filter(
-      (v: { impact: string }) => v.impact === "critical",
-    );
-
-    if (criticalViolations.length > 0) {
-      console.log(
-        "Critical accessibility violations:",
-        JSON.stringify(criticalViolations, null, 2),
-      );
-    }
-
-    expect(criticalViolations).toHaveLength(0);
   });
 
-  test("should have proper aria-label on each input", async ({ page }) => {
-    const inputs = getOtpInputs(page);
+  test("fits every slot inside a 375px viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "OtpInput", "default");
+
+    const inputs = page.locator(INPUTS);
     const count = await inputs.count();
+    expect(count).toBe(4);
 
     for (let i = 0; i < count; i++) {
-      const input = inputs.nth(i);
-      const ariaLabel = await input.getAttribute("aria-label");
-      expect(ariaLabel).toBe(`Digit ${i + 1} of ${count}`);
+      const box = (await inputs.nth(i).boundingBox())!;
+      expect(box.x, `slot ${i} starts off-screen`).toBeGreaterThanOrEqual(-1);
+      expect(box.x + box.width, `slot ${i} overflows 375px`).toBeLessThanOrEqual(376);
     }
   });
 
+  test("accepts a digit from a touch", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "OtpInput", "default");
 
-  test("should have autocomplete=one-time-code on first input", async ({
-    page,
-  }) => {
-    const inputs = getOtpInputs(page);
-    await expect(inputs.first()).toHaveAttribute(
-      "autocomplete",
-      "one-time-code",
-    );
+    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
+    // projects and `tap()` throws there instead of degrading.
+    const first = page.locator(INPUTS).first();
+    await first.dispatchEvent("touchstart");
+    await first.dispatchEvent("touchend");
+    await first.click();
+    await page.keyboard.type("7");
+
+    await expect(first).toHaveValue("7");
   });
 
+  test("keeps each slot at a usable touch target size", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await gotoFixture(page, "OtpInput", "default");
 
-  test("should have labels properly associated via htmlFor", async ({
-    page,
-  }) => {
-    const labels = page.locator("label[for]");
-    const count = await labels.count();
-
-    for (let i = 0; i < Math.min(count, 3); i++) {
-      const label = labels.nth(i);
-      const forAttr = await label.getAttribute("for");
-
-      if (forAttr) {
-        // Check if corresponding input exists using attribute selector (avoids CSS.escape issue)
-        const input = page.locator(`[id="${forAttr}"]`);
-        // The guard used to make this pass when the element was absent, which is
-        // the failure the test exists to catch. Assert presence, then behaviour.
-        await expect(input.first()).toBeVisible();
-        await expect(input).toBeVisible();
-      }
-    }
-  });
-});
-
-test.describe("OTP Input - Responsive Tests", () => {
-  test("should render correctly on mobile viewport", async ({
-    page,
-    browserName,
-  }, testInfo) => {
-    const isMobileProject = testInfo.project.name.includes("Mobile");
-
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-
-    if (browserName === "firefox") {
-      await page.waitForTimeout(500);
-    }
-
-    const inputs = page.locator('[aria-label="Digit 1 of 6"]');
-    const timeout = browserName === "firefox" ? 10000 : 5000;
-    await inputs.first().waitFor({ state: "attached", timeout });
-
-    const count = await inputs.count();
-    expect(count).toBeGreaterThan(0);
-
-    if (isMobileProject) {
-      await inputs.first().scrollIntoViewIfNeeded();
-      await expect(inputs.first()).toBeVisible();
-    }
+    // WCAG 2.5.5 asks for 44px; the library ships smaller slots so six fit on a
+    // narrow screen. 32px is the line below which the control is unusable by
+    // thumb, and it is what this asserts rather than the standard.
+    const box = (await page.locator(INPUTS).first().boundingBox())!;
+    expect(box.width).toBeGreaterThanOrEqual(32);
+    expect(box.height).toBeGreaterThanOrEqual(32);
   });
 
-  test("should handle touch interactions on mobile", async ({
-    page,
-  }, testInfo) => {
-    const isMobileProject = testInfo.project.name.includes("Mobile");
+  test("advances real focus as digits are typed", async ({ page }) => {
+    await gotoFixture(page, "OtpInput", "default");
 
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-
-    const inputs = getOtpInputs(page);
-    await inputs.first().waitFor({ state: "attached", timeout: 5000 });
-
-    if (isMobileProject) {
-      await inputs.first().scrollIntoViewIfNeeded();
-      await inputs.first().tap();
-      await page.keyboard.type("123");
-
-      await expect(inputs.nth(0)).toHaveValue("1");
-      await expect(inputs.nth(1)).toHaveValue("2");
-      await expect(inputs.nth(2)).toHaveValue("3");
-    } else {
-      await expect(inputs.first()).toBeAttached();
-    }
-  });
-
-  test("should maintain touch target size on mobile", async ({
-    page,
-  }, testInfo) => {
-    // Increase timeout for slower browsers
-    test.setTimeout(60000);
-    
-    const isMobileProject = testInfo.project.name.includes("Mobile");
-
-    if (!isMobileProject) {
-      await page.setViewportSize({ width: 375, height: 667 });
-    }
-
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-
-    const inputs = getOtpInputs(page);
-    await inputs.first().waitFor({ state: "attached", timeout: 10000 });
-    await inputs.first().scrollIntoViewIfNeeded();
-
-    const box = await inputs.first().boundingBox();
-
-    if (box) {
-      // Minimum touch target should be 44x44 pixels (WCAG recommendation)
-      // Allow some tolerance for styled inputs
-      expect(box.width).toBeGreaterThanOrEqual(24);
-      expect(box.height).toBeGreaterThanOrEqual(24);
-    }
-  });
-});
-
-test.describe("OTP Input - Browser-Specific Tests", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForOtpVisible(page);
-  });
-
-  test("should handle focus correctly across browsers", async ({
-    page,
-    browserName,
-  }) => {
-    const inputs = getOtpInputs(page);
-
+    const inputs = page.locator(INPUTS);
     await inputs.first().click();
-    await expect(inputs.first()).toBeFocused();
+    await page.keyboard.type("12");
 
-    // Type to advance
-    await page.keyboard.type("1");
-    await expect(inputs.nth(1)).toBeFocused();
-
-    // Safari sometimes has focus quirks with programmatic focus
-    if (browserName === "webkit") {
-      // Additional verification for Safari
-      const focusedElement = page.locator(":focus");
-      await expect(focusedElement).toBeVisible();
-    }
-  });
-
-  test("should handle rapid input across browsers", async ({
-    page,
-    browserName,
-  }) => {
-    const inputs = getOtpInputs(page);
-
-    await inputs.first().click();
-
-    // Rapid input
-    const startTime = Date.now();
-    await page.keyboard.type("123456", { delay: 50 });
-    const endTime = Date.now();
-
-    // All inputs should be filled
-    for (let i = 0; i < 6; i++) {
-      await expect(inputs.nth(i)).toHaveValue(String(i + 1));
-    }
-
-    // Should complete in reasonable time (allow more for Firefox/WebKit which
-    // are significantly slower in Playwright, especially under parallel load)
-    const maxTime = browserName === "chromium" ? 3000 : 8000;
-    expect(endTime - startTime).toBeLessThan(maxTime);
-  });
-});
-
-
-test.describe("OTP Input - Full User Flows", () => {
-  // Increase timeout for this test suite to handle slower browsers
-  test.setTimeout(60000);
-  
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/otp-input");
-    await page.waitForLoadState("domcontentloaded");
-    await waitForOtpVisible(page);
-  });
-
-  test("should complete verification code entry flow", async ({ page }) => {
-    const inputs = getOtpInputs(page);
-
-    // Step 1: Click first input to focus
-    await inputs.first().click();
-
-    // Step 2: Enter complete OTP
-    await page.keyboard.type("847291");
-
-    // Step 3: Verify all inputs are filled
-    const expectedValues = ["8", "4", "7", "2", "9", "1"];
-    for (let i = 0; i < 6; i++) {
-      await expect(inputs.nth(i)).toHaveValue(expectedValues[i]);
-    }
-  });
-
-  test("should support edit and correct flow", async ({ page }) => {
-    const inputs = getOtpInputs(page);
-
-    // Enter OTP
-    await inputs.first().click();
-    await page.keyboard.type("123456");
-
-    // Verify all initial values
-    await expect(inputs.nth(0)).toHaveValue("1");
-    await expect(inputs.nth(1)).toHaveValue("2");
-    await expect(inputs.nth(2)).toHaveValue("3");
-    await expect(inputs.nth(3)).toHaveValue("4");
-    await expect(inputs.nth(4)).toHaveValue("5");
-    await expect(inputs.nth(5)).toHaveValue("6");
-
-    // Edit a specific digit using fill (more reliable than click+delete+type)
-    await inputs.nth(2).fill("9");
-
-    // Verify the edit - only index 2 should change
-    await expect(inputs.nth(0)).toHaveValue("1");
-    await expect(inputs.nth(1)).toHaveValue("2");
-    await expect(inputs.nth(2)).toHaveValue("9"); // Changed from "3" to "9"
-    await expect(inputs.nth(3)).toHaveValue("4");
-    await expect(inputs.nth(4)).toHaveValue("5");
-    await expect(inputs.nth(5)).toHaveValue("6");
-  });
-
-  test("should handle clear and re-enter flow", async ({ page }) => {
-    const inputs = getOtpInputs(page);
-
-    // Enter OTP
-    await inputs.first().click();
-    await page.keyboard.type("111111");
-
-    // Clear all with multiple backspaces
-    for (let i = 0; i < 6; i++) {
-      await page.keyboard.press("Backspace");
-    }
-
-    // Re-enter new OTP
-    await page.keyboard.type("222222");
-
-    // Verify new values
-    for (let i = 0; i < 6; i++) {
-      await expect(inputs.nth(i)).toHaveValue("2");
-    }
-  });
-
-  test("should handle copy-paste workflow", async ({ page }) => {
-    const inputs = getOtpInputs(page);
-
-    // Focus first input
-    await inputs.first().click();
-
-    // Simulate receiving OTP via paste (e.g., from SMS autofill)
-    await page.evaluate(() => {
-      const pasteEvent = new ClipboardEvent("paste", {
-        bubbles: true,
-        clipboardData: new DataTransfer(),
-      });
-      pasteEvent.clipboardData!.setData("text/plain", "567890");
-      document
-        .querySelector('[role="group"][aria-label="One-time password input"]')
-        ?.dispatchEvent(pasteEvent);
-    });
-
-    // Verify pasted values
-    const expectedValues = ["5", "6", "7", "8", "9", "0"];
-    for (let i = 0; i < 6; i++) {
-      await expect(inputs.nth(i)).toHaveValue(expectedValues[i]);
-    }
+    // `document.activeElement`, not a handler spy: the jsdom equivalent asserts
+    // the component called focus(), which is not the same as the browser
+    // honouring it.
+    await expect(inputs.nth(2)).toBeFocused();
   });
 });

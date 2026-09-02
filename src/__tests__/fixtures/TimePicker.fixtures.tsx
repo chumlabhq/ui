@@ -1,7 +1,8 @@
+import { TimePicker } from "../../components/TimePicker";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof TimePicker> = [
   { name: "closed", props: {} },
   { name: "labelled", props: { label: "Time", description: "24h clock" } },
   { name: "open", props: { defaultOpen: true } },

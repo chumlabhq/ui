@@ -1,7 +1,8 @@
+import { Slider } from "../../components/Slider";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof Slider> = [
   { name: "default", props: {} },
   { name: "labelled", props: { label: "Volume", description: "0 to 100" } },
   { name: "range", props: { defaultValue: [20, 60] } },

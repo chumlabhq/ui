@@ -348,7 +348,7 @@ npm run build:lib      # Build library
 
 1. Fork the repo
 2. Create your branch (`git checkout -b feat/my-feature`)
-3. Make changes and run `npm run test:run && npx tsc --noEmit`
+3. Make changes and run `npm run test:run && npm run typecheck`
 4. Open a pull request
 
 ---

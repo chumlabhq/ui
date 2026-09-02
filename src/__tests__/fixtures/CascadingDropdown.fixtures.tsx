@@ -1,6 +1,19 @@
+import { CascadingDropdown } from "../../components/CascadingDropdown";
 import { fireEvent } from "@testing-library/react";
 import type { Fixtures } from "./types";
 import { tick } from "./_act";
+
+const MULTI = [
+  {
+    value: "fruit",
+    label: "Fruit",
+    selectionMode: "multi" as const,
+    children: [
+      { value: "a", label: "Apple" },
+      { value: "b", label: "Banana" },
+    ],
+  },
+];
 
 const NESTED = [
   {
@@ -27,18 +40,18 @@ const openSubmenu = async (c: HTMLElement) => {
   await tick();
 };
 
-const fixtures: Fixtures = [
+const fixtures: Fixtures<typeof CascadingDropdown> = [
   { name: "closed", props: { options: NESTED } },
   { name: "labelled", props: { options: NESTED, label: "Produce", description: "Pick one." } },
   { name: "open", props: { options: NESTED, defaultOpen: true, keepMounted: true }, act: settle },
   {
     name: "open-search",
-    props: { options: NESTED, defaultOpen: true, keepMounted: true, showSearch: true },
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, showMenuSearch: true, showSubmenuSearch: true },
     act: settle,
   },
   {
     name: "open-submenu",
-    props: { options: NESTED, defaultOpen: true, keepMounted: true, showSearch: true },
+    props: { options: NESTED, defaultOpen: true, keepMounted: true, showMenuSearch: true, showSubmenuSearch: true },
     note: "Submenu parts, and their own search box, only exist once a parent row is entered.",
     act: openSubmenu,
   },
@@ -51,6 +64,23 @@ const fixtures: Fixtures = [
       defaultValue: { fruit: "a" },
       clearable: true,
     },
+    act: openSubmenu,
+  },
+  {
+    name: "open-multi",
+    props: { options: MULTI, defaultOpen: true, keepMounted: true },
+    note: "`selectionMode` is per-option and read from the PARENT (CascadingDropdown.tsx:192), so a multi-select submenu needs it on the parent, not on the dropdown.",
+    act: openSubmenu,
+  },
+  {
+    name: "open-multi-selected",
+    props: {
+      options: MULTI,
+      defaultOpen: true,
+      keepMounted: true,
+      defaultValue: { fruit: ["a"] },
+    },
+    note: "The only fixture rendering `checkboxChecked` — it needs multi mode AND a selection.",
     act: openSubmenu,
   },
   { name: "open-empty", props: { options: [], defaultOpen: true, keepMounted: true }, act: settle },
