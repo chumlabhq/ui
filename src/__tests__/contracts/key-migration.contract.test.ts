@@ -27,6 +27,15 @@ const TABLE = JSON.parse(
   vocabularyAmendments: Record<string, string>;
 };
 
+/** `totals` keys that are a straight count of rows by outcome. */
+const OUTCOME_TOTALS: Record<string, string> = {
+  renamed: "renamed",
+  unchanged: "unchanged",
+  absorbedIntoParent: "absorbed-into-parent",
+  deletedAsState: "deleted-as-state",
+  deletedAsDead: "deleted-as-dead",
+};
+
 /**
  * Names where two source keys collapsing onto one part is the intended outcome —
  * two states of one element, or the same element spelled twice. Anything else
@@ -116,6 +125,39 @@ describe("key migration contract", () => {
       .filter((r) => !r.precedent || r.precedent === "UNDOCUMENTED")
       .map((r) => `${r.component}.${r.key} -> ${r.to}`);
     expect(undocumented, "an amendment term with no precedent recorded").toEqual([]);
+  });
+
+  /**
+   * 24 rows shipped as `unchanged` while naming a different target. They were
+   * renames counted as no-ops, which is why the recorded rename total was 176
+   * against a real 200 — and why Task 3a's first pass would have skipped them.
+   * `unchanged` has to mean the name did not change.
+   */
+  it("every unchanged row keeps its own name", () => {
+    expect(
+      TABLE.rows.filter((r) => r.outcome === "unchanged" && r.to !== r.key)
+        .map((r) => `${r.component}.${r.key} -> ${r.to}`),
+      "an outcome of `unchanged` on a row that renames the key",
+    ).toEqual([]);
+  });
+
+  /** The totals were read straight into a task brief; nothing derived them. */
+  it("every total is a count over the rows", () => {
+    const drift: string[] = [];
+    for (const [field, outcome] of Object.entries(OUTCOME_TOTALS)) {
+      const actual = TABLE.rows.filter((r) => r.outcome === outcome).length;
+      if (TABLE.totals[field] !== actual) {
+        drift.push(`${field}: recorded ${TABLE.totals[field]}, rows say ${actual}`);
+      }
+    }
+    const after = new Set(
+      TABLE.rows.filter((r) => r.outcome === "renamed" || r.outcome === "unchanged")
+        .map((r) => `${r.component}.${r.to}`),
+    );
+    if (TABLE.totals.keysAfter !== after.size) {
+      drift.push(`keysAfter: recorded ${TABLE.totals.keysAfter}, rows say ${after.size}`);
+    }
+    expect(drift, "a recorded total nothing derives from the rows").toEqual([]);
   });
 
   it("covers every key exactly once", () => {

@@ -35,6 +35,14 @@ export default defineConfig({
           setupFiles: ["./src/test/setup.ts"],
           include: [CONTRACTS],
           isolate: true,
+          // These sweeps render every fixture of every component, and the
+          // project runs its files in parallel. Under that load a render that
+          // takes ~460ms alone has been measured at ~5.4s, which tripped the
+          // 5s default and failed the whole file — one timeout cascading into
+          // "no fixture renders `root`" for every component after it. The
+          // suite was green or 99-red on the same commit depending on machine
+          // load. A timeout is not an assertion; nothing here is weakened.
+          testTimeout: 30_000,
         },
       },
     ],

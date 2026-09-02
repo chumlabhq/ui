@@ -83,7 +83,6 @@
       "animate-pulse"
     ],
     "Table": [
-      "transition-all",
       "transition-transform",
       "transition-colors",
       "transition-opacity"

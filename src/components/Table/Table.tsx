@@ -1284,7 +1284,7 @@ function TableInner<TData>(
                 data-state={isPinned ? "active" : undefined}
                 onClick={(e) => handlePinClick(columnId, isPinned, e)}
                 disabled={isDisabled}
-                className={`shrink-0 transition-all ${
+                className={`${
                   isPinned
                     ? `opacity-100 ${pinnedPinButtonClassName} ${pinnedPinIconHoverClassName ? `hover:${pinnedPinIconHoverClassName}` : ""}`
                     : `opacity-0 group-hover/header:opacity-100 ${pinButtonClassName} ${pinIconHoverClassName ? `hover:${pinIconHoverClassName}` : ""} ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`
