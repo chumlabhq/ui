@@ -52,7 +52,20 @@
       "path": "src/components/Accordion",
       "demo": "src/pages/demo/AccordionDemo.tsx",
       "schema": "src/components/Accordion/Accordion.schema.json",
-      "knowledge": "src/components/Accordion/ACCORDION.ai.md"
+      "knowledge": "src/components/Accordion/ACCORDION.ai.md",
+      "anatomy": {
+        "root": {
+          "item": {
+            "content": {},
+            "heading": {
+              "trigger": {
+                "description": {},
+                "icon": {}
+              }
+            }
+          }
+        }
+      }
     },
     {
       "name": "Avatar",
@@ -96,7 +109,15 @@
       "path": "src/components/Avatar",
       "demo": "src/pages/demo/AvatarDemo.tsx",
       "schema": "src/components/Avatar/Avatar.schema.json",
-      "knowledge": "src/components/Avatar/AVATAR.ai.md"
+      "knowledge": "src/components/Avatar/AVATAR.ai.md",
+      "anatomy": {
+        "root": {
+          "fallback": {},
+          "image": {},
+          "initials": {},
+          "status": {}
+        }
+      }
     },
     {
       "name": "Breadcrumb",
@@ -142,7 +163,21 @@
       "path": "src/components/Breadcrumb",
       "demo": "src/pages/demo/BreadcrumbDemo.tsx",
       "schema": "src/components/Breadcrumb/Breadcrumb.schema.json",
-      "knowledge": "src/components/Breadcrumb/BREADCRUMB.ai.md"
+      "knowledge": "src/components/Breadcrumb/BREADCRUMB.ai.md",
+      "anatomy": {
+        "root": {
+          "list": {
+            "ellipsis": {
+              "content": {}
+            },
+            "item": {
+              "itemIcon": {},
+              "link": {}
+            },
+            "separator": {}
+          }
+        }
+      }
     },
     {
       "name": "Button",
@@ -189,7 +224,13 @@
       "path": "src/components/Button",
       "demo": "src/pages/demo/ButtonDemo.tsx",
       "schema": "src/components/Button/Button.schema.json",
-      "knowledge": "src/components/Button/BUTTON.ai.md"
+      "knowledge": "src/components/Button/BUTTON.ai.md",
+      "anatomy": {
+        "root": {
+          "icon": {},
+          "loading": {}
+        }
+      }
     },
     {
       "name": "CascadingDropdown",
@@ -270,7 +311,30 @@
       "path": "src/components/CascadingDropdown",
       "demo": "src/pages/demo/CascadingDropdownDemo.tsx",
       "schema": "src/components/CascadingDropdown/CascadingDropdown.schema.json",
-      "knowledge": "src/components/CascadingDropdown/CASCADINGDROPDOWN.ai.md"
+      "knowledge": "src/components/CascadingDropdown/CASCADINGDROPDOWN.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "empty": {},
+            "item": {
+              "checkbox": {},
+              "itemIcon": {},
+              "itemIndicator": {}
+            },
+            "loading": {},
+            "searchInput": {}
+          },
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "clearButton": {},
+            "icon": {},
+            "value": {}
+          }
+        }
+      }
     },
     {
       "name": "Checkbox",
@@ -320,7 +384,17 @@
       "path": "src/components/Checkbox",
       "demo": "src/pages/demo/CheckboxDemo.tsx",
       "schema": "src/components/Checkbox/Checkbox.schema.json",
-      "knowledge": "src/components/Checkbox/CHECKBOX.ai.md"
+      "knowledge": "src/components/Checkbox/CHECKBOX.ai.md",
+      "anatomy": {
+        "root": {
+          "checkbox": {},
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "itemIndicator": {},
+          "label": {}
+        }
+      }
     },
     {
       "name": "CountryFlag",
@@ -356,7 +430,21 @@
       "path": "src/components/CountryFlag",
       "demo": "src/pages/demo/CountryFlagDemo.tsx",
       "schema": "src/components/CountryFlag/CountryFlag.schema.json",
-      "knowledge": "src/components/CountryFlag/COUNTRYFLAG.ai.md"
+      "knowledge": "src/components/CountryFlag/COUNTRYFLAG.ai.md",
+      "anatomy": {
+        "root": {
+          "fallback": {},
+          "image": {}
+        }
+      },
+      "subAnatomy": {
+        "CountryFlagGroup": {
+          "root": {
+            "count": {},
+            "item": {}
+          }
+        }
+      }
     },
     {
       "name": "DatePicker",
@@ -441,7 +529,38 @@
       "path": "src/components/DatePicker",
       "demo": "src/pages/demo/DatePickerDemo.tsx",
       "schema": "src/components/DatePicker/DatePicker.schema.json",
-      "knowledge": "src/components/DatePicker/DATEPICKER.ai.md"
+      "knowledge": "src/components/DatePicker/DATEPICKER.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "footer": {
+              "presetButton": {}
+            },
+            "header": {
+              "monthSelect": {},
+              "navButton": {},
+              "yearSelect": {}
+            },
+            "list": {
+              "item": {
+                "markerIndicator": {},
+                "markerTooltip": {}
+              },
+              "weekNumber": {},
+              "weekday": {}
+            }
+          },
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "clearButton": {},
+            "icon": {},
+            "input": {}
+          }
+        }
+      }
     },
     {
       "name": "Drawer",
@@ -494,7 +613,13 @@
       "path": "src/components/Drawer",
       "demo": "src/pages/demo/DrawerDemo.tsx",
       "schema": "src/components/Drawer/Drawer.schema.json",
-      "knowledge": "src/components/Drawer/DRAWER.ai.md"
+      "knowledge": "src/components/Drawer/DRAWER.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {},
+          "overlay": {}
+        }
+      }
     },
     {
       "name": "Dropdown",
@@ -567,7 +692,29 @@
       "path": "src/components/Dropdown",
       "demo": "src/pages/demo/DropdownDemo.tsx",
       "schema": "src/components/Dropdown/Dropdown.schema.json",
-      "knowledge": "src/components/Dropdown/DROPDOWN.ai.md"
+      "knowledge": "src/components/Dropdown/DROPDOWN.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "empty": {},
+            "list": {
+              "item": {
+                "itemIndicator": {}
+              }
+            },
+            "loading": {}
+          },
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "clearButton": {},
+            "icon": {},
+            "value": {}
+          }
+        }
+      }
     },
     {
       "name": "Input",
@@ -616,7 +763,19 @@
       "path": "src/components/Input",
       "demo": "src/pages/demo/InputDemo.tsx",
       "schema": "src/components/Input/Input.schema.json",
-      "knowledge": "src/components/Input/INPUT.ai.md"
+      "knowledge": "src/components/Input/INPUT.ai.md",
+      "anatomy": {
+        "root": {
+          "count": {},
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "input": {},
+          "label": {},
+          "prefix": {},
+          "suffix": {}
+        }
+      }
     },
     {
       "name": "InternationalPhoneInput",
@@ -686,7 +845,19 @@
       "path": "src/components/InternationalPhoneInput",
       "demo": "src/pages/demo/InternationalPhoneInputDemo.tsx",
       "schema": "src/components/InternationalPhoneInput/InternationalPhoneInput.schema.json",
-      "knowledge": "src/components/InternationalPhoneInput/INTERNATIONALPHONEINPUT.ai.md"
+      "knowledge": "src/components/InternationalPhoneInput/INTERNATIONALPHONEINPUT.ai.md",
+      "anatomy": {
+        "root": {
+          "countrySelect": {},
+          "description": {},
+          "errorText": {},
+          "flag": {},
+          "helperText": {},
+          "input": {},
+          "label": {},
+          "value": {}
+        }
+      }
     },
     {
       "name": "Loader",
@@ -708,7 +879,30 @@
       "path": "src/components/Loader",
       "demo": "src/pages/demo/LoaderDemo.tsx",
       "schema": "src/components/Loader/Loader.schema.json",
-      "knowledge": "src/components/Loader/LOADER.ai.md"
+      "knowledge": "src/components/Loader/LOADER.ai.md",
+      "anatomy": {
+        "root": {
+          "indicator": {},
+          "track": {}
+        }
+      },
+      "subAnatomy": {
+        "DotLoader": {
+          "root": {
+            "indicator": {}
+          }
+        },
+        "LinearLoader": {
+          "root": {
+            "indicator": {}
+          }
+        },
+        "PulseLoader": {
+          "root": {
+            "indicator": {}
+          }
+        }
+      }
     },
     {
       "name": "Modal",
@@ -771,7 +965,21 @@
       "path": "src/components/Modal",
       "demo": "src/pages/demo/ModalDemo.tsx",
       "schema": "src/components/Modal/Modal.schema.json",
-      "knowledge": "src/components/Modal/MODAL.ai.md"
+      "knowledge": "src/components/Modal/MODAL.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "body": {},
+            "closeButton": {},
+            "header": {
+              "description": {},
+              "title": {}
+            }
+          },
+          "icon": {},
+          "overlay": {}
+        }
+      }
     },
     {
       "name": "MultiSelectDropdown",
@@ -843,7 +1051,34 @@
       "path": "src/components/MultiSelectDropdown",
       "demo": "src/pages/demo/MultiSelectDropdownDemo.tsx",
       "schema": "src/components/MultiSelectDropdown/MultiSelectDropdown.schema.json",
-      "knowledge": "src/components/MultiSelectDropdown/MULTISELECTDROPDOWN.ai.md"
+      "knowledge": "src/components/MultiSelectDropdown/MULTISELECTDROPDOWN.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "empty": {},
+            "list": {
+              "item": {
+                "checkbox": {},
+                "itemIndicator": {}
+              }
+            },
+            "loading": {}
+          },
+          "count": {},
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "chip": {
+              "chipRemove": {}
+            },
+            "clearButton": {},
+            "icon": {},
+            "value": {}
+          }
+        }
+      }
     },
     {
       "name": "MultiSelectSearchableDropdown",
@@ -920,7 +1155,35 @@
       "path": "src/components/MultiSelectSearchableDropdown",
       "demo": "src/pages/demo/MultiSelectSearchableDropdownDemo.tsx",
       "schema": "src/components/MultiSelectSearchableDropdown/MultiSelectSearchableDropdown.schema.json",
-      "knowledge": "src/components/MultiSelectSearchableDropdown/MULTISELECTSEARCHABLEDROPDOWN.ai.md"
+      "knowledge": "src/components/MultiSelectSearchableDropdown/MULTISELECTSEARCHABLEDROPDOWN.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "empty": {},
+            "list": {
+              "item": {
+                "checkbox": {},
+                "itemIndicator": {}
+              }
+            },
+            "loading": {},
+            "searchInput": {}
+          },
+          "count": {},
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "chip": {
+              "chipRemove": {}
+            },
+            "clearButton": {},
+            "icon": {},
+            "value": {}
+          }
+        }
+      }
     },
     {
       "name": "OtpInput",
@@ -973,7 +1236,19 @@
       "path": "src/components/OtpInput",
       "demo": "src/pages/demo/OtpInputDemo.tsx",
       "schema": "src/components/OtpInput/OtpInput.schema.json",
-      "knowledge": "src/components/OtpInput/OTPINPUT.ai.md"
+      "knowledge": "src/components/OtpInput/OTPINPUT.ai.md",
+      "anatomy": {
+        "root": {
+          "description": {},
+          "errorText": {},
+          "group": {
+            "input": {},
+            "separator": {}
+          },
+          "helperText": {},
+          "label": {}
+        }
+      }
     },
     {
       "name": "Pagination",
@@ -1029,7 +1304,19 @@
       "path": "src/components/Pagination",
       "demo": "src/pages/demo/PaginationDemo.tsx",
       "schema": "src/components/Pagination/Pagination.schema.json",
-      "knowledge": "src/components/Pagination/PAGINATION.ai.md"
+      "knowledge": "src/components/Pagination/PAGINATION.ai.md",
+      "anatomy": {
+        "root": {
+          "label": {},
+          "list": {
+            "ellipsis": {},
+            "item": {}
+          },
+          "navButton": {},
+          "pageInfo": {},
+          "rowsPerPage": {}
+        }
+      }
     },
     {
       "name": "RadioButton",
@@ -1054,7 +1341,25 @@
       "path": "src/components/RadioButton",
       "demo": "src/pages/demo/RadioButtonDemo.tsx",
       "schema": "src/components/RadioButton/RadioButton.schema.json",
-      "knowledge": "src/components/RadioButton/RADIOBUTTON.ai.md"
+      "knowledge": "src/components/RadioButton/RADIOBUTTON.ai.md",
+      "anatomy": {
+        "root": {
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {}
+        }
+      },
+      "subAnatomy": {
+        "RadioButton": {
+          "root": {
+            "description": {},
+            "itemIndicator": {},
+            "label": {},
+            "radio": {}
+          }
+        }
+      }
     },
     {
       "name": "ResizablePanel",
@@ -1091,7 +1396,12 @@
       "path": "src/components/ResizablePanel",
       "demo": "src/pages/demo/ResizablePanelDemo.tsx",
       "schema": "src/components/ResizablePanel/ResizablePanel.schema.json",
-      "knowledge": "src/components/ResizablePanel/RESIZABLEPANEL.ai.md"
+      "knowledge": "src/components/ResizablePanel/RESIZABLEPANEL.ai.md",
+      "anatomy": {
+        "root": {
+          "handle": {}
+        }
+      }
     },
     {
       "name": "SearchableDropdown",
@@ -1171,7 +1481,30 @@
       "path": "src/components/SearchableDropdown",
       "demo": "src/pages/demo/SearchableDropdownDemo.tsx",
       "schema": "src/components/SearchableDropdown/SearchableDropdown.schema.json",
-      "knowledge": "src/components/SearchableDropdown/SEARCHABLEDROPDOWN.ai.md"
+      "knowledge": "src/components/SearchableDropdown/SEARCHABLEDROPDOWN.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "empty": {},
+            "list": {
+              "item": {
+                "itemIndicator": {}
+              }
+            },
+            "loading": {},
+            "searchInput": {}
+          },
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "clearButton": {},
+            "icon": {},
+            "value": {}
+          }
+        }
+      }
     },
     {
       "name": "Slider",
@@ -1229,7 +1562,22 @@
       "path": "src/components/Slider",
       "demo": "src/pages/demo/SliderDemo.tsx",
       "schema": "src/components/Slider/Slider.schema.json",
-      "knowledge": "src/components/Slider/SLIDER.ai.md"
+      "knowledge": "src/components/Slider/SLIDER.ai.md",
+      "anatomy": {
+        "root": {
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "track": {
+            "mark": {},
+            "range": {},
+            "thumb": {
+              "tooltip": {}
+            }
+          }
+        }
+      }
     },
     {
       "name": "Stepper",
@@ -1282,7 +1630,19 @@
       "path": "src/components/Stepper",
       "demo": "src/pages/demo/StepperDemo.tsx",
       "schema": "src/components/Stepper/Stepper.schema.json",
-      "knowledge": "src/components/Stepper/STEPPER.ai.md"
+      "knowledge": "src/components/Stepper/STEPPER.ai.md",
+      "anatomy": {
+        "root": {
+          "list": {
+            "item": {
+              "connector": {},
+              "description": {},
+              "itemIndicator": {},
+              "itemText": {}
+            }
+          }
+        }
+      }
     },
     {
       "name": "Switch",
@@ -1334,7 +1694,19 @@
       "path": "src/components/Switch",
       "demo": "src/pages/demo/SwitchDemo.tsx",
       "schema": "src/components/Switch/Switch.schema.json",
-      "knowledge": "src/components/Switch/SWITCH.ai.md"
+      "knowledge": "src/components/Switch/SWITCH.ai.md",
+      "anatomy": {
+        "root": {
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "loading": {},
+          "track": {
+            "thumb": {}
+          }
+        }
+      }
     },
     {
       "name": "Table",
@@ -1462,7 +1834,38 @@
       "path": "src/components/Table",
       "demo": "src/pages/demo/TableDemo.tsx",
       "schema": "src/components/Table/Table.schema.json",
-      "knowledge": "src/components/Table/TABLE.ai.md"
+      "knowledge": "src/components/Table/TABLE.ai.md",
+      "anatomy": {
+        "root": {
+          "empty": {},
+          "list": {
+            "body": {
+              "item": {
+                "cell": {
+                  "checkbox": {},
+                  "expandButton": {},
+                  "input": {}
+                },
+                "dragHandle": {}
+              }
+            },
+            "footer": {},
+            "groupLabel": {},
+            "header": {
+              "headerCell": {
+                "filterButton": {},
+                "filterContent": {},
+                "pinButton": {},
+                "sortIcon": {}
+              }
+            }
+          },
+          "loading": {},
+          "mobileCard": {},
+          "resizeHandle": {},
+          "searchInput": {}
+        }
+      }
     },
     {
       "name": "TabPanel",
@@ -1511,7 +1914,21 @@
       "path": "src/components/TabPanel",
       "demo": "src/pages/demo/TabPanelDemo.tsx",
       "schema": "src/components/TabPanel/TabPanel.schema.json",
-      "knowledge": "src/components/TabPanel/TABPANEL.ai.md"
+      "knowledge": "src/components/TabPanel/TABPANEL.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "list": {
+              "indicator": {},
+              "item": {
+                "count": {},
+                "itemIcon": {},
+                "itemText": {}
+              }
+            }
+          }
+        }
+      }
     },
     {
       "name": "TextArea",
@@ -1568,7 +1985,17 @@
       "path": "src/components/TextArea",
       "demo": "src/pages/demo/TextAreaDemo.tsx",
       "schema": "src/components/TextArea/TextArea.schema.json",
-      "knowledge": "src/components/TextArea/TEXTAREA.ai.md"
+      "knowledge": "src/components/TextArea/TEXTAREA.ai.md",
+      "anatomy": {
+        "root": {
+          "count": {},
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "input": {},
+          "label": {}
+        }
+      }
     },
     {
       "name": "TimePicker",
@@ -1636,7 +2063,39 @@
       "path": "src/components/TimePicker",
       "demo": "src/pages/demo/TimePickerDemo.tsx",
       "schema": "src/components/TimePicker/TimePicker.schema.json",
-      "knowledge": "src/components/TimePicker/TIMEPICKER.ai.md"
+      "knowledge": "src/components/TimePicker/TIMEPICKER.ai.md",
+      "anatomy": {
+        "root": {
+          "content": {
+            "clockDisplay": {
+              "periodButton": {}
+            },
+            "clockFace": {
+              "clockHand": {},
+              "clockNumber": {}
+            },
+            "empty": {},
+            "footer": {
+              "cancelButton": {},
+              "confirmButton": {}
+            },
+            "list": {
+              "item": {
+                "itemIndicator": {}
+              }
+            }
+          },
+          "description": {},
+          "errorText": {},
+          "helperText": {},
+          "label": {},
+          "trigger": {
+            "clearButton": {},
+            "icon": {},
+            "input": {}
+          }
+        }
+      }
     },
     {
       "name": "Toast",
@@ -1678,7 +2137,16 @@
       "path": "src/components/Toast",
       "demo": "src/pages/demo/ToastDemo.tsx",
       "schema": "src/components/Toast/Toast.schema.json",
-      "knowledge": "src/components/Toast/TOAST.ai.md"
+      "knowledge": "src/components/Toast/TOAST.ai.md",
+      "anatomy": {
+        "root": {
+          "closeButton": {},
+          "description": {},
+          "icon": {},
+          "progress": {},
+          "title": {}
+        }
+      }
     },
     {
       "name": "Tooltip",
@@ -1733,7 +2201,15 @@
       "path": "src/components/Tooltip",
       "demo": "src/pages/demo/TooltipDemo.tsx",
       "schema": "src/components/Tooltip/Tooltip.schema.json",
-      "knowledge": "src/components/Tooltip/TOOLTIP.ai.md"
+      "knowledge": "src/components/Tooltip/TOOLTIP.ai.md",
+      "anatomy": {
+        "content": {
+          "arrow": {}
+        },
+        "trigger": {}
+      }
     }
-  ]
+  ],
+  "$anatomyComment": "ADR 002 R1: a `classes` key exists if and only if it names a part in the component's anatomy. These trees are the migration TARGET, from docs/adr/002-key-migration.json - the source still ships the pre-migration keys until Task 3 lands. Names marked in vocabularyAmendmentsNeeded there are outside R2's list and need an ADR amendment. `subAnatomy` holds the separate class sets a component ships alongside its own (RadioButton's group and item, the Loader family, CountryFlag and its group).",
+  "anatomyGeneratedAt": "2026-09-02"
 }
