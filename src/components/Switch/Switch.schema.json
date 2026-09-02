@@ -10,11 +10,11 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label displayed alongside the switch."
+      "description": "React.ReactNode \u2014 Label displayed alongside the switch."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Description text below the label."
+      "description": "React.ReactNode \u2014 Description text below the label."
     },
     "checked": {
       "type": "boolean",
@@ -27,7 +27,7 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(checked: boolean) => void — Fires when the checked state changes."
+      "description": "(checked: boolean) => void \u2014 Fires when the checked state changes."
     },
     "name": {
       "type": "string",
@@ -59,7 +59,7 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message displayed below the switch."
+      "description": "React.ReactNode \u2014 Error message displayed below the switch."
     },
     "success": {
       "type": "boolean",
@@ -68,7 +68,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message displayed below the switch."
+      "description": "React.ReactNode \u2014 Success message displayed below the switch."
     },
     "loading": {
       "type": "boolean",
@@ -77,7 +77,7 @@
     },
     "loader": {
       "type": "object",
-      "description": "React.ReactNode — Custom loader element."
+      "description": "React.ReactNode \u2014 Custom loader element."
     },
     "loaderSize": {
       "type": "number",
@@ -86,11 +86,11 @@
     },
     "checkedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon displayed inside the thumb when checked."
+      "description": "React.ReactNode \u2014 Icon displayed inside the thumb when checked."
     },
     "uncheckedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon displayed inside the thumb when unchecked."
+      "description": "React.ReactNode \u2014 Icon displayed inside the thumb when unchecked."
     },
     "transitionDuration": {
       "type": "number",
@@ -102,11 +102,11 @@
     },
     "renderLabel": {
       "type": "object",
-      "description": "(props: SwitchRenderProps) => ReactNode — Custom label render function."
+      "description": "(props: SwitchRenderProps) => ReactNode \u2014 Custom label render function."
     },
     "renderDescription": {
       "type": "object",
-      "description": "(props: SwitchRenderProps) => ReactNode — Custom description render function."
+      "description": "(props: SwitchRenderProps) => ReactNode \u2014 Custom description render function."
     },
     "classes": {
       "type": "object",
@@ -115,10 +115,10 @@
         "root": {
           "type": "string"
         },
-        "innerRow": {
+        "row": {
           "type": "string"
         },
-        "labelContainer": {
+        "labelGroup": {
           "type": "string"
         },
         "label": {
@@ -130,7 +130,7 @@
         "description": {
           "type": "string"
         },
-        "tracker": {
+        "control": {
           "type": "string"
         },
         "disabledTracker": {
@@ -151,10 +151,7 @@
         "uncheckedThumb": {
           "type": "string"
         },
-        "error": {
-          "type": "string"
-        },
-        "success": {
+        "message": {
           "type": "string"
         },
         "loading": {

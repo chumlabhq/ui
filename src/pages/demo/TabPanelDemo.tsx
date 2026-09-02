@@ -451,8 +451,8 @@ const TabPanelDemo = () => {
             onValueChange={setBoxedTab}
             classes={{
               root: "w-full",
-              tabList: `flex items-center border-b border-cl-border`,
-              tab: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
+              list: `flex items-center border-b border-cl-border`,
+              item: "relative px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border border-transparent border-b-0 -mb-px",
               tabActive: dark
                 ? "bg-cl-bg-elevated text-cl-accent border-cl-border border-b-gray-800 rounded-t-lg"
                 : "bg-white text-cl-accent border-cl-border border-b-white rounded-t-lg",
@@ -460,7 +460,7 @@ const TabPanelDemo = () => {
                 ? "text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-elevated"
                 : "text-cl-text-secondary hover:text-cl-text hover:bg-cl-bg-hover",
               tabFocus: c.tabs.underline.tabFocus,
- panel: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-white dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
+ content: `p-4 border-t-0 rounded-b-lg border border-cl-border bg-white dark:border dark:border-cl-border dark:bg-cl-bg-elevated`,
             }}
           >
             <div className={c.content}>
@@ -538,7 +538,7 @@ const TabPanelDemo = () => {
             iconPosition="right"
             classes={{
               ...c.tabs.pill,
-              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
               iconActive: c.tabs.icon.iconActive,
               iconInactive: c.tabs.icon.iconInactive,
             }}
@@ -735,8 +735,8 @@ const TabPanelDemo = () => {
             onValueChange={setGradientTab}
             classes={{
               root: `w-full rounded-cl-lg p-3 bg-linear-to-r from-cl-accent/10 to-cl-accent/10 dark:bg-linear-to-r dark:from-cl-accent/20 dark:to-cl-accent/20`,
-              tabList: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
-              tab: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              list: `inline-flex items-center gap-2 p-1.5 backdrop-blur rounded-cl-lg bg-cl-text/60 dark:bg-cl-bg-elevated/60`,
+              item: "flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
               tabFocus: `outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent dark:focus-visible:ring-offset-cl-bg`,
               tabActive: dark
                 ? "bg-cl-bg-elevated text-cl-accent shadow-md"
@@ -746,7 +746,7 @@ const TabPanelDemo = () => {
                 : "text-cl-text-secondary hover:text-cl-accent hover:bg-cl-text/50",
               iconActive: dark ? "text-cl-accent" : "text-cl-accent",
               iconInactive: dark ? "text-cl-text-secondary" : "text-cl-text-secondary",
-              panel: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
+              content: `p-4 mt-3 rounded-cl-lg shadow-sm bg-cl-bg-elevated`,
             }}
           >
             <div className={c.content}>
@@ -964,8 +964,8 @@ const TabPanelDemo = () => {
             orientation="vertical"
             classes={{
               root: "flex gap-0 w-full",
-              tabList: `flex flex-col gap-1 pr-0 min-w-[160px] border-r border-cl-border`,
-              tab: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
+              list: `flex flex-col gap-1 pr-0 min-w-[160px] border-r border-cl-border`,
+              item: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
               tabActive: dark
                 ? "text-cl-accent bg-cl-accent/30"
                 : "text-cl-accent bg-cl-accent/10",
@@ -975,7 +975,7 @@ const TabPanelDemo = () => {
               tabFocus: c.tabs.underline.tabFocus,
               iconActive: c.tabs.icon.iconActive,
               iconInactive: c.tabs.icon.iconInactive,
-              panel: "flex-1 p-4",
+              content: "flex-1 p-4",
             }}
           >
             <div className={c.content}>
@@ -1043,7 +1043,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderFnTab}
             classes={{
               ...c.tabs.pill,
-              tab: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
               iconActive: dark ? "text-cl-text" : "text-cl-text",
               iconInactive: c.tabs.icon.iconInactive,
             }}
@@ -1076,7 +1076,7 @@ const TabPanelDemo = () => {
             onValueChange={setRenderTabTab}
             classes={{
               ...c.tabs.pill,
-              tab: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
+              item: "relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer bg-transparent border-none rounded-cl-md",
               iconActive: dark ? "text-cl-text" : "text-cl-text",
               iconInactive: c.tabs.icon.iconInactive,
             }}

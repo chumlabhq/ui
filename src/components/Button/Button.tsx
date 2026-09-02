@@ -86,10 +86,9 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const mergedClasses: Required<ButtonClasses> = useMemo(
     () => ({
       root: classesProp?.root ?? baseClasses.root,
-      content: classesProp?.content ?? baseClasses.content,
-      startIcon: classesProp?.startIcon ?? baseClasses.startIcon,
-      endIcon: classesProp?.endIcon ?? baseClasses.endIcon,
-      loader: classesProp?.loader ?? baseClasses.loader,
+      itemText: classesProp?.itemText ?? baseClasses.itemText,
+      icon: classesProp?.icon ?? baseClasses.icon,
+      loading: classesProp?.loading ?? baseClasses.loading,
     }),
     [classesProp, baseClasses],
   );
@@ -140,24 +139,24 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   }, [effectiveAnimation, animateOnHover, animateIcon]);
 
   const content = (
-    <span className={mergedClasses.content || undefined}>
+    <span className={mergedClasses.itemText || undefined}>
       {loadingAnnouncement}
       {loaderPosition === "left" && loading && (
-        <span className={mergedClasses.loader || undefined}>{loaderElement}</span>
+        <span className={mergedClasses.loading || undefined}>{loaderElement}</span>
       )}
       {startIcon && (
-        <span aria-hidden="true" className={cn(mergedClasses.startIcon, animationClasses.leading) || undefined}>
+        <span aria-hidden="true" className={cn(mergedClasses.icon, animationClasses.leading) || undefined}>
           {startIcon}
         </span>
       )}
       {displayContent}
       {endIcon && (
-        <span aria-hidden="true" className={cn(mergedClasses.endIcon, animationClasses.trailing) || undefined}>
+        <span aria-hidden="true" className={cn(mergedClasses.icon, animationClasses.trailing) || undefined}>
           {endIcon}
         </span>
       )}
       {loaderPosition === "right" && loading && (
-        <span className={mergedClasses.loader || undefined}>{loaderElement}</span>
+        <span className={mergedClasses.loading || undefined}>{loaderElement}</span>
       )}
     </span>
   );

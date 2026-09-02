@@ -231,7 +231,7 @@ const OptionItem = memo(function OptionItem({
 }) {
   const combinedOptionClassName =
     cn(
-      classes.option,
+      classes.item,
       isSelected && classes.optionSelected,
       isFocused && classes.optionFocused,
       option.disabled && classes.optionDisabled,
@@ -239,7 +239,7 @@ const OptionItem = memo(function OptionItem({
 
   const combinedCheckboxClassName =
     cn(
-      classes.checkbox,
+      classes.itemControl,
       isSelected && classes.checkboxChecked,
     ) || undefined;
   // ADR 002 R4: the state the checkboxChecked key named.
@@ -259,7 +259,7 @@ const OptionItem = memo(function OptionItem({
       onMouseEnter={() => onHover(index)}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
-        {isSelected && (checkboxIcon || <CheckIcon className={classes.checkboxIcon || undefined} />)}
+        {isSelected && (checkboxIcon || <CheckIcon className={classes.itemIndicator || undefined} />)}
       </span>
       <span className="flex-1 truncate">
         {option.content || option.label}
@@ -403,34 +403,31 @@ const MultiSelectSearchableDropdown = forwardRef<
     const mergedClasses: Required<MultiSelectSearchableDropdownClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
-        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
+        value: classesProp?.value ?? baseClasses.value,
         content: classesProp?.content ?? baseClasses.content,
-        optionList: classesProp?.optionList ?? baseClasses.optionList,
-        option: classesProp?.option ?? baseClasses.option,
+        list: classesProp?.list ?? baseClasses.list,
+        item: classesProp?.item ?? baseClasses.item,
         optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
         optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
         optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
-        chevron: classesProp?.chevron ?? baseClasses.chevron,
-        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        itemControl: classesProp?.itemControl ?? baseClasses.itemControl,
         checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
-        checkboxIcon: classesProp?.checkboxIcon ?? baseClasses.checkboxIcon,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         chip: classesProp?.chip ?? baseClasses.chip,
         chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,
-        noResults: classesProp?.noResults ?? baseClasses.noResults,
-        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
+        empty: classesProp?.empty ?? baseClasses.empty,
+        clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
         loading: classesProp?.loading ?? baseClasses.loading,
-        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
-        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
         label: classesProp?.label ?? baseClasses.label,
-        error: classesProp?.error ?? baseClasses.error,
+        message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
-        success: classesProp?.success ?? baseClasses.success,
+        searchControl: classesProp?.searchControl ?? baseClasses.searchControl,
         searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
-        searchInputElement: classesProp?.searchInputElement ?? baseClasses.searchInputElement,
         searchIcon: classesProp?.searchIcon ?? baseClasses.searchIcon,
-        moreCount: classesProp?.moreCount ?? baseClasses.moreCount,
+        count: classesProp?.count ?? baseClasses.count,
       }),
       [classesProp, baseClasses],
     );
@@ -678,7 +675,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         )}
 
         <div
-          className={mergedClasses.wrapper || undefined}
+          className={mergedClasses.control || undefined}
         >
           {renderTrigger ? (
             renderTrigger({
@@ -729,7 +726,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className={mergedClasses.triggerText || undefined}>
+              <span className={mergedClasses.value || undefined}>
                 {showSelectedChips && selectedOptions.length > 0 ? (
                   <>
                     {displayedChips.map((option) => (
@@ -741,7 +738,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                       />
                     ))}
                     {remainingCount > 0 && (
-                      <span className={mergedClasses.moreCount || undefined}>
+                      <span className={mergedClasses.count || undefined}>
                         +{remainingCount}
                       </span>
                     )}
@@ -756,7 +753,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               </span>
               {showChevron && (
                 <ChevronDownIcon
-                  className={mergedClasses.chevron || undefined}
+                  className={mergedClasses.icon || undefined}
                   style={isOpen ? { transform: "rotate(180deg)" } : undefined}
                 />
               )}
@@ -768,7 +765,7 @@ const MultiSelectSearchableDropdown = forwardRef<
               type="button"
               tabIndex={-1}
               aria-label="Clear all selections"
-              className={mergedClasses.clearIcon || undefined}
+              className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
@@ -796,7 +793,7 @@ const MultiSelectSearchableDropdown = forwardRef<
             contentRef={dropdownContentRef}
           >
             {showSearch && (
-              <div className={mergedClasses.searchInput || undefined}>
+              <div className={mergedClasses.searchControl || undefined}>
                 <SearchIcon className={mergedClasses.searchIcon || undefined} />
                 <input
                   ref={searchInputRef}
@@ -808,25 +805,25 @@ const MultiSelectSearchableDropdown = forwardRef<
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onClick={(e) => e.stopPropagation()}
-                  className={cn(mergedClasses.searchInputElement) || undefined}
+                  className={cn(mergedClasses.searchInput) || undefined}
                 />
               </div>
             )}
 
-            <div className={mergedClasses.optionList || undefined}>
+            <div className={mergedClasses.list || undefined}>
               {loading ? (
                 <>
                   <div role="status" className={mergedClasses.loading || undefined}>
                     {loadingText}
                   </div>
-                  <div className={mergedClasses.shimmer || undefined}>
+                  <div className={mergedClasses.loading || undefined}>
                     {Array.from({ length: shimmerCount }).map((_, i) => (
-                      <div key={i} className={mergedClasses.shimmerItem || undefined} />
+                      <div key={i} className={mergedClasses.loading || undefined} />
                     ))}
                   </div>
                 </>
               ) : displayOptions.length === 0 ? (
-                <div role="status" className={mergedClasses.noResults || undefined}>
+                <div role="status" className={mergedClasses.empty || undefined}>
                   {noResultsContent}
                 </div>
               ) : (
@@ -860,14 +857,14 @@ const MultiSelectSearchableDropdown = forwardRef<
             id={errorId}
             role="alert"
             data-invalid
-            className={mergedClasses.error || undefined}
+            className={mergedClasses.message || undefined}
           >
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

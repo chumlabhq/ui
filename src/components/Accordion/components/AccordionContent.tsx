@@ -167,7 +167,7 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
       return null;
     }
 
-    const wrapperClassName = cn(config.classes.contentWrapper, className);
+    const wrapperClassName = cn(config.classes.content, className);
 
     const contentStyle: React.CSSProperties = {
       maxHeight: showExpanded ? measuredHeight : 0,
@@ -202,8 +202,8 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
           <div
             className={
               cn(
-                config.classes.content,
-                config.classes.contentInner,
+                config.classes.body,
+                config.classes.body,
               ) || undefined
             }
           >

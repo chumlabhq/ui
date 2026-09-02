@@ -182,7 +182,7 @@ function Thumb({
         : null}
       {tooltipVisible && (
         <div
-          className={classes.tooltip || undefined}
+          className={classes.valueText || undefined}
           style={{ position: "absolute", ...tooltipStyle }}
           role="tooltip"
         >
@@ -301,19 +301,16 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         root: classesProp?.root ?? baseClasses.root,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         track: classesProp?.track ?? baseClasses.track,
         range: classesProp?.range ?? baseClasses.range,
         thumb: classesProp?.thumb ?? baseClasses.thumb,
         thumbActive: classesProp?.thumbActive ?? baseClasses.thumbActive,
         thumbDisabled: classesProp?.thumbDisabled ?? baseClasses.thumbDisabled,
-        tooltip: classesProp?.tooltip ?? baseClasses.tooltip,
-        mark: classesProp?.mark ?? baseClasses.mark,
-        markDot: classesProp?.markDot ?? baseClasses.markDot,
+        valueText: classesProp?.valueText ?? baseClasses.valueText,
+        marker: classesProp?.marker ?? baseClasses.marker,
         markDotActive: classesProp?.markDotActive ?? baseClasses.markDotActive,
-        markLabel: classesProp?.markLabel ?? baseClasses.markLabel,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        message: classesProp?.message ?? baseClasses.message,
       }),
       [classesProp, baseClasses],
     );
@@ -588,7 +585,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {/* Track wrapper — box-content so padding doesn't shrink track */}
         <div
           ref={trackRef}
-          className={cn(mc.wrapper) || undefined}
+          className={cn(mc.control) || undefined}
           style={{ position: "relative", overflow: "visible", ...wrapperStyle, ...(loading ? { opacity: 0.5, pointerEvents: "none" } : {}) }}
           onPointerDown={handleTrackPointerDown}
           aria-describedby={ariaDescribedBy}
@@ -640,7 +637,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                   </div>
                 ) : (
                   <div
-                    className={cn(mc.markDot, inRange && mc.markDotActive) || undefined}
+                    className={cn(mc.marker, inRange && mc.markDotActive) || undefined}
                     data-state={inRange ? "active" : undefined}
                     style={{
                       position: "absolute",
@@ -654,7 +651,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 )}
                 {showMarkLabels && mark.label && (
                   <span
-                    className={mc.markLabel || undefined}
+                    className={mc.marker || undefined}
                     style={{
                       position: "absolute",
                       whiteSpace: "nowrap",
@@ -759,13 +756,13 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           ))}
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mc.error || undefined}>
+          <div id={errorId} role="alert" data-invalid className={mc.message || undefined}>
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div id={`${sliderId}-success`} data-valid className={mc.success || undefined}>
+          <div id={`${sliderId}-success`} data-valid className={mc.message || undefined}>
             {successMessage}
           </div>
         )}

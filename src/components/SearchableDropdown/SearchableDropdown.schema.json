@@ -32,7 +32,7 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: string | null, option: SearchableDropdownOption | null) => void — Callback fired when the selected value changes."
+      "description": "(value: string | null, option: SearchableDropdownOption | null) => void \u2014 Callback fired when the selected value changes."
     },
     "open": {
       "type": "boolean",
@@ -45,7 +45,7 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void — Callback fired when the open state changes."
+      "description": "(open: boolean) => void \u2014 Callback fired when the open state changes."
     },
     "id": {
       "type": "string",
@@ -57,7 +57,7 @@
     },
     "placeholder": {
       "type": "object",
-      "description": "React.ReactNode — Placeholder content shown when no value is selected.",
+      "description": "React.ReactNode \u2014 Placeholder content shown when no value is selected.",
       "default": "Select an option"
     },
     "disabled": {
@@ -72,15 +72,15 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message displayed below the dropdown."
+      "description": "React.ReactNode \u2014 Error message displayed below the dropdown."
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label displayed above the dropdown."
+      "description": "React.ReactNode \u2014 Label displayed above the dropdown."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Description text displayed below the label."
+      "description": "React.ReactNode \u2014 Description text displayed below the label."
     },
     "success": {
       "type": "boolean",
@@ -89,7 +89,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message displayed below the dropdown."
+      "description": "React.ReactNode \u2014 Success message displayed below the dropdown."
     },
     "required": {
       "type": "boolean",
@@ -118,7 +118,7 @@
     },
     "noResultsContent": {
       "type": "object",
-      "description": "React.ReactNode — Content shown when no search results are found.",
+      "description": "React.ReactNode \u2014 Content shown when no search results are found.",
       "default": "No results found"
     },
     "showChevron": {
@@ -133,7 +133,7 @@
     },
     "selectedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon for the selected option."
+      "description": "React.ReactNode \u2014 Custom icon for the selected option."
     },
     "fullWidth": {
       "type": "boolean",
@@ -146,7 +146,7 @@
     },
     "onSearch": {
       "type": "object",
-      "description": "(query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering."
+      "description": "(query: string) => Promise<SearchableDropdownOption[]> \u2014 Async search callback for server-side filtering."
     },
     "searchDebounceMs": {
       "type": "number",
@@ -162,7 +162,7 @@
     },
     "onLoadInitialOptions": {
       "type": "object",
-      "description": "() => Promise<SearchableDropdownOption[]> — Async callback to load initial options."
+      "description": "() => Promise<SearchableDropdownOption[]> \u2014 Async callback to load initial options."
     },
     "loadInitialOnOpen": {
       "type": "boolean",
@@ -171,7 +171,7 @@
     },
     "onLoadError": {
       "type": "object",
-      "description": "(error: unknown) => void — Callback when async loading fails."
+      "description": "(error: unknown) => void \u2014 Callback when async loading fails."
     },
     "shimmerCount": {
       "type": "number",
@@ -185,22 +185,22 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "trigger": {
           "type": "string"
         },
-        "triggerText": {
+        "value": {
           "type": "string"
         },
         "content": {
           "type": "string"
         },
-        "optionList": {
+        "list": {
           "type": "string"
         },
-        "option": {
+        "item": {
           "type": "string"
         },
         "optionSelected": {
@@ -212,43 +212,40 @@
         "optionDisabled": {
           "type": "string"
         },
-        "chevron": {
+        "icon": {
           "type": "string"
         },
-        "checkIcon": {
+        "itemIndicator": {
           "type": "string"
         },
-        "clearIcon": {
+        "clearTrigger": {
           "type": "string"
         },
-        "noResults": {
+        "empty": {
           "type": "string"
         },
         "label": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "success": {
+        "searchControl": {
           "type": "string"
         },
         "searchInput": {
           "type": "string"
         },
-        "searchInputElement": {
-          "type": "string"
-        },
         "searchIcon": {
           "type": "string"
         },
-        "shimmer": {
+        "loading": {
           "type": "string"
         },
-        "shimmerItem": {
+        "loadingItem": {
           "type": "string"
         }
       }
@@ -268,7 +265,7 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Custom container element for the dropdown portal."
+      "description": "HTMLElement | null \u2014 Custom container element for the dropdown portal."
     },
     "dropdownPosition": {
       "type": "string",
@@ -315,39 +312,39 @@
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void — Callback fired when the dropdown loses focus."
+      "description": "() => void \u2014 Callback fired when the dropdown loses focus."
     },
     "onFocus": {
       "type": "object",
-      "description": "() => void — Callback fired when the dropdown gains focus."
+      "description": "() => void \u2014 Callback fired when the dropdown gains focus."
     },
     "onKeyDown": {
       "type": "object",
-      "description": "(event: React.KeyboardEvent) => void — Callback fired on keydown events."
+      "description": "(event: React.KeyboardEvent) => void \u2014 Callback fired on keydown events."
     },
     "renderTrigger": {
       "type": "object",
-      "description": "(props: SearchableDropdownTriggerRenderProps) => ReactNode — Custom trigger render function."
+      "description": "(props: SearchableDropdownTriggerRenderProps) => ReactNode \u2014 Custom trigger render function."
     },
     "ChevronIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom chevron icon component."
+      "description": "React.ComponentType \u2014 Custom chevron icon component."
     },
     "CheckIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom check icon component."
+      "description": "React.ComponentType \u2014 Custom check icon component."
     },
     "ClearIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom clear icon component."
+      "description": "React.ComponentType \u2014 Custom clear icon component."
     },
     "SearchIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom search icon component."
+      "description": "React.ComponentType \u2014 Custom search icon component."
     },
     "loadingText": {
       "type": "object",
-      "description": "React.ReactNode — Text shown during loading state.",
+      "description": "React.ReactNode \u2014 Text shown during loading state.",
       "default": "Loading..."
     }
   },

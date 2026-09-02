@@ -35,7 +35,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
     const mergedClasses: Required<DotLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        dot: classesProp?.dot ?? baseClasses.dot,
+        range: classesProp?.range ?? baseClasses.range,
       }),
       [classesProp, baseClasses],
     );
@@ -61,7 +61,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
         {dots.map((_, i) => (
           <span
             key={i}
-            className={mergedClasses.dot || undefined}
+            className={mergedClasses.range || undefined}
             style={{
               width: `${dotSize}px`,
               height: `${dotSize}px`,

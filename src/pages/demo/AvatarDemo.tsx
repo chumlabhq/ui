@@ -280,13 +280,13 @@ const AvatarDemo = () => {
             name="Bold"
             autoColor
             colors={c.subtleColors}
-            classes={{ initials: "font-bold" }}
+            classes={{ fallback: "font-bold" }}
           />
           <Avatar
             name="Light"
             autoColor
             colors={c.subtleColors}
-            classes={{ initials: "font-light" }}
+            classes={{ fallback: "font-light" }}
           />
           <Avatar
             name="Italic"
@@ -1036,13 +1036,13 @@ const AvatarDemo = () => {
                 name="Bold"
                 autoColor
                 colors={c.subtleColors}
-                classes={{ initials: "font-bold tracking-wider" }}
+                classes={{ fallback: "font-bold tracking-wider" }}
               />
               <Avatar
                 name="Italic"
                 autoColor
                 colors={c.subtleColors}
-                classes={{ initials: "italic" }}
+                classes={{ fallback: "italic" }}
               />
             </DemoWrapper>
           </div>
@@ -1072,7 +1072,7 @@ const AvatarDemo = () => {
                 unstyled
                 classes={{
                   root: "inline-flex items-center justify-center rounded-cl-lg bg-linear-to-br from-cl-accent to-cl-accent text-white font-bold",
-                  inner:
+                  control:
                     "absolute inset-0 overflow-hidden flex items-center justify-center rounded-cl-lg",
                 }}
                 size="lg"

@@ -146,7 +146,7 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "group": {
@@ -161,16 +161,13 @@
         "label": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "separator": {
           "type": "string"
         },
         "description": {
-          "type": "string"
-        },
-        "success": {
           "type": "string"
         }
       }

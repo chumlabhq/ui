@@ -9,7 +9,6 @@
  */
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { splitLayers } from "../../utils/classLayers";
 import { resolve } from "node:path";
 
 interface Row {
@@ -19,6 +18,7 @@ interface Row {
   to: string | null;
   vocabulary?: string;
   precedent?: string;
+  structuralBefore?: string[];
 }
 const TABLE = JSON.parse(
   readFileSync(resolve(process.cwd(), "docs/adr/002-key-migration.json"), "utf8"),
@@ -27,81 +27,23 @@ const TABLE = JSON.parse(
   totals: Record<string, number>;
   vocabularyAmendments: Record<string, string>;
   declaredMerges: Record<string, string[]>;
+  coLocatedBefore: Record<string, [string, string][]>;
 };
-
-const constants = {
-  ...(import.meta.glob("../../components/*/utils/constants.ts", { eager: true }) as Record<string, Record<string, unknown>>),
-  ...(import.meta.glob("../../components/*/constants.ts", { eager: true }) as Record<string, Record<string, unknown>>),
-};
-const defaults: Record<string, Record<string, string>> = {};
-for (const [path, module] of Object.entries(constants)) {
-  const component = path.replace("../../components/", "").split("/")[0];
-  for (const [name, value] of Object.entries(module)) {
-    if (name.startsWith("DEFAULT_") && name.endsWith("_CLASSES")) {
-      defaults[`${component}::${name}`] = value as Record<string, string>;
-    }
-  }
-}
-
-/** The structural half of a key's default, or null when no set declares it. */
-const structuralLayer = (component: string, key: string): string[] | null => {
-  const owner = component.split("/")[0];
-  for (const [name, set] of Object.entries(defaults)) {
-    if (name.startsWith(`${owner}::`) && key in set) return splitLayers(set[key] ?? "").structural;
-  }
-  return null;
-};
-
-const sources = import.meta.glob("../../components/**/*.tsx", {
-  eager: true,
-  query: "?raw",
-  import: "default",
-}) as Record<string, string>;
 
 /**
- * Keys written into one `className` expression sit on one element, so they can
- * never be "two elements sharing a key" however the table routes them. Without
- * this the structural test reports `Accordion.contentInner` — which is
- * `cn(classes.content, classes.contentInner)` on a single div — as a merge.
+ * R9's evidence is frozen into the table rather than read from the tree.
+ *
+ * Task 3a renames the keys and merges the class strings, so a check that read
+ * the live constants would afterwards look up names that no longer exist, find
+ * nothing, and pass on every row — a gate that cannot see its own evidence.
+ * `structuralBefore` and `coLocatedBefore` are the pre-migration facts, read
+ * from git at the moment the migration was applied.
  */
-const coLocated = new Map<string, Set<string>>();
-for (const [path, source] of Object.entries(sources)) {
-  if (path.includes("__tests__")) continue;
-  const component = path.replace("../../components/", "").split("/")[0];
-  for (const match of source.matchAll(/className=\{/g)) {
-    const start = (match.index ?? 0) + match[0].length - 1;
-    let depth = 0;
-    let i = start;
-    for (; i < source.length; i += 1) {
-      const ch = source[i];
-      if (ch === '"' || ch === "'" || ch === "`") {
-        const quote = ch;
-        i += 1;
-        while (i < source.length && source[i] !== quote) i += source[i] === "\\" ? 2 : 1;
-      } else if (ch === "{") {
-        depth += 1;
-      } else if (ch === "}") {
-        depth -= 1;
-        if (depth === 0) break;
-      }
-    }
-    const keys = new Set<string>();
-    const pattern = /(?:classes|cls|base|merged|mergedClasses)\??\.(\w+)|\b(\w+)ClassName\b/g;
-    for (const [, dotted, suffixed] of source.slice(start, i + 1).matchAll(pattern)) {
-      if (dotted) keys.add(dotted);
-      else if (suffixed) keys.add(suffixed[0].toLowerCase() + suffixed.slice(1));
-    }
-    if (keys.size < 2) continue;
-    for (const key of keys) {
-      const id = `${component}.${key}`;
-      coLocated.set(id, new Set([...(coLocated.get(id) ?? []), ...keys]));
-    }
-  }
-}
 const sameElement = (component: string, a: string, b: string): boolean =>
-  coLocated.get(`${component.split("/")[0]}.${a}`)?.has(b) ?? false;
+  (TABLE.coLocatedBefore[component.split("/")[0]] ?? []).some(
+    ([x, y]) => (x === a && y === b) || (x === b && y === a),
+  );
 
-/** Targets claimed by more than one surviving key. */
 /** Rows claiming `unchanged` while naming a different target. */
 const mislabelledUnchanged = (rows: Row[]): string[] =>
   rows
@@ -136,12 +78,13 @@ const structuralMergeFailures = (rows: Row[]): string[] => {
   for (const [id, members] of groups) {
     if (members.length < 2) continue;
     const [component, to] = id.split("|");
+    void component;
     const distinct = members.filter(
       (m) => !members.some((o) => o !== m && sameElement(component, m.key, o.key)),
     );
     if (distinct.length < 2) continue;
     const layers = new Set(
-      distinct.map((m) => [...(structuralLayer(component, m.key) ?? ["UNKNOWN"])].sort().join(" ")),
+      distinct.map((m) => [...(m.structuralBefore ?? ["UNKNOWN"])].sort().join(" ")),
     );
     if (layers.size > 1) failures.push(`${component}.${to}`);
   }
@@ -175,20 +118,20 @@ describe("key migration contract", () => {
     });
 
     it("catches a merge that combines differing structural layers", () => {
-      // Accordion.root is `w-full`, Accordion.heading is empty: different layers,
-      // different elements.
       const planted: Row[] = [
-        { component: "Accordion", key: "root", outcome: "renamed", to: "probe" },
-        { component: "Accordion", key: "heading", outcome: "renamed", to: "probe" },
+        { component: "Accordion", key: "root", outcome: "renamed", to: "probe", structuralBefore: ["w-full"] },
+        { component: "Accordion", key: "heading", outcome: "renamed", to: "probe", structuralBefore: [] },
       ];
       expect(structuralMergeFailures(planted)).toEqual(["Accordion.probe"]);
     });
 
     it("does not flag two keys that sit on one element", () => {
+      // `cn(classes.content, classes.contentInner)` was one div with two handles.
       const planted: Row[] = [
-        { component: "Accordion", key: "content", outcome: "renamed", to: "probe" },
-        { component: "Accordion", key: "contentInner", outcome: "absorbed-into-parent", to: "probe" },
+        { component: "Accordion", key: "content", outcome: "renamed", to: "probe", structuralBefore: [] },
+        { component: "Accordion", key: "contentInner", outcome: "absorbed-into-parent", to: "probe", structuralBefore: ["overflow-hidden"] },
       ];
+      expect(sameElement("Accordion", "content", "contentInner")).toBe(true);
       expect(structuralMergeFailures(planted)).toEqual([]);
     });
   });

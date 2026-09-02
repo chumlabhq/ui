@@ -306,7 +306,7 @@ const StepperDemo = () => {
             isStepClickable={() => true}
             classes={{
               ...c.stepper,
-              label: "text-sm font-medium leading-tight mt-1 transition-colors",
+              itemText: "text-sm font-medium leading-tight mt-1 transition-colors",
             }}
           />
         </DemoWrapper>
@@ -611,15 +611,15 @@ const StepperDemo = () => {
             isStepClickable={() => true}
             classes={{
               ...c.stepper,
-              step: `flex items-center gap-2 px-3 py-2 rounded-cl-lg border-2 border-transparent transition-all hover:border-cl-border-input-focus dark:hover:border-cl-border-input-focus/30`,
+              trigger: `flex items-center gap-2 px-3 py-2 rounded-cl-lg border-2 border-transparent transition-all hover:border-cl-border-input-focus dark:hover:border-cl-border-input-focus/30`,
               stepInteractive:
                 "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2",
-              indicator: `shrink-0 rounded-cl-lg flex items-center justify-center shadow-lg bg-cl-accent text-white shadow-accent dark:bg-cl-accent dark:text-white dark:shadow-accent/20`,
+              itemIndicator: `shrink-0 rounded-cl-lg flex items-center justify-center shadow-lg bg-cl-accent text-white shadow-accent dark:bg-cl-accent dark:text-white dark:shadow-accent/20`,
               indicatorActive: "",
               indicatorCompleted: "",
               indicatorPending: "",
-              indicatorIcon: "w-5 h-5",
-              label: `text-sm font-semibold text-cl-accent dark:text-cl-accent`,
+              itemIcon: "w-5 h-5",
+              itemText: `text-sm font-semibold text-cl-accent dark:text-cl-accent`,
               labelActive: "",
               labelCompleted: "",
               labelPending: "",
@@ -773,11 +773,11 @@ const StepperDemo = () => {
               isStepClickable={() => true}
               classes={{
                 ...c.stepper,
-                indicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-secondary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-secondary dark:data-[status=pending]:border-white/15`,
+                itemIndicator: `shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-transparent transition-colors data-[status=active]:bg-cl-accent data-[status=active]:text-white data-[status=active]:border-cl-border-input-focus data-[status=completed]:bg-cl-accent data-[status=completed]:text-white data-[status=completed]:border-cl-accent data-[status=pending]:bg-black/[0.06] data-[status=pending]:text-cl-text-secondary data-[status=pending]:border-black/[0.08] dark:data-[status=pending]:bg-white/10 dark:data-[status=pending]:text-cl-text-secondary dark:data-[status=pending]:border-white/15`,
                 indicatorActive: "",
                 indicatorCompleted: "",
                 indicatorPending: "",
-                indicatorIcon: "w-5 h-5",
+                itemIcon: "w-5 h-5",
                 connectorHorizontal: "w-full h-0.5 rounded-full bg-black/[0.08] dark:bg-white/15",
               }}
             />

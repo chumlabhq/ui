@@ -70,9 +70,9 @@ export default function Example() {
 | `name` | string | — | Form field name. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `error` | boolean | `false` | Displays the input in an error state. |
+| `message` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | `false` | Displays the input in a success state. |
+| `message` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `loading` | boolean | `false` | Shows a loading state. |
 | `disabled` | boolean | `false` | Disables all input fields. |

@@ -6,11 +6,11 @@
   "properties": {
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label displayed above the textarea."
+      "description": "React.ReactNode \u2014 Label displayed above the textarea."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Description text below the label."
+      "description": "React.ReactNode \u2014 Description text below the label."
     },
     "error": {
       "type": "boolean",
@@ -19,7 +19,7 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message displayed below the textarea."
+      "description": "React.ReactNode \u2014 Error message displayed below the textarea."
     },
     "success": {
       "type": "boolean",
@@ -28,7 +28,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message displayed below the textarea."
+      "description": "React.ReactNode \u2014 Success message displayed below the textarea."
     },
     "size": {
       "type": "string",
@@ -41,19 +41,19 @@
     },
     "startIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon rendered before the textarea."
+      "description": "React.ReactNode \u2014 Icon rendered before the textarea."
     },
     "endIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon rendered after the textarea."
+      "description": "React.ReactNode \u2014 Icon rendered after the textarea."
     },
     "onStartIconClick": {
       "type": "object",
-      "description": "() => void — Makes startIcon a clickable button."
+      "description": "() => void \u2014 Makes startIcon a clickable button."
     },
     "onEndIconClick": {
       "type": "object",
-      "description": "() => void — Makes endIcon a clickable button."
+      "description": "() => void \u2014 Makes endIcon a clickable button."
     },
     "startIconLabel": {
       "type": "string",
@@ -65,7 +65,7 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: string) => void — Fires with the current string value when the value changes."
+      "description": "(value: string) => void \u2014 Fires with the current string value when the value changes."
     },
     "clearable": {
       "type": "boolean",
@@ -74,7 +74,7 @@
     },
     "onClear": {
       "type": "object",
-      "description": "() => void — Callback when the clear button is clicked."
+      "description": "() => void \u2014 Callback when the clear button is clicked."
     },
     "showCount": {
       "type": "boolean",
@@ -93,7 +93,7 @@
     },
     "loader": {
       "type": "object",
-      "description": "React.ReactNode — Custom loader element."
+      "description": "React.ReactNode \u2014 Custom loader element."
     },
     "loaderSize": {
       "type": "number",
@@ -116,7 +116,7 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "label": {
@@ -125,13 +125,10 @@
         "description": {
           "type": "string"
         },
-        "textarea": {
+        "input": {
           "type": "string"
         },
-        "error": {
-          "type": "string"
-        },
-        "success": {
+        "message": {
           "type": "string"
         },
         "count": {

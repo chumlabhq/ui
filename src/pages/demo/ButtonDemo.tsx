@@ -774,7 +774,7 @@ const ButtonDemo = () => {
           <Button
             className={c.primary}
             classes={{
-              content: "inline-flex items-center justify-center gap-4",
+              itemText: "inline-flex items-center justify-center gap-4",
             }}
             startIcon={<SearchIcon />}
           >
@@ -783,7 +783,7 @@ const ButtonDemo = () => {
           <Button
             className={c.secondary}
             classes={{
-              content: "inline-flex items-center justify-center gap-1",
+              itemText: "inline-flex items-center justify-center gap-1",
             }}
             endIcon={<ArrowRightIcon />}
           >
@@ -792,7 +792,7 @@ const ButtonDemo = () => {
           <Button
             className={c.outline}
             classes={{
-              content:
+              itemText:
                 "flex flex-row-reverse items-center justify-center gap-2",
             }}
             startIcon={<CheckIcon />}

@@ -731,7 +731,7 @@ describe("TabPanel", () => {
         <TabPanel
           tabs={tabs}
           defaultValue="home"
-          classes={{ panel: "panel-class" }}
+          classes={{ content: "panel-class" }}
         >
           Content
         </TabPanel>,

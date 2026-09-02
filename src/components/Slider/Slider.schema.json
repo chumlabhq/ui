@@ -38,11 +38,11 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(value: SliderValue) => void — Fires when the value changes."
+      "description": "(value: SliderValue) => void \u2014 Fires when the value changes."
     },
     "onValueCommit": {
       "type": "object",
-      "description": "(value: SliderValue) => void — Fires when a drag interaction ends (commit)."
+      "description": "(value: SliderValue) => void \u2014 Fires when a drag interaction ends (commit)."
     },
     "min": {
       "type": "number",
@@ -90,7 +90,7 @@
     },
     "formatTooltip": {
       "type": "object",
-      "description": "(value: number) => string — Format the tooltip display value."
+      "description": "(value: number) => string \u2014 Format the tooltip display value."
     },
     "marks": {
       "type": "array",
@@ -118,11 +118,11 @@
     },
     "renderThumb": {
       "type": "object",
-      "description": "(props: SliderThumbRenderProps) => ReactNode — Custom thumb content renderer."
+      "description": "(props: SliderThumbRenderProps) => ReactNode \u2014 Custom thumb content renderer."
     },
     "renderMark": {
       "type": "object",
-      "description": "(props: SliderMarkRenderProps) => ReactNode — Custom mark dot renderer."
+      "description": "(props: SliderMarkRenderProps) => ReactNode \u2014 Custom mark dot renderer."
     },
     "markDotSize": {
       "type": "number",
@@ -144,11 +144,11 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label displayed above the slider."
+      "description": "React.ReactNode \u2014 Label displayed above the slider."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Description text."
+      "description": "React.ReactNode \u2014 Description text."
     },
     "disabled": {
       "type": "boolean",
@@ -167,7 +167,7 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message displayed below the slider."
+      "description": "React.ReactNode \u2014 Error message displayed below the slider."
     },
     "success": {
       "type": "boolean",
@@ -175,7 +175,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message displayed below the slider."
+      "description": "React.ReactNode \u2014 Success message displayed below the slider."
     },
     "loading": {
       "type": "boolean",
@@ -194,7 +194,7 @@
         "description": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "track": {
@@ -212,25 +212,16 @@
         "thumbDisabled": {
           "type": "string"
         },
-        "tooltip": {
+        "valueText": {
           "type": "string"
         },
-        "mark": {
-          "type": "string"
-        },
-        "markDot": {
+        "marker": {
           "type": "string"
         },
         "markDotActive": {
           "type": "string"
         },
-        "markLabel": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        },
-        "success": {
+        "message": {
           "type": "string"
         }
       }

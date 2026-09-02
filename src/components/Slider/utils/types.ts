@@ -13,7 +13,7 @@ export interface SliderClasses {
   /** Description below the label */
   description?: string;
   /** Horizontal/vertical wrapper around track + thumbs */
-  wrapper?: string;
+  control?: string;
   /** Full-length track background */
   track?: string;
   /** Filled portion of the track */
@@ -25,19 +25,13 @@ export interface SliderClasses {
   /** Disabled thumb */
   thumbDisabled?: string;
   /** Value tooltip above the thumb */
-  tooltip?: string;
+  valueText?: string;
   /** Mark tick container */
-  mark?: string;
-  /** Mark tick dot */
-  markDot?: string;
+  marker?: string;
   /** Active mark tick dot (within range) */
   markDotActive?: string;
-  /** Mark label text */
-  markLabel?: string;
   /** Error message */
-  error?: string;
-  /** Success message */
-  success?: string;
+  message?: string;
 }
 
 export type SliderValue = number | [number, number];

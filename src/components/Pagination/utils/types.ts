@@ -19,21 +19,20 @@ export type SectionName = "selector" | "pageInfo" | "nav";
 
 export interface PaginationClasses {
   root?: string;
-  nav?: string;
-  pageButtons?: string;
-  pageButton?: string;
+  row?: string;
+  list?: string;
+  item?: string;
   activePageButton?: string;
   navButton?: string;
   ellipsis?: string;
-  selector?: string;
+  rowsPerPage?: string;
   selectorButton?: string;
   selectorDropdown?: string;
   selectorDropdownWrapper?: string;
   selectorOption?: string;
   label?: string;
   dropdownIcon?: string;
-  prevIcon?: string;
-  nextIcon?: string;
+  navIcon?: string;
   pageInfo?: string;
 }
 

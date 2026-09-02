@@ -271,7 +271,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
       data-dropdown-id={dropdownId}
     >
       {showSearch && (
-        <div className={classes.searchInput || undefined}>
+        <div className={classes.searchControl || undefined}>
           <SearchIconComponent className={cn(classes.searchIcon) || undefined} />
           <input
             ref={searchInputRef}
@@ -281,14 +281,14 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
             onKeyDown={onSearchInputKeyDown}
             onKeyDownCapture={onSearchInputKeyDownCapture}
             placeholder={searchPlaceholder}
-            className={classes.searchInputElement || undefined}
+            className={classes.searchInput || undefined}
             aria-label={searchInputAriaLabel}
             aria-autocomplete="list"
             aria-controls={listboxId}
           />
         </div>
       )}
-      <div className={classes.optionList || undefined}>{children}</div>
+      <div className={classes.list || undefined}>{children}</div>
     </div>,
     portalContainer ?? document.body,
   );
@@ -393,28 +393,27 @@ const SearchableDropdown = forwardRef<
   const mergedClasses: Required<SearchableDropdownClasses> = useMemo(
     () => ({
       root: classesProp?.root ?? baseClasses.root,
-      wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+      control: classesProp?.control ?? baseClasses.control,
       trigger: classesProp?.trigger ?? baseClasses.trigger,
-      triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
+      value: classesProp?.value ?? baseClasses.value,
       content: classesProp?.content ?? baseClasses.content,
-      optionList: classesProp?.optionList ?? baseClasses.optionList,
-      option: classesProp?.option ?? baseClasses.option,
+      list: classesProp?.list ?? baseClasses.list,
+      item: classesProp?.item ?? baseClasses.item,
       optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
       optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
       optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
-      chevron: classesProp?.chevron ?? baseClasses.chevron,
-      checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
-      clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
-      noResults: classesProp?.noResults ?? baseClasses.noResults,
+      icon: classesProp?.icon ?? baseClasses.icon,
+      itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+      clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
+      empty: classesProp?.empty ?? baseClasses.empty,
       label: classesProp?.label ?? baseClasses.label,
-      error: classesProp?.error ?? baseClasses.error,
+      message: classesProp?.message ?? baseClasses.message,
       description: classesProp?.description ?? baseClasses.description,
-      success: classesProp?.success ?? baseClasses.success,
+      searchControl: classesProp?.searchControl ?? baseClasses.searchControl,
       searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
-      searchInputElement: classesProp?.searchInputElement ?? baseClasses.searchInputElement,
       searchIcon: classesProp?.searchIcon ?? baseClasses.searchIcon,
-      shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
-      shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+      loading: classesProp?.loading ?? baseClasses.loading,
+      loadingItem: classesProp?.loadingItem ?? baseClasses.loadingItem,
     }),
     [classesProp, baseClasses],
   );
@@ -658,7 +657,7 @@ const SearchableDropdown = forwardRef<
         <div className={mergedClasses.description || undefined}>{description}</div>
       )}
 
-      <div className={mergedClasses.wrapper || undefined}>
+      <div className={mergedClasses.control || undefined}>
         {renderTrigger ? (
           renderTrigger({
             ...triggerProps,
@@ -674,7 +673,7 @@ const SearchableDropdown = forwardRef<
             type="button"
             className={mergedClasses.trigger || undefined}
           >
-            <span className={mergedClasses.triggerText || undefined}>
+            <span className={mergedClasses.value || undefined}>
               {selectedOption
                 ? selectedOption.selectedContent ||
                   selectedOption.content ||
@@ -683,7 +682,7 @@ const SearchableDropdown = forwardRef<
             </span>
             {showChevron && (
               <ChevronIcon
-                className={cn(mergedClasses.chevron) || undefined}
+                className={cn(mergedClasses.icon) || undefined}
                 style={isOpen ? { transform: "rotate(180deg)" } : undefined}
               />
             )}
@@ -695,7 +694,7 @@ const SearchableDropdown = forwardRef<
             type="button"
             tabIndex={-1}
             aria-label="Clear selection"
-            className={mergedClasses.clearIcon || undefined}
+            className={mergedClasses.clearTrigger || undefined}
             onClick={(e) => {
               e.stopPropagation();
               handleClear(e);
@@ -735,11 +734,11 @@ const SearchableDropdown = forwardRef<
           {loading ? (
             <SearchableDropdownShimmer
               count={shimmerCount}
-              className={mergedClasses.shimmer}
-              itemClassName={mergedClasses.shimmerItem}
+              className={mergedClasses.loading}
+              itemClassName={mergedClasses.loadingItem}
             />
           ) : displayOptions.length === 0 ? (
-            <div role="status" className={mergedClasses.noResults || undefined}>
+            <div role="status" className={mergedClasses.empty || undefined}>
               {noResultsContent}
             </div>
           ) : (
@@ -787,14 +786,14 @@ const SearchableDropdown = forwardRef<
           id={errorId}
           role="alert"
           data-invalid
-          className={mergedClasses.error || undefined}
+          className={mergedClasses.message || undefined}
         >
           {errorMessage}
         </div>
       )}
 
       {success && successMessage && !error && (
-        <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+        <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
       )}
     </div>
   );

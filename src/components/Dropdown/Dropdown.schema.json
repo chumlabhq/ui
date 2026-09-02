@@ -176,22 +176,22 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "trigger": {
           "type": "string"
         },
-        "triggerText": {
+        "value": {
           "type": "string"
         },
         "content": {
           "type": "string"
         },
-        "optionList": {
+        "list": {
           "type": "string"
         },
-        "option": {
+        "item": {
           "type": "string"
         },
         "optionSelected": {
@@ -203,34 +203,31 @@
         "optionDisabled": {
           "type": "string"
         },
-        "chevron": {
+        "icon": {
           "type": "string"
         },
-        "checkIcon": {
+        "itemIndicator": {
           "type": "string"
         },
-        "clearIcon": {
+        "clearTrigger": {
           "type": "string"
         },
-        "noResults": {
+        "empty": {
           "type": "string"
         },
         "label": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "success": {
+        "loading": {
           "type": "string"
         },
-        "shimmer": {
-          "type": "string"
-        },
-        "shimmerItem": {
+        "loadingItem": {
           "type": "string"
         }
       }

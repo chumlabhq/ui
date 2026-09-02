@@ -12,13 +12,13 @@ export interface RadioButtonClasses {
   /** Description text below the label. */
   description?: string;
   /** The radio indicator circle. */
-  radio?: string;
+  control?: string;
   /** Applied when the radio is checked. */
   checked?: string;
   /** Applied when the radio is unchecked. */
   unchecked?: string;
   /** The inner dot/icon inside the indicator. */
-  icon?: string;
+  itemIndicator?: string;
   /** Error message element. */
   error?: string;
   /** Success message element. */
@@ -34,9 +34,7 @@ export interface RadioGroupClasses {
   /** Group description text. */
   description?: string;
   /** Error message element. */
-  error?: string;
-  /** Success message element. */
-  success?: string;
+  message?: string;
 }
 
 /**

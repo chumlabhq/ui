@@ -34,35 +34,31 @@ export interface TableView {
 /** CSS class overrides for Table sub-elements. */
 export interface TableClasses {
   /** Root container wrapping the entire table region. */
-  container?: string;
+  root?: string;
   /** The `<table>` element itself. */
-  table?: string;
+  list?: string;
   /** The `<thead>` element. */
   header?: string;
-  /** The `<tr>` inside `<thead>`. */
-  headerRow?: string;
   /** Individual `<th>` elements. */
   headerCell?: string;
   /** Applied on header cell hover. */
   headerCellHover?: string;
   /** The content wrapper inside each header cell. */
-  headerCellContent?: string;
+  headerCellText?: string;
   /** The `<tbody>` element. */
   body?: string;
   /** Each `<tr>` in the body. */
-  row?: string;
+  item?: string;
   /** Individual `<td>` elements. */
   cell?: string;
   /** Applied to a selected row. */
   selectedRow?: string;
   /** Container for pinned columns. */
-  pinnedContainer?: string;
+  pinnedRegion?: string;
   /** The `<table>` element for pinned columns. */
-  pinnedTable?: string;
+  pinnedList?: string;
   /** Container for unpinned (scrollable) columns. */
-  unpinnedContainer?: string;
-  /** The `<table>` element for unpinned columns. */
-  unpinnedTable?: string;
+  scrollRegion?: string;
   /** The empty-state wrapper. */
   empty?: string;
   /** Pin icon (unpinned state). */
@@ -78,50 +74,46 @@ export interface TableClasses {
   /** Pin button (pinned state). */
   pinnedPinButton?: string;
   /** Shimmer container. */
-  shimmer?: string;
+  loading?: string;
   /** Shimmer row. */
-  shimmerRow?: string;
+  loadingRow?: string;
   /** Shimmer cell. */
-  shimmerCell?: string;
+  loadingItem?: string;
   /** Shimmer bar animation. */
-  shimmerBar?: string;
+  loadingBar?: string;
   /** Checkbox input for row selection. */
-  checkbox?: string;
-  /** Checkbox cell (td/th) wrapper. */
-  checkboxCell?: string;
+  control?: string;
   /** Sort direction indicator icon. */
   sortIcon?: string;
   /** Filter input field for column filters. */
   /** Filter icon button in header. */
-  filterIcon?: string;
+  filterButton?: string;
   /** Filter dropdown container. */
-  filterDropdown?: string;
+  filterContent?: string;
   /** Expand/collapse icon button. */
-  expandIcon?: string;
+  expandButton?: string;
   /** Expanded row content container. */
   expandedRow?: string;
   /** Right-pinned column container. */
-  pinnedRightContainer?: string;
+  pinnedRightRegion?: string;
   /** The `<table>` element for right-pinned columns. */
-  pinnedRightTable?: string;
+  pinnedRightList?: string;
   /** Inline edit input field. */
-  editInput?: string;
+  input?: string;
   /** Drag handle for row reordering. */
   dragHandle?: string;
   /** The `<tfoot>` element. */
   footer?: string;
   /** Search bar container above the table. */
-  searchBar?: string;
+  searchInput?: string;
   /** Mobile card layout wrapper. */
   mobileCard?: string;
   /** Group header row. */
-  groupHeader?: string;
+  groupLabel?: string;
   /** Column resize handle. */
   resizeHandle?: string;
   /** Loading more indicator for infinite scroll. */
-  loadingMore?: string;
-  /** Search input element inside the search bar. */
-  searchInput?: string;
+  loadingFooter?: string;
 }
 
 /**

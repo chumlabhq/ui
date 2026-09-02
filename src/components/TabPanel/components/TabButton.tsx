@@ -29,7 +29,7 @@ const TabButton = memo(function TabButton({
   const iconElement = tab.icon != null && (
     <span
       className={cn(
-        classNames.icon,
+        classNames.itemIcon,
         isActive ? classNames.iconActive : classNames.iconInactive,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
@@ -42,7 +42,7 @@ const TabButton = memo(function TabButton({
   const labelElement = showLabel && (
     <span
       className={cn(
-        classNames.label,
+        classNames.itemText,
         isActive ? classNames.labelActive : classNames.labelInactive,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
@@ -81,7 +81,7 @@ const TabButton = memo(function TabButton({
       onKeyDown={(e) => ctx.onKeyDown(e, index)}
       className={cn(
         classNames.tabFocus,
-        classNames.tab,
+        classNames.item,
         isActive ? classNames.tabActive : classNames.tabInactive,
         isDisabled && classNames.tabDisabled,
       ) || undefined}

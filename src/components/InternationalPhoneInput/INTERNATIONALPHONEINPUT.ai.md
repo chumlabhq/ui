@@ -108,9 +108,9 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `required` | boolean | `false` | Marks the field as required. |
 | `disabled` | boolean | `false` | Disables the input. |
 | `readOnly` | boolean | `false` | Makes the input read-only. |
-| `error` | boolean | `false` | Displays the input in an error state. |
+| `message` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | `false` | Displays the input in a success state. |
+| `message` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `placeholder` | string | `"Enter phone number"` | Placeholder text for the phone number input. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
@@ -177,7 +177,7 @@ console.log(inputRef.current?.value);
 root
 ├── label
 ├── description
-└── wrapper (role="group")
+└── control (role="group")
     ├── countrySelect (SearchableDropdown root)
     │   ├── countrySelectTrigger
     │   ├── countrySelectDropdown (portal)
@@ -191,8 +191,8 @@ root
     │   └── countrySelectNoResults
     ├── input
     └── clearButton (when clearable)
-├── error
-└── success
+├── message
+└── message
 ```
 
 | "I want to change..." | Slot to use | Notes |
@@ -200,7 +200,7 @@ root
 | Root container | `root` | Layout wrapper |
 | Label styling | `label` | |
 | Helper text | `description` | Below label |
-| Input + dropdown row | `wrapper` | `flex` container |
+| Input + dropdown row | `control` | `flex` container |
 | Phone text input | `input` | The `<input type="tel">` |
 | Country trigger button | `countrySelectTrigger` | Flag + dial code + chevron |
 | Country dropdown panel | `countrySelectDropdown` | Portal-rendered |
@@ -208,8 +208,8 @@ root
 | Selected country highlight | `countrySelectOptionSelected` | Additional class on selected |
 | Check icon | `countrySelectCheckIcon` | Selected indicator |
 | Search input | `countrySelectSearchInputElement` | In dropdown |
-| Error message | `error` | Below wrapper |
-| Success message | `success` | Below wrapper |
+| Error message | `message` | Below wrapper |
+| Success message | `message` | Below wrapper |
 
 ### Dark mode
 
@@ -234,7 +234,7 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. When o
   classes={{
     root: "flex flex-col gap-1",
     label: "text-sm font-medium text-gray-700 dark:text-gray-200",
-    wrapper: "flex gap-2 items-stretch",
+    control: "flex gap-2 items-stretch",
     input: "flex-1 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
     countrySelectTrigger: "flex items-center gap-2 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 min-w-[120px]",
     countrySelectDropdown: "w-72 border rounded-md shadow-lg bg-white dark:bg-gray-800",
@@ -247,8 +247,8 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. When o
     countrySelectCheckIcon: "w-4 h-4 text-indigo-600",
     countrySelectSearchIcon: "w-4 h-4 text-gray-400",
     countrySelectNoResults: "px-3 py-4 text-sm text-center text-gray-500",
-    error: "text-xs mt-1 text-red-500",
-    success: "text-xs mt-1 text-green-600",
+    message: "text-xs mt-1 text-red-500",
+    message: "text-xs mt-1 text-green-600",
     description: "text-xs mt-1 text-gray-400",
   }}
 />
@@ -266,7 +266,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
   label="Phone"
   value={phone}
   onValueChange={setPhone}
-  error={phone ? !phone.isValid : false}
+  message={phone ? !phone.isValid : false}
   errorMessage="Invalid phone number"
 />
 ```

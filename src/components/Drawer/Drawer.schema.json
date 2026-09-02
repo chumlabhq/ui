@@ -15,7 +15,7 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void — Callback when the drawer's open state changes."
+      "description": "(open: boolean) => void \u2014 Callback when the drawer's open state changes."
     },
     "zIndex": {
       "type": "number",
@@ -24,7 +24,7 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter)."
+      "description": "React.ReactNode \u2014 Drawer content (DrawerHeader, DrawerBody, DrawerFooter)."
     },
     "direction": {
       "type": "string",
@@ -81,7 +81,7 @@
         "overlay": {
           "type": "string"
         },
-        "panel": {
+        "content": {
           "type": "string"
         }
       }
@@ -115,15 +115,15 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Portal container for the drawer."
+      "description": "HTMLElement | null \u2014 Portal container for the drawer."
     },
     "initialFocus": {
       "type": "object",
-      "description": "RefObject<HTMLElement> — Element to receive focus when the drawer opens."
+      "description": "RefObject<HTMLElement> \u2014 Element to receive focus when the drawer opens."
     },
     "onTransitionEnd": {
       "type": "object",
-      "description": "(open: boolean) => void — Called when the open/close transition completes."
+      "description": "(open: boolean) => void \u2014 Called when the open/close transition completes."
     },
     "keepMounted": {
       "type": "boolean",
@@ -161,7 +161,7 @@
     },
     "onSnapPointIndexChange": {
       "type": "object",
-      "description": "(index: number) => void — Called when the active snap point changes."
+      "description": "(index: number) => void \u2014 Called when the active snap point changes."
     }
   },
   "required": []

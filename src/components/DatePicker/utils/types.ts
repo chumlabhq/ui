@@ -53,37 +53,35 @@ export interface DatePickerClasses {
   /** The trigger's clear/calendar icon row. */
   triggerActions?: string;
   /** Calendar icon in trigger */
-  calendarIcon?: string;
+  icon?: string;
   /** Clear button in trigger */
-  clearButton?: string;
+  clearTrigger?: string;
   /** Label above trigger */
   label?: string;
   /** Error message below trigger */
-  error?: string;
+  message?: string;
   /** Description text below label */
   description?: string;
-  /** Success message below trigger */
-  success?: string;
   /** Calendar popover container */
-  calendar?: string;
+  content?: string;
   /** Calendar header (month/year nav) */
   header?: string;
   /** Month navigation container */
-  monthNav?: string;
+  row?: string;
   /** Navigation button (prev/next month/year) */
   navButton?: string;
   /** Disabled navigation button */
   navButtonDisabled?: string;
   /** Multi-month grid wrapper */
-  monthGrid?: string;
+  listRow?: string;
   /** Single month grid */
-  grid?: string;
+  list?: string;
   /** Weekday header row */
-  weekdayHeader?: string;
+  listHeader?: string;
   /** Individual weekday label */
   weekday?: string;
   /** Calendar day cell */
-  day?: string;
+  item?: string;
   /** Selected day */
   daySelected?: string;
   /** Today indicator */
@@ -107,15 +105,15 @@ export interface DatePickerClasses {
   /** Week number column */
   weekNumber?: string;
   /** Preset buttons container */
-  presets?: string;
+  presetGroup?: string;
   /** Individual preset button */
-  presetButton?: string;
+  presetTrigger?: string;
   /** Active preset button */
   presetActive?: string;
   /** Calendar footer */
   footer?: string;
   /** Today button in footer */
-  todayButton?: string;
+  todayTrigger?: string;
   /** Marker indicator dot */
   markerIndicator?: string;
   /** Marker tooltip */
@@ -129,9 +127,9 @@ export interface DatePickerClasses {
   /** Year dropdown menu */
   yearDropdown?: string;
   /** Generic dropdown menu */
-  dropdownMenu?: string;
+  subContent?: string;
   /** Dropdown item */
-  dropdownItem?: string;
+  subItem?: string;
   /** Selected dropdown item */
   dropdownItemSelected?: string;
 }

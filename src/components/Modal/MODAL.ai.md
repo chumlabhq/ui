@@ -162,14 +162,14 @@ modalRef.current?.focus();
 ```
 root (fixed inset-0, z-50, flex center)
 ├── overlay (fixed inset-0, bg-black/60, backdrop-blur)
-└── container (fixed inset-0, overflow-y-auto, flex center, p-4)
+└── positioner (fixed inset-0, overflow-y-auto, flex center, p-4)
     └── content (role="dialog", w-full max-w-lg, rounded-xl, shadow, bg-white dark:bg-gray-800)
         ├── header (flex items-start gap-3, p-6 pb-4)
         │   ├── icon (shrink-0)
         │   ├── div (flex-1)
         │   │   ├── title (font-semibold text-lg)
         │   │   └── description (text-sm text-gray-600)
-        │   └── closeButton (shrink-0, aria-label="Close modal")
+        │   └── closeTrigger (shrink-0, aria-label="Close modal")
         │       └── closeIcon (w-5 h-5)
         └── body (px-6 pb-6)
 ```
@@ -178,13 +178,13 @@ root (fixed inset-0, z-50, flex center)
 |------------------------|-------------|-------|
 | Root fixed wrapper | `root` | Positioning layer |
 | Backdrop color/blur | `overlay` | Also see `overlayColor`/`overlayOpacity` props |
-| Scroll/centering wrapper | `container` | Controls modal placement |
+| Scroll/centering wrapper | `positioner` | Controls modal placement |
 | Dialog panel | `content` | The visible card |
 | Header layout | `header` | Contains icon, title, close button |
 | Title text | `title` | |
 | Subtitle text | `description` | |
 | Header icon | `icon` | Requires `showIcon` |
-| Close button | `closeButton` | |
+| Close button | `closeTrigger` | |
 | Close icon SVG | `closeIcon` | Or use `closeIcon` prop for custom element |
 | Body area | `body` | Where `children` render |
 
@@ -213,12 +213,12 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. Conten
   classes={{
     root: "fixed inset-0 z-50 flex items-center justify-center",
     overlay: "fixed inset-0 bg-black/40 backdrop-blur-sm",
-    container: "relative z-10 flex items-center justify-center p-4",
+    positioner: "relative z-10 flex items-center justify-center p-4",
     content: "w-full max-w-md rounded-2xl shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700",
     header: "flex items-start gap-3 p-5 pb-3",
     title: "font-bold text-lg text-gray-900 dark:text-white",
     description: "mt-1 text-sm text-gray-500 dark:text-gray-400",
-    closeButton: "shrink-0 p-1.5 rounded-lg ml-auto hover:bg-gray-100 dark:hover:bg-gray-800",
+    closeTrigger: "shrink-0 p-1.5 rounded-lg ml-auto hover:bg-gray-100 dark:hover:bg-gray-800",
     closeIcon: "w-5 h-5 text-gray-500 dark:text-gray-400",
     body: "px-5 pb-5",
   }}

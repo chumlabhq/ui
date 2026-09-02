@@ -119,7 +119,7 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "label": {
@@ -137,10 +137,7 @@
         "suffix": {
           "type": "string"
         },
-        "error": {
-          "type": "string"
-        },
-        "success": {
+        "message": {
           "type": "string"
         },
         "count": {

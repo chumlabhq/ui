@@ -11,12 +11,11 @@ export type ToastPosition =
   | "bottom-center";
 
 export interface ToastClasses {
-  container?: string;
-  content?: string;
-  message?: string;
+  root?: string;
+  title?: string;
   description?: string;
-  progress?: string;
-  closeButton?: string;
+  indicator?: string;
+  closeTrigger?: string;
   icon?: string;
 }
 

@@ -87,7 +87,7 @@ export default function Example() {
 
 ## Styling Guide
 
-Each variant has its own class slots. Circular: `root`, `svg`, `track`, `indicator`. Linear: `root`, `bar`. Dot: `root`, `dot`. Pulse: `root`, `ring`.
+Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.
 
 ---
 

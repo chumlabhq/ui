@@ -337,9 +337,9 @@ export default function BlogListing() {
                 onValueChange={setCurrentPage}
                 classes={{
                   root: "",
-                  nav: "flex items-center gap-2",
-                  pageButtons: "flex items-center gap-1",
-                  pageButton:
+                  row: "flex items-center gap-2",
+                  list: "flex items-center gap-1",
+                  item:
                     "w-9 h-9 text-sm font-medium text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
                   activePageButton:
                     "w-9 h-9 text-sm font-medium bg-fg text-bg-base flex items-center justify-center cursor-pointer rounded-md",
@@ -347,15 +347,14 @@ export default function BlogListing() {
                     "w-9 h-9 text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
                   ellipsis:
                     "w-9 h-9 flex items-center justify-center text-fg-muted",
-                  selector: "",
+                  rowsPerPage: "",
                   selectorButton: "",
                   selectorDropdown: "",
                   selectorDropdownWrapper: "",
                   selectorOption: "",
                   label: "",
                   dropdownIcon: "",
-                  prevIcon: "",
-                  nextIcon: "",
+                  navIcon: "",
                   pageInfo: "",
                 }}
               />

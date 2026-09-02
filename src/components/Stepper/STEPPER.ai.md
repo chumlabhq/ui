@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-Use `<Stepper steps={[...]} value={activeStep} onValueChange={setActiveStep} />` for a controlled stepper. Steps have `id`, `label`, optional `description` and `icon`. Supports horizontal/vertical layouts, numbered/icon/dot variants, tooltips, non-linear navigation, and responsive sizing. Works out-of-the-box with built-in Tailwind styles.
+Use `<Stepper steps={[...]} value={activeStep} onValueChange={setActiveStep} />` for a controlled stepper. Steps have `id`, `itemText`, optional `description` and `icon`. Supports horizontal/vertical layouts, numbered/icon/dot variants, tooltips, non-linear navigation, and responsive sizing. Works out-of-the-box with built-in Tailwind styles.
 
 ---
 
@@ -29,9 +29,9 @@ import { useState } from "react";
 import { Stepper } from "@chumlab/ui/stepper";
 
 const steps = [
-  { id: 1, label: "Account" },
-  { id: 2, label: "Profile" },
-  { id: 3, label: "Review" },
+  { id: 1, itemText: "Account" },
+  { id: 2, itemText: "Profile" },
+  { id: 3, itemText: "Review" },
 ];
 
 export default function Example() {
@@ -138,23 +138,23 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 ```
 root (nav, data-orientation, data-variant)
 └── list (ol, flex horizontal or flex-col vertical)
-    ├── stepContainer (li)
-    │   └── step (button or div)
-    │       ├── indicator (rounded-full, sized per variant)
-    │       │   └── indicatorIcon (check/error/number/dot)
-    │       └── labelWrapper
-    │           ├── label
+    ├── item (li)
+    │   └── trigger (button or div)
+    │       ├── itemIndicator (rounded-full, sized per variant)
+    │       │   └── itemIcon (check/error/number/dot)
+    │       └── row
+    │           ├── itemText
     │           └── description
-    ├── connector (li, flex-1)
+    ├── separator (li, flex-1)
     │   └── connectorHorizontal or connectorVertical
     └── ... more steps
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
-| Indicator circle | `indicator` + status classes (`indicatorActive`, etc.) | |
-| Step number/icon inside | `indicatorIcon` | |
-| Step label text | `label` + status classes (`labelActive`, etc.) | |
+| Indicator circle | `itemIndicator` + status classes (`indicatorActive`, etc.) | |
+| Step number/icon inside | `itemIcon` | |
+| Step label text | `itemText` + status classes (`labelActive`, etc.) | |
 | Step description | `description` + status classes | |
 | Connecting line | `connectorHorizontal` / `connectorVertical` + status classes | |
 | Clickable step hover | `stepInteractive` | |
@@ -176,9 +176,9 @@ Default classes include responsive sizing: indicators, labels, descriptions, gap
 
 ```tsx
 const steps = [
-  { id: 1, label: "Account", description: "Set up your account", icon: UserIcon },
-  { id: 2, label: "Payment", description: "Add payment method", icon: CreditCardIcon },
-  { id: 3, label: "Confirm", description: "Review and submit", icon: CheckIcon },
+  { id: 1, itemText: "Account", description: "Set up your account", icon: UserIcon },
+  { id: 2, itemText: "Payment", description: "Add payment method", icon: CreditCardIcon },
+  { id: 3, itemText: "Confirm", description: "Review and submit", icon: CheckIcon },
 ];
 <Stepper steps={steps} variant="icon" showDescriptions labelPosition="bottom" fullWidth />
 ```

@@ -11,13 +11,13 @@ export interface CheckboxClasses {
   /** Root container wrapping checkbox and label. */
   root?: string;
   /** Container for the label and description text. */
-  labelContainer?: string;
+  labelGroup?: string;
   /** Label text element. */
   label?: string;
   /** Description text below the label. */
   description?: string;
   /** The checkbox indicator box. */
-  checkbox?: string;
+  control?: string;
   /** Applied when the checkbox is checked. */
   checked?: string;
   /** Applied when the checkbox is unchecked. */
@@ -25,11 +25,9 @@ export interface CheckboxClasses {
   /** Applied when the checkbox is in the indeterminate state. */
   indeterminate?: string;
   /** The check/indeterminate icon inside the indicator. */
-  icon?: string;
+  itemIndicator?: string;
   /** Error message element. */
-  error?: string;
-  /** Success message element. */
-  success?: string;
+  message?: string;
 }
 
 /**

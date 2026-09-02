@@ -31,16 +31,14 @@ export interface AccordionClasses {
   root?: string;
   item?: string;
   trigger?: string;
-  triggerInner?: string;
+  itemText?: string;
+  body?: string;
   content?: string;
-  contentWrapper?: string;
   icon?: string;
-  iconWrapper?: string;
-  subtitle?: string;
-  triggerLeft?: string;
-  triggerRight?: string;
-  contentInner?: string;
-  heading?: string;
+  description?: string;
+  itemIcon?: string;
+  triggerActions?: string;
+  header?: string;
 }
 
 export interface AccordionRef {

@@ -111,7 +111,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       trigger: classesProp?.trigger ?? baseClasses.trigger,
       content: classesProp?.content ?? baseClasses.content,
       arrow: classesProp?.arrow ?? baseClasses.arrow,
-      baseArrow: classesProp?.baseArrow ?? baseClasses.baseArrow,
+      baseArrow: classesProp?.arrow ?? baseClasses.arrow,
     }), [classesProp, baseClasses]);
 
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);

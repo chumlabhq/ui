@@ -7,9 +7,8 @@ export const DEFAULT_SPACING = -8;
 
 export const DEFAULT_AVATAR_CLASSES: Required<AvatarClasses> = {
   root: "shrink-0 flex items-center justify-center font-medium select-none",
-  inner: "absolute inset-0 overflow-hidden flex items-center justify-center",
+  control: "absolute inset-0 overflow-hidden flex items-center justify-center",
   image: "w-full h-full object-cover",
-  initials: "",
   fallback: "",
   status: "absolute block rounded-full",
 };

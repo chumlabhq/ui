@@ -98,11 +98,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `message` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `message` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
@@ -122,7 +122,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -159,21 +159,21 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 root
 ├── label
 ├── description
-└── wrapper
+└── control
     └── trigger (role="combobox")
-    │   ├── chips / triggerText / moreCount
-    │   ├── clearIcon
-    │   └── chevron
+    │   ├── chips / value / count
+    │   ├── clearTrigger
+    │   └── icon
     └── content (portal)
-        ├── searchInput > searchIcon + searchInputElement
-        └── optionList (role="listbox")
-            └── option (checkbox + checkboxIcon + label)
+        ├── searchControl > searchIcon + searchInput
+        └── list (role="listbox")
+            └── item (itemControl + itemIndicator + label)
 ```
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Search input wrapper | `searchInput` |
-| Search text input | `searchInputElement` |
+| Search input wrapper | `searchControl` |
+| Search text input | `searchInput` |
 | Search icon | `searchIcon` |
 | Loading indicator | `loading` |
 | Everything else | Same as MultiSelectDropdown |

@@ -228,76 +228,73 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     const mergedClasses = useMemo<Required<TimePickerClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,
       label: classesProp?.label ?? baseClasses.label,
-      wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+      control: classesProp?.control ?? baseClasses.control,
       trigger: classesProp?.trigger ?? baseClasses.trigger,
       input: classesProp?.input ?? baseClasses.input,
-      endIcon: classesProp?.endIcon ?? baseClasses.endIcon,
-      clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
-      dropdown: classesProp?.dropdown ?? baseClasses.dropdown,
-      optionList: classesProp?.optionList ?? baseClasses.optionList,
-      option: classesProp?.option ?? baseClasses.option,
+      icon: classesProp?.icon ?? baseClasses.icon,
+      clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
+      content: classesProp?.content ?? baseClasses.content,
+      list: classesProp?.list ?? baseClasses.list,
+      item: classesProp?.item ?? baseClasses.item,
       optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
       optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
-      selectedIcon: classesProp?.selectedIcon ?? baseClasses.selectedIcon,
-      noResults: classesProp?.noResults ?? baseClasses.noResults,
-      error: classesProp?.error ?? baseClasses.error,
+      itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+      empty: classesProp?.empty ?? baseClasses.empty,
+      message: classesProp?.message ?? baseClasses.message,
       description: classesProp?.description ?? baseClasses.description,
-      success: classesProp?.success ?? baseClasses.success,
-      clockContainer: classesProp?.clockContainer ?? baseClasses.clockContainer,
+      clockContent: classesProp?.clockContent ?? baseClasses.clockContent,
       clockDisplay: classesProp?.clockDisplay ?? baseClasses.clockDisplay,
-      clockDisplayHours: classesProp?.clockDisplayHours ?? baseClasses.clockDisplayHours,
-      clockDisplayMinutes: classesProp?.clockDisplayMinutes ?? baseClasses.clockDisplayMinutes,
+      clockHours: classesProp?.clockHours ?? baseClasses.clockHours,
+      clockMinutes: classesProp?.clockMinutes ?? baseClasses.clockMinutes,
       clockDisplayActive: classesProp?.clockDisplayActive ?? baseClasses.clockDisplayActive,
-      clockDisplaySeparator: classesProp?.clockDisplaySeparator ?? baseClasses.clockDisplaySeparator,
+      clockSeparator: classesProp?.clockSeparator ?? baseClasses.clockSeparator,
       clockFace: classesProp?.clockFace ?? baseClasses.clockFace,
       clockHand: classesProp?.clockHand ?? baseClasses.clockHand,
       clockHandLine: classesProp?.clockHandLine ?? baseClasses.clockHandLine,
       clockHandDot: classesProp?.clockHandDot ?? baseClasses.clockHandDot,
       clockNumber: classesProp?.clockNumber ?? baseClasses.clockNumber,
       clockNumberSelected: classesProp?.clockNumberSelected ?? baseClasses.clockNumberSelected,
-      clockNumberInner: classesProp?.clockNumberInner ?? baseClasses.clockNumberInner,
       clockNumberDisabled: classesProp?.clockNumberDisabled ?? baseClasses.clockNumberDisabled,
       clockCenter: classesProp?.clockCenter ?? baseClasses.clockCenter,
-      clockActions: classesProp?.clockActions ?? baseClasses.clockActions,
-      clockCancelButton: classesProp?.clockCancelButton ?? baseClasses.clockCancelButton,
-      clockOkButton: classesProp?.clockOkButton ?? baseClasses.clockOkButton,
-      clockPeriodToggle: classesProp?.clockPeriodToggle ?? baseClasses.clockPeriodToggle,
-      clockPeriodButton: classesProp?.clockPeriodButton ?? baseClasses.clockPeriodButton,
+      footer: classesProp?.footer ?? baseClasses.footer,
+      cancelButton: classesProp?.cancelButton ?? baseClasses.cancelButton,
+      confirmButton: classesProp?.confirmButton ?? baseClasses.confirmButton,
+      row: classesProp?.row ?? baseClasses.row,
+      periodButton: classesProp?.periodButton ?? baseClasses.periodButton,
       clockPeriodActive: classesProp?.clockPeriodActive ?? baseClasses.clockPeriodActive,
     }), [classesProp, baseClasses]);
 
     // Clock classes sub-object
     const clockClasses = useMemo<Required<ClockFaceClasses>>(() => ({
-      clockContainer: mergedClasses.clockContainer,
+      clockContent: mergedClasses.clockContent,
       clockDisplay: mergedClasses.clockDisplay,
-      clockDisplayHours: mergedClasses.clockDisplayHours,
-      clockDisplayMinutes: mergedClasses.clockDisplayMinutes,
+      clockHours: mergedClasses.clockHours,
+      clockMinutes: mergedClasses.clockMinutes,
       clockDisplayActive: mergedClasses.clockDisplayActive,
-      clockDisplaySeparator: mergedClasses.clockDisplaySeparator,
+      clockSeparator: mergedClasses.clockSeparator,
       clockFace: mergedClasses.clockFace,
       clockHand: mergedClasses.clockHand,
       clockHandLine: mergedClasses.clockHandLine,
       clockHandDot: mergedClasses.clockHandDot,
       clockNumber: mergedClasses.clockNumber,
       clockNumberSelected: mergedClasses.clockNumberSelected,
-      clockNumberInner: mergedClasses.clockNumberInner,
       clockNumberDisabled: mergedClasses.clockNumberDisabled,
       clockCenter: mergedClasses.clockCenter,
-      clockActions: mergedClasses.clockActions,
-      clockCancelButton: mergedClasses.clockCancelButton,
-      clockOkButton: mergedClasses.clockOkButton,
-      clockPeriodToggle: mergedClasses.clockPeriodToggle,
-      clockPeriodButton: mergedClasses.clockPeriodButton,
+      footer: mergedClasses.footer,
+      cancelButton: mergedClasses.cancelButton,
+      confirmButton: mergedClasses.confirmButton,
+      row: mergedClasses.row,
+      periodButton: mergedClasses.periodButton,
       clockPeriodActive: mergedClasses.clockPeriodActive,
     }), [mergedClasses]);
 
     // Option classes sub-object for TimeOption
     const optionClasses = useMemo(() => ({
-      option: mergedClasses.option,
+      option: mergedClasses.item,
       optionSelected: mergedClasses.optionSelected,
       optionFocused: mergedClasses.optionFocused,
-      selectedIcon: mergedClasses.selectedIcon,
-    }), [mergedClasses.option, mergedClasses.optionSelected, mergedClasses.optionFocused, mergedClasses.selectedIcon]);
+      selectedIcon: mergedClasses.itemIndicator,
+    }), [mergedClasses.item, mergedClasses.optionSelected, mergedClasses.optionFocused, mergedClasses.itemIndicator]);
 
     const prefersReducedMotion = useReducedMotion(reduceMotion);
 
@@ -622,13 +619,13 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
           id={listboxId}
           role="listbox"
           aria-label={typeof label === "string" ? label : "Time options"}
-          className={mergedClasses.dropdown}
+          className={mergedClasses.content}
           style={portalDropdownStyle}
           data-position={dropdownCoords?.position ?? dropdownPosition}
         >
-          <div className={mergedClasses.optionList}>
+          <div className={mergedClasses.list}>
             {displayOptions.length === 0 ? (
-              <div className={mergedClasses.noResults}>No matching times</div>
+              <div className={mergedClasses.empty}>No matching times</div>
             ) : (
               displayOptions.map((time, index) => (
                 <TimeOption
@@ -710,7 +707,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
 
         <div
           ref={containerRef}
-          className={[wrapperLayoutClass, mergedClasses.wrapper, loading ? "opacity-50 pointer-events-none" : ""].filter(Boolean).join(" ")}
+          className={[wrapperLayoutClass, mergedClasses.control, loading ? "opacity-50 pointer-events-none" : ""].filter(Boolean).join(" ")}
         >
           <div
             ref={triggerElRef}
@@ -772,23 +769,23 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
             {showClearButton && (
               <button
                 type="button"
-                className={mergedClasses.clearIcon}
+                className={mergedClasses.clearTrigger}
                 onClick={handleClear}
                 aria-label="Clear time"
                 tabIndex={-1}
               >
-                <ClearIconDefault className={mergedClasses.clearIcon ? "" : "w-4 h-4"} />
+                <ClearIconDefault className={mergedClasses.clearTrigger ? "" : "w-4 h-4"} />
               </button>
             )}
             {showEndIcon &&
               (endIcon ? (
-                <span className={mergedClasses.endIcon} aria-hidden>
+                <span className={mergedClasses.icon} aria-hidden>
                   {endIcon}
                 </span>
               ) : (
                 <ChevronDownIcon
                   className={cn(
-                    mergedClasses.endIcon,
+                    mergedClasses.icon,
                     // The transition lives in the endIcon default; drop it here
                     // rather than re-adding it, so `classes.endIcon` and
                     // `unstyled` both reach it.
@@ -803,12 +800,12 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mergedClasses.error}>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.message}>
             {errorMessage}
           </div>
         )}
         {success && successMessage && !error && (
-          <div id={successId} data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div id={successId} data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

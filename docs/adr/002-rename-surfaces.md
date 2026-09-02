@@ -1,6 +1,6 @@
 # ADR 002 — surfaces the rename must reach
 
-Produced during Task 3a; counts refreshed after Amendment F. The rename itself is held (see
+Produced before Task 3a; **the migration has since been applied** and the counts below are historical. The closing section records the state afterwards. The rename itself is held (see
 `002-migration-blockers.json`), but the blast radius does not depend on when it
 lands, and an AI surface naming a key that no longer exists fails **silently**:
 an unknown key in a `classes` object is ignored, so a playground generation
@@ -65,3 +65,29 @@ the `.ai.md` files are the real source and must be corrected first.
 Searched for vendored or pre-built bundles carrying key names; there are none in
 this repo. If the AI Playground vendors `@chumlab/ui` on the backend, that copy
 is outside this repo and is not covered here.
+
+## After Task 3a (2026-09-03)
+
+227 key moves applied by `scripts/adr002-codemod.mjs`, which uses the TypeScript checker
+rather than text matching — a `classes` bag written inside `<Button>` may belong to Tooltip,
+and only the contextual type knows which.
+
+| Surface | State |
+| --- | --- |
+| Types, constants, component source, tests, fixtures, registry, demos | migrated; `tsc --build` clean |
+| 27 `.ai.md` files | migrated inside backticks and fenced blocks; prose left alone |
+| 28 `*.schema.json` | 225 key renames under `classes.properties` |
+| `ai/component-index.json` | 9 anatomy renames (the button/trigger family) |
+| `llms-full.txt` | regenerated from the `.ai.md` sources |
+
+**Nothing the AI Playground reads still names a retired key.** The remaining textual matches
+for names like `tooltip`, `step`, `startIcon` and `loader` are *props*, not class keys —
+verified by checking each against the `classes.properties` block rather than by word match.
+
+### Deferred, 19 rows
+
+- **InternationalPhoneInput ×13, Pagination ×5** — targets are R6-nested
+  (`countrySelect.item`, `rowsPerPage.trigger`). Applying them needs the nested `classes`
+  object, which is Task 4. Their present keys are untouched and still work.
+- **ResizablePanel.handle → resizeHandle ×1** — `resizeHandle` is the last RECALLED
+  precedent in the ledger. Not renamed on recall.

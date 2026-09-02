@@ -37,11 +37,11 @@ export interface BreadcrumbClasses {
   itemDisabled?: string;
   link?: string;
   separator?: string;
-  icon?: string;
+  itemIcon?: string;
   ellipsis?: string;
-  ellipsisButton?: string;
-  dropdown?: string;
-  dropdownItem?: string;
+  ellipsisTrigger?: string;
+  content?: string;
+  collapsedItem?: string;
   dropdownItemDisabled?: string;
 }
 

@@ -23,11 +23,11 @@
     },
     "onClear": {
       "type": "object",
-      "description": "() => void — Called when the clear button is clicked."
+      "description": "() => void \u2014 Called when the clear button is clicked."
     },
     "onMonthChange": {
       "type": "object",
-      "description": "(month: Date) => void — Called when the displayed month changes."
+      "description": "(month: Date) => void \u2014 Called when the displayed month changes."
     },
     "open": {
       "type": "boolean",
@@ -44,11 +44,11 @@
     },
     "minDate": {
       "type": "object",
-      "description": "Date — Earliest selectable date."
+      "description": "Date \u2014 Earliest selectable date."
     },
     "maxDate": {
       "type": "object",
-      "description": "Date — Latest selectable date."
+      "description": "Date \u2014 Latest selectable date."
     },
     "disabledDates": {
       "type": "object",
@@ -56,11 +56,11 @@
       "properties": {
         "before": {
           "type": "object",
-          "description": "Date — Disable dates before this date."
+          "description": "Date \u2014 Disable dates before this date."
         },
         "after": {
           "type": "object",
-          "description": "Date — Disable dates after this date."
+          "description": "Date \u2014 Disable dates after this date."
         },
         "disablePast": {
           "type": "boolean"
@@ -84,7 +84,7 @@
         },
         "custom": {
           "type": "object",
-          "description": "(date: Date) => boolean — Custom disable function."
+          "description": "(date: Date) => boolean \u2014 Custom disable function."
         }
       }
     },
@@ -239,15 +239,15 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message."
+      "description": "React.ReactNode \u2014 Error message."
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label above the trigger."
+      "description": "React.ReactNode \u2014 Label above the trigger."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Description text."
+      "description": "React.ReactNode \u2014 Description text."
     },
     "success": {
       "type": "boolean",
@@ -256,7 +256,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message."
+      "description": "React.ReactNode \u2014 Success message."
     },
     "loading": {
       "type": "boolean",
@@ -289,39 +289,39 @@
     },
     "calendarIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom calendar icon."
+      "description": "React.ReactNode \u2014 Custom calendar icon."
     },
     "clearIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom clear icon."
+      "description": "React.ReactNode \u2014 Custom clear icon."
     },
     "prevMonthIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom previous month icon."
+      "description": "React.ReactNode \u2014 Custom previous month icon."
     },
     "nextMonthIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom next month icon."
+      "description": "React.ReactNode \u2014 Custom next month icon."
     },
     "prevYearIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom previous year icon."
+      "description": "React.ReactNode \u2014 Custom previous year icon."
     },
     "nextYearIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom next year icon."
+      "description": "React.ReactNode \u2014 Custom next year icon."
     },
     "todayIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom today button icon."
+      "description": "React.ReactNode \u2014 Custom today button icon."
     },
     "monthDropdownSelectedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon for selected month in dropdown."
+      "description": "React.ReactNode \u2014 Icon for selected month in dropdown."
     },
     "yearDropdownSelectedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Icon for selected year in dropdown."
+      "description": "React.ReactNode \u2014 Icon for selected year in dropdown."
     },
     "classes": {
       "type": "object",
@@ -336,31 +336,28 @@
         "input": {
           "type": "string"
         },
-        "calendarIcon": {
+        "icon": {
           "type": "string"
         },
-        "clearButton": {
+        "clearTrigger": {
           "type": "string"
         },
         "label": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "success": {
-          "type": "string"
-        },
-        "calendar": {
+        "content": {
           "type": "string"
         },
         "header": {
           "type": "string"
         },
-        "monthNav": {
+        "row": {
           "type": "string"
         },
         "navButton": {
@@ -369,19 +366,19 @@
         "navButtonDisabled": {
           "type": "string"
         },
-        "monthGrid": {
+        "listRow": {
           "type": "string"
         },
-        "grid": {
+        "list": {
           "type": "string"
         },
-        "weekdayHeader": {
+        "listHeader": {
           "type": "string"
         },
         "weekday": {
           "type": "string"
         },
-        "day": {
+        "item": {
           "type": "string"
         },
         "daySelected": {
@@ -417,10 +414,10 @@
         "weekNumber": {
           "type": "string"
         },
-        "presets": {
+        "presetGroup": {
           "type": "string"
         },
-        "presetButton": {
+        "presetTrigger": {
           "type": "string"
         },
         "presetActive": {
@@ -429,7 +426,7 @@
         "footer": {
           "type": "string"
         },
-        "todayButton": {
+        "todayTrigger": {
           "type": "string"
         },
         "markerIndicator": {
@@ -450,10 +447,10 @@
         "yearDropdown": {
           "type": "string"
         },
-        "dropdownMenu": {
+        "subContent": {
           "type": "string"
         },
-        "dropdownItem": {
+        "subItem": {
           "type": "string"
         },
         "dropdownItemSelected": {
@@ -468,7 +465,7 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Portal container for the calendar popup."
+      "description": "HTMLElement | null \u2014 Portal container for the calendar popup."
     },
     "lockScroll": {
       "type": "boolean",

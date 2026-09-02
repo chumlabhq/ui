@@ -18,7 +18,7 @@ export const VELOCITY_THRESHOLD = 0.5;
 export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
   root: "z-999999",
   overlay: "fixed inset-0 transition-opacity",
-  panel: "fixed z-999999",
+  content: "fixed z-999999",
 };
 
 export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> =

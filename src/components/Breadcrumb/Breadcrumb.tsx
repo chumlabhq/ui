@@ -363,11 +363,11 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         itemDisabled: classesProp?.itemDisabled ?? baseClasses.itemDisabled,
         link: classesProp?.link ?? baseClasses.link,
         separator: classesProp?.separator ?? baseClasses.separator,
-        icon: classesProp?.icon ?? baseClasses.icon,
+        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
         ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
-        ellipsisButton: classesProp?.ellipsisButton ?? baseClasses.ellipsisButton,
-        dropdown: classesProp?.dropdown ?? baseClasses.dropdown,
-        dropdownItem: classesProp?.dropdownItem ?? baseClasses.dropdownItem,
+        ellipsisTrigger: classesProp?.ellipsisTrigger ?? baseClasses.ellipsisTrigger,
+        content: classesProp?.content ?? baseClasses.content,
+        collapsedItem: classesProp?.collapsedItem ?? baseClasses.collapsedItem,
         dropdownItemDisabled: classesProp?.dropdownItemDisabled ?? baseClasses.dropdownItemDisabled,
       }),
       [classesProp, baseClasses],
@@ -575,7 +575,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         const isDisabled = !!item.disabled;
         const isClickable = !isDisabled && (!!item.onClick || !!onItemClick);
 
-        const content = <BreadcrumbItemContent item={item} iconClassName={mergedClasses.icon} />;
+        const content = <BreadcrumbItemContent item={item} iconClassName={mergedClasses.itemIcon} />;
 
         // Only merge when tooltip is actually shown to avoid unnecessary object creation
         const mergedTooltipProps = showTooltips && item.tooltip
@@ -673,7 +673,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           type="button"
           onClick={handleEllipsisClick}
           onKeyDown={handleEllipsisKeyDown}
-          className={mergedClasses.ellipsisButton || undefined}
+          className={mergedClasses.ellipsisTrigger || undefined}
           aria-expanded={isDropdownOpen}
           aria-haspopup="menu"
           aria-controls={isDropdownOpen ? dropdownId : undefined}
@@ -706,10 +706,10 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             <DropdownPortal
               buttonRef={ellipsisButtonRef}
               dropdownId={dropdownId}
-              dropdownClassName={mergedClasses.dropdown}
-              dropdownItemClassName={mergedClasses.dropdownItem}
+              dropdownClassName={mergedClasses.content}
+              dropdownItemClassName={mergedClasses.collapsedItem}
               dropdownItemDisabledClassName={mergedClasses.dropdownItemDisabled}
-              iconClassName={mergedClasses.icon}
+              iconClassName={mergedClasses.itemIcon}
               collapsedItems={collapsedItems}
               position={dropdownPosition}
               zIndex={dropdownZIndex}

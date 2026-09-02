@@ -37,7 +37,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     const mergedClasses: Required<LinearLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        bar: classesProp?.bar ?? baseClasses.bar,
+        range: classesProp?.range ?? baseClasses.range,
       }),
       [classesProp, baseClasses],
     );
@@ -72,7 +72,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
         data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
       >
-        <div className={mergedClasses.bar || undefined} style={barStyle} />
+        <div className={mergedClasses.range || undefined} style={barStyle} />
         <style>{`@keyframes linear-loader-slide{0%{transform:translateX(-100%)}50%{transform:translateX(0%)}100%{transform:translateX(100%)}}`}</style>
       </div>
     );

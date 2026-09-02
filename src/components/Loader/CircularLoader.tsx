@@ -43,9 +43,9 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
     const mergedClasses: Required<CircularLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        svg: classesProp?.svg ?? baseClasses.svg,
+        control: classesProp?.control ?? baseClasses.control,
         track: classesProp?.track ?? baseClasses.track,
-        indicator: classesProp?.indicator ?? baseClasses.indicator,
+        range: classesProp?.range ?? baseClasses.range,
       }),
       [classesProp, baseClasses],
     );
@@ -71,7 +71,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
         <svg
           viewBox="0 0 24 24"
           fill="none"
-          className={cn(mergedClasses.svg, !unstyled && "[animation-duration:var(--loader-speed)]") || undefined}
+          className={cn(mergedClasses.control, !unstyled && "[animation-duration:var(--loader-speed)]") || undefined}
           style={prefersReducedMotion ? { animation: "none" } : undefined}
         >
           <circle
@@ -91,7 +91,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={circumference * 0.75}
-            className={mergedClasses.indicator || undefined}
+            className={mergedClasses.range || undefined}
           />
         </svg>
       </div>

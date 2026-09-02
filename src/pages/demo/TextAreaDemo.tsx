@@ -140,12 +140,11 @@ const AlertIcon = ({ className = "" }: { className?: string }) => (
 const getClasses = (dark: boolean) => ({
   // ── TextAreaClasses object for the `classes` prop ──
   textarea: {
-    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
-    textarea: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-disabled`,
+    control: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text border-cl-border bg-white shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:text-cl-text-secondary dark:border dark:border-cl-text/10 dark:bg-cl-text/4 dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
+    input: `w-full bg-transparent outline-none text-sm resize-y text-cl-text placeholder:text-cl-text-disabled`,
     label: `text-[13px] font-medium mb-1.5 block text-cl-text-secondary`,
     description: `text-xs mt-1 mb-1.5 text-cl-text-tertiary`,
-    error: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-error`,
-    success: `text-xs mt-1.5 flex items-center gap-1.5 text-cl-success`,
+    message: "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
     count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
   } satisfies TextAreaClasses,
 
@@ -193,7 +192,7 @@ const TextAreaDemo = () => {
   const bioBad = bio.length > 0 && bio.length < 10;
 
   const wrapperFor = (err: boolean, ok: boolean) =>
-    err ? c.wrapperError : ok ? c.wrapperSuccess : c.textarea.wrapper;
+    err ? c.wrapperError : ok ? c.wrapperSuccess : c.textarea.control;
 
   return (
     <div className="space-y-10">
@@ -320,7 +319,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    textarea: `${c.textarea.textarea} resize-y`,
+                    input: `${c.textarea.input} resize-y`,
                   }}
                 />
               </div>
@@ -334,7 +333,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    textarea: `${c.textarea.textarea} resize-none`,
+                    input: `${c.textarea.input} resize-none`,
                   }}
                 />
               </div>
@@ -346,7 +345,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    textarea: `${c.textarea.textarea} resize`,
+                    input: `${c.textarea.input} resize`,
                   }}
                 />
               </div>
@@ -486,7 +485,7 @@ const TextAreaDemo = () => {
                 }
                 error={bioBad}
                 errorMessage="At least 10 characters required"
-                classes={{ ...c.textarea, wrapper: wrapperFor(bioBad, bioOk) }}
+                classes={{ ...c.textarea, control: wrapperFor(bioBad, bioOk) }}
                 className={c.container}
               />
               <TextArea
@@ -528,7 +527,7 @@ const TextAreaDemo = () => {
                     <AlertIcon /> Minimum 20 characters required
                   </>
                 }
-                classes={{ ...c.textarea, wrapper: c.wrapperError }}
+                classes={{ ...c.textarea, control: c.wrapperError }}
                 className={c.container}
               />
               <TextArea
@@ -540,7 +539,7 @@ const TextAreaDemo = () => {
                     <CheckIcon /> Content looks good
                   </>
                 }
-                classes={{ ...c.textarea, wrapper: c.wrapperSuccess }}
+                classes={{ ...c.textarea, control: c.wrapperSuccess }}
                 className={c.container}
               />
             </div>
@@ -576,7 +575,7 @@ const TextAreaDemo = () => {
                     <CheckIcon /> Looks great!
                   </>
                 }
-                classes={{ ...c.textarea, wrapper: wrapperFor(bioBad, bioOk) }}
+                classes={{ ...c.textarea, control: wrapperFor(bioBad, bioOk) }}
                 className={c.container}
               />
             </div>
@@ -678,8 +677,8 @@ const TextAreaDemo = () => {
                 }
                 classes={{
                   ...c.textarea,
-                  textarea: c.disabledTextarea,
-                  wrapper: c.wrapperDisabled,
+                  input: c.disabledTextarea,
+                  control: c.wrapperDisabled,
                 }}
                 className={c.container}
               />
@@ -689,8 +688,8 @@ const TextAreaDemo = () => {
                 disabled
                 classes={{
                   ...c.textarea,
-                  textarea: c.disabledTextarea,
-                  wrapper: c.wrapperDisabled,
+                  input: c.disabledTextarea,
+                  control: c.wrapperDisabled,
                 }}
                 className={c.container}
               />
@@ -700,7 +699,7 @@ const TextAreaDemo = () => {
                 readOnly
                 classes={{
                   ...c.textarea,
-                  wrapper: `${c.textarea.wrapper} cursor-default`,
+                  control: `${c.textarea.control} cursor-default`,
                 }}
                 className={c.container}
               />
@@ -725,7 +724,7 @@ const TextAreaDemo = () => {
                 rows={3}
                 classes={{
                   ...c.textarea,
-                  textarea: `${c.textarea.textarea} resize-none`,
+                  input: `${c.textarea.input} resize-none`,
                 }}
                 className={c.container}
               />
@@ -737,7 +736,7 @@ const TextAreaDemo = () => {
                 rows={3}
                 classes={{
                   ...c.textarea,
-                  textarea: `${c.textarea.textarea} resize-none`,
+                  input: `${c.textarea.input} resize-none`,
                 }}
                 className={c.container}
               />
@@ -858,7 +857,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    wrapper: `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 border border-cl-border focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
+                    control: `px-0.5 py-2.5 border-b-2 gap-2.5 transition-all duration-150 border border-cl-border focus-within:border-cl-border-input-focus dark:border dark:border-cl-text/10 dark:focus-within:border-cl-border-input-focus`,
                   }}
                 />
               </div>
@@ -870,7 +869,7 @@ const TextAreaDemo = () => {
                   rows={3}
                   classes={{
                     ...c.textarea,
-                    wrapper: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/[0.10] dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
+                    control: `px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent/15 dark:border dark:border-cl-border-input-focus/30 dark:bg-cl-accent/[0.10] dark:focus-within:ring-2 dark:focus-within:ring-cl-accent/25`,
                   }}
                 />
               </div>

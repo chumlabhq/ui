@@ -154,7 +154,7 @@ The component has three styling modes:
 // This REPLACES the default trigger classes entirely:
 <Accordion classes={{ trigger: "my-custom-trigger" }} />
 
-// The other slots (item, content, icon, etc.) still use their defaults.
+// The other slots (item, body, icon, etc.) still use their defaults.
 // To ADD to defaults, you must include the default classes yourself.
 ```
 
@@ -169,16 +169,16 @@ Use this to know which slot to change for a given visual outcome:
 │  ┌──────────────────────────────────────────────┐   │
 │  │ item                                          │   │
 │  │                                               │   │
-│  │  ┌─ heading ──────────────────────────────┐  │   │
+│  │  ┌─ header ──────────────────────────────┐  │   │
 │  │  │ ┌─ trigger ──────────────────────────┐ │  │   │
-│  │  │ │ [triggerLeft] [triggerInner] [triggerRight] [iconWrapper > icon] │ │   │
-│  │  │ │               └─ subtitle                │ │  │   │
+│  │  │ │ [itemIcon] [itemText] [triggerActions] [icon] │ │   │
+│  │  │ │               └─ description                │ │  │   │
 │  │  │ └────────────────────────────────────┘ │  │   │
 │  │  └────────────────────────────────────────┘  │   │
 │  │                                               │   │
-│  │  ┌─ contentWrapper (animation layer) ─────┐  │   │
-│  │  │ ┌─ contentInner ─────────────────────┐ │  │   │
-│  │  │ │  content (your text/elements)      │ │  │   │
+│  │  ┌─ content (animation layer) ─────┐  │   │
+│  │  │ ┌─ body ─────────────────────┐ │  │   │
+│  │  │ │  body (your text/elements)      │ │  │   │
 │  │  │ └───────────────────────────────────┘ │  │   │
 │  │  └────────────────────────────────────────┘  │   │
 │  └──────────────────────────────────────────────┘   │
@@ -198,11 +198,11 @@ Use this to know which slot to change for a given visual outcome:
 | Trigger text color | `trigger` | Includes font weight, size from `size` prop |
 | Expanded/collapsed text color | `trigger` | Target via `data-state` in CSS: `[data-state=open]:text-blue-600` |
 | Chevron icon color/size | `icon` | Rotation is automatic via `iconAnimation` |
-| Subtitle appearance | `subtitle` | Below the main trigger label |
-| Content text styling | `content` | Wraps your children |
-| Open/close animation speed | `contentWrapper` | Must keep `overflow-hidden transition-[max-height,opacity,visibility]` |
-| Extra spacing inside content | `contentInner` | Inner wrapper if you need it |
-| Heading semantics (h1-h6 tag) | `heading` | Rarely styled — use for CSS resets only |
+| Subtitle appearance | `description` | Below the main trigger label |
+| Content text styling | `body` | Wraps your children |
+| Open/close animation speed | `content` | Must keep `overflow-hidden transition-[max-height,opacity,visibility]` |
+| Extra spacing inside content | `body` | Inner wrapper if you need it |
+| Heading semantics (h1-h6 tag) | `header` | Rarely styled — use for CSS resets only |
 
 ### Dark mode
 
@@ -215,7 +215,7 @@ The default classes use Tailwind's `dark:` prefix. Dark mode activates when `<ht
 // When overriding, always provide both light and dark variants:
 <Accordion classes={{
   trigger: "text-gray-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800",
-  content: "text-gray-600 dark:text-gray-300",
+  body: "text-gray-600 dark:text-gray-300",
 }} />
 ```
 
@@ -249,8 +249,8 @@ Or in plain CSS:
 <Accordion type="single" collapsible unstyled classes={{
   root: "divide-y divide-gray-200 dark:divide-gray-700",
   trigger: "w-full flex justify-between py-4 text-left text-base font-medium text-gray-900 dark:text-white",
-  content: "pb-4 text-sm text-gray-500 dark:text-gray-400",
-  contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+  body: "pb-4 text-sm text-gray-500 dark:text-gray-400",
+  content: "overflow-hidden transition-[max-height,opacity,visibility]",
   icon: "h-5 w-5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
 }}>
 ```
@@ -267,11 +267,11 @@ Or in plain CSS:
     item: "border-b border-gray-100 dark:border-gray-700 last:border-b-0",
     trigger:
       "flex w-full items-center gap-3 px-4 py-3 text-[13px] font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors",
-    triggerInner: "flex-1 text-left",
-    content: "px-4 pb-3 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed",
-    contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+    itemText: "flex-1 text-left",
+    body: "px-4 pb-3 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed",
+    content: "overflow-hidden transition-[max-height,opacity,visibility]",
     icon: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
-    iconWrapper: "shrink-0",
+    icon: "shrink-0",
   }}
   animationDuration={200}
   animationEasing="ease-out"
@@ -437,7 +437,7 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Visual variants | `title="Variants"` | default, bordered, separated, flush |
 | Size presets | `title="Sizes"` | sm, md, lg side by side |
 | Custom icons | `title="Custom Icons"` | `expandedIcon`, `collapsedIcon`, `iconPosition`, `iconAnimation` |
-| Trigger slots | `title="Subtitles & Slots"` | `leftSlot`, `rightSlot`, `subtitle` |
+| Trigger slots | `title="Subtitles & Slots"` | `leftSlot`, `rightSlot`, `description` |
 | Disabled states | `title="Disabled"` | Per-item and global disabled |
 | Imperative API | `title="Imperative Ref API"` | `expandAll`, `collapseAll`, `toggle`, `focusItem` |
 | Animation config | `title="Animation Customization"` | Custom duration, easing, lifecycle callbacks |

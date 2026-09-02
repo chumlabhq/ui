@@ -7,11 +7,10 @@ export {
 } from "../Pagination";
 
 export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
-  container:
+  root:
     "w-full border rounded-cl-md overflow-hidden bg-white dark:bg-cl-bg border-cl-border dark:border-white/[0.06]",
-  table: "w-full border-collapse",
+  list: "w-full border-collapse",
   header: "",
-  headerRow: "",
   headerCell:
     "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated dark:bg-[#111118] border-cl-border dark:border-white/[0.06]",
   // Inset box-shadow (not bg) for the hover tint so the opaque base
@@ -20,9 +19,9 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   // sticky headers.
   headerCellHover:
     "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-  headerCellContent: "",
+  headerCellText: "",
   body: "",
-  row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
+  item: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] hover:bg-cl-bg-hover dark:hover:bg-white/[0.06]",
   cell: "px-4 py-3 text-sm whitespace-nowrap text-cl-text dark:text-cl-text",
   selectedRow:
     "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border dark:border-white/[0.04] bg-cl-accent/15 dark:bg-cl-accent/10 hover:bg-cl-accent/15 dark:hover:bg-cl-accent/15",
@@ -32,11 +31,10 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   // that clip because sticky + z-index creates its own stacking
   // context. var(--cl-border-input-focus) is theme-aware (deeper blue
   // in light, softer blue in dark), so one declaration covers both.
-  pinnedContainer:
+  pinnedRegion:
     "shrink-0 sticky left-0 z-30 bg-white dark:bg-cl-bg [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
-  pinnedTable: "border-collapse",
-  unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
-  unpinnedTable: "w-full border-collapse",
+  pinnedList: "border-collapse",
+  scrollRegion: "min-w-0 flex-1 overflow-x-auto",
   empty:
     "flex items-center justify-center py-12 text-cl-text-tertiary dark:text-cl-text-tertiary",
   pinIcon: "text-cl-text-tertiary",
@@ -47,30 +45,28 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated",
   pinnedPinButton:
     "shrink-0 ml-2 p-1.5 rounded transition-colors hover:bg-cl-accent/15",
-  shimmer:
+  loading:
     "w-full border rounded-cl-md overflow-hidden border-cl-border dark:border-white/[0.06]",
-  shimmerRow: "border-b border-cl-border dark:border-white/[0.04]",
-  shimmerCell: "px-4 py-2 h-14",
-  shimmerBar:
+  loadingRow: "border-b border-cl-border dark:border-white/[0.04]",
+  loadingItem: "px-4 py-2 h-14",
+  loadingBar:
     "h-full w-full bg-linear-to-r rounded animate-pulse from-fg/[0.06] dark:from-fg/[0.10] via-fg/[0.06] dark:via-fg/[0.10] to-fg/[0.06] dark:to-fg/[0.10]",
-  checkbox: "",
-  checkboxCell: "",
+  control: "",
   sortIcon: "",
-  filterIcon: "",
-  filterDropdown: "",
-  expandIcon: "",
+  filterButton: "",
+  filterContent: "",
+  expandButton: "",
   expandedRow: "",
-  pinnedRightContainer: "",
-  pinnedRightTable: "",
-  editInput: "",
+  pinnedRightRegion: "",
+  pinnedRightList: "",
+  input: "",
   dragHandle: "",
   footer: "",
-  searchBar: "",
-  mobileCard: "",
-  groupHeader: "",
-  resizeHandle: "",
-  loadingMore: "",
   searchInput: "",
+  mobileCard: "",
+  groupLabel: "",
+  resizeHandle: "",
+  loadingFooter: "",
 };
 
 export const UNSTYLED_TABLE_CLASSES: Required<TableClasses> =

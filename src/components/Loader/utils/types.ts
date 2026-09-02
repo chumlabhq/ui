@@ -7,11 +7,11 @@ export interface CircularLoaderClasses {
   /** Root wrapper element. */
   root?: string;
   /** SVG element. */
-  svg?: string;
+  control?: string;
   /** Background track circle. */
   track?: string;
   /** Foreground arc circle. */
-  indicator?: string;
+  range?: string;
 }
 
 /** CSS class overrides for LinearLoader sub-elements. */
@@ -19,7 +19,7 @@ export interface LinearLoaderClasses {
   /** Root wrapper element. */
   root?: string;
   /** Animated bar element. */
-  bar?: string;
+  range?: string;
 }
 
 /** CSS class overrides for DotLoader sub-elements. */
@@ -27,7 +27,7 @@ export interface DotLoaderClasses {
   /** Root wrapper element. */
   root?: string;
   /** Individual dot element. */
-  dot?: string;
+  range?: string;
 }
 
 /** CSS class overrides for PulseLoader sub-elements. */
@@ -35,9 +35,7 @@ export interface PulseLoaderClasses {
   /** Root wrapper element. */
   root?: string;
   /** Core dot element. */
-  core?: string;
-  /** Ripple ring element. */
-  ring?: string;
+  range?: string;
 }
 
 // ─── Props types ────────────────────────────────────────────────────────────

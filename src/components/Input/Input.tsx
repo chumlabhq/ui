@@ -126,14 +126,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const mergedClasses: Required<InputClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
         input: classesProp?.input ?? baseClasses.input,
         prefix: classesProp?.prefix ?? baseClasses.prefix,
         suffix: classesProp?.suffix ?? baseClasses.suffix,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        message: classesProp?.message ?? baseClasses.message,
         count: classesProp?.count ?? baseClasses.count,
       }),
       [classesProp, baseClasses],
@@ -215,10 +214,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         loaderSize={loaderSize}
         fullWidth={fullWidth}
         className={cn(mergedClasses.root, fullWidth && "w-full", className)}
-        wrapperClassName={mergedClasses.wrapper}
+        wrapperClassName={mergedClasses.control}
         labelClassName={mergedClasses.label}
-        errorClassName={mergedClasses.error}
-        successClassName={mergedClasses.success}
+        errorClassName={mergedClasses.message}
+        successClassName={mergedClasses.message}
         descriptionClassName={mergedClasses.description}
         prefixClassName={mergedClasses.prefix}
         suffixClassName={mergedClasses.suffix}

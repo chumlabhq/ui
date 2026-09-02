@@ -245,16 +245,13 @@
         "label": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "input": {
           "type": "string"
         },
-        "error": {
-          "type": "string"
-        },
-        "success": {
+        "message": {
           "type": "string"
         },
         "countrySelect": {

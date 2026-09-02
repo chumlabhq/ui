@@ -47,13 +47,13 @@
             "root": {
               "type": "string"
             },
-            "svg": {
+            "control": {
               "type": "string"
             },
             "track": {
               "type": "string"
             },
-            "indicator": {
+            "range": {
               "type": "string"
             }
           }
@@ -115,7 +115,7 @@
             "root": {
               "type": "string"
             },
-            "bar": {
+            "range": {
               "type": "string"
             }
           }
@@ -170,7 +170,7 @@
             "root": {
               "type": "string"
             },
-            "dot": {
+            "range": {
               "type": "string"
             }
           }
@@ -220,10 +220,7 @@
             "root": {
               "type": "string"
             },
-            "core": {
-              "type": "string"
-            },
-            "ring": {
+            "range": {
               "type": "string"
             }
           }

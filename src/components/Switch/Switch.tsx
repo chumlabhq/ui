@@ -85,20 +85,19 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
     const mergedClasses: Required<SwitchClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        innerRow: classesProp?.innerRow ?? baseClasses.innerRow,
-        labelContainer: classesProp?.labelContainer ?? baseClasses.labelContainer,
+        row: classesProp?.row ?? baseClasses.row,
+        labelGroup: classesProp?.labelGroup ?? baseClasses.labelGroup,
         label: classesProp?.label ?? baseClasses.label,
         disabledLabel: classesProp?.disabledLabel ?? baseClasses.disabledLabel,
         description: classesProp?.description ?? baseClasses.description,
-        tracker: classesProp?.tracker ?? baseClasses.tracker,
+        control: classesProp?.control ?? baseClasses.control,
         disabledTracker: classesProp?.disabledTracker ?? baseClasses.disabledTracker,
         thumb: classesProp?.thumb ?? baseClasses.thumb,
         checkedTracker: classesProp?.checkedTracker ?? baseClasses.checkedTracker,
         uncheckedTracker: classesProp?.uncheckedTracker ?? baseClasses.uncheckedTracker,
         checkedThumb: classesProp?.checkedThumb ?? baseClasses.checkedThumb,
         uncheckedThumb: classesProp?.uncheckedThumb ?? baseClasses.uncheckedThumb,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        message: classesProp?.message ?? baseClasses.message,
         loading: classesProp?.loading ?? baseClasses.loading,
       }),
       [classesProp, baseClasses],
@@ -136,9 +135,9 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         data-valid={(!error && success) || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
       >
-        <div className={mergedClasses.innerRow || undefined}>
+        <div className={mergedClasses.row || undefined}>
           {hasLabelContent && (
-            <div className={mergedClasses.labelContainer || undefined}>
+            <div className={mergedClasses.labelGroup || undefined}>
               {renderLabel
                 ? renderLabel(renderProps)
                 : label && (
@@ -188,7 +187,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             disabled={disabled || loading}
             onClick={handleToggle}
             className={cn(
-              mergedClasses.tracker,
+              mergedClasses.control,
               disabled && mergedClasses.disabledTracker,
               isChecked ? mergedClasses.checkedTracker : mergedClasses.uncheckedTracker,
               loading && "opacity-50 pointer-events-none",
@@ -254,11 +253,11 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mergedClasses.error || undefined}>{errorMessage}</div>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>{errorMessage}</div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

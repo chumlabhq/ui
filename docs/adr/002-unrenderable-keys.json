@@ -3,7 +3,6 @@
   "recordedOn": "2026-09-02",
   "waived": {
     "CascadingDropdown": {
-      "content": "dead \u2014 grepped: no source reference outside the merged-classes map. Duplicates `menu` (AUDIT-GAP 4.5). Task 3 frees the name for it.",
       "option": "dead \u2014 grepped: no source reference outside the merge map. Superseded by menuItem.",
       "optionSelected": "dead \u2014 grepped: no source reference outside the merge map.",
       "optionFocused": "dead \u2014 grepped: no source reference outside the merge map.",
@@ -24,7 +23,7 @@
       "thumbActive": "BROWSER TIER \u2014 gated on isDragging, set from a pointer sequence calling setPointerCapture, which jsdom does not implement. Asserted in e2e/slider.spec.ts with a real mouse drag; classified browserTier in 002-state-attributes.json with a guard that fails if that spec stops asserting it."
     },
     "Table": {
-      "editInput": "ATTEMPTED, still unreachable \u2014 a fixture with editable + editableColumns + onCellEdit and a fireEvent.doubleClick on the first body cell did not open edit mode. The previous reason said it 'needs a measured cell'; that was not tested and may still be wrong. Re-attempt with a real double-click in the browser tier before Task 3 deletes it."
+      "input": "ATTEMPTED, still unreachable \u2014 a fixture with editable + editableColumns + onCellEdit and a fireEvent.doubleClick on the first body cell did not open edit mode. The previous reason said it 'needs a measured cell'; that was not tested and may still be wrong. Re-attempt with a real double-click in the browser tier before Task 3 deletes it. | RENAMED in Task 3a from `editInput`."
     },
     "RadioButton/RadioButton": {
       "error": "dead \u2014 read the source: RadioButton.tsx renders error text only inside RadioGroup (:192), from DEFAULT_RADIO_GROUP_CLASSES. The item's own class set never reaches an error element.",

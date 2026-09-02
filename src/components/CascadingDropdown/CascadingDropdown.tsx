@@ -42,13 +42,13 @@ const SubmenuItem = memo(function SubmenuItem({
   onHover: (index: number) => void;
 }) {
   const combinedClassName = cn(
-    classes.submenuItem,
+    classes.subItem,
     isSelected && classes.submenuItemSelected,
     isFocused && classes.submenuItemFocused,
   );
 
   const combinedCheckboxClassName = cn(
-    classes.checkbox,
+    classes.itemControl,
     isSelected && classes.checkboxChecked,
   );
   // ADR 002 R4: the state the checkboxChecked key named; Radix Checkbox spelling.
@@ -82,7 +82,7 @@ const SubmenuItem = memo(function SubmenuItem({
       {selectionMode === "single" &&
         isSelected &&
         showSelectedIcon &&
-        (selectedIcon || <CheckIcon className={classes.checkIcon || undefined} />)}
+        (selectedIcon || <CheckIcon className={classes.itemIndicator || undefined} />)}
     </div>
   );
 });
@@ -111,7 +111,7 @@ const MenuItem = memo(function MenuItem({
   onClick: (option: CascadingOption) => void;
 }) {
   const combinedClassName = cn(
-    classes.menuItem,
+    classes.item,
     isSelected && classes.menuItemSelected,
     isFocused && classes.menuItemFocused,
   );
@@ -134,7 +134,7 @@ const MenuItem = memo(function MenuItem({
       onClick={() => onClick(option)}
     >
       <span className="flex-1 truncate">{option.content || option.label}</span>
-      {hasSubmenu && <ChevronRightIcon className={classes.submenuChevron || undefined} />}
+      {hasSubmenu && <ChevronRightIcon className={classes.itemIcon || undefined} />}
     </div>
   );
 });
@@ -199,12 +199,12 @@ const Submenu = memo(function Submenu({
     <div
       role="menu"
       aria-label={`${parent.label} submenu`}
-      className={classes.submenu || undefined}
+      className={classes.subContent || undefined}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {showSearch && (
-        <div className={submenuSearchInputClass || classes.searchInput || undefined}>
+        <div className={submenuSearchInputClass || classes.searchControl || undefined}>
           <SearchIcon className={cn(submenuSearchIconClass || classes.searchIcon) || undefined} />
           <input
             type="text"
@@ -212,7 +212,7 @@ const Submenu = memo(function Submenu({
             onChange={(e) => onSearchChange?.(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             placeholder={searchPlaceholder || "Search..."}
-            className={submenuSearchInputElementClass || classes.searchInputElement || undefined}
+            className={submenuSearchInputElementClass || classes.searchInput || undefined}
             aria-label={searchAriaLabel || "Search submenu"}
             aria-autocomplete="list"
           />
@@ -221,7 +221,7 @@ const Submenu = memo(function Submenu({
       {loading || isSearching ? (
         <div className={classes.loading || undefined}>{loadingText}</div>
       ) : options.length === 0 ? (
-        <div className={classes.noResults || undefined}>{noResultsContent}</div>
+        <div className={classes.empty || undefined}>{noResultsContent}</div>
       ) : (
         options.map((option, index) => (
           <SubmenuItem
@@ -344,41 +344,38 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     const mergedClasses: Required<CascadingDropdownClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
-        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
-        menu: classesProp?.menu ?? baseClasses.menu,
-        menuItem: classesProp?.menuItem ?? baseClasses.menuItem,
+        value: classesProp?.value ?? baseClasses.value,
+        content: classesProp?.content ?? baseClasses.content,
+        item: classesProp?.item ?? baseClasses.item,
         menuItemSelected: classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
         menuItemFocused: classesProp?.menuItemFocused ?? baseClasses.menuItemFocused,
         menuItemDisabled: classesProp?.menuItemDisabled ?? baseClasses.menuItemDisabled,
-        submenu: classesProp?.submenu ?? baseClasses.submenu,
-        submenuContainer: classesProp?.submenuContainer ?? baseClasses.submenuContainer,
-        submenuItem: classesProp?.submenuItem ?? baseClasses.submenuItem,
+        subContent: classesProp?.subContent ?? baseClasses.subContent,
+        subPositioner: classesProp?.subPositioner ?? baseClasses.subPositioner,
+        subItem: classesProp?.subItem ?? baseClasses.subItem,
         submenuItemSelected: classesProp?.submenuItemSelected ?? baseClasses.submenuItemSelected,
         submenuItemFocused: classesProp?.submenuItemFocused ?? baseClasses.submenuItemFocused,
         label: classesProp?.label ?? baseClasses.label,
-        error: classesProp?.error ?? baseClasses.error,
+        message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
-        success: classesProp?.success ?? baseClasses.success,
-        chevron: classesProp?.chevron ?? baseClasses.chevron,
-        submenuChevron: classesProp?.submenuChevron ?? baseClasses.submenuChevron,
-        checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
-        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        itemControl: classesProp?.itemControl ?? baseClasses.itemControl,
         checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
-        noResults: classesProp?.noResults ?? baseClasses.noResults,
-        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
+        empty: classesProp?.empty ?? baseClasses.empty,
+        clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
         loading: classesProp?.loading ?? baseClasses.loading,
-        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
-        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+        loadingItem: classesProp?.loadingItem ?? baseClasses.loadingItem,
+        searchControl: classesProp?.searchControl ?? baseClasses.searchControl,
         searchInput: classesProp?.searchInput ?? baseClasses.searchInput,
-        searchInputElement: classesProp?.searchInputElement ?? baseClasses.searchInputElement,
         searchIcon: classesProp?.searchIcon ?? baseClasses.searchIcon,
-        submenuSearchInput: classesProp?.submenuSearchInput ?? classesProp?.searchInput ?? (baseClasses.submenuSearchInput || baseClasses.searchInput),
-        submenuSearchInputElement: classesProp?.submenuSearchInputElement ?? classesProp?.searchInputElement ?? (baseClasses.submenuSearchInputElement || baseClasses.searchInputElement),
-        submenuSearchIcon: classesProp?.submenuSearchIcon ?? classesProp?.searchIcon ?? (baseClasses.submenuSearchIcon || baseClasses.searchIcon),
-        content: classesProp?.content ?? classesProp?.menu ?? baseClasses.menu,
-        option: classesProp?.option ?? classesProp?.menuItem ?? baseClasses.menuItem,
+        subSearchControl: classesProp?.subSearchControl ?? classesProp?.searchControl ?? (baseClasses.subSearchControl || baseClasses.searchControl),
+        subSearchInput: classesProp?.subSearchInput ?? classesProp?.searchInput ?? (baseClasses.subSearchInput || baseClasses.searchInput),
+        subSearchIcon: classesProp?.subSearchIcon ?? classesProp?.searchIcon ?? (baseClasses.subSearchIcon || baseClasses.searchIcon),
+        option: classesProp?.option ?? classesProp?.item ?? baseClasses.item,
         optionSelected: classesProp?.optionSelected ?? classesProp?.menuItemSelected ?? baseClasses.menuItemSelected,
         optionFocused: classesProp?.optionFocused ?? classesProp?.menuItemFocused ?? baseClasses.menuItemFocused,
         optionDisabled: classesProp?.optionDisabled ?? classesProp?.menuItemDisabled ?? baseClasses.menuItemDisabled,
@@ -600,7 +597,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     return (
       <div
         ref={ref}
-        className={cn(mergedClasses.wrapper, fullWidthClass, className) || undefined}
+        className={cn(mergedClasses.control, fullWidthClass, className) || undefined}
         style={style}
         data-disabled={disabled || undefined}
         data-error={error || undefined}
@@ -668,12 +665,12 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className={mergedClasses.triggerText || undefined}>
+              <span className={mergedClasses.value || undefined}>
                 {displayValue || placeholder}
               </span>
               {showChevron && (
                 <ChevronDownIcon
-                  className={cn(mergedClasses.chevron, isOpen && "rotate-180") || undefined}
+                  className={cn(mergedClasses.icon, isOpen && "rotate-180") || undefined}
                 />
               )}
             </button>
@@ -684,7 +681,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               type="button"
               tabIndex={-1}
               aria-label="Clear selection"
-              className={mergedClasses.clearIcon || undefined}
+              className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
@@ -703,7 +700,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               aria-label={typeof label === "string" ? label : ariaLabel || "Options"}
               aria-live={showMenuSearch ? "polite" : undefined}
               aria-busy={isMenuSearching || undefined}
-              className={mergedClasses.menu || undefined}
+              className={mergedClasses.content || undefined}
               style={{
                 position: "fixed" as const,
                 zIndex: dropdownZIndex,
@@ -714,7 +711,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               }}
             >
               {showMenuSearch && (
-                <div className={mergedClasses.searchInput || undefined}>
+                <div className={mergedClasses.searchControl || undefined}>
                   <SearchIconComponent className={cn(mergedClasses.searchIcon) || undefined} />
                   <input
                     type="text"
@@ -722,7 +719,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                     onChange={(e) => onMenuSearchChange(e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder={menuSearchPlaceholder}
-                    className={mergedClasses.searchInputElement || undefined}
+                    className={mergedClasses.searchInput || undefined}
                     aria-label={menuSearchAriaLabel}
                     aria-autocomplete="list"
                   />
@@ -731,14 +728,14 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
               {externalLoading || isMenuSearching ? (
                 <>
                   <div className={mergedClasses.loading || undefined}>{loadingText}</div>
-                  <div className={mergedClasses.shimmer || undefined}>
+                  <div className={mergedClasses.loading || undefined}>
                     {Array.from({ length: shimmerCount }).map((_, i) => (
-                      <div key={i} className={mergedClasses.shimmerItem || undefined} />
+                      <div key={i} className={mergedClasses.loadingItem || undefined} />
                     ))}
                   </div>
                 </>
               ) : filteredOptions.length === 0 ? (
-                <div className={mergedClasses.noResults || undefined}>{noResultsContent}</div>
+                <div className={mergedClasses.empty || undefined}>{noResultsContent}</div>
               ) : (
                 filteredOptions.map((option, index) => {
                   const staticChildren = option.children || [];
@@ -778,7 +775,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                             submenuPosition === "right"
                               ? "absolute left-full top-0 pl-1"
                               : "absolute right-full top-0 pr-1",
-                            mergedClasses.submenuContainer,
+                            mergedClasses.subPositioner,
                           ) || undefined}
                         >
                           <Submenu
@@ -810,9 +807,9 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
                             searchAriaLabel={submenuSearchAriaLabel}
                             SearchIconComponent={SearchIconComponent}
                             isSearching={isSubmenuSearching}
-                            submenuSearchInputClass={mergedClasses.submenuSearchInput}
-                            submenuSearchInputElementClass={mergedClasses.submenuSearchInputElement}
-                            submenuSearchIconClass={mergedClasses.submenuSearchIcon}
+                            submenuSearchInputClass={mergedClasses.subSearchControl}
+                            submenuSearchInputElementClass={mergedClasses.subSearchInput}
+                            submenuSearchIconClass={mergedClasses.subSearchIcon}
                           />
                         </div>
                       )}
@@ -834,13 +831,13 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
         )}
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mergedClasses.error || undefined}>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

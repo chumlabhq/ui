@@ -16,23 +16,23 @@ export interface Tab {
 
 export interface TabPanelClasses {
   root?: string;
-  tabList?: string;
-  tab?: string;
+  list?: string;
+  item?: string;
   tabActive?: string;
   tabInactive?: string;
   tabDisabled?: string;
   tabFocus?: string;
-  label?: string;
+  itemText?: string;
   labelActive?: string;
   labelInactive?: string;
-  icon?: string;
+  itemIcon?: string;
   iconActive?: string;
   iconInactive?: string;
   count?: string;
   countActive?: string;
   countInactive?: string;
   indicator?: string;
-  panel?: string;
+  content?: string;
 }
 
 export interface TabRenderProps {
@@ -92,23 +92,23 @@ export interface TabPanelProps {
 
 export interface ResolvedClasses {
   root: string;
-  tabList: string;
-  tab: string;
+  list: string;
+  item: string;
   tabActive: string;
   tabInactive: string;
   tabDisabled: string;
   tabFocus: string;
-  label: string;
+  itemText: string;
   labelActive: string;
   labelInactive: string;
-  icon: string;
+  itemIcon: string;
   iconActive: string;
   iconInactive: string;
   count: string;
   countActive: string;
   countInactive: string;
   indicator: string;
-  panel: string;
+  content: string;
 }
 
 export interface TabPanelContextValue {

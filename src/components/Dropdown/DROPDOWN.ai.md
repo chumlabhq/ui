@@ -108,11 +108,11 @@ export default function Example() {
 | `name` | string | — | Form field name for the hidden input. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode - Content displayed when no option is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `message` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `message` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |
@@ -162,38 +162,38 @@ export default function Example() {
 root
 ├── label
 ├── description
-└── wrapper (relative container)
+└── control (relative container)
     ├── trigger (button)
-    │   ├── triggerText (selected value or placeholder)
-    │   └── chevron (icon)
-    ├── clearIcon (button, absolute positioned)
+    │   ├── value (selected value or placeholder)
+    │   └── icon (icon)
+    ├── clearTrigger (button, absolute positioned)
     └── content (portal → fixed position)
-        └── optionList (scrollable)
-            └── option (repeated)
+        └── list (scrollable)
+            └── item (repeated)
                 ├── label/content
-                └── checkIcon (when selected)
-    noResults (when empty)
-    shimmer / shimmerItem (when loading)
-error
-success
+                └── itemIndicator (when selected)
+    empty (when empty)
+    loading / loadingItem (when loading)
+message
+message
 ```
 
 | "I want to change..." | Slot | Notes |
 |------------------------|------|-------|
 | Trigger button style | `trigger` | Includes border, bg, focus ring |
-| Selected text appearance | `triggerText` | Has `truncate` by default |
+| Selected text appearance | `value` | Has `truncate` by default |
 | Popup container | `content` | Border, shadow, bg |
-| Option row | `option` | Hover/cursor styles |
-| Selected option highlight | `optionSelected` | Applied on top of `option` |
-| Keyboard-focused option | `optionFocused` | Applied on top of `option` |
+| Option row | `item` | Hover/cursor styles |
+| Selected option highlight | `optionSelected` | Applied on top of `item` |
+| Keyboard-focused option | `optionFocused` | Applied on top of `item` |
 | Disabled option | `optionDisabled` | Includes `pointer-events-none` |
-| Dropdown arrow icon | `chevron` | Size, color, transition |
-| Check mark on selected | `checkIcon` | Size, color |
-| Clear/X button | `clearIcon` | Absolutely positioned |
-| Empty state | `noResults` | Centered text |
+| Dropdown arrow icon | `icon` | Size, color, transition |
+| Check mark on selected | `itemIndicator` | Size, color |
+| Clear/X button | `clearTrigger` | Absolutely positioned |
+| Empty state | `empty` | Centered text |
 | Label text | `label` | Font, color, spacing |
-| Error message | `error` | Below dropdown |
-| Success message | `success` | Below dropdown |
+| Error message | `message` | Below dropdown |
+| Success message | `message` | Below dropdown |
 
 ### Dark mode
 
@@ -207,7 +207,7 @@ classes={{ trigger: "bg-white dark:bg-gray-900 text-black dark:text-white ..." }
 
 ```css
 /* Tailwind arbitrary variant */
-<Dropdown classes={{ trigger: "data-[open]:ring-2 data-[error]:border-red-500" }} />
+<Dropdown classes={{ trigger: "data-[open]:ring-2 data-[message]:border-red-500" }} />
 
 /* Plain CSS */
 [data-state="open"] { ... }
@@ -224,14 +224,14 @@ classes={{ trigger: "bg-white dark:bg-gray-900 text-black dark:text-white ..." }
   onValueChange={setValue}
   classes={{
     trigger: "flex items-center justify-between w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-900 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white",
-    triggerText: "flex-1 text-left truncate",
+    value: "flex-1 text-left truncate",
     content: "rounded-md shadow-lg bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700",
-    optionList: "max-h-60 overflow-y-auto py-1",
-    option: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer",
+    list: "max-h-60 overflow-y-auto py-1",
+    item: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer",
     optionSelected: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300",
     optionFocused: "bg-gray-100 dark:bg-gray-700",
-    checkIcon: "w-4 h-4 text-indigo-600 dark:text-indigo-400",
-    chevron: "w-4 h-4 text-gray-400 transition-transform duration-200",
+    itemIndicator: "w-4 h-4 text-indigo-600 dark:text-indigo-400",
+    icon: "w-4 h-4 text-gray-400 transition-transform duration-200",
   }}
 />
 ```
@@ -256,7 +256,7 @@ const [value, setValue] = useState<string | null>(null);
     const res = await fetch("/api/options");
     return res.json();
   }}
-  onLoadError={(err) => console.error(err)}
+  onLoadError={(err) => console.message(err)}
   placeholder="Click to load..."
 />
 ```
@@ -268,7 +268,7 @@ const [value, setValue] = useState<string | null>(null);
   label="Country"
   required
   name="country"
-  error={!value}
+  message={!value}
   errorMessage="Please select a country"
   options={countries}
   value={value}

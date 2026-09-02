@@ -6,11 +6,11 @@
   "properties": {
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Text label rendered beside the checkbox."
+      "description": "React.ReactNode \u2014 Text label rendered beside the checkbox."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Helper text rendered below the label."
+      "description": "React.ReactNode \u2014 Helper text rendered below the label."
     },
     "checked": {
       "type": "boolean",
@@ -28,7 +28,7 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(checked: boolean) => void — Fires when the checked state changes."
+      "description": "(checked: boolean) => void \u2014 Fires when the checked state changes."
     },
     "onFocus": {
       "type": "object",
@@ -45,7 +45,7 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message displayed below the checkbox."
+      "description": "React.ReactNode \u2014 Error message displayed below the checkbox."
     },
     "success": {
       "type": "boolean",
@@ -54,7 +54,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message displayed below the checkbox."
+      "description": "React.ReactNode \u2014 Success message displayed below the checkbox."
     },
     "loading": {
       "type": "boolean",
@@ -92,15 +92,15 @@
     },
     "checkedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon for the checked state."
+      "description": "React.ReactNode \u2014 Custom icon for the checked state."
     },
     "uncheckedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon for the unchecked state."
+      "description": "React.ReactNode \u2014 Custom icon for the unchecked state."
     },
     "indeterminateIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon for the indeterminate state."
+      "description": "React.ReactNode \u2014 Custom icon for the indeterminate state."
     },
     "classes": {
       "type": "object",
@@ -109,7 +109,7 @@
         "root": {
           "type": "string"
         },
-        "labelContainer": {
+        "labelGroup": {
           "type": "string"
         },
         "label": {
@@ -118,7 +118,7 @@
         "description": {
           "type": "string"
         },
-        "checkbox": {
+        "control": {
           "type": "string"
         },
         "checked": {
@@ -130,13 +130,10 @@
         "indeterminate": {
           "type": "string"
         },
-        "icon": {
+        "itemIndicator": {
           "type": "string"
         },
-        "error": {
-          "type": "string"
-        },
-        "success": {
+        "message": {
           "type": "string"
         }
       }

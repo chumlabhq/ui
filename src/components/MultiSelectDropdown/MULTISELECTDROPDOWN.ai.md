@@ -102,11 +102,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `message` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `message` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
@@ -120,7 +120,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -158,15 +158,15 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 root
 ├── label
 ├── description
-└── wrapper
+└── control
     └── trigger (role="combobox")
-    │   ├── chips (chip + chipRemove) or triggerText
-    │   ├── moreCount (+N more)
-    │   ├── clearIcon
-    │   └── chevron
+    │   ├── chips (chip + chipRemove) or value
+    │   ├── count (+N more)
+    │   ├── clearTrigger
+    │   └── icon
     └── content (portal)
-        └── optionList (role="listbox")
-            └── option (checkbox + checkboxIcon + label)
+        └── list (role="listbox")
+            └── item (itemControl + itemIndicator + label)
 ```
 
 | "I want to change..." | Slot to use | Notes |
@@ -174,10 +174,10 @@ root
 | Trigger button | `trigger` | Contains chips/text |
 | Selected chips | `chip`, `chipRemove` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
-| Option row | `option`, `optionSelected`, `optionFocused` | |
-| Checkbox | `checkbox`, `checkboxChecked`, `checkboxIcon` | |
-| Chevron icon | `chevron` | |
-| "+N more" badge | `moreCount` | |
+| Option row | `item`, `optionSelected`, `optionFocused` | |
+| Checkbox | `itemControl`, `checkboxChecked`, `itemIndicator` | |
+| Chevron icon | `icon` | |
+| "+N more" badge | `count` | |
 
 ### Dark mode
 

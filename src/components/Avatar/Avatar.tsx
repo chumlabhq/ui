@@ -139,9 +139,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        inner: classesProp?.inner ?? baseClasses.inner,
+        control: classesProp?.control ?? baseClasses.control,
         image: classesProp?.image ?? baseClasses.image,
-        initials: classesProp?.initials ?? baseClasses.initials,
         fallback: classesProp?.fallback ?? baseClasses.fallback,
         status: classesProp?.status ?? baseClasses.status,
       }),
@@ -236,7 +235,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         {...rest}
       >
         <div
-          className={mergedClasses.inner || undefined}
+          className={mergedClasses.control || undefined}
           style={{ borderRadius }}
         >
           {showImage && (
@@ -268,7 +267,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             <span className={mergedClasses.fallback || undefined}>{fallback}</span>
           )}
           {showInitials && (
-            <span className={mergedClasses.initials || undefined} style={textStyle}>
+            <span className={mergedClasses.fallback || undefined} style={textStyle}>
               {initials}
             </span>
           )}

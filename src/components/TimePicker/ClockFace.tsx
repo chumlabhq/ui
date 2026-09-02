@@ -432,7 +432,7 @@ export function ClockFace({
           className={[
             cls.clockNumber,
             isSelected && cls.clockNumberSelected,
-            isInner && cls.clockNumberInner,
+            isInner && cls.clockNumber,
             isDisabled && cls.clockNumberDisabled,
           ]
             .filter(Boolean)
@@ -457,7 +457,7 @@ export function ClockFace({
       displayValue,
       cls.clockNumber,
       cls.clockNumberSelected,
-      cls.clockNumberInner,
+      cls.clockNumber,
       cls.clockNumberDisabled,
       reduceMotion,
       isHourDisabled,
@@ -482,7 +482,7 @@ export function ClockFace({
   return (
     <div
       ref={containerRef}
-      className={cls.clockContainer}
+      className={cls.clockContent}
       style={{
         ...style,
         ...(reduceMotion ? { transition: "none", animation: "none" } : {}),
@@ -495,7 +495,7 @@ export function ClockFace({
         <button
           type="button"
           className={[
-            cls.clockDisplayHours,
+            cls.clockHours,
             selectionMode === "hours" && cls.clockDisplayActive,
           ]
             .filter(Boolean)
@@ -508,11 +508,11 @@ export function ClockFace({
         >
           {pad(displayValue.hours)}
         </button>
-        <span className={cls.clockDisplaySeparator}>:</span>
+        <span className={cls.clockSeparator}>:</span>
         <button
           type="button"
           className={[
-            cls.clockDisplayMinutes,
+            cls.clockMinutes,
             selectionMode === "minutes" && cls.clockDisplayActive,
           ]
             .filter(Boolean)
@@ -527,11 +527,11 @@ export function ClockFace({
         </button>
 
         {format === "12h" && (
-          <div className={cls.clockPeriodToggle}>
+          <div className={cls.row}>
             <button
               type="button"
               className={[
-                cls.clockPeriodButton,
+                cls.periodButton,
                 displayValue.period === "AM" && cls.clockPeriodActive,
               ]
                 .filter(Boolean)
@@ -547,7 +547,7 @@ export function ClockFace({
             <button
               type="button"
               className={[
-                cls.clockPeriodButton,
+                cls.periodButton,
                 displayValue.period === "PM" && cls.clockPeriodActive,
               ]
                 .filter(Boolean)
@@ -618,10 +618,10 @@ export function ClockFace({
         {innerNumbers.map((num, index) => renderNumber(num, index, true))}
       </div>
 
-      <div className={cls.clockActions}>
+      <div className={cls.footer}>
         <button
           type="button"
-          className={cls.clockCancelButton}
+          className={cls.cancelButton}
           onClick={onCancel}
           disabled={disabled}
         >
@@ -629,7 +629,7 @@ export function ClockFace({
         </button>
         <button
           type="button"
-          className={cls.clockOkButton}
+          className={cls.confirmButton}
           onClick={onConfirm}
           disabled={disabled || !isCurrentTimeInRange}
         >

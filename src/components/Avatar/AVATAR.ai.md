@@ -142,11 +142,11 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 ```
 ┌─ root (outer container, sets size/shape) ──────────────┐
 │                                                         │
-│  ┌─ inner (absolute inset, overflow hidden) ─────────┐ │
+│  ┌─ control (absolute inset, overflow hidden) ─────────┐ │
 │  │                                                    │ │
 │  │  <img class="image" />                            │ │
 │  │  — OR —                                           │ │
-│  │  <span class="initials">JD</span>                │ │
+│  │  <span class="fallback">JD</span>                │ │
 │  │  — OR —                                           │ │
 │  │  <span class="fallback">{icon}</span>            │ │
 │  │                                                    │ │
@@ -178,7 +178,7 @@ Avatar relies on inline styles for most visual properties (size, shape, auto-gen
   name="Jane"
   classes={{
     root: "ring-2 ring-gray-200 dark:ring-gray-700",
-    initials: "text-gray-700 dark:text-gray-200",
+    fallback: "text-gray-700 dark:text-gray-200",
   }}
 />
 ```
@@ -241,7 +241,7 @@ For grouped avatars, match `ringColor` to your background:
 <Avatar
   src={user.avatarUrl}
   name={user.displayName}
-  onError={() => console.log("Image failed, showing initials")}
+  onError={() => console.log("Image failed, showing fallback")}
 />
 ```
 

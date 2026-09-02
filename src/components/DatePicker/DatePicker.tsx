@@ -588,22 +588,21 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       trigger: classesProp?.trigger ?? baseClasses.trigger,
       input: classesProp?.input ?? baseClasses.input,
       triggerActions: classesProp?.triggerActions ?? baseClasses.triggerActions,
-      calendarIcon: classesProp?.calendarIcon ?? baseClasses.calendarIcon,
-      clearButton: classesProp?.clearButton ?? baseClasses.clearButton,
+      icon: classesProp?.icon ?? baseClasses.icon,
+      clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
       label: classesProp?.label ?? baseClasses.label,
-      error: classesProp?.error ?? baseClasses.error,
+      message: classesProp?.message ?? baseClasses.message,
       description: classesProp?.description ?? baseClasses.description,
-      success: classesProp?.success ?? baseClasses.success,
-      calendar: classesProp?.calendar ?? baseClasses.calendar,
+      content: classesProp?.content ?? baseClasses.content,
       header: classesProp?.header ?? baseClasses.header,
-      monthNav: classesProp?.monthNav ?? baseClasses.monthNav,
+      row: classesProp?.row ?? baseClasses.row,
       navButton: classesProp?.navButton ?? baseClasses.navButton,
       navButtonDisabled: classesProp?.navButtonDisabled ?? baseClasses.navButtonDisabled,
-      monthGrid: classesProp?.monthGrid ?? baseClasses.monthGrid,
-      grid: classesProp?.grid ?? baseClasses.grid,
-      weekdayHeader: classesProp?.weekdayHeader ?? baseClasses.weekdayHeader,
+      listRow: classesProp?.listRow ?? baseClasses.listRow,
+      list: classesProp?.list ?? baseClasses.list,
+      listHeader: classesProp?.listHeader ?? baseClasses.listHeader,
       weekday: classesProp?.weekday ?? baseClasses.weekday,
-      day: classesProp?.day ?? baseClasses.day,
+      item: classesProp?.item ?? baseClasses.item,
       daySelected: classesProp?.daySelected ?? baseClasses.daySelected,
       dayToday: classesProp?.dayToday ?? baseClasses.dayToday,
       dayDisabled: classesProp?.dayDisabled ?? baseClasses.dayDisabled,
@@ -615,19 +614,19 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       dayFocused: classesProp?.dayFocused ?? baseClasses.dayFocused,
       dayMarked: classesProp?.dayMarked ?? baseClasses.dayMarked,
       weekNumber: classesProp?.weekNumber ?? baseClasses.weekNumber,
-      presets: classesProp?.presets ?? baseClasses.presets,
-      presetButton: classesProp?.presetButton ?? baseClasses.presetButton,
+      presetGroup: classesProp?.presetGroup ?? baseClasses.presetGroup,
+      presetTrigger: classesProp?.presetTrigger ?? baseClasses.presetTrigger,
       presetActive: classesProp?.presetActive ?? baseClasses.presetActive,
       footer: classesProp?.footer ?? baseClasses.footer,
-      todayButton: classesProp?.todayButton ?? baseClasses.todayButton,
+      todayTrigger: classesProp?.todayTrigger ?? baseClasses.todayTrigger,
       markerIndicator: classesProp?.markerIndicator ?? baseClasses.markerIndicator,
       markerTooltip: classesProp?.markerTooltip ?? baseClasses.markerTooltip,
       monthSelect: classesProp?.monthSelect ?? baseClasses.monthSelect,
       yearSelect: classesProp?.yearSelect ?? baseClasses.yearSelect,
       monthDropdown: classesProp?.monthDropdown ?? baseClasses.monthDropdown,
       yearDropdown: classesProp?.yearDropdown ?? baseClasses.yearDropdown,
-      dropdownMenu: classesProp?.dropdownMenu ?? baseClasses.dropdownMenu,
-      dropdownItem: classesProp?.dropdownItem ?? baseClasses.dropdownItem,
+      subContent: classesProp?.subContent ?? baseClasses.subContent,
+      subItem: classesProp?.subItem ?? baseClasses.subItem,
       dropdownItemSelected: classesProp?.dropdownItemSelected ?? baseClasses.dropdownItemSelected,
     }), [classesProp, baseClasses]);
 
@@ -921,7 +920,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     // ─── Classes for DayCell sub-component ─────────────────────────────
     const dayCellClasses = useMemo(
       () => ({
-        day: mergedClasses.day,
+        day: mergedClasses.item,
         daySelected: mergedClasses.daySelected,
         dayToday: mergedClasses.dayToday,
         dayDisabled: mergedClasses.dayDisabled,
@@ -997,7 +996,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   role="button"
                   tabIndex={0}
                   aria-label="Clear selection"
-                  className={mergedClasses.clearButton}
+                  className={mergedClasses.clearTrigger}
                   onClick={handleClearClick}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -1011,7 +1010,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               )}
               {showCalendarIcon &&
                 (calendarIcon || (
-                  <CalendarIcon className={mergedClasses.calendarIcon} />
+                  <CalendarIcon className={mergedClasses.icon} />
                 ))}
             </div>
           </button>
@@ -1023,7 +1022,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               role="dialog"
               aria-modal="true"
               aria-label={`${mode === "single" ? "Date" : mode === "range" ? "Date range" : "Multiple dates"} picker`}
-              className={mergedClasses.calendar}
+              className={mergedClasses.content}
               style={{
                 position: "fixed",
                 zIndex: dropdownZIndex,
@@ -1039,14 +1038,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   value={singleValue}
                   rangeValue={rangeValue}
                   multipleValue={multipleValue}
-                  presetsClassName={mergedClasses.presets}
-                  presetButtonClassName={mergedClasses.presetButton}
+                  presetsClassName={mergedClasses.presetGroup}
+                  presetButtonClassName={mergedClasses.presetTrigger}
                   presetActiveClassName={mergedClasses.presetActive}
                   onPresetClick={handlePresetClick}
                 />
               )}
 
-              <div className={mergedClasses.monthGrid}>
+              <div className={mergedClasses.listRow}>
                 {calendarMonths.map((calendarMonth, monthIndex) => {
                   const monthYear = getYear(calendarMonth.month);
                   const monthIdx = getMonth(calendarMonth.month);
@@ -1054,7 +1053,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   return (
                     <div
                       key={calendarMonth.month.toISOString()}
-                      className={mergedClasses.grid}
+                      className={mergedClasses.list}
                     >
                       <div className={mergedClasses.header}>
                         {monthIndex === 0 && (
@@ -1082,14 +1081,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           </>
                         )}
 
-                        <div className={mergedClasses.monthNav}>
+                        <div className={mergedClasses.row}>
                           <CustomDropdown
                             value={monthIdx}
                             options={getMonthOptions(locale)}
                             onChange={(m) => handleMonthSelect(m - monthIndex)}
                             buttonClassName={mergedClasses.monthSelect}
-                            menuClassName={mergedClasses.dropdownMenu}
-                            itemClassName={mergedClasses.dropdownItem}
+                            menuClassName={mergedClasses.subContent}
+                            itemClassName={mergedClasses.subItem}
                             itemSelectedClassName={
                               mergedClasses.dropdownItemSelected
                             }
@@ -1101,8 +1100,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                             options={getYearOptions(monthYear)}
                             onChange={handleYearSelect}
                             buttonClassName={mergedClasses.yearSelect}
-                            menuClassName={mergedClasses.dropdownMenu}
-                            itemClassName={mergedClasses.dropdownItem}
+                            menuClassName={mergedClasses.subContent}
+                            itemClassName={mergedClasses.subItem}
                             itemSelectedClassName={
                               mergedClasses.dropdownItemSelected
                             }
@@ -1138,7 +1137,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       </div>
 
                       <div
-                        className={mergedClasses.weekdayHeader}
+                        className={mergedClasses.listHeader}
                         style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
                         role="row"
                         aria-label="Days of the week"
@@ -1221,7 +1220,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   {showTodayButton && todayAction && (
                     <button
                       type="button"
-                      className={mergedClasses.todayButton}
+                      className={mergedClasses.todayTrigger}
                       onClick={handleTodayClick}
                     >
                       <span className="flex items-center gap-2">
@@ -1233,7 +1232,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   {!todayAction && showTodayButton && (
                     <button
                       type="button"
-                      className={mergedClasses.todayButton}
+                      className={mergedClasses.todayTrigger}
                       onClick={goToToday}
                     >
                       <span className="flex items-center gap-2">
@@ -1250,13 +1249,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         </div>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mergedClasses.error}>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.message}>
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

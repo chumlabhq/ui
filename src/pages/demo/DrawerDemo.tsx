@@ -565,7 +565,7 @@ const DrawerDemo = () => {
           size="360px"
           classes={{
             overlay: `fixed inset-0 transition-opacity bg-cl-accent/30 dark:bg-cl-accent/60`,
-            panel: `fixed z-999999 shadow-2xl shadow-accent/20 dark:shadow-2xl dark:shadow-accent/10`,
+            content: `fixed z-999999 shadow-2xl shadow-accent/20 dark:shadow-2xl dark:shadow-accent/10`,
           }}
         >
           <div

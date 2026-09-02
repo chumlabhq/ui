@@ -9,7 +9,6 @@ export interface TooltipClasses {
   trigger?: string;
   content?: string;
   arrow?: string;
-  baseArrow?: string;
 }
 
 /**

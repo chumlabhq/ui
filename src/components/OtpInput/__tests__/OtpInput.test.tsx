@@ -731,7 +731,7 @@ describe("OtpInput", () => {
     });
 
     it("applies classes.wrapper to wrapper", () => {
-      render(<OtpInput classes={{ wrapper: "custom-wrapper" }} />);
+      render(<OtpInput classes={{ control: "custom-wrapper" }} />);
 
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
@@ -767,7 +767,7 @@ describe("OtpInput", () => {
 
     it("applies errorClassName to error message", () => {
       render(
-        <OtpInput error errorMessage="Error" classes={{ error: "custom-error" }} />
+        <OtpInput error errorMessage="Error" classes={{ message: "custom-error" }} />
       );
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");

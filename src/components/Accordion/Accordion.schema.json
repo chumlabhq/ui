@@ -116,34 +116,28 @@
         "trigger": {
           "type": "string"
         },
-        "triggerInner": {
+        "itemText": {
+          "type": "string"
+        },
+        "body": {
           "type": "string"
         },
         "content": {
           "type": "string"
         },
-        "contentWrapper": {
-          "type": "string"
-        },
         "icon": {
           "type": "string"
         },
-        "iconWrapper": {
+        "description": {
           "type": "string"
         },
-        "subtitle": {
+        "itemIcon": {
           "type": "string"
         },
-        "triggerLeft": {
+        "triggerActions": {
           "type": "string"
         },
-        "triggerRight": {
-          "type": "string"
-        },
-        "contentInner": {
-          "type": "string"
-        },
-        "heading": {
+        "header": {
           "type": "string"
         }
       }
@@ -162,7 +156,7 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode — AccordionItem children."
+      "description": "React.ReactNode \u2014 AccordionItem children."
     },
     "asChild": {
       "type": "boolean",

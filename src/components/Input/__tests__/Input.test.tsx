@@ -190,7 +190,7 @@ describe("Input", () => {
     });
 
     it("applies classes.success to success message", () => {
-      render(<Input aria-label="test" success successMessage="Good" classes={{ success: "custom-success" }} />);
+      render(<Input aria-label="test" success successMessage="Good" classes={{ message: "custom-success" }} />);
       expect(document.querySelector(".custom-success")).toBeInTheDocument();
     });
   });
@@ -831,7 +831,7 @@ describe("Input", () => {
     });
 
     it("applies classes.wrapper to wrapper", () => {
-      render(<Input aria-label="test" classes={{ wrapper: "custom-wrapper" }} />);
+      render(<Input aria-label="test" classes={{ control: "custom-wrapper" }} />);
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
@@ -846,12 +846,12 @@ describe("Input", () => {
     });
 
     it("applies classes.error to error message", () => {
-      render(<Input aria-label="test" error errorMessage="Error" classes={{ error: "custom-error" }} />);
+      render(<Input aria-label="test" error errorMessage="Error" classes={{ message: "custom-error" }} />);
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
 
     it("applies focus classes via classes.wrapper", () => {
-      render(<Input aria-label="test" classes={{ wrapper: "custom-focus" }} />);
+      render(<Input aria-label="test" classes={{ control: "custom-focus" }} />);
       expect(document.querySelector(".custom-focus")).toBeInTheDocument();
     });
   });

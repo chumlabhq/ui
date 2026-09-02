@@ -46,19 +46,18 @@ export interface PhoneFormatPattern {
 export interface InternationalPhoneInputClasses {
   root?: string;
   label?: string;
-  wrapper?: string;
+  control?: string;
   input?: string;
-  error?: string;
-  success?: string;
+  message?: string;
   countrySelect?: string;
   /** A row inside the country list: flag + name + dial code. */
   countryOptionRow?: string;
   countryOptionFlag?: string;
   countryOptionLabel?: string;
   /** The selected country shown on the trigger. */
-  countrySelectedRow?: string;
-  countrySelectedFlag?: string;
-  countrySelectedLabel?: string;
+  triggerRow?: string;
+  flag?: string;
+  value?: string;
   countrySelectTrigger?: string;
   countrySelectDropdown?: string;
   countrySelectSearchInput?: string;

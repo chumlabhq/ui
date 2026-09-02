@@ -9,7 +9,7 @@
 
 ## Quick Answer
 
-`<Button className="your-styles">Label</Button>` — the component provides structure (padding, rounded corners, focus ring, disabled handling). You pass visual styles (colors, shadows) via `className`. Use `as="a"` for links, `startIcon`/`endIcon` for icons, `loading` for async states. Group buttons with `<ButtonGroup>`.
+`<Button className="your-styles">Label</Button>` — the component provides structure (padding, rounded corners, focus ring, disabled handling). You pass visual styles (colors, shadows) via `className`. Use `as="a"` for links, `icon`/`icon` for icons, `loading` for async states. Group buttons with `<ButtonGroup>`.
 
 ---
 
@@ -110,13 +110,13 @@ To override structural defaults (e.g., different padding), include the override 
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
-| `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
-| `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
+| `icon` | object | — | React.ReactNode — Icon rendered before the button label. |
+| `icon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
 | `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
 | `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
-| `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
+| `loading` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
 | `classes` | object | — | CSS class overrides for button sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
@@ -149,9 +149,9 @@ const ref = useRef<HTMLElement>(null);
 ```
 ┌─ root (button/a/span — structural styles + your className) ─┐
 │                                                               │
-│  ┌─ content (inline-flex wrapper) ─────────────────────────┐ │
+│  ┌─ itemText (inline-flex wrapper) ─────────────────────────┐ │
 │  │                                                          │ │
-│  │  [loader?]  [startIcon]  children  [endIcon]  [loader?] │ │
+│  │  [loading?]  [icon]  children  [icon]  [loading?] │ │
 │  │                                                          │ │
 │  └──────────────────────────────────────────────────────────┘ │
 └───────────────────────────────────────────────────────────────┘
@@ -164,7 +164,7 @@ const ref = useRef<HTMLElement>(null);
 | Focus ring color | `className` | Add `focus-visible:ring-indigo-500` etc. |
 | Icon spacing | `classes={{ content: "gap-4" }}` | Default gap is `gap-2`. |
 | Icon size/color | Style the icon element itself | Icons are your ReactNode — you control them. |
-| Loader appearance | `loader` prop or `classes={{ loader: "..." }}` | Custom loader replaces default spinner. |
+| Loader appearance | `loading` prop or `classes={{ loader: "..." }}` | Custom loader replaces default spinner. |
 | Disabled opacity | `className` | Default is `disabled:opacity-50`. Override with `disabled:opacity-30` etc. |
 
 ### Dark mode
@@ -209,13 +209,13 @@ Copy-paste these as `className` values:
 <div className="flex gap-2">
   <Button
     className="bg-indigo-600 dark:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-400 shadow-sm focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-gray-900"
-    startIcon={<PlusIcon className="w-3.5 h-3.5" />}
+    icon={<PlusIcon className="w-3.5 h-3.5" />}
   >
     Create payment
   </Button>
   <Button
     className="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
-    endIcon={<FilterIcon className="w-3.5 h-3.5" />}
+    icon={<FilterIcon className="w-3.5 h-3.5" />}
   >
     Filter
   </Button>
@@ -263,7 +263,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={iconOnlyClasses}
-  startIcon={<TrashIcon />}
+  icon={<TrashIcon />}
   aria-label="Delete item"
   tooltip="Delete"
   tooltipProps={{ side: "bottom", delayDuration: 300 }}
@@ -285,7 +285,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={primaryClasses}
-  endIcon={<ArrowRightIcon />}
+  icon={<ArrowRightIcon />}
   iconAnimation="slideRight"
 >
   Continue
@@ -315,7 +315,7 @@ const [saving, setSaving] = useState(false);
 | Link button still looks like button | `as="a"` but no link-specific classes | Use underline/text-color classes instead of bg classes. |
 | Icon not animating | `iconAnimation="none"` (default) | Set `iconAnimation="slideRight"` etc. |
 | Animation runs continuously | `animateOnHover={false}` | Set `animateOnHover={true}` (default) for hover-only. |
-| Loading spinner not visible | Custom `className` hides it | Check `loader` slot classes. Default spinner is 16px white. |
+| Loading spinner not visible | Custom `className` hides it | Check `loading` slot classes. Default spinner is 16px white. |
 | `as="span"` not keyboard accessible | Missing aria-label | Add `aria-label` — dev warning should appear in console. |
 
 ---
@@ -336,12 +336,12 @@ const [saving, setSaving] = useState(false);
 // ❌ DON'T: Use color alone for destructive actions
 <Button className="bg-red-500 text-white">Delete</Button>
 // ✅ DO: Include a warning icon or confirmation
-<Button className="bg-red-500 text-white" startIcon={<TrashIcon />}>Delete</Button>
+<Button className="bg-red-500 text-white" icon={<TrashIcon />}>Delete</Button>
 
 // ❌ DON'T: Use icon-only span button without aria-label
-<Button as="span" startIcon={<CloseIcon />} />
+<Button as="span" icon={<CloseIcon />} />
 // ✅ DO: Always provide aria-label for icon-only buttons
-<Button as="span" startIcon={<CloseIcon />} aria-label="Close" />
+<Button as="span" icon={<CloseIcon />} aria-label="Close" />
 ```
 
 ---

@@ -126,13 +126,13 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const mergedClasses = useMemo<Required<ModalClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,
       overlay: classesProp?.overlay ?? baseClasses.overlay,
-      container: classesProp?.container ?? baseClasses.container,
+      positioner: classesProp?.positioner ?? baseClasses.positioner,
       content: classesProp?.content ?? baseClasses.content,
       header: classesProp?.header ?? baseClasses.header,
       title: classesProp?.title ?? baseClasses.title,
       description: classesProp?.description ?? baseClasses.description,
       icon: classesProp?.icon ?? baseClasses.icon,
-      closeButton: classesProp?.closeButton ?? baseClasses.closeButton,
+      closeTrigger: classesProp?.closeTrigger ?? baseClasses.closeTrigger,
       closeIcon: classesProp?.closeIcon ?? baseClasses.closeIcon,
       body: classesProp?.body ?? baseClasses.body,
     }), [classesProp, baseClasses]);
@@ -356,10 +356,10 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           )}
 
           <div
-            className={unstyled ? mergedClasses.container : [
+            className={unstyled ? mergedClasses.positioner : [
               "fixed inset-0 overflow-y-auto",
               centered && "flex items-center justify-center",
-              mergedClasses.container,
+              mergedClasses.positioner,
             ]
               .filter(Boolean)
               .join(" ")}
@@ -418,7 +418,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                     <button
                       type="button"
                       onClick={handleClose}
-                      className={mergedClasses.closeButton || undefined}
+                      className={mergedClasses.closeTrigger || undefined}
                       aria-label="Close modal"
                     >
                       {closeIconProp || <CloseIcon className={mergedClasses.closeIcon || undefined} />}

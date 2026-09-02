@@ -16,7 +16,7 @@ Use `<Table columns={[...]} data={[...]} />` for a data table. Built on TanStack
 ## Import
 
 ```tsx
-import { Table } from "@chumlab/ui/table";
+import { Table } from "@chumlab/ui/list";
 import { Pagination } from "@chumlab/ui/pagination";
 import type { ColumnDef } from "@tanstack/react-table";
 ```
@@ -26,7 +26,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { Table } from "@chumlab/ui/table";
+import { Table } from "@chumlab/ui/list";
 import type { ColumnDef } from "@tanstack/react-table";
 
 interface User { name: string; email: string; }
@@ -169,7 +169,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
 | `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
 | `hasMore` | boolean | `false` | Whether there is more data to load. |
-| `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
+| `loadingFooter` | boolean | `false` | Whether more data is currently being loaded. |
 | `infiniteEndContent` | object | — | React.ReactNode — Content shown when all data is loaded. |
 | `responsiveBreakpoint` | number | — | Viewport width below which the table renders as card layout. |
 | `renderMobileCard` | object | — | (row: TData) => ReactNode — Render function for mobile card layout. |
@@ -197,16 +197,16 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Root container | `container` |
-| Table element | `table` |
-| Header row/cell | `headerRow`, `headerCell` |
-| Body row/cell | `row`, `cell` |
+| Root container | `root` |
+| Table element | `list` |
+| Header row/cell | `header`, `headerCell` |
+| Body row/cell | `item`, `cell` |
 | Selected row | `selectedRow` |
-| Pinned columns | `pinnedContainer`, `pinnedTable` |
-| Scrollable area | `unpinnedContainer` (has `overflow-x-auto`) |
+| Pinned columns | `pinnedRegion`, `pinnedList` |
+| Scrollable area | `scrollRegion` (has `overflow-x-auto`) |
 | Empty state | `empty` |
-| Shimmer loading | `shimmer`, `shimmerRow`, `shimmerCell`, `shimmerBar` |
-| Search bar | `searchBar`, `searchInput` |
+| Shimmer loading | `loading`, `loadingRow`, `loadingItem`, `loadingBar` |
+| Search bar | `searchInput`, `searchInput` |
 
 ### Responsive behavior
 
@@ -267,7 +267,7 @@ const [sorting, setSorting] = useState<SortingState>([]);
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Styles wrong after overriding one class | `classes` replaces per slot | Provide full class string |
-| Table overflows on mobile | Many columns | Default `unpinnedContainer` has `overflow-x-auto` |
+| Table overflows on mobile | Many columns | Default `scrollRegion` has `overflow-x-auto` |
 | Sorting not working | `sortable` not set | Add `sortable` prop |
 | Server-side sort not triggering | Missing `manualSorting` | Set `manualSorting={true}` |
 | Pinned columns not scrolling | Expected behavior | Pinned columns stay fixed; unpinned scroll |

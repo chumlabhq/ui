@@ -55,7 +55,7 @@ export default function Example() {
 ## Data Attributes (for CSS selectors and testing)
 
 - `data-disabled` — on root and trigger when `disabled`
-- `data-error` — on trigger when `error`
+- `data-error` — on trigger when `message`
 - `data-open` — on trigger when dropdown/clock is open
 - `data-selected` — on selected option
 - `data-highlighted` — on keyboard-focused option
@@ -83,18 +83,18 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `name` | string | — | Name for the hidden input for form submission. |
 | `placeholder` | string | — | Placeholder text for the input. |
 | `disabled` | boolean | `false` | Disables the component. |
-| `error` | boolean | `false` | Marks the component as having an error. |
+| `message` | boolean | `false` | Marks the component as having an error. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the input. |
 | `description` | object | — | React.ReactNode — Helper text displayed below the label. |
-| `success` | boolean | — | Success state. |
+| `message` | boolean | — | Success state. |
 | `successMessage` | object | — | React.ReactNode — Success message text. |
 | `loading` | boolean | — | Loading state. |
 | `label` | object | — | React.ReactNode — Label displayed above the input. |
 | `required` | boolean | `false` | Shows a required indicator on the label. |
 | `showEndIcon` | boolean | `true` | Show the chevron/end icon in the trigger. |
-| `endIcon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
+| `icon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
 | `showSelectedIcon` | boolean | `true` | Show a check icon on the selected option. |
-| `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
+| `itemIndicator` | object | — | React.ReactNode — Custom selected icon element. |
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
 | `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
@@ -134,22 +134,22 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | Label text | `label` |
 | Trigger button area | `trigger` |
 | Text input | `input` |
-| Chevron icon | `endIcon` |
-| Clear button | `clearIcon` |
-| Dropdown panel | `dropdown` |
-| Option list container | `optionList` |
-| Individual option | `option` |
+| Chevron icon | `icon` |
+| Clear button | `clearTrigger` |
+| Dropdown panel | `content` |
+| Option list container | `list` |
+| Individual option | `item` |
 | Selected option highlight | `optionSelected` |
 | Focused option highlight | `optionFocused` |
-| Check icon in option | `selectedIcon` |
-| Error message | `error` |
+| Check icon in option | `itemIndicator` |
+| Error message | `message` |
 | Description text | `description` |
-| Clock container | `clockContainer` |
+| Clock container | `clockContent` |
 | Clock face circle | `clockFace` |
 | Clock numbers | `clockNumber`, `clockNumberSelected` |
 | Clock hand | `clockHand`, `clockHandLine`, `clockHandDot` |
-| AM/PM buttons | `clockPeriodButton`, `clockPeriodActive` |
-| OK/Cancel buttons | `clockOkButton`, `clockCancelButton` |
+| AM/PM buttons | `periodButton`, `clockPeriodActive` |
+| OK/Cancel buttons | `confirmButton`, `cancelButton` |
 
 ### Dark mode
 
@@ -210,7 +210,7 @@ const [time, setTime] = useState<string | null>(null);
 - `aria-activedescendant` tracks focused option in dropdown
 - `aria-autocomplete="list"` for dropdown variant
 - `aria-required` when `required` is set
-- `aria-invalid` when `error` is set
+- `aria-invalid` when `message` is set
 - `aria-describedby` connects description, error, and success messages
 - `aria-pressed` on clock AM/PM and hours/minutes toggle buttons
 - Clock variant uses `role="dialog"` with `aria-modal="true"`

@@ -106,15 +106,14 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
     const mergedClasses: Required<OtpInputClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         group: classesProp?.group ?? baseClasses.group,
         input: classesProp?.input ?? baseClasses.input,
         inputFocused: classesProp?.inputFocused ?? baseClasses.inputFocused,
         label: classesProp?.label ?? baseClasses.label,
-        error: classesProp?.error ?? baseClasses.error,
+        message: classesProp?.message ?? baseClasses.message,
         separator: classesProp?.separator ?? baseClasses.separator,
         description: classesProp?.description ?? baseClasses.description,
-        success: classesProp?.success ?? baseClasses.success,
       }),
       [classesProp, baseClasses],
     );
@@ -360,7 +359,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           <div className={mergedClasses.description || undefined}>{description}</div>
         )}
         <div
-          className={cn(mergedClasses.wrapper, loading && "opacity-50 pointer-events-none") || undefined}
+          className={cn(mergedClasses.control, loading && "opacity-50 pointer-events-none") || undefined}
           onPaste={handlePaste}
           role="group"
           aria-label={groupAriaLabel}
@@ -369,10 +368,10 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         </div>
         {name && <input type="hidden" name={name} value={value} disabled={disabled} />}
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mergedClasses.error || undefined}>{errorMessage}</div>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>{errorMessage}</div>
         )}
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

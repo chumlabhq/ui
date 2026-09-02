@@ -52,13 +52,11 @@ export interface ButtonClasses {
   /** Root button/anchor/span element. */
   root?: string;
   /** Inner content wrapper. */
-  content?: string;
+  itemText?: string;
   /** Leading icon wrapper. */
-  startIcon?: string;
-  /** Trailing icon wrapper. */
-  endIcon?: string;
+  icon?: string;
   /** Loader/spinner wrapper. */
-  loader?: string;
+  loading?: string;
 }
 
 interface ButtonSharedProps {

@@ -52,7 +52,7 @@
     },
     "fallback": {
       "type": "object",
-      "description": "React.ReactNode — Custom fallback content when no image or name is available."
+      "description": "React.ReactNode \u2014 Custom fallback content when no image or name is available."
     },
     "autoColor": {
       "type": "boolean",
@@ -243,13 +243,10 @@
         "root": {
           "type": "string"
         },
-        "inner": {
+        "control": {
           "type": "string"
         },
         "image": {
-          "type": "string"
-        },
-        "initials": {
           "type": "string"
         },
         "fallback": {
@@ -267,7 +264,7 @@
     },
     "textStyle": {
       "type": "object",
-      "description": "CSSProperties — Inline styles for the initials text."
+      "description": "CSSProperties \u2014 Inline styles for the initials text."
     },
     "loading": {
       "type": "boolean",
@@ -289,11 +286,11 @@
     },
     "onLoad": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image finishes loading."
+      "description": "() => void \u2014 Fires when the avatar image finishes loading."
     },
     "onError": {
       "type": "object",
-      "description": "() => void — Fires when the avatar image fails to load."
+      "description": "() => void \u2014 Fires when the avatar image fails to load."
     },
     "asChild": {
       "type": "boolean",

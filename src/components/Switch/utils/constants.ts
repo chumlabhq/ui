@@ -15,12 +15,12 @@ export { CSS_VARS as SWITCH_CSS_VARS };
 
 export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   root: "flex flex-col",
-  innerRow: "flex items-center gap-3",
-  labelContainer: "flex flex-col",
+  row: "flex items-center gap-3",
+  labelGroup: "flex flex-col",
   label: "text-sm font-medium text-cl-text dark:text-cl-text cursor-pointer",
   disabledLabel: "text-cl-text-tertiary dark:text-cl-text-tertiary cursor-not-allowed",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
-  tracker:
+  control:
     "relative inline-flex items-center h-[var(--switch-tracker-height,1.25rem)] w-[var(--switch-tracker-width,2.25rem)] rounded-full transition-colors duration-200 motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--switch-focus-ring,var(--cl-accent))] cursor-pointer",
   disabledTracker: "opacity-50 cursor-not-allowed",
   thumb:
@@ -32,8 +32,7 @@ export const DEFAULT_SWITCH_CLASSES: Required<SwitchClasses> = {
   uncheckedTracker: "bg-[var(--switch-tracker-unchecked-bg,#d1d5db)] dark:bg-[var(--switch-tracker-unchecked-bg,#4b5563)]",
   checkedThumb: "translate-x-4.5",
   uncheckedThumb: "translate-x-0.5",
-  error: "text-sm text-cl-error mt-2",
-  success: "text-sm text-cl-success mt-2",
+  message: "text-sm text-cl-error mt-2 text-cl-success",
   loading: "animate-spin",
 };
 

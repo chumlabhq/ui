@@ -20,48 +20,44 @@ export interface CascadingValue {
 
 export interface CascadingDropdownClasses {
   root?: string;
-  wrapper?: string;
+  control?: string;
   trigger?: string;
   /** The trigger\'s value/placeholder text. */
-  triggerText?: string;
-  menu?: string;
-  menuItem?: string;
+  value?: string;
+  content?: string;
+  item?: string;
   menuItemSelected?: string;
   menuItemFocused?: string;
   menuItemDisabled?: string;
-  submenu?: string;
-  submenuContainer?: string;
-  submenuItem?: string;
+  subContent?: string;
+  subPositioner?: string;
+  subItem?: string;
   submenuItemSelected?: string;
   submenuItemFocused?: string;
   label?: string;
-  error?: string;
+  message?: string;
   description?: string;
-  success?: string;
-  chevron?: string;
-  submenuChevron?: string;
-  checkIcon?: string;
-  checkbox?: string;
+  icon?: string;
+  itemIcon?: string;
+  itemIndicator?: string;
+  itemControl?: string;
   checkboxChecked?: string;
-  noResults?: string;
+  empty?: string;
   loading?: string;
-  clearIcon?: string;
-  shimmer?: string;
-  shimmerItem?: string;
+  clearTrigger?: string;
+  loadingItem?: string;
   /** Search input wrapper in the main menu (contains icon + input). */
-  searchInput?: string;
+  searchControl?: string;
   /** The search `<input>` element in the main menu. */
-  searchInputElement?: string;
+  searchInput?: string;
   /** Search icon in the main menu search input. */
   searchIcon?: string;
   /** Search input wrapper in submenus. Falls back to `searchInput` if not set. */
-  submenuSearchInput?: string;
+  subSearchControl?: string;
   /** The search `<input>` element in submenus. Falls back to `searchInputElement` if not set. */
-  submenuSearchInputElement?: string;
+  subSearchInput?: string;
   /** Search icon in submenu search inputs. Falls back to `searchIcon` if not set. */
-  submenuSearchIcon?: string;
-  /** Alias for `menu` — matches Dropdown naming convention. */
-  content?: string;
+  subSearchIcon?: string;
   /** Alias for `menuItem` — matches Dropdown naming convention. */
   option?: string;
   /** Alias for `menuItemSelected` — matches Dropdown naming convention. */

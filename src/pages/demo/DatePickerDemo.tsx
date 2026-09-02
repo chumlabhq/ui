@@ -396,7 +396,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   classes={{
                     ...c.datepicker,
                     trigger: `${c.datepicker.trigger} border border-cl-border-input-focus focus-within:ring-cl-accent/15 focus-within:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus/30 dark:focus-within:ring-cl-accent/30 dark:focus-within:border-cl-border-input-focus/50`,
-                    day: `${c.datepicker.day} font-semibold`,
+                    item: `${c.datepicker.day} font-semibold`,
                     daySelected: `bg-cl-accent text-white hover:bg-cl-accent dark:bg-cl-accent dark:text-white dark:hover:bg-cl-accent/90 font-bold`,
                     dayRangeStart: `bg-cl-accent text-white dark:bg-cl-accent dark:text-white rounded-r-none font-bold`,
                     dayRangeEnd: `bg-cl-accent text-white dark:bg-cl-accent dark:text-white rounded-l-none font-bold`,
@@ -1491,9 +1491,9 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   placeholder="Large calendar"
                   classes={{
                     ...c.datepicker,
-                    calendar: `${c.datepicker.calendar} p-6`,
+                    content: `${c.datepicker.calendar} p-6`,
                     weekday: `text-sm font-bold text-center py-3 uppercase tracking-wider text-cl-text-secondary`,
-                    day: `relative w-12 h-12 flex items-center justify-center text-base font-semibold rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
+                    item: `relative w-12 h-12 flex items-center justify-center text-base font-semibold rounded-full cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text`,
                     daySelected: c.datepicker.daySelected,
                     dayToday: c.datepicker.dayToday,
                     dayDisabled: c.datepicker.dayDisabled,
@@ -1524,11 +1524,11 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   classes={{
                     ...c.datepicker,
                     trigger: `flex items-center gap-1.5 w-full px-2.5 py-1.5 rounded-cl-md border text-xs transition-all cursor-pointer bg-white border-cl-border text-cl-text shadow-sm dark:bg-cl-text/4 dark:border dark:border-cl-text/10 dark:text-cl-text`,
- calendar: `rounded-cl-md shadow-lg p-2.5 bg-cl-bg-elevated border border-cl-border`,
-                    calendarIcon: `w-3.5 h-3.5 shrink-0 text-cl-text-tertiary`,
+ content: `rounded-cl-md shadow-lg p-2.5 bg-cl-bg-elevated border border-cl-border`,
+                    icon: `w-3.5 h-3.5 shrink-0 text-cl-text-tertiary`,
                     header: "flex items-center justify-between mb-2",
                     weekday: `text-[10px] font-semibold text-center py-1 uppercase text-cl-text-tertiary`,
-                    day: `relative w-7 h-7 flex items-center justify-center text-[11px] font-medium rounded-full cursor-pointer transition-all focus:outline-none hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text-secondary`,
+                    item: `relative w-7 h-7 flex items-center justify-center text-[11px] font-medium rounded-full cursor-pointer transition-all focus:outline-none hover:bg-cl-bg-hover text-cl-text dark:hover:bg-cl-text/10 dark:text-cl-text-secondary`,
                     daySelected: c.datepicker.daySelected,
                     dayToday: c.datepicker.dayToday,
                     dayDisabled: c.datepicker.dayDisabled,
@@ -1537,7 +1537,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                     yearSelect: `flex items-center gap-0.5 px-1.5 py-1 text-xs font-semibold bg-transparent border border-none cursor-pointer rounded transition-colors text-cl-text hover:bg-cl-bg-elevated`,
                     navButton: `p-1 rounded transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-elevated`,
                     footer: `flex justify-center pt-2 mt-2 border-t border-cl-border`,
-                    todayButton: `flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded transition-all text-cl-accent hover:bg-cl-bg-elevated`,
+                    todayTrigger: `flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded transition-all text-cl-accent hover:bg-cl-bg-elevated`,
                   }}
                   showTodayIndicator
                   showTodayButton
@@ -1589,7 +1589,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   showClearButton
                   classes={{
                     ...c.datepicker,
- presetButton: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-all bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:hover:bg-cl-text/10`,
+ presetTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-all bg-cl-bg-hover text-cl-text-secondary hover:bg-cl-bg-hover border border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text-secondary dark:hover:bg-cl-text/10`,
                     presetActive: `bg-cl-accent/10 text-cl-accent border border-cl-border-input-focus dark:bg-cl-accent/20 dark:text-cl-accent dark:border dark:border-cl-border-input-focus/30`,
                   }}
                 />

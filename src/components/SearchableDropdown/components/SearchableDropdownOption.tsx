@@ -30,7 +30,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
 }) {
   const combinedClassName =
     cn(
-      classes.option,
+      classes.item,
       isSelected && classes.optionSelected,
       isFocused && classes.optionFocused,
       option.disabled && classes.optionDisabled,
@@ -60,7 +60,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <IconComponent className={classes.checkIcon} />
+          <IconComponent className={classes.itemIndicator} />
         ))}
     </div>
   );

@@ -42,12 +42,11 @@ export const stackDirectionClasses: Record<"top" | "bottom", string> = {
 export const PROGRESS_KEYFRAMES = `@keyframes chumlab-toast-progress{from{width:100%}to{width:0%}}`;
 
 export const DEFAULT_TOAST_CLASSES: Required<ToastClasses> = {
-  container: "",
-  content: "",
-  message: "",
+  root: "",
+  title: "",
   description: "",
-  progress: "",
-  closeButton: "",
+  indicator: "",
+  closeTrigger: "",
   icon: "",
 };
 

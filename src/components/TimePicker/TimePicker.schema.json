@@ -20,11 +20,11 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(time: string | null, timeValue: TimeValue | null) => void — Called when the selected time changes."
+      "description": "(time: string | null, timeValue: TimeValue | null) => void \u2014 Called when the selected time changes."
     },
     "onBlur": {
       "type": "object",
-      "description": "() => void — Called when the input loses focus."
+      "description": "() => void \u2014 Called when the input loses focus."
     },
     "format": {
       "type": "string",
@@ -68,11 +68,11 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message displayed below the input."
+      "description": "React.ReactNode \u2014 Error message displayed below the input."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Helper text displayed below the label."
+      "description": "React.ReactNode \u2014 Helper text displayed below the label."
     },
     "success": {
       "type": "boolean",
@@ -80,7 +80,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message text."
+      "description": "React.ReactNode \u2014 Success message text."
     },
     "loading": {
       "type": "boolean",
@@ -88,7 +88,7 @@
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label displayed above the input."
+      "description": "React.ReactNode \u2014 Label displayed above the input."
     },
     "required": {
       "type": "boolean",
@@ -102,7 +102,7 @@
     },
     "endIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom end icon element replacing the default chevron."
+      "description": "React.ReactNode \u2014 Custom end icon element replacing the default chevron."
     },
     "showSelectedIcon": {
       "type": "boolean",
@@ -111,11 +111,11 @@
     },
     "selectedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom selected icon element."
+      "description": "React.ReactNode \u2014 Custom selected icon element."
     },
     "renderOptionContent": {
       "type": "object",
-      "description": "(time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content."
+      "description": "(time: string, isSelected: boolean) => ReactNode \u2014 Custom renderer for dropdown option content."
     },
     "fullWidth": {
       "type": "boolean",
@@ -138,7 +138,7 @@
     },
     "onClear": {
       "type": "object",
-      "description": "() => void — Called when the clear button is clicked."
+      "description": "() => void \u2014 Called when the clear button is clicked."
     },
     "open": {
       "type": "boolean",
@@ -151,7 +151,7 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void — Called when the open state changes."
+      "description": "(open: boolean) => void \u2014 Called when the open state changes."
     },
     "lockScroll": {
       "type": "boolean",
@@ -189,7 +189,7 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Custom container element for the dropdown portal."
+      "description": "HTMLElement | null \u2014 Custom container element for the dropdown portal."
     },
     "classes": {
       "type": "object",
@@ -201,7 +201,7 @@
         "label": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "trigger": {
@@ -210,19 +210,19 @@
         "input": {
           "type": "string"
         },
-        "endIcon": {
+        "icon": {
           "type": "string"
         },
-        "clearIcon": {
+        "clearTrigger": {
           "type": "string"
         },
-        "dropdown": {
+        "content": {
           "type": "string"
         },
-        "optionList": {
+        "list": {
           "type": "string"
         },
-        "option": {
+        "item": {
           "type": "string"
         },
         "optionSelected": {
@@ -231,37 +231,34 @@
         "optionFocused": {
           "type": "string"
         },
-        "selectedIcon": {
+        "itemIndicator": {
           "type": "string"
         },
-        "noResults": {
+        "empty": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "success": {
-          "type": "string"
-        },
-        "clockContainer": {
+        "clockContent": {
           "type": "string"
         },
         "clockDisplay": {
           "type": "string"
         },
-        "clockDisplayHours": {
+        "clockHours": {
           "type": "string"
         },
-        "clockDisplayMinutes": {
+        "clockMinutes": {
           "type": "string"
         },
         "clockDisplayActive": {
           "type": "string"
         },
-        "clockDisplaySeparator": {
+        "clockSeparator": {
           "type": "string"
         },
         "clockFace": {
@@ -282,28 +279,25 @@
         "clockNumberSelected": {
           "type": "string"
         },
-        "clockNumberInner": {
-          "type": "string"
-        },
         "clockNumberDisabled": {
           "type": "string"
         },
         "clockCenter": {
           "type": "string"
         },
-        "clockActions": {
+        "footer": {
           "type": "string"
         },
-        "clockCancelButton": {
+        "cancelButton": {
           "type": "string"
         },
-        "clockOkButton": {
+        "confirmButton": {
           "type": "string"
         },
-        "clockPeriodToggle": {
+        "row": {
           "type": "string"
         },
-        "clockPeriodButton": {
+        "periodButton": {
           "type": "string"
         },
         "clockPeriodActive": {
@@ -331,11 +325,11 @@
     },
     "onCancel": {
       "type": "object",
-      "description": "() => void — Called when the clock cancel button is pressed."
+      "description": "() => void \u2014 Called when the clock cancel button is pressed."
     },
     "onConfirm": {
       "type": "object",
-      "description": "() => void — Called when the clock confirm button is pressed."
+      "description": "() => void \u2014 Called when the clock confirm button is pressed."
     },
     "cancelText": {
       "type": "string",

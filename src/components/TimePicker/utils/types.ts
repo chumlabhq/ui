@@ -22,49 +22,47 @@ export interface TimePickerClasses {
   /** Label element. */
   label?: string;
   /** Relative-positioned wrapper around trigger + dropdown. */
-  wrapper?: string;
+  control?: string;
   /** Combobox trigger container. */
   trigger?: string;
   /** Text input element. */
   input?: string;
   /** End icon wrapper / chevron. */
-  endIcon?: string;
+  icon?: string;
   /** Clear icon button. */
-  clearIcon?: string;
+  clearTrigger?: string;
   /** Dropdown panel (listbox). */
-  dropdown?: string;
+  content?: string;
   /** Scrollable option list wrapper. */
-  optionList?: string;
+  list?: string;
   /** Individual option. */
-  option?: string;
+  item?: string;
   /** Modifier added to the selected option. */
   optionSelected?: string;
   /** Modifier added to the keyboard-focused option. */
   optionFocused?: string;
   /** Check-mark icon inside a selected option. */
-  selectedIcon?: string;
+  itemIndicator?: string;
   /** "No matching times" message. */
-  noResults?: string;
+  empty?: string;
   /** Error message element. */
-  error?: string;
+  message?: string;
   /** Description element. */
   description?: string;
-  /** Success message element. */
-  success?: string;
 
   // ── Clock variant slots ──────────────────────────────────────────────
   /** Clock variant outermost container. */
-  clockContainer?: string;
+  clockContent?: string;
   /** Hours / minutes display row. */
   clockDisplay?: string;
   /** Hours button in the display. */
-  clockDisplayHours?: string;
+  clockHours?: string;
   /** Minutes button in the display. */
-  clockDisplayMinutes?: string;
+  clockMinutes?: string;
   /** Active (selected) display button modifier. */
   clockDisplayActive?: string;
   /** Colon separator in the display. */
-  clockDisplaySeparator?: string;
+  clockSeparator?: string;
   /** Circular clock face. */
   clockFace?: string;
   /** SVG hand overlay. */
@@ -77,22 +75,20 @@ export interface TimePickerClasses {
   clockNumber?: string;
   /** Selected number modifier. */
   clockNumberSelected?: string;
-  /** Inner-ring number modifier (24h). */
-  clockNumberInner?: string;
   /** Disabled number modifier (out of min/max range). */
   clockNumberDisabled?: string;
   /** Center dot of the clock. */
   clockCenter?: string;
   /** Actions row (Cancel / OK). */
-  clockActions?: string;
+  footer?: string;
   /** Cancel button. */
-  clockCancelButton?: string;
+  cancelButton?: string;
   /** OK button. */
-  clockOkButton?: string;
+  confirmButton?: string;
   /** AM/PM toggle container. */
-  clockPeriodToggle?: string;
+  row?: string;
   /** Individual AM or PM button. */
-  clockPeriodButton?: string;
+  periodButton?: string;
   /** Active period button modifier. */
   clockPeriodActive?: string;
 }
@@ -100,26 +96,26 @@ export interface TimePickerClasses {
 /** Subset of TimePickerClasses relevant to ClockFace. */
 export type ClockFaceClasses = Pick<
   TimePickerClasses,
-  | "clockContainer"
+  | "clockContent"
   | "clockDisplay"
-  | "clockDisplayHours"
-  | "clockDisplayMinutes"
+  | "clockHours"
+  | "clockMinutes"
   | "clockDisplayActive"
-  | "clockDisplaySeparator"
+  | "clockSeparator"
   | "clockFace"
   | "clockHand"
   | "clockHandLine"
   | "clockHandDot"
   | "clockNumber"
   | "clockNumberSelected"
-  | "clockNumberInner"
+  | "clockNumber"
   | "clockNumberDisabled"
   | "clockCenter"
-  | "clockActions"
-  | "clockCancelButton"
-  | "clockOkButton"
-  | "clockPeriodToggle"
-  | "clockPeriodButton"
+  | "footer"
+  | "cancelButton"
+  | "confirmButton"
+  | "row"
+  | "periodButton"
   | "clockPeriodActive"
 >;
 

@@ -244,7 +244,7 @@ const ToastDemoContent = ({
                 message: "Gradient progress",
                 description: "Using classes.progress prop",
                 classes: {
-                  progress:
+                  indicator:
                     "bg-linear-to-r from-cl-accent/30 via-cl-accent/30 to-cl-accent/40",
                 },
               })
@@ -589,10 +589,10 @@ const ToastDemoContent = ({
                   // hardcoded dark too — text-cl-text would invert to
                   // near-white in dark mode and disappear on the white
                   // surface. Using the light-mode --cl-text hex value.
-                  container: "bg-white border border-[#e5e7eb] text-[#0f1218]",
+                  root: "bg-white border border-[#e5e7eb] text-[#0f1218]",
                   description: "text-[#0f1218]/70",
                   icon: "text-cl-accent",
-                  closeButton: "text-[#0f1218]/60 hover:text-[#0f1218] hover:bg-black/5",
+                  closeTrigger: "text-[#0f1218]/60 hover:text-[#0f1218] hover:bg-black/5",
                 },
               })
             }
@@ -607,7 +607,7 @@ const ToastDemoContent = ({
                 message: "Custom border radius",
                 description: "Rounded-full style",
                 classes: {
-                  container: "rounded-full bg-[#195030]",
+                  root: "rounded-full bg-[#195030]",
                 },
               })
             }
@@ -622,7 +622,7 @@ const ToastDemoContent = ({
                 message: "Custom message style",
                 description: "Description with custom styling",
                 classes: {
-                  message: "text-lg font-bold text-cl-warning",
+                  title: "text-lg font-bold text-cl-warning",
                   description: "text-xs italic text-cl-accent",
                 },
               })
@@ -638,7 +638,7 @@ const ToastDemoContent = ({
                 message: "Custom content wrapper",
                 description: "Using classes.content for padding",
                 classes: {
-                  content: "p-6 bg-cl-text/10 rounded-cl-md",
+                  root: "p-6 bg-cl-text/10 rounded-cl-md",
                 },
               })
             }

@@ -720,7 +720,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer min-h-[42px] bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
-                  triggerText:
+                  value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
                 aria-label="Borderless variant"
@@ -739,7 +739,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer min-h-[42px] border border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
-                  triggerText:
+                  value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
                 aria-label="Bottom border variant"
@@ -758,7 +758,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
                   trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer min-h-[42px] text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
-                  triggerText:
+                  value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
                 aria-label="Ghost variant"
@@ -777,7 +777,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 classes={{
                   ...c.dropdown,
  trigger: `flex items-center gap-2 px-4 py-2 text-sm rounded-full transition-colors cursor-pointer min-h-[42px] border border-cl-border bg-white text-cl-text hover:border-cl-border-input shadow-sm dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:border-cl-border`,
-                  triggerText:
+                  value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
                 aria-label="Pill variant"
@@ -807,25 +807,25 @@ const MultiSelectSearchableDropdownDemo = () => {
                   "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px]",
                 content:
                   "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
-                searchInput:
+                searchControl:
                   "flex items-center gap-2 px-3 py-2 border-b border-[#2a2f3a] bg-[#0a0d12]",
-                searchInputElement: "text-white placeholder:text-white/50",
-                option:
+                searchInput: "text-white placeholder:text-white/50",
+                item:
                   "flex items-center gap-2 px-3 py-2 cursor-pointer text-white hover:bg-white/[0.08] transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
                 optionSelected: "bg-white/[0.12] font-medium",
                 optionFocused: "bg-white/[0.08]",
-                chevron:
+                icon:
                   "w-4 h-4 shrink-0 transition-transform duration-200 text-white/60",
-                checkbox:
+                itemControl:
                   "w-4 h-4 shrink-0 border border-white/30 rounded flex items-center justify-center",
                 checkboxChecked: "bg-cl-accent border-cl-accent text-white",
                 searchIcon: "w-4 h-4 shrink-0 text-white/60",
                 chip: "inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-white/[0.10] text-white rounded-cl-md shrink-0 max-w-[100px]",
                 chipRemove:
                   "w-3 h-3 shrink-0 cursor-pointer text-white/70 hover:text-white",
-                moreCount:
+                count:
                   "inline-flex items-center px-2 py-0.5 text-xs bg-white/[0.10] text-white/80 rounded-cl-md shrink-0",
-                noResults: "px-3 py-4 text-sm text-white/60 text-center",
+                empty: "px-3 py-4 text-sm text-white/60 text-center",
               }}
               aria-label="Dark theme fruits"
             />
@@ -850,24 +850,24 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-accent hover:border-cl-border-input-focus dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/60 dark:text-cl-accent dark:hover:border-cl-border-input-focus`,
-                triggerText:
+                value:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus`,
-                searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/20`,
-                option: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/60`,
+                searchControl: `flex items-center gap-2 px-3 py-2 border-b border-cl-border-input-focus bg-cl-accent/10 dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/20`,
+                item: `flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-accent hover:bg-cl-accent/10 dark:text-cl-accent dark:hover:bg-cl-accent/60`,
                 optionSelected: dark ? "bg-cl-accent/80" : "bg-cl-accent/10",
                 optionFocused: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",
-                chevron: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
-                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input-focus dark:border dark:border-cl-border-input-focus`,
+                icon: `w-4 h-4 shrink-0 transition-transform duration-200 text-cl-accent`,
+                itemControl: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-border-input-focus dark:border dark:border-cl-border-input-focus`,
                 checkboxChecked: dark
                   ? "bg-cl-accent border-cl-border-input-focus text-white"
                   : "bg-cl-accent border-cl-border-input-focus text-white",
                 searchIcon: `w-4 h-4 shrink-0 text-cl-accent`,
                 chip: `inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-cl-md shrink-0 max-w-[100px] bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/60 dark:text-cl-accent`,
                 chipRemove: `w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent dark:hover:text-cl-accent`,
-                moreCount: `inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`,
+                count: `inline-flex items-center px-2 py-0.5 text-xs rounded-cl-md shrink-0 bg-cl-accent/10 text-cl-accent dark:bg-cl-accent/40 dark:text-cl-accent`,
                 label: `block text-sm font-medium mb-1 text-cl-accent`,
-                error: `text-sm mt-1 text-cl-accent`,
+                message: `text-sm mt-1 text-cl-accent`,
               }}
               aria-label="Blue theme fruits"
             />
@@ -891,7 +891,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                checkbox: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
+                itemControl: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
                 checkboxChecked: "bg-cl-success border-cl-success text-white",
               }}
               aria-label="Green checkbox fruits"
@@ -916,7 +916,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxDisplayedChips={2}
               classes={{
                 ...c.dropdown,
-                checkbox:
+                itemControl:
                   "w-5 h-5 shrink-0 border-2 border-cl-warning rounded-cl-sm flex items-center justify-center",
                 checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
@@ -952,7 +952,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               }
               classes={{
                 ...c.dropdown,
-                checkbox: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-warning dark:border dark:border-cl-warning`,
+                itemControl: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-warning dark:border dark:border-cl-warning`,
                 checkboxChecked: "bg-cl-warning border-cl-warning text-white",
               }}
               aria-label="Custom icon fruits"
@@ -1370,7 +1370,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-accent hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent dark:border dark:border-cl-border-input-focus dark:bg-cl-accent/40 dark:text-cl-accent dark:hover:border-cl-border-input-focus dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
-                triggerText:
+                value:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus dark:bg-[color-mix(in_oklab,var(--color-cl-accent)_20%,var(--color-cl-bg-elevated))] dark:border dark:border-cl-border-input-focus`,
                 optionSelected: dark ? "bg-cl-accent/60" : "bg-cl-accent/10",

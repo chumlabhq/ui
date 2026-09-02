@@ -216,19 +216,17 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
       trigger:
         classesProp?.trigger ??
         cn(baseClasses.trigger, sizeClasses.trigger, variantClasses.trigger),
-      triggerInner: classesProp?.triggerInner ?? baseClasses.triggerInner,
-      content:
-        classesProp?.content ?? cn(baseClasses.content, sizeClasses.content),
-      contentWrapper: classesProp?.contentWrapper ?? baseClasses.contentWrapper,
+      itemText: classesProp?.itemText ?? baseClasses.itemText,
+      body:
+        classesProp?.body ?? cn(baseClasses.body, sizeClasses.content),
+      content: classesProp?.content ?? baseClasses.content,
       icon:
         classesProp?.icon ?? cn(baseClasses.icon, sizeClasses.icon),
-      iconWrapper: classesProp?.iconWrapper ?? baseClasses.iconWrapper,
-      subtitle:
-        classesProp?.subtitle ?? cn(baseClasses.subtitle, sizeClasses.subtitle),
-      triggerLeft: classesProp?.triggerLeft ?? baseClasses.triggerLeft,
-      triggerRight: classesProp?.triggerRight ?? baseClasses.triggerRight,
-      contentInner: classesProp?.contentInner ?? baseClasses.contentInner,
-      heading: classesProp?.heading ?? baseClasses.heading,
+      description:
+        classesProp?.description ?? cn(baseClasses.description, sizeClasses.subtitle),
+      itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
+      triggerActions: classesProp?.triggerActions ?? baseClasses.triggerActions,
+      header: classesProp?.header ?? baseClasses.header,
     }),
     [classesProp, sizeClasses, variantClasses, baseClasses, unstyled],
   );

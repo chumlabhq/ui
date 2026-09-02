@@ -107,7 +107,7 @@ trigger (span wrapper, or merged via asChild)
 | `trigger` | Wrapper around the child element |
 | `content` | Tooltip popup (bg, border, padding, text) |
 | `arrow` | Arrow triangle fill |
-| `baseArrow` | Arrow border/outline |
+| `arrow` | Arrow border/outline |
 
 ### Dark mode
 

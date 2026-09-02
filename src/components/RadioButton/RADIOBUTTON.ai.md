@@ -57,9 +57,9 @@ export default function Example() {
 | `name` | string | — | Field name for form submission. |
 | `required` | boolean | `false` | Required field indicator. |
 | `disabled` | boolean | `false` | Disables all radio buttons in the group. |
-| `error` | boolean | `false` | Displays the group in an error state. |
+| `message` | boolean | `false` | Displays the group in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the group. |
-| `success` | boolean | `false` | Displays the group in a success state. |
+| `message` | boolean | `false` | Displays the group in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the group. |
 | `loading` | boolean | `false` | Loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of all radio indicators. |

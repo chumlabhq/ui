@@ -42,8 +42,7 @@ export const DEFAULT_TOOLTIP_CLASSES: Required<TooltipClasses> = {
   trigger: "block truncate",
   content:
     "rounded-cl-md bg-cl-bg-elevated border border-cl-border px-2.5 py-1.5 text-[12px] leading-[1.4] text-cl-text shadow-cl-md",
-  arrow: "",
-  baseArrow: "fill-cl-bg-elevated stroke-cl-border [stroke-width:1]",
+  arrow: "fill-cl-bg-elevated stroke-cl-border [stroke-width:1]",
 };
 
 export const UNSTYLED_TOOLTIP_CLASSES: Required<TooltipClasses> =

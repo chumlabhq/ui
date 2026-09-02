@@ -285,21 +285,20 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses = useMemo<Required<PaginationClasses>>(() => ({
       root: classesProp?.root ?? baseClasses.root,
-      nav: classesProp?.nav ?? baseClasses.nav,
-      pageButtons: classesProp?.pageButtons ?? baseClasses.pageButtons,
-      pageButton: classesProp?.pageButton ?? baseClasses.pageButton,
+      row: classesProp?.row ?? baseClasses.row,
+      list: classesProp?.list ?? baseClasses.list,
+      item: classesProp?.item ?? baseClasses.item,
       activePageButton: classesProp?.activePageButton ?? baseClasses.activePageButton,
       navButton: classesProp?.navButton ?? baseClasses.navButton,
       ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
-      selector: classesProp?.selector ?? baseClasses.selector,
+      rowsPerPage: classesProp?.rowsPerPage ?? baseClasses.rowsPerPage,
       selectorButton: classesProp?.selectorButton ?? baseClasses.selectorButton,
       selectorDropdown: classesProp?.selectorDropdown ?? baseClasses.selectorDropdown,
       selectorDropdownWrapper: classesProp?.selectorDropdownWrapper ?? baseClasses.selectorDropdownWrapper,
       selectorOption: classesProp?.selectorOption ?? baseClasses.selectorOption,
       label: classesProp?.label ?? baseClasses.label,
       dropdownIcon: classesProp?.dropdownIcon ?? baseClasses.dropdownIcon,
-      prevIcon: classesProp?.prevIcon ?? baseClasses.prevIcon,
-      nextIcon: classesProp?.nextIcon ?? baseClasses.nextIcon,
+      navIcon: classesProp?.navIcon ?? baseClasses.navIcon,
       pageInfo: classesProp?.pageInfo ?? baseClasses.pageInfo,
     }), [classesProp, baseClasses]);
 
@@ -457,7 +456,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const selectorSection =
       showRowsPerPage && rowsPerPage !== undefined ? (
-        <div className={mergedClasses.selector}>
+        <div className={mergedClasses.rowsPerPage}>
           <span className={mergedClasses.label}>{showLabel}</span>
           <div className={cn(mergedClasses.selectorDropdownWrapper)}>
             <button
@@ -525,7 +524,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     ) : null;
 
     const navSection = (
-      <div className={cn(mergedClasses.nav)}>
+      <div className={cn(mergedClasses.row)}>
         <button
           type="button"
           onClick={handlePrevPage}
@@ -534,10 +533,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           aria-label={prevAriaLabel}
           data-disabled={isFirstPage || undefined}
         >
-          {renderIcon(prevIcon, ChevronLeftIcon, mergedClasses.prevIcon, "w-5 h-5")}
+          {renderIcon(prevIcon, ChevronLeftIcon, mergedClasses.navIcon, "w-5 h-5")}
         </button>
 
-        <div className={cn(mergedClasses.pageButtons)}>
+        <div className={cn(mergedClasses.list)}>
           {visiblePages.map((item, index) =>
             item === "ellipsis" ? (
               renderEllipsis ? (
@@ -565,7 +564,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 className={
                   safeCurrentPage === item
                     ? mergedClasses.activePageButton
-                    : mergedClasses.pageButton
+                    : mergedClasses.item
                 }
                 aria-label={pageAriaLabel ? pageAriaLabel(item) : `Page ${item}`}
                 aria-current={safeCurrentPage === item ? "page" : undefined}
@@ -586,7 +585,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
           aria-label={nextAriaLabel}
           data-disabled={isLastPage || undefined}
         >
-          {renderIcon(nextIcon, ChevronRightIcon, mergedClasses.nextIcon, "w-5 h-5")}
+          {renderIcon(nextIcon, ChevronRightIcon, mergedClasses.navIcon, "w-5 h-5")}
         </button>
       </div>
     );

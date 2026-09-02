@@ -28,15 +28,15 @@ import type { Tab, TabPanelProps } from "@chumlab/ui/tab-panel";
 import { TabPanel } from "@chumlab/ui/tab-panel";
 
 const tabs = [
-  { id: "home", label: "Home" },
-  { id: "profile", label: "Profile" },
-  { id: "settings", label: "Settings" },
+  { id: "home", itemText: "Home" },
+  { id: "profile", itemText: "Profile" },
+  { id: "settings", itemText: "Settings" },
 ];
 
 export default function Example() {
   return (
     <TabPanel tabs={tabs} defaultValue="home">
-      {(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
+      {(item) => <div style={{ padding: 16 }}>{item.itemText} content</div>}
     </TabPanel>
   );
 }
@@ -116,25 +116,25 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 
 ```
 root (w-full)
-├── tabList (role="tablist", flex overflow-x-auto)
-│   └── tab (role="tab", relative shrink-0)
-│       ├── icon
-│       ├── label
+├── list (role="tablist", flex overflow-x-auto)
+│   └── item (role="item", relative shrink-0)
+│       ├── itemIcon
+│       ├── itemText
 │       ├── count (badge)
 │       └── indicator (absolute bottom, animated underline)
-└── panel (role="tabpanel", p-4)
+└── content (role="tabpanel", p-4)
 ```
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Tab list container | `tabList` |
-| Tab button | `tab`, `tabActive`, `tabInactive`, `tabDisabled` |
+| Tab list container | `list` |
+| Tab button | `item`, `tabActive`, `tabInactive`, `tabDisabled` |
 | Tab focus ring | `tabFocus` |
-| Tab label text | `label`, `labelActive`, `labelInactive` |
-| Tab icon | `icon`, `iconActive`, `iconInactive` |
+| Tab label text | `itemText`, `labelActive`, `labelInactive` |
+| Tab icon | `itemIcon`, `iconActive`, `iconInactive` |
 | Count badge | `count`, `countActive`, `countInactive` |
 | Active underline | `indicator` |
-| Panel content | `panel` |
+| Panel content | `content` |
 
 ### Responsive sizing
 
@@ -152,22 +152,22 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(tab) => ...}</TabPanel>
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(item) => ...}</TabPanel>
 ```
 
 ### With icons and badges
 
 ```tsx
 const tabs = [
-  { id: "home", label: "Home", icon: HomeIcon, count: 3 },
-  { id: "messages", label: "Messages", icon: MailIcon, count: 12 },
+  { id: "home", itemText: "Home", itemIcon: HomeIcon, count: 3 },
+  { id: "messages", itemText: "Messages", itemIcon: MailIcon, count: 12 },
 ];
 ```
 
 ### Keep panels mounted
 
 ```tsx
-<TabPanel tabs={tabs} keepMounted>{(tab) => <Panel id={tab.id} />}</TabPanel>
+<TabPanel tabs={tabs} keepMounted>{(item) => <Panel id={item.id} />}</TabPanel>
 ```
 
 ### Vertical orientation

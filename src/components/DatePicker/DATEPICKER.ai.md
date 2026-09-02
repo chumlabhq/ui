@@ -52,8 +52,8 @@ These props have dependencies -- using them wrong causes silent bugs:
 | Prop | Constraint |
 |------|-----------|
 | `mode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
-| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` prop is provided. |
-| `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
+| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presetGroup` prop is provided. |
+| `presetGroup` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
 | `clearable` / `showClearButton` | Both control the clear button. `showClearButton` takes precedence if both are set. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
@@ -119,7 +119,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `outsideDaysSelectable` | boolean | `true` | Whether outside days can be selected. |
 | `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
 | `showPresets` | boolean | `false` | Shows preset date selection buttons. |
-| `presets` | array | — | Array of date presets. |
+| `presetGroup` | array | — | Array of date presets. |
 | `markers` | array | — | Array of date markers to display on the calendar. |
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
@@ -127,11 +127,11 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `name` | string | — | Form field name. |
 | `placeholder` | string | — | Placeholder text for the trigger input. |
 | `disabled` | boolean | `false` | Disables the date picker. |
-| `error` | boolean | `false` | Displays error state. |
+| `message` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `success` | boolean | `false` | Displays success state. |
+| `message` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `loading` | boolean | `false` | Shows loading state. |
 | `clearable` | boolean | — | Shows a clear button. |
@@ -139,7 +139,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
 | `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
 | `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
-| `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
+| `icon` | object | — | React.ReactNode — Custom calendar icon. |
 | `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
 | `prevMonthIcon` | object | — | React.ReactNode — Custom previous month icon. |
 | `nextMonthIcon` | object | — | React.ReactNode — Custom next month icon. |
@@ -173,7 +173,7 @@ The component has three styling modes:
 // This REPLACES the default trigger classes entirely:
 <DatePicker classes={{ trigger: "my-custom-trigger" }} />
 
-// The other slots (calendar, day, etc.) still use their defaults.
+// The other slots (content, item, etc.) still use their defaults.
 ```
 
 ### Slot overview
@@ -182,20 +182,20 @@ The component has three styling modes:
 |------------------------|-------------|-------|
 | Trigger button appearance | `trigger` | The clickable input area |
 | Trigger text | `input` | Text display inside trigger |
-| Calendar/clear icons | `calendarIcon`, `clearButton` | Icons inside trigger |
-| Label, description, error text | `label`, `description`, `error`, `success` | Form field elements |
-| Calendar popover | `calendar` | Outer container of calendar |
-| Month/year navigation | `header`, `monthNav`, `navButton`, `navButtonDisabled` | Calendar header area |
-| Month/year dropdowns | `monthSelect`, `yearSelect`, `dropdownMenu`, `dropdownItem`, `dropdownItemSelected` | Month/year selectors |
-| Weekday headers | `weekdayHeader`, `weekday` | Day-of-week labels |
-| Day cells | `day`, `daySelected`, `dayToday`, `dayDisabled`, `dayOutside` | Individual calendar days |
+| Calendar/clear icons | `icon`, `clearTrigger` | Icons inside trigger |
+| Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
+| Calendar popover | `content` | Outer container of calendar |
+| Month/year navigation | `header`, `row`, `navButton`, `navButtonDisabled` | Calendar header area |
+| Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem`, `dropdownItemSelected` | Month/year selectors |
+| Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
+| Day cells | `item`, `daySelected`, `dayToday`, `dayDisabled`, `dayOutside` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | `dayFocused` | Focused day ring |
 | Marked days | `dayMarked`, `markerIndicator`, `markerTooltip` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
-| Presets | `presets`, `presetButton`, `presetActive` | Preset buttons panel |
-| Footer / today button | `footer`, `todayButton` | Calendar footer |
-| Multi-month layout | `monthGrid`, `grid` | Side-by-side months |
+| Presets | `presetGroup`, `presetTrigger`, `presetActive` | Preset buttons panel |
+| Footer / today button | `footer`, `todayTrigger` | Calendar footer |
+| Multi-month layout | `listRow`, `list` | Side-by-side months |
 
 ### Dark mode
 
@@ -211,9 +211,9 @@ Default classes use Tailwind `dark:` prefix. When overriding, always provide bot
 ### Styling via data attributes
 
 ```tsx
-// Tailwind arbitrary variants on day cells:
+// Tailwind arbitrary variants on item cells:
 <DatePicker classes={{
-  day: "[&[data-selected]]:bg-purple-600 [&[data-today]]:ring-purple-500 [&[data-disabled]]:opacity-30",
+  item: "[&[data-selected]]:bg-purple-600 [&[data-today]]:ring-purple-500 [&[data-disabled]]:opacity-30",
 }} />
 ```
 
@@ -271,13 +271,13 @@ const [dates, setDates] = useState<Date[] | null>(null);
 ### Custom presets
 
 ```tsx
-const presets = [
+const presetGroup = [
   { label: "Today", getValue: () => new Date() },
   { label: "Yesterday", getValue: () => subDays(new Date(), 1) },
   { label: "Start of Month", getValue: () => startOfMonth(new Date()) },
 ];
 
-<DatePicker presets={presets} showPresets />
+<DatePicker presetGroup={presetGroup} showPresets />
 ```
 
 ### With markers
@@ -333,7 +333,7 @@ import { fr } from "date-fns/locale";
   label="Start date"
   description="When should the project begin?"
   required
-  error={!date}
+  message={!date}
   errorMessage="Please select a date"
 />
 ```
@@ -382,9 +382,9 @@ To find a specific demo implementation, search for these `title=` strings in the
 | Week numbers | `title="Week Numbers"` | `showWeekNumbers` |
 | Today button | `title="Today Button & Indicator"` | `showTodayButton`, `showTodayIndicator` |
 | Week start day | `title="Week Starts On Monday"` | `weekStartsOn={1}` |
-| Error state | `title="Error State"` | `error`, `errorMessage` |
+| Error state | `title="Error State"` | `message`, `errorMessage` |
 | Description text | `title="With Description"` | `description` prop |
-| Success state | `title="Success State"` | `success`, `successMessage` |
+| Success state | `title="Success State"` | `message`, `successMessage` |
 | Loading state | `title="Loading State"` | `loading` prop |
 | Clearable | `title="Clearable (Unified API)"` | `clearable` / `showClearButton` |
 | Disabled | `title="Disabled"` | `disabled` prop |

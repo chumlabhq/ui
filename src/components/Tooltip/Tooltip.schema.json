@@ -6,11 +6,11 @@
   "properties": {
     "children": {
       "type": "object",
-      "description": "React.ReactNode — The trigger element that the tooltip is attached to."
+      "description": "React.ReactNode \u2014 The trigger element that the tooltip is attached to."
     },
     "content": {
       "type": "object",
-      "description": "React.ReactNode — Content displayed inside the tooltip."
+      "description": "React.ReactNode \u2014 Content displayed inside the tooltip."
     },
     "side": {
       "type": "string",
@@ -87,7 +87,7 @@
     },
     "onOpenChange": {
       "type": "object",
-      "description": "(open: boolean) => void — Callback when the open state changes."
+      "description": "(open: boolean) => void \u2014 Callback when the open state changes."
     },
     "showArrow": {
       "type": "boolean",
@@ -136,7 +136,7 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Custom container element for the tooltip portal."
+      "description": "HTMLElement | null \u2014 Custom container element for the tooltip portal."
     },
     "asChild": {
       "type": "boolean",
@@ -163,9 +163,6 @@
           "type": "string"
         },
         "arrow": {
-          "type": "string"
-        },
-        "baseArrow": {
           "type": "string"
         }
       }

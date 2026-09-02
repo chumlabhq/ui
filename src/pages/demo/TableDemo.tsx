@@ -1128,11 +1128,11 @@ function ServerApiDemo({
           // stays vertically centered while unpinned rows drift slightly
           // taller, accumulating a misalignment by a few rows in.
           cell: `px-4 py-3 h-[64px] text-sm whitespace-nowrap text-cl-text align-middle`,
-          shimmer: "w-full overflow-hidden",
-          shimmerRow: "border-b border-cl-border/50 dark:border-cl-text/[0.03]",
-          shimmerCell: "px-4 py-3.5 h-16",
-          shimmerBar: `h-3 w-full rounded-cl-md bg-cl-bg-elevated bg-[length:200%_100%] animate-[shimmer_2s_ease-in-out_infinite]`,
-          filterDropdown: `bg-cl-bg border-cl-border`,
+          loading: "w-full overflow-hidden",
+          loadingRow: "border-b border-cl-border/50 dark:border-cl-text/[0.03]",
+          loadingItem: "px-4 py-3.5 h-16",
+          loadingBar: `h-3 w-full rounded-cl-md bg-cl-bg-elevated bg-[length:200%_100%] animate-[shimmer_2s_ease-in-out_infinite]`,
+          filterContent: `bg-cl-bg border-cl-border`,
         }}
       />
       {totalPages > 1 && !loading && (
@@ -2225,7 +2225,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `${s.container} overflow-x-auto`,
+              root: `${s.container} overflow-x-auto`,
             }}
           />
         </div>
@@ -2280,7 +2280,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             )}
             classes={{
               ...s,
-              container: `${s.container} overflow-x-auto`,
+              root: `${s.container} overflow-x-auto`,
               pinIcon: dark ? "text-cl-text-tertiary" : "text-cl-text-tertiary",
               pinnedPinIcon: dark ? "text-cl-warning" : "text-cl-warning",
             }}
@@ -2319,8 +2319,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `${s.container} overflow-x-auto`,
-              pinnedContainer: "shrink-0 sticky left-0 z-30 bg-white dark:bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
+              root: `${s.container} overflow-x-auto`,
+              pinnedRegion: "shrink-0 sticky left-0 z-30 bg-white dark:bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
               pinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
               pinnedPinButton: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15 dark:hover:bg-cl-success/20`,
               pinIcon: "text-cl-text-tertiary",
@@ -2400,11 +2400,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             onRowsPerPageChange={handleRowsPerPageChange}
             classes={{
               root: pClasses.root,
-              selector: pClasses.selector,
+              rowsPerPage: pClasses.selector,
               selectorButton: pClasses.selectorButton,
               selectorDropdown: pClasses.selectorDropdown,
               selectorOption: pClasses.selectorOption,
-              pageButton: pClasses.pageButton,
+              item: pClasses.pageButton,
               activePageButton: pClasses.activePageButton,
               navButton: pClasses.navButton,
               ellipsis: pClasses.ellipsis,
@@ -2427,15 +2427,15 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             rowsPerPageLabel="per page"
             classes={{
               root: darkPaginationContainerStyle,
-              selector: darkPaginationRowSelectorStyle,
+              rowsPerPage: darkPaginationRowSelectorStyle,
               selectorButton: darkPaginationButtonStyle,
               selectorDropdown: darkPaginationDropdownStyle,
               selectorOption: darkPaginationOptionStyle,
-              pageButton: darkPaginationPageStyle,
+              item: darkPaginationPageStyle,
               activePageButton: darkPaginationActivePageStyle,
               navButton: darkPaginationNavStyle,
-              nav: darkPaginationNavContainerStyle,
-              pageButtons: darkPaginationPageContainerStyle,
+              row: darkPaginationNavContainerStyle,
+              list: darkPaginationPageContainerStyle,
               ellipsis: darkPaginationEllipsisStyle,
               label: darkPaginationLabelStyle,
             }}
@@ -2456,8 +2456,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           classes={{
             ...s,
             ...s,
-            container: `border rounded-cl-md border-cl-border`,
-            table: "w-max border-collapse",
+            root: `border rounded-cl-md border-cl-border`,
+            list: "w-max border-collapse",
           }}
         />
         <p
@@ -2481,7 +2481,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           classes={{
             ...s,
             ...s,
-            container: `w-full border rounded-cl-md border-cl-border`,
+            root: `w-full border rounded-cl-md border-cl-border`,
           }}
         />
         <p
@@ -2506,7 +2506,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           classes={{
             ...s,
             ...s,
-            container: `w-full border rounded-cl-md border-cl-border`,
+            root: `w-full border rounded-cl-md border-cl-border`,
           }}
         />
         <p
@@ -2535,8 +2535,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           classes={{
             ...s,
             ...s,
-            container: `border rounded-cl-md border-cl-border`,
-            table: "w-max border-collapse",
+            root: `border rounded-cl-md border-cl-border`,
+            list: "w-max border-collapse",
           }}
         />
         <p
@@ -2567,7 +2567,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           classes={{
             ...s,
             ...s,
-            container: `w-full border rounded-cl-md border-cl-border`,
+            root: `w-full border rounded-cl-md border-cl-border`,
           }}
         />
         <p
@@ -2601,8 +2601,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           classes={{
             ...s,
             ...s,
-            container: `border rounded-cl-md border-cl-border`,
-            table: "w-max border-collapse",
+            root: `border rounded-cl-md border-cl-border`,
+            list: "w-max border-collapse",
           }}
         />
         <p
@@ -2679,12 +2679,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             }
             classes={{
               ...s,
-              container: `border rounded-cl-md border-cl-border`,
-              table: "w-max border-collapse",
-              unpinnedTable: "w-max border-collapse",
-              pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
-              unpinnedContainer: "",
-              shimmer: "w-max min-w-[1600px]",
+              root: `border rounded-cl-md border-cl-border`,
+              list: "w-max border-collapse",
+              pinnedRegion: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+              scrollRegion: "",
+              loading: "w-max min-w-[1600px]",
             }}
           />
 
@@ -3592,7 +3591,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandIcon: dark ? "text-cl-accent" : "text-cl-accent",
+                  expandButton: dark ? "text-cl-accent" : "text-cl-accent",
                 }}
               />
             );
@@ -3758,7 +3757,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandIcon: dark ? "text-cl-accent" : "text-cl-accent",
+                  expandButton: dark ? "text-cl-accent" : "text-cl-accent",
                 }}
               />
             );
@@ -3839,7 +3838,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  expandIcon: dark
+                  expandButton: dark
                     ? "text-cl-accent hover:text-cl-accent"
                     : "text-cl-accent hover:text-cl-accent",
                   expandedRow: dark
@@ -3936,8 +3935,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 classes={{
                   ...s,
                   ...s,
-                  row: `${s.row} select-none`,
-                  expandIcon: "",
+                  item: `${s.row} select-none`,
+                  expandButton: "",
                 }}
               />
             );
@@ -4524,7 +4523,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/10`,
+              item: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-accent/10 dark:border-cl-text/[0.04] dark:hover:bg-cl-accent/10`,
             }}
             onRowClick={(row) => alert(`Clicked: ${(row as User).name}`)}
           />
@@ -4553,7 +4552,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              row: `border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover dark:[&[data-striped]]:bg-gradient-to-r dark:[&[data-striped]]:from-cl-accent/0.04 dark:[&[data-striped]]:to-transparent`,
+              item: `border-b transition-colors border-cl-border hover:bg-cl-bg-hover [&[data-striped]]:bg-gradient-to-r [&[data-striped]]:from-cl-accent/10 [&[data-striped]]:to-transparent dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover dark:[&[data-striped]]:bg-gradient-to-r dark:[&[data-striped]]:from-cl-accent/0.04 dark:[&[data-striped]]:to-transparent`,
             }}
           />
           <p
@@ -4637,9 +4636,9 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `border rounded-cl-md border-cl-border`,
-              table: "w-max border-collapse",
-              pinnedRightContainer: `shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated`,
+              root: `border rounded-cl-md border-cl-border`,
+              list: "w-max border-collapse",
+              pinnedRightRegion: `shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated`,
             }}
           />
           <p
@@ -4669,7 +4668,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               classes={{
                 ...s,
                 ...s,
-                container: "",
+                root: "",
                 cell: `${s.cell} overflow-hidden text-ellipsis`,
               }}
             />
@@ -4698,7 +4697,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 classes={{
                   ...s,
                   ...s,
-                  container: "",
+                  root: "",
                   cell: `${s.cell} overflow-hidden text-ellipsis`,
                   resizeHandle:
                     "[&>div]:bg-cl-success [&>div]:opacity-100 [&>div]:w-1 [&>div]:h-full [&>div]:rounded-none",
@@ -4773,7 +4772,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     classes={{
                       ...s,
                       ...s,
-                      container: "",
+                      root: "",
                       cell: `${s.cell} overflow-hidden text-ellipsis`,
                     }}
                   />
@@ -4863,7 +4862,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   classes={{
                     ...s,
                     ...s,
-                    container: "",
+                    root: "",
                     cell: `${s.cell} overflow-hidden text-ellipsis`,
                   }}
                 />
@@ -5206,7 +5205,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  row: `border-b transition-all data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover [&[draggable]]:cursor-grab [&[draggable]]:active:cursor-grabbing`,
+                  item: `border-b transition-all data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover dark:border-cl-text/[0.04] dark:hover:bg-cl-bg-hover [&[draggable]]:cursor-grab [&[draggable]]:active:cursor-grabbing`,
                   dragHandle: `text-cl-accent hover:text-cl-accent dark:text-cl-accent dark:hover:text-cl-accent transition-colors`,
                 }}
               />
@@ -5862,7 +5861,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-cl-md border-cl-border`,
+              root: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
@@ -5960,7 +5959,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-cl-md border-cl-border`,
+              root: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
@@ -6045,7 +6044,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-cl-md border-cl-border`,
+              root: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
@@ -6093,7 +6092,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             classes={{
               ...s,
               ...s,
-              container: `w-full border rounded-cl-md border-cl-border`,
+              root: `w-full border rounded-cl-md border-cl-border`,
             }}
           />
           <div
@@ -6538,7 +6537,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 }}
                 classes={{
                   ...s,
-                  filterIcon: dark ? "text-cl-accent" : "text-cl-accent",
+                  filterButton: dark ? "text-cl-accent" : "text-cl-accent",
                 }}
               />
             );
@@ -6667,7 +6666,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 )}
                 classes={{
                   ...s,
-                  filterDropdown: dark
+                  filterContent: dark
                     ? "bg-cl-bg border-cl-text/[0.08]"
                     : "bg-white border-cl-border",
                 }}
@@ -6907,8 +6906,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 )}
                 classes={{
                   ...s,
-                  filterIcon: dark ? "text-cl-accent" : "text-cl-accent",
-                  filterDropdown: `rounded-cl-lg border shadow-2xl bg-white border-cl-border-input-focus dark:bg-cl-bg dark:border dark:border-cl-border-input-focus/20`,
+                  filterButton: dark ? "text-cl-accent" : "text-cl-accent",
+                  filterContent: `rounded-cl-lg border shadow-2xl bg-white border-cl-border-input-focus dark:bg-cl-bg dark:border dark:border-cl-border-input-focus/20`,
                 }}
               />
             );
@@ -7052,7 +7051,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   )}
                   classes={{
                     ...s,
-                    filterDropdown: `rounded-cl-lg border shadow-2xl bg-white border-cl-border-input-focus dark:bg-cl-bg dark:border dark:border-cl-border-input-focus/20`,
+                    filterContent: `rounded-cl-lg border shadow-2xl bg-white border-cl-border-input-focus dark:bg-cl-bg dark:border dark:border-cl-border-input-focus/20`,
                   }}
                 />
                 {filters.length > 0 && (
@@ -7421,7 +7420,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   classes={{
                     ...s,
                     ...s,
-                    groupHeader: dark
+                    groupLabel: dark
                       ? "bg-cl-bg-hover font-semibold text-cl-text-secondary"
                       : "bg-cl-bg-hover font-semibold text-cl-text",
                   }}

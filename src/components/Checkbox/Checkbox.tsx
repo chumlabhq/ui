@@ -110,16 +110,15 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const mergedClasses: Required<CheckboxClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        labelContainer: classesProp?.labelContainer ?? baseClasses.labelContainer,
+        labelGroup: classesProp?.labelGroup ?? baseClasses.labelGroup,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
-        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        control: classesProp?.control ?? baseClasses.control,
         checked: classesProp?.checked ?? baseClasses.checked,
         unchecked: classesProp?.unchecked ?? baseClasses.unchecked,
         indeterminate: classesProp?.indeterminate ?? baseClasses.indeterminate,
-        icon: classesProp?.icon ?? baseClasses.icon,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        message: classesProp?.message ?? baseClasses.message,
       }),
       [classesProp, baseClasses],
     );
@@ -161,13 +160,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     // ─── Icon ───────────────────────────────────────────────────────────
     const renderedIcon = useMemo(() => {
       if (indeterminate) {
-        return indeterminateIcon || <IndeterminateIcon className={mergedClasses.icon || undefined} size={iconSize} />;
+        return indeterminateIcon || <IndeterminateIcon className={mergedClasses.itemIndicator || undefined} size={iconSize} />;
       }
       if (isChecked) {
-        return checkedIcon || <CheckIconDefault className={mergedClasses.icon || undefined} size={iconSize} />;
+        return checkedIcon || <CheckIconDefault className={mergedClasses.itemIndicator || undefined} size={iconSize} />;
       }
       return uncheckedIcon || null;
-    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, mergedClasses.icon, iconSize]);
+    }, [indeterminate, isChecked, indeterminateIcon, checkedIcon, uncheckedIcon, mergedClasses.itemIndicator, iconSize]);
 
     // ─── Described by ───────────────────────────────────────────────────
     const describedBy = [
@@ -197,7 +196,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       >
         <label className="flex items-start gap-2" style={{ cursor: disabled ? "not-allowed" : "pointer" }}>
           <span
-            className={cn(mergedClasses.checkbox, stateClassName, shapeClass, !unstyled && error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
+            className={cn(mergedClasses.control, stateClassName, shapeClass, !unstyled && error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
@@ -238,7 +237,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           </span>
 
           {(label || description) && (
-            <span className={mergedClasses.labelContainer || undefined}>
+            <span className={mergedClasses.labelGroup || undefined}>
               {label && (
                 <span className={mergedClasses.label || undefined}>
                   {label}
@@ -255,13 +254,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {error && errorMessage && (
-          <div id={errorId} role="alert" data-invalid className={mergedClasses.error || undefined}>
+          <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

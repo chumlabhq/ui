@@ -498,11 +498,11 @@ const AccordionDemo = () => {
                   classes={{
                     root: c.accordion.root,
                     item: c.accordion.item,
-                    triggerInner: c.accordion.triggerInner,
-                    contentWrapper: c.accordion.contentWrapper,
-                    iconWrapper: c.accordion.iconWrapper,
-                    subtitle: c.accordion.subtitle,
-                    heading: c.accordion.heading,
+                    itemText: c.accordion.triggerInner,
+                    content: c.accordion.contentWrapper,
+                    icon: c.accordion.iconWrapper,
+                    description: c.accordion.subtitle,
+                    header: c.accordion.heading,
                   }}
                 >
                   <AccordionItem value={`${size}-1`}>

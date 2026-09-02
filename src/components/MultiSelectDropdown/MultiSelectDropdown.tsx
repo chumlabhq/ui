@@ -173,7 +173,7 @@ const MultiSelectDropdownContent = memo(function MultiSelectDropdownContent({
       data-position={coords?.position ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
-      <div className={classes.optionList || undefined}>{children}</div>
+      <div className={classes.list || undefined}>{children}</div>
     </div>,
     portalContainer ?? document.body,
   );
@@ -270,30 +270,28 @@ const MultiSelectDropdown = forwardRef<
     const mergedClasses: Required<MultiSelectDropdownClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
-        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
+        value: classesProp?.value ?? baseClasses.value,
         content: classesProp?.content ?? baseClasses.content,
-        optionList: classesProp?.optionList ?? baseClasses.optionList,
-        option: classesProp?.option ?? baseClasses.option,
+        list: classesProp?.list ?? baseClasses.list,
+        item: classesProp?.item ?? baseClasses.item,
         optionSelected: classesProp?.optionSelected ?? baseClasses.optionSelected,
         optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
         optionDisabled: classesProp?.optionDisabled ?? baseClasses.optionDisabled,
-        chevron: classesProp?.chevron ?? baseClasses.chevron,
-        checkbox: classesProp?.checkbox ?? baseClasses.checkbox,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        itemControl: classesProp?.itemControl ?? baseClasses.itemControl,
         checkboxChecked: classesProp?.checkboxChecked ?? baseClasses.checkboxChecked,
-        checkboxIcon: classesProp?.checkboxIcon ?? baseClasses.checkboxIcon,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         chip: classesProp?.chip ?? baseClasses.chip,
         chipRemove: classesProp?.chipRemove ?? baseClasses.chipRemove,
-        noResults: classesProp?.noResults ?? baseClasses.noResults,
-        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
+        empty: classesProp?.empty ?? baseClasses.empty,
+        clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
         label: classesProp?.label ?? baseClasses.label,
-        error: classesProp?.error ?? baseClasses.error,
+        message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
-        success: classesProp?.success ?? baseClasses.success,
-        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
-        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
-        moreCount: classesProp?.moreCount ?? baseClasses.moreCount,
+        loading: classesProp?.loading ?? baseClasses.loading,
+        count: classesProp?.count ?? baseClasses.count,
       }),
       [classesProp, baseClasses],
     );
@@ -516,7 +514,7 @@ const MultiSelectDropdown = forwardRef<
         )}
 
         <div
-          className={mergedClasses.wrapper || undefined}
+          className={mergedClasses.control || undefined}
         >
           {renderTrigger ? (
             renderTrigger({
@@ -567,7 +565,7 @@ const MultiSelectDropdown = forwardRef<
               data-error={error || undefined}
               data-open={isOpen || undefined}
             >
-              <span className={mergedClasses.triggerText || undefined}>
+              <span className={mergedClasses.value || undefined}>
                 {showSelectedChips && selectedOptions.length > 0 ? (
                   <>
                     {displayedChips.map((option) => (
@@ -579,7 +577,7 @@ const MultiSelectDropdown = forwardRef<
                       />
                     ))}
                     {remainingCount > 0 && (
-                      <span className={mergedClasses.moreCount || undefined}>
+                      <span className={mergedClasses.count || undefined}>
                         +{remainingCount}
                       </span>
                     )}
@@ -594,7 +592,7 @@ const MultiSelectDropdown = forwardRef<
               </span>
               {showChevron && (
                 <ChevronIconProp
-                  className={cn(mergedClasses.chevron) || undefined}
+                  className={cn(mergedClasses.icon) || undefined}
                   style={isOpen ? { transform: "rotate(180deg)" } : undefined}
                 />
               )}
@@ -606,7 +604,7 @@ const MultiSelectDropdown = forwardRef<
               type="button"
               tabIndex={-1}
               aria-label="Clear all selections"
-              className={mergedClasses.clearIcon || undefined}
+              className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
@@ -636,13 +634,13 @@ const MultiSelectDropdown = forwardRef<
             {loading ? (
               <MultiSelectDropdownShimmer
                 count={shimmerCount}
-                className={mergedClasses.shimmer || undefined}
-                itemClassName={mergedClasses.shimmerItem || undefined}
+                className={mergedClasses.loading || undefined}
+                itemClassName={mergedClasses.loading || undefined}
               />
             ) : displayOptions.length === 0 ? (
               <div
                 role="status"
-                className={mergedClasses.noResults || undefined}
+                className={mergedClasses.empty || undefined}
               >
                 {noResultsContent}
               </div>
@@ -689,14 +687,14 @@ const MultiSelectDropdown = forwardRef<
             id={errorId}
             role="alert"
             data-invalid
-            className={mergedClasses.error || undefined}
+            className={mergedClasses.message || undefined}
           >
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

@@ -118,8 +118,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         root: classesProp?.root ?? baseClasses.root,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        message: classesProp?.message ?? baseClasses.message,
       }),
       [classesProp, baseClasses],
     );
@@ -189,13 +188,13 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           </div>
 
           {error && errorMessage && (
-            <div id={errorId} role="alert" data-invalid className={mergedClasses.error || undefined}>
+            <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>
               {errorMessage}
             </div>
           )}
 
           {success && successMessage && !error && (
-            <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+            <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
           )}
         </div>
       </RadioGroupContext.Provider>
@@ -241,10 +240,10 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         root: classesProp?.root ?? baseClasses.root,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
-        radio: classesProp?.radio ?? baseClasses.radio,
+        control: classesProp?.control ?? baseClasses.control,
         checked: classesProp?.checked ?? baseClasses.checked,
         unchecked: classesProp?.unchecked ?? baseClasses.unchecked,
-        icon: classesProp?.icon ?? baseClasses.icon,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
         error: classesProp?.error ?? baseClasses.error,
         success: classesProp?.success ?? baseClasses.success,
       }),
@@ -283,7 +282,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         return (
           checkedIcon || (
             <span
-              className={mergedClasses.icon || undefined}
+              className={mergedClasses.itemIndicator || undefined}
               style={{
                 width: iconSize ?? 10,
                 height: iconSize ?? 10,
@@ -296,7 +295,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         );
       }
       return uncheckedIcon || null;
-    }, [isChecked, checkedIcon, uncheckedIcon, mergedClasses.icon, iconSize]);
+    }, [isChecked, checkedIcon, uncheckedIcon, mergedClasses.itemIndicator, iconSize]);
 
     return (
       <label
@@ -312,7 +311,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         {...rest}
       >
         <span
-          className={cn(mergedClasses.radio, stateClassName, !unstyled && ctx.error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
+          className={cn(mergedClasses.control, stateClassName, !unstyled && ctx.error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
           style={{ ...sizeStyle, position: "relative" }}
           data-checked={isChecked || undefined}
           data-state={isChecked ? "checked" : "unchecked"}

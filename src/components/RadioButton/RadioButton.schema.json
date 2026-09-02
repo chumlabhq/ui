@@ -77,15 +77,29 @@
         },
         "size": {
           "oneOf": [
-            { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl"] },
-            { "type": "number" }
+            {
+              "type": "string",
+              "enum": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "type": "number"
+            }
           ],
           "description": "Size of all radio indicators.",
           "default": "md"
         },
         "orientation": {
           "type": "string",
-          "enum": ["horizontal", "vertical"],
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
           "description": "Layout orientation.",
           "default": "vertical"
         },
@@ -93,11 +107,18 @@
           "type": "object",
           "description": "CSS class overrides for group sub-elements.",
           "properties": {
-            "root": { "type": "string" },
-            "label": { "type": "string" },
-            "description": { "type": "string" },
-            "error": { "type": "string" },
-            "success": { "type": "string" }
+            "root": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
           }
         },
         "unstyled": {
@@ -106,9 +127,16 @@
           "default": false
         },
         "reduceMotion": {
-          "type": ["boolean", "string"],
+          "type": [
+            "boolean",
+            "string"
+          ],
           "description": "Controls motion preferences. 'auto' respects the user's OS setting.",
-          "enum": [true, false, "auto"]
+          "enum": [
+            true,
+            false,
+            "auto"
+          ]
         },
         "children": {
           "type": "object",
@@ -119,7 +147,9 @@
           "description": "Additional class names applied to the group root."
         }
       },
-      "required": ["children"]
+      "required": [
+        "children"
+      ]
     },
     {
       "title": "RadioButton",
@@ -145,8 +175,19 @@
         },
         "size": {
           "oneOf": [
-            { "type": "string", "enum": ["xs", "sm", "md", "lg", "xl"] },
-            { "type": "number" }
+            {
+              "type": "string",
+              "enum": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "type": "number"
+            }
           ],
           "description": "Size of the radio indicator. Inherits the group's size when unset."
         },
@@ -162,15 +203,30 @@
           "type": "object",
           "description": "CSS class overrides for radio sub-elements.",
           "properties": {
-            "root": { "type": "string" },
-            "label": { "type": "string" },
-            "description": { "type": "string" },
-            "radio": { "type": "string" },
-            "checked": { "type": "string" },
-            "unchecked": { "type": "string" },
-            "icon": { "type": "string" },
-            "error": { "type": "string" },
-            "success": { "type": "string" }
+            "root": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "control": {
+              "type": "string"
+            },
+            "checked": {
+              "type": "string"
+            },
+            "unchecked": {
+              "type": "string"
+            },
+            "itemIndicator": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
           }
         },
         "className": {
@@ -178,7 +234,9 @@
           "description": "Additional class names applied to the radio root."
         }
       },
-      "required": ["value"]
+      "required": [
+        "value"
+      ]
     }
   ]
 }

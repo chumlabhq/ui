@@ -80,9 +80,9 @@ export default function Example() {
 | `required` | boolean | `false` | Whether the field is required. |
 | `id` | string | — | HTML id attribute. |
 | `disabled` | boolean | `false` | Whether the switch is disabled. |
-| `error` | boolean | `false` | Whether the switch is in an error state. |
+| `message` | boolean | `false` | Whether the switch is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the switch. |
-| `success` | boolean | `false` | Whether the switch is in a success state. |
+| `message` | boolean | `false` | Whether the switch is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the switch. |
 | `loading` | boolean | `false` | Whether the switch is in a loading state. |
 | `loader` | object | — | React.ReactNode — Custom loader element. |

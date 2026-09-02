@@ -27,7 +27,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
 }) {
   const combinedOptionClassName =
     cn(
-      classes.option,
+      classes.item,
       isSelected && classes.optionSelected,
       isFocused && classes.optionFocused,
       option.disabled && classes.optionDisabled,
@@ -35,7 +35,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
 
   const combinedCheckboxClassName =
     cn(
-      classes.checkbox,
+      classes.itemControl,
       isSelected && classes.checkboxChecked,
     ) || undefined;
   // ADR 002 R4: the state the checkboxChecked key named.
@@ -57,7 +57,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected &&
           (checkboxIcon || (
-            <CheckIcon className={classes.checkboxIcon || undefined} />
+            <CheckIcon className={classes.itemIndicator || undefined} />
           ))}
       </span>
       <span className="flex-1 truncate">

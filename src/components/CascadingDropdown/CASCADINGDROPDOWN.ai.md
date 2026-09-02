@@ -76,7 +76,7 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 | `value` / `onValueChange` | Controlled mode. Shape: `{ parentValue: "childValue" }` for single, `{ parentValue: ["a","b"] }` for multi. |
 | `defaultValue` | Uncontrolled mode. Cannot be used with `value`. |
 | `closeOnSelect` | Defaults to `true`. Set `false` to keep menu open after selection (useful for multi-select). |
-| `submenuSearchInput` | Falls back to `searchInput` if not set. Same for `submenuSearchInputElement` and `submenuSearchIcon`. |
+| `subSearchControl` | Falls back to `searchControl` if not set. Same for `subSearchInput` and `subSearchIcon`. |
 
 ---
 
@@ -118,11 +118,11 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content when no value is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays error state. |
+| `message` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `success` | boolean | `false` | Displays success state. |
+| `message` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
@@ -173,36 +173,36 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 ```
 root
-└── wrapper
+└── control
     ├── label
     ├── description
-    ├── trigger [chevron, clearIcon, selectedContent]
+    ├── trigger [icon, clearTrigger, selectedContent]
     ├── errorMessage / successMessage
     └── portal
-        └── menu
-            ├── searchInput [searchIcon + searchInputElement]
-            ├── menuItem* [submenuChevron]
-            │   └── submenuContainer
-            │       └── submenu
-            │           ├── submenuSearchInput [submenuSearchIcon + submenuSearchInputElement]
-            │           └── submenuItem* [checkbox/checkboxChecked, checkIcon]
-            ├── noResults
+        └── content
+            ├── searchControl [searchIcon + searchInput]
+            ├── item* [itemIcon]
+            │   └── subPositioner
+            │       └── subContent
+            │           ├── subSearchControl [subSearchIcon + subSearchInput]
+            │           └── subItem* [itemControl/checkboxChecked, itemIndicator]
+            ├── empty
             ├── loading
-            └── shimmer > shimmerItem*
+            └── loading > loadingItem*
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Trigger button style | `trigger` | |
-| Dropdown background | `menu` | |
-| Menu item hover | `menuItem` | Uses hover: pseudo-class |
+| Dropdown background | `content` | |
+| Menu item hover | `item` | Uses hover: pseudo-class |
 | Selected item highlight | `menuItemSelected` | Stacks on top of menuItem |
 | Focused item (keyboard) | `menuItemFocused` | Stacks on top of menuItem |
-| Submenu panel | `submenu` | |
-| Checkbox style | `checkbox` + `checkboxChecked` | checkboxChecked applied when checked |
-| Search bar in menu | `searchInput`, `searchInputElement`, `searchIcon` | |
-| Search bar in submenu | `submenuSearchInput` | Falls back to `searchInput` if empty |
-| Loading state | `loading`, `shimmer`, `shimmerItem` | |
+| Submenu panel | `subContent` | |
+| Checkbox style | `itemControl` + `checkboxChecked` | checkboxChecked applied when checked |
+| Search bar in menu | `searchControl`, `searchInput`, `searchIcon` | |
+| Search bar in submenu | `subSearchControl` | Falls back to `searchControl` if empty |
+| Loading state | `loading`, `loading`, `loadingItem` | |
 
 ### Dark mode
 
@@ -220,7 +220,7 @@ classes={{
 /* Style trigger when open */
 [data-open] { border-color: blue; }
 
-/* Style when in error state */
+/* Style when in message state */
 [data-error] { border-color: red; }
 ```
 
@@ -234,16 +234,16 @@ classes={{
   onValueChange={setValue}
   placeholder="Pick a category"
   classes={{
-    wrapper: "relative w-64",
+    control: "relative w-64",
     trigger: "flex items-center justify-between w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:border-blue-400 focus:ring-2 focus:ring-blue-500",
-    menu: "mt-1 rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
-    menuItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between",
+    content: "mt-1 rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
+    item: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between",
     menuItemSelected: "bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
-    submenu: "rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
-    submenuItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2",
-    checkbox: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center",
+    subContent: "rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
+    subItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2",
+    itemControl: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center",
     checkboxChecked: "bg-blue-600 border-blue-600 text-white",
-    chevron: "w-4 h-4 text-gray-400",
+    icon: "w-4 h-4 text-gray-400",
   }}
 />
 ```
@@ -320,7 +320,7 @@ const searchCountries = async (query: string) => {
   name="category"
   label="Category"
   required
-  error={!!errors.category}
+  message={!!errors.category}
   errorMessage={errors.category}
   options={options}
   value={value}
@@ -352,7 +352,7 @@ const searchCountries = async (query: string) => {
 | Async children load every hover | Children not cached | Hook caches loaded children by parent value automatically |
 | Search not calling API | `showMenuSearch` is true but no `onMenuSearch` | Without `onMenuSearch`, search is client-side filtering only |
 | Stale search results | Race condition with fast typing | Built-in version tracking prevents stale results; increase `searchDebounceMs` if needed |
-| Submenu search styling same as menu | `submenuSearchInput` not set | Set `submenuSearchInput`, `submenuSearchInputElement`, `submenuSearchIcon` for independent styles |
+| Submenu search styling same as menu | `subSearchControl` not set | Set `subSearchControl`, `subSearchInput`, `subSearchIcon` for independent styles |
 | Classes override doesn't work | Expected additive behavior | Classes REPLACE per slot, not merge. Provide full styling for overridden slots |
 | Value shape wrong | Using string instead of object | Value must be `{ parentValue: "childValue" }` or `{ parentValue: ["a","b"] }` |
 

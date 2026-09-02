@@ -273,7 +273,7 @@ function BuyMeCoffeeModal({
       classes={{
         root: "fixed inset-0 z-50 flex items-center justify-center",
         overlay: "fixed inset-0 bg-cl-bg/80",
-        container:
+        positioner:
           "relative z-10 flex items-center justify-center p-4 sm:p-6 w-full",
         content:
           "relative outline-none w-full sm:w-[520px] rounded-lg bg-cl-bg-elevated text-cl-text overflow-hidden",

@@ -391,7 +391,7 @@ const ModalDemo = () => {
           content: `w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg`,
           header: "flex items-start gap-3 p-6 pb-4 border-b border-cl-border-input-focus",
           title: "font-semibold text-lg text-cl-accent",
-          closeButton: "shrink-0 p-1 rounded-cl-md hover:bg-cl-accent/10 transition-colors ml-auto",
+          closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-accent/10 transition-colors ml-auto",
           body: "px-6 pb-6 pt-4",
         }}
       >
@@ -415,11 +415,11 @@ const ModalDemo = () => {
         classes={{
           root: "fixed inset-0 z-50 flex items-center justify-center",
           overlay: `fixed inset-0 transition-opacity bg-cl-bg/40 dark:bg-cl-bg/70 backdrop-blur-sm`,
-          container: "relative z-10 flex items-center justify-center p-4",
+          positioner: "relative z-10 flex items-center justify-center p-4",
           content: `w-full max-w-md rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border dark:border dark:border-cl-border`,
           header: "flex items-start gap-3 p-5 pb-3",
           title: `font-bold text-lg text-cl-text`,
-          closeButton: `shrink-0 p-1.5 rounded-cl-md ml-auto transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated`,
+          closeTrigger: `shrink-0 p-1.5 rounded-cl-md ml-auto transition-colors hover:bg-cl-bg-hover dark:hover:bg-cl-bg-elevated`,
           closeIcon: "w-5 h-5",
           body: "px-5 pb-5",
         }}
@@ -448,7 +448,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -470,7 +470,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -493,7 +493,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -532,7 +532,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -566,7 +566,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -608,7 +608,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -646,7 +646,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           body: c.modalBody,
         }}
       >
@@ -667,7 +667,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -689,7 +689,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -708,7 +708,7 @@ const ModalDemo = () => {
           content: c.modalContent,
           header: c.modalHeader,
           title: c.modalTitle,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -727,7 +727,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -778,7 +778,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -826,7 +826,7 @@ const ModalDemo = () => {
           title: c.modalTitle,
           description: c.modalDescription,
           icon: "shrink-0",
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -1170,7 +1170,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}
@@ -1456,7 +1456,7 @@ const ModalDemo = () => {
           header: c.modalHeader,
           title: c.modalTitle,
           description: c.modalDescription,
-          closeButton: c.modalCloseBtn,
+          closeTrigger: c.modalCloseBtn,
           closeIcon: c.modalCloseIcon,
           body: c.modalBody,
         }}

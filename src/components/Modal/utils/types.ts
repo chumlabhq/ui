@@ -7,7 +7,7 @@ export interface ModalClasses {
   /** Backdrop overlay. */
   overlay?: string;
   /** Scroll/centering container. */
-  container?: string;
+  positioner?: string;
   /** Dialog content panel. */
   content?: string;
   /** Header section. */
@@ -19,7 +19,7 @@ export interface ModalClasses {
   /** Header icon wrapper. */
   icon?: string;
   /** Close button. */
-  closeButton?: string;
+  closeTrigger?: string;
   /** Close icon inside the close button. */
   closeIcon?: string;
   /** Body content area. */

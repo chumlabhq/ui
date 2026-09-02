@@ -31,7 +31,7 @@
     },
     "onPinColumn": {
       "type": "object",
-      "description": "(columnId: string, isPinned: boolean) => void — Callback when a column is pinned or unpinned."
+      "description": "(columnId: string, isPinned: boolean) => void \u2014 Callback when a column is pinned or unpinned."
     },
     "pinnableColumns": {
       "type": "array",
@@ -47,15 +47,15 @@
     },
     "onCursorPosition": {
       "type": "object",
-      "description": "(position: { x: number; y: number } | null) => void — Callback with cursor position over the table."
+      "description": "(position: { x: number; y: number } | null) => void \u2014 Callback with cursor position over the table."
     },
     "onCursorOverHeader": {
       "type": "object",
-      "description": "(isOverHeader: boolean) => void — Callback when cursor enters/leaves the header."
+      "description": "(isOverHeader: boolean) => void \u2014 Callback when cursor enters/leaves the header."
     },
     "emptyContent": {
       "type": "object",
-      "description": "React.ReactNode — Content shown when the table has no data."
+      "description": "React.ReactNode \u2014 Content shown when the table has no data."
     },
     "ariaLabel": {
       "type": "string",
@@ -68,7 +68,7 @@
     },
     "getRowId": {
       "type": "object",
-      "description": "(row: TData) => string — Function to derive a unique row ID."
+      "description": "(row: TData) => string \u2014 Function to derive a unique row ID."
     },
     "selectedRowId": {
       "type": [
@@ -79,15 +79,15 @@
     },
     "onRowClick": {
       "type": "object",
-      "description": "(rowData: TData) => void — Callback fired when a row is clicked."
+      "description": "(rowData: TData) => void \u2014 Callback fired when a row is clicked."
     },
     "onRowHover": {
       "type": "object",
-      "description": "(rowIndex: number | null, rowRef?: React.RefObject) => void — Callback fired when a row is hovered."
+      "description": "(rowIndex: number | null, rowRef?: React.RefObject) => void \u2014 Callback fired when a row is hovered."
     },
     "floatingActions": {
       "type": "object",
-      "description": "React.ReactNode — Floating action elements displayed on row hover."
+      "description": "React.ReactNode \u2014 Floating action elements displayed on row hover."
     },
     "isFloatingActionsHovered": {
       "type": "boolean",
@@ -139,16 +139,13 @@
       "type": "object",
       "description": "CSS class overrides for table sub-elements.",
       "properties": {
-        "container": {
+        "root": {
           "type": "string"
         },
-        "table": {
+        "list": {
           "type": "string"
         },
         "header": {
-          "type": "string"
-        },
-        "headerRow": {
           "type": "string"
         },
         "headerCell": {
@@ -157,13 +154,13 @@
         "headerCellHover": {
           "type": "string"
         },
-        "headerCellContent": {
+        "headerCellText": {
           "type": "string"
         },
         "body": {
           "type": "string"
         },
-        "row": {
+        "item": {
           "type": "string"
         },
         "cell": {
@@ -172,16 +169,13 @@
         "selectedRow": {
           "type": "string"
         },
-        "pinnedContainer": {
+        "pinnedRegion": {
           "type": "string"
         },
-        "pinnedTable": {
+        "pinnedList": {
           "type": "string"
         },
-        "unpinnedContainer": {
-          "type": "string"
-        },
-        "unpinnedTable": {
+        "scrollRegion": {
           "type": "string"
         },
         "empty": {
@@ -205,22 +199,19 @@
         "pinnedPinButton": {
           "type": "string"
         },
-        "shimmer": {
+        "loading": {
           "type": "string"
         },
-        "shimmerRow": {
+        "loadingRow": {
           "type": "string"
         },
-        "shimmerCell": {
+        "loadingItem": {
           "type": "string"
         },
-        "shimmerBar": {
+        "loadingBar": {
           "type": "string"
         },
-        "checkbox": {
-          "type": "string"
-        },
-        "checkboxCell": {
+        "control": {
           "type": "string"
         },
         "sortIcon": {
@@ -229,25 +220,25 @@
         "filterInput": {
           "type": "string"
         },
-        "filterIcon": {
+        "filterButton": {
           "type": "string"
         },
-        "filterDropdown": {
+        "filterContent": {
           "type": "string"
         },
-        "expandIcon": {
+        "expandButton": {
           "type": "string"
         },
         "expandedRow": {
           "type": "string"
         },
-        "pinnedRightContainer": {
+        "pinnedRightRegion": {
           "type": "string"
         },
-        "pinnedRightTable": {
+        "pinnedRightList": {
           "type": "string"
         },
-        "editInput": {
+        "input": {
           "type": "string"
         },
         "dragHandle": {
@@ -256,22 +247,19 @@
         "footer": {
           "type": "string"
         },
-        "searchBar": {
+        "searchInput": {
           "type": "string"
         },
         "mobileCard": {
           "type": "string"
         },
-        "groupHeader": {
+        "groupLabel": {
           "type": "string"
         },
         "resizeHandle": {
           "type": "string"
         },
-        "loadingMore": {
-          "type": "string"
-        },
-        "searchInput": {
+        "loadingFooter": {
           "type": "string"
         }
       }
@@ -287,11 +275,11 @@
     },
     "PinIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom pin icon component (unpinned state)."
+      "description": "React.ComponentType \u2014 Custom pin icon component (unpinned state)."
     },
     "PinnedIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom pin icon component (pinned state)."
+      "description": "React.ComponentType \u2014 Custom pin icon component (pinned state)."
     },
     "shimmerRowCount": {
       "type": "number",
@@ -304,7 +292,7 @@
     },
     "children": {
       "type": "object",
-      "description": "React.ReactNode — Child elements."
+      "description": "React.ReactNode \u2014 Child elements."
     },
     "sortable": {
       "type": "boolean",
@@ -313,7 +301,7 @@
     },
     "onSortingChange": {
       "type": "object",
-      "description": "(sorting: SortingState) => void — Callback when sorting state changes."
+      "description": "(sorting: SortingState) => void \u2014 Callback when sorting state changes."
     },
     "sorting": {
       "type": "array",
@@ -343,7 +331,7 @@
     },
     "onSelectionChange": {
       "type": "object",
-      "description": "(selectedIds: string[]) => void — Callback when selection changes."
+      "description": "(selectedIds: string[]) => void \u2014 Callback when selection changes."
     },
     "selectAllMode": {
       "type": "string",
@@ -360,7 +348,7 @@
     },
     "onGlobalFilterChange": {
       "type": "object",
-      "description": "(value: string) => void — Callback when global filter changes."
+      "description": "(value: string) => void \u2014 Callback when global filter changes."
     },
     "columnFilters": {
       "type": "array",
@@ -368,7 +356,7 @@
     },
     "onColumnFiltersChange": {
       "type": "object",
-      "description": "(filters: ColumnFiltersState) => void — Callback when column filters change."
+      "description": "(filters: ColumnFiltersState) => void \u2014 Callback when column filters change."
     },
     "enableColumnFilters": {
       "type": "boolean",
@@ -381,11 +369,11 @@
     },
     "FilterIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom filter icon component."
+      "description": "React.ComponentType \u2014 Custom filter icon component."
     },
     "renderColumnFilter": {
       "type": "object",
-      "description": "(columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode — Custom filter dropdown renderer."
+      "description": "(columnId: string, currentValues: string[], setValues: (values: string[]) => void) => ReactNode \u2014 Custom filter dropdown renderer."
     },
     "expandable": {
       "type": "boolean",
@@ -401,15 +389,15 @@
     },
     "onExpandedChange": {
       "type": "object",
-      "description": "(expandedIds: string[]) => void — Callback when expanded rows change."
+      "description": "(expandedIds: string[]) => void \u2014 Callback when expanded rows change."
     },
     "renderExpandedRow": {
       "type": "object",
-      "description": "(row: TData) => ReactNode — Render function for expanded row content."
+      "description": "(row: TData) => ReactNode \u2014 Render function for expanded row content."
     },
     "ExpandIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom expand icon component."
+      "description": "React.ComponentType \u2014 Custom expand icon component."
     },
     "expandColumnPosition": {
       "type": "string",
@@ -431,7 +419,7 @@
     },
     "onColumnVisibilityChange": {
       "type": "object",
-      "description": "(visibility: Record<string, boolean>) => void — Callback when column visibility changes."
+      "description": "(visibility: Record<string, boolean>) => void \u2014 Callback when column visibility changes."
     },
     "striped": {
       "type": "boolean",
@@ -473,7 +461,7 @@
     },
     "onCellEdit": {
       "type": "object",
-      "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited."
+      "description": "(rowId: string, columnId: string, value: unknown) => void \u2014 Callback when a cell value is edited."
     },
     "enableColumnResizing": {
       "type": "boolean",
@@ -486,7 +474,7 @@
     },
     "onColumnSizingChange": {
       "type": "object",
-      "description": "(sizing: ColumnSizingState) => void — Callback when column sizing changes."
+      "description": "(sizing: ColumnSizingState) => void \u2014 Callback when column sizing changes."
     },
     "manualPagination": {
       "type": "boolean",
@@ -507,7 +495,7 @@
     },
     "onColumnOrderChange": {
       "type": "object",
-      "description": "(order: string[]) => void — Callback when column order changes."
+      "description": "(order: string[]) => void \u2014 Callback when column order changes."
     },
     "enableRowDragDrop": {
       "type": "boolean",
@@ -516,7 +504,7 @@
     },
     "onRowReorder": {
       "type": "object",
-      "description": "(fromIndex: number, toIndex: number) => void — Callback when a row is reordered."
+      "description": "(fromIndex: number, toIndex: number) => void \u2014 Callback when a row is reordered."
     },
     "dragColumnPosition": {
       "type": "string",
@@ -534,11 +522,11 @@
     },
     "footerContent": {
       "type": "object",
-      "description": "React.ReactNode — Custom footer content rendered inside <tfoot>."
+      "description": "React.ReactNode \u2014 Custom footer content rendered inside <tfoot>."
     },
     "onContextMenu": {
       "type": "object",
-      "description": "(event: React.MouseEvent, row: TData) => void — Callback on right-click of a row."
+      "description": "(event: React.MouseEvent, row: TData) => void \u2014 Callback on right-click of a row."
     },
     "enableCopyOnClick": {
       "type": "boolean",
@@ -547,7 +535,7 @@
     },
     "onCellCopy": {
       "type": "object",
-      "description": "(value: string, rowId: string, columnId: string) => void — Callback after a cell value is copied."
+      "description": "(value: string, rowId: string, columnId: string) => void \u2014 Callback after a cell value is copied."
     },
     "enableInfiniteScroll": {
       "type": "boolean",
@@ -556,7 +544,7 @@
     },
     "onLoadMore": {
       "type": "object",
-      "description": "() => void — Callback when user scrolls near the bottom."
+      "description": "() => void \u2014 Callback when user scrolls near the bottom."
     },
     "hasMore": {
       "type": "boolean",
@@ -570,7 +558,7 @@
     },
     "infiniteEndContent": {
       "type": "object",
-      "description": "React.ReactNode — Content shown when all data is loaded."
+      "description": "React.ReactNode \u2014 Content shown when all data is loaded."
     },
     "responsiveBreakpoint": {
       "type": "number",
@@ -578,7 +566,7 @@
     },
     "renderMobileCard": {
       "type": "object",
-      "description": "(row: TData) => ReactNode — Render function for mobile card layout."
+      "description": "(row: TData) => ReactNode \u2014 Render function for mobile card layout."
     },
     "groupBy": {
       "type": "array",
@@ -589,7 +577,7 @@
     },
     "onGroupByChange": {
       "type": "object",
-      "description": "(groupBy: string[]) => void — Callback when group-by columns change."
+      "description": "(groupBy: string[]) => void \u2014 Callback when group-by columns change."
     },
     "showSearch": {
       "type": "boolean",
@@ -613,7 +601,7 @@
     },
     "CheckboxIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom checkbox component for multi-row selection."
+      "description": "React.ComponentType \u2014 Custom checkbox component for multi-row selection."
     },
     "checkboxColor": {
       "type": "string",
@@ -621,19 +609,19 @@
     },
     "DragHandleIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom drag handle icon component."
+      "description": "React.ComponentType \u2014 Custom drag handle icon component."
     },
     "SearchIcon": {
       "type": "object",
-      "description": "React.ComponentType — Custom search icon component."
+      "description": "React.ComponentType \u2014 Custom search icon component."
     },
     "onSearchClear": {
       "type": "object",
-      "description": "() => void — Callback when the search clear button is clicked."
+      "description": "() => void \u2014 Callback when the search clear button is clicked."
     },
     "loadingMoreContent": {
       "type": "object",
-      "description": "React.ReactNode — Custom content for the loading more indicator."
+      "description": "React.ReactNode \u2014 Custom content for the loading more indicator."
     }
   },
   "required": []

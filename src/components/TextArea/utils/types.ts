@@ -11,12 +11,11 @@ export type TextAreaSize = "sm" | "md" | "lg";
 
 export interface TextAreaClasses {
   root?: string;
-  wrapper?: string;
+  control?: string;
   label?: string;
   description?: string;
-  textarea?: string;
-  error?: string;
-  success?: string;
+  input?: string;
+  message?: string;
   count?: string;
 }
 

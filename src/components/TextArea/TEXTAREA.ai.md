@@ -16,7 +16,7 @@ Use `<TextArea label="Message" placeholder="Write..." />` for a labeled textarea
 ## Import
 
 ```tsx
-import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";
+import { TextArea, TextAreaLabel } from "@chumlab/ui/input";
 ```
 
 ---
@@ -24,7 +24,7 @@ import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { TextArea } from "@chumlab/ui/textarea";
+import { TextArea } from "@chumlab/ui/input";
 
 export default function Example() {
   return (
@@ -78,9 +78,9 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Label displayed above the textarea. |
 | `description` | object | — | React.ReactNode — Description text below the label. |
-| `error` | boolean | `false` | Whether the textarea is in an error state. |
+| `message` | boolean | `false` | Whether the textarea is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
-| `success` | boolean | `false` | Green success state for validated fields. |
+| `message` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
@@ -125,22 +125,22 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 root (flex flex-col)
 ├── label
 ├── description
-├── wrapper (border, focus ring)
+├── control (border, focus ring)
 │   ├── startIcon
-│   ├── textarea
+│   ├── input
 │   ├── endIcon
 │   ├── clear button
 │   └── loader
-├── error / success
+├── message / message
 └── count
 ```
 
 | "I want to change..." | Slot | Notes |
 |------------------------|------|-------|
-| Border/focus ring | `wrapper` | Contains textarea chrome |
-| Textarea text | `textarea` | Font, color, placeholder, resize |
+| Border/focus ring | `control` | Contains textarea chrome |
+| Textarea text | `input` | Font, color, placeholder, resize |
 | Label style | `label` | Font weight, size, color |
-| Error text | `error` | Color, icon |
+| Error text | `message` | Color, icon |
 
 ### Dark mode
 
@@ -167,9 +167,9 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
 ```tsx
 <TextArea
   label="Feedback"
-  error={!isValid}
+  message={!isValid}
   errorMessage="Feedback is required"
-  success={isValid}
+  message={isValid}
   successMessage="Thank you!"
   required
 />

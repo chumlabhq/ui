@@ -672,7 +672,7 @@ describe("Toast", () => {
       );
 
       await act(async () => {
-        toastApi.info("Message", { classes: { container: "custom-toast-class" } });
+        toastApi.info("Message", { classes: { root: "custom-toast-class" } });
       });
 
       expect(screen.getByRole("status")).toHaveClass("custom-toast-class");

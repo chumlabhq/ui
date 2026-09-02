@@ -11,14 +11,13 @@ export type InputSize = "sm" | "md" | "lg";
 
 export interface InputClasses {
   root?: string;
-  wrapper?: string;
+  control?: string;
   label?: string;
   description?: string;
   input?: string;
   prefix?: string;
   suffix?: string;
-  error?: string;
-  success?: string;
+  message?: string;
   count?: string;
 }
 

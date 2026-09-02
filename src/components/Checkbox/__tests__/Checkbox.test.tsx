@@ -179,7 +179,7 @@ describe("Checkbox", () => {
     });
 
     it("applies classes.error to error message", () => {
-      render(<Checkbox error errorMessage="Error" classes={{ error: "custom-error" }} />);
+      render(<Checkbox error errorMessage="Error" classes={{ message: "custom-error" }} />);
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
@@ -279,7 +279,7 @@ describe("Checkbox", () => {
     });
 
     it("applies shape class from shape prop", () => {
-      render(<Checkbox shape="circle" classes={{ checkbox: "checkbox" }} />);
+      render(<Checkbox shape="circle" classes={{ control: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveClass("rounded-full");
@@ -443,7 +443,7 @@ describe("Checkbox", () => {
         <Checkbox
           checked
           onValueChange={() => {}}
-          classes={{ checkbox: "checkbox", checked: "is-checked" }}
+          classes={{ control: "checkbox", checked: "is-checked" }}
         />
       );
 
@@ -455,7 +455,7 @@ describe("Checkbox", () => {
       render(
         <Checkbox
           checked={false}
-          classes={{ checkbox: "checkbox", unchecked: "is-unchecked" }}
+          classes={{ control: "checkbox", unchecked: "is-unchecked" }}
         />
       );
 
@@ -467,7 +467,7 @@ describe("Checkbox", () => {
       render(
         <Checkbox
           indeterminate
-          classes={{ checkbox: "checkbox", indeterminate: "is-indeterminate" }}
+          classes={{ control: "checkbox", indeterminate: "is-indeterminate" }}
         />
       );
 
@@ -542,7 +542,7 @@ describe("Checkbox", () => {
         <Checkbox
           checked
           onValueChange={() => {}}
-          classes={{ checkbox: "checkbox" }}
+          classes={{ control: "checkbox" }}
         />
       );
 
@@ -551,14 +551,14 @@ describe("Checkbox", () => {
     });
 
     it("sets data-disabled on checkbox span when disabled", () => {
-      render(<Checkbox disabled classes={{ checkbox: "checkbox" }} />);
+      render(<Checkbox disabled classes={{ control: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveAttribute("data-disabled", "true");
     });
 
     it("sets data-error on checkbox span when error", () => {
-      render(<Checkbox error classes={{ checkbox: "checkbox" }} />);
+      render(<Checkbox error classes={{ control: "checkbox" }} />);
 
       const checkboxSpan = document.querySelector(".checkbox");
       expect(checkboxSpan).toHaveAttribute("data-error", "true");

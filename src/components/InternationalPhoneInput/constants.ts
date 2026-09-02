@@ -339,20 +339,18 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   label:
     "text-[13px] font-medium mb-1.5 block text-cl-text dark:text-cl-text-secondary",
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary dark:text-cl-text-tertiary",
-  wrapper: "flex gap-2 items-stretch",
+  control: "flex gap-2 items-stretch",
   input:
     "flex-1 h-10 px-3 rounded-cl-md border bg-transparent outline-none text-sm transition-all duration-150 text-cl-text dark:text-white placeholder:text-cl-text-tertiary dark:placeholder:text-cl-text-tertiary border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 focus:ring-2 focus:ring-cl-accent dark:focus:ring-cl-accent/30 focus:border-cl-border-input-focus dark:focus:border-cl-border-input-focus/50",
-  error:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error",
-  success:
-    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-success",
+  message:
+    "text-xs mt-1.5 flex items-center gap-1.5 text-cl-error text-cl-success",
   countrySelect: "",
   countryOptionRow: "flex items-center gap-2 min-w-0",
   countryOptionFlag: "shrink-0 rounded-cl-sm",
   countryOptionLabel: "text-sm wrap-break-word min-w-0",
-  countrySelectedRow: "flex items-center gap-2",
-  countrySelectedFlag: "rounded-cl-sm",
-  countrySelectedLabel: "text-sm",
+  triggerRow: "flex items-center gap-2",
+  flag: "rounded-cl-sm",
+  value: "text-sm",
   countrySelectTrigger:
     "flex items-center justify-between gap-2 h-10 px-3 rounded-cl-md border transition-all duration-150 outline-none min-w-[110px] sm:min-w-[130px] border-cl-border-input dark:border-cl-text/10 bg-white dark:bg-cl-text/4 hover:bg-cl-bg-hover dark:hover:bg-white/6 text-cl-text dark:text-cl-text-secondary",
   countrySelectDropdown:

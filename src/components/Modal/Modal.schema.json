@@ -180,7 +180,7 @@
         "overlay": {
           "type": "string"
         },
-        "container": {
+        "positioner": {
           "type": "string"
         },
         "content": {
@@ -198,7 +198,7 @@
         "icon": {
           "type": "string"
         },
-        "closeButton": {
+        "closeTrigger": {
           "type": "string"
         },
         "closeIcon": {

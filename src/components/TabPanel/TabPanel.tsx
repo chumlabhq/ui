@@ -232,23 +232,23 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     const resolvedClasses: ResolvedClasses = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        tabList: classesProp?.tabList ?? baseClasses.tabList,
-        tab: classesProp?.tab ?? baseClasses.tab,
+        list: classesProp?.list ?? baseClasses.list,
+        item: classesProp?.item ?? baseClasses.item,
         tabActive: classesProp?.tabActive ?? baseClasses.tabActive,
         tabInactive: classesProp?.tabInactive ?? baseClasses.tabInactive,
         tabDisabled: classesProp?.tabDisabled ?? baseClasses.tabDisabled,
         tabFocus: classesProp?.tabFocus ?? baseClasses.tabFocus,
-        label: classesProp?.label ?? baseClasses.label,
+        itemText: classesProp?.itemText ?? baseClasses.itemText,
         labelActive: classesProp?.labelActive ?? baseClasses.labelActive,
         labelInactive: classesProp?.labelInactive ?? baseClasses.labelInactive,
-        icon: classesProp?.icon ?? baseClasses.icon,
+        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
         iconActive: classesProp?.iconActive ?? baseClasses.iconActive,
         iconInactive: classesProp?.iconInactive ?? baseClasses.iconInactive,
         count: classesProp?.count ?? baseClasses.count,
         countActive: classesProp?.countActive ?? baseClasses.countActive,
         countInactive: classesProp?.countInactive ?? baseClasses.countInactive,
         indicator: classesProp?.indicator ?? baseClasses.indicator,
-        panel: classesProp?.panel ?? baseClasses.panel,
+        content: classesProp?.content ?? baseClasses.content,
       }),
       [classesProp, baseClasses],
     );
@@ -295,7 +295,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-orientation={orientation}
-            className={resolvedClasses.tabList || undefined}
+            className={resolvedClasses.list || undefined}
           >
             {tabs.map((tab, index) => {
               const isActive = resolvedValue === tab.id;
@@ -359,7 +359,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
                 id={`${tabListId}-panel-${tab.id}`}
                 aria-labelledby={`${tabListId}-tab-${tab.id}`}
                 tabIndex={isActive ? 0 : -1}
-                className={resolvedClasses.panel || undefined}
+                className={resolvedClasses.content || undefined}
                 data-state={isActive ? "active" : "inactive"}
                 data-orientation={orientation}
                 hidden={!isActive || undefined}

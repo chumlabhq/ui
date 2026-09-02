@@ -105,11 +105,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name attribute. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content shown when no value is selected. |
 | `disabled` | boolean | `false` | Whether the dropdown is disabled. |
-| `error` | boolean | `false` | Whether the dropdown is in an error state. |
+| `message` | boolean | `false` | Whether the dropdown is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode — Label displayed above the dropdown. |
 | `description` | object | — | React.ReactNode — Description text displayed below the label. |
-| `success` | boolean | `false` | Whether the dropdown is in a success state. |
+| `message` | boolean | `false` | Whether the dropdown is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Whether the field is required. |
 | `clearable` | boolean | `false` | Whether the selected value can be cleared. |
@@ -166,33 +166,33 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 root
 ├── label
 ├── description
-└── wrapper
+└── control
     └── trigger (role="combobox")
-    │   ├── triggerText
-    │   ├── clearIcon
-    │   └── chevron
+    │   ├── value
+    │   ├── clearTrigger
+    │   └── icon
     └── content (portal)
-        ├── searchInput > searchIcon + searchInputElement
-        ├── optionList (role="listbox")
-        │   └── option (optionSelected, optionFocused, optionDisabled)
-        │       └── checkIcon
-        ├── noResults
-        └── shimmer > shimmerItem
+        ├── searchControl > searchIcon + searchInput
+        ├── list (role="listbox")
+        │   └── item (optionSelected, optionFocused, optionDisabled)
+        │       └── itemIndicator
+        ├── empty
+        └── loading > loadingItem
 ```
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Search input wrapper | `searchInput` |
-| Search text input | `searchInputElement` |
+| Search input wrapper | `searchControl` |
+| Search text input | `searchInput` |
 | Search icon | `searchIcon` |
 | Trigger button | `trigger` |
-| Selected text | `triggerText` |
+| Selected text | `value` |
 | Dropdown panel | `content` |
-| Option row | `option`, `optionSelected`, `optionFocused` |
-| Check icon | `checkIcon` |
-| Clear button | `clearIcon` |
-| No results text | `noResults` |
-| Loading shimmer | `shimmer`, `shimmerItem` |
+| Option row | `item`, `optionSelected`, `optionFocused` |
+| Check icon | `itemIndicator` |
+| Clear button | `clearTrigger` |
+| No results text | `empty` |
+| Loading shimmer | `loading`, `loadingItem` |
 
 ### Dark mode
 

@@ -19,23 +19,23 @@
           },
           "label": {
             "type": "object",
-            "description": "React.ReactNode — Step label text."
+            "description": "React.ReactNode \u2014 Step label text."
           },
           "description": {
             "type": "object",
-            "description": "React.ReactNode — Step description text."
+            "description": "React.ReactNode \u2014 Step description text."
           },
           "icon": {
             "type": "object",
-            "description": "React.ComponentType | React.ReactNode — Custom icon for the step."
+            "description": "React.ComponentType | React.ReactNode \u2014 Custom icon for the step."
           },
           "completedIcon": {
             "type": "object",
-            "description": "React.ComponentType | React.ReactNode — Icon shown when step is completed."
+            "description": "React.ComponentType | React.ReactNode \u2014 Icon shown when step is completed."
           },
           "errorIcon": {
             "type": "object",
-            "description": "React.ComponentType | React.ReactNode — Icon shown when step has an error."
+            "description": "React.ComponentType | React.ReactNode \u2014 Icon shown when step has an error."
           },
           "disabled": {
             "type": "boolean",
@@ -43,7 +43,7 @@
           },
           "tooltip": {
             "type": "object",
-            "description": "React.ReactNode | StepTooltipConfig — Tooltip content or configuration for the step."
+            "description": "React.ReactNode | StepTooltipConfig \u2014 Tooltip content or configuration for the step."
           }
         },
         "required": [
@@ -67,11 +67,11 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(stepId: string | number) => void — Callback fired when the active step changes."
+      "description": "(stepId: string | number) => void \u2014 Callback fired when the active step changes."
     },
     "beforeStepChange": {
       "type": "object",
-      "description": "(nextStepId: string | number, currentStepId: string | number) => boolean — Guard callback invoked before changing steps. Return false to prevent the change."
+      "description": "(nextStepId: string | number, currentStepId: string | number) => boolean \u2014 Guard callback invoked before changing steps. Return false to prevent the change."
     },
     "orientation": {
       "type": "string",
@@ -103,11 +103,11 @@
     },
     "isStepClickable": {
       "type": "object",
-      "description": "(stepId: string | number, status: StepStatus) => boolean — Determines whether a step is clickable."
+      "description": "(stepId: string | number, status: StepStatus) => boolean \u2014 Determines whether a step is clickable."
     },
     "getStepStatus": {
       "type": "object",
-      "description": "(stepId: string | number, index: number, activeIndex: number) => StepStatus — Custom function to determine step status."
+      "description": "(stepId: string | number, index: number, activeIndex: number) => StepStatus \u2014 Custom function to determine step status."
     },
     "showLabels": {
       "type": "boolean",
@@ -135,11 +135,11 @@
     },
     "completedIcon": {
       "type": "object",
-      "description": "React.ComponentType | React.ReactNode — Default icon for completed steps."
+      "description": "React.ComponentType | React.ReactNode \u2014 Default icon for completed steps."
     },
     "errorIcon": {
       "type": "object",
-      "description": "React.ComponentType | React.ReactNode — Default icon for error steps."
+      "description": "React.ComponentType | React.ReactNode \u2014 Default icon for error steps."
     },
     "fullWidth": {
       "type": "boolean",
@@ -240,10 +240,10 @@
         "list": {
           "type": "string"
         },
-        "stepContainer": {
+        "item": {
           "type": "string"
         },
-        "step": {
+        "trigger": {
           "type": "string"
         },
         "stepInteractive": {
@@ -252,13 +252,13 @@
         "stepDisabled": {
           "type": "string"
         },
-        "indicator": {
+        "itemIndicator": {
           "type": "string"
         },
-        "indicatorButton": {
+        "indicatorTrigger": {
           "type": "string"
         },
-        "indicatorIcon": {
+        "itemIcon": {
           "type": "string"
         },
         "indicatorActive": {
@@ -273,13 +273,13 @@
         "indicatorError": {
           "type": "string"
         },
-        "labelWrapper": {
+        "row": {
           "type": "string"
         },
         "labelWrapperBottom": {
           "type": "string"
         },
-        "label": {
+        "itemText": {
           "type": "string"
         },
         "labelActive": {
@@ -309,7 +309,7 @@
         "descriptionError": {
           "type": "string"
         },
-        "connector": {
+        "separator": {
           "type": "string"
         },
         "connectorHorizontal": {
@@ -361,7 +361,7 @@
     },
     "renderStep": {
       "type": "object",
-      "description": "(props: StepRenderProps, defaultElement: ReactElement) => ReactNode — Custom step render function."
+      "description": "(props: StepRenderProps, defaultElement: ReactElement) => ReactNode \u2014 Custom step render function."
     }
   },
   "required": [

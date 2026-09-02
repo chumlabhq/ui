@@ -171,7 +171,7 @@ describe("TextArea", () => {
     });
 
     it("applies classes.success to success message", () => {
-      render(<TextArea aria-label="test" success successMessage="Good" classes={{ success: "custom-success" }} />);
+      render(<TextArea aria-label="test" success successMessage="Good" classes={{ message: "custom-success" }} />);
       expect(document.querySelector(".custom-success")).toBeInTheDocument();
     });
   });
@@ -537,12 +537,12 @@ describe("TextArea", () => {
     });
 
     it("applies classes.wrapper to wrapper", () => {
-      render(<TextArea aria-label="test" classes={{ wrapper: "custom-wrapper" }} />);
+      render(<TextArea aria-label="test" classes={{ control: "custom-wrapper" }} />);
       expect(document.querySelector(".custom-wrapper")).toBeInTheDocument();
     });
 
     it("applies classes.textarea to textarea element", () => {
-      render(<TextArea aria-label="test" classes={{ textarea: "ta-style" }} />);
+      render(<TextArea aria-label="test" classes={{ input: "ta-style" }} />);
       expect(screen.getByRole("textbox")).toHaveClass("ta-style");
     });
 
@@ -552,7 +552,7 @@ describe("TextArea", () => {
     });
 
     it("applies classes.error to error message", () => {
-      render(<TextArea aria-label="test" error errorMessage="Error" classes={{ error: "custom-error" }} />);
+      render(<TextArea aria-label="test" error errorMessage="Error" classes={{ message: "custom-error" }} />);
       expect(screen.getByRole("alert")).toHaveClass("custom-error");
     });
   });

@@ -216,22 +216,22 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "trigger": {
           "type": "string"
         },
-        "triggerText": {
+        "value": {
           "type": "string"
         },
         "content": {
           "type": "string"
         },
-        "optionList": {
+        "list": {
           "type": "string"
         },
-        "option": {
+        "item": {
           "type": "string"
         },
         "optionSelected": {
@@ -243,16 +243,16 @@
         "optionDisabled": {
           "type": "string"
         },
-        "chevron": {
+        "icon": {
           "type": "string"
         },
-        "checkbox": {
+        "itemControl": {
           "type": "string"
         },
         "checkboxChecked": {
           "type": "string"
         },
-        "checkboxIcon": {
+        "itemIndicator": {
           "type": "string"
         },
         "chip": {
@@ -261,43 +261,34 @@
         "chipRemove": {
           "type": "string"
         },
-        "noResults": {
+        "empty": {
           "type": "string"
         },
-        "clearIcon": {
+        "clearTrigger": {
           "type": "string"
         },
         "loading": {
           "type": "string"
         },
-        "shimmer": {
-          "type": "string"
-        },
-        "shimmerItem": {
-          "type": "string"
-        },
         "label": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "success": {
+        "searchControl": {
           "type": "string"
         },
         "searchInput": {
           "type": "string"
         },
-        "searchInputElement": {
-          "type": "string"
-        },
         "searchIcon": {
           "type": "string"
         },
-        "moreCount": {
+        "count": {
           "type": "string"
         }
       }

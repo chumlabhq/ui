@@ -5,7 +5,7 @@ export type DrawerDirection = "left" | "right" | "top" | "bottom";
 export interface DrawerClasses {
   root?: string;
   overlay?: string;
-  panel?: string;
+  content?: string;
 }
 
 /**

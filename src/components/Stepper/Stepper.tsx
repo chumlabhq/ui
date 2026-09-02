@@ -192,7 +192,7 @@ const StepItem = memo(function StepItem({
   const indicatorSizeClass = sizeClasses.indicator;
   const iconSizeClass = sizeClasses.icon;
 
-  const iconClassName = cn(iconSizeClass, classes.indicatorIcon);
+  const iconClassName = cn(iconSizeClass, classes.itemIcon);
 
   const getIndicatorContent = (): ReactNode => {
     if (status === "completed") {
@@ -277,7 +277,7 @@ const StepItem = memo(function StepItem({
     <div
       className={cn(
         indicatorSizeClass,
-        classes.indicator,
+        classes.itemIndicator,
         indicatorStatusClass,
       )}
       data-status={status}
@@ -292,7 +292,7 @@ const StepItem = memo(function StepItem({
     (showLabels || showDescriptions) && (step.label || step.description) ? (
       <div
         className={cn(
-          classes.labelWrapper,
+          classes.row,
           isLabelBottom && classes.labelWrapperBottom,
         )}
         // ADR 002 R4: the state the labelWrapperBottom key named.
@@ -301,7 +301,7 @@ const StepItem = memo(function StepItem({
         {showLabels && step.label && (
           <span
             className={cn(
-              classes.label,
+              classes.itemText,
               getStatusClass(
                 status,
                 classes.labelActive,
@@ -353,7 +353,7 @@ const StepItem = memo(function StepItem({
         <div
           className={cn(
             classes.connectorVertical,
-            classes.connector,
+            classes.separator,
             getStatusClass(
               status,
               classes.connectorActive,
@@ -379,7 +379,7 @@ const StepItem = memo(function StepItem({
         onKeyDown={handleKeyDown}
         aria-current={status === "active" ? "step" : undefined}
         aria-label={sharedAriaLabel}
-        className={cn(classes.step, classes.stepInteractive)}
+        className={cn(classes.trigger, classes.stepInteractive)}
         data-status={status}
       {...stateAttrsFor(status)}
         data-clickable="true"
@@ -394,7 +394,7 @@ const StepItem = memo(function StepItem({
         aria-current={status === "active" ? "step" : undefined}
         aria-disabled={isDisabled || undefined}
         aria-label={sharedAriaLabel}
-        className={cn(classes.step, isDisabled && classes.stepDisabled)}
+        className={cn(classes.trigger, isDisabled && classes.stepDisabled)}
         data-status={status}
       {...stateAttrsFor(status)}
         data-disabled={isDisabled || undefined}
@@ -406,7 +406,7 @@ const StepItem = memo(function StepItem({
 
     return (
       <li
-        className={cn(classes.stepContainerVertical, classes.stepContainer)}
+        className={cn(classes.stepContainerVertical, classes.item)}
         data-status={status}
       {...stateAttrsFor(status)}
         data-orientation={orientation}
@@ -453,7 +453,7 @@ const StepItem = memo(function StepItem({
         onKeyDown={handleKeyDown}
         aria-current={status === "active" ? "step" : undefined}
         aria-label={bottomAriaLabel}
-        className={classes.indicatorButton}
+        className={classes.indicatorTrigger}
         data-status={status}
       {...stateAttrsFor(status)}
         data-clickable="true"
@@ -480,7 +480,7 @@ const StepItem = memo(function StepItem({
       <li
         className={cn(
           "shrink-0 flex flex-col items-center",
-          classes.stepContainer,
+          classes.item,
         )}
         data-status={status}
       {...stateAttrsFor(status)}
@@ -508,7 +508,7 @@ const StepItem = memo(function StepItem({
       onKeyDown={handleKeyDown}
       aria-current={status === "active" ? "step" : undefined}
       aria-label={stepAriaLabel}
-      className={cn(classes.step, classes.stepInteractive)}
+      className={cn(classes.trigger, classes.stepInteractive)}
       data-status={status}
       {...stateAttrsFor(status)}
       data-clickable="true"
@@ -523,7 +523,7 @@ const StepItem = memo(function StepItem({
       aria-current={status === "active" ? "step" : undefined}
       aria-disabled={isDisabled || undefined}
       aria-label={stepAriaLabel}
-      className={cn(classes.step, isDisabled && classes.stepDisabled)}
+      className={cn(classes.trigger, isDisabled && classes.stepDisabled)}
       data-status={status}
       {...stateAttrsFor(status)}
       data-disabled={isDisabled || undefined}
@@ -535,7 +535,7 @@ const StepItem = memo(function StepItem({
 
   return (
     <li
-      className={cn(classes.stepContainerHorizontal, classes.stepContainer)}
+      className={cn(classes.stepContainerHorizontal, classes.item)}
       data-status={status}
       {...stateAttrsFor(status)}
       data-orientation={orientation}
@@ -621,21 +621,21 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
         list: classesProp?.list ?? baseClasses.list,
-        stepContainer: classesProp?.stepContainer ?? baseClasses.stepContainer,
+        item: classesProp?.item ?? baseClasses.item,
         stepContainerVertical:
           classesProp?.stepContainerVertical ?? baseClasses.stepContainerVertical,
         stepContainerHorizontal:
           classesProp?.stepContainerHorizontal ??
           baseClasses.stepContainerHorizontal,
-        step: classesProp?.step ?? baseClasses.step,
+        trigger: classesProp?.trigger ?? baseClasses.trigger,
         stepInteractive:
           classesProp?.stepInteractive ?? baseClasses.stepInteractive,
         stepDisabled: classesProp?.stepDisabled ?? baseClasses.stepDisabled,
-        indicator: classesProp?.indicator ?? baseClasses.indicator,
-        indicatorButton:
-          classesProp?.indicatorButton ?? baseClasses.indicatorButton,
-        indicatorIcon:
-          classesProp?.indicatorIcon ?? baseClasses.indicatorIcon,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        indicatorTrigger:
+          classesProp?.indicatorTrigger ?? baseClasses.indicatorTrigger,
+        itemIcon:
+          classesProp?.itemIcon ?? baseClasses.itemIcon,
         indicatorActive:
           classesProp?.indicatorActive ?? baseClasses.indicatorActive,
         indicatorCompleted:
@@ -644,10 +644,10 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
           classesProp?.indicatorPending ?? baseClasses.indicatorPending,
         indicatorError:
           classesProp?.indicatorError ?? baseClasses.indicatorError,
-        labelWrapper: classesProp?.labelWrapper ?? baseClasses.labelWrapper,
+        row: classesProp?.row ?? baseClasses.row,
         labelWrapperBottom:
           classesProp?.labelWrapperBottom ?? baseClasses.labelWrapperBottom,
-        label: classesProp?.label ?? baseClasses.label,
+        itemText: classesProp?.itemText ?? baseClasses.itemText,
         labelActive: classesProp?.labelActive ?? baseClasses.labelActive,
         labelCompleted:
           classesProp?.labelCompleted ?? baseClasses.labelCompleted,
@@ -663,7 +663,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
           classesProp?.descriptionPending ?? baseClasses.descriptionPending,
         descriptionError:
           classesProp?.descriptionError ?? baseClasses.descriptionError,
-        connector: classesProp?.connector ?? baseClasses.connector,
+        separator: classesProp?.separator ?? baseClasses.separator,
         connectorHorizontal:
           classesProp?.connectorHorizontal ?? baseClasses.connectorHorizontal,
         connectorVertical:
@@ -998,7 +998,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
                     <div
                       className={cn(
                         mergedClasses.connectorHorizontal,
-                        mergedClasses.connector,
+                        mergedClasses.separator,
                         getStatusClass(
                           status,
                           mergedClasses.connectorActive,

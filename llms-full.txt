@@ -237,7 +237,7 @@ The component has three styling modes:
 // This REPLACES the default trigger classes entirely:
 <Accordion classes={{ trigger: "my-custom-trigger" }} />
 
-// The other slots (item, content, icon, etc.) still use their defaults.
+// The other slots (item, body, icon, etc.) still use their defaults.
 // To ADD to defaults, you must include the default classes yourself.
 ```
 
@@ -252,16 +252,16 @@ Use this to know which slot to change for a given visual outcome:
 │  ┌──────────────────────────────────────────────┐   │
 │  │ item                                          │   │
 │  │                                               │   │
-│  │  ┌─ heading ──────────────────────────────┐  │   │
+│  │  ┌─ header ──────────────────────────────┐  │   │
 │  │  │ ┌─ trigger ──────────────────────────┐ │  │   │
-│  │  │ │ [triggerLeft] [triggerInner] [triggerRight] [iconWrapper > icon] │ │   │
-│  │  │ │               └─ subtitle                │ │  │   │
+│  │  │ │ [itemIcon] [itemText] [triggerActions] [icon] │ │   │
+│  │  │ │               └─ description                │ │  │   │
 │  │  │ └────────────────────────────────────┘ │  │   │
 │  │  └────────────────────────────────────────┘  │   │
 │  │                                               │   │
-│  │  ┌─ contentWrapper (animation layer) ─────┐  │   │
-│  │  │ ┌─ contentInner ─────────────────────┐ │  │   │
-│  │  │ │  content (your text/elements)      │ │  │   │
+│  │  ┌─ content (animation layer) ─────┐  │   │
+│  │  │ ┌─ body ─────────────────────┐ │  │   │
+│  │  │ │  body (your text/elements)      │ │  │   │
 │  │  │ └───────────────────────────────────┘ │  │   │
 │  │  └────────────────────────────────────────┘  │   │
 │  └──────────────────────────────────────────────┘   │
@@ -281,11 +281,11 @@ Use this to know which slot to change for a given visual outcome:
 | Trigger text color | `trigger` | Includes font weight, size from `size` prop |
 | Expanded/collapsed text color | `trigger` | Target via `data-state` in CSS: `[data-state=open]:text-blue-600` |
 | Chevron icon color/size | `icon` | Rotation is automatic via `iconAnimation` |
-| Subtitle appearance | `subtitle` | Below the main trigger label |
-| Content text styling | `content` | Wraps your children |
-| Open/close animation speed | `contentWrapper` | Must keep `overflow-hidden transition-[max-height,opacity,visibility]` |
-| Extra spacing inside content | `contentInner` | Inner wrapper if you need it |
-| Heading semantics (h1-h6 tag) | `heading` | Rarely styled — use for CSS resets only |
+| Subtitle appearance | `description` | Below the main trigger label |
+| Content text styling | `body` | Wraps your children |
+| Open/close animation speed | `content` | Must keep `overflow-hidden transition-[max-height,opacity,visibility]` |
+| Extra spacing inside content | `body` | Inner wrapper if you need it |
+| Heading semantics (h1-h6 tag) | `header` | Rarely styled — use for CSS resets only |
 
 #### Dark mode
 
@@ -298,7 +298,7 @@ The default classes use Tailwind's `dark:` prefix. Dark mode activates when `<ht
 // When overriding, always provide both light and dark variants:
 <Accordion classes={{
   trigger: "text-gray-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800",
-  content: "text-gray-600 dark:text-gray-300",
+  body: "text-gray-600 dark:text-gray-300",
 }} />
 ```
 
@@ -332,8 +332,8 @@ Or in plain CSS:
 <Accordion type="single" collapsible unstyled classes={{
   root: "divide-y divide-gray-200 dark:divide-gray-700",
   trigger: "w-full flex justify-between py-4 text-left text-base font-medium text-gray-900 dark:text-white",
-  content: "pb-4 text-sm text-gray-500 dark:text-gray-400",
-  contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+  body: "pb-4 text-sm text-gray-500 dark:text-gray-400",
+  content: "overflow-hidden transition-[max-height,opacity,visibility]",
   icon: "h-5 w-5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
 }}>
 ```
@@ -350,11 +350,11 @@ Or in plain CSS:
     item: "border-b border-gray-100 dark:border-gray-700 last:border-b-0",
     trigger:
       "flex w-full items-center gap-3 px-4 py-3 text-[13px] font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors",
-    triggerInner: "flex-1 text-left",
-    content: "px-4 pb-3 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed",
-    contentWrapper: "overflow-hidden transition-[max-height,opacity,visibility]",
+    itemText: "flex-1 text-left",
+    body: "px-4 pb-3 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed",
+    content: "overflow-hidden transition-[max-height,opacity,visibility]",
     icon: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
-    iconWrapper: "shrink-0",
+    icon: "shrink-0",
   }}
   animationDuration={200}
   animationEasing="ease-out"
@@ -620,11 +620,11 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 ```
 ┌─ root (outer container, sets size/shape) ──────────────┐
 │                                                         │
-│  ┌─ inner (absolute inset, overflow hidden) ─────────┐ │
+│  ┌─ control (absolute inset, overflow hidden) ─────────┐ │
 │  │                                                    │ │
 │  │  <img class="image" />                            │ │
 │  │  — OR —                                           │ │
-│  │  <span class="initials">JD</span>                │ │
+│  │  <span class="fallback">JD</span>                │ │
 │  │  — OR —                                           │ │
 │  │  <span class="fallback">{icon}</span>            │ │
 │  │                                                    │ │
@@ -656,7 +656,7 @@ Avatar relies on inline styles for most visual properties (size, shape, auto-gen
   name="Jane"
   classes={{
     root: "ring-2 ring-gray-200 dark:ring-gray-700",
-    initials: "text-gray-700 dark:text-gray-200",
+    fallback: "text-gray-700 dark:text-gray-200",
   }}
 />
 ```
@@ -719,7 +719,7 @@ For grouped avatars, match `ringColor` to your background:
 <Avatar
   src={user.avatarUrl}
   name={user.displayName}
-  onError={() => console.log("Image failed, showing initials")}
+  onError={() => console.log("Image failed, showing fallback")}
 />
 ```
 
@@ -932,13 +932,13 @@ const navRef = useRef<HTMLElement>(null);
 │                                                              │
 │  ┌─ list (<ol>) ──────────────────────────────────────────┐ │
 │  │                                                         │ │
-│  │  [item/link] [separator] [ellipsisButton] [separator]  │ │
+│  │  [item/link] [separator] [ellipsisTrigger] [separator]  │ │
 │  │  [item/link] [separator] [itemActive]                  │ │
 │  │                                                         │ │
 │  └─────────────────────────────────────────────────────────┘ │
 │                                                              │
-│  ┌─ dropdown (portal) ──────────────────────────────────┐   │
-│  │  [dropdownItem] [dropdownItem] ...                    │   │
+│  ┌─ content (portal) ──────────────────────────────────┐   │
+│  │  [collapsedItem] [collapsedItem] ...                    │   │
 │  └───────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -951,10 +951,10 @@ const navRef = useRef<HTMLElement>(null);
 | Disabled item look | `itemDisabled` | Appended to `item` class when disabled. |
 | Link items (with href) | `link` | Anchors — separate slot from `item`. |
 | Separator icon/text | `separator` | Between each item. |
-| Icon inside items | `icon` | Applied to the icon wrapper span. |
-| Ellipsis "..." button | `ellipsisButton` | The collapse trigger. |
-| Collapsed items dropdown | `dropdown` | The portal-rendered menu container. |
-| Items inside dropdown | `dropdownItem` | Each collapsed item in the menu. |
+| Icon inside items | `itemIcon` | Applied to the icon wrapper span. |
+| Ellipsis "..." button | `ellipsisTrigger` | The collapse trigger. |
+| Collapsed items dropdown | `content` | The portal-rendered menu container. |
+| Items inside dropdown | `collapsedItem` | Each collapsed item in the menu. |
 
 #### Dark mode
 
@@ -966,7 +966,7 @@ Default classes use Tailwind `dark:` prefix. Activated by `<html class="dark">`.
   classes={{
     item: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800",
     itemActive: "text-gray-900 dark:text-white font-semibold",
-    dropdown: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+    content: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
   }}
 />
 ```
@@ -998,9 +998,9 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
     item: "px-3 py-1.5 text-xs font-medium rounded-full cursor-pointer transition-all bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
     itemActive: "px-3 py-1.5 text-xs font-medium rounded-full bg-blue-600 text-white",
     separator: "text-gray-300 dark:text-gray-600 mx-0.5",
-    ellipsisButton: "px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer",
-    dropdown: "rounded-xl shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
-    dropdownItem: "px-3 py-2 text-sm cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700",
+    ellipsisTrigger: "px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer",
+    content: "rounded-xl shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+    collapsedItem: "px-3 py-2 text-sm cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700",
   }}
 />
 ```
@@ -1024,8 +1024,8 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
 
 ```tsx
 const items: BreadcrumbItem[] = [
-  { id: "home", label: "Home", icon: <HomeIcon className="w-4 h-4" /> },
-  { id: "docs", label: "Docs", icon: <FolderIcon className="w-4 h-4" /> },
+  { id: "home", label: "Home", itemIcon: <HomeIcon className="w-4 h-4" /> },
+  { id: "docs", label: "Docs", itemIcon: <FolderIcon className="w-4 h-4" /> },
   { id: "api", label: "API Reference" },
 ];
 
@@ -1050,7 +1050,7 @@ const items: BreadcrumbItem[] = [
 // String separator
 <Breadcrumb items={items} separator={<span className="mx-1 text-gray-400">/</span>} />
 
-// Custom icon component
+// Custom itemIcon component
 <Breadcrumb items={items} separatorIcon={ArrowRightIcon} iconSize={14} />
 ```
 
@@ -1176,13 +1176,13 @@ To override structural defaults (e.g., different padding), include the override 
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
-| `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
-| `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
+| `icon` | object | — | React.ReactNode — Icon rendered before the button label. |
+| `icon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
 | `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
 | `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
-| `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
+| `loading` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
 | `classes` | object | — | CSS class overrides for button sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
@@ -1215,9 +1215,9 @@ const ref = useRef<HTMLElement>(null);
 ```
 ┌─ root (button/a/span — structural styles + your className) ─┐
 │                                                               │
-│  ┌─ content (inline-flex wrapper) ─────────────────────────┐ │
+│  ┌─ itemText (inline-flex wrapper) ─────────────────────────┐ │
 │  │                                                          │ │
-│  │  [loader?]  [startIcon]  children  [endIcon]  [loader?] │ │
+│  │  [loading?]  [icon]  children  [icon]  [loading?] │ │
 │  │                                                          │ │
 │  └──────────────────────────────────────────────────────────┘ │
 └───────────────────────────────────────────────────────────────┘
@@ -1230,7 +1230,7 @@ const ref = useRef<HTMLElement>(null);
 | Focus ring color | `className` | Add `focus-visible:ring-indigo-500` etc. |
 | Icon spacing | `classes={{ content: "gap-4" }}` | Default gap is `gap-2`. |
 | Icon size/color | Style the icon element itself | Icons are your ReactNode — you control them. |
-| Loader appearance | `loader` prop or `classes={{ loader: "..." }}` | Custom loader replaces default spinner. |
+| Loader appearance | `loading` prop or `classes={{ loader: "..." }}` | Custom loader replaces default spinner. |
 | Disabled opacity | `className` | Default is `disabled:opacity-50`. Override with `disabled:opacity-30` etc. |
 
 #### Dark mode
@@ -1275,13 +1275,13 @@ Copy-paste these as `className` values:
 <div className="flex gap-2">
   <Button
     className="bg-indigo-600 dark:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-400 shadow-sm focus-visible:ring-indigo-500 dark:focus-visible:ring-offset-gray-900"
-    startIcon={<PlusIcon className="w-3.5 h-3.5" />}
+    icon={<PlusIcon className="w-3.5 h-3.5" />}
   >
     Create payment
   </Button>
   <Button
     className="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
-    endIcon={<FilterIcon className="w-3.5 h-3.5" />}
+    icon={<FilterIcon className="w-3.5 h-3.5" />}
   >
     Filter
   </Button>
@@ -1329,7 +1329,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={iconOnlyClasses}
-  startIcon={<TrashIcon />}
+  icon={<TrashIcon />}
   aria-label="Delete item"
   tooltip="Delete"
   tooltipProps={{ side: "bottom", delayDuration: 300 }}
@@ -1351,7 +1351,7 @@ const [saving, setSaving] = useState(false);
 ```tsx
 <Button
   className={primaryClasses}
-  endIcon={<ArrowRightIcon />}
+  icon={<ArrowRightIcon />}
   iconAnimation="slideRight"
 >
   Continue
@@ -1376,12 +1376,12 @@ const [saving, setSaving] = useState(false);
 // ❌ DON'T: Use color alone for destructive actions
 <Button className="bg-red-500 text-white">Delete</Button>
 // ✅ DO: Include a warning icon or confirmation
-<Button className="bg-red-500 text-white" startIcon={<TrashIcon />}>Delete</Button>
+<Button className="bg-red-500 text-white" icon={<TrashIcon />}>Delete</Button>
 
 // ❌ DON'T: Use icon-only span button without aria-label
-<Button as="span" startIcon={<CloseIcon />} />
+<Button as="span" icon={<CloseIcon />} />
 // ✅ DO: Always provide aria-label for icon-only buttons
-<Button as="span" startIcon={<CloseIcon />} aria-label="Close" />
+<Button as="span" icon={<CloseIcon />} aria-label="Close" />
 ```
 
 ---
@@ -1470,7 +1470,7 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 | `value` / `onValueChange` | Controlled mode. Shape: `{ parentValue: "childValue" }` for single, `{ parentValue: ["a","b"] }` for multi. |
 | `defaultValue` | Uncontrolled mode. Cannot be used with `value`. |
 | `closeOnSelect` | Defaults to `true`. Set `false` to keep menu open after selection (useful for multi-select). |
-| `submenuSearchInput` | Falls back to `searchInput` if not set. Same for `submenuSearchInputElement` and `submenuSearchIcon`. |
+| `subSearchControl` | Falls back to `searchControl` if not set. Same for `subSearchInput` and `subSearchIcon`. |
 
 ---
 
@@ -1512,11 +1512,11 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content when no value is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays error state. |
+| `message` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `success` | boolean | `false` | Displays success state. |
+| `message` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
@@ -1567,36 +1567,36 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 
 ```
 root
-└── wrapper
+└── control
     ├── label
     ├── description
-    ├── trigger [chevron, clearIcon, selectedContent]
+    ├── trigger [icon, clearTrigger, selectedContent]
     ├── errorMessage / successMessage
     └── portal
-        └── menu
-            ├── searchInput [searchIcon + searchInputElement]
-            ├── menuItem* [submenuChevron]
-            │   └── submenuContainer
-            │       └── submenu
-            │           ├── submenuSearchInput [submenuSearchIcon + submenuSearchInputElement]
-            │           └── submenuItem* [checkbox/checkboxChecked, checkIcon]
-            ├── noResults
+        └── content
+            ├── searchControl [searchIcon + searchInput]
+            ├── item* [itemIcon]
+            │   └── subPositioner
+            │       └── subContent
+            │           ├── subSearchControl [subSearchIcon + subSearchInput]
+            │           └── subItem* [itemControl/checkboxChecked, itemIndicator]
+            ├── empty
             ├── loading
-            └── shimmer > shimmerItem*
+            └── loading > loadingItem*
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Trigger button style | `trigger` | |
-| Dropdown background | `menu` | |
-| Menu item hover | `menuItem` | Uses hover: pseudo-class |
+| Dropdown background | `content` | |
+| Menu item hover | `item` | Uses hover: pseudo-class |
 | Selected item highlight | `menuItemSelected` | Stacks on top of menuItem |
 | Focused item (keyboard) | `menuItemFocused` | Stacks on top of menuItem |
-| Submenu panel | `submenu` | |
-| Checkbox style | `checkbox` + `checkboxChecked` | checkboxChecked applied when checked |
-| Search bar in menu | `searchInput`, `searchInputElement`, `searchIcon` | |
-| Search bar in submenu | `submenuSearchInput` | Falls back to `searchInput` if empty |
-| Loading state | `loading`, `shimmer`, `shimmerItem` | |
+| Submenu panel | `subContent` | |
+| Checkbox style | `itemControl` + `checkboxChecked` | checkboxChecked applied when checked |
+| Search bar in menu | `searchControl`, `searchInput`, `searchIcon` | |
+| Search bar in submenu | `subSearchControl` | Falls back to `searchControl` if empty |
+| Loading state | `loading`, `loading`, `loadingItem` | |
 
 #### Dark mode
 
@@ -1614,7 +1614,7 @@ classes={{
 /* Style trigger when open */
 [data-open] { border-color: blue; }
 
-/* Style when in error state */
+/* Style when in message state */
 [data-error] { border-color: red; }
 ```
 
@@ -1628,16 +1628,16 @@ classes={{
   onValueChange={setValue}
   placeholder="Pick a category"
   classes={{
-    wrapper: "relative w-64",
+    control: "relative w-64",
     trigger: "flex items-center justify-between w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:border-blue-400 focus:ring-2 focus:ring-blue-500",
-    menu: "mt-1 rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
-    menuItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between",
+    content: "mt-1 rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
+    item: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center justify-between",
     menuItemSelected: "bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
-    submenu: "rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
-    submenuItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2",
-    checkbox: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center",
+    subContent: "rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 py-1",
+    subItem: "px-3 py-2 cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 flex items-center gap-2",
+    itemControl: "w-4 h-4 rounded border border-gray-300 dark:border-gray-600 flex items-center justify-center",
     checkboxChecked: "bg-blue-600 border-blue-600 text-white",
-    chevron: "w-4 h-4 text-gray-400",
+    icon: "w-4 h-4 text-gray-400",
   }}
 />
 ```
@@ -1714,7 +1714,7 @@ const searchCountries = async (query: string) => {
   name="category"
   label="Category"
   required
-  error={!!errors.category}
+  message={!!errors.category}
   errorMessage={errors.category}
   options={options}
   value={value}
@@ -1736,7 +1736,7 @@ const searchCountries = async (query: string) => {
 ### Import
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/checkbox";
+import { Checkbox } from "@chumlab/ui/control";
 ```
 
 ---
@@ -1744,7 +1744,7 @@ import { Checkbox } from "@chumlab/ui/checkbox";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/checkbox";
+import { Checkbox } from "@chumlab/ui/control";
 import { useState } from "react";
 
 export default function Example() {
@@ -1785,7 +1785,7 @@ This renders correctly with no additional props, classes, or setup.
 - `data-shape` on root — "square", "rounded", or "circle"
 - `data-reduce-motion` on root — when reduced motion active
 - `data-loading` on root — when loading
-- `data-success` on root — when success state
+- `data-valid` on root — when success state
 
 DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelContainer > label-text + description) + error/success`
 
@@ -1805,9 +1805,9 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
-| `error` | boolean | `false` | Displays the checkbox in an error state. |
+| `message` | boolean | `false` | Displays the checkbox in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the checkbox. |
-| `success` | boolean | `false` | Displays the checkbox in a success state. |
+| `message` | boolean | `false` | Displays the checkbox in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the checkbox. |
 | `loading` | boolean | `false` | Displays the checkbox in a loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of the checkbox indicator. |
@@ -1837,23 +1837,23 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 ```
 root
 └── label (implicit, wraps everything)
-    ├── checkbox [contains hidden input + icon]
+    ├── control [contains hidden input + itemIndicator]
     │   ├── (hidden native input)
-    │   └── icon (check / indeterminate / unchecked)
-    └── labelContainer
+    │   └── itemIndicator (check / indeterminate / unchecked)
+    └── labelGroup
         ├── label (text)
         └── description (text)
-error / success (below)
+message / message (below)
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Box color when checked | `checked` | Background + border + text color |
 | Box color when unchecked | `unchecked` | Background + border |
-| Box border radius | `checkbox` | Or use `shape` prop |
+| Box border radius | `control` | Or use `shape` prop |
 | Label text style | `label` | Font size, color, weight |
-| Error message style | `error` | Color, size |
-| Check icon | `icon` | Or use `checkedIcon` prop for custom element |
+| Error message style | `message` | Color, size |
+| Check icon | `itemIndicator` | Or use `checkedIcon` prop for custom element |
 
 #### Dark mode
 
@@ -1886,7 +1886,7 @@ classes={{
   shape="circle"
   classes={{
     root: "",
-    checkbox: "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors",
+    control: "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors",
     checked: "bg-emerald-500 border-emerald-500 text-white",
     unchecked: "bg-white dark:bg-gray-900",
     label: "text-sm font-medium text-gray-800 dark:text-gray-200",
@@ -1932,7 +1932,7 @@ const someChecked = items.some(Boolean);
 <Checkbox
   name="terms"
   required
-  error={!!errors.terms}
+  message={!!errors.terms}
   errorMessage={errors.terms}
   label="I accept the Terms of Service"
   checked={accepted}
@@ -2151,8 +2151,8 @@ These props have dependencies -- using them wrong causes silent bugs:
 | Prop | Constraint |
 |------|-----------|
 | `mode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
-| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` prop is provided. |
-| `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
+| `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presetGroup` prop is provided. |
+| `presetGroup` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
 | `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
 | `clearable` / `showClearButton` | Both control the clear button. `showClearButton` takes precedence if both are set. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
@@ -2168,7 +2168,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-error` -- when error state is active
 - `data-open` -- when calendar is open
 - `data-loading` -- when loading state is active
-- `data-success` -- when success state is active
+- `data-valid` -- when success state is active
 
 #### Day cells
 - `data-selected` -- selected day
@@ -2178,7 +2178,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-range-start` -- first day of range
 - `data-range-end` -- last day of range
 - `data-in-range` -- day within selected range
-- `data-focused` -- keyboard-focused day
+- `data-highlighted` -- keyboard-focused day
 - `data-marked` -- day with a marker
 - `data-marker-type` -- marker type string (e.g. `"meeting"`, `"deadline"`)
 
@@ -2218,7 +2218,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `outsideDaysSelectable` | boolean | `true` | Whether outside days can be selected. |
 | `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
 | `showPresets` | boolean | `false` | Shows preset date selection buttons. |
-| `presets` | array | — | Array of date presets. |
+| `presetGroup` | array | — | Array of date presets. |
 | `markers` | array | — | Array of date markers to display on the calendar. |
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
@@ -2226,11 +2226,11 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `name` | string | — | Form field name. |
 | `placeholder` | string | — | Placeholder text for the trigger input. |
 | `disabled` | boolean | `false` | Disables the date picker. |
-| `error` | boolean | `false` | Displays error state. |
+| `message` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `success` | boolean | `false` | Displays success state. |
+| `message` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `loading` | boolean | `false` | Shows loading state. |
 | `clearable` | boolean | — | Shows a clear button. |
@@ -2238,7 +2238,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
 | `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
 | `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
-| `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
+| `icon` | object | — | React.ReactNode — Custom calendar icon. |
 | `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
 | `prevMonthIcon` | object | — | React.ReactNode — Custom previous month icon. |
 | `nextMonthIcon` | object | — | React.ReactNode — Custom next month icon. |
@@ -2272,7 +2272,7 @@ The component has three styling modes:
 // This REPLACES the default trigger classes entirely:
 <DatePicker classes={{ trigger: "my-custom-trigger" }} />
 
-// The other slots (calendar, day, etc.) still use their defaults.
+// The other slots (content, item, etc.) still use their defaults.
 ```
 
 #### Slot overview
@@ -2281,20 +2281,20 @@ The component has three styling modes:
 |------------------------|-------------|-------|
 | Trigger button appearance | `trigger` | The clickable input area |
 | Trigger text | `input` | Text display inside trigger |
-| Calendar/clear icons | `calendarIcon`, `clearButton` | Icons inside trigger |
-| Label, description, error text | `label`, `description`, `error`, `success` | Form field elements |
-| Calendar popover | `calendar` | Outer container of calendar |
-| Month/year navigation | `header`, `monthNav`, `navButton`, `navButtonDisabled` | Calendar header area |
-| Month/year dropdowns | `monthSelect`, `yearSelect`, `dropdownMenu`, `dropdownItem`, `dropdownItemSelected` | Month/year selectors |
-| Weekday headers | `weekdayHeader`, `weekday` | Day-of-week labels |
-| Day cells | `day`, `daySelected`, `dayToday`, `dayDisabled`, `dayOutside` | Individual calendar days |
+| Calendar/clear icons | `icon`, `clearTrigger` | Icons inside trigger |
+| Label, description, error text | `label`, `description`, `message`, `message` | Form field elements |
+| Calendar popover | `content` | Outer container of calendar |
+| Month/year navigation | `header`, `row`, `navButton`, `navButtonDisabled` | Calendar header area |
+| Month/year dropdowns | `monthSelect`, `yearSelect`, `subContent`, `subItem`, `dropdownItemSelected` | Month/year selectors |
+| Weekday headers | `listHeader`, `weekday` | Day-of-week labels |
+| Day cells | `item`, `daySelected`, `dayToday`, `dayDisabled`, `dayOutside` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | `dayFocused` | Focused day ring |
 | Marked days | `dayMarked`, `markerIndicator`, `markerTooltip` | Marker visuals |
 | Week numbers | `weekNumber` | Week number column |
-| Presets | `presets`, `presetButton`, `presetActive` | Preset buttons panel |
-| Footer / today button | `footer`, `todayButton` | Calendar footer |
-| Multi-month layout | `monthGrid`, `grid` | Side-by-side months |
+| Presets | `presetGroup`, `presetTrigger`, `presetActive` | Preset buttons panel |
+| Footer / today button | `footer`, `todayTrigger` | Calendar footer |
+| Multi-month layout | `listRow`, `list` | Side-by-side months |
 
 #### Dark mode
 
@@ -2310,9 +2310,9 @@ Default classes use Tailwind `dark:` prefix. When overriding, always provide bot
 #### Styling via data attributes
 
 ```tsx
-// Tailwind arbitrary variants on day cells:
+// Tailwind arbitrary variants on item cells:
 <DatePicker classes={{
-  day: "[&[data-selected]]:bg-purple-600 [&[data-today]]:ring-purple-500 [&[data-disabled]]:opacity-30",
+  item: "[&[data-selected]]:bg-purple-600 [&[data-today]]:ring-purple-500 [&[data-disabled]]:opacity-30",
 }} />
 ```
 
@@ -2370,13 +2370,13 @@ const [dates, setDates] = useState<Date[] | null>(null);
 #### Custom presets
 
 ```tsx
-const presets = [
+const presetGroup = [
   { label: "Today", getValue: () => new Date() },
   { label: "Yesterday", getValue: () => subDays(new Date(), 1) },
   { label: "Start of Month", getValue: () => startOfMonth(new Date()) },
 ];
 
-<DatePicker presets={presets} showPresets />
+<DatePicker presetGroup={presetGroup} showPresets />
 ```
 
 #### With markers
@@ -2432,7 +2432,7 @@ import { fr } from "date-fns/locale";
   label="Start date"
   description="When should the project begin?"
   required
-  error={!date}
+  message={!date}
   errorMessage="Please select a date"
 />
 ```
@@ -2603,7 +2603,7 @@ export default function Example() {
 - `data-error` — when `error={true}`
 - `data-open` — when dropdown is open
 - `data-full-width` — when `fullWidth={true}`
-- `data-success` — when `success={true}`
+- `data-valid` — when `success={true}`
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
@@ -2615,7 +2615,7 @@ export default function Example() {
 - `data-dropdown-id` — unique ID for click-outside detection
 
 **Options:**
-- `data-selected`, `data-focused`, `data-disabled`, `data-value`
+- `data-selected`, `data-highlighted`, `data-disabled`, `data-value`
 
 **DOM nesting:** `root > label? + description? + wrapper > trigger + content(portal) > optionList > option*`
 
@@ -2638,11 +2638,11 @@ export default function Example() {
 | `name` | string | — | Form field name for the hidden input. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode - Content displayed when no option is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `message` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `message` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |
@@ -2692,38 +2692,38 @@ export default function Example() {
 root
 ├── label
 ├── description
-└── wrapper (relative container)
+└── control (relative container)
     ├── trigger (button)
-    │   ├── triggerText (selected value or placeholder)
-    │   └── chevron (icon)
-    ├── clearIcon (button, absolute positioned)
+    │   ├── value (selected value or placeholder)
+    │   └── icon (icon)
+    ├── clearTrigger (button, absolute positioned)
     └── content (portal → fixed position)
-        └── optionList (scrollable)
-            └── option (repeated)
+        └── list (scrollable)
+            └── item (repeated)
                 ├── label/content
-                └── checkIcon (when selected)
-    noResults (when empty)
-    shimmer / shimmerItem (when loading)
-error
-success
+                └── itemIndicator (when selected)
+    empty (when empty)
+    loading / loadingItem (when loading)
+message
+message
 ```
 
 | "I want to change..." | Slot | Notes |
 |------------------------|------|-------|
 | Trigger button style | `trigger` | Includes border, bg, focus ring |
-| Selected text appearance | `triggerText` | Has `truncate` by default |
+| Selected text appearance | `value` | Has `truncate` by default |
 | Popup container | `content` | Border, shadow, bg |
-| Option row | `option` | Hover/cursor styles |
-| Selected option highlight | `optionSelected` | Applied on top of `option` |
-| Keyboard-focused option | `optionFocused` | Applied on top of `option` |
+| Option row | `item` | Hover/cursor styles |
+| Selected option highlight | `optionSelected` | Applied on top of `item` |
+| Keyboard-focused option | `optionFocused` | Applied on top of `item` |
 | Disabled option | `optionDisabled` | Includes `pointer-events-none` |
-| Dropdown arrow icon | `chevron` | Size, color, transition |
-| Check mark on selected | `checkIcon` | Size, color |
-| Clear/X button | `clearIcon` | Absolutely positioned |
-| Empty state | `noResults` | Centered text |
+| Dropdown arrow icon | `icon` | Size, color, transition |
+| Check mark on selected | `itemIndicator` | Size, color |
+| Clear/X button | `clearTrigger` | Absolutely positioned |
+| Empty state | `empty` | Centered text |
 | Label text | `label` | Font, color, spacing |
-| Error message | `error` | Below dropdown |
-| Success message | `success` | Below dropdown |
+| Error message | `message` | Below dropdown |
+| Success message | `message` | Below dropdown |
 
 #### Dark mode
 
@@ -2737,7 +2737,7 @@ classes={{ trigger: "bg-white dark:bg-gray-900 text-black dark:text-white ..." }
 
 ```css
 /* Tailwind arbitrary variant */
-<Dropdown classes={{ trigger: "data-[open]:ring-2 data-[error]:border-red-500" }} />
+<Dropdown classes={{ trigger: "data-[open]:ring-2 data-[message]:border-red-500" }} />
 
 /* Plain CSS */
 [data-state="open"] { ... }
@@ -2754,14 +2754,14 @@ classes={{ trigger: "bg-white dark:bg-gray-900 text-black dark:text-white ..." }
   onValueChange={setValue}
   classes={{
     trigger: "flex items-center justify-between w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-900 shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white",
-    triggerText: "flex-1 text-left truncate",
+    value: "flex-1 text-left truncate",
     content: "rounded-md shadow-lg bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700",
-    optionList: "max-h-60 overflow-y-auto py-1",
-    option: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer",
+    list: "max-h-60 overflow-y-auto py-1",
+    item: "flex items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700 cursor-pointer",
     optionSelected: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300",
     optionFocused: "bg-gray-100 dark:bg-gray-700",
-    checkIcon: "w-4 h-4 text-indigo-600 dark:text-indigo-400",
-    chevron: "w-4 h-4 text-gray-400 transition-transform duration-200",
+    itemIndicator: "w-4 h-4 text-indigo-600 dark:text-indigo-400",
+    icon: "w-4 h-4 text-gray-400 transition-transform duration-200",
   }}
 />
 ```
@@ -2786,7 +2786,7 @@ const [value, setValue] = useState<string | null>(null);
     const res = await fetch("/api/options");
     return res.json();
   }}
-  onLoadError={(err) => console.error(err)}
+  onLoadError={(err) => console.message(err)}
   placeholder="Click to load..."
 />
 ```
@@ -2798,7 +2798,7 @@ const [value, setValue] = useState<string | null>(null);
   label="Country"
   required
   name="country"
-  error={!value}
+  message={!value}
   errorMessage="Please select a country"
   options={countries}
   value={value}
@@ -2876,7 +2876,7 @@ export default function Example() {
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
 - `data-error` on root — when error state
-- `data-success` on root — when success state
+- `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
 - `data-slot="input"` on the input element
 - `data-slot="count"` on the character count
@@ -2893,9 +2893,9 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode - Label rendered above the input. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `error` | boolean | `false` | Displays the input in an error state. |
+| `message` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | `false` | Green success state for validated fields. |
+| `message` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
@@ -2932,7 +2932,7 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 root (flex flex-col)
 ├── label
 ├── description
-├── wrapper (border, focus ring, flex row)
+├── control (border, focus ring, flex row)
 │   ├── prefix
 │   ├── startIcon
 │   ├── input
@@ -2940,23 +2940,23 @@ root (flex flex-col)
 │   ├── suffix
 │   ├── clear button
 │   └── loader
-├── error / success
+├── message / message
 └── count
 ```
 
 | "I want to change..." | Slot | Notes |
 |------------------------|------|-------|
-| Border/focus ring | `wrapper` | Contains all input chrome |
+| Border/focus ring | `control` | Contains all input chrome |
 | Input text | `input` | Font, color, placeholder |
 | Label style | `label` | Font weight, size, color |
-| Error text | `error` | Color, icon |
+| Error text | `message` | Color, icon |
 
 #### Dark mode
 
 Defaults include `dark:` variants for all slots. When overriding, provide both:
 
 ```tsx
-classes={{ wrapper: "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900" }}
+classes={{ control: "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900" }}
 ```
 
 ---
@@ -2981,9 +2981,9 @@ const [show, setShow] = useState(false);
 ```tsx
 <Input
   label="Email"
-  error={!isValid}
+  message={!isValid}
   errorMessage="Please enter a valid email"
-  success={isValid}
+  message={isValid}
   successMessage="Looks good!"
 />
 ```
@@ -3057,13 +3057,13 @@ export default function Example() {
 **Root (`data-slot="root"`):**
 - `data-disabled` — when `disabled={true}`
 - `data-error` — when `error={true}` or validation fails
-- `data-success` — when `success={true}` (without error)
+- `data-valid` — when `success={true}` (without error)
 - `data-readonly` — when `readOnly={true}`
 - `data-full-width` — when `fullWidth={true}`
 - `data-loading` — when `loading={true}`
 
 **Input (`data-slot="input"`):**
-- `data-disabled`, `data-error`, `data-success`, `data-readonly` — mirrors root
+- `data-disabled`, `data-error`, `data-valid`, `data-readonly` — mirrors root
 
 **Other slots:** `data-slot="label"`, `data-slot="wrapper"`, `data-slot="error"`, `data-slot="success"`
 
@@ -3094,9 +3094,9 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `required` | boolean | `false` | Marks the field as required. |
 | `disabled` | boolean | `false` | Disables the input. |
 | `readOnly` | boolean | `false` | Makes the input read-only. |
-| `error` | boolean | `false` | Displays the input in an error state. |
+| `message` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | `false` | Displays the input in a success state. |
+| `message` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `placeholder` | string | `"Enter phone number"` | Placeholder text for the phone number input. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
@@ -3163,7 +3163,7 @@ console.log(inputRef.current?.value);
 root
 ├── label
 ├── description
-└── wrapper (role="group")
+└── control (role="group")
     ├── countrySelect (SearchableDropdown root)
     │   ├── countrySelectTrigger
     │   ├── countrySelectDropdown (portal)
@@ -3177,8 +3177,8 @@ root
     │   └── countrySelectNoResults
     ├── input
     └── clearButton (when clearable)
-├── error
-└── success
+├── message
+└── message
 ```
 
 | "I want to change..." | Slot to use | Notes |
@@ -3186,7 +3186,7 @@ root
 | Root container | `root` | Layout wrapper |
 | Label styling | `label` | |
 | Helper text | `description` | Below label |
-| Input + dropdown row | `wrapper` | `flex` container |
+| Input + dropdown row | `control` | `flex` container |
 | Phone text input | `input` | The `<input type="tel">` |
 | Country trigger button | `countrySelectTrigger` | Flag + dial code + chevron |
 | Country dropdown panel | `countrySelectDropdown` | Portal-rendered |
@@ -3194,8 +3194,8 @@ root
 | Selected country highlight | `countrySelectOptionSelected` | Additional class on selected |
 | Check icon | `countrySelectCheckIcon` | Selected indicator |
 | Search input | `countrySelectSearchInputElement` | In dropdown |
-| Error message | `error` | Below wrapper |
-| Success message | `success` | Below wrapper |
+| Error message | `message` | Below wrapper |
+| Success message | `message` | Below wrapper |
 
 #### Dark mode
 
@@ -3220,7 +3220,7 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. When o
   classes={{
     root: "flex flex-col gap-1",
     label: "text-sm font-medium text-gray-700 dark:text-gray-200",
-    wrapper: "flex gap-2 items-stretch",
+    control: "flex gap-2 items-stretch",
     input: "flex-1 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500",
     countrySelectTrigger: "flex items-center gap-2 h-10 px-3 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 min-w-[120px]",
     countrySelectDropdown: "w-72 border rounded-md shadow-lg bg-white dark:bg-gray-800",
@@ -3233,8 +3233,8 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. When o
     countrySelectCheckIcon: "w-4 h-4 text-indigo-600",
     countrySelectSearchIcon: "w-4 h-4 text-gray-400",
     countrySelectNoResults: "px-3 py-4 text-sm text-center text-gray-500",
-    error: "text-xs mt-1 text-red-500",
-    success: "text-xs mt-1 text-green-600",
+    message: "text-xs mt-1 text-red-500",
+    message: "text-xs mt-1 text-green-600",
     description: "text-xs mt-1 text-gray-400",
   }}
 />
@@ -3252,7 +3252,7 @@ const [phone, setPhone] = useState<PhoneNumberData>();
   label="Phone"
   value={phone}
   onValueChange={setPhone}
-  error={phone ? !phone.isValid : false}
+  message={phone ? !phone.isValid : false}
   errorMessage="Invalid phone number"
 />
 ```
@@ -3382,7 +3382,7 @@ export default function Example() {
 
 ### Styling Guide
 
-Each variant has its own class slots. Circular: `root`, `svg`, `track`, `indicator`. Linear: `root`, `bar`. Dot: `root`, `dot`. Pulse: `root`, `ring`.
+Each variant has its own class slots. Circular: `root`, `control`, `track`, `range`. Linear: `root`, `range`. Dot: `root`, `range`. Pulse: `root`, `range`.
 
 ---
 
@@ -3544,14 +3544,14 @@ modalRef.current?.focus();
 ```
 root (fixed inset-0, z-50, flex center)
 ├── overlay (fixed inset-0, bg-black/60, backdrop-blur)
-└── container (fixed inset-0, overflow-y-auto, flex center, p-4)
+└── positioner (fixed inset-0, overflow-y-auto, flex center, p-4)
     └── content (role="dialog", w-full max-w-lg, rounded-xl, shadow, bg-white dark:bg-gray-800)
         ├── header (flex items-start gap-3, p-6 pb-4)
         │   ├── icon (shrink-0)
         │   ├── div (flex-1)
         │   │   ├── title (font-semibold text-lg)
         │   │   └── description (text-sm text-gray-600)
-        │   └── closeButton (shrink-0, aria-label="Close modal")
+        │   └── closeTrigger (shrink-0, aria-label="Close modal")
         │       └── closeIcon (w-5 h-5)
         └── body (px-6 pb-6)
 ```
@@ -3560,13 +3560,13 @@ root (fixed inset-0, z-50, flex center)
 |------------------------|-------------|-------|
 | Root fixed wrapper | `root` | Positioning layer |
 | Backdrop color/blur | `overlay` | Also see `overlayColor`/`overlayOpacity` props |
-| Scroll/centering wrapper | `container` | Controls modal placement |
+| Scroll/centering wrapper | `positioner` | Controls modal placement |
 | Dialog panel | `content` | The visible card |
 | Header layout | `header` | Contains icon, title, close button |
 | Title text | `title` | |
 | Subtitle text | `description` | |
 | Header icon | `icon` | Requires `showIcon` |
-| Close button | `closeButton` | |
+| Close button | `closeTrigger` | |
 | Close icon SVG | `closeIcon` | Or use `closeIcon` prop for custom element |
 | Body area | `body` | Where `children` render |
 
@@ -3595,12 +3595,12 @@ Defaults use Tailwind `dark:` prefix, activated by `<html class="dark">`. Conten
   classes={{
     root: "fixed inset-0 z-50 flex items-center justify-center",
     overlay: "fixed inset-0 bg-black/40 backdrop-blur-sm",
-    container: "relative z-10 flex items-center justify-center p-4",
+    positioner: "relative z-10 flex items-center justify-center p-4",
     content: "w-full max-w-md rounded-2xl shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700",
     header: "flex items-start gap-3 p-5 pb-3",
     title: "font-bold text-lg text-gray-900 dark:text-white",
     description: "mt-1 text-sm text-gray-500 dark:text-gray-400",
-    closeButton: "shrink-0 p-1.5 rounded-lg ml-auto hover:bg-gray-100 dark:hover:bg-gray-800",
+    closeTrigger: "shrink-0 p-1.5 rounded-lg ml-auto hover:bg-gray-100 dark:hover:bg-gray-800",
     closeIcon: "w-5 h-5 text-gray-500 dark:text-gray-400",
     body: "px-5 pb-5",
   }}
@@ -3745,7 +3745,7 @@ export default function Example() {
 - `data-error` — when `error={true}`
 - `data-open` — when dropdown is open
 - `data-full-width` — when `fullWidth={true}`
-- `data-success` — when `success={true}`
+- `data-valid` — when `success={true}`
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
@@ -3772,11 +3772,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `message` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `message` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
@@ -3790,7 +3790,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -3828,15 +3828,15 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 root
 ├── label
 ├── description
-└── wrapper
+└── control
     └── trigger (role="combobox")
-    │   ├── chips (chip + chipRemove) or triggerText
-    │   ├── moreCount (+N more)
-    │   ├── clearIcon
-    │   └── chevron
+    │   ├── chips (chip + chipRemove) or value
+    │   ├── count (+N more)
+    │   ├── clearTrigger
+    │   └── icon
     └── content (portal)
-        └── optionList (role="listbox")
-            └── option (checkbox + checkboxIcon + label)
+        └── list (role="listbox")
+            └── item (itemControl + itemIndicator + label)
 ```
 
 | "I want to change..." | Slot to use | Notes |
@@ -3844,10 +3844,10 @@ root
 | Trigger button | `trigger` | Contains chips/text |
 | Selected chips | `chip`, `chipRemove` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
-| Option row | `option`, `optionSelected`, `optionFocused` | |
-| Checkbox | `checkbox`, `checkboxChecked`, `checkboxIcon` | |
-| Chevron icon | `chevron` | |
-| "+N more" badge | `moreCount` | |
+| Option row | `item`, `optionSelected`, `optionFocused` | |
+| Checkbox | `itemControl`, `checkboxChecked`, `itemIndicator` | |
+| Chevron icon | `icon` | |
+| "+N more" badge | `count` | |
 
 #### Dark mode
 
@@ -3960,7 +3960,7 @@ export default function Example() {
 ### Data Attributes (for CSS selectors and testing)
 
 **Root element:**
-- `data-disabled`, `data-error`, `data-open`, `data-full-width`, `data-success`
+- `data-disabled`, `data-error`, `data-open`, `data-full-width`, `data-valid`
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open`, `data-placeholder`
@@ -3986,11 +3986,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `error` | boolean | `false` | Displays the dropdown in an error state. |
+| `message` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `success` | boolean | `false` | Displays the dropdown in a success state. |
+| `message` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
@@ -4010,7 +4010,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -4047,21 +4047,21 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 root
 ├── label
 ├── description
-└── wrapper
+└── control
     └── trigger (role="combobox")
-    │   ├── chips / triggerText / moreCount
-    │   ├── clearIcon
-    │   └── chevron
+    │   ├── chips / value / count
+    │   ├── clearTrigger
+    │   └── icon
     └── content (portal)
-        ├── searchInput > searchIcon + searchInputElement
-        └── optionList (role="listbox")
-            └── option (checkbox + checkboxIcon + label)
+        ├── searchControl > searchIcon + searchInput
+        └── list (role="listbox")
+            └── item (itemControl + itemIndicator + label)
 ```
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Search input wrapper | `searchInput` |
-| Search text input | `searchInputElement` |
+| Search input wrapper | `searchControl` |
+| Search text input | `searchInput` |
 | Search icon | `searchIcon` |
 | Loading indicator | `loading` |
 | Everything else | Same as MultiSelectDropdown |
@@ -4176,9 +4176,9 @@ export default function Example() {
 | `name` | string | — | Form field name. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `error` | boolean | `false` | Displays the input in an error state. |
+| `message` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | `false` | Displays the input in a success state. |
+| `message` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `loading` | boolean | `false` | Shows a loading state. |
 | `disabled` | boolean | `false` | Disables all input fields. |
@@ -4263,7 +4263,7 @@ export default function Example() {
 | `sectionOrder` | Controls layout order: `["selector", "pageInfo", "nav"]`. |
 | `renderEllipsis` | Replaces default `...` with custom content. Receives `{ position, onValueChange }`. |
 | `renderPageInfo` | Custom render for page info. Receives `{ value, totalPages, rowsPerPage }`. |
-| `prevIcon` / `nextIcon` / `dropdownIcon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
+| `navIcon` / `navIcon` / `dropdownIcon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
 | `dropdownPosition` | `"top"` or `"bottom"` — controls rows dropdown direction. |
 | `unstyled` | Strips all default classes. Must provide styling via `classes`. |
 
@@ -4307,8 +4307,8 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
 | `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
-| `prevIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
-| `nextIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
+| `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
+| `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
@@ -4329,7 +4329,7 @@ import { Pagination } from "@chumlab/ui/pagination";
 
 const paginationRef = useRef<HTMLElement>(null);
 
-// Focus the nav element
+// Focus the row element
 paginationRef.current?.focus();
 
 <Pagination ref={paginationRef} value={page} totalPages={10} onValueChange={setPage} />
@@ -4348,8 +4348,8 @@ paginationRef.current?.focus();
 #### Slot → visual mapping
 
 ```
-root (nav, flex flex-wrap)
-├── selector (rows-per-page)
+root (row, flex flex-wrap)
+├── rowsPerPage (rows-per-page)
 │   ├── label ("Show")
 │   ├── selectorButton (trigger)
 │   │   └── dropdownIcon
@@ -4358,26 +4358,26 @@ root (nav, flex flex-wrap)
 │   │       └── selectorOption (role="option")
 │   └── label ("rows")
 ├── pageInfo (custom render slot)
-└── nav (navigation controls)
+└── row (navigation controls)
     ├── navButton (prev)
-    │   └── prevIcon
-    ├── pageButtons
-    │   ├── pageButton / activePageButton
+    │   └── navIcon
+    ├── list
+    │   ├── item / activePageButton
     │   └── ellipsis
     └── navButton (next)
-        └── nextIcon
+        └── navIcon
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Root layout | `root` | Controls flex direction and gap |
-| Page buttons | `pageButton`, `activePageButton` | Inactive and active styles |
+| Page buttons | `item`, `activePageButton` | Inactive and active styles |
 | Prev/next buttons | `navButton` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
 | Rows dropdown trigger | `selectorButton` | |
 | Dropdown panel | `selectorDropdown` | Portal-rendered |
 | Dropdown option | `selectorOption` | Use `data-[selected]` and `data-[highlighted]` |
-| Icons | `prevIcon`, `nextIcon`, `dropdownIcon` | |
+| Icons | `navIcon`, `navIcon`, `dropdownIcon` | |
 
 #### Dark mode
 
@@ -4393,11 +4393,11 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
   classes={{
     root: "flex flex-wrap items-center gap-1",
     navButton: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
-    pageButton: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
+    item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
     activePageButton: "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-blue-600 text-white",
-    pageButtons: "flex items-center gap-1",
-    prevIcon: "w-4 h-4",
-    nextIcon: "w-4 h-4",
+    list: "flex items-center gap-1",
+    navIcon: "w-4 h-4",
+    navIcon: "w-4 h-4",
     ellipsis: "px-2 text-gray-400",
   }}
 />
@@ -4464,7 +4464,7 @@ const [rows, setRows] = useState(10);
 #### Section reordering
 
 ```tsx
-<Pagination sectionOrder={["nav", "pageInfo", "selector"]} />
+<Pagination sectionOrder={["row", "pageInfo", "rowsPerPage"]} />
 ```
 
 ---
@@ -4522,9 +4522,9 @@ export default function Example() {
 | `name` | string | — | Field name for form submission. |
 | `required` | boolean | `false` | Required field indicator. |
 | `disabled` | boolean | `false` | Disables all radio buttons in the group. |
-| `error` | boolean | `false` | Displays the group in an error state. |
+| `message` | boolean | `false` | Displays the group in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the group. |
-| `success` | boolean | `false` | Displays the group in a success state. |
+| `message` | boolean | `false` | Displays the group in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the group. |
 | `loading` | boolean | `false` | Loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of all radio indicators. |
@@ -4674,7 +4674,7 @@ export default function Example() {
 - `data-error` — when `error={true}`
 - `data-open` — when dropdown is open
 - `data-full-width` — when `fullWidth={true}`
-- `data-success` — when `success={true}`
+- `data-valid` — when `success={true}`
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
@@ -4704,11 +4704,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name attribute. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content shown when no value is selected. |
 | `disabled` | boolean | `false` | Whether the dropdown is disabled. |
-| `error` | boolean | `false` | Whether the dropdown is in an error state. |
+| `message` | boolean | `false` | Whether the dropdown is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode — Label displayed above the dropdown. |
 | `description` | object | — | React.ReactNode — Description text displayed below the label. |
-| `success` | boolean | `false` | Whether the dropdown is in a success state. |
+| `message` | boolean | `false` | Whether the dropdown is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Whether the field is required. |
 | `clearable` | boolean | `false` | Whether the selected value can be cleared. |
@@ -4765,33 +4765,33 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 root
 ├── label
 ├── description
-└── wrapper
+└── control
     └── trigger (role="combobox")
-    │   ├── triggerText
-    │   ├── clearIcon
-    │   └── chevron
+    │   ├── value
+    │   ├── clearTrigger
+    │   └── icon
     └── content (portal)
-        ├── searchInput > searchIcon + searchInputElement
-        ├── optionList (role="listbox")
-        │   └── option (optionSelected, optionFocused, optionDisabled)
-        │       └── checkIcon
-        ├── noResults
-        └── shimmer > shimmerItem
+        ├── searchControl > searchIcon + searchInput
+        ├── list (role="listbox")
+        │   └── item (optionSelected, optionFocused, optionDisabled)
+        │       └── itemIndicator
+        ├── empty
+        └── loading > loadingItem
 ```
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Search input wrapper | `searchInput` |
-| Search text input | `searchInputElement` |
+| Search input wrapper | `searchControl` |
+| Search text input | `searchInput` |
 | Search icon | `searchIcon` |
 | Trigger button | `trigger` |
-| Selected text | `triggerText` |
+| Selected text | `value` |
 | Dropdown panel | `content` |
-| Option row | `option`, `optionSelected`, `optionFocused` |
-| Check icon | `checkIcon` |
-| Clear button | `clearIcon` |
-| No results text | `noResults` |
-| Loading shimmer | `shimmer`, `shimmerItem` |
+| Option row | `item`, `optionSelected`, `optionFocused` |
+| Check icon | `itemIndicator` |
+| Clear button | `clearTrigger` |
+| No results text | `empty` |
+| Loading shimmer | `loading`, `loadingItem` |
 
 #### Dark mode
 
@@ -4931,9 +4931,9 @@ export default function Example() {
 | `description` | object | — | React.ReactNode — Description text. |
 | `disabled` | boolean | `false` | Whether the slider is disabled. |
 | `required` | boolean | `false` | Whether the field is required. |
-| `error` | boolean | `false` | Whether the slider is in an error state. |
+| `message` | boolean | `false` | Whether the slider is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the slider. |
-| `success` | boolean | — | Whether the slider is in a success state. |
+| `message` | boolean | — | Whether the slider is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the slider. |
 | `loading` | boolean | — | Whether the slider is in a loading state. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -4967,9 +4967,9 @@ import { useState } from "react";
 import { Stepper } from "@chumlab/ui/stepper";
 
 const steps = [
-  { id: 1, label: "Account" },
-  { id: 2, label: "Profile" },
-  { id: 3, label: "Review" },
+  { id: 1, itemText: "Account" },
+  { id: 2, itemText: "Profile" },
+  { id: 3, itemText: "Review" },
 ];
 
 export default function Example() {
@@ -5076,23 +5076,23 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 ```
 root (nav, data-orientation, data-variant)
 └── list (ol, flex horizontal or flex-col vertical)
-    ├── stepContainer (li)
-    │   └── step (button or div)
-    │       ├── indicator (rounded-full, sized per variant)
-    │       │   └── indicatorIcon (check/error/number/dot)
-    │       └── labelWrapper
-    │           ├── label
+    ├── item (li)
+    │   └── trigger (button or div)
+    │       ├── itemIndicator (rounded-full, sized per variant)
+    │       │   └── itemIcon (check/error/number/dot)
+    │       └── row
+    │           ├── itemText
     │           └── description
-    ├── connector (li, flex-1)
+    ├── separator (li, flex-1)
     │   └── connectorHorizontal or connectorVertical
     └── ... more steps
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
-| Indicator circle | `indicator` + status classes (`indicatorActive`, etc.) | |
-| Step number/icon inside | `indicatorIcon` | |
-| Step label text | `label` + status classes (`labelActive`, etc.) | |
+| Indicator circle | `itemIndicator` + status classes (`indicatorActive`, etc.) | |
+| Step number/icon inside | `itemIcon` | |
+| Step label text | `itemText` + status classes (`labelActive`, etc.) | |
 | Step description | `description` + status classes | |
 | Connecting line | `connectorHorizontal` / `connectorVertical` + status classes | |
 | Clickable step hover | `stepInteractive` | |
@@ -5114,9 +5114,9 @@ Default classes include responsive sizing: indicators, labels, descriptions, gap
 
 ```tsx
 const steps = [
-  { id: 1, label: "Account", description: "Set up your account", icon: UserIcon },
-  { id: 2, label: "Payment", description: "Add payment method", icon: CreditCardIcon },
-  { id: 3, label: "Confirm", description: "Review and submit", icon: CheckIcon },
+  { id: 1, itemText: "Account", description: "Set up your account", icon: UserIcon },
+  { id: 2, itemText: "Payment", description: "Add payment method", icon: CreditCardIcon },
+  { id: 3, itemText: "Confirm", description: "Review and submit", icon: CheckIcon },
 ];
 <Stepper steps={steps} variant="icon" showDescriptions labelPosition="bottom" fullWidth />
 ```
@@ -5226,9 +5226,9 @@ export default function Example() {
 | `required` | boolean | `false` | Whether the field is required. |
 | `id` | string | — | HTML id attribute. |
 | `disabled` | boolean | `false` | Whether the switch is disabled. |
-| `error` | boolean | `false` | Whether the switch is in an error state. |
+| `message` | boolean | `false` | Whether the switch is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the switch. |
-| `success` | boolean | `false` | Whether the switch is in a success state. |
+| `message` | boolean | `false` | Whether the switch is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the switch. |
 | `loading` | boolean | `false` | Whether the switch is in a loading state. |
 | `loader` | object | — | React.ReactNode — Custom loader element. |
@@ -5269,7 +5269,7 @@ Or use the `classes` prop with 14 slots for full control.
 ### Import
 
 ```tsx
-import { Table } from "@chumlab/ui/table";
+import { Table } from "@chumlab/ui/list";
 import { Pagination } from "@chumlab/ui/pagination";
 import type { ColumnDef } from "@tanstack/react-table";
 ```
@@ -5279,7 +5279,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { Table } from "@chumlab/ui/table";
+import { Table } from "@chumlab/ui/list";
 import type { ColumnDef } from "@tanstack/react-table";
 
 interface User { name: string; email: string; }
@@ -5422,7 +5422,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
 | `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
 | `hasMore` | boolean | `false` | Whether there is more data to load. |
-| `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
+| `loadingFooter` | boolean | `false` | Whether more data is currently being loaded. |
 | `infiniteEndContent` | object | — | React.ReactNode — Content shown when all data is loaded. |
 | `responsiveBreakpoint` | number | — | Viewport width below which the table renders as card layout. |
 | `renderMobileCard` | object | — | (row: TData) => ReactNode — Render function for mobile card layout. |
@@ -5450,16 +5450,16 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Root container | `container` |
-| Table element | `table` |
-| Header row/cell | `headerRow`, `headerCell` |
-| Body row/cell | `row`, `cell` |
+| Root container | `root` |
+| Table element | `list` |
+| Header row/cell | `header`, `headerCell` |
+| Body row/cell | `item`, `cell` |
 | Selected row | `selectedRow` |
-| Pinned columns | `pinnedContainer`, `pinnedTable` |
-| Scrollable area | `unpinnedContainer` (has `overflow-x-auto`) |
+| Pinned columns | `pinnedRegion`, `pinnedList` |
+| Scrollable area | `scrollRegion` (has `overflow-x-auto`) |
 | Empty state | `empty` |
-| Shimmer loading | `shimmer`, `shimmerRow`, `shimmerCell`, `shimmerBar` |
-| Search bar | `searchBar`, `searchInput` |
+| Shimmer loading | `loading`, `loadingRow`, `loadingItem`, `loadingBar` |
+| Search bar | `searchInput`, `searchInput` |
 
 #### Responsive behavior
 
@@ -5528,15 +5528,15 @@ import type { Tab, TabPanelProps } from "@chumlab/ui/tab-panel";
 import { TabPanel } from "@chumlab/ui/tab-panel";
 
 const tabs = [
-  { id: "home", label: "Home" },
-  { id: "profile", label: "Profile" },
-  { id: "settings", label: "Settings" },
+  { id: "home", itemText: "Home" },
+  { id: "profile", itemText: "Profile" },
+  { id: "settings", itemText: "Settings" },
 ];
 
 export default function Example() {
   return (
     <TabPanel tabs={tabs} defaultValue="home">
-      {(tab) => <div style={{ padding: 16 }}>{tab.label} content</div>}
+      {(item) => <div style={{ padding: 16 }}>{item.itemText} content</div>}
     </TabPanel>
   );
 }
@@ -5616,25 +5616,25 @@ DOM nesting: `root > tabList(role="tablist") > tab(role="tab") + indicator > pan
 
 ```
 root (w-full)
-├── tabList (role="tablist", flex overflow-x-auto)
-│   └── tab (role="tab", relative shrink-0)
-│       ├── icon
-│       ├── label
+├── list (role="tablist", flex overflow-x-auto)
+│   └── item (role="item", relative shrink-0)
+│       ├── itemIcon
+│       ├── itemText
 │       ├── count (badge)
 │       └── indicator (absolute bottom, animated underline)
-└── panel (role="tabpanel", p-4)
+└── content (role="tabpanel", p-4)
 ```
 
 | "I want to change..." | Slot to use |
 |------------------------|-------------|
-| Tab list container | `tabList` |
-| Tab button | `tab`, `tabActive`, `tabInactive`, `tabDisabled` |
+| Tab list container | `list` |
+| Tab button | `item`, `tabActive`, `tabInactive`, `tabDisabled` |
 | Tab focus ring | `tabFocus` |
-| Tab label text | `label`, `labelActive`, `labelInactive` |
-| Tab icon | `icon`, `iconActive`, `iconInactive` |
+| Tab label text | `itemText`, `labelActive`, `labelInactive` |
+| Tab icon | `itemIcon`, `iconActive`, `iconInactive` |
 | Count badge | `count`, `countActive`, `countInactive` |
 | Active underline | `indicator` |
-| Panel content | `panel` |
+| Panel content | `content` |
 
 #### Responsive sizing
 
@@ -5652,22 +5652,22 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(tab) => ...}</TabPanel>
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(item) => ...}</TabPanel>
 ```
 
 #### With icons and badges
 
 ```tsx
 const tabs = [
-  { id: "home", label: "Home", icon: HomeIcon, count: 3 },
-  { id: "messages", label: "Messages", icon: MailIcon, count: 12 },
+  { id: "home", itemText: "Home", itemIcon: HomeIcon, count: 3 },
+  { id: "messages", itemText: "Messages", itemIcon: MailIcon, count: 12 },
 ];
 ```
 
 #### Keep panels mounted
 
 ```tsx
-<TabPanel tabs={tabs} keepMounted>{(tab) => <Panel id={tab.id} />}</TabPanel>
+<TabPanel tabs={tabs} keepMounted>{(item) => <Panel id={item.id} />}</TabPanel>
 ```
 
 #### Vertical orientation
@@ -5690,7 +5690,7 @@ const tabs = [
 ### Import
 
 ```tsx
-import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";
+import { TextArea, TextAreaLabel } from "@chumlab/ui/input";
 ```
 
 ---
@@ -5698,7 +5698,7 @@ import { TextArea, TextAreaLabel } from "@chumlab/ui/textarea";
 ### Basic Usage (copy-paste ready)
 
 ```tsx
-import { TextArea } from "@chumlab/ui/textarea";
+import { TextArea } from "@chumlab/ui/input";
 
 export default function Example() {
   return (
@@ -5735,7 +5735,7 @@ export default function Example() {
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
 - `data-error` on root — when error state
-- `data-success` on root — when success state
+- `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
 - `data-slot="textarea"` on the textarea element
 - `data-slot="count"` on the character count
@@ -5752,9 +5752,9 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Label displayed above the textarea. |
 | `description` | object | — | React.ReactNode — Description text below the label. |
-| `error` | boolean | `false` | Whether the textarea is in an error state. |
+| `message` | boolean | `false` | Whether the textarea is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
-| `success` | boolean | `false` | Green success state for validated fields. |
+| `message` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
@@ -5799,22 +5799,22 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 root (flex flex-col)
 ├── label
 ├── description
-├── wrapper (border, focus ring)
+├── control (border, focus ring)
 │   ├── startIcon
-│   ├── textarea
+│   ├── input
 │   ├── endIcon
 │   ├── clear button
 │   └── loader
-├── error / success
+├── message / message
 └── count
 ```
 
 | "I want to change..." | Slot | Notes |
 |------------------------|------|-------|
-| Border/focus ring | `wrapper` | Contains textarea chrome |
-| Textarea text | `textarea` | Font, color, placeholder, resize |
+| Border/focus ring | `control` | Contains textarea chrome |
+| Textarea text | `input` | Font, color, placeholder, resize |
 | Label style | `label` | Font weight, size, color |
-| Error text | `error` | Color, icon |
+| Error text | `message` | Color, icon |
 
 #### Dark mode
 
@@ -5841,9 +5841,9 @@ Defaults include `dark:` variants. When overriding, provide both light and dark.
 ```tsx
 <TextArea
   label="Feedback"
-  error={!isValid}
+  message={!isValid}
   errorMessage="Feedback is required"
-  success={isValid}
+  message={isValid}
   successMessage="Thank you!"
   required
 />
@@ -5902,10 +5902,10 @@ export default function Example() {
 ### Data Attributes (for CSS selectors and testing)
 
 - `data-disabled` — on root and trigger when `disabled`
-- `data-error` — on trigger when `error`
+- `data-error` — on trigger when `message`
 - `data-open` — on trigger when dropdown/clock is open
 - `data-selected` — on selected option
-- `data-focused` — on keyboard-focused option
+- `data-highlighted` — on keyboard-focused option
 - `data-position` — on dropdown portal (`"top"` or `"bottom"`)
 - `data-active` — on active clock display button and period button
 
@@ -5930,18 +5930,18 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `name` | string | — | Name for the hidden input for form submission. |
 | `placeholder` | string | — | Placeholder text for the input. |
 | `disabled` | boolean | `false` | Disables the component. |
-| `error` | boolean | `false` | Marks the component as having an error. |
+| `message` | boolean | `false` | Marks the component as having an error. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the input. |
 | `description` | object | — | React.ReactNode — Helper text displayed below the label. |
-| `success` | boolean | — | Success state. |
+| `message` | boolean | — | Success state. |
 | `successMessage` | object | — | React.ReactNode — Success message text. |
 | `loading` | boolean | — | Loading state. |
 | `label` | object | — | React.ReactNode — Label displayed above the input. |
 | `required` | boolean | `false` | Shows a required indicator on the label. |
 | `showEndIcon` | boolean | `true` | Show the chevron/end icon in the trigger. |
-| `endIcon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
+| `icon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
 | `showSelectedIcon` | boolean | `true` | Show a check icon on the selected option. |
-| `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
+| `itemIndicator` | object | — | React.ReactNode — Custom selected icon element. |
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
 | `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
@@ -5981,22 +5981,22 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | Label text | `label` |
 | Trigger button area | `trigger` |
 | Text input | `input` |
-| Chevron icon | `endIcon` |
-| Clear button | `clearIcon` |
-| Dropdown panel | `dropdown` |
-| Option list container | `optionList` |
-| Individual option | `option` |
+| Chevron icon | `icon` |
+| Clear button | `clearTrigger` |
+| Dropdown panel | `content` |
+| Option list container | `list` |
+| Individual option | `item` |
 | Selected option highlight | `optionSelected` |
 | Focused option highlight | `optionFocused` |
-| Check icon in option | `selectedIcon` |
-| Error message | `error` |
+| Check icon in option | `itemIndicator` |
+| Error message | `message` |
 | Description text | `description` |
-| Clock container | `clockContainer` |
+| Clock container | `clockContent` |
 | Clock face circle | `clockFace` |
 | Clock numbers | `clockNumber`, `clockNumberSelected` |
 | Clock hand | `clockHand`, `clockHandLine`, `clockHandDot` |
-| AM/PM buttons | `clockPeriodButton`, `clockPeriodActive` |
-| OK/Cancel buttons | `clockOkButton`, `clockCancelButton` |
+| AM/PM buttons | `periodButton`, `clockPeriodActive` |
+| OK/Cancel buttons | `confirmButton`, `cancelButton` |
 
 #### Dark mode
 
@@ -6100,7 +6100,7 @@ function MyComponent() {
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
-| `content` | ReactNode that replaces the default message/description layout entirely |
+| `root` | ReactNode that replaces the default message/description layout entirely |
 | `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
 
@@ -6110,11 +6110,11 @@ function MyComponent() {
 
 ```tsx
 const toast = useToast();
-toast.success("message", options?);
-toast.warning("message", options?);
-toast.error("message", options?);
-toast.info("message", options?);
-toast.toast({ type, message, ...options }); // generic
+toast.success("title", options?);
+toast.warning("title", options?);
+toast.error("title", options?);
+toast.info("title", options?);
+toast.toast({ type, title, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();
 ```
@@ -6129,9 +6129,9 @@ toast.dismissAll();
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
 | `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
-| `message` | object | — | React.ReactNode — Primary message content. |
+| `title` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
-| `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
+| `root` | object | — | React.ReactNode — Custom content that replaces message and description. |
 | `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
 | `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
 | `progressColor` | string | — | Custom color for the progress bar. |
@@ -6259,7 +6259,7 @@ trigger (span wrapper, or merged via asChild)
 | `trigger` | Wrapper around the child element |
 | `content` | Tooltip popup (bg, border, padding, text) |
 | `arrow` | Arrow triangle fill |
-| `baseArrow` | Arrow border/outline |
+| `arrow` | Arrow border/outline |
 
 #### Dark mode
 

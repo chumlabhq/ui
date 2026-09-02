@@ -175,10 +175,9 @@ const InternationalPhoneInput = forwardRef<
         root: classesProp?.root ?? baseClasses.root,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         input: classesProp?.input ?? baseClasses.input,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        message: classesProp?.message ?? baseClasses.message,
         countrySelect: classesProp?.countrySelect ?? baseClasses.countrySelect,
         countryOptionRow:
           classesProp?.countryOptionRow ?? baseClasses.countryOptionRow,
@@ -186,12 +185,12 @@ const InternationalPhoneInput = forwardRef<
           classesProp?.countryOptionFlag ?? baseClasses.countryOptionFlag,
         countryOptionLabel:
           classesProp?.countryOptionLabel ?? baseClasses.countryOptionLabel,
-        countrySelectedRow:
-          classesProp?.countrySelectedRow ?? baseClasses.countrySelectedRow,
-        countrySelectedFlag:
-          classesProp?.countrySelectedFlag ?? baseClasses.countrySelectedFlag,
-        countrySelectedLabel:
-          classesProp?.countrySelectedLabel ?? baseClasses.countrySelectedLabel,
+        triggerRow:
+          classesProp?.triggerRow ?? baseClasses.triggerRow,
+        flag:
+          classesProp?.flag ?? baseClasses.flag,
+        value:
+          classesProp?.value ?? baseClasses.value,
         countrySelectTrigger:
           classesProp?.countrySelectTrigger ?? baseClasses.countrySelectTrigger,
         countrySelectDropdown:
@@ -323,15 +322,15 @@ const InternationalPhoneInput = forwardRef<
           selectedContent: renderSelectedCountry ? (
             renderSelectedCountry(country)
           ) : (
-            <div className={mergedClasses.countrySelectedRow || undefined}>
+            <div className={mergedClasses.triggerRow || undefined}>
               <CountryFlag
                 code={country.flag}
                 size={flagSize}
                 unstyled={unstyled}
-                className={mergedClasses.countrySelectedFlag || undefined}
+                className={mergedClasses.flag || undefined}
                 style={{ height: Math.round((flagSize * 17) / 22) }}
               />
-              <span className={mergedClasses.countrySelectedLabel || undefined}>{country.dialCode}</span>
+              <span className={mergedClasses.value || undefined}>{country.dialCode}</span>
             </div>
           ),
         })),
@@ -345,9 +344,9 @@ const InternationalPhoneInput = forwardRef<
         mergedClasses.countryOptionRow,
         mergedClasses.countryOptionFlag,
         mergedClasses.countryOptionLabel,
-        mergedClasses.countrySelectedRow,
-        mergedClasses.countrySelectedFlag,
-        mergedClasses.countrySelectedLabel,
+        mergedClasses.triggerRow,
+        mergedClasses.flag,
+        mergedClasses.value,
       ],
     );
 
@@ -617,7 +616,7 @@ const InternationalPhoneInput = forwardRef<
         )}
 
         <div
-          className={cn(mergedClasses.wrapper, loading && "opacity-50 pointer-events-none") || undefined}
+          className={cn(mergedClasses.control, loading && "opacity-50 pointer-events-none") || undefined}
           data-slot="wrapper"
           role="group"
           aria-labelledby={label ? labelId : undefined}
@@ -644,15 +643,15 @@ const InternationalPhoneInput = forwardRef<
               root: mergedClasses.countrySelect,
               trigger: mergedClasses.countrySelectTrigger,
               content: mergedClasses.countrySelectDropdown,
-              searchInput: mergedClasses.countrySelectSearchInput,
-              searchInputElement: mergedClasses.countrySelectSearchInputElement,
-              option: mergedClasses.countrySelectOption,
+              searchControl: mergedClasses.countrySelectSearchInput,
+              searchInput: mergedClasses.countrySelectSearchInputElement,
+              item: mergedClasses.countrySelectOption,
               optionSelected: mergedClasses.countrySelectOptionSelected,
-              optionList: mergedClasses.countrySelectOptionList,
-              chevron: mergedClasses.countrySelectChevron,
-              checkIcon: mergedClasses.countrySelectCheckIcon,
+              list: mergedClasses.countrySelectOptionList,
+              icon: mergedClasses.countrySelectChevron,
+              itemIndicator: mergedClasses.countrySelectCheckIcon,
               searchIcon: mergedClasses.countrySelectSearchIcon,
-              noResults: mergedClasses.countrySelectNoResults,
+              empty: mergedClasses.countrySelectNoResults,
             }}
           />
 
@@ -738,7 +737,7 @@ const InternationalPhoneInput = forwardRef<
             id={errorId}
             role="alert"
             data-invalid
-            className={mergedClasses.error || undefined}
+            className={mergedClasses.message || undefined}
             data-slot="error"
           >
             {displayErrorMessage}
@@ -750,7 +749,7 @@ const InternationalPhoneInput = forwardRef<
             id={successId}
             role="status"
             data-valid
-            className={mergedClasses.success || undefined}
+            className={mergedClasses.message || undefined}
             data-slot="success"
           >
             {displaySuccessMessage}

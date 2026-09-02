@@ -38,12 +38,10 @@ export interface AvatarClasses {
   /** Root container. */
   root?: string;
   /** Inner wrapper around image/initials/fallback. */
-  inner?: string;
+  control?: string;
   /** The `<img>` element. */
   image?: string;
   /** Initials text element. */
-  initials?: string;
-  /** Fallback content wrapper. */
   fallback?: string;
   /** Status indicator dot. */
   status?: string;

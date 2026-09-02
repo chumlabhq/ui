@@ -337,7 +337,7 @@
           },
           "control": {
             "trigger": {
-              "clearButton": {},
+              "clearTrigger": {},
               "icon": {},
               "value": {}
             }
@@ -577,7 +577,7 @@
           "listRow": {},
           "message": {},
           "trigger": {
-            "clearButton": {},
+            "clearTrigger": {},
             "icon": {},
             "input": {}
           },
@@ -733,7 +733,7 @@
           "loadingItem": {},
           "message": {},
           "trigger": {
-            "clearButton": {},
+            "clearTrigger": {},
             "icon": {},
             "value": {}
           }
@@ -999,7 +999,7 @@
           "positioner": {
             "content": {
               "body": {},
-              "closeButton": {},
+              "closeTrigger": {},
               "header": {
                 "description": {},
                 "title": {}
@@ -1100,7 +1100,7 @@
             "chip": {
               "chipRemove": {}
             },
-            "clearButton": {},
+            "clearTrigger": {},
             "icon": {},
             "value": {}
           }
@@ -1205,7 +1205,7 @@
             "chip": {
               "chipRemove": {}
             },
-            "clearButton": {},
+            "clearTrigger": {},
             "icon": {},
             "value": {}
           }
@@ -1530,7 +1530,7 @@
           "message": {},
           "searchIcon": {},
           "trigger": {
-            "clearButton": {},
+            "clearTrigger": {},
             "icon": {},
             "value": {}
           }
@@ -2132,7 +2132,7 @@
           "label": {},
           "message": {},
           "trigger": {
-            "clearButton": {},
+            "clearTrigger": {},
             "icon": {},
             "input": {}
           }
@@ -2182,7 +2182,7 @@
       "knowledge": "src/components/Toast/TOAST.ai.md",
       "anatomy": {
         "root": {
-          "closeButton": {},
+          "closeTrigger": {},
           "description": {},
           "icon": {},
           "indicator": {},

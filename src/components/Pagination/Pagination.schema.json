@@ -72,7 +72,7 @@
         "bottom"
       ],
       "default": "top",
-      "description": "Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom)."
+      "description": "Vertical placement of the rows-per-page dropdown \u2014 opens upward (top) or downward (bottom)."
     },
     "dropdownZIndex": {
       "type": "number",
@@ -135,13 +135,13 @@
         "root": {
           "type": "string"
         },
-        "nav": {
+        "row": {
           "type": "string"
         },
-        "pageButtons": {
+        "list": {
           "type": "string"
         },
-        "pageButton": {
+        "item": {
           "type": "string"
         },
         "activePageButton": {
@@ -153,7 +153,7 @@
         "ellipsis": {
           "type": "string"
         },
-        "selector": {
+        "rowsPerPage": {
           "type": "string"
         },
         "selectorButton": {
@@ -174,10 +174,7 @@
         "dropdownIcon": {
           "type": "string"
         },
-        "prevIcon": {
-          "type": "string"
-        },
-        "nextIcon": {
+        "navIcon": {
           "type": "string"
         },
         "pageInfo": {

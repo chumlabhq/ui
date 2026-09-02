@@ -10,25 +10,24 @@ export interface DropdownOption {
 
 export interface DropdownClasses {
   root?: string;
-  wrapper?: string;
+  control?: string;
   trigger?: string;
-  triggerText?: string;
+  value?: string;
   content?: string;
-  optionList?: string;
-  option?: string;
+  list?: string;
+  item?: string;
   optionSelected?: string;
   optionFocused?: string;
   optionDisabled?: string;
-  chevron?: string;
-  checkIcon?: string;
-  clearIcon?: string;
-  noResults?: string;
+  icon?: string;
+  itemIndicator?: string;
+  clearTrigger?: string;
+  empty?: string;
   label?: string;
-  error?: string;
+  message?: string;
   description?: string;
-  success?: string;
-  shimmer?: string;
-  shimmerItem?: string;
+  loading?: string;
+  loadingItem?: string;
 }
 
 export interface DropdownTriggerRenderProps {

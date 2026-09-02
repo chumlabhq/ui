@@ -130,13 +130,13 @@ const navRef = useRef<HTMLElement>(null);
 │                                                              │
 │  ┌─ list (<ol>) ──────────────────────────────────────────┐ │
 │  │                                                         │ │
-│  │  [item/link] [separator] [ellipsisButton] [separator]  │ │
+│  │  [item/link] [separator] [ellipsisTrigger] [separator]  │ │
 │  │  [item/link] [separator] [itemActive]                  │ │
 │  │                                                         │ │
 │  └─────────────────────────────────────────────────────────┘ │
 │                                                              │
-│  ┌─ dropdown (portal) ──────────────────────────────────┐   │
-│  │  [dropdownItem] [dropdownItem] ...                    │   │
+│  ┌─ content (portal) ──────────────────────────────────┐   │
+│  │  [collapsedItem] [collapsedItem] ...                    │   │
 │  └───────────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -149,10 +149,10 @@ const navRef = useRef<HTMLElement>(null);
 | Disabled item look | `itemDisabled` | Appended to `item` class when disabled. |
 | Link items (with href) | `link` | Anchors — separate slot from `item`. |
 | Separator icon/text | `separator` | Between each item. |
-| Icon inside items | `icon` | Applied to the icon wrapper span. |
-| Ellipsis "..." button | `ellipsisButton` | The collapse trigger. |
-| Collapsed items dropdown | `dropdown` | The portal-rendered menu container. |
-| Items inside dropdown | `dropdownItem` | Each collapsed item in the menu. |
+| Icon inside items | `itemIcon` | Applied to the icon wrapper span. |
+| Ellipsis "..." button | `ellipsisTrigger` | The collapse trigger. |
+| Collapsed items dropdown | `content` | The portal-rendered menu container. |
+| Items inside dropdown | `collapsedItem` | Each collapsed item in the menu. |
 
 ### Dark mode
 
@@ -164,7 +164,7 @@ Default classes use Tailwind `dark:` prefix. Activated by `<html class="dark">`.
   classes={{
     item: "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800",
     itemActive: "text-gray-900 dark:text-white font-semibold",
-    dropdown: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+    content: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
   }}
 />
 ```
@@ -196,9 +196,9 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
     item: "px-3 py-1.5 text-xs font-medium rounded-full cursor-pointer transition-all bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
     itemActive: "px-3 py-1.5 text-xs font-medium rounded-full bg-blue-600 text-white",
     separator: "text-gray-300 dark:text-gray-600 mx-0.5",
-    ellipsisButton: "px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer",
-    dropdown: "rounded-xl shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
-    dropdownItem: "px-3 py-2 text-sm cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700",
+    ellipsisTrigger: "px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer",
+    content: "rounded-xl shadow-lg py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+    collapsedItem: "px-3 py-2 text-sm cursor-pointer text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700",
   }}
 />
 ```
@@ -222,8 +222,8 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
 
 ```tsx
 const items: BreadcrumbItem[] = [
-  { id: "home", label: "Home", icon: <HomeIcon className="w-4 h-4" /> },
-  { id: "docs", label: "Docs", icon: <FolderIcon className="w-4 h-4" /> },
+  { id: "home", label: "Home", itemIcon: <HomeIcon className="w-4 h-4" /> },
+  { id: "docs", label: "Docs", itemIcon: <FolderIcon className="w-4 h-4" /> },
   { id: "api", label: "API Reference" },
 ];
 
@@ -248,7 +248,7 @@ const items: BreadcrumbItem[] = [
 // String separator
 <Breadcrumb items={items} separator={<span className="mx-1 text-gray-400">/</span>} />
 
-// Custom icon component
+// Custom itemIcon component
 <Breadcrumb items={items} separatorIcon={ArrowRightIcon} iconSize={14} />
 ```
 

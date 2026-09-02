@@ -16,7 +16,7 @@ Use `<Checkbox label="Accept" checked={val} onValueChange={setVal} />` for a bas
 ## Import
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/checkbox";
+import { Checkbox } from "@chumlab/ui/control";
 ```
 
 ---
@@ -24,7 +24,7 @@ import { Checkbox } from "@chumlab/ui/checkbox";
 ## Basic Usage (copy-paste ready)
 
 ```tsx
-import { Checkbox } from "@chumlab/ui/checkbox";
+import { Checkbox } from "@chumlab/ui/control";
 import { useState } from "react";
 
 export default function Example() {
@@ -85,9 +85,9 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
-| `error` | boolean | `false` | Displays the checkbox in an error state. |
+| `message` | boolean | `false` | Displays the checkbox in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the checkbox. |
-| `success` | boolean | `false` | Displays the checkbox in a success state. |
+| `message` | boolean | `false` | Displays the checkbox in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the checkbox. |
 | `loading` | boolean | `false` | Displays the checkbox in a loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of the checkbox indicator. |
@@ -117,23 +117,23 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 ```
 root
 └── label (implicit, wraps everything)
-    ├── checkbox [contains hidden input + icon]
+    ├── control [contains hidden input + itemIndicator]
     │   ├── (hidden native input)
-    │   └── icon (check / indeterminate / unchecked)
-    └── labelContainer
+    │   └── itemIndicator (check / indeterminate / unchecked)
+    └── labelGroup
         ├── label (text)
         └── description (text)
-error / success (below)
+message / message (below)
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Box color when checked | `checked` | Background + border + text color |
 | Box color when unchecked | `unchecked` | Background + border |
-| Box border radius | `checkbox` | Or use `shape` prop |
+| Box border radius | `control` | Or use `shape` prop |
 | Label text style | `label` | Font size, color, weight |
-| Error message style | `error` | Color, size |
-| Check icon | `icon` | Or use `checkedIcon` prop for custom element |
+| Error message style | `message` | Color, size |
+| Check icon | `itemIndicator` | Or use `checkedIcon` prop for custom element |
 
 ### Dark mode
 
@@ -166,7 +166,7 @@ classes={{
   shape="circle"
   classes={{
     root: "",
-    checkbox: "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors",
+    control: "w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 inline-flex items-center justify-center transition-colors",
     checked: "bg-emerald-500 border-emerald-500 text-white",
     unchecked: "bg-white dark:bg-gray-900",
     label: "text-sm font-medium text-gray-800 dark:text-gray-200",
@@ -212,7 +212,7 @@ const someChecked = items.some(Boolean);
 <Checkbox
   name="terms"
   required
-  error={!!errors.terms}
+  message={!!errors.terms}
   errorMessage={errors.terms}
   label="I accept the Terms of Service"
   checked={accepted}
@@ -250,7 +250,7 @@ const someChecked = items.some(Boolean);
 |---------|-------|-----|
 | Checkbox doesn't toggle | Using `checked` without `onValueChange` | Add `onValueChange` handler or use `defaultChecked` |
 | Indeterminate not showing | `indeterminate` not set | Pass `indeterminate={true}` — it's visual only |
-| Custom icon wrong size | Icon doesn't match checkbox size | Use the `icon` class slot or size your icon to match |
+| Custom icon wrong size | Icon doesn't match checkbox size | Use the `itemIndicator` class slot or size your icon to match |
 | Classes don't merge | Expected additive | Classes REPLACE per slot. Provide complete styling. |
 | Checkbox invisible in dark mode | Overrode `unchecked` without dark variant | Add `dark:` classes to your override |
 | Click doesn't work | Label not wrapping input | Ensure you're not breaking the component structure with `asChild` |

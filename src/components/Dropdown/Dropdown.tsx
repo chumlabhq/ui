@@ -78,7 +78,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       aria-label={option.label}
       className={
         cn(
-          classes.option,
+          classes.item,
           isSelected && classes.optionSelected,
           isFocused && classes.optionFocused,
           isDisabled && classes.optionDisabled,
@@ -103,7 +103,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || (
-          <CheckIconComponent className={cn(classes.checkIcon) || undefined} />
+          <CheckIconComponent className={cn(classes.itemIndicator) || undefined} />
         ))}
     </div>
   );
@@ -303,7 +303,7 @@ const DropdownContent = memo(function DropdownContent({
       data-position={coords?.position ?? preferredPosition}
       data-dropdown-id={dropdownId}
     >
-      <div className={classes.optionList || undefined}>{children}</div>
+      <div className={classes.list || undefined}>{children}</div>
     </div>,
     portalContainer ?? document.body,
   );
@@ -401,27 +401,26 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const mergedClasses: Required<DropdownClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         trigger: classesProp?.trigger ?? baseClasses.trigger,
-        triggerText: classesProp?.triggerText ?? baseClasses.triggerText,
+        value: classesProp?.value ?? baseClasses.value,
         content: classesProp?.content ?? baseClasses.content,
-        optionList: classesProp?.optionList ?? baseClasses.optionList,
-        option: classesProp?.option ?? baseClasses.option,
+        list: classesProp?.list ?? baseClasses.list,
+        item: classesProp?.item ?? baseClasses.item,
         optionSelected:
           classesProp?.optionSelected ?? baseClasses.optionSelected,
         optionFocused: classesProp?.optionFocused ?? baseClasses.optionFocused,
         optionDisabled:
           classesProp?.optionDisabled ?? baseClasses.optionDisabled,
-        chevron: classesProp?.chevron ?? baseClasses.chevron,
-        checkIcon: classesProp?.checkIcon ?? baseClasses.checkIcon,
-        clearIcon: classesProp?.clearIcon ?? baseClasses.clearIcon,
-        noResults: classesProp?.noResults ?? baseClasses.noResults,
+        icon: classesProp?.icon ?? baseClasses.icon,
+        itemIndicator: classesProp?.itemIndicator ?? baseClasses.itemIndicator,
+        clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
+        empty: classesProp?.empty ?? baseClasses.empty,
         label: classesProp?.label ?? baseClasses.label,
-        error: classesProp?.error ?? baseClasses.error,
+        message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
-        success: classesProp?.success ?? baseClasses.success,
-        shimmer: classesProp?.shimmer ?? baseClasses.shimmer,
-        shimmerItem: classesProp?.shimmerItem ?? baseClasses.shimmerItem,
+        loading: classesProp?.loading ?? baseClasses.loading,
+        loadingItem: classesProp?.loadingItem ?? baseClasses.loadingItem,
       }),
       [classesProp, baseClasses],
     );
@@ -615,7 +614,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           <div className={mergedClasses.description || undefined}>{description}</div>
         )}
 
-        <div className={mergedClasses.wrapper || undefined}>
+        <div className={mergedClasses.control || undefined}>
           {renderTrigger ? (
             renderTrigger({
               ...triggerProps,
@@ -631,7 +630,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               type="button"
               className={mergedClasses.trigger || undefined}
             >
-              <span className={mergedClasses.triggerText || undefined}>
+              <span className={mergedClasses.value || undefined}>
                 {selectedOption
                   ? selectedOption.selectedContent ||
                     selectedOption.content ||
@@ -640,7 +639,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               </span>
               {showChevron && (
                 <ChevronIcon
-                  className={cn(mergedClasses.chevron) || undefined}
+                  className={cn(mergedClasses.icon) || undefined}
                   style={isOpen ? { transform: "rotate(180deg)" } : undefined}
                 />
               )}
@@ -652,7 +651,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               type="button"
               tabIndex={-1}
               aria-label="Clear selection"
-              className={mergedClasses.clearIcon || undefined}
+              className={mergedClasses.clearTrigger || undefined}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClear();
@@ -683,13 +682,13 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             {loading ? (
               <DropdownShimmer
                 count={shimmerCount}
-                className={mergedClasses.shimmer}
-                itemClassName={mergedClasses.shimmerItem}
+                className={mergedClasses.loading}
+                itemClassName={mergedClasses.loadingItem}
               />
             ) : displayOptions.length === 0 ? (
               <div
                 role="status"
-                className={mergedClasses.noResults || undefined}
+                className={mergedClasses.empty || undefined}
               >
                 {noResultsContent}
               </div>
@@ -738,14 +737,14 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             id={errorId}
             role="alert"
             data-invalid
-            className={mergedClasses.error || undefined}
+            className={mergedClasses.message || undefined}
           >
             {errorMessage}
           </div>
         )}
 
         {success && successMessage && !error && (
-          <div data-valid className={mergedClasses.success || undefined}>{successMessage}</div>
+          <div data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
         )}
       </div>
     );

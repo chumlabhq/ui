@@ -48,7 +48,7 @@ export default function Example() {
 | `sectionOrder` | Controls layout order: `["selector", "pageInfo", "nav"]`. |
 | `renderEllipsis` | Replaces default `...` with custom content. Receives `{ position, onValueChange }`. |
 | `renderPageInfo` | Custom render for page info. Receives `{ value, totalPages, rowsPerPage }`. |
-| `prevIcon` / `nextIcon` / `dropdownIcon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
+| `navIcon` / `navIcon` / `dropdownIcon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
 | `dropdownPosition` | `"top"` or `"bottom"` — controls rows dropdown direction. |
 | `unstyled` | Strips all default classes. Must provide styling via `classes`. |
 
@@ -92,8 +92,8 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
 | `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
-| `prevIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
-| `nextIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
+| `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
+| `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
@@ -114,7 +114,7 @@ import { Pagination } from "@chumlab/ui/pagination";
 
 const paginationRef = useRef<HTMLElement>(null);
 
-// Focus the nav element
+// Focus the row element
 paginationRef.current?.focus();
 
 <Pagination ref={paginationRef} value={page} totalPages={10} onValueChange={setPage} />
@@ -133,8 +133,8 @@ paginationRef.current?.focus();
 ### Slot → visual mapping
 
 ```
-root (nav, flex flex-wrap)
-├── selector (rows-per-page)
+root (row, flex flex-wrap)
+├── rowsPerPage (rows-per-page)
 │   ├── label ("Show")
 │   ├── selectorButton (trigger)
 │   │   └── dropdownIcon
@@ -143,26 +143,26 @@ root (nav, flex flex-wrap)
 │   │       └── selectorOption (role="option")
 │   └── label ("rows")
 ├── pageInfo (custom render slot)
-└── nav (navigation controls)
+└── row (navigation controls)
     ├── navButton (prev)
-    │   └── prevIcon
-    ├── pageButtons
-    │   ├── pageButton / activePageButton
+    │   └── navIcon
+    ├── list
+    │   ├── item / activePageButton
     │   └── ellipsis
     └── navButton (next)
-        └── nextIcon
+        └── navIcon
 ```
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
 | Root layout | `root` | Controls flex direction and gap |
-| Page buttons | `pageButton`, `activePageButton` | Inactive and active styles |
+| Page buttons | `item`, `activePageButton` | Inactive and active styles |
 | Prev/next buttons | `navButton` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
 | Rows dropdown trigger | `selectorButton` | |
 | Dropdown panel | `selectorDropdown` | Portal-rendered |
 | Dropdown option | `selectorOption` | Use `data-[selected]` and `data-[highlighted]` |
-| Icons | `prevIcon`, `nextIcon`, `dropdownIcon` | |
+| Icons | `navIcon`, `navIcon`, `dropdownIcon` | |
 
 ### Dark mode
 
@@ -178,11 +178,11 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
   classes={{
     root: "flex flex-wrap items-center gap-1",
     navButton: "p-2 rounded-full border shadow-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
-    pageButton: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
+    item: "w-9 h-9 rounded-full border shadow-sm flex items-center justify-center text-sm bg-white border-gray-200 dark:bg-gray-700 dark:border-gray-600",
     activePageButton: "w-9 h-9 rounded-full shadow-md flex items-center justify-center text-sm bg-blue-600 text-white",
-    pageButtons: "flex items-center gap-1",
-    prevIcon: "w-4 h-4",
-    nextIcon: "w-4 h-4",
+    list: "flex items-center gap-1",
+    navIcon: "w-4 h-4",
+    navIcon: "w-4 h-4",
     ellipsis: "px-2 text-gray-400",
   }}
 />
@@ -249,7 +249,7 @@ const [rows, setRows] = useState(10);
 ### Section reordering
 
 ```tsx
-<Pagination sectionOrder={["nav", "pageInfo", "selector"]} />
+<Pagination sectionOrder={["row", "pageInfo", "rowsPerPage"]} />
 ```
 
 ---

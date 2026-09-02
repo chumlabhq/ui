@@ -10,34 +10,31 @@ export interface MultiSelectOption {
 
 export interface MultiSelectSearchableDropdownClasses {
   root?: string;
-  wrapper?: string;
+  control?: string;
   trigger?: string;
-  triggerText?: string;
+  value?: string;
   content?: string;
-  optionList?: string;
-  option?: string;
+  list?: string;
+  item?: string;
   optionSelected?: string;
   optionFocused?: string;
   optionDisabled?: string;
-  chevron?: string;
-  checkbox?: string;
+  icon?: string;
+  itemControl?: string;
   checkboxChecked?: string;
-  checkboxIcon?: string;
+  itemIndicator?: string;
   chip?: string;
   chipRemove?: string;
-  noResults?: string;
-  clearIcon?: string;
+  empty?: string;
+  clearTrigger?: string;
   loading?: string;
-  shimmer?: string;
-  shimmerItem?: string;
   label?: string;
-  error?: string;
+  message?: string;
   description?: string;
-  success?: string;
+  searchControl?: string;
   searchInput?: string;
-  searchInputElement?: string;
   searchIcon?: string;
-  moreCount?: string;
+  count?: string;
 }
 
 /**

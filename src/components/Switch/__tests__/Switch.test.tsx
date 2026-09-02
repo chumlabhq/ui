@@ -502,7 +502,7 @@ describe("Switch Component", () => {
 
     it("applies error class from classes prop to error message", () => {
       render(
-        <Switch error errorMessage="Error" classes={{ error: "custom-error" }} aria-label="Toggle" />
+        <Switch error errorMessage="Error" classes={{ message: "custom-error" }} aria-label="Toggle" />
       );
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");

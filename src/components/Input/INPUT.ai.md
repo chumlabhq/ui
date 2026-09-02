@@ -74,9 +74,9 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode - Label rendered above the input. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `error` | boolean | `false` | Displays the input in an error state. |
+| `message` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `success` | boolean | `false` | Green success state for validated fields. |
+| `message` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
@@ -113,7 +113,7 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 root (flex flex-col)
 ├── label
 ├── description
-├── wrapper (border, focus ring, flex row)
+├── control (border, focus ring, flex row)
 │   ├── prefix
 │   ├── startIcon
 │   ├── input
@@ -121,23 +121,23 @@ root (flex flex-col)
 │   ├── suffix
 │   ├── clear button
 │   └── loader
-├── error / success
+├── message / message
 └── count
 ```
 
 | "I want to change..." | Slot | Notes |
 |------------------------|------|-------|
-| Border/focus ring | `wrapper` | Contains all input chrome |
+| Border/focus ring | `control` | Contains all input chrome |
 | Input text | `input` | Font, color, placeholder |
 | Label style | `label` | Font weight, size, color |
-| Error text | `error` | Color, icon |
+| Error text | `message` | Color, icon |
 
 ### Dark mode
 
 Defaults include `dark:` variants for all slots. When overriding, provide both:
 
 ```tsx
-classes={{ wrapper: "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900" }}
+classes={{ control: "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900" }}
 ```
 
 ---
@@ -162,9 +162,9 @@ const [show, setShow] = useState(false);
 ```tsx
 <Input
   label="Email"
-  error={!isValid}
+  message={!isValid}
   errorMessage="Please enter a valid email"
-  success={isValid}
+  message={isValid}
   successMessage="Looks good!"
 />
 ```
@@ -187,7 +187,7 @@ const [show, setShow] = useState(false);
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| No focus ring | Overrode `wrapper` without focus classes | Include `focus-within:ring-2` in your override |
+| No focus ring | Overrode `control` without focus classes | Include `focus-within:ring-2` in your override |
 | Character count not showing | Missing `maxLength` | Set both `showCount` and `maxLength` |
 | Icon not clickable | Missing click handler | Pass `onStartIconClick` or `onEndIconClick` |
 | Classes don't merge | Expected additive | Classes REPLACE per slot |

@@ -45,8 +45,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
     const mergedClasses: Required<PulseLoaderClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        core: classesProp?.core ?? baseClasses.core,
-        ring: classesProp?.ring ?? baseClasses.ring,
+        range: classesProp?.range ?? baseClasses.range,
       }),
       [classesProp, baseClasses],
     );
@@ -64,7 +63,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
       >
         {/* Core dot */}
         <span
-          className={mergedClasses.core || undefined}
+          className={mergedClasses.range || undefined}
           style={{
             position: "absolute",
             width: `${size * 0.3}px`,
@@ -78,7 +77,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
         {ringElements.map((_, i) => (
           <span
             key={i}
-            className={mergedClasses.ring || undefined}
+            className={mergedClasses.range || undefined}
             style={{
               position: "absolute",
               width: "100%",

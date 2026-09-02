@@ -160,7 +160,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
         overlay: classesProp?.overlay ?? baseClasses.overlay,
-        panel: classesProp?.panel ?? baseClasses.panel,
+        content: classesProp?.content ?? baseClasses.content,
       }),
       [classesProp, baseClasses],
     );
@@ -557,7 +557,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               inert={isHiddenMounted || undefined}
               className={
                 cn(
-                  mergedClasses.panel,
+                  mergedClasses.content,
                   modal && !lockScroll && "pointer-events-auto",
                   !modal &&
                     (visualOpen

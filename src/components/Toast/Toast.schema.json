@@ -21,15 +21,15 @@
     },
     "message": {
       "type": "object",
-      "description": "React.ReactNode — Primary message content."
+      "description": "React.ReactNode \u2014 Primary message content."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Secondary description text."
+      "description": "React.ReactNode \u2014 Secondary description text."
     },
     "content": {
       "type": "object",
-      "description": "React.ReactNode — Custom content that replaces message and description."
+      "description": "React.ReactNode \u2014 Custom content that replaces message and description."
     },
     "duration": {
       "type": "number",
@@ -47,7 +47,7 @@
     },
     "icon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon replacing the default type icon."
+      "description": "React.ReactNode \u2014 Custom icon replacing the default type icon."
     },
     "showCloseButton": {
       "type": "boolean",
@@ -56,7 +56,7 @@
     },
     "onDismiss": {
       "type": "object",
-      "description": "() => void — Fires when the toast is dismissed."
+      "description": "() => void \u2014 Fires when the toast is dismissed."
     },
     "role": {
       "type": "string",
@@ -84,22 +84,19 @@
       "type": "object",
       "description": "CSS class overrides for sub-elements.",
       "properties": {
-        "container": {
+        "root": {
           "type": "string"
         },
-        "content": {
-          "type": "string"
-        },
-        "message": {
+        "title": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "progress": {
+        "indicator": {
           "type": "string"
         },
-        "closeButton": {
+        "closeTrigger": {
           "type": "string"
         },
         "icon": {
@@ -114,7 +111,7 @@
     },
     "onRemove": {
       "type": "object",
-      "description": "(id: string) => void — Internal callback to remove the toast from the provider."
+      "description": "(id: string) => void \u2014 Internal callback to remove the toast from the provider."
     }
   },
   "required": [

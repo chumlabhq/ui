@@ -123,7 +123,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const shouldShowIcon = iconPosition !== "none";
     const iconElement = shouldShowIcon && (
-      <span className={config.classes.iconWrapper || undefined} aria-hidden="true" inert>
+      <span className={config.classes.icon || undefined} aria-hidden="true" inert>
         {renderIcon()}
       </span>
     );
@@ -159,22 +159,22 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     ) : (
       <>
         {leftSlot && (
-          <span className={config.classes.triggerLeft || undefined} aria-hidden="true" inert>
+          <span className={config.classes.itemIcon || undefined} aria-hidden="true" inert>
             {leftSlot}
           </span>
         )}
         {iconPosition === "left" && iconElement}
-        <span className={config.classes.triggerInner || undefined}>
+        <span className={config.classes.itemText || undefined}>
           <span>{children}</span>
           {subtitle && (
-            <span className={cn(config.classes.subtitle) || undefined}>
+            <span className={cn(config.classes.description) || undefined}>
               {subtitle}
             </span>
           )}
         </span>
         {iconPosition === "right" && iconElement}
         {rightSlot && (
-          <span className={config.classes.triggerRight || undefined} aria-hidden="true" inert>
+          <span className={config.classes.triggerActions || undefined} aria-hidden="true" inert>
             {rightSlot}
           </span>
         )}
@@ -182,7 +182,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     );
 
     return (
-      <HeadingTag className={config.classes.heading || undefined}>
+      <HeadingTag className={config.classes.header || undefined}>
         <Comp ref={mergedButtonRef} {...triggerProps}>
           {content}
         </Comp>

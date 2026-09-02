@@ -289,7 +289,7 @@ describe("Slider", () => {
 
     it("applies classes.error to the error message", () => {
       render(
-        <Slider error errorMessage="Bad" classes={{ error: "custom-error" }} />
+        <Slider error errorMessage="Bad" classes={{ message: "custom-error" }} />
       );
 
       expect(screen.getByRole("alert")).toHaveClass("custom-error");

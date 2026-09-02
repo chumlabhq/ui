@@ -858,7 +858,7 @@ describe("Accordion", () => {
         <Accordion
           type="single"
           classes={{
-            content: "custom-content",
+            body: "custom-content",
           }}
         >
           <AccordionItem value="item-1">

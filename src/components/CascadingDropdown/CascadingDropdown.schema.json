@@ -18,11 +18,11 @@
           },
           "content": {
             "type": "object",
-            "description": "React.ReactNode — Custom display content."
+            "description": "React.ReactNode \u2014 Custom display content."
           },
           "selectedContent": {
             "type": "object",
-            "description": "React.ReactNode — Content shown when selected."
+            "description": "React.ReactNode \u2014 Content shown when selected."
           },
           "disabled": {
             "type": "boolean"
@@ -66,11 +66,11 @@
     },
     "onLoadChildren": {
       "type": "object",
-      "description": "(parent: CascadingOption) => Promise<CascadingOption[]> — Async child loader."
+      "description": "(parent: CascadingOption) => Promise<CascadingOption[]> \u2014 Async child loader."
     },
     "onLoadError": {
       "type": "object",
-      "description": "(error: unknown) => void — Called when async child loading fails."
+      "description": "(error: unknown) => void \u2014 Called when async child loading fails."
     },
     "open": {
       "type": "boolean",
@@ -107,7 +107,7 @@
     },
     "placeholder": {
       "type": "object",
-      "description": "React.ReactNode — Placeholder content when no value is selected.",
+      "description": "React.ReactNode \u2014 Placeholder content when no value is selected.",
       "default": "Select an option"
     },
     "disabled": {
@@ -122,15 +122,15 @@
     },
     "errorMessage": {
       "type": "object",
-      "description": "React.ReactNode — Error message."
+      "description": "React.ReactNode \u2014 Error message."
     },
     "label": {
       "type": "object",
-      "description": "React.ReactNode — Label above the trigger."
+      "description": "React.ReactNode \u2014 Label above the trigger."
     },
     "description": {
       "type": "object",
-      "description": "React.ReactNode — Description text."
+      "description": "React.ReactNode \u2014 Description text."
     },
     "success": {
       "type": "boolean",
@@ -139,7 +139,7 @@
     },
     "successMessage": {
       "type": "object",
-      "description": "React.ReactNode — Success message."
+      "description": "React.ReactNode \u2014 Success message."
     },
     "required": {
       "type": "boolean",
@@ -148,12 +148,12 @@
     },
     "noResultsContent": {
       "type": "object",
-      "description": "React.ReactNode — Content shown when no results match.",
+      "description": "React.ReactNode \u2014 Content shown when no results match.",
       "default": "No options found"
     },
     "loadingText": {
       "type": "object",
-      "description": "React.ReactNode — Text shown during async loading.",
+      "description": "React.ReactNode \u2014 Text shown during async loading.",
       "default": "Loading..."
     },
     "shimmerCount": {
@@ -181,11 +181,11 @@
     },
     "selectedIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom icon for selected items."
+      "description": "React.ReactNode \u2014 Custom icon for selected items."
     },
     "checkboxIcon": {
       "type": "object",
-      "description": "React.ReactNode — Custom checkbox icon for multi-select."
+      "description": "React.ReactNode \u2014 Custom checkbox icon for multi-select."
     },
     "fullWidth": {
       "type": "boolean",
@@ -222,16 +222,16 @@
         "root": {
           "type": "string"
         },
-        "wrapper": {
+        "control": {
           "type": "string"
         },
         "trigger": {
           "type": "string"
         },
-        "menu": {
+        "content": {
           "type": "string"
         },
-        "menuItem": {
+        "item": {
           "type": "string"
         },
         "menuItemSelected": {
@@ -243,13 +243,13 @@
         "menuItemDisabled": {
           "type": "string"
         },
-        "submenu": {
+        "subContent": {
           "type": "string"
         },
-        "submenuContainer": {
+        "subPositioner": {
           "type": "string"
         },
-        "submenuItem": {
+        "subItem": {
           "type": "string"
         },
         "submenuItemSelected": {
@@ -261,64 +261,55 @@
         "label": {
           "type": "string"
         },
-        "error": {
+        "message": {
           "type": "string"
         },
         "description": {
           "type": "string"
         },
-        "success": {
+        "icon": {
           "type": "string"
         },
-        "chevron": {
+        "itemIcon": {
           "type": "string"
         },
-        "submenuChevron": {
+        "itemIndicator": {
           "type": "string"
         },
-        "checkIcon": {
-          "type": "string"
-        },
-        "checkbox": {
+        "itemControl": {
           "type": "string"
         },
         "checkboxChecked": {
           "type": "string"
         },
-        "noResults": {
+        "empty": {
           "type": "string"
         },
         "loading": {
           "type": "string"
         },
-        "clearIcon": {
+        "clearTrigger": {
           "type": "string"
         },
-        "shimmer": {
+        "loadingItem": {
           "type": "string"
         },
-        "shimmerItem": {
+        "searchControl": {
           "type": "string"
         },
         "searchInput": {
           "type": "string"
         },
-        "searchInputElement": {
-          "type": "string"
-        },
         "searchIcon": {
           "type": "string"
         },
-        "submenuSearchInput": {
+        "subSearchControl": {
           "type": "string"
         },
-        "submenuSearchInputElement": {
+        "subSearchInput": {
           "type": "string"
         },
-        "submenuSearchIcon": {
-          "type": "string"
-        },
-        "content": {
+        "subSearchIcon": {
           "type": "string"
         },
         "option": {
@@ -347,7 +338,7 @@
     },
     "portalContainer": {
       "type": "object",
-      "description": "HTMLElement | null — Portal container for the dropdown."
+      "description": "HTMLElement | null \u2014 Portal container for the dropdown."
     },
     "dropdownZIndex": {
       "type": "number",
@@ -370,15 +361,15 @@
     },
     "style": {
       "type": "object",
-      "description": "CSSProperties — Inline styles."
+      "description": "CSSProperties \u2014 Inline styles."
     },
     "ClearIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> — Custom clear icon component."
+      "description": "React.ComponentType<{ className?: string }> \u2014 Custom clear icon component."
     },
     "renderTrigger": {
       "type": "object",
-      "description": "(props: CascadingDropdownTriggerRenderProps) => React.ReactNode — Custom trigger render function."
+      "description": "(props: CascadingDropdownTriggerRenderProps) => React.ReactNode \u2014 Custom trigger render function."
     },
     "showMenuSearch": {
       "type": "boolean",
@@ -402,11 +393,11 @@
     },
     "onMenuSearch": {
       "type": "object",
-      "description": "(query: string) => Promise<CascadingOption[]> — Async search for main menu."
+      "description": "(query: string) => Promise<CascadingOption[]> \u2014 Async search for main menu."
     },
     "onSubmenuSearch": {
       "type": "object",
-      "description": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]> — Async search for submenu."
+      "description": "(query: string, parent: CascadingOption) => Promise<CascadingOption[]> \u2014 Async search for submenu."
     },
     "searchDebounceMs": {
       "type": "number",
@@ -415,7 +406,7 @@
     },
     "SearchIcon": {
       "type": "object",
-      "description": "React.ComponentType<{ className?: string }> — Custom search icon component."
+      "description": "React.ComponentType<{ className?: string }> \u2014 Custom search icon component."
     },
     "menuSearchAriaLabel": {
       "type": "string",

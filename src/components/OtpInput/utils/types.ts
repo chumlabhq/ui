@@ -9,15 +9,14 @@ export interface OtpInputLabelProps {
 
 export interface OtpInputClasses {
   root?: string;
-  wrapper?: string;
+  control?: string;
   group?: string;
   input?: string;
   inputFocused?: string;
   label?: string;
-  error?: string;
+  message?: string;
   separator?: string;
   description?: string;
-  success?: string;
 }
 
 export interface OtpInputRenderProps {

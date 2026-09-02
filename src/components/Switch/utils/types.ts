@@ -12,20 +12,19 @@ export interface SwitchRenderProps {
 
 export interface SwitchClasses {
   root?: string;
-  innerRow?: string;
-  labelContainer?: string;
+  row?: string;
+  labelGroup?: string;
   label?: string;
   disabledLabel?: string;
   description?: string;
-  tracker?: string;
+  control?: string;
   disabledTracker?: string;
   thumb?: string;
   checkedTracker?: string;
   uncheckedTracker?: string;
   checkedThumb?: string;
   uncheckedThumb?: string;
-  error?: string;
-  success?: string;
+  message?: string;
   loading?: string;
 }
 

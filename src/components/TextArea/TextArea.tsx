@@ -106,12 +106,11 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const mergedClasses: Required<TextAreaClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        wrapper: classesProp?.wrapper ?? baseClasses.wrapper,
+        control: classesProp?.control ?? baseClasses.control,
         label: classesProp?.label ?? baseClasses.label,
         description: classesProp?.description ?? baseClasses.description,
-        textarea: classesProp?.textarea ?? baseClasses.textarea,
-        error: classesProp?.error ?? baseClasses.error,
-        success: classesProp?.success ?? baseClasses.success,
+        input: classesProp?.input ?? baseClasses.input,
+        message: classesProp?.message ?? baseClasses.message,
         count: classesProp?.count ?? baseClasses.count,
       }),
       [classesProp, baseClasses],
@@ -222,10 +221,10 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         loaderSize={loaderSize}
         fullWidth={fullWidth}
         className={cn(mergedClasses.root, fullWidth && "w-full", className)}
-        wrapperClassName={mergedClasses.wrapper}
+        wrapperClassName={mergedClasses.control}
         labelClassName={mergedClasses.label}
-        errorClassName={mergedClasses.error}
-        successClassName={mergedClasses.success}
+        errorClassName={mergedClasses.message}
+        successClassName={mergedClasses.message}
         descriptionClassName={mergedClasses.description}
         countClassName={mergedClasses.count}
         wrapperAlign="items-start"
@@ -244,7 +243,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           maxLength={maxLength}
           rows={rows}
           data-slot="textarea"
-          className={cn(mergedClasses.textarea)}
+          className={cn(mergedClasses.input)}
           style={autoResize ? { overflow: "hidden", resize: "none" } : undefined}
           aria-invalid={error || undefined}
           aria-describedby={ariaDescribedBy}

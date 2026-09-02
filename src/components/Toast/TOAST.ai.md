@@ -53,7 +53,7 @@ function MyComponent() {
 | `type` | `"success"`, `"warning"`, `"error"`, `"info"` |
 | `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
-| `content` | ReactNode that replaces the default message/description layout entirely |
+| `root` | ReactNode that replaces the default message/description layout entirely |
 | `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
 | `maxToasts` | Set on `<ToastProvider>` to limit visible toasts |
 
@@ -63,11 +63,11 @@ function MyComponent() {
 
 ```tsx
 const toast = useToast();
-toast.success("message", options?);
-toast.warning("message", options?);
-toast.error("message", options?);
-toast.info("message", options?);
-toast.toast({ type, message, ...options }); // generic
+toast.success("title", options?);
+toast.warning("title", options?);
+toast.error("title", options?);
+toast.info("title", options?);
+toast.toast({ type, title, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();
 ```
@@ -93,9 +93,9 @@ toast.dismissAll();
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
 | `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
-| `message` | object | — | React.ReactNode — Primary message content. |
+| `title` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
-| `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
+| `root` | object | — | React.ReactNode — Custom content that replaces message and description. |
 | `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
 | `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
 | `progressColor` | string | — | Custom color for the progress bar. |

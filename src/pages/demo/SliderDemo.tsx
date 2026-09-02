@@ -249,7 +249,7 @@ const SliderDemo = () => {
                 markDotSize={10}
                 classes={{
                   ...c.slider,
-                  markDot: `rounded-full bg-cl-bg-hover dark:bg-cl-text/10`,
+                  marker: `rounded-full bg-cl-bg-hover dark:bg-cl-text/10`,
                   markDotActive: dark ? "bg-cl-accent/90" : "bg-cl-accent",
                 }}
               />
@@ -648,7 +648,7 @@ const SliderDemo = () => {
                   ...c.slider,
                   track: `rounded-full h-3 bg-cl-bg-hover dark:bg-cl-bg-hover`,
                   range: "rounded-full bg-gradient-to-r from-cl-accent/150 to-cl-accent",
-                  wrapper: "relative select-none touch-none py-1",
+                  control: "relative select-none touch-none py-1",
                 }}
               />
             </div>

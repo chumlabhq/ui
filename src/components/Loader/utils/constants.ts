@@ -10,9 +10,9 @@ import type {
 
 export const DEFAULT_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> = {
   root: "inline-flex shrink-0 text-cl-accent",
-  svg: "h-full w-full animate-spin",
+  control: "h-full w-full animate-spin",
   track: "opacity-20",
-  indicator: "",
+  range: "",
 };
 
 export const UNSTYLED_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> =
@@ -22,7 +22,7 @@ export const UNSTYLED_CIRCULAR_LOADER_CLASSES: Required<CircularLoaderClasses> =
 
 export const DEFAULT_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> = {
   root: "inline-block text-cl-accent",
-  bar: "",
+  range: "",
 };
 
 export const UNSTYLED_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> =
@@ -32,7 +32,7 @@ export const UNSTYLED_LINEAR_LOADER_CLASSES: Required<LinearLoaderClasses> =
 
 export const DEFAULT_DOT_LOADER_CLASSES: Required<DotLoaderClasses> = {
   root: "text-cl-accent",
-  dot: "",
+  range: "",
 };
 
 export const UNSTYLED_DOT_LOADER_CLASSES: Required<DotLoaderClasses> =
@@ -42,8 +42,7 @@ export const UNSTYLED_DOT_LOADER_CLASSES: Required<DotLoaderClasses> =
 
 export const DEFAULT_PULSE_LOADER_CLASSES: Required<PulseLoaderClasses> = {
   root: "text-cl-accent",
-  core: "",
-  ring: "",
+  range: "",
 };
 
 export const UNSTYLED_PULSE_LOADER_CLASSES: Required<PulseLoaderClasses> =

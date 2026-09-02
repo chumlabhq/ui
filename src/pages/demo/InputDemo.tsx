@@ -549,7 +549,7 @@ const InputDemo = () => {
                 }
                 error={userBad}
                 errorMessage="Minimum 3 characters"
-                classes={{ ...c.input, wrapper: wrapperFor(userBad, userOk) }}
+                classes={{ ...c.input, control: wrapperFor(userBad, userOk) }}
               />
             </div>
           </DemoWrapper>
@@ -577,7 +577,7 @@ const InputDemo = () => {
                     <AlertIcon /> Please enter a valid email
                   </>
                 }
-                classes={{ ...c.input, wrapper: c.wrapperError }}
+                classes={{ ...c.input, control: c.wrapperError }}
               />
               <Input
                 label="Success"
@@ -588,7 +588,7 @@ const InputDemo = () => {
                     <CheckIcon /> Email is valid
                   </>
                 }
-                classes={{ ...c.input, wrapper: c.wrapperSuccess }}
+                classes={{ ...c.input, control: c.wrapperSuccess }}
               />
             </div>
           </DemoWrapper>
@@ -623,7 +623,7 @@ const InputDemo = () => {
                     <CheckIcon /> Looks good!
                   </>
                 }
-                classes={{ ...c.input, wrapper: wrapperFor(emailBad, emailOk) }}
+                classes={{ ...c.input, control: wrapperFor(emailBad, emailOk) }}
               />
             </div>
           </DemoWrapper>
@@ -761,7 +761,7 @@ const InputDemo = () => {
                 classes={{
                   ...c.input,
                   input: c.disabledInput,
-                  wrapper: c.wrapperDisabled,
+                  control: c.wrapperDisabled,
                 }}
               />
               <Input
@@ -771,7 +771,7 @@ const InputDemo = () => {
                 classes={{
                   ...c.input,
                   input: c.disabledInput,
-                  wrapper: c.wrapperDisabled,
+                  control: c.wrapperDisabled,
                 }}
               />
               <Input
@@ -780,7 +780,7 @@ const InputDemo = () => {
                 readOnly
                 classes={{
                   ...c.input,
-                  wrapper: `${c.input.wrapper} cursor-default`,
+                  control: `${c.input.wrapper} cursor-default`,
                 }}
               />
             </div>
@@ -1057,7 +1057,7 @@ const InputDemo = () => {
                         String(label) === "Large size"
                           ? `w-full bg-transparent outline-none text-lg text-cl-text placeholder:text-cl-text-disabled`
                           : c.input.input,
-                      wrapper: wCls as string,
+                      control: wCls as string,
                     }}
                   />
                 </div>
@@ -1193,7 +1193,7 @@ const InputDemo = () => {
                 }
                 error={userBad}
                 errorMessage="Min 3 characters"
-                classes={{ ...c.input, wrapper: wrapperFor(userBad, userOk) }}
+                classes={{ ...c.input, control: wrapperFor(userBad, userOk) }}
               />
               <Input
                 label="Email"
@@ -1217,7 +1217,7 @@ const InputDemo = () => {
                     <AlertIcon /> Invalid format
                   </>
                 }
-                classes={{ ...c.input, wrapper: wrapperFor(emailBad, emailOk) }}
+                classes={{ ...c.input, control: wrapperFor(emailBad, emailOk) }}
               />
               <Input
                 label="Password"

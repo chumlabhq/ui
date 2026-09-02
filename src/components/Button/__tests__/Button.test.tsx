@@ -73,7 +73,7 @@ describe("Button", () => {
     });
 
     it("applies custom classes.content", () => {
-      render(<Button classes={{ content: "custom-content" }}>Content</Button>);
+      render(<Button classes={{ itemText: "custom-content" }}>Content</Button>);
 
       const content = screen.getByText("Content").closest("span");
       expect(content).toHaveClass("custom-content");

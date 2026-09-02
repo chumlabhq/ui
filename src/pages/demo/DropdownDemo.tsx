@@ -736,7 +736,7 @@ const DropdownDemo = () => {
                   optionSelected: dark
                     ? "bg-cl-success/40 border-l-[3px] border-cl-success pl-3"
                     : "bg-cl-success/15 border-l-[3px] border-cl-success pl-3",
-                  checkIcon: dark ? "text-cl-success" : "text-cl-success",
+                  itemIndicator: dark ? "text-cl-success" : "text-cl-success",
                 }}
               />
             </div>
@@ -823,7 +823,7 @@ const DropdownDemo = () => {
  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-accent`,
                   optionFocused: dark ? "bg-cl-accent/50" : "bg-cl-accent/10",
                   optionSelected: dark ? "bg-cl-accent/40" : "bg-cl-accent/10",
-                  checkIcon: `w-4 h-4 shrink-0 text-cl-accent`,
+                  itemIndicator: `w-4 h-4 shrink-0 text-cl-accent`,
                 }}
               />
             </div>
@@ -839,7 +839,7 @@ const DropdownDemo = () => {
  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-white text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-success focus:border-transparent dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-white dark:hover:border-cl-border dark:focus:outline-none dark:focus:ring-2 dark:focus:ring-cl-success`,
                   optionFocused: dark ? "bg-cl-success/50" : "bg-cl-success/15",
                   optionSelected: dark ? "bg-cl-success/40" : "bg-cl-success/15",
-                  checkIcon: `w-4 h-4 shrink-0 text-cl-success`,
+                  itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
               />
             </div>
@@ -1173,7 +1173,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover dark:bg-cl-bg-hover dark:text-cl-text dark:hover:bg-cl-bg-hover`,
-                triggerText: "flex-1 text-left truncate",
+                value: "flex-1 text-left truncate",
               }}
             />
           </div>
@@ -1185,7 +1185,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-b-2 rounded-none transition-colors cursor-pointer border border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus dark:border dark:border-cl-border dark:text-cl-text dark:hover:border-cl-border-input-focus dark:focus-within:border-cl-border-input-focus`,
-                triggerText: "flex-1 text-left truncate",
+                value: "flex-1 text-left truncate",
               }}
             />
           </div>
@@ -1197,7 +1197,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover dark:text-cl-text-secondary dark:hover:bg-cl-text/60`,
-                triggerText: "flex-1 text-left truncate",
+                value: "flex-1 text-left truncate",
               }}
             />
           </div>
@@ -1210,7 +1210,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
  trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full transition-colors cursor-pointer border border-cl-border bg-white text-cl-text hover:border-cl-border-input shadow-sm dark:border dark:border-cl-border dark:bg-cl-bg-elevated dark:text-cl-text dark:hover:border-cl-border`,
-                triggerText: "flex-1 text-left truncate",
+                value: "flex-1 text-left truncate",
               }}
             />
           </div>
@@ -1560,7 +1560,7 @@ const DropdownDemo = () => {
               )}
               classes={{
                 ...c.dropdown,
-                checkIcon: `w-4 h-4 shrink-0 text-cl-warning`,
+                itemIndicator: `w-4 h-4 shrink-0 text-cl-warning`,
               }}
             />
           </div>

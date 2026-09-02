@@ -438,7 +438,7 @@ describe("Table", () => {
         <Table
           columns={columns}
           data={data}
-          classes={{ container: "my-container" }}
+          classes={{ root: "my-container" }}
         />
       );
 
