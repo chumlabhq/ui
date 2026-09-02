@@ -42,11 +42,7 @@ const NOT_SHIPPED =
  * with the count of literal-class expressions remaining in it.
  */
 const BASELINE: Record<string, number> = {
-  // 42 before the mobile-card view moved to its own module for lazy loading;
-  // 37 + 5 after. The literals were relocated, not added, and the tier total is
-  // unchanged.
-  "Table/Table.tsx": 37,
-  "Table/components/TableMobileView.tsx": 5,
+  "Table/Table.tsx": 42,
   "DatePicker/DatePicker.tsx": 22,
   "Toast/Toast.tsx": 8,
   "CascadingDropdown/CascadingDropdown.tsx": 6,

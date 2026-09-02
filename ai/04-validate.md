@@ -42,17 +42,26 @@ Run each check. Each is independent and must PASS.
 
 ### 4. TypeScript
 
-- [ ] `npm run verify:bundle-size` passes — measures every packaged entry's
-      gzipped size against its class ceiling and fails on a hard-fail breach.
-      Needs a `build:lib` dist. NOT wired into `postbuild:lib` on purpose: it is
-      red today (Table, DatePicker), and chaining it there would make the
-      library unbuildable and take `npm run build` with it. The breach belongs
-      in validation, not in everyone's build.
-      Reports two numbers per entry — `own`, the component's own chunk, which is
-      the basis the ceilings were set against and what the gate enforces; and
-      `closure`, the eager static closure of the public entry, which is what a
-      consumer actually downloads. Nine entries exceed their ceiling on
-      `closure`. That is a threshold decision, not a regression.
+- [ ] `npm run verify:bundle-size` passes — measures every packaged entry and
+      the library as a whole. Needs a `build:lib` dist. NOT wired into
+      `postbuild:lib` on purpose: it is red today, and chaining it there would
+      make the library unbuildable and take `npm run build` with it. The breach
+      belongs in validation, not in everyone's build.
+      Gated on `exclusive` — bytes reachable from this entry and no other, the
+      marginal cost of adding the component to a page already using the library.
+      Not `own` (Rollup splits some components across siblings, so Button reads
+      0.17 KB) and not `closure` (it charges a component for composing:
+      CountryFlag is 11.19 closure against 1.59 exclusive, the difference being
+      a Tooltip any page using Tooltip already paid for — a gate on that reddens
+      when composition improves). Both are still reported beside it.
+      Shape sets the ceiling and is derived from the built artifact, not
+      assigned: `"grid"` role → surface, `createPortal` → overlay, pulls another
+      component's chunk → composed, otherwise control. Read from the
+      component's OWN chunk, or everything rendering a Tooltip inherits
+      "overlay" from it.
+      Also gates the whole library, deduplicated, against `LIBRARY_TOTAL_KB`,
+      ratchet-down-only: every entry can sit under its ceiling while the
+      aggregate drifts, and nothing else would notice.
 - [ ] `npm run verify:dist-records` passes — the four dist-derived records
       (validation.build, .performance, .npmAudit, issues.high[8].evidence) are
       tied to a dist fingerprint. `postbuild:lib` clears it, so after any build

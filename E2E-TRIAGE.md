@@ -1413,3 +1413,103 @@ and it is a threshold decision, not a refactor.
 12.32 KB against a 12 KB date-class hard fail — the ceiling we already knew
 about, first caught at 12.63 KB in AUDIT-GAP 7.2 and recorded as 10.25 KB
 throughout. Now gated.
+
+---
+
+# Appendix P — the gate, on exclusive
+
+## Table's mobile split, reverted
+
+0.02 KB net. `Table.tsx`, its two tests, the `mobile` fixture and the constants
+baseline are back to `78709fe`; `TableMobileView.tsx` is deleted. Baseline total
+is 125 again with `Table/Table.tsx: 42`.
+
+The mechanism was sound — separate chunk, `React.lazy`, null fallback, SSR
+untouched. The target was wrong, and the 6.2 KB that made it look worthwhile was
+my region measurement over lines 1839–2006 when the block ends at 1942. The
+block is ~1.3 KB gzipped, and extracting a body that closes over 27 locals costs
+a props interface weighing about the same. Table's real weight is the sub-render
+helpers at 23.8 KB raw, 29% of the file, and that is composition-phase work.
+
+## Gated on `exclusive`
+
+| number | what it is | why not |
+|---|---|---|
+| `own` | the component's own chunk | Rollup splits some components across siblings — Button 0.17, Avatar 0.23, Toast 0.18. A ceiling you pass by moving bytes next door. |
+| `closure` | eager static closure of the entry | charges a component for composing. CountryFlag: 11.19 closure, 1.59 exclusive — the gap is a Tooltip any page using Tooltip already paid for. A gate on this reddens when composition improves. |
+| **`exclusive`** | **reachable from this entry and no other** | **the marginal cost of adding the component to a page already using the library.** |
+
+`own` and `closure` are still printed. The gap between them is the composition
+story, and hiding it would be the same mistake in a new place.
+
+## Shape is derived, not assigned
+
+The shape sets the ceiling, so assigning it by hand would make the ceiling a
+matter of opinion. Read off the built artifact, first match wins:
+
+| shape | signal | ceiling | members |
+|---|---|---|---|
+| surface | renders a `"grid"` role | 12 | 2 |
+| overlay | calls `createPortal` | 10 | 9 |
+| composed | pulls another component's chunk | 8 | 12 |
+| control | none of the above | 6 | 7 |
+
+Read from the component's **own chunk plus its entry**, not the whole closure.
+Scoped to the closure it puts 18 of 30 in `overlay`, because everything that
+renders a Tooltip inherits `createPortal` from it — the rule would have been
+detecting "composes something that portals", not "is an overlay".
+
+Ceilings unchanged from the proposal: floor 4.15 KB (Loader's closure, the
+cheapest complete shipping component) × 1.5 / 2 / 2.5 / 3.
+
+## Five breaches, left red
+
+| component | shape | own | closure | exclusive | ceiling | over |
+|---|---|---|---|---|---|---|
+| Table | surface | 15.30 | 17.81 | 15.66 | 12 | **+3.66** |
+| InternationalPhoneInput | composed | 10.46 | 27.58 | 10.80 | 8 | **+2.80** |
+| TimePicker | overlay | 10.80 | 13.14 | 11.10 | 10 | **+1.10** |
+| Accordion | composed | 0.55 | 11.18 | 9.09 | 8 | **+1.09** |
+| DatePicker | surface | 12.32 | 14.62 | 12.53 | 12 | **+0.53** |
+
+Five, not the four expected. **TimePicker is the extra**, and it is the rule
+working rather than failing: it renders a clock face, not a `"grid"`, so it
+classifies as `overlay` at 10 rather than `surface` at 12. It has no date
+library and no grid role — nothing derivable puts it with DatePicker. Widening
+the rule to include it by name would be hand-assignment wearing a derivation's
+clothes, so it stays red at +1.10.
+
+`InternationalPhoneInput` also moved: `composed`, not `overlay`, because its own
+chunk does not portal — it composes SearchableDropdown, which does. That takes
+its ceiling from 10 to 8 and its breach from +0.80 to +2.80.
+
+## The aggregate gate
+
+**155.76 KB, 75 files, deduplicated. Ratchet-down-only.**
+
+Every entry can sit under its ceiling while the whole library drifts, and
+nothing else would notice — the per-entry gate cannot see it by construction.
+
+Both directions are enforced: above the record fails as growth; more than 0.5 KB
+below fails as a stale record, because a record left above reality buys back
+headroom nobody agreed to. Verified by moving the constant in each direction.
+
+## Self-check
+
+One probe serves both gates: an entry with 24 KB of random bytes.
+
+```
+✓ self-check: a 25.46 KB entry breaches its 6 KB ceiling,
+  and moves the library total by 26.07 KB
+```
+
+Random, not repeated — the first draft used 400,000 identical characters, which
+gzip to 0.48 KB, and the self-check caught its own probe not being a probe.
+
+## `ai/` placeholders
+
+`ai/07-performance.md`'s OUTPUT FORMAT block now carries `<Component>` /
+`<n.n>kb` placeholders and a blockquote naming what went wrong. 17 other OUTPUT
+FORMAT blocks carry a "Placeholders below, not readings" marker. `ai/run.md`'s
+STRICT MODE numbers are thresholds, correctly stated as requirements, and were
+left alone.
