@@ -64,6 +64,8 @@ Use a programmatic check (e.g. via `chroma-js` or similar). Log any failure as �
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 THEME AUDIT — <ISO date>
 

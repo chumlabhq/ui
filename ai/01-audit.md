@@ -100,6 +100,8 @@ Severity rules from `/ai/rules.md` apply.
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 SYSTEM AUDIT — <ISO date>
 

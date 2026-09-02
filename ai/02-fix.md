@@ -80,6 +80,8 @@ Deferred issues move to `issues.deferred` with:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 FIX REPORT — <ISO date>
 

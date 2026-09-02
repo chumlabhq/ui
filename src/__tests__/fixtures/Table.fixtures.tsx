@@ -1,4 +1,5 @@
 import { fireEvent } from "@testing-library/react";
+import { tick } from "./_act";
 import type { Fixture } from "./types";
 import type { TableProps } from "../../components/Table/utils/types";
 import { ROWS, COLUMNS } from "./_data";
@@ -36,7 +37,12 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "editable", props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID } },
   { name: "draggable", props: { data: ROWS, columns: COLUMNS, enableRowDragDrop: true, getRowId: GET_ID } },
   { name: "grouped", props: { data: ROWS, columns: COLUMNS, groupBy: ["role"] } },
-  { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 } },
+  {
+    name: "mobile",
+    props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 },
+    note: "The card view is a lazily-loaded chunk behind Suspense, so it is absent on the synchronous render pass. Without the tick, `mobileCard` looks unrenderable again.",
+    act: () => tick(),
+  },
   { name: "load-more", props: { data: ROWS, columns: COLUMNS, hasMore: true, loadingMore: true, enableInfiniteScroll: true, onLoadMore: () => {} } },
   {
     name: "pinned-right",

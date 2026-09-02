@@ -129,6 +129,8 @@ Capture the file list. Verify it matches the expected output. Flag any unexpecte
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 NPM PUBLISH AUDIT — <ISO date>
 

@@ -67,6 +67,8 @@ When fixing, follow these patterns:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 RESPONSIVE AUDIT — <ISO date>
 

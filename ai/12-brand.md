@@ -72,6 +72,8 @@ Check:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 BRAND AUDIT — <ISO date>
 

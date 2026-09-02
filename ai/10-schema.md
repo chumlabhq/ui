@@ -110,6 +110,8 @@ For each generated schema:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 SCHEMA GENERATION — <ISO date>
 

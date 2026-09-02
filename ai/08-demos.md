@@ -76,6 +76,8 @@ For every demo:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 DEMO AUDIT — <ISO date>
 

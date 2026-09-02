@@ -154,22 +154,28 @@ const handleClick = useCallback(() => doThing(id), [id]);
 
 ## OUTPUT FORMAT
 
+> **This is a shape, not a reading.** Every value below is a placeholder. The
+> block once carried plausible-looking figures — `Button 1.8kb`, `DatePicker
+> 4.1kb`, `Table 6.2kb` — and `Table 6.2kb` was quoted as Table's real size for
+> months, including in `validation.performance`, while the measured figure was
+> 15.30kb. Bundle sizes now come from `npm run verify:bundle-size`, which reads
+> `dist/`. Never copy a number out of this file.
+
 ```
 PERFORMANCE AUDIT — <ISO date>
 
 BUNDLE SIZE PER COMPONENT (gzipped):
-  Button       :  1.8kb  ✓
-  DatePicker   :  4.1kb  ✓
-  Table        :  6.2kb  ⚠
+  <Component>  : <n.n>kb  <✓ | ⚠>
+  <Component>  : <n.n>kb  <✓ | ⚠>
   …
 
 LARGEST COMPONENTS:
-  - Table    : 6.2kb (over 5kb threshold)
+  - <Component> : <n.n>kb (over <n>kb threshold)
 
 TREE SHAKING: <PASS | FAIL>
 
 RENDER PROFILES (avg ms):
-  Button       :  0.4ms initial,  0.1ms re-render
+  <Component>  : <n.n>ms initial, <n.n>ms re-render
   …
 
 MEMOIZATION ISSUES:

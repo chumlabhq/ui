@@ -1255,7 +1255,7 @@ describe("Table", () => {
   });
 
   describe("Mobile card rendering", () => {
-    it("renders mobile cards when renderMobileCard is provided and mobileBreakpoint met", () => {
+    it("renders mobile cards when renderMobileCard is provided and mobileBreakpoint met", async () => {
       // This used to stub matchMedia to `matches: true` and assert nothing.
       // The stub was inert: Table switches on window.innerWidth against
       // responsiveBreakpoint, never on a media query, so the mobile branch was
@@ -1270,7 +1270,9 @@ describe("Table", () => {
         />
       );
 
-      expect(screen.getAllByTestId("mobile-card")).toHaveLength(data.length);
+      // `findAll`, not `getAll`: the card view is a lazily-loaded chunk behind a
+      // Suspense boundary with a null fallback, so the first frame is empty.
+      expect(await screen.findAllByTestId("mobile-card")).toHaveLength(data.length);
       expect(screen.queryByRole("grid")).not.toBeInTheDocument();
     });
   });
@@ -1875,7 +1877,7 @@ describe("Table – additional coverage", () => {
   });
 
   describe("mobile card onContextMenu", () => {
-    it("renders mobile cards with onContextMenu when mobileBreakpoint is exceeded", () => {
+    it("renders mobile cards with onContextMenu when mobileBreakpoint is exceeded", async () => {
       const onContextMenu = vi.fn();
       // jsdom innerWidth is 0, so mobileBreakpoint of 9999 ensures mobile view
       render(
@@ -1888,7 +1890,8 @@ describe("Table – additional coverage", () => {
           ariaLabel="t"
         />,
       );
-      const cards = screen.getAllByTestId("mobile-card");
+      // See above: the card view arrives a frame after render.
+      const cards = await screen.findAllByTestId("mobile-card");
       expect(cards.length).toBeGreaterThan(0);
       fireEvent.contextMenu(cards[0].parentElement!);
       expect(onContextMenu).toHaveBeenCalled();

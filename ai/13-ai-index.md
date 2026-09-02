@@ -85,6 +85,8 @@ Before writing the file, verify:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 COMPONENT INDEX — <ISO date>
 

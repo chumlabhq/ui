@@ -79,6 +79,8 @@ Length: 80–200 words per component. No bullet lists. No headings. Flowing pros
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 SEMANTIC TEXT SOURCE — <ISO date>
 

@@ -6,7 +6,20 @@ import {
   useEffect,
   memo,
   forwardRef,
+  lazy,
+  Suspense,
 } from "react";
+import type { ReactNode } from "react";
+import type { MobileRow } from "./components/TableMobileView";
+
+/**
+ * The card layout below the responsive breakpoint, loaded on demand.
+ *
+ * 103 lines of a second render path that every desktop consumer downloaded and
+ * never ran. `isMobileView` is a client-side width measurement, so this is
+ * never requested during SSR or on a desktop viewport.
+ */
+const TableMobileView = lazy(() => import("./components/TableMobileView"));
 import { createPortal } from "react-dom";
 import { isBrowser } from "../../utils/isBrowser";
 import { cn } from "../../utils/scopedCn";
@@ -1837,107 +1850,62 @@ function TableInner<TData>(
   const isEmpty = rows.length === 0;
 
   // ── Mobile card view ──────────────────────────────────────────────────
+  // Lazy: a second complete render path that desktop consumers downloaded and
+  // never executed. `isMobileView` comes from a client-side width measurement,
+  // so the server renders the desktop branch and never requests this chunk.
+  // `null` fallback, so the frame before it resolves is empty rather than a
+  // flash of the desktop table.
   if (isMobileView && renderMobileCard) {
     return (
-      <div
-        ref={(node) => {
-          (
-            containerRef as React.MutableRefObject<HTMLDivElement | null>
-          ).current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref)
-            (ref as React.MutableRefObject<HTMLDivElement | null>).current =
-              node;
-        }}
-        className={
-          `${containerClassName} ${className ?? ""}`.trim() || undefined
-        }
-        style={{ overflow: "hidden", ...containerStyle, ...styleProp }}
-        role="region"
-        aria-label={ariaLabel}
-        data-table-container
-        data-mobile-view
-      >
-        {/* Search bar for mobile */}
-        {showSearch && (
-          <div className={`mb-2 ${searchBarClassName}`} data-table-search>
-            <div className="relative">
-              {CustomSearchIcon ? (
-                <CustomSearchIcon className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
-              ) : (
-                <SearchIcon className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
-              )}
-              <input
-                type="text"
-                value={globalFilter ?? ""}
-                onChange={handleSearchChange}
-                placeholder={searchPlaceholder}
-                className={`w-full pl-8 pr-8 py-2 border rounded bg-inherit text-inherit border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 ${searchInputClassName}`}
-                aria-label="Search table"
-              />
-              {globalFilter && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInternalGlobalFilter("");
-                    onGlobalFilterChange?.("");
-                    table.setGlobalFilter("");
-                    onSearchClear?.();
-                  }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                  aria-label="Clear search"
-                >
-                  <svg
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    className="w-3.5 h-3.5"
-                  >
-                    <path d="M4.646 4.646a.5.5 0 01.708 0L8 7.293l2.646-2.647a.5.5 0 01.708.708L8.707 8l2.647 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L7.293 8 4.646 5.354a.5.5 0 010-.708z" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-        {children}
-        {isEmpty
-          ? emptyContent || (
-              <div className={emptyClassName}>
-                <span>No data available</span>
-              </div>
-            )
-          : rows.map((row) => (
-              <div
-                key={row.id}
-                className={mobileCardClassName}
-                data-mobile-card
-                onClick={(e) => {
-                  if (onRowClick && !isInteractiveElement(e.target)) {
-                    onRowClick(row.original);
-                  }
-                }}
-                onContextMenu={
-                  onContextMenu
-                    ? (e) => {
-                        e.preventDefault();
-                        onContextMenu(e, row.original);
-                      }
-                    : undefined
-                }
-              >
-                {renderMobileCard(row.original)}
-              </div>
-            ))}
-        {/* Infinite scroll loading for mobile */}
-        {enableInfiniteScroll && loadingMore && (
-          <div
-            className={`text-center flex items-center justify-center py-3 text-gray-400 ${loadingMoreClassName}`}
-            data-loading-more
-          >
-            {loadingMoreContent ?? "Loading more..."}
-          </div>
-        )}
-      </div>
+      <Suspense fallback={null}>
+        <TableMobileView
+          setContainer={(node) => {
+            (
+              containerRef as React.MutableRefObject<HTMLDivElement | null>
+            ).current = node;
+            if (typeof ref === "function") ref(node);
+            else if (ref)
+              (ref as React.MutableRefObject<HTMLDivElement | null>).current =
+                node;
+          }}
+          containerClassName={containerClassName}
+          className={className}
+          containerStyle={containerStyle}
+          styleProp={styleProp}
+          ariaLabel={ariaLabel}
+          showSearch={showSearch}
+          searchBarClassName={searchBarClassName}
+          searchInputClassName={searchInputClassName}
+          searchPlaceholder={searchPlaceholder}
+          SearchIconOverride={CustomSearchIcon}
+          globalFilter={globalFilter ?? undefined}
+          onSearchChange={handleSearchChange}
+          onClearSearch={() => {
+            setInternalGlobalFilter("");
+            onGlobalFilterChange?.("");
+            table.setGlobalFilter("");
+            onSearchClear?.();
+          }}
+          isEmpty={isEmpty}
+          emptyContent={emptyContent}
+          emptyClassName={emptyClassName}
+          rows={rows as unknown as MobileRow[]}
+          mobileCardClassName={mobileCardClassName}
+          renderMobileCard={renderMobileCard as (row: unknown) => ReactNode}
+          onRowClick={onRowClick as ((row: unknown) => void) | undefined}
+          onContextMenu={
+            onContextMenu as
+              | ((e: React.MouseEvent, row: unknown) => void)
+              | undefined
+          }
+          enableInfiniteScroll={enableInfiniteScroll}
+          loadingMore={loadingMore}
+          loadingMoreClassName={loadingMoreClassName}
+          loadingMoreContent={loadingMoreContent}
+        >
+          {children}
+        </TableMobileView>
+      </Suspense>
     );
   }
 

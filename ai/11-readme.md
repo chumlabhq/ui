@@ -132,6 +132,8 @@ MIT © Chumlab. See [LICENSE](./LICENSE).
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 README — <ISO date>
 

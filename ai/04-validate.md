@@ -91,6 +91,8 @@ Run each check. Each is independent and must PASS.
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 VALIDATION REPORT — <ISO date>
 

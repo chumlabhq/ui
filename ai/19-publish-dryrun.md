@@ -118,6 +118,8 @@ If it returns `404 Not Found`, the version is available — proceed.
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 PUBLISH DRY RUN — <ISO date>
 

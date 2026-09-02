@@ -135,6 +135,8 @@ Search the codebase for:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 SECURITY AUDIT — <ISO date>
 

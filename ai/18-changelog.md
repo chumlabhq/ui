@@ -90,6 +90,8 @@ When bumping the version in `package.json`:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 CHANGELOG — <ISO date>
 

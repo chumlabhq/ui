@@ -48,6 +48,8 @@ Beyond modified files:
 
 ## OUTPUT FORMAT
 
+> Placeholders below, not readings. Fill every `<…>` from a command's output.
+
 ```
 REGRESSION REPORT — <ISO date>
 
