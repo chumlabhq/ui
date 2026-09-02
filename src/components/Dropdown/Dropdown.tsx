@@ -85,7 +85,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
         ) || undefined
       }
       data-selected={isSelected || undefined}
-      data-focused={isFocused || undefined}
+      data-highlighted={isFocused || undefined}
       data-disabled={isDisabled || undefined}
       data-value={option.value}
       onClick={() => {

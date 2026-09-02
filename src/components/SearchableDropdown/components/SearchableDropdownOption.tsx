@@ -46,7 +46,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
       aria-disabled={option.disabled || undefined}
       className={combinedClassName}
       data-selected={isSelected || undefined}
-      data-focused={isFocused || undefined}
+      data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       data-value={option.value}
       onClick={() => {

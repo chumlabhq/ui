@@ -58,7 +58,7 @@ export default function Example() {
 - `data-error` — on trigger when `error`
 - `data-open` — on trigger when dropdown/clock is open
 - `data-selected` — on selected option
-- `data-focused` — on keyboard-focused option
+- `data-highlighted` — on keyboard-focused option
 - `data-position` — on dropdown portal (`"top"` or `"bottom"`)
 - `data-active` — on active clock display button and period button
 

@@ -2165,7 +2165,7 @@ const SearchableDropdownDemo = () => {
               isDarkMode={dark}
             />
             <PropRow
-              name="data-focused"
+              name="data-highlighted"
               type="option"
               description="Present on the keyboard-focused option"
               isDarkMode={dark}

@@ -85,7 +85,7 @@ export default function Example() {
 - `data-dropdown-id` — unique ID for click-outside detection
 
 **Options:**
-- `data-selected`, `data-focused`, `data-disabled`, `data-value`
+- `data-selected`, `data-highlighted`, `data-disabled`, `data-value`
 
 **DOM nesting:** `root > label? + description? + wrapper > trigger + content(portal) > optionList > option*`
 

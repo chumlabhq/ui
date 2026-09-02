@@ -1,0 +1,752 @@
+{
+  "$comment": "Derived from the 97 deleted-as-state rows of 002-key-migration.json, not written by hand. Every row names a state a consumer can target today and must still be able to target after Task 3. This is the input to state-attributes.contract.test.tsx.",
+  "recordedOn": "2026-09-02",
+  "r4Gaps": {
+    "data-today": "DatePicker's dayToday. `today` is not `active`: a day can be today AND selected AND disabled at once, and data-state holds one value. DatePicker already emits data-today (DatePicker.tsx:360), so R4's list was incomplete rather than the component wrong.",
+    "data-clickable": "Stepper's stepInteractive. Not the inverse of disabled: a step ahead of the current one is non-clickable without being disabled. Stepper already emits data-clickable (Stepper.tsx:364)."
+  },
+  "cssPseudoReplacements": [
+    {
+      "component": "TabPanel",
+      "part": "item",
+      "key": "tabFocus",
+      "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
+    },
+    {
+      "component": "Table",
+      "part": "headerCell",
+      "key": "headerCellHover",
+      "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
+    },
+    {
+      "component": "Table",
+      "part": "pinButton",
+      "key": "pinIconHover",
+      "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
+    },
+    {
+      "component": "Table",
+      "part": "pinButton",
+      "key": "pinnedPinIconHover",
+      "replacement": "a Tailwind hover:/focus-visible: variant on the part; no attribute needed"
+    }
+  ],
+  "requirements": [
+    {
+      "component": "Breadcrumb",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "dropdownItemDisabled",
+        "itemDisabled"
+      ]
+    },
+    {
+      "component": "Breadcrumb",
+      "part": "item",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "itemActive"
+      ]
+    },
+    {
+      "component": "CascadingDropdown",
+      "part": "control",
+      "attribute": "data-state",
+      "values": [
+        "checked"
+      ],
+      "fromKeys": [
+        "checkboxChecked"
+      ]
+    },
+    {
+      "component": "CascadingDropdown",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "menuItemDisabled"
+      ]
+    },
+    {
+      "component": "CascadingDropdown",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "menuItemFocused",
+        "submenuItemFocused"
+      ]
+    },
+    {
+      "component": "CascadingDropdown",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "menuItemSelected",
+        "submenuItemSelected"
+      ]
+    },
+    {
+      "component": "Checkbox",
+      "part": "control",
+      "attribute": "data-state",
+      "values": [
+        "checked",
+        "indeterminate",
+        "unchecked"
+      ],
+      "fromKeys": [
+        "checked",
+        "indeterminate",
+        "unchecked"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "dayDisabled"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "dayFocused"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-marked",
+      "values": null,
+      "fromKeys": [
+        "dayMarked"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-outside",
+      "values": null,
+      "fromKeys": [
+        "dayOutside"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-range",
+      "values": [
+        "end",
+        "middle",
+        "start"
+      ],
+      "fromKeys": [
+        "dayRangeEnd",
+        "dayRangeMiddle",
+        "dayRangeStart"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "daySelected"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "item",
+      "attribute": "data-today",
+      "values": null,
+      "fromKeys": [
+        "dayToday"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "subItem",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "dropdownItemSelected"
+      ]
+    },
+    {
+      "component": "DatePicker",
+      "part": "presetTrigger",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "presetActive"
+      ]
+    },
+    {
+      "component": "Dropdown",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "optionDisabled"
+      ]
+    },
+    {
+      "component": "Dropdown",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "optionFocused"
+      ]
+    },
+    {
+      "component": "Dropdown",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "optionSelected"
+      ]
+    },
+    {
+      "component": "InternationalPhoneInput",
+      "part": "countrySelect.item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "countrySelectOptionSelected"
+      ]
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "part": "control",
+      "attribute": "data-state",
+      "values": [
+        "checked"
+      ],
+      "fromKeys": [
+        "checkboxChecked"
+      ]
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "optionDisabled"
+      ]
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "optionFocused"
+      ]
+    },
+    {
+      "component": "MultiSelectDropdown",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "optionSelected"
+      ]
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "part": "control",
+      "attribute": "data-state",
+      "values": [
+        "checked"
+      ],
+      "fromKeys": [
+        "checkboxChecked"
+      ]
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "optionDisabled"
+      ]
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "optionFocused"
+      ]
+    },
+    {
+      "component": "MultiSelectSearchableDropdown",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "optionSelected"
+      ]
+    },
+    {
+      "component": "OtpInput",
+      "part": "input",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "inputFocused"
+      ]
+    },
+    {
+      "component": "Pagination",
+      "part": "item",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "activePageButton"
+      ]
+    },
+    {
+      "component": "RadioButton/RadioButton",
+      "part": "control",
+      "attribute": "data-state",
+      "values": [
+        "checked",
+        "unchecked"
+      ],
+      "fromKeys": [
+        "checked",
+        "unchecked"
+      ]
+    },
+    {
+      "component": "SearchableDropdown",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "optionDisabled"
+      ]
+    },
+    {
+      "component": "SearchableDropdown",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "optionFocused"
+      ]
+    },
+    {
+      "component": "SearchableDropdown",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "optionSelected"
+      ]
+    },
+    {
+      "component": "Slider",
+      "part": "marker",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "markDotActive"
+      ]
+    },
+    {
+      "component": "Slider",
+      "part": "thumb",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "thumbActive"
+      ]
+    },
+    {
+      "component": "Slider",
+      "part": "thumb",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "thumbDisabled"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "separator",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "completed",
+        "inactive"
+      ],
+      "fromKeys": [
+        "connectorActive",
+        "connectorCompleted",
+        "connectorPending"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "separator",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "connectorError"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "separator",
+      "attribute": "data-orientation",
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "fromKeys": [
+        "connectorHorizontal",
+        "connectorVertical"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "description",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "completed",
+        "inactive"
+      ],
+      "fromKeys": [
+        "descriptionActive",
+        "descriptionCompleted",
+        "descriptionPending"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "description",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "descriptionError"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "itemIndicator",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "completed",
+        "inactive"
+      ],
+      "fromKeys": [
+        "indicatorActive",
+        "indicatorCompleted",
+        "indicatorPending"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "itemIndicator",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "indicatorError"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "itemText",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "completed",
+        "inactive"
+      ],
+      "fromKeys": [
+        "labelActive",
+        "labelCompleted",
+        "labelPending"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "itemText",
+      "attribute": "data-invalid",
+      "values": null,
+      "fromKeys": [
+        "labelError"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "itemText",
+      "attribute": "data-align",
+      "values": [
+        "bottom"
+      ],
+      "fromKeys": [
+        "labelWrapperBottom"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "item",
+      "attribute": "data-orientation",
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "fromKeys": [
+        "stepContainerHorizontal",
+        "stepContainerVertical"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "stepDisabled"
+      ]
+    },
+    {
+      "component": "Stepper",
+      "part": "item",
+      "attribute": "data-clickable",
+      "values": [
+        "true"
+      ],
+      "fromKeys": [
+        "stepInteractive"
+      ]
+    },
+    {
+      "component": "Switch",
+      "part": "thumb",
+      "attribute": "data-state",
+      "values": [
+        "checked",
+        "unchecked"
+      ],
+      "fromKeys": [
+        "checkedThumb",
+        "uncheckedThumb"
+      ]
+    },
+    {
+      "component": "Switch",
+      "part": "control",
+      "attribute": "data-state",
+      "values": [
+        "checked",
+        "unchecked"
+      ],
+      "fromKeys": [
+        "checkedTracker",
+        "uncheckedTracker"
+      ]
+    },
+    {
+      "component": "Switch",
+      "part": "label",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "disabledLabel"
+      ]
+    },
+    {
+      "component": "Switch",
+      "part": "control",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "disabledTracker"
+      ]
+    },
+    {
+      "component": "TabPanel",
+      "part": "count",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "inactive"
+      ],
+      "fromKeys": [
+        "countActive",
+        "countInactive"
+      ]
+    },
+    {
+      "component": "TabPanel",
+      "part": "itemIcon",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "inactive"
+      ],
+      "fromKeys": [
+        "iconActive",
+        "iconInactive"
+      ]
+    },
+    {
+      "component": "TabPanel",
+      "part": "itemText",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "inactive"
+      ],
+      "fromKeys": [
+        "labelActive",
+        "labelInactive"
+      ]
+    },
+    {
+      "component": "TabPanel",
+      "part": "item",
+      "attribute": "data-state",
+      "values": [
+        "active",
+        "inactive"
+      ],
+      "fromKeys": [
+        "tabActive",
+        "tabInactive"
+      ]
+    },
+    {
+      "component": "TabPanel",
+      "part": "item",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "tabDisabled"
+      ]
+    },
+    {
+      "component": "Table",
+      "part": "item",
+      "attribute": "data-state",
+      "values": [
+        "open"
+      ],
+      "fromKeys": [
+        "expandedRow"
+      ]
+    },
+    {
+      "component": "Table",
+      "part": "pinButton",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "pinnedPinButton",
+        "pinnedPinIcon"
+      ]
+    },
+    {
+      "component": "Table",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "selectedRow"
+      ]
+    },
+    {
+      "component": "TimePicker",
+      "part": "clockDisplay",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "clockDisplayActive"
+      ]
+    },
+    {
+      "component": "TimePicker",
+      "part": "clockNumber",
+      "attribute": "data-disabled",
+      "values": null,
+      "fromKeys": [
+        "clockNumberDisabled"
+      ]
+    },
+    {
+      "component": "TimePicker",
+      "part": "clockNumber",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "clockNumberSelected"
+      ]
+    },
+    {
+      "component": "TimePicker",
+      "part": "periodButton",
+      "attribute": "data-state",
+      "values": [
+        "active"
+      ],
+      "fromKeys": [
+        "clockPeriodActive"
+      ]
+    },
+    {
+      "component": "TimePicker",
+      "part": "item",
+      "attribute": "data-highlighted",
+      "values": null,
+      "fromKeys": [
+        "optionFocused"
+      ]
+    },
+    {
+      "component": "TimePicker",
+      "part": "item",
+      "attribute": "data-selected",
+      "values": null,
+      "fromKeys": [
+        "optionSelected"
+      ]
+    }
+  ]
+}

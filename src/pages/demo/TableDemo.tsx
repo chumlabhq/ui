@@ -8722,7 +8722,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               isDarkMode={dark}
             />
             <PropRow
-              name="data-focused"
+              name="data-highlighted"
               type="cell"
               description="Present on the keyboard-focused cell"
               isDarkMode={dark}

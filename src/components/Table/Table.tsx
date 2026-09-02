@@ -1028,7 +1028,7 @@ function TableInner<TData>(
   useEffect(() => {
     if (!focusedCell) return;
     containerRef.current
-      ?.querySelector<HTMLElement>('td[data-focused="true"]')
+      ?.querySelector<HTMLElement>('td[data-highlighted="true"]')
       ?.focus({ preventScroll: true });
   }, [focusedCell]);
 
@@ -1484,7 +1484,7 @@ function TableInner<TData>(
                 : { row: rowIndex, col: colIndex },
             )
           }
-          data-focused={isFocused || undefined}
+          data-highlighted={isFocused || undefined}
           data-editing={isEditing || undefined}
           data-grouped={isGrouped || undefined}
           onDoubleClick={

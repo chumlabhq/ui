@@ -1471,7 +1471,7 @@ const TimePickerDemo = () => {
             <PropRow name="data-success" type="root" description="Present when success=true (without error)" isDarkMode={dark} />
             <PropRow name="data-position" type="dropdown" description='"top" or "bottom" — current dropdown position' isDarkMode={dark} />
             <PropRow name="data-selected" type="option" description="Present on the currently selected time option" isDarkMode={dark} />
-            <PropRow name="data-focused" type="option" description="Present on the keyboard-focused time option" isDarkMode={dark} />
+            <PropRow name="data-highlighted" type="option" description="Present on the keyboard-focused time option" isDarkMode={dark} />
           </PropsTable>
         </div>
       </Section>

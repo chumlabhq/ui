@@ -61,7 +61,7 @@ const SubmenuItem = memo(function SubmenuItem({
       aria-disabled={option.disabled}
       className={combinedClassName || undefined}
       data-selected={isSelected || undefined}
-      data-focused={isFocused || undefined}
+      data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       onClick={onSelect}
       onMouseEnter={() => onHover(index)}
@@ -124,7 +124,7 @@ const MenuItem = memo(function MenuItem({
       aria-disabled={option.disabled}
       className={combinedClassName || undefined}
       data-selected={isSelected || undefined}
-      data-focused={isFocused || undefined}
+      data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       data-has-submenu={hasSubmenu || undefined}
       onMouseEnter={() => onHover(option, index)}

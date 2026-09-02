@@ -305,6 +305,8 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
         className={cn(mergedClasses.root, className, !unstyled && isDisabled && "opacity-50") || undefined}
         style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
         data-checked={isChecked || undefined}
+        // ADR 002 R4; Radix RadioGroup precedent.
+        data-state={isChecked ? "checked" : "unchecked"}
         data-disabled={isDisabled || undefined}
         data-value={value}
         {...rest}
@@ -313,6 +315,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
           className={cn(mergedClasses.radio, stateClassName, !unstyled && ctx.error && "border-cl-error dark:border-cl-error", "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-cl-accent dark:has-[:focus-visible]:ring-offset-cl-bg") || undefined}
           style={{ ...sizeStyle, position: "relative" }}
           data-checked={isChecked || undefined}
+          data-state={isChecked ? "checked" : "unchecked"}
           data-disabled={isDisabled || undefined}
           data-error={ctx.error || undefined}
         >

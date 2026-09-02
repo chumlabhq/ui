@@ -129,6 +129,8 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         style={style}
         data-disabled={disabled || undefined}
         data-checked={isChecked || undefined}
+        // ADR 002 R4; Radix Switch precedent.
+        data-state={isChecked ? "checked" : "unchecked"}
         data-error={error || undefined}
         data-loading={loading || undefined}
         data-success={success || undefined}
@@ -194,6 +196,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
             style={transitionStyle}
             data-disabled={disabled || undefined}
             data-checked={isChecked || undefined}
+            data-state={isChecked ? "checked" : "unchecked"}
             {...buttonProps}
           >
             <span

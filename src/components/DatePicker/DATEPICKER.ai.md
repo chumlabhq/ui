@@ -79,7 +79,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-range-start` -- first day of range
 - `data-range-end` -- last day of range
 - `data-in-range` -- day within selected range
-- `data-focused` -- keyboard-focused day
+- `data-highlighted` -- keyboard-focused day
 - `data-marked` -- day with a marker
 - `data-marker-type` -- marker type string (e.g. `"meeting"`, `"deadline"`)
 

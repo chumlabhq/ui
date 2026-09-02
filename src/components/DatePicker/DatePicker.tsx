@@ -363,7 +363,19 @@ const DayCell = memo(function DayCell({
         data-range-start={day.isRangeStart || undefined}
         data-range-end={day.isRangeEnd || undefined}
         data-in-range={day.isInRange || undefined}
-        data-focused={isFocused || undefined}
+        // ADR 002 R4 / Amendment D: one attribute with a value, so a consumer
+        // writes data-[range=middle] rather than three booleans. The booleans
+        // stay until Task 3 retires them with the keys they mirror.
+        data-range={
+          day.isRangeStart
+            ? "start"
+            : day.isRangeEnd
+              ? "end"
+              : day.isInRange
+                ? "middle"
+                : undefined
+        }
+        data-highlighted={isFocused || undefined}
         data-marked={day.isMarked || undefined}
         data-marker-type={day.marker?.type || undefined}
         onClick={() => !day.isDisabled && onSelect(day.date, day.isOutside)}

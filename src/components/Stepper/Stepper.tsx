@@ -144,6 +144,20 @@ const getStatusClass = (
   }
 };
 
+/**
+ * ADR 002 R4. `data-status` is this component's own enum
+ * (completed | active | pending | error). `data-state` is the library-wide one,
+ * and `error` is not a position in it — an errored step is still active or
+ * pending — so it carries `data-invalid` alongside rather than replacing the
+ * state. Ark Steps sets the precedent for `completed`.
+ */
+const stateAttrsFor = (status: string) =>
+  ({
+    "data-state":
+      status === "completed" ? "completed" : status === "active" ? "active" : "inactive",
+    "data-invalid": status === "error" ? true : undefined,
+  }) as const;
+
 const StepItem = memo(function StepItem({
   step,
   index,
@@ -267,6 +281,7 @@ const StepItem = memo(function StepItem({
         indicatorStatusClass,
       )}
       data-status={status}
+      {...stateAttrsFor(status)}
       aria-hidden="true"
     >
       {getIndicatorContent()}
@@ -294,6 +309,7 @@ const StepItem = memo(function StepItem({
               ),
             )}
             data-status={status}
+      {...stateAttrsFor(status)}
           >
             {step.label}
           </span>
@@ -311,6 +327,7 @@ const StepItem = memo(function StepItem({
               ),
             )}
             data-status={status}
+      {...stateAttrsFor(status)}
           >
             {step.description}
           </span>
@@ -345,6 +362,7 @@ const StepItem = memo(function StepItem({
           )}
           style={{ marginLeft: connectorMarginLeft }}
           data-status={status}
+      {...stateAttrsFor(status)}
           data-next-status={nextStepStatus}
           aria-hidden="true"
         />
@@ -361,6 +379,7 @@ const StepItem = memo(function StepItem({
         aria-label={sharedAriaLabel}
         className={cn(classes.step, classes.stepInteractive)}
         data-status={status}
+      {...stateAttrsFor(status)}
         data-clickable="true"
       >
         {indicator}
@@ -375,6 +394,7 @@ const StepItem = memo(function StepItem({
         aria-label={sharedAriaLabel}
         className={cn(classes.step, isDisabled && classes.stepDisabled)}
         data-status={status}
+      {...stateAttrsFor(status)}
         data-disabled={isDisabled || undefined}
       >
         {indicator}
@@ -386,6 +406,7 @@ const StepItem = memo(function StepItem({
       <li
         className={cn(classes.stepContainerVertical, classes.stepContainer)}
         data-status={status}
+      {...stateAttrsFor(status)}
         data-orientation={orientation}
       >
         {wrapWithTooltip(stepContent)}
@@ -427,6 +448,7 @@ const StepItem = memo(function StepItem({
         aria-label={bottomAriaLabel}
         className={classes.indicatorButton}
         data-status={status}
+      {...stateAttrsFor(status)}
         data-clickable="true"
       >
         {indicator}
@@ -440,6 +462,7 @@ const StepItem = memo(function StepItem({
         aria-label={bottomAriaLabel}
         className={isDisabled ? classes.stepDisabled : undefined}
         data-status={status}
+      {...stateAttrsFor(status)}
         data-disabled={isDisabled || undefined}
       >
         {indicator}
@@ -453,6 +476,7 @@ const StepItem = memo(function StepItem({
           classes.stepContainer,
         )}
         data-status={status}
+      {...stateAttrsFor(status)}
         data-orientation={orientation}
       >
         {wrapWithTooltip(indicatorEl)}
@@ -477,6 +501,7 @@ const StepItem = memo(function StepItem({
       aria-label={stepAriaLabel}
       className={cn(classes.step, classes.stepInteractive)}
       data-status={status}
+      {...stateAttrsFor(status)}
       data-clickable="true"
     >
       {indicator}
@@ -491,6 +516,7 @@ const StepItem = memo(function StepItem({
       aria-label={stepAriaLabel}
       className={cn(classes.step, isDisabled && classes.stepDisabled)}
       data-status={status}
+      {...stateAttrsFor(status)}
       data-disabled={isDisabled || undefined}
     >
       {indicator}
@@ -502,6 +528,7 @@ const StepItem = memo(function StepItem({
     <li
       className={cn(classes.stepContainerHorizontal, classes.stepContainer)}
       data-status={status}
+      {...stateAttrsFor(status)}
       data-orientation={orientation}
     >
       {wrapWithTooltip(stepContent)}
@@ -971,6 +998,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
                       )}
                       style={connectorStyle}
                       data-status={status}
+      {...stateAttrsFor(status)}
                       data-next-status={nextStatus}
                     />
                   </li>

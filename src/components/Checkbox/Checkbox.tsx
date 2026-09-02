@@ -185,6 +185,10 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         data-error={error || undefined}
         data-checked={isChecked || undefined}
         data-indeterminate={indeterminate || undefined}
+        // ADR 002 R4: state is one attribute with a value, which is what a
+        // consumer targets after the checked/unchecked/indeterminate keys go.
+        // Radix Checkbox spells it exactly this way.
+        data-state={indeterminate ? "indeterminate" : isChecked ? "checked" : "unchecked"}
         data-size={typeof size === "string" ? size : undefined}
         data-shape={shape || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
@@ -197,6 +201,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             style={{ ...sizeStyle, position: "relative" }}
             data-checked={isChecked || undefined}
             data-indeterminate={indeterminate || undefined}
+            data-state={indeterminate ? "indeterminate" : isChecked ? "checked" : "unchecked"}
             data-disabled={disabled || undefined}
             data-error={error || undefined}
           >

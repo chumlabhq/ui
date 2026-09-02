@@ -931,10 +931,10 @@ describe("DatePicker", () => {
       // The focused date should now be 16
       await flushPositionFrames();
 
-      // Check that a cell with data-focused exists
+      // Check that a cell with data-highlighted exists
       const focusedCell = screen
         .getAllByRole("gridcell")
-        .find((cell) => cell.getAttribute("data-focused"));
+        .find((cell) => cell.getAttribute("data-highlighted"));
       if (focusedCell) {
         expect(focusedCell.textContent?.trim()).toBe("16");
       }
@@ -1580,7 +1580,7 @@ describe("DatePicker", () => {
       // The focused date should now be in the previous month
       const focusedCell = screen
         .getAllByRole("gridcell")
-        .find((cell) => cell.getAttribute("data-focused"));
+        .find((cell) => cell.getAttribute("data-highlighted"));
 
       if (focusedCell) {
         // Should be the last day of the previous month (28, 29, 30, or 31)
@@ -1614,7 +1614,7 @@ describe("DatePicker", () => {
 
       const focusedCell = screen
         .getAllByRole("gridcell")
-        .find((cell) => cell.getAttribute("data-focused"));
+        .find((cell) => cell.getAttribute("data-highlighted"));
 
       if (focusedCell) {
         expect(focusedCell.textContent?.trim()).toBe("17");
@@ -1646,7 +1646,7 @@ describe("DatePicker", () => {
 
       const focusedCell = screen
         .getAllByRole("gridcell")
-        .find((cell) => cell.getAttribute("data-focused"));
+        .find((cell) => cell.getAttribute("data-highlighted"));
 
       if (focusedCell) {
         expect(focusedCell.textContent?.trim()).toBe("13");
@@ -1817,7 +1817,7 @@ describe("Calendar keyboard: minDate/maxDate blocks navigation (useDatePicker ha
       // focusedDate should NOT have advanced past day 15
       const focusedCell = screen
         .getAllByRole("gridcell")
-        .find((cell) => cell.getAttribute("data-focused"));
+        .find((cell) => cell.getAttribute("data-highlighted"));
 
       // If focus was blocked, either there's no focused cell or it's still 15
       if (focusedCell) {
@@ -1855,7 +1855,7 @@ describe("Calendar keyboard: minDate/maxDate blocks navigation (useDatePicker ha
 
       const focusedCell = screen
         .getAllByRole("gridcell")
-        .find((cell) => cell.getAttribute("data-focused"));
+        .find((cell) => cell.getAttribute("data-highlighted"));
 
       if (focusedCell) {
         const dayNum = parseInt(focusedCell.textContent?.trim() || "0", 10);

@@ -47,7 +47,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       aria-disabled={option.disabled}
       className={combinedOptionClassName}
       data-selected={isSelected || undefined}
-      data-focused={isFocused || undefined}
+      data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       onClick={() => onToggle(option)}
       onMouseEnter={() => onHover(index)}

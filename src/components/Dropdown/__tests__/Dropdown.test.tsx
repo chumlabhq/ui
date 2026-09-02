@@ -393,7 +393,7 @@ describe('Dropdown - Keyboard Navigation', () => {
     
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
-      expect(options[0]).toHaveAttribute('data-focused', 'true');
+      expect(options[0]).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -411,7 +411,7 @@ describe('Dropdown - Keyboard Navigation', () => {
     
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
-      expect(options[options.length - 1]).toHaveAttribute('data-focused', 'true');
+      expect(options[options.length - 1]).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -546,7 +546,7 @@ describe('Dropdown - Keyboard Navigation', () => {
     
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
-      expect(options[0]).toHaveAttribute('data-focused', 'true');
+      expect(options[0]).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -592,7 +592,7 @@ describe('Dropdown - Type-ahead Search', () => {
     
     await waitFor(() => {
       const cherryOption = screen.getByRole('option', { name: 'Cherry', hidden: true });
-      expect(cherryOption).toHaveAttribute('data-focused', 'true');
+      expect(cherryOption).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -610,7 +610,7 @@ describe('Dropdown - Type-ahead Search', () => {
     await waitForDropdownOpen();
     await waitFor(() => {
       const elderberryOption = screen.getByRole('option', { name: 'Elderberry', hidden: true });
-      expect(elderberryOption).toHaveAttribute('data-focused', 'true');
+      expect(elderberryOption).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -631,17 +631,17 @@ describe('Dropdown - Type-ahead Search', () => {
     await user.keyboard('c'); // First 'c' - Cat
     await waitForDropdownOpen();
     await waitFor(() => {
-      expect(screen.getByRole('option', { name: 'Cat', hidden: true })).toHaveAttribute('data-focused', 'true');
+      expect(screen.getByRole('option', { name: 'Cat', hidden: true })).toHaveAttribute('data-highlighted', 'true');
     });
     
     await user.keyboard('c'); // Second 'c' - Car
     await waitFor(() => {
-      expect(screen.getByRole('option', { name: 'Car', hidden: true })).toHaveAttribute('data-focused', 'true');
+      expect(screen.getByRole('option', { name: 'Car', hidden: true })).toHaveAttribute('data-highlighted', 'true');
     });
     
     await user.keyboard('c'); // Third 'c' - Cup
     await waitFor(() => {
-      expect(screen.getByRole('option', { name: 'Cup', hidden: true })).toHaveAttribute('data-focused', 'true');
+      expect(screen.getByRole('option', { name: 'Cup', hidden: true })).toHaveAttribute('data-highlighted', 'true');
     });
   });
 });
@@ -1380,7 +1380,7 @@ describe('Dropdown - Home/End with Disabled Options', () => {
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
       // First non-disabled option should be focused (index 1 = Enabled 1)
-      expect(options[1]).toHaveAttribute('data-focused', 'true');
+      expect(options[1]).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -1405,7 +1405,7 @@ describe('Dropdown - Home/End with Disabled Options', () => {
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
       // Last non-disabled option should be focused (index 1 = Enabled 2)
-      expect(options[1]).toHaveAttribute('data-focused', 'true');
+      expect(options[1]).toHaveAttribute('data-highlighted', 'true');
     });
   });
 });

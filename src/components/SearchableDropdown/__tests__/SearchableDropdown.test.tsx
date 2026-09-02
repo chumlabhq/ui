@@ -495,7 +495,7 @@ describe('SearchableDropdown - Keyboard Navigation', () => {
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
       const firstOption = options[0];
-      expect(firstOption).toHaveAttribute('data-focused', 'true');
+      expect(firstOption).toHaveAttribute('data-highlighted', 'true');
     });
   });
 
@@ -514,7 +514,7 @@ describe('SearchableDropdown - Keyboard Navigation', () => {
     await waitFor(() => {
       const options = screen.getAllByRole('option', { hidden: true });
       const lastOption = options[options.length - 1];
-      expect(lastOption).toHaveAttribute('data-focused', 'true');
+      expect(lastOption).toHaveAttribute('data-highlighted', 'true');
     });
   });
 

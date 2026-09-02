@@ -119,7 +119,7 @@ const TimeOption = memo(function TimeOption({
       aria-label={time}
       className={combinedClassName}
       data-selected={isSelected || undefined}
-      data-focused={isFocused || undefined}
+      data-highlighted={isFocused || undefined}
       onMouseDown={(e) => {
         e.preventDefault();
         onSelect(time);
