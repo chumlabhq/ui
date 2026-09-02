@@ -255,40 +255,39 @@
           "type": "string"
         },
         "countrySelect": {
-          "type": "string"
-        },
-        "countrySelectTrigger": {
-          "type": "string"
-        },
-        "countrySelectDropdown": {
-          "type": "string"
-        },
-        "countrySelectSearchInput": {
-          "type": "string"
-        },
-        "countrySelectSearchInputElement": {
-          "type": "string"
-        },
-        "countrySelectOption": {
-          "type": "string"
-        },
-        "countrySelectOptionSelected": {
-          "type": "string"
-        },
-        "countrySelectOptionList": {
-          "type": "string"
-        },
-        "countrySelectChevron": {
-          "type": "string"
-        },
-        "countrySelectCheckIcon": {
-          "type": "string"
-        },
-        "countrySelectSearchIcon": {
-          "type": "string"
-        },
-        "countrySelectNoResults": {
-          "type": "string"
+          "type": "object",
+          "properties": {
+            "trigger": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "searchControl": {
+              "type": "string"
+            },
+            "searchInput": {
+              "type": "string"
+            },
+            "item": {
+              "type": "string"
+            },
+            "list": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string"
+            },
+            "itemIndicator": {
+              "type": "string"
+            },
+            "searchIcon": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            }
+          }
         },
         "description": {
           "type": "string"

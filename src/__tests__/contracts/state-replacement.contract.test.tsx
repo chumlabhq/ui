@@ -63,6 +63,90 @@ const valueFor = (note: string, attribute: string): string | null => {
 const PROBE = "bg-cl-probe";
 
 /**
+ * The class list is not the claim. Under the deleted keys a consumer's value
+ * REPLACED the default for that slot; the replacement route is only equivalent
+ * if their value still paints. A class can be present and lose.
+ *
+ * So each case renders, then builds a stylesheet in the order least favourable
+ * to the consumer — their rule first, every rival rule on the same element
+ * after it, at equal specificity — and reads the computed value back. The
+ * consumer's value can only win there by having displaced the rivals in the
+ * merge, never by source order.
+ */
+const PROBE_RGB = "rgb(1, 2, 3)";
+const RIVAL_RGB = "rgb(9, 9, 9)";
+
+/** Which CSS property a probe should contest, and the two values to tell apart. */
+const PROPERTIES = {
+  bg: { utility: "bg-cl-probe", css: "background-color", mine: "rgb(1,2,3)", rival: "rgb(9,9,9)", read: (s: CSSStyleDeclaration) => s.backgroundColor, win: PROBE_RGB },
+  opacity: { utility: "opacity-[0.123]", css: "opacity", mine: "0.123", rival: "0.9", read: (s: CSSStyleDeclaration) => s.opacity, win: "0.123" },
+  cursor: { utility: "cursor-crosshair", css: "cursor", mine: "crosshair", rival: "progress", read: (s: CSSStyleDeclaration) => s.cursor, win: "crosshair" },
+} as const;
+type PropertyKey = keyof typeof PROPERTIES;
+
+const escapeClass = (name: string) => name.replace(/[^a-zA-Z0-9_-]/g, (c) => `\\${c}`);
+
+/** `data-[state=active]` -> `[data-state="active"]`; `data-[selected]` -> `[data-selected]`. */
+const attributeSelector = (variant: string) => {
+  const inner = variant.slice("data-[".length, -1);
+  const [attr, value] = inner.split("=");
+  return value ? `[data-${attr.replace(/^data-/, "")}="${value}"]` : `[data-${attr}]`;
+};
+
+/**
+ * Returns the computed value of `property` on `el` once the consumer's rule and
+ * every rival rule for the same variant are installed, consumer first.
+ */
+const paintedValue = (el: Element, variant: string, probeClass: string, property: PropertyKey) => {
+  const spec = PROPERTIES[property];
+  const sel = attributeSelector(variant);
+  const rivals = Array.from(el.classList).filter(
+    (t) => t !== probeClass && t.startsWith(`${variant}:`) && t.slice(variant.length + 1).startsWith(`${property}-`),
+  );
+  const style = document.createElement("style");
+  style.textContent = [
+    `.${escapeClass(probeClass)}${sel}{${spec.css}:${spec.mine}}`,
+    ...rivals.map((t) => `.${escapeClass(t)}${sel}{${spec.css}:${spec.rival}}`),
+  ].join("\n");
+  document.head.appendChild(style);
+  const painted = spec.read(getComputedStyle(el as HTMLElement));
+  style.remove();
+  return { painted, rivals, wins: spec.win };
+};
+
+/** The property a consumer would have to contest, given what the default carries. */
+const contestedProperty = (defaultValue: string, variant: string): PropertyKey => {
+  for (const token of defaultValue.split(/\s+/)) {
+    if (!token.startsWith(`${variant}:`)) continue;
+    const utility = token.slice(variant.length + 1);
+    if (utility.startsWith("opacity-")) return "opacity";
+    if (utility.startsWith("cursor-")) return "cursor";
+    if (utility.startsWith("bg-")) return "bg";
+  }
+  return "bg";
+};
+
+const constantsModules = {
+  ...(import.meta.glob("../../components/*/utils/constants.ts", { eager: true }) as Record<string, Record<string, unknown>>),
+  ...(import.meta.glob("../../components/*/constants.ts", { eager: true }) as Record<string, Record<string, unknown>>),
+};
+const defaultSets: Record<string, Record<string, string>> = {};
+for (const [path, module] of Object.entries(constantsModules)) {
+  const component = path.replace("../../components/", "").split("/")[0];
+  for (const [name, value] of Object.entries(module)) {
+    if (name.startsWith("DEFAULT_") && name.endsWith("_CLASSES")) {
+      defaultSets[`${component}::${name}`] = value as Record<string, string>;
+    }
+  }
+}
+const defaultFor = (component: string, key: string) => {
+  const owner = component.split("/")[0];
+  for (const [n, set] of Object.entries(defaultSets)) if (n.startsWith(`${owner}::`) && key in set) return set[key] ?? "";
+  return "";
+};
+
+
+/**
  * Renders every fixture with `override` on `part` and returns the class lists of
  * the elements that are in the state.
  *
@@ -78,10 +162,12 @@ const probe = async (
   override: string,
   selector: string,
   matches: (el: Element) => boolean,
+  measure?: { variant: string; probeClass: string; property: PropertyKey },
 ) => {
   const entry = COMPONENTS.find((c) => c.name === componentName);
-  if (!entry) return { inState: [] as string[][], fixtures: 0 };
-  const inState: string[][] = [];
+  if (!entry) return { inState: [] as Element[], painted: [] as ReturnType<typeof paintedValue>[], fixtures: 0 };
+  const inState: Element[] = [];
+  const painted: { painted: string; rivals: string[]; wins: string }[] = [];
   let fixtures = 0;
 
   for (const f of fixturesFor(componentName).filter((x) => !x.render)) {
@@ -98,11 +184,17 @@ const probe = async (
     if (f.act) await f.act(container);
     fixtures += 1;
     for (const el of Array.from(document.body.querySelectorAll(selector))) {
-      if (matches(el)) inState.push(Array.from(el.classList));
+      if (!matches(el)) continue;
+      inState.push(el);
+      // Measured here, while this fixture's DOM is still the only one mounted.
+      // Deferring it meant keeping every fixture mounted at once, and the
+      // submenu `act` helper then found a stale [role=menuitem] from an earlier
+      // render and never opened the menu it was pointed at.
+      if (measure) painted.push(paintedValue(el, measure.variant, measure.probeClass, measure.property));
     }
     cleanup();
   }
-  return { inState, fixtures };
+  return { inState, painted, fixtures };
 };
 
 describe("state replacement contract", () => {
@@ -125,13 +217,40 @@ describe("state replacement contract", () => {
       expect(inState).toEqual([]);
     });
 
+    it("reports a loss when a rival for the same variant survives the merge", () => {
+      // The whole point of the paint assertion: a class can be present and lose.
+      // If tailwind-merge ever stops collapsing these, this is the shape the
+      // real cases would take.
+      const el = document.createElement("div");
+      el.className = `data-[selected]:${PROBE} data-[selected]:bg-rival`;
+      el.setAttribute("data-selected", "");
+      document.body.appendChild(el);
+      const r = paintedValue(el, "data-[selected]", `data-[selected]:${PROBE}`, "bg");
+      expect(r.rivals).toEqual(["data-[selected]:bg-rival"]);
+      expect(r.painted).toBe(RIVAL_RGB);
+      expect(r.painted).not.toBe(r.wins);
+      el.remove();
+    });
+
+    it("reports a win when the rival was merged away", () => {
+      const el = document.createElement("div");
+      el.className = `data-[selected]:${PROBE}`;
+      el.setAttribute("data-selected", "");
+      document.body.appendChild(el);
+      const r = paintedValue(el, "data-[selected]", `data-[selected]:${PROBE}`, "bg");
+      expect(r.rivals).toEqual([]);
+      expect(r.painted).toBe(r.wins);
+      el.remove();
+    });
+
     it("a probe on a state that exists does reach the element", async () => {
-      const { inState } = await probe(
+      const { inState, painted } = await probe(
         "Breadcrumb", "item", `data-[disabled]:${PROBE}`, "[data-disabled]",
         (el) => el.hasAttribute("data-disabled"),
+        { variant: "data-[disabled]", probeClass: `data-[disabled]:${PROBE}`, property: "bg" },
       );
       expect(inState.length).toBeGreaterThan(0);
-      expect(inState.some((cls) => cls.includes(`data-[disabled]:${PROBE}`))).toBe(true);
+      expect(painted.some((r) => r.painted === PROBE_RGB)).toBe(true);
     });
   });
 
@@ -165,26 +284,31 @@ describe("state replacement contract", () => {
     .map(([r, req]) => [`${r.component}.${r.key} -> ${r.to}`, r, req!] as const);
 
   describe.each(ATTRIBUTE_CASES)("%s", (_label, row, req) => {
-    it("a consumer variant on the surviving key reaches the element in that state", async () => {
+    it("a consumer variant on the surviving key paints over the default in that state", async () => {
       const value = valueFor(row.note, req.attribute);
       const variant = value ? `data-[${req.attribute.slice(5)}=${value}]` : `data-[${req.attribute.slice(5)}]`;
-      const override = `${variant}:${PROBE}`;
-      const { inState, fixtures } = await probe(
+      const property = contestedProperty(defaultFor(row.component, req.part), variant);
+      const override = `${variant}:${PROPERTIES[property].utility}`;
+      const { inState, painted, fixtures } = await probe(
         row.component, req.part, override, `[${req.attribute}]`,
         (el) => {
           const v = el.getAttribute(req.attribute);
           return v !== null && (value === null || v === value);
         },
+        { variant, probeClass: override, property },
       );
       expect(fixtures, `${row.component} renders no fixtures`).toBeGreaterThan(0);
       expect(
         inState.length,
         `no element carries ${req.attribute}${value ? `="${value}"` : ""} on part '${req.part}', so nothing replaces classes.${row.key}`,
       ).toBeGreaterThan(0);
+
+      const winner = painted.find((r) => r.painted === r.wins);
       expect(
-        inState.some((cls) => cls.includes(override)),
-        `${req.attribute} is on the element but the consumer's '${override}' did not survive cn()/tailwind-merge onto it`,
-      ).toBe(true);
+        winner,
+        `the consumer's '${override}' is on the element but does not paint: ` +
+          `${painted.map((r) => `got ${r.painted || "nothing"}${r.rivals.length ? ` behind [${r.rivals.join(" ")}]` : ""}`).join("; ")}`,
+      ).toBeTruthy();
     });
   });
 
@@ -201,9 +325,10 @@ describe("state replacement contract", () => {
         row.component, pseudo.part, override, SELECTOR[pseudo.part] ?? "*", () => true,
       );
       expect(
-        inState.some((cls) => cls.includes(override)),
+        inState.some((el) => el.classList.contains(override)),
         `nothing on part '${pseudo.part}' carries the consumer's '${override}'`,
       ).toBe(true);
+      cleanup();
     });
   });
 
@@ -224,7 +349,7 @@ describe("state replacement contract", () => {
         row.component, req.part, override, SELECTOR[req.part] ?? "*", () => true,
       );
       expect(
-        inState.some((cls) => cls.includes(override)),
+        inState.some((el) => el.classList.contains(override)),
         `nothing on part '${req.part}' carries the consumer override, so ${req.attribute} in the browser has nothing to style`,
       ).toBe(true);
       expect(req.assertedIn, "browserTier with no spec named").toBeTruthy();

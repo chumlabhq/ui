@@ -39,7 +39,7 @@ const waivedFor = (component: string) =>
 const tokensFrom = async (
   Component: React.ComponentType<Record<string, unknown>>,
   fixture: ReturnType<typeof fixturesFor>[number],
-  overrides: Record<string, string>,
+  overrides: Record<string, unknown>,
 ) => {
   const element = (
     <Component {...fixture.props} classes={overrides}>
@@ -90,7 +90,36 @@ describe("fixtures contract", () => {
   });
 
   describe.each(candidates)("$name", ({ name, Component, defaults }) => {
-    const keys = Object.keys(defaults!);
+    /**
+     * ADR 002 R6: a key whose value is a child component's bag is not a class
+     * string, so it can never "render". Its SLOTS are what reach the DOM, and
+     * they are what this has to prove — otherwise nesting a key would silently
+     * drop every class inside it from the coverage this suite provides.
+     */
+    const paths = (bag: object, prefix = ""): string[] =>
+      Object.entries(bag).flatMap(([k, v]) =>
+        typeof v === "string"
+          ? [prefix + k]
+          : v && typeof v === "object"
+            ? paths(v as object, `${prefix}${k}.`)
+            : [],
+      );
+    const setPath = (target: Record<string, unknown>, path: string, value: string) => {
+      const parts = path.split(".");
+      let node = target;
+      for (const part of parts.slice(0, -1)) {
+        node[part] = (node[part] as Record<string, unknown>) ?? {};
+        node = node[part] as Record<string, unknown>;
+      }
+      node[parts[parts.length - 1]] = value;
+    };
+    const buildOverrides = (list: string[]) => {
+      const out: Record<string, unknown> = {};
+      for (const k of list) setPath(out, k, `ovr-${k.replace(/\./g, "-")}`);
+      return out;
+    };
+    const token = (k: string) => `ovr-${k.replace(/\./g, "-")}`;
+    const keys = paths(defaults!);
     // `render` fixtures own their markup and never receive the sentinel
     // `classes` map, so they cannot answer this question either way.
     const fixtures = fixturesFor(name).filter((f) => !f.render);
@@ -98,12 +127,12 @@ describe("fixtures contract", () => {
 
     it("renders every documented classes key across its fixtures", async () => {
       if (fixtures.length === 0) return; // reported by the check above
-      const overrides = Object.fromEntries(keys.map((k) => [k, `ovr-${k}`]));
+      const overrides = buildOverrides(keys);
 
       const seen = new Set<string>();
       for (const fixture of fixtures) {
         const html = await tokensFrom(Component, fixture, overrides);
-        for (const k of keys) if (html.includes(`ovr-${k}`)) seen.add(k);
+        for (const k of keys) if (html.includes(token(k))) seen.add(k);
       }
 
       // A key can be shadowed when its siblings are set — Table's `table` only
@@ -113,8 +142,8 @@ describe("fixtures contract", () => {
       for (const k of keys) {
         if (seen.has(k)) continue;
         for (const fixture of fixtures) {
-          const html = await tokensFrom(Component, fixture, { [k]: `ovr-${k}` });
-          if (html.includes(`ovr-${k}`)) {
+          const html = await tokensFrom(Component, fixture, buildOverrides([k]));
+          if (html.includes(token(k))) {
             seen.add(k);
             break;
           }

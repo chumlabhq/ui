@@ -1,3 +1,4 @@
+import type { SearchableDropdownClasses } from "../../SearchableDropdown/utils/types";
 import type { ReactNode, InputHTMLAttributes, CSSProperties } from "react";
 
 export interface CountryOption {
@@ -49,26 +50,25 @@ export interface InternationalPhoneInputClasses {
   control?: string;
   input?: string;
   message?: string;
-  countrySelect?: string;
+  /**
+   * ADR 002 R6: the country picker is a SearchableDropdown, so its key takes
+   * that component's own classes object rather than a string. `unstyled`
+   * reaches it by the same path.
+   */
+  countrySelect?: SearchableDropdownClasses;
+  /**
+   * The option row IPI renders into the child's `item` slot. These are IPI's
+   * own parts, not the dropdown's: SearchableDropdown has no itemRow/itemIcon/
+   * itemText, and adding them would grow that component's API for one caller.
+   */
+  itemRow?: string;
+  itemIcon?: string;
+  itemText?: string;
   /** A row inside the country list: flag + name + dial code. */
-  countryOptionRow?: string;
-  countryOptionFlag?: string;
-  countryOptionLabel?: string;
   /** The selected country shown on the trigger. */
   triggerRow?: string;
   flag?: string;
   value?: string;
-  countrySelectTrigger?: string;
-  countrySelectDropdown?: string;
-  countrySelectSearchInput?: string;
-  countrySelectSearchInputElement?: string;
-  countrySelectOption?: string;
-  countrySelectOptionSelected?: string;
-  countrySelectOptionList?: string;
-  countrySelectChevron?: string;
-  countrySelectCheckIcon?: string;
-  countrySelectSearchIcon?: string;
-  countrySelectNoResults?: string;
   description?: string;
 }
 

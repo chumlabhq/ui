@@ -2395,10 +2395,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             onRowsPerPageChange={handleRowsPerPageChange}
             classes={{
               root: pClasses.root,
-              rowsPerPage: pClasses.selector,
-              selectorButton: pClasses.selectorButton,
-              selectorDropdown: pClasses.selectorDropdown,
-              selectorOption: pClasses.selectorOption,
+              rowsPerPage: {
+                root: pClasses.selector,
+                trigger: pClasses.selectorButton,
+                content: pClasses.selectorDropdown,
+                item: pClasses.selectorOption,
+              },
               item: pClasses.pageButton,
               navButton: pClasses.navButton,
               ellipsis: pClasses.ellipsis,
@@ -2421,10 +2423,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             rowsPerPageLabel="per page"
             classes={{
               root: darkPaginationContainerStyle,
-              rowsPerPage: darkPaginationRowSelectorStyle,
-              selectorButton: darkPaginationButtonStyle,
-              selectorDropdown: darkPaginationDropdownStyle,
-              selectorOption: darkPaginationOptionStyle,
+              rowsPerPage: {
+                root: darkPaginationRowSelectorStyle,
+                trigger: darkPaginationButtonStyle,
+                content: darkPaginationDropdownStyle,
+                item: darkPaginationOptionStyle,
+              },
               item: darkPaginationPageStyle,
               navButton: darkPaginationNavStyle,
               row: darkPaginationNavContainerStyle,

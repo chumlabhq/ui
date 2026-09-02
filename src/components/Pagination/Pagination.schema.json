@@ -151,24 +151,26 @@
           "type": "string"
         },
         "rowsPerPage": {
-          "type": "string"
-        },
-        "selectorButton": {
-          "type": "string"
-        },
-        "selectorDropdown": {
-          "type": "string"
-        },
-        "selectorDropdownWrapper": {
-          "type": "string"
-        },
-        "selectorOption": {
-          "type": "string"
+          "type": "object",
+          "properties": {
+            "trigger": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "positioner": {
+              "type": "string"
+            },
+            "item": {
+              "type": "string"
+            },
+            "icon": {
+              "type": "string"
+            }
+          }
         },
         "label": {
-          "type": "string"
-        },
-        "dropdownIcon": {
           "type": "string"
         },
         "navIcon": {

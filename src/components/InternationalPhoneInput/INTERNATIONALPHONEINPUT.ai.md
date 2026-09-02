@@ -202,12 +202,12 @@ root
 | Helper text | `description` | Below label |
 | Input + dropdown row | `control` | `flex` container |
 | Phone text input | `input` | The `<input type="tel">` |
-| Country trigger button | `countrySelectTrigger` | Flag + dial code + chevron |
-| Country dropdown panel | `countrySelectDropdown` | Portal-rendered |
-| Country option row | `countrySelectOption` | Each country in list |
-| Selected country highlight | `countrySelectOptionSelected` | Additional class on selected |
-| Check icon | `countrySelectCheckIcon` | Selected indicator |
-| Search input | `countrySelectSearchInputElement` | In dropdown |
+| Country trigger button | `countrySelect.trigger` | Flag + dial code + chevron |
+| Country dropdown panel | `countrySelect.content` | Portal-rendered |
+| Country option row | `countrySelect.item` | Each country in list |
+| Selected country highlight | | Additional class on selected |
+| Check icon | `countrySelect.itemIndicator` | Selected indicator |
+| Search input | `countrySelect.searchInput` | In dropdown |
 | Error message | `message` | Below wrapper |
 | Success message | `message` | Below wrapper |
 

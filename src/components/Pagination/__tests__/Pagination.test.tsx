@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Pagination } from "../index";
+import { DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "../utils/constants";
 
 import { setReducedMotion } from "../../../test/matchMedia";
 
@@ -25,6 +26,41 @@ afterEach(() => {
 });
 
 describe("Pagination", () => {
+  /**
+   * ADR 002 R6: `rowsPerPage` carries the selector's whole anatomy rather than
+   * a string. Asserts both paths cross the boundary — a consumer's classes AND
+   * `unstyled` — because a nested bag can silently keep its decoration if the
+   * unstyled derivation stops at the object.
+   */
+  describe("R6 nested rowsPerPage", () => {
+    it("takes a child bag, and unstyled reaches inside it", () => {
+      const styled = DEFAULT_PAGINATION_CLASSES.rowsPerPage as Record<string, string>;
+      const bare = UNSTYLED_PAGINATION_CLASSES.rowsPerPage as Record<string, string>;
+      expect(typeof styled, "rowsPerPage must be the child's bag").toBe("object");
+      for (const slot of ["root", "trigger", "content", "item", "icon", "positioner"]) {
+        expect(styled, `rowsPerPage.${slot} missing`).toHaveProperty(slot);
+        expect(bare, `unstyled dropped rowsPerPage.${slot}`).toHaveProperty(slot);
+      }
+      expect(styled.trigger).toContain("border");
+      expect(bare.trigger, "unstyled stopped at the R6 boundary").not.toContain("border");
+      expect(bare.root, "unstyled dropped the child's structural utilities").toContain("flex");
+    });
+
+    it("routes a consumer's nested classes onto the selector", () => {
+      render(
+        <Pagination
+          value={1}
+          totalPages={3}
+          showRowsPerPage
+          rowsPerPage={10}
+          onValueChange={() => {}}
+          classes={{ rowsPerPage: { trigger: "cl-nested-trigger" } }}
+        />,
+      );
+      expect(document.querySelector(".cl-nested-trigger")).not.toBeNull();
+    });
+  });
+
   describe("Rendering", () => {
     it("renders as a nav element with aria-label", () => {
       render(

@@ -178,49 +178,16 @@ const InternationalPhoneInput = forwardRef<
         control: classesProp?.control ?? baseClasses.control,
         input: classesProp?.input ?? baseClasses.input,
         message: classesProp?.message ?? baseClasses.message,
-        countrySelect: classesProp?.countrySelect ?? baseClasses.countrySelect,
-        countryOptionRow:
-          classesProp?.countryOptionRow ?? baseClasses.countryOptionRow,
-        countryOptionFlag:
-          classesProp?.countryOptionFlag ?? baseClasses.countryOptionFlag,
-        countryOptionLabel:
-          classesProp?.countryOptionLabel ?? baseClasses.countryOptionLabel,
-        triggerRow:
-          classesProp?.triggerRow ?? baseClasses.triggerRow,
-        flag:
-          classesProp?.flag ?? baseClasses.flag,
-        value:
-          classesProp?.value ?? baseClasses.value,
-        countrySelectTrigger:
-          classesProp?.countrySelectTrigger ?? baseClasses.countrySelectTrigger,
-        countrySelectDropdown:
-          classesProp?.countrySelectDropdown ??
-          baseClasses.countrySelectDropdown,
-        countrySelectSearchInput:
-          classesProp?.countrySelectSearchInput ??
-          baseClasses.countrySelectSearchInput,
-        countrySelectSearchInputElement:
-          classesProp?.countrySelectSearchInputElement ??
-          baseClasses.countrySelectSearchInputElement,
-        countrySelectOption:
-          classesProp?.countrySelectOption ?? baseClasses.countrySelectOption,
-        countrySelectOptionSelected:
-          classesProp?.countrySelectOptionSelected ??
-          baseClasses.countrySelectOptionSelected,
-        countrySelectOptionList:
-          classesProp?.countrySelectOptionList ??
-          baseClasses.countrySelectOptionList,
-        countrySelectChevron:
-          classesProp?.countrySelectChevron ?? baseClasses.countrySelectChevron,
-        countrySelectCheckIcon:
-          classesProp?.countrySelectCheckIcon ??
-          baseClasses.countrySelectCheckIcon,
-        countrySelectSearchIcon:
-          classesProp?.countrySelectSearchIcon ??
-          baseClasses.countrySelectSearchIcon,
-        countrySelectNoResults:
-          classesProp?.countrySelectNoResults ??
-          baseClasses.countrySelectNoResults,
+        // ADR 002 R6: one key carrying the child's whole bag. Merged per slot
+        // so a consumer overriding `trigger` keeps the other defaults, matching
+        // how a flat key behaves at the top level.
+        countrySelect: { ...baseClasses.countrySelect, ...classesProp?.countrySelect },
+        itemRow: classesProp?.itemRow ?? baseClasses.itemRow,
+        itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,
+        itemText: classesProp?.itemText ?? baseClasses.itemText,
+        triggerRow: classesProp?.triggerRow ?? baseClasses.triggerRow,
+        flag: classesProp?.flag ?? baseClasses.flag,
+        value: classesProp?.value ?? baseClasses.value,
       }),
       [classesProp, baseClasses],
     );
@@ -306,15 +273,15 @@ const InternationalPhoneInput = forwardRef<
               isSelected: country.value === selectedCountryCode,
             })
           ) : (
-            <div className={mergedClasses.countryOptionRow || undefined}>
+            <div className={mergedClasses.itemRow || undefined}>
               <CountryFlag
                 code={country.flag}
                 size={flagSize}
                 unstyled={unstyled}
-                className={mergedClasses.countryOptionFlag || undefined}
+                className={mergedClasses.itemIcon || undefined}
                 style={{ height: Math.round((flagSize * 17) / 22) }}
               />
-              <span className={mergedClasses.countryOptionLabel || undefined}>
+              <span className={mergedClasses.itemText || undefined}>
                 {country.name} ({country.dialCode})
               </span>
             </div>
@@ -341,9 +308,9 @@ const InternationalPhoneInput = forwardRef<
         selectedCountryCode,
         flagSize,
         unstyled,
-        mergedClasses.countryOptionRow,
-        mergedClasses.countryOptionFlag,
-        mergedClasses.countryOptionLabel,
+        mergedClasses.itemRow,
+        mergedClasses.itemIcon,
+        mergedClasses.itemText,
         mergedClasses.triggerRow,
         mergedClasses.flag,
         mergedClasses.value,
@@ -639,19 +606,11 @@ const InternationalPhoneInput = forwardRef<
             dropdownGap={dropdownGap}
             portalContainer={portalContainer}
             lockScroll={lockScroll}
-            classes={{
-              root: mergedClasses.countrySelect,
-              trigger: mergedClasses.countrySelectTrigger,
-              content: mergedClasses.countrySelectDropdown,
-              searchControl: mergedClasses.countrySelectSearchInput,
-              searchInput: mergedClasses.countrySelectSearchInputElement,
-              item: mergedClasses.countrySelectOption,
-              list: mergedClasses.countrySelectOptionList,
-              icon: mergedClasses.countrySelectChevron,
-              itemIndicator: mergedClasses.countrySelectCheckIcon,
-              searchIcon: mergedClasses.countrySelectSearchIcon,
-              empty: mergedClasses.countrySelectNoResults,
-            }}
+            // ADR 002 R6: the child's own bag, handed over whole. `unstyled`
+            // travels the same path — baseClasses is already the unstyled set
+            // when the prop is on, and structuralOnly recurses into this object.
+            unstyled={unstyled}
+            classes={mergedClasses.countrySelect}
           />
 
           <input

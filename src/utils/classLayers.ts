@@ -70,15 +70,26 @@ export const splitLayers = (classString: string) => {
  * Every component's UNSTYLED_*_CLASSES is this applied to its DEFAULT_*_CLASSES,
  * so the two sets share one source of truth and cannot disagree.
  */
-export const structuralOnly = <T extends Record<string, string>>(
-  defaults: T,
-): { [K in keyof T]: string } =>
+/** A class bag: strings, or a nested child component's bag under R6. */
+export type ClassBag = { [key: string]: string | undefined | ClassBag };
+
+/**
+ * Recurses into nested bags so `unstyled` reaches a child component by the same
+ * path its classes do (ADR 002 R6). Without this an R6 key would keep its
+ * decorative defaults under `unstyled`, because the value is an object and the
+ * old implementation mapped every non-string to "".
+ */
+export const structuralOnly = <T extends object>(defaults: T): T =>
   Object.fromEntries(
     Object.entries(defaults).map(([key, value]) => [
       key,
-      typeof value === "string" ? splitLayers(value).structural.join(" ") : "",
+      typeof value === "string"
+        ? splitLayers(value).structural.join(" ")
+        : value && typeof value === "object"
+          ? structuralOnly(value as object)
+          : "",
     ]),
-  ) as { [K in keyof T]: string };
+  ) as T;
 
 /**
  * Utilities that make something move.
@@ -129,7 +140,7 @@ export const motionSafe = (value: string, prefersReducedMotion: boolean): string
     : value;
 
 /** `motionSafe` over every value of a class set. */
-export const motionSafeClasses = <T extends Record<string, string>>(
+export const motionSafeClasses = <T extends object>(
   classes: T,
   prefersReducedMotion: boolean,
 ): T => {
@@ -137,7 +148,12 @@ export const motionSafeClasses = <T extends Record<string, string>>(
   return Object.fromEntries(
     Object.entries(classes).map(([key, value]) => [
       key,
-      typeof value === "string" ? motionSafe(value, true) : value,
+      typeof value === "string"
+        ? motionSafe(value, true)
+        // R6: a nested child bag is calmed by the same path.
+        : value && typeof value === "object"
+          ? motionSafeClasses(value as object, true)
+          : value,
     ]),
   ) as T;
 };

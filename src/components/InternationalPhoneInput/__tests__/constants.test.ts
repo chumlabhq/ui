@@ -198,31 +198,49 @@ describe("PHONE_LENGTH_RULES", () => {
   });
 });
 
+/**
+ * ADR 002 R6: `countrySelect` holds SearchableDropdown's own bag, so walking
+ * the top level alone would skip every class inside it — which is precisely
+ * where `unstyled` has to keep working.
+ */
+const flatten = (bag: object, prefix = ""): [string, string][] =>
+  Object.entries(bag).flatMap(([k, v]) =>
+    typeof v === "string"
+      ? [[prefix + k, v] as [string, string]]
+      : v && typeof v === "object"
+        ? flatten(v as object, `${prefix}${k}.`)
+        : [],
+  );
+
 describe("DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES", () => {
   it("has all required class keys", () => {
-    const keys = [
-      "root",
-      "label",
-      "description",
-      "control",
-      "input",
-      "message",
-      "countrySelect",
-      "countrySelectTrigger",
-      "countrySelectDropdown",
-      "countrySelectSearchInput",
-      "countrySelectSearchInputElement",
-      "countrySelectOption",
-      "countrySelectOptionSelected",
-      "countrySelectOptionList",
-      "countrySelectChevron",
-      "countrySelectCheckIcon",
-      "countrySelectSearchIcon",
-      "countrySelectNoResults",
-    ] as const;
+    const keys = ["root", "label", "description", "control", "input", "message",
+      "itemRow", "itemIcon", "itemText", "triggerRow", "flag", "value"] as const;
     for (const key of keys) {
       expect(DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES).toHaveProperty(key);
     }
+  });
+
+  /**
+   * ADR 002 R6: `countrySelect` is SearchableDropdown's own bag, not a string.
+   * This replaces the old flat-key propagation check — it asserts the child's
+   * slots are present in BOTH paths, so `unstyled` cannot quietly stop at the
+   * boundary while `classes` keeps crossing it.
+   */
+  it("hands the country picker a child bag on both the styled and unstyled path", () => {
+    for (const set of [DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES, UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES]) {
+      const child = set.countrySelect;
+      expect(typeof child, "countrySelect must carry the child's bag, not a string").toBe("object");
+      for (const slot of ["trigger", "content", "item", "list", "icon", "searchControl", "searchInput", "searchIcon", "itemIndicator", "empty"]) {
+        expect(child, `countrySelect.${slot} missing`).toHaveProperty(slot);
+      }
+    }
+    // and unstyled must actually have stripped the child's decoration
+    const styled = (DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES.countrySelect as Record<string, string>).content;
+    const bare = (UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES.countrySelect as Record<string, string>).content;
+    expect(styled).toContain("shadow-lg");
+    expect(bare, "unstyled stopped at the R6 boundary").not.toContain("shadow-lg");
+    expect(bare, "unstyled dropped the child's structural utilities").toContain("overflow-hidden");
   });
 });
 
@@ -232,26 +250,17 @@ describe("UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES", () => {
   // so an unstyled phone input lost `flex flex-col` and stacked wrong. The set
   // is now derived from the defaults, and the invariant is the split itself.
   it("every value carries only structural utilities", () => {
-    for (const [key, value] of Object.entries(
-      UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES,
-    )) {
+    for (const [key, value] of flatten(UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES)) {
       const decorative = value.split(/\s+/).filter((t) => t && !isStructural(t));
       expect(decorative, `${key} kept decorative utilities`).toEqual([]);
     }
   });
 
   it("keeps every structural utility its default declares", () => {
-    for (const [key, value] of Object.entries(
-      DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES,
-    )) {
+    const unstyled = new Map(flatten(UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES));
+    for (const [key, value] of flatten(DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES)) {
       const expected = value.split(/\s+/).filter((t) => t && isStructural(t));
-      const actual = new Set(
-        UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES[
-          key as keyof typeof UNSTYLED_INTERNATIONAL_PHONE_INPUT_CLASSES
-        ]
-          .split(/\s+/)
-          .filter(Boolean),
-      );
+      const actual = new Set((unstyled.get(key) ?? "").split(/\s+/).filter(Boolean));
       const dropped = expected.filter((t) => !actual.has(t));
       expect(dropped, `${key} dropped structural utilities`).toEqual([]);
     }

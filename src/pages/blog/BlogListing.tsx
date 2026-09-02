@@ -345,13 +345,15 @@ export default function BlogListing() {
                     "w-9 h-9 text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
                   ellipsis:
                     "w-9 h-9 flex items-center justify-center text-fg-muted",
-                  rowsPerPage: "",
-                  selectorButton: "",
-                  selectorDropdown: "",
-                  selectorDropdownWrapper: "",
-                  selectorOption: "",
+                  rowsPerPage: {
+                    root: "",
+                    trigger: "",
+                    content: "",
+                    positioner: "",
+                    item: "",
+                    icon: "",
+                  },
                   label: "",
-                  dropdownIcon: "",
                   navIcon: "",
                   pageInfo: "",
                 }}

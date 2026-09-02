@@ -24,13 +24,21 @@ export interface PaginationClasses {
   item?: string;
   navButton?: string;
   ellipsis?: string;
-  rowsPerPage?: string;
-  selectorButton?: string;
-  selectorDropdown?: string;
-  selectorDropdownWrapper?: string;
-  selectorOption?: string;
+  /**
+   * ADR 002 R6: the rows-per-page selector is a dropdown's anatomy, so its key
+   * carries that whole shape. Unlike InternationalPhoneInput's `countrySelect`
+   * this is not a rendered child component — Pagination builds the markup
+   * inline — so the object is namespaced here rather than imported from one.
+   */
+  rowsPerPage?: {
+    root?: string;
+    positioner?: string;
+    trigger?: string;
+    content?: string;
+    item?: string;
+    icon?: string;
+  };
   label?: string;
-  dropdownIcon?: string;
   navIcon?: string;
   pageInfo?: string;
 }

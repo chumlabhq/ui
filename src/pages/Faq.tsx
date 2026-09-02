@@ -465,9 +465,7 @@ const Faq = () => {
                     "w-9 h-9 text-fg-tertiary hover:text-accent transition-colors flex items-center justify-center cursor-pointer",
                   ellipsis:
                     "w-9 h-9 flex items-center justify-center text-fg-muted",
-                  rowsPerPage: "",
-                  selectorButton: "",
-                  selectorOption: "",
+                  rowsPerPage: { root: "", trigger: "", item: "" },
                 }}
               />
             </div>

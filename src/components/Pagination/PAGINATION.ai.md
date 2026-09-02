@@ -48,7 +48,7 @@ export default function Example() {
 | `sectionOrder` | Controls layout order: `["selector", "pageInfo", "nav"]`. |
 | `renderEllipsis` | Replaces default `...` with custom content. Receives `{ position, onValueChange }`. |
 | `renderPageInfo` | Custom render for page info. Receives `{ value, totalPages, rowsPerPage }`. |
-| `navIcon` / `navIcon` / `dropdownIcon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
+| `navIcon` / `navIcon` / `rowsPerPage.icon` | Accept either a `ComponentType<{ className }>` or `ReactNode`. |
 | `dropdownPosition` | `"top"` or `"bottom"` — controls rows dropdown direction. |
 | `unstyled` | Strips all default classes. Must provide styling via `classes`. |
 
@@ -91,7 +91,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
-| `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
+| `rowsPerPage.icon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
 | `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
 | `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
@@ -159,10 +159,10 @@ root (row, flex flex-wrap)
 | Page buttons | `item` | Inactive and active styles |
 | Prev/next buttons | `navButton` | Shared for both |
 | Ellipsis dots | `ellipsis` | Or use `renderEllipsis` for custom |
-| Rows dropdown trigger | `selectorButton` | |
-| Dropdown panel | `selectorDropdown` | Portal-rendered |
-| Dropdown option | `selectorOption` | Use `data-[selected]` and `data-[highlighted]` |
-| Icons | `navIcon`, `navIcon`, `dropdownIcon` | |
+| Rows dropdown trigger | `rowsPerPage.trigger` | |
+| Dropdown panel | `rowsPerPage.content` | Portal-rendered |
+| Dropdown option | `rowsPerPage.item` | Use `data-[selected]` and `data-[highlighted]` |
+| Icons | `navIcon`, `navIcon`, `rowsPerPage.icon` | |
 
 ### Dark mode
 

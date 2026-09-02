@@ -290,13 +290,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       item: classesProp?.item ?? baseClasses.item,
       navButton: classesProp?.navButton ?? baseClasses.navButton,
       ellipsis: classesProp?.ellipsis ?? baseClasses.ellipsis,
-      rowsPerPage: classesProp?.rowsPerPage ?? baseClasses.rowsPerPage,
-      selectorButton: classesProp?.selectorButton ?? baseClasses.selectorButton,
-      selectorDropdown: classesProp?.selectorDropdown ?? baseClasses.selectorDropdown,
-      selectorDropdownWrapper: classesProp?.selectorDropdownWrapper ?? baseClasses.selectorDropdownWrapper,
-      selectorOption: classesProp?.selectorOption ?? baseClasses.selectorOption,
+      // ADR 002 R6: merged per slot, so overriding `trigger` keeps the rest.
+      rowsPerPage: { ...baseClasses.rowsPerPage, ...classesProp?.rowsPerPage },
       label: classesProp?.label ?? baseClasses.label,
-      dropdownIcon: classesProp?.dropdownIcon ?? baseClasses.dropdownIcon,
       navIcon: classesProp?.navIcon ?? baseClasses.navIcon,
       pageInfo: classesProp?.pageInfo ?? baseClasses.pageInfo,
     }), [classesProp, baseClasses]);
@@ -443,7 +439,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const dropdownIconClass = cn(
       "w-3 h-3 transition-transform duration-200",
       isDropdownOpen && "rotate-180",
-      mergedClasses.dropdownIcon,
+      mergedClasses.rowsPerPage.icon,
     );
 
     const isFirstPage = safeCurrentPage <= 1;
@@ -455,9 +451,9 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const selectorSection =
       showRowsPerPage && rowsPerPage !== undefined ? (
-        <div className={mergedClasses.rowsPerPage}>
+        <div className={mergedClasses.rowsPerPage.root}>
           <span className={mergedClasses.label}>{showLabel}</span>
-          <div className={cn(mergedClasses.selectorDropdownWrapper)}>
+          <div className={cn(mergedClasses.rowsPerPage.positioner)}>
             <button
               ref={triggerRef}
               type="button"
@@ -471,7 +467,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 }
               }}
               onKeyDown={!isDropdownOpen ? handleDropdownKeyDown : undefined}
-              className={cn(mergedClasses.selectorButton)}
+              className={cn(mergedClasses.rowsPerPage.trigger)}
               aria-expanded={isDropdownOpen}
               aria-haspopup="listbox"
               aria-controls={isDropdownOpen ? listboxId : undefined}
@@ -480,7 +476,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
               {renderIcon(
                 dropdownIcon,
                 ChevronDownIcon,
-                mergedClasses.dropdownIcon,
+                mergedClasses.rowsPerPage.icon,
                 dropdownIconClass,
               )}
             </button>
@@ -491,8 +487,8 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
                 direction={dropdownPosition === "top" ? "up" : "down"}
                 zIndex={dropdownZIndex}
                 gap={dropdownGap}
-                dropdownClassName={mergedClasses.selectorDropdown}
-                optionClassName={mergedClasses.selectorOption}
+                dropdownClassName={mergedClasses.rowsPerPage.content}
+                optionClassName={mergedClasses.rowsPerPage.item}
                 listboxId={listboxId}
                 activeOptionId={activeOptionId}
                 activeOptionIndex={activeOptionIndex}
