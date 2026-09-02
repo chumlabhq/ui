@@ -18,7 +18,7 @@
     "deletedAsDead": 11,
     "absorbedIntoParent": 24,
     "promotedByAmendmentC": 53,
-    "amendmentTerms": 85,
+    "amendmentTerms": 86,
     "withPeerPrecedent": 16,
     "novel": 41,
     "promotedByAmendmentF": 45
@@ -82,12 +82,12 @@
     "weekNumber": "NOVEL \u2014 ISO week column",
     "weekday": "NOVEL \u2014 calendar column heading",
     "clearTrigger": "Ark DatePicker.ClearTrigger \u2014 VERIFIED https://ark-ui.com/docs/components/date-picker",
-    "closeTrigger": "Ark Dialog CloseTrigger \u2014 RECALLED, blocking",
+    "closeTrigger": "Ark Dialog.CloseTrigger \u2014 VERIFIED https://ark-ui.com/docs/components/dialog",
     "day": "DIVERGENT \u2014 Ark's calendar cell is TableCell + TableCellTrigger (https://ark-ui.com/docs/components/date-picker). Our day is a single button, so adopting the split would mint two keys for one element",
     "searchControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "subSearchControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "itemControl": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "itemRow": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "itemRow": "RETIRED \u2014 see Stepper.step; the element is Ark's Steps.Trigger",
     "itemIcon": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "collapsedItem": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "ellipsisTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
@@ -103,12 +103,13 @@
     "clockMinutes": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "clockSeparator": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "clockContent": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
-    "indicatorTrigger": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
+    "indicatorTrigger": "DIVERGENT \u2014 Ark Steps ships a single Trigger (https://ark-ui.com/docs/components/steps). We ship a second control for the bottom-label layout, where only the indicator sits inside it",
     "subSearchIcon": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "subSearchInput": "NOVEL \u2014 Amendment F promotion; qualifier-first compound of an R2 or verified head",
     "header": "Radix Accordion.Header \u2014 VERIFIED (Root/Item/Header/Trigger/Content)",
-    "separator": "Ark Steps.Separator as our step connector \u2014 RECALLED, blocking",
-    "markerGroup": "Ark Slider.MarkerGroup \u2014 VERIFIED https://ark-ui.com/docs/components/slider; available if a marker container needs a name"
+    "separator": "Ark Steps.Separator \u2014 VERIFIED https://ark-ui.com/docs/components/steps",
+    "markerGroup": "Ark Slider.MarkerGroup \u2014 VERIFIED https://ark-ui.com/docs/components/slider; available if a marker container needs a name",
+    "overlay": "Radix Dialog.Overlay \u2014 VERIFIED https://www.radix-ui.com/primitives/docs/components/dialog. Ark spells the same part Backdrop (https://ark-ui.com/docs/components/dialog); we follow Radix"
   },
   "r6NestingKeys": [
     "countrySelect",
@@ -4448,7 +4449,7 @@
       "outcome": "renamed",
       "to": "indicatorTrigger",
       "vocabulary": "R2",
-      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->itemIndicator)",
+      "note": "(R5) | AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was absorbed-into-parent->itemIndicator) | DIVERGENT from Ark Steps: Ark ships one Trigger. We ship two because labelPosition=\"bottom\" puts only the indicator inside the control and the label beside it, while the other layouts put both inside; one key would style two structurally different controls",
       "promotedByAmendmentF": true
     },
     {
@@ -4576,9 +4577,9 @@
       "owner": "Stepper",
       "key": "step",
       "outcome": "renamed",
-      "to": "itemRow",
+      "to": "trigger",
       "vocabulary": "R2",
-      "note": "AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->item)",
+      "note": "AMENDMENT F: promoted to its own part; merging it would have combined differing structural layers (was renamed->item) | CORRECTED (Ark Steps comparison): this is a <button> with onClick/onKeyDown wrapping the indicator and label \u2014 Ark's Steps.Trigger, not a layout row. `itemRow` was a misnomer, so R2's `trigger` replaces it",
       "promotedByAmendmentF": true
     },
     {

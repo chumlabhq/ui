@@ -865,6 +865,8 @@
     "evidence": "Surfaced by the new 'renders one validity state, never both' case in state-attributes.contract, which initially failed on 12 of 15 components because an unscoped [data-valid] query matched the root. The message elements themselves are correct \u2014 every one guards success with !error.",
     "fixShape": "Change the 12 to `{(!error && success) || undefined}`, matching Input. Then widen the contract's exclusivity case from message-scoped to whole-render, which is the assertion it wanted to make in the first place.",
     "estimate": "S",
-    "dependsOn": []
+    "dependsOn": [],
+    "resolvedOn": "2026-09-03",
+    "resolvedBy": "All 12 roots now use `{(!error && success) || undefined}`, matching Input and TextArea. state-attributes.contract's exclusivity case was widened from message-scoped to whole-render, so a root claiming validity during an error fails the suite; confirmed by reverting Dropdown's guard."
   }
 ]

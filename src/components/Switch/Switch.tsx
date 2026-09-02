@@ -133,7 +133,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
         data-state={isChecked ? "checked" : "unchecked"}
         data-error={error || undefined}
         data-loading={loading || undefined}
-        data-valid={success || undefined}
+        data-valid={(!error && success) || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
       >
         <div className={mergedClasses.innerRow || undefined}>

@@ -1,6 +1,6 @@
 # ADR 002 — precedent verification ledger
 
-**Status:** 18 claims verified against live docs; 3 still unchecked; 2 divergences recorded
+**Status:** 21 claims verified against live docs; 1 still unchecked; 3 divergences recorded
 **Date:** 2026-09-02
 
 ## Why this exists
@@ -87,22 +87,68 @@ Parts: Root, Item, Header, Trigger, Content.
 `data-valid` and `data-invalid` sit on Field, Control, Label and **Message**. The Message
 placement is why Amendment B's message part is the right home for them.
 
+### Ark Dialog — `https://ark-ui.com/docs/components/dialog`
+Parts: Root, Trigger, Backdrop, Positioner, Content, Title, Description, CloseTrigger.
+
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `closeTrigger` | `Dialog.CloseTrigger` | **VERIFIED** |
+
+### Ark Steps — `https://ark-ui.com/docs/components/steps`
+Parts: Root, List, Item, Trigger, Indicator, Separator, Content, CompletedContent, PrevTrigger, NextTrigger.
+
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `separator` | `Steps.Separator` | **VERIFIED** |
+
+### Radix Dialog — `https://www.radix-ui.com/primitives/docs/components/dialog`
+
+| Our name | Peer part | Marker |
+| --- | --- | --- |
+| `overlay` | `Dialog.Overlay` | **VERIFIED** |
+
+`overlay` was previously unattributed. Radix ships `Overlay` where Ark ships `Backdrop`; we
+follow Radix, and R2 already carried the name.
+
 ## Divergences
 
 | Name | Marker | Reason |
 | --- | --- | --- |
 | `navButton` | **DIVERGENT** | Ark splits `PrevTrigger` / `NextTrigger`. Unified here as one part carrying `data-side`: the two controls are structurally identical, so splitting them would mint a key with no reachable difference, and R4 already resolves direction as an attribute. Recorded as DIVERGENT rather than NOVEL because Ark demonstrably ships these parts. |
 | `day` | **DIVERGENT** | Ark's calendar cell is `TableCell` + `TableCellTrigger`; ours is a single button, so adopting the split would mint two keys for one element. |
+| `indicatorTrigger` | **DIVERGENT** | Ark Steps ships a single `Trigger`. We ship a second control because `labelPosition="bottom"` puts only the indicator inside the button and the label beside it, while the other layouts put both inside. One key would style two structurally different controls, which R9 forbids. |
 
-## Still RECALLED — these block renames
+## Still RECALLED — this blocks the rename
 
-4 rows across 3 names. Exact peer part claimed:
+1 row, 1 name.
 
-| Our name | Exact peer part claimed | Library | Rows blocked |
+| Our name | Exact peer part claimed | Library | Row blocked |
 | --- | --- | --- | --- |
-| `closeTrigger` | `Dialog.CloseTrigger` | Ark | 2 — `Modal.closeButton`, `Toast.closeButton` |
 | `resizeHandle` | `PanelResizeHandle` | react-resizable-panels | 1 — `ResizablePanel.handle` |
-| `separator` | `Steps.Separator` as our step connector | Ark | 1 — `Stepper.connector` |
+
+## Stepper anatomy vs Ark Steps
+
+Checked before the rename lands, because `itemRow` would otherwise have shipped as an
+unremarked coinage.
+
+**The shapes correspond.** Ark is `Item > Trigger > Indicator`, with `Separator` inside
+`Item`. Ours is `<li> > button > indicator`, with the connector inside the `<li>`
+(`Stepper.tsx:407-421`). Same nesting, same roles:
+
+| Ark part | Our element | Mapping |
+| --- | --- | --- |
+| `Item` | the `<li>` | `stepContainer` → `item` — correct |
+| `Trigger` | `<button onClick onKeyDown>` wrapping indicator + label | `step` → **corrected to `trigger`** |
+| `Indicator` | the numbered/ticked circle | `indicator` → `itemIndicator` — nested inside the trigger, as Ark has it |
+| `Separator` | the connector, a sibling inside the `<li>` | `connector` → `separator` — correct |
+
+`step` was mapped to `itemRow`, which was **wrong rather than divergent**. The element is a
+`<button>` carrying `onClick` and `onKeyDown` (a `<div role="group">` when the step is not
+interactive), and it wraps the indicator — Ark's `Trigger` exactly. A DIVERGENT marker would
+have preserved a misnomer by explaining it; the fix is R2's `trigger`, which was free in
+Stepper. `itemRow` is retired.
+
+The one real divergence is `indicatorTrigger`, recorded above.
 
 ## Still RECALLED — not blocking a rename
 

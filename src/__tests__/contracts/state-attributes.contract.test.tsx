@@ -217,22 +217,21 @@ describe("state attributes contract", () => {
         (base.wrap ? base.wrap(element) : entry.wrap ? entry.wrap(element) : element) as React.ReactElement,
       );
 
-      // Scoped by message text, not by attribute alone: most roots also carry
-      // data-valid, and this assertion is about the message part.
-      const messages = (attribute: string, text: string) =>
-        Array.from(document.body.querySelectorAll(`[${attribute}]`)).filter(
-          (el) => el.textContent === text,
-        );
-      const invalid = messages("data-invalid", "Invalid");
-      const valid = messages("data-valid", "Valid");
+      // Whole render, not just the message. This started message-scoped and
+      // passed, which hid ADR002-T3b.1: twelve roots emitted
+      // `data-valid={success || undefined}` with no !error guard, so the root
+      // reported valid while an error message displayed. Nothing may claim
+      // validity anywhere in the tree while the component is in error.
+      const invalid = document.body.querySelectorAll("[data-invalid]");
+      const valid = document.body.querySelectorAll("[data-valid]");
       expect(
         invalid.length,
-        `${name} shows no invalid message when error and success are both set`,
+        `${name} marks nothing invalid when error and success are both set`,
       ).toBeGreaterThan(0);
       expect(
-        valid.length,
-        `${name} renders both validity states at once, so one \`message\` part cannot style them apart`,
-      ).toBe(0);
+        Array.from(valid).map((el) => el.tagName.toLowerCase()),
+        `${name} reports valid somewhere in the tree while showing an error`,
+      ).toEqual([]);
       cleanup();
     });
   });

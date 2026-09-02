@@ -165,7 +165,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           data-orientation={orientation}
           data-reduce-motion={prefersReducedMotion || undefined}
           data-loading={loading || undefined}
-          data-valid={success || undefined}
+          data-valid={(!error && success) || undefined}
           {...rest}
         >
           {label && (

@@ -498,7 +498,7 @@ const MultiSelectDropdown = forwardRef<
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-full-width={fullWidth || undefined}
-        data-valid={success || undefined}
+        data-valid={(!error && success) || undefined}
       >
         {label && (
           <label

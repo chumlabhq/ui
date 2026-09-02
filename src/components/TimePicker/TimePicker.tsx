@@ -693,7 +693,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
         data-error={error || undefined}
         data-open={isOpen || undefined}
         data-loading={loading || undefined}
-        data-valid={success || undefined}
+        data-valid={(!error && success) || undefined}
       >
         {name ? (
           <input type="hidden" name={name} value={value ?? ""} readOnly tabIndex={-1} aria-hidden />

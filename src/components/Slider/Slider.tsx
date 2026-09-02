@@ -564,7 +564,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-loading={loading || undefined}
-        data-valid={success || undefined}
+        data-valid={(!error && success) || undefined}
         data-orientation={orientation}
         {...rest}
       >
