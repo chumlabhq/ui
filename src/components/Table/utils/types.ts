@@ -39,6 +39,12 @@ export interface TableClasses {
   list?: string;
   /** The `<thead>` element. */
   header?: string;
+  /**
+   * ADR 002 R9 ancestor clause: the <tr> inside `header`. Both read the same key,
+   * so an override on the <thead> also hit the row. Qualifier-first compound of
+   * `row`, an existing amendment term.
+   */
+  headerRow?: string;
   /** Individual `<th>` elements. */
   headerCell?: string;
   /** The content wrapper inside each header cell. */
@@ -91,6 +97,12 @@ export interface TableClasses {
   /** The `<tfoot>` element. */
   footer?: string;
   /** Search bar container above the table. */
+  /**
+   * The box around the search field. It shared `searchInput` with the <input>
+   * inside it — the same split already made in CascadingDropdown,
+   * SearchableDropdown and MultiSelectSearchableDropdown.
+   */
+  searchControl?: string;
   searchInput?: string;
   /** Mobile card layout wrapper. */
   mobileCard?: string;

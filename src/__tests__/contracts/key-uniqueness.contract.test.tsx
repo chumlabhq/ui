@@ -30,15 +30,10 @@ beforeEach(() => setReducedMotion(false));
  * through the full gates, as Toast.body and Toast.track were.
  */
 const DECLARED: Record<string, string> = {
-  "Accordion.icon":
-    "Amendment C folded iconWrapper into icon; the wrapper span and the chevron inside it both carry it",
-  "MultiSelectDropdown.loading":
-    "shimmer folded into loading; the skeleton container and each skeleton row both carry it",
-  "MultiSelectSearchableDropdown.loading": "same fold as MultiSelectDropdown",
-  "Table.header":
-    "headerRow absorbed into header; the thead and each header row both carry it",
-  "Table.searchInput":
-    "searchBar absorbed into searchInput; the search wrapper and the input inside it both carry it",
+  // Empty. All five entries were fixed by giving the inner element its own key
+  // (Accordion.itemIndicator, MultiSelectDropdown.loadingItem,
+  // MultiSelectSearchableDropdown.loadingItem, Table.headerRow,
+  // Table.searchControl), so nothing is waived here.
 };
 
 const paths = (bag: object, prefix = ""): string[] =>

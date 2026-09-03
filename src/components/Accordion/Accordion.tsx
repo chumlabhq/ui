@@ -222,6 +222,8 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
       content: classesProp?.content ?? baseClasses.content,
       icon:
         classesProp?.icon ?? cn(baseClasses.icon, sizeClasses.icon),
+      itemIndicator:
+        classesProp?.itemIndicator ?? baseClasses.itemIndicator,
       description:
         classesProp?.description ?? cn(baseClasses.description, sizeClasses.subtitle),
       itemIcon: classesProp?.itemIcon ?? baseClasses.itemIcon,

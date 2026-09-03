@@ -287,6 +287,7 @@ const MultiSelectDropdown = forwardRef<
         message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
         loading: classesProp?.loading ?? baseClasses.loading,
+        loadingItem: classesProp?.loadingItem ?? baseClasses.loadingItem,
         count: classesProp?.count ?? baseClasses.count,
       }),
       [classesProp, baseClasses],
@@ -631,7 +632,7 @@ const MultiSelectDropdown = forwardRef<
               <MultiSelectDropdownShimmer
                 count={shimmerCount}
                 className={mergedClasses.loading || undefined}
-                itemClassName={mergedClasses.loading || undefined}
+                itemClassName={mergedClasses.loadingItem || undefined}
               />
             ) : displayOptions.length === 0 ? (
               <div

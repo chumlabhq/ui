@@ -413,6 +413,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         empty: classesProp?.empty ?? baseClasses.empty,
         clearTrigger: classesProp?.clearTrigger ?? baseClasses.clearTrigger,
         loading: classesProp?.loading ?? baseClasses.loading,
+        loadingItem: classesProp?.loadingItem ?? baseClasses.loadingItem,
         label: classesProp?.label ?? baseClasses.label,
         message: classesProp?.message ?? baseClasses.message,
         description: classesProp?.description ?? baseClasses.description,
@@ -810,7 +811,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                   </div>
                   <div className={mergedClasses.loading || undefined}>
                     {Array.from({ length: shimmerCount }).map((_, i) => (
-                      <div key={i} className={mergedClasses.loading || undefined} />
+                      <div key={i} className={mergedClasses.loadingItem || undefined} />
                     ))}
                   </div>
                 </>

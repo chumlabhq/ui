@@ -262,7 +262,7 @@ function TableInner<TData>(
   const containerClassName = classesProp?.root ?? base.root;
   const tableClassName = classesProp?.list ?? base.list;
   const headerClassName = classesProp?.header ?? base.header;
-  const headerRowClassName = classesProp?.header ?? base.header;
+  const headerRowClassName = classesProp?.headerRow ?? base.headerRow;
   const headerCellClassName = classesProp?.headerCell ?? base.headerCell;
   const headerCellContentClassName = classesProp?.headerCellText ?? base.headerCellText;
   const bodyClassName = classesProp?.body ?? base.body;
@@ -288,7 +288,7 @@ function TableInner<TData>(
   const editInputClassName = classesProp?.input ?? base.input;
   const dragHandleClassName = classesProp?.dragHandle ?? base.dragHandle;
   const footerClassName = classesProp?.footer ?? base.footer;
-  const searchBarClassName = classesProp?.searchInput ?? base.searchInput;
+  const searchBarClassName = classesProp?.searchControl ?? base.searchControl;
   const mobileCardClassName = classesProp?.mobileCard ?? base.mobileCard;
   const groupHeaderClassName = classesProp?.groupLabel ?? base.groupLabel;
   const resizeHandleClassName = classesProp?.resizeHandle ?? base.resizeHandle;

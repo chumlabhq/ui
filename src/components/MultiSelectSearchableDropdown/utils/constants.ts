@@ -28,6 +28,8 @@ export const DEFAULT_MULTISELECTSEARCHABLEDROPDOWN_CLASSES: Required<MultiSelect
     clearTrigger: "",
     loading:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
+    loadingItem:
+      "px-3 py-4 text-sm text-center text-cl-text-tertiary dark:text-cl-text-tertiary",
     label:
       "block text-sm font-medium mb-1 text-cl-text dark:text-cl-text-secondary",
     message: "text-sm mt-1 text-cl-error text-cl-success",

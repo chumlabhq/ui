@@ -24,6 +24,8 @@ export interface MultiSelectSearchableDropdownClasses {
   empty?: string;
   clearTrigger?: string;
   loading?: string;
+  /** One row of the skeleton. It shared `loading` with the container above it. */
+  loadingItem?: string;
   label?: string;
   message?: string;
   description?: string;

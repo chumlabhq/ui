@@ -116,7 +116,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
       return (
         <ChevronDownIcon
-          className={cn(config.classes.icon, getIconAnimationClass()) || undefined}
+          className={cn(config.classes.itemIndicator, getIconAnimationClass()) || undefined}
         />
       );
     };

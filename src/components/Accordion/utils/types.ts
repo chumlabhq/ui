@@ -35,6 +35,12 @@ export interface AccordionClasses {
   body?: string;
   content?: string;
   icon?: string;
+  /**
+   * ADR 002 R2: the chevron glyph inside the `icon` slot. Both carried `icon`,
+   * so an override on the slot also hit the glyph — R9's ancestor clause.
+   * `itemIndicator` is already in R2's closed list, so no precedent is owed.
+   */
+  itemIndicator?: string;
   description?: string;
   itemIcon?: string;
   triggerActions?: string;

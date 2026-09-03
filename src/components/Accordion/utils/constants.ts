@@ -10,7 +10,9 @@ export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   itemText: "flex-1 text-left",
   body: "text-cl-text-secondary dark:text-cl-text-secondary",
   content: "overflow-hidden transition-[max-height,opacity,visibility]",
-  icon: "shrink-0 text-cl-text-tertiary dark:text-cl-text-tertiary transition-transform duration-200",
+  icon: "shrink-0",
+  itemIndicator:
+    "text-cl-text-tertiary dark:text-cl-text-tertiary transition-transform duration-200",
   description: "block text-cl-text-tertiary dark:text-cl-text-tertiary font-normal mt-0.5",
   itemIcon: "mr-2 shrink-0",
   triggerActions: "ml-2 shrink-0",

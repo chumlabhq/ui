@@ -28,6 +28,7 @@ const TABLE = JSON.parse(
   vocabularyAmendments: Record<string, string>;
   declaredMerges: Record<string, string[]>;
   coLocatedBefore: Record<string, [string, string][]>;
+  nestedMergeTargets: Record<string, string[]>;
 };
 
 /**
@@ -43,6 +44,37 @@ const sameElement = (component: string, a: string, b: string): boolean =>
   (TABLE.coLocatedBefore[component.split("/")[0]] ?? []).some(
     ([x, y]) => (x === a && y === b) || (x === b && y === a),
   );
+
+/**
+ * R9's ancestor clause.
+ *
+ * The structural test asks whether two merged elements carry the same layers.
+ * It never asked whether one CONTAINS the other, so five merges passed with
+ * identical layers while putting one key on a box and on the box inside it — an
+ * override on the outer then styles the inner too. Same layers, still wrong.
+ *
+ * Nesting is a fact about the render, not the table, so it is measured there and
+ * frozen into `nestedMergeTargets` for this table-only check to read — the same
+ * arrangement as `structuralBefore` and `coLocatedBefore`.
+ */
+const nestedMerges = (
+  rows: Row[],
+  nested: Record<string, string[]> = TABLE.nestedMergeTargets,
+): string[] => {
+  const targets = new Map<string, number>();
+  for (const row of rows) {
+    if (row.outcome === "deleted-as-state" || row.outcome === "deleted-as-dead") continue;
+    const id = `${row.component}|${row.to}`;
+    targets.set(id, (targets.get(id) ?? 0) + 1);
+  }
+  const failures: string[] = [];
+  for (const [id, count] of targets) {
+    if (count < 2) continue;
+    const [component, to] = id.split("|");
+    if ((nested[component] ?? []).includes(to)) failures.push(`${component}.${to}`);
+  }
+  return failures.sort();
+};
 
 /** Rows claiming `unchanged` while naming a different target. */
 const mislabelledUnchanged = (rows: Row[]): string[] =>
@@ -115,6 +147,24 @@ describe("key migration contract", () => {
         { component: "Probe", key: "inner", outcome: "renamed", to: "somewhereNew" },
       ];
       expect(sharedTargets(planted)).toEqual(["Probe.somewhereNew"]);
+    });
+
+    it("catches a merge whose two elements are nested", () => {
+      const planted: Row[] = [
+        { component: "Accordion", key: "icon", outcome: "unchanged", to: "icon" },
+        { component: "Accordion", key: "iconWrapper", outcome: "renamed", to: "icon" },
+      ];
+      // evidence supplied inline: the check must fail on the shape, not on
+      // whatever the live table happens to record today
+      expect(nestedMerges(planted, { Accordion: ["icon"] })).toEqual(["Accordion.icon"]);
+    });
+
+    it("does not flag a merge whose elements are siblings", () => {
+      const planted: Row[] = [
+        { component: "Pagination", key: "prevIcon", outcome: "renamed", to: "navIcon" },
+        { component: "Pagination", key: "nextIcon", outcome: "renamed", to: "navIcon" },
+      ];
+      expect(nestedMerges(planted, {})).toEqual([]);
     });
 
     it("catches a merge that combines differing structural layers", () => {
@@ -203,6 +253,14 @@ describe("key migration contract", () => {
     expect(
       sharedTargets(TABLE.rows).filter((t) => !declared.has(t)),
       "two elements would claim one key with nothing recording that as intentional",
+    ).toEqual([]);
+  });
+
+  it("no declared merge is ancestor and descendant", () => {
+    expect(
+      nestedMerges(TABLE.rows),
+      "a merge may not put one key on an element and on that element's own ancestor, " +
+        "whatever the structural layers say",
     ).toEqual([]);
   });
 

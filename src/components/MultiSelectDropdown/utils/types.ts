@@ -22,6 +22,8 @@ export interface MultiSelectDropdownClasses {
   description?: string;
   clearTrigger?: string;
   loading?: string;
+  /** One row of the skeleton. It shared `loading` with the container above it. */
+  loadingItem?: string;
   count?: string;
 }
 

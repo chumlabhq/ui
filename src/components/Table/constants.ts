@@ -11,6 +11,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
     "w-full border rounded-cl-md overflow-hidden bg-white dark:bg-cl-bg border-cl-border dark:border-white/[0.06]",
   list: "w-full border-collapse",
   header: "",
+  headerRow: "",
   headerCell:
     "px-4 py-3 text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-secondary dark:text-cl-text-tertiary bg-cl-bg-elevated dark:bg-[#111118] border-cl-border dark:border-white/[0.06]",
   headerCellText: "flex items-center",
@@ -48,6 +49,7 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   input: "",
   dragHandle: "",
   footer: "",
+  searchControl: "",
   searchInput: "",
   mobileCard: "",
   groupLabel: "",
