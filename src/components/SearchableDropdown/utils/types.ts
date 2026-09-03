@@ -33,9 +33,7 @@ export interface SearchableDropdownClasses {
  * <SearchableDropdown options={opts} value={val} onValueChange={setVal} />
  * ```
  */
-export interface SearchableDropdownProps {
-  /** Array of `{ value: string, label: string }` objects. Not `items`. */
-  options?: SearchableDropdownOption[];
+export interface SearchableDropdownBaseProps {
   /** Selected option value string, or null. Not `selected`. */
   value?: string | null;
   defaultValue?: string;
@@ -68,12 +66,7 @@ export interface SearchableDropdownProps {
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
-  /** Async search callback. Fires with the search query string. Return filtered options. Not `onFilter`. */
-  onSearch?: (query: string) => Promise<SearchableDropdownOption[]>;
   searchDebounceMs?: number;
-  initialOptions?: SearchableDropdownOption[];
-  onLoadInitialOptions?: () => Promise<SearchableDropdownOption[]>;
-  loadInitialOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
   classes?: SearchableDropdownClasses;
@@ -127,3 +120,44 @@ export interface SearchableDropdownTriggerRenderProps {
   "data-open"?: true;
   "data-placeholder"?: true;
 }
+
+/**
+ * Where the options come from — sync or async, never both.
+ *
+ * `useDropdown` drops `options` entirely once `onSearch` is a function: the menu
+ * renders `initialOptions` before a query and the async results after, so
+ * passing both showed an empty menu. It looked half-working rather than broken
+ * because `selectedOption` DOES consult `options`, so the trigger kept
+ * displaying the right label over an empty list.
+ *
+ * A discriminated union makes the combination fail to typecheck instead. A
+ * runtime fallback would have papered over it: the two props mean different
+ * things, and silently preferring one is a guess about which the caller meant.
+ */
+export type SearchableDropdownOptionSource =
+  | {
+      /** Array of `{ value: string, label: string }` objects. Not `items`. */
+      options?: SearchableDropdownOption[];
+      onSearch?: never;
+      initialOptions?: never;
+      onLoadInitialOptions?: never;
+      loadInitialOnOpen?: never;
+    }
+  | {
+      options?: never;
+      /** Async search callback. Fires with the query. Return filtered options. Not `onFilter`. */
+      onSearch: (query: string) => Promise<SearchableDropdownOption[]>;
+      /** Shown before the first query, and merged into the value lookup. */
+      initialOptions?: SearchableDropdownOption[];
+    } & SearchableInitialLoad<SearchableDropdownOption>;
+
+/**
+ * The initial load fires only when both halves are present, so either alone
+ * typechecked and fetched nothing.
+ */
+type SearchableInitialLoad<T> =
+  | { onLoadInitialOptions?: never; loadInitialOnOpen?: never }
+  | { onLoadInitialOptions: () => Promise<T[]>; loadInitialOnOpen: true };
+
+export type SearchableDropdownProps = SearchableDropdownBaseProps &
+  SearchableDropdownOptionSource;

@@ -43,7 +43,7 @@ export interface MultiSelectDropdownClasses {
  * <MultiSelectDropdown options={opts} value={selectedValues} onValueChange={setValues} />
  * ```
  */
-export interface MultiSelectDropdownProps {
+export interface MultiSelectDropdownBaseProps {
   /** Array of `{ value: string, label: string }` objects. Not `items`. */
   options?: MultiSelectOption[];
   /** Array of selected value strings. Values not present in options are not shown or submitted; prune when options change. Not `selected`. */
@@ -70,8 +70,6 @@ export interface MultiSelectDropdownProps {
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
-  onLoadOptions?: () => Promise<MultiSelectOption[]>;
-  loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
   maxDisplayedChips?: number;
@@ -101,6 +99,21 @@ export interface MultiSelectDropdownProps {
   ClearIcon?: React.ComponentType<{ className?: string }>;
   renderTrigger?: (props: MultiSelectDropdownTriggerRenderProps) => ReactNode;
 }
+
+/**
+ * `loadOptions` returns early unless BOTH are set, so `onLoadOptions` on its own
+ * fetched nothing and `loadOnOpen` on its own had nothing to fetch. Either half
+ * alone typechecked and did exactly nothing.
+ */
+export type MultiSelectDropdownLoadSource =
+  | { onLoadOptions?: never; loadOnOpen?: never }
+  | {
+      onLoadOptions: () => Promise<MultiSelectOption[]>;
+      loadOnOpen: true;
+    };
+
+export type MultiSelectDropdownProps = MultiSelectDropdownBaseProps & MultiSelectDropdownLoadSource;
+
 
 export interface MultiSelectDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;

@@ -1,5 +1,6 @@
 import { useRef, useEffect, useId, forwardRef, memo, useMemo, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { ReactNode, ComponentType, KeyboardEvent, MutableRefObject } from "react";
 import type { CascadingOption, CascadingDropdownProps, CascadingDropdownClasses } from "./utils/types";
 import { useCascadingDropdown } from "./utils/useCascadingDropdown";
@@ -307,7 +308,7 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
       unstyled = false,
       lockScroll = false,
       portalContainer,
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
       keepMounted = false,
       className,
@@ -328,6 +329,10 @@ const CascadingDropdown = forwardRef<HTMLDivElement, CascadingDropdownProps>(
     },
     ref,
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     const shimmerCount = Math.min(Math.max(0, rawShimmerCount), 50);
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_CASCADINGDROPDOWN_CLASSES : DEFAULT_CASCADINGDROPDOWN_CLASSES;

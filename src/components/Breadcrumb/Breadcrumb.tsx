@@ -8,6 +8,7 @@ import {
   useId,
 } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type {
   BreadcrumbItem,
   BreadcrumbProps,
@@ -318,7 +319,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       ellipsisTooltip,
       ellipsisTooltipProps,
       dropdownPosition = "top",
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       portalContainer,
       ellipsisAriaLabel = "Show collapsed breadcrumb items",
       onDropdownOpenChange,
@@ -326,6 +327,10 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     },
     ref,
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     const generatedId = useId();
     const dropdownId = `breadcrumb-dropdown-${generatedId}`;
 

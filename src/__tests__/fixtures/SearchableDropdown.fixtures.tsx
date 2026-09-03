@@ -27,5 +27,22 @@ const fixtures: Fixtures<typeof SearchableDropdown> = [
   { name: "success", props: { options: OPTIONS, label: "Fruit", success: true, successMessage: "Saved" } },
   { name: "disabled", props: { options: OPTIONS, disabled: true } },
   { name: "open-search", props: { options: OPTIONS, defaultOpen: true, showSearch: true } },
+  // Both branches of the option source, which is now a discriminated union:
+  // passing `options` AND `onSearch` no longer typechecks, because useDropdown
+  // drops `options` entirely once onSearch is a function.
+  {
+    name: "async-initial",
+    props: {
+      onSearch: async () => OPTIONS,
+      initialOptions: OPTIONS,
+      defaultOpen: true,
+      showSearch: true,
+    },
+  },
+  {
+    name: "async-searched",
+    props: { onSearch: async () => OPTIONS, defaultOpen: true, showSearch: true },
+    note: "Async with no initialOptions: the menu is empty until a query resolves.",
+  },
 ];
 export default fixtures;

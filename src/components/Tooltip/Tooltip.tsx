@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { ReactElement, Ref } from "react";
 import { createPortal } from "react-dom";
+import { LAYERS } from "../../utils/layers";
 import { cn } from "../../utils/scopedCn";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 import { useControllableState } from "../../utils/useControllableState";
@@ -78,7 +79,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       truncate = false,
       truncateWidth,
       shadow = "lg",
-      zIndex = 9999,
+      zIndex = LAYERS.tooltip,
       portal = true,
       portalContainer,
       asChild = false,

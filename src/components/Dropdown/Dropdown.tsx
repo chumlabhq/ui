@@ -9,6 +9,7 @@ import {
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { CSSProperties, ReactNode } from "react";
 import type {
   DropdownOption,
@@ -371,7 +372,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       lockScroll = false,
       dropdownPosition = "bottom",
       forceDropdownPosition = false,
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
       typeaheadTimeout = 500,
       "aria-label": ariaLabel,
@@ -383,6 +384,11 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       CheckIcon: CheckIconProp = CheckIconDefault,
       ClearIcon: ClearIconProp = ClearIconDefault,
     } = props;
+
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
 
     const prefersReducedMotion = useReducedMotion();
 

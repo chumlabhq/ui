@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { LAYERS } from "../../../utils/layers";
 import type {
   ToastConfig,
   ToastContextValue,
@@ -23,7 +24,7 @@ export const ToastProvider = ({
   defaultDuration = 5000,
   animationDuration = 500,
   gap = 12,
-  zIndex = 9999,
+  zIndex = LAYERS.toast,
   dismissOnEscape = false,
   containerAriaLabel = "Notifications",
   classes: providerClasses,

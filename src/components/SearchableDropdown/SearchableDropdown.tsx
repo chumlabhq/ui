@@ -9,6 +9,7 @@ import {
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { CSSProperties, ReactNode } from "react";
 import type {
   SearchableDropdownProps,
@@ -367,7 +368,7 @@ const SearchableDropdown = forwardRef<
     lockScroll = false,
     dropdownPosition = "bottom",
     forceDropdownPosition = false,
-    dropdownZIndex = 50,
+    dropdownZIndex: dropdownZIndexProp,
     dropdownGap = 4,
     typeaheadTimeout = 500,
     "aria-label": ariaLabel,
@@ -380,6 +381,11 @@ const SearchableDropdown = forwardRef<
     ClearIcon: ClearIconProp = DefaultClearIcon,
     SearchIcon: SearchIconProp = SearchIcon,
   } = props;
+
+  // ADR: floating content resolves its layer from the nearest overlay, so a
+  // dropdown inside a drawer stacks above it. An explicit prop still wins.
+  const dropdownZIndex = useLayer(dropdownZIndexProp);
+
 
   const prefersReducedMotion = useReducedMotion();
 

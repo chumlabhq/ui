@@ -1,5 +1,6 @@
 import { useRef, useEffect, useId, forwardRef, useCallback, useState, useMemo, memo } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { CSSProperties, ReactNode } from "react";
 import type { MultiSelectDropdownProps, MultiSelectDropdownClasses } from "./utils/types";
 import { useMultiSelectDropdown } from "./utils/useMultiSelectDropdown";
@@ -255,11 +256,15 @@ const MultiSelectDropdown = forwardRef<
       portalContainer,
       dropdownPosition = "bottom",
       forceDropdownPosition = false,
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
     },
     ref,
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled ? UNSTYLED_MULTISELECTDROPDOWN_CLASSES : DEFAULT_MULTISELECTDROPDOWN_CLASSES;
     // Motion is decorative under ADR 001, so `unstyled` has already removed it;

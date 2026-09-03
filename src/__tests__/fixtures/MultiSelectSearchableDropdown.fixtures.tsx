@@ -29,5 +29,22 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
   { name: "open-search", props: { options: OPTIONS, defaultOpen: true, showSearch: true } },
   { name: "multi-value", props: { options: OPTIONS, defaultOpen: true, defaultValue: ["a", "b"], clearable: true, showSelectedChips: true } },
   { name: "chips-overflow", props: { options: OPTIONS, defaultValue: ["a", "b", "c"], showSelectedChips: true, maxDisplayedChips: 1 }, note: "moreCount needs more selections than maxDisplayedChips." },
+  // Both branches of the option source, which is now a discriminated union:
+  // passing `options` AND `onSearch` no longer typechecks, because
+  // useMultiSelectDropdown drops `options` once onSearch is a function.
+  {
+    name: "async-initial",
+    props: {
+      onSearch: async () => OPTIONS,
+      initialOptions: OPTIONS,
+      defaultOpen: true,
+      showSearch: true,
+    },
+  },
+  {
+    name: "async-searched",
+    props: { onSearch: async () => OPTIONS, defaultOpen: true, showSearch: true },
+    note: "Async with no initialOptions: the menu is empty until a query resolves.",
+  },
 ];
 export default fixtures;

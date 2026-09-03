@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { LAYERS, useLayer } from "../../utils/layers";
 import type {
   DatePickerProps,
   DatePickerClasses,
@@ -229,7 +230,7 @@ function useMarkerTooltip(
             className="bg-cl-bg-elevated text-cl-text border border-cl-border"
             style={{
               position: "fixed",
-              zIndex: 100,
+              zIndex: LAYERS.tooltip,
               top: position.top,
               left: position.left,
               // When anchored to the cell's top edge (placement="top"),
@@ -538,7 +539,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       className = "",
       portalContainer,
       lockScroll = false,
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownPosition = "bottom",
       forceDropdownPosition = false,
       dropdownGap = 4,
@@ -552,6 +553,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     },
     ref,
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     // ─── Resolved props ───────────────────────────────────────────────
     const resolvedShowClearButton = showClearButton ?? clearable ?? true;
 

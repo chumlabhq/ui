@@ -393,3 +393,8 @@ export { useControllableState } from "./utils/useControllableState";
 export { useIsomorphicLayoutEffect } from "./utils/useIsomorphicLayoutEffect";
 export { useReducedMotion } from "./utils/useReducedMotion";
 export { SR_ONLY_STYLE } from "./utils/srOnlyStyle";
+
+// One layering scale for the whole library. Public because a consumer placing
+// their own floating content beside ours needs to know which layer to take.
+export { LAYERS, LAYER_STEP, OverlayLayerContext, useLayer } from "./utils/layers";
+export type { LayerTier } from "./utils/layers";

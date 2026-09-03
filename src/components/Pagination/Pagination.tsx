@@ -11,6 +11,7 @@ import {
   Fragment,
 } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { PaginationProps, PaginationClasses, IconProps, SectionName } from "./utils/types";
 import { DEFAULT_ROW_OPTIONS, DEFAULT_PAGINATION_CLASSES, UNSTYLED_PAGINATION_CLASSES } from "./utils/constants";
 import { getVisiblePages } from "./utils/helpers";
@@ -241,7 +242,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       showLabel = "Show",
       dropdownAriaLabel = "Rows per page",
       dropdownPosition = "top",
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
       dropdownIcon,
       prevIcon,
@@ -262,6 +263,10 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     },
     ref,
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     const instanceId = useId();
     const prefersReducedMotion = useReducedMotion(reduceMotion);
     const paginationAriaLabel = paginationAriaLabelProp ?? "Pagination";

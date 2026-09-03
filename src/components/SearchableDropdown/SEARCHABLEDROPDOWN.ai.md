@@ -94,7 +94,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | Array of dropdown options. |
+| `options` | array | — | Array of dropdown options. Mutually exclusive with `onSearch`: the async branch never reads it. |
 | `value` | string \| null | — | Controlled selected value. |
 | `defaultValue` | string | — | Default uncontrolled selected value. |
 | `onValueChange` | object | — | (value: string \| null, option: SearchableDropdownOption \| null) => void — Callback fired when the selected value changes. |
@@ -122,11 +122,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for the selected option. |
 | `fullWidth` | boolean | `false` | Whether the dropdown expands to fill its parent container. |
 | `loading` | boolean | — | Whether the dropdown is in a loading state. |
-| `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. |
+| `onSearch` | object | — | (query: string) => Promise<SearchableDropdownOption[]> — Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | — | Initial options to display before any search is performed. |
-| `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. |
-| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. |
+| `initialOptions` | array | — | Initial options to display before any search is performed. Async branch only (`onSearch`). |
+| `onLoadInitialOptions` | object | — | () => Promise<SearchableDropdownOption[]> — Async callback to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
+| `loadInitialOnOpen` | boolean | `false` | Whether to load initial options when the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void — Callback when async loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items to show while loading. |
 | `classes` | object | — | CSS class overrides for sub-elements. |

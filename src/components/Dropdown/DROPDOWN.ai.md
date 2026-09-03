@@ -122,8 +122,8 @@ export default function Example() {
 | `selectedIcon` | object | — | React.ReactNode - Custom icon for the selected option indicator. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading/shimmer state. |
-| `onLoadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. |
-| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. |
+| `onLoadOptions` | object | — | () => Promise<DropdownOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
+| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `unstyled` | boolean | `false` | Removes all default styling. |

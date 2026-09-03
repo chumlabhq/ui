@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { LAYERS, OverlayLayerContext } from "../../utils/layers";
 import type { DrawerProps, DrawerClasses } from "./utils/types";
 import {
   getDirectionStyles,
@@ -65,7 +66,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       open,
       defaultOpen = false,
       onOpenChange,
-      zIndex = 9999,
+      zIndex = LAYERS.overlay,
       children,
       direction = DEFAULT_DIRECTION,
       size = DEFAULT_SIZE,
@@ -497,6 +498,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const isHiddenMounted = keepMounted && isClosed;
 
     return (
+      // ADR: the drawer publishes its layer so floating content opened inside
+      // it stacks above rather than at the dropdown tier. This is why popovers
+      // inside drawers used to vanish.
+      <OverlayLayerContext.Provider value={zIndex}>
       <DrawerContext.Provider value={contextValue}>
         {createPortal(
           <div
@@ -587,6 +592,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           container,
         )}
       </DrawerContext.Provider>
+      </OverlayLayerContext.Provider>
     );
   },
 );

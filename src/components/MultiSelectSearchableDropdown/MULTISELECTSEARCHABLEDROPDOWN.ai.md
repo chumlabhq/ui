@@ -90,7 +90,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `options` | array | — | List of selectable options. |
+| `options` | array | — | List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it. |
 | `value` | array | — | Controlled selected values. |
 | `defaultValue` | array | — | Initial selected values for uncontrolled usage. |
 | `onValueChange` | object | — | (values: string[], options: MultiSelectOption[]) => void - Fires when the selected values change. |
@@ -114,11 +114,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading state. |
-| `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. |
+| `onSearch` | object | — | (query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`. |
 | `searchDebounceMs` | number | `300` | Debounce delay in milliseconds for the search callback. |
-| `initialOptions` | array | — | Options to display before any search is performed. |
-| `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. |
-| `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. |
+| `initialOptions` | array | — | Options to display before any search is performed. Async branch only (`onSearch`). |
+| `onLoadInitialOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`. |
+| `loadInitialOnOpen` | boolean | `false` | When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |

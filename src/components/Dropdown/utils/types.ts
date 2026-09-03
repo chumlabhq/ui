@@ -64,7 +64,7 @@ export interface DropdownTriggerRenderProps {
  * <Dropdown options={[{ value: "a", label: "A" }]} value={val} onValueChange={setVal} />
  * ```
  */
-export interface DropdownProps {
+export interface DropdownBaseProps {
   /** Array of `{ value: string, label: string }` objects. Not `items`. */
   options?: DropdownOption[];
   /** Selected option value string, or null. Not `selected`. */
@@ -95,8 +95,6 @@ export interface DropdownProps {
   selectedIcon?: ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
-  onLoadOptions?: () => Promise<DropdownOption[]>;
-  loadOnOpen?: boolean;
   onLoadError?: (error: unknown) => void;
   shimmerCount?: number;
   unstyled?: boolean;
@@ -122,3 +120,18 @@ export interface DropdownProps {
   ClearIcon?: ComponentType<{ className?: string; style?: CSSProperties }>;
   loadingText?: ReactNode;
 }
+
+/**
+ * `loadOptions` returns early unless BOTH are set, so `onLoadOptions` on its own
+ * fetched nothing and `loadOnOpen` on its own had nothing to fetch. Either half
+ * alone typechecked and did exactly nothing.
+ */
+export type DropdownLoadSource =
+  | { onLoadOptions?: never; loadOnOpen?: never }
+  | {
+      onLoadOptions: () => Promise<DropdownOption[]>;
+      loadOnOpen: true;
+    };
+
+export type DropdownProps = DropdownBaseProps & DropdownLoadSource;
+

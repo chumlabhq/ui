@@ -1,5 +1,6 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { isBrowser } from "../../utils/isBrowser";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle";
@@ -375,7 +376,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       portalContainer,
       dropdownPosition = "bottom",
       forceDropdownPosition = false,
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
       keepMounted = false,
       onBlur: onBlurProp,
@@ -387,6 +388,10 @@ const MultiSelectSearchableDropdown = forwardRef<
     },
     ref
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     const prefersReducedMotion = useReducedMotion();
     const baseClassesRaw = unstyled
       ? UNSTYLED_MULTISELECTSEARCHABLEDROPDOWN_CLASSES

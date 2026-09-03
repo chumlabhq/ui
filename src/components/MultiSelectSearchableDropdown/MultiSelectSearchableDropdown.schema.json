@@ -6,7 +6,7 @@
   "properties": {
     "options": {
       "type": "array",
-      "description": "List of selectable options.",
+      "description": "List of selectable options. Mutually exclusive with `onSearch`: the async branch never reads it.",
       "items": {
         "type": "object",
         "properties": {
@@ -150,7 +150,7 @@
     },
     "onSearch": {
       "type": "object",
-      "description": "(query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering."
+      "description": "(query: string) => Promise<MultiSelectOption[]> - Async search callback for server-side filtering. Mutually exclusive with `options`."
     },
     "searchDebounceMs": {
       "type": "number",
@@ -159,7 +159,7 @@
     },
     "initialOptions": {
       "type": "array",
-      "description": "Options to display before any search is performed.",
+      "description": "Options to display before any search is performed. Async branch only (`onSearch`).",
       "items": {
         "type": "object",
         "properties": {
@@ -174,11 +174,11 @@
     },
     "onLoadInitialOptions": {
       "type": "object",
-      "description": "() => Promise<MultiSelectOption[]> - Async function to load initial options."
+      "description": "() => Promise<MultiSelectOption[]> - Async function to load initial options. Async branch only, and requires `loadInitialOnOpen`."
     },
     "loadInitialOnOpen": {
       "type": "boolean",
-      "description": "When true, calls onLoadInitialOptions each time the dropdown opens.",
+      "description": "When true, calls onLoadInitialOptions each time the dropdown opens. Requires `onLoadInitialOptions`; alone it has nothing to load.",
       "default": false
     },
     "onLoadError": {

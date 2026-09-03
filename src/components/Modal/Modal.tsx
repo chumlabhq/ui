@@ -19,6 +19,7 @@ import type {
 } from "./utils/types";
 import { CloseIcon } from "./icons";
 import { ModalContext } from "./ModalContext";
+import { LAYERS, LAYER_STEP, OverlayLayerContext } from "../../utils/layers";
 import { mergeRefs } from "../../utils/mergeRefs";
 import { useControllableState } from "../../utils/useControllableState";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock";
@@ -32,8 +33,9 @@ import {
 import { pushModal, popModal, isTopModal } from "./utils/helpers";
 
 import { motionSafeClasses } from "../../utils/classLayers";
-const BASE_Z_INDEX = 9999;
-const Z_INDEX_INCREMENT = 10;
+// ADR: one scale. These were 9999 / 10 hardcoded here.
+const BASE_Z_INDEX = LAYERS.overlay;
+const Z_INDEX_INCREMENT = LAYER_STEP;
 
 /**
  * Component: Modal
@@ -313,6 +315,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const hasDescription = description !== undefined && description !== null;
 
     const modalContent = (
+      <OverlayLayerContext.Provider value={zIndex}>
       <ModalContext.Provider value={contextValue}>
         <div
           id={modalId}
@@ -427,6 +430,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
           </div>
         </div>
       </ModalContext.Provider>
+      </OverlayLayerContext.Provider>
     );
 
     if (!isBrowser) return null;

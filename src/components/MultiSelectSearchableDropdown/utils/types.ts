@@ -43,9 +43,7 @@ export interface MultiSelectSearchableDropdownClasses {
  * <MultiSelectSearchableDropdown options={opts} value={selectedValues} onValueChange={setValues} />
  * ```
  */
-export interface MultiSelectSearchableDropdownProps {
-  /** Array of `{ value: string, label: string }` objects. Not `items`. */
-  options?: MultiSelectOption[];
+export interface MultiSelectSearchableDropdownBaseProps {
   /** Array of selected value strings. Not `selected`. */
   value?: string[];
   defaultValue?: string[];
@@ -73,12 +71,7 @@ export interface MultiSelectSearchableDropdownProps {
   showChevron?: boolean;
   fullWidth?: boolean;
   loading?: boolean;
-  /** Async search callback. Fires with the search query string. Return filtered options. Not `onFilter`. */
-  onSearch?: (query: string) => Promise<MultiSelectOption[]>;
   searchDebounceMs?: number;
-  initialOptions?: MultiSelectOption[];
-  onLoadInitialOptions?: () => Promise<MultiSelectOption[]>;
-  loadInitialOnOpen?: boolean;
   /** Called when async loading or search fails. */
   onLoadError?: (error: unknown) => void;
   maxDisplayedChips?: number;
@@ -107,6 +100,45 @@ export interface MultiSelectSearchableDropdownProps {
   renderTrigger?: (props: MultiSelectSearchableDropdownTriggerRenderProps) => ReactNode;
   searchInputAriaLabel?: string;
 }
+
+/**
+ * `useMultiSelectDropdown` computes `displayOptions` from `asyncOptions` and
+ * `allInitialOptions` once `onSearch` is a function -- `options` never reaches
+ * the menu on that branch. `allOptions`, which resolves the chips, does still
+ * read it, so passing both rendered an empty menu under correctly-labelled
+ * chips. The union makes that combination fail to typecheck; a runtime fallback
+ * would instead have to guess which of the two sources the consumer meant.
+ *
+ * The initial-load family is on the async branch for the same reason: it feeds
+ * `allInitialOptions`, which the sync branch never reads.
+ */
+export type MultiSelectSearchableDropdownOptionSource =
+  | {
+      /** Array of `{ value: string, label: string }` objects. Not `items`. */
+      options?: MultiSelectOption[];
+      onSearch?: never;
+      initialOptions?: never;
+      onLoadInitialOptions?: never;
+      loadInitialOnOpen?: never;
+    }
+  | {
+      options?: never;
+      /** Async search callback. Fires with the search query string. Return filtered options. Not `onFilter`. */
+      onSearch: (query: string) => Promise<MultiSelectOption[]>;
+      /** Shown before the first query, and merged into the chip lookup. */
+      initialOptions?: MultiSelectOption[];
+    } & SearchableInitialLoad<MultiSelectOption>;
+
+/**
+ * The initial load fires only when both halves are present, so either alone
+ * typechecked and fetched nothing.
+ */
+type SearchableInitialLoad<T> =
+  | { onLoadInitialOptions?: never; loadInitialOnOpen?: never }
+  | { onLoadInitialOptions: () => Promise<T[]>; loadInitialOnOpen: true };
+
+export type MultiSelectSearchableDropdownProps =
+  MultiSelectSearchableDropdownBaseProps & MultiSelectSearchableDropdownOptionSource;
 
 export interface MultiSelectSearchableDropdownTriggerRenderProps {
   ref: React.RefCallback<HTMLElement>;

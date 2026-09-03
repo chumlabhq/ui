@@ -130,11 +130,11 @@
     },
     "onLoadOptions": {
       "type": "object",
-      "description": "() => Promise<MultiSelectOption[]> - Async function to load options."
+      "description": "() => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires."
     },
     "loadOnOpen": {
       "type": "boolean",
-      "description": "When true, calls onLoadOptions each time the dropdown opens.",
+      "description": "When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load.",
       "default": false
     },
     "onLoadError": {

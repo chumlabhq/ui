@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { ReactNode, CSSProperties } from "react";
 import { createPortal } from "react-dom";
+import { useLayer } from "../../utils/layers";
 import type { TimePickerProps, TimePickerClasses, TimeValue, ClockFaceClasses } from "./utils/types";
 import {
   DEFAULT_TIMEPICKER_CLASSES,
@@ -188,7 +189,7 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
       lockScroll = false,
       dropdownPosition = "bottom",
       forceDropdownPosition = false,
-      dropdownZIndex = 50,
+      dropdownZIndex: dropdownZIndexProp,
       dropdownGap = 4,
       keepMounted = false,
       portalContainer,
@@ -206,6 +207,10 @@ const TimePicker = forwardRef<HTMLDivElement, TimePickerProps>(
     },
     ref,
   ) => {
+    // ADR: floating content resolves its layer from the nearest overlay, so a
+    // dropdown inside a drawer stacks above it. An explicit prop still wins.
+    const dropdownZIndex = useLayer(dropdownZIndexProp);
+
     // ── Class merging (matches library pattern: classes ?? base) ────────
     const prefersReducedMotionForClasses = useReducedMotion();
 

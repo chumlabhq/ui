@@ -114,8 +114,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `showChevron` | boolean | `true` | Whether to show the chevron icon in the trigger. |
 | `fullWidth` | boolean | `false` | Makes the dropdown span the full width of its container. |
 | `loading` | boolean | — | Shows a loading/shimmer state. |
-| `onLoadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. |
-| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. |
+| `onLoadOptions` | object | — | () => Promise<MultiSelectOption[]> - Async function to load options. Requires `loadOnOpen`; alone it never fires. |
+| `loadOnOpen` | boolean | `false` | When true, calls onLoadOptions each time the dropdown opens. Requires `onLoadOptions`; alone it has nothing to load. |
 | `onLoadError` | object | — | (error: unknown) => void - Called when async option loading fails. |
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
