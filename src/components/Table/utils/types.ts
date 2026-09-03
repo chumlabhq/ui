@@ -84,6 +84,17 @@ export interface TableClasses {
   filterButton?: string;
   /** Filter dropdown container. */
   filterContent?: string;
+  /**
+   * The column-filter panel's parts. TanStack Table is headless and names data
+   * roles, not elements, so it is no peer here — these are qualifier-first
+   * compounds of R2 heads (header, label, clearTrigger, item, control), all
+   * NOVEL. Selection is `data-selected` (R4), not a second class set.
+   */
+  filterHeader?: string;
+  filterLabel?: string;
+  filterClearTrigger?: string;
+  filterItem?: string;
+  filterItemControl?: string;
   /** Expand/collapse icon button. */
   expandButton?: string;
   /** Right-pinned column container. */
@@ -103,6 +114,14 @@ export interface TableClasses {
    * SearchableDropdown and MultiSelectSearchableDropdown.
    */
   searchControl?: string;
+  /**
+   * R2 `searchIcon` and `clearTrigger`. Both search boxes — the desktop one and
+   * the mobile card one — render these; their styling was a call-site literal,
+   * so `unstyled` could not strip it and no consumer could reach it.
+   * Side placement is `data-side` on `searchControl` (R4), not two class sets.
+   */
+  searchIcon?: string;
+  clearTrigger?: string;
   searchInput?: string;
   /** Mobile card layout wrapper. */
   mobileCard?: string;

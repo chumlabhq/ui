@@ -2,6 +2,7 @@ import { fireEvent } from "@testing-library/react";
 import type { Fixture } from "./types";
 import type { TableProps } from "../../components/Table/utils/types";
 import { ROWS, COLUMNS } from "./_data";
+import { tick } from "./_act";
 
 type Row = (typeof ROWS)[number];
 
@@ -30,6 +31,12 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     },
   },
   { name: "with-search", props: { data: ROWS, columns: COLUMNS, showSearch: true } },
+  // `clearTrigger` only renders once the search box holds a value, and
+  // `filterClearTrigger` only once a column filter has one selected.
+  {
+    name: "search-with-value",
+    props: { data: ROWS, columns: COLUMNS, showSearch: true, globalFilter: "a" },
+  },
   { name: "with-footer", props: { data: ROWS, columns: COLUMNS, showFooter: true, footerContent: "Total" } },
   {
     name: "selectable",
@@ -70,6 +77,20 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     act: (c) => {
       const btn = c.querySelector("[data-table-filter-trigger], th button");
       if (btn) fireEvent.click(btn);
+    },
+  },
+  {
+    name: "filter-selected",
+    props: { data: ROWS, columns: COLUMNS, enableColumnFilters: true, filterableColumns: FILTERABLE },
+    // `filterClearTrigger` only appears once a value is selected, so the act
+    // opens the panel AND picks an option.
+    act: async (c) => {
+      const btn = c.querySelector("[data-table-filter-trigger], th button");
+      if (btn) fireEvent.click(btn);
+      await tick();
+      const option = c.ownerDocument.querySelector("[data-table-filter-content] button");
+      if (option) fireEvent.click(option);
+      await tick();
     },
   },
   {

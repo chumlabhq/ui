@@ -46,17 +46,15 @@
       "rounded-cl-md",
       "bg-white",
       "border-cl-border",
-      "dark:border-white/[0.06]",
       "py-3",
       "text-sm",
-      "font-medium",
-      "border-b",
       "bg-cl-bg-elevated",
-      "transition-colors",
       "text-cl-text",
-      "text-cl-text-tertiary",
       "py-2",
-      "rounded"
+      "cursor-pointer",
+      "select-none",
+      "opacity-50",
+      "px-3"
     ],
     "DatePicker": [
       "gap-2"
@@ -74,9 +72,7 @@
       "animate-spin"
     ],
     "Table": [
-      "transition-transform",
-      "transition-colors",
-      "transition-opacity"
+      "transition-transform"
     ],
     "Toast": [
       "transition-colors"
@@ -189,5 +185,6 @@
         "Switch/loading"
       ]
     }
-  }
+  },
+  "$tableLeakNote": "Table's decorativeLeaks are bounded by its remaining call-site literals: each token here comes from one of them, and the entry goes when the literal moves into a key. They are recorded rather than waived \u2014 the constants ratchet is the schedule."
 }

@@ -297,6 +297,13 @@ function TableInner<TData>(
   const filterDropdownClassName = classesProp?.filterContent ?? base.filterContent;
   const loadingMoreClassName = classesProp?.loadingFooter ?? base.loadingFooter;
   const searchInputClassName = classesProp?.searchInput ?? base.searchInput;
+  const searchIconClassName = classesProp?.searchIcon ?? base.searchIcon;
+  const filterHeaderClassName = classesProp?.filterHeader ?? base.filterHeader;
+  const filterLabelClassName = classesProp?.filterLabel ?? base.filterLabel;
+  const filterClearTriggerClassName = classesProp?.filterClearTrigger ?? base.filterClearTrigger;
+  const filterItemClassName = classesProp?.filterItem ?? base.filterItem;
+  const filterItemControlClassName = classesProp?.filterItemControl ?? base.filterItemControl;
+  const clearTriggerClassName = classesProp?.clearTrigger ?? base.clearTrigger;
 
   const columns = columnsProp ?? FALLBACK_COLUMNS;
   const data = dataProp ?? FALLBACK_DATA;
@@ -1203,7 +1210,7 @@ function TableInner<TData>(
                     e.stopPropagation();
                     header.column.toggleSorting();
                   }}
-                  className={`shrink-0 cursor-pointer select-none rounded p-0.5 transition-colors text-cl-text-tertiary hover:text-cl-text hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent ${sortIconClassName}`}
+                  className={sortIconClassName}
                   aria-label={`Sort by ${columnId}`}
                   title={
                     sortDir === "asc"
@@ -1253,7 +1260,9 @@ function TableInner<TData>(
                     });
                   }
                 }}
-                className={`shrink-0 ml-1 cursor-pointer transition-opacity opacity-50 hover:opacity-100 ${filterIconClassName} ${getColumnFilterValues(columnId).length > 0 ? "opacity-100" : ""}`}
+                className={filterIconClassName}
+                // ADR 002 R4: the state the opacity ternary expressed.
+                data-active={getColumnFilterValues(columnId).length > 0 || undefined}
                 aria-label={`Filter ${columnId}`}
                 title="Filter column"
               >
@@ -1850,11 +1859,11 @@ function TableInner<TData>(
         {/* Search bar for mobile */}
         {showSearch && (
           <div className={`mb-2 ${searchBarClassName}`} data-table-search>
-            <div className="relative">
+            <div className="relative group/search" data-side="start">
               {CustomSearchIcon ? (
-                <CustomSearchIcon className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <CustomSearchIcon className={searchIconClassName} />
               ) : (
-                <SearchIcon className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <SearchIcon className={searchIconClassName} />
               )}
               <input
                 type="text"
@@ -1873,7 +1882,7 @@ function TableInner<TData>(
                     table.setGlobalFilter("");
                     onSearchClear?.();
                   }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  className={clearTriggerClassName}
                   aria-label="Clear search"
                 >
                   <svg
@@ -2032,12 +2041,13 @@ function TableInner<TData>(
 
           return (
             <div className={`mb-3 ${searchBarClassName}`} data-table-search>
-              <div className="relative">
-                {showIcon && (
-                  <IconComponent
-                    className={`w-4 h-4 absolute top-1/2 -translate-y-1/2 text-cl-text-tertiary pointer-events-none ${iconLeft ? "left-3" : "right-3"}`}
-                  />
-                )}
+              <div
+                className="relative group/search"
+                // ADR 002 R4: the side the icon sits on, which both the icon and
+                // the clear button position against.
+                data-side={showIcon ? (iconLeft ? "start" : "end") : undefined}
+              >
+                {showIcon && <IconComponent className={searchIconClassName} />}
                 <input
                   type="text"
                   value={globalFilter ?? ""}
@@ -2055,7 +2065,7 @@ function TableInner<TData>(
                       table.setGlobalFilter("");
                       onSearchClear?.();
                     }}
-                    className={`absolute top-1/2 -translate-y-1/2 p-0.5 rounded text-cl-text-tertiary hover:text-cl-text hover:bg-black/[0.04] dark:hover:bg-white/[0.06] cursor-pointer ${showIcon && !iconLeft ? "right-9" : "right-2.5"}`}
+                    className={clearTriggerClassName}
                     aria-label="Clear search"
                   >
                     <svg
@@ -2228,8 +2238,8 @@ function TableInner<TData>(
               )
             ) : (
               <>
-                <div className="px-3 py-2 border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between">
-                  <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                <div className={filterHeaderClassName}>
+                  <span className={filterLabelClassName}>
                     Filter {filterDropdownState.columnId}
                   </span>
                   {getColumnFilterValues(filterDropdownState.columnId).length >
@@ -2239,7 +2249,7 @@ function TableInner<TData>(
                       onClick={() =>
                         setColumnFilterValues(filterDropdownState.columnId, [])
                       }
-                      className="text-xs text-cl-accent hover:text-cl-accent-hover cursor-pointer"
+                      className={filterClearTriggerClassName}
                     >
                       Clear
                     </button>
@@ -2255,7 +2265,8 @@ function TableInner<TData>(
                       <button
                         key={opt.value}
                         type="button"
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm cursor-pointer transition-colors ${isSelected ? "bg-cl-accent-bg text-cl-accent" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/[0.04]"}`}
+                        className={filterItemClassName}
+                        data-selected={isSelected || undefined}
                         onClick={() => {
                           if (
                             filterableColumns[filterDropdownState.columnId]
@@ -2277,7 +2288,8 @@ function TableInner<TData>(
                         }}
                       >
                         <div
-                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isSelected ? "bg-cl-accent border-cl-accent" : "border-gray-300 dark:border-gray-600"}`}
+                          className={filterItemControlClassName}
+                          data-selected={isSelected || undefined}
                         >
                           {isSelected && (
                             <svg

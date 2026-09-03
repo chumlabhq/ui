@@ -1671,16 +1671,22 @@ describe("Table Icons", () => {
   });
 
   describe("FilterIcon", () => {
-    it("renders with active=true", () => {
+    // ADR 002 R4: `active` is a state the icon reports, not a class it picks.
+    // The opacity now lives in `filterButton`'s default as a data-variant, so
+    // a consumer overriding that key keeps control of both states.
+    it("marks itself active", () => {
       const { container } = render(<FilterIcon className="test" active={true} />);
-      const svg = container.querySelector("svg");
-      expect(svg).toHaveClass("opacity-100");
+      expect(container.querySelector("svg")).toHaveAttribute("data-active", "true");
     });
 
-    it("renders with active=false (default)", () => {
+    it("carries no active marker by default", () => {
       const { container } = render(<FilterIcon className="test" />);
-      const svg = container.querySelector("svg");
-      expect(svg).toHaveClass("opacity-60");
+      expect(container.querySelector("svg")).not.toHaveAttribute("data-active");
+    });
+
+    it("still passes the caller's className through", () => {
+      const { container } = render(<FilterIcon className="test" />);
+      expect(container.querySelector("svg")).toHaveClass("test");
     });
   });
 });
