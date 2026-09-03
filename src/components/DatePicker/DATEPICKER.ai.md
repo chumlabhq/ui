@@ -119,7 +119,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `outsideDaysSelectable` | boolean | `true` | Whether outside days can be selected. |
 | `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
 | `showPresets` | boolean | `false` | Shows preset date selection buttons. |
-| `presetGroup` | array | — | Array of date presets. |
+| `presets` | array | — | Array of date presets. |
 | `markers` | array | — | Array of date markers to display on the calendar. |
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
@@ -127,11 +127,11 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `name` | string | — | Form field name. |
 | `placeholder` | string | — | Placeholder text for the trigger input. |
 | `disabled` | boolean | `false` | Disables the date picker. |
-| `message` | boolean | `false` | Displays error state. |
+| `error` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `message` | boolean | `false` | Displays success state. |
+| `success` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `loading` | boolean | `false` | Shows loading state. |
 | `clearable` | boolean | — | Shows a clear button. |
@@ -139,7 +139,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
 | `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
 | `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
-| `icon` | object | — | React.ReactNode — Custom calendar icon. |
+| `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
 | `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
 | `prevMonthIcon` | object | — | React.ReactNode — Custom previous month icon. |
 | `nextMonthIcon` | object | — | React.ReactNode — Custom next month icon. |

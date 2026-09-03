@@ -102,11 +102,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays the dropdown in an error state. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `message` | boolean | `false` | Displays the dropdown in a success state. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
@@ -120,7 +120,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |

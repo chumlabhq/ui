@@ -169,7 +169,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
 | `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
 | `hasMore` | boolean | `false` | Whether there is more data to load. |
-| `loadingFooter` | boolean | `false` | Whether more data is currently being loaded. |
+| `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
 | `infiniteEndContent` | object | — | React.ReactNode — Content shown when all data is loaded. |
 | `responsiveBreakpoint` | number | — | Viewport width below which the table renders as card layout. |
 | `renderMobileCard` | object | — | (row: TData) => ReactNode — Render function for mobile card layout. |

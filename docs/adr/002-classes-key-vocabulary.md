@@ -227,6 +227,35 @@ whose structural utilities are still written at the call site reports an empty l
 `Table.tsx:1198`. The test is exactly as complete as the constants ratchet, and becomes
 sound when the remaining literals move (Task 3c).
 
+### R10 — Not every call-site literal is equal debt (Task 3c, 2026-09-03)
+
+`constants.contract` counts literal class strings at JSX call sites and ratchets the number
+down. Treating that number as one pile of debt is wrong, and the fix costs more than it
+returns for most of it.
+
+**A decorative literal is a real defect.** It survives `unstyled` — the split derives from
+the constants, and a string that never reached them cannot be stripped — and no `classes`
+key can displace it. The element needs a key, through the full gates: R2 vocabulary or the
+Amendment A precedent scheme, the collision guard, and R9's merge test.
+
+**A structural literal is nearly harmless.** Structural utilities are applied in both modes
+by definition, so `unstyled` was never going to remove them and the consumer loses nothing
+they would otherwise have had. It is untidy, not broken. These stay, held by the ratchet,
+and are not worth minting public API to remove — every key is permanent surface.
+
+At the time of writing, of 101 literals on unkeyed elements: **57 purely structural, 33
+mixed, 11 purely decorative**. The 44 that carry any decorative token are the ones that
+need a key; the other 57 do not.
+
+A conditional literal is a third case again. It expresses state, which R4 already owns, so
+it becomes a `data-` variant on a key that exists rather than a new key. Where its state
+has no attribute, the attribute goes through R4's precedent scheme — a literal is not a
+licence to invent one silently.
+
+`STRUCTURAL_BASELINE` in `constants.contract` is tracked separately from the overall
+baseline for this reason: the two ratchets measure different things, and only one of them
+is a bug count.
+
 ## Consequences
 
 **Accepted costs.** Every component, every constants file, every test naming a key, all 30 `*.ai.md`, `llms-full.txt`, `component-index.json`, and the AI Playground's codegen prompts and vendored bundle change in one sweep. Partial adoption is worse than none: a half-renamed vocabulary is exactly the state this ADR exists to end.

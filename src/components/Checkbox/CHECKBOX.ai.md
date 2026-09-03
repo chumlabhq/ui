@@ -77,13 +77,15 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Text label rendered beside the checkbox. |
 | `description` | object | — | React.ReactNode — Helper text rendered below the label. |
+| `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
+| `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
-| `message` | boolean | `false` | Displays the checkbox in an error state. |
+| `error` | boolean | `false` | Displays the checkbox in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the checkbox. |
-| `message` | boolean | `false` | Displays the checkbox in a success state. |
+| `success` | boolean | `false` | Displays the checkbox in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the checkbox. |
 | `loading` | boolean | `false` | Displays the checkbox in a loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of the checkbox indicator. |

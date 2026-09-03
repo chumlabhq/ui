@@ -63,7 +63,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
         role="status"
         aria-live="polite"
         aria-label="Loading"
-        className={cn(mergedClasses.root, !unstyled && "h-(--loader-size) w-(--loader-size)", className) || undefined}
+        className={cn(mergedClasses.root, className) || undefined}
         style={loaderStyle}
         data-reduce-motion={prefersReducedMotion || undefined}
         {...rest}
@@ -71,7 +71,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
         <svg
           viewBox="0 0 24 24"
           fill="none"
-          className={cn(mergedClasses.control, !unstyled && "[animation-duration:var(--loader-speed)]") || undefined}
+          className={mergedClasses.control || undefined}
           style={prefersReducedMotion ? { animation: "none" } : undefined}
         >
           <circle

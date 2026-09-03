@@ -118,11 +118,11 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content when no value is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays error state. |
+| `error` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `message` | boolean | `false` | Displays success state. |
+| `success` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |

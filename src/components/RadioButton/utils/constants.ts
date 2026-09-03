@@ -18,7 +18,7 @@ export const ICON_SIZE_MAP: Record<Exclude<RadioButtonSize, number>, number> = {
 };
 
 export const DEFAULT_RADIO_CLASSES: Required<RadioButtonClasses> = {
-  root: "flex items-start gap-2 cursor-pointer",
+  root: "flex items-start gap-2 cursor-pointer data-[disabled]:opacity-50",
   label: "text-sm font-medium text-cl-text dark:text-cl-text",
   description: "text-xs text-cl-text-tertiary dark:text-cl-text-tertiary",
   control: "shrink-0 flex items-center justify-center rounded-full border-2 border-cl-border-input dark:border-cl-border transition-colors",

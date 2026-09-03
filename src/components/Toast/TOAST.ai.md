@@ -93,9 +93,9 @@ toast.dismissAll();
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
 | `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
-| `title` | object | — | React.ReactNode — Primary message content. |
+| `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
-| `root` | object | — | React.ReactNode — Custom content that replaces message and description. |
+| `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
 | `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
 | `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
 | `progressColor` | string | — | Custom color for the progress bar. |

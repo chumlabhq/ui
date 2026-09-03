@@ -103,9 +103,9 @@ override silently drops the rest.
 | `required` | boolean | `false` | Whether the field is required. |
 | `id` | string | — | HTML id attribute. |
 | `disabled` | boolean | `false` | Whether the switch is disabled. |
-| `message` | boolean | `false` | Whether the switch is in an error state. |
+| `error` | boolean | `false` | Whether the switch is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the switch. |
-| `message` | boolean | `false` | Whether the switch is in a success state. |
+| `success` | boolean | `false` | Whether the switch is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the switch. |
 | `loading` | boolean | `false` | Whether the switch is in a loading state. |
 | `loader` | object | — | React.ReactNode — Custom loader element. |

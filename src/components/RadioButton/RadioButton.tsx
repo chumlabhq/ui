@@ -298,7 +298,7 @@ const RadioButton = forwardRef<HTMLLabelElement, RadioButtonProps>(
       <label
         ref={ref}
         htmlFor={radioId}
-        className={cn(mergedClasses.root, className, !unstyled && isDisabled && "opacity-50") || undefined}
+        className={cn(mergedClasses.root, className) || undefined}
         style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
         data-checked={isChecked || undefined}
         // ADR 002 R4; Radix RadioGroup precedent.

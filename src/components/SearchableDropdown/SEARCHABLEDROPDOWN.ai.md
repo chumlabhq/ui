@@ -105,11 +105,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name attribute. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content shown when no value is selected. |
 | `disabled` | boolean | `false` | Whether the dropdown is disabled. |
-| `message` | boolean | `false` | Whether the dropdown is in an error state. |
+| `error` | boolean | `false` | Whether the dropdown is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode — Label displayed above the dropdown. |
 | `description` | object | — | React.ReactNode — Description text displayed below the label. |
-| `message` | boolean | `false` | Whether the dropdown is in a success state. |
+| `success` | boolean | `false` | Whether the dropdown is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Whether the field is required. |
 | `clearable` | boolean | `false` | Whether the selected value can be cleared. |

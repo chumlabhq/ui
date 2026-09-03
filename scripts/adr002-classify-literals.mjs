@@ -34,6 +34,16 @@ for (const path of files) {
   const visit = (node) => {
     if (ts.isJsxAttribute(node) && node.name.getText(sf) === "className" && node.initializer) {
       const root = node.initializer;
+      // every data-* already on this element, so a conditional can be told
+      // apart from one that would need a new R4 attribute
+      const owner = node.parent;
+      const attrs = [];
+      for (const a of owner.properties ?? []) {
+        if (ts.isJsxAttribute(a)) {
+          const n = a.name.getText(sf);
+          if (n.startsWith("data-")) attrs.push(n);
+        }
+      }
       // which classes key(s) this className already applies
       const keys = [];
       const findKeys = (n) => {
@@ -52,11 +62,23 @@ for (const path of files) {
           const v = value.trim();
           if (!v || !UTIL.test(v)) return;
           let conditional = false;
+          let condition = null;
+          let branch = null;
           for (let p = at; p && p !== root; p = p.parent) {
-            if (ts.isConditionalExpression(p)) { conditional = true; break; }
+            if (ts.isConditionalExpression(p)) {
+              conditional = true;
+              condition = p.condition.getText(sf);
+              branch = p.whenTrue.getStart(sf) <= at.getStart(sf) && at.getEnd() <= p.whenTrue.getEnd() ? "true" : "false";
+              break;
+            }
             if (ts.isBinaryExpression(p) &&
                 (p.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken ||
-                 p.operatorToken.kind === ts.SyntaxKind.BarBarToken)) { conditional = true; break; }
+                 p.operatorToken.kind === ts.SyntaxKind.BarBarToken)) {
+              conditional = true;
+              condition = p.left.getText(sf);
+              branch = p.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken ? "true" : "false";
+              break;
+            }
           }
           (out[file] ||= []).push({
             line: sf.getLineAndCharacterOfPosition(at.getStart(sf)).line + 1,
@@ -66,6 +88,9 @@ for (const path of files) {
             end: at.getEnd(),
             value: v,
             form,
+            condition,
+            branch,
+            attrs,
             bucket: conditional ? "conditional" : keys.length ? "absorb-into-key" : "unkeyed",
             key: keys[0] ?? null,
           });

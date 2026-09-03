@@ -173,7 +173,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div
-        className={cn(mergedClasses.root, className, loading && "opacity-50 pointer-events-none", !unstyled && disabled && "opacity-50") || undefined}
+        className={cn(mergedClasses.root, className) || undefined}
         data-disabled={disabled || undefined}
         data-readonly={readOnly || undefined}
         data-error={error || undefined}

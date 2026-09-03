@@ -83,18 +83,18 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `name` | string | — | Name for the hidden input for form submission. |
 | `placeholder` | string | — | Placeholder text for the input. |
 | `disabled` | boolean | `false` | Disables the component. |
-| `message` | boolean | `false` | Marks the component as having an error. |
+| `error` | boolean | `false` | Marks the component as having an error. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the input. |
 | `description` | object | — | React.ReactNode — Helper text displayed below the label. |
-| `message` | boolean | — | Success state. |
+| `success` | boolean | — | Success state. |
 | `successMessage` | object | — | React.ReactNode — Success message text. |
 | `loading` | boolean | — | Loading state. |
 | `label` | object | — | React.ReactNode — Label displayed above the input. |
 | `required` | boolean | `false` | Shows a required indicator on the label. |
 | `showEndIcon` | boolean | `true` | Show the chevron/end icon in the trigger. |
-| `icon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
+| `endIcon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
 | `showSelectedIcon` | boolean | `true` | Show a check icon on the selected option. |
-| `itemIndicator` | object | — | React.ReactNode — Custom selected icon element. |
+| `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
 | `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |

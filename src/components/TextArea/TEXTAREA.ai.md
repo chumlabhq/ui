@@ -78,9 +78,9 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Label displayed above the textarea. |
 | `description` | object | — | React.ReactNode — Description text below the label. |
-| `message` | boolean | `false` | Whether the textarea is in an error state. |
+| `error` | boolean | `false` | Whether the textarea is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
-| `message` | boolean | `false` | Green success state for validated fields. |
+| `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |

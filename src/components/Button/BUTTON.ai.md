@@ -110,13 +110,13 @@ To override structural defaults (e.g., different padding), include the override 
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
-| `icon` | object | — | React.ReactNode — Icon rendered before the button label. |
-| `icon` | object | — | React.ReactNode — Icon rendered after the button label. |
+| `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
+| `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
 | `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
 | `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
-| `loading` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
+| `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
 | `classes` | object | — | CSS class overrides for button sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |

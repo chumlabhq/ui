@@ -1210,13 +1210,13 @@ To override structural defaults (e.g., different padding), include the override 
 | `asChild` | boolean | `false` | Merges button props onto a child element via Slot. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Emits data-size attribute for CSS targeting. No built-in sizing. |
 | `disabled` | boolean | — | Disables interaction and applies disabled styling. |
-| `icon` | object | — | React.ReactNode — Icon rendered before the button label. |
-| `icon` | object | — | React.ReactNode — Icon rendered after the button label. |
+| `startIcon` | object | — | React.ReactNode — Icon rendered before the button label. |
+| `endIcon` | object | — | React.ReactNode — Icon rendered after the button label. |
 | `loading` | boolean | `false` | Shows a loading spinner and disables interaction. |
 | `loadingText` | object | — | React.ReactNode — Text displayed alongside the loading spinner. |
 | `loaderPosition` | `"left"` \| `"right"` | `"right"` | Which side of the label the loader appears on. |
 | `loaderSize` | number | `16` | Pixel size of the loading spinner. |
-| `loading` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
+| `loader` | object | — | React.ReactNode — Custom loader element replacing the default spinner. |
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
 | `classes` | object | — | CSS class overrides for button sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
@@ -1546,11 +1546,11 @@ DOM nesting: `root > wrapper > trigger + portal(menu > menuItem* + submenu > sub
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content when no value is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays error state. |
+| `error` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `message` | boolean | `false` | Displays success state. |
+| `success` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode — Content shown when no results match. |
@@ -1853,13 +1853,15 @@ DOM nesting: `root > label > (checkbox-span > hidden-input + icon) + (labelConta
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Text label rendered beside the checkbox. |
 | `description` | object | — | React.ReactNode — Helper text rendered below the label. |
+| `checked` | boolean | — | Controlled checked state. |
 | `defaultChecked` | boolean | `false` | Initial checked state for uncontrolled usage. |
+| `indeterminate` | boolean | `false` | Displays the indeterminate (minus) indicator instead of a checkmark. |
 | `onValueChange` | object | — | (checked: boolean) => void — Fires when the checked state changes. |
 | `onFocus` | object | — | (event: FocusEvent) => void |
 | `onBlur` | object | — | (event: FocusEvent) => void |
-| `message` | boolean | `false` | Displays the checkbox in an error state. |
+| `error` | boolean | `false` | Displays the checkbox in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the checkbox. |
-| `message` | boolean | `false` | Displays the checkbox in a success state. |
+| `success` | boolean | `false` | Displays the checkbox in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the checkbox. |
 | `loading` | boolean | `false` | Displays the checkbox in a loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of the checkbox indicator. |
@@ -2299,7 +2301,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `outsideDaysSelectable` | boolean | `true` | Whether outside days can be selected. |
 | `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
 | `showPresets` | boolean | `false` | Shows preset date selection buttons. |
-| `presetGroup` | array | — | Array of date presets. |
+| `presets` | array | — | Array of date presets. |
 | `markers` | array | — | Array of date markers to display on the calendar. |
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
@@ -2307,11 +2309,11 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `name` | string | — | Form field name. |
 | `placeholder` | string | — | Placeholder text for the trigger input. |
 | `disabled` | boolean | `false` | Disables the date picker. |
-| `message` | boolean | `false` | Displays error state. |
+| `error` | boolean | `false` | Displays error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message. |
 | `label` | object | — | React.ReactNode — Label above the trigger. |
 | `description` | object | — | React.ReactNode — Description text. |
-| `message` | boolean | `false` | Displays success state. |
+| `success` | boolean | `false` | Displays success state. |
 | `successMessage` | object | — | React.ReactNode — Success message. |
 | `loading` | boolean | `false` | Shows loading state. |
 | `clearable` | boolean | — | Shows a clear button. |
@@ -2319,7 +2321,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `fullWidth` | boolean | `false` | Stretches the date picker to fill its container width. |
 | `showClearButton` | boolean | `true` | Shows the clear button in the trigger. |
 | `showCalendarIcon` | boolean | `true` | Shows the calendar icon in the trigger. |
-| `icon` | object | — | React.ReactNode — Custom calendar icon. |
+| `calendarIcon` | object | — | React.ReactNode — Custom calendar icon. |
 | `clearIcon` | object | — | React.ReactNode — Custom clear icon. |
 | `prevMonthIcon` | object | — | React.ReactNode — Custom previous month icon. |
 | `nextMonthIcon` | object | — | React.ReactNode — Custom next month icon. |
@@ -2748,11 +2750,11 @@ export default function Example() {
 | `name` | string | — | Form field name for the hidden input. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode - Content displayed when no option is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays the dropdown in an error state. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `message` | boolean | `false` | Displays the dropdown in a success state. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |
@@ -3026,9 +3028,9 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode - Label rendered above the input. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `message` | boolean | `false` | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `message` | boolean | `false` | Green success state for validated fields. |
+| `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
@@ -3233,9 +3235,9 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `required` | boolean | `false` | Marks the field as required. |
 | `disabled` | boolean | `false` | Disables the input. |
 | `readOnly` | boolean | `false` | Makes the input read-only. |
-| `message` | boolean | `false` | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `message` | boolean | `false` | Displays the input in a success state. |
+| `success` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `placeholder` | string | `"Enter phone number"` | Placeholder text for the phone number input. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
@@ -3682,12 +3684,6 @@ modalRef.current?.focus();
 
 1. **Default** (no `classes`, no `unstyled`) — uses `DEFAULT_MODAL_CLASSES`
 2. **Partial override** (`classes` without `unstyled`) — **replaces** per slot, not additive
-
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
-
 3. **Unstyled** (`unstyled={true}`) — all slots empty, you provide everything via `classes`
 
 #### Slot → visual mapping
@@ -3923,11 +3919,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays the dropdown in an error state. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `message` | boolean | `false` | Displays the dropdown in a success state. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `noResultsContent` | object | `"No options found"` | React.ReactNode - Content shown when no options are available. |
@@ -3941,7 +3937,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `shimmerCount` | number | `5` | Number of shimmer placeholder items shown during loading. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -4160,11 +4156,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name. |
 | `placeholder` | object | `"Select options..."` | React.ReactNode - Placeholder when nothing is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays the dropdown in an error state. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `message` | boolean | `false` | Displays the dropdown in a success state. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `showSearch` | boolean | `true` | Whether to show the search input in the dropdown. |
@@ -4184,7 +4180,7 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `onLoadError` | object | — | (error: unknown) => void - Called when async loading or search fails. |
 | `maxDisplayedChips` | number | `3` | Maximum number of selected chips displayed before showing a count. |
 | `showSelectedChips` | boolean | `true` | Whether to show selected values as chips in the trigger. |
-| `itemIndicator` | object | — | React.ReactNode - Custom checkbox icon for options. |
+| `checkboxIcon` | object | — | React.ReactNode - Custom checkbox icon for options. |
 | `unstyled` | boolean | `false` | Removes all default styling. |
 | `lockScroll` | boolean | `false` | Locks body scroll while the dropdown is open. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -4373,9 +4369,9 @@ export default function Example() {
 | `name` | string | — | Form field name. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `message` | boolean | `false` | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `message` | boolean | `false` | Displays the input in a success state. |
+| `success` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `loading` | boolean | `false` | Shows a loading state. |
 | `disabled` | boolean | `false` | Disables all input fields. |
@@ -4384,11 +4380,11 @@ export default function Example() {
 | `allowPaste` | boolean | `true` | Enables pasting OTP values. |
 | `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
 | `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
-| `inputPattern` | string | `"\\\\d*"` | Allowed characters. Sets the `pattern` attribute and filters input. Default accepts digits only. |
+| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
 | `inputClassNames` | array | — | Per-input CSS class overrides. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
-| `validate` | object | — | (char: string) => boolean - Per-character filter. Overrides the one derived from `inputPattern`. |
+| `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
 | `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
 | `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -4503,9 +4499,9 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `dropdownPosition` | `"top"` \| `"bottom"` | `"top"` | Vertical placement of the rows-per-page dropdown — opens upward (top) or downward (bottom). |
 | `dropdownZIndex` | number | `50` | Z-index of the rows-per-page dropdown. |
 | `dropdownGap` | number | `4` | Gap in pixels between trigger and dropdown. |
-| `rowsPerPage.icon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
-| `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
-| `navIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
+| `dropdownIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the rows-per-page dropdown. |
+| `prevIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the previous page button. |
+| `nextIcon` | object | — | React.ComponentType<IconProps> \| React.ReactNode - Custom icon for the next page button. |
 | `renderEllipsis` | object | — | (props: EllipsisRenderProps) => ReactNode - Custom render function for the ellipsis element. |
 | `renderPageInfo` | object | — | (props: PageInfoRenderProps) => ReactNode - Custom render function for the page info display. |
 | `sectionOrder` | array | — | Order of pagination sections. |
@@ -4725,9 +4721,9 @@ export default function Example() {
 | `name` | string | — | Field name for form submission. |
 | `required` | boolean | `false` | Required field indicator. |
 | `disabled` | boolean | `false` | Disables all radio buttons in the group. |
-| `message` | boolean | `false` | Displays the group in an error state. |
+| `error` | boolean | `false` | Displays the group in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the group. |
-| `message` | boolean | `false` | Displays the group in a success state. |
+| `success` | boolean | `false` | Displays the group in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the group. |
 | `loading` | boolean | `false` | Loading state. |
 | `size` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` \| `"xl"` \| number | `"md"` | Size of all radio indicators. |
@@ -4924,11 +4920,11 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `name` | string | — | Form field name attribute. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode — Placeholder content shown when no value is selected. |
 | `disabled` | boolean | `false` | Whether the dropdown is disabled. |
-| `message` | boolean | `false` | Whether the dropdown is in an error state. |
+| `error` | boolean | `false` | Whether the dropdown is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode — Label displayed above the dropdown. |
 | `description` | object | — | React.ReactNode — Description text displayed below the label. |
-| `message` | boolean | `false` | Whether the dropdown is in a success state. |
+| `success` | boolean | `false` | Whether the dropdown is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Whether the field is required. |
 | `clearable` | boolean | `false` | Whether the selected value can be cleared. |
@@ -5174,9 +5170,9 @@ export default function Example() {
 | `description` | object | — | React.ReactNode — Description text. |
 | `disabled` | boolean | `false` | Whether the slider is disabled. |
 | `required` | boolean | `false` | Whether the field is required. |
-| `message` | boolean | `false` | Whether the slider is in an error state. |
+| `error` | boolean | `false` | Whether the slider is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the slider. |
-| `message` | boolean | — | Whether the slider is in a success state. |
+| `success` | boolean | — | Whether the slider is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the slider. |
 | `loading` | boolean | — | Whether the slider is in a loading state. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
@@ -5540,9 +5536,9 @@ override silently drops the rest.
 | `required` | boolean | `false` | Whether the field is required. |
 | `id` | string | — | HTML id attribute. |
 | `disabled` | boolean | `false` | Whether the switch is disabled. |
-| `message` | boolean | `false` | Whether the switch is in an error state. |
+| `error` | boolean | `false` | Whether the switch is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the switch. |
-| `message` | boolean | `false` | Whether the switch is in a success state. |
+| `success` | boolean | `false` | Whether the switch is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the switch. |
 | `loading` | boolean | `false` | Whether the switch is in a loading state. |
 | `loader` | object | — | React.ReactNode — Custom loader element. |
@@ -5736,7 +5732,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `enableInfiniteScroll` | boolean | `false` | Enable infinite scroll loading. |
 | `onLoadMore` | object | — | () => void — Callback when user scrolls near the bottom. |
 | `hasMore` | boolean | `false` | Whether there is more data to load. |
-| `loadingFooter` | boolean | `false` | Whether more data is currently being loaded. |
+| `loadingMore` | boolean | `false` | Whether more data is currently being loaded. |
 | `infiniteEndContent` | object | — | React.ReactNode — Content shown when all data is loaded. |
 | `responsiveBreakpoint` | number | — | Viewport width below which the table renders as card layout. |
 | `renderMobileCard` | object | — | (row: TData) => ReactNode — Render function for mobile card layout. |
@@ -5758,29 +5754,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 
 1. **Default** — uses `DEFAULT_TABLE_CLASSES`
 2. **Partial override** — **replaces** per slot, not additive
-
-**A slot that carries states is replaced as a whole.** Several slots absorbed what were
-separate per-state keys, so overriding one replaces its base styling *and* every state
-variant on it. Write the base and all the states you want in one string — a one-state
-override silently drops the rest.
-
 3. **Unstyled** — all slots empty, you build from scratch
-
-```tsx
-// `item` carries the base AND 2 state variants. Overriding it
-// replaces all of them, so write them together:
-<Table
-  classes={{
-    item:
-      "rounded-cl-md px-2 py-1 " +           // base
-      "data-[selected]:bg-cl-accent/15 data-[selected]:text-cl-accent " +
-      "data-[state=open]:bg-cl-accent/10 ",
-  }}
-/>
-
-// Passing only `item: "data-[selected]:…"` drops the base and the other
-// 1 states.
-```
 
 #### Key slots
 
@@ -6111,9 +6085,9 @@ DOM nesting: `root > label + description + wrapper(startIcon + textarea + endIco
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode — Label displayed above the textarea. |
 | `description` | object | — | React.ReactNode — Description text below the label. |
-| `message` | boolean | `false` | Whether the textarea is in an error state. |
+| `error` | boolean | `false` | Whether the textarea is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the textarea. |
-| `message` | boolean | `false` | Green success state for validated fields. |
+| `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the textarea. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `startIcon` | object | — | React.ReactNode — Icon rendered before the textarea. |
@@ -6295,18 +6269,18 @@ DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevr
 | `name` | string | — | Name for the hidden input for form submission. |
 | `placeholder` | string | — | Placeholder text for the input. |
 | `disabled` | boolean | `false` | Disables the component. |
-| `message` | boolean | `false` | Marks the component as having an error. |
+| `error` | boolean | `false` | Marks the component as having an error. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the input. |
 | `description` | object | — | React.ReactNode — Helper text displayed below the label. |
-| `message` | boolean | — | Success state. |
+| `success` | boolean | — | Success state. |
 | `successMessage` | object | — | React.ReactNode — Success message text. |
 | `loading` | boolean | — | Loading state. |
 | `label` | object | — | React.ReactNode — Label displayed above the input. |
 | `required` | boolean | `false` | Shows a required indicator on the label. |
 | `showEndIcon` | boolean | `true` | Show the chevron/end icon in the trigger. |
-| `icon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
+| `endIcon` | object | — | React.ReactNode — Custom end icon element replacing the default chevron. |
 | `showSelectedIcon` | boolean | `true` | Show a check icon on the selected option. |
-| `itemIndicator` | object | — | React.ReactNode — Custom selected icon element. |
+| `selectedIcon` | object | — | React.ReactNode — Custom selected icon element. |
 | `renderOptionContent` | object | — | (time: string, isSelected: boolean) => ReactNode — Custom renderer for dropdown option content. |
 | `fullWidth` | boolean | `false` | Expand the picker to fill its parent container. |
 | `variant` | `"dropdown"` \| `"clock"` | `"dropdown"` | Visual variant: dropdown list or analog clock face. |
@@ -6516,9 +6490,9 @@ toast.dismissAll();
 |------|------|---------|-------------|
 | `id` **(required)** | string | — | Unique identifier for the toast. |
 | `type` | `"success"` \| `"warning"` \| `"error"` \| `"info"` | `"info"` | Visual type/severity of the toast. |
-| `title` | object | — | React.ReactNode — Primary message content. |
+| `message` | object | — | React.ReactNode — Primary message content. |
 | `description` | object | — | React.ReactNode — Secondary description text. |
-| `root` | object | — | React.ReactNode — Custom content that replaces message and description. |
+| `content` | object | — | React.ReactNode — Custom content that replaces message and description. |
 | `duration` | number | `5000` | Auto-dismiss duration in milliseconds. |
 | `showProgress` | boolean | `true` | Whether to show a progress bar countdown. |
 | `progressColor` | string | — | Custom color for the progress bar. |

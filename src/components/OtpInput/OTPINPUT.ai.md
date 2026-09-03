@@ -70,9 +70,9 @@ export default function Example() {
 | `name` | string | — | Form field name. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `message` | boolean | `false` | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `message` | boolean | `false` | Displays the input in a success state. |
+| `success` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `loading` | boolean | `false` | Shows a loading state. |
 | `disabled` | boolean | `false` | Disables all input fields. |
@@ -81,11 +81,11 @@ export default function Example() {
 | `allowPaste` | boolean | `true` | Enables pasting OTP values. |
 | `autoFocusFirst` | boolean | `false` | Automatically focuses the first input on mount. |
 | `inputType` | `"text"` \| `"password"` \| `"tel"` | `"text"` | HTML input type for each field. |
-| `inputPattern` | string | `"\\\\d*"` | Allowed characters. Sets the `pattern` attribute and filters input. Default accepts digits only. |
+| `inputPattern` | string | `"\\\\d*"` | HTML pattern attribute for input validation. |
 | `inputClassNames` | array | — | Per-input CSS class overrides. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |
 | `renderInput` | object | — | (props: OtpInputRenderProps) => ReactNode - Custom render function for individual input fields. |
-| `validate` | object | — | (char: string) => boolean - Per-character filter. Overrides the one derived from `inputPattern`. |
+| `validate` | object | — | (char: string) => boolean - Custom validation function for each character. |
 | `inputAriaLabel` | object | — | (index: number, length: number) => string - Function to generate aria-label for each input. |
 | `groupAriaLabel` | string | `"One-time password input"` | Accessible label for the input group. |
 | `classes` | object | — | CSS class overrides for sub-elements. |

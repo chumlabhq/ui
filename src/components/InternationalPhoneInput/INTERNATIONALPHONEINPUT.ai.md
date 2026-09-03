@@ -108,9 +108,9 @@ DOM nesting: `root > label + description + wrapper(group) > SearchableDropdown +
 | `required` | boolean | `false` | Marks the field as required. |
 | `disabled` | boolean | `false` | Disables the input. |
 | `readOnly` | boolean | `false` | Makes the input read-only. |
-| `message` | boolean | `false` | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `message` | boolean | `false` | Displays the input in a success state. |
+| `success` | boolean | `false` | Displays the input in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `placeholder` | string | `"Enter phone number"` | Placeholder text for the phone number input. |
 | `fullWidth` | boolean | `false` | Makes the input span the full width of its container. |

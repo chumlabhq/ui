@@ -85,9 +85,9 @@ export default function Example() {
 | `description` | object | — | React.ReactNode — Description text. |
 | `disabled` | boolean | `false` | Whether the slider is disabled. |
 | `required` | boolean | `false` | Whether the field is required. |
-| `message` | boolean | `false` | Whether the slider is in an error state. |
+| `error` | boolean | `false` | Whether the slider is in an error state. |
 | `errorMessage` | object | — | React.ReactNode — Error message displayed below the slider. |
-| `message` | boolean | — | Whether the slider is in a success state. |
+| `success` | boolean | — | Whether the slider is in a success state. |
 | `successMessage` | object | — | React.ReactNode — Success message displayed below the slider. |
 | `loading` | boolean | — | Whether the slider is in a loading state. |
 | `classes` | object | — | CSS class overrides for sub-elements. |

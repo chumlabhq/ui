@@ -108,11 +108,11 @@ export default function Example() {
 | `name` | string | — | Form field name for the hidden input. |
 | `placeholder` | object | `"Select an option"` | React.ReactNode - Content displayed when no option is selected. |
 | `disabled` | boolean | `false` | Disables the dropdown. |
-| `message` | boolean | `false` | Displays the dropdown in an error state. |
+| `error` | boolean | `false` | Displays the dropdown in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the dropdown. |
 | `label` | object | — | React.ReactNode - Label rendered above the dropdown. |
 | `description` | object | — | React.ReactNode - Description text rendered below the label. |
-| `message` | boolean | `false` | Displays the dropdown in a success state. |
+| `success` | boolean | `false` | Displays the dropdown in a success state. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the dropdown. |
 | `required` | boolean | `false` | Marks the field as required. |
 | `clearable` | boolean | `false` | Shows a clear button to deselect the current value. |

@@ -74,9 +74,9 @@ DOM nesting: `root > label + description + wrapper(prefix + startIcon + input + 
 |------|------|---------|-------------|
 | `label` | object | — | React.ReactNode - Label rendered above the input. |
 | `description` | object | — | React.ReactNode - Helper text rendered below the label. |
-| `message` | boolean | `false` | Displays the input in an error state. |
+| `error` | boolean | `false` | Displays the input in an error state. |
 | `errorMessage` | object | — | React.ReactNode - Error message displayed below the input. |
-| `message` | boolean | `false` | Green success state for validated fields. |
+| `success` | boolean | `false` | Green success state for validated fields. |
 | `successMessage` | object | — | React.ReactNode - Success message displayed below the input. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | — | Visual size variant. Emits data-size on the root container for CSS targeting. |
 | `prefix` | object | — | React.ReactNode - Inline text or element rendered before the input (e.g. '$', 'https://'). |
