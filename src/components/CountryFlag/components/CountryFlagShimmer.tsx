@@ -6,6 +6,10 @@ import type {
 import { cn } from "../../../utils/scopedCn";
 import { motionSafe } from "../../../utils/classLayers";
 import { getPixelSize } from "../utils/helpers";
+import {
+  DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES,
+  UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES,
+} from "../utils/constants";
 import { DEFAULT_ASPECT_RATIO } from "../utils/constants";
 import { useReducedMotion } from "../../../utils/useReducedMotion";
 
@@ -17,6 +21,8 @@ export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmer
       animate = true,
       reduceMotion = "auto",
       className,
+      classes,
+      unstyled = false,
       style,
       ...rest
     },
@@ -28,11 +34,16 @@ export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmer
     const effectiveReduceMotion = useReducedMotion(reduceMotion);
     const shouldAnimate = animate && !effectiveReduceMotion;
 
+    const base = unstyled
+      ? UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES
+      : DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES;
+    const rootClass = classes?.root ?? base.root;
+
     return (
       <span
         ref={ref}
         className={cn(
-          motionSafe(className ?? "", !shouldAnimate),
+          motionSafe(cn(rootClass, className) ?? "", !shouldAnimate),
         )}
         style={{ width, height, ...style }}
         role="status"

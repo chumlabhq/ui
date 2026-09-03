@@ -1,6 +1,12 @@
 import { forwardRef } from "react";
 import type { AvatarShimmerProps, AvatarGroupShimmerProps } from "../utils/types";
-import { DEFAULT_SIZE, DEFAULT_SHAPE, DEFAULT_SPACING } from "../utils/constants";
+import {
+  DEFAULT_SIZE,
+  DEFAULT_SHAPE,
+  DEFAULT_SPACING,
+  DEFAULT_AVATAR_SHIMMER_CLASSES,
+  UNSTYLED_AVATAR_SHIMMER_CLASSES,
+} from "../utils/constants";
 import { getNumericSize, getBorderRadius } from "../utils/helpers";
 import { Slot } from "../../../utils/Slot";
 import { cn } from "../../../utils/scopedCn";
@@ -13,10 +19,11 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
       size = DEFAULT_SIZE,
       shape = DEFAULT_SHAPE,
       className,
+      classes,
+      unstyled = false,
       style,
       animate = true,
       reduceMotion = "auto",
-      asChild = false,
     },
     ref,
   ) => {
@@ -24,13 +31,16 @@ export const AvatarShimmer = forwardRef<HTMLDivElement, AvatarShimmerProps>(
     const borderRadius = getBorderRadius(shape);
     const effectiveReduceMotion = useReducedMotion(reduceMotion);
     const shouldAnimate = animate && !effectiveReduceMotion;
-    const Comp = asChild ? Slot : "div";
+    const base = unstyled
+      ? UNSTYLED_AVATAR_SHIMMER_CLASSES
+      : DEFAULT_AVATAR_SHIMMER_CLASSES;
+    const rootClass = classes?.root ?? base.root;
 
     return (
-      <Comp
+      <div
         ref={ref}
         className={cn(
-          motionSafe(className ?? "", !shouldAnimate),
+          motionSafe(cn(rootClass, className) ?? "", !shouldAnimate),
         )}
         style={{
           width: numericSize,

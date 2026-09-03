@@ -2,7 +2,10 @@
 export { default as MultiSelectDropdown } from "./MultiSelectDropdown";
 export { MultiSelectDropdownOption } from "./components/MultiSelectDropdownOption";
 export { SelectedChip } from "./components/SelectedChip";
-export { default as MultiSelectDropdownShimmer } from "./components/MultiSelectDropdownShimmer";
+// MultiSelectDropdownShimmer is INTERNAL: it is never rendered without
+// MultiSelectDropdown, nothing imports it standalone, and its styling arrives
+// through the parent's `loadingIcon` / `loadingBar` keys. Un-exported rather
+// than given a second styling route — free pre-1.0, and it shrinks the API.
 export type {
   MultiSelectOption,
   MultiSelectDropdownProps,

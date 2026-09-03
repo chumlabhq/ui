@@ -1,4 +1,4 @@
-import type { AvatarSize, AvatarStatus, AvatarClasses } from "./types";
+import type { AvatarSize, AvatarStatus, AvatarClasses , AvatarShimmerClasses} from "./types";
 import { structuralOnly } from "../../../utils/classLayers";
 
 export const DEFAULT_SIZE: AvatarSize = "md";
@@ -7,7 +7,7 @@ export const DEFAULT_SPACING = -8;
 
 export const DEFAULT_AVATAR_CLASSES: Required<AvatarClasses> = {
   root: "shrink-0 flex items-center justify-center font-medium select-none",
-  loading: "shrink-0 bg-gray-200 animate-pulse",
+  loading: { root: "shrink-0 bg-gray-200 animate-pulse" },
   control: "absolute inset-0 overflow-hidden flex items-center justify-center",
   image: "w-full h-full object-cover",
   fallback: "",
@@ -143,3 +143,11 @@ export const DEFAULT_DARK_TEXT_COLORS = [
   "#bef264",
   "#7dd3fc",
 ];
+
+/** AvatarShimmer's own defaults, for the standalone render path. */
+export const DEFAULT_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> = {
+  root: "shrink-0 bg-gray-200 animate-pulse",
+};
+
+export const UNSTYLED_AVATAR_SHIMMER_CLASSES: Required<AvatarShimmerClasses> =
+  structuralOnly(DEFAULT_AVATAR_SHIMMER_CLASSES);

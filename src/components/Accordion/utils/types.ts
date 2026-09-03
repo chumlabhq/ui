@@ -235,7 +235,28 @@ export interface AccordionItemContextValue {
   onToggle?: (isExpanded: boolean) => void;
 }
 
+/**
+ * ADR 002: Accordion never renders AccordionShimmer — ACCORDION.ai.md:351 shows
+ * the consumer writing it directly — so it is a component in its own right and
+ * carries its own anatomy rather than borrowing Accordion's keys.
+ */
+export interface AccordionShimmerClasses {
+  root?: string;
+  item?: string;
+  trigger?: string;
+  itemText?: string;
+  /** The title placeholder bar. NOVEL: no peer ships a skeleton anatomy. */
+  titleBar?: string;
+  /** The description placeholder bars, in the trigger and in the body. */
+  descriptionBar?: string;
+  icon?: string;
+  body?: string;
+}
+
 export interface AccordionShimmerProps {
+  reduceMotion?: boolean | "auto";
+  classes?: AccordionShimmerClasses;
+  unstyled?: boolean;
   count?: number;
   size?: AccordionSize;
   variant?: AccordionVariant;

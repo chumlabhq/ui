@@ -1,6 +1,13 @@
+import { motionSafeClasses } from "../../../utils/classLayers";
+import { useReducedMotion } from "../../../utils/useReducedMotion";
 import { forwardRef, useMemo } from "react";
 import type { AccordionShimmerProps } from "../utils/types";
-import { SIZE_CLASSES, VARIANT_CLASSES } from "../utils/constants";
+import {
+  SIZE_CLASSES,
+  VARIANT_CLASSES,
+  DEFAULT_ACCORDION_SHIMMER_CLASSES,
+  UNSTYLED_ACCORDION_SHIMMER_CLASSES,
+} from "../utils/constants";
 import { Slot } from "../../../utils/Slot";
 import { cn } from "../../../utils/scopedCn";
 
@@ -11,6 +18,9 @@ const AccordionShimmer = forwardRef<HTMLDivElement, AccordionShimmerProps>(
   (
     {
       count = 3,
+      classes,
+      unstyled = false,
+      reduceMotion = "auto",
       size = "md",
       variant = "default",
       animate = true,
@@ -29,41 +39,43 @@ const AccordionShimmer = forwardRef<HTMLDivElement, AccordionShimmerProps>(
       () => Array.from({ length: count }, (_, i) => i),
       [count],
     );
-    const shimmerClass = animate ? "animate-pulse" : "";
+    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const base = unstyled
+      ? UNSTYLED_ACCORDION_SHIMMER_CLASSES
+      : DEFAULT_ACCORDION_SHIMMER_CLASSES;
+    // The animation lives in the defaults now, so `unstyled` can strip it and a
+    // consumer can reach it. `animate={false}` still switches it off.
+    // Both the prop and the OS preference switch it off; reduced-motion is not
+    // something an `animate` default gets to override.
+    const c = motionSafeClasses(
+      { ...base, ...classes },
+      !animate || effectiveReduceMotion,
+    );
 
     return (
       <Comp
         ref={ref}
-        className={cn("w-full", variantClasses.root, className)}
+        className={cn(c.root, variantClasses.root, className)}
         style={style}
         role="status"
         aria-label={`Loading ${count} accordion items`}
         aria-busy="true"
       >
         {items.map((index) => (
-          <div key={index} className={variantClasses.item}>
+          <div key={index} className={cn(c.item, variantClasses.item) || undefined}>
             <div
-              className={cn(
-                "flex items-center justify-between",
-                sizeClasses.trigger,
-              )}
+              className={cn(c.trigger, sizeClasses.trigger)}
             >
-              <div className="flex-1 space-y-2">
+              <div className={c.itemText || undefined}>
                 <div
-                  className={cn(
-                    "h-4 rounded bg-gray-200 dark:bg-gray-700",
-                    shimmerClass,
-                  )}
+                  className={c.titleBar || undefined}
                   style={{
                     width: `${TITLE_WIDTHS[index % TITLE_WIDTHS.length]}%`,
                   }}
                 />
                 {showContent && (
                   <div
-                    className={cn(
-                      "h-3 rounded bg-gray-100 dark:bg-gray-600",
-                      shimmerClass,
-                    )}
+                    className={c.descriptionBar || undefined}
                     style={{
                       width: `${SUBTITLE_WIDTHS[index % SUBTITLE_WIDTHS.length]}%`,
                     }}
@@ -71,35 +83,22 @@ const AccordionShimmer = forwardRef<HTMLDivElement, AccordionShimmerProps>(
                 )}
               </div>
               <div
-                className={cn(
-                  sizeClasses.icon,
-                  "rounded bg-gray-200 dark:bg-gray-700 shrink-0 ml-4",
-                  shimmerClass,
-                )}
+                className={cn(sizeClasses.icon, c.icon)}
               />
             </div>
             {showContent && (
               <div className={sizeClasses.content}>
-                <div className="space-y-2">
+                <div className={c.body || undefined}>
                   <div
-                    className={cn(
-                      "h-3 rounded bg-gray-100 dark:bg-gray-600",
-                      shimmerClass,
-                    )}
+                    className={c.descriptionBar || undefined}
                     style={{ width: "100%" }}
                   />
                   <div
-                    className={cn(
-                      "h-3 rounded bg-gray-100 dark:bg-gray-600",
-                      shimmerClass,
-                    )}
+                    className={c.descriptionBar || undefined}
                     style={{ width: "85%" }}
                   />
                   <div
-                    className={cn(
-                      "h-3 rounded bg-gray-100 dark:bg-gray-600",
-                      shimmerClass,
-                    )}
+                    className={c.descriptionBar || undefined}
                     style={{ width: "70%" }}
                   />
                 </div>

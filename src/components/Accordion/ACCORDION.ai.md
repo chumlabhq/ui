@@ -363,6 +363,40 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 
 ---
 
+## AccordionShimmer classes
+
+`AccordionShimmer` is a component in its own right, not a part of Accordion —
+Accordion never renders it, the consumer does. It has its own anatomy and its own
+`classes` bag; Accordion's keys do not reach it.
+
+```
+root
+└── item
+    ├── trigger
+    │   ├── itemText
+    │   │   ├── titleBar
+    │   │   └── descriptionBar
+    │   └── icon
+    └── body
+        └── descriptionBar
+```
+
+```tsx
+<AccordionShimmer
+  count={3}
+  showContent
+  classes={{
+    item: "border-b border-gray-100",
+    titleBar: "h-4 rounded bg-slate-200",
+    descriptionBar: "h-3 rounded bg-slate-100",
+  }}
+/>
+```
+
+`unstyled` works the same way it does elsewhere: decorative classes are stripped,
+structural ones stay. The pulse is in the defaults, so `unstyled`, `animate={false}`
+and `prefers-reduced-motion` each switch it off.
+
 ## Accessibility
 
 - **Keyboard:** ArrowDown/Up navigates items, Home/End jump to first/last, Enter/Space toggles, disabled items are skipped, loop wraps focus

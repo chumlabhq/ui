@@ -139,7 +139,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const mergedClasses: Required<AvatarClasses> = useMemo(
       () => ({
         root: classesProp?.root ?? baseClasses.root,
-        loading: classesProp?.loading ?? baseClasses.loading,
+        loading: { ...baseClasses.loading, ...classesProp?.loading },
         control: classesProp?.control ?? baseClasses.control,
         image: classesProp?.image ?? baseClasses.image,
         fallback: classesProp?.fallback ?? baseClasses.fallback,
@@ -188,7 +188,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           size={effectiveSize}
           shape={effectiveShape}
           reduceMotion={reduceMotion}
-          className={mergedClasses.loading || undefined}
+          classes={mergedClasses.loading}
+          unstyled={unstyled}
           style={
             groupCtx
               ? { boxShadow: `0 0 0 2px ${groupCtx.ringColor}` }

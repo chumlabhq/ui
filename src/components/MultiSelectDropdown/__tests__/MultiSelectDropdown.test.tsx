@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MultiSelectDropdown, MultiSelectDropdownShimmer, SelectedChip } from "../index";
+import { MultiSelectDropdown, SelectedChip } from "../index";
+// internal now: imported from its module rather than the public barrel
+import MultiSelectDropdownShimmer from "../components/MultiSelectDropdownShimmer";
 import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/types";
 import { DEFAULT_MULTISELECTDROPDOWN_CLASSES } from "../utils/constants";
 

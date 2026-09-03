@@ -1,4 +1,4 @@
-import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses } from "./types";
+import type { CountryFlagSize, CountryFlagClasses, CountryFlagGroupClasses , CountryFlagShimmerClasses} from "./types";
 import { structuralOnly } from "../../../utils/classLayers";
 
 // Opt-in CDN for consumers who would rather serve flags over the network than
@@ -24,7 +24,7 @@ export const DEFAULT_COUNTRYFLAG_CLASSES: Required<CountryFlagClasses> = {
   // the border is barely-visible in dark mode and clearly defined in
   // light mode where the contrast issue actually exists.
   root: "inline-flex items-center justify-center shrink-0 overflow-hidden border border-cl-border",
-  loading: "inline-flex shrink-0 overflow-hidden bg-gray-200 animate-pulse",
+  loading: { root: "inline-flex shrink-0 overflow-hidden bg-gray-200 animate-pulse" },
   image: "w-full h-full object-cover",
   fallback: "",
 };
@@ -44,3 +44,11 @@ export const DEFAULT_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses
 
 export const UNSTYLED_COUNTRYFLAG_GROUP_CLASSES: Required<CountryFlagGroupClasses> =
   structuralOnly(DEFAULT_COUNTRYFLAG_GROUP_CLASSES);
+
+/** CountryFlagShimmer's own defaults, for the standalone render path. */
+export const DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES: Required<CountryFlagShimmerClasses> = {
+  root: "inline-flex shrink-0 overflow-hidden bg-gray-200 animate-pulse",
+};
+
+export const UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES: Required<CountryFlagShimmerClasses> =
+  structuralOnly(DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES);

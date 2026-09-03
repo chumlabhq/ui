@@ -14,13 +14,8 @@ export interface CountryFlagTooltipConfig {
 
 export interface CountryFlagClasses {
   root?: string;
-  /**
-   * ADR 002 R2 `loading`: the skeleton CountryFlag renders while the flag
-   * loads. Its styling was a call-site literal in CountryFlagShimmer, which has
-   * no `classes` prop of its own — the shimmer is a sub-component, so it is
-   * styled through the parent's bag rather than gaining a second route in.
-   */
-  loading?: string;
+  /** R6: the skeleton's own bag. CountryFlagShimmer is a component, not a part. */
+  loading?: CountryFlagShimmerClasses;
   image?: string;
   fallback?: string;
 }
@@ -80,8 +75,18 @@ export interface CountryFlagGroupCountProps
   tooltip?: ReactNode | CountryFlagTooltipConfig;
 }
 
+/**
+ * ADR 002: CountryFlagShimmer is root-exported and COUNTRYFLAG.ai.md:19 shows it
+ * imported directly, so it is a component with its own styling route.
+ */
+export interface CountryFlagShimmerClasses {
+  root?: string;
+}
+
 export interface CountryFlagShimmerProps
   extends HTMLAttributes<HTMLSpanElement> {
+  classes?: CountryFlagShimmerClasses;
+  unstyled?: boolean;
   size?: CountryFlagSize | number;
   aspectRatio?: number;
   animate?: boolean;

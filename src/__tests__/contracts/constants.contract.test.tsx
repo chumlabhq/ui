@@ -48,7 +48,7 @@ const NOT_SHIPPED =
  * measured truth, not a relaxation; the ratchet resumes from here.
  */
 const BASELINE: Record<string, number> = {
-  "Accordion/components/AccordionShimmer.tsx": 10,
+  "Accordion/components/AccordionShimmer.tsx": 0,
   "Avatar/components/AvatarBadge.tsx": 2,
   "Avatar/components/AvatarGroupCount.tsx": 2,
   "Avatar/components/AvatarShimmer.tsx": 1,

@@ -1,4 +1,4 @@
-import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig } from "./types";
+import type { AccordionClasses, AccordionSize, AccordionVariant, AnimationEasing, StorageConfig , AccordionShimmerClasses} from "./types";
 import { isBrowser } from "../../../utils/isBrowser";
 import { structuralOnly } from "../../../utils/classLayers";
 
@@ -110,3 +110,17 @@ export function getDefaultStorageConfig(): Omit<StorageConfig, "key"> {
   };
 }
 
+/** AccordionShimmer's own anatomy (ADR 002 R1). */
+export const DEFAULT_ACCORDION_SHIMMER_CLASSES: Required<AccordionShimmerClasses> = {
+  root: "w-full",
+  item: "",
+  trigger: "flex items-center justify-between",
+  itemText: "flex-1 space-y-2",
+  titleBar: "h-4 rounded bg-gray-200 dark:bg-gray-700 animate-pulse",
+  descriptionBar: "h-3 rounded bg-gray-100 dark:bg-gray-600 animate-pulse",
+  icon: "rounded bg-gray-200 dark:bg-gray-700 shrink-0 ml-4 animate-pulse",
+  body: "space-y-2",
+};
+
+export const UNSTYLED_ACCORDION_SHIMMER_CLASSES: Required<AccordionShimmerClasses> =
+  structuralOnly(DEFAULT_ACCORDION_SHIMMER_CLASSES);

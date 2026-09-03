@@ -45,8 +45,8 @@ export interface AvatarClasses {
   fallback?: string;
   /** Status indicator dot. */
   status?: string;
-  /** R2 `loading`: the skeleton Avatar renders while the image loads. */
-  loading?: string;
+  /** R6: the skeleton's own bag. AvatarShimmer is a component, not a part. */
+  loading?: AvatarShimmerClasses;
 }
 
 /** CSS class overrides for AvatarGroup sub-elements. */
@@ -281,7 +281,18 @@ export interface AvatarBadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /** Props for the avatar loading placeholder. */
+/**
+ * ADR 002: AvatarShimmer is reachable from the package root and AvatarDemo
+ * renders it standalone, so it is a component in its own right and needs its own
+ * styling route — not a second route into Avatar's bag.
+ */
+export interface AvatarShimmerClasses {
+  root?: string;
+}
+
 export interface AvatarShimmerProps extends HTMLAttributes<HTMLDivElement> {
+  classes?: AvatarShimmerClasses;
+  unstyled?: boolean;
   /** Shimmer size matching the avatar size. */
   size?: AvatarSize;
   /** Shimmer shape matching the avatar shape. */
@@ -290,8 +301,6 @@ export interface AvatarShimmerProps extends HTMLAttributes<HTMLDivElement> {
   animate?: boolean;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";
-  /** Merges shimmer props onto the child element via Slot. */
-  asChild?: boolean;
 }
 
 /** Props for the avatar group loading placeholder. */

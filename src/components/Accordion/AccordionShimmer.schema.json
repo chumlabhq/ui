@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AccordionShimmer",
+  "description": "Loading skeleton for Accordion. Rendered by the consumer, not by Accordion, so it carries its own anatomy (ADR 002 R1).",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "number",
+      "description": "How many skeleton items to render."
+    },
+    "size": {
+      "type": "string",
+      "enum": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "description": "Matches Accordion's size scale."
+    },
+    "variant": {
+      "type": "string",
+      "description": "Matches Accordion's variant scale."
+    },
+    "animate": {
+      "type": "boolean",
+      "description": "Pulse animation. Also switched off by prefers-reduced-motion."
+    },
+    "reduceMotion": {
+      "type": [
+        "boolean",
+        "string"
+      ],
+      "description": "'auto' respects the OS setting."
+    },
+    "showContent": {
+      "type": "boolean",
+      "description": "Also render body placeholder bars."
+    },
+    "unstyled": {
+      "type": "boolean",
+      "description": "Strips decorative classes, keeps structural ones."
+    },
+    "className": {
+      "type": "string"
+    },
+    "classes": {
+      "type": "object",
+      "description": "CSS class overrides for AccordionShimmer's parts.",
+      "properties": {
+        "root": {
+          "type": "string"
+        },
+        "item": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        },
+        "itemText": {
+          "type": "string"
+        },
+        "titleBar": {
+          "type": "string"
+        },
+        "descriptionBar": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
